@@ -1,0 +1,55 @@
+# Consumed by Greed {1}{B}{B}: with the gift promised there is exactly one target creature card from your graveyard: it cannot be left
+# out or doubled. Bot1 has an Ornithopter and an Elvish Mystic in its graveyard and returns the Mystic; the Ornithopter stays there.
+
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Faithless Looting
+Consumed by Greed
+Ornithopter
+Elvish Mystic
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Mox Emerald
+Gleemox
+Elvish Mystic
+Ornithopter
+Island
+Island
+Island
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter; Elvish Mystic)
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Gleemox.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Gleemox.Activate(Color: Green)
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Consumed by Greed.Cast
+Bot1.Accept
+Bot1.Target(Bot2)
+! Bot1.Target(Count: 0)
+! Bot1.Target(Count: 2)
+Bot1.Target(Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Consumed by Greed; Black Lotus; Faithless Looting; Ornithopter
+Bot1.Hand.Elvish Mystic.Power = 1
+Bot2.Hand.Count = 6
+Bot2.Graveyard = Elvish Mystic

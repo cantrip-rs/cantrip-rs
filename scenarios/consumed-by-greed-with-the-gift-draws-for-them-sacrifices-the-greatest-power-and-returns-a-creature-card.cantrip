@@ -1,0 +1,58 @@
+# Consumed by Greed {1}{B}{B} (instant), "Gift a card": "Target opponent sacrifices a creature with the greatest power among creatures
+# they control. If the gift was promised, return target creature card from your graveyard to your hand." Bot1 discards an Ornithopter
+# to Faithless Looting. Bot2 controls an Elvish Mystic (power 1) and an Ornithopter (power 0). Bot1 promises the gift: Bot2 draws a
+# card, sacrifices the Mystic (the greatest power, not the Ornithopter), and Bot1's Ornithopter returns to its hand.
+
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Faithless Looting
+Consumed by Greed
+Ornithopter
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Mox Emerald
+Gleemox
+Elvish Mystic
+Ornithopter
+Island
+Island
+Island
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter; Swamp)
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Gleemox.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Gleemox.Activate(Color: Green)
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Consumed by Greed.Cast
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Consumed by Greed; Black Lotus; Faithless Looting; Swamp
+Bot1.Hand = Ornithopter; Swamp; Swamp; Swamp; Swamp
+Bot2.Hand.Count = 5
+Bot2.Graveyard = Elvish Mystic
+Bot2.Battlefield = Gleemox; Mox Emerald; Ornithopter
