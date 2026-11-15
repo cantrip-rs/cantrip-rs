@@ -1,0 +1,46 @@
+# Take Out the Trash: the discard is only offered "if you control a Raccoon" (CR 608.2c) - an opponent's Raccoon (Bot2's Raccoon Rallier) doesn't count. Bot1 has none, so the Trash
+# just deals its 3 damage, killing Bot2's Ornithopter, and Bot1 is asked nothing: no card is discarded or drawn, leaving four cards in hand.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Take Out the Trash
+Island
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Raccoon Rallier
+Ornithopter
+Island x16
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Raccoon Rallier.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Hand.Count = 5
+Bot1.Hand.Take Out the Trash.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter = (absent)
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 4
+Bot1.Graveyard = Take Out the Trash
+Bot2.Battlefield.Raccoon Rallier.Power = 2

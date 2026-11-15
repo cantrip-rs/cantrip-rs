@@ -1,0 +1,45 @@
+# Take Out the Trash {1}{R}: "3 damage to target creature or planeswalker. If you control a Raccoon, you may discard a card. If you do, draw a card." (CR 608.2c, 701.9). Bot1 controls
+# a Raccoon Rallier; the Trash kills Bot2's 0/2 Ornithopter, then Bot1 declines the discard (it is a "may"): no card is discarded and none drawn, so two cards stay in hand and only the Trash is in the graveyard.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Raccoon Rallier
+Take Out the Trash
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Raccoon Rallier.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Hand.Count = 3
+Bot1.Hand.Take Out the Trash.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot2.Battlefield.Ornithopter = (absent)
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 2
+Bot1.Graveyard.Count = 1

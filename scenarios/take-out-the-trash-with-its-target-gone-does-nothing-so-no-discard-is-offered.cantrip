@@ -1,0 +1,52 @@
+# Take Out the Trash {1}{R} with a Raccoon in play: Bot2 exiles its own targeted Ornithopter with Swords to Plowshares in response (CR 608.2b). The Trash's only target is gone, so it
+# doesn't resolve at all - no damage, and the "if you control a Raccoon, you may discard" part is never reached: Bot1 is asked nothing and the Trash is simply in the graveyard.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Raccoon Rallier
+Take Out the Trash
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Ornithopter
+Island x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Raccoon Rallier.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Hand.Count = 3
+Bot1.Hand.Take Out the Trash.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 2
+Bot1.Graveyard = Take Out the Trash
+Exile.Count = 1

@@ -1,0 +1,43 @@
+# Take Out the Trash {1}{R}: "deals 3 damage" (CR 120.3): against Bot2's 0/8 Wall of Stone the damage marked is exactly 3 - the Wall survives with 3 damage. Bot1 has no Raccoon, so no discard is offered.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Take Out the Trash
+Island
+Island x15
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Wall of Stone
+Island x16
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Stone.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Take Out the Trash.Cast(Bot2.Battlefield.Wall of Stone)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 4
+Bot2.Battlefield.Wall of Stone.Damage = 3

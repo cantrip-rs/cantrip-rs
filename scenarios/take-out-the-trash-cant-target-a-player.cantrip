@@ -1,0 +1,34 @@
+# Take Out the Trash {1}{R}: "target creature or planeswalker" (CR 115.1): a player is not a legal target, so both casts are refused, and a creature target is accepted: the Trash resolves (in hand 5 -> 4) and kills Bot2's Ornithopter.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Take Out the Trash
+Island
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Take Out the Trash.Cast(Bot2)
+! Bot1.Hand.Take Out the Trash.Cast(Bot1)
+Bot1.Hand.Take Out the Trash.Cast(Bot2.Battlefield.Ornithopter)
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 4
+Bot2.Battlefield.Ornithopter = (absent)
