@@ -1,0 +1,64 @@
+# Kindlespark Duo. Turn 1: it has summoning sickness, so its {T} ability cannot be activated (CR 302.6). Turn 3: it pings Bot2 (20 to
+# 19) and stays tapped through Bot1's creature spell Memnite. Mox Emerald, a noncreature spell, untaps it (CR 701.26) and it pings
+# again (18). Sol Ring is a second noncreature spell, which untaps it again for a third ping (17).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Kindlespark Duo
+Mox Emerald
+Sol Ring
+Memnite
+Island x12
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kindlespark Duo.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Kindlespark Duo.Activate(Bot2)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Kindlespark Duo.Activate(Bot2)
+? Bot1.Battlefield.Kindlespark Duo.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+Bot1.Hand.Memnite.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kindlespark Duo.Tapped = true
+! Bot1.Battlefield.Kindlespark Duo.Activate(Bot2)
+Bot1.Hand.Mox Emerald.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kindlespark Duo.Tapped = false
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Kindlespark Duo.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sol Ring.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Kindlespark Duo.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17

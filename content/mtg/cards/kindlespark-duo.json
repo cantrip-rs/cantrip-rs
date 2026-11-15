@@ -1,0 +1,8 @@
+{
+  "name": "Kindlespark Duo",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Lizard Otter",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "{T}: This creature deals 1 damage to target opponent.\nWhenever you cast a noncreature spell, untap this creature."
+}
