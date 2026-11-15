@@ -1,0 +1,56 @@
+# Parting Gust returns the card under its OWNER's control (CR 603.7, 110.2a): Bot1 takes Bot2's Grizzly Bears with Act of Treason, then exiles it with Parting Gust (no gift). At the end step it returns
+# to the battlefield under Bot2's control with a +1/+1 counter, a 3/3.
+
+[Bot1 Deck]
+Plains
+Act of Treason
+Parting Gust
+Black Lotus
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Forest x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Act of Treason.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Parting Gust.Cast
+Bot1.Decline
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Exile = Grizzly Bears
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Battlefield = Plains; Plains
+Bot2.Battlefield = Forest; Mox Emerald; Grizzly Bears
+Bot2.Battlefield.Grizzly Bears.Power = 3
+Bot2.Battlefield.Grizzly Bears.Toughness = 3

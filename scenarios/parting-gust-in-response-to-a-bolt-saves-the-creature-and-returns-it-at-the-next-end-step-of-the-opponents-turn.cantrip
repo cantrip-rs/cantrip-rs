@@ -1,0 +1,46 @@
+# The "next end step" is the first one to begin after the spell resolves (CR 603.7): Bot2 bolts Bot1's Memnite on turn 2, Bot1 answers with Parting Gust (no gift). The Bolt fizzles (CR 608.2b); at
+# the end step of turn 2, Bot2's own turn, the Memnite returns as a 2/2 with a +1/+1 counter, a new object.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Memnite
+Parting Gust
+Plains x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Parting Gust.Cast
+Bot1.Decline
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Exile = Memnite
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Lightning Bolt
+? Exile = Memnite
+[T2 Bot2.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Battlefield = Memnite; Mox Pearl; Plains
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Life = 20
