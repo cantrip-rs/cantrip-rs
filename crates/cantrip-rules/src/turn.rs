@@ -1788,7 +1788,8 @@ fn most_obeyed(rules: &mut BlockRequirements, allowed: &[(ObjectId, ObjectId)]) 
 /// creature blocks which attacker if it can. Each block named that the restrictions allow is made (CR 509.1b: a tapped
 /// creature, one that can't block or can't block that attacker blocks nothing; nor does one whose block would cost something,
 /// CR 509.1c-d, as nothing here pays it), as many of them together as the restrictions
-/// on the whole allow (CR 509.1c read for "does so": a lone creature named to block a creature with menace doesn't, two do);
+/// on the whole allow (CR 509.1c read for "does so": a lone creature named to block a creature with menace doesn't, two do;
+/// no more than Caverns of Despair's two creatures in all);
 /// only where they allow no declaration with every one of them is the defending player asked which, among the declarations
 /// that make the most. No other requirement applies, as there is no declaration to obey it (CR 509.1c). A defending player
 /// who has left does nothing (CR 800.4a).
@@ -1829,7 +1830,16 @@ fn blocks_instead(
     if able.is_empty() {
         return Ok(able);
     }
+    let mut eligible: Vec<ObjectId> = Vec::new();
+    for &(b, _) in &able {
+        if !eligible.contains(&b) {
+            eligible.push(b);
+        }
+    }
     let mut rules = block_limits(cx, attackers, &able, rule_sources);
+    // The restrictions on the whole declaration hold for the blocks the piles make too (CR 509.1b: Caverns of Despair's
+    // "no more than two creatures can block each combat").
+    rules.groups = crate::static_rules::combat_groups(cx, CombatRole::Blocker, &eligible);
     rules.required = able.iter().map(|&(b, a)| RequiredBlock { blocker: Some(b), attacker: Some(a) }).collect();
     most_obeyed(&mut rules, &able);
     if rules.most == count_u32(rules.required.len()) {
@@ -1837,12 +1847,6 @@ fn blocks_instead(
     }
     if rules.most == 0 {
         return Ok(Vec::new());
-    }
-    let mut eligible: Vec<ObjectId> = Vec::new();
-    for &(b, _) in &able {
-        if !eligible.contains(&b) {
-            eligible.push(b);
-        }
     }
     let ask = RequestKind::DeclareBlockers { eligible, attackers: attackers.to_vec(), allowed: able, requirements: rules };
     Ok(match cx.ask_rule(defender, ask)? {
