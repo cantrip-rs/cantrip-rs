@@ -4627,8 +4627,9 @@ fn some_activation(
     let named = named_by_changes(cx, a, id);
     let mode_specs_all = def.modal.iter().flat_map(|m| m.modes.iter().flat_map(|mode| mode.targets.iter()));
     let least = least_x(def.x_cant_be_zero);
-    // X of the mana cost (CR 107.3a), or of a "−X" loyalty cost (CR 606.4), which costs no mana.
-    let announces_x = cost.x > 0 || def.cost.loyalty == Some(LOYALTY_MINUS_X);
+    // X of the mana cost (CR 107.3a), or of a "−X" loyalty cost (CR 606.4), which costs no mana. An X the text defines is not
+    // announced (CR 107.3c): `covered` reads it for each announcement of the targets.
+    let announces_x = (cost.x > 0 && def.x_defined.is_none()) || def.cost.loyalty == Some(LOYALTY_MINUS_X);
     let bound = count_bound(cx, asker, def.targets.iter().chain(mode_specs_all));
     let bound = if announces_x { bound.max(divided_x_bound(cx, asker, def.divide, def.targets)) } else { bound };
     let xs = if announces_x { least..=bound.max(least) } else { 0..=0 };
@@ -4639,7 +4640,7 @@ fn some_activation(
     let mut budget = ANNOUNCEMENT_BUDGET;
     for x in xs {
         let mut owed = cost;
-        if cost.x > 0 {
+        if cost.x > 0 && def.x_defined.is_none() {
             // "Spend only black mana on X" (CR 107.3, 601.2h): X's generic mana only that mana may pay.
             owed = cost.with_x_mana(def.x_mana).plus_x(u32::from(x) * u32::from(cost.x), def.x_mana);
             owed.x = 0;
@@ -4941,7 +4942,8 @@ pub fn activation_costs(game: &crate::Game, player: PlayerId, source: ObjectId, 
     let changers = game.state.battlefield().iter().any(|&id| {
         game.cards.texts(&game.state, game.state.obj(id)).any(|c| game.cards.cost_changes[c.0 as usize]) && !game.lost_all_abilities(id)
     });
-    if def.special_action || def.cost.mana.x > 0 || !(changers || def.cost_change.is_some()) {
+    // An {X} its controller announces is not known here; one the text defines (CR 107.3c) is, and may read the target.
+    if def.special_action || (def.cost.mana.x > 0 && def.x_defined.is_none()) || !(changers || def.cost_change.is_some() || def.x_defined.is_some()) {
         return Vec::new();
     }
     // The rules read the game through a frame's view; a copy of the position (no tree) is enough to ask it.
@@ -4949,10 +4951,12 @@ pub fn activation_costs(game: &crate::Game, player: PlayerId, source: ObjectId, 
     let cx = Cx { g: &mut copy, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     // The ability asked as it is (CR 607.5): its own cost change reads its own links.
     let by = cx.link_of_nth(source, index as usize);
+    let asker = Asker { instance: None, source, controller: player, by, spell: false };
+    let printed = |targets: &[Target]| with_defined_x(&cx, &asker, def, def.cost.mana, targets);
     if candidates.is_empty() {
-        vec![apply_cost_changes_total(&cx, player, Costed::Ability(source, ability, by), def.cost.mana, &[])]
+        vec![apply_cost_changes_total(&cx, player, Costed::Ability(source, ability, by), printed(&[]), &[])]
     } else {
-        candidates.iter().map(|&t| apply_cost_changes_total(&cx, player, Costed::Ability(source, ability, by), def.cost.mana, &[t])).collect()
+        candidates.iter().map(|&t| apply_cost_changes_total(&cx, player, Costed::Ability(source, ability, by), printed(&[t]), &[t])).collect()
     }
 }
 
@@ -7730,11 +7734,13 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             // An activation whose mana cost the player cannot meet is not offered, as a spell they cannot afford is not
             // (CR 602.2b): a seat handed it would cancel at the payment and be handed it again, forever.
             let owed = if def.special_action { special_action_cost(cx, player, id, ability, def) } else { def.cost.mana };
-            // An {X} is judged at the least it may be announced as (CR 107.3a, 601.2b): 0, or 1 where X can't be 0. A printed
+            // An {X} is judged at the least it may be announced as (CR 107.3a, 601.2b): 0, or 1 where X can't be 0; one the text
+            // defines, at what it is for the targets announced (CR 107.3c, `with_defined_x`). A printed
             // cost of no mana is judged too wherever something may add mana to it as the total cost is determined (CR 601.2f by
             // way of 602.2b): the ability's own cost change (Merseine's "Pay enchanted creature's mana cost"), or a permanent
             // that changes costs (Skyseer's Chariot's tax on a crew ability, Anointed Peacekeeper's).
             let judged = (at_least_x(owed, def.x_cant_be_zero).mana_value() > 0
+                || def.x_defined.is_some()
                 || def.cost_change.is_some()
                 || *changing.get_or_init(|| !cost_change_sources(cx).is_empty()))
                 && !def.tap_creatures_for_mana;
@@ -7749,7 +7755,7 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             // A special action is no ability, so mana limited to activating abilities can't pay for it (CR 116.2, 106.6).
             let payment = if def.special_action { ManaPayment::Other } else { ability_payment(cx, id, chars.types, chars.subtypes, def.equip) };
             let covered = |a: &Available, owed: ManaCost, targets: &[Target]| {
-                let owed = at_least_x(owed, def.x_cant_be_zero);
+                let owed = at_least_x(with_defined_x(cx, &asker, def, owed, targets), def.x_cant_be_zero);
                 // A special action is no activated ability (CR 116.2): what changes the cost of activating abilities does not
                 // touch it; what changes its own cost is already in `owed` (`special_action_cost`), which `special_action`
                 // pays. A cost of nothing is judged too: an increase still applies to it (CR 118.9d, 601.2f).
@@ -7785,7 +7791,8 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             // with the action could be: only those the cost could then be paid for are offered. Only where something could
             // change the cost - a cost changer on the battlefield, or the ability's own - since nearly nothing does;
             // otherwise the cost is judged once, before any target is looked for.
-            let changes = |a: &Available| !a.changers.is_empty() || def.cost_change.is_some();
+            // An X the text defines may read the targets as well (CR 107.3c: "twice the mana value of that spell").
+            let changes = |a: &Available| !a.changers.is_empty() || def.cost_change.is_some() || def.x_defined.is_some();
             let each_target = a.is_some_and(|a| targets_with_activation(def) && !def.special_action && def.modal.is_none() && changes(a));
             // Targets chosen once it has begun, after its modes and X (CR 601.2b-c by way of 602.2b): offered if some legal
             // announcement of them could be paid for (`some_activation`).
@@ -12486,6 +12493,20 @@ pub(crate) const fn x_only_zero(x_cant_be_zero: bool, printed_x: u8, paid_x: u8)
     x_cant_be_zero && printed_x > 0 && paid_x == 0
 }
 
+/// An activation cost `cost` with the X its ability's text defines (CR 107.3c, `ActivatedDef::x_defined`) filled in for the
+/// targets announced, as `activate` determines it (CR 601.2f by way of 602.2b), and no {X} left to announce; `cost`
+/// unchanged for an ability whose X is announced.
+fn with_defined_x(cx: &Cx, asker: &Asker, def: &ActivatedDef, cost: ManaCost, targets: &[Target]) -> ManaCost {
+    match def.x_defined {
+        Some(defined) if cost.x > 0 => {
+            let mut total = cost.with_x_mana(def.x_mana).plus_x(defined(cx, asker, targets) * u32::from(cost.x), def.x_mana);
+            total.x = 0;
+            total
+        }
+        _ => cost,
+    }
+}
+
 /// `cost` as the least it could be announced to come to: each {X} as the least X may be (`least_x`), in generic mana.
 /// The `x` symbols are kept, for mana that pays for spells of a mana value at an X that brings it there
 /// (`Available::covers_for`).
@@ -12632,7 +12653,8 @@ fn activate(
         Some(VariableCost::TapX(filter)) => Some((filter, tap_x_candidates(cx, source, player, filter, whole.tap, by).len() as u32)),
         _ => None,
     };
-    if mana.x > 0 {
+    // An X the text defines is not announced (CR 107.3c): it is determined with the total cost, below.
+    if mana.x > 0 && def.x_defined.is_none() {
         // "X target lands" cannot be announced past the legal targets there are (CR 601.2c, 602.2b).
         let cap = x_target_cap(cx, &Asker { instance: None, source, controller: player, by, spell: false }, def);
         let cap = tap_x.map_or(cap, |(_, most)| cap.min(most)).min(most_x(mana, u32::from(mana.x)));
@@ -12719,6 +12741,19 @@ fn activate(
         let of;
         (targets, of) = choose_slots(cx, player, source, false, def.targets, u32::from(item.x), 0, announced_x(&item), by)?;
         set_item_targets(cx, &targets, &of);
+    }
+    // CR 107.3c, 601.2f by way of 602.2b: an X the text defines ("X is twice the mana value of that spell") is read as the
+    // total cost is determined, once the targets are announced, and is the ability's X on the stack.
+    if let Some(defined) = def.x_defined
+        && mana.x > 0
+    {
+        let n = defined(&*cx, &Asker { instance: None, source, controller: player, by, spell: false }, &targets);
+        mana = mana.with_x_mana(def.x_mana).plus_x(n * u32::from(mana.x), def.x_mana);
+        item.x = n;
+        let at = cx.s().stack.len() - 1;
+        let mut with = cx.s().stack[at];
+        with.x = n;
+        cx.st().stack_set(at, with);
     }
     // CR 601.2f by way of 602.2b: the total cost, with what increases or reduces it, once the targets are announced: a
     // change may read them ("equip abilities you activate that target this creature cost {2} less"). It is locked in

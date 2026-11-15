@@ -161,6 +161,8 @@ mod x_mana_tests;
 #[cfg(test)]
 mod x_minimum_tests;
 #[cfg(test)]
+mod x_defined_tests;
+#[cfg(test)]
 mod waterbend_cost_tests;
 #[cfg(test)]
 mod together_targets_tests;

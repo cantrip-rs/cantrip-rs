@@ -549,6 +549,15 @@ pub type CostChange = fn(&dyn Query, ObjectId, PlayerId, Costed, &[Target]) -> C
 /// player activating it, as the ability it is (`Asker::by`, CR 607.5); otherwise as `CostChange`.
 pub type AbilityCostChange = fn(&dyn Query, &Asker, Costed, &[Target]) -> CostDelta;
 
+/// The value of the X in an activated ability's activation cost where the ability's text defines it (CR 107.3c, by way of
+/// 602.2b): "X is the number of cards in an opponent's hand" (Bargaining Table), "X is twice the mana value of that spell"
+/// (Reflecting Mirror), "X is the mana value of the exiled card" (Soul Foundry). Its controller announces no X (CR 107.3a
+/// is for an X the text leaves undefined): X is read from the game as the total cost is determined, once the targets are
+/// announced (CR 601.2f), asked as the ability (`asker` names its source and the player activating it) with `targets` the
+/// ones announced. That value is what its cost is paid with, kept as the ability's `StackItem::x`; an effect that reads X
+/// reads the definition again as it resolves, since the value may change while the ability is on the stack (CR 107.3c).
+pub type DefinedX = fn(&dyn Query, &Asker, &[Target]) -> u32;
+
 /// A static ability that applies an additional cost of permanents to a spell or ability (CR 118.8, 601.2f): "spells cost an
 /// additional 'Sacrifice a Swamp' to cast for each black mana symbol in their mana costs" (Drought), "activated abilities of
 /// nontoken Rebels cost an additional 'Sacrifice a land' to activate" (Brutal Suppression). What it adds to the total cost
@@ -1724,6 +1733,9 @@ pub struct ActivatedDef {
     /// "X can't be 0" (CR 107.3a, 601.2b by way of 602.2b): the X of its activation cost is announced as 1 or more, and it is
     /// offered only where it could be paid with X as 1 (Lair of the Hydra, Helm of Obedience, Aladdin's Lamp).
     pub x_cant_be_zero: bool,
+    /// "X is [a value]" (CR 107.3c): the X of its activation cost is defined by its text, not announced, and is determined
+    /// with the total cost (`DefinedX`). Written `.x_is(..)`. None for an X its controller announces (CR 107.3a).
+    pub x_defined: Option<DefinedX>,
     /// "Spend only [type] mana on X" (CR 107.3, 601.2h by way of 602.2b): what mana may pay the X of its activation cost
     /// (Crypt Rats, Crimson Hellkite, Atalya, Samite Master's modes), `XMana::ANY` for most. Written `.x_mana(..)`; held to
     /// the Oracle text by `cantrip-cards/tests/x_mana_matches_oracle.rs`.
@@ -1802,6 +1814,7 @@ impl ActivatedDef {
         cycling: false,
         ninjutsu: false,
         x_cant_be_zero: false,
+        x_defined: None,
         x_mana: XMana::ANY,
         cant_be_copied: false,
         divide: None,

@@ -787,6 +787,14 @@ impl AbilityDef {
         AbilityDef::Activated(ActivatedDef { x_cant_be_zero: true, ..activated(self, "only an activated ability announces an X") })
     }
 
+    /// "X is [a value]" (CR 107.3c): the X of its activation cost is defined by its text, not announced, and is read by `x`
+    /// as the total cost is determined (`DefinedX`). Not for a mana ability, whose X is always announced (CR 605.3a, 107.3a).
+    pub const fn x_is(self, x: DefinedX) -> AbilityDef {
+        let def = activated(self, "only an activated ability has an X in its cost");
+        assert!(def.cost.mana.x > 0 && !def.is_mana_ability(), "an X the text defines is an {{X}} in a non-mana ability's cost");
+        AbilityDef::Activated(ActivatedDef { x_defined: Some(x), ..def })
+    }
+
     /// "Spend only [type] mana on X" (CR 107.3, 601.2h by way of 602.2b): only that mana may pay the X of its activation cost.
     pub const fn x_mana(self, x_mana: XMana) -> AbilityDef {
         AbilityDef::Activated(ActivatedDef { x_mana, ..activated(self, "only an activated ability announces an X") })
