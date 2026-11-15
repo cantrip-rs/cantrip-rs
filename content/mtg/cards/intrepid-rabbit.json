@@ -1,0 +1,8 @@
+{
+  "name": "Intrepid Rabbit",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Rabbit Soldier",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Offspring {1} (You may pay an additional {1} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nWhen this creature enters, target creature you control gets +1/+1 until end of turn."
+}
