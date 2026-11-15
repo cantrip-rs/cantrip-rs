@@ -1,0 +1,49 @@
+# Waterspout Warden {2}{U} 3/2: "Whenever this creature attacks, if another creature entered the battlefield under your control this
+# turn, this creature gains flying until end of turn" (CR 603.4, 603.6a, 702.9b). On turn 3 no other creature entered under Bot1's
+# control (the Warden itself entered on turn 1, and Bot2's Memnite entered under Bot2's control): it attacks without flying and Memnite
+# blocks it. On turn 5 Bot1 casts an Ornithopter first, so the Warden attacks with flying and Bot2's new Memnite can't block it.
+
+[Bot1 Deck]
+Black Lotus
+Waterspout Warden
+Ornithopter
+Island x4
+Island x20
+
+[Bot2 Deck]
+Memnite
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Waterspout Warden.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Waterspout Warden > Bot2)
+? Bot1.Battlefield.Waterspout Warden.Keywords = (absent)
+Bot2.Block(Memnite > Waterspout Warden)
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+? Bot1.Battlefield.Waterspout Warden.Damage = 1
+? Bot2.Graveyard = Memnite
+[T4 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Attack(Waterspout Warden > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Waterspout Warden.Keywords = Flying
+! Bot2.Block(Memnite > Waterspout Warden)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17

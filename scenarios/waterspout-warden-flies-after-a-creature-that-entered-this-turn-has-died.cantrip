@@ -1,0 +1,43 @@
+# Waterspout Warden: "if another creature entered the battlefield under your control this turn" (CR 603.4) is asked of the turn's
+# history, not of what is on the battlefield. On turn 3 Bot1 casts an Ornithopter and Bot2 Lightning Bolts it; the Warden still
+# attacks with flying, and Bot2's Memnite can't block it.
+
+[Bot1 Deck]
+Black Lotus
+Waterspout Warden
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Memnite
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Waterspout Warden.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Ornithopter; Black Lotus
+Bot1.Attack(Waterspout Warden > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Waterspout Warden.Keywords = Flying
+! Bot2.Block(Memnite > Waterspout Warden)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
