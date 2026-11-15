@@ -1,0 +1,49 @@
+# Brave-Kin Duo: {1}, {T}: target creature gets +1/+1 until end of turn. Its {T} cost needs a Duo that is not summoning sick (CR 302.6): refused on the turn it enters;
+# on Bot1's next turn the Eager Cadet becomes 2/2 until end of turn (CR 611.2a, 514.2), the Duo is tapped, and a second activation is refused (CR 602.2b).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Brave-Kin Duo
+Eager Cadet
+Plains
+Savannah Lions
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Dwarven Trader
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Brave-Kin Duo.Cast
+Bot1.Pass
+! Bot1.Battlefield.Brave-Kin Duo.Activate(Bot1.Battlefield.Brave-Kin Duo)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Brave-Kin Duo.Activate(Bot1.Battlefield.Eager Cadet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Eager Cadet.Power = 2
+? Bot1.Battlefield.Eager Cadet.Toughness = 2
+? Bot1.Battlefield.Brave-Kin Duo.Tapped = true
+! Bot1.Battlefield.Brave-Kin Duo.Activate(Bot1.Battlefield.Eager Cadet)
+Bot1.Hand.Plains.Play
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Eager Cadet.Power = 1
+Bot1.Battlefield.Eager Cadet.Toughness = 1
+Bot1.Battlefield.Brave-Kin Duo.Power = 1
