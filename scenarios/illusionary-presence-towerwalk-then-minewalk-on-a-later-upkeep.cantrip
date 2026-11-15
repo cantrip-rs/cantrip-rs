@@ -1,0 +1,99 @@
+# Illusionary Presence {1}{U}{U}: with three Moxen but one blue source it can't be cast; off Island, Mox Sapphire and Mox
+# Ruby the pool is empty after. Both its upkeep triggers trigger at Bot1's turn 3 upkeep, the land type one put on the stack
+# last. Bot1 chooses Tower, a land type that is no basic one (its 2005-11-01 ruling: any land subtype that exists): it gains
+# towerwalk (CR 702.14c). Its cumulative upkeep {U} for one age counter can't be paid with Mox Ruby's {R} and is paid with the
+# Island's {U}, the {R} left over (CR 702.24a). Bot2, whose only land is Urza's Tower, can't block it with Ornithopter. The
+# landwalk lasts until end of turn (CR 514.2): gone in Bot2's upkeep, where no land type is asked ("your upkeep"). At turn 5
+# the upkeep is {U}{U} for two counters; the choice offers land types only, not a creature type such as Elf (CR 205.3i), and
+# Bot1 chooses Mine: minewalk, which neither Urza's Tower (an Urza's land, but no
+# Mine) nor Bot2's Island lets walk, so Ornithopter blocks it and dies.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Illusionary Presence
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Urza's Tower
+Ornithopter
+Island
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+! Bot1.Hand.Illusionary Presence.Cast(Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Illusionary Presence.Cast
+Bot1.Pass
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Urza's Tower.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Triggers(Cumulative upkeep; choose a land type)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Tower)
+? Bot1.Battlefield.Illusionary Presence.Keywords = Towerwalk
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Island.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana = {R}
+? Bot1.Battlefield.Illusionary Presence.Counters.Age = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Attack(Illusionary Presence > Bot2)
+! Bot2.Block(Ornithopter > Illusionary Presence)
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Illusionary Presence.Keywords = (absent)
+? Bot2.Life = 18
+Bot2.Pass
+Bot1.Pass
+! Bot1.Modes
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Upkeep]
+Bot1.Triggers(Cumulative upkeep; choose a land type)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+! Bot1.Modes(Elf)
+Bot1.Modes(Mine)
+? Bot1.Battlefield.Illusionary Presence.Keywords = Minewalk
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Illusionary Presence.Counters.Age = 2
+[T5 Bot1.Main1]
+Bot1.Attack(Illusionary Presence > Bot2)
+Bot2.Block(Ornithopter > Illusionary Presence)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Illusionary Presence.Keywords = Minewalk
+Bot1.Battlefield.Illusionary Presence.Counters.Age = 2
