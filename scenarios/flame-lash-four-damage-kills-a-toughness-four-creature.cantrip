@@ -1,0 +1,48 @@
+# Flame Lash deals exactly 4 damage to target creature (CR 120.3e, 704.5g): Concealing Curtains (0/4) has lethal damage
+# and dies; the 4 is not 3, so it would survive one point less. Paid with Mox Ruby, Sol Ring and Mox Sapphire (Mox Jet
+# casts Sol Ring) off the three Moxen.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Sol Ring
+Flame Lash
+Mountain x2
+Mountain x10
+
+[Bot2 Deck]
+Swamp
+Concealing Curtains
+Swamp x5
+Swamp x10
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Concealing Curtains.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Flame Lash.Cast(Bot2.Battlefield.Concealing Curtains)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Concealing Curtains
+Bot1.Graveyard = Flame Lash
+Bot2.Life = 20
+Stack.Count = 0

@@ -1,0 +1,6 @@
+{
+  "name": "Flame Lash",
+  "manaCost": "{3}{R}",
+  "type": "Instant",
+  "oracleText": "Flame Lash deals 4 damage to any target."
+}

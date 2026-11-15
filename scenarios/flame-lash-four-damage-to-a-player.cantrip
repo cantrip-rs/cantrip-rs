@@ -1,0 +1,37 @@
+# "Any target" includes a player: Flame Lash on Bot2 deals exactly 4 damage, so Bot2 goes from 20 to 16 (CR 120.3a),
+# and Bot1's own life is untouched. Cast at instant speed on Bot2's turn.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Sol Ring
+Flame Lash
+Mountain x2
+Mountain x10
+
+[Bot2 Deck]
+Swamp x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Flame Lash.Cast(Bot2)
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Life = 20
+Bot1.Graveyard = Flame Lash
