@@ -1,0 +1,52 @@
+# Keys to the House: "{3}, {T}, Sacrifice this artifact: Lock or unlock a door of target Room you control." On turn 3 Bot1 aims
+# it at its Roaring Furnace // Steaming Sauna; Bot2 Disenchants the Room in response, and the ability, its only target gone,
+# does nothing (CR 608.2b): no door is asked for, and the Keys, sacrificed as a cost (CR 602.2), are in the graveyard with it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Roaring Furnace // Steaming Sauna
+Keys to the House
+Mountain
+Island x14
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Disenchant
+Island x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Steaming Sauna)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Keys to the House.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Keys to the House.Activate(Ability: Lock; Bot1.Battlefield.Steaming Sauna)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Steaming Sauna)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Roaring Furnace // Steaming Sauna; Keys to the House; Black Lotus
+Bot1.Battlefield = Mountain; Mox Ruby; Mox Sapphire
