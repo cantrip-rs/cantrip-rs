@@ -1,5 +1,5 @@
 # The top seven cards are seven Lightning Bolts: no creature or land among them, so nothing may be put into the hand and nothing is
-# asked (the refused Arrange). All seven go to the bottom of the library, leaving the three Islands that were below them on top.
+# asked (the refused Choose). All seven go to the bottom of the library, leaving the three Islands that were below them on top.
 
 [Bot1 Deck]
 Torsten, Founder of Benalia
@@ -37,7 +37,7 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Hand.Torsten, Founder of Benalia.Cast
 Bot1.Pass
 Bot1.Pass
-! Bot1.Arrange
+! Bot1.Choose
 [T1 Bot1.Main2]
 
 [Expect]

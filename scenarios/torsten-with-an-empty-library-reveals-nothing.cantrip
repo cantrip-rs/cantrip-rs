@@ -1,5 +1,5 @@
 # Torsten's enters trigger with no cards in the library (the deck is exactly the opening hand): nothing is revealed, taken or put
-# on the bottom, and nothing is asked (the refused Arrange). Bot1 does not lose until it would draw.
+# on the bottom, and nothing is asked (the refused Choose). Bot1 does not lose until it would draw.
 
 [Bot1 Deck]
 Torsten, Founder of Benalia
@@ -35,7 +35,7 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Hand.Torsten, Founder of Benalia.Cast
 Bot1.Pass
 Bot1.Pass
-! Bot1.Arrange
+! Bot1.Choose
 [T1 Bot1.Main2]
 
 [Expect]
