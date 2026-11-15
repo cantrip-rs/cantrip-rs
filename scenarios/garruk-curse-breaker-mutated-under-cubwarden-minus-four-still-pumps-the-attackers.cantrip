@@ -1,0 +1,88 @@
+# Garruk, Curse Breaker's -4 sets up "Whenever one or more creatures attack one of your opponents, those creatures get
+# +2/+2 and gain trample until end of turn", a delayed ability of Garruk's card (CR 603.7), whatever the object its
+# ability resolves for has become. Mycosynth Lattice makes Garruk an artifact and Animate Artifact makes him a 5/5
+# artifact creature; on turn 9 Cubwarden mutates over him, on top (CR 702.140c), so the merged creature is a Cubwarden
+# with Garruk's loyalty abilities and his loyalty counters (CR 702.140e, 606.3). Its -4 resolves, and Memnite attacking
+# Bot2 gets +2/+2 and trample: Bot2 takes 3.
+
+[Bot1 Deck]
+Mycosynth Lattice
+Black Lotus
+Mox Pearl
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Memnite
+Forest
+Garruk, Curse Breaker
+Animate Artifact
+Cubwarden
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mycosynth Lattice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Garruk, Curse Breaker.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Animate Artifact.Cast(Garruk, Curse Breaker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Garruk, Curse Breaker.Power = 5
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Cubwarden.Cast(Garruk, Curse Breaker; Ability: Mutate)
+Bot1.Pass
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Cubwarden.Activate(Ability: Until your next turn)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cubwarden.Counters.Loyalty = 1
+[T9 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T9 Bot1.Main2]
+
+[Expect]
+Turn = 9
+Bot2.Life = 17
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Keywords = Trample

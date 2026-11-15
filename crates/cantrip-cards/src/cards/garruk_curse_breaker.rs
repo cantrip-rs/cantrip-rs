@@ -37,11 +37,10 @@ fn create_beast(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// −4: Until your next turn (CR 611.2a), the delayed ability watches every attack on your opponents.
+/// −4: Until your next turn (CR 611.2a), the delayed ability watches every attack on your opponents: the one Garruk's card
+/// lists, whatever card the object it resolves for has now (a merged creature's top, CR 702.140e).
 fn minus_four(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let o = g.obj(item.object);
-    let this = o.copied_card().unwrap_or(o.card);
-    g.delayed_trigger(DelayedWhen::UntilNextTurnOf(item.controller), item.object, item.controller, AbilityRef::delayed(this, 0), Target::None);
+    g.delayed_trigger(DelayedWhen::UntilNextTurnOf(item.controller), item.object, item.controller, AbilityRef::delayed(item.ability.card, 0), Target::None);
     Ok(())
 }
 
