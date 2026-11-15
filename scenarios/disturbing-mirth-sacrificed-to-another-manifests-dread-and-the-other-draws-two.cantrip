@@ -1,0 +1,48 @@
+# Disturbing Mirth: "When you sacrifice this enchantment, manifest dread." (CR 603.2, 701.21a, 701.62a). The first Mirth, alone
+# on turn 1, has nothing else to sacrifice. On turn 3 the second Mirth's "you may sacrifice another enchantment or creature" takes
+# the first: the second draws two cards, and the first's trigger manifests dread, putting the Guerrilla Gorilla onto the
+# battlefield face down and the Lightning Bolt into the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Disturbing Mirth
+Disturbing Mirth
+Island
+Island
+Island
+Island
+Island
+Island
+Guerrilla Gorilla
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Disturbing Mirth.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+? Bot1.Battlefield = Mox Jet; Mox Ruby; Disturbing Mirth
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Disturbing Mirth.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Disturbing Mirth)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Guerrilla Gorilla | Lightning Bolt)
+
+[Expect]
+Bot1.Hand.Count = 6
+Bot1.Graveyard = Lightning Bolt; Disturbing Mirth
+Bot1.Battlefield.Count = 4

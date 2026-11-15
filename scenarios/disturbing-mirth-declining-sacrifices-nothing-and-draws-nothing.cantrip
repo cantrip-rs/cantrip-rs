@@ -1,0 +1,37 @@
+# Disturbing Mirth: "you may sacrifice another enchantment or creature. If you do, draw two cards" (CR 608.2c, 608.2d, 701.21a).
+# Declining with creatures available (two Ornithopters) sacrifices nothing, so no card is drawn and both stay on the battlefield; the
+# answer of both Ornithopters is refused (one at most).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Disturbing Mirth
+Ornithopter
+Ornithopter
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Disturbing Mirth.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Ornithopter#1; Ornithopter#2)
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield = Mox Jet; Mox Ruby; Ornithopter; Ornithopter; Disturbing Mirth

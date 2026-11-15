@@ -1,0 +1,38 @@
+# Disturbing Mirth: "When this enchantment enters, you may sacrifice another enchantment or creature. If you do, draw two
+# cards." (CR 603.6a, 608.2d, 701.21a). Of the Mirth itself, a Mox Pearl (an artifact) and an Ornithopter (an artifact creature),
+# only the Ornithopter may be sacrificed: the other two answers are refused. Sacrificing it draws exactly two cards.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Disturbing Mirth
+Ornithopter
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Disturbing Mirth.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Mox Pearl)
+! Bot1.Choose(Disturbing Mirth)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Graveyard = Ornithopter
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Disturbing Mirth

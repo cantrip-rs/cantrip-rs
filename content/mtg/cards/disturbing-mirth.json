@@ -1,0 +1,6 @@
+{
+  "name": "Disturbing Mirth",
+  "manaCost": "{B}{R}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, you may sacrifice another enchantment or creature. If you do, draw two cards.\nWhen you sacrifice this enchantment, manifest dread. (Look at the top two cards of your library. Put one onto the battlefield face down as a 2/2 creature and the other into your graveyard. Turn it face up any time for its mana cost if it's a creature card.)"
+}
