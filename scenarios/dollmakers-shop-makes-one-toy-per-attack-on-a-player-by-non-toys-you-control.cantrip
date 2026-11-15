@@ -1,0 +1,47 @@
+# Dollmaker's Shop: "Whenever one or more non-Toy creatures you control attack a player, create a 1/1 white Toy artifact
+# creature token" (CR 508.1, 603.2c). In turn 3 Bot1 attacks Bot2 with Memnite and Ornithopter: one trigger, one Toy. In
+# turn 4 Bot2's Memnite attacks Bot1: not Bot1's creature, no Toy. In turn 5 Bot1 attacks with the Toy alone: a Toy is no
+# "non-Toy creature", no trigger. The token is a 1/1 white Toy artifact creature.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Dollmaker's Shop // Porcelain Gallery
+Ornithopter
+Memnite
+Plains x15
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dollmaker's Shop // Porcelain Gallery.Cast(Ability: Dollmaker's Shop)
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2; Ornithopter > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Toy Token.Power = 1
+? Bot1.Battlefield.Count = 6
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Count = 6
+[T5 Bot1.Main1]
+Bot1.Attack(Toy Token > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Toy Token.Power = 1
+Bot1.Battlefield.Toy Token.Toughness = 1
+Bot1.Battlefield.Toy Token.Colors = White
+Bot1.Battlefield.Toy Token.Types = Artifact; Creature
+Bot1.Battlefield.Toy Token.Subtypes = Toy
+Bot2.Life = 18
