@@ -1,0 +1,50 @@
+# Moldering Gym // Weight Room cast as its right door, Weight Room, on turn 1 ({5}{G}: five Moxen and Black Lotus's three green, two floating mana left):
+# "When you unlock this door, manifest dread, then put three +1/+1 counters on that creature" (CR 709.5h, 701.62a, 122.1): the top two cards are the Snapcaster
+# Mage and an Island; Bot1 manifests the Mage and the Island goes to the graveyard. The Mage is a face-down 2/2 with three counters: 5/5. Only the right door
+# is unlocked. On turn 3 it unlocks the left door, Moldering Gym, for {2}{G} (a special action, CR 709.5e): the Forest is fetched tapped and both doors are unlocked.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Moldering Gym // Weight Room
+Snapcaster Mage
+Island
+Forest x2
+Island x8
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Moldering Gym // Weight Room.Cast(Ability: Weight Room)
+Bot1.Arrange(Snapcaster Mage | Island)
+? Bot1.Battlefield.Weight Room.Doors = Weight Room
+? Bot1.Battlefield..FaceDownName = Snapcaster Mage
+? Bot1.Battlefield..Power = 5
+? Bot1.Battlefield..Counters.PlusOnePlusOne = 3
+? Bot1.Graveyard = Island; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Weight Room.Activate(Ability: left door)
+Bot1.Search(Forest)
+
+[Expect]
+Bot1.Battlefield.Moldering Gym // Weight Room.Doors = Moldering Gym; Weight Room
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield..Power = 5

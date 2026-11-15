@@ -1,0 +1,31 @@
+# Moldering Gym // Weight Room, Weight Room cast from a seven-card deck: five Moxen and Black Lotus pay {5}{G} on turn 1 and the library is empty, so "manifest dread"
+# (CR 701.62a) looks at no cards and manifests nothing; there is no creature, so "put three +1/+1 counters on that creature" does nothing and nothing is
+# manifested or put into the graveyard. Only the Weight Room door is unlocked and the room itself is a permanent.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Moldering Gym // Weight Room
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Moldering Gym // Weight Room.Cast(Ability: Weight Room)
+
+[Expect]
+Bot1.Battlefield.Weight Room.Doors = Weight Room
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Weight Room
+Bot1.Graveyard = Black Lotus
