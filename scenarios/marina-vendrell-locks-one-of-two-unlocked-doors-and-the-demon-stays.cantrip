@@ -1,0 +1,61 @@
+# Marina Vendrell: with both doors of a Room unlocked, the door her controller names is the one locked (CR 709.5g), and the Room is
+# the same permanent (CR 709.5c): Unholy Annex // Ritual Chamber, the right door unlocked on turn 3 by Black Lotus and two Moxen,
+# makes its Demon (CR 709.5h); Marina locks Ritual Chamber and the Room is Unholy Annex again, the Demon staying (locking is not
+# an unlock, and the token is no part of the door).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Marina Vendrell
+Unholy Annex // Ritual Chamber
+Forest x7
+Black Lotus
+Forest x5
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Marina Vendrell.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Unholy Annex.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Unholy Annex // Ritual Chamber.Doors = Unholy Annex; Ritual Chamber
+? Bot1.Battlefield.Demon Token.Power = 6
+Bot1.Battlefield.Marina Vendrell.Activate(Unholy Annex // Ritual Chamber)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Ritual Chamber)
+
+[Expect]
+Bot1.Battlefield.Unholy Annex.Doors = Unholy Annex
+Bot1.Battlefield.Unholy Annex.ManaValue = 3
+Bot1.Battlefield.Marina Vendrell.Tapped = true
+Bot1.Battlefield.Demon Token.Power = 6

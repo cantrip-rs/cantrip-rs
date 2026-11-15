@@ -1,0 +1,8 @@
+{
+  "name": "Marina Vendrell",
+  "manaCost": "{W}{U}{B}{R}{G}",
+  "type": "Legendary Creature — Human Warlock",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "When Marina Vendrell enters, reveal the top seven cards of your library. Put all enchantment cards from among them into your hand and the rest on the bottom of your library in a random order.\n{T}: Lock or unlock a door of target Room you control. Activate only as a sorcery."
+}

@@ -1,0 +1,40 @@
+# Marina Vendrell: with no enchantment card among the seven revealed (CR 701.20), nothing goes to hand and all seven go to the
+# bottom in a random order (CR 401.4): the hand is only the Room card left, the library still holds all thirteen cards and the six
+# Forests that were below the seven are on top.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Marina Vendrell
+Unholy Annex // Ritual Chamber
+Dark Ritual
+Lightning Bolt
+Giant Growth
+Swamp x4
+Forest x6
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Marina Vendrell.Cast
+Bot1.Pass
+
+[Expect]
+Bot1.Hand = Unholy Annex // Ritual Chamber
+Bot1.Library.Count = 13
+Bot1.Library.Top = Forest
+Bot1.Revealed = Dark Ritual; Giant Growth; Lightning Bolt; Swamp; Swamp; Swamp; Swamp
