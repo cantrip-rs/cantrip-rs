@@ -3593,14 +3593,16 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, window: ManaWindow, option
         }
     }
     // Mana abilities the player has of their own, from a resolved spell or ability (CR 605.1a, 611.2a): offered whenever they
-    // could activate a mana ability. Numbered in the order of the effects that gave them.
+    // could activate a mana ability. Numbered in the order of the effects that gave them, as many as the options can number
+    // (`PLAYER_MANA_ABILITY` to 255); a later one past them is not offered, never offered as another.
     for (n, effect) in cx.s().effects.iter().filter(|e| matches!(e.kind, EffectKind::PlayerManaAbility(_)) && e.controller == player).enumerate() {
+        let Some(index) = u8::try_from(n).ok().and_then(|n| PLAYER_MANA_ABILITY.checked_add(n)) else { break };
         let EffectKind::PlayerManaAbility(ability) = effect.kind else { continue };
         if let Some(def) = activated(cx, ability)
             && window.allows(def)
             && can_pay_other_as(cx, effect.source, player, &def.cost, judged, Some(CostFor::ManaAbility), None)
         {
-            options.push(ActionOption::on(ActionKind::ActivateAbility, effect.source, PLAYER_MANA_ABILITY + n as u8));
+            options.push(ActionOption::on(ActionKind::ActivateAbility, effect.source, index));
         }
     }
     // Mana abilities that function from the hand (CR 113.6, 605): Elvish Spirit Guide's exile-this-card.

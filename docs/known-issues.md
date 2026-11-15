@@ -94,8 +94,23 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-163](#ki-163-a-choose-question-offering-one-card-drops-its-rules-words-from-the-caption) | A choose question offering one card drops its rule's words from the caption | Pri-2 | Open |
 | [KI-164](#ki-164-an-x-paid-in-mana-is-announced-at-most-about-two-billion) | An X paid in mana is announced at most about two billion | Pri-3 | Won't fix: beyond practical scale |
 | [KI-165](#ki-165-a-player-is-offered-at-most-136-actions-effects-let-them-take-at-a-later-time) | A player is offered at most 136 actions effects let them take at a later time | Pri-3 | Won't fix: beyond practical scale |
+| [KI-166](#ki-166-a-player-is-offered-at-most-56-mana-abilities-of-their-own) | A player is offered at most 56 mana abilities of their own | Pri-3 | Won't fix: beyond practical scale |
 
 ## Issues
+
+### KI-166: A player is offered at most 56 mana abilities of their own
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-3 | Won't fix: beyond practical scale | engine (`crates/cantrip-rules/src/actions.rs`, `mana_ability_options_as`) | 2026-11-14, review of Guardian Angel |
+
+**Notes.** A mana ability a resolved spell gives a player of their own (CR 605.1a, 611.2a, `EffectKind::PlayerManaAbility`) is
+offered as an `ActivateAbility` option numbered `PLAYER_MANA_ABILITY + n`, up to 255: 56 of them. A player with more such
+effects at once is offered the first 56, and the later ones not at all - never another's, and never an index of an object's
+own abilities (before this, the 57th overflowed: a panic with overflow checks on, a wrapped index without). Each is one
+Channel (or a copy of one) resolved this turn: 57 in a turn, by hand on a clock, is out of reach.
+
+**Scenarios.** None: no game played by hand reaches it.
 
 ### KI-165: A player is offered at most 136 actions effects let them take at a later time
 
