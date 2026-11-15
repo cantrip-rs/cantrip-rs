@@ -28,23 +28,13 @@ fn combat_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     effects::may_pay_x_then_when_you_do(g, item, &BACK, &PAY_X, item.subject)
 }
 
-/// "... put any number of target creature cards with total mana value X or less from that player's graveyard onto the
-/// battlefield under your control." The total was judged as the targets were chosen (CR 601.2c, 603.3d) and is judged again
-/// on resolution: if it has grown past X every target is illegal (CR 608.2b); otherwise the targets still legal enter under
-/// the ability's controller's control (CR 110.2a).
-fn reanimate(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let you = item.controller;
-    let cards: Vec<(ObjectId, PlayerId)> = targets::legal_objects(g, item).into_iter().map(|c| (c, you)).collect();
-    g.put_all_onto_battlefield(&cards)?;
-    Ok(())
-}
-
 pub static BACK: CardDef = CardDef {
     abilities: &[
         firebending::trigger::<3>("Firebending 3 (Whenever this creature attacks, add {R}{R}{R}. This mana lasts until end of combat.)"),
         triggered(DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT, combat_damage, "Whenever Fire Lord Sozin deals combat damage to a player, you may pay {X}. When you do, put any number of target creature cards with total mana value X or less from that player's graveyard onto the battlefield under your control."),
     ],
-    delayed: &[delayed_trigger(reanimate, "When you do, put any number of target creature cards with total mana value X or less from that player's graveyard onto the battlefield under your control.")
+    // The total is judged again as it resolves: grown past X, every target is illegal (CR 608.2b) and nothing returns.
+    delayed: &[delayed_trigger(effects::return_targets_to_battlefield, "When you do, put any number of target creature cards with total mana value X or less from that player's graveyard onto the battlefield under your control.")
         .targets(&[TargetSpec { min: 0, max: TargetSpec::ANY_NUMBER, ..target(targets::creature_card_in_that_players_graveyard) }
             .together(select::total_mana_value_at_most(TargetSpec::COUNTED))
             .labelled("Creature cards from that player's graveyard to put onto the battlefield under your control")])],

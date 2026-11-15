@@ -2587,6 +2587,16 @@ pub fn return_first_target_to_battlefield_tapped(g: &mut dyn Game, item: &StackI
     Ok(())
 }
 
+/// "Return [target cards] from your graveyard to the battlefield" / "put [target cards] onto the battlefield under your control"
+/// (CR 110.2a): the targets still legal as it resolves (CR 608.2b) enter together under your control (CR 101.4).
+/// Agadeem's Awakening, The Rise of Sozin (Fire Lord Sozin) and Dewdrop Cure print it.
+pub fn return_targets_to_battlefield(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let you = item.controller;
+    let cards: Vec<(ObjectId, PlayerId)> = crate::targets::legal_objects(g, item).into_iter().map(|c| (c, you)).collect();
+    g.put_all_onto_battlefield(&cards)?;
+    Ok(())
+}
+
 /// "Return [up to N] target [creature cards] from your graveyard to the battlefield. Put a +1/+1 counter on each of them" (CR 400.3,
 /// 122.1): the targets still legal enter under your control (CR 608.2b, 110.2a), all at once; then, as the next sentence (CR 608.2c),
 /// one +1/+1 counter goes on each that did enter - a new object each (CR 400.7), one instruction (CR 122.6). A card a replacement
