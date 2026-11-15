@@ -1,0 +1,53 @@
+# Gremlin Tamer, Eerie: "Whenever an enchantment you control enters ... create a 1/1 red Gremlin creature token" (CR 603.2,
+# 111.4). Two Mox Pearls entering after it are artifacts, not enchantments: no token. Bot1's Crusade makes one Gremlin; Bot2's
+# Crusade is an enchantment Bot1 does not control: no second token (Bot1 keeps exactly one).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Gremlin Tamer
+Mox Pearl
+Mox Pearl
+Crusade
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl
+Crusade
+Plains
+Plains x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Gremlin Tamer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+? Bot1.Battlefield.Gremlin Token = (absent)
+? Bot1.Battlefield.Count = 5
+Bot1.Hand.Crusade.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gremlin Token.Power = 1
+? Bot1.Battlefield.Gremlin Token.Colors = Red
+? Bot1.Battlefield.Gremlin Token.Token = true
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Crusade.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Crusade; Gremlin Tamer; Gremlin Token; Mox Pearl; Mox Pearl; Mox Pearl; Mox Sapphire

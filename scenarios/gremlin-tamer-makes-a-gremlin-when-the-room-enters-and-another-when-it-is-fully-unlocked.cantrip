@@ -1,0 +1,60 @@
+# Gremlin Tamer, Eerie: a Room is an enchantment, so Unholy Annex // Ritual Chamber cast as its left door entering makes a
+# Gremlin (CR 603.2), and unlocking its right door "fully unlocks a Room" (CR 709.5i) for a second one - 1/1 red Gremlin tokens
+# (CR 111.4), alongside the Demon the right door's own trigger makes. Setup follows
+# nykthos-counts-both-doors-of-a-room-once-both-are-unlocked.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Unholy Annex // Ritual Chamber
+Mox Pearl
+Mox Sapphire
+Gremlin Tamer
+Mox Jet
+Mox Jet
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Gremlin Tamer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gremlin Token.Power = 1
+? Bot1.Battlefield.Count = 6
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Unholy Annex.Activate(Ability: right door)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Demon Token; Gremlin Tamer; Gremlin Token; Gremlin Token; Mox Jet; Mox Jet; Mox Pearl; Mox Sapphire; Swamp; Swamp; Unholy Annex // Ritual Chamber
