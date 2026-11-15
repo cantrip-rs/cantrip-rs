@@ -1,0 +1,38 @@
+# Wick's Patrol with no creature an opponent controls: the three cards are milled, the reflexive trigger has no legal target and
+# is removed from the stack, and Wick's Patrol itself (a creature, but its controller's own) is not shrunk (-X/-X would kill it:
+# the milled Nocturnal Hunger makes X = 3).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Wick's Patrol
+Island
+Island
+Island
+Island
+Island
+Nocturnal Hunger
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Wick's Patrol.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wick's Patrol.Power = 5
+? Bot1.Battlefield.Wick's Patrol.Toughness = 3
+
+[Expect]
+Bot1.Graveyard.Count = 5
+Bot1.Battlefield = Wick's Patrol

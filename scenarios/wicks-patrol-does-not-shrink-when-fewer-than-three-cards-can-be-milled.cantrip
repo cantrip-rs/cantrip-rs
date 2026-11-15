@@ -1,0 +1,43 @@
+# Wick's Patrol with only two cards left in the library as its ability resolves (Bot1 draws one on turn 3): it mills the two it can
+# and "when you do" does not trigger (CR 701.17b; the card's ruling), so Bot2's Valley Rotcaller keeps its 1/3 even though the
+# milled Nocturnal Hunger makes the greatest mana value 3.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Wick's Patrol
+Island
+Island
+Island
+Island
+Island
+Island
+Nocturnal Hunger
+
+[Bot2 Deck]
+Black Lotus
+Valley Rotcaller
+Swamp x18
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Valley Rotcaller.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Wick's Patrol.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Valley Rotcaller.Power = 1
+? Bot2.Battlefield.Valley Rotcaller.Toughness = 3
+
+[Expect]
+Bot1.Library.Count = 0
+Bot1.Graveyard.Count = 4
+Bot2.Battlefield = Valley Rotcaller

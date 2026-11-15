@@ -1,0 +1,58 @@
+# Wick's Patrol: X is the greatest mana value among cards in *your* graveyard. Bot1 mills Savor (2) and two Islands, so X = 2, and
+# Bot2's Valley Rotcaller (1/3) survives as a -1/1 until end of turn. Bot2's own Nocturnal Hunger (mana value 3, in Bot2's
+# graveyard after it destroyed Bot1's Memnite) is not counted: X = 3 would have killed the Rotcaller. The Memnite (0) in Bot1's
+# graveyard and the two Black Lotuses are below 2.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Wick's Patrol
+Memnite
+Island
+Island
+Island
+Island
+Savor
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Nocturnal Hunger
+Valley Rotcaller
+Swamp
+Swamp
+Swamp x15
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Nocturnal Hunger.Cast
+Bot2.Target(Bot1.Battlefield.Memnite)
+Bot2.Hand.Valley Rotcaller.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Wick's Patrol.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Valley Rotcaller.Power = -1
+? Bot2.Battlefield.Valley Rotcaller.Toughness = 1
+
+[Expect]
+Bot1.Graveyard.Count = 6

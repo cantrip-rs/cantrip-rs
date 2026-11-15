@@ -1,0 +1,44 @@
+# Wick's Patrol with a graveyard of two Black Lotuses (mana value 0) and three milled Islands (lands, mana value 0): the greatest
+# mana value is 0, so Bot2's Valley Rotcaller gets -0/-0 and stays a 1/3.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Wick's Patrol
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Valley Rotcaller
+Swamp x18
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Valley Rotcaller.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Wick's Patrol.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Valley Rotcaller.Power = 1
+? Bot2.Battlefield.Valley Rotcaller.Toughness = 3
+
+[Expect]
+Bot1.Graveyard.Count = 5
