@@ -513,6 +513,15 @@ pub fn dealt_to_this_creature_instead(_: &dyn Query, asker: &Asker, proposal: &m
     }
 }
 
+/// "... that damage [is] dealt to you instead" (CR 614.9): a lasting replacement effect a spell or ability made redirects the
+/// damage it replaces to its controller, the player its "you" means (CR 109.5). Blood of the Martyr ("you may have that
+/// damage dealt to you instead") and Jade Monolith ("that source deals that damage to you instead").
+pub fn damage_dealt_to_you_instead(_: &dyn Query, asker: &Asker, _: ObjectId, proposal: &mut Proposal) {
+    if let Proposal::Damage(d) = proposal {
+        d.target = Target::Player(asker.controller);
+    }
+}
+
 /// See [`damage_to_you_and_your_other_permanents`].
 pub const DAMAGE_TO_YOU_AND_YOUR_OTHER_PERMANENTS_IS_DEALT_TO_THIS: ReplacementDef = replacement(
     ReplacementKind::Damage,
