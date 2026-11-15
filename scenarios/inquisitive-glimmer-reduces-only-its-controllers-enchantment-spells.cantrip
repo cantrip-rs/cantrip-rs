@@ -1,0 +1,55 @@
+# Inquisitive Glimmer's reductions are "you cast" and "enchantment" (CR 601.2f, 118.7a). Turn 1: with Mox Pearl and Mox
+# Sapphire tapped for the Glimmer, Sol Ring ({1}, not an enchantment) is not made free. Turn 2: Bot2 has Mox Jet x2 but the
+# Glimmer is not theirs, so Unholy Annex ({2}{B}) is still three mana, and can be cast once a Swamp is the third. Turn 4:
+# nor does it take {1} off Bot2's unlock, so Ritual Chamber's {3}{B}{B} is short of four sources and the door stays locked.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Inquisitive Glimmer
+Sol Ring
+Plains x16
+
+[Bot2 Deck]
+Mox Jet
+Mox Jet
+Unholy Annex // Ritual Chamber
+Swamp
+Swamp x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Inquisitive Glimmer.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Sol Ring.Cast(Mana: short)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet#1.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+! Bot2.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex; Mana: short)
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Mox Jet#1.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Battlefield.Swamp#1.Activate
+Bot2.Battlefield.Swamp#2.Activate
+! Bot2.Battlefield.Unholy Annex.Activate(Ability: right door; Mana: short)
+
+[Expect]
+Bot2.Battlefield.Unholy Annex.Doors = Unholy Annex

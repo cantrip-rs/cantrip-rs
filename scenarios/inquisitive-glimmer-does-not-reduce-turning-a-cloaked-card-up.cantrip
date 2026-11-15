@@ -1,0 +1,51 @@
+# Inquisitive Glimmer's "unlock costs" are the Room special action (CR 709.5e) and no other: turning a cloaked card face up
+# for its mana cost (CR 701.58c, 116.2b) is not one, so Branchsnap Lorian's {1}{G}{G} stays three mana. Turn 1: Mox Pearl
+# and Mox Sapphire pay for the Glimmer, and Forest and Mox Emerald, which the reduction would let pay {G}{G}, are short.
+# Turn 3: with the moxen untapped a third source is there, and it is paid in full.
+
+[Bot1 Deck]
+Black Lotus
+Cryptic Coat
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Forest
+Inquisitive Glimmer
+Branchsnap Lorian
+Island x12
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Cryptic Coat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Inquisitive Glimmer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.#1.Activate(Ability: mana cost; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.#1.Activate(Ability: mana cost)
+? Bot1.Mana = 
+
+[Expect]
+Bot1.Battlefield.Branchsnap Lorian.Power = 5

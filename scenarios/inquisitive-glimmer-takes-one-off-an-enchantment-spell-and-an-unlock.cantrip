@@ -1,0 +1,49 @@
+# Inquisitive Glimmer: "Enchantment spells you cast cost {1} less to cast. Unlock costs you pay cost {1} less" (CR 601.2f,
+# 116.2m, 709.5e, 118.7a). Turn 1: Glimmer ({W}{U}) is cast from Mox Pearl and Mox Sapphire; Unholy Annex ({2}{B}), an
+# enchantment spell, is then cast for {1}{B} from two Mox Jets (at {2}{B} it would be a mana short), the pool left empty.
+# Turn 3: Ritual Chamber's {3}{B}{B} unlock special action costs {2}{B}{B}, exactly the four moxen, and unlocks the door.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Jet
+Inquisitive Glimmer
+Unholy Annex // Ritual Chamber
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Inquisitive Glimmer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Unholy Annex.Doors = Unholy Annex
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Unholy Annex.Activate(Ability: right door)
+
+[Expect]
+Bot1.Mana = 
+Bot1.Battlefield.Unholy Annex // Ritual Chamber.Doors = Unholy Annex; Ritual Chamber

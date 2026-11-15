@@ -1,0 +1,8 @@
+{
+  "name": "Inquisitive Glimmer",
+  "manaCost": "{W}{U}",
+  "type": "Enchantment Creature — Fox Glimmer",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Enchantment spells you cast cost {1} less to cast.\nUnlock costs you pay cost {1} less."
+}
