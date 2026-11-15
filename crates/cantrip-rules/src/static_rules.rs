@@ -261,22 +261,30 @@ fn damage_sources<'a>(cx: &'a Cx, has: impl Fn(&CardDef) -> bool + Copy + 'a) ->
     sources(cx, has).chain(spells.flat_map(move |id| source_texts(cx, id, has)))
 }
 
-/// Whether a static ability makes the damage `source` is about to deal to `target` unpreventable (CR 615.12).
+/// Whether a static ability, or a resolved rule about a set that takes the recipient in (CR 611.2c,
+/// `LastingRuleKind::DamageCantBePrevented`), makes the damage `source` is about to deal to `target` unpreventable (CR 615.12).
 pub fn damage_cant_be_prevented(cx: &Cx, source: ObjectId, target: Target, combat: bool) -> bool {
     damage_sources(cx, |d| !d.unpreventable_damage.is_empty()).any(|(id, controller, def, by)| {
         let asker = Asker { instance: None, source: id, controller, by, spell: false };
         def.unpreventable_damage.iter().any(|rule| rule(cx, &asker, source, target, combat))
-    })
+    }) || resolved_rule_on_recipient(cx, target, LastingRuleKind::DamageCantBePrevented)
 }
 
-/// Whether a static ability keeps the damage `source` is about to deal to `target` from being dealt instead to another
-/// permanent or player (`CardDef::unredirectable_damage`): no redirection effect applies to it (CR 614.9). Asked only as
-/// one would.
+/// Whether a static ability, or a resolved rule about a set that takes the recipient in (CR 611.2c,
+/// `LastingRuleKind::DamageCantBeRedirected`), keeps the damage `source` is about to deal to `target` from being dealt instead
+/// to another permanent or player (`CardDef::unredirectable_damage`): no redirection effect applies to it (CR 614.9). Asked
+/// only as one would.
 pub fn damage_cant_be_redirected(cx: &Cx, source: ObjectId, target: Target, combat: bool) -> bool {
     damage_sources(cx, |d| !d.unredirectable_damage.is_empty()).any(|(id, controller, def, by)| {
         let asker = Asker { instance: None, source: id, controller, by, spell: false };
         def.unredirectable_damage.iter().any(|rule| rule(cx, &asker, source, target, combat))
-    })
+    }) || resolved_rule_on_recipient(cx, target, LastingRuleKind::DamageCantBeRedirected)
+}
+
+/// Whether a resolved rule of this kind about an open set takes in the permanent damage would be dealt to now (CR 611.2c): a
+/// rule about permanents, so none is about a player.
+fn resolved_rule_on_recipient(cx: &Cx, target: Target, rule: LastingRuleKind) -> bool {
+    matches!(target, Target::Object(id) if lasting_rules_on(cx, cx.cards(), id, rule).next().is_some())
 }
 
 /// Whether a static ability of a permanent on the battlefield keeps the ability `item` from being countered (CR 101.2,

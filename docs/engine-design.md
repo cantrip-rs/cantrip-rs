@@ -1351,7 +1351,11 @@ told the damage's source and its recipient as the effects applied so far have le
 an instant or sorcery spell on the stack (CR 113.6; Lava Burst's damage to a creature). "Can't be dealt instead to another
 permanent or player" is a `CardDef::unredirectable_damage` static, read where those are: `replace::valid_redirection` and
 `valid_damage_components` refuse a redirection of such damage, whole or in part (CR 614.9), as they refuse one from a
-recipient that can no longer be dealt damage.
+recipient that can no longer be dealt damage. A resolved effect that says either of the damage that would be dealt to a
+permanent for a duration is a lasting rule (`LastingRuleKind::DamageCantBePrevented`, `DamageCantBeRedirected`, CR 611.2c),
+read beside those statics by `static_rules::damage_cant_be_prevented` and `damage_cant_be_redirected` of the recipient as the
+effects applied so far have left it, so it outlives its source and holds whatever abilities either loses (Whippoorwill's
+"damage that would be dealt to that creature this turn can't be prevented or dealt instead to another permanent or player").
 
 ### Excess damage
 

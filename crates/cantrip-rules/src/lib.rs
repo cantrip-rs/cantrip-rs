@@ -231,6 +231,8 @@ mod own_text_tests;
 #[cfg(test)]
 mod effect_text_tests;
 #[cfg(test)]
+mod resolved_damage_rule_tests;
+#[cfg(test)]
 mod mana_cost_change_tests;
 #[cfg(test)]
 mod mana_replacement_tests;

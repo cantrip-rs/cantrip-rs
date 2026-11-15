@@ -2868,6 +2868,17 @@ pub enum LastingRuleKind {
     /// whatever abilities the permanent or the source loses (CR 613.1f), and it outlives the source (CR 611.2a). Runesword's
     /// "if the creature deals damage to a creature this turn, the creature dealt damage can't be regenerated this turn".
     CantBeRegenerated,
+    /// "Damage that would be dealt to [it] can't be prevented" (CR 615.12, 611.2c): no prevention effect applies to damage that
+    /// would be dealt to a permanent the set takes in - judged at the recipient the damage would be dealt to now, as the effects
+    /// applied so far have left it (CR 616.1f) - as `CardDef::unpreventable_damage` reads it of a static ability. It is no
+    /// ability, so it holds whatever abilities the permanent or the source loses (CR 613.1f), and it outlives the source (CR
+    /// 611.2a). Whippoorwill's "damage that would be dealt to that creature this turn can't be prevented".
+    DamageCantBePrevented,
+    /// "Damage that would be dealt to [it] can't be dealt instead to another permanent or player" (CR 614.9, 611.2c): no
+    /// redirection effect applies, whole or in part, to damage that would be dealt to a permanent the set takes in, judged as
+    /// `DamageCantBePrevented` is, as `CardDef::unredirectable_damage` reads it of a static ability. Whippoorwill's "damage that
+    /// would be dealt to that creature this turn can't be ... dealt instead to another permanent or player".
+    DamageCantBeRedirected,
 }
 
 /// A rule a resolving spell or ability gives an open set of objects for a duration (CR 611.2c): "creatures without flying

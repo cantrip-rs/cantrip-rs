@@ -4569,7 +4569,8 @@ pub(crate) fn protection_prevents(cx: &Cx, source: ObjectId, target: Target, com
 /// Whether a prevention effect may prevent the damage `source` is about to deal to `target` (CR 615.12): not in a turn an
 /// effect said damage can't be prevented this turn (Bonecrusher Giant's Stomp), nor while a static ability says this damage
 /// can't be (Sunspine Lynx's "Damage can't be prevented", Questing Beast's combat damage, Lava Burst's damage to a
-/// creature). Every prevention effect asks it: protection's (CR 702.16e) and those of `replace` (CR 615).
+/// creature), nor while a resolved rule says so of the recipient (Whippoorwill's "damage that would be dealt to that creature
+/// this turn can't be prevented"). Every prevention effect asks it: protection's (CR 702.16e) and those of `replace` (CR 615).
 pub(crate) fn damage_can_be_prevented(cx: &Cx, source: ObjectId, target: Target, combat: bool) -> bool {
     let turn = cx.s().turn;
     turn.no_prevention_turn != turn.number && !crate::static_rules::damage_cant_be_prevented(cx, source, target, combat)

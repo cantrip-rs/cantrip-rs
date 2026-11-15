@@ -960,7 +960,8 @@ fn note_put_by(before: &Proposal, after: &mut Proposal, controller: PlayerId) {
 }
 
 /// CR 614.9: an invalid redirection does nothing; it does not replace valid damage with no damage. Nor does one of damage
-/// a static ability says can't be dealt instead to another permanent or player (`static_rules::damage_cant_be_redirected`).
+/// a static ability or a resolved rule says can't be dealt instead to another permanent or player
+/// (`static_rules::damage_cant_be_redirected`).
 /// Replacement functions are pure, so an invalid effect is neither offered nor consumed nor followed by its `then`.
 fn valid_redirection(cx: &Cx, before: &Proposal, apply: impl FnOnce(&mut Proposal)) -> bool {
     let Proposal::Damage(original) = before else { return true };
@@ -982,7 +983,8 @@ fn valid_damage_components(cx: &Cx, before: &Proposal, components: &[DamageCompo
 }
 
 /// Whether the damage may be dealt to another recipient than the one it would be dealt to now: that one is still a
-/// recipient of damage (CR 614.9), and no static ability says the damage can't be dealt instead to another permanent or player.
+/// recipient of damage (CR 614.9), and no static ability or resolved rule says the damage can't be dealt instead to another
+/// permanent or player.
 fn redirectable(cx: &Cx, d: &DamageEvent) -> bool {
     damage_recipient(cx, d.target) && !crate::static_rules::damage_cant_be_redirected(cx, d.source, d.target, d.combat)
 }
