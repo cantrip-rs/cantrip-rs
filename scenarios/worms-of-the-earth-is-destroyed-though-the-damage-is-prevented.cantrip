@@ -1,0 +1,61 @@
+# Worms of the Earth's "If a player does either, destroy this enchantment": a player who has it deal 5 damage to them has
+# done so even if the damage is prevented (Vexing Devil's 2012-05-01 ruling for the same wording). Bot2 plays a Plains and
+# casts Circle of Protection: Black on turn 2, before the Worms is out; Bot1 casts the Worms on turn 3. At Bot2's upkeep on
+# turn 4 Bot2 activates the Circle off its Mox Jet, choosing the Worms, a black source, then chooses the 5 damage first
+# (CR 101.4), and Bot1 neither: the damage is prevented (CR 615.1), and the Worms is destroyed all the same (CR 701.8a).
+
+[Bot1 Deck]
+Worms of the Earth
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Swamp x23
+
+[Bot2 Deck]
+Circle of Protection: Black
+Mox Pearl
+Mox Jet
+Plains
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Circle of Protection: Black.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Worms of the Earth.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Upkeep]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Circle of Protection: Black.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Worms of the Earth)
+Bot2.Pass
+Bot1.Pass
+Bot2.Modes(Take 5 damage)
+Bot1.Modes(Neither)
+
+[Expect]
+Turn = 4
+Bot1.Graveyard = Worms of the Earth; Black Lotus
+Bot1.Life = 20
+Bot2.Life = 20

@@ -1,0 +1,53 @@
+# Worms of the Earth's upkeep trigger: "any player may sacrifice two lands of their choice or have this enchantment deal 5
+# damage to that player. If a player does either, destroy this enchantment." Each player chooses in turn order from the
+# active player (CR 101.4). Bot1 plays a Swamp on turn 1 and an Island on turn 3, before casting the Worms; Bot2 plays an
+# Island and casts a Mox Jet on turn 2. At Bot2's upkeep on turn 4 Bot2 chooses first: with one land (and a Mox, no land)
+# it isn't offered to sacrifice two (CR 101.2), and takes neither; Bot1, the Worms' controller, with exactly two lands,
+# sacrifices both (CR 701.21a), and the Worms is destroyed (CR 701.8a). No one is dealt damage.
+
+[Bot1 Deck]
+Worms of the Earth
+Black Lotus
+Mox Pearl
+Mox Ruby
+Swamp
+Island
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Mox Jet
+Island x26
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Worms of the Earth.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot2.Modes(Sacrifice two lands)
+Bot2.Modes(Neither)
+Bot1.Modes(Sacrifice two lands)
+Bot1.Choose(Swamp; Island)
+
+[Expect]
+Turn = 4
+Bot1.Battlefield = Mox Pearl; Mox Ruby
+Bot1.Graveyard = Worms of the Earth; Island; Swamp; Black Lotus
+Bot1.Life = 20
+Bot2.Battlefield = Island; Mox Jet
+Bot2.Life = 20

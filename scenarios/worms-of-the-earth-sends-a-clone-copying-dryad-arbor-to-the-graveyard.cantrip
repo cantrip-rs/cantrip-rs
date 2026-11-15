@@ -1,0 +1,56 @@
+# Worms of the Earth's "Lands can't enter the battlefield" judges a permanent as it would exist there (CR 614.17d): a Clone
+# that chooses to enter as a copy of Dryad Arbor, a land creature, can't enter from the stack and is put into its owner's
+# graveyard (CR 608.3e - its example is this one; the card's 2008-08-01 ruling). Bot2 plays Dryad Arbor on turn 2, before
+# the Worms is out; on turn 3 Bot1 plays a Swamp, casts the Worms off Black Lotus and Sol Ring, then the Clone off the
+# Moxen and the Swamp, copying the Arbor, the only creature.
+
+[Bot1 Deck]
+Worms of the Earth
+Clone
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Sol Ring
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Dryad Arbor
+Island x26
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Dryad Arbor.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Worms of the Earth.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Clone.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Sol Ring; Swamp; Worms of the Earth
+Bot1.Graveyard = Clone; Black Lotus
+Bot2.Battlefield = Dryad Arbor

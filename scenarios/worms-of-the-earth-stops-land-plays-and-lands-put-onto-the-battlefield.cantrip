@@ -1,0 +1,65 @@
+# Worms of the Earth's "Players can't play lands" and "Lands can't enter the battlefield" (CR 101.2, 305.1, 614.17d), for
+# both players. On turn 1 Bot1 casts it off Black Lotus and two Moxen; it can't then play a Swamp from hand, while a Mox
+# Emerald cast after it, no land, enters. On turn 2, past an upkeep trigger both decline, Bot2 can't play a Forest either,
+# and its Rampant Growth finds an Island that can't enter: the land stays in the library, which is still shuffled (the
+# rulings: the effect does all else it says).
+
+[Bot1 Deck]
+Worms of the Earth
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Rampant Growth
+Forest
+Island
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Worms of the Earth.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Modes(Neither)
+Bot1.Modes(Neither)
+[T2 Bot2.Main1]
+! Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Rampant Growth.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Search(Island)
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Pearl; Mox Sapphire; Worms of the Earth
+Bot1.Hand = Swamp; Swamp
+Bot2.Battlefield = Mox Emerald; Mox Jet
+Bot2.Graveyard = Rampant Growth
+Bot2.Hand = Forest; Island; Island; Island; Island
+Bot2.Library.Count = 19

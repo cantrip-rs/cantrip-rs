@@ -1,0 +1,46 @@
+# Worms of the Earth's upkeep trigger, at each upkeep, both players' (CR 503.1a): at Bot2's on turn 2 both players take
+# neither choice, and the Worms stays; at Bot1's on turn 3 Bot1, the active player and the Worms' controller, takes neither
+# again and Bot2 has the Worms deal 5 damage to it (CR 120.3), so the Worms is destroyed (CR 701.8a). Neither player has
+# two lands, so neither is offered to sacrifice them. Its "Players can't play lands" gone with it, Bot1 then plays a Swamp.
+
+[Bot1 Deck]
+Worms of the Earth
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Swamp
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Worms of the Earth.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Modes(Neither)
+Bot1.Modes(Neither)
+? Bot1.Battlefield = Mox Pearl; Mox Sapphire; Worms of the Earth
+? Bot2.Life = 20
+Bot1.Modes(Neither)
+Bot2.Modes(Take 5 damage)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+
+[Expect]
+Turn = 3
+Bot1.Battlefield = Mox Pearl; Mox Sapphire; Swamp
+Bot1.Graveyard = Worms of the Earth; Black Lotus
+Bot1.Life = 20
+Bot2.Life = 15
