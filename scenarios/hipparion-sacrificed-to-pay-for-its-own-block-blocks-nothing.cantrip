@@ -1,0 +1,53 @@
+# Hipparion's cost to block Kalonian Tusker (power 3), {1}, is paid as blockers are declared, with mana abilities
+# activated first (CR 509.1d-e): Bot2 pays it by sacrificing Hipparion itself to Ashnod's Altar. Only a chosen creature
+# still controlled by the defending player becomes a blocking creature (CR 509.1g), so nothing is blocking; but Hipparion
+# was declared as a blocker for the Tusker, so the Tusker is a blocked creature (CR 509.1h) and, blocked by nothing and
+# without trample, deals no combat damage. The Altar's second {C} empties with the step.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Kalonian Tusker
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Black Lotus
+Ashnod's Altar
+Hipparion
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Kalonian Tusker.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Ashnod's Altar.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Hipparion.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Kalonian Tusker > Bot2)
+Bot2.Block(Hipparion > Kalonian Tusker)
+? Combat.BlockCost = {1}
+Bot2.Battlefield.Ashnod's Altar.Activate(Sacrifice: Hipparion)
+? Combat.Blocks.Count = 0
+? Combat.Blockers.Count = 0
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Hipparion; Black Lotus

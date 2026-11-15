@@ -1,0 +1,8 @@
+{
+  "name": "Hipparion",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Horse",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "This creature can't block creatures with power 3 or greater unless you pay {1}."
+}

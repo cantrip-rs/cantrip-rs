@@ -1,0 +1,60 @@
+# Camouflage replaces Bot2's declaration of blockers: Bot2 puts Hipparion and Grizzly Bears in the one pile, which goes to
+# the one attacker, Kalonian Tusker (power 3), and "each creature in a pile that can block the creature that pile is
+# assigned to does so". Hipparion can block the Tusker only by paying {1} as blockers are declared (CR 509.1d-f), and
+# nothing here declares or pays; a player is never required to pay a cost to block (CR 509.1c). So only the Bears block,
+# and die to the Tusker's 3; Hipparion is untouched, though Bot2 has an untapped Plains it could have paid with.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Kalonian Tusker
+Camouflage
+Forest
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Hipparion
+Grizzly Bears
+Island x10
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Kalonian Tusker.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Hipparion.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Attack(Kalonian Tusker > Bot2)
+Bot1.Hand.Camouflage.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Hipparion; Grizzly Bears)
+? Combat.Blocks = Grizzly Bears > Kalonian Tusker
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield.Grizzly Bears = (absent)
+Bot2.Battlefield.Hipparion.Damage = 0
+Bot2.Battlefield.Plains.Tapped = false

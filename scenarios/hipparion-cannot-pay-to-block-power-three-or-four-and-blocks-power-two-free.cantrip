@@ -1,0 +1,60 @@
+# Hipparion: "This creature can't block creatures with power 3 or greater unless you pay {1}." Bot2 spent all its mana on
+# Hipparion, so on turn 3 it has nothing to pay with. Blocking Alpine Grizzly (power 4) costs {1}, and blocking Kalonian
+# Tusker (power 3) costs {1} too (CR 509.1d): neither can be paid, so each declaration is given up and taken back (CR 509.1,
+# 733), to be declared again. Blocking Elite Vanguard (power 2) costs nothing and is asked no payment. Bot2 takes the
+# Grizzly's 4 and the Tusker's 3; Hipparion takes the Vanguard's 2 and deals it 1.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Pearl
+Black Lotus
+Kalonian Tusker
+Alpine Grizzly
+Elite Vanguard
+Island x10
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Hipparion
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Kalonian Tusker.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elite Vanguard.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Hipparion.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Kalonian Tusker > Bot2; Alpine Grizzly > Bot2; Elite Vanguard > Bot2)
+Bot2.Block(Hipparion > Alpine Grizzly)
+? Combat.BlockCost = {1}
+Bot2.Cancel
+Bot2.Block(Hipparion > Kalonian Tusker)
+? Combat.BlockCost = {1}
+Bot2.Cancel
+Bot2.Block(Hipparion > Elite Vanguard)
+? Combat.Blocks = Hipparion > Elite Vanguard
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot2.Battlefield.Hipparion.Damage = 2
+Bot1.Battlefield.Elite Vanguard = (absent)

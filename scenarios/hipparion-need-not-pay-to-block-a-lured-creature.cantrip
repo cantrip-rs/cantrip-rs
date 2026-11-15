@@ -1,0 +1,51 @@
+# Kalonian Tusker (power 3) is enchanted with Lure: "All creatures able to block enchanted creature do so." Hipparion is
+# able to block it only by paying {1} (CR 509.1d), and a player is not required to pay a cost to block, even to obey a
+# requirement (CR 509.1c; the like ruling on Archangel of Tithes). So declaring no blockers obeys as many requirements as
+# any declaration that costs nothing, and Bot2 declares none though its Plains could pay: the Tusker deals Bot2 3.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Kalonian Tusker
+Lure
+Forest
+Forest
+Island
+Island x10
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Hipparion
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Kalonian Tusker.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Hipparion.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Lure.Cast(Kalonian Tusker)
+Bot1.Attack(Kalonian Tusker > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot2.Battlefield.Hipparion.Damage = 0
+Bot2.Battlefield.Plains.Tapped = false

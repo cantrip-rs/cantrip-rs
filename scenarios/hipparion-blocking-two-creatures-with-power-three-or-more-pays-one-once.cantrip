@@ -1,0 +1,57 @@
+# Hipparion: "This creature can't block creatures with power 3 or greater unless you pay {1}." Blaze of Glory lets it block
+# any number of creatures this turn, and Bot2 declares it blocking both Kalonian Tusker (power 3) and Alpine Grizzly (power
+# 4). The card asks {1} - there is no "for each" - so the declaration costs {1} in all (CR 509.1d), paid with Mox Sapphire
+# alone. Both attackers are blocked: Bot2 takes nothing, and Hipparion dies to their 7.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Pearl
+Black Lotus
+Kalonian Tusker
+Alpine Grizzly
+Island x14
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Hipparion
+Blaze of Glory
+Island x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Kalonian Tusker.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Hipparion.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Kalonian Tusker > Bot2; Alpine Grizzly > Bot2)
+Bot2.Hand.Blaze of Glory.Cast(Bot2.Battlefield.Hipparion)
+Bot2.Battlefield.Plains.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Block(Hipparion > Kalonian Tusker; Hipparion > Alpine Grizzly)
+? Combat.BlockCost = {1}
+Bot2.Battlefield.Mox Sapphire.Activate
+? Combat.Blocks.Count = 2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield.Mox Sapphire.Tapped = true
+Bot2.Battlefield.Hipparion = (absent)

@@ -1,0 +1,59 @@
+# Browser
+# What a player sees of a cost to block (CR 509.1d-f), Hipparion's "can't block creatures with power 3 or greater unless
+# you pay {1}": declaring Hipparion blocking Bot2's Kalonian Tusker (power 3), the payment that follows is titled for the
+# block, says Hipparion asks it and that Cancel declares blockers again; given up, the declaration is taken back (CR 733)
+# and asked again saying so. Bot1 then declares the block again and pays {1} with its Plains: the Tusker is blocked, and
+# Bot1 takes nothing.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Hipparion
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Kalonian Tusker
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hipparion.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Kalonian Tusker.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Kalonian Tusker > Bot1)
+Bot1.Block(Hipparion > Kalonian Tusker)
+? Combat.BlockCost = {1}
+? Client.Bot1.Prompt.Title = Pay {1} to block with Hipparion
+? Client.Bot1.Prompt.Detail = Hipparion asks it  ·  {1} still to pay  ·  tap a land  ·  Cancel declares blockers again
+Bot1.Cancel
+? Client.Bot1.Prompt.Title = Declare blockers
+? Client.Bot1.Prompt.Detail = The blocks were taken back: their cost wasn't paid  ·  1 attacking
+Bot1.Block(Hipparion > Kalonian Tusker)
+? Combat.BlockCost = {1}
+Bot1.Battlefield.Plains.Activate
+? Combat.Blocks = Hipparion > Kalonian Tusker
+[T4 Bot2.Main2]
+
+[Expect]
+Turn = 4
+Bot1.Life = 20
+Bot1.Battlefield.Plains.Tapped = true
+Bot1.Battlefield.Mox Pearl.Tapped = false
