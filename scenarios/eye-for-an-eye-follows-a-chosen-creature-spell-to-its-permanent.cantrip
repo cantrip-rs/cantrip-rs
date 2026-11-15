@@ -1,0 +1,42 @@
+# "If the player chooses a permanent spell, the effect will apply to any damage dealt by that spell and any damage dealt by
+# the permanent that spell becomes when it resolves" (CR 609.7a). Bot2 casts Viashino Pyromancer; in response Bot1 casts Eye for
+# an Eye and chooses the Pyromancer spell on the stack. The Pyromancer resolves and its enters ability deals 2 damage to Bot1:
+# that is the next damage from the permanent the chosen spell became, so Bot1 is still dealt it and Eye for an Eye deals 2 to
+# the Pyromancer's controller, Bot2. The effect outlives the spell object it was made about.
+
+[Bot1 Deck]
+Mox Pearl x2
+Eye for an Eye
+Island x25
+
+[Bot2 Deck]
+Mox Ruby x2
+Viashino Pyromancer
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Viashino Pyromancer.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Eye for an Eye.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Stack.Viashino Pyromancer)
+Bot2.Target(Bot1)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18

@@ -1,0 +1,41 @@
+# A source of your choice may be an object an ability on the stack refers to "even if that object is no longer in the zone it
+# used to be in" (CR 609.7a). Bot2 sacrifices its Fanatical Firebrand to have it deal 1 damage to Bot1; in response Bot1 casts
+# Eye for an Eye and chooses the sacrificed Firebrand. The ability's damage is dealt by the Firebrand as it last existed - the
+# chosen source - so Bot1 is still dealt it and Eye for an Eye deals 1 to that source's controller, Bot2. The effect is not
+# ended because the object it was made about has left the battlefield.
+
+[Bot1 Deck]
+Mox Pearl x2
+Eye for an Eye
+Island x25
+
+[Bot2 Deck]
+Mox Ruby
+Fanatical Firebrand
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Fanatical Firebrand.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Fanatical Firebrand.Activate(Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Eye for an Eye.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fanatical Firebrand)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Bot2.Graveyard = Fanatical Firebrand

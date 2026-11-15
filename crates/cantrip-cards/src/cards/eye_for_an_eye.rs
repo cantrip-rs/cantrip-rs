@@ -14,19 +14,23 @@ fn reflected_damage(q: &dyn Query, asker: &Asker, _: ObjectId, before: &DamageEv
     })]
 }
 
-fn applies(q: &dyn Query, asker: &Asker, chosen: ObjectId, proposal: &Proposal) -> bool {
-    matches!(proposal, Proposal::Damage(d) if d.target == Target::Player(asker.controller)
-        && prevention::by_chosen_source(q, chosen, d))
+/// Damage from the chosen source (CR 609.7a, `prevention::by_chosen_source`); the core asks the effect only about damage to
+/// "you", the recipient it names (its `to`).
+fn applies(q: &dyn Query, _: &Asker, chosen: ObjectId, proposal: &Proposal) -> bool {
+    matches!(proposal, Proposal::Damage(d) if prevention::by_chosen_source(q, chosen, d))
 }
 
 /// The replacement leaves the original damage in place; `reflected_damage` adds the other component.
 fn retain_damage(_: &dyn Query, _: &Asker, _: ObjectId, _: &mut Proposal) {}
 
-/// Choose a damage source and watch it for the rest of this turn (CR 609.7a, 611.2a).
+/// Choose a damage source and watch it for the rest of this turn (CR 609.7a, 611.2a): an effect about the source, of damage to
+/// you, which outlives the source's object - a permanent spell chosen is followed to the permanent it becomes, and a source
+/// that has left deals its damage as it last existed.
 fn eye(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(source) = prevention::choose_source(g, item, prevention::SOURCE)? else { return Ok(()) };
     g.end_sentence();
-    g.add_effect(item.object, source, EffectKind::Replacement { card: item.ability.card, index: 0, to: Target::None }, Duration::EndOfTurn);
+    let to = Target::Player(item.controller);
+    g.add_effect(item.object, source, EffectKind::Replacement { card: item.ability.card, index: 0, to }, Duration::EndOfTurn);
     Ok(())
 }
 
