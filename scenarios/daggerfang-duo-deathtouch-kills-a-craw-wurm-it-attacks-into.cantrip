@@ -1,0 +1,56 @@
+# Daggerfang Duo (3/2, deathtouch): Bot2's Craw Wurm (6/4) blocks it on turn 3, and the 3 damage with deathtouch destroys the Wurm although it has toughness 4
+# (CR 702.2b, 704.5h); the Wurm's 6 damage kills the Duo too. Bot2 paid for the Wurm with Black Lotus and three Moxen.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Daggerfang Duo
+Plains
+Plains
+Plains
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Craw Wurm
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Daggerfang Duo.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Craw Wurm.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Daggerfang Duo > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Craw Wurm > Daggerfang Duo)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Daggerfang Duo
+Bot2.Graveyard = Craw Wurm; Black Lotus
+Bot2.Life = 20

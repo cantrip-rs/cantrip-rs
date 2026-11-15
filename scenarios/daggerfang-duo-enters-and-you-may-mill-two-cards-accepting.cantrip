@@ -1,0 +1,38 @@
+# Daggerfang Duo ({2}{B}, 3/2): "When this creature enters, you may mill two cards." Bot1 accepts, so the top two cards of the library, Island and Mountain, go to the
+# graveyard (CR 701.17a) and Forest is the top card left.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Daggerfang Duo
+Plains
+Plains
+Plains
+Island
+Mountain
+Forest
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Daggerfang Duo.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Library.Count = 23
+Bot1.Accept
+? Bot1.Library.Count = 21
+
+[Expect]
+Bot1.Graveyard = Mountain; Island
+Bot1.Library.Top = Forest
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Daggerfang Duo
