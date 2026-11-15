@@ -15,3 +15,17 @@ pub const EXILE_THREE_CARDS: ExtraCost = ExtraCost { text: "Forage: exile three 
 
 /// "Sacrifice a Food": the second way to forage (CR 701.61a).
 pub const SACRIFICE_A_FOOD: ExtraCost = ExtraCost { text: "Forage: sacrifice a Food", cost: Cost::sacrifice(1, filters::food) };
+
+const FORAGE_BY_EXILING: Question = Question::new("Forage", "forage by exiling three cards from your graveyard?", "", "Exile three cards", "Don't exile");
+const FORAGE_BY_SACRIFICING: Question = Question::new("Forage", "forage by sacrificing a Food?", "", "Sacrifice a Food", "Don't sacrifice");
+
+/// "You may forage" as the ability resolves (CR 701.61a, 608.2d, 118.12): its controller is asked whether to exile three cards from
+/// their graveyard and, if they decline or cannot, whether to sacrifice a Food (a way that cannot be paid is not asked, CR 118.3).
+/// Whether they foraged: the "if you do" of the sentence. Bushy Bodyguard and Curious Forager print it.
+pub fn may_forage(g: &mut dyn Game, item: &StackItem) -> Result<bool, Suspend> {
+    let you = item.controller;
+    if g.may_pay(you, item.object, item.object, EXILE_THREE_CARDS.cost, &FORAGE_BY_EXILING)? {
+        return Ok(true);
+    }
+    g.may_pay(you, item.object, item.object, SACRIFICE_A_FOOD.cost, &FORAGE_BY_SACRIFICING)
+}
