@@ -1,0 +1,74 @@
+# Nova Pentacle (CR 602.3, 609.7a, 614.1a, 611.2a): the opponent may choose a creature of their own as the target ("it
+# doesn't have to be a creature that opponent controls"), only the chosen source's damage to the activating player is
+# redirected, and the effect lasts only the turn. On turn 3 Bot1 activates the Pentacle with exactly three sources, Bot2
+# targets its own Sanctuary Cat (1/2), and Bot1 chooses that Cat as the source. Bot2's Lightning Bolt then deals 3 to Bot1:
+# not from the chosen source, so it is dealt to Bot1 (17). Bot1's own Cat attacks and Bot2's Cat blocks: the chosen source's
+# damage to Bot1's Cat is not damage to Bot1, so each Cat takes 1, and the effect still waits. On turn 4 Bot2's Cat attacks:
+# the effect ended with turn 3, so its 1 damage is dealt to Bot1 (16) and not to the Cat.
+
+[Bot1 Deck]
+Nova Pentacle
+Black Lotus
+Mox Pearl
+Sanctuary Cat
+Plains
+Plains x25
+
+[Bot2 Deck]
+Mox Pearl
+Sanctuary Cat
+Lightning Bolt
+Mountain
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nova Pentacle.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Sanctuary Cat.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Sanctuary Cat.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Nova Pentacle.Activate
+Bot2.Target(Bot2.Battlefield.Sanctuary Cat)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Bot2.Battlefield.Sanctuary Cat)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Sanctuary Cat > Bot2)
+Bot2.Block(Sanctuary Cat > Sanctuary Cat)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Sanctuary Cat.Damage = 1
+? Bot2.Battlefield.Sanctuary Cat.Damage = 1
+? Bot1.Life = 17
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Sanctuary Cat > Bot1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 16
+Bot2.Life = 20
+Bot2.Battlefield.Sanctuary Cat.Damage = 0

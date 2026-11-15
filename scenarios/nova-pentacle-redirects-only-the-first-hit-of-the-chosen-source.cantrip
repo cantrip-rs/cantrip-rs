@@ -1,0 +1,70 @@
+# Nova Pentacle: "{3}, {T}: The next time a source of your choice would deal damage to you this turn, that damage is dealt to
+# target creature of an opponent's choice instead" (CR 602.3, 609.7a, 614.1a, 614.9). Bot2's Fencing Ace (1/1 double strike)
+# attacks Bot1. Bot1 floats four white mana and activates the Pentacle: {3} leaves one W in the pool. Bot2, the opponent,
+# chooses the target (CR 602.3) - not the Pentacle, a noncreature - and takes Bot1's Sanctuary Cat (1/2). Bot1 chooses the
+# Ace as the source as the ability resolves (CR 609.7a). The Ace's first-strike damage to Bot1 is the next time: it is dealt
+# to the Cat instead (1 damage marked), and not to Bot1. The effect is then used up, so the regular-damage hit is dealt to
+# Bot1: Bot1 19.
+
+[Bot1 Deck]
+Nova Pentacle
+Black Lotus
+Mox Pearl x3
+Sanctuary Cat
+Plains
+Plains x25
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Fencing Ace
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nova Pentacle.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Sanctuary Cat.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Fencing Ace.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Fencing Ace > Bot1)
+[T4 Bot2.DeclareBlockers]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Nova Pentacle.Activate
+! Bot2.Target(Bot1.Battlefield.Nova Pentacle)
+Bot2.Target(Bot1.Battlefield.Sanctuary Cat)
+? Bot1.Mana = {W}
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fencing Ace)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 20
+Bot1.Battlefield.Sanctuary Cat.Damage = 1
+Bot1.Battlefield.Nova Pentacle.Tapped = true

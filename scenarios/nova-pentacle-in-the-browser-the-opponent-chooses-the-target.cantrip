@@ -1,0 +1,53 @@
+# Browser
+# Nova Pentacle's target is "of an opponent's choice" (CR 602.3): as Bot2 activates the Pentacle, Bot1's page is asked the
+# target of an ability it does not control, and its caption says what the creature is for. Bot1 chooses its own Savannah
+# Lions over its Sanctuary Cat. As the ability resolves Bot2 chooses Bot1's Sanctuary Cat as the source (CR 609.7a), and the
+# effect is shown on the Lions, the creature it redirects to, and on the Cat, the source it watches.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Sanctuary Cat
+Savannah Lions
+Plains x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby x3
+Nova Pentacle
+Mountain
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Sanctuary Cat.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Nova Pentacle.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Nova Pentacle.Activate
+? Client.Bot1.Prompt.Title = Target for Nova Pentacle
+? Client.Bot1.Prompt.Detail = Creature to be dealt instead the next damage to the activating player from a source they choose  ·  2 possible targets
+Bot1.Target(Bot1.Battlefield.Savannah Lions)
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Bot1.Battlefield.Sanctuary Cat)
+? Client.Bot1.Battlefield.Savannah Lions.Rules = The next time a source of your choice would deal damage to you this turn, that damage is dealt to target creature of an opponent's choice instead (Nova Pentacle).
+? Client.Bot1.Battlefield.Sanctuary Cat.Rules = The next time a source of your choice would deal damage to you this turn, that damage is dealt to target creature of an opponent's choice instead (Nova Pentacle).
+[T2 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Nova Pentacle.Tapped = true

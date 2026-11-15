@@ -1,0 +1,60 @@
+# Nova Pentacle and Lava Burst: Lava Burst's damage "can't be prevented or dealt instead to another permanent or player"
+# only where it would be dealt to a creature; its ruling: redirection effects "will work on damage that Lava Burst would
+# deal to a player" (CR 614.9, 616.1f). Bot2 casts Lava Burst with X 1 at Bot1, who responds with the Pentacle; Bot2 targets
+# Bot1's Sanctuary Cat (1/2), and as the ability resolves Bot1 chooses Lava Burst on the stack as the source (CR 609.7a).
+# Its 1 damage to Bot1 is dealt to the Cat instead: the Cat has 1 damage marked, and Bot1 stays at 20.
+
+[Bot1 Deck]
+Nova Pentacle
+Black Lotus
+Mox Pearl x3
+Sanctuary Cat
+Plains
+Plains x25
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lava Burst
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nova Pentacle.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Sanctuary Cat.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lava Burst.Cast(Bot1; X: 1)
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Nova Pentacle.Activate
+Bot2.Target(Bot1.Battlefield.Sanctuary Cat)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Stack.Lava Burst)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Sanctuary Cat.Damage = 1
+Bot2.Graveyard = Lava Burst

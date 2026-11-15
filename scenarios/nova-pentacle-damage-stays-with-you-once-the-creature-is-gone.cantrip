@@ -1,0 +1,62 @@
+# Nova Pentacle's ruling: "Whether it's still a legal target is not checked at this time. However, if ... it's no longer on
+# the battlefield, then the damage is not redirected and is dealt to you as normal" (CR 614.9). Bot2 casts Lightning Bolt at
+# Bot1, who responds with the Pentacle; Bot2 targets Bot1's Sanctuary Cat, and as the ability resolves Bot1 chooses the Bolt
+# on the stack as the source (CR 609.7a). Bot2 then kills the Cat with a second Bolt before the first resolves: its 3 damage
+# to Bot1 has nowhere to go, and is dealt to Bot1 (17).
+
+[Bot1 Deck]
+Nova Pentacle
+Black Lotus
+Mox Pearl x3
+Sanctuary Cat
+Plains
+Plains x25
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt x2
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nova Pentacle.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Sanctuary Cat.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Nova Pentacle.Activate
+Bot2.Target(Bot1.Battlefield.Sanctuary Cat)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Stack.Lightning Bolt)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Sanctuary Cat)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Sanctuary Cat = (absent)
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt

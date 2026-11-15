@@ -1,0 +1,64 @@
+# Nova Pentacle in a game of three (CR 602.3a: "if there is more than one opponent who could make such a choice, the
+# ability's controller decides which of those opponents will make the choice"; the ruling "in multi-player games you can
+# choose a different opposing player each time it is used"). On turn 4 Bot2 casts Lightning Bolt at Bot1, who responds with
+# the Pentacle: Bot1 is offered only its opponents - not itself - and picks Bot3, and Bot3 targets Bot1's own Sanctuary Cat
+# (1/2). As the ability resolves Bot1 chooses the Bolt on the stack as the source (CR 609.7a): its 3 damage to Bot1 is dealt
+# to the Cat instead, which dies, and Bot1 stays at 20.
+
+[Bot1 Deck]
+Nova Pentacle
+Black Lotus
+Mox Pearl x3
+Sanctuary Cat
+Plains
+Plains x25
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x25
+
+[Bot3 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nova Pentacle.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Sanctuary Cat.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T4 Bot1.Main1]
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Nova Pentacle.Activate
+! Bot1.ChoosePlayer(Bot1)
+Bot1.ChoosePlayer(Bot3)
+Bot3.Target(Bot1.Battlefield.Sanctuary Cat)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Choose(Stack.Lightning Bolt)
+[T4 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Sanctuary Cat = (absent)
+Bot2.Graveyard = Lightning Bolt
