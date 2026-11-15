@@ -1,0 +1,8 @@
+{
+  "name": "Gremlin Tamer",
+  "manaCost": "{W}{U}",
+  "type": "Creature — Human Scout",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 1/1 red Gremlin creature token."
+}
