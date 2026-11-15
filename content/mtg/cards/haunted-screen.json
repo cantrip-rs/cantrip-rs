@@ -1,0 +1,6 @@
+{
+  "name": "Haunted Screen",
+  "manaCost": "{3}",
+  "type": "Artifact",
+  "oracleText": "{T}: Add {W} or {B}.\n{T}, Pay 1 life: Add {G}, {U}, or {R}.\n{7}: Put seven +1/+1 counters on this artifact. It becomes a 0/0 Spirit creature in addition to its other types. Activate only once."
+}

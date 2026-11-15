@@ -1,0 +1,63 @@
+# Haunted Screen: "It becomes a 0/0 Spirit creature in addition to its other types." (CR 205.1b, 613.1d, 613.4b, 613.7). Turn 1
+# Ensoul Artifact makes the Screen a 5/5 artifact creature; turn 3 Arcane Adaptation (Goblin) makes it a Goblin as well. Turn 5
+# Black Lotus and five Moxen pay the {7}: the Screen is a Goblin Spirit - the Spirit added to the Goblin, not in place of it - and
+# its later 0/0 overrides the Ensoul's 5/5, so the seven counters make it a 7/7.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Haunted Screen
+Ensoul Artifact
+Arcane Adaptation
+Island
+Black Lotus
+Island x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Haunted Screen.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ensoul Artifact.Cast(Bot1.Battlefield.Haunted Screen)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Haunted Screen.Power = 5
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Arcane Adaptation.Cast
+Bot1.Pass
+Bot1.Modes(Goblin)
+? Bot1.Battlefield.Haunted Screen.Subtypes = Goblin
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Haunted Screen.Activate(Ability: {7})
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Haunted Screen.Subtypes = Goblin; Spirit
+Bot1.Battlefield.Haunted Screen.Types = Artifact; Creature
+Bot1.Battlefield.Haunted Screen.Power = 7
+Bot1.Battlefield.Haunted Screen.Toughness = 7

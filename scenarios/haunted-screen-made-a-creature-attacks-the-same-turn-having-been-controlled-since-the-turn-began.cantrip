@@ -1,0 +1,48 @@
+# Haunted Screen: "{7}: ... It becomes a 0/0 Spirit creature in addition to its other types." Summoning sickness asks only whether
+# its controller has controlled the permanent continuously since the turn began (CR 302.6), not whether it was a creature: cast on
+# turn 1, animated in turn 3's first main phase with Black Lotus and four Moxen, the 7/7 Spirit attacks that turn and Bot2 takes 7.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Haunted Screen
+Black Lotus
+Mox Pearl
+Island x14
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Haunted Screen.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Haunted Screen.Activate(Ability: {7})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Haunted Screen.SummoningSick = false
+Bot1.Pass
+Bot1.Attack(Haunted Screen > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Haunted Screen.Tapped = true
+Bot1.Battlefield.Haunted Screen.Power = 7
