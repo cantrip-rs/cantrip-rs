@@ -1,0 +1,69 @@
+# Victor, Valgavoth's Seneschal's count of resolutions is per turn: on turn 3 and again on
+# turn 5 Bot1 puts one enchantment onto the battlefield, and each is the first resolution of that turn, so each surveils 2
+# and neither makes Bot2 discard. Bot2's own Authority of the Consuls entering on turn 2 is not an enchantment Bot1
+# controls: it is no resolution. Turn 3: Bot1 draws Hill Giant, sees Lightning Bolt and Counterspell, bins the Bolt and
+# keeps Counterspell on top. Turn 5: Bot1 draws Counterspell and sees two Plains, keeping both.
+
+[Bot1 Deck]
+Victor, Valgavoth's Seneschal
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Exploration
+Fastbond
+Hill Giant
+Lightning Bolt
+Counterspell
+Plains x10
+
+[Bot2 Deck]
+Authority of the Consuls
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Victor, Valgavoth's Seneschal.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Authority of the Consuls.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Exploration.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Counterspell | Lightning Bolt)
+? Bot1.Surveilled = 2 requested, 2 looked
+? Bot1.Graveyard = Lightning Bolt
+? Bot2.Hand.Count = 6
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fastbond.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Plains |)
+
+[Expect]
+Bot1.Surveilled = 2 requested, 2 looked; 2 requested, 2 looked
+Bot1.Graveyard = Lightning Bolt
+Bot2.Hand.Count = 7
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield = Exploration; Fastbond; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Victor, Valgavoth's Seneschal

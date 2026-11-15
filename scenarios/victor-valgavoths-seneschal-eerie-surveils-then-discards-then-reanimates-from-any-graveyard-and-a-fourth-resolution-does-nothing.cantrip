@@ -1,0 +1,88 @@
+# Victor, Valgavoth's Seneschal counts how many times its Eerie ability has resolved this turn. Victor comes
+# down on turn 1; on turn 5 four enchantments enter in one turn: the first resolution surveils 2 (Bot1 puts Hill Giant and
+# Lightning Bolt into the graveyard), the second makes Bot2 discard a card (the Ornithopter among the Islands Bot2 is
+# holding), the third puts a creature card from a graveyard onto the battlefield untapped under Bot1's control (Bot1 takes Bot2's
+# Ornithopter, not its own Hill Giant, and may not take the Lightning Bolt: not a creature card), and the fourth does nothing.
+# (Black Lotus sacrificed itself, so Bot1 graveyard holds three cards after the surveil.) Mana: Mox Pearl pays Authority of the Consuls; Black Lotus pays the three green enchantments.
+
+[Bot1 Deck]
+Victor, Valgavoth's Seneschal
+Mox Pearl
+Mox Jet
+Mox Ruby
+Black Lotus
+Exploration
+Fastbond
+Hardened Scales
+Authority of the Consuls
+Hill Giant
+Lightning Bolt
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Victor, Valgavoth's Seneschal.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+? Bot1.Hand.Count = 5
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Exploration.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(| Hill Giant; Lightning Bolt)
+? Bot1.Surveilled = 2 requested, 2 looked
+? Bot1.Graveyard.Count = 3
+? Bot2.Hand.Count = 7
+Bot1.Hand.Fastbond.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Ornithopter)
+? Bot2.Hand.Count = 6
+? Bot2.Graveyard = Ornithopter
+Bot1.Hand.Hardened Scales.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Ornithopter)
+? Bot1.Battlefield = Exploration; Fastbond; Hardened Scales; Mox Jet; Mox Pearl; Mox Ruby; Ornithopter; Victor, Valgavoth's Seneschal
+? Bot2.Graveyard.Count = 0
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Authority of the Consuls.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Surveilled = 2 requested, 2 looked
+Bot1.Graveyard.Count = 3
+Bot1.Battlefield = Authority of the Consuls; Exploration; Fastbond; Hardened Scales; Mox Jet; Mox Pearl; Mox Ruby; Ornithopter; Victor, Valgavoth's Seneschal
+Bot2.Graveyard.Count = 0
+Bot2.Hand.Count = 6
+Bot1.Hand.Count = 0
+Bot1.Battlefield.Ornithopter.Tapped = false
