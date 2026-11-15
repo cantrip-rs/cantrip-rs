@@ -1,0 +1,69 @@
+# For the Common Good ({X}{X}{G}): "Create X tokens that are copies of target token you control. Then tokens you control gain indestructible
+# until your next turn. You gain 1 life for each token you control." Turn 1: Gold Pan (Mox Jet and Mox Ruby) makes a Treasure token, then the
+# spell is cast for X=2 (five mana: Black Lotus, Mox Emerald, Mox Pearl): two more Treasures (copies), all three tokens gain indestructible, and 3 life is gained (20 -> 23),
+# counted after the copies exist. The battlefield is the four Moxen, Gold Pan and three Treasures (Black Lotus was sacrificed): 8.
+# Turn 2: Bot2's Disenchant on a Treasure made by the spell (#3) does not destroy it - the copies gain indestructible too, being tokens you control once they exist (CR 608.2c; a Treasure has no keyword key to read, so the Disenchants are the check). Turn 3: "until your next turn" is over as the turn
+# begins: the Treasures are no longer indestructible, and turn 4's Disenchant destroys one (the positive control, 8 -> 7).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Gold Pan
+For the Common Good
+Island x14
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Disenchant
+Disenchant
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gold Pan.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.For the Common Good.Cast(Bot1.Battlefield.Treasure Token; X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 8
+? Bot1.Life = 23
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Treasure Token#3)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 8
+[T3 Bot1.Main1]
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Treasure Token)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 7
+Bot1.Life = 23

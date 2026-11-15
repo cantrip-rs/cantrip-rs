@@ -1,0 +1,77 @@
+# For the Common Good: "target token you control" and "tokens you control", so an opponent's token is neither a legal target nor
+# helped, nor counted. Turn 1 Bot1 makes a Treasure with Gold Pan. Turn 2 Bot2 makes one too. Turn 3: Bot1 cannot cast the spell at Bot2's
+# Treasure (refused), and then casts it at its own for X=0 ({G} only): no copies, but the sentence still happens, the Treasure
+# gains indestructible and 1 life is gained for it (20 -> 21), not 2 for both. On turn 4 Bot2's two Disenchants: the one at Bot1's
+# Treasure does not destroy it; the one at Bot2's own Treasure does (not protected, the positive control).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Gold Pan
+For the Common Good
+Island x2
+Island x14
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Gold Pan
+Disenchant
+Disenchant
+Plains
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gold Pan.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Gold Pan.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Count = 6
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.For the Common Good.Cast(Bot2.Battlefield.Treasure Token; X: 0)
+Bot1.Hand.For the Common Good.Cast(Bot1.Battlefield.Treasure Token; X: 0)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+? Bot1.Battlefield.Count = 5
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Treasure Token)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 5
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Disenchant.Cast(Bot2.Battlefield.Treasure Token)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Bot2.Battlefield.Count = 5
+Bot1.Life = 21

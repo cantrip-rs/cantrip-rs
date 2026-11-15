@@ -1,0 +1,6 @@
+{
+  "name": "For the Common Good",
+  "manaCost": "{X}{X}{G}",
+  "type": "Sorcery",
+  "oracleText": "Create X tokens that are copies of target token you control. Then tokens you control gain indestructible until your next turn. You gain 1 life for each token you control."
+}
