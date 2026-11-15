@@ -1735,6 +1735,7 @@ counter_kinds! {
     Doom = 92, "doom", "Doom";
     Intervention = 93, "intervention", "Intervention";
     Hunger = 94, "hunger", "Hunger";
+    Possession = 95, "possession", "Possession";
 }
 
 impl CounterKind {
@@ -2413,7 +2414,7 @@ mod carrion_counter_tests {
         assert_eq!(CounterKind::Film as usize, 64);
         assert_eq!(CounterKind::Peace as usize, 65);
         assert_eq!(CounterKind::Vow as usize, 91);
-        assert_eq!(CounterKind::COUNT, 95);
+        assert_eq!(CounterKind::COUNT, 96);
         assert!(!CounterKind::POWER_TOUGHNESS.iter().any(|(kind, _, _)| *kind == carrion));
     }
     #[test]
