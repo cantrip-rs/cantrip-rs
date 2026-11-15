@@ -487,6 +487,11 @@ pub enum RequestKind {
         /// The creatures whose cost to attack this pays (CR 508.1h-j), when it is one: `source` is then the permanent
         /// whose static ability makes attacking cost something (the first, when several do). Empty for anything else.
         attackers: Vec<ObjectId>,
+        /// The creatures whose cost to block this pays (CR 509.1d-f), when it is one: `source` is then the permanent whose
+        /// static ability makes blocking cost something (the first, when several do). None for anything else: boxed, as
+        /// `x_cost` is, so the question stays its size for every payment that is not one.
+        #[allow(clippy::box_collection)]
+        blockers: Option<Box<Vec<ObjectId>>>,
         /// The life the total cost asks besides its mana (CR 119.4, 601.2h: "an additional 3 life", "pay X life"), paid with it
         /// once the mana is. Zero while X is announced, and for anything but a spell.
         life: u32,
@@ -765,9 +770,12 @@ impl RequestKind {
                 options(&mut add, o);
                 add(&[*source, *subject]);
             }
-            RequestKind::PayCosts { source, options: o, attackers, .. } => {
+            RequestKind::PayCosts { source, options: o, attackers, blockers, .. } => {
                 add(&[*source]);
                 add(attackers);
+                if let Some(blockers) = blockers {
+                    add(blockers);
+                }
                 options(&mut add, o);
             }
             RequestKind::ChooseCards { source, cards, rule, .. } => {
@@ -1113,9 +1121,14 @@ pub struct BlockRequirements {
     /// Each attacker offered with the fewest creatures that may block it, if any do (2 for menace, CR 702.111b), and the
     /// most (`u32::MAX` for any number; 1 for "can't be blocked by more than one creature", CR 509.1b).
     pub limits: Vec<(ObjectId, u32, u32)>,
-    /// What each block that costs something costs (CR 509.1d); a block with no entry is free. A requirement is never obeyed
-    /// by paying (CR 509.1c): `most` counts free blocks only. Empty until an effect makes blocking cost something.
+    /// What each block that costs something costs (CR 509.1d), an entry for each ability that taxes it; a block with no entry
+    /// is free. A requirement is never obeyed
+    /// by paying (CR 509.1c): `most` counts free blocks only. Empty where no static ability makes blocking cost something.
     pub costs: Vec<BlockCost>,
+    /// The declaration made before this one in the same step was taken back, its cost not paid (CR 509.1f, 733.1). Said
+    /// so the player knows why they are asked again, and so a seat that answers alike each time may declare differently -
+    /// only blocks that cost nothing, say - rather than make the same one forever.
+    pub taken_back: bool,
     /// Each creature offered that can block more than one attacker (CR 509.1a, `BlockCapacity`), with how many it can block
     /// (`u32::MAX` for any number); one not listed blocks one at most. Empty where no creature can block more than one.
     pub capacities: Vec<(ObjectId, u32)>,
@@ -1159,15 +1172,20 @@ pub struct RequiredBlock {
     pub attacker: Option<ObjectId>,
 }
 
-/// What declaring `blocker` as a blocker of `attacker` costs (CR 509.1d): the sum of what every effect that makes that block
-/// cost something asks, with the first permanent asking it, which the payment is shown as being for. Paid as attack costs
-/// are (CR 509.1d-f, 508.1h-j: mana abilities, then the total at once), through the same payment question.
+/// What one static ability asks for declaring `blocker` as a blocker of `attacker` (CR 509.1d), with the permanent asking it,
+/// which the payment is shown as being for. `ability` tells the abilities consulted as the question was made apart: an
+/// ability's cost is paid once for each creature it taxes, however many of the attackers that creature is declared blocking
+/// it taxes - Hipparion's "can't block creatures with power 3 or greater unless you pay {1}" asks {1} of a Hipparion blocking
+/// two such creatures, and Archangel of Tithes' "{1} for each of those creatures" counts blocking creatures, not blocks
+/// (`BlockRequirements::total_cost`). Paid as attack costs are (CR 509.1d-f, 508.1h-j: mana abilities, then the total at
+/// once), through the same payment question.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct BlockCost {
     pub blocker: ObjectId,
     pub attacker: ObjectId,
     pub cost: ManaCost,
     pub source: ObjectId,
+    pub ability: u32,
 }
 
 impl BlockRequirements {
@@ -1204,11 +1222,14 @@ impl BlockRequirements {
         !self.costs.iter().any(|c| c.blocker == blocker && c.attacker == attacker)
     }
 
-    /// What declaring `blocks` costs in all (CR 509.1d): each block's own cost, added up.
+    /// What declaring `blocks` costs in all (CR 509.1d): for each blocking creature, what each ability that taxes any of its
+    /// declared blocks asks, once (`BlockCost::ability`), added up.
     pub fn total_cost(&self, blocks: &[(ObjectId, ObjectId)]) -> ManaCost {
         let mut total = ManaCost::ZERO;
-        for &(b, a) in blocks {
-            if let Some(c) = self.costs.iter().find(|c| c.blocker == b && c.attacker == a) {
+        for (i, c) in self.costs.iter().enumerate() {
+            if blocks.contains(&(c.blocker, c.attacker))
+                && !self.costs[..i].iter().any(|d| d.blocker == c.blocker && d.ability == c.ability && blocks.contains(&(d.blocker, d.attacker)))
+            {
                 total = total.plus(&c.cost);
             }
         }

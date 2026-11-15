@@ -341,6 +341,12 @@ impl StateDump {
             d.set("Combat.AttackCost.Remaining", remaining.to_string());
             d.list("Combat.AttackCost.Attackers", attackers.iter().map(|&a| game.known_name(a).to_string()).collect(), true);
         }
+        // While a declaration's cost to block is being paid (CR 509.1d-f), the same, with the blockers it is for.
+        if let Some(Request { kind: RequestKind::PayCosts { total, remaining, blockers: Some(blockers), .. }, .. }) = game.pending() {
+            d.set("Combat.BlockCost", total.to_string());
+            d.set("Combat.BlockCost.Remaining", remaining.to_string());
+            d.list("Combat.BlockCost.Blockers", blockers.iter().map(|&b| game.known_name(b).to_string()).collect(), true);
+        }
 
         // Only once there is one (CR 725.1, 726.1): most games never have a monarch or the initiative.
         if let Some(p) = s.seats().find(|&p| s.player(p).monarch) {
@@ -1033,7 +1039,8 @@ impl StateDump {
 const GAME_KEYS: &[&str] = &[
     "Turn", "Step", "ActivePlayer", "PriorityPlayer", "Result", "DrawReason", "Monarch", "Initiative", "DayNight", "Stack", "Exile",
     "Exile.FaceDown", "Combat.Attackers", "Combat.Blockers", "Combat.Blocks", "Combat.AttackCost", "Combat.AttackCost.Remaining",
-    "Combat.AttackCost.Attackers", "Delayed", "LeftBattlefield", "Prevented", "Attached",
+    "Combat.AttackCost.Attackers", "Combat.BlockCost", "Combat.BlockCost.Remaining", "Combat.BlockCost.Blockers", "Delayed",
+    "LeftBattlefield", "Prevented", "Attached",
 ];
 
 /// The keys the dump writes of a player, after `BotN.`.

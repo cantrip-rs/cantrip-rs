@@ -10756,6 +10756,7 @@ fn cast(
         no_mana,
         purpose: Paying::Casting,
         attackers: &[],
+        blockers: &[],
         life: life_owed,
         any,
         abilities_closed: assisted.is_some(),
@@ -10977,6 +10978,7 @@ fn assist(cx: &mut Cx, caster: PlayerId, spell: ObjectId, total: ManaCost) -> R<
                 least: 0,
                 loyalty: false,
                 attackers: Vec::new(),
+                blockers: None,
                 life: 0,
                 governs: "",
                 assist: AssistStep::HelperAnnounces,
@@ -11033,6 +11035,7 @@ fn assist_window(cx: &mut Cx, player: PlayerId, spell: ObjectId, owed: ManaCost,
             least: 0,
             loyalty: false,
             attackers: Vec::new(),
+            blockers: None,
             life: 0,
             governs: "",
             assist: step,
@@ -12370,7 +12373,7 @@ fn announce_x(cx: &mut Cx, player: PlayerId, spell: ObjectId, base: ManaCost, ki
         options.push(ActionOption::simple(ActionKind::ConfirmCasting));
         options.push(ActionOption::simple(ActionKind::CancelCasting));
         let x_cost = paid.map(|c| Box::new(c.clone()));
-        let ask = RequestKind::PayCosts { source: spell, total, remaining: total, options, mana_abilities: false, announcing: true, x: n, most, least, loyalty, attackers: Vec::new(), life: 0, governs, assist: AssistStep::None, x_cost };
+        let ask = RequestKind::PayCosts { source: spell, total, remaining: total, options, mana_abilities: false, announcing: true, x: n, most, least, loyalty, attackers: Vec::new(), blockers: None, life: 0, governs, assist: AssistStep::None, x_cost };
         match cx.ask_core(player, ask, true)? {
             // The whole value at once, which the request's `least` and `most` bound (`validate::check`).
             Answer::Announce(value) if (least..=most).contains(&value) => return Ok(value),
@@ -14502,6 +14505,8 @@ pub(crate) struct Helpers<'a> {
     pub purpose: Paying,
     /// The attacking creatures whose cost to attack this pays (CR 508.1h-j), for the question to name.
     pub attackers: &'a [ObjectId],
+    /// The blocking creatures whose cost to block this pays (CR 509.1d-f), for the question to name.
+    pub blockers: &'a [ObjectId],
     /// The life the total cost asks besides its mana (CR 119.4, 601.2h), paid with it once the mana is: for the question to
     /// say.
     pub life: u32,
@@ -14518,9 +14523,17 @@ pub(crate) struct Helpers<'a> {
     pub mana_ability: bool,
 }
 
+impl Helpers<'_> {
+    /// The blockers a payment of a cost to block names (`RequestKind::PayCosts::blockers`), none for any other payment.
+    #[allow(clippy::box_collection)]
+    fn blockers_asked(&self) -> Option<Box<Vec<ObjectId>>> {
+        (!self.blockers.is_empty()).then(|| Box::new(self.blockers.to_vec()))
+    }
+}
+
 impl Helpers<'static> {
     pub const NONE: Helpers<'static> =
-        Helpers { with: PayWith::NONE, waterbend: 0, creatures: false, no_mana: false, purpose: Paying::Other, attackers: &[], life: 0, any: AnyMana::No, abilities_closed: false, assist: AssistStep::None, mana_ability: false };
+        Helpers { with: PayWith::NONE, waterbend: 0, creatures: false, no_mana: false, purpose: Paying::Other, attackers: &[], blockers: &[], life: 0, any: AnyMana::No, abilities_closed: false, assist: AssistStep::None, mana_ability: false };
 }
 
 /// What a mana payment is for, as far as restricted mana is concerned (CR 106.6): see `payment_for`.
@@ -14699,6 +14712,12 @@ pub(crate) fn pay_attack_costs(cx: &mut Cx, player: PlayerId, source: ObjectId, 
     Ok(())
 }
 
+/// Pays a declaration of blockers' locked-in total cost to block (CR 509.1d), as a cost to attack's mana is paid: the chance
+/// to activate mana abilities (CR 509.1e), then all of it at once (CR 509.1f). `Stop::Cancel` when the player gives it up.
+pub(crate) fn pay_block_costs(cx: &mut Cx, player: PlayerId, source: ObjectId, total: ManaCost, blockers: &[ObjectId]) -> R<()> {
+    pay_mana_with(cx, player, source, total, &Helpers { blockers, ..Helpers::NONE }).map(|_| ())
+}
+
 /// `pay_mana_with`, and what the mana spent does to what it paid for (`ManaRestriction::effects`, CR 106.6).
 pub(crate) fn pay_mana_used(cx: &mut Cx, player: PlayerId, source: ObjectId, total: ManaCost, helpers: &Helpers) -> R<(ManaPool, u8)> {
     if !helpers.mana_ability {
@@ -14764,7 +14783,7 @@ fn mana_activation_window(cx: &mut Cx, player: PlayerId, source: ObjectId, total
             options.push(ActionOption::simple(ActionKind::ConfirmCasting));
         }
         options.push(ActionOption::simple(ActionKind::CancelCasting));
-        let ask = RequestKind::PayCosts { source, total, remaining, options, mana_abilities: true, announcing: false, x: 0, most: 0, least: 0, loyalty: false, attackers: helpers.attackers.to_vec(), life: helpers.life + u32::from(life), governs: "", assist: helpers.assist, x_cost: None };
+        let ask = RequestKind::PayCosts { source, total, remaining, options, mana_abilities: true, announcing: false, x: 0, most: 0, least: 0, loyalty: false, attackers: helpers.attackers.to_vec(), blockers: helpers.blockers_asked(), life: helpers.life + u32::from(life), governs: "", assist: helpers.assist, x_cost: None };
         let answer = cx.ask_core(player, ask, true)?;
         if record { crate::takeback::asked_paying(cx.g); }
         match answer {
@@ -14965,7 +14984,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
         } else {
             total
         };
-        let ask = RequestKind::PayCosts { source, total: shown, remaining: due, options, mana_abilities: false, announcing: false, x: 0, most: 0, least: 0, loyalty: false, attackers: helpers.attackers.to_vec(), life: helpers.life + u32::from(life), governs: "", assist: helpers.assist, x_cost: None };
+        let ask = RequestKind::PayCosts { source, total: shown, remaining: due, options, mana_abilities: false, announcing: false, x: 0, most: 0, least: 0, loyalty: false, attackers: helpers.attackers.to_vec(), blockers: helpers.blockers_asked(), life: helpers.life + u32::from(life), governs: "", assist: helpers.assist, x_cost: None };
         // The player assisting pays for a spell that is not theirs to take back (CR 702.132a).
         let answer = cx.ask_core(player, ask, helpers.assist != AssistStep::HelperPays)?;
         if record {

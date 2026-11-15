@@ -3,7 +3,7 @@
 //! without them pays one table lookup per permanent when something is cast or activated.
 
 use cantrip_api::*;
-use cantrip_state::ManaPart;
+use cantrip_state::{BlockCost, ManaPart};
 
 use crate::{Cx, actions::WithWords};
 
@@ -432,6 +432,34 @@ pub fn attack_costs(cx: &Cx, eligible: &[ObjectId], targets: &[Target]) -> Vec<A
             if let Some(source) = first {
                 out.push(AttackCost { attacker, target, cost: total, source });
             }
+        }
+    }
+    out
+}
+
+/// What each block the restrictions allow costs to declare (CR 509.1d): for each of `allowed`, every static ability of a
+/// permanent on the battlefield that makes that block cost something (`CardDef::block_costs`: Hipparion's "this creature
+/// can't block creatures with power 3 or greater unless you pay {1}"), an entry for each, numbered for the ability it is
+/// (`BlockCost::ability`) so that each ability is paid once for each creature it taxes, however many attackers that creature
+/// blocks. Blocks that cost nothing have no entry. A board with no such permanent, nearly every board, makes no list.
+pub fn block_costs(cx: &Cx, allowed: &[(ObjectId, ObjectId)]) -> Vec<BlockCost> {
+    let taxes: Vec<(ObjectId, PlayerId, &'static CardDef, Option<Linked>)> = sources(cx, |d| !d.block_costs.is_empty()).collect();
+    if taxes.is_empty() {
+        return Vec::new();
+    }
+    let mut out = Vec::new();
+    let mut ability = 0u32;
+    for &(id, controller, def, by) in &taxes {
+        let asker = Asker { instance: None, source: id, controller, by, spell: false };
+        for rule in def.block_costs {
+            for &(blocker, attacker) in allowed {
+                if let Some(cost) = rule(cx, &asker, blocker, attacker)
+                    && !cost.is_zero()
+                {
+                    out.push(BlockCost { blocker, attacker, cost, source: id, ability });
+                }
+            }
+            ability += 1;
         }
     }
     out

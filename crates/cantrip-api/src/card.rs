@@ -2903,6 +2903,17 @@ pub type AttackHasteRule = fn(&dyn Query, &Asker, ObjectId, Target) -> bool;
 /// `cantrip_mechanics::statics` has the shared ones.
 pub type AttackCostRule = fn(&dyn Query, &Asker, ObjectId, Target) -> Option<ManaCost>;
 
+/// A static ability that makes blocking cost something (CR 509.1d): "this creature can't block creatures with power 3 or
+/// greater unless you pay {1}" (Hipparion). Asked, while its source is on the battlefield and has its abilities, of each
+/// block the restrictions allow - the blocker, then the attacker it would be declared blocking: the cost of that one block,
+/// or `None` when this ability asks nothing of it. Each ability is paid once for each creature whose declared blocks it taxes,
+/// however many of them it taxes: Hipparion blocking two creatures with power 3 or more asks {1}, and Archangel of Tithes'
+/// "{1} for each of those creatures" counts blocking creatures. Every such ability's cost is added up and locked in once the
+/// blockers are declared (CR 509.1d); the defending player may activate mana abilities and pays it all (CR 509.1e-f), or
+/// declares again (CR 509.1, 733). A cost is never a requirement: a creature that must block if able need not make a block
+/// that costs something (CR 509.1c).
+pub type BlockCostRule = fn(&dyn Query, &Asker, ObjectId, ObjectId) -> Option<ManaCost>;
+
 /// A fixed cost for each attack to which `applies` is true (CR 508.1h-j).
 /// Flooded Woodlands and Reclamation ask for a land per matching attacker;
 /// Leviathan asks for two Islands. The declaring player pays, with filters and
@@ -3841,6 +3852,8 @@ pub struct CardDef {
     pub block_requirements: &'static [BlockRequirement],
     /// Its static abilities that require an attacker to be blocked (CR 509.1c), while it is on the battlefield.
     pub must_be_blocked: &'static [MustBeBlocked],
+    /// Its static abilities that make blocking cost something (CR 509.1d), while it is on the battlefield.
+    pub block_costs: &'static [BlockCostRule],
     /// Its static abilities that keep creatures from attacking, or from attacking a given player, planeswalker or battle
     /// (CR 508.1c), while it is on the battlefield.
     pub attack_rules: &'static [AttackRule],
@@ -4158,6 +4171,7 @@ impl CardDef {
         block_capacities: &[],
         block_requirements: &[],
         must_be_blocked: &[],
+        block_costs: &[],
         attack_rules: &[],
         attack_alone_rules: &[],
         attack_costs: &[],
@@ -4273,6 +4287,7 @@ impl CardDef {
             (!self.block_capacities.is_empty(), "block capacities"),
             (!self.block_requirements.is_empty(), "block requirements"),
             (!self.must_be_blocked.is_empty(), "must be blocked"),
+            (!self.block_costs.is_empty(), "block costs"),
             (!self.attack_rules.is_empty(), "attack rules"),
             (!self.attacks_as_though_haste.is_empty(), "attack-only haste permissions"),
             (!self.attack_alone_rules.is_empty(), "a rule against attacking alone"),

@@ -1149,6 +1149,9 @@ pub struct DeclareBlockersPrompt {
     /// first. Every other declaration is asked of the host (`CheckBlocks`).
     #[serde(default)]
     pub verdict: BlockVerdictView,
+    /// The declaration made before this one in the same step was taken back, its cost to block not paid (CR 509.1f, 733.1).
+    #[serde(default)]
+    pub taken_back: bool,
 }
 
 /// What the rules make of a declaration of blockers (CR 509.1a-c): whether it may be declared as it is, why not, and the
@@ -1300,6 +1303,10 @@ pub struct PayCostsPrompt {
     pub remaining_x: i32,
     #[serde(default)]
     pub remaining_snow: u32,
+    /// The blocking creatures whose cost to block this pays (CR 509.1d-f); `spell` is then the permanent that makes blocking
+    /// cost something. Giving it up takes the declaration of blockers back, to be made again. Empty for any other payment.
+    #[serde(default)]
+    pub blockers: Vec<ViewHandle>,
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]

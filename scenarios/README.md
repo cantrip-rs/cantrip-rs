@@ -579,6 +579,10 @@ kind, place it where the action could otherwise be taken, with a wait or `BotN.P
   paid (CR 508.1h-j: "creatures can't attack you unless their controller pays ..."): the total, what the pool has not yet
   covered, and the attackers it is for; absent at any other time. A `? Combat.AttackCost = {2}` right after an `Attack`
   line proves the payment was asked for, and `Bot1.Cancel` then takes the declaration back, to be declared again
+- `Combat.BlockCost` (`{1}`), `.Remaining` and `.Blockers` (with `.Count`), the same while a declaration's cost to block is
+  being paid (CR 509.1d-f: Hipparion's "can't block creatures with power 3 or greater unless you pay {1}"): a
+  `? Combat.BlockCost = {1}` right after a `Block` line proves the payment was asked for, and `Bot2.Cancel` takes the
+  declaration back, to be declared again
 - `LeftBattlefield` (with `.Count`): every permanent that left the battlefield, in the order the history recorded it, as it
   last was there (CR 608.2h): `Expedition Map (tapped)` when it was tapped as it left. A tap the history records only after
   the permanent had left does not count (CR 701.26a), which is how a cost that taps and moves its source shows it paid the tap

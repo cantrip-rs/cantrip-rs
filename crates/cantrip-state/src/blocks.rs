@@ -516,7 +516,7 @@ mod tests {
                             let mut r = BlockRequirements { capacities: vec![(X, cx), (Y, cy)],
                                 limits: vec![(A, ma, 2), (B, mb, 2)], required: needs.clone(), ..Default::default() };
                             if paid { r.costs.push(BlockCost { blocker: X, attacker: A,
-                                cost: ManaCost { generic: 1, ..ManaCost::ZERO }, source: A }); }
+                                cost: ManaCost { generic: 1, ..ManaCost::ZERO }, source: A, ability: 0 }); }
                             let declarations: Vec<Vec<_>> = (0..16).map(|mask| all.iter().enumerate()
                                 .filter(|(i, _)| mask & (1 << i) != 0).map(|(_, p)| *p).collect()).collect();
                             let valid = |decl: &Vec<(ObjectId, ObjectId)>| {
@@ -638,12 +638,34 @@ mod tests {
     fn a_requirement_is_never_obeyed_by_paying() {
         let allowed = [(X, A)];
         let mut r = BlockRequirements { required: vec![blocks(X)], ..Default::default() };
-        r.costs = vec![BlockCost { blocker: X, attacker: A, cost: ManaCost { generic: 2, ..ManaCost::ZERO }, source: B }];
+        r.costs = vec![BlockCost { blocker: X, attacker: A, cost: ManaCost { generic: 2, ..ManaCost::ZERO }, source: B, ability: 0 }];
         r.most = r.solve(&allowed, &[], None, true).map_or(0, |s| s.0);
         assert_eq!(r.most, 0);
         assert!(r.judge(&allowed, &[], false).complete);
         let paid = r.judge(&allowed, &[(X, A)], false);
         assert!(paid.complete && paid.cost.generic == 2);
+    }
+
+    /// An ability's cost to block is paid once for each creature it taxes (CR 509.1d): X blocking A and B, both taxed by
+    /// ability 0 ({1}, Hipparion's), owes {1}; a second ability taxing X's block of B adds its own {2}; Y blocking C, taxed by
+    /// ability 0 too, owes its own {1}.
+    #[test]
+    fn an_ability_taxes_each_blocking_creature_once() {
+        let one = ManaCost { generic: 1, ..ManaCost::ZERO };
+        let two = ManaCost { generic: 2, ..ManaCost::ZERO };
+        let r = BlockRequirements {
+            capacities: vec![(X, 2)],
+            costs: vec![
+                BlockCost { blocker: X, attacker: A, cost: one, source: X, ability: 0 },
+                BlockCost { blocker: X, attacker: B, cost: one, source: X, ability: 0 },
+                BlockCost { blocker: Y, attacker: C, cost: one, source: Y, ability: 0 },
+                BlockCost { blocker: X, attacker: B, cost: two, source: Y, ability: 1 },
+            ],
+            ..Default::default()
+        };
+        assert_eq!(r.total_cost(&[(X, A), (X, B)]).generic, 3);
+        assert_eq!(r.total_cost(&[(X, A)]).generic, 1);
+        assert_eq!(r.total_cost(&[(X, A), (Y, C)]).generic, 2);
     }
 
     /// Lured attackers that can't be blocked by more than one creature each, and every creature able to block any of them: the
@@ -778,7 +800,7 @@ mod tests {
             let costs: Vec<BlockCost> = allowed
                 .iter()
                 .filter(|_| next(6) == 0)
-                .map(|&(b, a)| BlockCost { blocker: b, attacker: a, cost: ManaCost { generic: 1, ..ManaCost::ZERO }, source: ObjectId(99) })
+                .map(|&(b, a)| BlockCost { blocker: b, attacker: a, cost: ManaCost { generic: 1, ..ManaCost::ZERO }, source: ObjectId(99), ability: 0 })
                 .collect();
             // Most creatures block one attacker; some two (one additional), some any number.
             let capacities: Vec<(ObjectId, u32)> = blockers

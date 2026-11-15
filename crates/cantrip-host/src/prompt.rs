@@ -964,7 +964,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
         RequestKind::Priority { options } => {
             PromptPayload::PriorityPromptMessage(PriorityPrompt { player, options: options_messages(game, handles, options) })
         }
-        RequestKind::PayCosts { source, total, remaining, options, mana_abilities, announcing, x, most, least, loyalty, attackers, life, governs, assist, x_cost } => {
+        RequestKind::PayCosts { source, total, remaining, options, mana_abilities, announcing, x, most, least, loyalty, attackers, blockers, life, governs, assist, x_cost } => {
             let def = game.cards.get(game.state.obj(*source).card);
             let kicker = def.kicker;
             let spends_no_mana = game.chars(*source).has(Keyword::CantSpendManaToCast);
@@ -1018,6 +1018,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 x_governs: (*governs).into(),
                 spends_no_mana,
                 attackers: handles_of(handles, attackers),
+                blockers: blockers.as_deref().map_or_else(Vec::new, |b| handles_of(handles, b)),
                 life: (*life).min(i32::MAX as u32) as i32,
                 assist_step: assist_step_view(*assist).into(),
                 // Only a payment with assist has another player's mana in it: no other reads the log.
@@ -1579,6 +1580,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                         most => wire(most),
                     })
                     .collect(),
+                taken_back: requirements.taken_back,
             })
         }
         RequestKind::DiscardToHandSize { count, hand } => PromptPayload::DiscardPromptMessage(DiscardPrompt {

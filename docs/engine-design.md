@@ -3058,9 +3058,18 @@ loses its abilities still must), one requirement per effect of a creature that m
 this combat if able" is `EffectKind::MustBlockAttacker(attacker)` with `Duration::EndOfCombat`, one requirement naming the blocker and
 that attacker, made only while the restrictions allow that block. A creature that is
 tapped, can't block or may block no attacker is required nothing. Costs to block (CR 509.1d) are data in the question
-(`BlockRequirements::costs`, one `BlockCost` per block that costs something; no effect makes one yet) and the verdict carries a
-declaration's total; `most` counts free blocks only, since no requirement is obeyed by paying (CR 509.1c). Paying would reuse
-attack costs' payment (CR 509.1d-f mirrors 508.1h-j). `turn::block_rules` puts the requirements, each attacker's fewest and most
+(`BlockRequirements::costs`, one `BlockCost` per block and ability that taxes it), from the static abilities that make blocking
+cost something (`CardDef::block_costs`, a `BlockCostRule` asked of each allowed block: Hipparion's "can't block creatures with
+power 3 or greater unless you pay {1}"; `static_rules::block_costs`), and the verdict carries a declaration's total, in which
+each ability is paid once for each creature whose blocks it taxes (Hipparion blocking two such creatures asks {1}; Archangel
+of Tithes' "for each of those creatures" counts blocking creatures, not blocks); `most`
+counts free blocks only, since no requirement is obeyed by paying (CR 509.1c). A declaration that costs something is paid as
+a cost to attack's mana is (`turn::declare_paid_blocks`, `actions::pay_block_costs`: the total locked in, mana abilities, then
+all of it, CR 509.1d-f), the payment naming its blockers (`RequestKind::PayCosts::blockers`); given up, it is taken back (CR
+733) and asked again with `BlockRequirements::taken_back`. Only a chosen creature still controlled by the defending player
+then becomes a blocking creature (CR 509.1g) - one a mana ability sacrificed while paying does not - and the attacker it was
+declared blocking is blocked all the same (CR 509.1h). Camouflage's procedure, which declares and pays nothing, makes no block
+that costs something. `turn::block_rules` puts the requirements, each attacker's fewest and most
 blockers (`limits`), the costs and the bands in the question, and `BlockRequirements::solve` (`crates/cantrip-state/src/blocks.rs`)
 finds the most of them any declaration that breaks no restriction obeys by a cut search over the blocks of the attackers a
 requirement can be obeyed through, with one such declaration (`suggested`). A branch is bounded by what the creatures still
@@ -3076,8 +3085,9 @@ and judges refusals with it, and the host gives it to a client as the player dec
 The web client holds any set of blocks and offers exactly what the verdict adds, and every client's declaration is settled
 with the host by `GameClient.Answer`, so a new restriction, requirement or cost changes the engine alone. Not built, as no card
 in content needs it: the static "blocks each combat if able" (a source of the same no-attacker requirement), "must be blocked if
-able" (whose requirement already fits), "this combat" durations, an effect that makes blocking cost something, and a creature
-that can block additional creatures (the validator's one-attacker-per-blocker rule, CR 509.1a).
+able" (whose requirement already fits), "this combat" durations, a resolved effect that makes blocking cost something (War
+Cadence), a cost to block other than mana, and a creature that can block additional creatures (the validator's
+one-attacker-per-blocker rule, CR 509.1a).
 
 ### Banding
 

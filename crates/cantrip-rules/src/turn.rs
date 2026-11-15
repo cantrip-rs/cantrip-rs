@@ -1548,10 +1548,16 @@ fn declare_blockers(cx: &mut Cx) -> R<()> {
         } else {
             // CR 509.1b-c: each attacker's limits, and the blocks effects require if able, with the most of them a declaration can obey.
             let requirements = block_rules(cx, &attackers, &allowed, &rule_sources);
-            // A defending player who has left blocks with nothing (CR 800.4a): no one else declares their blocks.
-            match cx.ask_rule(defender, RequestKind::DeclareBlockers { eligible, attackers, allowed, requirements })? {
-                Some(Answer::Block(blocks)) => Some(blocks),
-                _ => None,
+            let costly = !requirements.costs.is_empty();
+            let kind = RequestKind::DeclareBlockers { eligible, attackers, allowed, requirements };
+            if costly {
+                declare_paid_blocks(cx, defender, kind)?
+            } else {
+                // A defending player who has left blocks with nothing (CR 800.4a): no one else declares their blocks.
+                match cx.ask_rule(defender, kind)? {
+                    Some(Answer::Block(blocks)) => Some(blocks),
+                    _ => None,
+                }
             }
         }
     };
@@ -1564,6 +1570,23 @@ fn declare_blockers(cx: &mut Cx) -> R<()> {
         let mut list: Vec<Block> = Vec::new();
         let mut attackers = cx.s().attackers.clone();
         for (blocker, attacker) in blocks {
+            // An attacker removed from combat (CR 506.4) while a cost to block was paid is blocked by nothing.
+            let Some(at) = attackers.iter().position(|a| a.id == attacker) else { continue };
+            // CR 509.1g: only a chosen creature still controlled by the defending player becomes a blocking creature - one
+            // a mana ability sacrificed while its cost to block was paid does not, nor one no longer a creature, which no
+            // combat holds (CR 506.4). The attacker it was declared blocking is blocked all the same (CR 509.1h: "with one or
+            // more creatures declared as blockers for it").
+            if !live(cx.s(), blocker)
+                || !cx.s().obj(blocker).zone.is(ZoneKind::Battlefield)
+                || cx.s().obj(blocker).controller != defender
+                || !cx.chars(blocker).is(CardType::Creature)
+            {
+                if !attackers[at].blocked {
+                    events.push(Event::BecameBlocked { attacker });
+                }
+                attackers[at].blocked = true;
+                continue;
+            }
             // CR 702.22h: a creature blocking a member of an attacking band blocks each other member of it too, a block of
             // each (CR 509.3b, 509.3d), including any it blocks automatically through banding.
             let band = attackers.iter().find(|a| a.id == attacker).map_or(0, |a| a.band);
@@ -1602,6 +1625,47 @@ fn declare_blockers(cx: &mut Cx) -> R<()> {
         cx.emit_batch(&unblocked, None);
     }
     Ok(())
+}
+
+/// A declaration of blockers where some blocks cost something to declare (CR 509.1d): the declaration asked, its total cost
+/// locked in (CR 509.1d) - the costs in the question, which nothing has changed since it was asked - and paid, with the
+/// chance to activate mana abilities first (CR 509.1e-f). A declaration whose cost is not paid is taken back (CR 509.1, 733):
+/// the game returns to the moment before it, the mana abilities activated while paying undone but those that may not be
+/// (`takeback`), and blockers are declared again, the question saying so (`BlockRequirements::taken_back`). None when the
+/// defending player has left (CR 800.4a).
+fn declare_paid_blocks(cx: &mut Cx, defender: PlayerId, mut kind: RequestKind) -> R<Option<Vec<(ObjectId, ObjectId)>>> {
+    loop {
+        let mark = cx.s().mark();
+        let log_mark = cx.g.log.len();
+        let since = crate::takeback::since(cx.g);
+        let Some(Answer::Block(blocks)) = cx.ask_rule(defender, kind.clone())? else { return Ok(None) };
+        let RequestKind::DeclareBlockers { requirements, .. } = &mut kind else { return Ok(Some(blocks)) };
+        let total = requirements.total_cost(&blocks);
+        if total.is_zero() {
+            return Ok(Some(blocks));
+        }
+        // The payment is shown as for the first permanent asking it, and for the creatures whose blocks cost something.
+        let mut source = ObjectId::NONE;
+        let mut blockers: Vec<ObjectId> = Vec::new();
+        for &(b, a) in &blocks {
+            if let Some(c) = requirements.costs.iter().find(|c| c.blocker == b && c.attacker == a) {
+                if source == ObjectId::NONE {
+                    source = c.source;
+                }
+                if !blockers.contains(&b) {
+                    blockers.push(b);
+                }
+            }
+        }
+        match actions::pay_block_costs(cx, defender, source, total, &blockers) {
+            Ok(()) => return Ok(Some(blocks)),
+            Err(Stop::Cancel) => {
+                crate::takeback::take_back(cx, mark, log_mark, since);
+                requirements.taken_back = true;
+            }
+            Err(stop) => return Err(stop),
+        }
+    }
 }
 
 /// Whether a creature has first strike or double strike now (CR 702.7b, 702.4b).
@@ -1644,6 +1708,9 @@ fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)]
     }
     let mut rules = block_limits(cx, attackers, allowed, rule_sources);
     rules.required = required;
+    // CR 509.1d: what each block costs, where a static ability makes blocking cost something - before the most requirements
+    // are counted, which counts free blocks only (CR 509.1c).
+    rules.costs = crate::static_rules::block_costs(cx, allowed);
     if !rules.required.is_empty() {
         most_obeyed(&mut rules, allowed);
     }
@@ -1671,8 +1738,7 @@ fn block_limits(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)
     // A creature blocking one member of an attacking band blocks every member (CR 702.22h), so blocking any member obeys a
     // requirement to block another, and one block may obey two.
     let bands = cx.s().attackers.iter().filter(|a| a.band != 0).map(|a| (a.id, a.band)).collect();
-    // No block costs anything to declare yet (CR 509.1d): no effect that makes one is built.
-    BlockRequirements { required: Vec::new(), most: 0, suggested: Vec::new(), bands, limits, costs: Vec::new(), capacities }
+    BlockRequirements { required: Vec::new(), most: 0, suggested: Vec::new(), bands, limits, costs: Vec::new(), taken_back: false, capacities }
 }
 
 /// The most of `rules`' requirements a declaration among `allowed` that obeys every restriction can obey, with one that does
@@ -1690,7 +1756,8 @@ fn most_obeyed(rules: &mut BlockRequirements, allowed: &[(ObjectId, ObjectId)]) 
 /// 509.1; `EffectKind::BlockersInstead`): the effect's card carries out its procedure over the attackers that player
 /// defends against and every creature they control, with how many attackers each can block (CR 509.1a), and names which
 /// creature blocks which attacker if it can. Each block named that the restrictions allow is made (CR 509.1b: a tapped
-/// creature, one that can't block or can't block that attacker blocks nothing), as many of them together as the restrictions
+/// creature, one that can't block or can't block that attacker blocks nothing; nor does one whose block would cost something,
+/// CR 509.1c-d, as nothing here pays it), as many of them together as the restrictions
 /// on the whole allow (CR 509.1c read for "does so": a lone creature named to block a creature with menace doesn't, two do);
 /// only where they allow no declaration with every one of them is the defending player asked which, among the declarations
 /// that make the most. No other requirement applies, as there is no declaration to obey it (CR 509.1c). A defending player
@@ -1725,6 +1792,10 @@ fn blocks_instead(
             able.push(pair);
         }
     }
+    // A block that costs something (CR 509.1d) is made only by paying for it as blockers are declared (CR 509.1e-f), which
+    // this procedure replaces: it is not made, as a player is never required to pay a cost to block (CR 509.1c).
+    let costs = crate::static_rules::block_costs(cx, &able);
+    able.retain(|&(b, a)| !costs.iter().any(|c| c.blocker == b && c.attacker == a));
     if able.is_empty() {
         return Ok(able);
     }
