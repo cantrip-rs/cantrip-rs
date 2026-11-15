@@ -1,0 +1,33 @@
+# Flesh Burrower's attack trigger says "another target creature you control": attacking alone, with only Bot2's Ornithopter besides
+# it, it has no legal target and never goes on the stack (CR 603.3d), so the Burrower alone hits for 2 and nothing gains deathtouch.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Flesh Burrower
+Island x17
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Flesh Burrower.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Flesh Burrower > Bot2)
+? Stack.Count = 0
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Flesh Burrower.Keywords = Deathtouch
+Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Life = 18
