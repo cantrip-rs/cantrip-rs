@@ -1,0 +1,41 @@
+# Trial of Agony deals 5 damage, no more and no less, to the creature "that player" chooses (CR 608.2d, 120.3): Bot2's Wall of Stone (0/8) takes exactly 5 and
+# survives with 5 damage marked, chosen by Bot2 though Memnite, the first target, is the answer a default would take; Memnite, the other, is untouched.
+
+[Bot1 Deck]
+Mox Ruby
+Trial of Agony
+Mountain x18
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Pearl
+Memnite
+Wall of Stone
+Plains x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Wall of Stone.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Trial of Agony.Cast
+! Bot1.Target(Memnite)
+Bot1.Target(Memnite; Wall of Stone)
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Wall of Stone)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Wall of Stone.Damage = 5
+Bot2.Battlefield.Memnite.Damage = 0
+Bot1.Graveyard = Trial of Agony
