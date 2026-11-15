@@ -1,0 +1,55 @@
+# Salvation Swan has flash, and its target is "creature you control without flying" (CR 115.1, 702.9): on Bot2's turn Bot1's Birds of Paradise
+# (flying) and Bot2's Memnite are not legal targets; Bot1's Memnite is. It is exiled and returns at the next end step, which is Bot2's,
+# with a flying counter, while Bot2's Memnite is untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gleemox
+Memnite
+Salvation Swan
+Birds of Paradise
+Plains
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Birds of Paradise.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Salvation Swan.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Memnite)
+! Bot1.Target(Bot1.Battlefield.Birds of Paradise)
+! Bot1.Target(Bot1.Battlefield.Salvation Swan)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Exile = Memnite
+? Bot2.Battlefield = Memnite
+[T2 Bot2.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Memnite.Counters.Flying = 1
+Bot2.Battlefield.Memnite.Counters.Flying = (absent)
+Bot1.Battlefield.Birds of Paradise.Counters.Flying = (absent)
