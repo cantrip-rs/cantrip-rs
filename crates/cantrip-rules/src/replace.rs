@@ -602,9 +602,10 @@ fn candidates_for(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Opti
     }
     // The replacement effects spells and abilities made, still lasting (CR 611.2): one about an object ends with it.
     for e in &cx.s().effects {
-        let (card, index, about_player) = match e.kind {
-            EffectKind::Replacement { card, index } => (card, index, false),
-            EffectKind::ReplacementRule { card, index } => (card, index, true),
+        // One about a source of damage, of damage to whom it names (`to`), outlives that source (CR 609.7a).
+        let (card, index, outlives, to) = match e.kind {
+            EffectKind::Replacement { card, index, to } => (card, index, to != Target::None, to),
+            EffectKind::ReplacementRule { card, index } => (card, index, true, Target::None),
             // A prevention effect a spell or ability made (CR 615.3): of damage to whom it names, if it names anyone, and of
             // the damage its definition describes. One about an object ends with it (CR 400.7).
             EffectKind::Prevention { card, index, to, .. } => {
@@ -626,7 +627,7 @@ fn candidates_for(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Opti
             }
             _ => continue,
         };
-        if !about_player && !live(cx.s(), e.affected) {
+        if !outlives && !live(cx.s(), e.affected) {
             continue;
         }
         let def = &cards.get(card).granted_replacements[index as usize];
@@ -636,6 +637,10 @@ fn candidates_for(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Opti
         let asker = Asker { instance: None, source: e.source, controller: e.controller, by: None, spell: false };
         let reads = WithWords { q: cx, source: e.source, words: e.words };
         let Some(selected) = select((e.source, index, Origin::Granted(e.timestamp))) else { continue };
+        // Damage to whom it names, as the effects applied so far have left it (CR 616.1f).
+        if to != Target::None && !matches!(selected, Proposal::Damage(d) if d.target == to) {
+            continue;
+        }
         if (def.applies)(&reads, &asker, e.affected, &selected)
             && valid_redirection(cx, &selected, |after| (def.apply)(&reads, &asker, e.affected, after))
         {
@@ -795,7 +800,7 @@ fn commander_components(cx: &Cx, object: ObjectId) -> Vec<(ObjectId, bool)> {
 /// the `granted_replacements` of the card the effect names, whatever its source has become since.
 fn granted<'a>(cx: &'a Cx, timestamp: u32) -> Option<(&'a ContinuousEffect, &'static GrantedReplacementDef)> {
     let e = cx.s().effects.iter().find(|e| e.timestamp == timestamp)?;
-    let (EffectKind::Replacement { card, index } | EffectKind::ReplacementRule { card, index }) = e.kind else { return None };
+    let (EffectKind::Replacement { card, index, .. } | EffectKind::ReplacementRule { card, index }) = e.kind else { return None };
     Some((e, &cx.cards().get(card).granted_replacements[index as usize]))
 }
 
@@ -1785,7 +1790,7 @@ pub(crate) fn mana_may_be_replaced(cx: &Cx) -> bool {
 pub(crate) fn mana_may_be_replaced_in(s: &GameState, cards: &CardTable) -> bool {
     s.battlefield().iter().any(|&id| cards.texts(s, s.obj(id)).any(|c| cards.mana_replaces[c.0 as usize]))
         || s.effects.iter().any(|e| match e.kind {
-            EffectKind::Replacement { card, index } | EffectKind::ReplacementRule { card, index } => {
+            EffectKind::Replacement { card, index, .. } | EffectKind::ReplacementRule { card, index } => {
                 cards.get(card).granted_replacements[index as usize].kind == ReplacementKind::ManaProduction
             }
             _ => false,
@@ -1912,7 +1917,7 @@ pub(crate) fn combination_types(cx: &Cx, permanent: ObjectId, player: PlayerId, 
 pub(crate) fn damage_may_change(cx: &Cx) -> bool {
     let cards = cx.cards();
     cx.s().effects.iter().any(|e| match e.kind {
-        EffectKind::Replacement { card, index } | EffectKind::ReplacementRule { card, index } => {
+        EffectKind::Replacement { card, index, .. } | EffectKind::ReplacementRule { card, index } => {
             cards.get(card).granted_replacements[index as usize].kind == ReplacementKind::Damage
         }
         _ => false,

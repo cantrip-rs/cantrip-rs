@@ -60,6 +60,7 @@ fn choose_one_destroy_target_aura_mode_1(
         EffectKind::Replacement {
             card: item.ability.card,
             index: 0,
+            to: Target::None,
         },
         Duration::EndOfTurn,
     );

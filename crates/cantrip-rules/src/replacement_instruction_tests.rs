@@ -236,7 +236,7 @@ fn add_replacement(cx: &mut Cx, source: ObjectId, target: ObjectId, index: u8) {
     cx.add_effect(
         source,
         target,
-        EffectKind::Replacement { card, index },
+        EffectKind::Replacement { card, index, to: Target::None },
         Duration::EndOfTurn,
     );
 }

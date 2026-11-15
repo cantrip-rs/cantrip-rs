@@ -35,6 +35,7 @@ fn if_target_plains_tapped_mana(
         EffectKind::Replacement {
             card: item.ability.card,
             index: 0,
+            to: Target::None,
         },
         Duration::Indefinite,
     );

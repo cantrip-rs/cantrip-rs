@@ -26,7 +26,7 @@ fn retain_damage(_: &dyn Query, _: &Asker, _: ObjectId, _: &mut Proposal) {}
 fn eye(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(source) = prevention::choose_source(g, item, prevention::SOURCE)? else { return Ok(()) };
     g.end_sentence();
-    g.add_effect(item.object, source, EffectKind::Replacement { card: item.ability.card, index: 0 }, Duration::EndOfTurn);
+    g.add_effect(item.object, source, EffectKind::Replacement { card: item.ability.card, index: 0, to: Target::None }, Duration::EndOfTurn);
     Ok(())
 }
 

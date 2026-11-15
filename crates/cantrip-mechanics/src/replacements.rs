@@ -284,7 +284,7 @@ pub const CREATURE_EXILED_INSTEAD_OF_DYING: GrantedReplacementDef =
 /// Makes the caller's granted exile replacement (the resolving spell or ability's card's replacement number `index`) about `creature` until
 /// end of turn. It names the object, so it does not follow the creature if it leaves and returns as a new object (CR 400.7).
 pub fn exile_if_it_would_die(g: &mut dyn Game, item: &StackItem, index: u8, creature: ObjectId) {
-    g.add_effect(item.object, creature, EffectKind::Replacement { card: item.ability.card, index }, Duration::EndOfTurn);
+    g.add_effect(item.object, creature, EffectKind::Replacement { card: item.ability.card, index, to: Target::None }, Duration::EndOfTurn);
 }
 
 /// Which permanents `opponents_enter_tapped` taps: a bit set of these.

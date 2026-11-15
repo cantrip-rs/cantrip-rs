@@ -169,8 +169,12 @@ pub fn damage_sources(q: &dyn Query) -> Vec<ObjectId> {
     // A waiting replacement or prevention effect refers to the object it is about, and to its source only where its text names
     // it ("Deflecting Palm deals that much damage"): a resolved Fog's "prevent all combat damage" refers to no object.
     for e in &s.effects {
+        // The recipient it names besides the object it is about (Jade Monolith's target creature).
+        if let EffectKind::Replacement { to: Target::Object(id), .. } = e.kind {
+            add(id);
+        }
         let (about_it, names_source) = match e.kind {
-            EffectKind::Replacement { card, index } => (true, q.names_its_source(Waiting::Replacement(card, index))),
+            EffectKind::Replacement { card, index, .. } => (true, q.names_its_source(Waiting::Replacement(card, index))),
             // About a player: its `affected` object is only its source.
             EffectKind::ReplacementRule { card, index } => (false, q.names_its_source(Waiting::Replacement(card, index))),
             // About the object damage to which it prevents, or one it names more than so (Maze of Ith's creature, the chosen

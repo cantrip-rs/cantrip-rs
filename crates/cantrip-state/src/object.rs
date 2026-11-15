@@ -1811,7 +1811,15 @@ pub enum EffectKind {
     /// become a copy of something else or turned over since (CR 707.2, 712.8). It ends with the object, which is a new
     /// one when it changes zones (CR 400.7): "if that creature would die this turn, exile it instead". The core makes one
     /// too for a granted way's "if you cast a spell this way" (`GrantedWay::spell_replacement`), about the spell.
-    Replacement { card: CardId, index: u8 },
+    ///
+    /// `to` is, for a damage replacement whose words name whom the damage is dealt to besides the source it is from, that
+    /// recipient, as `Prevention`'s `to` is: "the next time a source of your choice would deal damage to target creature this
+    /// turn, that source deals that damage to you instead" (Jade Monolith). The core asks the effect only about damage to it
+    /// (CR 614.1a), and its `affected` object is then the source of damage it was made about, chosen as it was made (CR
+    /// 609.7a), which its card's functions read: an effect that refers to the chosen source "even if that object is no longer
+    /// in the zone it used to be in" (CR 609.7a), so it outlives that object. An object named as `to` gets no damage once it
+    /// is a new object (CR 400.7). `Target::None` for every other replacement effect.
+    Replacement { card: CardId, index: u8, to: Target },
     /// The same, about a player or the game and not an object ("if a card would be put into your graveyard from
     /// anywhere this turn, exile it instead"): its `affected` object is only the source, and it outlives it.
     ReplacementRule { card: CardId, index: u8 },
@@ -1940,6 +1948,7 @@ impl EffectKind {
                 | EffectKind::LastingRule { .. }
                 | EffectKind::BlockersInstead { .. }
         ) || matches!(self, EffectKind::Prevention { to, .. } if to.object().is_none())
+            || matches!(self, EffectKind::Replacement { to, .. } if to != Target::None)
     }
 }
 

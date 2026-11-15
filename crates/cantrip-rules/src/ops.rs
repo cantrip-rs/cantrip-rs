@@ -6258,6 +6258,10 @@ pub fn leave_game(cx: &mut Cx, player: PlayerId) {
 mod departed_damage_tests;
 
 #[cfg(test)]
+#[path = "recipient_replacement_tests.rs"]
+mod recipient_replacement_tests;
+
+#[cfg(test)]
 #[path = "shield_total_tests.rs"]
 mod shield_total_tests;
 

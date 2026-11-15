@@ -10308,7 +10308,7 @@ fn cast(
     // 400.7) - whatever becomes of the permanent that gave it, and of what it is a copy of.
     if let Some((g, controller, index)) = by.by.and_then(|g| spell_replacement_by(cx, g, player)) {
         let timestamp = cx.st().timestamp();
-        let kind = EffectKind::Replacement { card: g.ability.card, index };
+        let kind = EffectKind::Replacement { card: g.ability.card, index, to: Target::None };
         cx.st().effect_push(ContinuousEffect { source: g.object, controller, timestamp, affected: spell, kind, duration: Duration::Indefinite, words: Words::NONE });
         cx.state_changed();
     }

@@ -2043,9 +2043,14 @@ Mikey & Don, Party Planners' "if you cast a creature spell this way, that creatu
 on it", which still applies once Mikey & Don has left (`spell_replacement_by`). It is about the spell, the object
 (CR 400.7): a copy of it was not cast (CR 707.10) and has none, and once the spell has left the stack, whatever it became
 is a new object the effect knows nothing of, and the effect is dropped with the other effects about objects that are gone.
-A lasting replacement effect names the card it is defined on (`EffectKind::Replacement { card, index }`, as `Prevention`
+A lasting replacement effect names the card it is defined on (`EffectKind::Replacement { card, index, to }`, as `Prevention`
 does), the card of the spell or ability that made it (`item.ability.card`) or of the way: never read from its source as
-the source is later, which may have become a copy of something else, turned over or left (CR 707.2, 712.8).
+the source is later, which may have become a copy of something else, turned over or left (CR 707.2, 712.8). A damage
+replacement whose words name the recipient besides the source - Jade Monolith's "the next time a source of your choice would
+deal damage to target creature this turn, that source deals that damage to you instead" - names it as `to`, as `Prevention`'s
+`to` names whom the damage it prevents is dealt to: the core asks the effect only about damage to it (`replace.rs`), and its
+`affected` object is then the chosen source, which it outlives (CR 609.7a: a permanent spell chosen is followed to the
+permanent it becomes, `prevention::by_chosen_source`), so it ends only with its duration.
 
 ### Alternative costs a permanent gives the spells a player casts
 

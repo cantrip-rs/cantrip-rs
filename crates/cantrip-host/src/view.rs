@@ -1711,7 +1711,8 @@ impl<'a> Projector<'a> {
                     spent: false,
                 });
             }
-            for e in s.effects.iter().filter(|e| e.affected == id) {
+            // A replacement about a chosen source of damage is shown on the recipient it names too (Jade Monolith's creature).
+            for e in s.effects.iter().filter(|e| e.affected == id || matches!(e.kind, EffectKind::Replacement { to, .. } if to == Target::Object(id))) {
                 let what = match e.kind {
                     EffectKind::CantAttack => "Can't attack",
                     EffectKind::CantBlock => "Can't block",
@@ -1790,7 +1791,7 @@ impl<'a> Projector<'a> {
                     }
                     // A resolved replacement about this permanent remains relevant after its source leaves or changes.
                     // Use the creating card and captured words, just as the rules do, rather than its source's current text.
-                    EffectKind::Replacement { card, index } => {
+                    EffectKind::Replacement { card, index, .. } => {
                         let def = game.cards.get(card);
                         let Some(rule) = def.granted_replacements.get(index as usize) else { continue };
                         let text = if rule.text.is_empty() {
@@ -2221,7 +2222,7 @@ mod tests {
         game.state.zone_push(Zone::BATTLEFIELD, target);
         let timestamp = game.state.timestamp();
         game.state.effect_push(ContinuousEffect { source, controller: owner, timestamp, affected: target,
-            kind: EffectKind::Replacement { card, index: 0 }, duration: Duration::EndOfTurn, words: Words::NONE });
+            kind: EffectKind::Replacement { card, index: 0, to: Target::None }, duration: Duration::EndOfTurn, words: Words::NONE });
         let names = vec!["A".to_string(), "B".to_string()];
         let faces = HashSet::new();
         for viewer in [owner, PlayerId(1), PUBLIC] {
