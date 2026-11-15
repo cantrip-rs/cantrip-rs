@@ -171,7 +171,10 @@ fn buyback_applies(q: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
             && q.obj(asker.source).kicked > 0)
 }
 
-fn buyback_apply(q: &dyn Query, _: &Asker, proposal: &mut Proposal) {
+/// "... [put it into / return it to] its owner's hand instead" (CR 614.1a) as the `apply` of a `replacement(ReplacementKind::ZoneChange,
+/// ..)`: the object goes to its owner's hand in place of the zone it would have gone to. Buyback (`BUYBACK`) and Firestorm
+/// Phoenix print it.
+pub fn owners_hand_instead_apply(q: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     if let Proposal::ZoneChange(z) = proposal {
         z.to = Zone::hand(q.obj(z.object).owner);
     }
@@ -180,8 +183,16 @@ fn buyback_apply(q: &dyn Query, _: &Asker, proposal: &mut Proposal) {
 /// Buyback's second half (CR 702.27a): "If the buyback cost was paid, put this spell into its owner's hand instead of
 /// into that player's graveyard as it resolves." The cost is the card's `kicker`; only the resolution move is
 /// replaced, so a countered spell goes to the graveyard. Corpse Dance, Capsize and Lava Burst print buyback.
-pub const BUYBACK: ReplacementDef = replacement(ReplacementKind::ZoneChange, buyback_applies, buyback_apply, "returned to its owner's hand by buyback")
+pub const BUYBACK: ReplacementDef = replacement(ReplacementKind::ZoneChange, buyback_applies, owners_hand_instead_apply, "returned to its owner's hand by buyback")
     .own_everywhere();
+
+/// "If this creature would die" (CR 614.1a, 700.4) as a permanent's own replacement: this permanent moving from the
+/// battlefield to a graveyard, however it would - destroyed, sacrificed, or put there by a state-based action. Firestorm
+/// Phoenix, Gloomshrieker, Gravebane Zombie and Nissa's Chosen print it.
+pub fn this_would_die(_: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
+    matches!(proposal, Proposal::ZoneChange(z)
+        if z.object == asker.source && z.from.is(ZoneKind::Battlefield) && z.to.is(ZoneKind::Graveyard))
+}
 
 /// "... exile it instead" (CR 614.1a) as the `apply` of a permanent's `replacement(ReplacementKind::ZoneChange, ..)`: the
 /// object goes to the exile zone of the player whose zone it was headed for, in place of the zone it would have gone to.
