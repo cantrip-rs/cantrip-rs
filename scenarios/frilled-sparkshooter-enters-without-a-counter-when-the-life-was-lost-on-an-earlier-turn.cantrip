@@ -1,0 +1,39 @@
+# "An opponent lost life this turn" looks only at the current turn (CR 119.3, 603.4): on turn 1 Bot1 Lightning Bolts Bot2 (3
+# life lost), and on turn 3 casts Frilled Sparkshooter with no new life lost, so it enters as a plain 3/3 with no counter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Frilled Sparkshooter
+Mountain x3
+Mountain x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Frilled Sparkshooter.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Frilled Sparkshooter.Power = 3
+Bot1.Battlefield.Frilled Sparkshooter.Toughness = 3
+Bot2.Life = 17
+Stack.Count = 0

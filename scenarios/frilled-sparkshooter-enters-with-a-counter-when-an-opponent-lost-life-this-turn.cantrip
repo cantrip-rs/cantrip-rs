@@ -1,0 +1,40 @@
+# Frilled Sparkshooter: "This creature enters with a +1/+1 counter on it if an opponent lost life this turn." Bot1 Lightning Bolts
+# Bot2 (3 life lost) and then casts Sparkshooter the same turn, so it enters as a 4/4 with one +1/+1 counter (CR 614.1c, 122.1).
+# It also has reach and menace. Controls: the scenarios where no life was lost, where only Bot1 lost life, and where it was last turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Frilled Sparkshooter
+Mountain x3
+Mountain x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Hand.Frilled Sparkshooter.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Frilled Sparkshooter.Power = 4
+Bot1.Battlefield.Frilled Sparkshooter.Toughness = 4
+Bot1.Battlefield.Frilled Sparkshooter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Frilled Sparkshooter.Keywords = Menace; Reach
+Stack.Count = 0

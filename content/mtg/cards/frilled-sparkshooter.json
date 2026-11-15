@@ -1,0 +1,12 @@
+{
+  "name": "Frilled Sparkshooter",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Lizard Archer",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Reach, menace\nThis creature enters with a +1/+1 counter on it if an opponent lost life this turn.",
+  "keywords": [
+    "Reach",
+    "Menace"
+  ]
+}

@@ -1,0 +1,38 @@
+# Frilled Sparkshooter asks whether an *opponent* lost life this turn. Bot1 casts Thoughtseize on Bot2 and so loses 2 life
+# itself, but Bot2 loses none, so Sparkshooter enters as a plain 3/3 with no counter (CR 119.3, 614.1c).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Thoughtseize
+Frilled Sparkshooter
+Mountain x3
+Mountain x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Thoughtseize.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+Bot1.Hand.Frilled Sparkshooter.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Frilled Sparkshooter.Power = 3
+Bot1.Battlefield.Frilled Sparkshooter.Toughness = 3
+Bot2.Life = 20
+Stack.Count = 0
