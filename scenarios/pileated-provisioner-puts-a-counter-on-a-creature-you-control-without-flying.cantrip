@@ -1,0 +1,70 @@
+# Pileated Provisioner's enters trigger puts a +1/+1 counter on target creature YOU control WITHOUT flying (CR 115.1, 702.9).
+# Bot1 has Eager Cadet and Savannah Lions (no flying), Suntail Hawk (flying) and the Provisioner itself (flying); Bot2 has a
+# Dwarven Trader (no flying, but an opponent's). The Hawk, the Trader and the Provisioner are each refused as the target,
+# and the Lions, a legal choice beside the Cadet, takes the counter.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Plains
+Plains
+Eager Cadet
+Suntail Hawk
+Savannah Lions
+Mox Ruby
+Pileated Provisioner
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Dwarven Trader
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Suntail Hawk.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dwarven Trader.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Pileated Provisioner.Cast
+Bot1.Pass
+! Bot1.Target(Suntail Hawk)
+! Bot1.Target(Bot2.Battlefield.Dwarven Trader)
+! Bot1.Target(Pileated Provisioner)
+Bot1.Target(Savannah Lions)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Savannah Lions.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Savannah Lions.Power = 3
+Bot1.Battlefield.Savannah Lions.Toughness = 2
+Bot1.Battlefield.Eager Cadet.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Eager Cadet.Power = 1
+Bot1.Battlefield.Suntail Hawk.Power = 1
+Bot1.Battlefield.Pileated Provisioner.Power = 3
+Bot2.Battlefield.Dwarven Trader.Power = 1
