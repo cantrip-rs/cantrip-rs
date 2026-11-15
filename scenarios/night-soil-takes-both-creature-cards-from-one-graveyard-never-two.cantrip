@@ -1,0 +1,73 @@
+# Night Soil: "{1}, Exile two creature cards from a single graveyard: Create a 1/1 green Saproling creature token." On turn
+# 3 each graveyard holds one creature card (Bot2's Grizzly Bears, Bot1's Ornithopter): two in all, but no single graveyard
+# has two, so the cost can't be paid and the ability is not offered (CR 118.3; the 2008-10-01 ruling). By turn 5 each
+# graveyard has two (Bot1 adds Memnite, Bot2 Savannah Lions): Bot1 may not take one card of each graveyard
+# (Ornithopter and Grizzly Bears), takes its own two, and gets a Saproling; Bot2's creature cards stay.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Night Soil
+Swamp
+Entomb
+Swamp
+Entomb
+Island
+Island
+Ornithopter
+Memnite
+Island x8
+
+[Bot2 Deck]
+Swamp
+Swamp
+Entomb
+Entomb
+Island
+Island
+Island
+Island
+Island
+Grizzly Bears
+Savannah Lions
+Island x8
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Night Soil.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Grizzly Bears)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Ornithopter)
+! Bot1.Battlefield.Night Soil.Activate
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp#2.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Savannah Lions)
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Night Soil.Activate
+! Bot1.Choose(Ornithopter; Grizzly Bears)
+Bot1.Choose(Ornithopter; Memnite)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Exile = Memnite; Ornithopter
+Bot2.Graveyard = Entomb; Savannah Lions; Entomb; Grizzly Bears
+Bot1.Battlefield.Saproling Token.Power = 1

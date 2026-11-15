@@ -1,0 +1,74 @@
+# Night Soil: "{1}, Exile two creature cards from a single graveyard: Create a 1/1 green Saproling creature token." The
+# cards are exiled as a cost (CR 601.2h by way of 602.2b), from any player's graveyard. On turn 5 Bot2's graveyard holds two
+# creature cards (Grizzly Bears, Memnite) and an Entomb, Bot1's one creature card (Ornithopter): Bot1 pays the {1} with the
+# one {G} it floats (the pool empty after it), may choose neither its own Ornithopter (a graveyard of one creature card can't
+# give two) nor an Entomb (not a creature card), exiles Bot2's Bears and Memnite, and gets one 1/1 green Saproling.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Night Soil
+Swamp
+Entomb
+Island
+Island
+Island
+Island
+Ornithopter
+Island x8
+
+[Bot2 Deck]
+Swamp
+Swamp
+Entomb
+Entomb
+Island
+Island
+Island
+Island
+Island
+Grizzly Bears
+Memnite
+Island x8
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Night Soil.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Grizzly Bears)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Ornithopter)
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp#2.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Memnite)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Night Soil.Activate
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Entomb)
+Bot1.Choose(Grizzly Bears; Memnite)
+? Bot1.Mana =
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Exile = Grizzly Bears; Memnite
+Bot2.Graveyard = Entomb; Entomb
+Bot1.Graveyard = Entomb; Ornithopter; Black Lotus
+Bot1.Battlefield = Forest; Swamp; Night Soil; Saproling Token
+Bot1.Battlefield.Saproling Token.Colors = Green
+Bot1.Battlefield.Saproling Token.Power = 1
+Bot1.Battlefield.Saproling Token.Toughness = 1

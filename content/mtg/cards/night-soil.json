@@ -1,0 +1,6 @@
+{
+  "name": "Night Soil",
+  "manaCost": "{G}{G}",
+  "type": "Enchantment",
+  "oracleText": "{1}, Exile two creature cards from a single graveyard: Create a 1/1 green Saproling creature token."
+}
