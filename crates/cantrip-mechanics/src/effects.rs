@@ -3582,17 +3582,39 @@ pub fn deal_damage_for_drained_life(g: &mut dyn Game, source: ObjectId, target: 
 /// 709.5d). The chosen door is unlocked by `player`, so "when you unlock this door" sees them (CR 709.5h). Nothing if the Room has
 /// no locked door left. Ghostly Dancers and Ghostly Keybearer print it.
 pub fn unlock_a_locked_door(g: &mut dyn Game, player: PlayerId, source: ObjectId, room: ObjectId) -> Result<(), Suspend> {
-    let Some((left, right)) = g.card(g.chars(room).card).split else { return Ok(()) };
-    let unlocked = g.obj(room).marks.doors;
-    let locked: Vec<(u8, &'static CardDef)> = [(DOOR_LEFT, left), (DOOR_RIGHT, right)].into_iter().filter(|&(door, _)| unlocked & door == 0).collect();
-    let door = match locked.as_slice() {
-        [] => return Ok(()),
-        [(only, _)] => *only,
-        _ => {
-            let labels = locked.iter().map(|&(_, half)| Label::Name(g.card_id(half))).collect();
-            locked[crate::choose::one_of(g, player, source, labels)? as usize].0
-        }
-    };
-    g.unlock_door(room, door, player);
+    let locked = !g.obj(room).marks.doors & (DOOR_LEFT | DOOR_RIGHT);
+    if let Some(door) = choose_a_door(g, player, source, room, locked)? {
+        g.unlock_door(room, door, player);
+    }
     Ok(())
+}
+
+/// "Lock or unlock a door of [a Room]" (CR 709.5f, 709.5g): `player` chooses either door, named as the halves are, and an unlocked
+/// one is locked while a locked one is unlocked by `player` (so "when you unlock this door" sees them, CR 709.5h). Choosing the door
+/// is the same as choosing to lock or to unlock and then a door of that kind, for the Room always has one door of each kind or two
+/// of the same, and a kind with no door cannot be chosen. Nothing if the permanent is no Room. Marina Vendrell and Keys to the House
+/// print it.
+pub fn lock_or_unlock_a_door(g: &mut dyn Game, player: PlayerId, source: ObjectId, room: ObjectId) -> Result<(), Suspend> {
+    let Some(door) = choose_a_door(g, player, source, room, DOOR_LEFT | DOOR_RIGHT)? else { return Ok(()) };
+    if g.obj(room).marks.doors & door == 0 {
+        g.unlock_door(room, door, player);
+    } else {
+        g.lock_door(room, door);
+    }
+    Ok(())
+}
+
+/// The door of `room` that `player` chooses from among the doors in `among` (CR 709.5f, 709.5g), each named as its half is; no
+/// question with only one, and none at all when `among` is empty or the permanent is no Room (it has no halves to name).
+fn choose_a_door(g: &mut dyn Game, player: PlayerId, source: ObjectId, room: ObjectId, among: u8) -> Result<Option<u8>, Suspend> {
+    let Some((left, right)) = g.card(g.chars(room).card).split else { return Ok(None) };
+    let doors: Vec<(u8, &'static CardDef)> = [(DOOR_LEFT, left), (DOOR_RIGHT, right)].into_iter().filter(|&(door, _)| among & door != 0).collect();
+    Ok(match doors.as_slice() {
+        [] => None,
+        [(only, _)] => Some(*only),
+        _ => {
+            let labels = doors.iter().map(|&(_, half)| Label::Name(g.card_id(half))).collect();
+            Some(doors[crate::choose::one_of(g, player, source, labels)? as usize].0)
+        }
+    })
 }
