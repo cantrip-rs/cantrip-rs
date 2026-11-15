@@ -1,0 +1,11 @@
+{
+  "name": "Broodspinner",
+  "manaCost": "{B}{G}",
+  "type": "Creature — Spider",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Reach\nWhen this creature enters, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)\n{4}{B}{G}, {T}, Sacrifice this creature: Create a number of 1/1 black and green Insect creature tokens with flying equal to the number of card types among cards in your graveyard.",
+  "keywords": [
+    "Reach"
+  ]
+}
