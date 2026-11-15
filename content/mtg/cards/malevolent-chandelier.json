@@ -1,0 +1,11 @@
+{
+  "name": "Malevolent Chandelier",
+  "manaCost": "{6}",
+  "type": "Artifact Creature — Construct",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying\n{2}: Put target card from a graveyard on the bottom of its owner's library. Activate only as a sorcery.",
+  "keywords": [
+    "Flying"
+  ]
+}

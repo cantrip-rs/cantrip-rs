@@ -1,0 +1,58 @@
+# Malevolent Chandelier: "{2}: Put target card from a graveyard on the bottom of its owner's library." On turn 3 Bot1 aims it
+# at Bot2's Lightning Bolt; Bot2 answers with Tormod's Crypt, exiling its own graveyard (the Crypt, sacrificed as a cost, with it), and the ability, its only target gone,
+# does nothing as it resolves (CR 608.2b): the Bolt stays in exile and Bot2's library keeps its seven cards untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Malevolent Chandelier
+Mox Sapphire
+Mox Emerald
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Tormod's Crypt
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Malevolent Chandelier.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Tormod's Crypt.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Malevolent Chandelier.Activate(Ability: {2}; Bot2.Graveyard.Lightning Bolt)
+Bot1.Pass
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Exile = Lightning Bolt; Tormod's Crypt
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile = Lightning Bolt; Tormod's Crypt
+Bot2.Graveyard.Count = 0
+Bot2.Library.Count = 7
