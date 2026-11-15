@@ -1,0 +1,56 @@
+# Ice Cauldron's {X} is paid with {R}{R}{R} from a Black Lotus and {B} from Mox Jet (X = 4) and exiles a Lightning Bolt from
+# Bot1's hand - a Mountain there is no nonland card to choose. The ability puts a charge counter on it, so it can't be
+# activated again (CR 602.5). Two turns later its mana ability adds exactly what was spent, {B}{R}{R}{R}, which may be spent
+# only to cast that exiled Bolt (CR 106.6, 607.2a, 607.2e): the Bolt drawn since can't be cast with it (no other red source
+# is left), the exiled one is cast from exile - the permission lasts while it stays there - with one {R} of it, and the rest
+# stays in the pool.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Ice Cauldron
+Black Lotus
+Mox Jet
+Lightning Bolt
+Mountain
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Lightning Bolt
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ice Cauldron.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: {X}; X: 4)
+Bot1.Pass
+? Bot1.Mana =
+! Bot1.Choose(Mountain)
+Bot1.Choose(Lightning Bolt)
+? Bot1.Battlefield.Ice Cauldron.Counters.Charge = 1
+? Exile = Lightning Bolt
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Ice Cauldron.Activate(Ability: {X}; X: 0)
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: Remove)
+? Bot1.Mana = {B} (Card Lightning Bolt) {R}{R}{R} (Card Lightning Bolt)
+? Bot1.Battlefield.Ice Cauldron.Counters.Charge = (absent)
+! Bot1.Hand.Lightning Bolt.Cast(Bot2; Mana: short)
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+? Bot1.Mana = {B} (Card Lightning Bolt) {R}{R} (Card Lightning Bolt)
+[Expect]
+Bot2.Life = 17
+Bot1.Hand = Lightning Bolt; Mountain
+Bot1.Graveyard = Lightning Bolt; Black Lotus; Black Lotus
+Exile =
+Bot1.Battlefield.Ice Cauldron.Tapped = true

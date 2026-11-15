@@ -1,0 +1,62 @@
+# Two activations of Ice Cauldron's first ability wait on the stack together: the first paid {B} (X = 1), then a Voltaic Key
+# untaps the Cauldron, still without a charge counter, and the second is paid {R}. Stifle counters the second, which leaves
+# the stack without resolving and notes nothing; the first resolves, exiling Dark Ritual. The note is the first one's
+# (CR 607.2e: the information noted as the ability resolved, about its own activation cost), so two turns later the Cauldron
+# adds {B}, not {R} - spent only on the exiled Dark Ritual, cast from exile (CR 106.6).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Ice Cauldron
+Voltaic Key
+Mox Jet
+Mox Ruby
+Dark Ritual
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Stifle
+Island x24
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ice Cauldron.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Voltaic Key.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: {X}; X: 1)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Voltaic Key.Activate(Bot1.Battlefield.Ice Cauldron)
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: {X}; X: 1)
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Stifle.Cast(Stack.Ice Cauldron#1)
+Bot1.Choose(Dark Ritual)
+? Bot1.Battlefield.Ice Cauldron.Counters.Charge = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: Remove)
+? Bot1.Mana = {B} (Card Dark Ritual)
+Bot1.Exile.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {B}{B}{B}
+[Expect]
+Bot1.Graveyard = Dark Ritual; Black Lotus
+Bot2.Graveyard = Stifle
+Exile =

@@ -1,0 +1,56 @@
+# Ice Cauldron activated for X = 0 exiles a Lightning Bolt and notes no mana: tapped for mana two turns later, it adds
+# nothing (the ruling: "X can be zero. This places a zero mana counter on the Cauldron"). Activated again for X = 3, paid
+# {R}{R}{R}, Bot1 exiles nothing though a second Lightning Bolt is in hand ("you may"): the counter is still put and the
+# mana noted (CR 607.2e), and the last card exiled with the Cauldron is still the first Bolt (CR 607.2a) - so its mana,
+# {R}{R}{R}, may be spent on that Bolt from exile, not on the one in hand (CR 106.6).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Ice Cauldron
+Lightning Bolt
+Black Lotus
+Island
+Island
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Island x26
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ice Cauldron.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: {X}; X: 0)
+Bot1.Pass
+Bot1.Choose(Lightning Bolt)
+? Exile = Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: Remove)
+? Bot1.Mana =
+? Bot1.Battlefield.Ice Cauldron.Counters.Charge = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: {X}; X: 3)
+Bot1.Pass
+Bot1.Choose()
+? Bot1.Battlefield.Ice Cauldron.Counters.Charge = 1
+? Bot1.Hand.Lightning Bolt.Colors = Red
+[T7 Bot1.Main1]
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: Remove)
+? Bot1.Mana = {R}{R}{R} (Card Lightning Bolt)
+! Bot1.Hand.Lightning Bolt.Cast(Bot2; Mana: short)
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R} (Card Lightning Bolt)
+[Expect]
+Bot2.Life = 17
+Bot1.Hand.Lightning Bolt.Colors = Red
+Exile =

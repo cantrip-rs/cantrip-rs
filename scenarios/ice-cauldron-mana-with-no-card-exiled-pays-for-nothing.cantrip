@@ -1,0 +1,37 @@
+# Ice Cauldron is activated for X = 1, paid {R}, and Bot1 exiles nothing though a Lightning Bolt is in hand. Two turns later
+# the Cauldron adds the {R} noted (CR 607.2e), but no card was ever exiled with it, so there is no card that mana may be
+# spent to cast (CR 106.6, 607.2a): the Bolt in hand can't be cast with it.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Ice Cauldron
+Black Lotus
+Lightning Bolt
+Island
+Island
+Island x20
+[Bot2 Deck]
+Island x26
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ice Cauldron.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: {X}; X: 1)
+Bot1.Pass
+Bot1.Choose()
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: Remove)
+? Bot1.Mana = {R} (Card none)
+! Bot1.Hand.Lightning Bolt.Cast(Bot2; Mana: short)
+[Expect]
+Bot2.Life = 20
+Exile =
+Bot1.Hand.Lightning Bolt.Colors = Red

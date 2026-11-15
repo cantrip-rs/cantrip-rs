@@ -1,0 +1,74 @@
+# Two Ice Cauldrons, one each: Bot1's is paid {B} and exiles Dark Ritual, then Bot2's is paid {G} and exiles Lightning Bolt.
+# Each one's mana ability reads only its own note and its own exiled card (CR 607.2a, 607.2e: linked abilities of that
+# object): after Bot2's Cauldron is destroyed, Bot1's adds {B} for Dark Ritual, not {G} for the Bolt. And a card a Cauldron
+# exiled may still be cast once it is gone (the ruling; the permission is the card's for as long as it stays exiled, CR
+# 611.2a): Bot2 casts that Bolt from exile.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Ice Cauldron
+Mox Jet
+Dark Ritual
+Shatter
+Mountain
+Mountain
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Ice Cauldron
+Mox Emerald
+Lightning Bolt
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ice Cauldron.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: {X}; X: 1)
+Bot1.Pass
+Bot1.Choose(Dark Ritual)
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Ice Cauldron.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Ice Cauldron.Activate(Ability: {X}; X: 1)
+Bot2.Pass
+Bot2.Choose(Lightning Bolt)
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Shatter.Cast(Bot2.Battlefield.Ice Cauldron)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: Remove)
+? Bot1.Mana = {B} (Card Dark Ritual)
+Bot1.Exile.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {B}{B}{B}
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Exile.Lightning Bolt.Cast(Bot1)
+[Expect]
+Bot1.Life = 17
+Bot2.Graveyard.Ice Cauldron.Colors.Count = 0
+Exile =

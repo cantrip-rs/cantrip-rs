@@ -1,0 +1,54 @@
+# Browser
+# What the page shows of Ice Cauldron's mana, "Spend this mana only to cast the last card exiled with this artifact" (CR
+# 106.6, 607.2a), and that a person can spend it there. Turn 1 the Cauldron is paid {R}{R}{R}{B} (X = 4) and exiles a
+# Lightning Bolt from the hand. Turn 3 its mana ability adds that mana, which sits in the pool as chips naming the card,
+# "only Lightning Bolt", beside a Mountain's plain {R}; the Bolt is cast from exile with one {R} of the Cauldron's, the
+# player choosing it over the Mountain's, and the rest is left.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Ice Cauldron
+Black Lotus
+Mox Jet
+Lightning Bolt
+Mountain
+Island x20
+[Bot2 Deck]
+Island x26
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ice Cauldron.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: {X}; X: 4)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: Remove)
+? Client.Bot1.Mana = 1 Red; 1 Black (only Lightning Bolt); 3 Red (only Lightning Bolt)
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Client.Bot1.Mana = 1 Red; 1 Black (only Lightning Bolt); 2 Red (only Lightning Bolt)
+[Expect]
+Bot2.Life = 17
+Bot1.Mana = {R} {B} (Card Lightning Bolt) {R}{R} (Card Lightning Bolt)
+Exile =

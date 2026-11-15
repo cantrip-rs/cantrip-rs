@@ -1,0 +1,62 @@
+# A copy of Ice Cauldron's first ability (Peter Parker's Camera) resolves, puts a charge counter on it and notes the mana
+# spent to pay its activation cost - none, since a copy was not activated and mana is no object (CR 707.10, its Dawnglow
+# Infusion example) - and then Stifle counters the original, which notes nothing. That copy's note is the last one
+# (CR 607.2e): the Cauldron then adds nothing, neither the {R} the original was paid with nor the {B} noted two turns before.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Ice Cauldron
+Mox Jet
+Dark Ritual
+Peter Parker's Camera
+Black Lotus
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Stifle
+Island x24
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ice Cauldron.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: {X}; X: 1)
+Bot1.Pass
+Bot1.Choose(Dark Ritual)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Peter Parker's Camera.Cast
+Bot1.Pass
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: Remove)
+? Bot1.Mana = {B} (Card Dark Ritual)
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: {X}; X: 1)
+Bot1.Battlefield.Peter Parker's Camera.Activate(Stack.Ice Cauldron)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Stifle.Cast(Stack.Ice Cauldron)
+? Bot1.Battlefield.Ice Cauldron.Counters.Charge = 1
+[T7 Bot1.Main1]
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: Remove)
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Ice Cauldron.Counters.Charge = (absent)
+Bot2.Graveyard.Stifle.Colors = Blue
+Exile = Dark Ritual

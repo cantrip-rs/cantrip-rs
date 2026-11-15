@@ -1,0 +1,47 @@
+# Ice Cauldron exiles two cards over two charges: Dark Ritual for X = 0, then, once that charge is removed, Lightning Bolt for
+# X = 1 paid {R}. Its mana is for the last card exiled with it (CR 106.6, 607.2a; the ruling: "the card that was exiled by the
+# Cauldron when the most recent charge counter was put there"), so the {R} names the Bolt, not the Ritual exiled first, and
+# the Bolt is cast from exile with it.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Ice Cauldron
+Mox Ruby
+Dark Ritual
+Lightning Bolt
+Island
+Island x20
+[Bot2 Deck]
+Island x26
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ice Cauldron.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: {X}; X: 0)
+Bot1.Pass
+Bot1.Choose(Dark Ritual)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: Remove)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: {X}; X: 1)
+Bot1.Pass
+Bot1.Choose(Lightning Bolt)
+? Exile = Dark Ritual; Lightning Bolt
+[T7 Bot1.Main1]
+Bot1.Battlefield.Ice Cauldron.Activate(Ability: Remove)
+? Bot1.Mana = {R} (Card Lightning Bolt)
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Life = 17
+Bot1.Mana =
+Exile = Dark Ritual

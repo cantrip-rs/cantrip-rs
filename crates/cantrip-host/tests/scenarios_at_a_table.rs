@@ -111,6 +111,56 @@ fn activation_rows(value: &Value, source: &Value, out: &mut Vec<Value>) {
     }
 }
 
+/// Mana for one card (CR 106.6: Ice Cauldron's) at a table: the pool names the card by the seat's handle, and the answer that
+/// spends it on that card's spell - a handle that has followed the card from exile to the stack - reads back as the mana
+/// offered, limited to the card as it was in exile (CR 400.7).
+#[test]
+fn ice_cauldrons_mana_for_one_card_is_spent_at_a_table() {
+    for name in [
+        "ice-cauldron-charges-with-the-mana-spent-and-pays-only-for-the-exiled-card",
+        "ice-cauldron-notes-the-activation-that-resolved-not-a-later-one-stifled",
+        "ice-cauldron-x-of-zero-adds-nothing-and-a-declined-exile-keeps-the-earlier-card",
+        "ice-cauldron-page-shows-mana-for-the-exiled-card-and-spends-it-there",
+    ] {
+        let text = std::fs::read_to_string(scripts().join(format!("{name}.cantrip"))).unwrap();
+        at_a_table(name, &text).unwrap_or_else(|report| panic!("{name}: {report}"));
+    }
+}
+
+/// Ice Cauldron's mana in the pool (CR 106.6) is shown to each seat as mana for one card, the exiled Lightning Bolt, named by
+/// that seat's own handle for it - and as the Bolt is cast from exile with it, by the handle of the spell it became.
+#[test]
+fn ice_cauldrons_mana_names_its_card_to_each_seat() {
+    let mut seen = [false; 2];
+    let mut offered = false;
+    play_looking("ice-cauldron-page-shows-mana-for-the-exiled-card-and-spends-it-there", |_, views, step| {
+        // Its mana ability states no yield of its own - what it adds is what was last noted - so its row offers no mana
+        // kinds and reads as its text.
+        if let Some(cauldron) = views[0].objects.iter().find(|o| o.name == "Ice Cauldron") {
+            let mut rows = Vec::new();
+            activation_rows(&step["Requests"], &serde_json::to_value(cauldron.handle).unwrap(), &mut rows);
+            for row in rows.iter().filter(|r| r["Description"].as_str().is_some_and(|d| d.contains("Remove a charge counter"))) {
+                assert_eq!(row["Produces"], serde_json::json!([]), "{row}");
+                assert!(row["Description"].as_str().unwrap().contains("last noted type and amount of mana"), "{row}");
+                offered = true;
+            }
+        }
+        for (seat, view) in views.iter().enumerate() {
+            for mana in view.players[0].restricted_mana.iter().filter(|m| m.filter == cantrip_host::protocol::ManaSpendFilterView::Card) {
+                let card = view.objects.iter().find(|o| o.handle == mana.spend_card).unwrap_or_else(|| {
+                    panic!("seat {}: the card the mana names ({:?}) is not shown: {:?}", seat + 1, mana.spend_card,
+                        view.objects.iter().map(|o| (o.handle, o.name.clone(), o.zone)).collect::<Vec<_>>())
+                });
+                assert_eq!(card.name, "Lightning Bolt", "seat {}", seat + 1);
+                seen[seat] = true;
+            }
+        }
+        false
+    });
+    assert_eq!(seen, [true; 2], "a seat never saw the mana");
+    assert!(offered, "the mana ability was never offered");
+}
+
 /// A mana action's description retains its complete ability and its structured yield (Ancient Tomb, Adarkar Wastes).
 #[test]
 fn a_mana_action_retains_its_ability_text_and_yield() {
