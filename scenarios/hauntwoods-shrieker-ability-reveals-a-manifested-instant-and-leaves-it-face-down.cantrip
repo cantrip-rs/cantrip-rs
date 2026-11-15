@@ -1,0 +1,48 @@
+# Hauntwoods Shrieker's "{1}{G}: Reveal target face-down permanent. If it's a creature card, you may turn it face up." The
+# manifested card is Lightning Bolt, an instant: not a creature card (its printed card counts, not the 2/2 it shows), so the ability
+# reveals it and asks nothing (CR 701.20a, 701.40a, 701.40g) and the Bolt stays on the battlefield face down.
+#
+# Turn 1 is the Shrieker cast with Black Lotus (the Moxen stay untapped). Turn 3 it attacks and manifests dread: Lightning Bolt goes
+# face down onto the battlefield and Snapcaster Mage into the graveyard; after combat the ability targets the Bolt.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Hauntwoods Shrieker
+Island x3
+Island
+Lightning Bolt
+Snapcaster Mage
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hauntwoods Shrieker.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Hauntwoods Shrieker > Bot2)
+Bot1.Arrange(Lightning Bolt | Snapcaster Mage)
+? Bot1.Battlefield..FaceDownName = Lightning Bolt
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hauntwoods Shrieker.Activate(Bot1.Battlefield.#1)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..FaceDownName = Lightning Bolt
+Bot1.Battlefield..Power = 2
+Bot1.Graveyard = Snapcaster Mage; Black Lotus
+Bot2.Life = 17
+Bot1.Revealed = Lightning Bolt

@@ -1,0 +1,51 @@
+# Hauntwoods Shrieker: "Whenever this creature attacks, manifest dread." and "{1}{G}: Reveal target face-down permanent. If it's a
+# creature card, you may turn it face up." (CR 701.62a, 701.20a, 701.40b, 708.2a, 708.8).
+#
+# Turn 1: Black Lotus (green) pays {1}{G}{G} for the Shrieker; the Moxen are left untapped. Turn 3 the Shrieker attacks: the trigger
+# manifests dread, Snapcaster Mage going onto the battlefield face down as a 2/2 and Lightning Bolt into the graveyard. After combat
+# the ability ({1}{G} from Mox Jet and Mox Emerald) targets that face-down permanent: Snapcaster Mage is a creature card, so Bot1 is
+# asked and turns it face up. It is the same permanent, a 2/1 with flash, and it is not entering, so its enters trigger doesn't happen.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Hauntwoods Shrieker
+Island x3
+Island
+Snapcaster Mage
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hauntwoods Shrieker.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Hauntwoods Shrieker > Bot2)
+Bot1.Arrange(Snapcaster Mage | Lightning Bolt)
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Snapcaster Mage
+? Bot1.Graveyard = Lightning Bolt; Black Lotus
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hauntwoods Shrieker.Activate(Bot1.Battlefield.#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield.Snapcaster Mage.FaceDown = (absent)
+Bot1.Battlefield.Snapcaster Mage.Power = 2
+Bot1.Battlefield.Snapcaster Mage.Toughness = 1
+Bot1.Battlefield.Snapcaster Mage.Keywords = Flash
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot2.Life = 17

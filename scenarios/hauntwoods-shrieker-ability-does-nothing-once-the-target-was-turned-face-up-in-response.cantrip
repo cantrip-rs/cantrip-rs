@@ -1,0 +1,52 @@
+# Hauntwoods Shrieker's ability targets a face-down permanent (CR 115.1). With the ability on the stack Bot1 turns the target,
+# the Snapcaster Mage its attack trigger manifested, face up for {1}{U} (a special action, CR 116.2b, 701.40b). The target is no longer
+# a face-down permanent when the ability resolves, so it is illegal and the ability does nothing (CR 608.2b): nothing is revealed and
+# Bot1 is not asked about turning it up. The Mage stays the 2/1 it was turned up as.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Hauntwoods Shrieker
+Mox Sapphire
+Mox Pearl
+Island
+Island
+Snapcaster Mage
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hauntwoods Shrieker.Cast
+Bot2.Pass
+! Bot1.Accept
+[T3 Bot1.Main1]
+Bot1.Attack(Hauntwoods Shrieker > Bot2)
+Bot1.Arrange(Snapcaster Mage | Lightning Bolt)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hauntwoods Shrieker.Activate(Bot1.Battlefield.#1)
+Bot1.Battlefield.#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Battlefield.Snapcaster Mage.FaceDown = (absent)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield.Snapcaster Mage.FaceDown = (absent)
+Bot1.Battlefield.Snapcaster Mage.Power = 2
+Bot1.Battlefield.Snapcaster Mage.Toughness = 1
