@@ -1,0 +1,8 @@
+{
+  "name": "Cautious Survivor",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Elf Survivor",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Survival — At the beginning of your second main phase, if this creature is tapped, you gain 2 life."
+}
