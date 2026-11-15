@@ -1,0 +1,43 @@
+# "You may discard a card or pay {2}": Bot1 chooses neither (Modes(Neither)) with a card in hand and {2} available, so nothing
+# is discarded or paid and "when you do" (CR 603.12) never triggers: no target is asked and Bot2's Roaring Furnace stays.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Anthropede
+Lightning Bolt
+Mox Emerald
+Mox Jet
+Island
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Roaring Furnace // Steaming Sauna
+Island x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Roaring Furnace)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Anthropede.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Neither)
+! Bot1.Target
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Lightning Bolt; Island; Island
+Bot1.Battlefield.Mox Emerald.Tapped = false
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot2.Battlefield = Roaring Furnace
+Stack.Count = 0

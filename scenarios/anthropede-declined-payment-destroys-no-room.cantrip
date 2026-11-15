@@ -1,0 +1,44 @@
+# Bot1 chooses "Pay {2}" and then declines to pay at the payment question (CR 118.12): nothing was paid, so "when you do"
+# does not trigger (CR 603.12) and Bot2's Roaring Furnace stays; Mox Emerald and Mox Jet stay untapped and the hand is untouched.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Anthropede
+Lightning Bolt
+Mox Emerald
+Mox Jet
+Island
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Roaring Furnace // Steaming Sauna
+Island x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Roaring Furnace)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Anthropede.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Pay {2})
+Bot1.Decline
+! Bot1.Target
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Lightning Bolt; Island; Island
+Bot1.Battlefield.Mox Emerald.Tapped = false
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot2.Battlefield = Roaring Furnace
+Stack.Count = 0
