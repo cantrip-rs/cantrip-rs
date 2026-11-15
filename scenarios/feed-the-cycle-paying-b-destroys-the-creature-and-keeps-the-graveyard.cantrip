@@ -1,0 +1,37 @@
+# Feed the Cycle {1}{B} (instant): "As an additional cost to cast this spell, forage or pay {B}. Destroy target creature or planeswalker."
+# With no three cards in its graveyard and no Food, Bot1 can only pay {B} (Black Lotus gives {B}{B}{B} for the {1}{B} and the extra {B}): Bot2's Memnite is destroyed, and nothing leaves Bot1's graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Feed the Cycle
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Memnite
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Island x13
+
+[Actions]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Feed the Cycle.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Memnite = (absent)
+Bot2.Graveyard = Memnite
+Bot1.Graveyard = Feed the Cycle; Black Lotus
+Exile = 

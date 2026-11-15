@@ -1,0 +1,46 @@
+# Feed the Cycle {1}{B}: Bot1 foraged by sacrificing a Food (the Food token Gilded Goose made when it entered) instead of paying {B},
+# and its graveyard is untouched. Bot2's Memnite is destroyed.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Black Lotus
+Gilded Goose
+Feed the Cycle
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Memnite
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gilded Goose.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Feed the Cycle.Cast(Bot2.Battlefield.Memnite)
+Bot1.Modes(Forage: sacrifice a Food)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Memnite = (absent)
+Bot2.Graveyard = Memnite
+Bot1.Battlefield = Gilded Goose; Mox Emerald; Mox Ruby
+Bot1.Graveyard = Feed the Cycle; Black Lotus
+Exile = 

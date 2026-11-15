@@ -1,0 +1,49 @@
+# Feed the Cycle {1}{B}: with only two mana, no Food and two cards in its graveyard (Black Lotus and Dark Ritual), Bot1 can neither
+# pay {B} nor forage, so it cannot cast the spell. Bot2's graveyard holds three cards (Faithless Looting and two discards), but
+# foraging exiles from your own graveyard only (CR 701.61a).
+
+[Bot1 Deck]
+Black Lotus
+Dark Ritual
+Mox Jet
+Mox Ruby
+Feed the Cycle
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Mox Ruby
+Faithless Looting
+Memnite
+Swamp
+Swamp
+Swamp
+Swamp
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Swamp; Swamp)
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Feed the Cycle.Cast(Mana: short)
+
+[Expect]
+Bot2.Battlefield = Memnite; Mox Ruby
+Bot1.Graveyard = Dark Ritual; Black Lotus
+Bot2.Graveyard.Count = 3
+Bot1.Hand.Feed the Cycle.Colors.Count = 1

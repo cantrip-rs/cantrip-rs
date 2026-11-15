@@ -1,0 +1,45 @@
+# Feed the Cycle {1}{B}: Bot1 foraged instead of paying {B}, exiling three cards from its own graveyard (a Swamp, a Swamp and
+# Faithless Looting out of Black Lotus, Looting, Swamp and Swamp); the Lotus stays. Bot2's Memnite is destroyed.
+
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Faithless Looting
+Feed the Cycle
+Swamp
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Memnite
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Swamp; Swamp)
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Feed the Cycle.Cast(Bot2.Battlefield.Memnite)
+Bot1.Modes(Forage: exile three cards from your graveyard)
+Bot1.Choose(Swamp; Swamp; Faithless Looting)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Memnite = (absent)
+Bot2.Graveyard = Memnite
+Bot1.Graveyard = Feed the Cycle; Black Lotus
+Exile = Faithless Looting; Swamp; Swamp

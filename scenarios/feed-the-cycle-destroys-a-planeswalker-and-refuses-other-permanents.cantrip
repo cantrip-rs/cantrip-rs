@@ -1,0 +1,42 @@
+# Feed the Cycle {1}{B}: "Destroy target creature or planeswalker": Bot2's Mox Pearl is refused as a target, and Ajani Resolute is destroyed.
+# Bot1 pays {B}.
+
+[Bot1 Deck]
+Black Lotus
+Feed the Cycle
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Emerald
+Ajani Resolute
+Swamp
+Swamp
+Swamp
+Swamp
+Island x13
+
+[Actions]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Ajani Resolute.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Hand.Feed the Cycle.Cast(Bot2.Battlefield.Mox Pearl)
+Bot1.Hand.Feed the Cycle.Cast(Bot2.Battlefield.Ajani Resolute)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Emerald; Mox Pearl
+Bot2.Graveyard = Ajani Resolute
+Bot1.Graveyard = Feed the Cycle; Black Lotus
