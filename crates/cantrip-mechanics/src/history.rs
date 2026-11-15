@@ -213,6 +213,13 @@ pub fn permanents_sacrificed_this_turn(q: &dyn Query, player: PlayerId) -> usize
         .count()
 }
 
+/// "If you sacrificed one or more permanents this turn" (CR 603.4, 701.21a): the ability's controller sacrificed a permanent this turn,
+/// the `condition` of a triggered ability (asked as it would trigger and again as it resolves). Phoenix Fleet Airship and Sawblade
+/// Skinripper print it.
+pub fn you_sacrificed_a_permanent_this_turn(q: &dyn Query, asker: &Asker) -> bool {
+    permanents_sacrificed_this_turn(q, asker.controller) > 0
+}
+
 /// The void condition: "a nonland permanent left the battlefield this turn or a spell was warped this turn". Void is an
 /// ability word (CR 207.2c) with no rules of its own; only its second clause has a rule, CR 702.185c: a spell was warped when
 /// it was cast for its warp cost. Any player's permanent counts, a token too, judged as it was as it left the battlefield (CR 608.2h). Elegy Acolyte, Plasma Bolt and

@@ -1,14 +1,8 @@
 use cantrip_api::*;
-use cantrip_mechanics::{statics::creature_too, copy::create_token_copy_of_it, crew::crew, history::permanents_sacrificed_this_turn, triggers::YOUR_END_STEP};
+use cantrip_mechanics::{statics::creature_too, copy::create_token_copy_of_it, crew::crew, history::you_sacrificed_a_permanent_this_turn, triggers::YOUR_END_STEP};
 use cantrip_oracle as oracle;
 
 const NAME: &str = "Phoenix Fleet Airship";
-
-/// "If you sacrificed a permanent this turn" (CR 603.4, 701.21a): checked as the end step begins and again as the ability
-/// resolves.
-fn sacrificed_a_permanent_this_turn(q: &dyn Query, asker: &Asker) -> bool {
-    permanents_sacrificed_this_turn(q, asker.controller) > 0
-}
 
 /// "Create a token that's a copy of this Vehicle" (CR 707.2, 111.4): its copiable values, or its last known ones if it has left
 /// the battlefield by now (CR 608.2h).
@@ -32,7 +26,7 @@ pub static CARD: CardDef = CardDef {
             copy_this,
             "At the beginning of your end step, if you sacrificed a permanent this turn, create a token that's a copy of this Vehicle.",
         )
-        .condition(sacrificed_a_permanent_this_turn),
+        .condition(you_sacrificed_a_permanent_this_turn),
         crew(1, "Crew 1 (Tap any number of creatures you control with total power 1 or more: This Vehicle becomes an artifact creature until end of turn.)"),
     ],
     statics: &[static_ability(
