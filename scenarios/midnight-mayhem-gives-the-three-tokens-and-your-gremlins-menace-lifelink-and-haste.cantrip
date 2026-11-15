@@ -1,0 +1,80 @@
+# Midnight Mayhem: "Create three 1/1 red Gremlin creature tokens. Gremlins you control gain menace, lifelink, and haste until
+# end of turn." (CR 111.1, 611.2c, 702.110, 702.15, 702.10). Turn 3, Bot1 (who has had a Phyrexian Gremlins since turn 1)
+# casts it: the three tokens and its own Gremlins gain the three keywords; Bot2's Phyrexian Gremlins and Bot1's Savannah Lions
+# (not a Gremlin) gain none. The tokens have haste, so attack at once; Bot2's one untapped Gremlins cannot block a menace
+# attacker alone, so all three connect, and lifelink gains Bot1 3 life.
+
+[Bot1 Deck]
+Phyrexian Gremlins
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Midnight Mayhem
+Savannah Lions
+Island x13
+
+[Bot2 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Phyrexian Gremlins
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Phyrexian Gremlins.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Phyrexian Gremlins.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Midnight Mayhem.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 9
+? Bot1.Battlefield.Gremlin Token#1.Keywords = Haste; Lifelink; Menace
+? Bot1.Battlefield.Gremlin Token#2.Keywords = Haste; Lifelink; Menace
+? Bot1.Battlefield.Gremlin Token#3.Keywords = Haste; Lifelink; Menace
+? Bot1.Battlefield.Phyrexian Gremlins.Keywords = Haste; Lifelink; Menace
+? Bot2.Battlefield.Phyrexian Gremlins.Keywords = (absent)
+? Bot1.Battlefield.Savannah Lions.Keywords = (absent)
+Bot1.Attack(Gremlin Token#1 > Bot2; Gremlin Token#2 > Bot2; Gremlin Token#3 > Bot2)
+! Bot2.Block(Phyrexian Gremlins > Gremlin Token#1)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 17
