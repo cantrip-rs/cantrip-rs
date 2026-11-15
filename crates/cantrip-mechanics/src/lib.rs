@@ -243,6 +243,14 @@ pub fn your_turn(q: &dyn Query, asker: &Asker) -> bool {
     q.state().turn.active == asker.controller
 }
 
+/// "If there are four or more card types among cards in your graveyard" (delirium, an ability word, CR 207.2c) as an intervening "if"
+/// (CR 603.4), asked as the ability would trigger and again as it resolves, or as an activation restriction (CR 602.5b), asked only as
+/// the ability is activated: the ability's controller has delirium (`delirium`). Fear of Missing Out and Omnivorous Flytrap (triggered),
+/// Shifting Woodland and Balustrade Wurm (activated) print it.
+pub fn you_have_delirium(q: &dyn Query, asker: &Asker) -> bool {
+    delirium(q, asker.controller)
+}
+
 /// "Activate only during your upkeep" (CR 602.5b): the ability's controller is the active player and the step is the
 /// upkeep. Life Chisel and Life Matrix print it.
 pub fn your_upkeep(q: &dyn Query, asker: &Asker) -> bool {

@@ -1,13 +1,7 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::THIS_ENTERS_OR_ATTACKS;
-use cantrip_mechanics::{card_types_in_graveyard, counters_divided, delirium, double, targets};
+use cantrip_mechanics::{card_types_in_graveyard, counters_divided, double, targets, you_have_delirium};
 use cantrip_oracle as oracle;
-
-/// The intervening "if" (CR 603.4): "if there are four or more card types among cards in your graveyard" (delirium, CR 702.138a),
-/// asked when the ability would trigger and again as it resolves.
-fn has_delirium(q: &dyn Query, asker: &Asker) -> bool {
-    delirium(q, asker.controller)
-}
 
 /// "Distribute two +1/+1 counters among one or two target creatures. Then if there are six or more card types among cards in your
 /// graveyard, double the number of +1/+1 counters on those creatures." The targets and their shares were fixed as the ability went
@@ -32,6 +26,6 @@ pub static CARD: CardDef = CardDef {
     )
     .targets(&[targets::CREATURE.between(1, 2)])
     .divide(Divide { total: 2, reads: None })
-    .condition(has_delirium)],
+    .condition(you_have_delirium)],
     ..oracle::OMNIVOROUS_FLYTRAP
 };
