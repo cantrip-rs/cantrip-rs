@@ -1,0 +1,42 @@
+# Break Down the Door, mode 3: "Manifest dread." (CR 700.2, 701.62a, 708.2a). It has no target, so it is cast with nothing for the other
+# modes to aim at: Bot2 has no artifact or enchantment. The top two cards of Bot1's library, Snapcaster Mage and Lightning Bolt, are
+# looked at; the Mage goes onto the battlefield face down as a 2/2 and the Bolt into the graveyard with the spell. Bot1's Moxen are
+# artifacts and remain: mode 1 was not chosen.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Break Down the Door
+Island x3
+Island
+Snapcaster Mage
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Break Down the Door.Cast
+Bot1.Modes(3)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Snapcaster Mage | Lightning Bolt)
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..FaceDownName = Snapcaster Mage
+Bot1.Battlefield..Power = 2
+Bot1.Battlefield..Toughness = 2
+Bot1.Battlefield.Count = 4
+Bot1.Graveyard = Break Down the Door; Lightning Bolt
