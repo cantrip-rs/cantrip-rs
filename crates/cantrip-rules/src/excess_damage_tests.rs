@@ -17,9 +17,9 @@ fn two(_: &dyn Query, _: &Asker, _: &DamageEvent) -> u32 {
     2
 }
 static SHIELDED: CardDef =
-    CardDef { name: "Excess Shielded", preventions: &[PreventionDef { hint: "prevent two", applies: to_self, amount: PreventionAmount::Specific(two) }], ..BEAR };
+    CardDef { name: "Excess Shielded", preventions: &[PreventionDef { hint: "prevent two", applies: to_self, amount: PreventionAmount::Specific(two), then: None }], ..BEAR };
 static IMMUNE: CardDef =
-    CardDef { name: "Excess Immune", preventions: &[PreventionDef { hint: "prevent all", applies: to_self, amount: PreventionAmount::All }], ..BEAR };
+    CardDef { name: "Excess Immune", preventions: &[PreventionDef { hint: "prevent all", applies: to_self, amount: PreventionAmount::All, then: None }], ..BEAR };
 fn to_another(_: &dyn Query, a: &Asker, p: &Proposal) -> bool {
     matches!(p, Proposal::Damage(d) if matches!(d.target, Target::Object(id) if id != a.source))
 }

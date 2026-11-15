@@ -50,6 +50,7 @@ pub static CARD: CardDef = CardDef {
             hint: "prevents all damage that would be dealt to you",
             applies: cumulative_upkeep_pay_2_life_applies,
             amount: PreventionAmount::All,
+            then: None,
         },
     ],
     attack_rules: &[cumulative_upkeep_pay_2_life_rule],

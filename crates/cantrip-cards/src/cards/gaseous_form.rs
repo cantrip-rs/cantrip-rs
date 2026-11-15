@@ -18,6 +18,7 @@ pub static CARD: CardDef = CardDef {
             hint: "prevents all combat damage that would be dealt to and dealt by enchanted creature",
             applies: prevent_all_combat_damage_would_applies,
             amount: PreventionAmount::All,
+            then: None,
         },
     ],
     enchant: Some(targets::CREATURE),

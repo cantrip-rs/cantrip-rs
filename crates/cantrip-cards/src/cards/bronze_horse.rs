@@ -55,6 +55,7 @@ pub static CARD: CardDef = CardDef {
             hint: "As long as you control another creature, prevent all damage that would be dealt to this creature by spells that target it.",
             applies: as_long_as_control_another_applies,
             amount: PreventionAmount::All,
+            then: None,
         },
     ],
     ..oracle::BRONZE_HORSE

@@ -19,6 +19,7 @@ pub static CARD: CardDef = CardDef {
             hint: "prevents all damage that would be dealt to this creature by creatures",
             applies: damage_by_a_creature_to_this,
             amount: PreventionAmount::All,
+            then: None,
         },
     ],
     ..oracle::UNCLE_ISTVAN

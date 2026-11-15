@@ -20,6 +20,7 @@ pub static CARD: CardDef = CardDef {
         hint: "prevents all noncombat damage that would be dealt to other creatures you control",
         applies: noncombat_to_your_other_creatures,
         amount: PreventionAmount::All,
+        then: None,
     }],
     ..oracle::CRYSTAL_BARRICADE
 };

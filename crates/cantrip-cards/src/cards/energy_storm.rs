@@ -37,6 +37,7 @@ pub static CARD: CardDef = CardDef {
             hint: "prevents all damage that would be dealt by instant and sorcery spells",
             applies: prevent_all_damage_would_be_applies,
             amount: PreventionAmount::All,
+            then: None,
         },
     ],
     untap_bans: &[prevent_all_damage_would_be_rule],

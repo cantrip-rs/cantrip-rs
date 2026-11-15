@@ -20,6 +20,7 @@ pub static CARD: CardDef = CardDef {
             hint: "prevents all damage that would be dealt to this creature by enchanted creatures",
             applies: prevent_all_damage_would_be_applies,
             amount: PreventionAmount::All,
+            then: None,
         },
     ],
     ..oracle::WALL_OF_PUTRID_FLESH

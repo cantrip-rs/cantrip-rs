@@ -1375,7 +1375,9 @@ left it (CR 616.1f). There are three kinds besides protection's (CR 702.16e, `re
   while its permanent is on the battlefield and gone with its abilities (CR 613.1f): Black Panther, Hope Enduring's "Prevent
   all damage that would be dealt to Black Panther". It prevents all of what it applies to, or as much as its `amount` says
   of the damage as it now is (Gisela, Blade of Goldnight's "prevent half that damage, rounded up"), which is then ordered with
-  the others like a shield;
+  the others like a shield. What it does besides (CR 615.5), its `then`, is done as it applies to each part of the damage
+  (Rock Hydra's "remove a +1/+1 counter from it and prevent that 1 damage"), so its next opportunity at the same event sees
+  it; such an effect still applies to damage that can't be prevented, preventing none, for that (CR 615.12);
 - one a resolving spell or ability made (CR 615.3, 611.2), `EffectKind::Prevention { card, index, to, shield }`: of damage to an
   object (which it ends with, CR 400.7), to a player, or to anyone (`Target::None`), and of the damage the making card's
   `granted_preventions[index]` describes (any damage, combat damage: `cantrip_mechanics::prevention::ANY_DAMAGE`,

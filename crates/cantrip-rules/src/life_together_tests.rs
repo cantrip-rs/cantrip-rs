@@ -167,7 +167,7 @@ fn one_damage(_: &dyn Query, _: &Asker, _: &DamageEvent) -> u32 {
 static ARMOR: CardDef = CardDef {
     name: "Damage Life Urza's Armor",
     types: TypeSet::of(&[CardType::Artifact]),
-    preventions: &[PreventionDef { hint: "prevent 1 damage", applies: to_you, amount: PreventionAmount::Specific(one_damage) }],
+    preventions: &[PreventionDef { hint: "prevent 1 damage", applies: to_you, amount: PreventionAmount::Specific(one_damage), then: None }],
     ..CardDef::BLANK
 };
 

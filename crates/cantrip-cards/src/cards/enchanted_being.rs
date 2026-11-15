@@ -26,6 +26,7 @@ pub static CARD: CardDef = CardDef {
             hint: "prevents all combat damage that would be dealt to this creature by enchanted creatures",
             applies: prevent_all_combat_damage_would_applies,
             amount: PreventionAmount::All,
+            then: None,
         },
     ],
     ..oracle::ENCHANTED_BEING

@@ -371,7 +371,7 @@ static NO_REPLACEMENT: ReplacementDef = ReplacementDef {
     in_graveyard: false,
 };
 
-static NO_PREVENTION: PreventionDef = PreventionDef { hint: "", applies: nothing_prevented, amount: PreventionAmount::All };
+static NO_PREVENTION: PreventionDef = PreventionDef { hint: "", applies: nothing_prevented, amount: PreventionAmount::All, then: None };
 
 /// `id`'s printed replacement effect `index` (`printed_replacements`), and the link it is asked with.
 fn printed_replacement(cx: &Cx, id: ObjectId, index: u8) -> &'static ReplacementDef {
@@ -565,15 +565,16 @@ fn candidates_for(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Opti
                 found.push(Candidate { source: id, index, origin: Origin::Printed });
             }
         }
-        // Its static abilities' prevention effects function only while it is on the battlefield (CR 604.1).
+        // Its static abilities' prevention effects function only while it is on the battlefield (CR 604.1). Damage that can't
+        // be prevented meets only those with more to do, which still applies (CR 615.12).
         if let Proposal::Damage(_) = proposal
-            && preventable
             && at == At::Field
         {
             for (index, (def, by)) in printed_preventions(cx, id).enumerate() {
                 let index = index as u8;
                 let asker = Asker { instance: None, source: id, controller, by, spell: false };
-                if !applied.contains(&(id, index, Origin::Prevention))
+                if (preventable || def.then.is_some())
+                    && !applied.contains(&(id, index, Origin::Prevention))
                     && let Some(Proposal::Damage(selected)) = select((id, index, Origin::Prevention))
                     && (def.applies)(cx, &asker, &selected) {
                     found.push(Candidate { source: id, index, origin: Origin::Prevention });
@@ -1235,11 +1236,14 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
                 }
             }
             // CR 615.1: a static ability's prevention, of all the damage or of as much as it says, of the damage as it now is
-            // (CR 616.1f).
+            // (CR 616.1f); none of damage that can't be prevented (CR 615.12). Then what it does besides, as it applies,
+            // whether or not it prevented any (CR 615.5, 615.12).
             Origin::Prevention => {
                 let (def, by) = printed_prevention(cx, source, index);
                 let asker = Asker { instance: None, source, controller: controller_of(cx, source, proposal), by, spell: false };
-                if let Proposal::Damage(d) = proposal {
+                if let Proposal::Damage(d) = proposal
+                    && damage_can_be_prevented(cx, d)
+                {
                     let scope = DamageScope::of(d);
                     let key = (source, index, origin);
                     let amount = match def.amount {
@@ -1256,6 +1260,10 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
                         }
                     };
                     prevent(cx, d, amount, source);
+                }
+                if let Some(then) = def.then {
+                    let after = *proposal;
+                    run_then(cx, &applied, source, asker.controller, |cx| then(cx, &asker, &start, &after));
                 }
             }
             Origin::GrantedPrevention(timestamp) => {

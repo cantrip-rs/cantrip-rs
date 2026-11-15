@@ -1022,6 +1022,7 @@ static URZA_ARMOR: CardDef = CardDef {
         hint: "prevent1 from the source",
         applies: armor_to_you,
         amount: PreventionAmount::Specific(armor_one),
+        then: None,
     }],
     ..UNLIFE
 };
@@ -1181,7 +1182,7 @@ fn converged_damage_beyond_u16_remains_one_exact_source_event() {
 
 static PREVENT_ALL: CardDef = CardDef {
     name: "Damage convergence unlimited prevention",
-    preventions: &[PreventionDef { hint: "prevent all", applies: armor_to_you, amount: PreventionAmount::All }],
+    preventions: &[PreventionDef { hint: "prevent all", applies: armor_to_you, amount: PreventionAmount::All, then: None }],
     ..UNLIFE
 };
 
@@ -1520,6 +1521,7 @@ static FRACTION_PREVENTION: CardDef = CardDef {
         hint: "prevent half, rounded up",
         applies: armor_to_you,
         amount: PreventionAmount::Relative(half_prevented),
+        then: None,
     }],
     ..UNLIFE
 };
@@ -1628,6 +1630,7 @@ static ARMOR_THREE: CardDef = CardDef {
         hint: "prevent three",
         applies: armor_to_you,
         amount: PreventionAmount::Specific(armor_three),
+        then: None,
     }],
     ..UNLIFE
 };
@@ -1769,6 +1772,7 @@ static STATE_CAP: CardDef = CardDef {
         hint: "prevent one plus charges",
         applies: armor_to_you,
         amount: PreventionAmount::Specific(capacity),
+        then: None,
     }],
     replacements: &[replacement(
         ReplacementKind::Damage,
@@ -1805,6 +1809,7 @@ static STATE_CAP_ZERO: CardDef = CardDef {
         hint: "prevent charges",
         applies: armor_to_you,
         amount: PreventionAmount::Specific(zero_capacity),
+        then: None,
     }],
     ..STATE_CAP
 };

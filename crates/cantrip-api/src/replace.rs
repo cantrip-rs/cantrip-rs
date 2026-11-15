@@ -524,8 +524,9 @@ pub enum PreventionAmount {
 
 /// A prevention effect of a static ability (CR 615, 604): "Prevent all damage that would be dealt to Black Panther". It
 /// functions while its source is on the battlefield, and prevents all of the damage it applies to, or as much as `amount`
-/// says. The core orders it with the replacement effects that would change the same damage (CR 616.1), skips it where the
-/// damage can't be prevented (CR 615.12) and records what it prevents (`Event::DamagePrevented`).
+/// says. The core orders it with the replacement effects that would change the same damage (CR 616.1), prevents nothing
+/// where the damage can't be prevented (CR 615.12: one that only prevents is skipped there, one with more to do, `then`,
+/// applies for that) and records what it prevents (`Event::DamagePrevented`).
 #[derive(Clone, Copy)]
 pub struct PreventionDef {
     /// What it does, in a few words: shown beside its source when a player orders several (CR 616.1).
@@ -534,6 +535,13 @@ pub struct PreventionDef {
     /// The printed quantity contract: all damage, a specific source-event allowance, or an event-relative portion.
     /// Gisela's existing partial-amount callback is `Relative`, never reinterpreted as a specific allowance.
     pub amount: PreventionAmount,
+    /// What the effect does besides preventing the damage (CR 615.5): Rock Hydra's "remove a +1/+1 counter from it and prevent
+    /// that 1 damage". Done to the game as the effect applies to each part of the damage, as a replacement effect's `then` is
+    /// (`ReplacementDef::then`), told that part as it was proposed to the effect and as the effect left it - so the effect's
+    /// next opportunity, at another source's damage dealt at the same time, sees what it did. Where the damage can't be
+    /// prevented the effect still applies, prevents none of it, and this still takes place (CR 615.12), once for each part
+    /// (CR 615.12a). None for an effect that only prevents.
+    pub then: Option<ReplacementThen>,
 }
 
 /// Whether a prevention effect a spell or ability made applies to this damage (CR 615.1), judged as `PreventionApplies` is,

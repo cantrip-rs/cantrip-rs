@@ -12,6 +12,7 @@ pub static CARD: CardDef = CardDef {
         hint: "prevents all combat damage that would be dealt to and dealt by this creature",
         applies: prevent_all_combat_damage_to_and_by_this,
         amount: PreventionAmount::All,
+        then: None,
     }],
     ..oracle::FOG_BANK
 };

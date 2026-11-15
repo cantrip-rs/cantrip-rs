@@ -60,6 +60,7 @@ pub static CARD: CardDef = CardDef {
             hint: "prevents all damage that would be dealt to enchanted creature by artifact sources",
             applies: enchanted_creature_cant_be_blocked_applies,
             amount: PreventionAmount::All,
+            then: None,
         },
     ],
     block_rules: &[enchanted_creature_cant_be_blocked_rule],

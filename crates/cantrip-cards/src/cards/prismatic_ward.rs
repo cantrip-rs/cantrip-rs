@@ -40,6 +40,7 @@ pub static CARD: CardDef = CardDef {
             hint: "prevents all damage that would be dealt to enchanted creature by sources of the chosen color",
             applies: as_aura_enters_choose_color_applies,
             amount: PreventionAmount::All,
+            then: None,
         },
     ],
     enters: Some(as_aura_enters_choose_color_enters),

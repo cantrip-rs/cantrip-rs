@@ -19,6 +19,7 @@ pub static CARD: CardDef = CardDef {
             hint: "prevents all damage that would be dealt to this creature by creatures it's blocking",
             applies: prevent_all_damage_would_be_applies,
             amount: PreventionAmount::All,
+            then: None,
         },
     ],
     ..oracle::WALL_OF_VAPOR
