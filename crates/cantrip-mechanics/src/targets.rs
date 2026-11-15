@@ -1592,6 +1592,12 @@ fn permanent_card_in_your_graveyard_with_mana_value_three_or_less(q: &dyn Query,
 pub const PERMANENT_CARD_IN_YOUR_GRAVEYARD_WITH_MANA_VALUE_3_OR_LESS: TargetSpec =
     target(permanent_card_in_your_graveyard_with_mana_value_three_or_less);
 
+/// "Target noncreature, nonland permanent card from your graveyard" (CR 115.1, 110.4a): an artifact, battle, enchantment or
+/// planeswalker card there, as it is there. Builder's Talent and Astelli Reclaimer (with a mana value limit) print it.
+pub fn noncreature_nonland_permanent_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    nonland_permanent_card_in_your_graveyard(q, asker, t) && matches!(t, Target::Object(id) if !q.chars(id).is(CardType::Creature))
+}
+
 /// "Target nonland permanent card from your graveyard" (CR 115.1, 110.4a). Loamcrafter Faun prints it; Guardian
 /// Scalelord asks it of a card with mana value up to its power.
 pub fn nonland_permanent_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target) -> bool {
