@@ -1,0 +1,43 @@
+# Stargaze, X = 2 ({2}{B}{B}: Black Lotus and Mox Jet): "Look at twice X cards from the top of your library. Put X cards from among them
+# into your hand and the rest into your graveyard. You lose X life." The top four are Ponder, Lightning Bolt, Brainstorm and Island; taking
+# three or one is refused, taking Ponder and Brainstorm puts the Bolt and the Island into the graveyard, and Bot1 pays 2 life (18). The
+# fifth card, Mountain, was not looked at and stays on top; Bot2's library is untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Stargaze
+Plains
+Plains
+Plains
+Plains
+Ponder
+Lightning Bolt
+Brainstorm
+Island
+Mountain
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stargaze.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Ponder; Lightning Bolt; Brainstorm | Island)
+! Bot1.Arrange(Ponder | Lightning Bolt; Brainstorm; Island)
+Bot1.Arrange(Ponder; Brainstorm | Lightning Bolt; Island)
+? Bot1.Looked = Ponder; Lightning Bolt; Brainstorm; Island
+
+[Expect]
+Bot1.Life = 18
+Bot1.Hand = Plains; Plains; Plains; Plains; Ponder; Brainstorm
+Bot1.Graveyard = Stargaze; Island; Lightning Bolt; Black Lotus
+Bot1.Library.Top = Mountain
+Bot1.Library.Count = 9
+Bot2.Library.Count = 13

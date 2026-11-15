@@ -1,0 +1,35 @@
+# Stargaze, X = 1 ({1}{B}{B}, Black Lotus): twice X is 2 cards looked at (Ponder and Island), exactly one taken, the other binned and 1 life
+# lost (19). The third card, Brainstorm, stays on top.
+
+[Bot1 Deck]
+Black Lotus
+Stargaze
+Plains
+Plains
+Plains
+Plains
+Plains
+Ponder
+Island
+Brainstorm
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Stargaze.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Ponder; Island | )
+! Bot1.Arrange( | Ponder; Island)
+Bot1.Arrange(Ponder | Island)
+? Bot1.Looked = Ponder; Island
+
+[Expect]
+Bot1.Life = 19
+Bot1.Hand = Plains; Plains; Plains; Plains; Plains; Ponder
+Bot1.Graveyard = Stargaze; Island; Black Lotus
+Bot1.Library.Top = Brainstorm

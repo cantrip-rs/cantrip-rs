@@ -1,0 +1,34 @@
+# Stargaze, X = 2 with only three cards left in the library (CR 609.3): Bot1 looks at all three (Ponder, Brainstorm, Island), takes two of them
+# and bins the third, and still loses 2 life (18); the library is then empty.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Stargaze
+Plains
+Plains
+Plains
+Plains
+Ponder
+Brainstorm
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stargaze.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Ponder; Brainstorm | Island)
+? Bot1.Looked = Ponder; Brainstorm; Island
+
+[Expect]
+Bot1.Life = 18
+Bot1.Library.Count = 0
+Bot1.Hand = Plains; Plains; Plains; Plains; Ponder; Brainstorm
+Bot1.Graveyard = Stargaze; Island; Black Lotus

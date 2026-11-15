@@ -1,0 +1,30 @@
+# Stargaze, X = 0 ({B}{B}, Black Lotus): twice 0 cards are looked at, nobody is asked, no card is taken and no life is lost. The library
+# still has every card, Ponder on top; the spell is in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Stargaze
+Plains
+Plains
+Plains
+Plains
+Plains
+Ponder
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Stargaze.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot1.Hand = Plains; Plains; Plains; Plains; Plains
+Bot1.Graveyard = Stargaze; Black Lotus
+Bot1.Library.Top = Ponder
+Bot1.Library.Count = 11
