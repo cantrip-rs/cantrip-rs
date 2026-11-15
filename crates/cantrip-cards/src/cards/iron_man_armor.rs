@@ -21,7 +21,6 @@ fn becomes_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         return Ok(());
     }
     let words = g.words(me);
-    let card = g.obj(me).card;
     let animation = Animation {
         power: 0,
         toughness: 0,
@@ -31,7 +30,7 @@ fn becomes_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         all_creature_types: false,
         replaces_creature_types: true,
         keywords: Keywords::of(&[Keyword::Flying]),
-        ability: Some(AbilityRef::delayed(card, 0)),
+        ability: Some(AbilityRef::delayed(item.ability.card, 0)),
     };
     animate(g, me, me, &animation, Duration::EndOfTurn);
     Ok(())

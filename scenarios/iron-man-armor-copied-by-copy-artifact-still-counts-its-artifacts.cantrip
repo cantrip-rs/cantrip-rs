@@ -1,0 +1,64 @@
+# Iron Man Armor's {2} makes it a 0/0 creature with "This creature gets +1/+1 for each artifact you control", an
+# ability of the card whose ability resolves (CR 613.1f), the card a copy copies (CR 707.2). Bot1's Copy Artifact enters
+# as a copy of Bot2's Armor on turn 3 (its attach trigger has no creature to take); animated, it is a 4/4 among Bot1's
+# three Moxen.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Copy Artifact
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Iron Man Armor
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Hand.Iron Man Armor.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Copy Artifact.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Iron Man Armor)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Iron Man Armor.Activate(Ability: If this Equipment)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Iron Man Armor.Power = 4
+Bot1.Battlefield.Iron Man Armor.Toughness = 4
