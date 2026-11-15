@@ -9,14 +9,6 @@ fn enter_as_copy(g: &mut dyn Game, entry: &mut Entering) -> Result<(), Suspend> 
     cantrip_mechanics::copy::enter_as_copy(g, entry, |c| c.is(CardType::Creature), |_, copy| copy)
 }
 
-fn nonlegendary_creature_you_control(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    targets::creature_filter(q, asker, t)
-        && matches!(t, Target::Object(id) if q.controller(id) == asker.controller && !q.chars(id).supertypes.legendary)
-}
-
-/// "Target nonlegendary creature you control" (CR 115.1, 205.4a), checked again as the ability resolves (CR 608.2b).
-static NONLEGENDARY_CREATURE_YOU_CONTROL: TargetSpec = target(nonlegendary_creature_you_control);
-
 /// "Put a +1/+1 counter on target nonlegendary creature you control. Each other creature you control becomes a copy of that
 /// creature until end of turn." The counter goes on first, but it is no copiable value (CR 707.2), so the copies are of the
 /// printed (or copied) creature; the creatures that become copies are those you control as the ability resolves (CR 611.2c),
@@ -47,6 +39,6 @@ pub static CARD: CardDef = CardDef {
     abilities: &[ability(cost("{2}{U}").and(EXILE_THIS), renew, "Renew \u{2014} {2}{U}, Exile this card from your graveyard: Put a +1/+1 counter on target nonlegendary creature you control. Each other creature you control becomes a copy of that creature until end of turn. Activate only as a sorcery.")
         .from(ZoneKind::Graveyard)
         .sorcery_speed()
-        .targets(&[NONLEGENDARY_CREATURE_YOU_CONTROL])],
+        .targets(&[targets::NONLEGENDARY_CREATURE_YOU_CONTROL])],
     ..oracle::NAGA_FLESHCRAFTER
 };
