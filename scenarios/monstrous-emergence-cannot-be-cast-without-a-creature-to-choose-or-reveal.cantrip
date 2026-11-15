@@ -1,0 +1,38 @@
+# Monstrous Emergence needs a creature to choose or reveal as an additional cost (CR 601.2b, 701.4a). Bot1 has the {1}{G} (a Mox Emerald and a Mox Jet) but no creature on its
+# battlefield and no creature card in its hand (a Forest and a Lightning Bolt: a noncreature card), and Bot2's Grizzly Bears is not a creature Bot1 controls: the cast is
+# refused with nothing spent and the Bears lives. The cost is not optional.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Monstrous Emergence
+Lightning Bolt
+Forest x3
+Forest x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Monstrous Emergence.Cast(Target: Grizzly Bears)
+
+[Expect]
+Bot2.Battlefield = Mox Emerald; Mox Ruby; Grizzly Bears
+Bot1.Hand = Monstrous Emergence; Lightning Bolt; Forest; Forest; Forest; Forest
