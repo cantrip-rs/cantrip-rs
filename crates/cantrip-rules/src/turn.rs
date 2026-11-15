@@ -942,6 +942,8 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
                 && !obj.tapped
                 // CR 508.1c: an effect saying it can't attack; a static ability's restriction is read below, of each attack.
                 && !cx.s().effects.iter().any(|e| e.affected == id && e.kind == EffectKind::CantAttack && in_force(cx, e))
+                // CR 508.1c, 113.1a: its own ability saying it can't attack, which losing its abilities takes.
+                && !chars.has(Keyword::CantAttack)
                 // CR 508.1c: a resolved rule about an open set that says it, or those who control it, can't attack this turn
                 // (`LastingRuleKind::CantAttack`: Peace in Our Time).
                 && crate::static_rules::lasting_rules_on(cx, cx.cards(), id, LastingRuleKind::CantAttack).next().is_none()
@@ -1010,7 +1012,16 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
         let bands = declare_bands(cx, active, &attacks)?;
         // CR 508.1f: the chosen creatures become tapped, which is no cost, before any cost is paid (CR 508.1g-j).
         // They become tapped at once: "whenever one or more creatures you control become tapped" triggers once (CR 603.2c).
-        let tapping: Vec<ObjectId> = attacks.iter().map(|&(id, _)| id).filter(|&id| !cx.chars(id).has(Keyword::Vigilance)).collect();
+        // Attacking doesn't cause one with vigilance to tap (CR 702.20b), nor one a resolved rule says so of (CR 611.2c,
+        // `LastingRuleKind::AttackingDoesntCauseTap`), each judged before any of them is tapped.
+        let tapping: Vec<ObjectId> = attacks
+            .iter()
+            .map(|&(id, _)| id)
+            .filter(|&id| {
+                !cx.chars(id).has(Keyword::Vigilance)
+                    && crate::static_rules::lasting_rules_on(cx, cx.cards(), id, LastingRuleKind::AttackingDoesntCauseTap).next().is_none()
+            })
+            .collect();
         ops::tap_together(cx, &tapping);
         // CR 508.1g: the optional costs to attack the active player chooses to pay.
         let options = choose_attack_options(cx, active, &attacks)?;

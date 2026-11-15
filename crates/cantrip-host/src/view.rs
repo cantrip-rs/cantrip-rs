@@ -298,7 +298,7 @@ pub fn hexproof_from_text(qualities: HexproofFrom) -> String {
 }
 
 /// The keywords as a card's text words them, for the ones an effect gave an object or took from it.
-const KEYWORD_WORDS: [(Keyword, &str); 85] = [
+const KEYWORD_WORDS: [(Keyword, &str); 86] = [
     (Keyword::Flying, "Flying"),
     (Keyword::Haste, "Haste"),
     (Keyword::Vigilance, "Vigilance"),
@@ -318,6 +318,7 @@ const KEYWORD_WORDS: [(Keyword, &str); 85] = [
     (Keyword::Shroud, "Shroud"),
     (Keyword::CantBeCountered, "This spell can't be countered."),
     (Keyword::CantBlock, "This creature can't block."),
+    (Keyword::CantAttack, "This creature can't attack."),
     (Keyword::CanBlockOnlyCreaturesWithFlying, "This creature can block only creatures with flying."),
     (Keyword::DoesNotUntap, "This permanent doesn't untap during your untap step."),
     (Keyword::CrewsAsThoughPowerTwoGreater, "This creature crews Vehicles as though its power were 2 greater."),

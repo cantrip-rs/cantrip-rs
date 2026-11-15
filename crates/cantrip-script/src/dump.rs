@@ -140,6 +140,7 @@ fn keyword_name(k: u8) -> &'static str {
         89 => "Towerwalk",
         90 => "Townwalk",
         91 => "Urzaswalk",
+        92 => "CantAttack",
         _ => "?",
     }
 }

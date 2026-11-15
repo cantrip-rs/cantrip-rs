@@ -2817,6 +2817,12 @@ pub enum LastingRuleKind {
     /// `hand_visibility` shows it to every seat and records it, and the moves into and out of the hand say it was public. Only
     /// a card in a hand: one that leaves it is a new object (CR 400.7). Firestorm Phoenix.
     RevealedInHand,
+    /// "Attacking doesn't cause [the set] to tap" (CR 508.1f, 611.2c): a creature the set takes in as attackers are declared
+    /// doesn't become tapped by being declared, as one with vigilance doesn't (CR 702.20b) - but it is no ability, so it gives
+    /// no vigilance and holds whatever abilities the creature or the source loses (CR 613.1f). The set is asked of every
+    /// attacker before any becomes tapped, since the declaration taps them at once (CR 508.1f). Johan's "attacking doesn't
+    /// cause creatures you control to tap this combat if Johan is untapped".
+    AttackingDoesntCauseTap,
 }
 
 /// A rule a resolving spell or ability gives an open set of objects for a duration (CR 611.2c): "creatures without flying

@@ -1448,6 +1448,12 @@ pub enum Keyword {
     Towerwalk = 89,
     Townwalk = 90,
     Urzaswalk = 91,
+    /// "This creature can't attack" (CR 508.1c): an ability, granted with "has" or "gains" (CR 113.1a), so the layers decide
+    /// whether the creature has it (CR 613.1f) and "loses all abilities" takes it. Johan's "Johan gains 'Johan can't attack'
+    /// until end of combat". Where it is no ability of the creature - "it can't attack this turn", "creatures without flying
+    /// can't attack" - it is `EffectKind::CantAttack`, a `LastingRuleKind::CantAttack` or another permanent's
+    /// `CardDef::attack_rules`, which hold whatever abilities it loses.
+    CantAttack = 92,
 }
 
 impl Keyword {

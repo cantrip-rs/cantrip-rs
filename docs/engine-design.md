@@ -3024,6 +3024,9 @@ controls don't untap during their next untap step"; "target player", for Headlin
 beside each per-object effect (`static_rules::lasting_rules_on`: `turn::attack_rules`, `cant_block`, `untap_step`), from the effects and not from any object's abilities, so neither the source's nor the permanent's losing
 abilities ends it, and it outlives its source. `LastingRule` also captures its creation-time `Words`, read through `WithWords` by both `lasting_rules_on` and
 `lasting_rules_barring_attacks`. The objects' characteristics remain live; only the rule's words are fixed.
+`AttackingDoesntCauseTap` (CR 508.1f) is read as a declaration taps its attackers, of each of them before any is tapped, beside
+vigilance (CR 702.20b) but no ability: Johan's "attacking doesn't cause creatures you control to tap this combat if Johan is
+untapped", whose set asks whether Johan is still the untapped permanent it was.
 Two kinds are about cards rather than permanents. `CantBePlayed` (CR 101.2, 701.18b) forbids the player its words named (`about`;
 every player for none) every cast and land play of a card its set takes in, with priority or as an effect resolves, whatever
 permits it (`static_rules::play_forbidden`, asked by `actions::cast_only_if_met` of every cast and by each land-play offer);
@@ -3265,7 +3268,10 @@ flying, stays attacking what it attacks (CR 506.4, Patchwork Beastie's ruling). 
 optionally that player's current planeswalkers (Promise of Loyalty). It is a rule, survives losing abilities and
 changing control, and never restricts battles. `Duration::WhileCounter` permanently removes it when the last vow
 counter is removed; readding a counter cannot restart an ended duration (CR 611.2b). The canonical Chronomantic Escape
-reader uses `LastingRuleKind::CantAttackYou` for an open set of creatures and the fixed player alone (CR 611.2c). The benchmark, three runs alternating with origin/main on a shared machine (2026-10-29): 15.10, 14.83, 14.73 us per
+reader uses `LastingRuleKind::CantAttackYou` for an open set of creatures and the fixed player alone (CR 611.2c). A creature's
+own "this creature can't attack", granted with "gains" (CR 113.1a: Johan's "Johan gains 'Johan can't attack' until end of
+combat"), is `Keyword::CantAttack`, read off its characteristics as the eligible attackers are found, so "loses all abilities"
+takes it (CR 613.1f); "it can't attack this turn" is `EffectKind::CantAttack`, which outlasts its abilities. The benchmark, three runs alternating with origin/main on a shared machine (2026-10-29): 15.10, 14.83, 14.73 us per
 decision after against 14.39, 15.32, 14.49 us before - lost in the noise, as nothing new runs while no permanent restricts
 attacking.
 
