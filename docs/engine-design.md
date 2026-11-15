@@ -1878,6 +1878,16 @@ is not played, so it is not asked (that is `enter_rules`). One look at the battl
 (`static_rules::land_play_bans`), made only once the player has a land play left; a permanent that lost its abilities has none
 (CR 613.1f). An effect that says a player can't play lands (Solfatara) is not built: no card in content has one.
 
+A static ability that keeps some permanents from entering, named by what they would be on the battlefield ("lands can't enter
+the battlefield", Worms of the Earth) is `CardDef::permanent_enter_rules` (`PermanentEnterRule`, CR 101.2, 614.17), apart from
+`enter_rules`, which name cards where they are (Grafdigger's Cage's ruling). It is judged on the permanent as it would exist
+there (`ops::entry_forbidden`, `as_it_would_exist`, CR 614.17d), in turn with the replacements that modify its entry: before
+any, after its own copy and back-face replacements (`prepare_entry`, CR 616.1c-d), as the move is planned, and after each other
+replacement applies (`replace::apply_each`). Once it forbids the entry, the event can't happen and no other replacement
+modifies or replaces it (CR 614.17c): a card stays where it is, a permanent spell is put into its owner's graveyard (CR 608.3e:
+a Clone copying Dryad Arbor), a token is not created. The battlefield is searched for these at each such point; with none
+there nothing more is worked out.
+
 A special action with a cost (CR 116.2: plotting, suspending, foretelling, turning a face-down permanent up, unlocking a
 door) is costed as `Costed::SpecialAction`: it is no activated ability (CR 116.1), so what changes the cost of activating
 abilities (Forensic Gadgeteer, Anointed Peacekeeper) leaves it alone, and only a change that names it applies - Doc Aurlock,

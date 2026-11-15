@@ -86,13 +86,16 @@ pub struct MillResult {
 /// The parts of one instruction several players carry out at once (CR 101.4), for `Game::together`: who sacrifices what (CR
 /// 701.21a), the cards discarded (CR 701.9), and the changes of life (CR 119.3), signed, each its own occurrence - a player
 /// who loses 4 life "the appropriate number of times" (Rottenmouth Viper) is named once for each, and the two halves of an
-/// exchange of life totals (CR 701.12c) are a gain and a loss. Each part is chosen before the call, as the rules have it chosen
-/// (CR 101.4, 608.2h).
+/// exchange of life totals (CR 701.12c) are a gain and a loss - and the damage dealt (CR 120.2), each a source, a recipient and
+/// an amount, all of it one damage event (Worms of the Earth's "sacrifice two lands ... or have this enchantment deal 5 damage
+/// to that player", chosen by each player). Each part is chosen before the call, as the rules have it chosen (CR 101.4,
+/// 608.2h).
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Together<'a> {
     pub sacrifices: &'a [(PlayerId, ObjectId)],
     pub discards: &'a [ObjectId],
     pub life: &'a [(PlayerId, i32)],
+    pub damage: &'a [(ObjectId, Target, u32)],
 }
 
 /// What a verb that takes permanents off the battlefield did - `Game::sacrifice` (CR 701.21a), `Game::destroy_all` (CR

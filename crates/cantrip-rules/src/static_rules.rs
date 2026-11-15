@@ -224,6 +224,21 @@ pub fn enter_banned(q: &dyn Query, bans: &[(ObjectId, PlayerId, &'static CardDef
         && bans.iter().any(|&(id, controller, def, by)| def.enter_rules.iter().any(|rule| !rule(q, &Asker { instance: None, source: id, controller, by, spell: false }, card)))
 }
 
+/// The permanents on the battlefield with a static ability that keeps some permanents from entering the battlefield, judged as
+/// they would exist there (`CardDef::permanent_enter_rules`, CR 101.2, 614.17d), with their controllers: empty, so
+/// unallocated, in nearly every game.
+pub fn permanent_enter_bans(cx: &Cx) -> Vec<(ObjectId, PlayerId, &'static CardDef, Option<Linked>)> {
+    sources(cx, |d| !d.permanent_enter_rules.is_empty()).collect()
+}
+
+/// Whether one of `bans` (`permanent_enter_bans`) keeps `permanent` from entering the battlefield (CR 101.2, 614.17d), read
+/// through `q` - which answers of it as it would exist there (`ops::entry_forbidden`).
+pub fn permanent_enter_banned(q: &dyn Query, bans: &[(ObjectId, PlayerId, &'static CardDef, Option<Linked>)], permanent: ObjectId) -> bool {
+    bans.iter().any(|&(id, controller, def, by)| {
+        def.permanent_enter_rules.iter().any(|rule| !rule(q, &Asker { instance: None, source: id, controller, by, spell: false }, permanent))
+    })
+}
+
 /// The permanents on the battlefield with a static ability that keeps some land plays from being made: one that keeps cards
 /// from entering the battlefield from where they are (`CardDef::enter_rules`, as playing a land puts it there, CR 305.1) or
 /// one that forbids playing some lands (`CardDef::land_play_rules`, CR 101.2), with their controllers. One look at the

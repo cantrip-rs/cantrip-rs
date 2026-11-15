@@ -183,6 +183,10 @@ mod destroy_selection_tests;
 #[cfg(test)]
 mod enter_rules_tests;
 #[cfg(test)]
+mod permanent_enter_rules_tests;
+#[cfg(test)]
+mod together_damage_tests;
+#[cfg(test)]
 mod land_play_rules_tests;
 #[cfg(test)]
 mod given_play_rule_tests;

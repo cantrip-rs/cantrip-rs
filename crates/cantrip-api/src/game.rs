@@ -1671,13 +1671,15 @@ pub trait Game: Query {
     /// then the changes are announced together (CR 603.2c). Returns the actual life lost: only final negative changes,
     /// not blocked losses or losses replaced with gains. Gul Dukat, Colonial Prefect; Archfiend of Despair.
     fn lose_life_together(&mut self, losses: &[(PlayerId, i32)]) -> i32;
-    /// One instruction whose sacrifices, discards and changes of life happen at once (CR 101.4): each sacrifice judged as
-    /// `sacrifice_each` judges it, each discard as `discard_together`, and each change of life its own occurrence, never added
+    /// One instruction whose sacrifices, discards, changes of life and damage happen at once (CR 101.4): each sacrifice judged
+    /// as `sacrifice_each` judges it, each discard as `discard_together`, each change of life its own occurrence, never added
     /// to another (unlike `lose_life_together`'s) - replaced on its own, in APNAP order, and announced as its own `LifeChange`
-    /// (CR 603.2c: "whenever a player loses life" triggers for each, "whenever one or more players lose life" once). Every
-    /// replacement and prohibition of every part is judged against the game as it is before any part happens (CR 616.1), then
-    /// they all happen and are announced together. Returns the life lost. Rottenmouth Viper; an exchange of life totals
-    /// (`exchange::life_totals`, CR 701.12c).
+    /// (CR 603.2c: "whenever a player loses life" triggers for each, "whenever one or more players lose life" once) - and the
+    /// damage one damage event, as `damage_together` deals it (CR 120.2). Every replacement and prohibition of every part is
+    /// judged against the game as it is before any part happens (CR 616.1), then they all happen and are announced together:
+    /// a permanent that leaves in it doesn't see its damage (CR 603.10). Returns the life lost by the changes of life.
+    /// Rottenmouth Viper; an exchange of life totals (`exchange::life_totals`, CR 701.12c); Worms of the Earth's sacrifices
+    /// and damage.
     fn together(&mut self, parts: Together) -> i32;
     /// "`player`'s life total becomes `total`" (CR 119.5): they gain or lose the difference, so a player who can't gain life
     /// keeps a total lower than `total` (CR 119.7).

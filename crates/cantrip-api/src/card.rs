@@ -3269,6 +3269,18 @@ pub type CounterBan = fn(&dyn Query, &Asker, ObjectId, PlayerId, CounterKind) ->
 /// cards in graveyards and libraries ..." (Weathered Runestone).
 pub type EnterRule = fn(&dyn Query, &Asker, ObjectId) -> bool;
 
+/// A static ability that says some permanents can't enter the battlefield (CR 101.2, 614.17): whether `permanent`, about to
+/// enter, may, false forbidding it. Unlike an `EnterRule`, which names cards where they are, it is judged on the permanent as
+/// it would exist on the battlefield (CR 614.17d) - `Query::chars` of it answers so - with the replacement effects that have
+/// modified how it enters so far (an "enters as a copy", CR 616.1c), its own static abilities and the continuous effects that
+/// would apply to it there. Asked of every permanent about to enter, from anywhere and however - a card put there, a land
+/// played, a permanent spell resolving, a token created - before any replacement effect modifies its entry and again after
+/// each one does; once one forbids it, the event can't happen, and no other replacement effect modifies or replaces it
+/// (CR 614.17c): a card stays where it is, a permanent spell is put into its owner's graveyard (CR 608.3e), a token is not
+/// created. "Lands can't enter the battlefield" (Worms of the Earth: a Clone entering as a copy of Dryad Arbor can't, the
+/// example of CR 608.3e).
+pub type PermanentEnterRule = fn(&dyn Query, &Asker, ObjectId) -> bool;
+
 /// A static ability that says some lands can't be played (CR 101.2, 305.1, 116.2a): whether `player` may play `land`, a card
 /// where it is now, as `face` - the card itself, or the land back face of a modal double-faced card (CR 712.12) - false
 /// forbidding it. It is asked of every land play whatever allows it: from a hand by the rules, from a graveyard, a
@@ -4004,6 +4016,10 @@ pub struct CardDef {
     /// battlefield with its abilities: Grafdigger's Cage's "creature cards in graveyards and libraries can't enter the
     /// battlefield".
     pub enter_rules: &'static [EnterRule],
+    /// Its static abilities that keep some permanents from entering the battlefield, judged as they would exist there
+    /// (CR 101.2, 614.17d), while it is on the battlefield with its abilities: Worms of the Earth's "lands can't enter the
+    /// battlefield". See `PermanentEnterRule`.
+    pub permanent_enter_rules: &'static [PermanentEnterRule],
     /// Its static abilities that keep some lands from being played (CR 101.2, 305.1), while it is on the battlefield with its
     /// abilities: Tomik, Distinguished Advokist's "your opponents can't play land cards from graveyards". See `LandPlayRule`.
     pub land_play_rules: &'static [LandPlayRule],
@@ -4276,6 +4292,7 @@ impl CardDef {
         counter_bans: &[],
         counter_ceilings: &[],
         enter_rules: &[],
+        permanent_enter_rules: &[],
         land_play_rules: &[],
         player_counter_bans: &[],
         cost_bans: &[],
@@ -4394,6 +4411,7 @@ impl CardDef {
             (!self.counter_bans.is_empty(), "counter bans"),
             (!self.counter_ceilings.is_empty(), "counter ceilings"),
             (!self.enter_rules.is_empty(), "enter rules"),
+            (!self.permanent_enter_rules.is_empty(), "permanent enter rules"),
             (!self.land_play_rules.is_empty(), "land play rules"),
             (!self.player_counter_bans.is_empty(), "player counter bans"),
             (!self.cost_bans.is_empty(), "cost bans"),

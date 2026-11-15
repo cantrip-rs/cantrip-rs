@@ -296,7 +296,7 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
 fn move_together_entering(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, attacking: Option<Target>) -> (Vec<ObjectId>, Vec<ObjectId>) {
     // A simultaneous move, including its replacement bookkeeping, is one rules
     // instruction (CR 614.6, 603.2c), not one instruction per saved permanent.
-    let (created, seen, _) = cx.instruction(|cx| move_together_entering_event(cx, moves, reason, attacking, &[]), |_| true);
+    let (created, seen, _) = cx.instruction(|cx| move_together_entering_event(cx, moves, reason, attacking, &[], &[]), |_| true);
     (created, seen)
 }
 
@@ -364,11 +364,12 @@ fn move_together_entering_event(
     reason: ZoneReason,
     attacking: Option<Target>,
     life: &[(PlayerId, i64)],
+    with: &[Event],
 ) -> (Vec<ObjectId>, Vec<ObjectId>, i32) {
     // The replacement effects that apply to these moves with more of their modified events to do once the moves have
     // happened (CR 614.6), done at the end.
     let outer = replace::afterward_scope(cx);
-    let moved = move_together_entering_moves(cx, moves, reason, attacking, life);
+    let moved = move_together_entering_moves(cx, moves, reason, attacking, life, with);
     let rest = replace::afterward_done(cx, outer);
     replace::rest_of_replacements(cx, rest);
     moved
@@ -380,6 +381,7 @@ fn move_together_entering_moves(
     reason: ZoneReason,
     attacking: Option<Target>,
     life: &[(PlayerId, i64)],
+    with: &[Event],
 ) -> (Vec<ObjectId>, Vec<ObjectId>, i32) {
     // An object moves once however many times the batch names it: a permanent a spell targets twice ("destroy target
     // artifact and target creature" at an artifact creature, CR 115.3) is destroyed once (CR 400.7). The first move kept.
@@ -498,6 +500,16 @@ fn move_together_entering_moves(
         let from = old.zone;
         let (mut m, proposed) = moving_proposal(cx, *m, reason);
         let entry = m.entering.filter(|_| proposed.to.is(ZoneKind::Battlefield));
+        // One a static ability keeps from entering, as it would exist with what its own replacements made of it (CR 614.17d),
+        // can't: no other replacement effect modifies or replaces the event (CR 614.17c), and it stays where it is - closed
+        // in the history as an entry stopped without a move.
+        if let Some(e) = entry
+            && entry_forbidden(cx, &e)
+        {
+            cx.record(Event::EntryAttemptFailed { entering: m.id });
+            replaced.push(m.id);
+            continue;
+        }
         let requested_to = proposed.to;
         // A permanent entering is judged as it would exist on the battlefield (CR 614.12), and its own replacements are
         // ordered with the others (CR 616.1). One its own replacement sent elsewhere instead does not enter at all.
@@ -938,6 +950,11 @@ fn move_together_entering_moves(
         if let Event::ZoneChange { new, to, to_revealed_hand, .. } = event {
             *to_revealed_hand = to.is(ZoneKind::Hand) && (hands_after & (1 << to.player.0) != 0 || cards_after.contains(new));
         }
+    }
+    // The events of the instruction's other parts that happen with the moves (`together`'s damage, CR 101.4): announced with
+    // them, one batch.
+    if !with.is_empty() {
+        events.splice(0..0, with.iter().copied());
     }
     cx.emit_batch(&events, Some(crate::settle::Before { battlefield: &before, then: &then, seen_by_all: &seen }));
     for player in shuffled {
@@ -1428,6 +1445,12 @@ pub fn prepare_entry(cx: &mut Cx, entering: &mut Entering) -> R<()> {
     if cx.s().obj(entering.object).copy.is_some_and(|c| cx.card(c.card).face_down) {
         return Ok(());
     }
+    // CR 614.17c-d: a permanent a static ability keeps from entering, as it would exist so far, can't: no replacement effect
+    // that modifies how it enters applies to it, and none of their choices is asked. Its caller sees it can't enter
+    // (`entry_forbidden`) once this returns.
+    if entry_forbidden(cx, entering) {
+        return Ok(());
+    }
     // Most positions have no static ability that could take an entering permanent's abilities: then it has its own. Its
     // own static abilities count among them (a "loses all abilities" or land-type-setting ability it would have there).
     let own = cx.cards().get(cx.cards().face(cx.s().obj(entering.object).card, entering.transformed));
@@ -1456,6 +1479,10 @@ pub fn prepare_entry(cx: &mut Cx, entering: &mut Entering) -> R<()> {
     if !entering.transformed && enters_by_daybound(cx, entering, may_lose) {
         entering.transformed = true;
     }
+    // Judged again on what those made of it (CR 614.17d: a Clone entering as a copy of Dryad Arbor under Worms of the Earth).
+    if (copied_by.is_some() || entering.transformed) && entry_forbidden(cx, entering) {
+        return Ok(());
+    }
     choose_protector(cx, entering)?;
     // Its face's other replacements (CR 616.1e) - none where a copy effect is over it (its copy replacement made it a copy, it
     // was made as one, or it is a bestowed Aura, CR 702.103b), as its copy's apply instead, below. Applied with the other
@@ -1481,6 +1508,10 @@ pub fn prepare_entry(cx: &mut Cx, entering: &mut Entering) -> R<()> {
         if let Some(enters_as_copy) = def.enters_as_copy {
             enters_as_copy(cx, entering)?;
             entering_keeps_colors(cx, entering, copy, face);
+            // Judged again on the copy it now enters as (CR 614.17d).
+            if entry_forbidden(cx, entering) {
+                return Ok(());
+            }
         }
         let card = entering.copy.map_or(copy.card, |c| c.card);
         if cx.cards().get(card).enters.is_some() {
@@ -1951,6 +1982,31 @@ fn judged_entering<T>(cx: &mut Cx, entering: &Entering, counters: bool, f: impl 
     let done = f(cx);
     cx.entering = outer;
     done
+}
+
+/// Whether a static ability keeps the permanent `entering` describes from entering the battlefield (CR 101.2, 614.17d,
+/// `CardDef::permanent_enter_rules`): judged on it as it would exist there (`as_it_would_exist`), with what the replacements
+/// applied to its entry so far made of it. Worked out only where such an ability is on the battlefield.
+pub(crate) fn entry_forbidden(cx: &mut Cx, entering: &Entering) -> bool {
+    let bans = crate::static_rules::permanent_enter_bans(cx);
+    if bans.is_empty() {
+        return false;
+    }
+    let would = as_it_would_exist(cx, entering);
+    let outer = cx.entering.replace(would);
+    let banned = crate::static_rules::permanent_enter_banned(cx, &bans, entering.object);
+    cx.entering = outer;
+    banned
+}
+
+/// `entry_forbidden` of `object`, the permanent judged now as it would exist (`Cx::entering`): asked of an entry after each
+/// replacement effect that modified it (CR 614.17c-d, `replace::apply_each`). False of anything not being judged so.
+pub(crate) fn judged_entry_forbidden(cx: &Cx, object: ObjectId) -> bool {
+    if !cx.entering.is_some_and(|w| w.object == object) {
+        return false;
+    }
+    let bans = crate::static_rules::permanent_enter_bans(cx);
+    !bans.is_empty() && crate::static_rules::permanent_enter_banned(cx, &bans, object)
 }
 
 /// After a replacement has modified how a permanent enters (CR 614.12: "taking into account replacement effects that have
@@ -3021,6 +3077,11 @@ fn create_tokens_entering(
         if instant_or_sorcery(cx.card(face)) {
             continue;
         }
+        // Nor one a static ability keeps from entering, as it would exist (CR 614.17d: a token copy of a land under Worms of
+        // the Earth): it would cease to exist anywhere but the battlefield (CR 111.7).
+        if entry_forbidden(cx, &entering) {
+            continue;
+        }
         // The token is judged as it would exist on the battlefield (CR 614.12): a token copy as what it copies.
         let (copy, transformed) = (entering.copy, entering.transformed);
         cx.st().update_obj(id, |o| {
@@ -3088,7 +3149,7 @@ fn create_tokens_entering(
         // An effect that sends it elsewhere instead (CR 614.1a): a token anywhere but the battlefield ceases to exist
         // (CR 111.7), so it is never created: an entry its own replacement sends elsewhere instead (`Entering::instead`)
         // as much as one another effect does.
-        if !change.to.is(ZoneKind::Battlefield) {
+        if !change.to.is(ZoneKind::Battlefield) || change.replaced {
             continue;
         }
         entering.tapped = change.tapped;
@@ -4007,6 +4068,24 @@ pub(crate) fn damage_batch(cx: &mut Cx, hits: &[(ObjectId, Target, u32)], combat
 }
 
 fn damage_batch_nonzero(cx: &mut Cx, hits: &[(ObjectId, Target, u32)], combat: bool) -> (Vec<DamageOutcome>, Vec<Event>, DamageBatch) {
+    let (slots, mut events, mut batch) = damage_formed(cx, hits, combat);
+    batch.finish(cx, &mut events);
+    let results = slots.into_iter().map(|slots| {
+        let mut outcome = DamageOutcome { amount: 0, result: None };
+        for (at, attributed) in slots {
+            let Event::Damage { target, recipient_excess, .. } = events[at] else { unreachable!("the original assignment's damage") };
+            outcome.amount += attributed;
+            outcome.result.get_or_insert(DamageResult { target, amount: attributed, excess: recipient_excess });
+        }
+        outcome
+    }).collect();
+    (results, events, batch)
+}
+
+/// One damage event formed (CR 120.4a-b): every replacement and prevention effect applied, against the game as it is, and
+/// what each assignment deals worked out - but nothing of it done to the game yet, nor announced: that is
+/// `DamageBatch::finish`, given the events. For each original assignment, the events it dealt and how much of each.
+fn damage_formed(cx: &mut Cx, hits: &[(ObjectId, Target, u32)], combat: bool) -> (Vec<Vec<(usize, u32)>>, Vec<Event>, DamageBatch) {
     let mut batch = DamageBatch::new(cx, hits);
     let proposed: Vec<_> = hits.iter().map(|&(source, target, amount)| DamageEvent { source, target, amount, combat, heal_marked: false, shielded: None }).collect();
     let parts = replace::damage_event(cx, &proposed, &mut batch.prevented, &mut batch.shielded);
@@ -4033,17 +4112,7 @@ fn damage_batch_nonzero(cx: &mut Cx, hits: &[(ObjectId, Target, u32)], combat: b
             events.push(event);
         }
     }
-    batch.finish(cx, &mut events);
-    let results = slots.into_iter().map(|slots| {
-        let mut outcome = DamageOutcome { amount: 0, result: None };
-        for (at, attributed) in slots {
-            let Event::Damage { target, recipient_excess, .. } = events[at] else { unreachable!("the original assignment's damage") };
-            outcome.amount += attributed;
-            outcome.result.get_or_insert(DamageResult { target, amount: attributed, excess: recipient_excess });
-        }
-        outcome
-    }).collect();
-    (results, events, batch)
+    (slots, events, batch)
 }
 
 /// Heals all damage marked on a permanent (CR 701.69a). A phased-out or new-zone object is not affected.
@@ -4215,6 +4284,13 @@ pub(crate) fn damage_source_order(cx: &mut Cx, hits: &[DamageEvent]) -> DamageSo
     DamageSourceOrder { order, established }
 }
 
+/// The results of one damage event, prepared and not yet applied (`DamageBatch::prepare_results`, CR 120.4c): the changes
+/// of life, and the counters.
+struct DamageResults {
+    changes: Vec<(PlayerId, i32)>,
+    counters: counters::Batch,
+}
+
 /// What one simultaneous damage event (CR 120.2, 510.2) has done so far, across its assignments.
 #[derive(Default)]
 pub struct DamageBatch {
@@ -4336,18 +4412,7 @@ impl DamageBatch {
     /// Finally apply and record the results, collecting only their triggers then (CR 120.4d, 603.2c); the already
     /// recorded dealt-damage events are neither recorded nor collected twice.
     pub fn finish(&mut self, cx: &mut Cx, events: &mut Vec<Event>) {
-        // A prevention effect's "you gain life equal to the damage prevented this way" is a result of the event even where
-        // it prevented all of the damage (CR 120.4's Awe Strike example).
-        let prevention_gains = if self.prevented.is_empty() { Vec::new() } else { replace::prevention_gains(cx, &self.prevented) };
-        if events.is_empty() && prevention_gains.is_empty() {
-            return;
-        }
-        // Excess is a recipient's total across the whole simultaneous event, not one assignment's (CR 120.10).
-        for event in events.iter_mut() {
-            if let Event::Damage { target: Target::Object(id), recipient_excess, .. } = event {
-                *recipient_excess = self.dealt.iter().find(|r| r.object == *id).map_or(0, DamageRecipient::excess);
-            }
-        }
+        let Some(gains) = self.dealt_events(cx, events) else { return };
         // Actual damage is already dealt at CR 120.4b: record the entire simultaneous damage before looking for
         // triggers, so history-dependent continuous effects see it (CR 603.10, 611.3a). Result records still wait.
         // Both trigger phases keep the boundary from before this instruction, even across replacement continuations.
@@ -4356,7 +4421,29 @@ impl DamageBatch {
         if damage_count > 0 {
             settle::collect_batch(cx, events, None, start);
         }
+        let results = self.prepare_results(cx, gains);
+        self.apply_results(cx, results, events, damage_count, start);
+    }
 
+    /// The damage events made final (CR 120.4b), each with its recipient's excess across the whole event (CR 120.10), and the
+    /// gains of the prevention effects that gain the damage they prevented - a result of the event even where they prevented
+    /// all of it (CR 120.4's Awe Strike example). None where the event has neither: nothing more to do.
+    fn dealt_events(&mut self, cx: &mut Cx, events: &mut [Event]) -> Option<Vec<(PlayerId, i64)>> {
+        let prevention_gains = if self.prevented.is_empty() { Vec::new() } else { replace::prevention_gains(cx, &self.prevented) };
+        if events.is_empty() && prevention_gains.is_empty() {
+            return None;
+        }
+        for event in events.iter_mut() {
+            if let Event::Damage { target: Target::Object(id), recipient_excess, .. } = event {
+                *recipient_excess = self.dealt.iter().find(|r| r.object == *id).map_or(0, DamageRecipient::excess);
+            }
+        }
+        Some(prevention_gains)
+    }
+
+    /// Every result of the event prepared (CR 120.4c, 616.1) - its replacements applied and its prohibitions judged against the
+    /// game as it now is - and none applied yet.
+    fn prepare_results(&mut self, cx: &mut Cx, prevention_gains: Vec<(PlayerId, i64)>) -> DamageResults {
         // Each result: its player, its signed amount, and whether it is the loss damage dealt to them causes (CR 120.3a).
         let mut life: Vec<(PlayerId, i64, bool)> = std::mem::take(&mut self.life).into_iter().map(|(p, amount)| (p, amount, true)).collect();
         life.extend(std::mem::take(&mut self.lifelink).into_iter().map(|(_, controller, amount)| (controller, amount, false)));
@@ -4377,6 +4464,14 @@ impl DamageBatch {
         // them against the same state, before any of the original life, counter or marked-damage results applies.
         retain_life_changes(cx, &mut changes);
         counters.retain_allowed(cx);
+        DamageResults { changes, counters }
+    }
+
+    /// The prepared results applied - the life, the counters, the marked damage and the loyalty and defense removed (CR
+    /// 120.3, 120.4d) - and announced with `events[damage_count..]` (CR 603.2c), the damage's triggers looked for over the
+    /// history from `start`, the boundary before the instruction.
+    fn apply_results(&mut self, cx: &mut Cx, results: DamageResults, events: &mut Vec<Event>, damage_count: usize, start: usize) {
+        let DamageResults { changes, counters } = results;
         apply_life_changes(cx, changes, events);
         events.extend(counters.place(cx));
         for recipient in &self.dealt {
@@ -4657,29 +4752,68 @@ pub fn pay_life_with_permanents(cx: &mut Cx, source: ObjectId, permanents: &[Obj
     if moves.is_empty() {
         life_together(cx, &life);
     } else {
-        cx.instruction(|cx| move_together_entering_event(cx, &moves, ZoneReason::Other, None, &life), |_| true);
+        cx.instruction(|cx| move_together_entering_event(cx, &moves, ZoneReason::Other, None, &life, &[]), |_| true);
     }
 }
 
 /// One instruction whose parts several players carry out at once (CR 101.4, `Game::together`): the sacrifices (CR 701.21a),
-/// the discards (CR 701.9) and the changes of life (CR 119.3) of `parts`, each change of life its own occurrence. Every
-/// replacement of every part is worked out against the game as it is before any of them happens, then they all happen and are
-/// announced together (CR 603.2c) - the discards' own events after them, as every discard's are (`discard_events`). The life
-/// lost.
+/// the discards (CR 701.9), the changes of life (CR 119.3) and the damage (CR 120.2: one damage event, each assignment dealt
+/// by its own procedure) of `parts`, each change of life its own occurrence. Every replacement of every part is worked out
+/// against the game as it is before any of them happens, then they all happen and are announced together (CR 603.2c) - the
+/// discards' own events after them, as every discard's are (`discard_events`). The life lost by the changes of life (the
+/// damage's is its own result, CR 120.3a).
 pub fn together(cx: &mut Cx, parts: cantrip_api::Together) -> i32 {
     let life: Vec<(PlayerId, i64)> = parts.life.iter().filter(|&&(_, n)| n != 0).map(|&(player, n)| (player, i64::from(n))).collect();
     let mut moves = discard_moves(cx, parts.discards, &[], false);
     let discarding = moves.len();
     moves.extend(sacrifice_moves(cx, parts.sacrifices));
-    if moves.is_empty() {
-        return life_together(cx, &life);
+    // Zero damage is no event (CR 120.8).
+    let hits: Vec<(ObjectId, Target, u32)> = parts.damage.iter().copied().filter(|&(_, _, amount)| amount != 0).collect();
+    if hits.is_empty() {
+        if moves.is_empty() {
+            return life_together(cx, &life);
+        }
+        let (_, seen, lost) = cx.instruction(|cx| move_together_entering_event(cx, &moves, ZoneReason::Other, None, &life, &[]), |_| true);
+        let events = discarded_events(cx, &moves[..discarding], &seen);
+        if !events.is_empty() {
+            cx.emit_batch(&events, None);
+        }
+        return lost;
     }
-    let (_, seen, lost) = cx.instruction(|cx| move_together_entering_event(cx, &moves, ZoneReason::Other, None, &life), |_| true);
-    let events = discarded_events(cx, &moves[..discarding], &seen);
-    if !events.is_empty() {
-        cx.emit_batch(&events, None);
-    }
-    lost
+    // The damage is formed and every result of it prepared first - each replacement, prevention effect and prohibition judged
+    // against the game as it is before any part happens (CR 101.4, 120.4c, 616.1), nothing of it done yet. Then the moves and
+    // the changes of life are made and announced with the damage, one batch: the moves' look-back is taken before any part
+    // (CR 603.10a), and a permanent that leaves in the event doesn't see the damage (CR 603.10). Then the damage's results are
+    // applied and announced (CR 120.4d), over the history from before the instruction.
+    cx.instruction(
+        |cx| {
+            let start = cx.g.log.len();
+            let (_, mut dealt, mut batch) = damage_formed(cx, &hits, false);
+            let results = batch.dealt_events(cx, &mut dealt).map(|gains| batch.prepare_results(cx, gains));
+            let lost = if moves.is_empty() {
+                let lost = life_together(cx, &life);
+                if !dealt.is_empty() {
+                    cx.record_batch(&dealt);
+                    settle::collect_batch(cx, &dealt, None, start);
+                }
+                lost
+            } else {
+                let (_, seen, lost) = move_together_entering_event(cx, &moves, ZoneReason::Other, None, &life, &dealt);
+                let events = discarded_events(cx, &moves[..discarding], &seen);
+                if !events.is_empty() {
+                    cx.emit_batch(&events, None);
+                }
+                lost
+            };
+            if let Some(results) = results {
+                let damage_count = dealt.len();
+                batch.apply_results(cx, results, &mut dealt, damage_count, start);
+            }
+            batch.rest_of_preventions(cx);
+            lost
+        },
+        |_| true,
+    )
 }
 
 /// Life results of one simultaneous event (CR 101.4, 120.4c, 616.1), with signed amounts, each its own occurrence: a player

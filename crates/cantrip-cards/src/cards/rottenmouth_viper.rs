@@ -56,7 +56,7 @@ fn blight_and_punish(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
             }
         }
     }
-    g.together(Together { sacrifices: &sacrificed, discards: &discarded, life: &losses });
+    g.together(Together { sacrifices: &sacrificed, discards: &discarded, life: &losses, ..Together::default() });
     Ok(())
 }
 

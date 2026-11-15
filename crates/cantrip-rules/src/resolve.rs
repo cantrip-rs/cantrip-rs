@@ -709,6 +709,13 @@ fn resolve_inner(cx: &mut Cx, summarize_terminal_mana: bool) -> R<Flow> {
                     &[ops::Moving { entering: Some(entering), ..ops::Moving::to(item.object, Zone::BATTLEFIELD) }],
                     ZoneReason::Resolve,
                 );
+                // CR 608.3e: one a static ability keeps from entering, as it would exist there with what the replacement
+                // effects made of its entry (CR 614.17c-d), was not put onto the battlefield: its controller puts it into its
+                // owner's graveyard - the example of CR 608.3e, a Clone entering as a copy of Dryad Arbor under Worms of the
+                // Earth.
+                if live(cx.s(), item.object) && cx.s().obj(item.object).zone.is(ZoneKind::Stack) {
+                    leave_stack(cx, std::slice::from_ref(&item), ZoneReason::Resolve);
+                }
                 if let Some(new) = cx.s().obj(item.object).became
                     && cx.s().obj(new).zone.is(ZoneKind::Battlefield)
                 {

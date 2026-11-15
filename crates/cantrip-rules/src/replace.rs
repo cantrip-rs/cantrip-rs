@@ -1039,6 +1039,15 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
         if let Proposal::ZoneChange(z) = *proposal {
             crate::ops::rejudge_entering(cx, &z);
         }
+        // An entry a static ability keeps from happening, judged on the permanent as the replacements applied so far left it
+        // (CR 614.17d), can't happen: no other replacement effect modifies or replaces it (CR 614.17c), and nothing moves.
+        if let Proposal::ZoneChange(z) = proposal
+            && z.to.is(ZoneKind::Battlefield)
+            && crate::ops::judged_entry_forbidden(cx, z.object)
+        {
+            z.replaced = true;
+            return None;
+        }
         if let Proposal::Counters(placement) = proposal {
             // A non-entering recipient's controller is live information, not the controller from when its first
             // replacement choice was built (CR 616.1, 611.3a). A concession or a continuation can change it here.
