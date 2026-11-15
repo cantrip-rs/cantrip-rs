@@ -1,0 +1,6 @@
+{
+  "name": "Peer Past the Veil",
+  "manaCost": "{2}{R}{G}",
+  "type": "Instant",
+  "oracleText": "Discard your hand. Then draw X cards, where X is the number of card types among cards in your graveyard."
+}
