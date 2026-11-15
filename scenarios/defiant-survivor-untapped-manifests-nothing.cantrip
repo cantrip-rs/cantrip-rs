@@ -1,0 +1,36 @@
+# Defiant Survivor, Survival: the intervening "if this creature is tapped" (CR 603.4) is false when it stays home on turn 3, so nothing
+# triggers at Bot1's second main phase: no card is looked at, the graveyard stays empty and the library keeps its top two cards.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Defiant Survivor
+Island x3
+Island
+Snapcaster Mage
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Defiant Survivor.Cast
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Defiant Survivor.Tapped = false
+? Stack.Count = 0
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Count = 4
+Bot1.Graveyard.Count = 0
+Bot1.Library.Count = 12
+Stack.Count = 0
