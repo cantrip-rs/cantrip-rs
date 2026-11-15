@@ -1150,6 +1150,13 @@ pub const CREATURE_THAT_WAS_DEALT_DAMAGE_THIS_TURN: TargetSpec = target(creature
 fn creature_an_opponent_controls_that_dealt_damage_this_turn_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     creature_that_dealt_damage_this_turn_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) != asker.controller)
 }
+/// "Target creature an opponent controls that was dealt damage this turn" (CR 115.1, 120.2): judged as it is chosen and again as the
+/// ability resolves (CR 608.2b). Unsparing Boltcaster and Downwind Ambusher print it.
+pub const CREATURE_AN_OPPONENT_CONTROLS_THAT_WAS_DEALT_DAMAGE_THIS_TURN: TargetSpec =
+    target(creature_an_opponent_controls_that_was_dealt_damage_this_turn_filter);
+fn creature_an_opponent_controls_that_was_dealt_damage_this_turn_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_that_was_dealt_damage_this_turn_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) != asker.controller)
+}
 /// "Target creature an opponent controls that dealt damage this turn" (CR 115.1, 120.2). Red Guardian, Super-Soldier prints it.
 pub const CREATURE_AN_OPPONENT_CONTROLS_THAT_DEALT_DAMAGE_THIS_TURN: TargetSpec =
     target(creature_an_opponent_controls_that_dealt_damage_this_turn_filter);
