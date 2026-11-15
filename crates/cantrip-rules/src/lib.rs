@@ -2614,6 +2614,10 @@ impl cantrip_api::Game for Cx<'_> {
         ops::unlock_door(self, permanent, door, player);
     }
 
+    fn lock_door(&mut self, permanent: ObjectId, door: u8) {
+        ops::lock_door(self, permanent, door);
+    }
+
     fn remember_chosen_name(&mut self, by: Linked, name: CardId) {
         ops::remember_chosen(self, by, cantrip_state::Kept::Name(name));
     }
