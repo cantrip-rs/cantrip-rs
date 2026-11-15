@@ -514,8 +514,11 @@ public sealed record PlayerState(
     float GraveyardY = 0,
     string Name = "");
 
-/// <summary>A button over a player's piles (Exile, Companion): what it says and its tooltip, whether it is lit, and where it is.</summary>
-public sealed record ZoneButtonState(string Text, string Tooltip, bool Lit, bool Open, float X, float Y, float W, float H);
+/// <summary>
+/// A button over a player's piles (Exile, Companion): what it says and its tooltip, whether it is lit, and where it is. One
+/// that takes an action the player has of their own (CR 116.2c) says which, by the index its answer names (`Ability`).
+/// </summary>
+public sealed record ZoneButtonState(string Text, string Tooltip, bool Lit, bool Open, float X, float Y, float W, float H, int? Ability = null);
 
 /// <summary>
 /// A kind of mana in a pool, how much, whether a click spends one, and where it is; its caption says what restricts it
@@ -535,7 +538,8 @@ public sealed record ManaChipState(
     string Effect = "",
     string SpendSubtypes = "",
     int SpendManaValue = 0,
-    int Source = 0);
+    int Source = 0,
+    int? Ability = null);
 
 /// <summary>An ability shown resolving: the way it cut, and each arrow's target and way.</summary>
 public sealed record EffectState(string Feeling, bool Lit, IReadOnlyList<ArrowState> Arrows);

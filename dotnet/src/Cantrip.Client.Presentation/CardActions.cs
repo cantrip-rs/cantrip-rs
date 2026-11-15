@@ -161,8 +161,9 @@ public sealed class CardActions
         _bySource.TryGetValue(handle.Value, out List<ActionOptionMessage>? options) ? options : None;
 
     /// <summary>
-    /// The mana abilities the player has of their own (CR 611.2a, 605.1a), such as the one Channel gives: no card
-    /// offers them, so they come with no source and the name of what gave them, and the player's own area shows them.
+    /// The abilities and actions the player has of their own (CR 611.2a, 605.1a; CR 116.2c), such as Channel's mana ability
+    /// and Guardian Angel's "pay {1}": no card offers them, so they come with no source and the name of what gave them, and
+    /// the player's own area shows them.
     /// </summary>
     public IReadOnlyList<ActionOptionMessage> Own =>
         [.. For(ViewHandle.None).Where(option => option.Kind == ActionKindView.ActivateAbility && option.GrantedBy.Length > 0)];
@@ -598,6 +599,13 @@ public sealed class CardActions
             && option.ProducesOfAnyOneColor == 0
             && option.ProducesOfAnyColorEach == 0
             && option.ColorChoices.Count == 0;
+    }
+
+    /// <summary>Whether this is a mana ability's activation (CR 605.1a): one that says what mana it adds.</summary>
+    public static bool IsManaAbility(ActionOptionMessage option)
+    {
+        ArgumentNullException.ThrowIfNull(option);
+        return option.Kind == ActionKindView.ActivateAbility && !IsIrreversibleActivation(option);
     }
 
     /// <summary>

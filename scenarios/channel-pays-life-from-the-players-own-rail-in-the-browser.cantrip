@@ -1,0 +1,33 @@
+# Browser
+# Channel's mana ability is the player's own, no card's (CR 605.1a, 611.2a): once Channel has resolved, the page shows it
+# beside Bot1's pool as a chip naming the card and its cost, and a click on it pays 1 life and adds {C}. Twice, then the
+# {C}{C} casts Mind Stone.
+[Bot1 Deck]
+Channel
+Forest
+Forest
+Mind Stone
+Forest x16
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Channel.Cast
+Bot1.Pass
+? Client.Bot1.Own = Channel · 1 life
+Bot1.Channel.Activate
+Bot1.Channel.Activate
+? Bot1.Mana = {C}{C}
+Bot1.Hand.Mind Stone.Cast
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot1.Graveyard = Channel
+Bot1.Battlefield.Count = 3

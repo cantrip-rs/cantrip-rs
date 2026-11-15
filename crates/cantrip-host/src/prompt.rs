@@ -187,6 +187,33 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
     m.pays_nothing = o.pays_nothing;
     let candidates: Vec<TargetMessage> = o.target_candidates.iter().filter_map(|t| target_message(handles, *t)).collect();
 
+    // A player's own ability or action (CR 605.1a, 611.2a; CR 116.2c): Channel's mana ability, Guardian Angel's "pay {1}".
+    // No object has it, so it names no card the page draws - the card that gave it may be in a graveyard, in exile, or gone
+    // (a copy, CR 707.10a) - but the player, by the card that gave it (`granted_by`), with its cost and what it does.
+    if o.kind == ActionKind::ActivateAbility
+        && o.index >= PLAYER_SPECIAL_ACTION
+        && let Some(src) = o.source
+    {
+        let asked = game.pending().map_or(game.state.turn.priority, |r| r.player);
+        let name = game.cards.get(game.state.obj(src).card).name;
+        m.source = ViewHandle::NONE;
+        m.granted_by = name.to_string();
+        if let Some((ability, about)) = players_own(game, asked, o.index)
+            && let AbilityDef::Activated(d) = game.cards.ability(ability)
+        {
+            m.description = players_own_text(game, asked, ability, about);
+            m.cost_text = cost_text_of(&d.cost, name);
+            m.life_cost = i32::try_from(d.cost.life).unwrap_or(i32::MAX);
+            for mana in Mana::ALL.into_iter().filter(|_| o.mana.is_none()) {
+                for _ in 0..d.adds.get(mana) {
+                    m.produces.push(mana_view(mana));
+                }
+            }
+        }
+        m.target_candidates = candidates;
+        return m;
+    }
+
     let Some(src) = o.source else {
         m.target_candidates = candidates;
         return m;
@@ -395,6 +422,40 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
         _ => m.target_candidates = candidates,
     }
     m
+}
+
+/// The ability or action of `player`'s own an option numbered `index` takes (`PLAYER_MANA_ABILITY + n`, `PLAYER_SPECIAL_ACTION
+/// + n`): the nth effect that gave them one of that kind, and what it is about (an action's "that permanent or player").
+pub(crate) fn players_own(game: &Game, player: PlayerId, index: u8) -> Option<(AbilityRef, Target)> {
+    let mine = game.state.effects.iter().filter(|e| e.controller == player);
+    if index >= PLAYER_MANA_ABILITY {
+        mine.filter_map(|e| match e.kind {
+            EffectKind::PlayerManaAbility(a) => Some((a, Target::None)),
+            _ => None,
+        })
+        .nth(usize::from(index - PLAYER_MANA_ABILITY))
+    } else {
+        mine.filter_map(|e| match e.kind {
+            EffectKind::PlayerSpecialAction { ability, about } => Some((ability, about)),
+            _ => None,
+        })
+        .nth(usize::from(index.checked_sub(PLAYER_SPECIAL_ACTION)?))
+    }
+}
+
+/// How a player's own ability or action reads, for `viewer`: its words, and what it is about where it is about something -
+/// Guardian Angel's "that permanent or player" is the one its spell targeted, which the words alone do not say: "(on
+/// Kraken Hatchling)", "(on you)".
+pub(crate) fn players_own_text(game: &Game, viewer: PlayerId, ability: AbilityRef, about: Target) -> String {
+    let text = game.cards.ability(ability).text();
+    let on = match about {
+        Target::Object(id) => game.name(id).to_string(),
+        Target::Player(p) if p == viewer => "you".to_string(),
+        Target::Player(_) if game.state.players.len() == 2 => "your opponent".to_string(),
+        Target::Player(p) => format!("the player in seat {}", crate::view::seat(p)),
+        _ => return text.to_string(),
+    };
+    format!("{} (on {on}).", text.trim_end_matches('.'))
 }
 
 /// What a mana ability's row says it adds where replacement effects change what a tap for mana produces

@@ -140,6 +140,16 @@ pub fn translate(
             {
                 action.source = o.source;
             }
+            // A player's own ability or action names no card (`prompt::option_message`): the option the player is offered under
+            // that index is the one it takes, from whatever card gave it.
+            if action.source.is_none()
+                && kind == ActionKind::ActivateAbility
+                && action.index >= PLAYER_SPECIAL_ACTION
+                && let RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } | RequestKind::Priority { options } = &request.kind
+                && let Some(o) = options.iter().find(|o| o.kind == kind && o.index == action.index)
+            {
+                action.source = o.source;
+            }
             // A cancel or a decline names no source, whatever the option it matches carries.
             if matches!(kind, ActionKind::CancelCasting | ActionKind::DeclineCost | ActionKind::PayCost | ActionKind::ConfirmCasting)
                 && let RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } | RequestKind::Priority { options } = &request.kind
@@ -308,7 +318,9 @@ pub fn payload_of(answer: &Answer, request: &Request, handles: &mut HandleSpace,
         }),
         Answer::Cards(ids) => AnswerPayload::CardsChosenAnswer(CardsChosenAnswer { cards: ids.iter().map(|&id| crate::prompt::offered_handle(game, handles, id)).collect() }),
         Answer::Act(action) => {
-            let source = action.source.map_or(ViewHandle::NONE, |s| handles.handle(s));
+            // A player's own ability or action names no card, as its option does not (`prompt::option_message`).
+            let own = action.kind == ActionKind::ActivateAbility && action.index >= PLAYER_SPECIAL_ACTION;
+            let source = action.source.filter(|_| !own).map_or(ViewHandle::NONE, |s| handles.handle(s));
             let mut a = TakeActionAnswer::new(crate::prompt::action_kind_view(action.kind), source);
             a.ability_index = i32::from(action.index);
             // The option it takes, by its place in the question (`ActionOptionMessage::option_id`).

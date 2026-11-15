@@ -434,7 +434,7 @@ public sealed partial class MainPage
 
                     json.WriteEndArray();
                     json.WriteStartArray("zones");
-                    foreach ((string text, string tooltip, bool lit, DockButton button) in rail.ZoneButtonsShown())
+                    foreach (((string text, string tooltip, bool lit, DockButton button), ActionOptionMessage? own) in rail.ZoneButtonsShown().Zip(rail.ZoneButtonActions()))
                     {
                         if (button.ActualWidth <= 0)
                         {
@@ -443,6 +443,12 @@ public sealed partial class MainPage
 
                         json.WriteStartObject();
                         json.WriteString("text", text);
+                        // A player's own action the button takes (CR 116.2c), by the index its answer names.
+                        if (own is not null)
+                        {
+                            json.WriteNumber("ability", own.AbilityIndex);
+                        }
+
                         json.WriteString("tooltip", tooltip);
                         json.WriteBoolean("lit", lit);
                         json.WriteBoolean("open", button.On);
@@ -473,6 +479,12 @@ public sealed partial class MainPage
                         json.WriteNumber("count", spec.Count);
                         json.WriteBoolean("clickable", spec.Click is not null);
                         json.WriteString("caption", spec.Caption ?? string.Empty);
+                        // A player's own mana ability the chip takes (CR 605.1a, 611.2a), by the index its answer names.
+                        if (spec.Own is { } own)
+                        {
+                            json.WriteNumber("ability", own.AbilityIndex);
+                        }
+
                         if (spec.Assign is { } assign)
                         {
                             json.WriteString("filter", assign.Filter.ToString());

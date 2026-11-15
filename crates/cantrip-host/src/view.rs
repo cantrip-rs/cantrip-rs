@@ -781,6 +781,13 @@ impl<'a> Projector<'a> {
                 let text = game.cards.ability(ability).text();
                 summary.pending_effects.push(if p == self.viewer { format!("{name}: {text}") } else { format!("Their {name}'s effect: {text}") });
             }
+            // An action a resolved spell lets the player take at a later time, until the effect ends (CR 116.2c: Guardian
+            // Angel's "until end of turn, you may pay {1}"): the other seat is told of it too, and what it is about.
+            if let EffectKind::PlayerSpecialAction { ability, about } = e.kind {
+                let name = game.cards.get(ability.card).name;
+                let text = crate::prompt::players_own_text(game, self.viewer, ability, about);
+                summary.pending_effects.push(if p == self.viewer { format!("{name}: {text}") } else { format!("Their {name}'s effect: {text}") });
+            }
         }
         // "Whenever [event] this turn" / "when you next [event] this turn" / "until your next turn, whenever [event]" (CR 603.7b):
         // a delayed triggered ability that waits for its event, on no object, so the page says it beside its controller's life

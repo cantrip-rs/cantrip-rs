@@ -17,9 +17,10 @@ public sealed class PlayerRail : Border
     /// <summary>
     /// A chip in the mana row: mana in the pool, or with <paramref name="Ability"/> a mana ability the player has of
     /// their own (CR 611.2a) — no card offers it — which reads as its caption alone and activates on a click.
-    /// <paramref name="Assign"/> is the server's option a click on pool mana answers with.
+    /// <paramref name="Assign"/> is the server's option a click on pool mana answers with; <paramref name="Own"/> the
+    /// player's own ability a click on an ability chip takes.
     /// </summary>
-    public sealed record ManaChipSpec(ManaTypeView Type, int Count, string? Caption, string? Tooltip, Action? Click, bool Ability = false, ActionOptionMessage? Assign = null);
+    public sealed record ManaChipSpec(ManaTypeView Type, int Count, string? Caption, string? Tooltip, Action? Click, bool Ability = false, ActionOptionMessage? Assign = null, ActionOptionMessage? Own = null);
 
     /// <summary>
     /// A pile at the rail's foot: how many cards, the one drawn on top if any is known, what a click on it does, whether
@@ -27,8 +28,12 @@ public sealed class PlayerRail : Border
     /// </summary>
     public sealed record PileSpec(int Count, ObjectView? Top, Action? Click, bool Lit, string? Note);
 
-    /// <summary>A button over the piles into a zone that is not drawn as a pile: a share of exile, a sideboard.</summary>
-    public sealed record ZoneButtonSpec(string Text, string Tooltip, bool Open, Action Click, bool Lit = false);
+    /// <summary>
+    /// A button over the piles into a zone that is not drawn as a pile: a share of exile, a sideboard. Or, with
+    /// <paramref name="Own"/>, an action the player has of their own, which no card offers (CR 116.2c: Guardian Angel's
+    /// "pay {1}"): it takes that action.
+    /// </summary>
+    public sealed record ZoneButtonSpec(string Text, string Tooltip, bool Open, Action Click, bool Lit = false, ActionOptionMessage? Own = null);
 
     public const double RailWidth = 208;
     private const double PileWidth = 85;
@@ -493,6 +498,9 @@ public sealed class PlayerRail : Border
     /// <summary>The zone buttons shown with what they say and whether they are lit, for a page driven by a test (MainPage.Test.cs).</summary>
     public IEnumerable<(string Text, string Tooltip, bool Lit, DockButton Button)> ZoneButtonsShown() =>
         _zoneButtons.Children.OfType<DockButton>().Select((button, i) => (_zonesShown[i].Text, _zonesShown[i].Tooltip, _zonesShown[i].Lit, button));
+
+    /// <summary>The player's own action each zone button shown takes, if it takes one, in the order shown: for a page driven by a test.</summary>
+    public IEnumerable<ActionOptionMessage?> ZoneButtonActions() => _zones.Select(zone => zone.Own);
 
     /// <summary>The words of the facts shown beside the life total, for a page driven by a test.</summary>
     public IEnumerable<string> FactsShown() => _factsShown.Select(fact => fact.Text);

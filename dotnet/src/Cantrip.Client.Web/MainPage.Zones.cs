@@ -578,6 +578,26 @@ public sealed partial class MainPage
                 Lit: castable > 0));
         }
 
+        // The actions the player has of their own (CR 116.2c: Guardian Angel's "pay {1}"), which no card offers - the card
+        // that gave one may be in a graveyard, in exile or gone - on their own rail: the card's name and the cost, lit, and
+        // what it does on the tooltip. One button for each that reads differently; a click takes it, or asks which.
+        if (seat == client.Seat)
+        {
+            foreach (IGrouping<(string, string), ActionOptionMessage> own in _actions.Own.Where(option => !CardActions.IsManaAbility(option)).GroupBy(option => (option.GrantedBy, option.Description)))
+            {
+                ActionOptionMessage first = own.First();
+                List<ActionOptionMessage> offered = [.. own];
+                string cost = first.LifeCost > 0 && first.CostText.Length == 0 ? $"{first.LifeCost} life" : first.CostText;
+                buttons.Add(new PlayerRail.ZoneButtonSpec(
+                    cost.Length > 0 ? $"{first.GrantedBy} · {cost}" : first.GrantedBy,
+                    $"{first.GrantedBy}: {first.Description}",
+                    false,
+                    () => { Choose(client, offered); RedrawNow(); },
+                    Lit: true,
+                    Own: first));
+            }
+        }
+
         return buttons;
     }
 
@@ -652,7 +672,7 @@ public sealed partial class MainPage
         // one chip for each that reads differently, since two Channels give two abilities that do the same thing.
         if (player.Seat == client.Seat)
         {
-            foreach (IGrouping<(string, string), ActionOptionMessage> own in _actions.Own.GroupBy(option => (option.GrantedBy, option.Description)))
+            foreach (IGrouping<(string, string), ActionOptionMessage> own in _actions.Own.Where(CardActions.IsManaAbility).GroupBy(option => (option.GrantedBy, option.Description)))
             {
                 ActionOptionMessage first = own.First();
                 ManaTypeView adds = first.Produces.Count > 0 ? first.Produces[0] : ManaTypeView.Colorless;
@@ -667,7 +687,8 @@ public sealed partial class MainPage
                         Choose(client, [first]);
                         RedrawNow();
                     },
-                    Ability: true));
+                    Ability: true,
+                    Own: first));
             }
         }
 

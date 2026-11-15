@@ -842,6 +842,30 @@ public sealed class ScenarioPlayer
 
                 // A phone's hand card is played by swiping it up out of the hand: done, for a card with one thing to do;
                 // its sheet, with a row for each, for a card with several (MainPage.PhoneHand.cs).
+                // A player's own ability or action names no card (CR 605.1a, 611.2a; CR 116.2c: Channel's, Guardian Angel's): it
+                // is on the player's own rail, a chip beside the pool for a mana ability, a button over the piles for the rest.
+                if (action.Kind == ActionKindView.ActivateAbility && action.Source.Value == 0)
+                {
+                    PlayerState me = state.Players?.FirstOrDefault(p => p.Seat == state.Seat)
+                        ?? throw new NotDrivenException("a player's own ability, with no rail shown", state);
+                    (float X, float Y)? at = me.Zones?.FirstOrDefault(z => z.Ability == action.AbilityIndex) is { } button ? (button.X, button.Y)
+                        : me.Mana.FirstOrDefault(c => c.Ability == action.AbilityIndex) is { } chip ? (chip.X, chip.Y)
+                        : null;
+                    if (at is not { } point)
+                    {
+                        throw new NotDrivenException($"the player's own ability #{action.AbilityIndex} on their rail", state);
+                    }
+
+                    await _page.TapAsync(point.X, point.Y);
+                    TableState taken = await _page.SettledAsync();
+                    if (taken.Controls.Any(c => c.Kind == "item"))
+                    {
+                        await ChooseRowAsync(action, taken, line);
+                    }
+
+                    return;
+                }
+
                 if (state.InPerson is not null && state.Cards.FirstOrDefault(c => c.Visible && c.Place == "hand" && c.Handle == action.Source.Value) is { } held)
                 {
                     (float hx, float hy) = ClickPoint(state, held);
@@ -1702,7 +1726,7 @@ public sealed class ScenarioPlayer
     }
 
     private const string ClientKeys =
-        "Stack, Hand, Battlefield, OpponentBattlefield, OpponentHand (the cards known in it), each with .Count; <Row>.<Card>.TypeLine, .Rules, .Status, .Annotation, .Note (what the card's tooltip says of it below its rules, like Exiled with The Darkness Crystal.), .Counters (the pills drawn on it, like 3 × incubation), .FaceDownName (what a face-down card really is, to the page that may look at it; empty to one that may not) or .Damage (the marked damage drawn beside its power and toughness, like -3), .Share (the share of a divided total it wears while one is divided, and what it is a share of: 1 counters in the counters' tone, 2 damage in the damage's), .Halves (a split card's halves as drawn, like Turn; Burn; rows Stack, Hand, Battlefield, OpponentBattlefield, Exile, Graveyard); Facts, OpponentFacts (beside the life total); Mana (the pool's chips, like 2 Blue (land abilities)); Exile.Lit, .Open (whether its window is open), .Caption, .Tooltip and OpponentExile.*; Sideboard.Caption, .Tooltip, OpponentSideboard.Caption, .Tooltip; Companion, OpponentCompanion (the card in each companion window, empty with none) and their .Corner (bottom-left, top-left); Graveyard.Lit, .Note; Button.<label> (shown or absent), Button.<label>.Enabled (true or false: whether the dock's button can be pressed; absent with none), Arrows (the latest resolution's targets), Over, Prompt.Title, Prompt.Detail, Prompt.Modes, Log.Has (a line of the game log, by its text), Confirm (the button the last choice of cards was confirmed with), Menu (the rows of the menu the last card action opened; empty when it opened none), Targeting (the dock's title / line while the last card action's targets were picked), Dock (the dock's buttons), Combat (each combat group as its ground is captioned, with its attackers: Attacking Bot2: Ornithopter); TargetLabels (the labels on the arrows from the spell on the stack to its targets, like Turn; Burn); Hand.<Card>.Actions, Battlefield.<Card>.Actions (what the card offers to do, as its menu words it)";
+        "Stack, Hand, Battlefield, OpponentBattlefield, OpponentHand (the cards known in it), each with .Count; <Row>.<Card>.TypeLine, .Rules, .Status, .Annotation, .Note (what the card's tooltip says of it below its rules, like Exiled with The Darkness Crystal.), .Counters (the pills drawn on it, like 3 × incubation), .FaceDownName (what a face-down card really is, to the page that may look at it; empty to one that may not) or .Damage (the marked damage drawn beside its power and toughness, like -3), .Share (the share of a divided total it wears while one is divided, and what it is a share of: 1 counters in the counters' tone, 2 damage in the damage's), .Halves (a split card's halves as drawn, like Turn; Burn; rows Stack, Hand, Battlefield, OpponentBattlefield, Exile, Graveyard); Facts, OpponentFacts (beside the life total); Mana (the pool's chips, like 2 Blue (land abilities)); Own, Own.Tooltip (the player's own abilities and actions on their rail, like Guardian Angel · {1}); Exile.Lit, .Open (whether its window is open), .Caption, .Tooltip and OpponentExile.*; Sideboard.Caption, .Tooltip, OpponentSideboard.Caption, .Tooltip; Companion, OpponentCompanion (the card in each companion window, empty with none) and their .Corner (bottom-left, top-left); Graveyard.Lit, .Note; Button.<label> (shown or absent), Button.<label>.Enabled (true or false: whether the dock's button can be pressed; absent with none), Arrows (the latest resolution's targets), Over, Prompt.Title, Prompt.Detail, Prompt.Modes, Log.Has (a line of the game log, by its text), Confirm (the button the last choice of cards was confirmed with), Menu (the rows of the menu the last card action opened; empty when it opened none), Targeting (the dock's title / line while the last card action's targets were picked), Dock (the dock's buttons), Combat (each combat group as its ground is captioned, with its attackers: Attacking Bot2: Ornithopter); TargetLabels (the labels on the arrows from the spell on the stack to its targets, like Turn; Burn); Hand.<Card>.Actions, Battlefield.<Card>.Actions (what the card offers to do, as its menu words it)";
 
     private string? Read(string what, TableState state)
     {
@@ -1717,6 +1741,11 @@ public sealed class ScenarioPlayer
             // The pool's chips as drawn: "2 Blue (land abilities)" for restricted mana, its caption what it is for.
             "Mana" => string.Join("; ", (me?.Mana ?? []).Select(m => m.Caption.Length == 0 ? $"{m.Count} {m.Type}" : $"{m.Count} {m.Type} ({m.Caption})")),
             "OpponentFacts" => string.Join("; ", them?.Facts ?? []),
+            // The abilities and actions the player has of their own, on their rail (CR 605.1a, 611.2a; CR 116.2c): the buttons
+            // over the piles and the chips beside the pool, as they read, "Guardian Angel · {1}".
+            "Own" => string.Join("; ", (me?.Zones ?? []).Where(z => z.Ability is not null).Select(z => z.Text)
+                .Concat((me?.Mana ?? []).Where(c => c.Ability is not null).Select(c => c.Caption))),
+            "Own.Tooltip" => string.Join("; ", (me?.Zones ?? []).Where(z => z.Ability is not null).Select(z => z.Tooltip)),
             "Exile.Lit" => (Exile(me)?.Lit ?? false) ? "true" : "false",
             "Exile.Open" => (Exile(me)?.Open ?? false) ? "true" : "false",
             "Exile.Caption" => Exile(me)?.Text ?? string.Empty,
