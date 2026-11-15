@@ -50,7 +50,7 @@ fn yours_banned(_: &dyn Query, a: &Asker, _: ObjectId, controller: PlayerId, _: 
 static BAN: CardDef = CardDef { name: "Controller counter ban probe", abilities: &[], counter_bans: &[yours_banned], ..SHARED };
 fn board() -> RulesGame {
     static TABLE: OnceLock<CardTable> = OnceLock::new();
-    let cards = TABLE.get_or_init(|| CardTable::new([&SHARED,&MANA,&PAID,&SACRIFICE,&HAND,&CREATURE,&NORMAL,&SORCERY,&RETURN,&EXERT,&UNATTACH,&COUNTER,&BAN]));
+    let cards = TABLE.get_or_init(|| CardTable::new([&SHARED,&MANA,&PAID,&SACRIFICE,&HAND,&CREATURE,&NORMAL,&SORCERY,&RETURN,&EXERT,&UNATTACH,&COUNTER,&BAN,&PLUS_G]));
     let deck = vec![cards.id_of(&NORMAL); 20];
     let mut g = RulesGame::new(cards, &crate::Setup { decks: vec![deck;2], ..Default::default() });
     while !g.state.agenda.is_empty() { g.state.frame_remove(0); }
@@ -173,6 +173,24 @@ fn explicit_self_costs_use_the_permitted_source_and_exert_uses_the_payers_next_u
             assert_eq!(g.state.obj(source).marks.exerted_by,1u8 << THEM.0);
         } else { assert!(g.state.obj(source).attached_to.is_none()); }
     }
+}
+
+/// The ability's own cost change adds {G} to a printed cost of no mana (Merseine's "Pay enchanted creature's mana cost").
+fn plus_g(_: &dyn Query, _: &Asker, _: Costed, _: &[Target]) -> CostDelta { CostDelta::more_mana(mana("{G}")) }
+static PLUS_G: CardDef = CardDef {
+    name: "Shared own increase probe",
+    abilities: &[ability(Cost::NONE, nothing, "Pay {G}: Nothing. Any player may activate.").cost_change(plus_g).any_player_may_activate()],
+    ..SHARED
+};
+
+/// CR 601.2f by way of 602.2b: the total cost of an ability whose printed cost has no mana includes what its own cost change
+/// adds, so it is offered only to an activator who could pay that, judged with the activator's mana.
+#[test]
+fn an_own_increase_on_a_cost_of_no_mana_is_judged_with_the_activators_mana() {
+    let mut g=board();let source=put(&mut g,&PLUS_G,YOU,Zone::BATTLEFIELD);
+    assert!(options(&mut g,THEM,source).is_empty(),"nothing pays the {{G}} its own change adds");
+    put(&mut g,&MANA,THEM,Zone::BATTLEFIELD);
+    assert_eq!(options(&mut g,THEM,source),[0]);
 }
 
 /// CR 122.6, 602.2: a counter ban on "permanents you control" is judged by the source's controller, whoever activates.

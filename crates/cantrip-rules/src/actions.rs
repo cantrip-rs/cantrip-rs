@@ -7661,8 +7661,10 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             // An activation whose mana cost the player cannot meet is not offered, as a spell they cannot afford is not
             // (CR 602.2b): a seat handed it would cancel at the payment and be handed it again, forever.
             let owed = if def.special_action { special_action_cost(cx, player, id, ability, def) } else { def.cost.mana };
-            // An {X} is judged at the least it may be announced as (CR 107.3a, 601.2b): 0, or 1 where X can't be 0.
-            let judged = at_least_x(owed, def.x_cant_be_zero).mana_value() > 0 && !def.tap_creatures_for_mana;
+            // An {X} is judged at the least it may be announced as (CR 107.3a, 601.2b): 0, or 1 where X can't be 0. A printed
+            // cost of no mana is judged too where the ability's own cost change may add mana to it as the total cost is
+            // determined (CR 601.2f by way of 602.2b: Merseine's "Pay enchanted creature's mana cost").
+            let judged = (at_least_x(owed, def.x_cant_be_zero).mana_value() > 0 || def.cost_change.is_some()) && !def.tap_creatures_for_mana;
             // What pays for it (`activation_available`), its waterbend judged at the least X may be announced as.
             let own = judged
                 .then(|| {
