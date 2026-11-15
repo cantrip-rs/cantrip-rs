@@ -1,0 +1,8 @@
+{
+  "name": "Warren Elder",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Rabbit Cleric",
+  "oracleText": "{3}{W}: Creatures you control get +1/+1 until end of turn.",
+  "power": 2,
+  "toughness": 2
+}
