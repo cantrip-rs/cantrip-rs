@@ -22,12 +22,11 @@ fn mire(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// "When this artifact is put into a graveyard from the battlefield, at the beginning of each of your upkeeps for the rest of
 /// the game, ..." (CR 603.7): a delayed triggered ability whose source is this artifact as it last existed.
 fn each_upkeep(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let card = g.obj(item.object).card;
     g.delayed_trigger(
         DelayedWhen::EachStep { step: Step::Upkeep, on_turn_of: Some(item.controller) },
         item.object,
         item.controller,
-        AbilityRef::delayed(card, 0),
+        AbilityRef::delayed(item.ability.card, 0),
         Target::None,
     );
     Ok(())
