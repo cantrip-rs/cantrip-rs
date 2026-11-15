@@ -1,0 +1,69 @@
+# Malevolent Chandelier (6, 4/4 flying): "{2}: Put target card from a graveyard on the bottom of its owner's library. Activate
+# only as a sorcery." (CR 602.5d, 401.4). Turn 1 Black Lotus and three Moxen pay {6} (the pool empty right after); two more Moxen
+# stay untapped. Bot2's turn 2 Lightning Bolt is on the stack, so the Chandelier's ability is refused at instant speed even
+# with {2} available. On turn 3, paid with exactly two Moxen, it puts Bot2's Bolt on the bottom of Bot2's library, and (paid
+# with two more) Bot1's own Black Lotus on the bottom of Bot1's library - each owner's, one just outside the filter (a
+# permanent, the Mox Jet) refused.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Malevolent Chandelier
+Mox Sapphire
+Mox Emerald
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Malevolent Chandelier.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Malevolent Chandelier.Keywords = Flying
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+! Bot1.Battlefield.Malevolent Chandelier.Activate(Ability: {2}; Bot1.Graveyard.Black Lotus)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Malevolent Chandelier.Activate(Ability: {2}; Bot1.Battlefield.Mox Jet)
+Bot1.Battlefield.Malevolent Chandelier.Activate(Ability: {2}; Bot2.Graveyard.Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 0
+? Bot2.Library = Island; Island; Island; Island; Island; Island; Lightning Bolt
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Malevolent Chandelier.Activate(Ability: {2}; Bot1.Graveyard.Black Lotus)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard.Count = 0
+Bot1.Library = Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Black Lotus
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield.Malevolent Chandelier.Power = 4
+Bot1.Battlefield.Malevolent Chandelier.Toughness = 4
