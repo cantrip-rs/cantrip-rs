@@ -10,16 +10,7 @@ use cantrip_oracle as oracle;
 /// own (CR 601.2a), by flashback or any other permission; a copy was never cast (CR 707.10).
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
-    let power = fight::damage_equal_to_power(g, creature);
-    let hits: Vec<(ObjectId, Target, u32)> = g
-        .state()
-        .battlefield()
-        .iter()
-        .copied()
-        .filter(|&id| id != creature && g.chars(id).is(CardType::Creature))
-        .map(|id| (creature, Target::Object(id), power))
-        .collect();
-    g.damage_together(&hits);
+    fight::deals_damage_equal_to_its_power_to_each_other_creature(g, creature);
     if g.obj(item.object).cast_from == Some(ZoneKind::Graveyard) {
         g.discard_hand(item.controller);
         g.draw(item.controller, 4);
