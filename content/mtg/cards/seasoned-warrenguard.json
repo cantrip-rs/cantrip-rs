@@ -1,0 +1,8 @@
+{
+  "name": "Seasoned Warrenguard",
+  "manaCost": "{W}",
+  "type": "Creature — Rabbit Warrior",
+  "oracleText": "Whenever this creature attacks while you control a token, this creature gets +2/+0 until end of turn.",
+  "power": 1,
+  "toughness": 2
+}
