@@ -292,6 +292,28 @@ impl ManaProduction {
     }
 }
 
+/// A permanent about to untap (CR 701.26b), alone or with others at once (CR 502.3: the untap step's untap). "If a
+/// permanent with a stun counter on it would become untapped, instead remove a stun counter from it" (CR 122.1d) is the
+/// core's effect, ordered with the others (CR 616.1): Freyalise's Winds' "if a permanent with a wind counter on it would
+/// untap during its controller's untap step, remove all wind counters from it instead" is a card's. An effect that replaces
+/// the untap clears `untaps` and names what is done instead in `remove`; the event is then no untap, and no other effect
+/// applies to it (CR 614.6). The core carries out every untap of an event, and every removal in place of one, at once,
+/// after each has met its effects.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Untap {
+    pub permanent: ObjectId,
+    /// Its controller, whose choice CR 616.1 is.
+    pub controller: PlayerId,
+    /// The player whose untap step this untap is part of (CR 502.3), the active player; `None` for an untap by an effect or
+    /// a cost (CR 701.26b). "During its controller's untap step" is `Some(controller)`; an untap "during each other player's
+    /// untap step" (Seedborn Muse) is in another player's.
+    pub untap_step: Option<PlayerId>,
+    /// It untaps. Set by the core; an effect that replaces the untap clears it.
+    pub untaps: bool,
+    /// The counters taken off it in place of the untap, by kind (CR 122.1d, 614.1a).
+    pub remove: [i32; CounterKind::COUNT],
+}
+
 /// A proposed event a replacement effect may reshape.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Proposal {
@@ -306,6 +328,7 @@ pub enum Proposal {
     TokenCreation(TokenCreation),
     LifeChange(LifeChange),
     ManaProduction(ManaProduction),
+    Untap(Untap),
 }
 
 /// The kinds of event a replacement effect watches for, so an effect is asked only about events it could replace.
@@ -324,6 +347,8 @@ pub enum ReplacementKind {
     LifeChange,
     /// A permanent tapped for mana producing it (CR 106.12b): `Proposal::ManaProduction`.
     ManaProduction,
+    /// A permanent untapping (CR 701.26b): `Proposal::Untap`.
+    Untap,
 }
 
 impl Proposal {
@@ -339,6 +364,7 @@ impl Proposal {
             Proposal::TokenCreation(_) => ReplacementKind::TokenCreation,
             Proposal::LifeChange(_) => ReplacementKind::LifeChange,
             Proposal::ManaProduction(_) => ReplacementKind::ManaProduction,
+            Proposal::Untap(_) => ReplacementKind::Untap,
         }
     }
 }

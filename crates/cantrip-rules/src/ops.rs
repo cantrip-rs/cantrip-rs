@@ -5214,32 +5214,56 @@ pub fn untap(cx: &mut Cx, id: ObjectId) {
     untap_together(cx, &[id]);
 }
 
-/// Untaps permanents simultaneously (CR 502.3, 701.26b, 603.2c): all prohibitions and stun replacements are decided
-/// against the same pre-event state (CR 101.2, 614.6, 122.1d). Removing a stun counter instead does not untap, so cannot
-/// end a tapped duration or produce an Untapped event. Only after every status/counter changes do durations/control
-/// settle and triggers see one batch. Magnetic Mountain and Intruder Alarm need this same simultaneous instruction.
+/// Untaps permanents simultaneously (CR 502.3, 701.26b, 603.2c), by an effect or a cost: `untap_together_in`, in no
+/// untap step.
 pub fn untap_together(cx: &mut Cx, ids: &[ObjectId]) {
-    let mut plan = Vec::new();
+    untap_together_in(cx, ids, None);
+}
+
+/// Untaps permanents simultaneously (CR 502.3, 701.26b, 603.2c), as part of `untap_step`'s untap step or not: all
+/// prohibitions and replacements - stun counters' (CR 122.1d) and the cards' (CR 614.1a), ordered by each permanent's
+/// controller where several apply (CR 616.1), the players choosing in APNAP order (CR 101.4) - are decided against the
+/// same pre-event state (CR 101.2, 614.6). An untap replaced by removing counters does not untap, so cannot end a tapped
+/// duration or produce an Untapped event. Only after every status/counter changes do durations/control settle and
+/// triggers see one batch. Magnetic Mountain and Intruder Alarm need this same simultaneous instruction.
+pub(crate) fn untap_together_in(cx: &mut Cx, ids: &[ObjectId], untap_step: Option<PlayerId>) {
+    let mut plan: Vec<ObjectId> = Vec::new();
     for &id in ids {
-        if !plan.iter().any(|&(other, _)| other == id) && can_untap(cx, cx.cards(), id) {
-            plan.push((id, cx.s().obj(id).counters(CounterKind::Stun) > 0));
+        if !plan.contains(&id) && can_untap(cx, cx.cards(), id) {
+            plan.push(id);
         }
     }
     if plan.is_empty() {
         return;
     }
+    // Each untap meets the effects that would replace it, nothing changing until all have (CR 614.6). The guard that keeps
+    // the hot path free of replacement work: one scan for a replacement effect, and none where none is in play.
+    let replaceable = crate::replace::possible(cx, None);
+    let order: Vec<PlayerId> = cx.s().apnap().collect();
+    let mut by_apnap: Vec<usize> = (0..plan.len()).collect();
+    by_apnap.sort_by_key(|&at| order.iter().position(|&p| p == cx.s().obj(plan[at]).controller));
+    let mut outcome: Vec<Untap> = plan.iter().map(|&permanent| Untap {
+        permanent, controller: cx.s().obj(permanent).controller, untap_step, untaps: true, remove: [0; CounterKind::COUNT],
+    }).collect();
+    for at in by_apnap {
+        let u = outcome[at];
+        if replaceable || cx.s().obj(u.permanent).counters(CounterKind::Stun) > 0 {
+            outcome[at] = crate::replace::untap(cx, u);
+        }
+    }
     // No intermediate status or duration change can affect another member of this event. In particular, removing a
     // stun counter may end a control duration, which must not change the remaining prohibitions or replacements.
     as_one_instruction(cx, |cx| {
-        for &(id, stun) in &plan {
-            if stun {
-                counters::remove(cx, id, CounterKind::Stun, 1);
-            } else {
-                cx.st().update_obj(id, |o| o.tapped = false);
+        for u in &outcome {
+            for (kind, &n) in CounterKind::ALL.into_iter().zip(&u.remove) {
+                counters::remove(cx, u.permanent, kind, n);
+            }
+            if u.untaps {
+                cx.st().update_obj(u.permanent, |o| o.tapped = false);
             }
         }
     });
-    let events: Vec<Event> = plan.into_iter().filter(|&(_, stun)| !stun).map(|(permanent, _)| Event::Untapped { permanent }).collect();
+    let events: Vec<Event> = outcome.into_iter().filter(|u| u.untaps).map(|u| Event::Untapped { permanent: u.permanent }).collect();
     if !events.is_empty() {
         cx.emit_batch(&events, None);
     }

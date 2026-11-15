@@ -379,8 +379,12 @@ only the candidates the host's verdict on those picked says may be added.
   "Can't become untapped" is `CardDef::cant_become_untapped` (Frozen in Ice): the same kind of rule, but it holds in every untap, an
   effect's and a stun counter's too (`ops::untap`, CR 101.2, 122.1d).
   Untapping is one planned simultaneous instruction (`Game::untap_together`, CR 502.3, 701.26b, 603.2c): every
-  prohibition and stun replacement is decided before anything changes; all status/counter changes happen before
-  durations and control settle. The untap step and multi-object card instructions use the same operation. Actual
+  prohibition and replacement is decided before anything changes; all status/counter changes happen before
+  durations and control settle. Each permanent's untap is a `Proposal::Untap` (`ReplacementKind::Untap`), naming the
+  untap step it is part of (`untap_step`, CR 502.3) and, once an effect has replaced it, the counters taken off instead:
+  a stun counter's replacement (CR 122.1d) is the core's own there (`Origin::Stun`), ordered by the permanent's controller
+  with a card's (CR 616.1; Freyalise's Winds' "remove all wind counters from it instead"), the players choosing in APNAP
+  order (`ops::untap_together_in`). The untap step and multi-object card instructions use the same operation. Actual
   untaps emit `Event::Untapped` in one trigger batch (Wake Thrasher, Mesmeric Orb); its distinct bit 64 widens
   `EventMask` to u128 so exact tapped-history counts remain unchanged. The native observation maps that bit to
   its own appended event category (66); the existing unknown category stays 65. Model loading checks the

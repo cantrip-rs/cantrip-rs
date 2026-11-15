@@ -72,6 +72,9 @@ pub(crate) enum Origin {
     /// (CR 614.1c, `Entering::counters_if`): of the permanent itself, offered while it would be one of what it names, and
     /// ordered with the others that modify how it enters (CR 616.1).
     CountersIf,
+    /// Stun counters' "if a permanent with a stun counter on it would become untapped, instead remove a stun counter from it"
+    /// (CR 122.1d): one effect however many it has, of the permanent they are on.
+    Stun,
 }
 
 /// One effect that applies to the event: its source, and which of the source's replacements it is.
@@ -107,6 +110,7 @@ const FINALITY_HINT: &str = "exile it, as it has a finality counter";
 const REGENERATION_HINT: &str = "regenerate it instead of destroying it";
 const SHIELD_DESTROY_HINT: &str = "remove a shield counter from it instead of destroying it";
 const SHIELD_DAMAGE_HINT: &str = "prevent the damage and remove a shield counter from it";
+const STUN_HINT: &str = "remove a stun counter from it instead of untapping it";
 
 /// What protection's prevention says it does, for the player who orders it with others (CR 616.1).
 const PROTECTION_HINT: &str = "protection prevents the damage";
@@ -430,6 +434,7 @@ fn subject_of(proposal: &Proposal) -> Option<ObjectId> {
         // sacrificed Treasure's): no printed card has one of this kind, which would function from its new zone here.
         Proposal::ManaProduction(m) => Some(m.permanent),
         Proposal::Connive(c) => Some(c.creature),
+        Proposal::Untap(u) => Some(u.permanent),
         Proposal::DrawInstruction(_)
         | Proposal::Draw(_)
         | Proposal::Mill(_)
@@ -474,6 +479,7 @@ fn affected(cx: &Cx, proposal: &Proposal) -> PlayerId {
         // "If multiple replacement effects would modify the mana an ability you control produces, choose one to apply"
         // (Damping Sphere's ruling): the player who tapped the permanent for it.
         Proposal::ManaProduction(m) => m.player,
+        Proposal::Untap(u) => u.controller,
     }
 }
 
@@ -498,6 +504,12 @@ fn candidates_for(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Opti
     }
     if let Proposal::Draw(d) = proposal
         && d.replaced
+    {
+        return Vec::new();
+    }
+    // Nor is an untap an effect has replaced with something else (CR 614.6).
+    if let Proposal::Untap(u) = proposal
+        && !u.untaps
     {
         return Vec::new();
     }
@@ -747,6 +759,14 @@ fn candidates_for(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Opti
     {
         found.insert(0, Candidate { source: by, index: 0, origin: Origin::Protection });
     }
+    // Stun counters' replacement of the untap (CR 122.1d), ordered with the effects that would change it (CR 616.1): of the
+    // permanent itself, which is what the player ordering them is shown.
+    if let Proposal::Untap(u) = proposal
+        && !applied.contains(&(u.permanent, 0, Origin::Stun))
+        && cx.s().obj(u.permanent).counters(CounterKind::Stun) > 0
+    {
+        found.insert(0, Candidate { source: u.permanent, index: 0, origin: Origin::Stun });
+    }
     // A card discarded to pay a cost that specifies a characteristic of it can't pay it from a hidden zone it was put into
     // unrevealed (CR 701.9c): an effect that would put it there is not offered, and it goes where the others leave it.
     if let Proposal::ZoneChange(z) = proposal
@@ -808,6 +828,7 @@ fn hint_of(cx: &Cx, proposal: &Proposal, c: &Candidate) -> &'static str {
         Origin::Enters(card) => enters_hint(cx.cards().get(card)),
         Origin::Riot => RIOT_HINT,
         Origin::CountersIf => COUNTERS_IF_HINT,
+        Origin::Stun => STUN_HINT,
     }
 }
 
@@ -1179,6 +1200,13 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
                         d.shielded = Some(source);
                         crate::counters::remove(cx, source, CounterKind::Shield, 1);
                     }
+                }
+            }
+            // CR 122.1d: it doesn't untap; a stun counter is removed from it instead, as the core carries out the event.
+            Origin::Stun => {
+                if let Proposal::Untap(u) = proposal {
+                    u.untaps = false;
+                    u.remove[CounterKind::Stun as usize] += 1;
                 }
             }
             // CR 614.1d: it enters tapped.
@@ -2039,6 +2067,18 @@ pub fn mill_count(cx: &mut Cx, player: PlayerId, count: u32) -> u32 {
 pub fn would_connive(cx: &mut Cx, creature: ObjectId, count: u32) {
     if possible(cx, None) {
         apply(cx, &mut Proposal::Connive(Connive { creature, count }));
+    }
+}
+
+/// A permanent about to untap (CR 701.26b): the event once every effect that replaces it has applied, each once (CR 614.5),
+/// its controller ordering several (CR 616.1) - stun counters' (CR 122.1d) among them. Nothing is changed here: the caller
+/// carries out the untap, or what replaced it, with the event's other untaps (`ops::untap_together_in`, CR 614.6).
+pub(crate) fn untap(cx: &mut Cx, untap: Untap) -> Untap {
+    let mut proposal = Proposal::Untap(untap);
+    apply(cx, &mut proposal);
+    match proposal {
+        Proposal::Untap(u) => u,
+        _ => unreachable!("an effect cannot change the kind of the event"),
     }
 }
 

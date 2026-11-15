@@ -760,8 +760,9 @@ fn skip_turn(cx: &mut Cx, player: PlayerId) -> R<bool> {
 
 /// CR 502.3: the active player's permanents untap, all at once. Except an exerted one, for the untap step it sits out
 /// (CR 701.43a), and one that doesn't untap during its controller's untap step (CR 502.3: its own `Keyword::DoesNotUntap`,
-/// another permanent's `CardDef::untap_bans`, or a resolved effect's, `static_rules::untap_step_skips`); and one with a stun counter
-/// has a counter removed from it instead (CR 122.1d). With them, the other players' permanents that a static ability of
+/// another permanent's `CardDef::untap_bans`, or a resolved effect's, `static_rules::untap_step_skips`); and an effect that
+/// replaces the untap of one that would untap does what it says instead - a stun counter's (CR 122.1d), Freyalise's Winds'
+/// (CR 614.1a) - in the untap step's own untap (`ops::untap_together_in`). With them, the other players' permanents that a static ability of
 /// a permanent another player controls untaps "during each other player's untap step" (`CardDef::untap_in_others_untap_steps`).
 pub(crate) fn untap_step(cx: &mut Cx, active: PlayerId) -> R<()> {
     // CR 502.3: the active player determines which permanents will untap, then they untap together. A permanent whose
@@ -820,7 +821,7 @@ pub(crate) fn untap_step(cx: &mut Cx, active: PlayerId) -> R<()> {
             }
         }
     }
-    ops::untap_together(cx, &untapping);
+    ops::untap_together_in(cx, &untapping, Some(active));
     // "During its controller's next untap step" and "during [this player's] next untap step" end with this untap step,
     // whatever it untapped (CR 611.2a; the Frost Titan ruling): the first is over for each permanent the active player
     // controls now, whoever controlled it as the effect began (the Tamiyo, the Moon Sage ruling).
