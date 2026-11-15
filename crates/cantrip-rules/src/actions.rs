@@ -9421,7 +9421,7 @@ impl<'a> Offer<'a> {
         if own && matches!(zone.kind(), ZoneKind::Graveyard | ZoneKind::Sideboard) {
             for way in self.granted() {
                 if way.what.permission && way.what.from == zone.kind() {
-                    routes.push(Route { by: Some(way.grant), allows: Allows::Way(way.asker(), way.what), ..Route::RULES });
+                    routes.push(Route { by: Some(way.grant), additional: way.what.additional, allows: Allows::Way(way.asker(), way.what), ..Route::RULES });
                 }
             }
         }
@@ -9667,7 +9667,7 @@ fn through(q: &dyn Query, cards: &CardTable, player: PlayerId, card: ObjectId, b
     }
     if let Some(way) = named_way(s, cards, g) {
         return Some(if way.what.permission {
-            Through::Route(Route { by, allows: Allows::Way(way.asker(), way.what), ..Route::RULES })
+            Through::Route(Route { by, additional: way.what.additional, allows: Allows::Way(way.asker(), way.what), ..Route::RULES })
         } else {
             Through::Way(way)
         });

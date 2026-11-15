@@ -2545,6 +2545,11 @@ pub struct GrantedWay {
     /// spell becomes, created as the spell is cast by the way. Warp given to a hand's cards (CR 702.185a: "exile this
     /// permanent at the beginning of the next end step"): Tannuk, Steadfast Second.
     pub end_step_rider: Option<u8>,
+    /// What is owed on top of the cost of every cast by a way that is a `permission` (CR 118.8, 601.2b): "by paying 1 life in
+    /// addition to their other costs" (Festival of Embers; Noctis, Prince of Lucis's "by paying 3 life in addition to paying
+    /// their other costs"). Added to the spell's total cost as the cast is made, beside any alternative cost the card is cast
+    /// for; a total its caster can't pay is not offered (CR 119.4, 601.2h). `Cost::NONE` for none.
+    pub additional: Cost,
 }
 
 impl GrantedWay {
@@ -2563,6 +2568,7 @@ impl GrantedWay {
         condition: None,
         enters_attacking: false,
         end_step_rider: None,
+        additional: Cost::NONE,
     };
 }
 
