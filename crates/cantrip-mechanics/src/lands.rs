@@ -752,7 +752,9 @@ pub fn power_and_toughness_are_lands_you_control(q: &dyn LayerQuery, source: Obj
 /// "[This creature]'s power and toughness are each equal to the number of creatures you control" as the `StaticDef::apply` of
 /// the ability (CR 604.3, 613.4a): characteristic-defining, so it applies in every zone, and it counts every creature its
 /// controller controls through the layers before the one being applied, the source itself included when it is one (see
-/// `count_you_control`). Crusader of Odric and the Elemental token of Voice of Resurgence print it.
+/// `count_you_control`). Crusader of Odric and the Elemental token of Voice of Resurgence print it; Porcelain Gallery's
+/// "creatures you control have base power and toughness each equal to the number of creatures you control" sets it in
+/// layer 7b (CR 613.4b).
 pub fn power_and_toughness_are_creatures_you_control(q: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
     let creatures = count_you_control(q, source, &|c| c.is(CardType::Creature));
     chars.power = Some(creatures);

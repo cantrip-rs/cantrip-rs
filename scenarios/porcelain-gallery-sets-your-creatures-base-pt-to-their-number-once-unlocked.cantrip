@@ -1,0 +1,67 @@
+# Porcelain Gallery: "Creatures you control have base power and toughness each equal to the number of creatures you
+# control" (CR 613.4b, layer 7b), a static ability of a door: it applies only while that door is unlocked (CR 709.5). Bot1
+# casts Dollmaker's Shop, so the Gallery is locked: Ornithopter is 0/2 and Memnite 1/1. Unlocking the Gallery (CR 709.5e)
+# turns the static on at once: Bot1's two creatures are each 2/2, Ornithopter keeping flying, and Bot2's Memnite stays
+# 1/1 ("you control"). In turn 5 Giant Growth gives Ornithopter +3/+3 on top of the base it sets (layer 7c, CR 613.4c): 5/5.
+# With both doors unlocked both apply (CR 709.5): Memnite attacks, Dollmaker's Shop makes a Toy, and the Toy enters as a
+# 3/3 since Bot1 now controls three creatures; Ornithopter is 6/6 and Memnite 3/3.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Black Lotus
+Dollmaker's Shop // Porcelain Gallery
+Ornithopter
+Memnite
+Mox Emerald
+Giant Growth
+Plains x10
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dollmaker's Shop // Porcelain Gallery.Cast(Ability: Dollmaker's Shop)
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Dollmaker's Shop.Activate(Ability: right door)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Battlefield.Dollmaker's Shop // Porcelain Gallery.Doors = Dollmaker's Shop; Porcelain Gallery
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot2.Battlefield.Memnite.Power = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Ornithopter)
+Bot1.Pass
+Bot1.Attack(Memnite > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 6
+Bot1.Battlefield.Ornithopter.Toughness = 6
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Toy Token.Power = 3
+Bot1.Battlefield.Toy Token.Toughness = 3
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Toughness = 1

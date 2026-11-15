@@ -1,0 +1,67 @@
+# A door's static ability has the timestamp of the Room it is on (CR 613.7a: "the same timestamp as the object the static
+# ability is on"); unlocking a door is no event that gives the permanent a new one (CR 613.7d-k). Bot1's Room enters in
+# turn 1 with Dollmaker's Shop unlocked, Opalescence follows in turn 3 and makes it a creature with base power and
+# toughness equal to its mana value (layer 7b), and in turn 5 Bot1 unlocks Porcelain Gallery. Both are layer 7b effects
+# on the Room: the Gallery's (the Room's timestamp, turn 1) applies first and Opalescence's (turn 3) after it, so the Room
+# is 8/8, its mana value with both doors unlocked ({5}{W}{W}{W}, CR 709.5), while Memnite is 2/2 (two creatures). In
+# turn 7 Turn to Frog takes the Room's abilities (layer 6): the Gallery's static is gone with them (CR 613.1f, 709.5), so
+# Memnite is 1/1 again and the Room a 1/1 Frog.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Dollmaker's Shop // Porcelain Gallery
+Memnite
+Black Lotus
+Mox Jet
+Opalescence
+Plains
+Mox Sapphire
+Turn to Frog
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dollmaker's Shop // Porcelain Gallery.Cast(Ability: Dollmaker's Shop)
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Opalescence.Cast
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Dollmaker's Shop.Power = 2
+? Bot1.Battlefield.Memnite.Power = 1
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Dollmaker's Shop.Activate(Ability: right door)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Battlefield.Dollmaker's Shop // Porcelain Gallery.Power = 8
+? Bot1.Battlefield.Dollmaker's Shop // Porcelain Gallery.Toughness = 8
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Turn to Frog.Cast(Dollmaker's Shop // Porcelain Gallery)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Dollmaker's Shop // Porcelain Gallery.Power = 1
+Bot1.Battlefield.Dollmaker's Shop // Porcelain Gallery.Toughness = 1
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1

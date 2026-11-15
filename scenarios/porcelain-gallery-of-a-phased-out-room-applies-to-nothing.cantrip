@@ -1,0 +1,57 @@
+# A phased-out permanent is treated as though it does not exist (CR 702.26b), so the static ability of its unlocked door
+# applies to nothing. Bot1 casts Porcelain Gallery with Ornithopter beside it, and Opalescence makes the Room a creature:
+# two creatures, so Ornithopter is 2/2. In turn 5 Talon Gates of Madara phases the Room out (CR 702.26a): Ornithopter is
+# 0/2 again. At Bot1's next untap step the Room phases in with the Gallery still unlocked: Ornithopter is 2/2, and the Room
+# 6/6 (Opalescence, with the later timestamp, sets it to the Gallery's mana value after the Gallery does).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Black Lotus
+Mox Jet
+Mox Ruby
+Dollmaker's Shop // Porcelain Gallery
+Ornithopter
+Opalescence
+Talon Gates of Madara
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dollmaker's Shop // Porcelain Gallery.Cast(Ability: Porcelain Gallery)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Opalescence.Cast
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Porcelain Gallery.Power = 6
+[T5 Bot1.Main1]
+Bot1.Hand.Talon Gates of Madara.Play
+Bot1.Target(Porcelain Gallery)
+Bot1.Pass
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T7 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Porcelain Gallery.Power = 6
+Bot1.Battlefield.Porcelain Gallery.Toughness = 6

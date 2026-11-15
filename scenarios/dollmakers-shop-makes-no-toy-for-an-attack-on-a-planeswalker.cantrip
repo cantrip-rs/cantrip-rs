@@ -1,0 +1,49 @@
+# Dollmaker's Shop: "Whenever one or more non-Toy creatures you control attack a player, create a 1/1 white Toy artifact
+# creature token" (CR 508.1, 603.2c). A planeswalker is no player (CR 506.2): in turn 3 Bot1's Memnite and Ornithopter
+# attack Bot2's Jace, the Mind Sculptor, and no Toy is made. In turn 5 Memnite attacks Bot2 and Ornithopter attacks Jace:
+# the attack on the player makes one Toy.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Dollmaker's Shop // Porcelain Gallery
+Ornithopter
+Memnite
+Plains x15
+
+[Bot2 Deck]
+Island
+Black Lotus
+Jace, the Mind Sculptor
+Island x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dollmaker's Shop // Porcelain Gallery.Cast(Ability: Dollmaker's Shop)
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Jace, the Mind Sculptor.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Island.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Jace, the Mind Sculptor; Ornithopter > Jace, the Mind Sculptor)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Count = 5
+? Bot2.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 2
+[T5 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2; Ornithopter > Jace, the Mind Sculptor)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Toy Token.Subtypes = Toy
+Bot2.Life = 19
+Bot2.Graveyard = Black Lotus
+Bot2.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 2
