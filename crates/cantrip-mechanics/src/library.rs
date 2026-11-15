@@ -1598,9 +1598,16 @@ pub fn owner_puts_first_target_on_top_or_bottom_then_surveil<const N: usize>(g: 
 /// finds one, unless `rule` lets none be chosen (an "up to one" for a "you may": Say Its Name). Takenuma, Abandoned Mire (a
 /// creature or planeswalker card) and Fell Gravship (a creature or Spacecraft card) print it.
 pub fn mill_then_return_a_card(g: &mut dyn Game, item: &StackItem, count: u32, rule: Selection) -> Result<(), Suspend> {
-    let you = item.controller;
-    g.mill(you, count);
+    g.mill(item.controller, count);
     g.end_sentence();
+    return_a_card_from_your_graveyard(g, item, rule)
+}
+
+/// "Return [`rule`] from your graveyard to your hand" (CR 400.7): the choice is made on resolution from the whole graveyard as it
+/// stands, and is not a target. One is returned whenever the rule finds one, unless `rule` lets none be chosen (an "up to one"
+/// for a "you may"). `mill_then_return_a_card` follows a mill with it; Under the Skin follows a manifest dread with it.
+pub fn return_a_card_from_your_graveyard(g: &mut dyn Game, item: &StackItem, rule: Selection) -> Result<(), Suspend> {
+    let you = item.controller;
     let graveyard = g.state().zone(Zone::graveyard(you)).to_vec();
     let chosen = crate::choose::select(g, you, item.object, Purpose::PutIntoHand, graveyard, rule)?;
     g.return_to_hand(&chosen);
