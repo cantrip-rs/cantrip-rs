@@ -1,0 +1,48 @@
+# Rip, Spawn Hunter: "Survival — At the beginning of your second main phase, if Rip is tapped, reveal the top X cards of your library,
+# where X is its power. Put any number of creature and/or Vehicle cards with different powers from among them into your hand. Put the
+# rest on the bottom of your library in a random order." (CR 701.20a, 208.1, 401.4) Rip attacks on turn 3 and the top four cards are
+# Grizzly Bears, Runeclaw Bear (both 2), Smuggler's Copter (a Vehicle, 3) and Serra Angel (4); the fifth, Hill Giant, is not revealed (X
+# is Rip's power, 4). Bot1 cannot take both Bears (the same power) and takes a Bear, the Copter and the Angel: the Runeclaw Bear goes to the
+# bottom of the library and the Hill Giant stays on top.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Rip, Spawn Hunter
+Island
+Island
+Island
+Grizzly Bears
+Runeclaw Bear
+Smuggler's Copter
+Serra Angel
+Hill Giant
+Island x7
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rip, Spawn Hunter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Rip, Spawn Hunter > Bot2)
+[T3 Bot1.Main2]
+! Bot1.Choose(Hill Giant)
+! Bot1.Choose(Grizzly Bears; Runeclaw Bear)
+Bot1.Choose(Grizzly Bears; Smuggler's Copter; Serra Angel)
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Hand = Grizzly Bears; Island; Island; Island; Serra Angel; Smuggler's Copter
+Bot1.Library.Count = 9
