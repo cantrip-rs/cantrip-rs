@@ -688,6 +688,25 @@ pub fn look_at_top_select(
     Ok(taken)
 }
 
+/// "Reveal the top `count` cards of your library. Put any cards the rule allows from among them into your hand. Put the rest on the
+/// bottom of your library in a random order." (CR 701.20a, 401.4, 608.2d): every card revealed is shown (`g.reveal`, moving
+/// nothing) and the player chooses from them with `choose::select`, `rule` saying how many and of what quality and together how.
+/// A library with fewer cards reveals what it has (CR 609.3); with nothing in it, or none of them one the rule allows, nobody is
+/// asked. The cards taken, as they are in the hand. Rip, Spawn Hunter prints it with "creature and/or Vehicle cards with different
+/// powers", Torsten, Founder of Benalia with "creature and/or land cards".
+pub fn reveal_top_select_to_hand_rest_to_bottom_in_random_order(g: &mut dyn Game, player: PlayerId, source: ObjectId, count: usize, rule: Selection) -> Result<Vec<ObjectId>, Suspend> {
+    let revealed = top_of_library(g, player, count);
+    if revealed.is_empty() {
+        return Ok(Vec::new());
+    }
+    g.reveal(player, &revealed);
+    let any = cantrip_api::select::first_answer(&*g, &rule, player, source, &revealed, true).is_some_and(|taken| !taken.is_empty());
+    let chosen = if any { crate::choose::select(g, player, source, Purpose::PutIntoHand, revealed.clone(), rule)? } else { Vec::new() };
+    let taken = if chosen.is_empty() { chosen } else { g.return_to_hand_revealed(&chosen) };
+    rest_to_bottom_in_random_order(g, player, &revealed);
+    Ok(taken)
+}
+
 /// "If it's a land card, you may put it onto the battlefield [tapped]" (CR 608.2d, 305.1) for a card just revealed or looked at as the
 /// ability resolves: asked only of a land card, and the permanent arrives under its owner's control, `tapped` or not. Whether it
 /// entered - not whether the player said yes, so one a replacement effect stops (CR 614.6) did not. Risen Reef and Commander Spock
