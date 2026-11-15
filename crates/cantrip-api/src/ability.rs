@@ -919,17 +919,17 @@ pub const fn spell(targets: &'static [TargetSpec], effect: Effect) -> Option<Spe
 
 /// One target that passes the filter (CR 115.1).
 pub const fn target(filter: TargetFilter) -> TargetSpec {
-    TargetSpec { min: 1, max: 1, filter, label: "", if_kicked: None, together: None }
+    TargetSpec { min: 1, max: 1, filter, label: "", if_kicked: None, together: None, opponent_chooses: false }
 }
 
 /// "Up to one target" (CR 115.1d).
 pub const fn up_to_one(filter: TargetFilter) -> TargetSpec {
-    TargetSpec { min: 0, max: 1, filter, label: "", if_kicked: None, together: None }
+    TargetSpec { min: 0, max: 1, filter, label: "", if_kicked: None, together: None, opponent_chooses: false }
 }
 
 /// "Up to N targets" (CR 115.1d).
 pub const fn up_to(n: u32, filter: TargetFilter) -> TargetSpec {
-    TargetSpec { min: 0, max: n, filter, label: "", if_kicked: None, together: None }
+    TargetSpec { min: 0, max: n, filter, label: "", if_kicked: None, together: None, opponent_chooses: false }
 }
 
 impl TargetSpec {
@@ -961,6 +961,12 @@ impl TargetSpec {
     pub const fn together(self, rule: Part) -> TargetSpec {
         assert!(rule.is_set_rule(), "a target slot's rule of its targets together is a set rule (select::set_part); a quality of each target is the slot's filter");
         TargetSpec { together: Some(rule), ..self }
+    }
+
+    /// "Target [thing] of an opponent's choice" (CR 601.7, 602.3): the same slot, its targets chosen by an opponent
+    /// (`TargetSpec::opponent_chooses`). Nova Pentacle's "target creature of an opponent's choice".
+    pub const fn of_an_opponents_choice(self) -> TargetSpec {
+        TargetSpec { opponent_chooses: true, ..self }
     }
 }
 

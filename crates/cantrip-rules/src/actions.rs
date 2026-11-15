@@ -3820,9 +3820,10 @@ fn candidates(
 }
 
 /// Whether the targets are announced with the action (a single slot for one target), rather than asked slot by
-/// slot once the spell or ability has begun to be put on the stack, as the C# engine does for anything else.
+/// slot once the spell or ability has begun to be put on the stack, as the C# engine does for anything else. A slot an
+/// opponent chooses the targets of (CR 601.7, 602.3) is asked of them then.
 pub fn targets_with_action(specs: &[TargetSpec]) -> bool {
-    specs.len() == 1 && specs[0].max == 1
+    specs.len() == 1 && specs[0].max == 1 && !specs[0].opponent_chooses
 }
 
 /// Whether an activated ability's targets are announced with the action: one slot of one target, unless they wait for X
@@ -11660,7 +11661,15 @@ fn choose_slots_after(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bo
                 any_number: spec.is_any_number(),
                 together,
             };
-            match cx.ask_core(player, ask, true)? {
+            // "Of an opponent's choice" (CR 601.7, 602.3): that opponent chooses them, and can't take back the controller's
+            // announcement.
+            let answer = if spec.opponent_chooses {
+                let opponent = opponent_choosing(cx, player, source)?;
+                cx.ask_core(opponent, ask, false)?
+            } else {
+                cx.ask_core(player, ask, true)?
+            };
+            match answer {
                 Answer::Targets(chosen) => targets.extend(chosen),
                 _ => return Err(Stop::Cancel),
             }
@@ -11675,6 +11684,23 @@ fn choose_slots_after(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bo
     }
     of.truncate(targets.len());
     Ok((targets.split_off(start), of.split_off(start)))
+}
+
+/// The opponent of `player` who does what a spell or ability `player` is announcing says "an opponent" chooses (CR 601.7,
+/// 602.3): the one opponent still in the game, or the one `player` decides on where there are more (CR 601.7a, 602.3a).
+fn opponent_choosing(cx: &mut Cx, player: PlayerId, source: ObjectId) -> R<PlayerId> {
+    let candidates: Vec<PlayerId> = cx.s().opponents(player).collect();
+    match candidates.as_slice() {
+        [] => Err(Stop::Cancel),
+        [one] => Ok(*one),
+        _ => {
+            let ask = RequestKind::ChoosePlayer { source, candidates: candidates.clone(), verb: "chooses its targets", amount: 0, subject: None };
+            match cx.ask_core(player, ask, true)? {
+                Answer::Player(p) if candidates.contains(&p) => Ok(p),
+                _ => Err(Stop::Cancel),
+            }
+        }
+    }
 }
 
 /// What asking a divided slot came to.

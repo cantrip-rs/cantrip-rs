@@ -339,6 +339,12 @@ every target of the slot illegal (Nethroi, Apex of Death's and Run Away Together
 keep the choice legal. The client keeps a total's running total in the caption (`Tally`), shows the rule's words, and offers
 only the candidates the host's verdict on those picked says may be added.
 
+"Target [thing] of an opponent's choice" (CR 601.7, 602.3) is `TargetSpec::of_an_opponents_choice`: the slot is never
+announced with the action (`targets_with_action`), and as `actions::choose_slots` reaches it the controller's opponent is
+asked it - the one the controller picks where there are several (CR 601.7a, 602.3a, `opponent_choosing`), who cannot take
+the announcement back. The candidates are the controller's still: the targets are the spell's or ability's (Nova Pentacle).
+A spell's or an activated ability's slot; no triggered ability implemented prints it.
+
 ### Characteristics
 
 - **Computed on query** (`chars()`), through the layers (613), from the object's card, its counters and the

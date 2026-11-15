@@ -776,6 +776,12 @@ pub struct TargetSpec {
     /// every target of the slot illegal (Nethroi, Apex of Death's and Run Away Together's rulings). The rule judges the
     /// objects among the targets; a player chosen for the slot is neither judged nor counted by it. `None` asks nothing.
     pub together: Option<Part>,
+    /// "Target [thing] of an opponent's choice" (CR 601.7, 602.3): an opponent of the controller chooses the slot's
+    /// targets, when its controller would (CR 601.2c by way of 602.2b) - the one the controller chooses where more than
+    /// one could (CR 601.7a, 602.3a). The targets are the spell's or ability's all the same, judged as its controller's
+    /// (CR 115.1), so the slot is never announced with the action (`targets_with_action`). A spell's or an activated
+    /// ability's slot (`TargetSpec::of_an_opponents_choice`).
+    pub opponent_chooses: bool,
 }
 
 impl TargetSpec {
