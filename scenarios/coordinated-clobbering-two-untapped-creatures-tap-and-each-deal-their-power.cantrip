@@ -1,0 +1,50 @@
+# Two untapped creatures you control are tapped and each deals damage equal to its own power (2 + 1) to the opponent's creature, though both
+# are tapped by then (CR 701.26a, 120.3, 608.2b). Lands and the opponent's creature are not legal sources, a third source is refused (it stays untapped); the last target must be an opponent's creature.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Grizzly Bears
+Llanowar Elves
+Coordinated Clobbering
+Forest
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Black Lotus
+Wall of Mist
+Island x12
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wall of Mist.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Coordinated Clobbering.Cast
+! Bot1.Target(Bot1.Battlefield.Forest)
+! Bot1.Target(Bot2.Battlefield.Wall of Mist)
+! Bot1.Target(Bot1.Battlefield.Llanowar Elves; Bot1.Battlefield.Grizzly Bears; Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Llanowar Elves; Bot1.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Wall of Mist)
+Bot1.Battlefield.Forest.Activate
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Coordinated Clobbering; Black Lotus
+Bot1.Battlefield.Grizzly Bears.Tapped = true
+Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot2.Battlefield.Wall of Mist.Damage = 3
+Bot2.Battlefield.Wall of Mist.Toughness = 5
