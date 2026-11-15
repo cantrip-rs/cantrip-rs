@@ -14,14 +14,6 @@ fn two_damage_to_each_opponent(g: &mut dyn Game, item: &StackItem) -> Result<(),
     Ok(())
 }
 
-/// "When this Class becomes level 3" (CR 716.4).
-fn became_level_three(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
-    match event {
-        Event::ClassLevel { object, level: 3 } if *object == source => Fired::PLAIN,
-        _ => None,
-    }
-}
-
 /// "Search your library for a card, put it into your hand, shuffle, then discard a card at random" (CR 701.23, 701.9b):
 /// the card found may be the one discarded, and the discard is one more discard for the level 2 ability.
 fn search_then_discard_at_random(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -37,7 +29,7 @@ pub static CARD: CardDef = CardDef {
         triggered(when_asked(EventMask::DISCARDED, you_discard_at_level_two), two_damage_to_each_opponent, "Whenever you discard a card, this Class deals 2 damage to each opponent."),
         class::level_three("{1}{R}", "{1}{R}: Level 3"),
         triggered(
-            when(EventMask::CLASS_LEVEL, became_level_three),
+            class::BECOMES_LEVEL_THREE,
             search_then_discard_at_random,
             "When this Class becomes level 3, search your library for a card, put it into your hand, shuffle, then discard a card at random.",
         ),

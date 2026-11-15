@@ -47,3 +47,13 @@ fn became_level_two(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fi
 
 /// "When this Class becomes level 2" (CR 716.4).
 pub const BECOMES_LEVEL_TWO: Trigger = when(EventMask::CLASS_LEVEL, became_level_two);
+
+fn became_level_three(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ClassLevel { object, level: 3 } if *object == source => Fired::PLAIN,
+        _ => None,
+    }
+}
+
+/// "When this Class becomes level 3" (CR 716.4). Cool but Rude and Builder's Talent print it.
+pub const BECOMES_LEVEL_THREE: Trigger = when(EventMask::CLASS_LEVEL, became_level_three);
