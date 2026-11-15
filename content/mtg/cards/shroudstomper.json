@@ -1,0 +1,11 @@
+{
+  "name": "Shroudstomper",
+  "manaCost": "{3}{W}{W}{B}{B}",
+  "type": "Creature — Elemental",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Deathtouch\nWhenever this creature enters or attacks, each opponent loses 2 life. You gain 2 life and draw a card.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

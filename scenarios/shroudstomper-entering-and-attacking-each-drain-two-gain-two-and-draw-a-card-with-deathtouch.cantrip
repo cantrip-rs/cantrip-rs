@@ -1,0 +1,59 @@
+# Shroudstomper, "Whenever this creature enters or attacks, each opponent loses 2 life. You gain 2 life and draw a card."
+# Deathtouch. It is cast on turn 1 for {3}{W}{W}{B}{B} (Plains and Mox Pearl for the white, Black Lotus for the black and
+# Mox Jet and Mox Ruby for the rest): the enters trigger leaves Bot2 at 18 and Bot1 at 22 with one more card (Swamp). On turn 3 it
+# attacks (it has been under Bot1's control since turn 1) and the attack trigger takes Bot2 to 16 and Bot1 to 24 with another
+# card (Forest, after the Mountain of the draw step), before the 5 combat damage (11).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Plains
+Shroudstomper
+Island
+Swamp
+Mountain
+Forest
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shroudstomper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Shroudstomper.Keywords = Deathtouch
+? Bot2.Life = 18
+? Bot1.Life = 22
+? Bot1.Hand = Island; Swamp
+[T3 Bot1.Main1]
+? Bot1.Hand = Island; Mountain; Swamp
+Bot1.Attack(Shroudstomper > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+? Bot1.Life = 24
+? Bot1.Hand = Forest; Island; Mountain; Swamp
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 11
+Bot1.Life = 24
