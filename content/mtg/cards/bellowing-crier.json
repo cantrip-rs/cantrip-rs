@@ -1,0 +1,8 @@
+{
+  "name": "Bellowing Crier",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Frog Advisor",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "When this creature enters, draw a card, then discard a card."
+}

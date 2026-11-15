@@ -1,0 +1,32 @@
+# Bellowing Crier {1}{U} 2/1: "When this creature enters, draw a card, then discard a card." The draw comes first (CR 608.2c,
+# in order), so the Forest drawn from the top of the library is in hand when the discard is chosen and may be the card
+# discarded; the hand ends the same size as before the trigger. Both Moxen empty the pool exactly.
+
+[Bot1 Deck]
+Bellowing Crier
+Mox Sapphire
+Mox Pearl
+Island x4
+Forest
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bellowing Crier.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest)
+
+[Expect]
+Bot1.Battlefield.Bellowing Crier.Power = 2
+Bot1.Battlefield.Bellowing Crier.Toughness = 1
+Bot1.Graveyard = Forest
+Bot1.Hand = Island; Island; Island; Island
+Bot1.Library.Count = 13
