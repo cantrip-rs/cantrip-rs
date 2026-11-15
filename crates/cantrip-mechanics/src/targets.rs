@@ -486,6 +486,13 @@ pub const YOUR_ACTIVATED_OR_TRIGGERED_ABILITY: TargetSpec = target(your_activate
 /// "Target spell or ability with a single target" (CR 115.1, 115.7a): exactly one target across every slot, counted with
 /// repeats, as the item was announced; re-asked as the spell resolves (CR 608.2b). Untimely Malfunction and Bolt Bend print it.
 pub const SPELL_OR_ABILITY_WITH_A_SINGLE_TARGET: TargetSpec = target(spell_or_ability_with_a_single_target_filter);
+/// "Target spell with a single target" (CR 115.1, 115.7a): a spell, never an ability, with exactly one target as
+/// `SPELL_OR_ABILITY_WITH_A_SINGLE_TARGET` counts them. Deflection and Reflecting Mirror print it.
+pub const SPELL_WITH_A_SINGLE_TARGET: TargetSpec = target(spell_with_a_single_target_filter);
+
+fn spell_with_a_single_target_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    matches!(t, Target::Object(_)) && spell_or_ability_with_a_single_target_filter(q, asker, t)
+}
 /// "Target spell or permanent" (CR 115.1): Artificial Evolution and Venser, Shaper Savant print it.
 pub const SPELL_OR_PERMANENT: TargetSpec = target(spell_or_permanent_filter);
 
