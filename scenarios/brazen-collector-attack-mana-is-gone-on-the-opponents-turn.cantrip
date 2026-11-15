@@ -1,0 +1,33 @@
+# Brazen Collector's mana lasts "until end of turn" and no longer: the R added when it attacks on turn 3 is unspent through
+# the second main phase and is gone at the cleanup step (CR 514.2), so it is not in Bot1's pool on Bot2's turn 4.
+
+[Bot1 Deck]
+Brazen Collector
+Mox Ruby
+Mox Jet
+Mountain x3
+Mountain x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Brazen Collector.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Brazen Collector > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Mana = {R} lasting {R}
+[T4 Bot2.Main1]
+? Bot1.Mana =
+
+[Expect]
+Bot1.Mana =
+Bot2.Life = 18

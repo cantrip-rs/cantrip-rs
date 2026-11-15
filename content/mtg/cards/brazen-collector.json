@@ -1,0 +1,11 @@
+{
+  "name": "Brazen Collector",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Raccoon Rogue",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "First strike\nWhenever this creature attacks, add {R}. Until end of turn, you don't lose this mana as steps and phases end.",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

@@ -1,0 +1,44 @@
+# Brazen Collector: "Whenever this creature attacks, add {R}. Until end of turn, you don't lose this mana as steps and phases
+# end" (CR 106.4, 514.2). Bot1 casts it on turn 1 and attacks with it on turn 3 (Bot2 has no creatures, so 2 damage). The R is
+# still in the pool in the second main phase, past the end of combat, and pays for a Lightning Bolt there while Bot1's Moxen stay
+# untapped.
+
+[Bot1 Deck]
+Brazen Collector
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Mountain
+Mountain
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Brazen Collector.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+? Bot1.Mana =
+Bot1.Attack(Brazen Collector > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Mana = {R} lasting {R}
+? Bot2.Life = 18
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Mana =
+Bot2.Life = 15
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot1.Graveyard = Lightning Bolt

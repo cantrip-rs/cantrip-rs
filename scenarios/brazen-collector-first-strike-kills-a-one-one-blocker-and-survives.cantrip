@@ -1,0 +1,40 @@
+# Brazen Collector (2/1) has first strike: blocked by Bot2's Memnite (1/1), it deals its 2 combat damage in the first-strike
+# step, the Memnite dies as a state-based action, and so deals no damage back (CR 702.7b, 510.4); the Collector survives.
+# Without first strike both would die. Attacking still added its R.
+
+[Bot1 Deck]
+Brazen Collector
+Mox Ruby
+Mox Jet
+Mountain x3
+Mountain x15
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Brazen Collector.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Brazen Collector > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Bot2.Battlefield.Memnite > Bot1.Battlefield.Brazen Collector)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Memnite
+Bot1.Battlefield.Brazen Collector.Damage = 0
+Bot2.Life = 20
+Bot1.Mana = {R} lasting {R}
