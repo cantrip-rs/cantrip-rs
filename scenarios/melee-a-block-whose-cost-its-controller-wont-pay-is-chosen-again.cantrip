@@ -1,0 +1,63 @@
+# Under Melee its caster declares the blocks, but a block that costs something is paid for, or not, by the blocking
+# creature's controller; if they don't pay, the caster declares again (Odric, Master Tactician's ruling; CR 509.1d-f, 101.1).
+# Bot1 has Bot2's Hipparion block Kalonian Tusker (power 3: "can't block creatures with power 3 or greater unless you pay
+# {1}"). Bot2, not Bot1, is asked for the {1}, and gives it up with Mox Jet untapped: the declaration is taken back (CR
+# 733), and Bot1 declares again, Hipparion blocking Memnite for free. The Tusker, now unblocked, is untapped and removed
+# from combat by Melee's trigger, so Bot2 takes no damage.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Kalonian Tusker
+Memnite
+Black Lotus
+Mox Ruby
+Melee
+Island x10
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Hipparion
+Mox Jet
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Kalonian Tusker.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Hipparion.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Kalonian Tusker > Bot2; Memnite > Bot2)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Melee.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Block(Hipparion > Kalonian Tusker)
+? Combat.BlockCost = {1}
+Bot2.Cancel
+Bot1.Block(Hipparion > Memnite)
+? Combat.Blocks = Hipparion > Memnite
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield.Mox Jet.Tapped = false
+Bot2.Battlefield.Hipparion.Damage = 1
+Bot1.Battlefield.Kalonian Tusker.Tapped = false

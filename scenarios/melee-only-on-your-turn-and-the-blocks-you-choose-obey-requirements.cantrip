@@ -1,0 +1,59 @@
+# Melee is cast "only during combat on your turn before blockers are declared" (CR 601.3): not in Bot2's beginning of
+# combat step, nor in Bot1's main phase, and in Bot1's declare attackers step it is. The blocks its caster chooses are still
+# a declaration of blockers, under its requirements (CR 509.1c; Odric, Master Tactician's ruling, "all blocking
+# declarations must still be legal"): Blaze of Glory has Bot2's Phyrexian Walker block each attacker if able, so Bot1 may
+# not leave it out, and has it block both.
+
+[Bot1 Deck]
+Memnite
+Alpha Myr
+Mox Ruby
+Mox Pearl
+Black Lotus
+Melee
+Blaze of Glory
+Mox Jet
+Island x10
+
+[Bot2 Deck]
+Phyrexian Walker
+Crimson Kobolds
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Alpha Myr.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Hand.Crimson Kobolds.Cast
+[T2 Bot2.BeginCombat]
+! Bot1.Hand.Melee.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Melee.Cast
+Bot1.Attack(Alpha Myr > Bot2; Memnite > Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Blaze of Glory.Cast(Bot2.Battlefield.Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Melee.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Block(Count: 0)
+Bot1.Block(Phyrexian Walker > Alpha Myr; Phyrexian Walker > Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Phyrexian Walker
+Bot2.Battlefield.Crimson Kobolds.Damage = 0

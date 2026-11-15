@@ -1,0 +1,60 @@
+# Browser
+# Melee, cast in the declare attackers step of its caster's turn, has its caster (Bot1), not the defending player, declare
+# the blocks (CR 509.1): Bot1 has Bot2's Crimson Kobolds block Alpha Myr, where it dies, and leaves Phyrexian Walker out.
+# Memnite, which nothing blocks, triggers "whenever a creature attacks and isn't blocked this combat" (CR 509.3g, 603.7):
+# it is untapped and removed from combat, so it deals Bot2 no damage (CR 506.4). The pool is empty right after the cast:
+# {4}{R} paid off exactly five mana. In the browser, Bot1's page shows both effects beside its life total and is asked to
+# declare blockers, and clicks Bot2's creature to block.
+
+[Bot1 Deck]
+Memnite
+Alpha Myr
+Mox Ruby
+Mox Pearl
+Black Lotus
+Melee
+Island
+Island x10
+
+[Bot2 Deck]
+Phyrexian Walker
+Crimson Kobolds
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Alpha Myr.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Hand.Crimson Kobolds.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Alpha Myr > Bot2; Memnite > Bot2)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Melee.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Client.Bot1.Facts = Melee: You choose which creatures block this combat and how those creatures block; Melee: Whenever a creature attacks and isn't blocked this combat, untap it and remove it from combat
+Bot1.Pass
+Bot2.Pass
+? Client.Bot1.Prompt.Title = Declare blockers
+Bot1.Block(Crimson Kobolds > Alpha Myr)
+Bot1.Pass
+Bot2.Pass
+? Combat.Attackers = Alpha Myr > Bot2
+? Bot1.Battlefield.Memnite.Tapped = false
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Crimson Kobolds
+Bot2.Battlefield.Phyrexian Walker.Damage = 0
+Bot1.Battlefield.Alpha Myr.Tapped = true
+Bot1.Battlefield.Memnite.Tapped = false
