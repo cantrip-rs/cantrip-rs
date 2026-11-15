@@ -1,0 +1,39 @@
+# Early Winter ({4}{B}), first mode: "Exile target creature." The target is any creature, not only an opponent's: Bot1 exiles
+# its own Memnite (positive control for the opponent's creature in the other scenario), and Bot2's Memnite stays.
+
+[Bot1 Deck]
+Early Winter
+Mox Jet
+Mox Pearl
+Black Lotus
+Memnite
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Early Winter.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Memnite
+Bot2.Battlefield = Memnite
+Bot1.Battlefield = Mox Jet; Mox Pearl
+Bot1.Graveyard = Early Winter; Black Lotus

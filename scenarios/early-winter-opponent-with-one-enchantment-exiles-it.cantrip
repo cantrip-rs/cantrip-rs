@@ -1,0 +1,48 @@
+# Early Winter ({4}{B}), second mode: "Target opponent exiles an enchantment they control." With a single enchantment Bot2 is
+# still asked to choose it (CR 608.2d, as Strategic Betrayal's choice is) and it is exiled; Bot2's Memnite stays. Bot1 casts it
+# on its own turn 3.
+
+[Bot1 Deck]
+Early Winter
+Mox Jet
+Mox Pearl
+Black Lotus
+Swamp x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Bad Moon
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Bad Moon.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Early Winter.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Bad Moon)
+
+[Expect]
+Exile = Bad Moon
+Bot2.Battlefield = Memnite; Mox Jet; Mox Pearl
+Stack.Count = 0

@@ -1,0 +1,6 @@
+{
+  "name": "Early Winter",
+  "manaCost": "{4}{B}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Exile target creature.\n• Target opponent exiles an enchantment they control."
+}
