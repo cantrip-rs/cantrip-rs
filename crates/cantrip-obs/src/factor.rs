@@ -507,6 +507,45 @@ fn names_with(ask: &Ask, names: &[String]) -> Vec<String> {
     all
 }
 
+/// Whether every permanent `attacks` cost (`sacrifices`) can be a different one of its candidates (CR 118.3, 508.1j): a
+/// matching of every permanent to be sacrificed to one of its own, found by augmenting paths - the validator's judgement
+/// (`cantrip_state::AttackRules::unpaid`) in the factoring's terms.
+fn sacrifices_payable(sacrifices: &[crate::AttackSacrificeObs], attacks: &[(Ref, Ref)]) -> bool {
+    if sacrifices.is_empty() {
+        return true;
+    }
+    let slots: Vec<&[Ref]> = sacrifices
+        .iter()
+        .filter(|s| attacks.contains(&(s.attacker, s.defender)))
+        .flat_map(|s| std::iter::repeat_n(&s.candidates[..], s.count as usize))
+        .collect();
+    // The slot each permanent pays.
+    fn place(slot: usize, slots: &[&[Ref]], paid_by: &mut Vec<(Ref, usize)>, seen: &mut Vec<Ref>) -> bool {
+        for &id in slots[slot] {
+            if seen.contains(&id) {
+                continue;
+            }
+            seen.push(id);
+            // Entries are only ever added or repointed, never removed, so `k` stays this permanent's.
+            match paid_by.iter().position(|p| p.0 == id) {
+                Some(k) => {
+                    if place(paid_by[k].1, slots, paid_by, seen) {
+                        paid_by[k].1 = slot;
+                        return true;
+                    }
+                }
+                None => {
+                    paid_by.push((id, slot));
+                    return true;
+                }
+            }
+        }
+        false
+    }
+    let mut paid_by = Vec::new();
+    (0..slots.len()).all(|slot| place(slot, &slots, &mut paid_by, &mut Vec::new()))
+}
+
 /// Payment windows whose source quality or snow demand requires an explicit allocation choice.
 /// Ordinary costs retain their established automatic payment factoring.
 pub fn snow_payment(kind: &AskKind) -> bool {
@@ -887,6 +926,7 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
             max_attackers,
             barred,
             alone,
+            sacrifices,
             ..
         } => {
             // A defender at its cap takes no more attackers (CR 508.1c). A declaration obeys `most` requirements (CR
@@ -915,10 +955,20 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
             // still to come can attack something with room beside it (the ones between staying home); one attacker
             // beside it mends it, and no attack is ever taken back.
             let room = |attacking: &[usize], i: usize| cap(i) == u8::MAX || attacking[i] < usize::from(cap(i));
+            // CR 508.1j, 118.3: an attack whose permanents to sacrifice the declaration with it can't spare is never
+            // offered - exactly, as nothing added later pays for it, and staying home costs nothing.
+            let payable = |attacks: &[(Ref, Ref)], more: (Ref, Ref)| {
+                let mut with = attacks.to_vec();
+                with.push(more);
+                sacrifices_payable(sacrifices, &with)
+            };
             let mended = |attacks: &[(Ref, Ref)], attacking: &[usize], later: &[Ref]| match attacks {
-                [(a, _)] if alone.contains(a) => later
-                    .iter()
-                    .any(|&l| defenders.iter().enumerate().any(|(i, &d)| open(l, d) && room(attacking, i))),
+                [(a, _)] if alone.contains(a) => later.iter().any(|&l| {
+                    defenders
+                        .iter()
+                        .enumerate()
+                        .any(|(i, &d)| open(l, d) && room(attacking, i) && payable(attacks, (l, d)))
+                }),
                 _ => true,
             };
             for (j, &c) in eligible.iter().enumerate() {
@@ -928,15 +978,16 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
                 step.push(Token::on(Tok::Stay, c), obeyed + rest >= *most);
                 let mut lawful = vec![mended(&attacks, &attacking, later)];
                 for (i, &d) in defenders.iter().enumerate() {
+                    let paid = payable(&attacks, (c, d));
                     step.push(
                         Token::of(Tok::Attack, c, d, 0),
-                        room(&attacking, i) && open(c, d) && obeyed + gain(c, d) + rest >= *most,
+                        room(&attacking, i) && open(c, d) && paid && obeyed + gain(c, d) + rest >= *most,
                     );
                     let mut with = attacks.clone();
                     with.push((c, d));
                     let mut now = attacking.clone();
                     now[i] += 1;
-                    lawful.push(room(&attacking, i) && open(c, d) && mended(&with, &now, later));
+                    lawful.push(room(&attacking, i) && open(c, d) && paid && mended(&with, &now, later));
                 }
                 // Lone attackers are judged before the requirements (`cantrip_state::attacks`): where nothing obeys
                 // both, the most is the bound that gives way, for the validator to refuse (a global refusal).
@@ -1787,6 +1838,7 @@ mod tests {
             max_attackers: vec![u8::MAX, u8::MAX],
             barred: vec![],
             alone: vec![],
+            sacrifices: vec![],
         });
         let mut m = Machine::new(&a, &[]);
         m.choose_token(Token::on(Tok::Stay, o(1)));
@@ -1812,6 +1864,7 @@ mod tests {
             max_attackers: vec![u8::MAX, u8::MAX],
             barred: vec![(o(1), Ref::Player(1))],
             alone: vec![],
+            sacrifices: vec![],
         });
         let m = Machine::new(&a, &[]);
         assert!(!legal(&m, Token::of(Tok::Attack, o(1), Ref::Player(1), 0)));
@@ -1832,6 +1885,7 @@ mod tests {
             max_attackers: vec![1, 1],
             barred: vec![],
             alone: vec![],
+            sacrifices: vec![],
         });
         let mut m = Machine::new(&a, &[]);
         m.choose_token(Token::of(Tok::Attack, o(1), Ref::Player(1), 0));
@@ -1858,6 +1912,7 @@ mod tests {
             max_attackers: vec![u8::MAX, 1],
             barred: vec![],
             alone: vec![],
+            sacrifices: vec![],
         });
         assert!(!legal(&Machine::new(&open, &[]), Token::on(Tok::Stay, o(3))));
         // Where attacking that player costs something (Ghostly Prison), the requirement is not to pay (CR 508.1d): it may.
@@ -1872,6 +1927,7 @@ mod tests {
             max_attackers: vec![u8::MAX],
             barred: vec![],
             alone: vec![],
+            sacrifices: vec![],
         });
         assert!(legal(&Machine::new(&taxed, &[]), Token::on(Tok::Stay, o(3))));
         round_trip(&taxed, &FactoredAnswer::Attack(vec![(o(3), Ref::Player(1))]));
@@ -1895,6 +1951,7 @@ mod tests {
             max_attackers: vec![u8::MAX; 3],
             barred: vec![],
             alone: vec![],
+            sacrifices: vec![],
         });
         let m = Machine::new(&goaded, &[]);
         assert!(!legal(&m, Token::on(Tok::Stay, o(1))));
@@ -1911,6 +1968,7 @@ mod tests {
             max_attackers: vec![u8::MAX],
             barred: vec![],
             alone: vec![],
+            sacrifices: vec![],
         });
         round_trip(&gone, &FactoredAnswer::Attack(vec![]));
         // One creature may make up for another: one paying to obey two leaves the other free to stay home.
@@ -1928,6 +1986,7 @@ mod tests {
             max_attackers: vec![u8::MAX; 2],
             barred: vec![],
             alone: vec![],
+            sacrifices: vec![],
         });
         let m = walk(&paid, &[Token::on(Tok::Stay, o(1))]);
         assert!(!legal(&m, Token::on(Tok::Stay, o(2))));
@@ -1949,6 +2008,7 @@ mod tests {
             max_attackers: vec![u8::MAX, 1],
             barred: vec![(o(3), Ref::Player(1))],
             alone: vec![o(1), o(2)],
+            sacrifices: vec![],
         });
         // Alone, the first may attack: either other creature can join it.
         let m = walk(&a, &[Token::of(Tok::Attack, o(1), o(9), 0)]);
@@ -1976,10 +2036,68 @@ mod tests {
             max_attackers: vec![u8::MAX],
             barred: vec![],
             alone: vec![o(1)],
+            sacrifices: vec![],
         });
         assert!(!legal(&Machine::new(&lone, &[]), Token::of(Tok::Attack, o(1), Ref::Player(1), 0)));
         round_trip(&a, &FactoredAnswer::Attack(vec![(o(1), Ref::Player(1)), (o(2), Ref::Player(1))]));
         round_trip(&a, &FactoredAnswer::Attack(vec![(o(2), Ref::Player(1)), (o(3), o(9))]));
+    }
+
+    #[test]
+    fn attacks_whose_permanents_to_sacrifice_cant_be_spared_are_not_offered() {
+        // Flooded Woodlands (CR 508.1h-j, 118.3): creatures 1 and 2 are green, each attack costing a land; land 2 is
+        // Dryad Arbor, both a creature that may attack and the one land there is, and creature 3 attacks for free.
+        let land = |attacker| crate::AttackSacrificeObs { attacker, defender: Ref::Player(1), count: 1, candidates: vec![o(2)] };
+        let a = ask(AskKind::DeclareAttackers {
+            eligible: vec![o(1), o(2), o(3)],
+            defenders: vec![Ref::Player(1)],
+            requirements: vec![],
+            most: 0,
+            costs: vec![(o(1), Ref::Player(1), 0), (o(2), Ref::Player(1), 0)],
+            can_pay: 0,
+            max_attackers: vec![u8::MAX],
+            barred: vec![],
+            alone: vec![],
+            sacrifices: vec![land(o(1)), land(o(2))],
+        });
+        // The first attacking takes the land: the second may not, and the third may.
+        let m = walk(&a, &[Token::of(Tok::Attack, o(1), Ref::Player(1), 0)]);
+        assert!(!legal(&m, Token::of(Tok::Attack, o(2), Ref::Player(1), 0)));
+        assert!(legal(&m, Token::on(Tok::Stay, o(2))));
+        let m = walk(&a, &[Token::on(Tok::Stay, o(1))]);
+        assert!(legal(&m, Token::of(Tok::Attack, o(2), Ref::Player(1), 0)));
+        round_trip(&a, &FactoredAnswer::Attack(vec![(o(1), Ref::Player(1)), (o(3), Ref::Player(1))]));
+        // Creature 3 can't attack alone (CR 508.1c), and the one creature that could join it is green with no land to
+        // sacrifice: nothing can mend it attacking alone, so it is not offered, and staying home is.
+        let lone = ask(AskKind::DeclareAttackers {
+            eligible: vec![o(3), o(1)],
+            defenders: vec![Ref::Player(1)],
+            requirements: vec![],
+            most: 0,
+            costs: vec![(o(1), Ref::Player(1), 0)],
+            can_pay: 0,
+            max_attackers: vec![u8::MAX],
+            barred: vec![],
+            alone: vec![o(3)],
+            sacrifices: vec![crate::AttackSacrificeObs { attacker: o(1), defender: Ref::Player(1), count: 1, candidates: vec![] }],
+        });
+        let m = Machine::new(&lone, &[]);
+        assert!(!legal(&m, Token::of(Tok::Attack, o(3), Ref::Player(1), 0)));
+        assert!(legal(&m, Token::on(Tok::Stay, o(3))));
+        let m = walk(&lone, &[Token::on(Tok::Stay, o(3))]);
+        assert!(!legal(&m, Token::of(Tok::Attack, o(1), Ref::Player(1), 0)));
+        round_trip(&lone, &FactoredAnswer::Attack(vec![]));
+        for walked in 0..32u64 {
+            let mut m = Machine::new(&a, &[]);
+            let mut k = walked;
+            while let Some(step) = m.step() {
+                let legal: Vec<usize> = step.legal().collect();
+                m.choose(legal[(k % legal.len() as u64) as usize]);
+                k /= legal.len() as u64;
+            }
+            let Some(FactoredAnswer::Attack(x)) = m.answer() else { panic!("no declaration") };
+            assert!(!(x.contains(&(o(1), Ref::Player(1))) && x.contains(&(o(2), Ref::Player(1)))), "{x:?}");
+        }
     }
 
     #[test]

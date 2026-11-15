@@ -778,6 +778,18 @@ pub(crate) fn ask_of(
             barred.sort();
             // CR 508.1c: the creatures forbidden to attack alone.
             let alone = rs(&requirements.alone_barred);
+            // CR 508.1h-j, 118.3: the permanents attacks cost, which a declaration must be able to pay.
+            let mut sacrifices: Vec<AttackSacrificeObs> = requirements
+                .sacrifices
+                .iter()
+                .map(|s| AttackSacrificeObs {
+                    attacker: r(s.attacker),
+                    defender: t(s.target),
+                    count: s.count,
+                    candidates: rs(&s.candidates),
+                })
+                .collect();
+            sacrifices.sort();
             AskKind::DeclareAttackers {
                 eligible: rs(eligible),
                 defenders,
@@ -788,6 +800,7 @@ pub(crate) fn ask_of(
                 max_attackers,
                 barred,
                 alone,
+                sacrifices,
             }
         }
         RequestKind::AssignCombatDamage { divisions } => {

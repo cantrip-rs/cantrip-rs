@@ -285,6 +285,16 @@ pub struct CounterPoolObs {
     pub count: u32,
 }
 
+/// A permanent part of what one attack costs (CR 508.1h; `cantrip_state::AttackSacrifice`): `count` of the attacking
+/// player's permanents, each one of `candidates` (sorted), sacrificed as the declaration's costs are paid (CR 508.1j).
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+pub struct AttackSacrificeObs {
+    pub attacker: Ref,
+    pub defender: Ref,
+    pub count: u32,
+    pub candidates: Vec<Ref>,
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DivisionObs {
     /// The creature whose combat damage it is.
@@ -361,7 +371,9 @@ pub enum AskKind {
     /// `defenders`; `u8::MAX` where nothing caps it. `barred` the attacks (attacker, defender; sorted) a restriction forbids
     /// (CR 508.1c: "creatures with flying can't attack you"). `alone` the creatures (sorted) a static ability forbids to
     /// attack alone (CR 508.1c: Pet Sehlat's "can't attack alone"): a declaration whose only attacker is one of them is
-    /// illegal.
+    /// illegal. `sacrifices` the permanents attacks cost (sorted; Flooded Woodlands' lands): no permanent pays for two
+    /// (CR 118.3), so a declaration whose parts can't each be given permanents of their own can't be paid, and is illegal
+    /// (CR 508.1j).
     DeclareAttackers {
         eligible: Vec<Ref>,
         defenders: Vec<Ref>,
@@ -374,6 +386,8 @@ pub enum AskKind {
         barred: Vec<(Ref, Ref)>,
         #[serde(default)]
         alone: Vec<Ref>,
+        #[serde(default)]
+        sacrifices: Vec<AttackSacrificeObs>,
     },
     /// One division per creature with a choice, sorted by source.
     AssignCombatDamage { divisions: Vec<DivisionObs> },

@@ -355,6 +355,9 @@ fn scenarios_that_once_failed_factor() {
             "pet-sehlat-two-attack-together",
             // A choice asked again after a player conceded mid-resolution (CR 800.4a): their objects left the game.
             "cleansing-a-payer-who-concedes-pays-nothing-and-the-land-they-chose-is-destroyed",
+            // Lands to sacrifice for attacking creatures (CR 508.1j, 118.3) where a land is itself one of the creatures
+            // that may attack: Dryad Arbor attacking raises the count it would pay.
+            "flooded-woodlands-an-enlisted-dryad-arbor-is-tapped-before-it-is-sacrificed",
         ]
         .iter()
         .map(|n| {
