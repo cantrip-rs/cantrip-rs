@@ -1145,6 +1145,13 @@ pub static FISH: CardDef = CardDef {
     ..token!(Fish)
 };
 
+/// "Create a 1/1 blue Fish creature token." (CR 111.1): one `FISH` under `item`'s controller, the card file listing it in its `EXTRA`.
+/// Knightfisher, Fountainport and Fishing Pole print it.
+pub fn create_a_fish(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &FISH, 1)?;
+    Ok(())
+}
+
 /// An 8/8 blue Octopus creature token (CR 702.174i). "Gift an Octopus" makes it.
 pub static OCTOPUS: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::Blue)),
