@@ -1591,6 +1591,16 @@ pub fn surveil(g: &mut dyn Game, item: &StackItem, n: usize) -> Result<(), Suspe
     crate::surveil(g, item.controller, item.object, n)
 }
 
+/// "Surveil 2, then draw two cards. You lose 2 life." (CR 701.25, 121.1, 119.3, 608.2c): the surveil is complete, its own triggers
+/// waiting, before the draw; the life is lost as the second sentence. Cruel Truths, Risky Research and Diresight print it.
+pub fn surveil_2_then_draw_2_you_lose_2_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    surveil(g, item, 2)?;
+    draw(g, item, 2)?;
+    g.end_sentence();
+    g.lose_life(item.controller, 2);
+    Ok(())
+}
+
 /// "Reveal the top card of your library. Draw a card if it's an artifact card." (CR 701.20a, 121.1): the card revealed
 /// stays on top unless it is an artifact, in which case it is the card drawn. `may` makes the revealing its controller's
 /// choice ("you may reveal it"); an empty library reveals nothing and a nonartifact card is left on top, so neither
