@@ -796,6 +796,15 @@ pub fn x_plus_one_counters_on_this(g: &mut dyn Game, item: &StackItem) -> Result
     Ok(())
 }
 
+/// "Put a +1/+1 counter on it", "it" the permanent the trigger is about (its subject, not a target): nothing if it is no longer
+/// on the battlefield by now, a new object (CR 400.7, 608.2b). Curse of Predation and Growing Dread print it.
+pub fn plus_one_counter_on_that_permanent(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(permanent) = item.subject.object().filter(|&p| crate::targets::permanent(g, p)) {
+        g.add_counters(permanent, CounterKind::PlusOne, 1);
+    }
+    Ok(())
+}
+
 /// "This Vehicle becomes an artifact creature. Put `N` +1/+1 counters on it" (CR 301.7, 611.2a, 122.1): with no duration said it
 /// stays an artifact creature for as long as it is on the battlefield, still a Vehicle, its printed power and toughness and the
 /// counters making it. Done to the permanent whose ability this is, so a Vehicle that has left the battlefield by the time the
