@@ -1,0 +1,65 @@
+# Ali from Cairo judges the damage's life loss with its controller's other life results of the same damage event, and
+# its controller orders it against a replacement on another of them (CR 120.4c, 616.1). Bot1, at 2 life, blocks one of
+# Bot2's five attacking Memnites with Rhox Faithmender (lifelink; "If you would gain life, you gain twice that much life
+# instead"). Combat damage is one event (CR 510.2): Bot1 loses 4 to the four unblocked Memnites and gains 1 by lifelink.
+# Bot1 applies Ali's floor first: losing 4 and gaining 1 from 2 would leave -1, so the loss becomes 2, which with the
+# gain of 1 leaves exactly 1. The Faithmender then doubles the gain to 2: Bot1 ends at 2 - 2 + 2 = 2. (Faithmender first
+# would end at 1; a floor that ignored the gain would end at 3; no floor at 0.)
+
+[Life]
+Bot1: 2
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Mox Pearl
+Ali from Cairo
+Rhox Faithmender
+Island x20
+
+[Bot2 Deck]
+Memnite
+Memnite
+Memnite
+Memnite
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ali from Cairo.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rhox Faithmender.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite#1 > Bot1; Memnite#2 > Bot1; Memnite#3 > Bot1; Memnite#4 > Bot1; Memnite#5 > Bot1)
+Bot1.Block(Rhox Faithmender > Memnite#1)
+Bot1.Replace(1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 2
+Bot1.Battlefield.Ali from Cairo.Types = Creature

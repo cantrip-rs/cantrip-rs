@@ -1,0 +1,37 @@
+# Ali from Cairo replaces only damage that would reduce its controller's life total ("your life total"): Bot1, who
+# controls Ali, deals 3 damage with Lightning Bolt to Bot2 at 3 life, and Bot2 goes to 0 and loses (CR 704.5a).
+
+[Life]
+Bot2: 3
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Ali from Cairo
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Ali from Cairo.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 0
+Bot2.Status = Lost
+Bot1.Battlefield.Ali from Cairo.Types = Creature

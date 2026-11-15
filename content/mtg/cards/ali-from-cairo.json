@@ -1,0 +1,8 @@
+{
+  "name": "Ali from Cairo",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Human",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "Damage that would reduce your life total to less than 1 reduces it to 1 instead."
+}

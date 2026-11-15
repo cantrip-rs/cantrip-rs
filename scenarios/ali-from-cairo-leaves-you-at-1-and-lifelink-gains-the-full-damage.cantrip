@@ -1,0 +1,53 @@
+# Ali from Cairo: "Damage that would reduce your life total to less than 1 reduces it to 1 instead." Bot1 starts at 3
+# with Ali. Bot2's Lightning Bolt deals 3, which would leave 0: it leaves 1 instead, not 0 and not 2 (CR 120.3a, 614.1a).
+# At exactly 1 life the floor still applies: Bot2's Ajani's Sunstriker deals its 2 combat damage and Bot1 stays at 1. The
+# damage itself is dealt in full (the ruling: only the life loss is replaced), so the Sunstriker's lifelink gains Bot2 2
+# (CR 120.3f, 702.15b), not the 0 life Bot1 lost.
+
+[Life]
+Bot1: 3
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Ali from Cairo
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Lightning Bolt
+Ajani's Sunstriker
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ali from Cairo.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Ajani's Sunstriker.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 1
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ajani's Sunstriker > Bot1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 1
+Bot2.Life = 22
+Bot1.Status = (absent)

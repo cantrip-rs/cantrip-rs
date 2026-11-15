@@ -1,0 +1,70 @@
+# Ali from Cairo replaces only the life loss damage dealt to its controller causes, never a gain or another loss, and
+# lowers that loss at most to none (CR 120.3a, 614.1a; the rulings: life loss bypasses the floor). Bot1, at 2 life, blocks
+# one of Bot2's five attacking Memnites with Ajani's Sunstriker (lifelink) while Bot2 controls Tainted Remedy ("If an
+# opponent would gain life, that player loses that much life instead"). The combat damage event's results for Bot1 are
+# [lose 4, gain 2], and Bot1 orders the two effects on them (CR 120.4c, 616.1). Bot1 applies Tainted Remedy first: the
+# results become [lose 4, lose 2], which would take Bot1 to -4, so Ali's floor applies to the damage's loss, but it can
+# only lower it to 0, not turn it into a gain: Tainted Remedy's loss of 2 still leaves Bot1 at 0, and Bot1 loses (CR
+# 704.5a). (Ali first would make the loss 3, then Tainted Remedy's 2: -3. A floor that turned the loss into a gain of 1
+# would meet Tainted Remedy again, a new event to it: -1.)
+
+[Life]
+Bot1: 2
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Ali from Cairo
+Ajani's Sunstriker
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Tainted Remedy
+Memnite
+Memnite
+Memnite
+Memnite
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ali from Cairo.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Ajani's Sunstriker.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Tainted Remedy.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite#1 > Bot1; Memnite#2 > Bot1; Memnite#3 > Bot1; Memnite#4 > Bot1; Memnite#5 > Bot1)
+Bot1.Block(Ajani's Sunstriker > Memnite#1)
+Bot1.Replace(2)
+
+[Expect]
+Bot1.Life = 0
+Bot1.Status = Lost
+Bot1.Battlefield.Ali from Cairo.Types = Creature

@@ -1,0 +1,52 @@
+# Ali from Cairo works until it leaves the battlefield (the ruling: "if he takes lethal damage ... at the same time you
+# take damage, the ability helps you"). Bot1, at 1 life, blocks one of Bot2's two attacking Memnites with Ali: the combat
+# damage is dealt at once (CR 510.2), Ali takes lethal damage and the unblocked Memnite's 1 damage leaves Bot1 at 1. Ali
+# then dies (CR 704.5g), and Bot2's Lightning Bolt afterwards is not replaced: Bot1 goes to -2 and loses (CR 704.5a).
+
+[Life]
+Bot1: 1
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Ali from Cairo
+Island x20
+
+[Bot2 Deck]
+Memnite
+Memnite
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ali from Cairo.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite#1 > Bot1; Memnite#2 > Bot1)
+Bot1.Block(Ali from Cairo > Memnite#1)
+[T4 Bot2.Main2]
+? Bot1.Life = 1
+? Bot1.Battlefield.Ali from Cairo = (absent)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = -2
+Bot1.Status = Lost
+Bot1.Graveyard = Ali from Cairo; Black Lotus
