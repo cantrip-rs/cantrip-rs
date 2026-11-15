@@ -1,0 +1,11 @@
+{
+  "name": "Fear of Being Hunted",
+  "manaCost": "{1}{R}{R}",
+  "type": "Enchantment Creature — Nightmare",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Haste\nThis creature must be blocked if able.",
+  "keywords": [
+    "Haste"
+  ]
+}

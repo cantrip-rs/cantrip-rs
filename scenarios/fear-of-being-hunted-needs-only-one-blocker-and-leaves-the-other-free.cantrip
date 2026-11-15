@@ -1,0 +1,48 @@
+# Fear of Being Hunted: "This creature must be blocked if able" (CR 509.1c). The requirement is one blocker on it, not every creature
+# able to block (CR 509.1c: the most requirements obeyed, and one blocker obeys this one). Turn 3: it attacks with Elvish
+# Mystic into Bot2's two Ornithopters. Both blocking the Mystic is refused (one of them could block the Fear), and so is no block
+# at all; one Ornithopter on the Fear and the other on the Mystic is allowed. The Fear kills its Ornithopter, the Mystic is
+# blocked by the other and deals it 1, which a 0/2 survives.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Fear of Being Hunted
+Elvish Mystic
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fear of Being Hunted.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Fear of Being Hunted > Bot2; Elvish Mystic > Bot2)
+! Bot2.Block(Count: 0)
+! Bot2.Block(Ornithopter#1 > Elvish Mystic; Ornithopter#2 > Elvish Mystic)
+Bot2.Block(Ornithopter#1 > Fear of Being Hunted; Ornithopter#2 > Elvish Mystic)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield = Ornithopter
+Bot1.Battlefield = Mox Ruby; Mox Ruby; Mox Pearl; Mox Emerald; Fear of Being Hunted; Elvish Mystic
