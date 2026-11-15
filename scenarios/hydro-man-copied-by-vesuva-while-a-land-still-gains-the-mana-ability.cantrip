@@ -1,0 +1,42 @@
+# Hydro-Man, Fluid Felon's end step trigger makes him a land that gains "{T}: Add {U}", an ability of the card whose
+# ability resolves (CR 613.1f), the card a copy copies (CR 707.2). Bot2's Hydro-Man is a land after Bot2's end step, so
+# Bot1's Vesuva may enter as a copy of it on turn 3 - a copy of the creature card, the land-making effect being no
+# copiable value (CR 707.2); at Bot1's end step the copy becomes a land, and in Bot2's upkeep it taps for {U}.
+
+[Bot1 Deck]
+Island
+Vesuva
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Hydro-Man, Fluid Felon
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Hand.Hydro-Man, Fluid Felon.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Hydro-Man, Fluid Felon.Types = Land
+Bot1.Hand.Vesuva.Play
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Hydro-Man, Fluid Felon)
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Hydro-Man, Fluid Felon.Types = Land
+Bot1.Battlefield.Hydro-Man, Fluid Felon.Activate
+? Bot1.Mana = {U}
+Bot1.Pass
+
+[Expect]
+Turn = 4
+Bot1.Battlefield.Hydro-Man, Fluid Felon.Tapped = true

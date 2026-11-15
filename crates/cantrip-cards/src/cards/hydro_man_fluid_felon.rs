@@ -19,10 +19,9 @@ fn become_a_land(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.untap(me);
     g.end_sentence();
     let until = Duration::UntilNextTurnOf(item.controller);
-    let card = g.obj(me).card;
     instruction(g, |g| {
         g.add_effect(me, me, EffectKind::SetTypes(TypeSet::of(&[CardType::Land])), until);
-        g.add_effect(me, me, EffectKind::AddAbility(AbilityRef::delayed(card, 0)), until);
+        g.add_effect(me, me, EffectKind::AddAbility(AbilityRef::delayed(item.ability.card, 0)), until);
     });
     Ok(())
 }
