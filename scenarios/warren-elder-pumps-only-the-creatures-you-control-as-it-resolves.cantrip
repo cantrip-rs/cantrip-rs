@@ -1,0 +1,45 @@
+# Warren Elder: "{3}{W}: Creatures you control get +1/+1 until end of turn." The Elder (2/2) and Bot1's Ornithopter (0/2)
+# get +1/+1 and Bot2's Ornithopter does not (it is not "you control"); the Memnite cast after the ability resolved is not
+# pumped, since a resolving effect changes only the creatures there then (CR 611.2c).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Pearl
+Ornithopter
+Warren Elder
+Black Lotus
+Memnite
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Warren Elder.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Warren Elder.Activate
+? Stack.Count = 1
+[Bot1.Main2]
+Bot1.Hand.Memnite.Cast
+
+[Expect]
+Bot1.Battlefield.Warren Elder.Power = 3
+Bot1.Battlefield.Warren Elder.Toughness = 3
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Memnite.Power = 1
