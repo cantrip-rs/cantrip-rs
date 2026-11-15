@@ -1,0 +1,46 @@
+# Druid of the Spade only counts a token "you control": Bot2 casts Mox Pearl, Mox Sapphire and Gold Pan on turn 2, so a Treasure
+# token sits on Bot2's side of the table, and Bot1's Druid (cast turn 1 from three Moxen) stays a 2/3 without trample, with
+# nothing of Bot1's but nontoken permanents (CR 109.4, 604.1).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Druid of the Spade
+Island x16
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Gold Pan
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Druid of the Spade.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Gold Pan.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Treasure Token.Tapped = false
+Bot1.Battlefield.Druid of the Spade.Power = 2
+Bot1.Battlefield.Druid of the Spade.Keywords = (absent)

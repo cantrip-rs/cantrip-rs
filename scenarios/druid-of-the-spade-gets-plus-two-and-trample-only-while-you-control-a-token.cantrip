@@ -1,0 +1,54 @@
+# Druid of the Spade (2/3, {2}{G}): "As long as you control a token, this creature gets +2/+0 and has trample." Five Moxen cast
+# on turn 1 are nonlegendary permanents but not tokens: with them and the Druid out it is a plain 2/3 without trample. Gold Pan
+# (two mana, "When this Equipment enters, create a Treasure token") makes a token: now the Druid is 4/3 with trample (CR 604.1,
+# 613.4c, 111.1). Sacrificing the Treasure for its mana takes the token away and the Druid is a plain 2/3 again.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Druid of the Spade
+Gold Pan
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Druid of the Spade.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Druid of the Spade.Power = 2
+? Bot1.Battlefield.Druid of the Spade.Keywords = (absent)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Gold Pan.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Treasure Token.Tapped = false
+? Bot1.Battlefield.Druid of the Spade.Power = 4
+? Bot1.Battlefield.Druid of the Spade.Toughness = 3
+? Bot1.Battlefield.Druid of the Spade.Keywords = Trample
+Bot1.Battlefield.Treasure Token.Activate(Color: Green)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Treasure Token = (absent)
+Bot1.Battlefield.Druid of the Spade.Power = 2
+Bot1.Battlefield.Druid of the Spade.Toughness = 3
+Bot1.Battlefield.Druid of the Spade.Keywords = (absent)

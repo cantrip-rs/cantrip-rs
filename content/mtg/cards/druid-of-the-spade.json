@@ -1,0 +1,8 @@
+{
+  "name": "Druid of the Spade",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Rabbit Druid",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "As long as you control a token, this creature gets +2/+0 and has trample."
+}
