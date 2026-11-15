@@ -604,7 +604,7 @@ fn candidates_for(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Opti
     for e in &cx.s().effects {
         // One about a source of damage, of damage to whom it names (`to`), outlives that source (CR 609.7a).
         let (card, index, outlives, to) = match e.kind {
-            EffectKind::Replacement { card, index, to } => (card, index, to != Target::None, to),
+            EffectKind::Replacement { card, index, to, .. } => (card, index, to != Target::None, to),
             EffectKind::ReplacementRule { card, index } => (card, index, true, Target::None),
             // A prevention effect a spell or ability made (CR 615.3): of damage to whom it names, if it names anyone, and of
             // the damage its definition describes. One about an object ends with it (CR 400.7).
@@ -617,7 +617,7 @@ fn candidates_for(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Opti
                 {
                     let def = &cards.get(card).granted_preventions[index as usize];
                     let asker = Asker { instance: None, source: e.source, controller: e.controller, by: None, spell: false };
-                    let reads = WithWords { q: cx, source: e.source, words: e.words };
+                    let reads = WithWords::effect(cx, &e);
                     if let Some(Proposal::Damage(selected)) = select((e.source, index, Origin::GrantedPrevention(e.timestamp)))
                         && (def.applies)(&reads, &asker, e.affected, &selected) {
                         found.push(Candidate { source: e.source, index, origin: Origin::GrantedPrevention(e.timestamp) });
@@ -635,7 +635,7 @@ fn candidates_for(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Opti
             continue;
         }
         let asker = Asker { instance: None, source: e.source, controller: e.controller, by: None, spell: false };
-        let reads = WithWords { q: cx, source: e.source, words: e.words };
+        let reads = WithWords::effect(cx, &e);
         let Some(selected) = select((e.source, index, Origin::Granted(e.timestamp))) else { continue };
         // Damage to whom it names, as the effects applied so far have left it (CR 616.1f).
         if to != Target::None && !matches!(selected, Proposal::Damage(d) if d.target == to) {
@@ -1269,7 +1269,7 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
                         None => d.amount,
                         Some(portion) => {
                             let asker = Asker { instance: None, source: e.source, controller: e.controller, by: None, spell: false };
-                            let reads = WithWords { q: &*cx, source: e.source, words: e.words };
+                            let reads = WithWords::effect(&*cx, &e);
                             (portion.amount)(&reads, &asker, d).min(d.amount)
                         }
                     };
@@ -1645,7 +1645,7 @@ fn apply_granted(
     let (apply, then) = (def.apply, def.then);
     let asker = Asker { instance: None, source, controller: e.controller, by: None, spell: false };
     let before = *proposal;
-    let reads = WithWords { q: &*cx, source: e.source, words: e.words };
+    let reads = WithWords::effect(&*cx, &e);
     let mut after = before;
     apply(&reads, &asker, e.affected, &mut after);
     normalize_damage(&mut after);
@@ -1778,7 +1778,7 @@ fn reshape(cx: &Cx, c: &Candidate, proposal: &mut Proposal) {
         }
         Origin::Granted(timestamp) => {
             let Some((e, def)) = granted(cx, timestamp) else { return };
-            let reads = WithWords { q: cx, source: e.source, words: e.words };
+            let reads = WithWords::effect(cx, &e);
             (def.apply)(&reads, &Asker { instance: None, source: c.source, controller: e.controller, by: None, spell: false }, e.affected, proposal);
         }
         // No other kind of effect applies to the mana a permanent produces.
@@ -1953,7 +1953,7 @@ pub(crate) fn shields(cx: &Cx, d: &DamageEvent) -> Option<(ObjectId, u32)> {
             continue;
         }
         let def = &cx.cards().get(card).granted_preventions[index as usize];
-        let reads = WithWords { q: cx, source: e.source, words: e.words };
+        let reads = WithWords::effect(cx, &e);
         if (def.applies)(&reads, &Asker { instance: None, source: e.source, controller: e.controller, by: None, spell: false }, e.affected, d) {
             found = Some(found.map_or((e.source, u32::from(left)), |(s, n)| (s, n + u32::from(left))));
         }

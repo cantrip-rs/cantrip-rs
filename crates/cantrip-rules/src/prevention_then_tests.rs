@@ -506,8 +506,8 @@ fn a_waiting_replacement_offers_what_it_is_about_and_a_source_it_names() {
         (put(&mut game, &PALM, Zone::graveyard(THEM)), put(&mut game, &PALM, Zone::graveyard(THEM)), put(&mut game, &PALM, Zone::graveyard(THEM)));
     let mut cx = cx(&mut game);
     let palm = cards.id_of(&PALM);
-    cantrip_api::Game::add_effect(&mut cx, silent, replaced, EffectKind::Replacement { card: palm, index: REPLACE_ABOUT, to: Target::None }, Duration::EndOfTurn);
-    cantrip_api::Game::add_effect(&mut cx, naming, replaced, EffectKind::Replacement { card: palm, index: REPLACE_NAMING, to: Target::None }, Duration::EndOfTurn);
+    cantrip_api::Game::add_effect(&mut cx, silent, replaced, EffectKind::Replacement { card: palm, index: REPLACE_ABOUT, to: Target::None, into: Target::None }, Duration::EndOfTurn);
+    cantrip_api::Game::add_effect(&mut cx, naming, replaced, EffectKind::Replacement { card: palm, index: REPLACE_NAMING, to: Target::None, into: Target::None }, Duration::EndOfTurn);
     cantrip_api::Game::add_effect(&mut cx, shielding, regenerating, EffectKind::RegenerationShield, Duration::EndOfTurn);
     assert_eq!(exile_all(&mut cx, &[replaced, regenerating]).len(), 2);
     let sources = prevention::damage_sources(&cx);

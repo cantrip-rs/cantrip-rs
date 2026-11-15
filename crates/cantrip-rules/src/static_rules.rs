@@ -917,7 +917,7 @@ pub fn lasting_rules_barring_attacks(q: &dyn Query, cards: &CardTable, creatures
             let applies = match e.kind {
                 EffectKind::CantAttackPlayer { .. } => e.affected == creature,
                 EffectKind::LastingRule { card, index, about } => {
-                    let reads = WithWords { q, source: e.source, words: e.words };
+                    let reads = WithWords::effect(q, &e);
                     (cards.get(card).lasting_rules[index as usize].applies)(&reads, &Asker::new(e.source, e.controller), about, creature)
                 },
                 _ => unreachable!(),
@@ -1120,7 +1120,7 @@ pub fn lasting_rules_on<'a>(
             .lasting_rules
             .get(index as usize)
             .is_some_and(|r| {
-                let reads = WithWords { q, source: e.source, words: e.words };
+                let reads = WithWords::effect(q, &e);
                 r.rule == rule && (r.applies)(&reads, &Asker::new(e.source, e.controller), about, id)
             }),
         _ => false,

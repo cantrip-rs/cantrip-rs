@@ -1170,6 +1170,8 @@ An invalid redirection is different: the redirection effect does nothing, leavin
 for other effects (CR 614.9). `replace::valid_redirection` checks changed recipients before offering/applying an effect;
 absent/non-damageable permanents or departed players cannot be its origin/destination. No side effect or once-only
 resource is consumed by an invalid redirection. Earlier replacement effects retain their one opportunity (CR 614.5).
+A lasting redirection effect names the recipient it was made with in `EffectKind::Replacement`'s `into` (Nova Pentacle's
+target creature), which its card's functions read as `Query::redirected_to` (`actions::WithWords::effect`).
 A live player at zero life still receives simultaneous damage before state-based actions. Life changes,
 including lifelink from a departed source-controller's independent ability, likewise affect only players still in the
 game. The original simultaneous batch and each source's live damage totals are preserved.

@@ -30,7 +30,7 @@ fn eye(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(source) = prevention::choose_source(g, item, prevention::SOURCE)? else { return Ok(()) };
     g.end_sentence();
     let to = Target::Player(item.controller);
-    g.add_effect(item.object, source, EffectKind::Replacement { card: item.ability.card, index: 0, to }, Duration::EndOfTurn);
+    g.add_effect(item.object, source, EffectKind::Replacement { card: item.ability.card, index: 0, to, into: Target::None }, Duration::EndOfTurn);
     Ok(())
 }
 

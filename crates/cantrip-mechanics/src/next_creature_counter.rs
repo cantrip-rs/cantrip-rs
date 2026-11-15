@@ -20,7 +20,7 @@ pub fn chapter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// spell enters the battlefield from the stack (CR 614.12). Wildgrowth Archaic and Torgal, A Fine Hound give it too.
 pub fn give_the_spell_a_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Target::Object(spell) = item.subject {
-        g.add_effect(item.object, spell, EffectKind::Replacement { card: item.ability.card, index: 0, to: Target::None }, Duration::EndOfTurn);
+        g.add_effect(item.object, spell, EffectKind::Replacement { card: item.ability.card, index: 0, to: Target::None, into: Target::None }, Duration::EndOfTurn);
     }
     Ok(())
 }

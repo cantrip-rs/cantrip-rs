@@ -32,7 +32,7 @@ fn to_its_owner(q: &dyn Query, _: &Asker, creature: ObjectId, before: &DamageEve
 /// The effect is made as the ability resolves (CR 611.2), about this creature, and lasts until it is used up or the turn
 /// ends.
 fn redirect_next_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let kind = EffectKind::Replacement { card: item.ability.card, index: 0, to: Target::None };
+    let kind = EffectKind::Replacement { card: item.ability.card, index: 0, to: Target::None, into: Target::None };
     g.add_effect(item.object, item.object, kind, Duration::EndOfTurn);
     Ok(())
 }

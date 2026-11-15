@@ -1210,7 +1210,7 @@ impl Game {
     pub fn lasting_rule_applies(&self, effect: &ContinuousEffect, id: ObjectId) -> bool {
         let EffectKind::LastingRule { card, index, about } = effect.kind else { return false };
         self.cards.get(card).lasting_rules.get(index as usize).is_some_and(|rule| {
-            let reads = actions::WithWords { q: self, source: effect.source, words: effect.words };
+            let reads = actions::WithWords::effect(self, effect);
             (rule.applies)(&reads, &Asker::new(effect.source, effect.controller), about, id)
         })
     }

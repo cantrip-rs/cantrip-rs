@@ -33,7 +33,7 @@ fn made_1_apply(q: &dyn Query, _: &Asker, _: ObjectId, proposal: &mut Proposal) 
 /// "All damage that would be dealt this turn by target sorcery spell is dealt to that spell's controller instead." (CR 608.2, 611.2a).
 fn all_damage_would_be_dealt(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(spell) = targets::object(g, item, 0) else { return Ok(()) };
-    g.add_effect(item.object, spell, EffectKind::Replacement { card: item.ability.card, index: 0, to: Target::None }, Duration::EndOfTurn);
+    g.add_effect(item.object, spell, EffectKind::Replacement { card: item.ability.card, index: 0, to: Target::None, into: Target::None }, Duration::EndOfTurn);
     Ok(())
 }
 

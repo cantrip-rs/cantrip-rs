@@ -15,7 +15,7 @@ fn from_chosen_source(q: &dyn Query, _: &Asker, chosen: ObjectId, proposal: &Pro
 fn monolith(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
     let Some(source) = prevention::choose_source(g, item, prevention::SOURCE)? else { return Ok(()) };
-    let kind = EffectKind::Replacement { card: item.ability.card, index: 0, to: Target::Object(creature) };
+    let kind = EffectKind::Replacement { card: item.ability.card, index: 0, to: Target::Object(creature), into: Target::None };
     g.add_effect(item.object, source, kind, Duration::EndOfTurn);
     Ok(())
 }

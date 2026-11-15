@@ -1825,7 +1825,13 @@ pub enum EffectKind {
     /// 609.7a), which its card's functions read: an effect that refers to the chosen source "even if that object is no longer
     /// in the zone it used to be in" (CR 609.7a), so it outlives that object. An object named as `to` gets no damage once it
     /// is a new object (CR 400.7). `Target::None` for every other replacement effect.
-    Replacement { card: CardId, index: u8, to: Target },
+    ///
+    /// `into` is, for a redirection effect (CR 614.9) whose words name the new recipient of the damage as the effect was
+    /// made - a target of the spell or ability, neither its controller nor its source - that recipient: "that damage is
+    /// dealt to target creature of an opponent's choice instead" (Nova Pentacle). Its card's functions read it
+    /// (`Query::redirected_to`); damage redirected to an object that has left the battlefield or is no longer a creature,
+    /// planeswalker or battle is not redirected (CR 614.9). `Target::None` for every other replacement effect.
+    Replacement { card: CardId, index: u8, to: Target, into: Target },
     /// The same, about a player or the game and not an object ("if a card would be put into your graveyard from
     /// anywhere this turn, exile it instead"): its `affected` object is only the source, and it outlives it.
     ReplacementRule { card: CardId, index: u8 },

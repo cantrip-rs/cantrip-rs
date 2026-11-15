@@ -568,6 +568,7 @@ fn partial_prevention_then_a_once_only_expansion_keeps_the_remaining_amount() {
             card: cx.obj(eye).card,
             index: 0,
             to: Target::None,
+            into: Target::None,
         },
         Duration::EndOfTurn,
     );
@@ -820,6 +821,7 @@ fn impossible_partial_redirection_does_not_consume_its_once_only_effect() {
             card: cx.obj(redirect).card,
             index: 0,
             to: Target::None,
+            into: Target::None,
         },
         Duration::EndOfTurn,
     );
@@ -940,6 +942,7 @@ fn once_only_eye_replaces_every_eligible_component_after_partial_redirection() {
             card: cx.obj(redirect).card,
             index: 0,
             to: Target::None,
+            into: Target::None,
         },
         Duration::EndOfTurn,
     );
@@ -951,6 +954,7 @@ fn once_only_eye_replaces_every_eligible_component_after_partial_redirection() {
             card: cx.obj(eye).card,
             index: 0,
             to: Target::None,
+            into: Target::None,
         },
         Duration::EndOfTurn,
     );
@@ -1067,6 +1071,7 @@ fn converging_position(armor: bool) -> (Game, ObjectId, ObjectId) {
             card: cx.obj(redirect).card,
             index: 0,
             to: Target::None,
+            into: Target::None,
         },
         Duration::EndOfTurn,
     );
@@ -1187,7 +1192,7 @@ fn finite_prevention_stays_used_when_later_redirected_damage_converges() {
     let redirect = put(&mut g, &SPLIT_GRANT, YOU);
     put(&mut g, &URZA_ARMOR, THEM);
     let mut cx = cx(&mut g, source);
-    cx.add_effect(redirect, source, EffectKind::Replacement { card: cx.obj(redirect).card, index: 0, to: Target::None }, Duration::EndOfTurn);
+    cx.add_effect(redirect, source, EffectKind::Replacement { card: cx.obj(redirect).card, index: 0, to: Target::None, into: Target::None }, Duration::EndOfTurn);
     cx.end_sentence();
     assert_eq!(cx.damage_together(&[(source, Target::Player(THEM), 3), (source, Target::Player(YOU), 2)]), [2, 2]);
     assert_eq!(cx.state().player(THEM).life, 16);
@@ -1219,7 +1224,7 @@ fn unlimited_prevention_also_prevents_new_arrivals_after_original_group_is_zero(
     let redirect = put(&mut g, &SPLIT_GRANT, YOU);
     put(&mut g, &PREVENT_ALL, THEM);
     let mut cx = cx(&mut g, source);
-    cx.add_effect(redirect, source, EffectKind::Replacement { card: cx.obj(redirect).card, index: 0, to: Target::None }, Duration::EndOfTurn);
+    cx.add_effect(redirect, source, EffectKind::Replacement { card: cx.obj(redirect).card, index: 0, to: Target::None, into: Target::None }, Duration::EndOfTurn);
     cx.end_sentence();
     assert_eq!(cx.damage_together(&[(source, Target::Player(THEM), 2), (source, Target::Player(YOU), 2)]), [0, 0]);
     assert_eq!(cx.state().player(THEM).life, 20);

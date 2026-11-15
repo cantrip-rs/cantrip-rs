@@ -490,6 +490,13 @@ pub trait Query {
         None
     }
 
+    /// The recipient the lasting replacement effect whose function is being asked redirects damage to, named as the effect
+    /// was made (`EffectKind::Replacement`'s `into`, CR 614.9): Nova Pentacle's "that damage is dealt to target creature of
+    /// an opponent's choice instead". `Target::None` outside such an effect's functions.
+    fn redirected_to(&self) -> Target {
+        Target::None
+    }
+
     /// The subject of the event a triggered ability triggered on (`Fired::subject`), for the filter of its targets: "target
     /// planeswalker that player controls", where the player is the one the damage was dealt to (CR 603.3d). `Target::None`
     /// outside a trigger's target filter.

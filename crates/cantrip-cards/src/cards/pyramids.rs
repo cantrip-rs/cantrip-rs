@@ -61,6 +61,7 @@ fn choose_one_destroy_target_aura_mode_1(
             card: item.ability.card,
             index: 0,
             to: Target::None,
+            into: Target::None,
         },
         Duration::EndOfTurn,
     );

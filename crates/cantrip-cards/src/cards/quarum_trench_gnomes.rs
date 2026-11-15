@@ -36,6 +36,7 @@ fn if_target_plains_tapped_mana(
             card: item.ability.card,
             index: 0,
             to: Target::None,
+            into: Target::None,
         },
         Duration::Indefinite,
     );

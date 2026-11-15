@@ -1753,8 +1753,10 @@ impl<'a> Projector<'a> {
                     spent: false,
                 });
             }
-            // A replacement about a chosen source of damage is shown on the recipient it names too (Jade Monolith's creature).
-            for e in s.effects.iter().filter(|e| e.affected == id || matches!(e.kind, EffectKind::Replacement { to, .. } if to == Target::Object(id))) {
+            // A replacement about a chosen source of damage is shown on the recipient it names too (Jade Monolith's creature),
+            // and on the one it redirects the damage to (Nova Pentacle's creature).
+            for e in s.effects.iter().filter(|e| e.affected == id
+                || matches!(e.kind, EffectKind::Replacement { to, into, .. } if to == Target::Object(id) || into == Target::Object(id))) {
                 let what = match e.kind {
                     EffectKind::CantAttack => "Can't attack",
                     EffectKind::CantBlock => "Can't block",
@@ -2264,7 +2266,7 @@ mod tests {
         game.state.zone_push(Zone::BATTLEFIELD, target);
         let timestamp = game.state.timestamp();
         game.state.effect_push(ContinuousEffect { source, controller: owner, timestamp, affected: target,
-            kind: EffectKind::Replacement { card, index: 0, to: Target::None }, duration: Duration::EndOfTurn, words: Words::NONE });
+            kind: EffectKind::Replacement { card, index: 0, to: Target::None, into: Target::None }, duration: Duration::EndOfTurn, words: Words::NONE });
         let names = vec!["A".to_string(), "B".to_string()];
         let faces = HashSet::new();
         for viewer in [owner, PlayerId(1), PUBLIC] {
@@ -2302,7 +2304,7 @@ mod tests {
         let (monolith, chosen, creature, other) = (put("Jade Monolith", owner), put("Fencing Ace", PlayerId(1)), put("Grizzly Bears", owner), put("Yoked Ox", owner));
         let timestamp = game.state.timestamp();
         game.state.effect_push(ContinuousEffect { source: monolith, controller: owner, timestamp, affected: chosen,
-            kind: EffectKind::Replacement { card, index: 0, to: Target::Object(creature) }, duration: Duration::EndOfTurn, words: Words::NONE });
+            kind: EffectKind::Replacement { card, index: 0, to: Target::Object(creature), into: Target::None }, duration: Duration::EndOfTurn, words: Words::NONE });
         let names = vec!["A".to_string(), "B".to_string()];
         let faces = HashSet::new();
         let projector = Projector { game: &game, viewer: owner, names: &names, conceded: &[false, false], faces: &faces };

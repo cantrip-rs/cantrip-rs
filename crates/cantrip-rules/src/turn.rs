@@ -1271,7 +1271,7 @@ fn can_block(cx: &Cx, blocker: ObjectId, attacker: ObjectId, rule_sources: &[Obj
                 // This callback's source argument names the affected attacker,
                 // not the object which created the rule. Read its rule words
                 // through that argument, while characteristics remain live.
-                let reads = actions::WithWords { q: cx, source: e.affected, words: e.words };
+                let reads = actions::WithWords { q: cx, source: e.affected, words: e.words, into: Target::None };
                 !(r.allows)(&reads, e.affected, blocker, attacker)
             })
         {
