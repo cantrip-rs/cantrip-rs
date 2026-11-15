@@ -1,0 +1,49 @@
+# Sazacap's Brew: "As an additional cost to cast this spell, discard a card" (CR 601.2b, 118.8). The Brew has already left the hand when the cost is paid
+# (CR 601.2a), so it can't be the discarded card: on turn 1 Bot1 empties the rest of its hand onto the battlefield and the Brew is refused though its
+# mana is there to pay. On turn 3 it draws an Island, discards it as the cost, and Bot2 (the target player) draws two.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Sazacap's Brew
+Memnite
+Mountain
+Ornithopter
+Island
+Island x12
+
+[Bot2 Deck]
+Mountain x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+? Bot1.Hand = Sazacap's Brew
+! Bot1.Hand.Sazacap's Brew.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Sazacap's Brew.Cast
+Bot1.Decline
+Bot1.Target(Bot2)
+Bot1.Choose(Island)
+? Bot1.Mana =
+? Bot1.Graveyard = Island
+? Bot2.Hand.Count = 7
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Sazacap's Brew; Island
+Bot2.Hand.Count = 9
+Bot2.Battlefield.Count = 0

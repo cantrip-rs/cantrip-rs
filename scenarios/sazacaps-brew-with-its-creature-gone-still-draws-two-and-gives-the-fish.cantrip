@@ -1,0 +1,44 @@
+# Sazacap's Brew with the gift promised, but Bot1's Ornithopter is killed in response: one target (the player) is still legal, so the spell resolves, doing as much as it
+# can (CR 608.2b) - Bot1 draws two, the creature is not pumped - and the gift is given (CR 702.174j): Bot2 creates a tapped Fish.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Ornithopter
+Sazacap's Brew
+Island x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sazacap's Brew.Cast
+Bot1.Accept
+Bot1.Target(Bot1)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Island)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Sazacap's Brew; Ornithopter; Island
+Bot1.Hand.Count = 4
+Bot2.Battlefield = Fish Token; Mountain
+Bot2.Battlefield.Fish Token.Tapped = true

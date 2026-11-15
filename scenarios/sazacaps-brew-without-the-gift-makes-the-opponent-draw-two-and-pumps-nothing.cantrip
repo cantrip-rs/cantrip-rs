@@ -1,0 +1,33 @@
+# Sazacap's Brew without the gift: "Target player" may be the opponent - Bot2 draws exactly two - and no creature is chosen or pumped (the Ornithopter keeps power 0);
+# no Fish is created (CR 702.174, 601.2c).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Ornithopter
+Sazacap's Brew
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sazacap's Brew.Cast
+Bot1.Decline
+Bot1.Target(Bot2)
+Bot1.Choose(Island)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Sazacap's Brew; Island
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Count = 0
+Bot2.Hand.Count = 9
+Bot1.Hand.Count = 2
