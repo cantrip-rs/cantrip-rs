@@ -1,0 +1,45 @@
+# Bonebind Orator {1}{B}: "{3}{B}, Exile this card from your graveyard: Return another target creature card from your graveyard to
+# your hand." The only creature card in Bot1's graveyard is the Orator itself (a Swamp was discarded with it), and the only other
+# creature card in any graveyard is Bot2's Memnite, discarded to a Faithless Looting on turn 2 (CR 115.1: the target must be in
+# YOUR graveyard): the activation is refused with the mana ready, and nothing is paid.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Black Lotus
+Faithless Looting
+Bonebind Orator
+Swamp x15
+
+[Bot2 Deck]
+Mox Ruby
+Faithless Looting
+Memnite
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Bonebind Orator; Swamp)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Memnite; Island)
+? Bot2.Graveyard = Faithless Looting; Island; Memnite
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Graveyard.Bonebind Orator.Activate(Bot2.Graveyard.Memnite)
+! Bot1.Graveyard.Bonebind Orator.Activate(Bot1.Graveyard.Bonebind Orator)
+
+[Expect]
+Bot1.Graveyard = Black Lotus; Faithless Looting; Swamp; Bonebind Orator
+Exile.Count = 0
