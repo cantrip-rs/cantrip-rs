@@ -522,6 +522,14 @@ pub fn damage_dealt_to_you_instead(_: &dyn Query, asker: &Asker, _: ObjectId, pr
     }
 }
 
+/// "The next time a source of your choice would deal damage to [whom the effect names] this turn" (CR 609.7a): a lasting
+/// replacement effect made about the source chosen, which applies to damage that source deals (`prevention::by_chosen_source`);
+/// the core asks it only about damage to the recipient it names (`EffectKind::Replacement`'s `to`, CR 614.1a). Jade Monolith
+/// ("to target creature") and Nova Pentacle ("to you").
+pub fn damage_from_chosen_source(q: &dyn Query, _: &Asker, chosen: ObjectId, proposal: &Proposal) -> bool {
+    matches!(proposal, Proposal::Damage(d) if crate::prevention::by_chosen_source(q, chosen, d))
+}
+
 /// See [`damage_to_you_and_your_other_permanents`].
 pub const DAMAGE_TO_YOU_AND_YOUR_OTHER_PERMANENTS_IS_DEALT_TO_THIS: ReplacementDef = replacement(
     ReplacementKind::Damage,
