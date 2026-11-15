@@ -1,0 +1,46 @@
+# Zimone's intervening "if" is checked again as the ability resolves (CR 603.4; ruling 2024-09-20: "If you don't control a prime number of lands as
+# Zimone's ability tries to resolve, it won't resolve"). On turn 3 Bot1 controls two lands (prime) and a land entered, so the trigger goes on the stack at
+# the end step; in response Bot2 sacrifices Strip Mine to destroy one of them. One land is not prime, so no Primo is made.
+
+[Bot1 Deck]
+Zimone, All-Questioning
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Strip Mine
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Zimone, All-Questioning.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Battlefield.Strip Mine.Activate(Ability: Destroy; Bot1.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 5
+Bot2.Graveyard = Strip Mine
