@@ -1,0 +1,50 @@
+# Rock Hydra's "{R}: Prevent the next 1 damage that would be dealt to this creature this turn" (CR 615.7): with only Mox Jet
+# untapped it can't be paid. Bot2's first Shock costs the Hydra 2 of its 4 counters. Bot1 then pays {R} exactly with a
+# Mountain, and Bot2's second Shock meets that shield and the counters' prevention together: Bot1 orders the shield first (CR
+# 616.1), so it prevents 1 and a counter the other 1 - the Hydra keeps 1 counter, with no damage. (Had the counters gone first,
+# they would have prevented both and been removed, and the Hydra died a 0/0.)
+[Bot1 Deck]
+Rock Hydra
+Black Lotus
+Black Lotus
+Mox Jet
+Mountain
+Mountain x15
+[Bot2 Deck]
+Shock
+Shock
+Mox Ruby
+Mountain
+Mountain x16
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Rock Hydra.Cast(X: 4)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Rock Hydra.Activate(Ability: Prevent; Mana: short)
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Rock Hydra)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Rock Hydra.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Rock Hydra.Activate(Ability: Prevent)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Rock Hydra)
+Bot2.Pass
+Bot1.Replace(prevents the damage)
+[Expect]
+Bot1.Battlefield.Rock Hydra.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Rock Hydra.Damage = 0
+Bot2.Graveyard = Shock; Shock

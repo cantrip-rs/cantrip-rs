@@ -1,0 +1,32 @@
+# "If damage that would be dealt to Rock Hydra can't be prevented, you still remove a +1/+1 counter from it for each 1 damage
+# dealt" (the ruling; CR 615.12: the prevention effect still applies, prevents nothing, and its additional effect takes place).
+# Bot2's Lava Burst with X 1 deals 1 damage that can't be prevented to the Hydra with 3 counters: a counter is removed and the
+# damage is dealt anyway - a 2/2 with 1 damage marked, and nothing prevented.
+[Bot1 Deck]
+Rock Hydra
+Black Lotus
+Mox Jet
+Mox Pearl
+Mountain x16
+[Bot2 Deck]
+Lava Burst
+Mox Jet
+Mountain x18
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rock Hydra.Cast(X: 3)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Lava Burst.Cast(Bot1.Battlefield.Rock Hydra; X: 1)
+[Expect]
+Bot1.Battlefield.Rock Hydra.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Rock Hydra.Damage = 1
+Prevented = (absent)

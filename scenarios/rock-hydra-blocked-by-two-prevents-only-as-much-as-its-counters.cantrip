@@ -1,0 +1,67 @@
+# Rock Hydra with 3 +1/+1 counters, made a 6/6 by Giant Growth, attacks and is blocked by two Grizzly Bears, whose 2 damage each
+# is dealt to it at once (CR 510.2). Its counters prevent 1 damage each and are removed as they do (CR 615.1), so the second
+# Bears' damage meets only the counter the first left: 3 damage prevented, the fourth dealt - a 3/3 with 1 damage and no
+# counters. Its prevention is of damage to it alone: the Bears it deals damage to die. Then, with no counter left, its
+# prevention doesn't apply at all: Bot2's Shock meets only the Hydra's {R} shield, so Bot1 is not asked to order the two (CR
+# 616.1), and the shield prevents 1 and the other is dealt.
+[Bot1 Deck]
+Rock Hydra
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Emerald
+Giant Growth
+Mountain x14
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Grizzly Bears
+Grizzly Bears
+Forest
+Shock
+Forest x12
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rock Hydra.Cast(X: 3)
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Rock Hydra > Bot2)
+Bot2.Block(Grizzly Bears#1 > Rock Hydra; Grizzly Bears#2 > Rock Hydra)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Rock Hydra)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Rock Hydra.Damage = 1
+? Bot1.Battlefield.Rock Hydra.Counters.PlusOnePlusOne = (absent)
+? Bot2.Battlefield.Grizzly Bears = (absent)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Rock Hydra.Activate(Ability: Prevent)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Rock Hydra)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Replace
+[Expect]
+Bot1.Battlefield.Rock Hydra.Damage = 2
+Bot1.Battlefield.Rock Hydra.Toughness = 3
+Prevented = 2 Grizzly Bears > Rock Hydra by Rock Hydra; 1 Grizzly Bears > Rock Hydra by Rock Hydra; 1 Shock > Rock Hydra by Rock Hydra

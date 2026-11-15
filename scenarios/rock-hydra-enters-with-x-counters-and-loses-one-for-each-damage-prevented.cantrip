@@ -1,0 +1,33 @@
+# Rock Hydra enters with X +1/+1 counters (CR 614.1c, 122.1): cast with X 3, paying exactly {3}{R}{R} off Black Lotus, Mox
+# Ruby and Mox Jet, it has 3. For each 1 of Shock's 2 damage it has a counter for, a counter is removed and that 1 damage
+# prevented (CR 615.1): 2 counters gone and 2 damage prevented by it, none marked - a 1/1.
+[Bot1 Deck]
+Rock Hydra
+Black Lotus
+Mox Ruby
+Mox Jet
+Mountain x16
+[Bot2 Deck]
+Shock
+Mountain x19
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rock Hydra.Cast(X: 3)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+? Bot1.Battlefield.Rock Hydra.Counters.PlusOnePlusOne = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Rock Hydra)
+[Expect]
+Bot1.Battlefield.Rock Hydra.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Rock Hydra.Damage = 0
+Bot1.Battlefield.Rock Hydra.Toughness = 1
+Prevented = 2 Shock > Rock Hydra by Rock Hydra
