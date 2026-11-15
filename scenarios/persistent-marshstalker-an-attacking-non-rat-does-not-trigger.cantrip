@@ -1,0 +1,48 @@
+# Persistent Marshstalker at threshold (seven cards in the graveyard) but Bot1's only creature is a Memnite, an Artifact Creature
+# with no Rat type: "whenever you attack with one or more Rats" (CR 508.1m, 603.2c) is not met, so nothing triggers and nothing is
+# asked; the Marshstalker stays in the graveyard (seven cards) and only the Memnite hits (19).
+
+[Bot1 Deck]
+Black Lotus
+Entomb
+Dark Ritual
+Dark Ritual
+Dark Ritual
+Dark Ritual
+Memnite
+Swamp
+Swamp
+Swamp
+Persistent Marshstalker
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Persistent Marshstalker)
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+? Bot1.Graveyard.Count = 7
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+? Stack.Count = 0
+Bot1.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Graveyard.Count = 7
+Bot1.Battlefield = Memnite; Swamp; Swamp; Swamp
