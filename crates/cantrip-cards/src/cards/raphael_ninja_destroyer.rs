@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::triggers;
+use cantrip_mechanics::{combat, triggers};
 use cantrip_oracle as oracle;
 
 /// "Add that much {R}. Until end of turn, you don't lose this mana as steps and phases end" (CR 106.4, 500.5a): the damage
@@ -16,7 +16,6 @@ pub static CARD: CardDef = CardDef {
         "Enrage — Whenever Raphael is dealt damage, add that much {R}. Until end of turn, you don't lose this mana as steps and phases end.",
     ).damage_amount()
     .produces_mana().sums_per_subject()],
-    // "Raphael must be blocked if able" (CR 509.1c): the attacker it names is itself.
-    must_be_blocked: &[|_, source, attacker| attacker == source],
+    must_be_blocked: &[combat::this_must_be_blocked_if_able],
     ..oracle::RAPHAEL_NINJA_DESTROYER
 };
