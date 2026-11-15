@@ -1,0 +1,11 @@
+{
+  "name": "Shoreline Looter",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Rat Rogue",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "This creature can't be blocked.\nThreshold — Whenever this creature deals combat damage to a player, draw a card. Then discard a card unless there are seven or more cards in your graveyard.",
+  "keywords": [
+    "CantBeBlocked"
+  ]
+}
