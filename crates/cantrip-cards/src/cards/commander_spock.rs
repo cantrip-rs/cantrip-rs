@@ -21,7 +21,7 @@ fn strange_new_worlds(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
     if choose::may_cast_free_card(g, you, item.object, top, named, Purpose::CastFree)? {
         return Ok(());
     }
-    if library::may_put_land_onto_battlefield_tapped(g, you, item.object, top)? {
+    if library::may_put_land_onto_battlefield(g, you, item.object, top, true)? {
         return Ok(());
     }
     if top_of_library(g, you, 1).first() == Some(&top) {
