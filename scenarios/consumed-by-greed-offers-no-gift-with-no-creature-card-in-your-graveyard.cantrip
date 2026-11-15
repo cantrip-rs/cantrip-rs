@@ -1,0 +1,51 @@
+# Consumed by Greed {1}{B}{B}: with no creature card in Bot1's graveyard (two Swamps discarded), the promised gift would have no target
+# for the card to return, so no gift is offered; Bot2 sacrifices the Elvish Mystic and draws nothing.
+
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Faithless Looting
+Consumed by Greed
+Ornithopter
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Mox Emerald
+Gleemox
+Elvish Mystic
+Ornithopter
+Island
+Island
+Island
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Swamp; Swamp)
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Gleemox.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Gleemox.Activate(Color: Green)
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Consumed by Greed.Cast
+
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Consumed by Greed; Black Lotus; Faithless Looting; Swamp; Swamp
+Bot2.Hand.Count = 5
+Bot2.Graveyard = Elvish Mystic

@@ -1,0 +1,52 @@
+# Consumed by Greed {1}{B}{B}: Bot2 controls no creature, so nothing is sacrificed, but the promised gift still gives Bot2 a card and the
+# Ornithopter in Bot1's graveyard still returns to its hand.
+
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Faithless Looting
+Consumed by Greed
+Ornithopter
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Mox Emerald
+Gleemox
+Elvish Mystic
+Ornithopter
+Island
+Island
+Island
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter; Swamp)
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Gleemox.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Gleemox.Activate(Color: Green)
+
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Consumed by Greed.Cast
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Ornithopter; Swamp; Swamp; Swamp; Swamp
+Bot2.Hand.Count = 7
+Bot2.Graveyard = 
+Bot2.Battlefield = Gleemox; Mox Emerald

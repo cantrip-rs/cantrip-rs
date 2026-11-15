@@ -1,0 +1,53 @@
+# Consumed by Greed {1}{B}{B}: Bot2 controls an Elvish Mystic and a Llanowar Elves, both power 1, so Bot2 chooses which one to
+# sacrifice (the Llanowar Elves here); the gift is not promised.
+
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Faithless Looting
+Consumed by Greed
+Ornithopter
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Mox Emerald
+Gleemox
+Elvish Mystic
+Llanowar Elves
+Island
+Island
+Island
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter; Swamp)
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Gleemox.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Gleemox.Activate(Color: Green)
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Consumed by Greed.Cast
+Bot1.Decline
+Bot1.Target(Bot2)
+Bot2.Choose(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Llanowar Elves
+Bot2.Battlefield = Gleemox; Mox Emerald; Elvish Mystic
