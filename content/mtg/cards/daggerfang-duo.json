@@ -1,0 +1,11 @@
+{
+  "name": "Daggerfang Duo",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Rat Squirrel",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Deathtouch\nWhen this creature enters, you may mill two cards. (You may put the top two cards of your library into your graveyard.)",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

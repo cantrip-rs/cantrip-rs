@@ -1,0 +1,34 @@
+# Daggerfang Duo: a player can't choose to mill more cards than their library holds (CR 701.17b). Bot1's library holds one card, so it is not asked and nothing is
+# milled; the positive control is the accepting scenario, with a library of two or more.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Daggerfang Duo
+Plains
+Plains
+Plains
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Daggerfang Duo.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+
+[Expect]
+Bot1.Library.Count = 1
+Bot1.Graveyard.Count = 0
