@@ -1,0 +1,39 @@
+# Thornplate Intimidator: "That player can always choose to lose 3 life, even if they have cards to discard or nonland permanents to
+# sacrifice" (the rulings). On turn 3 Bot2 controls a Memnite and an Ornithopter and holds Islands, and chooses to lose 3 life: it keeps
+# every permanent and card (17 life, nothing sacrificed or discarded).
+
+[Bot1 Deck]
+Black Lotus
+Thornplate Intimidator
+Plains x18
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Thornplate Intimidator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Modes(Lose 3 life)
+
+[Expect]
+Bot2.Life = 17
+Bot2.Battlefield = Memnite; Ornithopter
+Bot2.Hand.Count = 6
+Bot2.Graveyard.Count = 0

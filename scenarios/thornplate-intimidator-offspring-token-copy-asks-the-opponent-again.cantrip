@@ -1,0 +1,43 @@
+# Thornplate Intimidator with offspring {3} paid (Black Lotus and four Moxen pay {3}{B} and {3}): the 4/3 and its 1/1 token copy
+# (CR 702.175a) each have the enters ability, so target opponent is asked twice. Bot2 loses 3 life to the first (17) and discards an
+# Island to the second (no more life lost).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Thornplate Intimidator
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thornplate Intimidator.Cast(Kicked: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thornplate Intimidator#2.Token = true
+Bot2.Modes(Lose 3 life)
+Bot2.Modes(Discard a card)
+Bot2.Choose(Island)
+
+[Expect]
+Bot2.Life = 17
+Bot2.Hand.Count = 6
+Bot2.Graveyard = Island
+Bot1.Battlefield.Thornplate Intimidator#2.Power = 1

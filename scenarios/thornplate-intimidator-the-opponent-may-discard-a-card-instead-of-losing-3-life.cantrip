@@ -1,0 +1,31 @@
+# Thornplate Intimidator (Black Lotus and a Plains pay {3}{B}): "When this creature enters, target opponent loses 3 life unless they sacrifice a nonland
+# permanent of their choice or discard a card." Bot2 controls no permanent, so is offered to discard a card or to lose 3 life, and
+# discards an Island: no life lost (20), six cards left in hand and the Island in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Thornplate Intimidator
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Thornplate Intimidator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+Bot2.Modes(Discard a card)
+Bot2.Choose(Island)
+
+[Expect]
+Bot2.Life = 20
+Bot2.Hand.Count = 6
+Bot2.Graveyard = Island
+Bot1.Battlefield = Plains; Thornplate Intimidator

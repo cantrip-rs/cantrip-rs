@@ -1,0 +1,41 @@
+# Thornplate Intimidator: Bot2 controls a Memnite, an Ornithopter and an Island (a land is not a nonland permanent: it cannot be chosen)
+# and sacrifices the Memnite instead of losing 3 life (20); the Ornithopter and the Island stay.
+
+[Bot1 Deck]
+Black Lotus
+Thornplate Intimidator
+Plains x18
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island
+Island x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Thornplate Intimidator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Modes(Sacrifice a nonland permanent)
+! Bot2.Choose(Island)
+Bot2.Choose(Memnite)
+
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield = Island; Ornithopter
+Bot2.Graveyard = Memnite

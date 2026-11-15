@@ -1,0 +1,55 @@
+# Thornplate Intimidator: with no card in hand Bot2 cannot discard, so is offered only to sacrifice or to lose 3 life. Bot2 has eight
+# Memnites, casts every one on turn 2 (an empty hand, an empty library) and, as Intimidator enters on turn 3, discarding is refused;
+# it chooses to lose 3 life (17) and keeps all eight.
+
+[Bot1 Deck]
+Black Lotus
+Thornplate Intimidator
+Plains x18
+
+[Bot2 Deck]
+Memnite x8
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Hand.Count = 0
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Thornplate Intimidator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot2.Modes(Discard a card)
+Bot2.Modes(Lose 3 life)
+
+[Expect]
+Bot2.Life = 17
+Bot2.Battlefield.Count = 8
