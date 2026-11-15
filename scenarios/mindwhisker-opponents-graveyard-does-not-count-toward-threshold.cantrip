@@ -1,0 +1,73 @@
+# Mindwhisker {2}{U}, 3/2: "Threshold - As long as there are seven or more cards in your graveyard, creatures your opponents control
+# get -1/-0." Only its controller's own graveyard counts. Bot2 casts an Elvish Mystic (1/1) on turn 2. On turn 3 Bot1 keeps the
+# surveilled Island on top, then casts two Moxen and Brain Freeze (storm 2, three mills of three) on Bot2: nine cards are in Bot2's
+# graveyard but Bot1's holds only the Brain Freeze, so the Mystic stays 1/1.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mindwhisker
+Brain Freeze
+Mox Pearl
+Mox Emerald
+Island
+Island x30
+
+[Bot2 Deck]
+Mox Emerald
+Elvish Mystic
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mindwhisker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Arrange(Island | )
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Brain Freeze.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard.Count = 9
+Bot1.Graveyard.Count = 1
+Bot2.Battlefield.Elvish Mystic.Power = 1
+Bot1.Battlefield.Mindwhisker.Power = 3

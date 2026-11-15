@@ -1,0 +1,76 @@
+# Mindwhisker {2}{U}, 3/2: "At the beginning of your upkeep, surveil 1." and "Threshold - As long as there are seven or more cards in your
+# graveyard, creatures your opponents control get -1/-0." Bot1 casts it on turn 1 (three Moxen pay), Bot2 casts an Elvish Mystic (1/1)
+# on turn 2. On turn 3 the upkeep surveil bins an Island (1 card), Brain Freeze on Bot1 mills three Islands and goes to the
+# graveyard (5), and a Lightning Bolt makes six: the Mystic is still 1/1 (one short of the limit). On turn 5 the surveil bins a second
+# Island: seven, and the Mystic is 0/1 while Mindwhisker itself (its controller's own creature) stays 3/2.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mindwhisker
+Brain Freeze
+Lightning Bolt
+Island
+Island x30
+
+[Bot2 Deck]
+Mox Emerald
+Elvish Mystic
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mindwhisker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Elvish Mystic.Power = 1
+[T3 Bot1.Upkeep]
+Bot1.Arrange( | Island)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Brain Freeze.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 5
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 6
+? Bot2.Battlefield.Elvish Mystic.Power = 1
+? Bot1.Battlefield.Mindwhisker.Power = 3
+[T5 Bot1.Upkeep]
+Bot1.Arrange( | Island)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard.Count = 7
+Bot2.Battlefield.Elvish Mystic.Power = 0
+Bot2.Battlefield.Elvish Mystic.Toughness = 1
+Bot1.Battlefield.Mindwhisker.Power = 3
+Bot1.Battlefield.Mindwhisker.Toughness = 2
