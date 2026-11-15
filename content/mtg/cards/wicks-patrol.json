@@ -1,0 +1,8 @@
+{
+  "name": "Wick's Patrol",
+  "manaCost": "{4}{B}{B}",
+  "type": "Creature — Rat Warlock",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": "When this creature enters, mill three cards. When you do, target creature an opponent controls gets -X/-X until end of turn, where X is the greatest mana value among cards in your graveyard."
+}
