@@ -205,6 +205,16 @@ pub fn permanents_sacrificed_this_turn(q: &dyn Query, player: PlayerId) -> usize
         .count()
 }
 
+/// "You've sacrificed a Food this turn" (CR 701.21a, 111.10b): a Food, token or card, left the battlefield as a sacrifice under
+/// `player`'s control this turn, judged as it last was on the battlefield (CR 603.10a). Bonecache Overseer and Elanor Gardner
+/// ("if you sacrificed a Food this turn") print it.
+pub fn sacrificed_a_food_this_turn(q: &dyn Query, player: PlayerId) -> bool {
+    q.history()
+        .select(EventQuery::kind(EventMask::ZONE_CHANGE).from(ZoneKind::Battlefield).this_turn())
+        .filter_map(|r| crate::triggers::sacrificed_by(q, player, &r.event))
+        .any(|old| q.state().last_known(old).is_some_and(|l| l.subtypes.has(Subtype::Food)))
+}
+
 /// The void condition: "a nonland permanent left the battlefield this turn or a spell was warped this turn". Void is an
 /// ability word (CR 207.2c) with no rules of its own; only its second clause has a rule, CR 702.185c: a spell was warped when
 /// it was cast for its warp cost. Any player's permanent counts, a token too, judged as it was as it left the battlefield (CR 608.2h). Elegy Acolyte, Plasma Bolt and
