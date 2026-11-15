@@ -1,0 +1,54 @@
+# Derelor's "black" is a word of its text (CR 612.1): Sleight of Mind changes it to blue, and then blue spells Bot1 casts
+# cost {B} more and black ones do not. The {B} of the increase is a mana symbol, not a color word, so it stays {B}.
+# Turn 1: Sleight of Mind (blue) costs only its {U} before the change; then Dark Ritual costs only its {B}, leaving
+# {B}{B}{B}. Turn 3: blue Ancestral Recall costs {U}{B}, leaving one {B} of {U}{B}{B}.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Derelor
+Mox Sapphire
+Sleight of Mind
+Mox Jet
+Dark Ritual
+Ancestral Recall
+Island x10
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Derelor.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Bot1.Battlefield.Derelor)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Black)
+Bot1.Colors(Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {B}{B}{B}
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+? Bot1.Mana = {B}
+Bot1.Pass
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Graveyard = Ancestral Recall; Dark Ritual; Sleight of Mind; Black Lotus

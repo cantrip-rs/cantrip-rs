@@ -1,0 +1,65 @@
+# Derelor: "Black spells you cast cost {B} more to cast" (CR 601.2f) - an increase of black mana, not generic.
+# Turn 1: with {B}{R} in the pool Bot1 cannot cast Dark Ritual ({B} becomes {B}{B}; a generic {1} more would be paid by
+# the {R}), while red Lightning Bolt costs only its {R}, leaving the {B}.
+# Turn 2: Bot2's Dark Ritual costs only {B}: Derelor taxes only its controller's spells.
+# Turn 3: from {B}{B}{R} Bot1's Dark Ritual costs {B}{B} (leaving {R}, then {B}{B}{B} more), and black-red Terminate
+# costs {B}{B}{R}, leaving {B}: a spell of two colors, one of them black, is a black spell (CR 105.2).
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Derelor
+Mox Jet
+Mox Ruby
+Dark Ritual
+Lightning Bolt
+Terminate
+Swamp x10
+
+[Bot2 Deck]
+Swamp
+Dark Ritual
+Swamp x15
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Derelor.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {B}{R}
+! Bot1.Hand.Dark Ritual.Cast(Mana: short)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Bot1.Mana = {B}
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Dark Ritual.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Mana = {B}{B}{B}
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dark Ritual.Cast
+? Bot1.Mana = {R}
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {B}{B}{B}{R}
+Bot1.Hand.Terminate.Cast(Bot1.Battlefield.Derelor)
+? Bot1.Mana = {B}
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Terminate; Derelor; Dark Ritual; Lightning Bolt; Black Lotus

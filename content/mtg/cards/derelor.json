@@ -1,0 +1,8 @@
+{
+  "name": "Derelor",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Thrull",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Black spells you cast cost {B} more to cast."
+}
