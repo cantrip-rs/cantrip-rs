@@ -1,0 +1,66 @@
+# Beastie Beatdown, Delirium (CR 207.2c): on turn 1 Black Lotus pays for a Wheel of Fortune that puts an Ornithopter
+# (artifact creature), three Islands (land), the Wheel (a sorcery) and the Lotus (artifact) into Bot1's graveyard: four types.
+# On turn 3 "put two +1/+1 counters on the creature you control" comes before "deals damage equal to its power" (CR 608.2c): the
+# Grizzly Bears become a 4/4 and deal 4, killing Bot2's Cogwork Librarian (3/3), which the Bears' own 2 would not.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Wheel of Fortune
+Ornithopter
+Island
+Island
+Island
+Mox Ruby
+Mox Emerald
+Grizzly Bears
+Beastie Beatdown
+Forest
+Island x9
+
+[Bot2 Deck]
+Island x7
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Cogwork Librarian
+Island x2
+Island x6
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Cogwork Librarian.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Beastie Beatdown.Cast
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Cogwork Librarian)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot2.Battlefield.Cogwork Librarian = (absent)

@@ -1,0 +1,6 @@
+{
+  "name": "Beastie Beatdown",
+  "manaCost": "{R}{G}",
+  "type": "Sorcery",
+  "oracleText": "Choose target creature you control and target creature an opponent controls.\nDelirium — If there are four or more card types among cards in your graveyard, put two +1/+1 counters on the creature you control.\nThe creature you control deals damage equal to its power to the creature an opponent controls."
+}
