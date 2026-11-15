@@ -1,0 +1,56 @@
+# Shrewd Storyteller, Survival: "At the beginning of your second main phase, if this creature is tapped, put a +1/+1 counter on
+# target creature." Cast on turn 1 off Mox Emerald, Mox Pearl and Mox Jet. On turn 3 it does not attack: it is untapped at the
+# second main phase and nothing triggers (the intervening "if", CR 603.4). On turn 5 it attacks (no vigilance, so tapped) and at
+# the second main phase Bot1 targets Bot2's Ornithopter, a creature it does not control, but not Mox Jet (an artifact that is not a
+# creature): Ornithopter becomes 1/3. On Bot2's turn 6 the Storyteller is still tapped but it is not Bot1's second main phase
+# (CR 603.2, "your"): nothing triggers.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Shrewd Storyteller
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Shrewd Storyteller.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Shrewd Storyteller.Tapped = false
+? Stack.Count = 0
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T5 Bot1.Main1]
+Bot1.Attack(Shrewd Storyteller > Bot2)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Shrewd Storyteller.Tapped = true
+! Bot1.Target(Mox Jet)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 1
+[T6 Bot2.Main2]
+? Bot1.Battlefield.Shrewd Storyteller.Tapped = true
+? Stack.Count = 0
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 1
+Bot2.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Shrewd Storyteller.Power = 3
+Bot2.Life = 17

@@ -1,0 +1,8 @@
+{
+  "name": "Shrewd Storyteller",
+  "manaCost": "{1}{G}{W}",
+  "type": "Creature — Human Survivor",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Survival — At the beginning of your second main phase, if this creature is tapped, put a +1/+1 counter on target creature."
+}
