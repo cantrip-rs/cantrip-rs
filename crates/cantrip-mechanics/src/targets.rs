@@ -760,6 +760,14 @@ fn creature_you_control_without_flying_filter(q: &dyn Query, asker: &Asker, t: T
 /// the ability resolves (CR 608.2b). Pileated Provisioner and Salvation Swan print it.
 pub const CREATURE_YOU_CONTROL_WITHOUT_FLYING: TargetSpec = target(creature_you_control_without_flying_filter);
 
+fn nontoken_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_filter(q, asker, t) && matches!(t, Target::Object(id) if !q.obj(id).token)
+}
+
+/// "Target nontoken creature" (CR 115.1, 111.1): a creature on the battlefield that is a card, not a token. Parting Gust and
+/// Dance of Many print it.
+pub const NONTOKEN_CREATURE: TargetSpec = target(nontoken_creature_filter);
+
 fn attacking_creature_without_flying_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     attacking_creature_filter(q, asker, t) && creature_without_flying_filter(q, asker, t)
 }
