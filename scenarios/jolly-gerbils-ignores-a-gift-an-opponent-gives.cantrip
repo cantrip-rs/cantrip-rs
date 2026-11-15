@@ -1,0 +1,43 @@
+# "Whenever you give a gift" is the Gerbils' controller giving it: on turn 2 Bot2 casts Dawn's Truce promising Bot1 the gift, so Bot1 draws the gift card (5 cards in hand) but its Gerbils do not
+# draw a second.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Jolly Gerbils
+Plains
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Dawn's Truce
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jolly Gerbils.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Dawn's Truce.Cast
+Bot2.Accept
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 5
+Bot2.Graveyard = Dawn's Truce
