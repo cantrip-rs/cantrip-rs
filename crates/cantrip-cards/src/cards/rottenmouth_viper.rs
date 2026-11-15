@@ -1,13 +1,8 @@
 use cantrip_api::*;
-use cantrip_mechanics::choose;
+use cantrip_mechanics::effects;
 use cantrip_mechanics::targets::filters::nonland;
 use cantrip_mechanics::triggers::THIS_ENTERS_OR_ATTACKS;
 use cantrip_oracle as oracle;
-
-/// The choices of each opponent, as `labels` below.
-const SACRIFICE: u8 = 0;
-const DISCARD: u8 = 1;
-const LOSE: u8 = 2;
 
 /// "Put a blight counter on it. Then for each blight counter on it, each opponent loses 4 life unless that player sacrifices
 /// a nonland permanent of their choice or discards a card." The counter goes on it only while it is on the battlefield
@@ -22,38 +17,11 @@ const LOSE: u8 = 2;
 fn blight_and_punish(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.add_counters(item.object, CounterKind::Blight, 1);
     let counters = g.obj(item.object).counters(CounterKind::Blight).max(0);
-    let card = g.card_id(&CARD);
     let (mut sacrificed, mut discarded, mut losses) = (Vec::new(), Vec::new(), Vec::new());
     let opponents: Vec<PlayerId> = g.state().apnap().filter(|&p| g.state().opponents(item.controller).any(|o| o == p)).collect();
     for opponent in opponents {
-        let asker = g.item_asker(item, opponent);
         for _ in 0..counters {
-            if !cantrip_mechanics::players::reached(g, opponent) {
-                break;
-            }
-            let permanents: Vec<ObjectId> =
-                g.permanents_of(opponent).into_iter().filter(|&id| nonland(g, &asker, id) && !sacrificed.iter().any(|&(_, s)| s == id) && g.can_sacrifice(opponent, id)).collect();
-            let hand = g.state().zone(Zone::hand(opponent)).to_vec();
-            let cards: Vec<ObjectId> = hand.iter().copied().filter(|c| !discarded.contains(c)).collect();
-            let mut options = Vec::new();
-            if !permanents.is_empty() {
-                options.push(SACRIFICE);
-            }
-            if !cards.is_empty() {
-                options.push(DISCARD);
-            }
-            options.push(LOSE);
-            let choice = if options.len() == 1 {
-                LOSE
-            } else {
-                let labels = options.iter().map(|&i| Label::Card(card, i)).collect();
-                options[choose::one_of(g, opponent, item.object, labels)? as usize]
-            };
-            match choice {
-                SACRIFICE => sacrificed.extend(choose::cards(g, opponent, item.object, Purpose::Sacrifice, permanents, 1, false)?.into_iter().map(|id| (opponent, id))),
-                DISCARD => discarded.extend(choose::cards_from(g, opponent, item.object, Purpose::Discard, hand, cards, 1, false)?),
-                _ => losses.push((opponent, -4)),
-            }
+            effects::choose_sacrifice_nonland_or_discard_or_lose_life(g, item, opponent, 4, &mut sacrificed, &mut discarded, &mut losses)?;
         }
     }
     g.together(Together { sacrifices: &sacrificed, discards: &discarded, life: &losses, ..Together::default() });
