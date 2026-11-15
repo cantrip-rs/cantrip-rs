@@ -60,6 +60,13 @@ pub fn other_creatures_you_control(q: &dyn LayerQuery, source: ObjectId, affecte
     affected != source && your_creatures(q, source, affected, so_far)
 }
 
+/// "Other permanents you control" (CR 613.1f, layer 6): every permanent under the source's controller's control but the source
+/// itself, of any type, by control and not ownership, read through the view (`LayerQuery::controller`, CR 613.1b). A Realm
+/// Reborn and Lecture Hall use it as `StaticDef::affects`.
+pub fn other_permanents_you_control(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Chars) -> bool {
+    affected != source && q.controller(affected) == q.controller(source)
+}
+
 /// "Attacking creatures you control" (CR 506.4, 613.1f): re-asked on every pass, so a creature put onto the battlefield
 /// attacking has what it gives and one removed from combat, or combat ending, loses it. Bow of Nylea and Raphael, the
 /// Nightwatcher use it as `StaticDef::affects`.
