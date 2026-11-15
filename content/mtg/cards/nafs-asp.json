@@ -1,0 +1,8 @@
+{
+  "name": "Nafs Asp",
+  "manaCost": "{G}",
+  "type": "Creature — Snake",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Whenever this creature deals damage to a player, that player loses 1 life at the beginning of their next draw step unless they pay {1} before that draw step."
+}

@@ -1,0 +1,47 @@
+# Bot1 has Blood of the Martyr take the damage its own Nafs Asp deals to Bot2's blocking Ornithopter: the Asp has dealt
+# damage to a player, its controller, and its ability triggers (the 2004-10-04 ruling). The loss waits for Bot1's next draw
+# step, not the next draw step, Bot2's: Bot1 has lost nothing after it, and may still pay {1} in Bot2's end step, before
+# their own draw step (CR 116.2c, 500.4). Having paid, they lose nothing at it.
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Nafs Asp
+Blood of the Martyr
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Nafs Asp.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Blood of the Martyr.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Nafs Asp)
+Bot2.Block(Ornithopter > Nafs Asp)
+Bot1.Accept
+[T3 Bot1.Main2]
+? Bot1.Life = 19
+? Bot2.Battlefield.Ornithopter.Damage = 0
+[T4 Bot2.Main1]
+? Bot1.Life = 19
+[T4 Bot2.End]
+Bot1.Nafs Asp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana =
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 20

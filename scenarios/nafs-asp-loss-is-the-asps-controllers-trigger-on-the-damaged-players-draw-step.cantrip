@@ -1,0 +1,34 @@
+# The delayed ability Nafs Asp's trigger makes is controlled by the Asp's controller, Bot1, not by the player it is about
+# (CR 603.7e). At the beginning of Bot2's draw step it triggers with Bot2's Howling Mine, and the active player's goes on
+# the stack first (CR 101.4): the Asp's is on top, Bot1's, and Bot2 is asked to order nothing.
+[Bot1 Deck]
+Mox Emerald
+Nafs Asp
+Forest x10
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Howling Mine
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Nafs Asp.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Howling Mine.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Nafs Asp)
+[T4 Bot2.Draw]
+? Stack = Nafs Asp; Howling Mine
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 18

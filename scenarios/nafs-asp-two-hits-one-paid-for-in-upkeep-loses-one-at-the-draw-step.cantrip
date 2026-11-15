@@ -1,0 +1,35 @@
+# Two Nafs Asps deal combat damage to Bot2: each trigger makes its own "loses 1 life at the beginning of their next draw
+# step unless they pay {1} before that draw step" (the 2004-10-04 ruling: hit twice, pay or lose twice). Bot2, the
+# player dealt damage and not the Asps' controller, pays {1} once in their upkeep - a special action (CR 116.2c), its one
+# Mox spent and nothing left in the pool - so of the two only one triggers at their draw step: 20 - 2 - 1 = 17 (CR 603.7).
+[Bot1 Deck]
+Black Lotus
+Nafs Asp
+Nafs Asp
+Forest x10
+
+[Bot2 Deck]
+Mox Sapphire
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Nafs Asp.Cast
+Bot1.Hand.Nafs Asp.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Nafs Asp#1; Nafs Asp#2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T4 Bot2.Upkeep]
+Bot2.Nafs Asp.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+? Bot2.Mana =
+? Bot2.Life = 18
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 17
+Bot2.Battlefield.Mox Sapphire.Tapped = true

@@ -1,0 +1,39 @@
+# Nafs Asp deals combat damage to Bot2, who Lightning Bolts it in Bot1's second main phase and pays {1} in Bot1's end step
+# - any time Bot2 has priority before their draw step, the other player's turn included (CR 116.2c). The delayed ability
+# and the effect that allows the payment are no abilities of the Asp, so its leaving changes neither (CR 603.7, 611.2a): Bot2 is
+# still offered the payment, and having paid, loses nothing at their draw step.
+[Bot1 Deck]
+Mox Emerald
+Nafs Asp
+Forest x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Sapphire
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Nafs Asp.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Nafs Asp)
+[T3 Bot1.Main2]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Nafs Asp)
+Bot2.Pass
+[T3 Bot1.End]
+? Bot1.Graveyard = Nafs Asp
+Bot2.Nafs Asp.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+? Bot2.Mana =
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Graveyard = Nafs Asp

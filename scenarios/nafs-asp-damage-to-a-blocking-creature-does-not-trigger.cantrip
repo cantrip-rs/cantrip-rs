@@ -1,0 +1,29 @@
+# Nafs Asp is blocked by Bot2's Ornithopter and deals its damage to the creature, not to a player (CR 603.2, 120.2):
+# nothing triggers, so Bot2, with a Mox untapped, is offered no payment, and loses nothing at their draw step.
+[Bot1 Deck]
+Mox Emerald
+Nafs Asp
+Forest x10
+
+[Bot2 Deck]
+Mox Sapphire
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Nafs Asp.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Nafs Asp)
+Bot2.Block(Ornithopter > Nafs Asp)
+[T3 Bot1.Main2]
+! Bot2.Nafs Asp.Activate
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 20

@@ -1,0 +1,30 @@
+# Nafs Asp deals combat damage to Bot2, who does not pay. Nothing happens on Bot1's turn or in Bot2's upkeep; at the
+# beginning of Bot2's draw step - theirs, not the Asp's controller's - the delayed ability triggers (CR 603.7) and Bot2
+# loses 1 life, not 1 damage, so the Asp does not trigger again (the rulings). Once that draw step has begun, paying is no
+# longer allowed ("before that draw step", CR 116.2c, 500.4), though Bot2's Mox is untapped.
+[Bot1 Deck]
+Mox Emerald
+Nafs Asp
+Forest x10
+
+[Bot2 Deck]
+Mox Sapphire
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Nafs Asp.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Nafs Asp)
+[T4 Bot2.Upkeep]
+? Bot2.Life = 19
+[T4 Bot2.Draw]
+! Bot2.Nafs Asp.Activate
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield.Mox Sapphire.Tapped = false

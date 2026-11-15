@@ -1,0 +1,39 @@
+# Two Nafs Asps deal combat damage to Bot2, who pays {1} for each in their upkeep (CR 116.2c). Each payment stops one
+# delayed ability and ends the effect that allowed it, so with a third Mox untapped the action is offered no more, and
+# nothing triggers at their draw step: 20 - 2 = 18 (CR 603.7).
+[Bot1 Deck]
+Black Lotus
+Nafs Asp
+Nafs Asp
+Forest x10
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Nafs Asp.Cast
+Bot1.Hand.Nafs Asp.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Nafs Asp#1; Nafs Asp#2)
+[T4 Bot2.Upkeep]
+Bot2.Nafs Asp.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Nafs Asp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+! Bot2.Nafs Asp.Activate
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield.Mox Ruby.Tapped = false
