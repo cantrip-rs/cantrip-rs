@@ -1,0 +1,37 @@
+# Brambleguard Captain may target itself ("target creature you control"): with no other creature it is the only legal target, and
+# X is its power, 2, so it becomes a 4/3 until end of turn (CR 611.2a). It attacks as a 4/3 and Bot2 goes from 20 to 16.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Brambleguard Captain
+Mountain x14
+
+[Bot2 Deck]
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Brambleguard Captain.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Brambleguard Captain.Power = 4
+? Bot1.Battlefield.Brambleguard Captain.Toughness = 3
+Bot1.Attack(Brambleguard Captain > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Brambleguard Captain.Power = 4

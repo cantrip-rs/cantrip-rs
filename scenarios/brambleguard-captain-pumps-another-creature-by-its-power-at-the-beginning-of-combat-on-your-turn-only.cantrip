@@ -1,0 +1,45 @@
+# Brambleguard Captain ({3}{R}, 2/3): "At the beginning of combat on your turn, target creature you control gets +X/+0 until
+# end of turn, where X is this creature's power." Turn 1 combat: Bot1 controls the Captain and a Memnite and chooses the Memnite
+# (a 3/1 for the turn: X is 2). The pump ends with the turn, so on Bot2's turn 2 the Memnite is a 1/1 again, and nothing triggers on
+# the opponent's combat (CR 603.2, 611.2a).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Memnite
+Brambleguard Captain
+Mountain x14
+
+[Bot2 Deck]
+Mountain x14
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Brambleguard Captain.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Brambleguard Captain.Power = 2
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Memnite.Power = 1
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Brambleguard Captain.Power = 2
+Stack.Count = 0

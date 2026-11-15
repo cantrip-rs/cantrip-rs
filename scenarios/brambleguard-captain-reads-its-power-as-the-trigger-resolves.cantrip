@@ -1,0 +1,43 @@
+# X is Brambleguard Captain's power as the ability resolves, not as it triggers (CR 608.2h). Turn 3 beginning of combat: the trigger
+# targets the Memnite; Bot1 responds with Giant Growth on the Captain (5/6), so the trigger resolves with X = 5 and the Memnite
+# becomes a 6/1 rather than a 3/1.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Memnite
+Brambleguard Captain
+Giant Growth
+Forest x13
+
+[Bot2 Deck]
+Mountain x14
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Brambleguard Captain.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Target(Memnite)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Brambleguard Captain)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Brambleguard Captain.Power = 5
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 6
+Bot1.Battlefield.Brambleguard Captain.Power = 5

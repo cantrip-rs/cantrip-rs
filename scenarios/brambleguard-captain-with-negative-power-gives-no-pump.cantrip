@@ -1,0 +1,48 @@
+# A power of 0 or less gives +0, not a penalty (CR 107.1b, 608.2h). Turn 3 beginning of combat: the trigger targets the Memnite; Bot2 casts Last
+# Gasp (-3/-3) on the Captain in response, and it dies with power -1 as it last existed. X is read as 0, so the Memnite stays a 1/1
+# (it is not weakened by -1, nor given +1).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Memnite
+Brambleguard Captain
+Mountain x14
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Last Gasp
+Mountain x13
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Brambleguard Captain.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Target(Memnite)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Last Gasp.Cast(Bot1.Battlefield.Brambleguard Captain)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Brambleguard Captain
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Brambleguard Captain
+Bot1.Battlefield.Memnite.Power = 1

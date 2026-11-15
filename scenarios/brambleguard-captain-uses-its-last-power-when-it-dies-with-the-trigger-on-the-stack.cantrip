@@ -1,0 +1,45 @@
+# The trigger is independent of its source (CR 113.7a). Turn 3 beginning of combat: it targets the Memnite; Bot2 Lightning Bolts the
+# Captain (2/3) in response and it dies. The ability still resolves, with X the Captain's last power on the battlefield, 2 (CR 608.2h),
+# so the Memnite is a 3/1 for the turn.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Memnite
+Brambleguard Captain
+Mountain x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x13
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Brambleguard Captain.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Target(Memnite)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Brambleguard Captain)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Brambleguard Captain
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Brambleguard Captain
+Bot1.Battlefield.Memnite.Power = 3
