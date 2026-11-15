@@ -1603,6 +1603,15 @@ pub static SAPROLING: CardDef = CardDef {
     ..token!(Saproling)
 };
 
+/// "Create a 1/1 green Saproling creature token." (CR 111.1): one `SAPROLING` under `item`'s controller, made with the words of
+/// its source's text (CR 612), the card file listing it in its `EXTRA`. Thallid, Elvish Farmer and Thallid Devourer
+/// (`spore::SAPROLING`) and Night Soil print it.
+pub fn create_a_saproling(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let token = g.card_id(&SAPROLING);
+    g.create_tokens_worded(&[(token, item.controller)], false, None, g.words(item.object))?;
+    Ok(())
+}
+
 /// A 1/1 white Citizen creature token (CR 111). Icatian Crier and Icatian Town create this exact token.
 pub static CITIZEN_1_1_WHITE: CardDef = CardDef {
     types: TypeSet::of(&[CardType::Creature]),

@@ -8,12 +8,6 @@ fn put_spore_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
     Ok(())
 }
 
-fn create_saproling(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let token = g.card_id(&tokens::SAPROLING);
-    g.create_tokens_worded(&[(token, item.controller)], false, None, g.words(item.object))?;
-    Ok(())
-}
-
 /// "At the beginning of your upkeep, put a spore counter on this creature." Elvish Farmer, Feral Thallid, Spore Flower, Thallid,
 /// Thallid Devourer and Thorn Thallid print it.
 pub const UPKEEP: AbilityDef = triggered(
@@ -27,6 +21,6 @@ pub const UPKEEP: AbilityDef = triggered(
 /// `tokens::SAPROLING` in its `EXTRA`.
 pub const SAPROLING: AbilityDef = ability(
     remove_counters(CounterKind::Spore, 3),
-    create_saproling,
+    tokens::create_a_saproling,
     "Remove three spore counters from this creature: Create a 1/1 green Saproling creature token.",
 );
