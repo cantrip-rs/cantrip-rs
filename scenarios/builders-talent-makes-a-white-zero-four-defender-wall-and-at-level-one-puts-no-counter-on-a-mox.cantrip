@@ -1,0 +1,42 @@
+# Builder's Talent: "When this Class enters, create a 0/4 white Wall creature token with defender." The Talent is a level 1
+# Class (CR 716.2a): its "whenever one or more noncreature, nonland permanents you control enter" ability exists only from
+# level 2, so Bot1's Mox Emerald entering at level 1 puts no counter on the Wall.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Builder's Talent
+Mox Emerald
+Plains
+Memnite
+Plains x13
+
+[Bot2 Deck]
+Plains x21
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Builder's Talent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Builder's Talent.ClassLevel = (absent)
+Bot1.Battlefield.Wall Token.Power = 0
+Bot1.Battlefield.Wall Token.Toughness = 4
+Bot1.Battlefield.Wall Token.Colors = White
+Bot1.Battlefield.Wall Token.Keywords = Defender
+Bot1.Battlefield.Wall Token.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Count = 8

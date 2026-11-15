@@ -1,0 +1,121 @@
+# Builder's Talent: "When this Class becomes level 3, return target noncreature, nonland permanent card from your graveyard
+# to the battlefield." In turn 9 Bot1's graveyard holds Memnite (a creature card, killed by Bolt), Disenchant (an instant),
+# Strip Mine (a land card) and Mox Ruby and Mox Jet (artifact cards, destroyed by Bot2's two Shatters in turn 2); Bot2's
+# graveyard holds a Mox Ruby of its own (Disenchant, turn 3). A Mox of Bot1's is targetable: Memnite, Disenchant, Strip Mine
+# and Bot2's Mox Ruby are each refused, and Mox Jet returns under Bot1's control. It enters as a noncreature, nonland
+# permanent, so the level 2 ability puts a counter on the Wall (the only creature Bot1 has). Four Plains and the Mox Pearl
+# pay the {4}{W} of level 3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Builder's Talent
+Disenchant
+Plains
+Memnite
+Strip Mine
+Plains
+Plains
+Plains x11
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mountain
+Shatter
+Shatter
+Lightning Bolt
+Mountain
+Mountain
+Mountain x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Builder's Talent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Builder's Talent.Activate(Ability: Level 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Mox Ruby)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Mox Jet)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Strip Mine.Play
+Bot1.Battlefield.Strip Mine.Activate(Ability: Destroy; Bot2.Battlefield.Mountain)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Disenchant.Cast(Bot2.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Memnite; Disenchant; Strip Mine; Mox Jet; Mox Ruby
+? Bot2.Graveyard = Lightning Bolt; Mox Ruby; Mountain; Shatter; Shatter
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Plains#3.Activate
+Bot1.Battlefield.Plains#4.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Builder's Talent.Activate(Ability: Level 3)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Graveyard.Memnite)
+! Bot1.Target(Bot1.Graveyard.Disenchant)
+! Bot1.Target(Bot1.Graveyard.Strip Mine)
+! Bot1.Target(Bot2.Graveyard.Mox Ruby)
+Bot1.Target(Bot1.Graveyard.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 9
+Stack.Count = 0
+Bot1.Battlefield.Builder's Talent.ClassLevel = 3
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Graveyard = Memnite; Disenchant; Strip Mine; Mox Ruby
+Bot2.Graveyard = Lightning Bolt; Mox Ruby; Mountain; Shatter; Shatter
+Bot1.Battlefield.Wall Token.Counters.PlusOnePlusOne = 1

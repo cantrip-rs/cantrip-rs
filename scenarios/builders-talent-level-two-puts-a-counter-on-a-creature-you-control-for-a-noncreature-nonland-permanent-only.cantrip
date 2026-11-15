@@ -1,0 +1,68 @@
+# Builder's Talent at level 2: "Whenever one or more noncreature, nonland permanents you control enter, put a +1/+1 counter
+# on target creature you control." In turn 1 Bot1 makes the Talent (and its Wall), takes level 2 with the Plains and casts
+# Memnite: a creature entering is no noncreature permanent, so nothing triggers (no counter, no target asked). In turn 2
+# Bot2's Mox Pearl and Memnite enter under Bot2's control: not "you control", nothing triggers. In turn 3 Bot1 plays a Plains
+# (a land: nothing) and then casts Mox Emerald: the trigger targets only a creature Bot1 controls, so Bot2's Memnite is
+# refused and Bot1's own Memnite takes the counter, the Wall none.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Builder's Talent
+Mox Emerald
+Plains
+Memnite
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl
+Memnite
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Builder's Talent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Builder's Talent.Activate(Ability: Level 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Builder's Talent.ClassLevel = 2
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Wall Token.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
