@@ -1178,9 +1178,12 @@ pub fn cant_be_sacrificed(q: &dyn Query, cards: &'static CardTable, id: ObjectId
 
 /// Whether a continuous effect or a functioning static ability forbids
 /// regenerating `id` (CR 101.2, 701.19b-c). Asked when destruction would be
-/// replaced, not when a spell or ability creates a regeneration shield.
+/// replaced, not when a spell or ability creates a regeneration shield. A
+/// resolved rule about an open set that takes `id` in forbids it too (CR
+/// 611.2c, `LastingRuleKind::CantBeRegenerated`).
 pub fn cant_be_regenerated(q: &dyn Query, cards: &'static CardTable, id: ObjectId) -> bool {
     q.state().effects.iter().any(|e| e.affected == id && e.kind == EffectKind::CantBeRegenerated)
+        || lasting_rules_on(q, cards, id, LastingRuleKind::CantBeRegenerated).next().is_some()
         || any_static(q, cards, |d| d.regeneration_bans, |rule, asker| rule(q, asker, id))
         // A granted ability has the holder as its source, and the layer-6
         // result decides whether it survived a later loss of abilities. Do not

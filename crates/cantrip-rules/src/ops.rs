@@ -4535,7 +4535,9 @@ fn apply_damage_with(cx: &mut Cx, event: DamageEvent, view: Option<DamageView>, 
                 batch.dealt[at].loyalty += amount;
             }
             lifelink(source, source_controller, &source_chars, amount, batch);
-            Some(Event::Damage { source, target, amount, kind: DamageKind::new(combat, source_chars.colors), controller: source_controller, recipient_excess: 0, known })
+            // What the recipient was as it was dealt the damage (CR 120.3d-e): "deals damage to a creature" asks it later.
+            let kind = DamageKind::new(combat, source_chars.colors).to_creature(target_chars.is(CardType::Creature));
+            Some(Event::Damage { source, target, amount, kind, controller: source_controller, recipient_excess: 0, known })
         }
     }
 }

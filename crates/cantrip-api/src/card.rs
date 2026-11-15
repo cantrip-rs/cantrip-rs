@@ -2862,6 +2862,12 @@ pub enum LastingRuleKind {
     /// attacker before any becomes tapped, since the declaration taps them at once (CR 508.1f). Johan's "attacking doesn't
     /// cause creatures you control to tap this combat if Johan is untapped".
     AttackingDoesntCauseTap,
+    /// "Can't be regenerated" (CR 701.19c, 611.2c): a permanent the set takes in as its destruction would be replaced is not
+    /// regenerated - neither a shield nor a static regeneration replacement saves it - as `EffectKind::CantBeRegenerated` reads
+    /// it of one permanent, here of a set that takes in permanents as they come to match it. It is no ability, so it holds
+    /// whatever abilities the permanent or the source loses (CR 613.1f), and it outlives the source (CR 611.2a). Runesword's
+    /// "if the creature deals damage to a creature this turn, the creature dealt damage can't be regenerated this turn".
+    CantBeRegenerated,
 }
 
 /// A rule a resolving spell or ability gives an open set of objects for a duration (CR 611.2c): "creatures without flying

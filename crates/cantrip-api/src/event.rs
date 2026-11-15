@@ -30,7 +30,8 @@ impl CoinFlip {
     }
 }
 
-/// The damage's combat designation and its source's five colors as it dealt damage (CR 120.3, 609.7).
+/// The damage's combat designation, its source's five colors as it dealt damage (CR 120.3, 609.7), and whether its recipient
+/// was a creature as it was dealt the damage (CR 120.3d-e).
 /// Kept in one byte so adding excess information does not enlarge every event in the history.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct DamageKind(u8);
@@ -40,8 +41,20 @@ impl DamageKind {
         Self(colors.0 | ((combat as u8) << 5))
     }
 
+    /// The same, dealt to a permanent that was a creature as it was dealt the damage (`creature`), whatever it is since: "deals
+    /// damage to a creature" asks what the recipient was then (Runesword's "if the creature deals damage to a creature this
+    /// turn"). Damage to a player, or to a permanent that was no creature then (a planeswalker, a battle), is not.
+    pub const fn to_creature(self, creature: bool) -> Self {
+        Self(self.0 | ((creature as u8) << 6))
+    }
+
     pub const fn is_combat(self) -> bool {
         self.0 & (1 << 5) != 0
+    }
+
+    /// Whether the recipient was a creature as it was dealt the damage (`to_creature`, CR 120.3d-e).
+    pub const fn dealt_to_creature(self) -> bool {
+        self.0 & (1 << 6) != 0
     }
 
     pub const fn colors(self) -> ColorSet {
