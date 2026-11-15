@@ -1,0 +1,40 @@
+# Serra Redeemer: "Whenever another creature you control with power 2 or less enters, put two +1/+1 counters on that creature." A Memnite
+# (power 1) and a Warren Elder (power 2, the boundary) entering after it each get two counters (CR 122.1); the Redeemer itself, which
+# entered with no other creature there, gets none ("another", CR 603.6a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Serra Redeemer
+Memnite
+Warren Elder
+Plains
+Plains x13
+Plains x6
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Serra Redeemer.Cast
+Bot1.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Warren Elder.Cast
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Serra Redeemer.Power = 2
+Bot1.Battlefield.Serra Redeemer.Toughness = 4
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 3
+Bot1.Battlefield.Warren Elder.Power = 4
+Bot1.Battlefield.Warren Elder.Toughness = 4
