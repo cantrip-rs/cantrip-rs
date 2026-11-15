@@ -1,0 +1,11 @@
+{
+  "name": "Skyskipper Duo",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Bird Frog",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nWhen this creature enters, exile up to one other target creature you control. Return it to the battlefield under its owner's control at the beginning of the next end step.",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,61 @@
+# Skyskipper Duo "up to one other target creature you control": with only itself on the battlefield it has nothing it may target (it is
+# "other"), so no target is asked for. On turn 3 Otterball Antics makes an Otter token. On turn 5 a second Duo finds the first Duo and the
+# token (it may not target itself, the refusal), and Bot1 chooses the token: it is exiled and ceases to exist (CR 111.7), so nothing returns at the end step. The first Duo stays.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Skyskipper Duo
+Skyskipper Duo
+Otterball Antics
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Skyskipper Duo.Cast
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+? Bot1.Battlefield.Count = 4
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Otterball Antics.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Otter Token.Power = 1
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Skyskipper Duo.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Skyskipper Duo#2)
+Bot1.Target(Bot1.Battlefield.Otter Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Otter Token = (absent)
+[T5 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Skyskipper Duo#1.Power = 3
+Bot1.Battlefield.Skyskipper Duo#2.Power = 3

@@ -1,0 +1,40 @@
+# Skyskipper Duo {4}{U}, 3/3 flying: "When this creature enters, exile up to one other target creature you control. Return it to the
+# battlefield under its owner's control at the beginning of the next end step" (CR 603.7). The Ornithopter is exiled as the trigger
+# resolves (Exile = Ornithopter), and is back at the beginning of the end step as a new object (summoning sick) while the Duo stays.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Ornithopter
+Skyskipper Duo
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Skyskipper Duo.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+? Bot1.Battlefield.Skyskipper Duo.Keywords = Flying
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Ornithopter.SummoningSick = true
+Bot1.Battlefield.Skyskipper Duo.Power = 3
+Bot1.Battlefield.Skyskipper Duo.Toughness = 3
