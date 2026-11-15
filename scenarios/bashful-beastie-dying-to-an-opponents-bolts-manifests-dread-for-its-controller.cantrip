@@ -1,0 +1,58 @@
+# Bashful Beastie (5/4): "When this creature dies, manifest dread." Bot2's first Lightning Bolt leaves it on the battlefield with 3 damage
+# (nothing triggers), the second (6 total >= 4, CR 704.5g) kills it: its controller Bot1 manifests dread (CR 701.62a), though Bot2 dealt
+# the damage: the library top, Snapcaster Mage and Lightning Bolt, are Bot1's. The Mage goes onto the battlefield face down as a 2/2 and the
+# Bolt into Bot1's graveyard next to the Beastie; Bot2's library and graveyard are untouched by it.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Bashful Beastie
+Island
+Snapcaster Mage
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bashful Beastie.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Bashful Beastie)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Bashful Beastie.Damage = 3
+? Stack.Count = 0
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Bashful Beastie)
+Bot2.Pass
+Bot1.Pass
+Bot1.Arrange(Snapcaster Mage | Lightning Bolt)
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Snapcaster Mage
+? Bot1.Battlefield..Power = 2
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Graveyard = Lightning Bolt; Bashful Beastie
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt; Black Lotus
+Stack.Count = 0
