@@ -1,0 +1,44 @@
+# Rip, Spawn Hunter: "different powers" counts a Vehicle's power as it counts a creature's (CR 208.1). Of the four cards revealed on turn 3,
+# Hill Giant and Smuggler's Copter both have power 3, so Bot1 cannot take both; the Island is neither a creature nor a Vehicle card and
+# cannot be taken. Bot1 takes the Copter and Ornithopter (power 0, a power like any other), and the Hill Giant and Island go to the bottom.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Rip, Spawn Hunter
+Island
+Island
+Island
+Hill Giant
+Smuggler's Copter
+Island
+Ornithopter
+Island x8
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rip, Spawn Hunter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Rip, Spawn Hunter > Bot2)
+[T3 Bot1.Main2]
+! Bot1.Choose(Island)
+! Bot1.Choose(Hill Giant; Smuggler's Copter)
+Bot1.Choose(Smuggler's Copter; Ornithopter)
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Ornithopter; Smuggler's Copter
+Bot1.Library.Count = 10

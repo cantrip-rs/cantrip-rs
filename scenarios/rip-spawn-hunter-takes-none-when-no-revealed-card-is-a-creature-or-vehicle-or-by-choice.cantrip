@@ -1,0 +1,44 @@
+# Rip, Spawn Hunter: "any number" includes none (CR 608.2d). The four cards revealed on turn 3 are a Grizzly Bears and three Islands; the
+# player is shown them and chooses nothing, and all four go to the bottom of the library in a random order, the Hill Giant under them
+# stays on top, and the hand gains nothing (its three Islands are the two left from the opening hand and the turn-3 draw).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Rip, Spawn Hunter
+Island
+Island
+Island
+Island
+Grizzly Bears
+Island
+Island
+Hill Giant
+Island x7
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rip, Spawn Hunter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Rip, Spawn Hunter > Bot2)
+[T3 Bot1.Main2]
+! Bot1.Choose(Island)
+Bot1.Choose()
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Hand = Island; Island; Island
+Bot1.Library.Count = 12

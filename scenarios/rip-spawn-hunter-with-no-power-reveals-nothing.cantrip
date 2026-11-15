@@ -1,0 +1,54 @@
+# Rip, Spawn Hunter: X is its power as the ability resolves (CR 608.2h), and a power of 0 or less reveals no card (CR 107.1b). On
+# turn 3 Bot1 casts Depower on Rip for {2}{U} (Mox Sapphire, Mox Emerald, Mox Ruby): it is a 0/4, draws Bot1 the Forest, and
+# attacks for no damage. At the second main phase the survival trigger reveals nothing: Bot1 is asked nothing, and the Grizzly
+# Bears stay on top of the library where a reveal of even one card would have offered them and moved what was left to the bottom.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Rip, Spawn Hunter
+Depower
+Island
+Plains
+Forest
+Grizzly Bears
+Swamp
+Swamp
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rip, Spawn Hunter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Depower.Cast(Bot1.Battlefield.Rip, Spawn Hunter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rip, Spawn Hunter.Power = 0
+Bot1.Attack(Rip, Spawn Hunter > Bot2)
+[T3 Bot1.Main2]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+[T3 Bot1.End]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Hand = Island; Plains; Forest
+Bot1.Library = Grizzly Bears; Swamp; Swamp
+Bot1.Graveyard = Depower

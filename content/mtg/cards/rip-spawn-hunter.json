@@ -1,0 +1,8 @@
+{
+  "name": "Rip, Spawn Hunter",
+  "manaCost": "{2}{G}{W}",
+  "type": "Legendary Creature — Human Survivor",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Survival — At the beginning of your second main phase, if Rip is tapped, reveal the top X cards of your library, where X is its power. Put any number of creature and/or Vehicle cards with different powers from among them into your hand. Put the rest on the bottom of your library in a random order."
+}

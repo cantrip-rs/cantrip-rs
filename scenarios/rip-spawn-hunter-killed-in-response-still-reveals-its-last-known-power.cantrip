@@ -1,0 +1,56 @@
+# Rip, Spawn Hunter: "X is its power" and "if Rip is tapped" for a Rip that has left the battlefield are as it last existed there (CR 603.4,
+# 608.2h; the rulings). Rip attacks on turn 3 and, with the trigger on the stack, Bot2 kills it with Infernal Grasp. The ability still
+# resolves: it reveals the top four cards, Rip's last power, and Bot1 takes Grizzly Bears and Hill Giant; the fifth card, Serra Angel, is not
+# revealed.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Rip, Spawn Hunter
+Island
+Island
+Island
+Grizzly Bears
+Hill Giant
+Island
+Island
+Serra Angel
+Island x7
+
+[Bot2 Deck]
+Mox Jet
+Infernal Grasp
+Swamp x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rip, Spawn Hunter.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Attack(Rip, Spawn Hunter > Bot2)
+[T3 Bot1.Main2]
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Infernal Grasp.Cast(Bot1.Battlefield.Rip, Spawn Hunter)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Serra Angel)
+Bot1.Choose(Grizzly Bears; Hill Giant)
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Graveyard = Rip, Spawn Hunter
+Bot1.Hand = Grizzly Bears; Hill Giant; Island; Island; Island
