@@ -1,0 +1,50 @@
+# "Choose one" (CR 700.2): modes 1 and 2 together are refused (Bot2 has both a creature and an artifact to target).
+# Mode 1's 4 damage does not kill Aegis Turtle (0/5): it stays on the battlefield with exactly 4 damage marked, so the
+# amount is 4 and not 5.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Agate Assault
+Mountain x3
+Mountain x10
+
+[Bot2 Deck]
+Island
+Aegis Turtle
+Mox Jet
+Island x5
+Island x10
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Agate Assault.Cast
+! Bot1.Modes(1; 2)
+Bot1.Modes(1)
+Bot1.Target(Aegis Turtle)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Aegis Turtle.Damage = 4
+
+[Expect]
+Bot2.Battlefield = Aegis Turtle; Island; Mox Jet
+Exile.Count = 0
+Bot2.Graveyard.Count = 0

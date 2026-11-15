@@ -1,0 +1,54 @@
+# Agate Assault's second mode exiles target artifact (CR 701.13a): Bot2's Sol Ring is exiled, while Bot2's Concealing
+# Curtains (not an artifact) is refused as its target, and the damage mode is not used, so the creature is untouched.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Agate Assault
+Mountain x3
+Mountain x10
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Concealing Curtains
+Sol Ring
+Swamp x5
+Swamp x10
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Concealing Curtains.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Agate Assault.Cast
+Bot1.Modes(2)
+! Bot1.Target(Concealing Curtains)
+Bot1.Target(Sol Ring)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Sol Ring
+Bot2.Battlefield = Concealing Curtains; Mox Jet; Swamp
+Bot2.Battlefield.Concealing Curtains.Damage = 0
+Bot2.Graveyard.Count = 0
+Stack.Count = 0
