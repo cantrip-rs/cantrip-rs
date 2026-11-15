@@ -1,0 +1,61 @@
+# Land Equilibrium replaces the entry of each land an opponent with at least as many lands puts onto the battlefield: Bot2,
+# with one land to Bot1's none (more, not only as many), puts two lands onto the battlefield at once with Reach the Horizon.
+# Both enter together, each modified to "puts that land onto the battlefield then sacrifices a land" (CR 614.6), so both
+# are there when Bot2 makes the first of its two sacrifices - and it chooses the Plains first, then the Island. Reach the
+# Horizon goes on resolving only once both are sacrificed. Bot1's Leyline of the Void exiles every card on its way to Bot2's
+# graveyard; Reach the Horizon going there is put by no one, so Land Equilibrium is no replacement Bot2 is asked to order
+# with the Leyline's (CR 616.1).
+[Bot1 Deck]
+Land Equilibrium
+Black Lotus
+Mox Sapphire
+Leyline of the Void
+Swamp
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Black Lotus
+Reach the Horizon
+Forest
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Island
+Plains
+Swamp x10
+
+[Actions]
+Bot1.Accept
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Land Equilibrium.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Reach the Horizon.Cast
+Bot2.Search(Island; Plains)
+? Bot2.Battlefield.Count = 3
+Bot2.Choose(Plains)
+Bot2.Choose(Island)
+! Bot2.Replace
+[T4 Bot2.End]
+[Expect]
+Exile = Black Lotus; Island; Plains; Reach the Horizon
+Bot2.Graveyard.Count = 0
+Bot2.Battlefield.Count = 1
+Bot2.Battlefield.Forest.Types = Land

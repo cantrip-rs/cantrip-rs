@@ -1,0 +1,52 @@
+# Creating a token puts it onto the battlefield (CR 111.1, 701.7a), so Land Equilibrium replaces the creation of a land token
+# by an opponent with as many lands as its controller (1 to 1): Bot2's Relm's Sketching makes a token copy of Bot1's
+# Island, which enters under Bot2's control, and then Bot2 sacrifices a land of their choice - the token itself, which is on
+# the battlefield by then (CR 614.6). A token in the graveyard ceases to exist (CR 111.7).
+[Bot1 Deck]
+Island
+Land Equilibrium
+Black Lotus
+Mox Sapphire
+Swamp
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Relm's Sketching
+Black Lotus
+Forest
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x10
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Land Equilibrium.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Relm's Sketching.Cast(Bot1.Battlefield.Island)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Island.Types = Land
+Bot2.Choose(Island)
+[T4 Bot2.End]
+[Expect]
+Bot2.Battlefield.Count = 1
+Bot2.Battlefield.Forest.Types = Land
+Bot1.Battlefield.Island.Types = Land
