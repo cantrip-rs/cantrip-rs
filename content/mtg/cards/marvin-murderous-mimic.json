@@ -1,0 +1,8 @@
+{
+  "name": "Marvin, Murderous Mimic",
+  "manaCost": "{2}",
+  "type": "Legendary Artifact Creature — Toy",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Marvin has all activated abilities of creatures you control that don't have the same name as this creature."
+}

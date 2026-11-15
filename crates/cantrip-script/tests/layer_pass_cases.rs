@@ -459,6 +459,10 @@ const INERT: &[(&str, &str)] = &[
         "Tempest Djinn",
         "its effect counts the basic Islands its controller controls, and the synthetic boards hold none; its scenario shows +1/+0 for each basic Island, and none for an opponent's Island or a nonbasic one",
     ),
+    (
+        "Marvin, Murderous Mimic",
+        "its effect copies the activated abilities of the other creatures its controller controls, and the synthetic boards hold no creature with an activated ability; its scenarios show the abilities of its controller's creatures (a granted one too), none of an opponent's, and none from a creature with its own name",
+    ),
 ];
 
 /// The contract of every static ability's effect (`StaticApply`), across the whole card table: applied to synthetic objects

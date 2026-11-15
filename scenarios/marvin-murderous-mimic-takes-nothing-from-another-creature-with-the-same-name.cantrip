@@ -1,0 +1,55 @@
+# Marvin, Murderous Mimic: "...creatures you control that don't have the same name as this creature". Mirror Gallery ("the
+# 'legend rule' doesn't apply") lets Bot1 keep two Marvins, the second equipped with Paradise Mantle ("{T}: Add one mana of
+# any color"). The first has Llanowar Elves' mana ability and only that: the other Marvin has the same name, so what he has -
+# the Mantle's ability - is no one's to take (a second ability is refused).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mirror Gallery
+Marvin, Murderous Mimic
+Marvin, Murderous Mimic
+Llanowar Elves
+Forest
+Paradise Mantle
+Forest x11
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mirror Gallery.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Marvin, Murderous Mimic.Cast
+Bot1.Hand.Llanowar Elves.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Marvin, Murderous Mimic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Paradise Mantle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Paradise Mantle.Activate(Marvin, Murderous Mimic#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 8
+! Bot1.Battlefield.Marvin, Murderous Mimic#1.Activate(Ability: #2)
+Bot1.Battlefield.Marvin, Murderous Mimic#1.Activate(Ability: #1)
+? Bot1.Mana = {G}
+
+[Expect]
+Bot1.Battlefield.Count = 8
