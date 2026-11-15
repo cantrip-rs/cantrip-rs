@@ -1,0 +1,11 @@
+{
+  "name": "Finch Formation",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Bird Scout",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Offspring {3} (You may pay an additional {3} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nFlying\nWhen this creature enters, target creature you control gains flying until end of turn.",
+  "keywords": [
+    "Flying"
+  ]
+}
