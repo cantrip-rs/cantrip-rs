@@ -1,0 +1,46 @@
+# Wickerfolk Thresher's delirium needs four types (CR 603.4, 207.2c): Faithless Looting (sorcery), Lightning Bolt (instant) and an Island (land) are
+# only three, so the attack triggers nothing (the refusal) and the Mountain on top of the library is not looked at: it is still on top of it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Faithless Looting
+Island
+Lightning Bolt
+Wickerfolk Thresher
+Forest
+Island
+Mountain
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Choose(Island; Lightning Bolt)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Wickerfolk Thresher.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Wickerfolk Thresher > Bot2)
+! Bot1.Accept
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island
+Bot1.Library.Top = Mountain
+Bot1.Graveyard.Count = 3
+Bot2.Life = 15
