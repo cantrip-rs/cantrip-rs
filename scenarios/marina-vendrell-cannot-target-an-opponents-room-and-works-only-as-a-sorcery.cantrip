@@ -1,0 +1,63 @@
+# Marina Vendrell: "target Room you control" (CR 115.1, 109.4) leaves out the opponent's Room, and "Activate only as a sorcery"
+# (CR 602.5d) keeps her from acting on the opponent's turn: Bot2's Unholy Annex (turn 2) is refused on turn 3 while Bot1's own is
+# the target that works on turn 5 (the positive control, locking its only unlocked door); on turn 4, Bot2's turn, her ability on
+# Bot1's own Room is refused though she is untapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Marina Vendrell
+Unholy Annex // Ritual Chamber
+Forest x13
+
+[Bot2 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Unholy Annex // Ritual Chamber
+Plains x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Marina Vendrell.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet#1.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Battlefield.Mox Jet#3.Activate
+Bot2.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Marina Vendrell.Activate(Bot2.Battlefield.Unholy Annex)
+[T4 Bot2.Main1]
+Bot2.Pass
+! Bot1.Battlefield.Marina Vendrell.Activate(Bot1.Battlefield.Unholy Annex)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Marina Vendrell.Activate(Bot1.Battlefield.Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Unholy Annex)
+
+[Expect]
+Bot1.Battlefield..Doors = 
+Bot2.Battlefield.Unholy Annex.Doors = Unholy Annex

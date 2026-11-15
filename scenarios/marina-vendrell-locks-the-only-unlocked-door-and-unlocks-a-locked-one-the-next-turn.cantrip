@@ -1,0 +1,56 @@
+# Marina Vendrell: "{T}: Lock or unlock a door of target Room you control" (CR 709.5f, 709.5g). Turn 3: Unholy Annex is cast as
+# its left door only, then Marina locks it, the Room having neither door unlocked (and so no name). Turn 5: she unlocks the
+# locked Ritual Chamber, chosen by her controller, so its "when you unlock this door" makes the 6/6 Demon (CR 709.5h); the
+# Annex door stays locked, and no end step has drawn or drained for it (its trigger is the Annex door's).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Marina Vendrell
+Unholy Annex // Ritual Chamber
+Forest x7
+Black Lotus
+Forest x5
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Marina Vendrell.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Unholy Annex.Doors = Unholy Annex
+Bot1.Battlefield.Marina Vendrell.Activate(Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Unholy Annex)
+? Bot1.Battlefield.Marina Vendrell.Tapped = true
+? Bot1.Battlefield..Doors = 
+[T5 Bot1.Main1]
+Bot1.Battlefield.Marina Vendrell.Activate(#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Ritual Chamber)
+
+[Expect]
+Bot1.Battlefield.Ritual Chamber.Doors = Ritual Chamber
+Bot1.Battlefield.Demon Token.Power = 6

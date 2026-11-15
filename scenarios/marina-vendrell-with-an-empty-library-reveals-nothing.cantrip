@@ -1,0 +1,33 @@
+# Marina Vendrell: with no cards in the library there is nothing to reveal (CR 701.20a), so nothing is put into the hand or on
+# the bottom, and the library stays empty.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Marina Vendrell
+Unholy Annex // Ritual Chamber
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Marina Vendrell.Cast
+Bot1.Pass
+
+[Expect]
+Bot1.Hand = Unholy Annex // Ritual Chamber
+Bot1.Library.Count = 0
+Bot1.Battlefield.Marina Vendrell.Tapped = false

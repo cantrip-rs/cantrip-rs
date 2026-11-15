@@ -1,0 +1,37 @@
+# Marina Vendrell: a library of fewer than seven cards reveals the cards it has (CR 701.20a): Rancor and Moat, two of the three left, go
+# to hand and Dark Ritual goes to the bottom of a library that is then only it.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Marina Vendrell
+Unholy Annex // Ritual Chamber
+Rancor
+Dark Ritual
+Moat
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Marina Vendrell.Cast
+Bot1.Pass
+
+[Expect]
+Bot1.Hand = Moat; Rancor; Unholy Annex // Ritual Chamber
+Bot1.Library.Count = 1
+Bot1.Library.Top = Dark Ritual
+Bot1.Revealed = Dark Ritual; Moat; Rancor
