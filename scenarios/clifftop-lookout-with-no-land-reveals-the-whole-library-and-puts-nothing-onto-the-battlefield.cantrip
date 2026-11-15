@@ -1,0 +1,35 @@
+# Clifftop Lookout with no land in the library: the enters trigger reveals every card (CR 701.20, 609.3), nothing enters, and
+# the revealed cards go back on the bottom, so the library still holds its two cards and no land enters.
+# The opponent's library, which holds lands, is not looked at (the reveal is of your own library).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Clifftop Lookout
+Memnite
+Memnite
+Memnite
+Ornithopter
+Lightning Bolt
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Clifftop Lookout.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Clifftop Lookout.Keywords = Reach
+Bot1.Library.Count = 2
+Bot1.Battlefield.Count = 4
+Bot2.Library.Count = 13

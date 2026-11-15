@@ -1,0 +1,41 @@
+# Clifftop Lookout (1/2 Reach, {2}{G}): "When this creature enters, reveal cards from the top of your library until you
+# reveal a land card. Put that card onto the battlefield tapped and the rest on the bottom of your library in a random order"
+# (CR 701.20, 401.4). Three Moxen pay for it on turn 1. Ornithopter is revealed, then the Island, which enters tapped; the
+# Ornithopter goes to the bottom, under the cards that were never revealed (the second Island is not touched), and the Lookout
+# keeps the Reach it prints.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Clifftop Lookout
+Memnite
+Memnite
+Memnite
+Ornithopter
+Island
+Lightning Bolt
+Island
+Counterspell
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Clifftop Lookout.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Clifftop Lookout.Keywords = Reach
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Island.Tapped = true
+Bot1.Library = Lightning Bolt; Island; Counterspell; Ornithopter
+Bot2.Library.Count = 13
