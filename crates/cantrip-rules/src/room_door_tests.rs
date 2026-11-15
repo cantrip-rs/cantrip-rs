@@ -118,3 +118,27 @@ static REFUSED_ROOM: CardDef =
 fn the_card_table_refuses_a_room_with_such_a_door() {
     let _ = CardTable::new([&PLAIN_DOOR, &TRIGGER_RULE_DOOR, &REFUSED_ROOM]);
 }
+
+/// Locking a door (CR 709.5g) removes only that half's unlocked designation, does nothing to a door already locked, and the
+/// Room stays the same object (CR 709.5c); a permanent that is not a Room has no doors to lock.
+#[test]
+fn locking_a_door_removes_that_doors_designation() {
+    static NOT_A_ROOM: CardDef = CardDef { name: "Not A Room", split: None, subtypes: SubtypeSet::of(&[]), ..PLAIN_DOOR };
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&STATE_DOOR, &PLAIN_DOOR, &STATE_ROOM, &NOT_A_ROOM])));
+    let mut game = Game::new(table, &Setup { decks: vec![Vec::new(), Vec::new()], ..Default::default() });
+    let room = game.state.push_obj(Obj::new(table.id_of(&STATE_ROOM), YOU, Zone::BATTLEFIELD));
+    game.state.zone_push(Zone::BATTLEFIELD, room);
+    game.state.update_obj(room, |o| o.marks.doors = DOOR_LEFT | DOOR_RIGHT);
+    let other = game.state.push_obj(Obj::new(table.id_of(&NOT_A_ROOM), YOU, Zone::BATTLEFIELD));
+    game.state.zone_push(Zone::BATTLEFIELD, other);
+    game.state.update_obj(other, |o| o.marks.doors = DOOR_LEFT);
+    let mut cx = cx(&mut game);
+    crate::ops::lock_door(&mut cx, room, DOOR_LEFT);
+    assert_eq!(cx.s().obj(room).marks.doors, DOOR_RIGHT);
+    crate::ops::lock_door(&mut cx, room, DOOR_LEFT);
+    assert_eq!(cx.s().obj(room).marks.doors, DOOR_RIGHT);
+    crate::ops::lock_door(&mut cx, other, DOOR_LEFT);
+    assert_eq!(cx.s().obj(other).marks.doors, DOOR_LEFT);
+    crate::ops::lock_door(&mut cx, room, DOOR_RIGHT);
+    assert_eq!(cx.s().obj(room).marks.doors, 0);
+}

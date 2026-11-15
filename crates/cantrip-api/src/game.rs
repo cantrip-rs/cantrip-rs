@@ -1614,6 +1614,10 @@ pub trait Game: Query {
     /// triggers "when you unlock this door" (CR 709.5h). `door` is `DOOR_LEFT` or `DOOR_RIGHT`. Nothing if the permanent is
     /// not a Room on the battlefield or the door is already unlocked.
     fn unlock_door(&mut self, permanent: ObjectId, door: u8, player: PlayerId);
+    /// A Room's door is locked (CR 709.5g): the permanent loses that half's unlocked designation, and is the same object (CR 709.5c).
+    /// `door` is `DOOR_LEFT` or `DOOR_RIGHT`. Nothing if the permanent is not a Room on the battlefield or the door is already
+    /// locked. No ability triggers on it: only unlocking does (CR 709.5h).
+    fn lock_door(&mut self, permanent: ObjectId, door: u8);
     /// A card name chosen for a permanent as `by`, an ability of it, resolves (`Query::linked` of the resolving ability),
     /// remembered by that permanent (CR 607.2d): "When this land enters, choose a land card name" (Petrified Hamlet), "II —
     /// Choose a card name" (Medomai's Prophecy). Kept with that ability (`Chosen`): the abilities linked to it read it with
