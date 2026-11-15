@@ -196,6 +196,13 @@ pub fn another_creature_entered_under_control_this_turn(history: History<'_>, pl
     history.entered().any(|e| e.permanent != except && e.controller == player && e.is(CardType::Creature))
 }
 
+/// "If another creature entered the battlefield under your control this turn" (CR 603.4, 603.6a) as the intervening "if" of a
+/// triggered ability: `another_creature_entered_under_control_this_turn` for the ability's controller and source, asked as the
+/// ability would trigger and again as it resolves. Wary Farmer and Waterspout Warden print it.
+pub fn another_creature_entered_under_your_control_this_turn(q: &dyn Query, asker: &Asker) -> bool {
+    another_creature_entered_under_control_this_turn(q.history(), asker.controller, asker.source)
+}
+
 /// The number of creatures that entered the battlefield under `player`'s control this turn (CR 603.6a), judged as each entered (the
 /// controller and card types `Event::Entered` holds), tokens included, whatever has happened to it since. Kinbinding sums them into a
 /// bonus; Spider-UK asks whether there were two or more.
