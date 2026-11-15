@@ -1,0 +1,47 @@
+# Salvation Swan exiling a token: the Rabbit token from Carrot Cake ceases to exist in exile (CR 111.7, 400.7), so nothing returns at
+# the end step. Exiling the token is optional: see the next scenario for choosing no target.
+[Bot1 Deck]
+
+Black Lotus
+Mox Pearl
+Mox Pearl
+Gleemox
+Carrot Cake
+Salvation Swan
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Carrot Cake.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains)
+? Bot1.Battlefield.Rabbit Token.Power = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Salvation Swan.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Rabbit Token)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+? Bot1.Battlefield = Mox Pearl; Mox Pearl; Gleemox; Carrot Cake; Salvation Swan
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Pearl; Gleemox; Carrot Cake; Salvation Swan
+Exile.Count = 0

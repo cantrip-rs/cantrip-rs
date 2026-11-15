@@ -1,0 +1,43 @@
+# Salvation Swan: when it enters it exiles up to one target creature you control without flying (the Memnite). The Memnite comes back
+# under its owner's control at the beginning of the next end step (CR 603.7c) as a new object (CR 400.7) with a flying counter on it
+# (CR 122.1b, 702.9), so it is untapped, has no counters from before and now flies.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Memnite
+Salvation Swan
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Salvation Swan.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Memnite)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Exile = Memnite
+? Bot1.Battlefield = Mox Pearl; Salvation Swan
+? Bot1.Battlefield.Salvation Swan.Counters.Flying = (absent)
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Salvation Swan; Memnite
+Exile.Count = 0
+Bot1.Battlefield.Memnite.Counters.Flying = 1
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Battlefield.Salvation Swan.Power = 3
+Bot1.Battlefield.Salvation Swan.Toughness = 3

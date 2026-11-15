@@ -1,0 +1,56 @@
+# Salvation Swan aimed at a merged permanent (CR 730.3c): Cubwarden is mutated onto Memnite on turn 3 (the mutate trigger leaves two
+# Cat tokens), and on turn 5 Swan is cast and exiles the merged creature, which has no flying. Both cards are exiled; at the
+# beginning of the next end step both return under their owner's control as separate permanents, each with a flying counter.
+
+[Bot1 Deck]
+Plains
+Plains
+Plains
+Memnite
+Black Lotus
+Cubwarden
+Mox Pearl
+Salvation Swan
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Cubwarden.Cast(Memnite; Ability: Mutate)
+Bot1.Pass
+Bot1.Modes(1)
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Plains#3.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Salvation Swan.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Cubwarden)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 2
+[T5 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Battlefield = Cat Token; Cat Token; Cubwarden; Memnite; Mox Pearl; Plains; Plains; Plains; Salvation Swan
+Bot1.Battlefield.Cubwarden.Counters.Flying = 1
+Bot1.Battlefield.Memnite.Counters.Flying = 1

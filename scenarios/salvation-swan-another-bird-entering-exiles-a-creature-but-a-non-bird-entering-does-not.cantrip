@@ -1,0 +1,58 @@
+# Salvation Swan triggers for itself and for another Bird you control entering (CR 603.6a), not for a non-Bird. The Swan enters first
+# with no creature without flying to target; the Memnite (a Construct) entering afterwards triggers nothing; Birds of Paradise
+# entering exiles the Memnite, which returns at the beginning of the end step with a flying counter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gleemox
+Memnite
+Salvation Swan
+Birds of Paradise
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Salvation Swan.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Exile.Count = 0
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Exile.Count = 0
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Birds of Paradise.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Memnite)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Exile = Memnite
+? Bot1.Battlefield = Mox Pearl; Gleemox; Salvation Swan; Birds of Paradise
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Memnite.Counters.Flying = 1
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Birds of Paradise.Counters.Flying = (absent)
+Bot1.Battlefield.Salvation Swan.Counters.Flying = (absent)
