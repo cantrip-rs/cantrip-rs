@@ -1,0 +1,68 @@
+# Mouse Trapper's valiant: the first time each turn it becomes the target of a spell or ability its controller controls, it taps target creature an
+# opponent controls (CR 603.2). Turn 3: Giant Growth on the Trapper triggers it - the Trapper itself is not a legal target (an opponent controls the creature),
+# Bot2's Dwarven Trader is tapped and the Savannah Lions is left alone - and a second Giant Growth the same turn is the second time, so nothing more is tapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Black Lotus
+Mouse Trapper
+Giant Growth
+Giant Growth
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Dwarven Trader
+Savannah Lions
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mouse Trapper.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dwarven Trader.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Giant Growth.Cast(Mouse Trapper)
+! Bot1.Target(Mouse Trapper)
+Bot1.Target(Bot2.Battlefield.Dwarven Trader)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Dwarven Trader.Tapped = true
+? Bot2.Battlefield.Savannah Lions.Tapped = false
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mouse Trapper.Power = 6
+Bot1.Hand.Giant Growth.Cast(Mouse Trapper)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mouse Trapper.Power = 9
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Savannah Lions.Tapped = false
+Bot1.Battlefield.Mouse Trapper.Power = 3
+Bot1.Battlefield.Mouse Trapper.Toughness = 2
