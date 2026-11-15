@@ -1,0 +1,74 @@
+# Keys to the House (2): "{3}, {T}, Sacrifice this artifact: Lock or unlock a door of target Room you control. Activate only as
+# a sorcery." (CR 709.5f, 709.5g). Turn 1 Bot1 casts Steaming Sauna, the right door of Roaring Furnace // Steaming Sauna, and
+# a Keys; turn 2 Bot2 casts its own Roaring Furnace and an Elves; turn 3, in Bot1's upkeep the Keys cannot be activated (not a
+# sorcery's time) and in its main phase not at Bot2's Room nor at a Mox (not a Room you control); aimed at its own Room it
+# locks the Sauna, the unlocked door. Turn 5 the second Keys, for the locked Furnace, unlocks it: its "when you unlock this
+# door" trigger (CR 709.5h) kills Bot2's Elves, and the Keys are a sacrificed cost each time.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Roaring Furnace // Steaming Sauna
+Keys to the House
+Keys to the House
+Mountain
+Island x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mox Ruby
+Mox Pearl
+Roaring Furnace // Steaming Sauna
+Island x15
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Steaming Sauna)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Keys to the House.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Roaring Furnace)
+[T3 Bot1.Upkeep]
+! Bot1.Battlefield.Keys to the House.Activate(Ability: Lock; Bot1.Battlefield.Steaming Sauna)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Keys to the House.Activate(Ability: Lock; Bot2.Battlefield.Roaring Furnace)
+! Bot1.Battlefield.Keys to the House.Activate(Ability: Lock; Bot1.Battlefield.Mox Ruby)
+Bot1.Battlefield.Keys to the House.Activate(Ability: Lock; Bot1.Battlefield.Steaming Sauna)
+Bot1.Pass
+Bot1.Modes(Steaming Sauna)
+? Bot1.Battlefield..Doors.Count = 0
+? Bot1.Graveyard = Keys to the House; Black Lotus
+Bot1.Hand.Keys to the House.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Keys to the House.Activate(Ability: Lock; Bot1.Battlefield.#1)
+Bot1.Pass
+Bot1.Modes(Roaring Furnace)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Roaring Furnace.Doors = Roaring Furnace
+Bot1.Graveyard = Keys to the House; Keys to the House; Black Lotus
+Bot2.Graveyard = Llanowar Elves

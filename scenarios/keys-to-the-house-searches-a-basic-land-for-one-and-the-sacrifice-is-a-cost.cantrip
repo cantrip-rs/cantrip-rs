@@ -1,0 +1,36 @@
+# Keys to the House (1): "{1}, {T}, Sacrifice this artifact: Search your library for a basic land card, reveal it, put it into
+# your hand, then shuffle." (CR 701.23, 602.2). Turn 1 one Mox Pearl pays for it and, with nothing left to pay, the ability is
+# refused. A second Mox pays exactly {1} (the pool empty after): the search offers only the basic lands - the Ornithopter (not a land) and the Volcanic Island (not basic) stay out of the choice -
+# and the Mountain taken goes to Bot1's hand, is revealed, the Keys are sacrificed as a cost, and Bot2's library
+# - full of basic Islands - is untouched.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Keys to the House
+Island x4
+Ornithopter
+Volcanic Island
+Mountain
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Keys to the House.Cast
+Bot1.Pass
+! Bot1.Battlefield.Keys to the House.Activate(Ability: Search; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Keys to the House.Activate(Ability: Search)
+? Bot1.Mana =
+Bot1.Search(Mountain)
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island; Mountain
+Bot1.Graveyard = Keys to the House
+Bot1.Revealed = Mountain
+Bot2.Library.Count = 13
