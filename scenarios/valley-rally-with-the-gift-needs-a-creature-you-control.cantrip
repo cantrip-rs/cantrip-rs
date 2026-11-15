@@ -1,0 +1,42 @@
+# Valley Rally: the creature is a target only if the gift is promised (CR 601.2c, 702.174), and it must be a creature Bot1 controls. With only Bot2's Memnite out, promising the gift leaves
+# that slot without a legal target, so the cast is taken back (CR 601.2, 733.1): the Rally is still in hand, no Food made. Casting it without the gift is fine (the pump just affects nothing).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Valley Rally
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Valley Rally.Cast
+Bot1.Accept
+? Stack.Count = 0
+? Bot1.Hand.Count = 5
+? Bot1.Graveyard.Count = 0
+Bot1.Hand.Valley Rally.Cast
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Valley Rally
+Bot2.Battlefield = Memnite
+Bot2.Battlefield.Memnite.Power = 1

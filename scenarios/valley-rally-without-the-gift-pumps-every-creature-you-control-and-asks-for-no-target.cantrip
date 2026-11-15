@@ -1,0 +1,46 @@
+# Valley Rally {2}{R} without the gift: the creatures Bot1 controls get +2/+0 until end of turn (Memnite 3/1, Ornithopter 2/2), Bot2's Memnite doesn't, and since the gift wasn't promised there is
+# no target (CR 601.2c): nobody is asked for one (`! Bot1.Target`), no creature gains first strike, and Bot2 gets no Food.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Memnite
+Ornithopter
+Valley Rally
+Island x15
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Valley Rally.Cast
+Bot1.Decline
+! Bot1.Target
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Valley Rally
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Battlefield = Memnite
+Bot2.Battlefield.Memnite.Power = 1

@@ -1,0 +1,57 @@
+# Valley Rally {2}{R} with the gift promised (CR 702.174): Bot2 creates a Food token as it resolves, every creature Bot1 controls gets +2/+0 until end of turn (Memnite 1/1 -> 3/1,
+# Ornithopter 0/2 -> 2/2) but not Bot2's Memnite, and only the targeted Memnite gains first strike (Ornithopter keeps just flying). All of it is gone on the next turn. Bot2's creature is refused as the target, and so are two
+# of Bot1's (the promise makes one target, CR 601.2c).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Memnite
+Ornithopter
+Valley Rally
+Island x15
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Valley Rally.Cast
+Bot1.Accept
+! Bot1.Target(Bot2.Battlefield.Memnite)
+! Bot1.Target(Bot1.Battlefield.Memnite; Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Memnite.Keywords = FirstStrike
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+? Bot2.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Memnite.Keywords = (absent)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+? Bot1.Battlefield.Ornithopter.Power = 0
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Valley Rally
+Bot2.Battlefield = Food Token; Memnite
+Bot2.Battlefield.Food Token.Token = true
