@@ -225,6 +225,14 @@ pub fn card_to_an_opponents_graveyard(q: &dyn Query, asker: &Asker, proposal: &P
             && q.state().opponents(asker.controller).any(|opponent| opponent == z.to.player))
 }
 
+/// "If a card or token would be put into your graveyard from anywhere" (CR 614.1a, 400.3): a card or a token (a copy of a spell
+/// is neither, CR 108.2, 111.1) bound for the graveyard of this ability's controller, whoever owns it or controlled it. Emet-Selch's
+/// back face Hades, Sorcerer of Eld and Festival of Embers print it.
+pub fn card_or_token_to_your_graveyard(q: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
+    matches!(proposal, Proposal::ZoneChange(z)
+        if z.to.is(ZoneKind::Graveyard) && z.to.player == asker.controller && (z.is_card || q.obj(z.object).token))
+}
+
 /// "If a nontoken creature an opponent controls would die" (CR 614.1a, 700.4, 111.1): `opponents_creature_would_die`, of a
 /// creature that is not a token. Kalitas, Traitor of Ghet, The Darkness Crystal, Draugr Necromancer and Valentin, Dean of the
 /// Vein print it.

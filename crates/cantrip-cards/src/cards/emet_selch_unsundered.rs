@@ -36,13 +36,6 @@ fn from_your_graveyard(q: &dyn Query, asker: &Asker, card: ObjectId, player: Pla
     def.has_cost.then(|| Cost::mana(def.cost))
 }
 
-/// "If a card or token would be put into your graveyard from anywhere, exile it instead" (CR 614.1a, 400.3): a card or a token
-/// (a copy of a spell is neither, CR 108.2, 111.1) bound for the graveyard of this ability's controller, whoever owns it.
-fn card_or_token_to_your_graveyard(q: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
-    matches!(proposal, Proposal::ZoneChange(z)
-        if z.to.is(ZoneKind::Graveyard) && z.to.player == asker.controller && (z.is_card || q.obj(z.object).token))
-}
-
 pub static BACK: CardDef = CardDef {
     granted_ways: &[GrantedWay {
         text: "Echo of the Lost \u{2014} During your turn, you may play cards from your graveyard.",
@@ -53,7 +46,7 @@ pub static BACK: CardDef = CardDef {
     }],
     replacements: &[replacement(
         ReplacementKind::ZoneChange,
-        card_or_token_to_your_graveyard,
+        cantrip_mechanics::replacements::card_or_token_to_your_graveyard,
         cantrip_mechanics::replacements::exile_instead_apply,
         "exiles a card or token your graveyard would receive",
     )],
