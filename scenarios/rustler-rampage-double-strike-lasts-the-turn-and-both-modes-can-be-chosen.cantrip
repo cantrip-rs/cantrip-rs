@@ -1,0 +1,45 @@
+# Rustler Rampage, Spree modes "+ {1} — Untap all creatures target player controls." and "+ {1} — Target creature gains double strike until end of turn." Bot1 casts both modes
+# ({W}+{1}+{1}: Moxen Pearl, Ruby, Jet) on its attacking Memnite on turn 3: it untaps (still attacking) and deals double strike damage, 2, so Bot2 goes 20 -> 18. Turn 5 it
+# attacks again without the spell: 1 damage only (until end of turn), 17.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Memnite
+Rustler Rampage
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Island x7
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rustler Rampage.Cast
+Bot1.Modes(1; 2)
+Bot1.Target(Bot1)
+Bot1.Target(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Tapped = false
+? Bot1.Battlefield.Memnite.Keywords = DoubleStrike
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+
+[Expect]
+Bot2.Life = 17

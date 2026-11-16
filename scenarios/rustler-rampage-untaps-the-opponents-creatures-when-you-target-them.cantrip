@@ -1,0 +1,42 @@
+# Rustler Rampage mode 1 aimed at the opponent: same board as the scenario beside it (Bot1's Ornithopter tapped from turn 3, Bot2 attacks on turn 4 with its Memnite), but Bot1
+# targets Bot2: the attacking Memnite untaps (an attacking creature stays attacking, CR 506.4) and Bot1's own tapped Ornithopter does not.
+
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Ornithopter
+Rustler Rampage
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Island x6
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Tapped = true
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rustler Rampage.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Memnite.Tapped = false
+
+[Expect]
+Bot1.Graveyard = Rustler Rampage
