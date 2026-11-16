@@ -8405,7 +8405,13 @@ pub fn maximum_hand_size(cx: &Cx, player: PlayerId) -> Option<u32> {
         each_play_rule_named(cx, cx.cards(), controller, true, |source, ability, rule| {
             let maximum = match *rule {
                 PlayRule::MaximumHandSize(maximum) if controller == player => maximum,
-                PlayRule::MaximumHandSizeOf(applies, maximum) if applies(cx, &Asker::new(source, controller), player) => maximum,
+                PlayRule::MaximumHandSizeOf(applies, maximum) => {
+                    let asker = Asker::new(source, controller);
+                    if !applies(cx, &asker, player) {
+                        return;
+                    }
+                    maximum(cx, &asker)
+                }
                 _ => return,
             };
             says(play_rule_timestamp(cx, source, ability), maximum);

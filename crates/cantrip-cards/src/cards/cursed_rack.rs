@@ -35,6 +35,6 @@ fn as_artifact_enters_choose_opponent_hand_size_0(
 
 pub static CARD: CardDef = CardDef {
     enters: Some(as_artifact_enters_choose_opponent_enters),
-    play_rules: &[PlayRule::MaximumHandSizeOf(as_artifact_enters_choose_opponent_hand_size_0, Some(4))],
+    play_rules: &[PlayRule::MaximumHandSizeOf(as_artifact_enters_choose_opponent_hand_size_0, |_, _| Some(4))],
     ..oracle::CURSED_RACK
 };

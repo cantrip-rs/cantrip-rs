@@ -116,10 +116,10 @@ fn anyone(_: &dyn Query, _: &Asker, _: PlayerId) -> bool {
 static RACK: CardDef = CardDef {
     name: "Cursed Rack hand-size fixture",
     types: TypeSet::of(&[CardType::Artifact]),
-    play_rules: &[PlayRule::MaximumHandSizeOf(opponent, Some(4))],
+    play_rules: &[PlayRule::MaximumHandSizeOf(opponent, |_, _| Some(4))],
     ..CardDef::BLANK
 };
-static UNLIMITED: CardDef = CardDef { name: "Hand-size unlimited fixture", play_rules: &[PlayRule::MaximumHandSizeOf(anyone, None)], ..RACK };
+static UNLIMITED: CardDef = CardDef { name: "Hand-size unlimited fixture", play_rules: &[PlayRule::MaximumHandSizeOf(anyone, |_, _| None)], ..RACK };
 /// Reliquary Tower's kind: "You have no maximum hand size."
 static TOWER: CardDef = CardDef { name: "Hand-size tower fixture", play_rules: &[PlayRule::MaximumHandSize(None)], ..RACK };
 fn hand_game() -> Game {
@@ -174,4 +174,21 @@ fn your_maximum_hand_size_is_of_its_controller_alone() {
     g.state.update_obj(tower, |o| o.controller = THEM);
     assert_eq!(maximum_hand_size(&cx(&mut g), THEM), None);
     assert_eq!(maximum_hand_size(&cx(&mut g), YOU), Some(7), "an opponent's \"you\" is not you");
+}
+/// Seven minus the permanents the rule's controller controls: a maximum that varies (Winter, Misanthropic Guide's kind).
+fn seven_minus_your_permanents(q: &dyn Query, a: &Asker) -> Option<u32> {
+    let yours = q.state().battlefield().iter().filter(|&&o| q.state().obj(o).controller == a.controller).count();
+    Some(7u32.saturating_sub(yours as u32))
+}
+static SHRINKING: CardDef = CardDef { name: "Hand-size shrinking fixture", play_rules: &[PlayRule::MaximumHandSizeOf(opponent, seven_minus_your_permanents)], ..RACK };
+/// The maximum is asked each time the rule is judged, so it follows the game: one permanent, six; two, five.
+#[test]
+fn a_named_players_hand_size_may_vary_with_the_game() {
+    let cards = Box::leak(Box::new(CardTable::new([&SHRINKING, &BEAR])));
+    let mut g = Game::new(cards, &Setup { decks: vec![vec![]; 2], ..Default::default() });
+    enter(&mut g, &SHRINKING);
+    assert_eq!(maximum_hand_size(&cx(&mut g), THEM), Some(6));
+    assert_eq!(maximum_hand_size(&cx(&mut g), YOU), Some(7));
+    enter(&mut g, &BEAR);
+    assert_eq!(maximum_hand_size(&cx(&mut g), THEM), Some(5));
 }
