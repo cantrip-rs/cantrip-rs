@@ -17,7 +17,7 @@ static RED: CardDef = CardDef { name:"Combat change red creature", colors:Some(C
 static PROTECTED: CardDef = CardDef { name:"Combat change red protection", protection:ColorSet::of(Color::Red), ..CREATURE };
 static MULTI: CardDef = CardDef { name:"Combat change multi blocker", abilities:&[block_allowance(1,"Can block an additional creature.")], ..CREATURE };
 static CAP: CardDef = CardDef { name:"Combat change group cap", combat_groups:&[
-    CombatGroupRule {role:CombatRole::Blocker,about:None,at_most:2}
+    CombatGroupRule {role:CombatRole::Blocker,about:None,at_least:0,at_most:2}
 ], ..CardDef::BLANK };
 fn blocks(_: &dyn Query, source: ObjectId, e: &Event) -> Option<Fired> {
     matches!(e, Event::Blocks { blocker, declared: true, .. } if *blocker == source).then_some(Fired::PLAIN).flatten()

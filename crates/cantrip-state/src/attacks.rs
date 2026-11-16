@@ -319,10 +319,19 @@ impl AttackRules {
                 #[cfg(test)]
                 GROUP_ATTACK_SEARCH_NODES.with(|n| n.set(n.get() + 1));
                 let has = |id| self.chosen.iter().any(|p| p.0 == id);
-                if self.rules.groups.iter().any(|g| !g.allows(has)) {
+                // Too many members where a group binds stays too many; too few where the creatures still to decide can't
+                // make up its minimum stays too few.
+                let short = |g: &crate::CombatGroup| {
+                    g.binds(has) && {
+                        let more = self.options[i..].iter().filter(|p| !p.1.is_empty() && g.members.contains(&p.0)).count();
+                        g.count(has) + count_u32(more) < g.at_least
+                    }
+                };
+                if self.rules.groups.iter().any(|g| g.exceeded(has) || short(g)) {
                     return;
                 }
-                let valid = !(self.chosen.len() == 1 && self.rules.alone_barred.contains(&self.chosen[0].0));
+                let valid = self.rules.groups.iter().all(|g| g.allows(has))
+                    && !(self.chosen.len() == 1 && self.rules.alone_barred.contains(&self.chosen[0].0));
                 if valid && self.best.as_ref().is_none_or(|b| gain > b.0) && self.enough.is_none_or(|n| gain >= n) {
                     self.best = Some((gain, self.chosen.clone()));
                 }

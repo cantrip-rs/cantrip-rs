@@ -13,6 +13,6 @@ pub static CARD: CardDef = CardDef {
     ],
     enchant: Some(targets::CREATURE),
     // "Can only attack alone" (CR 506.5, 508.1c): a declaration with the enchanted creature has no other attacker.
-    combat_groups: &[CombatGroupRule { role: CombatRole::Attacker, about: Some(attach::attached_to_it), at_most: 1 }],
+    combat_groups: &[CombatGroupRule { role: CombatRole::Attacker, about: Some(attach::attached_to_it), at_least: 0, at_most: 1 }],
     ..oracle::ERRANTRY
 };

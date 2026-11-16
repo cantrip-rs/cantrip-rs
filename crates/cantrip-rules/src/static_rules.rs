@@ -1246,7 +1246,7 @@ pub fn combat_groups(cx: &Cx, role: CombatRole, eligible: &[ObjectId]) -> Vec<Co
                 continue;
             }
             // Two of the same restriction are one.
-            let group = CombatGroup { subjects, members: eligible.to_vec(), at_most: rule.at_most };
+            let group = CombatGroup { subjects, members: eligible.to_vec(), at_least: rule.at_least, at_most: rule.at_most };
             if !groups.contains(&group) {
                 groups.push(group);
             }

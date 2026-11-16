@@ -2821,13 +2821,16 @@ pub enum CombatRole { Attacker, Blocker }
 /// A restriction on how many creatures a complete declaration has (CR 508.1c, 509.1b), every attacking (or blocking)
 /// creature counted: with no `about`, Caverns of Despair's "No more than two creatures can attack each combat"; with one,
 /// only a declaration that has a creature it is true of is limited - Errantry's "Enchanted creature can only attack alone"
-/// (CR 506.5) is `at_most: 1` about the enchanted creature. The core snapshots membership, judges full declarations and
-/// maximizes requirements with it.
+/// (CR 506.5) is `at_most: 1` about the enchanted creature, and Orcish Conscripts' "This creature can't attack unless at
+/// least two other creatures attack" is `at_least: 3` about itself, the creature counted with the two others. The core
+/// snapshots membership, judges full declarations and maximizes requirements with it.
 #[derive(Clone, Copy)]
 pub struct CombatGroupRule {
     pub role: CombatRole,
     /// The creatures the restriction is about, asked of each eligible creature with the source's asker; `None` for all.
     pub about: Option<fn(&dyn Query, &Asker, ObjectId) -> bool>,
+    /// The fewest creatures, those it is about among them, a declaration that has one it is about may have; 0 for none.
+    pub at_least: u32,
     pub at_most: u32,
 }
 

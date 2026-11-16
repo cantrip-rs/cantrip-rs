@@ -5,8 +5,8 @@ use cantrip_oracle as oracle;
 /// 509.1b).
 pub static CARD: CardDef = CardDef {
     combat_groups: &[
-        CombatGroupRule { role: CombatRole::Attacker, about: None, at_most: 2 },
-        CombatGroupRule { role: CombatRole::Blocker, about: None, at_most: 2 },
+        CombatGroupRule { role: CombatRole::Attacker, about: None, at_least: 0, at_most: 2 },
+        CombatGroupRule { role: CombatRole::Blocker, about: None, at_least: 0, at_most: 2 },
     ],
     ..oracle::CAVERNS_OF_DESPAIR
 };

@@ -122,7 +122,8 @@ impl BlockRequirements {
         }
         let has = |id| blocks.iter().any(|p| p.0 == id);
         if let Some(g) = self.groups.iter().find(|g| !g.allows(has)) {
-            return issue(g.subjects.iter().copied().find(|&id| has(id)).unwrap_or(ObjectId::NONE), "can't block with this group".into(), None, "509.1b", false);
+            // Too few blockers may be mended with more; too many may not.
+            return issue(g.subjects.iter().copied().find(|&id| has(id)).unwrap_or(ObjectId::NONE), "can't block with this group".into(), None, "509.1b", !g.exceeded(has));
         }
         if self.obeyed(blocks) < self.most {
             // A requirement left unobeyed by a creature that obeys none, so the caption names a creature that can still obey
@@ -328,10 +329,14 @@ impl BlockRequirements {
                 }
                 if !self.groups.is_empty() {
                     let has = |id| self.fixed.iter().any(|p| p.0 == id) || self.chosen.iter().any(|p| self.blockers[p.0].id == id);
-                    if self.groups.iter().any(|g| !g.allows(has)) { return; }
+                    if self.groups.iter().any(|g| g.exceeded(has)) { return; }
                 }
                 // A whole declaration is judged by what it obeys, nothing more.
                 if i == self.blockers.len() {
+                    if !self.groups.is_empty() {
+                        let has = |id| self.fixed.iter().any(|p| p.0 == id) || self.chosen.iter().any(|p| self.blockers[p.0].id == id);
+                        if self.groups.iter().any(|g| !g.allows(has)) { return; }
+                    }
                     let better = match self.enough {
                         Some(n) => obeyed >= n,
                         None => self.best.as_ref().is_none_or(|(n, _)| obeyed > *n),
