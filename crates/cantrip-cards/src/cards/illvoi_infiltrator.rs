@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::effects;
+use cantrip_mechanics::{effects, history};
 use cantrip_mechanics::triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER;
 use cantrip_oracle as oracle;
 
@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 /// countered or is still on the stack counts, as does the Infiltrator itself if it was cast this turn (the ruling). A block that has been
 /// made stands; casting spells after blockers are declared does not undo it.
 fn cant_block_the_infiltrator_after_two_spells(q: &dyn Query, source: ObjectId, _: ObjectId, attacker: ObjectId) -> bool {
-    !(attacker == source && q.history().casts_by(q.state().obj(source).controller).nth(1).is_some())
+    !(attacker == source && history::cast_two_or_more_spells_this_turn(q.history(), q.state().obj(source).controller))
 }
 
 pub static CARD: CardDef = CardDef {

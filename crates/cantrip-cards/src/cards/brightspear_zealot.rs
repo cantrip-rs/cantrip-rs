@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::statics::plus_pt;
+use cantrip_mechanics::{history, statics::plus_pt};
 use cantrip_oracle as oracle;
 
 /// "... as long as you've cast two or more spells this turn" (CR 611.3a, 601.2i) as a static ability's `StaticDef::affects`: only the
@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 /// is one of them once cast). The layers ask again whenever characteristics are computed, so it turns on with the second cast and
 /// off as the turn ends. Spells that were countered or are still on the stack count (the history holds every cast).
 fn itself_while_you_cast_two_or_more_spells(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Chars) -> bool {
-    source == affected && q.history().casts_by(q.state().obj(source).controller).count() >= 2
+    source == affected && history::cast_two_or_more_spells_this_turn(q.history(), q.state().obj(source).controller)
 }
 
 /// Brightspear Zealot: vigilance is a core keyword.

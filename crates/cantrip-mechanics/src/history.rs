@@ -32,6 +32,15 @@ pub fn you_havent_cast_a_spell_from_your_hand(q: &dyn Query, asker: &Asker) -> b
     !q.history().casts_by(asker.controller).any(|cast| cast.from == ZoneKind::Hand && q.state().obj(cast.spell).owner == asker.controller)
 }
 
+/// "If you've cast two or more spells this turn" (CR 601.2i): whether `player` has cast at least two spells this turn, whichever
+/// zone they were cast from and however they ended up (a countered spell, or one still on the stack, was cast; a copy is not, CR
+/// 707.10). A permanent spell that has since entered counts, so a creature that was itself the second spell cast sees that. Loan
+/// Shark and Reverberating Summons ask it as an intervening "if" (CR 603.4), Brightspear Zealot as a static ability, Effortless
+/// Master as it enters and Illvoi Infiltrator of a block.
+pub fn cast_two_or_more_spells_this_turn(history: History<'_>, player: PlayerId) -> bool {
+    history.casts_by(player).nth(1).is_some()
+}
+
 /// "[It] attacked during your last turn" (CR 508.1, 500.1): `object` was declared as an attacker in the most recent turn before
 /// this one that `player` was the active player of (turns they had no events in do not count, so a skipped turn is not
 /// their last). The object is the one that attacked, so a permanent that left and came back has not (CR 400.7). Giant Turtle

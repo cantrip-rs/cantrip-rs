@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{Animation, animate, effects};
+use cantrip_mechanics::{Animation, animate, effects, history};
 use cantrip_oracle as oracle;
 
 /// "At the beginning of each combat" (CR 507.1): the beginning of combat step of any player's turn.
@@ -13,7 +13,7 @@ fn each_combat(_: &dyn Query, _: &Asker, event: &Event) -> Option<Fired> {
 /// "... if you've cast two or more spells this turn" (CR 603.4): asked as the combat begins and again as the ability
 /// resolves, of the spells its controller has cast this turn, on whosever turn it is.
 fn you_cast_two_or_more_spells_this_turn(q: &dyn Query, asker: &Asker) -> bool {
-    q.history().casts_by(asker.controller).count() >= 2
+    history::cast_two_or_more_spells_this_turn(q.history(), asker.controller)
 }
 
 /// "This enchantment becomes a 3/3 Monk creature with haste in addition to its other types until end of turn" (CR 205.1b,
