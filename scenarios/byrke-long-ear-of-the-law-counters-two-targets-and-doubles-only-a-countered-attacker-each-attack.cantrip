@@ -1,0 +1,80 @@
+# Byrke, Long Ear of the Law: "When Byrke enters, put a +1/+1 counter on each of up to two target creatures. Whenever a
+# creature you control with a +1/+1 counter on it attacks, double the number of +1/+1 counters on it." On turn 3 Byrke enters
+# with Bot1's Memnite and Bot2's Ornithopter as its two targets (an opponent's creature is a legal target), and each gets one
+# counter. Bot1 attacks with the Memnite (1 counter, doubled to 2) and with its own Ornithopter, which has no counter and is
+# left alone (Byrke himself is summoning sick). On turn 4 Bot2's countered Ornithopter
+# attacks: it is not a creature Bot1 controls, so its counter stays one. On turn 5 the Memnite attacks again and its two
+# counters double to four, for 5 damage that turn after 3 on turn 3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Black Lotus
+Memnite
+Ornithopter
+Mox Sapphire
+Byrke, Long Ear of the Law
+Plains x12
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Byrke, Long Ear of the Law.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Memnite; Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+? Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+? Bot1.Battlefield.Byrke, Long Ear of the Law.Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2; Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+? Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Memnite.Power = 5
+Bot2.Life = 12
+Bot1.Life = 19
