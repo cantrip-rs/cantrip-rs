@@ -12,12 +12,7 @@ fn artifact_or_tapped_creature(q: &dyn Query, asker: &Asker, t: Target) -> bool 
 
 /// "Destroy target artifact or tapped creature. You gain 3 life." (CR 701.8, 119.3, 608.2b): the life is gained whether or not the
 /// target was destroyed (indestructible, regenerated); with its only target illegal the spell does nothing at all.
-fn destroy_and_gain_3(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::destroy_first_target(g, item)?;
-    effects::gain_life(g, item, 3)
-}
-
 pub static CARD: CardDef = CardDef {
-    spell: spell(&[target(artifact_or_tapped_creature)], destroy_and_gain_3),
+    spell: spell(&[target(artifact_or_tapped_creature)], effects::destroy_first_target_and_gain_life::<3>),
     ..oracle::RADIANT_STRIKE
 };

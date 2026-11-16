@@ -2038,6 +2038,14 @@ pub fn destroy_first_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Su
     Ok(())
 }
 
+/// "Destroy target [thing]. You gain N life." (CR 701.8, 119.3, 608.2b): the life is gained whether or not the target was
+/// destroyed (indestructible, regenerated); with its only target illegal the spell does nothing at all, so no life is gained.
+/// Grapple with Death (one), Sephiroth's Intervention (two), Eriette's Lullaby (two) and Radiant Strike (three) print it.
+pub fn destroy_first_target_and_gain_life<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    destroy_first_target(g, item)?;
+    gain_life(g, item, N)
+}
+
 const MAY_DESTROY_TARGET: Question = Question::new("Destroy", "destroy the targeted permanent?", "", "Destroy it", "Don't destroy");
 
 /// "You may destroy target [permanent]" (CR 701.8, 608.2b, 603.3d): the target is chosen as the ability goes on the stack and
