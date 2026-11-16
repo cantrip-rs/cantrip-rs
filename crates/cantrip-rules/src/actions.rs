@@ -3586,6 +3586,11 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
     for objects in [&mut way_paid, &mut ability_tappers, &mut ability_symbol_exiles] { objects.sort_by_key(|(component, _)| *component); }
     let members = way_paid.into_iter().chain(ability_tappers).map(|(_, id)| id).collect();
     let exiled = ability_symbol_exiles.into_iter().map(|(_, id)| id).collect();
+    // Each way to forage paid is a forage (CR 701.61a), recorded as the whole payment is made.
+    let forages = usize::from(cost.forage) + extra.iter().filter(|(_, part)| part.forage).count() + options.iter().filter(|part| part.forage).count();
+    for _ in 0..forages {
+        cx.emit(Event::Foraged { player, by: spell });
+    }
     Ok((members, exiled, way_attacking, spent, restrictions, taken, variable_paid, beheld_type, mana_adds_nothing))
 }
 
@@ -16192,6 +16197,7 @@ fn resolution_parts(cost: &Cost) -> bool {
         blight: _,
         tap_to_reduce,
         materials,
+        forage: _,
     } = *cost;
     // A waterbend cost's {X} is announced with a spell's (CR 107.3a), which a payment during a resolution has none of.
 

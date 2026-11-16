@@ -1036,6 +1036,10 @@ pub struct Cost {
     /// graveyard", chosen as the cost is chosen (CR 601.2h by way of 602.2b) and exiled as it is paid, together with
     /// the source when the cost also exiles it (`exile_self`). Only an activated ability's cost carries it.
     pub materials: Option<&'static Materials>,
+    /// This cost is a way to forage (CR 701.61a): paying it is foraging, and the payer's foraging is recorded once it is
+    /// paid (`Event::Foraged`), for "whenever you forage", whether the forage is a cost or what resolves (`Game::may_pay`).
+    /// `cantrip_mechanics::forage` sets it on both of its ways.
+    pub forage: bool,
 }
 
 /// What a craft ability exiles besides its source (CR 702.167a): `count` objects, or `count` or more, from among the
@@ -1269,6 +1273,7 @@ impl Cost {
             blight,
             tap_to_reduce,
             materials,
+            forage,
         } = *self;
         components.is_empty() && tap && mana.is_zero() && mana.x == 0
             && waterbend.is_zero()
@@ -1312,6 +1317,7 @@ impl Cost {
             && blight == 0
             && !tap_to_reduce
             && materials.is_none()
+            && !forage
     }
 
     /// This cost paid `n` times over (escalate, CR 702.120a, once for each mode beyond the first): its mana, life,
@@ -1489,6 +1495,7 @@ impl Cost {
             c.tap_creatures = other.tap_creatures;
         }
         c.exert |= other.exert;
+        c.forage |= other.forage;
         c.unattach_self |= other.unattach_self;
         c.return_self |= other.return_self;
         if c.variable.is_none() {
@@ -1574,6 +1581,7 @@ impl Cost {
             blight: 0,
             tap_to_reduce: false,
             materials: None,
+            forage: false,
         };
 
     /// "Waterbend {N}" (CR 701.67a-b): `generic` generic mana, each of which an untapped artifact or creature tapped may pay, and

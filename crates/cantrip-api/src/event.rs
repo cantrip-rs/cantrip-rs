@@ -491,6 +491,10 @@ pub enum Event {
     /// `graveyard` is the cards the process put into their graveyard, as the objects they became there - none, one, or both
     /// when the manifested one could not enter (CR 701.40f).
     ManifestedDread { player: PlayerId, graveyard: [Option<ObjectId>; 2] },
+    /// `player` foraged (CR 701.61a): paid a cost that is a way to forage (`Cost::forage`), as a cost of a spell or an
+    /// ability or as a resolving one asks (CR 118.12), by `by`, the spell or ability's source. Recorded once the whole
+    /// payment is made, for "whenever you forage".
+    Foraged { player: PlayerId, by: ObjectId },
     /// `player`'s speed became `speed` (CR 702.179): set to 1 by the state-based action (CR 704.5aa), or increased
     /// (CR 702.179c-d). Never for an increase that changed nothing.
     SpeedChanged { player: PlayerId, speed: u8 },
@@ -611,6 +615,7 @@ impl Event {
             | Event::Scried { player, .. }
             | Event::Surveilled { player, .. }
             | Event::ManifestedDread { player, .. }
+            | Event::Foraged { player, .. }
             | Event::SpeedChanged { player, .. }
             | Event::CrimeCommitted { player, .. }
             | Event::GameLost { player, .. }
@@ -692,7 +697,7 @@ impl Event {
             Event::Convoked { creature, spell } | Event::TappedForTeamwork { creature, spell } => creature == object || spell == object,
             Event::Crewed { creature, vehicle } => creature == object || vehicle == object,
             Event::Saddled { creature, mount } => creature == object || mount == object,
-            Event::LifeChange { .. } | Event::Searched { .. } | Event::AttackersDeclared { .. } | Event::StepBegan { .. } | Event::BecameMonarch { .. } | Event::TookInitiative { .. } | Event::GaveGift { .. } | Event::ChosenAtRandom { .. } | Event::CoinFlipped { .. } | Event::DieRolled { .. } | Event::TurnEnded { .. } | Event::TurnBegan { .. } | Event::DungeonCompleted { .. } | Event::Scried { .. } | Event::Surveilled { .. } | Event::SpeedChanged { .. } | Event::GameLost { .. } | Event::GameDrawn { .. } | Event::Shuffled { .. } | Event::PlayerControlled { .. } => false,
+            Event::LifeChange { .. } | Event::Searched { .. } | Event::AttackersDeclared { .. } | Event::StepBegan { .. } | Event::BecameMonarch { .. } | Event::TookInitiative { .. } | Event::GaveGift { .. } | Event::ChosenAtRandom { .. } | Event::CoinFlipped { .. } | Event::DieRolled { .. } | Event::TurnEnded { .. } | Event::TurnBegan { .. } | Event::DungeonCompleted { .. } | Event::Scried { .. } | Event::Surveilled { .. } | Event::Foraged { .. } | Event::SpeedChanged { .. } | Event::GameLost { .. } | Event::GameDrawn { .. } | Event::Shuffled { .. } | Event::PlayerControlled { .. } => false,
         }
     }
 }
@@ -799,6 +804,8 @@ impl EventMask {
     pub const CREWED: EventMask = EventMask(1 << 63);
     /// A creature saddled a Mount (CR 702.171c).
     pub const SADDLED: EventMask = EventMask(1 << 66);
+    /// A player foraged (CR 701.61a).
+    pub const FORAGED: EventMask = EventMask(1 << 68);
     /// A spell merged with a permanent (CR 702.140d), a distinct event from transforming.
     pub const MUTATED: EventMask = EventMask(1 << 65);
     /// A player manifested dread (CR 701.62b).
@@ -909,6 +916,7 @@ impl EventMask {
             Event::Scried { .. } => EventMask::SCRIED,
             Event::Surveilled { .. } => EventMask::SURVEILLED,
             Event::ManifestedDread { .. } => EventMask::MANIFESTED_DREAD,
+            Event::Foraged { .. } => EventMask::FORAGED,
             Event::DamagePrevented { .. } => EventMask::DAMAGE_PREVENTED,
             Event::SpeedChanged { .. } => EventMask::SPEED_CHANGED,
             // "When [a player] loses the game" (CR 603.10f): Shinryu, Transcendent Rival's Burning Chains. A drawn game

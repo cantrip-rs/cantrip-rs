@@ -397,6 +397,19 @@ static ABILITY_WITH_LIFE_AND_RANDOM_LIBRARY: CardDef = CardDef {
 fn power_ten(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
     q.chars(id).is(CardType::Creature) && q.chars(id).power.is_some_and(|n| n >= 10)
 }
+// A way to forage as a cost (CR 701.61a): its shape is a Bear sacrificed, marked as a forage.
+const FORAGE_BEAR: Cost = Cost { forage: true, ..Cost::sacrifice(1, is_bear) };
+static FORAGE_WAY_ABILITY: CardDef = CardDef {
+    name: "Cost Test Forage Way Ability", types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[ability(TAP, gain_three, "{T}, Forage: You gain 3 life.").pay_one_of(&[ExtraCost { text: "Forage: sacrifice a Bear", cost: FORAGE_BEAR }])],
+    ..CardDef::BLANK
+};
+static SPELL_WITH_OPTIONAL_FORAGE: CardDef = CardDef {
+    name: "Cost Test Optional Forage", types: TypeSet::of(&[CardType::Sorcery]), has_cost: true, cost: ManaCost::ZERO,
+    spell: spell(&[], gain_three), optional_cost: Some(OptionalCost::new(FORAGE_BEAR)), labels: &["Without optional cost", "Forage"],
+    ..CardDef::BLANK
+};
+
 static ABILITY_WITH_RANDOM_AND_DYNAMIC_SACRIFICE: CardDef = CardDef {
     name: "Cost Test Shuffle And Dynamic Sacrifice", types: TypeSet::of(&[CardType::Artifact]),
     abilities: &[ability(Cost::sacrifice(1, power_ten).and(Cost { life: 3, put_self_into_library: Some(LibraryPlace::ShuffledIn), ..Cost::NONE }), gain_three, "Pay 3 life, sacrifice a creature with power 10 or greater, shuffle this into its owner's library: gain 3 life.")], ..CardDef::BLANK
@@ -880,7 +893,7 @@ static ARCANE_CHOOSE_PAIR: CardDef = CardDef {
 
 /// Your precombat main phase with priority, nothing anywhere.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&CHOOSE_ONLY_SPELL, &LIFE_THEN_CHOOSE_SPELL, &GRANTED_CONTEXT_CHOOSE, &ARCANE_CHOOSE_PAIR, &FILLER, &BEAR, &DORK, &SEER, &GAZER, &RETURNER, &OFFER, &RECALL, &TITHE, &VOW, &RECOILER, &LIBRARIAN, &RITE, &GRAFT, &STOWER, &TOLL, &HOARD, &HIGH_LIFE, &IMPOSSIBLE_LIFE, &MASS_OFFER, &WITHERER, &RESOLUTION_LIFE_AND_SACRIFICE, &RESOLUTION_ONE_PAYMENT_ABILITY, &RESOLUTION_ONE_PAYMENT, &RESOLUTION_TWO_PAYMENTS, &TWO_DISTINCT_COSTS, &CHOSEN_DIFFERENT_COSTS, &MULTIKICK_DIFFERENT_COSTS, &MANA_FROM_PAID, &MANA_WITH_LIFE_AND_SACRIFICE, &MANA_WITH_LIFE_AND_DYNAMIC_SACRIFICE, &DYNAMIC_COLOR_STAR, &MANA_WITH_DYNAMIC_COLOR, &MANA_WITH_NESTED_DYNAMIC_SACRIFICE, &MANA_WITH_TAXED_DYNAMIC_SACRIFICE, &PLAYER_MANA_WITH_LIFE_AND_SACRIFICE, &TEMPORARY_PLAYER_GRANTER, &VANISHING_PLAYER_GRANTER, &GRANTED_COLOR_MANA, &SELF_COLOR_MANA, &RED_DORK, &TWO_SACRIFICE_COLOR_MANA, &RETURN_THEN_COLOR_MANA, &OVERLAPPING_COSTS, &MANA_AFTER_OTHER_SACRIFICE, &MANA_WITH_TWO_COSTS, &TAP_AND_SACRIFICE_COSTS, &SPELL_WITH_TWO_COSTS, &SPELL_WITH_TWO_ACTIONS, &OUTER_MANA_COST, &INNER_MANA_COST, &EXILE_SACRIFICES, &SPELL_WITH_OVERLAPPING_COSTS, &SPELL_WITH_TAP_AND_SACRIFICE, &PREVENT_SACRIFICES, &COLOR_MANA, &STATE_WATCHER, &PAYMENT_BOUNDARY, &LIFE_STAR, &SPELL_WITH_LIFE_AND_SACRIFICE, &REVERSE_LIFE_STAR, &SPELL_WITH_LIFE_AND_POWER_COST, &SPELL_WITH_MANA_AND_LIFE, &SPELL_WITH_TWO_MANA_AND_MIDPAYMENT_SACRIFICE, &SPELL_WITH_SNOW_MANA_AND_LIFE, &SPELL_WITH_MANA_RECEIPT_SACRIFICE, &SPELL_WITH_CONVOKE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_DELVE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_IMPROVISE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_WATERBEND_MIDPAYMENT_SACRIFICE, &TAP_BATCH_WATCHER, &SPELL_WITH_HARMONIZE, &SPELL_WITH_LIFE_AND_OPTIONAL_POWER, &LIFE_MANA_SOURCE, &SPELL_WITH_MANA_AND_OPTIONAL_POWER, &SPELL_WITH_MANA_AND_POWER_CHOICE, &SPELL_WITH_MANA_AND_DYNAMIC_BEHOLD, &SPELL_WITH_POWER_AND_OPTIONAL_LIFE, &ENERGY_STAR, &SPELL_WITH_ENERGY_AND_POWER_COST, &SPELL_WITH_COUNTER_AND_POWER_COST, &SPELL_WITH_BLIGHT_AND_POWER_COST, &SPELL_WITH_MANA_AND_GRAVEYARD_EXILE, &SPELL_WITH_MANA_AND_HAND_EXILE, &SPELL_WITH_MANA_AND_EVIDENCE, &SPELL_WITH_DISCARD_AND_GRAVEYARD_EXILE, &SPELL_WITH_DISCARD_AND_TARGET_EXILE, &SPELL_WITH_TARGET_EXILE_ONLY, &SPELL_WITH_DISCARD_AND_EXILE_CHOICE, &SPELL_WITH_LIFE_AND_EXILE_CHOICE, &SPELL_WITH_LIFE_AND_VARIABLE_SACRIFICE, &SPELL_WITH_BEHOLD_AND_DISCARD, &SPELL_WITH_SEVEN_DISCARDS, &SPELL_WITH_TEAMWORK_AND_SACRIFICE, &SPELL_WITH_CONVOKE_AND_SACRIFICE, &ABILITY_WITH_LIFE_AND_SACRIFICE, &ABILITY_WITH_TAP_AND_SELF_SACRIFICE, &ABILITY_WITH_TAP_AND_SELF_RETURN, &ABILITY_WITH_COUNTER_AND_SELF_SACRIFICE, &ABILITY_WITH_VARIABLE_COUNTER_AND_SELF_SACRIFICE, &ABILITY_SACRIFICING_ONE_OR_MORE, &ABILITY_SACRIFICING_X, &ABILITY_WITH_LOYALTY_AND_SELF_SACRIFICE, &ABILITY_WITH_EXERT_AND_SELF_SACRIFICE, &ABILITY_WITH_UNATTACH_AND_TAP, &ABILITY_WITH_CRAFT_AND_LIFE, &ABILITY_WITH_LIFE_AND_LIBRARY_TOP, &ABILITY_WITH_LIFE_AND_RANDOM_LIBRARY, &ABILITY_WITH_RANDOM_AND_DYNAMIC_SACRIFICE, &EVIDENCE_CARD, &SPELL_WITH_TWO_GRAVEYARD_EXILES])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&CHOOSE_ONLY_SPELL, &LIFE_THEN_CHOOSE_SPELL, &GRANTED_CONTEXT_CHOOSE, &ARCANE_CHOOSE_PAIR, &FILLER, &BEAR, &DORK, &SEER, &GAZER, &RETURNER, &OFFER, &RECALL, &TITHE, &VOW, &RECOILER, &LIBRARIAN, &RITE, &GRAFT, &STOWER, &TOLL, &HOARD, &HIGH_LIFE, &IMPOSSIBLE_LIFE, &MASS_OFFER, &WITHERER, &RESOLUTION_LIFE_AND_SACRIFICE, &RESOLUTION_ONE_PAYMENT_ABILITY, &RESOLUTION_ONE_PAYMENT, &RESOLUTION_TWO_PAYMENTS, &TWO_DISTINCT_COSTS, &CHOSEN_DIFFERENT_COSTS, &MULTIKICK_DIFFERENT_COSTS, &MANA_FROM_PAID, &MANA_WITH_LIFE_AND_SACRIFICE, &MANA_WITH_LIFE_AND_DYNAMIC_SACRIFICE, &DYNAMIC_COLOR_STAR, &MANA_WITH_DYNAMIC_COLOR, &MANA_WITH_NESTED_DYNAMIC_SACRIFICE, &MANA_WITH_TAXED_DYNAMIC_SACRIFICE, &PLAYER_MANA_WITH_LIFE_AND_SACRIFICE, &TEMPORARY_PLAYER_GRANTER, &VANISHING_PLAYER_GRANTER, &GRANTED_COLOR_MANA, &SELF_COLOR_MANA, &RED_DORK, &TWO_SACRIFICE_COLOR_MANA, &RETURN_THEN_COLOR_MANA, &OVERLAPPING_COSTS, &MANA_AFTER_OTHER_SACRIFICE, &MANA_WITH_TWO_COSTS, &TAP_AND_SACRIFICE_COSTS, &SPELL_WITH_TWO_COSTS, &SPELL_WITH_TWO_ACTIONS, &OUTER_MANA_COST, &INNER_MANA_COST, &EXILE_SACRIFICES, &SPELL_WITH_OVERLAPPING_COSTS, &SPELL_WITH_TAP_AND_SACRIFICE, &PREVENT_SACRIFICES, &COLOR_MANA, &STATE_WATCHER, &PAYMENT_BOUNDARY, &LIFE_STAR, &SPELL_WITH_LIFE_AND_SACRIFICE, &REVERSE_LIFE_STAR, &SPELL_WITH_LIFE_AND_POWER_COST, &SPELL_WITH_MANA_AND_LIFE, &SPELL_WITH_TWO_MANA_AND_MIDPAYMENT_SACRIFICE, &SPELL_WITH_SNOW_MANA_AND_LIFE, &SPELL_WITH_MANA_RECEIPT_SACRIFICE, &SPELL_WITH_CONVOKE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_DELVE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_IMPROVISE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_WATERBEND_MIDPAYMENT_SACRIFICE, &TAP_BATCH_WATCHER, &SPELL_WITH_HARMONIZE, &SPELL_WITH_LIFE_AND_OPTIONAL_POWER, &LIFE_MANA_SOURCE, &SPELL_WITH_MANA_AND_OPTIONAL_POWER, &SPELL_WITH_MANA_AND_POWER_CHOICE, &SPELL_WITH_MANA_AND_DYNAMIC_BEHOLD, &SPELL_WITH_POWER_AND_OPTIONAL_LIFE, &ENERGY_STAR, &SPELL_WITH_ENERGY_AND_POWER_COST, &SPELL_WITH_COUNTER_AND_POWER_COST, &SPELL_WITH_BLIGHT_AND_POWER_COST, &SPELL_WITH_MANA_AND_GRAVEYARD_EXILE, &SPELL_WITH_MANA_AND_HAND_EXILE, &SPELL_WITH_MANA_AND_EVIDENCE, &SPELL_WITH_DISCARD_AND_GRAVEYARD_EXILE, &SPELL_WITH_DISCARD_AND_TARGET_EXILE, &SPELL_WITH_TARGET_EXILE_ONLY, &SPELL_WITH_DISCARD_AND_EXILE_CHOICE, &SPELL_WITH_LIFE_AND_EXILE_CHOICE, &SPELL_WITH_LIFE_AND_VARIABLE_SACRIFICE, &SPELL_WITH_BEHOLD_AND_DISCARD, &SPELL_WITH_SEVEN_DISCARDS, &SPELL_WITH_TEAMWORK_AND_SACRIFICE, &SPELL_WITH_CONVOKE_AND_SACRIFICE, &ABILITY_WITH_LIFE_AND_SACRIFICE, &ABILITY_WITH_TAP_AND_SELF_SACRIFICE, &ABILITY_WITH_TAP_AND_SELF_RETURN, &ABILITY_WITH_COUNTER_AND_SELF_SACRIFICE, &ABILITY_WITH_VARIABLE_COUNTER_AND_SELF_SACRIFICE, &ABILITY_SACRIFICING_ONE_OR_MORE, &ABILITY_SACRIFICING_X, &ABILITY_WITH_LOYALTY_AND_SELF_SACRIFICE, &ABILITY_WITH_EXERT_AND_SELF_SACRIFICE, &ABILITY_WITH_UNATTACH_AND_TAP, &ABILITY_WITH_CRAFT_AND_LIFE, &ABILITY_WITH_LIFE_AND_LIBRARY_TOP, &ABILITY_WITH_LIFE_AND_RANDOM_LIBRARY, &ABILITY_WITH_RANDOM_AND_DYNAMIC_SACRIFICE, &EVIDENCE_CARD, &SPELL_WITH_TWO_GRAVEYARD_EXILES, &FORAGE_WAY_ABILITY, &SPELL_WITH_OPTIONAL_FORAGE])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -3228,4 +3241,54 @@ fn an_abilitys_sacrifice_x_announces_x_up_to_the_permanents_there_are_and_not_ze
     activate_variable_sacrifice(&mut g, source, 1, 2, 2, &bears);
     assert!(bears.iter().all(|&b| g.state.obj(b).became.is_some()), "both are sacrificed");
     assert_eq!(g.state.player(YOU).life, life + 2);
+}
+
+/// The forages `YOU` made this turn: one `Event::Foraged` for each way to forage paid (CR 701.61a).
+fn forages(g: &Game) -> usize {
+    g.history().this_turn().iter().filter(|r| matches!(r.event, Event::Foraged { player: YOU, .. })).count()
+}
+
+#[test]
+fn a_way_to_forage_paid_for_an_activated_ability_is_one_forage() {
+    let mut g = game();
+    let source = put(&mut g, &FORAGE_WAY_ABILITY, Zone::BATTLEFIELD);
+    let bear = put(&mut g, &BEAR, Zone::BATTLEFIELD);
+    let r = next(&mut g);
+    let ability = option_of(&g, &r, source).expect("the ability is offered");
+    answer(&mut g, &r, Answer::Act(Action::of(&ability)));
+    let mut r = next(&mut g);
+    while !matches!(r.kind, RequestKind::Priority { .. }) {
+        match &r.kind {
+            RequestKind::ChooseCostPayment { .. } => answer(&mut g, &r, Answer::CostPayment(0)),
+            RequestKind::ChooseModes { .. } => answer(&mut g, &r, Answer::Modes(vec![0])),
+            _ => answer_offered(&mut g, &r, &[bear]),
+        }
+        r = next(&mut g);
+    }
+    assert!(g.state.obj(bear).became.is_some(), "the Bear is sacrificed to forage");
+    assert_eq!(forages(&g), 1);
+}
+
+#[test]
+fn an_optional_forage_paid_to_cast_a_spell_is_one_forage_and_unpaid_is_none() {
+    for pay in [false, true] {
+        let mut g = game();
+        let spell = put(&mut g, &SPELL_WITH_OPTIONAL_FORAGE, Zone::hand(YOU));
+        let bear = put(&mut g, &BEAR, Zone::BATTLEFIELD);
+        let r = next(&mut g);
+        let cast = option_of(&g, &r, spell).expect("the spell is offered");
+        answer(&mut g, &r, Answer::Act(Action::of(&cast)));
+        let r = next(&mut g);
+        answer(&mut g, &r, Answer::Modes(vec![u8::from(pay)]));
+        let mut r = next(&mut g);
+        while !matches!(r.kind, RequestKind::Priority { .. }) {
+            match &r.kind {
+                RequestKind::ChooseCostPayment { .. } => answer(&mut g, &r, Answer::CostPayment(0)),
+                _ => answer_offered(&mut g, &r, &[bear]),
+            }
+            r = next(&mut g);
+        }
+        assert_eq!(g.state.obj(bear).became.is_some(), pay);
+        assert_eq!(forages(&g), usize::from(pay), "paid: {pay}");
+    }
 }
