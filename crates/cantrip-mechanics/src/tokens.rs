@@ -1127,7 +1127,14 @@ pub static WOLF: CardDef = CardDef {
     ..token!(Wolf)
 };
 
-/// The 1/1 green Squirrel creature token (CR 111.4). Comet, Stellar Pup and The Unbeatable Squirrel Girl make it.
+/// "Create a 1/1 green Squirrel creature token." (CR 111.1): one `SQUIRREL` under `item`'s controller, the card file listing it in
+/// its `EXTRA`. The Unbeatable Squirrel Girl and Camellia, the Seedmiser print it.
+pub fn create_a_squirrel(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &SQUIRREL, 1)?;
+    Ok(())
+}
+
+/// The 1/1 green Squirrel creature token (CR 111.4). Comet, Stellar Pup, The Unbeatable Squirrel Girl and Camellia, the Seedmiser make it.
 pub static SQUIRREL: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::Green)),
     types: TypeSet::of(&[CardType::Creature]),

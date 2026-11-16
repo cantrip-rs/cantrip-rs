@@ -2,15 +2,9 @@ use cantrip_api::*;
 use cantrip_mechanics::{tokens, triggers};
 use cantrip_oracle as oracle;
 
-/// "Create a 1/1 green Squirrel creature token."
-fn make_a_squirrel(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &tokens::SQUIRREL, 1)?;
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(triggers::THIS_ENTERS_OR_ATTACKS, make_a_squirrel, "Whenever The Unbeatable Squirrel Girl enters or attacks, create a 1/1 green Squirrel creature token."),
+        triggered(triggers::THIS_ENTERS_OR_ATTACKS, tokens::create_a_squirrel, "Whenever The Unbeatable Squirrel Girl enters or attacks, create a 1/1 green Squirrel creature token."),
         ability(
             cost("{1}{G}{G}{G}"),
             |g, item| tokens::create_x_where_x_is_the_number_you_control(g, item, &tokens::SQUIRREL, Subtype::Squirrel),
