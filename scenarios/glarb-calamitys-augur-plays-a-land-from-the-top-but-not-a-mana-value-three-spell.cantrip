@@ -1,0 +1,44 @@
+# Glarb, Calamity's Augur: "You may play lands and cast spells with mana value 4 or greater from the top of your library."
+# The Forest on top is played from there; the Hypnotic Specter (mana value 3, one short of the limit) that follows is refused
+# although its {1}{B}{B} is in the pool from a Black Lotus.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Glarb, Calamity's Augur
+Black Lotus
+Island
+Island
+Forest
+Hypnotic Specter
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Glarb, Calamity's Augur.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Library.Forest.Play
+? Bot1.Battlefield.Forest.Tapped = false
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Library.Hypnotic Specter.Cast
+
+[Expect]
+Turn = 1
+Bot1.Battlefield.Forest.Tapped = false
+Bot1.Library.Hypnotic Specter.Power = 2
+Bot1.Library.Count = 13
