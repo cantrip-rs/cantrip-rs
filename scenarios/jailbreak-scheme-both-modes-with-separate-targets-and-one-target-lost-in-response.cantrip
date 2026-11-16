@@ -1,0 +1,66 @@
+# Jailbreak Scheme with both modes ({U}{3}{2}, six of the seven mana of five Moxen and two Islands, turn 5): mode 1 on Bot2's Ornithopter, mode 2 on its
+# Memnite. In response Bot1 Lightning Bolts the Memnite, so mode 2's only target is gone and does nothing, but mode 1 still resolves
+# (each mode has its own target, CR 608.2b): the Ornithopter becomes a 1/3 and Bot2's library does not grow.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Ruby
+Jailbreak Scheme
+Lightning Bolt
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Jailbreak Scheme.Cast
+Bot1.Modes(1; 2)
+Bot1.Target(Ornithopter)
+Bot1.Target(Memnite)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Ornithopter
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter.Toughness = 3
+Bot2.Graveyard = Memnite
+Bot1.Graveyard = Jailbreak Scheme; Lightning Bolt
+Bot2.Library.Count = 13

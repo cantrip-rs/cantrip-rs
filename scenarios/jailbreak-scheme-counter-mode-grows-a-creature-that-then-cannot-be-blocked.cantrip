@@ -1,0 +1,56 @@
+# Jailbreak Scheme (spree, CR 702.172): {U} plus the chosen mode's cost. Mode 1 ({3}) puts a +1/+1 counter on target creature, and it
+# can't be blocked this turn. Bot1 pays {U}{3} from four of its five Moxen (Emerald stays untapped, the pool empty after) for the
+# Grizzly Bears, which attacks turn 3: Bot2's Ornithopter may not block it (CR 509.1b), so the 3/3 Bears connects and Bot2 is at 17.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Ruby
+Jailbreak Scheme
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Jailbreak Scheme.Cast
+Bot1.Modes(1)
+Bot1.Target(Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 1
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+! Bot2.Block(Ornithopter > Grizzly Bears)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Grizzly Bears.Toughness = 3
+Bot1.Battlefield.Mox Emerald.Tapped = false
+Bot1.Graveyard = Jailbreak Scheme

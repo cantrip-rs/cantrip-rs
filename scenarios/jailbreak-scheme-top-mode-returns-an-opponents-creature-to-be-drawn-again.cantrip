@@ -1,0 +1,42 @@
+# Jailbreak Scheme mode 2 on Bot2's Ornithopter (an artifact creature): its owner Bot2, not the caster, chooses, and Accepts the top of its
+# library, so it draws the Ornithopter again turn 4. Spree (CR 702.172a) costs {U} plus at least one mode, the cheapest {2}: with two
+# Moxen it is refused (Mana: short); with the third cast and tapped Bot1 pays {U}{2} exactly (the pool empty after).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Jailbreak Scheme
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Hand.Jailbreak Scheme.Cast(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Jailbreak Scheme.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Accept
+? Bot2.Battlefield.Count = 0
+[T4 Bot2.Main1]
+? Bot2.Hand.Ornithopter.Power = 0
+
+[Expect]
+Bot1.Graveyard = Jailbreak Scheme
+Bot2.Battlefield.Count = 0
