@@ -1,0 +1,11 @@
+{
+  "name": "Plumecreed Mentor",
+  "manaCost": "{1}{W}{U}",
+  "type": "Creature — Bird Scout",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying\nWhenever this creature or another creature you control with flying enters, put a +1/+1 counter on target creature you control without flying.",
+  "keywords": [
+    "Flying"
+  ]
+}
