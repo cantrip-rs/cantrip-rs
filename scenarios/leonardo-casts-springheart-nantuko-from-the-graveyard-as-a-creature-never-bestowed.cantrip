@@ -1,0 +1,49 @@
+# Leonardo, Sewer Samurai lets creature spells with power or toughness 1 or less be cast from the graveyard (CR 601.3). A
+# permission is judged on the spell the card would be (CR 601.3e): Springheart Nantuko cast bestowed is an Aura enchantment
+# spell and no creature (CR 702.103b), so Leonardo does not let it be bestowed, though it lets the 1/1 Nantuko be cast as a
+# creature for its mana cost - and so Bot1 does, with the mana for the bestow cost too.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Leonardo, Sewer Samurai
+Mox Emerald
+Llanowar Elves
+Faithless Looting
+Springheart Nantuko
+Mountain
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Leonardo, Sewer Samurai.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Springheart Nantuko; Island)
+! Bot1.Graveyard.Springheart Nantuko.Cast(Bot1.Battlefield.Llanowar Elves; Ability: Bestow)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Springheart Nantuko.Cast(Ability: During your turn)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Springheart Nantuko.Types = Enchantment; Creature
+Bot1.Battlefield.Springheart Nantuko.AttachedTo = (absent)
+Bot1.Battlefield.Llanowar Elves.Power = 1

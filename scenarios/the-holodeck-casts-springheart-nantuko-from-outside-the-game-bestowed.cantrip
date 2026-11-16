@@ -1,0 +1,49 @@
+# The Holodeck lets its controller play a permanent card they own from outside the game (CR 400.11b, 601.3): a permission,
+# so the card may be cast for an alternative cost of its own instead (CR 118.9). Springheart Nantuko in Bot1's sideboard is
+# cast bestowed - an Aura enchantment spell, a permanent spell (CR 702.103b) - on Llanowar Elves for {1}{G}.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Black Lotus
+The Holodeck
+Mox Emerald
+Llanowar Elves
+Island
+Forest
+Island x20
+
+[Bot1 Sideboard]
+Springheart Nantuko
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.The Holodeck.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Sideboard.Springheart Nantuko.Cast(Bot1.Battlefield.Llanowar Elves; Ability: Bestow)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Springheart Nantuko.AttachedTo = Llanowar Elves
+Bot1.Battlefield.Springheart Nantuko.Types = Enchantment
+Bot1.Battlefield.Llanowar Elves.Power = 2
+Bot1.Sideboard =

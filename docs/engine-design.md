@@ -1985,7 +1985,10 @@ card's own say-so or Yawgmoth's Will for the graveyard, retrace beside them; eac
 (`GrantedWay::permission`: Lurrus, Serra Paragon); each rule for the top of the library (Bolas's Citadel's for life, Mystic
 Forge's, Case of the Locked Hothouse's) - and by each route, each face it allows (judged as that face, CR 601.3e), for the
 mana cost or what the route names instead, for each alternative cost another object gives where the route names none (CR
-118.9a), and for the card's own ways that name no zone (CR 118.9: evoke from exile by a permission; not warp, CR 702.185a).
+118.9a), and for the card's own ways that name no zone (CR 118.9: evoke from exile by a permission; not warp, CR 702.185a),
+and bestowed (`Offer::bestow`, CR 702.103a) where the route names no cost of its own - judged as the Aura spell it would
+be (CR 601.3e, 702.103b), so Lurrus casts Springheart Nantuko bestowed and Leonardo's creature permission does not, and
+Bolas's Citadel's life never pays a bestow cost (CR 118.9a).
 A way a permanent gives that is its cost too (escape, mayhem, Iroh's flashback) is offered beside them. Nothing is
 first-found: Citadel and Mystic Forge both out offer both casts of the top card, two Yawgmoth's Wills two casts of a card in
 the graveyard, and the player chooses (CR 601.2b). Land plays are offered the same way (`land_plays`): by the rules from a
@@ -2052,7 +2055,8 @@ Second's warp was warped (`history::way_kind_of`, `warp::was_cast_for_warp`). A 
 ability as the spell is cast, as a card's own way does through `CardDef::end_step_riders`, names it among the granting
 card's `delayed` abilities (`GrantedWay::end_step_rider`: warp's "exile this permanent at the beginning of the next end
 step", CR 702.185a), and the core creates it about the spell as it is cast, so it happens whether or not the granting
-permanent is still there. One that is a permission (`GrantedWay::permission`: Lurrus, Serra Paragon) is a route: the card
+permanent is still there. One that is a permission (`GrantedWay::permission`: Lurrus, Serra Paragon, The Holodeck's from a
+graveyard or from outside the game) is a route: the card
 is cast by it for its mana cost or any alternative cost, as by any permission. Any other is an ability the permanent gives
 the card (CR 113.6): its cost says which cards have it, and its `condition` when it may be used (mayhem's discard this
 turn, sneak's declare blockers step), so a card has it whether or not it may be used now - what "a card with no abilities"

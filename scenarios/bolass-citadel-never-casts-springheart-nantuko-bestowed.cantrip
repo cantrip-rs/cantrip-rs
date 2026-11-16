@@ -1,0 +1,50 @@
+# Bolas's Citadel lets the top card of the library be cast for life equal to its mana value rather than its mana cost - an
+# alternative cost of its own, so no other may be paid with it (CR 118.9a; the ruling: no alternative costs such as bestow).
+# Springheart Nantuko on top is never offered bestowed, though Bot1 has the mana for its bestow cost and a creature to
+# enchant (CR 702.103a); it is cast as the creature for 2 life.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Mox Emerald
+Mox Jet
+Sol Ring
+Bolas's Citadel
+Llanowar Elves
+Forest
+Springheart Nantuko
+Swamp x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bolas's Citadel.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+! Bot1.Library.Springheart Nantuko.Cast(Bot1.Battlefield.Llanowar Elves; Ability: Bestow)
+Bot1.Library.Springheart Nantuko.Cast
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot1.Battlefield.Springheart Nantuko.Types = Enchantment; Creature
+Bot1.Battlefield.Springheart Nantuko.AttachedTo = (absent)
+Bot1.Battlefield.Llanowar Elves.Power = 1

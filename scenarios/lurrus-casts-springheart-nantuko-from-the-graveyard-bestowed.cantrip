@@ -1,0 +1,49 @@
+# Lurrus of the Dream-Den is a permission to cast a permanent spell with mana value 2 or less from the graveyard, so it lets a
+# card with bestow be cast for its bestow cost, an alternative cost of its own (CR 601.3, 118.9, 702.103a): the bestowed
+# Springheart Nantuko is an Aura enchantment spell of mana value 2 (CR 702.103b), which Lurrus allows. Faithless Looting puts
+# the Nantuko in the graveyard on turn 3, and Bot1 casts it from there bestowed on Llanowar Elves for {1}{G} - Forest and Mox
+# Emerald, nothing left over - so the Elves are 2/2 and the Nantuko is no creature.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Lurrus of the Dream-Den
+Mox Emerald
+Llanowar Elves
+Faithless Looting
+Springheart Nantuko
+Mountain
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Lurrus of the Dream-Den.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Springheart Nantuko; Island)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Springheart Nantuko.Cast(Bot1.Battlefield.Llanowar Elves; Ability: Bestow)
+Bot1.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Springheart Nantuko.AttachedTo = Llanowar Elves
+Bot1.Battlefield.Springheart Nantuko.Types = Enchantment
+Bot1.Battlefield.Llanowar Elves.Power = 2
+Bot1.Graveyard = Faithless Looting; Island; Black Lotus

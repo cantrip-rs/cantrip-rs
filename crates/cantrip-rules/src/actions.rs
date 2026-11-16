@@ -9287,6 +9287,7 @@ impl<'a> Offer<'a> {
         if !route.imposes() && route.kind != RouteKind::Prepared {
             self.offer_ways(card, def, route, |way| (whole_allowed || way.kind.face_down()) && ways(way), options);
         }
+        self.bestow(card, def, route, options);
     }
 
     /// Every cast `player` may begin of `card` in `zone` on this pass: by the rules from their hand, by the card's own ways
@@ -9311,12 +9312,10 @@ impl<'a> Offer<'a> {
                 self.by_route(card, def, &Route::RULES, |way| way.from == ZoneKind::Hand, options);
                 self.fused(card, def, options);
                 self.overload(card, def, options);
-                self.bestow(card, def, options);
             }
             ZoneKind::Command if own && cx.s().obj(card).commander_id.is_some() => {
                 self.by_route(card, def, &Route::RULES, |way| way.from == ZoneKind::Hand && !way.only_from, options);
                 self.overload(card, def, options);
-                self.bestow(card, def, options);
             }
             ZoneKind::Graveyard if own => {
                 // From the graveyard by the card's own ways that name it (flashback, CR 702.34a), an aftermath half (CR
@@ -9324,7 +9323,7 @@ impl<'a> Offer<'a> {
                 self.offer_ways(card, def, &Route::RULES, |way| way.from == ZoneKind::Graveyard, options);
                 self.aftermath(card, def, options);
                 if def.bestow_from_graveyard {
-                    self.bestow(card, def, options);
+                    self.bestow(card, def, &Route::RULES, options);
                 }
             }
             _ => {}
@@ -9366,12 +9365,6 @@ impl<'a> Offer<'a> {
                 // The card's own permission there that says more of the cast (CR 113.6e-f, 118.8): "you may cast this card
                 // from your graveyard by discarding a card in addition to paying its other costs" (Alien Symbiosis).
                 routes.extend(own_zone_casts(cx.cards(), cx.s(), &cx.g.log, card, player).iter().map(Route::exile_cast));
-                // A way a permanent gives that is a permission (Lurrus of the Dream-Den), judged on each face.
-                for way in self.granted() {
-                    if way.what.permission && way.what.from == ZoneKind::Graveyard {
-                        routes.push(Route { by: Some(way.grant), allows: Allows::Way(way.asker(), way.what), ..Route::RULES });
-                    }
-                }
             }
             ZoneKind::Exile => {
                 // A prepare spell's copy, by the prepared permanent's controller (CR 722.3).
@@ -9396,6 +9389,16 @@ impl<'a> Offer<'a> {
                 }
             }
             _ => {}
+        }
+        // A way a permanent gives that is a permission to cast cards from a graveyard (Lurrus of the Dream-Den) or from outside
+        // the game (The Holodeck, CR 400.11b), judged on each face: from a sideboard it is the only thing that lets a card be
+        // cast (CR 601.3, 604.1).
+        if own && matches!(zone.kind(), ZoneKind::Graveyard | ZoneKind::Sideboard) {
+            for way in self.granted() {
+                if way.what.permission && way.what.from == zone.kind() {
+                    routes.push(Route { by: Some(way.grant), allows: Allows::Way(way.asker(), way.what), ..Route::RULES });
+                }
+            }
         }
         // A permission to play it from where it is (CR 601.3), each its own.
         if !zone.is(ZoneKind::Hand) && !cx.s().permissions.is_empty() {
@@ -9429,22 +9432,30 @@ impl<'a> Offer<'a> {
         self.offer_costs_at(card, def, WAY_FUSED, &Route::RULES, instant, options);
     }
 
-    /// Bestow (CR 702.103a): as the Aura it becomes, which needs a creature to enchant (CR 601.2c), at the Aura's speed.
-    fn bestow(&self, card: ObjectId, def: &'static CardDef, options: &mut Vec<ActionOption>) {
+    /// Bestow (CR 702.103a): an alternative cost of the card's own (CR 118.9), by which it is cast as the Aura it becomes
+    /// (CR 702.103b), which needs a creature to enchant (CR 601.2c), at the Aura's speed. Any permission (`route`) to cast
+    /// the card from where it is lets it be cast bestowed (CR 601.3, 118.9: Muldrotha, the Gravetide's ruling, "you can cast
+    /// a card with bestow as an enchantment spell"), where it allows the Aura spell the card would be - judged on that spell,
+    /// an enchantment and no creature (CR 601.3e, 702.103b) - and names no alternative cost of its own (CR 118.9a); what the
+    /// permission adds is owed with it (CR 118.8).
+    fn bestow(&self, card: ObjectId, def: &'static CardDef, route: &Route, options: &mut Vec<ActionOption>) {
         let Some(bestow) = def.bestow else { return };
-        let (cx, player) = (self.cx, self.player);
-        if self.speed(card).face(bestow) != self.instants || !bestow.additional_cost.is_none_or(|extra| can_pay_other(cx, card, player, &extra)) {
+        if route.kind != RouteKind::Permission || route.imposes() || route.terms.adventure_only {
             return;
         }
-        let a = self.available();
-        let mut option = ActionOption::on(ActionKind::CastSpell, card, WAY_BESTOW);
-        // The Aura's target is announced with it, and the total cost follows from it (CR 601.2c, 601.2f): judged for each.
-        let covered = |targets: &[Target], earlier: &Earlier| {
-            least_cost(cx, a, player, card, bestow, def.bestow_cost, targets, earlier, &mut |cost| spell_covers(cx, a, player, card, bestow, &cost))
-        };
-        if offer_costed(cx, a, &self.asker(card), bestow, def.bestow_cost.x, &mut option, covered) {
-            options.push(option);
+        let (cx, player) = (self.cx, self.player);
+        let instant = self.speed(card).face(bestow) && !route.terms.sorcery_speed;
+        if instant != self.instants || !extra_payable(cx, card, player, bestow) || (route.by.is_some() && !can_pay_other(cx, card, player, &route.additional)) {
+            return;
         }
+        if !matches!(route.allows, Allows::Any) && !route.allows.face(&AsFace { cx, spell: card, face: cx.card_id(bestow) }, card, player) {
+            return;
+        }
+        if !self.imposed_payable(card, bestow) {
+            return;
+        }
+        // The Aura's target is announced with it, and the total cost follows from it (CR 601.2c, 601.2f): judged for each.
+        self.offer(card, bestow, WAY_BESTOW, route, def.bestow_cost, None, options);
     }
 
     /// A split card's aftermath half (CR 702.127a): from its owner's graveyard, by the card's own say-so, at its own speed.
@@ -9465,9 +9476,8 @@ impl<'a> Offer<'a> {
     fn granted_ways(&self, card: ObjectId, def: &'static CardDef, zone: Zone, options: &mut Vec<ActionOption>) {
         let (cx, player) = (self.cx, self.player);
         let ways = self.granted();
-        // A permission is offered by its route (CR 601.3), not here - but from outside the game there is no route to offer it by:
-        // a card in a sideboard is never cast or played by the rules, only by a way a permanent gives (CR 400.11b, 604.1).
-        let open = |w: &Given<GrantedWay>| !w.what.permission || zone.is(ZoneKind::Sideboard);
+        // A permission is offered by its route (CR 601.3), not here.
+        let open = |w: &Given<GrantedWay>| !w.what.permission;
         if !ways.iter().any(|w| open(w) && w.what.from == zone.kind()) {
             return;
         }
