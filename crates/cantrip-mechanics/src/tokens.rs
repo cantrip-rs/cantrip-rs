@@ -1189,7 +1189,7 @@ pub static BEAST_4_4_TRAMPLE: CardDef = CardDef {
     ..token!(Beast)
 };
 
-/// A 1/1 white Rabbit creature token. Jacked Rabbit and Hop to It make it.
+/// A 1/1 white Rabbit creature token. Jacked Rabbit, Hop to It and Head of the Homestead make it.
 pub static RABBIT: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::White)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -1197,6 +1197,13 @@ pub static RABBIT: CardDef = CardDef {
     toughness: Some(1),
     ..token!(Rabbit)
 };
+
+/// "Create [COUNT] 1/1 white Rabbit creature tokens" (CR 111.1, 701.7): every token is made at once, as one event, under the
+/// ability's controller. Hop to It (three) and Head of the Homestead (two) print it.
+pub fn create_rabbits<const COUNT: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &RABBIT, COUNT)?;
+    Ok(())
+}
 
 /// The 2/2 colorless Wizard Soldier creature token named Cadet (CR 111.4). Ajani Unrelenting, Stingerquill Charm and
 /// Ingris Stingerquill make it.
