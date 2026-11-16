@@ -1,0 +1,41 @@
+# Treeguard Duo (CR 608.2b): the trigger's one target, Bot1's Ornithopter, is killed in response (Bot2's Lightning Bolt), so the ability
+# does not resolve: the Duo (3/4, no keywords) gets neither vigilance nor +X/+X.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Ornithopter
+Treeguard Duo
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Treeguard Duo.Cast
+Bot1.Target(Ornithopter)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Ornithopter
+Bot1.Battlefield.Treeguard Duo.Power = 3
+Bot1.Battlefield.Treeguard Duo.Toughness = 4
+Bot1.Battlefield.Treeguard Duo.Keywords = (absent)

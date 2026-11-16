@@ -1,0 +1,53 @@
+# Treeguard Duo (CR 115.1, 611.2a, 608.2h): "target creature you control gains vigilance and gets +X/+X, where X is the number of creatures
+# you control." Bot1 controls an Ornithopter and the Duo (X = 2); Bot2's Ornithopter and Memnite are not counted. The target must be a creature
+# Bot1 controls: Bot2's Ornithopter and Bot1's Mox Jet (not a creature) are refused.
+# Bot1's Ornithopter (0/2, flying) becomes a 2/4 with vigilance, flying stays; the Duo itself is untouched (3/4). On Bot1's next turn the pump and vigilance are gone.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Ornithopter
+Treeguard Duo
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Treeguard Duo.Cast
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+! Bot1.Target(Mox Jet)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Vigilance
+? Bot1.Battlefield.Treeguard Duo.Power = 3
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Treeguard Duo.Power = 3
+Bot1.Battlefield.Treeguard Duo.Toughness = 4
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Memnite.Power = 1

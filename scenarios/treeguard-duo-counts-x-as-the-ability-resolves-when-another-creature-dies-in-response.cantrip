@@ -1,0 +1,42 @@
+# Treeguard Duo, ruling 2024-07-26: "The value of X is determined only as Treeguard Duo's triggered ability resolves, potentially including
+# Treeguard Duo itself. It won't change later in the turn." Bot1 controls an Ornithopter and the Duo; the Duo's trigger targets itself, and
+# in response Bot2 Lightning Bolts the Ornithopter, so X is 1 (the Duo alone): a 4/5 with vigilance, not the 5/6 it would be with X = 2.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Ornithopter
+Treeguard Duo
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Treeguard Duo.Cast
+Bot1.Target(Treeguard Duo)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Ornithopter
+Bot1.Battlefield.Treeguard Duo.Power = 4
+Bot1.Battlefield.Treeguard Duo.Toughness = 5
+Bot1.Battlefield.Treeguard Duo.Keywords = Vigilance

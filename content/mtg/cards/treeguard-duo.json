@@ -1,0 +1,8 @@
+{
+  "name": "Treeguard Duo",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Frog Rabbit",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "When this creature enters, until end of turn, target creature you control gains vigilance and gets +X/+X, where X is the number of creatures you control."
+}
