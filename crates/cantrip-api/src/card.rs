@@ -1661,6 +1661,23 @@ pub(crate) const fn same_str(a: &str, b: &str) -> bool {
 /// `player` is the proposed activator. This replaces the default controller/owner permission, not costs or timing.
 pub type ActivationPlayers = fn(&dyn Query, &Asker, PlayerId) -> bool;
 
+/// What a spell's text says of the X of its mana cost (CR 107.3, 601.2b): the core owns the announcement and the cost, the
+/// card supplies the number. An activated ability's X its text defines is `ActivatedDef::x_defined`.
+#[derive(Clone, Copy)]
+pub enum XRule {
+    /// "X can't be greater than [a value]" (CR 107.3a, 601.2b): X is announced up to it (Winter's Chill's snow lands,
+    /// Soul Immolation's creatures). The bound is a `DefinedX` read as X is announced, its targets those announced with the
+    /// cast, if any.
+    AtMost(DefinedX),
+    /// "X is [a value of a player]" (CR 107.3c, 601.2b): the caster chooses which of the players `players` allows X is read
+    /// of as it is cast, and X is that player's value (Spoils of War's "an opponent's graveyard"). The player chosen is not
+    /// a target.
+    OfPlayer {
+        players: fn(&dyn Query, &Asker, PlayerId) -> bool,
+        value: fn(&dyn Query, &Asker, PlayerId) -> u32,
+    },
+}
+
 /// An activated ability (CR 602). A card writes one with `ability` or `mana_ability` (`crate::ability`).
 #[derive(Clone, Copy)]
 pub struct ActivatedDef {
@@ -3783,6 +3800,9 @@ pub struct CardDef {
     /// Life, Consume Spirit: `XMana::only(Mana::B)`; Emblazoned Golem: `XMana::COLORED_ONE_EACH`), `XMana::ANY` for most.
     /// Held to the Oracle text by `cantrip-cards/tests/x_mana_matches_oracle.rs`.
     pub x_mana: XMana,
+    /// What its text says of the X of its mana cost (CR 107.3, 601.2b, `XRule`): a bound on the X announced, or the player
+    /// X is read of. None for an X its caster announces freely.
+    pub x_rule: Option<XRule>,
     /// Delayed abilities created as it is cast for a way, with no stack item of their own (CR 608.3g, 603.7a): a pair
     /// of the way (as `ways[n - 1]`) and the index in `delayed`. The ability triggers at the beginning of the next end
     /// step, aimed at the permanent the spell becomes: dash's "return it to its owner's hand" (CR 702.109a), blitz's.
@@ -4289,6 +4309,7 @@ impl CardDef {
         late_targets: false,
         x_cant_be_zero: false,
         x_mana: XMana::ANY,
+        x_rule: None,
         additional_cost: None,
         additional_choice: &[],
         enters: None,

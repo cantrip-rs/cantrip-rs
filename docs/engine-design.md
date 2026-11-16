@@ -349,6 +349,13 @@ targets are judged again (Preacher's "target creature of an opponent's choice th
 whether the slot has a legal choice asks every opponent in turn. A spell's or an activated ability's slot; no triggered
 ability implemented prints it.
 
+A spell's text that bounds or defines the X of its mana cost is `CardDef::x_rule` (`XRule`, CR 107.3, 601.2b), read by
+the cast's announcement and by what judges whether it may be cast, never by a test in its effect. `XRule::AtMost`
+bounds the X announced ("X can't be greater than the number of snow lands you control": Winter's Chill). `XRule::OfPlayer`
+defines it as a value of a player the caster chooses among those it allows, asked as a player choice and never a target
+("X is the number of artifact and/or creature cards in an opponent's graveyard": Spoils of War); whether it may be cast
+searches only the values those players have. An activated ability's defined X is `ActivatedDef::x_defined`.
+
 ### Characteristics
 
 - **Computed on query** (`chars()`), through the layers (613), from the object's card, its counters and the

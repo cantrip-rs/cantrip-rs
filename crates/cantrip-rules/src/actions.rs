@@ -4607,16 +4607,12 @@ fn some_cast(
         u32::MAX
     };
     let most = bound.max(least).min(cap).max(least);
-    let xs = if def.kicker.is_some() || (x_symbols == 0 && !x_life && !x_sacrifices) {
-        0..=0
-    } else if open {
-        least..=most
-    } else {
-        least..=least
-    };
+    let (x_least, x_most) = if def.kicker.is_some() || (x_symbols == 0 && !x_life && !x_sacrifices && !crate::x_rules::defines(def.x_rule)) {
+        (0, 0)
+    } else if open { (least, most) } else { (least, least) };
     for &paid in paid {
         for kicks in kicks.clone() {
-            for x in xs.clone() {
+            for x in crate::x_rules::values(cx, asker, def.x_rule, prefix.unwrap_or(&[]), x_least, x_most) {
                 // A kicker with {X} announces X and is kicked when it is not 0 (CR 702.33a, 107.3).
                 let (x, kicked) = match def.kicker {
                     Some(k) if k.cost.x > 0 => (kicks, u8::from(kicks > 0)),
@@ -4759,13 +4755,13 @@ fn offer_costed(
 ) -> bool {
     // CR 107.3a: the {X} of a waterbend cost an additional cost has is announced with the spell's own.
     let x_symbols = x_symbols + def.additional_cost.map_or(0, |c| c.waterbend.x);
-    let changes = !a.changers.is_empty() || !def.own_cost_changes.is_empty() || lasting_changes(cx);
+    let changes = !a.changers.is_empty() || !def.own_cost_changes.is_empty() || lasting_changes(cx) || def.x_rule.is_some();
     if !changes {
         return covered(&[], &Earlier::NONE) && offer_spell(cx, asker, def, option);
     }
     // A kicker, an optional cost or a splice announced after the target announced with the cast (CR 601.2b-c) may change
     // what a change reads ("if this spell was kicked") or bring targets of its own.
-    let announces = def.kicker.is_some() || def.optional_cost.is_some() || !splice_cards(cx, asker.controller, asker.source).is_empty();
+    let announces = def.kicker.is_some() || def.optional_cost.is_some() || !splice_cards(cx, asker.controller, asker.source).is_empty() || def.x_rule.is_some();
     let mut budget = ANNOUNCEMENT_BUDGET;
     if targets_with_cast(cx.cards(), def) {
         if !offer_spell(cx, asker, def, option) {
@@ -5260,6 +5256,10 @@ fn x_available(cx: &Cx, player: PlayerId, source: ObjectId, paid: &XCost, n: u32
 /// (`CardDef::cost_of_targets`), the cost changes applied as they are then (CR 601.2f, `change_any`: each way the payer
 /// could announce a reduction's hybrid symbols), the life they add payable (CR 118.8, 119.4), the reduction announced
 /// before X, and the least the total may come to. Past `ANNOUNCEMENT_BUDGET` it answers no: never more X than can be paid.
+pub(crate) fn defined_x_payable(cx: &Cx, player: PlayerId, source: ObjectId, paid: &XCost, n: u32) -> bool {
+    x_payable(cx, &x_available(cx, player, source, paid, n), player, source, paid, n)
+}
+
 fn x_payable(cx: &Cx, a: &Available, player: PlayerId, source: ObjectId, paid: &XCost, n: u32) -> bool {
     let (costed, by, spell, ability) = match paid.costed {
         XCosted::Spell => (Costed::Spell(source), None, true, None),
@@ -5342,7 +5342,7 @@ fn x_payable(cx: &Cx, a: &Available, player: PlayerId, source: ObjectId, paid: &
             _ => pre,
         };
         // Targets the action announced, or none to choose: the total is judged once.
-        if !paid.targets_later || !changes && of_targets.is_none() {
+        if !paid.targets_later || !changes && of_targets.is_none() && !card.is_some_and(|d| crate::x_rules::defines(d.x_rule)) {
             if covered(cost, &paid.targets) {
                 return true;
             }
@@ -5944,7 +5944,7 @@ fn least_cost_parts(
 ) -> bool {
     // "X can't be 0" (CR 107.3a): X at 1, and no cast at all for a cost where X could only be 0 (CR 107.3b), as `cast`
     // refuses it.
-    if x_only_zero(def.x_cant_be_zero, def.cost.x, base.x) {
+    if !crate::x_rules::defines(def.x_rule) && x_only_zero(def.x_cant_be_zero, def.cost.x, base.x) {
         return false;
     }
     // "Spend only black mana on X" (CR 107.3, 601.2h): X's generic mana only that mana may pay (`ManaCost::plus_x`).
@@ -10769,10 +10769,10 @@ fn cast(
     };
     // "X can't be 0" (CR 107.3a): cast where X can only be 0 (CR 107.3b: without paying its mana cost, or for an
     // alternative cost with no {X}), there is no X it may be cast with, and it can't be cast (Mind Grind's ruling).
-    if x_only_zero(def.x_cant_be_zero, def.cost.x, x_symbols) {
+    if !crate::x_rules::defines(def.x_rule) && x_only_zero(def.x_cant_be_zero, def.cost.x, x_symbols) {
         return Err(Stop::Cancel);
     }
-    if x_symbols > 0 || def.kicker.is_some() || extra.pay_x_life || sacrifices_x {
+    if x_symbols > 0 || def.kicker.is_some() || extra.pay_x_life || sacrifices_x || crate::x_rules::defines(def.x_rule) {
         // "Spend only black mana on X" (CR 107.3, 601.2h): the X announced, its mana cost's or its kicker's, is generic mana
         // only that mana may pay (`ManaCost::plus_x`).
         cost.mana = cost.mana.with_x_mana(def.x_mana);
@@ -10813,6 +10813,9 @@ fn cast(
         // A multikicker's count is the spell's `kicked`, which holds 255 (RX-5): it is announced no more times than that. A
         // cost paid any number of times otherwise keeps its own count (`announce_repeated`).
         let cap = if def.kicker.is_some_and(|k| k.multi && k.cost.x == 0) { cap.min(u32::from(u8::MAX)) } else { cap };
+        // An X its text bounds (CR 107.3a: "X can't be greater than ...", Winter's Chill) is announced no higher.
+        let x_asker = Asker { instance: None, source: spell, controller: player, by: None, spell: true };
+        let cap = cap.min(crate::x_rules::upper(cx, &x_asker, def.x_rule, targets));
         // An X that can't be 0 starts at 1 (CR 107.3a). A kicker with {X} announces 0 as not kicking it, so a kicked one
         // has X 1 or more as it is.
         let least = if def.kicker.is_none() && less_each == 0 { u32::from(least_x(def.x_cant_be_zero)) } else { 0 };
@@ -10836,7 +10839,10 @@ fn cast(
             targets: targets.to_vec(),
             targets_later: def.modal.is_some() || (!specs.is_empty() && (def.divide.is_some() || resolving || !targets_with_cast(cx.cards(), def))),
         });
-        let announced = announce_x(cx, player, spell, base, def.kicker, paid.as_ref(), least, cap, false, less_each, extra.variable.map_or("", |v| v.governs()))?;
+        let announced = match crate::x_rules::choose(cx, &x_asker, def.x_rule, least, cap, paid.as_ref())? {
+            Some(n) => n,
+            None => announce_x(cx, player, spell, base, def.kicker, paid.as_ref(), least, cap, false, less_each, extra.variable.map_or("", |v| v.governs()))?,
+        };
         let n = announced;
         if let Some(k) = def.kicker {
             if k.cost.x > 0 {

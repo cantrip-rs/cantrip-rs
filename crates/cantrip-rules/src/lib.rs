@@ -5,6 +5,9 @@
 
 pub mod tree;
 mod actions;
+mod x_rules;
+#[cfg(test)]
+mod computed_x_tests;
 #[cfg(test)]
 mod ability_acquisition_identity_tests;
 #[cfg(test)]
