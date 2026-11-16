@@ -444,7 +444,7 @@ public sealed class SiteTests : IDisposable
     public void A_deck_is_named_as_its_list_names_it_or_from_its_file()
     {
         string decks = Path.Combine(RepoRoot.Path, "decks");
-        Assert.Equal("Mono-Red Aggro", PlaySite.Title(DeckList.Load(Path.Combine(decks, "standard", "mono-red-aggro.txt"))));
+        Assert.Equal("Mono-Green Landfall", PlaySite.Title(DeckList.Load(Path.Combine(decks, "standard", "mono-green-landfall.txt"))));
         Assert.Equal("Rw Aggro", PlaySite.Title(DeckList.Parse("rw-aggro", "4 Mountain", Path.Combine(decks, "no-such-file.txt"))));
     }
 

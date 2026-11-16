@@ -5,7 +5,7 @@
 # (dotnet\tools\Cantrip.Advisor: its own table, its own AI host, the page), and the page in your browser.
 #
 #   advisor.ps1                                         asks for both decks and the opponent
-#   advisor.ps1 -Mine dimir-midrange -Theirs boros-dragons -Opponent neural
+#   advisor.ps1 -Mine dimir-midrange -Theirs izzet-spellementals -Opponent neural
 #
 #   -Mine, -Theirs   decklists by name under -Decks, or paths
 #   -Opponent        neural (the network's search, as the AI plays) or tactical
@@ -59,7 +59,7 @@ function Ask-Deck([string] $who, [string] $default) {
 }
 
 if (-not $Mine) { $Mine = Ask-Deck 'you (the AI''s seat)' 'dimir-midrange' }
-if (-not $Theirs) { $Theirs = Ask-Deck 'the bot' 'boros-dragons' }
+if (-not $Theirs) { $Theirs = Ask-Deck 'the bot' 'izzet-spellementals' }
 if (-not $Opponent) {
     $answer = "$(Read-Host 'The bot: (n)eural or (t)actical [n]')".Trim().ToLowerInvariant()
     $Opponent = if ($answer -like 't*') { 'tactical' } else { 'neural' }

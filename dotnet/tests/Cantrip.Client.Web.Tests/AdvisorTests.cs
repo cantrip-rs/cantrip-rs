@@ -165,7 +165,7 @@ public sealed class AdvisorTests(WebClient web, ITestOutputHelper output)
         {
             Root = WebClient.Root,
             MyDeck = Cantrip.Server.DeckList.Find(decks, "dimir-midrange"),
-            TheirDeck = Cantrip.Server.DeckList.Find(decks, "boros-dragons"),
+            TheirDeck = Cantrip.Server.DeckList.Find(decks, "izzet-spellementals"),
             Opponent = "neural",
             Model = model,
             InferenceServer = server,

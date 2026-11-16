@@ -1,47 +1,32 @@
-# Mono-Green Landfall: a Standard meta deck (19 players, record 42-33).
+# Mono-Green Landfall: a Standard meta deck, 11.6% of the metagame (MTGGoldfish, 2026-11-16).
 #
-# Imported from the Arcanum standard meta export (exports/standard_meta_decklists.json).
+# The archetype's list on MTGGoldfish's Standard metagame page: https://www.mtggoldfish.com/archetype/standard-mono-green-landfall-woe
 
 3 Ba Sing Se
-1 Bristly Bill, Spine Sower
-1 Bushwhack
-2 Carnivorous Cultivator
-2 Cavern of Souls
+4 Carnivorous Cultivator
 1 Demolition Field
 4 Earthbender Ascension
-2 Elven Passage
-2 Escape Tunnel
-4 Esper Origins
+4 Elven Passage
+1 Escape Tunnel
 4 Fabled Passage
-12 Forest
-1 Frenzied Baloth
-1 Ghost Vacuum
-1 Gigantic Big Bear
-1 Glimpse the Core
+13 Forest
 1 Hard-Hitting Question
 4 Icetill Explorer
-1 Karn, Argent Defender
-1 Keen-Eyed Curator
-1 Leatherhead, Swamp Stalker
+2 Keen-Eyed Curator
 4 Llanowar Elves
-1 Lumbering Worldwagon
-2 Meltstrider's Resolve
-4 Mightform Harmonizer
+3 Mightform Harmonizer
 4 Mossborn Hydra
-1 Origin of Metalbending
-1 Promising Vein
-1 Sandman, Shifting Scoundrel
+1 Pit of Offerings
+3 Sapling Nursery
 4 Sazh's Chocobo
-2 Shared Roots
-1 Traveling Chocobo
 
 Sideboard
-1 Case of the Locked Hothouse
-1 Dragon Sniper
-1 Meltstrider's Resolve
-2 Royal Treatment
-2 Sapling Nursery
-2 Soul-Guide Lantern
+3 Hard-Hitting Question
+1 Mightform Harmonizer
+1 Mole Man, Moloid Master
+1 Pick Your Poison
+2 Sandman, Shifting Scoundrel
+1 Sapling Nursery
 2 Surrak, Elusive Hunter
 2 Torpor Orb
 2 Warg Tactics

@@ -9,7 +9,7 @@ rem belief about the opponent's hand. The play you make is what happens. Every
 rem decision is recorded under ..\ai-data\sessions\<date>\<game>\ beside the repository.
 rem
 rem   advisor.cmd                                  asks for the decks and the bot
-rem   advisor.cmd -Mine dimir-midrange -Theirs boros-dragons -Opponent neural
+rem   advisor.cmd -Mine dimir-midrange -Theirs izzet-spellementals -Opponent neural
 rem   advisor.cmd -Budget 5000 -Seed 7 -NoBuild
 rem
 rem It starts its own inference server (port 7841), its own table and AI host,

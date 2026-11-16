@@ -813,9 +813,13 @@ fn deck(name: &str) -> Vec<String> {
 #[test]
 fn every_world_dealt_shows_the_seat_the_game_it_is_in() {
     let evaluator = TractEvaluator::load(&tiny(), table()).unwrap();
-    let decks = [deck("dimir-midrange.txt"), deck("boros-dragons.txt")];
+    let decks = [deck("dimir-midrange.txt"), deck("izzet-spellementals.txt")];
     let (mut searched, mut checked, mut mismatched) = (0usize, 0usize, 0usize);
-    for seed in 0..2u64 {
+    // Games until enough worlds are checked: how soon a game ends hangs on the decks and the tiny network's mulligans.
+    for seed in 0..12u64 {
+        if searched > 20 && checked > 100 {
+            break;
+        }
         let mut game = deal(&[decks[0].clone(), decks[1].clone()], 77_000 + seed, true, None).unwrap();
         let mut ks: Vec<Knowledge> = game.state.seats().map(Knowledge::new).collect();
         let mut payments = vec![cantrip_ai::net::Payment::default(); 2];
@@ -861,14 +865,17 @@ fn every_world_dealt_shows_the_seat_the_game_it_is_in() {
 /// and guard, the observation, the network's input, the options, their priors and the value - and no cut at the root
 /// may outlive its trim. And every world dealt fresh shows the seat the game it is in: its root observation is the real
 /// one, mulligans included (the tiny network mulligans often: hands shuffled back, cards bottomed - to an empty hand at
-/// the cap, RX-6, which ends a game early, so three games are played to reach enough searches).
+/// the cap, RX-6, which ends a game early, so games are played until there are enough searches to check).
 #[test]
 fn a_kept_tree_is_the_tree_a_fresh_search_would_grow() {
     let evaluator = TractEvaluator::load(&tiny(), table()).unwrap();
-    let decks = [deck("dimir-midrange.txt"), deck("boros-dragons.txt")];
+    let decks = [deck("dimir-midrange.txt"), deck("izzet-spellementals.txt")];
     let (mut rerooted, mut checked, mut fresh, mut fresh_mismatched) = (0usize, 0usize, 0usize, 0usize);
     let mut mismatches = std::collections::BTreeMap::<String, usize>::new();
-    for seed in 0..3u64 {
+    for seed in 0..12u64 {
+        if rerooted > 20 && checked > 50 && fresh > 100 {
+            break;
+        }
         let mut game = deal(&[decks[0].clone(), decks[1].clone()], 77_000 + seed, true, None).unwrap();
         let mut ks: Vec<Knowledge> = game.state.seats().map(Knowledge::new).collect();
         let mut payments = vec![cantrip_ai::net::Payment::default(); 2];

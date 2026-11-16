@@ -52,7 +52,7 @@ public static class FormatDecks
     }
 
     /// <summary>
-    /// A deck as the list names it: its file's first comment up to a colon (<c># Mono-Red Aggro: a Standard meta deck</c>),
+    /// A deck as the list names it: its file's first comment up to a colon (<c># Dimir Midrange: a Standard meta deck</c>),
     /// else its file name in words.
     /// </summary>
     public static string Title(DeckList deck)

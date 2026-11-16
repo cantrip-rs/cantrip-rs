@@ -186,7 +186,7 @@ public sealed class InPersonSetupServerTests : IDisposable
     [Fact]
     public async Task The_form_starts_a_constructed_game_dealt_with_each_seats_deck_once_both_phones_sit()
     {
-        DeckList[] decks = [.. ((string[])["mono-red-aggro", "azorius-control"]).Select(name =>
+        DeckList[] decks = [.. ((string[])["mono-green-landfall", "dimir-midrange"]).Select(name =>
         {
             DeckList deck = DeckList.Load(Path.Combine(RepoRoot.Path, "decks", "standard", name + ".txt"));
             deck.Resolve([ContentCache.Get(RepoRoot.ContentRoot).Cards]);
@@ -208,15 +208,15 @@ public sealed class InPersonSetupServerTests : IDisposable
 
         using (JsonDocument before = JsonDocument.Parse(await http.GetStringAsync("setup/api/state")))
         {
-            Assert.Equal(["Azorius Control", "Mono-Red Aggro"], before.RootElement.GetProperty("decks").EnumerateArray().Select(deck => deck.GetProperty("title").GetString()));
+            Assert.Equal(["Dimir Midrange", "Mono-Green Landfall"], before.RootElement.GetProperty("decks").EnumerateArray().Select(deck => deck.GetProperty("title").GetString()));
         }
 
         HttpResponseMessage refused = await http.PostAsJsonAsync("setup/api/start",
-            new SetupRequest(["Alice", "Bob"], string.Empty, 0, 3, false, "127.0.0.1", InPersonSetup.ConstructedMode, ["mono-red-aggro", "no-such-deck"]));
+            new SetupRequest(["Alice", "Bob"], string.Empty, 0, 3, false, "127.0.0.1", InPersonSetup.ConstructedMode, ["mono-green-landfall", "no-such-deck"]));
         Assert.Equal(HttpStatusCode.BadRequest, refused.StatusCode);
 
         HttpResponseMessage started = await http.PostAsJsonAsync("setup/api/start",
-            new SetupRequest(["Alice", "Bob"], string.Empty, 0, 3, false, "127.0.0.1", InPersonSetup.ConstructedMode, ["mono-red-aggro", "azorius-control"]));
+            new SetupRequest(["Alice", "Bob"], string.Empty, 0, 3, false, "127.0.0.1", InPersonSetup.ConstructedMode, ["mono-green-landfall", "dimir-midrange"]));
         Assert.True(started.IsSuccessStatusCode, await started.Content.ReadAsStringAsync());
         using JsonDocument state = JsonDocument.Parse(await started.Content.ReadAsStringAsync());
         Assert.Equal("Seating", state.RootElement.GetProperty("event").GetProperty("stage").GetString());

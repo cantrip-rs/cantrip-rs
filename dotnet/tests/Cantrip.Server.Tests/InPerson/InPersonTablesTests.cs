@@ -54,7 +54,7 @@ public sealed class InPersonTablesTests : IDisposable
 
     /// <summary>Two of the Standard decks, as a host offers them.</summary>
     private static readonly Lazy<IReadOnlyList<DeckList>> StandardDecks = new(() =>
-        [.. ((string[])["mono-red-aggro", "azorius-control"]).Select(name =>
+        [.. ((string[])["mono-green-landfall", "dimir-midrange"]).Select(name =>
         {
             DeckList deck = DeckList.Load(Path.Combine(RepoRoot.Path, "decks", "standard", name + ".txt"));
             deck.Resolve([ContentCache.Get(RepoRoot.ContentRoot).Cards]);
@@ -80,7 +80,7 @@ public sealed class InPersonTablesTests : IDisposable
         new(names.Length == 0 ? ["Alice", "Bob"] : names, cube, packs, layout, false, null);
 
     private static SetupRequest Constructed(params string[] decks) =>
-        new(["Alice", "Bob"], string.Empty, 0, 3, false, null, InPersonSetup.ConstructedMode, decks.Length == 0 ? ["mono-red-aggro", "azorius-control"] : decks);
+        new(["Alice", "Bob"], string.Empty, 0, 3, false, null, InPersonSetup.ConstructedMode, decks.Length == 0 ? ["mono-green-landfall", "dimir-midrange"] : decks);
 
     private static List<JsonElement> Devices(object state) =>
         [.. JsonSerializer.SerializeToElement(state).GetProperty("devices").EnumerateArray()];
@@ -136,9 +136,9 @@ public sealed class InPersonTablesTests : IDisposable
     public async Task A_constructed_table_takes_only_two_of_the_decks_offered()
     {
         await using InPersonTables tables = Tables();
-        await Assert.ThrowsAsync<ArgumentException>(() => tables.CreateAsync(Constructed("mono-red-aggro")));
-        await Assert.ThrowsAsync<ArgumentException>(() => tables.CreateAsync(Constructed("mono-red-aggro", "no-such-deck")));
-        await Assert.ThrowsAsync<ArgumentException>(() => tables.CreateAsync(Constructed("mono-red-aggro", "../../decks/demo/1-black-red")));
+        await Assert.ThrowsAsync<ArgumentException>(() => tables.CreateAsync(Constructed("mono-green-landfall")));
+        await Assert.ThrowsAsync<ArgumentException>(() => tables.CreateAsync(Constructed("mono-green-landfall", "no-such-deck")));
+        await Assert.ThrowsAsync<ArgumentException>(() => tables.CreateAsync(Constructed("mono-green-landfall", "../../decks/demo/1-black-red")));
         await Assert.ThrowsAsync<ArgumentException>(() => tables.CreateAsync(Constructed() with { Mode = "sealed" }));
         Assert.Equal(0, tables.Count);
     }
