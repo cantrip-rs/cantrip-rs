@@ -1,0 +1,6 @@
+{
+  "name": "Double Down",
+  "manaCost": "{3}{U}",
+  "type": "Enchantment",
+  "oracleText": "Whenever you cast an outlaw spell, copy that spell. (Assassins, Mercenaries, Pirates, Rogues, and Warlocks are outlaws. Copies of permanent spells become tokens.)"
+}

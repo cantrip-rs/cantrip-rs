@@ -1,0 +1,37 @@
+# Double Down only copies outlaw spells (CR 700.12): Bot1's Memnite (a Construct) is not one, so with Double Down on the battlefield
+# casting it puts one spell on the stack (no trigger) and Bot1 ends with one Memnite.
+
+[Bot1 Deck]
+Double Down
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Memnite
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Double Down.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 6

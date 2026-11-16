@@ -1,0 +1,51 @@
+# Double Down: "Whenever you cast an outlaw spell, copy that spell." Bot1 casts Double Down on turn one and Deepmuck Desperado (a
+# Mercenary, so an outlaw, CR 700.12) on turn three. The trigger goes above the Desperado (two on the stack), resolves and makes a copy
+# (CR 707.10) that is not cast, so it triggers nothing: the copy resolves first (the Desperado is still on the stack, Bot1 has
+# five permanents), becoming a token (CR 608.3f), then the original resolves: Bot1 ends with four Moxen, Double Down and two Desperados.
+
+[Bot1 Deck]
+Double Down
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Deepmuck Desperado
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Double Down.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Deepmuck Desperado.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Battlefield.Count = 6
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Deepmuck Desperado#2.Power = 2
+Bot1.Graveyard.Count = 0

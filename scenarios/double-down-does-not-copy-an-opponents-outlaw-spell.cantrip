@@ -1,0 +1,49 @@
+# Double Down says "whenever you cast" (CR 603.2): Bot2's Deepmuck Desperado (a Mercenary) on turn two sets off nothing. Bot2 ends
+# with three Moxen and one Desperado, Bot1 with four Moxen and Double Down, and no spell was copied.
+
+[Bot1 Deck]
+Double Down
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Deepmuck Desperado
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Island x2
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Double Down.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Deepmuck Desperado.Cast
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Count = 4
+Bot1.Battlefield.Count = 5

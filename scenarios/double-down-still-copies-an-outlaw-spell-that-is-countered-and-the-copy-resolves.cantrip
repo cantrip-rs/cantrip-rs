@@ -1,0 +1,62 @@
+# Double Down's trigger and its copy resolve before the spell that caused it, even if that spell is countered (ruling 2024-04-12).
+# Bot1's Deepmuck Desperado (Mercenary) triggers Double Down; with the trigger on the stack Bot2 casts Essence Scatter on the
+# Desperado. The Scatter resolves first and counters it (it goes to Bot1's graveyard), then the trigger resolves and copies the
+# spell from its last-known information: the copy becomes a token Desperado.
+
+[Bot1 Deck]
+Double Down
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Deepmuck Desperado
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Essence Scatter
+Island x3
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Double Down.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Deepmuck Desperado.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Essence Scatter.Cast(Stack.Deepmuck Desperado)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Deepmuck Desperado
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Deepmuck Desperado
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Deepmuck Desperado.Power = 2

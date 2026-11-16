@@ -1,0 +1,61 @@
+# Double Down copies a Kindred Instant with Changeling: it is every creature type, so an outlaw (CR 700.12, 702.73a; ruling
+# 2024-04-12). "Copy that spell" gives no new targets, so the copy keeps the original's target (CR 707.10) and no target question is asked (`! Bot1.Target`): with Bot2's Memnite also on
+# the battlefield, Bot1's Nameless Inversion (+3/-3) on Deepmuck Desperado is copied and both resolve on the Desperado (4 toughness:
+# 5/1 after the copy, then 8/-2), which dies; Memnite is untouched.
+
+[Bot1 Deck]
+Deepmuck Desperado
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Double Down
+Nameless Inversion
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Deepmuck Desperado.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Double Down.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Nameless Inversion.Cast(Deepmuck Desperado)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Deepmuck Desperado.Power = 5
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Deepmuck Desperado; Nameless Inversion
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Toughness = 1
