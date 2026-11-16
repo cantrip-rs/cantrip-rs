@@ -1,0 +1,11 @@
+{
+  "name": "Daring Thunder-Thief",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Turtle Rogue",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flash\nThis creature enters tapped.",
+  "keywords": [
+    "Flash"
+  ]
+}
