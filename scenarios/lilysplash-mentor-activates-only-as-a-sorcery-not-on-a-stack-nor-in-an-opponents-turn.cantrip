@@ -1,0 +1,57 @@
+# Lilysplash Mentor: "Activate only as a sorcery" (CR 602.5d): only in its controller's main phase with an empty stack. Bot2's
+# Ornithopter on the stack in Bot2's turn refuses it, Bot1's own second Ornithopter on the stack in Bot1's main phase refuses it
+# even with the mana untapped, and the same activation is allowed in Bot1's main phase once the stack is empty (the control).
+
+[Bot1 Deck]
+Lilysplash Mentor
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Ornithopter
+Ornithopter
+Forest x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lilysplash Mentor.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+! Bot1.Battlefield.Lilysplash Mentor.Activate(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Battlefield.Lilysplash Mentor.Activate(Bot1.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Lilysplash Mentor.Activate(Bot1.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter#2.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter#1.Counters.PlusOnePlusOne = (absent)

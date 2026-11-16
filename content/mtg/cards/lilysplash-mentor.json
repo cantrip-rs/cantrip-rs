@@ -1,0 +1,11 @@
+{
+  "name": "Lilysplash Mentor",
+  "manaCost": "{2}{G}{U}",
+  "type": "Creature — Frog Druid",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Reach\n{1}{G}{U}: Exile another target creature you control, then return it to the battlefield under its owner's control with a +1/+1 counter on it. Activate only as a sorcery.",
+  "keywords": [
+    "Reach"
+  ]
+}
