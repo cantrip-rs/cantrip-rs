@@ -1675,7 +1675,7 @@ impl<'a> Cx<'a> {
             }
             other => other,
         };
-        let controller = self.doer.or_else(|| self.effect_controller()).unwrap_or(self.g.state.obj(source).controller);
+        let controller = self.effect_controller().unwrap_or(self.g.state.obj(source).controller);
         let timestamp = self.g.state.timestamp();
         let words = self.granting_words(source, kind);
         let effect = ContinuousEffect { source, controller, timestamp, affected, kind, duration, words };
@@ -1823,9 +1823,15 @@ impl<'a> Cx<'a> {
         self.g.log.push(Record { serial, turn: turn.number, step: turn.step(), active: turn.active, cause, event });
     }
 
-    /// The controller of the spell or ability whose effect is running (CR 101.2): none for a player's own action, the
-    /// turn's, or the rules'.
+    /// The controller of the spell or ability whose effect is running (CR 101.2): what it causes a player to do - discard,
+    /// sacrifice, search - it is "a spell or ability [that player] controls" that causes. What a replacement effect or a mana
+    /// ability does is that effect's own, so its controller's (`Cx::doer`, CR 609.1, 614.1a, 605.3b): a discard Chains of
+    /// Mephistopheles has a player make in place of a draw is caused by Chains, not by the spell that had them draw. None for
+    /// a player's own action, the turn's, or the rules'.
     pub fn effect_controller(&self) -> Option<PlayerId> {
+        if let Some(doer) = self.doer {
+            return Some(doer);
+        }
         match self.cause() {
             Cause::Spell(_) | Cause::Ability { .. } => self.resolving().map(|i| i.controller),
             _ => None,

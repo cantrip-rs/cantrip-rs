@@ -1,0 +1,47 @@
+# Bot1's own Ancestral Recall makes it draw three; Bot2's Chains of Mephistopheles replaces each draw with a discard. The
+# discard is the replacement effect's, so the ability of Bot2's Chains causes it (CR 614.1a, 609.1), not the spell Bot1
+# controls - and Bot1's Tamiyo, Collector of Tales says spells and abilities its opponents control can't cause it to discard
+# (CR 101.2). Bot1 discards nothing, so for each draw it mills a card instead: its three Islands stay in hand, and Memnite,
+# Ornithopter and Tormod's Crypt are milled.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Tamiyo, Collector of Tales
+Ancestral Recall
+Island
+Island
+Island
+Memnite
+Ornithopter
+Tormod's Crypt
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Swamp
+Chains of Mephistopheles
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Tamiyo, Collector of Tales.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Chains of Mephistopheles.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Island; Island
+Bot1.Graveyard = Ancestral Recall; Tormod's Crypt; Ornithopter; Memnite; Black Lotus

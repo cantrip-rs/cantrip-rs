@@ -116,6 +116,22 @@ fn the_resolving_spell_is_instructing_only_while_its_own_instructions_are_carrie
     assert!(Query::instructing(&outside).is_none(), "no spell or ability resolves with priority");
 }
 
+/// What a replacement effect or a mana ability does in the middle of a resolution is that effect's own (CR 609.1, 614.1a,
+/// 605.3b): the discard, sacrifice or search it has a player make is caused by its controller (`Cx::effect_controller`, CR
+/// 101.2), not by the controller of the spell resolving. Outside, it is the spell's controller's; with priority, nobody's.
+#[test]
+fn a_replacement_effects_own_instructions_are_caused_by_its_controller() {
+    let mut g = game();
+    let (frame, _) = resolving(&mut g, &[]);
+    let mut cx = cx(&mut g, frame);
+    assert_eq!(cx.effect_controller(), Some(YOU), "the spell's instructions are its controller's");
+    assert_eq!(cx.acting_as(THEM, |cx| cx.effect_controller()), Some(THEM), "a replacement effect's are its controller's");
+    assert_eq!(cx.effect_controller(), Some(YOU), "and the spell's again once it is done");
+    let priority = cx.g.state.agenda.len() - 2;
+    let outside = Cx { g: cx.g, frame: priority, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
+    assert_eq!(outside.effect_controller(), None, "a player's own action has no spell or ability causing it");
+}
+
 /// Damage the resolving spell that targets the creature has a source deal to it is prevented; the same damage dealt while no
 /// spell or ability resolves is not.
 #[test]
