@@ -1,0 +1,38 @@
+# "Target tapped creature" is any player's (CR 115.1): Bot1's own Ornithopter attacked on turn 3 and is tapped in the second main phase, so the
+# Lullaby may destroy it, and Bot1 gains 2 (20 -> 22). Bot2's untapped Ornithopter is no legal target.
+
+[Bot1 Deck]
+Plains
+Plains
+Ornithopter
+Eriette's Lullaby
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+! Bot1.Hand.Eriette's Lullaby.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Eriette's Lullaby.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot1.Graveyard = Eriette's Lullaby; Ornithopter
+Bot2.Battlefield.Ornithopter.Tapped = false

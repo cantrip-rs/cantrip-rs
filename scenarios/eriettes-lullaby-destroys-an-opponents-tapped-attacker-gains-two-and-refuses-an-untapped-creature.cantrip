@@ -1,0 +1,46 @@
+# "Destroy target tapped creature" (CR 115.1, 701.8): Bot2's Ornithopter attacked on turn 4 and is still tapped on Bot1's turn 5, so it
+# is a legal target; the Ornithopter Bot2 cast afterwards is untapped and refused. The Lullaby destroys the tapped one and
+# Bot1 gains 2 (20 -> 22), costing exactly {1}{W} (the pool is empty after the cast).
+
+[Bot1 Deck]
+Plains
+Plains
+Plains
+Eriette's Lullaby
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+[T4 Bot2.Main2]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+! Bot1.Hand.Eriette's Lullaby.Cast(Bot2.Battlefield.Ornithopter#2)
+Bot1.Hand.Eriette's Lullaby.Cast(Bot2.Battlefield.Ornithopter#1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 5
+Bot1.Life = 22
+Bot1.Graveyard = Eriette's Lullaby
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield.Ornithopter.Tapped = false

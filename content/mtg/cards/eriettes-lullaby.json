@@ -1,0 +1,6 @@
+{
+  "name": "Eriette's Lullaby",
+  "manaCost": "{1}{W}",
+  "type": "Sorcery",
+  "oracleText": "Destroy target tapped creature. You gain 2 life."
+}
