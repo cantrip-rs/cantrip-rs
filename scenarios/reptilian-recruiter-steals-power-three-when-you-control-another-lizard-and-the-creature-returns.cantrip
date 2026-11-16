@@ -1,0 +1,53 @@
+# Reptilian Recruiter: with Hired Claw (a Lizard) already in play the "another Lizard" half holds, so Bot2's Hill Giant (power 3) is taken, untapped and given haste. It returns to Bot2 as the turn ends (CR 611.2a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Jet
+Hired Claw
+Reptilian Recruiter
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Hill Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Hired Claw.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reptilian Recruiter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hill Giant.Keywords = Haste
+? Bot1.Battlefield.Count = 6
+? Bot2.Battlefield.Count = 1
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Count = 2
+? Bot1.Battlefield.Count = 5
+
+[Expect]
+Bot2.Battlefield.Hill Giant.Tapped = false

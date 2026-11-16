@@ -1,0 +1,51 @@
+# Reptilian Recruiter: Bot2's Hill Giant has power 3, one past the limit. Bot1's only Lizard is the Recruiter itself (not "another" Lizard) and Bot2's own Hired Claw is a Lizard
+# Bot1 does not control, so the ability resolves and does nothing: the Giant stays Bot2's, untouched (CR 608.2b, 109.4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Reptilian Recruiter
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Hill Giant
+Hired Claw
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Hand.Hired Claw.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reptilian Recruiter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield = Hill Giant; Hired Claw; Mox Ruby; Mox Ruby
+Bot1.Battlefield = Reptilian Recruiter; Mox Ruby; Mox Jet
