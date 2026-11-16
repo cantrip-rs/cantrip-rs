@@ -8019,13 +8019,14 @@ fn play_condition_holds(cx: &Cx, player: PlayerId, when: PlayCondition) -> bool 
 }
 
 /// The effects that let `player` play lands and cast spells from their graveyard now (`EffectKind::PlayFromGraveyard`:
-/// Yawgmoth's Will), each as the `Grant` a play or cast by it is made by: the spell whose effect it is. Two are two
-/// permissions, each its own option. Nothing is allocated while there is none.
-fn graveyard_play(cx: &Cx, player: PlayerId) -> Vec<Grant> {
+/// Yawgmoth's Will), and with `spells` those that let them cast spells from there but not play lands
+/// (`EffectKind::CastFromGraveyard`: Forgotten Cellar), each as the `Grant` a play or cast by it is made by: the spell or
+/// permanent whose effect it is. Two are two permissions, each its own option. Nothing is allocated while there is none.
+fn graveyard_play(cx: &Cx, player: PlayerId, spells: bool) -> Vec<Grant> {
     cx.s()
         .effects
         .iter()
-        .filter(|e| e.kind == EffectKind::PlayFromGraveyard && e.controller == player)
+        .filter(|e| e.controller == player && (e.kind == EffectKind::PlayFromGraveyard || spells && e.kind == EffectKind::CastFromGraveyard))
         .map(|e| Grant { object: e.source, ability: AbilityRef::spell(cx.s().obj(e.source).card) })
         .collect()
 }
@@ -8175,7 +8176,7 @@ struct LandRules {
 
 fn land_rules(cx: &Cx, player: PlayerId) -> LandRules {
     // "Until end of turn, you may play lands and cast spells from your graveyard" (CR 305.1, 601.3): Yawgmoth's Will.
-    let mut rules = LandRules { graveyard: graveyard_play(cx, player), ..LandRules::default() };
+    let mut rules = LandRules { graveyard: graveyard_play(cx, player, false), ..LandRules::default() };
     each_play_rule_named(cx, cx.cards(), player, false, |source, ability, rule| match rule {
         PlayRule::ExtraLandPlays(n) => rules.extra += *n as u32,
         PlayRule::AnyNumberOfLandPlays => rules.unlimited = true,
@@ -9271,7 +9272,8 @@ impl<'a> Offer<'a> {
         match zone.kind() {
             ZoneKind::Graveyard if own => {
                 // The card's own say-so, for its ordinary cost (CR 113.6b): "You may cast this card from your graveyard"; or a
-                // rule that lets its owner cast spells from their graveyard (Yawgmoth's Will), which says nothing more.
+                // rule that lets its owner cast spells from their graveyard (Yawgmoth's Will, Forgotten Cellar), which says
+                // nothing more.
                 // Each is a permission of its own (two Yawgmoth's Wills are two).
                 if cx.chars(card).has(Keyword::CastFromYourGraveyard) {
                     routes.push(Route::RULES);
@@ -9447,7 +9449,7 @@ fn castable_ways(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<Avai
         player,
         instants,
         available,
-        graveyard: graveyard_play(cx, player),
+        graveyard: graveyard_play(cx, player, true),
         granted: std::cell::OnceCell::new(),
         exile_casts: std::cell::OnceCell::new(),
         alternatives: std::cell::OnceCell::new(),
@@ -9576,7 +9578,7 @@ fn through(q: &dyn Query, cards: &CardTable, player: PlayerId, card: ObjectId, b
     }
     s.effects
         .iter()
-        .any(|e| e.kind == EffectKind::PlayFromGraveyard && e.source == g.object && e.controller == player)
+        .any(|e| matches!(e.kind, EffectKind::PlayFromGraveyard | EffectKind::CastFromGraveyard) && e.source == g.object && e.controller == player)
         .then_some(Through::Route(Route::permission(by, PlayGrant::CAST)))
 }
 
