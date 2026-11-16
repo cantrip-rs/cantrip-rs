@@ -1883,6 +1883,10 @@ pub enum EffectKind {
     /// "You may play lands and cast spells from your graveyard" (CR 305.1, 601.3) for the effect's controller. About the
     /// player, and outlives its `affected` object, which is only the source.
     PlayFromGraveyard,
+    /// "You may cast spells from your graveyard" (CR 601.3) for the effect's controller, but not play lands from there: a
+    /// land card is no spell (CR 305.9). About the player, and outlives its `affected` object, which is only the source
+    /// (Forgotten Cellar's "when you unlock this door, you may cast spells from your graveyard this turn").
+    CastFromGraveyard,
     /// A mana ability the effect's controller has of their own until the effect ends (CR 605.1a, 611.2a): an ability of the
     /// source card's `delayed` list. About the player, so it outlives its `affected` object, which is only the source (Channel).
     PlayerManaAbility(AbilityRef),
@@ -1992,6 +1996,7 @@ impl EffectKind {
                 | EffectKind::ReplacementRule { .. }
                 | EffectKind::CreaturesAssignDamageByToughness
                 | EffectKind::PlayFromGraveyard
+                | EffectKind::CastFromGraveyard
                 | EffectKind::PlayerManaAbility(_)
                 | EffectKind::PlayerPlayRule(_)
                 | EffectKind::PlayerSpecialAction { .. }
