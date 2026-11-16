@@ -1,0 +1,72 @@
+# Mabel, Heir to Cragflame: "Other Mice you control get +1/+1" and "When Mabel enters, create Cragflame, a legendary colorless Equipment
+# artifact token ..." (CR 613.4c, 205.3m, 111.4, 603.6a). Bot1 casts Stampeding Scurryfoot (a 1/1 Mouse) and Memnite (not a Mouse), then Mabel
+# ({1}{R}{W}) with Mox Ruby, Mox Pearl and Mox Jet. Scurryfoot becomes 2/2; Mabel herself stays 3/3 ("other"), Memnite stays 1/1 and Bot2's
+# own Scurryfoot stays 1/1 ("you control"). Cragflame arrives under Bot1's control.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Stampeding Scurryfoot
+Memnite
+Mabel, Heir to Cragflame
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Stampeding Scurryfoot
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Stampeding Scurryfoot.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stampeding Scurryfoot.Power = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mabel, Heir to Cragflame.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stampeding Scurryfoot.Power = 2
+? Bot1.Battlefield.Stampeding Scurryfoot.Toughness = 2
+? Bot1.Battlefield.Mabel, Heir to Cragflame.Power = 3
+? Bot1.Battlefield.Memnite.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Stampeding Scurryfoot.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Stampeding Scurryfoot.Power = 2
+Bot1.Battlefield.Mabel, Heir to Cragflame.Power = 3
+Bot1.Battlefield.Mabel, Heir to Cragflame.Toughness = 3
+Bot1.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Stampeding Scurryfoot.Power = 1
+Bot2.Battlefield.Stampeding Scurryfoot.Toughness = 1
+Bot1.Battlefield = Mox Ruby; Mox Pearl; Mox Jet; Mox Emerald; Memnite; Stampeding Scurryfoot; Mabel, Heir to Cragflame; Cragflame
+Bot1.Battlefield.Cragflame.Types = Artifact
+Bot1.Battlefield.Cragflame.Supertypes = Legendary
+Bot1.Battlefield.Cragflame.Subtypes = Equipment
+Bot1.Battlefield.Cragflame.ManaValue = 0
+Bot1.Battlefield.Cragflame.Tapped = false
+Bot1.Battlefield.Count = 8
