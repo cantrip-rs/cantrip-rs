@@ -1,0 +1,46 @@
+# Stormcatch Mentor: Haste lets it attack the turn it is cast; Prowess (CR 702.108a) gives +1/+1 for each noncreature spell Bot1 casts
+# (Black Lotus, then Quick Study); and instants cost {1} less (CR 601.2f, 118.7a). Quick Study ({2}{U}) is paid from Black Lotus's {U}{U}{U}
+# as {1}{U}, so exactly {U} stays in the pool. The Mentor attacks as a 3/3 (1/1 + two prowess triggers) and Bot2 takes 3.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Stormcatch Mentor
+Quick Study
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stormcatch Mentor.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stormcatch Mentor.Power = 1
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stormcatch Mentor.Power = 2
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Quick Study.Cast
+? Bot1.Mana = {U}
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stormcatch Mentor.Power = 3
+Bot1.Attack(Stormcatch Mentor > Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Quick Study; Black Lotus
