@@ -688,32 +688,35 @@ pub fn look_at_top_select(
     Ok(taken)
 }
 
-/// "If it's a land card, you may put it onto the battlefield tapped" (CR 608.2d, 305.1) for a card just revealed or looked at as the
-/// ability resolves: asked only of a land card, and the permanent arrives tapped under its owner's control. Whether it entered - not
-/// whether the player said yes, so one a replacement effect stops (CR 614.6) did not. Risen Reef and Commander Spock print it.
-pub fn may_put_land_onto_battlefield_tapped(
+/// "If it's a land card, you may put it onto the battlefield [tapped]" (CR 608.2d, 305.1) for a card just revealed or looked at as the
+/// ability resolves: asked only of a land card, and the permanent arrives under its owner's control, `tapped` or not. Whether it
+/// entered - not whether the player said yes, so one a replacement effect stops (CR 614.6) did not. Risen Reef and Commander Spock
+/// (tapped) and Wickerfolk Thresher (untapped) print it.
+pub fn may_put_land_onto_battlefield(
     g: &mut dyn Game,
     player: PlayerId,
     source: ObjectId,
     card: ObjectId,
+    tapped: bool,
 ) -> Result<bool, Suspend> {
     if !g.chars(card).is(CardType::Land) || !crate::effects::ask_may(g, player, source, Purpose::Optional)? {
         return Ok(false);
     }
-    let arrived = g.put_onto_battlefield(card, g.obj(card).owner, true)?;
+    let arrived = g.put_onto_battlefield(card, g.obj(card).owner, tapped)?;
     Ok(g.is_on_battlefield(arrived))
 }
 
-/// "Look at the top card of your library. If it's a land card, you may put it onto the battlefield tapped. If you don't put the card
+/// "Look at the top card of your library. If it's a land card, you may put it onto the battlefield [tapped]. If you don't put the card
 /// onto the battlefield, put it into your hand." (CR 701.20a, 608.2c): the card is looked at whatever it is, a land is offered
-/// (`may_put_land_onto_battlefield_tapped`), and a card that did not enter - a nonland card, a land the player declined, one a replacement
-/// effect stopped - goes to the hand, wherever it now is. An empty library does nothing. Risen Reef and Fecund Greenshell print it.
-pub fn look_at_top_land_onto_battlefield_else_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+/// (`may_put_land_onto_battlefield`), and a card that did not enter - a nonland card, a land the player declined, one a replacement
+/// effect stopped - goes to the hand, wherever it now is. An empty library does nothing. Risen Reef and Fecund Greenshell (tapped) and
+/// Wickerfolk Thresher (untapped) print it.
+pub fn look_at_top_land_onto_battlefield_else_hand(g: &mut dyn Game, item: &StackItem, tapped: bool) -> Result<(), Suspend> {
     let looked = top_of_library(g, item.controller, 1);
     g.look_at(item.controller, &looked);
     g.end_sentence();
     for original in looked {
-        let entered = may_put_land_onto_battlefield_tapped(g, item.controller, item.object, original)?;
+        let entered = may_put_land_onto_battlefield(g, item.controller, item.object, original, tapped)?;
         g.end_sentence();
         if !entered {
             let card = g.found_after_move(original).unwrap_or(original);

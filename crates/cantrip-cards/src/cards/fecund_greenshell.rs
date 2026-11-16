@@ -31,7 +31,7 @@ fn this_or_another_creature_you_control_with_toughness_greater_than_power_enters
 /// top card of your library is a land card, you may choose to put it into your hand rather than onto the battlefield tapped"), so it
 /// reads as Risen Reef's `library::look_at_top_land_onto_battlefield_else_hand`, tapped.
 fn look_at_the_top_card_land_to_battlefield_otherwise_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    library::look_at_top_land_onto_battlefield_else_hand(g, item)
+    library::look_at_top_land_onto_battlefield_else_hand(g, item, true)
 }
 
 /// Reach is a core keyword.
