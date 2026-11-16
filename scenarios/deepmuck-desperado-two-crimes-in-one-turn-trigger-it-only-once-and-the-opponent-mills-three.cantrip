@@ -1,0 +1,49 @@
+# Deepmuck Desperado: "Whenever you commit a crime, each opponent mills three cards. This ability triggers only once each turn."
+# Bot1 casts it with Mox Sapphire, Jet and Pearl, then Black Lotus (red) pays two Lightning Bolts at Bot2, each a crime (CR 700.13):
+# the first crime triggers the ability, the second does not, so Bot2's library (13 after their opening hand) is down by exactly
+# three, to 10, not six, and the three milled cards are in their graveyard. Bot2 is at 14.
+
+[Bot1 Deck]
+Deepmuck Desperado
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Deepmuck Desperado.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Library.Count = 13
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot2.Library.Count = 10
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Bot2.Library.Count = 10
+Bot2.Graveyard.Count = 3
+Bot1.Crimes = Lightning Bolt; Lightning Bolt

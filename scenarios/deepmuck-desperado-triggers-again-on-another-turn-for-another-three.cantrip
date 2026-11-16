@@ -1,0 +1,48 @@
+# Deepmuck Desperado's limit is once each turn, not once: Bot1 commits a crime with a Lightning Bolt (Mox Ruby) on
+# turn one and another on turn three. Each time Bot2 mills three: library 13 after the opening hand, 10 after turn one, 9 after
+# Bot2's turn-two draw, 6 after turn three.
+
+[Bot1 Deck]
+Deepmuck Desperado
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Deepmuck Desperado.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Library.Count = 10
+[T2 Bot2.Main1]
+? Bot2.Library.Count = 9
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Library.Count = 6
+Bot2.Life = 14

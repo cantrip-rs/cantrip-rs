@@ -1,0 +1,53 @@
+# Deepmuck Desperado: only a crime triggers it (CR 700.13: a spell that targets an opponent, something an opponent controls, or a
+# card in an opponent's graveyard). On turn three Bot1 taps Black Lotus for red and bolts themselves (no crime, Bot2's library stays
+# at 13 after their turn-two draw), then bolts Bot2's Memnite, a permanent an opponent controls: crime, and the library falls by
+# three to 9.
+
+[Bot1 Deck]
+Deepmuck Desperado
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Deepmuck Desperado.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+? Bot2.Library.Count = 13
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot2.Library.Count = 10
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard.Count = 4
+Bot2.Battlefield.Memnite = (absent)

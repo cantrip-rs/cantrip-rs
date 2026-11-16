@@ -1,0 +1,8 @@
+{
+  "name": "Deepmuck Desperado",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Homarid Mercenary",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Whenever you commit a crime, each opponent mills three cards. This ability triggers only once each turn. (Targeting opponents, anything they control, and/or cards in their graveyards is a crime.)"
+}
