@@ -1,0 +1,45 @@
+# Roughshod Duo: on turn three Black Lotus is a free spell, the Duo mana 1-3 and Lightning Bolt, off a Mountain, mana 4:
+# its controller expends 4 (CR 700.14) and the trigger targets a creature they control - the opponent's Memnite is
+# refused - here their own Memnite, which gets +1/+1 and trample until end of turn (the Duo is unchanged, trampling of its
+# own); gone on the opponent's turn.
+
+[Bot1 Deck]
+Mountain
+Memnite
+Black Lotus
+Roughshod Duo
+Lightning Bolt
+Mountain x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Roughshod Duo.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Memnite)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Memnite.Keywords = Trample
+? Bot2.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Roughshod Duo.Power = 3
+? Bot1.Battlefield.Roughshod Duo.Keywords = Trample
+? Bot2.Life = 17
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Roughshod Duo.Keywords = Trample

@@ -1,0 +1,11 @@
+{
+  "name": "Roughshod Duo",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Mouse Raccoon",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Trample\nWhenever you expend 4, target creature you control gets +1/+1 and gains trample until end of turn. (You expend 4 as you spend your fourth total mana to cast spells during a turn.)",
+  "keywords": [
+    "Trample"
+  ]
+}
