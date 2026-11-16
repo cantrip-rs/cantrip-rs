@@ -901,11 +901,13 @@ impl From<MoveReason> for ZoneReason {
     }
 }
 
-/// A color reselected by a permanent's resolving ability (CR 607.2d): Chromatic Armor's "choose a color".
-/// Kept with the choosing ability's link; this does not make the value copiable.
+/// A color or number reselected by a permanent's resolving ability (CR 607.2d): Chromatic Armor's "choose a color",
+/// Shapeshifter's "you may choose a number between 0 and 7". Kept with the choosing ability's link; this does not make the
+/// value copiable.
 #[derive(Clone, Copy, Debug)]
 pub enum ChosenValue {
     Color(Color),
+    Number(u32),
 }
 
 pub trait Game: Query {
@@ -1654,7 +1656,7 @@ pub trait Game: Query {
     /// object's alone: a new object the permanent becomes has no chosen name (CR 400.7), and a later choice for the same
     /// object replaces the earlier one. Nothing if the permanent is no longer on the battlefield.
     fn remember_chosen_name(&mut self, by: Linked, name: CardId);
-    /// Reselect a color, replacing the earlier choice of the linked text.
+    /// Reselect a color or number, replacing the earlier choice of the linked text.
     /// Nothing if its permanent has left the battlefield. See `ChosenValue`.
     fn remember_chosen(&mut self, by: Linked, value: ChosenValue);
     /// An object chosen as `by`, an ability of a permanent, resolves (CR 607.2d), remembered by that permanent: Zenos yae

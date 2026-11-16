@@ -244,6 +244,7 @@ pub enum Kept {
     /// Two ordered subtype choices made by one text as it entered (CR 607.2d).
     SubtypePair([Subtype; 2]),
     Color(Color),
+    Number(u32),
     Object(ObjectId),
     Player(PlayerId),
     /// On an emblem, no choice but what its text names: the object whose ability made it, as the object it was then (CR
@@ -343,6 +344,7 @@ impl ChoiceRecord for Choices {
         if by.acquired == Acquired::OWN && self.by == Some(by.text) {
             match value {
                 Kept::Color(color) if self.color.is_some() => { self.color = Some(color); return true; }
+                Kept::Number(number) if self.number.is_some() => { self.number = Some(number); return true; }
                 _ => {}
             }
         }
@@ -432,9 +434,10 @@ impl Choices {
         self.entered_to(by)?.option
     }
 
-    /// The number chosen as this permanent entered, to the linked ability.
+    /// The number chosen as this permanent entered or reselected by its linked ability.
     pub fn number(&self, by: Linked) -> Option<u32> {
-        self.entered_to(by)?.number
+        self.entered_to(by).and_then(|c| c.number)
+            .or_else(|| self.kept_to(by, |k| match k { Kept::Number(n) => Some(n), _ => None }))
     }
 
     /// The object chosen, to `by`, wherever it is now: as the permanent entered, or by `by` as it resolved.
@@ -3569,12 +3572,12 @@ mod tests {
     }
 
     #[test]
-    fn reselected_entry_colors_reuse_their_carrier() {
+    fn reselected_entry_colors_and_numbers_reuse_their_carriers() {
         let text=CardId(4);let own=Linked {object:ObjectId(2),text,acquired:Acquired::OWN};
-        let mut choices=Choices::entered(text,Entered {color:Some(Color::Blue),card:Some(CardId(9)),..Default::default()});
+        let mut choices=Choices::entered(text,Entered {color:Some(Color::Blue),number:Some(2),card:Some(CardId(9)),..Default::default()});
         assert!(choices.keep(own,Kept::Player(PlayerId(1))),"fill the second kept slot");
-        assert!(choices.keep(own,Kept::Color(Color::Red)));
-        assert_eq!(choices.color(own),Some(Color::Red));
+        assert!(choices.keep(own,Kept::Color(Color::Red)));assert!(choices.keep(own,Kept::Number(7)));
+        assert_eq!(choices.color(own),Some(Color::Red));assert_eq!(choices.number(own),Some(7));
         assert_eq!(choices.card(own),Some(CardId(9)));assert_eq!(choices.player(own),Some(PlayerId(1)));
     }
 
@@ -3582,10 +3585,10 @@ mod tests {
     fn reselected_values_stay_linked_to_the_ability_that_chose_them() {
         let own=Linked {object:ObjectId(2),text:CardId(4),acquired:Acquired::OWN};
         let grant=Linked {acquired:Acquired {by:AcquiredBy::Grant,stamp:7,part:0},..own};
-        let mut choices=Choices::entered(own.text,Entered {color:Some(Color::Blue),..Default::default()});
-        assert!(choices.keep(grant,Kept::Color(Color::Red)));
-        assert_eq!(choices.color(own),Some(Color::Blue));
-        assert_eq!(choices.color(grant),Some(Color::Red));
+        let mut choices=Choices::entered(own.text,Entered {color:Some(Color::Blue),number:Some(2),..Default::default()});
+        assert!(choices.keep(grant,Kept::Color(Color::Red)));assert!(choices.keep(grant,Kept::Number(5)));
+        assert_eq!((choices.color(own),choices.number(own)),(Some(Color::Blue),Some(2)));
+        assert_eq!((choices.color(grant),choices.number(grant)),(Some(Color::Red),Some(5)));
         assert!(choices.keep(grant,Kept::Color(Color::Green)));assert_eq!(choices.color(grant),Some(Color::Green));
         assert_eq!(choices.color(Linked {text:CardId(8),..grant}),None);
     }
