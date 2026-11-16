@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{history, targets};
+use cantrip_mechanics::{delayed, history, targets};
 use cantrip_oracle as oracle;
 
 /// "Destroy all creatures that were blocked by that creature this turn" (CR 509.1h, 701.8a): the history of this turn's blocks,
@@ -11,33 +11,8 @@ fn delayed_1(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Choose target Wall creature. At this turn's next end of combat, destroy all creatures that were blocked by that creature this turn." (CR 608.2).
-fn choose_target_wall_creature_turns(
-    g: &mut dyn Game,
-    item: &StackItem,
-) -> Result<(), Suspend> {
-    let t_0 = vec![g.state().target(item, 0)];
-    let about: Vec<ObjectId> = t_0
-        .get(0)
-        .copied()
-        .and_then(|t: Target| t.object())
-        .into_iter()
-        .collect::<Vec<ObjectId>>();
-    g.delayed_trigger_about(
-        DelayedWhen::NextThisTurn,
-        item.object,
-        item.controller,
-        AbilityRef::delayed(item.ability.card, 0),
-        &about,
-    );
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
-    spell: spell(
-        &[targets::WALL_CREATURE],
-        choose_target_wall_creature_turns,
-    ),
+    spell: spell(&[targets::WALL_CREATURE], delayed::about_target_at_this_turns_next_end_of_combat),
     delayed: &[
         triggered(
             cantrip_mechanics::triggers::END_OF_COMBAT,

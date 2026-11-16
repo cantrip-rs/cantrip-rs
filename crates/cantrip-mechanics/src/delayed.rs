@@ -137,6 +137,16 @@ pub fn next_this_turn(g: &mut dyn Game, item: &StackItem, ability: u8, source: O
     g.delayed_trigger(DelayedWhen::NextThisTurn, source, item.controller, AbilityRef::delayed(card, ability), Target::None);
 }
 
+/// "Choose target creature. At this turn's next end of combat, ..." (CR 603.7, 608.2): the whole effect of a spell that sets up the
+/// card's delayed ability number 0 for this turn's next end of combat (`triggers::END_OF_COMBAT`, `DelayedWhen::NextThisTurn`), about
+/// its first target. Nothing if the target is no longer legal. Glyph of Doom and Venomous Breath print it.
+pub fn about_target_at_this_turns_next_end_of_combat(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(object) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    let card = ability_card(g, item);
+    g.delayed_trigger_about(DelayedWhen::NextThisTurn, item.object, item.controller, AbilityRef::delayed(card, 0), &[object]);
+    Ok(())
+}
+
 /// The whole effect of "When you next [event] this turn, ..." (CR 603.7b) for a spell or ability that does nothing else: it sets up
 /// the card's delayed ability number 0 (`next_this_turn`), for an effect function of a `spell`, `ability`, loyalty or chapter. Flamehold
 /// Grappler, Pit Automaton, Rimefire Torque, Pigment Wrangler's Striking Palette, Loki Laufeyson, Summon: Brynhildr, Summon: G.F.
