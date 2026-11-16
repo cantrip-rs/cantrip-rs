@@ -1,0 +1,43 @@
+# Dreamdew Entrancer: "When this creature enters, tap up to one target creature and put three stun counters on it. If you control
+# that creature, draw two cards." Bot2 casts a Memnite on turn 2; on turn 3 Bot1 casts the Entrancer ({2}{G}{U}) from four Moxen and
+# targets it: the Memnite is tapped with three stun counters (CR 122.1d) and Bot1, who does not control it, draws nothing (the hand
+# is 7 - 4 Moxen + 1 draw - the Entrancer = 3 cards).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Dreamdew Entrancer
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dreamdew Entrancer.Cast
+Bot1.Pass
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Memnite.Tapped = true
+Bot2.Battlefield.Memnite.Counters.Stun = 3
+Bot1.Hand.Count = 3

@@ -1,0 +1,11 @@
+{
+  "name": "Dreamdew Entrancer",
+  "manaCost": "{2}{G}{U}",
+  "type": "Creature — Frog Wizard",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Reach\nWhen this creature enters, tap up to one target creature and put three stun counters on it. If you control that creature, draw two cards.",
+  "keywords": [
+    "Reach"
+  ]
+}
