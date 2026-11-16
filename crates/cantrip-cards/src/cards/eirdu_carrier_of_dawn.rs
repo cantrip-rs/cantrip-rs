@@ -1,19 +1,7 @@
 use cantrip_api::*;
-use cantrip_mechanics::statics::{grant_delayed_ability, your_creatures};
+use cantrip_mechanics::statics::{self, grant_delayed_ability, your_creatures};
 use cantrip_mechanics::{effects, persist, triggers};
 use cantrip_oracle as oracle;
-
-/// "Creature spells you cast have convoke." (CR 702.51a, 601.2f-h): a creature spell that `caster`, Eirdu's controller, casts,
-/// judged on the spell's characteristics as it is cast. The spell has convoke only while it is cast and only while Eirdu is on
-/// the battlefield with its abilities (a static ability, CR 113.6); a noncreature spell, and any spell an opponent casts, gets
-/// nothing.
-fn creature_spells_convoke(q: &dyn Query, source: ObjectId, caster: PlayerId, spell: ObjectId) -> PayWith {
-    if q.controller(source) == caster && q.chars(spell).is(CardType::Creature) {
-        PayWith { convoke: true, ..PayWith::NONE }
-    } else {
-        PayWith::NONE
-    }
-}
 
 /// "Each other nontoken creature you control" (CR 613.1f, layer 6): the creatures Isilu's controller controls, judged on what the
 /// earlier layers made them, except Isilu itself and tokens.
@@ -45,7 +33,7 @@ pub static BACK: CardDef = CardDef {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(triggers::YOUR_FIRST_MAIN_PHASE, pay_black, "At the beginning of your first main phase, you may pay {B}. If you do, transform Eirdu.")],
-    grants_pay_with: &[creature_spells_convoke],
+    grants_pay_with: &[statics::creature_spells_you_cast_have_convoke],
     back: Some(&BACK),
     ..oracle::EIRDU_CARRIER_OF_DAWN
 };
