@@ -1,0 +1,63 @@
+# Alania, Divergent Storm: "Whenever you cast a spell, if it's the first instant spell, the first sorcery spell, or the first
+# Otter spell other than Alania you've cast this turn, you may have target opponent draw a card. If you do, copy that spell.
+# You may choose new targets for the copy." On turn 3 Bot1 casts Lightning Bolt at Bot2 (its first instant): Bot2 draws a card,
+# and the copy is sent at Bot2's Ornithopter instead (it dies) while the original still hits Bot2 (17). Opt, the second
+# instant, triggers nothing: no further card is drawn and nothing is copied.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Alania, Divergent Storm
+Lightning Bolt
+Opt
+Mox Jet
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Alania, Divergent Storm.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Hand.Count = 7
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+? Stack.Count = 2
+? Bot2.Hand.Count = 8
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Ornithopter
+? Bot2.Life = 20
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Opt.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Hand.Count = 8
+Bot2.Life = 17
