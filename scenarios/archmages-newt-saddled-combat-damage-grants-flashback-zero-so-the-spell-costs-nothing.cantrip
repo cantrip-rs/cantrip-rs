@@ -1,0 +1,55 @@
+# Archmage's Newt: "That card gains flashback {0} until end of turn instead if this creature is saddled." (CR 702.171b).
+# Turn one: Black Lotus (blue) pays the Newt, the left-over {U} and Mox Emerald's {G} pay Brushstrider (3/1, power three), and
+# Mox Ruby pays Lightning Bolt at Bot2 (17). Turn three: Brushstrider is tapped to saddle the Newt (power 3, a sorcery-speed
+# ability), the Newt attacks and connects (15), and the trigger targets the Bolt: it is cast from the graveyard with the
+# Mox Ruby still untapped, the pool never holding any mana, so the flashback cost is {0}; Bot2 goes to 12.
+
+[Bot1 Deck]
+Archmage's Newt
+Brushstrider
+Lightning Bolt
+Black Lotus
+Mox Emerald
+Mox Ruby
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Archmage's Newt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Brushstrider.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T3 Bot1.Main1]
+Bot1.Battlefield.Archmage's Newt.Activate(Ability: Saddle)
+Bot1.Choose(Brushstrider)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Archmage's Newt > Bot2)
+[T3 Bot1.CombatDamage]
+? Bot2.Life = 15
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Graveyard.Lightning Bolt.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 12
+Exile = Lightning Bolt
+Bot1.Battlefield.Mox Ruby.Tapped = false

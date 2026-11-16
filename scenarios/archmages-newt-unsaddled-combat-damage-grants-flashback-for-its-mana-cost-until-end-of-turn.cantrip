@@ -1,0 +1,55 @@
+# Archmage's Newt: "Whenever this creature deals combat damage to a player, target instant or sorcery card in your graveyard
+# gains flashback until end of turn. The flashback cost is equal to its mana cost." (CR 702.34a, 510.2). Bot1 casts Lightning
+# Bolt at Bot2 on turn one (17) and it sits in the graveyard. On turn three the unsaddled Newt connects (15) and the trigger
+# targets the Bolt: it is cast from the graveyard for its mana cost {R} (the Mox Ruby's mana is the whole pool and is used up),
+# Bot2 goes to 12 and the Bolt is exiled. On turn five the grant has ended: the Bolt in the graveyard cannot be cast.
+
+[Bot1 Deck]
+Archmage's Newt
+Lightning Bolt
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Archmage's Newt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Archmage's Newt > Bot2)
+[T3 Bot1.CombatDamage]
+? Bot2.Life = 15
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {R}
+Bot1.Graveyard.Lightning Bolt.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 12
+? Exile = Lightning Bolt
+[T5 Bot1.Main1]
+? Bot1.Graveyard.Count = 0
+
+[Expect]
+Bot2.Life = 12
+Exile = Lightning Bolt

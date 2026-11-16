@@ -1,0 +1,54 @@
+# Archmage's Newt's trigger targets an instant or sorcery card in YOUR graveyard (CR 115.1). Bot1's Lightning Bolt (turn one, Bot2
+# at 17) and Bot2's Lightning Bolt (turn two, at Bot1: 17) are both in graveyards when the Newt connects on turn three (Bot2
+# at 15): Bot2's Bolt is no legal target, so Bot1's is the only one and the trigger targets it without asking, and flashback lets Bot1 cast it for {R} (Bot2 to 12), after
+# which it is exiled and Bot2's Bolt is still in their graveyard.
+
+[Bot1 Deck]
+Archmage's Newt
+Lightning Bolt
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Archmage's Newt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Archmage's Newt > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 12
+Exile = Lightning Bolt
+Bot2.Graveyard = Lightning Bolt

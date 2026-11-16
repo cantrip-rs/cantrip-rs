@@ -1,0 +1,48 @@
+# Archmage's Newt triggers only on combat damage dealt to a player (CR 510.2, 603.2). Bot2's Memnite blocks it on turn three, so
+# the Newt's damage goes to the Memnite and nothing triggers although Lightning Bolt (cast on turn one) waits in the graveyard:
+# the stack stays empty and Bot2 stays at 17.
+
+[Bot1 Deck]
+Archmage's Newt
+Lightning Bolt
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Archmage's Newt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Archmage's Newt > Bot2)
+Bot2.Block(Memnite > Archmage's Newt)
+[T3 Bot1.CombatDamage]
+? Stack.Count = 0
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 17
+Bot2.Graveyard = Memnite
+Bot1.Graveyard = Lightning Bolt

@@ -1,0 +1,34 @@
+# Archmage's Newt has Saddle 3 (CR 702.171a): tapping other creatures with total power 3 or more. Savannah Lions (power 2,
+# summoning sick: tapping it for the cost is no {T} ability) is not enough: the saddle is refused and the Newt is not saddled.
+
+[Bot1 Deck]
+Archmage's Newt
+Savannah Lions
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Archmage's Newt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Archmage's Newt.Activate(Ability: Saddle)
+
+[Expect]
+Bot1.Battlefield.Archmage's Newt.Saddled = (absent)
