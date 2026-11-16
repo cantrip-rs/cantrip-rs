@@ -1,0 +1,34 @@
+# Lilypad Village ("Activate only if a Bird, Frog, Otter, or Rat entered the battlefield under your control this turn", CR 602.5b):
+# what counts is the creature as it entered. Memnite (a Construct) enters, then Turn to Frog makes it a Frog: no Frog entered this
+# turn, so the surveil stays refused with {U} still floating to pay it.
+
+[Bot1 Deck]
+Lilypad Village
+Memnite
+Black Lotus
+Turn to Frog
+Mox Sapphire
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Lilypad Village.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Turn to Frog.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Subtypes = Frog
+? Bot1.Mana = {U}
+! Bot1.Battlefield.Lilypad Village.Activate(Ability: Surveil 2)
+
+[Expect]
+Bot1.Battlefield.Lilypad Village.Tapped = false
+Bot1.Graveyard = Turn to Frog; Black Lotus

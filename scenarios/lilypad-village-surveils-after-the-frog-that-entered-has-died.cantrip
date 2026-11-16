@@ -1,0 +1,42 @@
+# Lilypad Village ("Activate only if a Bird, Frog, Otter, or Rat entered the battlefield under your control this turn", CR 602.5b):
+# the ruling says it doesn't matter what happens to that creature after it enters. Burrog Banemaker (a Frog) enters and is killed
+# by Lightning Bolt before the village is activated: the surveil is still allowed, read from the Frog as it entered.
+
+[Bot1 Deck]
+Lilypad Village
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Burrog Banemaker
+Lightning Bolt
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Lilypad Village.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Burrog Banemaker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Burrog Banemaker; Lightning Bolt
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Lilypad Village.Activate(Ability: Surveil 2)
+Bot1.Arrange( | Plains; Plains)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Lilypad Village.Tapped = true
+Bot1.Graveyard.Count = 4

@@ -1,0 +1,52 @@
+# Lilypad Village ("{U}, {T}: Surveil 2. Activate only if a Bird, Frog, Otter, or Rat entered the battlefield under your control
+# this turn", "{T}: Add {U}. Spend this mana only to cast a creature spell"): a Memnite (a Construct) does not enable the surveil
+# (turn 1), nor does the opponent's Birds of Paradise entering under their control (turn 2). On turn 3 an Elusive Otter enters;
+# the {U} is exact: refused while Mox Sapphire (tapped for the Otter) is the only blue source, allowed once an Island pays.
+
+[Bot1 Deck]
+Lilypad Village
+Mox Sapphire
+Memnite
+Elusive Otter
+Island
+Plains x14
+
+[Bot2 Deck]
+Mox Emerald
+Birds of Paradise
+Island x18
+
+[Actions]
+Bot1.Hand.Lilypad Village.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+! Bot1.Battlefield.Lilypad Village.Activate(Ability: Surveil 2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Birds of Paradise.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield = Mox Emerald; Birds of Paradise
+! Bot1.Battlefield.Lilypad Village.Activate(Ability: Surveil 2)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Elusive Otter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elusive Otter.Subtypes = Otter
+! Bot1.Battlefield.Lilypad Village.Activate(Ability: Surveil 2; Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Lilypad Village.Activate(Ability: Surveil 2)
+Bot1.Arrange(Plains; Plains | )
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Lilypad Village; Mox Sapphire; Memnite; Island; Elusive Otter

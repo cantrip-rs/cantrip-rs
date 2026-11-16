@@ -1,0 +1,79 @@
+# Lilypad Village ("{U}, {T}: Surveil 2. Activate only if a Bird, Frog, Otter, or Rat entered the battlefield under your control
+# this turn", CR 602.5b): refused after only Moxen entered, then allowed the turn a Frog (turn 1), an Otter (turn 3), a Rat (turn 5)
+# and a Bird (turn 7) enters; a creature from an earlier turn does not count, so it is refused again at the start of turn 3.
+# Each surveil keeps what it sees, except the last, which puts one Plains into the graveyard.
+
+[Bot1 Deck]
+Lilypad Village
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Burrog Banemaker
+Elusive Otter
+Birds of Paradise
+Island
+Bog Rats
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Lilypad Village.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+! Bot1.Battlefield.Lilypad Village.Activate(Ability: Surveil 2)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Burrog Banemaker.Subtypes = Frog; Warlock
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Lilypad Village.Activate(Ability: Surveil 2)
+Bot1.Arrange(Island; Bog Rats | )
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 13
+? Bot1.Battlefield.Lilypad Village.Tapped = true
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Lilypad Village.Activate(Ability: Surveil 2)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Elusive Otter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Lilypad Village.Activate(Ability: Surveil 2)
+Bot1.Arrange(Bog Rats; Plains | )
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Lilypad Village.Activate(Ability: Surveil 2)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bog Rats.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Lilypad Village.Activate(Ability: Surveil 2)
+Bot1.Arrange(Plains; Plains | )
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Birds of Paradise.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Lilypad Village.Activate(Ability: Surveil 2)
+Bot1.Arrange(Plains | Plains)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Lilypad Village; Mox Sapphire; Mox Jet; Mox Emerald; Island; Burrog Banemaker; Elusive Otter; Bog Rats; Birds of Paradise
+Bot1.Graveyard = Plains
+Bot1.Library.Count = 9

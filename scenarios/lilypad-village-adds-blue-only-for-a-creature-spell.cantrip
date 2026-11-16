@@ -1,0 +1,25 @@
+# Lilypad Village ("{T}: Add {U}. Spend this mana only to cast a creature spell", CR 106.6): the {U} it adds will not pay for Opt
+# (refused: no other mana source), but it pays for Elusive Otter. The village also adds {C} for anything, unrestricted.
+
+[Bot1 Deck]
+Lilypad Village
+Opt
+Elusive Otter
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Lilypad Village.Play
+Bot1.Battlefield.Lilypad Village.Activate(Ability: Add {U})
+? Bot1.Mana = {U} (CreatureSpells)
+! Bot1.Hand.Opt.Cast(Mana: short)
+Bot1.Hand.Elusive Otter.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Lilypad Village; Elusive Otter
+Bot1.Hand.Count = 5
+Bot1.Battlefield.Lilypad Village.Tapped = true
