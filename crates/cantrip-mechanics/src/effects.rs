@@ -3131,6 +3131,32 @@ pub fn gain_control_of_untap_haste(g: &mut dyn Game, item: &StackItem, creature:
     crate::haste_until_end_of_turn(g, item.object, creature);
 }
 
+/// "Untap target [permanent] an opponent controls and gain control of it until end of turn. It gains haste until end of turn.
+/// When you lose control of [it], tap it." (CR 608.2c, 611.2a, 603.7c): the first target, if still legal (CR 608.2b), untapped
+/// and taken in one instruction, then given haste, then watched by the card's delayed ability 0 (`triggers::YOU_LOSE_CONTROL_OF_THIS`
+/// into `tap_subject`). Ray of Command (a creature) and Magus of the Unseen (an artifact) print it; the target filter is theirs.
+pub fn untap_and_borrow_tapping_it_when_lost(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(it) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    instruction(g, |g| {
+        g.untap(it);
+        g.gain_control(item.object, it, item.controller, Duration::EndOfTurn);
+    });
+    g.end_sentence();
+    crate::haste_until_end_of_turn(g, item.object, it);
+    g.end_sentence();
+    g.delayed_trigger(DelayedWhen::WhenEvent, item.object, item.controller, AbilityRef::delayed(item.ability.card, 0), Target::Object(it));
+    Ok(())
+}
+
+/// "Tap it" (CR 701.26a): a delayed ability's subject (CR 603.7c). The "when you lose control of [it], tap it" of Ray of Command
+/// and Magus of the Unseen (`untap_and_borrow_tapping_it_when_lost`).
+pub fn tap_subject(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(it) = item.subject.object() {
+        g.tap(it);
+    }
+    Ok(())
+}
+
 const TRANSFORM: Question = Question::new("Transform", "pay {cost} to transform {subject}?", "", "Pay {cost}", "Don't transform");
 
 /// "You may pay [cost]. If you do, transform [this]." Asked as the ability resolves, wherever the permanent is: paying is
