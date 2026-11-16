@@ -1,0 +1,11 @@
+{
+  "name": "Burrowguard Mentor",
+  "manaCost": "{G}{W}",
+  "type": "Creature — Rabbit Soldier",
+  "power": "*",
+  "toughness": "*",
+  "oracleText": "Trample\nBurrowguard Mentor's power and toughness are each equal to the number of creatures you control.",
+  "keywords": [
+    "Trample"
+  ]
+}

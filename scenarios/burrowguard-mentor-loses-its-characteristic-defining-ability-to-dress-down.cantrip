@@ -1,0 +1,42 @@
+# Burrowguard Mentor's power and toughness are set by a characteristic-defining ability (CR 604.3), so Dress Down, which makes
+# creatures lose all abilities, takes it away and the stars count as 0 (CR 208.2a): a Giant Growth keeps the 0/0 body alive as 3/3
+# (it was 4/4 with the ability: one creature, plus three).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Pearl
+Black Lotus
+Burrowguard Mentor
+Giant Growth
+Dress Down
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Burrowguard Mentor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Giant Growth.Cast(Burrowguard Mentor)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Burrowguard Mentor.Power = 4
+? Bot1.Battlefield.Burrowguard Mentor.Toughness = 4
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Dress Down.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Burrowguard Mentor.Power = 3
+Bot1.Battlefield.Burrowguard Mentor.Toughness = 3
