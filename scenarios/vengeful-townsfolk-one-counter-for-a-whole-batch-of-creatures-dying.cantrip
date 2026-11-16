@@ -1,0 +1,49 @@
+# Vengeful Townsfolk (3/3): "Whenever one or more other creatures you control die, put a +1/+1 counter on this creature."
+# Bot1 controls the Townsfolk and two Ornithopters, Bot2 one Ornithopter. Bot2's Pyroclasm (2 damage to each creature) kills the three
+# Ornithopters at once (the Townsfolk survives): one batch, so exactly one counter (CR 603.2c), and Bot2's own dying creature adds none.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Vengeful Townsfolk
+Ornithopter x2
+Plains x2
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Pyroclasm
+Ornithopter
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vengeful Townsfolk.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Pyroclasm.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Vengeful Townsfolk.Counters.PlusOnePlusOne = (absent)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Ornithopter = (absent)
+? Bot2.Battlefield.Ornithopter = (absent)
+
+[Expect]
+Bot1.Battlefield.Vengeful Townsfolk.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Vengeful Townsfolk.Power = 4

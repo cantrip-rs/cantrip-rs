@@ -1,0 +1,8 @@
+{
+  "name": "Vengeful Townsfolk",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Citizen",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever one or more other creatures you control die, put a +1/+1 counter on this creature."
+}

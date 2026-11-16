@@ -1,0 +1,59 @@
+# Vengeful Townsfolk: creatures dying at different times each trigger it. Bot1 has two Ornithopters (and Bot2 one). On turn 2 Bot2 Bolts
+# one of Bot1's Ornithopters: one counter. On turn 3 Bot1 Bolts Bot2's Ornithopter (not its creature): still one. On turn 4 Bot2 Bolts the
+# second Ornithopter: two counters. Bot1 pays with Pearl, Jet, Ruby and a second Ruby, Bot2 with a Mountain and a Mox Ruby.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Ruby
+Vengeful Townsfolk
+Ornithopter x2
+Lightning Bolt
+Plains x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt x2
+Ornithopter
+Mountain x2
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vengeful Townsfolk.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Count = 5
+? Bot1.Battlefield.Vengeful Townsfolk.Counters.PlusOnePlusOne = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter = (absent)
+? Bot1.Battlefield.Vengeful Townsfolk.Counters.PlusOnePlusOne = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Vengeful Townsfolk.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Ornithopter = (absent)
