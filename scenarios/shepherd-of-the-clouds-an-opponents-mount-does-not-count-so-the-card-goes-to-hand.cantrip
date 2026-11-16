@@ -1,0 +1,68 @@
+# Shepherd of the Clouds: "if you control a Mount" is about the Shepherd's controller. Bot2 controls Bulwark Ox, Bot1 controls no Mount, so
+# Bot1's Alaborn Trooper (mana value 3, exactly at the limit) goes to its hand and not to the battlefield. Bot2's own Lightning Bolt
+# (not a permanent card) is in Bot2's graveyard, and the Trooper is the only card Bot1 may target.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Alaborn Trooper
+Shepherd of the Clouds
+Plains x15
+
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Mox Ruby
+Bulwark Ox
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Alaborn Trooper.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Bulwark Ox.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Alaborn Trooper)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Shepherd of the Clouds.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Alaborn Trooper; Plains
+Bot1.Battlefield.Alaborn Trooper = (absent)
+Bot1.Graveyard = 
+Bot2.Battlefield.Bulwark Ox.Tapped = false
+Stack.Count = 0

@@ -1,0 +1,63 @@
+# Shepherd of the Clouds: "if you control a Mount" names a creature type, which a text-changing effect may change (CR 612.1).
+# Bot1 controls no Mount. Bot1 casts Artificial Evolution on the Shepherd spell, changing Mount to Pegasus, a change the
+# permanent keeps (CR 400.7a). The Shepherd is itself a Pegasus, so as its enters trigger resolves Bot1 controls a "Mount"
+# and Alaborn Trooper returns to the battlefield, not to the hand. As printed (the without-a-Mount scenario) the Pegasus does
+# not count.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Alaborn Trooper
+Shepherd of the Clouds
+Black Lotus
+Artificial Evolution
+Plains x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Alaborn Trooper.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Alaborn Trooper)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Shepherd of the Clouds.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artificial Evolution.Cast(Stack.Shepherd of the Clouds)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Mount)
+Bot1.Modes(Pegasus)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Graveyard.Alaborn Trooper)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Alaborn Trooper.Tapped = false
+Bot1.Hand.Count = 0
+Bot1.Graveyard = Artificial Evolution; Black Lotus
+Stack.Count = 0

@@ -1,0 +1,12 @@
+{
+  "name": "Shepherd of the Clouds",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Pegasus",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Flying, vigilance\nWhen this creature enters, return target permanent card with mana value 3 or less from your graveyard to your hand. Return that card to the battlefield instead if you control a Mount.",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}
