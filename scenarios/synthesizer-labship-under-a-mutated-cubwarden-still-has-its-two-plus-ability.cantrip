@@ -1,0 +1,70 @@
+# Synthesizer Labship, made a creature by Animate Artifact and stationed to 2 charge counters, has Cubwarden mutated over it
+# (CR 702.140c): the merged permanent is Cubwarden with the Labship's abilities as well (CR 702.140e), its 2+ striation's
+# static ability among them, which gives the permanent the ability printed in the Labship's striation (CR 721.2a) whichever
+# card is on top. At the beginning of combat on turn 5 it triggers, and Mox Pearl becomes a 2/2 flying artifact creature.
+
+[Bot1 Deck]
+Gleemox
+Black Lotus
+Sol Ring
+Mox Pearl
+Synthesizer Labship
+Animate Artifact
+Grizzly Bears
+Cubwarden
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Synthesizer Labship.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Animate Artifact.Cast(Synthesizer Labship)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Synthesizer Labship.Activate(Ability: Station)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Synthesizer Labship.Counters.Charge = 2
+Bot1.Target(Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Cubwarden.Cast(Synthesizer Labship; Ability: Mutate)
+Bot1.Pass
+Bot1.Modes(1)
+Bot1.Pass
+Bot1.Target(Mox Pearl)
+[T5 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Pearl.Types = Artifact; Creature
+? Bot1.Battlefield.Mox Pearl.Power = 2
+? Bot1.Battlefield.Mox Pearl.Keywords = Flying
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot1.Battlefield.Cubwarden.Counters.Charge = 2
+Bot1.Battlefield.Mox Pearl.Toughness = 2

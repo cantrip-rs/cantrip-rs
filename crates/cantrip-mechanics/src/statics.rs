@@ -233,11 +233,14 @@ pub fn have_haste(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
 }
 
 /// "... has [an ability]" (CR 613.1f, layer 6) as a static ability's `StaticDef::apply`: the ability at `INDEX` of the card's
-/// `delayed` list, given to the permanent in the first free slot. A permanent that copies the card has it too. A station card's
+/// `delayed` list, given to the permanent in the first free slot. The card is the one the static ability is printed on as the
+/// source has it now (`LayerQuery::text_of`): a permanent that copies the card has it too (CR 707.2), and so does a merged
+/// permanent with the card under another (CR 702.140e), whose characteristics are its top card's. A station card's
 /// striations (`station::has`) and Fire Nation Cadets' conditional firebending 2 print it.
-pub fn has_delayed_ability<const INDEX: u8>(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
+pub fn has_delayed_ability<const INDEX: u8>(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
+    let card = view.text_of(source);
     if let Some(slot) = chars.abilities.iter().position(|a| a.is_none()) {
-        chars.abilities[slot] = Some(AbilityRef::delayed(chars.card, INDEX));
+        chars.abilities[slot] = Some(AbilityRef::delayed(card, INDEX));
     }
 }
 
