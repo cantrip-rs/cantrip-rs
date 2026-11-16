@@ -1,0 +1,52 @@
+# Clement, the Worrywort: "Frogs you control have '{T}: Add {G} or {U}. Spend this mana only to cast a creature spell.'" On turn 1
+# Bot1 casts Clement and Burrog Befuddler (another Frog). On turn 3 both tap for mana (the restriction shows on the pool),
+# and that mana alone pays for Grizzly Bears: the untapped Mox Emerald, Mox Sapphire and Island are still untapped afterwards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Emerald
+Island
+Clement, the Worrywort
+Burrog Befuddler
+Grizzly Bears
+Plains x13
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Clement, the Worrywort.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Burrog Befuddler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Clement, the Worrywort.Activate(Color: Green)
+? Bot1.Mana = {G} (CreatureSpells)
+Bot1.Battlefield.Burrog Befuddler.Activate(Color: Blue)
+? Bot1.Mana = {U} (CreatureSpells) {G} (CreatureSpells)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Clement, the Worrywort.Tapped = true
+Bot1.Battlefield.Burrog Befuddler.Tapped = true
+Bot1.Battlefield.Mox Emerald.Tapped = false
+Bot1.Battlefield.Mox Sapphire.Tapped = false
+Bot1.Battlefield.Island.Tapped = false
