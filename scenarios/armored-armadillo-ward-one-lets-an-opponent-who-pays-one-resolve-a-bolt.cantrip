@@ -1,0 +1,35 @@
+# Armored Armadillo, "Ward {1}" (CR 702.21a): Bot2 has a Mox Ruby for the Lightning Bolt and a Mountain for the ward cost. It pays {1}
+# (the pool is empty afterwards), so the Bolt resolves and the 0/4 takes 3 damage and survives.
+
+[Bot1 Deck]
+Mox Pearl
+Armored Armadillo
+Plains x30
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Armored Armadillo.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Armored Armadillo)
+Bot2.Pass
+Bot1.Pass
+Bot2.PayCost
+? Bot2.Mana =
+
+[Expect]
+Bot1.Battlefield.Armored Armadillo.Damage = 3
+Bot2.Graveyard = Lightning Bolt

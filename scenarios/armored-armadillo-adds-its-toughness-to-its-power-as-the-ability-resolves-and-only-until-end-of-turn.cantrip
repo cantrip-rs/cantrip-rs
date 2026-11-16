@@ -1,0 +1,58 @@
+# "{3}{W}: gets +X/+0 where X is its toughness" (CR 611.2a, 608.2h; ruling 2024-04-12): X is read as the ability resolves. With the 0/4
+# Armadillo, the ability on the stack and a Giant Growth cast in response (resolving first, 3/7), X is 7 and it becomes 10/7 - not 7/7 from
+# the 4 it had on activation. The pump ends with the turn: the Armadillo is 0/4 again on turn 2, and activated once more on turn 3 it is
+# 4/4 (not 10/7 or 14/4).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Emerald
+Black Lotus
+Armored Armadillo
+Giant Growth
+Plains x30
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Armored Armadillo.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Armored Armadillo.Power = 0
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Armored Armadillo.Activate
+? Bot1.Mana =
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Armored Armadillo)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Armored Armadillo.Power = 3
+Bot1.Pass
+Bot2.Pass
+
+? Bot1.Battlefield.Armored Armadillo.Power = 10
+? Bot1.Battlefield.Armored Armadillo.Toughness = 7
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Armored Armadillo.Power = 0
+? Bot1.Battlefield.Armored Armadillo.Toughness = 4
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Armored Armadillo.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Armored Armadillo.Power = 4
+Bot1.Battlefield.Armored Armadillo.Toughness = 4

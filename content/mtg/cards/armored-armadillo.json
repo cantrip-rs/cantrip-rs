@@ -1,0 +1,8 @@
+{
+  "name": "Armored Armadillo",
+  "manaCost": "{W}",
+  "type": "Creature — Armadillo",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": "Ward {1} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {1}.)\n{3}{W}: This creature gets +X/+0 until end of turn, where X is its toughness."
+}
