@@ -1,0 +1,49 @@
+# Camellia, the Seedmiser: "Whenever you sacrifice one or more Foods, create a 1/1 green Squirrel creature token" triggers once for a
+# batch (CR 603.2c). Turn 1: Camellia and a Nutrient Block (a nontoken Food). Turn 3: a second Nutrient Block, and Pitiless Carnage is
+# plotted. Turn 5: Carnage is cast free and Bot1 sacrifices both Foods and Mox Ruby at once: one Squirrel, not two, and the sacrificed
+# Mox, no Food, adds nothing to it.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Swamp
+Camellia, the Seedmiser
+Pitiless Carnage
+Nutrient Block
+Nutrient Block
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Camellia, the Seedmiser.Cast
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Nutrient Block.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Pitiless Carnage.Activate(Ability: Plot)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Nutrient Block.Cast
+Bot2.Pass
+[T5 Bot1.Main1]
+? Bot1.Battlefield = Camellia, the Seedmiser; Mox Emerald; Mox Jet; Mox Ruby; Nutrient Block; Nutrient Block; Swamp
+Bot1.Exile.Pitiless Carnage.Cast
+Bot1.Choose(Nutrient Block#1; Nutrient Block#2; Mox Ruby)
+Bot2.Pass
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Camellia, the Seedmiser; Mox Emerald; Mox Jet; Squirrel Token; Swamp
