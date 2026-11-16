@@ -1,0 +1,53 @@
+# Gift not promised: no Fish for Bot2 and no +1/+1 counter, so the two Grizzly Bears (2/2 and 2/2) each deal 2 to the other and both die (the same game as
+# the file with the gift, where the counter makes Bot1's Bears survive).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Longstalk Brawl
+Grizzly Bears
+Memnite
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Grizzly Bears
+Memnite
+Lightning Bolt
+Island
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Longstalk Brawl.Cast
+Bot1.Decline
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Grizzly Bears; Longstalk Brawl; Black Lotus
+Bot1.Battlefield = Memnite; Mox Emerald
+Bot2.Graveyard = Grizzly Bears; Black Lotus
+Bot2.Battlefield = Memnite; Mox Ruby

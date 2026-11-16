@@ -1,0 +1,58 @@
+# Gift promised, Bot1's Grizzly Bears is killed in response (Lightning Bolt): the other target is still legal, so the spell resolves and gives its gift
+# (CR 608.2b, 702.174j: Bot2 creates a tapped Fish), but the counter has nowhere to go and nothing fights (CR 701.14b): Bot2's Grizzly Bears is undamaged.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Longstalk Brawl
+Grizzly Bears
+Memnite
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Grizzly Bears
+Memnite
+Lightning Bolt
+Island
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Longstalk Brawl.Cast
+Bot1.Accept
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Longstalk Brawl; Grizzly Bears; Black Lotus
+Bot2.Battlefield = Fish Token; Grizzly Bears; Memnite; Mox Ruby
+Bot2.Battlefield.Fish Token.Tapped = true
+Bot2.Battlefield.Grizzly Bears.Toughness = 2
+Bot2.Graveyard = Lightning Bolt; Black Lotus
