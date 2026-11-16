@@ -3781,7 +3781,8 @@ fn target_candidates_if_promised(cx: &Cx, asker: &Asker, spec: &TargetSpec) -> V
 }
 
 /// The candidates for a slot after the slots before it chose `earlier` (CR 601.2c); `slot_player` is the opponent the slot
-/// is for when it is one of a `TargetSpec::EACH_OPPONENT`; `x` the X announced for the spell or ability they are for
+/// is for when it is one of a `TargetSpec::EACH_OPPONENT`, or the opponent who chooses a slot of an opponent's choice
+/// (`StackItem::opponent_choosing`); `x` the X announced for the spell or ability they are for
 /// (`resolve::announced_x`), none before it is.
 pub fn target_candidates_given(
     cx: &Cx,
@@ -3830,6 +3831,20 @@ fn candidates(
     gift: bool,
     text: Option<(ObjectId, Words)>,
 ) -> Vec<Target> {
+    // A slot of an opponent's choice before the opponent is decided (whether it has a legal choice at all): what any of
+    // them could choose, each asked as the slot's opponent (CR 601.7a, 602.3a; `StackItem::opponent_choosing`).
+    if spec.opponent_chooses && slot_player.is_none() {
+        let opponents: Vec<PlayerId> = q.state().opponents(asker.controller).collect();
+        let mut out: Vec<Target> = Vec::new();
+        for p in opponents {
+            for t in candidates(q, asker, spec, earlier, subject, data, Some(p), x, gift, text) {
+                if !out.contains(&t) {
+                    out.push(t);
+                }
+            }
+        }
+        return out;
+    }
     let s = q.state();
     let cx = &crate::resolve::Given { q, earlier, subject, slot_player, gift, x, data, text };
     let mut out = Vec::new();
@@ -10322,6 +10337,7 @@ pub(crate) fn stack_item(kind: StackKind, object: ObjectId, ability: AbilityRef,
         serial: 0,
         gift: None,
         shares: StackItem::NO_SHARES,
+        opponent_choosing: None,
         spill: 0,
         exile_instead: ExileInstead::Never,
         flashback: false,
@@ -11793,8 +11809,11 @@ fn choose_slots_after(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bo
         // 601.2c: "if the gift was promised, instead choose ...", the gift announced before the targets (CR 702.174m).
         let spec = &spec.when_kicked(kicked).when_promised(spell && cx.s().obj(source).gift.is_some());
         let before = targets.len();
+        // "Of an opponent's choice" (CR 601.7, 602.3): the opponent who chooses is decided first, and the slot's filter asks
+        // about them ("they control", Preacher).
+        let slot_player = if spec.opponent_chooses { Some(opponent_choosing(cx, &asker, spec, &targets, counted, x)?) } else { *slot_player };
         'slot: {
-            let candidates = target_candidates_given(cx, &asker, spec, &targets, Target::None, *slot_player, x);
+            let candidates = target_candidates_given(cx, &asker, spec, &targets, Target::None, slot_player, x);
             let (candidates, together) = within_together(cx, &asker, spec, counted, candidates);
             let (least, most) = spec.bounds(counted);
             // Fewer legal targets than the slot's minimum is not a legal announcement (CR 601.2c, 602.2b): given up whole.
@@ -11812,7 +11831,7 @@ fn choose_slots_after(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bo
             }
             // No more than there are candidates to choose (CR 601.2c: each target is a different object or player).
             let count = most.min(cantrip_state::count_u32(candidates.len()));
-            let ask = RequestKind::ChooseTarget { replacing: None, label: spec.label, slot_player: *slot_player,
+            let ask = RequestKind::ChooseTarget { replacing: None, label: spec.label, slot_player,
                 source,
                 purpose: Purpose::Targets,
                 candidates,
@@ -11825,8 +11844,7 @@ fn choose_slots_after(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bo
             };
             // "Of an opponent's choice" (CR 601.7, 602.3): that opponent chooses them, and can't take back the controller's
             // announcement.
-            let answer = if spec.opponent_chooses {
-                let opponent = opponent_choosing(cx, player, source)?;
+            let answer = if let Some(opponent) = slot_player.filter(|_| spec.opponent_chooses) {
                 cx.ask_core(opponent, ask, false)?
             } else {
                 cx.ask_core(player, ask, true)?
@@ -11848,21 +11866,39 @@ fn choose_slots_after(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bo
     Ok((targets.split_off(start), of.split_off(start)))
 }
 
-/// The opponent of `player` who does what a spell or ability `player` is announcing says "an opponent" chooses (CR 601.7,
-/// 602.3): the one opponent still in the game, or the one `player` decides on where there are more (CR 601.7a, 602.3a).
-fn opponent_choosing(cx: &mut Cx, player: PlayerId, source: ObjectId) -> R<PlayerId> {
-    let candidates: Vec<PlayerId> = cx.s().opponents(player).collect();
-    match candidates.as_slice() {
-        [] => Err(Stop::Cancel),
-        [one] => Ok(*one),
+/// The opponent of the controller who chooses the targets of `spec`, a slot "of an opponent's choice" of the spell or
+/// ability being announced (the top of the stack) (CR 601.7, 602.3): the one its controller already decided on for it, the
+/// one opponent still in the game, or the one the controller decides on where there are more (CR 601.7a, 602.3a) - among
+/// those the slot has a legal choice for, as no other makes a legal announcement (CR 601.2c). Kept with the item
+/// (`StackItem::opponent_choosing`), where the slot's filter asks about them as its targets are judged again.
+fn opponent_choosing(cx: &mut Cx, asker: &Asker, spec: &TargetSpec, earlier: &[Target], counted: u32, x: Option<u32>) -> R<PlayerId> {
+    let top = cx.s().stack.len().checked_sub(1).ok_or(Stop::Cancel)?;
+    if let Some(chosen) = cx.s().stack[top].opponent_choosing {
+        return Ok(chosen);
+    }
+    let opponents: Vec<PlayerId> = cx.s().opponents(asker.controller).collect();
+    let (least, _) = spec.bounds(counted);
+    let able = |cx: &Cx, p: PlayerId| {
+        let candidates = target_candidates_given(cx, asker, spec, earlier, Target::None, Some(p), x);
+        let (candidates, together) = within_together(cx, asker, spec, counted, candidates);
+        enough_together(cx, asker, &together, &candidates, least)
+    };
+    let candidates: Vec<PlayerId> = if opponents.len() > 1 { opponents.iter().copied().filter(|&p| able(cx, p)).collect() } else { opponents };
+    let chosen = match candidates.as_slice() {
+        [] => return Err(Stop::Cancel),
+        [one] => *one,
         _ => {
-            let ask = RequestKind::ChoosePlayer { source, candidates: candidates.clone(), verb: "chooses its targets", amount: 0, subject: None };
-            match cx.ask_core(player, ask, true)? {
-                Answer::Player(p) if candidates.contains(&p) => Ok(p),
-                _ => Err(Stop::Cancel),
+            let ask = RequestKind::ChoosePlayer { source: asker.source, candidates: candidates.clone(), verb: "chooses its targets", amount: 0, subject: None };
+            match cx.ask_core(asker.controller, ask, true)? {
+                Answer::Player(p) if candidates.contains(&p) => p,
+                _ => return Err(Stop::Cancel),
             }
         }
-    }
+    };
+    let mut item = cx.s().stack[top];
+    item.opponent_choosing = Some(chosen);
+    cx.st().stack_set(top, item);
+    Ok(chosen)
 }
 
 /// What asking a divided slot came to.

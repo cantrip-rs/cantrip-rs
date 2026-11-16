@@ -1445,6 +1445,11 @@ pub struct StackItem {
     pub serial: u32,
     /// For a spell cast with gift promised (CR 702.174): the opponent it was promised to.
     pub gift: Option<PlayerId>,
+    /// For a spell or activated ability with a target slot "of an opponent's choice" (`TargetSpec::opponent_chooses`): the
+    /// opponent who chose those targets, the one its controller decided on where there were more (CR 601.7a, 602.3a). Its
+    /// filter asks about them as `Query::slot_opponent`, as the targets are chosen and as they are judged again: Preacher's
+    /// "target creature of an opponent's choice they control". A copy has the same (CR 707.10).
+    pub opponent_choosing: Option<PlayerId>,
     /// For a spell or ability that divides a total among its targets (CR 601.2d): where each target's share, parallel to
     /// `targets`, starts in the game's share arena (`GameState::shares`); `StackItem::NO_SHARES` for an item with no share
     /// above 0, which is every other item.

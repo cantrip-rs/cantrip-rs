@@ -806,8 +806,10 @@ pub struct TargetSpec {
     /// "Target [thing] of an opponent's choice" (CR 601.7, 602.3): an opponent of the controller chooses the slot's
     /// targets, when its controller would (CR 601.2c by way of 602.2b) - the one the controller chooses where more than
     /// one could (CR 601.7a, 602.3a). The targets are the spell's or ability's all the same, judged as its controller's
-    /// (CR 115.1), so the slot is never announced with the action (`targets_with_action`). A spell's or an activated
-    /// ability's slot (`TargetSpec::of_an_opponents_choice`).
+    /// (CR 115.1), so the slot is never announced with the action (`targets_with_action`). The opponent is decided before
+    /// the targets and kept with the spell or ability (`StackItem::opponent_choosing`): the slot's filter asks about them as
+    /// `Query::slot_opponent`, as Preacher's "target creature of an opponent's choice they control" does. A spell's or an
+    /// activated ability's slot (`TargetSpec::of_an_opponents_choice`).
     pub opponent_chooses: bool,
 }
 
@@ -845,7 +847,8 @@ impl TargetSpec {
 
     /// A `max` of this is "for each opponent, up to one target ...": the slot stands for one slot of its own for each
     /// opponent of the controller (CR 601.2c, 115.1), at most one target each, in seat order. It is not valid inside a mode (a modal slot reads a `max` above 1 as a range). The slot for an opponent
-    /// is asked about `Query::slot_opponent`, and an opponent who has left the game keeps their slot, with nothing to
+    /// is asked about `Query::slot_opponent` (as is the opponent who chooses a slot of an opponent's choice,
+    /// `TargetSpec::opponent_chooses`), and an opponent who has left the game keeps their slot, with nothing to
     /// choose, so the others keep their places (CR 800.4a). Its `min` is 0.
     pub const EACH_OPPONENT: u32 = u32::MAX - 2;
 

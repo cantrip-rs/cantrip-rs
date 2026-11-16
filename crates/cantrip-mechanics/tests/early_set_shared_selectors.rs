@@ -91,7 +91,7 @@ fn wall_targets_and_named_landwalk_exceptions_preserve_their_rules() {
         inline_targets: [Target::None; INLINE_TARGETS], target_count: 0, inline_spec_of: [0; INLINE_TARGETS],
         x: 0, kicked: 0, counted: 0, paid: 0, modes: 0, way: 0, choice: 0,
         subject: Target::None, data: [0, 0], members: Span::default(), serial: 0,
-        gift: None, shares: StackItem::NO_SHARES, spill: 0, exile_instead: ExileInstead::Never,
+        gift: None, shares: StackItem::NO_SHARES, opponent_choosing: None, spill: 0, exile_instead: ExileInstead::Never,
         flashback: false, attacking: false, since: 0, tapped_since: 0, copied: false, cast_known: u32::MAX,
         acquired: Acquired::OWN, words: Words::NONE,
     });

@@ -235,6 +235,7 @@ fn run(probe: &'static CardDef) {
         serial: 0,
         gift: None,
         shares: StackItem::NO_SHARES,
+        opponent_choosing: None,
         spill: 0,
         exile_instead: ExileInstead::Never,
         flashback: false,

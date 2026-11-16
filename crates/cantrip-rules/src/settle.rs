@@ -863,6 +863,7 @@ pub(crate) fn announce_trigger(cx: &mut Cx, trigger: PendingTrigger, by: Option<
         // give its gift after the permanent has left.
         gift: cx.s().obj(trigger.source).gift,
         shares: StackItem::NO_SHARES,
+        opponent_choosing: None,
         spill: 0,
         exile_instead: ExileInstead::Never,
         flashback: false,

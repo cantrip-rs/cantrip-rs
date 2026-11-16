@@ -343,7 +343,11 @@ only the candidates the host's verdict on those picked says may be added.
 announced with the action (`targets_with_action`), and as `actions::choose_slots` reaches it the controller's opponent is
 asked it - the one the controller picks where there are several (CR 601.7a, 602.3a, `opponent_choosing`), who cannot take
 the announcement back. The candidates are the controller's still: the targets are the spell's or ability's (Nova Pentacle).
-A spell's or an activated ability's slot; no triggered ability implemented prints it.
+The opponent is decided before the candidates, among those the slot has a legal choice for, and kept with the item
+(`StackItem::opponent_choosing`): the slot's filter asks about them as `Query::slot_opponent`, as they choose and as the
+targets are judged again (Preacher's "target creature of an opponent's choice they control"). Before the announcement,
+whether the slot has a legal choice asks every opponent in turn. A spell's or an activated ability's slot; no triggered
+ability implemented prints it.
 
 ### Characteristics
 

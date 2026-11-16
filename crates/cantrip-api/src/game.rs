@@ -492,6 +492,8 @@ pub trait Query {
         false
     }
 
+    /// The opponent the target slot being judged is for: its opponent in a `TargetSpec::EACH_OPPONENT` slot, or the opponent
+    /// who chooses a slot of an opponent's choice (`TargetSpec::opponent_chooses`, CR 601.7a, 602.3a). None for any other.
     fn slot_opponent(&self) -> Option<PlayerId> {
         None
     }

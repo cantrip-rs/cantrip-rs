@@ -71,6 +71,10 @@ pub(crate) fn expand_specs(state: &GameState, controller: PlayerId, specs: &[Tar
 fn recorded_spec(state: &GameState, item: &StackItem, specs: &[TargetSpec], slot: usize) -> Option<(TargetSpec, Option<PlayerId>)> {
     let at = state.spec(item, slot) as usize;
     let spec = specs.get(at)?;
+    // "Of an opponent's choice" (CR 601.7a, 602.3a): the slot is the opponent's who chose its targets.
+    if spec.opponent_chooses {
+        return Some((*spec, item.opponent_choosing));
+    }
     if spec.max != TargetSpec::EACH_OPPONENT {
         return Some((*spec, None));
     }
