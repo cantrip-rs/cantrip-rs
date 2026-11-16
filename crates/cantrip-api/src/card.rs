@@ -1982,12 +1982,12 @@ pub struct ManaCombinationEffect {
     pub colors: ColorSet,
 }
 
-/// Keyword families represented by triggered definitions rather than `Keywords` bits (CR 702.24): what Balduvian Shaman's
-/// "that doesn't have cumulative upkeep" asks. A family is semantic metadata supplied by its shared keyword implementation,
+/// Keyword families represented by triggered definitions rather than `Keywords` bits (CR 702.23, 702.24): what Balduvian
+/// Shaman's "that doesn't have cumulative upkeep" and Rapid Fire's "if it doesn't have rampage" ask. A family is semantic metadata supplied by its shared keyword implementation,
 /// never inferred from display text.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 #[repr(u8)]
-pub enum KeywordFamily { CumulativeUpkeep }
+pub enum KeywordFamily { CumulativeUpkeep, Rampage }
 
 /// A triggered ability (CR 603).
 #[derive(Clone, Copy)]
