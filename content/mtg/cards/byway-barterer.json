@@ -1,0 +1,11 @@
+{
+  "name": "Byway Barterer",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Raccoon Rogue",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Menace\nWhenever you expend 4, you may discard your hand. If you do, draw two cards. (You expend 4 as you spend your fourth total mana to cast spells during a turn.)",
+  "keywords": [
+    "Menace"
+  ]
+}

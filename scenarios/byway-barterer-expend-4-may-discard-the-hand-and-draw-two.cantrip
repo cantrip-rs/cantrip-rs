@@ -1,0 +1,35 @@
+# Byway Barterer: Black Lotus is a free spell, the Barterer mana 1-3 and Lightning Bolt mana 4: its controller expends 4
+# (CR 700.14) and the trigger, above the Bolt, offers to discard the hand. Accepted, the three cards in hand go and two are
+# drawn; then the Bolt resolves.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Byway Barterer
+Lightning Bolt
+Grizzly Bears
+Memnite
+Giant Growth
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Byway Barterer.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+? Bot1.Battlefield.Byway Barterer.Power = 3
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Accept
+[T1 Bot1.Main2]
+? Bot2.Life = 17
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Hand = Mountain; Mountain
+Bot1.Graveyard.Count = 5
+Bot1.Battlefield.Byway Barterer.Keywords = Menace

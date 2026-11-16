@@ -1,0 +1,33 @@
+# Byway Barterer: the same expend 4 off Lightning Bolt, but the discard is optional ("you may"): declined, the hand
+# stays as it was and nothing is drawn.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Byway Barterer
+Lightning Bolt
+Grizzly Bears
+Memnite
+Giant Growth
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Byway Barterer.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+? Bot1.Battlefield.Byway Barterer.Power = 3
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Decline
+[T1 Bot1.Main2]
+? Bot2.Life = 17
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Hand = Giant Growth; Grizzly Bears; Memnite
+Bot1.Graveyard = Lightning Bolt; Black Lotus
