@@ -1,0 +1,45 @@
+# Bakersbane Duo: it enters with a Food token. The Mox is a free spell (0 mana), the Duo is mana 1-2, Black Lotus another
+# free spell, Llanowar Elves mana 3 (no trigger yet: one short), Elvish Mystic mana 4 - the fourth total mana spent on
+# spells this turn expends 4 (CR 700.14) and the Duo gets +1/+1 until end of turn, gone on the opponent's turn. Memnite,
+# cast free after it, does not expend 4 again: four mana was already spent before it.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Bakersbane Duo
+Black Lotus
+Llanowar Elves
+Elvish Mystic
+Memnite
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bakersbane Duo.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+? Bot1.Battlefield.Bakersbane Duo.Power = 2
+? Bot1.Battlefield.Bakersbane Duo.Toughness = 2
+Bot1.Hand.Elvish Mystic.Cast
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Bakersbane Duo.Power = 3
+? Bot1.Battlefield.Bakersbane Duo.Toughness = 3
+Bot1.Hand.Memnite.Cast
+? Stack.Count = 1
+Bot1.Pass
+? Bot1.Battlefield.Bakersbane Duo.Power = 3
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield = Bakersbane Duo; Elvish Mystic; Food Token; Forest; Llanowar Elves; Memnite; Mox Emerald
+Bot1.Battlefield.Food Token.Token = true
+Bot1.Battlefield.Bakersbane Duo.Power = 2
+Bot1.Battlefield.Bakersbane Duo.Toughness = 2
