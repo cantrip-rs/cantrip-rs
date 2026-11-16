@@ -1,0 +1,56 @@
+# Starseer Mentor: "if you gained or lost life this turn" is met by losing life as well as gaining it (CR 603.4, 119.3, 120.3). Bot1
+# casts the Mentor on turn 1 ({3}{W}{B}: Black Lotus, Mox Pearl and Mox Jet) and on turn 3 casts Lightning Bolt on itself with Mox Ruby, losing
+# 3 life. At its end step Bot2, holding Islands and controlling a Memnite, chooses to discard an Island: it loses no life (20) and keeps
+# its Memnite, its hand one card smaller.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Starseer Mentor
+Lightning Bolt
+Island x21
+
+[Bot2 Deck]
+Memnite
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Starseer Mentor.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Hand.Count = 6
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+Bot1.Pass
+Bot2.Pass
+Bot2.Modes(Discard a card)
+Bot2.Choose(Island)
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 17
+Bot2.Hand.Count = 5
+Bot2.Battlefield = Island; Memnite

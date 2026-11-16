@@ -1,0 +1,68 @@
+# Starseer Mentor: "At the beginning of your end step, if you gained or lost life this turn, target opponent loses 3 life unless they
+# sacrifice a nonland permanent of their choice or discard a card." (CR 603.4, 608.2d, 119.3). Bot1 casts it on turn 1 with Black Lotus,
+# Mox Pearl and Mox Jet ({3}{W}{B}). On turn 3 it attacks, flying over Bot2's Memnite and, with vigilance, staying untapped (3 damage),
+# then Lightning Helix gains Bot1 3 life (3 more damage). At its end step Bot2, holding a card and a Memnite, chooses to lose 3 life
+# rather than give either: 20 - 3 - 3 - 3 = 11, and it keeps its card and its Memnite.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Starseer Mentor
+Lightning Helix
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Starseer Mentor.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Starseer Mentor > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Battlefield.Starseer Mentor.Tapped = false
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 14
+? Bot1.Life = 23
+Bot1.Pass
+Bot2.Pass
+Bot2.Modes(Lose 3 life)
+? Bot2.Life = 11
+? Bot2.Battlefield = Island; Memnite
+
+[Expect]
+Bot2.Life = 11
+Bot1.Life = 23
+Bot2.Battlefield = Island; Memnite

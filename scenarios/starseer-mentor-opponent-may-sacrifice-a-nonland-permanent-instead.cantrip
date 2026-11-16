@@ -1,0 +1,55 @@
+# Starseer Mentor: the opponent may instead sacrifice "a nonland permanent of their choice" (CR 701.21a, 608.2d): Bot2's Island is a land
+# and is not offered, so its Memnite is the choice. Bot1 gains 3 life from Lightning Helix on turn 3 (Bot2 20 - 3 = 17), and at its end
+# step Bot2 sacrifices the Memnite, losing no further life and keeping its hand and Island.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Starseer Mentor
+Lightning Helix
+Island x22
+
+[Bot2 Deck]
+Memnite
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Starseer Mentor.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Pass
+Bot2.Pass
+Bot2.Modes(Sacrifice a nonland permanent)
+Bot2.Choose(Memnite)
+
+[Expect]
+Bot2.Life = 17
+Bot2.Battlefield = Island
+Bot2.Hand.Count = 6
+Bot2.Graveyard = Memnite
