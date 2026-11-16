@@ -1,0 +1,52 @@
+# Season of Loss with {P} twice and {P}{P}{P}, five pawprints (CR 700.2d, 700.2i): each player sacrifices a creature, twice,
+# first, as the modes run in printed order - the caster both of theirs, the opponent two of their three - so the
+# {P}{P}{P}'s X, the creature cards in its caster's graveyard counted as it resolves, is 2: their own Memnite and
+# Ornithopter, not the opponent's, and not the Season itself. One pawprint's worth more than five is refused.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Mox Jet
+Season of Loss
+Memnite
+Ornithopter
+Island
+Island x20
+
+[Bot2 Deck]
+Memnite
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Season of Loss.Cast
+! Bot1.Modes(1; 1; 3; 1)
+Bot1.Modes(1; 1; 3)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield = Swamp; Mox Jet
+? Bot2.Battlefield.Count = 1
+? Bot2.Life = 18
+
+[Expect]
+Bot1.Graveyard.Count = 4
+Bot2.Graveyard.Count = 2

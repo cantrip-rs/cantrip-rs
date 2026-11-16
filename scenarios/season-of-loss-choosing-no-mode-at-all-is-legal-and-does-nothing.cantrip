@@ -1,0 +1,33 @@
+# Season of Loss with no mode chosen: "choose up to five {P} worth of modes" allows none at all (CR 700.2i). The spell
+# resolves doing nothing - no creature is sacrificed - and goes to its owner's graveyard.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Mox Jet
+Season of Loss
+Memnite
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Season of Loss.Cast
+Bot1.Modes()
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield = Swamp; Memnite; Mox Jet
+? Bot1.Hand.Count = 2
+
+[Expect]
+Bot1.Graveyard = Season of Loss; Black Lotus
+Bot2.Life = 20
