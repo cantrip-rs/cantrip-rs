@@ -1,0 +1,12 @@
+{
+  "name": "Barkform Harvester",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Shapeshifter",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Changeling (This card is every creature type.)\nReach\n{2}: Put target card from your graveyard on the bottom of your library.",
+  "keywords": [
+    "Changeling",
+    "Reach"
+  ]
+}

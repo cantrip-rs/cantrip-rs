@@ -1,0 +1,66 @@
+# Barkform Harvester: changeling (every creature type) and reach, and "{2}: Put target card from your graveyard on the bottom
+# of your library" (CR 702.73a, 702.17). One mana is short, two pay it exactly; it takes a card from its controller's graveyard
+# (a Black Lotus Bot1 sacrificed) to the library's bottom, under the Lotus Petal that stays on top and is drawn on turn 3, and an
+# opponent's graveyard card (Bot2's Lotus, there from turn 2) is no legal target on turn 3 while Bot1's own Lotus Petal is.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Black Lotus
+Barkform Harvester
+Mox Pearl
+Mox Emerald
+Lotus Petal
+Island x30
+
+[Bot2 Deck]
+Black Lotus
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Barkform Harvester.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Barkform Harvester.Subtypes = (every creature type)
+? Bot1.Battlefield.Barkform Harvester.Keywords = Changeling; Reach
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Barkform Harvester.Activate(Bot1.Graveyard.Black Lotus; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Barkform Harvester.Activate(Bot1.Graveyard.Black Lotus)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 0
+? Bot1.Library.Count = 32
+? Bot1.Library.Top = Lotus Petal
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+[T3 Bot1.Main1]
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Lotus Petal.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Barkform Harvester.Activate(Bot2.Graveyard.Black Lotus)
+Bot1.Battlefield.Barkform Harvester.Activate(Bot1.Graveyard.Lotus Petal)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard.Count = 1
+Bot1.Library.Count = 32
