@@ -1,0 +1,11 @@
+{
+  "name": "Sterling Supplier",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Bird Soldier",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying\nWhen this creature enters, put a +1/+1 counter on another target creature you control.",
+  "keywords": [
+    "Flying"
+  ]
+}
