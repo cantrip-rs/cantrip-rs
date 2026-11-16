@@ -1,0 +1,48 @@
+# With Casey Jones's enters trigger on the stack, Bot1's Mirrorweave makes Casey a copy of Memnite until end of turn; the
+# delayed discard the trigger creates is still Casey's (CR 603.7, 707.2), so Bot1 discards three at random at its next upkeep.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Memnite
+Black Lotus
+Casey Jones, Vigilante
+Mirrorweave
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Casey Jones, Vigilante.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mirrorweave.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#2.Power = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+[T7 Bot1.Main1]
+
+[Expect]
+Turn = 7
+Bot1.Hand.Count = 1

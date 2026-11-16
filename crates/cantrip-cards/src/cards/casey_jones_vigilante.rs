@@ -6,16 +6,14 @@ use cantrip_oracle as oracle;
 /// "When Casey Jones enters, draw three cards. At the beginning of your next upkeep, discard three cards at random."
 /// The second sentence sets up a delayed triggered ability (CR 603.7) for the first upkeep of its controller's that has not
 /// begun yet; it is independent of Casey Jones from then on (CR 603.7e: "your" is the controller of the ability that created
-/// it), so it happens if he has left the battlefield. The ability is the card as the source has it, or the card it copies.
+/// it), so it happens if he has left the battlefield. The ability is the one on Casey's card that is resolving, whatever the object has become (CR 707.2).
 fn enters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.draw(item.controller, 3);
-    let o = *g.obj(item.object);
-    let card = o.copied_card().unwrap_or(o.card);
     g.delayed_trigger(
         DelayedWhen::Step { step: Step::Upkeep, on_turn_of: Some(item.controller) },
         item.object,
         item.controller,
-        AbilityRef::delayed(card, 0),
+        AbilityRef::delayed(item.ability.card, 0),
         Target::None,
     );
     Ok(())
