@@ -2325,6 +2325,22 @@ pub fn subtype_spell_you_cast<const SUBTYPE: u16>(q: &dyn Query, me: &Asker, eve
     }
 }
 
+/// "Whenever you cast a noncreature or [subtype] spell" (CR 603.2, 601.2i), `SUBTYPE` a `Subtype` as `u16` (`lands::sub`): one
+/// cast event triggers once, whether the spell is noncreature, of the subtype or both, judged on the spell as it is on the
+/// stack, the subtype read through the words of the source's text (CR 612). Firespitter Whelp (Dragons), Harnesser of Storms
+/// (Otters) and Vision, Spectral Synthezoid print it.
+pub fn noncreature_or_subtype_spell_you_cast<const SUBTYPE: u16>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::SpellCast { spell, player, .. }
+            if *player == me.controller
+                && (!q.chars(*spell).is(CardType::Creature) || q.chars(*spell).has_subtype(crate::lands::word(q, me.source, SUBTYPE))) =>
+        {
+            Fired::PLAIN
+        }
+        _ => None,
+    }
+}
+
 /// "Whenever you cast a legendary spell" (CR 603.2, 205.4a), about the spell. Rona, Herald of Invasion and Venat, Heart of
 /// Hydaelyn print it.
 pub fn legendary_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
