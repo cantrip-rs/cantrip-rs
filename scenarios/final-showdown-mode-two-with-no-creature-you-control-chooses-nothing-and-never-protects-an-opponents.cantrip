@@ -1,0 +1,46 @@
+# Final Showdown's second mode names "a creature you control": with none, nothing is chosen and nothing happens (CR 608.2d), and
+# Bot2's Ornithopter is not offered for the choice. Bot1 resolves it with no creature, then Bot2 bolts its own Ornithopter,
+# which was never given indestructible and dies.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Final Showdown
+Plains x13
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Mountain x11
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Final Showdown.Cast
+Bot1.Modes(2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Graveyard = Final Showdown
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Turn = 3
+Bot2.Graveyard = Ornithopter; Lightning Bolt

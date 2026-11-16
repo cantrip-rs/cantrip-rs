@@ -1,0 +1,64 @@
+# Final Showdown {W}, Spree: the {3}{W}{W} mode alone costs {W} + {3}{W}{W} = six mana, three of them white. With a Mox Pearl, a
+# Black Lotus (WWW) and one Mox that is five: the cast cannot be paid and is taken back. With a second Mox it resolves and destroys
+# every creature, both players' Ornithopters, but not the Darksteel Myr, which is indestructible (CR 702.12b).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Black Lotus
+Final Showdown
+Darksteel Myr
+Ornithopter
+Plains x8
+
+[Bot2 Deck]
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Darksteel Myr.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Final Showdown.Cast
+Bot1.Modes(3)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Cancel
+? Stack.Count = 0
+? Bot1.Hand = Final Showdown
+? Bot1.Battlefield.Count = 7
+Bot1.Hand.Final Showdown.Cast
+Bot1.Modes(3)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Battlefield = Mox Pearl; Mox Ruby; Mox Jet; Mox Sapphire; Darksteel Myr
+Bot1.Battlefield.Mox Sapphire.Tapped = false
+Bot1.Graveyard = Final Showdown; Ornithopter; Black Lotus
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Ornithopter

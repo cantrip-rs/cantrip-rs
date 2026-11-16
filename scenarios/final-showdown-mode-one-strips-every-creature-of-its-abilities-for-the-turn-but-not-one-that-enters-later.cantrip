@@ -1,0 +1,52 @@
+# Final Showdown's first mode ({W} + {1}): "All creatures lose all abilities until end of turn." Bot1 and Bot2 each have an
+# Ornithopter (flying) on turn 3. After the mode resolves neither has flying (both players' creatures, CR 613.1f), but a second
+# Ornithopter Bot1 casts afterwards is not in the set the effect affects (CR 611.2c) and keeps its flying. At Bot2's next turn (the
+# until-end-of-turn effect has ended, CR 514.2) Bot2's Ornithopter flies again.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Final Showdown
+Ornithopter
+Plains x3
+Ornithopter
+Plains x8
+
+[Bot2 Deck]
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Hand.Final Showdown.Cast
+Bot1.Modes(1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = (absent)
+? Bot2.Battlefield.Ornithopter.Keywords = (absent)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Keywords = (absent)
+? Bot1.Battlefield.Ornithopter#2.Keywords = Flying
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Ornithopter#1.Keywords = Flying
+? Bot1.Battlefield.Ornithopter#2.Keywords = Flying
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+
+[Expect]
+Turn = 4
+Bot1.Graveyard = Final Showdown
