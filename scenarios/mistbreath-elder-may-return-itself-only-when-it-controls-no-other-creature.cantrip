@@ -1,0 +1,36 @@
+# Mistbreath Elder: with no other creature of its own to return (Bot2's Ornithopter does not count, CR 109.4) the Elder gets no counter
+# ("if you do" fails) and Bot1 "may return this creature to its owner's hand" (CR 608.2d). At the turn 3 upkeep Bot1 declines: the
+# Elder stays a 2/2. At the turn 5 upkeep it accepts and the Elder goes to Bot1's hand.
+
+[Bot1 Deck]
+Mox Emerald
+Mistbreath Elder
+Island x18
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mistbreath Elder.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Mistbreath Elder.Power = 2
+? Bot1.Battlefield.Mistbreath Elder.Counters.PlusOnePlusOne = (absent)
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Hand.Mistbreath Elder.Power = 2
+Bot1.Battlefield.Count = 1
+Bot2.Battlefield.Ornithopter.Power = 0

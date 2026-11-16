@@ -1,0 +1,34 @@
+# Mistbreath Elder returns Bot1's commander, which its owner puts into the command zone instead (CR 903.9b): it was not
+# returned to hand (the first Accept moves it there), so "if you do" fails (no counter) and Bot1 may return the Elder (Accept): the Elder ends in hand, not with a counter.
+[Format]
+Commander
+[Bot1 Commander]
+Bristly Bill, Spine Sower
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mistbreath Elder
+Forest x32
+[Bot2 Deck]
+Island x35
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Command.Bristly Bill, Spine Sower.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Mistbreath Elder.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Bristly Bill, Spine Sower)
+Bot1.Accept
+Bot1.Accept
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Command = Bristly Bill, Spine Sower
+Bot1.Battlefield.Count = 3

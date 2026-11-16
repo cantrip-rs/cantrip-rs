@@ -1,0 +1,41 @@
+# Mistbreath Elder, ruling 2024-07-26: "If you control creatures other than Mistbreath Elder as its triggered ability resolves, you must
+# return one of them to its owner's hand." Nothing is targeted (CR 608.2c). At Bot1's upkeep it controls an Ornithopter and a Memnite
+# besides the Elder: it must pick exactly one of them (none, both and the Elder itself are refused, and Bot2's Ornithopter is not a choice);
+# Bot1 returns the Memnite, so "if you do" the Elder gets one +1/+1 counter (a 3/3) and the Ornithopter stays.
+
+[Bot1 Deck]
+Mox Emerald
+Mistbreath Elder
+Ornithopter
+Memnite
+Island x16
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mistbreath Elder.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose()
+! Bot1.Choose(Memnite; Ornithopter)
+! Bot1.Choose(Mistbreath Elder)
+! Bot1.Choose(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Memnite)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand.Memnite.Power = 1
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Mistbreath Elder.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Mistbreath Elder.Power = 3
+Bot1.Battlefield.Mistbreath Elder.Toughness = 3
+Bot2.Battlefield.Ornithopter.Power = 0
