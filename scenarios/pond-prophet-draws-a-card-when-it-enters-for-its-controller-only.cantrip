@@ -1,0 +1,65 @@
+# Pond Prophet: "When this creature enters, draw a card." Hybrid {G/U}{G/U} is paid by one green and one blue mana (CR 107.4e),
+# so each half is payable by either color. Bot1's Prophet draws Bot1 one card on entering; the Ornithopter that enters
+# afterwards draws nothing (it is the Prophet's own ability, CR 603.2), and Bot2 entering a Prophet of its own draws Bot2 a card
+# and leaves Bot1's hand alone.
+
+[Bot1 Deck]
+Pond Prophet
+Mox Emerald
+Mox Sapphire
+Ornithopter
+Forest
+Forest
+Forest
+Forest x10
+
+[Bot2 Deck]
+Pond Prophet
+Mox Emerald
+Mox Sapphire
+Forest
+Forest
+Forest
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Hand.Count = 5
+Bot1.Hand.Pond Prophet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Pond Prophet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot2.Hand.Count = 6
+Bot1.Battlefield.Pond Prophet.Power = 1
+Bot2.Battlefield.Pond Prophet.Toughness = 1
