@@ -13,6 +13,8 @@ mod ability_acquisition_identity_tests;
 #[cfg(test)]
 mod expend_tests;
 #[cfg(test)]
+mod forage_tests;
+#[cfg(test)]
 mod linked_created_tokens_tests;
 #[cfg(test)]
 mod delayed_capture_tests;

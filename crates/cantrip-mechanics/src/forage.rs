@@ -11,10 +11,10 @@ use cantrip_api::*;
 use crate::targets::filters;
 
 /// "Exile three cards from your graveyard": the first way to forage (CR 701.61a).
-pub const EXILE_THREE_CARDS: ExtraCost = ExtraCost { text: "Forage: exile three cards from your graveyard", cost: exile_from_graveyard(3) };
+pub const EXILE_THREE_CARDS: ExtraCost = ExtraCost { text: "Forage: exile three cards from your graveyard", cost: Cost { forage: true, ..exile_from_graveyard(3) } };
 
 /// "Sacrifice a Food": the second way to forage (CR 701.61a).
-pub const SACRIFICE_A_FOOD: ExtraCost = ExtraCost { text: "Forage: sacrifice a Food", cost: Cost::sacrifice(1, filters::food) };
+pub const SACRIFICE_A_FOOD: ExtraCost = ExtraCost { text: "Forage: sacrifice a Food", cost: Cost { forage: true, ..Cost::sacrifice(1, filters::food) } };
 
 const FORAGE_BY_EXILING: Question = Question::new("Forage", "forage by exiling three cards from your graveyard?", "", "Exile three cards", "Don't exile");
 const FORAGE_BY_SACRIFICING: Question = Question::new("Forage", "forage by sacrificing a Food?", "", "Sacrifice a Food", "Don't sacrifice");
@@ -29,3 +29,13 @@ pub fn may_forage(g: &mut dyn Game, item: &StackItem) -> Result<bool, Suspend> {
     }
     g.may_pay(you, item.object, item.object, SACRIFICE_A_FOOD.cost, &FORAGE_BY_SACRIFICING)
 }
+
+/// "Whenever you forage" (CR 701.61a): its controller paid a way to forage, as a cost or as an effect asked (`Event::Foraged`).
+/// Each forage triggers it once, so foraging twice triggers it twice.
+pub fn you_foraged(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    let Event::Foraged { player, .. } = *event else { return None };
+    (player == me.controller).then_some(Fired { subject: Target::Player(player), data: [0; 2] })
+}
+
+/// "Whenever you forage".
+pub const YOU_FORAGE: Trigger = when_asked(EventMask::FORAGED, you_foraged);
