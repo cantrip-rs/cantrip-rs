@@ -1,0 +1,44 @@
+# Hivespine Wolverine (5/4), second mode: "This creature fights target creature token." Bot2 has Esika's Chariot with two 2/2 Cat tokens
+# and a Memnite (a creature, but not a token). On turn 3 the Wolverine's trigger refuses the Memnite and fights a Cat of Bot2's: the Cat
+# takes 5 and dies (its token ceases to exist), the Wolverine takes 2 damage and survives. The Memnite is untouched (CR 701.14a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Hivespine Wolverine
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Esika's Chariot
+Memnite
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Esika's Chariot.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hivespine Wolverine.Cast
+Bot1.Pass
+Bot1.Modes(This creature fights target creature token)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot2.Battlefield.Cat Token)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Hivespine Wolverine.Damage = 2
+Bot2.Battlefield.Count = 4
+Bot2.Battlefield.Memnite.Damage = 0

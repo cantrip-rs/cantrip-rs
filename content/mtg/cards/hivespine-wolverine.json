@@ -1,0 +1,8 @@
+{
+  "name": "Hivespine Wolverine",
+  "manaCost": "{3}{G}{G}",
+  "type": "Creature — Elemental Wolverine",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "When this creature enters, choose one —\n• Put a +1/+1 counter on target creature you control.\n• This creature fights target creature token.\n• Destroy target artifact or enchantment."
+}

@@ -1,0 +1,41 @@
+# Hivespine Wolverine, third mode: "Destroy target artifact or enchantment." Bot2 has a Mox Sapphire and a Savannah Lions. On turn 3 the
+# Wolverine's trigger refuses the Savannah Lions (a creature, neither an artifact nor an enchantment) and destroys Bot2's Mox Sapphire:
+# it can be any player's, here an opponent's. Bot1's own Mox Jet (also an artifact, tapped for mana) is left alone.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Hivespine Wolverine
+Island x16
+
+[Bot2 Deck]
+Mox Sapphire
+Savannah Lions
+Plains
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hivespine Wolverine.Cast
+Bot1.Pass
+Bot1.Modes(Destroy target artifact or enchantment)
+! Bot1.Target(Bot2.Battlefield.Savannah Lions)
+Bot1.Target(Bot2.Battlefield.Mox Sapphire)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Mox Sapphire
+Bot2.Battlefield = Plains; Savannah Lions
+Bot1.Battlefield = Mox Emerald; Mox Jet; Hivespine Wolverine

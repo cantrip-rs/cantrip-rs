@@ -1,0 +1,41 @@
+# Hivespine Wolverine ({3}{G}{G} 5/4), first mode: "Put a +1/+1 counter on target creature you control." Turn 1 Bot1 casts a Memnite
+# (1/1); turn 2 Bot2 casts one; turn 3 the Wolverine enters (Black Lotus, Mox Emerald, Mox Jet). Bot2's Memnite is refused as the target
+# (control, CR 115.1) and Bot1's Memnite takes the counter: 2/2. The Wolverine and Bot2's Memnite are unchanged (5/4 and 1/1).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Memnite
+Hivespine Wolverine
+Island x15
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hivespine Wolverine.Cast
+Bot1.Pass
+Bot1.Modes(Put a +1/+1 counter on target creature you control)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Hivespine Wolverine.Power = 5
+Bot1.Battlefield.Hivespine Wolverine.Toughness = 4
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Toughness = 1
