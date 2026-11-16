@@ -10367,7 +10367,7 @@ fn cast(
     by: CastBy,
     resolving: bool,
 ) -> R<()> {
-    let CastTerms { instead, any_type, any_color, exile_instead, flashback, life, more, less, copy: _, way: _, caster: _ } = terms;
+    let CastTerms { instead, any_type, any_color, exile_instead, flashback, life, discard: _, more, less, copy: _, way: _, caster: _ } = terms;
     let any = AnyMana::of(any_type, any_color);
     // CR 406.3a: a card exiled face down is turned face up just before it is announced.
     ops::turn_up_to_play(cx, card);
@@ -11448,7 +11448,7 @@ fn cast_during_resolution_inner(cx: &mut Cx, card: ObjectId, terms: CastTerms) -
     // owner's graveyard, CR 702.34a), or an alternative cost another object gives (Jodah's, Primal Prayers'). A face with no
     // mana cost is cast only for an alternative cost (CR 118.6a), so its mana cost is no choice then, and without one it is
     // not cast at all.
-    let pays_mana_cost = terms.instead.is_none() && terms.life == 0;
+    let pays_mana_cost = terms.instead.is_none() && terms.life == 0 && terms.discard == 0;
     let whole = cx.card(cx.s().obj(card).card);
     let face = cast_face(whole, way);
     let mut alternative: Option<Cost> = None;
@@ -11543,6 +11543,14 @@ fn cast_during_resolution_inner(cx: &mut Cx, card: ObjectId, terms: CastTerms) -
         paid_by = given.map(|a| a.grant);
     } else if pays_mana_cost && !face.has_cost {
         return Ok(false);
+    } else if terms.discard > 0 {
+        // CR 118.9: the cards discarded are the cost paid rather than the mana cost, announced with the cast; where the hand
+        // has too few, the cast is not made (CR 601.2h).
+        let cost = Cost { discard: Discards::one(terms.discard, None), ..Cost::NONE };
+        if !can_pay_other(cx, card, player, &cost) {
+            return Ok(false);
+        }
+        alternative = Some(cost);
     }
     let mark = cx.s().mark();
     let log_mark = cx.g.log.len();
