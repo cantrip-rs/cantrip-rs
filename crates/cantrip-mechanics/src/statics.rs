@@ -918,6 +918,18 @@ fn grant_activated_from(view: &dyn LayerQuery, cards: impl Iterator<Item = (Obje
     }
 }
 
+/// "Creature spells you cast have convoke" (CR 702.51a, 601.2f-h) as a `CardDef::grants_pay_with` entry: a creature spell
+/// the source's controller casts, judged on the spell's characteristics as it is cast. The spell has convoke only while it
+/// is cast and only while the source is on the battlefield with the ability (a static ability, CR 113.6); a noncreature
+/// spell, and any spell an opponent casts, gets nothing. Eirdu, Carrier of Dawn and Dazzling Theater print it.
+pub fn creature_spells_you_cast_have_convoke(q: &dyn Query, source: ObjectId, caster: PlayerId, spell: ObjectId) -> PayWith {
+    if q.controller(source) == caster && q.chars(spell).is(CardType::Creature) {
+        PayWith { convoke: true, ..PayWith::NONE }
+    } else {
+        PayWith::NONE
+    }
+}
+
 /// "Has [an ability]" (CR 113.6, 613.1f) for the card's delayed ability number 0: a static ability that gives the objects it
 /// affects the ability the card lists first in `delayed` (the card the ability is printed on as the source has it now: the face
 /// showing, the card it copies, or a merged permanent's component's card, `LayerQuery::text_of`).
