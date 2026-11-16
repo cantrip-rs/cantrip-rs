@@ -1,0 +1,57 @@
+# The Infamous Cruelclaw: discarding a card replaces only the mana cost (CR 118.9, 118.8): Village Rites' additional cost, sacrificing a
+# creature, is still paid. Bot1 has Cruelclaw and a Memnite and attacks with Cruelclaw on turn 3 (17). The trigger exiles Forest and Village
+# Rites, and Bot1 casts it by discarding a Swamp and sacrificing the Memnite, and draws two cards. The Moxen stay untapped: {B} was not paid.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+The Infamous Cruelclaw
+Memnite
+Swamp
+Island
+Plains
+Forest
+Village Rites
+Mountain
+Island x5
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Infamous Cruelclaw.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(The Infamous Cruelclaw > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Accept
+Bot1.Choose(Swamp)
+Bot1.Choose(Memnite)
+? Stack.Count = 1
+? Bot1.Mana =
+? Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Pearl; The Infamous Cruelclaw; Island
+? Bot1.Graveyard = Memnite; Swamp
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Hand = Island; Mountain; Plains
+? Bot1.Graveyard = Village Rites; Memnite; Swamp
+? Bot1.Battlefield.Mox Ruby.Tapped = false
+? Bot1.Battlefield.Mox Jet.Tapped = false
+? Exile = Forest

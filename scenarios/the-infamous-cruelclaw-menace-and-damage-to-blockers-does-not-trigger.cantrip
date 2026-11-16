@@ -1,0 +1,56 @@
+# The Infamous Cruelclaw, "Menace" and "deals combat damage to a player" (CR 702.110b, 510.2): one Memnite can't block it alone, and when
+# Memnite and Ornithopter block it together its combat damage goes to them, not to a player, so nothing triggers: Bot2 stays at 20, nothing
+# is exiled, the library is untouched. Cruelclaw (3/3) takes 1 and survives.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+The Infamous Cruelclaw
+Island
+Swamp
+Island
+Plains
+Forest
+Lightning Bolt
+Island x5
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Infamous Cruelclaw.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(The Infamous Cruelclaw > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot2.Block(Memnite > The Infamous Cruelclaw)
+Bot2.Block(Memnite > The Infamous Cruelclaw; Ornithopter > The Infamous Cruelclaw)
+Bot1.Pass
+Bot2.Pass
+Bot1.AssignDamage(The Infamous Cruelclaw > Memnite: 1; The Infamous Cruelclaw > Ornithopter: 2)
+? Stack.Count = 0
+? Bot2.Life = 20
+? Exile.Count = 0
+? Bot1.Library.Count = 7
+? Bot1.Graveyard.Count = 0
+? Bot2.Graveyard = Ornithopter; Memnite
+? Bot1.Battlefield.The Infamous Cruelclaw.Toughness = 3

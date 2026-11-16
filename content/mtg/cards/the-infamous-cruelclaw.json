@@ -1,0 +1,11 @@
+{
+  "name": "The Infamous Cruelclaw",
+  "manaCost": "{1}{B}{R}",
+  "type": "Legendary Creature — Weasel Mercenary",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Menace\nWhenever The Infamous Cruelclaw deals combat damage to a player, exile cards from the top of your library until you exile a nonland card. You may cast that card by discarding a card rather than paying its mana cost.",
+  "keywords": [
+    "Menace"
+  ]
+}
