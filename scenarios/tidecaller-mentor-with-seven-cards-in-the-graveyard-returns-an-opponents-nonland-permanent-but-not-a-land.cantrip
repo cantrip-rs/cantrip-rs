@@ -1,0 +1,60 @@
+# Tidecaller Mentor: "Threshold — When this creature enters, if there are seven or more cards in your graveyard, return up to one target
+# nonland permanent to its owner's hand." (CR 207.2c, 603.4, 115.1, 400.7). Bot1's graveyard reaches seven on turn 1: Faithless Looting and
+# the two Islands it discards (3), Black Lotus sacrificed for {U} (4), and Thought Scour on Bot1 milling two Islands and then itself (7).
+# On turn 3 the Mentor ({1}{U}{B}) enters; the only legal targets are nonland permanents, so Bot2's Island is refused and its Memnite is
+# returned to Bot2's hand.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Black Lotus
+Faithless Looting
+Thought Scour
+Tidecaller Mentor
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Island; Island)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 7
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Hand.Count = 6
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tidecaller Mentor.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Island
+Bot2.Hand.Count = 7
+Bot1.Battlefield = Mox Ruby; Mox Sapphire; Mox Jet; Tidecaller Mentor

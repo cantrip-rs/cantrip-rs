@@ -1,0 +1,11 @@
+{
+  "name": "Tidecaller Mentor",
+  "manaCost": "{1}{U}{B}",
+  "type": "Creature — Rat Wizard",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Menace\nThreshold — When this creature enters, if there are seven or more cards in your graveyard, return up to one target nonland permanent to its owner's hand.",
+  "keywords": [
+    "Menace"
+  ]
+}

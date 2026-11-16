@@ -1,0 +1,58 @@
+# Tidecaller Mentor: "return up to one target nonland permanent to its owner's hand" does not say an opponent controls it (CR 115.1), so
+# its controller may return their own permanent, here the tapped Mox Jet that helped pay for the Mentor, to their hand. Bot1 reaches
+# seven cards in its graveyard on turn 1 (Faithless Looting, its two Islands, Black Lotus, Thought Scour and its two milled cards).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Black Lotus
+Faithless Looting
+Thought Scour
+Tidecaller Mentor
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Island; Island)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 7
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Hand.Count = 6
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tidecaller Mentor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Mox Jet)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Island; Memnite
+Bot2.Hand.Count = 6
+Bot1.Hand.Count = 3
+Bot1.Battlefield = Mox Ruby; Mox Sapphire; Tidecaller Mentor
