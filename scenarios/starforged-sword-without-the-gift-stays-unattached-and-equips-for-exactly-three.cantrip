@@ -1,0 +1,58 @@
+# Starforged Sword ({4} Equipment, "Equip {3}"): cast without the gift it gives no Fish and does not attach (CR 603.4),
+# so it enters unattached. Equip {3} takes exactly three mana: two Moxen are short, three pay, and the equipped
+# Memnite 1/1 becomes 4/4. The opponent's Memnite is no target (CR 702.6a).
+
+[Bot1 Deck]
+Memnite
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Starforged Sword
+Plains x14
+
+[Bot2 Deck]
+Memnite
+Plains x19
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Starforged Sword.Cast
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Starforged Sword.AttachedTo = (absent)
+? Bot2.Battlefield.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Starforged Sword.Activate(Bot1.Battlefield.Memnite; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Starforged Sword.Activate(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Starforged Sword.Activate(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Starforged Sword.AttachedTo = Memnite
+Bot1.Battlefield.Memnite.Power = 4
+Bot1.Battlefield.Memnite.Toughness = 4
+Bot2.Battlefield = Memnite

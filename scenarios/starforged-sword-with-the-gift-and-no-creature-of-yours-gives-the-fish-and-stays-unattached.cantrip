@@ -1,0 +1,40 @@
+# Starforged Sword: promised with no creature of its controller's on the battlefield, the gift trigger still gives the
+# opponent a tapped Fish (CR 702.174f) and the attach trigger has no legal target, so it is removed from the stack
+# (CR 603.3d) and the Equipment enters and stays unattached. The opponent's Memnite and Fish are not "creature you control".
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Starforged Sword
+Plains x17
+
+[Bot2 Deck]
+Memnite
+Plains x19
+
+[Actions]
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Starforged Sword.Cast
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Starforged Sword.AttachedTo = (absent)
+Bot2.Battlefield = Memnite; Fish Token
+Bot2.Battlefield.Fish Token.Tapped = true
+Bot2.Battlefield.Memnite.Power = 1
