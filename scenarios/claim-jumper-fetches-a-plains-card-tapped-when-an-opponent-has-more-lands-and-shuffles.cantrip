@@ -1,0 +1,54 @@
+# Claim Jumper, a 3/3 with vigilance: "When this creature enters, if an opponent controls more lands than you, you may search
+# your library for a Plains card and put it onto the battlefield tapped." (CR 603.4, 701.23). Bot1 plays no land and casts it
+# on turn 3 with three Moxen, after Bot2 played an Island on turn 2: one land to none. A "Plains card" is any land with the
+# subtype Plains, so a Plateau (a Mountain Plains) is one, while an Island and a Lightning Bolt are not (the refusals). Bot1
+# takes the Plateau, which enters tapped, and then the lands are level (one each), so the process is not repeated. The
+# library is shuffled once because it was searched.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Claim Jumper
+Plains x4
+Plateau
+Island
+Lightning Bolt
+Plains x6
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Claim Jumper.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Claim Jumper.Keywords = Vigilance
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Search(Island)
+! Bot1.Search(Lightning Bolt)
+Bot1.Search(Plateau)
+? Bot1.Battlefield.Plateau.Tapped = true
+? Bot1.Shuffles = 1
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Mox Ruby; Mox Pearl; Mox Emerald; Claim Jumper; Plateau
+Bot1.Shuffles = 1
+Bot2.Battlefield = Island

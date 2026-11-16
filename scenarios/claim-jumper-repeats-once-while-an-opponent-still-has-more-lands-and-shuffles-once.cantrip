@@ -1,0 +1,57 @@
+# Claim Jumper: "Then if an opponent controls more lands than you, repeat this process once. If you search your library this
+# way, shuffle." (CR 701.23, 701.24). On turn 5 Bot2 has two Islands to Bot1's none. Bot1 takes a Plains, leaving two lands to one,
+# so the process repeats and Bot1 takes a Plateau: two each. It repeats only once, and the library is shuffled once after both
+# searches, not after each.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Claim Jumper
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Plains
+Plateau
+Plains x6
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Claim Jumper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Search(Plains)
+? Bot1.Battlefield = Mox Ruby; Mox Pearl; Mox Emerald; Claim Jumper; Plains
+? Bot1.Shuffles = 0
+Bot1.Accept
+Bot1.Search(Plateau)
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Battlefield = Mox Ruby; Mox Pearl; Mox Emerald; Claim Jumper; Plains; Plateau
+Bot1.Battlefield.Plains.Tapped = true
+Bot1.Battlefield.Plateau.Tapped = true
+Bot1.Shuffles = 1
+Bot2.Battlefield = Island; Island

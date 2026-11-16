@@ -1,0 +1,41 @@
+# Claim Jumper: the trigger needs an opponent to control MORE lands than you (CR 603.4: an intervening "if"). Bot1 plays a
+# Plains on turn 1 and Bot2 an Island on turn 2: one land each, so casting it on turn 3 (the Moxen) triggers nothing, nothing
+# is asked and nothing is shuffled. The opponent having fewer lands is the same refusal, and is covered by the same check.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Claim Jumper
+Plains
+Plains
+Plains
+Plains x6
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Claim Jumper.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Plains; Mox Ruby; Mox Pearl; Mox Emerald; Claim Jumper
+Bot1.Shuffles = 0

@@ -1,0 +1,11 @@
+{
+  "name": "Claim Jumper",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Rabbit Mercenary",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Vigilance\nWhen this creature enters, if an opponent controls more lands than you, you may search your library for a Plains card and put it onto the battlefield tapped. Then if an opponent controls more lands than you, repeat this process once. If you search your library this way, shuffle.",
+  "keywords": [
+    "Vigilance"
+  ]
+}

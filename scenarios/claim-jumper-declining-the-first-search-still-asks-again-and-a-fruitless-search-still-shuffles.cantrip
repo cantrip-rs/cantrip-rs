@@ -1,0 +1,49 @@
+# Claim Jumper: the lands are unchanged when the first "you may search" is declined, so an opponent still controls more and the
+# process repeats (CR 701.23). Bot2 has two Islands to Bot1's none on turn 5. Bot1 declines the first search, accepts the second
+# and finds no card (the library has no Plains: a search may find nothing, CR 701.23b), and still shuffles because it
+# searched (CR 701.24).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Claim Jumper
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Claim Jumper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Shuffles = 0
+Bot1.Accept
+Bot1.Search()
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Battlefield = Mox Ruby; Mox Pearl; Mox Emerald; Claim Jumper
+Bot1.Shuffles = 1
