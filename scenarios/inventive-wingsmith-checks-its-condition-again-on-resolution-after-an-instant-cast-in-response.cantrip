@@ -1,0 +1,49 @@
+# The condition is an intervening "if" (CR 603.4): true as the ability triggers and again as it resolves. On turn three nothing
+# has been cast from Bot1's hand, so the trigger goes on the stack at the end step; in response Bot1 casts Swords to Plowshares
+# from hand on Bot2's Ornithopter. The trigger now does nothing: no counter is put on the Wingsmith. On turn five, with nothing
+# cast, it triggers again (the stack holds it) and the counter is put on.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Inventive Wingsmith
+Swords to Plowshares
+Plains
+Plains x9
+
+[Bot2 Deck]
+Ornithopter
+Plains x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Inventive Wingsmith.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T5 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Ornithopter
+Bot1.Battlefield.Inventive Wingsmith.Counters.Flying = 1

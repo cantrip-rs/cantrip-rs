@@ -1,0 +1,42 @@
+# Inventive Wingsmith {2}{W} 2/4: "At the beginning of your end step, if you haven't cast a spell from your hand this turn and
+# this creature doesn't have a flying counter on it, put a flying counter on it." Bot1 casts it from their hand on turn one, so
+# no counter at that end step. On turn three Bot1 casts nothing: the counter is put on it and it has flying. On turn five it
+# already has one, so the ability does not trigger again and it still has exactly one.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Inventive Wingsmith
+Plains x12
+
+[Bot2 Deck]
+Plains x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Inventive Wingsmith.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+? Stack.Count = 0
+[T2 Bot2.End]
+? Stack.Count = 0
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Inventive Wingsmith.Keywords = Flying
+? Bot1.Battlefield.Inventive Wingsmith.Counters.Flying = 1
+[T5 Bot1.End]
+? Bot1.Battlefield.Inventive Wingsmith.Counters.Flying = 1
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Inventive Wingsmith.Keywords = Flying
+Bot1.Battlefield.Inventive Wingsmith.Counters.Flying = 1

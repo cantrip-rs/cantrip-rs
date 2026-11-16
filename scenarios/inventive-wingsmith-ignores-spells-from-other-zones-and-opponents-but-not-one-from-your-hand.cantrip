@@ -1,0 +1,63 @@
+# Inventive Wingsmith's condition counts only spells Bot1 casts from Bot1's hand (CR 601.2a). Turn one: Mox Pearls, a Mox Jet and
+# the Wingsmith itself are all cast from hand: no counter. Turn three: Lingering Souls cast from hand: no counter at that end
+# step either. Turn five: Bot2 casts Lightning Bolt in Bot1's turn and Bot1 flashes Lingering Souls back from the graveyard,
+# neither counts, so the counter is put on at that end step.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Jet
+Inventive Wingsmith
+Lingering Souls
+Plains
+Plains x9
+
+[Bot2 Deck]
+Mountain
+Mountain
+Lightning Bolt
+Mountain x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Inventive Wingsmith.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+? Stack.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+? Stack.Count = 0
+[T5 Bot1.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Graveyard.Lingering Souls.Cast(Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Inventive Wingsmith.Counters.Flying = 1
+Bot1.Battlefield.Inventive Wingsmith.Keywords = Flying
