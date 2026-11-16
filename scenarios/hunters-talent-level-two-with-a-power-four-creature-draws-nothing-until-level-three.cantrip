@@ -1,0 +1,63 @@
+# Hunter's Talent, level 3 gate: the end-step draw needs level 3 even when Bot1 controls a creature with power 4 or greater. Turn 1: the Class (level 1)
+# with Moxen and the Lotus. Turn 3: a Shopkeeper's Bane (4/2); at that end step nothing is drawn (level 1). Turn 5: level 2 ({1}{G}); at that end step
+# still nothing (level 2). Turn 7: level 3 ({3}{G}) and now the end step draws (positive control). Hand counts include the Island held back.
+
+[Bot1 Deck]
+Black Lotus
+Hunter's Talent
+Mox Emerald
+Mox Jet
+Mox Ruby
+Shopkeeper's Bane
+Island
+Mox Sapphire
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hunter's Talent.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shopkeeper's Bane.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hunter's Talent.Activate
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Hunter's Talent.Activate
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 4

@@ -1,0 +1,64 @@
+# Hunter's Talent, level 3: "At the beginning of your end step, if you control a creature with power 4 or greater, draw a card." Turn 1: the Class
+# and a Grizzly Bears. Turn 3: level 2. Turn 5: level 3 ({3}{G}): at that end step Bot1's biggest creature is the 2/2 Bears, so nothing is drawn
+# (intervening "if", CR 603.4). Turn 7: a Shopkeeper's Bane (4/2) enters and at the end step a card is drawn. Bane stays in hand until turn 7 (hand counts include it).
+
+[Bot1 Deck]
+Black Lotus
+Hunter's Talent
+Mox Emerald
+Mox Jet
+Mox Ruby
+Grizzly Bears
+Shopkeeper's Bane
+Mox Sapphire
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hunter's Talent.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hunter's Talent.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+? Bot1.Hand.Count = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Hunter's Talent.Activate
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shopkeeper's Bane.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 3

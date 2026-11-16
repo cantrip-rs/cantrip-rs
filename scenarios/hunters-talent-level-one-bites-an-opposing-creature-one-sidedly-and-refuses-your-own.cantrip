@@ -1,0 +1,50 @@
+# Hunter's Talent ({1}{G}, Class): "When this Class enters, target creature you control deals damage equal to its power to target creature you
+# don't control." Turn 1: Bot1 has a Grizzly Bears (2/2) and a Memnite; turn 2 Bot2 casts its own Grizzly Bears. Turn 3: Bot1 casts the Class:
+# the trigger takes the Bears as the first target, the second target refuses Bot1's own Memnite and takes Bot2's Bears, which dies (2 damage).
+# The damage is one-sided (CR 120.3, 609.7): Bot1's Bears takes none and survives.
+
+[Bot1 Deck]
+Black Lotus
+Hunter's Talent
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Memnite
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hunter's Talent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot2.Battlefield = Mox Emerald; Mox Jet
+Bot1.Battlefield = Grizzly Bears; Hunter's Talent; Memnite; Mox Emerald; Mox Jet
+Bot1.Battlefield.Grizzly Bears.Toughness = 2

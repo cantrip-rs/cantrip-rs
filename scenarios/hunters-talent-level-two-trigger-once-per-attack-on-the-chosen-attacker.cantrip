@@ -1,0 +1,47 @@
+# Hunter's Talent, level 2: "Whenever you attack, target attacking creature gets +1/+0 and gains trample until end of turn." On turn 1 Bot1
+# casts a Grizzly Bears, a Memnite and the Class (Black Lotus and two Moxen) and on turn 3 raises it to level 2 and attacks with both: the trigger
+# happens once (not once per attacker) and Bot1 chooses the Memnite, a 2/1 with trample, while the Bears stays a 2/2 without it.
+# Bot2 takes 2 + 2 = 4 (20 -> 16).
+
+[Bot1 Deck]
+Black Lotus
+Hunter's Talent
+Mox Emerald
+Mox Jet
+Mox Ruby
+Grizzly Bears
+Memnite
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hunter's Talent.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hunter's Talent.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Grizzly Bears; Memnite > Bot2)
+Bot1.Target(Bot1.Battlefield.Memnite)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Keywords = Trample
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
