@@ -597,6 +597,17 @@ pub fn cast_during_your_main_phase(q: &dyn Query, me: &Asker) -> u32 {
     (turn.active == me.controller && turn.step().is_main()) as u32
 }
 
+/// "If you controlled a [subtype] as you cast this spell" (CR 601.2i) as a `CardDef::cast_fact`, `SUBTYPE` a `Subtype` as `u16`
+/// (`lands::sub`): 1 if its caster controlled a permanent with that subtype as it became cast, else 0, asked once and kept in
+/// the cast record (`history().fact_as_cast`): one lost since still counts and one gained since does not, and a copy, which was
+/// not cast (CR 707.10), never has it. The subtype is read through the words of the spell's text (CR 612.2) and as the layers
+/// have it (a changeling is every creature type, CR 702.73a); an opponent's does not count. Faerie Fencing (Faerie) and Steer
+/// Clear (Mount) print it.
+pub fn controlled_a_as_cast<const SUBTYPE: u16>(q: &dyn Query, me: &Asker) -> u32 {
+    let word = crate::lands::word(q, me.source, SUBTYPE);
+    q.permanents_of(me.controller).into_iter().any(|id| q.chars(id).has_subtype(word)) as u32
+}
+
 /// "Attacked with N creatures this turn" (CR 508.1): how many different creatures were declared as attackers this turn by
 /// `player`, who declares them only on their own turn (CR 506.2, 508.1a), so any other player has attacked with none - an
 /// ability's controller need not be the active player when a copy of it is controlled by another (CR 707.10). A creature

@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{pump, targets};
+use cantrip_mechanics::{history, lands, pump, targets};
 use cantrip_oracle as oracle;
 
 /// "Target creature gets -X/-X until end of turn. That creature gets an additional -3/-3 until end of turn if you
@@ -18,15 +18,8 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "If you controlled a Faerie as you cast this spell": asked once, as the spell becomes cast. "Faerie" is a word of its
-/// text (CR 612), and a changeling is every creature type (CR 702.73a).
-fn controlled_a_faerie(q: &dyn Query, me: &Asker) -> u32 {
-    let faerie = q.words(me.source).subtype(Subtype::Faerie);
-    q.permanents_of(me.controller).into_iter().any(|id| q.chars(id).has_subtype(faerie)) as u32
-}
-
 pub static CARD: CardDef = CardDef {
     spell: spell(&[targets::CREATURE], effect),
-    cast_fact: Some(controlled_a_faerie),
+    cast_fact: Some(history::controlled_a_as_cast::<{ lands::sub(Subtype::Faerie) }>),
     ..oracle::FAERIE_FENCING
 };
