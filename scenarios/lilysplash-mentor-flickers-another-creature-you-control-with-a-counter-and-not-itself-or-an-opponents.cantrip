@@ -1,0 +1,60 @@
+# Lilysplash Mentor: "{1}{G}{U}: Exile another target creature you control, then return it to the battlefield under its owner's
+# control with a +1/+1 counter on it." Bot1's Ornithopter is exiled and returns as a new object (CR 400.7) with one +1/+1 counter
+# (CR 122.6), summoning sick again. The ability's "another" refuses the Mentor itself, and "you control" refuses Bot2's
+# Ornithopter even though the same card is legal on Bot1's side: both are refused beside the legal target, so each refusal can only
+# be the filter. The Mentor itself keeps no counter.
+
+[Bot1 Deck]
+Lilysplash Mentor
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Ornithopter
+Forest x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lilysplash Mentor.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Lilysplash Mentor.Activate(Bot1.Battlefield.Lilysplash Mentor)
+! Bot1.Battlefield.Lilysplash Mentor.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Lilysplash Mentor.Activate(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.SummoningSick = true
+Bot1.Battlefield.Lilysplash Mentor.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Exile =
