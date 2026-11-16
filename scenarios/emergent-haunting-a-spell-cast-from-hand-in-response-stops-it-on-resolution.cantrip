@@ -1,0 +1,38 @@
+# Emergent Haunting: the intervening "if" is checked again as the trigger resolves (CR 603.4). At Bot1's turn-three end step the
+# trigger is on the stack; in response Bot1 casts Lightning Bolt from their hand. The trigger resolves and does nothing: it is
+# still only an enchantment.
+
+[Bot1 Deck]
+Emergent Haunting
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Lightning Bolt
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Emergent Haunting.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Emergent Haunting.Types = Enchantment

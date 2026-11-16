@@ -1,0 +1,50 @@
+# Emergent Haunting: Bot1 casts it on turn one (a spell cast from their hand, so no trigger at that end step: it stays an
+# enchantment). On turn three Bot1 casts nothing, so at their end step the trigger goes on the stack and, resolving, makes it a
+# 3/3 Spirit creature with flying in addition to being an enchantment, with no duration. On turn five it attacks: a Memnite
+# cannot block it (flying) and it deals 3. At that end step it is already a creature, so the trigger does not go on the stack.
+
+[Bot1 Deck]
+Emergent Haunting
+Mox Sapphire
+Mox Sapphire
+Island x17
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Emergent Haunting.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+? Stack.Count = 0
+? Bot1.Battlefield.Emergent Haunting.Types = Enchantment
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.End]
+? Stack.Count = 1
+? Bot1.Battlefield.Emergent Haunting.Types = Enchantment
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Emergent Haunting.Types = Enchantment; Creature
+? Bot1.Battlefield.Emergent Haunting.Subtypes = Spirit
+? Bot1.Battlefield.Emergent Haunting.Power = 3
+? Bot1.Battlefield.Emergent Haunting.Toughness = 3
+? Bot1.Battlefield.Emergent Haunting.Keywords = Flying
+[T5 Bot1.Main1]
+Bot1.Attack(Emergent Haunting > Bot2)
+! Bot2.Block(Memnite > Emergent Haunting)
+[T5 Bot1.CombatDamage]
+[T5 Bot1.End]
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Emergent Haunting.Types = Enchantment; Creature

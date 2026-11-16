@@ -1,0 +1,46 @@
+# Emergent Haunting: the {U} of "{2}{U}: Surveil 1" cannot be paid with other colours. Bot1 pays for Emergent Haunting with two
+# Mox Sapphires; the Mox Jets and Mox Pearl left make three mana but none of it blue, so the ability is refused. On turn
+# three, with a Mox Sapphire untapped, it is paid and Bot1 keeps the top card (Lightning Bolt) on top, drawing it on turn five.
+
+[Bot1 Deck]
+Emergent Haunting
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Jet
+Mox Pearl
+Island
+Island
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Emergent Haunting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Emergent Haunting.Activate(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Emergent Haunting.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt | )
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Island; Island; Lightning Bolt

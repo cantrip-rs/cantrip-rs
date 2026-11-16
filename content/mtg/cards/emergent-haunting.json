@@ -1,0 +1,6 @@
+{
+  "name": "Emergent Haunting",
+  "manaCost": "{1}{U}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of your end step, if you haven't cast a spell from your hand this turn and this enchantment isn't a creature, it becomes a 3/3 Spirit creature with flying in addition to its other types.\n{2}{U}: Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)"
+}

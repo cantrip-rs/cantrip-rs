@@ -1,0 +1,36 @@
+# Emergent Haunting: a spell Bot1 casts from their hand on turn three, before their end step, means the trigger does not go
+# on the stack at all (CR 603.4): the stack is empty at that end step and it is still only an enchantment. The next turn
+# they cast nothing, and it triggers.
+
+[Bot1 Deck]
+Emergent Haunting
+Mox Sapphire
+Mox Sapphire
+Memnite
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Emergent Haunting.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+? Stack.Count = 0
+? Bot1.Battlefield.Emergent Haunting.Types = Enchantment
+[T5 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Emergent Haunting.Types = Enchantment; Creature

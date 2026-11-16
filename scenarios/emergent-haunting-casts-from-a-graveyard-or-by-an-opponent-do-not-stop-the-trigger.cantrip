@@ -1,0 +1,58 @@
+# Emergent Haunting: only a spell Bot1 cast from their own hand stops the trigger. On turn one Bot1 casts Emergent Haunting and
+# Think Twice from hand. On turn three they flash back Think Twice from the graveyard ({2}{U}, three Mox Sapphires) and Bot2
+# casts Lightning Bolt at them with the trigger on the stack: neither is a spell Bot1 cast from their hand, so the trigger
+# resolves and it becomes a creature.
+
+[Bot1 Deck]
+Emergent Haunting
+Think Twice
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Emergent Haunting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Mox Sapphire#4.Activate
+Bot1.Hand.Think Twice.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Graveyard.Think Twice.Cast(Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Emergent Haunting.Types = Enchantment; Creature
