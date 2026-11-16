@@ -1,0 +1,6 @@
+{
+  "name": "Getaway Glamer",
+  "manaCost": "{W}",
+  "type": "Instant",
+  "oracleText": "Spree (Choose one or more additional costs.)\n+ {1} — Exile target nontoken creature. Return it to the battlefield under its owner's control at the beginning of the next end step.\n+ {2} — Destroy target creature if no other creature has greater power."
+}

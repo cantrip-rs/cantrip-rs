@@ -1,0 +1,49 @@
+# Getaway Glamer {W}, Spree: with a Plains and two Moxen (three mana) on turn 3 the two modes together ({W} + {1} + {2} = four)
+# cannot be paid for: after the three sources are tapped the cost is still unpaid and the cast is taken back. The destroy
+# mode alone ({W} + {2} = exactly three) can be paid and destroys Bot2's Ornithopter, the only creature in play.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Getaway Glamer
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Getaway Glamer.Cast
+Bot1.Modes(1; 2)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Cancel
+? Stack.Count = 0
+? Bot2.Battlefield = Ornithopter
+Bot1.Hand.Getaway Glamer.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = Getaway Glamer

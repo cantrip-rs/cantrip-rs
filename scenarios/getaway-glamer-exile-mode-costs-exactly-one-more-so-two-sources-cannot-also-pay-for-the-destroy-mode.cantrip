@@ -1,0 +1,51 @@
+# Getaway Glamer {W}, Spree: "+ {1} - Exile target nontoken creature..." and "+ {2} - Destroy target creature...". Bot1 has only
+# a Plains and a Mox Pearl on turn 3 (two mana). It chooses the destroy mode ({W} + {2} = three) and taps both sources: the cost is
+# still unpaid, so the cast is taken back and the two sources are untapped again. It casts again
+# with the exile mode ({W} + {1} = exactly two), which the two sources pay; the Ornithopter is exiled and returns at the end step.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Getaway Glamer
+Memnite
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Getaway Glamer.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Stack.Count = 1
+? Bot2.Battlefield = Ornithopter
+Bot1.Cancel
+? Stack.Count = 0
+Bot1.Hand.Getaway Glamer.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Battlefield = Ornithopter
+Bot1.Graveyard = Getaway Glamer

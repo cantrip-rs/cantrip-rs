@@ -1,0 +1,74 @@
+# Getaway Glamer {W}, Spree: "+ {1} - Exile target nontoken creature. Return it to the battlefield under its owner's control at
+# the beginning of the next end step." On turn 3 Bot1 chooses the first mode alone ({W} + {1}, two mana out of its four) and aims
+# it at Bot2's Giant Cindermaw: a Spirit token of its own (a token) and a Mox (not a creature) are no targets. The Cindermaw is
+# in exile until the end step begins, then returns to Bot2 - its owner. Nothing else was paid for: two sources stay untapped.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Lingering Souls
+Getaway Glamer
+Memnite
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Giant Cindermaw
+Memnite
+Ornithopter
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Giant Cindermaw.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Getaway Glamer.Cast
+Bot1.Modes(1)
+! Bot1.Target(Bot1.Battlefield.Spirit Token)
+! Bot1.Target(Bot2.Battlefield.Mox Ruby)
+Bot1.Target(Bot2.Battlefield.Giant Cindermaw)
+Bot1.Pass
+Bot2.Pass
+? Exile = Giant Cindermaw
+? Bot2.Battlefield = Mox Emerald; Mox Jet; Mox Ruby
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+
+[Expect]
+Bot2.Battlefield = Giant Cindermaw; Mox Emerald; Mox Jet; Mox Ruby
+Bot1.Graveyard = Getaway Glamer; Lingering Souls

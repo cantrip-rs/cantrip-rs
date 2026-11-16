@@ -1,0 +1,80 @@
+# Getaway Glamer {W}, Spree: both modes ({W} + {1} + {2} = four mana). "No matter which modes you choose, you always follow the
+# instructions in the order they are written": the first mode exiles Bot2's Giant Cindermaw (4 power, the only creature that
+# outpowered the Spirit tokens), and only then is the second mode's power compared - Bot1's Spirit token (1/1) now ties Bot2's
+# Memnite for the greatest power and is destroyed. The Cindermaw returns to Bot2 as the end step begins.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Lingering Souls
+Getaway Glamer
+Memnite
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Giant Cindermaw
+Memnite
+Ornithopter
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Giant Cindermaw.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Getaway Glamer.Cast
+Bot1.Modes(1; 2)
+Bot1.Target(Bot2.Battlefield.Giant Cindermaw)
+Bot1.Target(Bot1.Battlefield.Spirit Token#1)
+Bot1.Pass
+Bot2.Pass
+? Exile = Giant Cindermaw
+? Bot1.Battlefield.Count = 5
+? Bot2.Battlefield.Memnite.Power = 1
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Battlefield.Giant Cindermaw.Power = 4
+Bot1.Battlefield.Count = 5
+Bot1.Graveyard = Getaway Glamer; Lingering Souls

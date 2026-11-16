@@ -1,0 +1,58 @@
+# Getaway Glamer {W}, Spree: "+ {2} - Destroy target creature if no other creature has greater power." Equal power is not
+# greater: Bot2's Memnite (1/1) ties the two 1/1 Spirit tokens, Bot2's Ornithopter has less (0), so nothing has greater power
+# than the Memnite and it is destroyed.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Lingering Souls
+Getaway Glamer
+Memnite
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Giant Cindermaw
+Memnite
+Ornithopter
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Getaway Glamer.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Ornithopter
+Bot2.Graveyard = Memnite
+Bot1.Battlefield.Count = 6

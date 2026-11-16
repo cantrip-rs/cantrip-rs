@@ -1,0 +1,74 @@
+# Getaway Glamer {W}, Spree: both modes aimed at the same creature, Bot2's Giant Cindermaw. The first mode exiles it; it
+# returns as a new object (CR 400.7), so the second mode's target is gone and nothing is destroyed. The Cindermaw comes back
+# to Bot2 at the beginning of the end step.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Lingering Souls
+Getaway Glamer
+Memnite
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Giant Cindermaw
+Memnite
+Ornithopter
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Giant Cindermaw.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Getaway Glamer.Cast
+Bot1.Modes(1; 2)
+Bot1.Target(Bot2.Battlefield.Giant Cindermaw)
+Bot1.Target(Bot2.Battlefield.Giant Cindermaw)
+Bot1.Pass
+Bot2.Pass
+? Exile = Giant Cindermaw
+? Bot2.Graveyard.Count = 0
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Graveyard.Count = 0
+Bot2.Battlefield.Giant Cindermaw.Power = 4
