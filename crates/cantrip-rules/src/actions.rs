@@ -6670,7 +6670,7 @@ fn waiting_mana_triggers(cx: &Cx) -> Vec<WaitingManaTrigger> {
             if let AbilityDef::Triggered(t) = cards.ability(ability)
                 && t.mana_ability
             {
-                waiting.push((Asker { instance: None, source: id, controller, by: cx.link_nth(id, &chars, nth), spell: false }, t, id, None));
+                waiting.push((Asker { instance: Some(AbilityInstance::triggered(ability)), source: id, controller, by: cx.link_nth(id, &chars, nth), spell: false }, t, id, None));
             }
         }
     }
@@ -6679,7 +6679,7 @@ fn waiting_mana_triggers(cx: &Cx) -> Vec<WaitingManaTrigger> {
             && t.mana_ability
         {
             let by = layers::given_link(cards, cx.s(), d.source, d.ability, d.acquired);
-            waiting.push((Asker { instance: None, source: d.watched(), controller: d.controller, by, spell: false }, t, d.source, Some(*d)));
+            waiting.push((Asker { instance: Some(AbilityInstance::triggered(d.ability)), source: d.watched(), controller: d.controller, by, spell: false }, t, d.source, Some(*d)));
         }
     }
     waiting
@@ -14130,7 +14130,7 @@ fn tapped_for_mana(cx: &mut Cx, player: PlayerId, source: ObjectId, produced: Ma
             // How it acquired the ability (CR 607.5): what the ability is linked by, and asked as.
             let acquired = acquired_nth(cx, id, nth);
             let by = layers::given_link(cx.cards(), cx.s(), id, ability, acquired);
-            if let Some(fired) = t.fires(&*cx, &Asker { instance: None, source: id, controller, by, spell: false }, &event) {
+            if let Some(fired) = t.fires(&*cx, &Asker { instance: Some(AbilityInstance::triggered(ability)), source: id, controller, by, spell: false }, &event) {
                 // Static abilities that stop it triggering or make it trigger again apply to it as to any triggered ability
                 // (CR 603.2, 603.2d): each triggering resolves at once.
                 let triggering = Triggering { source: id, controller, def: t, permanent: true, looks_back: cx.cards().looks_back(ability, &event, false) };

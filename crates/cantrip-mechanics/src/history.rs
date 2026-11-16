@@ -16,6 +16,15 @@ pub fn this_ability_activations_this_turn(q: &dyn Query, asker: &Asker) -> usize
         .count()
 }
 
+/// "Do this only once each turn" (CR 603.2h), asked of a triggered ability's trigger event: "This ability triggers only if
+/// its source's controller has not yet taken the indicated action that turn" - with this ability of this object, as the
+/// effect recorded it (`Game::note_done` of the stack item's ability). The ability is the one asked (`Asker::asked_ability`),
+/// never one named from the object's card, which a merged permanent's ability is not printed on (CR 702.140e). Ancient
+/// Cornucopia, Spider-Verse, Terrasymbiosis, Baron Strucker, Chekov and McCoy and The Sensational She-Hulk ask it.
+pub fn done_this_turn(q: &dyn Query, asker: &Asker) -> bool {
+    asker.asked_ability().is_some_and(|ability| q.history().done(asker.source, ability, asker.controller))
+}
+
 /// "[It] attacked during your last turn" (CR 508.1, 500.1): `object` was declared as an attacker in the most recent turn before
 /// this one that `player` was the active player of (turns they had no events in do not count, so a skipped turn is not
 /// their last). The object is the one that attacked, so a permanent that left and came back has not (CR 400.7). Giant Turtle

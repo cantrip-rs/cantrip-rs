@@ -1053,7 +1053,11 @@ A trigger event is asked of the ability's source and controller (`TriggeredDef::
 "you" is written `when_asked` and reads the controller it is given. For an ability of a permanent that is the permanent's
 controller; for a delayed triggered ability it is the delayed ability's own controller, the player who controlled the spell
 or ability that created it (CR 603.7d-e), whoever controls its source afterwards and wherever the source has gone. Its
-intervening "if" is asked with the same controller as it triggers.
+intervening "if" is asked with the same controller as it triggers. The asker also names the ability asked
+(`Asker::instance`, `AbilityInstance::triggered`): the reference its stack item will carry, so "do this only once each
+turn" (CR 603.2h) asks the history for what that ability did (`cantrip_mechanics::history::done_this_turn`) - never for
+an ability named from the object's card, which a merged permanent's ability under its top card is not printed on (CR
+702.140e).
 
 A state trigger (CR 603.8: Mazemind Tome's "when there are four or more page counters on this artifact", Dandân's "when
 you control no Islands") listens for no event: `state_triggered` gives it a `TriggeredDef::state` condition, asked of each

@@ -557,6 +557,14 @@ pub struct AbilityInstance {
     pub acquisition: AbilityAcquisition,
 }
 
+impl AbilityInstance {
+    /// The triggered ability `ability`, as its trigger event and conditions are asked (CR 603.2): what its stack item will
+    /// carry as `StackItem::ability`, with the acquisition every triggered ability's item has (`AbilityAcquisition::OWN`).
+    pub const fn triggered(ability: AbilityRef) -> AbilityInstance {
+        AbilityInstance { ability, acquisition: AbilityAcquisition::OWN }
+    }
+}
+
 /// An ability as linked abilities know it (CR 607.1, 607.2a, 607.5): the object it is an ability of, the card whose text it
 /// is printed in - the object's own card, the card a copy effect gives it (CR 707.2), or the card whose ability an effect
 /// granted (CR 607.1a) - read as a whole (either face of a transforming double-faced card, CR 607.1b, and either door of a

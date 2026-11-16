@@ -721,8 +721,11 @@ impl Discards {
 pub struct Asker {
     pub source: ObjectId,
     pub controller: PlayerId,
-    /// Exact selected activated ability for its condition/mana callback; stack effects carry it on their StackItem.
-    /// None when asking as a spell, static rule, triggered ability or a card's other hook.
+    /// The exact ability being asked: the selected activated ability for its condition or mana callback, or the triggered
+    /// ability whose trigger event, intervening "if" or state is asked (`AbilityInstance::triggered`) - the same ability its
+    /// stack item carries (`StackItem::ability`), whichever card of a merged permanent or copy effect prints it (CR 702.140e,
+    /// 707.2), which is no card the object's characteristics name. None when asking as a spell, a static rule or a card's
+    /// other hook.
     pub instance: Option<AbilityInstance>,
     /// The ability whose function is asked, as linked abilities know it (CR 607.1, 607.5), where an effect gave `source`
     /// that ability: what `Query::linked_to` of this asker answers, so the function reads only that ability's links (the
@@ -752,6 +755,11 @@ impl Asker {
     /// from the text the object has (`by`).
     pub const fn ability(controller: PlayerId, by: Linked) -> Asker {
         Asker { instance: None, source: by.object, controller, by: Some(by), spell: false }
+    }
+
+    /// The ability being asked (`instance`), as the history records what it did (`Game::note_done`, CR 603.2h).
+    pub fn asked_ability(&self) -> Option<AbilityRef> {
+        self.instance.map(|i| i.ability)
     }
 }
 

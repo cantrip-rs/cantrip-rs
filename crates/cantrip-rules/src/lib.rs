@@ -1583,7 +1583,7 @@ impl<'a> Cx<'a> {
         // Asked as the ability it is, acquired as the resolving one that makes it trigger was (CR 607.5).
         let by = layers::given_link(self.g.cards, &self.g.state, source, ability, self.resolving_acquired(source));
         if let AbilityDef::Triggered(TriggeredDef { condition: Some(condition), .. }) = self.g.cards.ability(ability)
-            && !condition(&*self, &Asker { instance: None, source, controller, by, spell: false })
+            && !condition(&*self, &Asker { instance: Some(AbilityInstance::triggered(ability)), source, controller, by, spell: false })
         {
             return;
         }

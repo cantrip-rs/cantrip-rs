@@ -1142,7 +1142,7 @@ fn choose_attack_options(cx: &mut Cx, active: PlayerId, attacks: &[(ObjectId, Ta
             .filter_map(|(nth, a)| match cx.cards().ability(a) {
                 AbilityDef::Triggered(t) => t.attack_option.filter(|_| {
                     t.attack_condition.is_none_or(|condition| {
-                        condition(cx, &Asker { instance: None, source: attacker, controller: active, by: cx.link_nth(attacker, &chars, nth), spell: false })
+                        condition(cx, &Asker { instance: Some(AbilityInstance::triggered(a)), source: attacker, controller: active, by: cx.link_nth(attacker, &chars, nth), spell: false })
                     })
                 }).map(|o| (a, chars.instance(nth), o)),
                 _ => None,
