@@ -1750,6 +1750,7 @@ counter_kinds! {
     Cube = 99, "cube", "Cube";
     Glyph = 100, "glyph", "Glyph";
     Possession = 101, "possession", "Possession";
+    Nest = 102, "nest", "Nest";
 }
 
 impl CounterKind {
@@ -2435,7 +2436,8 @@ mod carrion_counter_tests {
         assert_eq!(CounterKind::Cube as usize, 99);
         assert_eq!(CounterKind::Glyph as usize, 100);
         assert_eq!(CounterKind::Possession as usize, 101);
-        assert_eq!(CounterKind::COUNT, 102);
+        assert_eq!(CounterKind::Nest as usize, 102);
+        assert_eq!(CounterKind::COUNT, 103);
         assert!(!CounterKind::POWER_TOUGHNESS.iter().any(|(kind, _, _)| *kind == carrion));
     }
     #[test]
