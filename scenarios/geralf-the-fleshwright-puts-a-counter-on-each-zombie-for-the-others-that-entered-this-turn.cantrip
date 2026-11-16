@@ -1,0 +1,60 @@
+# Bot1's turn-3 spells: Ornithopter (first, no token), Memnite (second: a Zombie Rogue token, the only Zombie this turn, so
+# no counter) and Diregraf Ghoul (third: a second token, which enters with one counter for the first, then the Ghoul, which
+# enters with two counters for both tokens). Each Zombie counts the others that entered under Bot1's control this turn, so the
+# Ghoul is a 4/4 and the second token a 3/3.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Geralf, the Fleshwright
+Ornithopter
+Memnite
+Island
+Diregraf Ghoul
+Island x12
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Geralf, the Fleshwright.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Zombie Rogue Token.Power = 2
+? Bot1.Battlefield.Zombie Rogue Token.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Diregraf Ghoul.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Zombie Rogue Token#1.Power = 2
+? Bot1.Battlefield.Zombie Rogue Token#2.Power = 3
+? Bot1.Battlefield.Zombie Rogue Token#2.Counters.PlusOnePlusOne = 1
+
+[Expect]
+Bot1.Battlefield.Diregraf Ghoul.Power = 4
+Bot1.Battlefield.Diregraf Ghoul.Counters.PlusOnePlusOne = 2

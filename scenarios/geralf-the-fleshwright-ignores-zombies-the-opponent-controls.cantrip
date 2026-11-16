@@ -1,0 +1,46 @@
+# Bot2 casts two Diregraf Ghouls on turn 2. Geralf, the Fleshwright's second ability is "a Zombie you control": Bot1 controls
+# neither, so no counter goes on either Ghoul, though each is another Zombie that entered the battlefield that turn.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Geralf, the Fleshwright
+Island x16
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Diregraf Ghoul
+Diregraf Ghoul
+Island x12
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Geralf, the Fleshwright.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Diregraf Ghoul.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Diregraf Ghoul.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot2.Battlefield.Diregraf Ghoul#1.Power = 2
+Bot2.Battlefield.Diregraf Ghoul#2.Power = 2
+Bot2.Battlefield.Diregraf Ghoul#1.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Diregraf Ghoul#2.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield = Geralf, the Fleshwright; Island; Mox Jet; Mox Sapphire

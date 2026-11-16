@@ -1,0 +1,8 @@
+{
+  "name": "Geralf, the Fleshwright",
+  "manaCost": "{2}{U}",
+  "type": "Legendary Creature — Human Warlock",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever you cast a spell during your turn other than your first spell that turn, create a 2/2 blue and black Zombie Rogue creature token.\nWhenever a Zombie you control enters, put a +1/+1 counter on it for each other Zombie that entered the battlefield under your control this turn."
+}
