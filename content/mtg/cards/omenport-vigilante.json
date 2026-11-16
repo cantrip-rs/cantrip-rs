@@ -1,0 +1,8 @@
+{
+  "name": "Omenport Vigilante",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Mercenary",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "This creature has double strike as long as you've committed a crime this turn. (Targeting opponents, anything they control, and/or cards in their graveyards is a crime.)"
+}

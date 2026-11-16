@@ -1,0 +1,55 @@
+# Omenport Vigilante: only crimes the Vigilante's controller commits count. On turn 2 Bot2 Bolts Bot1 (Bot2 commits a crime, Bot1 does not):
+# no double strike. On turn 3 Bot1 Bolts its own Ornithopter - targeting its own permanent is no crime - and still has none; then it
+# Bolts Bot2's Ornithopter (an opponent's permanent: a crime) and the Vigilante has double strike at once. Pearl+Jet pay the Vigilante; Rubies pay the Bolts.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Ruby
+Omenport Vigilante
+Ornithopter
+Lightning Bolt x2
+Plains x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Ornithopter
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Omenport Vigilante.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+? Bot1.Battlefield.Omenport Vigilante.Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter = (absent)
+? Bot1.Battlefield.Omenport Vigilante.Keywords = (absent)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter = (absent)
+? Bot1.Battlefield.Omenport Vigilante.Keywords = DoubleStrike
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Omenport Vigilante.Keywords = DoubleStrike

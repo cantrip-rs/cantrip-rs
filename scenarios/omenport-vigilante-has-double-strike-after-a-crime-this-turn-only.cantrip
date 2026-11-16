@@ -1,0 +1,41 @@
+# Omenport Vigilante (2/2): "This creature has double strike as long as you've committed a crime this turn." Cast on turn 1; on turn 3
+# Bot1 Bolts Bot2's face (a crime, CR 700.13) before combat, so the Vigilante has double strike and an unblocked attack deals 2 + 2:
+# Bot2 20 - 3 - 4 = 13. On turn 5 Bot1 commits no crime: no double strike (the turn-3 crime doesn't carry over), and it attacks for 2.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Omenport Vigilante
+Lightning Bolt
+Plains x2
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Omenport Vigilante.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Omenport Vigilante.Keywords = (absent)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Bot1.Battlefield.Omenport Vigilante.Keywords = DoubleStrike
+Bot1.Attack(Omenport Vigilante > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 13
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Omenport Vigilante.Keywords = (absent)
+Bot1.Attack(Omenport Vigilante > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 11
