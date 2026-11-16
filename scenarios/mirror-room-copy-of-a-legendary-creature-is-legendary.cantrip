@@ -1,0 +1,27 @@
+# Mirror Room: "create a token that's a copy of target creature you control, except it's a Reflection in addition to its
+# other creature types." The exception leaves the supertypes alone (CR 707.9b), so a copy of Ragavan is legendary too
+# and the legend rule (CR 704.5j) has Bot1 keep only one of the two.
+
+[Bot1 Deck]
+Mountain
+Ragavan, Nimble Pilferer
+Black Lotus
+Mirror Room // Fractured Realm
+Mountain x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Ragavan, Nimble Pilferer.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mirror Room // Fractured Realm.Cast(Ability: Mirror Room)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Mountain; Ragavan, Nimble Pilferer; Mirror Room

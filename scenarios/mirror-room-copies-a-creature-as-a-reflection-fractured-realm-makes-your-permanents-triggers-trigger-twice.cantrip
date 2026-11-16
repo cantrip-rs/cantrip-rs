@@ -1,0 +1,70 @@
+# Mirror Room: "When you unlock this door, create a token that's a copy of target creature you control, except it's a
+# Reflection in addition to its other creature types." Fractured Realm: "If a triggered ability of a permanent you control
+# triggers, that ability triggers an additional time" (CR 603.2d). Bot1 casts Mirror Room, which unlocks as it enters and
+# triggers (CR 709.5d, 709.5h) once - Fractured Realm is locked: one Reflection copy of Memnite. In turn 5 Bot1 unlocks
+# Fractured Realm, and in turn 7 Thraben Inspector's "When this creature enters, investigate" triggers twice: two Clues.
+# Bot2's own Thraben Inspector, no permanent of Bot1's, makes one.
+
+[Bot1 Deck]
+Island
+Black Lotus
+Mirror Room // Fractured Realm
+Memnite
+Sol Ring
+Mox Sapphire
+Mox Pearl
+Island
+Island
+Thraben Inspector
+Mountain x10
+
+[Bot2 Deck]
+Plains
+Thraben Inspector
+Plains x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mirror Room // Fractured Realm.Cast(Ability: Mirror Room)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Pass
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Memnite#2.Subtypes = Construct; Reflection
+? Bot1.Battlefield.Memnite#2.Power = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mirror Room.Activate(Ability: right door)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+[T6 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Thraben Inspector.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Thraben Inspector.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Mirror Room // Fractured Realm.Doors = Mirror Room; Fractured Realm
+Bot1.Battlefield = Island; Island; Island; Memnite; Memnite; Mirror Room // Fractured Realm; Sol Ring; Mox Sapphire; Mox Pearl; Thraben Inspector; Clue Token; Clue Token
+Bot2.Battlefield = Plains; Thraben Inspector; Clue Token
