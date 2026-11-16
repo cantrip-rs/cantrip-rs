@@ -465,6 +465,26 @@ impl<'a> History<'a> {
         })
     }
 
+    /// The mana `player` spent this turn to cast spells (CR 700.14) before paying for `spell`, and with that payment: what
+    /// "whenever you expend N" asks as `spell` becomes cast, when `before < N <= with`. Only mana actually spent counts, of
+    /// every cost paid to cast (additional and alternative costs, X), on any spell, countered or not since; none spent on
+    /// abilities or on a resolving effect's payment, and none for a spell cast without spending mana. Only spells `player`
+    /// cast count, and only `player`'s own mana on them: mana a helper spent on another player's spell through assist (CR
+    /// 702.132a) counts toward nobody's expend, neither the helper's (who paid but did not cast it, CR 700.14 "to cast
+    /// spells") nor the caster's (who did not spend it). That is the user's ruling. The turn's records hold every spell's payment.
+    pub fn expended(&self, player: PlayerId, spell: ObjectId) -> (u32, u32) {
+        let (mut before, mut now) = (0u32, 0u32);
+        for r in self.this_turn() {
+            if let Event::ManaSpent { player: p, on, cast: true, mana, .. } = r.event {
+                if p == player && self.casts_by(player).any(|c| c.spell == on) {
+                    let n = mana.total();
+                    if on == spell { now += n } else { before += n }
+                }
+            }
+        }
+        (before, before + now)
+    }
+
     /// Mana from snow sources spent to cast this spell, captured when produced (CR 107.4h), regardless of the sources'
     /// later characteristics or zones. Icehide Troll and Rime Transfusion use snow payment; Blood on the Snow reads it.
     pub fn snow_mana_spent_to_cast(&self, spell: ObjectId) -> u32 {
