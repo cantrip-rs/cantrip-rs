@@ -1,0 +1,68 @@
+# Tangle Tumbler ("{3}, {T}: Put a +1/+1 counter on target creature", CR 122.1; "Tap two untapped tokens you control"): the {3} is
+# exact (two Moxen are short), the target must be a creature (the Food token is refused), and the opponent's Food token from their own
+# Sharepot does not count as one of Bot1's two tokens, so the animation ability stays refused.
+
+[Bot1 Deck]
+Tangle Tumbler
+Bumbleflower's Sharepot
+Black Lotus
+Mox Ruby
+Mox Jet
+Memnite
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Bumbleflower's Sharepot
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tangle Tumbler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bumbleflower's Sharepot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Bumbleflower's Sharepot.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Food Token.Tapped = false
+! Bot1.Battlefield.Tangle Tumbler.Activate(Ability: Tap two untapped tokens)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Tangle Tumbler.Activate(Ability: {3}, {T}; Bot1.Battlefield.Memnite; Mana: short)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+! Bot1.Battlefield.Tangle Tumbler.Activate(Ability: {3}, {T}; Bot1.Battlefield.Food Token)
+Bot1.Battlefield.Tangle Tumbler.Activate(Ability: {3}, {T}; Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Tangle Tumbler.Tapped = true

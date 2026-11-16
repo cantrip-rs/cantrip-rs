@@ -1,0 +1,64 @@
+# Tangle Tumbler ({3} 6/6 Vehicle, "Tap two untapped tokens you control: This Vehicle becomes an artifact creature until end of
+# turn", CR 301.7b): turn 1 the Sharepot's Food is the only token, so the ability is refused; on turn 3 a second Food arrives, a
+# Memnite is no token (refused) and the two Foods are tapped for it. The Tumbler is then a 6/6 artifact creature, with both tokens
+# tapped it cannot do it again, and on turn 5 the effect has ended.
+
+[Bot1 Deck]
+Tangle Tumbler
+Bumbleflower's Sharepot
+Bumbleflower's Sharepot
+Black Lotus
+Mox Ruby
+Mox Jet
+Memnite
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tangle Tumbler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bumbleflower's Sharepot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Food Token.Tapped = false
+! Bot1.Battlefield.Tangle Tumbler.Activate(Ability: Tap two untapped tokens)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bumbleflower's Sharepot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tangle Tumbler.Types = Artifact
+Bot1.Battlefield.Tangle Tumbler.Activate(Ability: Tap two untapped tokens)
+! Bot1.Choose(Memnite)
+Bot1.Choose(Food Token#1; Food Token#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tangle Tumbler.Types = Artifact; Creature
+? Bot1.Battlefield.Tangle Tumbler.Power = 6
+? Bot1.Battlefield.Tangle Tumbler.Toughness = 6
+? Bot1.Battlefield.Tangle Tumbler.Keywords = Vigilance
+? Bot1.Battlefield.Food Token#1.Tapped = true
+? Bot1.Battlefield.Food Token#2.Tapped = true
+! Bot1.Battlefield.Tangle Tumbler.Activate(Ability: Tap two untapped tokens)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Tangle Tumbler.Types = Artifact
+Bot1.Battlefield.Memnite.Tapped = false
