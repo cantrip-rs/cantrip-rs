@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::statics::your_of_subtype;
+use cantrip_mechanics::statics::{have_double_strike_and_haste, your_of_subtype};
 use cantrip_mechanics::triggers::YOUR_UPKEEP;
 use cantrip_mechanics::{affinity, lands, tokens};
 use cantrip_oracle as oracle;
@@ -8,11 +8,6 @@ use cantrip_oracle as oracle;
 fn create_two_slivers(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     tokens::create(g, item.controller, &SLIVER, 2)?;
     Ok(())
-}
-
-/// "... have double strike and haste" (CR 702.4, 702.10, layer 6) as a static ability's `StaticDef::apply`.
-fn have_double_strike_and_haste(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
-    chars.keywords = chars.keywords.with(Keyword::DoubleStrike).with(Keyword::Haste);
 }
 
 /// The 1/1 colorless Sliver creature token the Hivepool makes.

@@ -483,6 +483,12 @@ pub fn have_flying_and_haste(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars)
     chars.keywords = chars.keywords.with(Keyword::Flying).with(Keyword::Haste);
 }
 
+/// "... has double strike and haste" (CR 702.4, 702.10, layer 6) as a static ability's `StaticDef::apply`: both in the one
+/// layer-6 effect. Thrumming Hivepool and Blacksmith's Talent's level 3 print it.
+pub fn have_double_strike_and_haste(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
+    chars.keywords = chars.keywords.with(Keyword::DoubleStrike).with(Keyword::Haste);
+}
+
 /// "... has flying, menace and haste" (CR 702.9, 702.111, 702.10, layer 6). K'Vort-Class Raider's 4+ striation prints
 /// it.
 pub fn have_flying_menace_and_haste(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
