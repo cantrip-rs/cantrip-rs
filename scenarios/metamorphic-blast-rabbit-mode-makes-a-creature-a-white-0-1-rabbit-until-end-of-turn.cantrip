@@ -1,0 +1,53 @@
+# Metamorphic Blast, an instant with Spree (CR 702.172a): {U} plus the {1} mode costs two mana, so with only Mox Sapphire out Bot1 is short. With Mox Jet
+# too, the Rabbit mode on Bot2's Memnite (a colorless 1/1 Artifact Creature - Construct) makes it a white Rabbit with base
+# power and toughness 0/1 until end of turn (CR 611.2a, 613.4b): its colors and creature types are replaced and its card types
+# kept (CR 205.1a, 105.3). Nothing else is drawn. At Bot2's next turn it is a 1/1 colorless Construct again.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Metamorphic Blast
+Island x17
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Metamorphic Blast.Cast(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+? Bot2.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Memnite.Colors = (absent)
+? Bot2.Battlefield.Memnite.Subtypes = Construct
+Bot1.Hand.Metamorphic Blast.Cast
+Bot1.Modes(1)
+Bot1.Target(Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Power = 0
+? Bot2.Battlefield.Memnite.Toughness = 1
+? Bot2.Battlefield.Memnite.Colors = White
+? Bot2.Battlefield.Memnite.Subtypes = Rabbit
+? Bot2.Battlefield.Memnite.Types = Artifact; Creature
+? Bot1.Hand.Count = 5
+? Bot1.Graveyard = Metamorphic Blast
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Memnite.Toughness = 1
+? Bot2.Battlefield.Memnite.Colors = (absent)
+? Bot2.Battlefield.Memnite.Subtypes = Construct
+
+[Expect]
+Turn = 4
+Bot1.Graveyard = Metamorphic Blast

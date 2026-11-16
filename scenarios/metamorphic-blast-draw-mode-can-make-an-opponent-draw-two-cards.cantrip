@@ -1,0 +1,39 @@
+# Metamorphic Blast's draw mode may target any player, an opponent included (CR 121.1): Bot1 pays {U}{3} and Bot2 draws two cards, so its
+# library shrinks by two and its hand grows by two, while Bot1 draws nothing.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Mox Jet
+Metamorphic Blast
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot2.Hand.Count = 7
+? Bot2.Library.Count = 12
+Bot1.Hand.Metamorphic Blast.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Hand.Count = 9
+Bot2.Library.Count = 10
+Bot1.Hand.Count = 3
+Bot1.Library.Count = 17

@@ -1,0 +1,42 @@
+# Metamorphic Blast's Rabbit mode changes base power and toughness, colors and creature types, nothing else (CR 613.4b, 205.1a):
+# Bot2's Ornithopter (a 0/2 flying Artifact Creature - Thopter) is a white Rabbit with base 0/1 and still flies and is still an
+# artifact creature. Bot1 casts the instant on Bot2's turn, once the Ornithopter has resolved; the effect ends at cleanup (CR 514.2), so on Bot1's
+# turn the Ornithopter is a 0/2 Thopter again.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Metamorphic Blast
+Island x17
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Hand.Metamorphic Blast.Cast
+Bot1.Modes(1)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Toughness = 1
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+? Bot2.Battlefield.Ornithopter.Types = Artifact; Creature
+? Bot2.Battlefield.Ornithopter.Subtypes = Rabbit
+? Bot2.Battlefield.Ornithopter.Colors = White
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+? Bot2.Battlefield.Ornithopter.Subtypes = Thopter
+
+[Expect]
+Turn = 3

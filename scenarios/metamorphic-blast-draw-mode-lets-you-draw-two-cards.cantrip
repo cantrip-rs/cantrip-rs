@@ -1,0 +1,44 @@
+# Metamorphic Blast's draw mode alone ({U}{3}, four Moxen) targets any player (CR 121.1): Bot1 targets itself and draws two cards. The
+# Rabbit mode is not chosen, so the spell has no creature target and Bot2's Memnite is untouched. Spree (CR 702.172a): the mode costs are added to {U} - all four
+# Moxen are tapped and the mana pool is empty after.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Mox Jet
+Metamorphic Blast
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Hand.Count = 4
+Bot1.Hand.Metamorphic Blast.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 15
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Subtypes = Construct
+Bot1.Graveyard = Metamorphic Blast
