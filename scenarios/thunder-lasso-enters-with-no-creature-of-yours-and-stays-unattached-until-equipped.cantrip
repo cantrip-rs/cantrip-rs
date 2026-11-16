@@ -1,0 +1,46 @@
+# With no creature Bot1 controls, Thunder Lasso's enters trigger has no legal target and is removed from the stack (CR 603.3d):
+# the Equipment stays unattached. Memnite arrives on turn 3 and Equip {2} attaches it to Memnite;
+# it attacks and taps Bot2's Ornithopter, so the attached Lasso works the same as one attached on entering.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Thunder Lasso
+Memnite
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Thunder Lasso.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thunder Lasso.AttachedTo = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Thunder Lasso.Activate(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Thunder Lasso.AttachedTo = Memnite
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Life = 18
