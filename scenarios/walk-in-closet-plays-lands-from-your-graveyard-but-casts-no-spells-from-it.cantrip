@@ -1,0 +1,33 @@
+# Walk-In Closet: "You may play lands from your graveyard" (CR 305.1), a standing rule of the Room while this door is
+# unlocked (CR 709.5). Bot1 casts the door, then in turn 3 sacrifices Strip Mine and plays it again from the graveyard.
+# The rule is only about lands: Black Lotus, also in the graveyard, is not cast from there.
+
+[Bot1 Deck]
+Strip Mine
+Black Lotus
+Walk-In Closet // Forgotten Cellar
+Forest x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Strip Mine.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Walk-In Closet // Forgotten Cellar.Cast(Ability: Walk-In Closet)
+Bot1.Pass
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Strip Mine.Activate(Bot2.Battlefield.Island; Ability: Destroy)
+? Bot1.Graveyard = Strip Mine; Black Lotus
+! Bot1.Graveyard.Black Lotus.Cast
+Bot1.Graveyard.Strip Mine.Play
+
+[Expect]
+Turn = 3
+Bot1.Battlefield = Walk-In Closet; Strip Mine
+Bot1.Battlefield.Walk-In Closet.Doors = Walk-In Closet
+Bot1.Graveyard = Black Lotus
+Bot1.LandsPlayed = 1
+Bot2.Graveyard = Island
