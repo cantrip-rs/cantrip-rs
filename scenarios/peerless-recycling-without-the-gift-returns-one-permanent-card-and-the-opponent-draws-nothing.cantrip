@@ -1,0 +1,71 @@
+# Peerless Recycling, gift declined (CR 702.174a): one target permanent card from your graveyard. Bot1's graveyard holds a Lightning Bolt (not a permanent
+# card, so not a legal target), an Ornithopter and a Memnite (Bot2's Bolts killed the creatures); Bot2's graveyard holds its own Memnite, a permanent card
+# but not in Bot1's graveyard, refused too. Bot1 returns only its Memnite; the rest stay, and Bot2 draws nothing (their hand: 7 cards, +1 drawn, -7 cast = 1).
+
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Ornithopter
+Ornithopter
+Memnite
+Lightning Bolt
+Peerless Recycling
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Memnite; Ornithopter; Lightning Bolt
+? Bot2.Graveyard = Memnite; Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Peerless Recycling.Cast
+Bot1.Decline
+! Bot1.Target(Bot1.Graveyard.Lightning Bolt)
+! Bot1.Target(Bot2.Graveyard.Memnite)
+Bot1.Target(Bot1.Graveyard.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Memnite.Power = 1
+Bot1.Graveyard = Peerless Recycling; Ornithopter; Lightning Bolt
+Bot2.Graveyard.Memnite.Power = 1
+Bot2.Hand.Count = 1

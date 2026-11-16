@@ -1,0 +1,56 @@
+# Peerless Recycling (CR 702.174a, 601.2c): "If the gift was promised, instead return two target permanent cards from your graveyard to
+# your hand." With exactly two permanent cards in Bot1's graveyard (Ornithopter and Memnite, each Bolted; Bot1's own Lightning Bolt is
+# there too but is not a permanent card) the gift can be promised and both return. Bot2 had 4 cards and draws one for the gift (5).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Ornithopter
+Memnite
+Lightning Bolt
+Peerless Recycling
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Memnite; Ornithopter; Lightning Bolt
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Peerless Recycling.Cast
+Bot1.Accept
+Bot1.Target(Bot1.Graveyard.Memnite; Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Memnite.Power = 1
+Bot1.Hand.Ornithopter.Power = 0
+Bot1.Graveyard = Peerless Recycling; Lightning Bolt
+Bot2.Hand.Count = 5
