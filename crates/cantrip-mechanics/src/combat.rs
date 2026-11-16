@@ -235,6 +235,15 @@ pub fn cast_only_before_blockers(q: &dyn Query, _: &Asker) -> bool {
     matches!(q.state().turn.step(), Step::BeginCombat | Step::DeclareAttackers)
 }
 
+/// "Cast this spell / activate only before blockers are declared" (CR 506.8b, 506.8d, 506.8e, 506.8g): the turn has not reached the
+/// declare blockers step of its first combat phase - any step before it, so a precombat main phase too, but not a later combat
+/// phase's steps, even when an effect ended the first before blockers were declared (CR 724.2d), nor the end of combat step of
+/// a combat with no attackers (CR 508.8). Rapid Fire prints it as a cast
+/// restriction (`CardDef::cast_only_if`), Acidic Dagger as an activation condition.
+pub fn before_blockers_are_declared(q: &dyn Query, _: &Asker) -> bool {
+    q.state().turn.step() < Step::DeclareBlockers && in_first_combat_phase_or_before(q)
+}
+
 /// "Activate only during combat" (CR 602.5b, 506.1): the activation condition form of `during_combat`. Jade Statue prints it.
 pub fn activate_only_during_combat(q: &dyn Query, _: &Asker) -> bool {
     during_combat(q)
