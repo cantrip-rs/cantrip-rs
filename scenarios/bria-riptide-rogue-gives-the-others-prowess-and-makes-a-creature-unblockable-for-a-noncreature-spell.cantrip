@@ -1,0 +1,77 @@
+# Bria, Riptide Rogue: "Prowess. Other creatures you control have prowess. Whenever you cast a noncreature spell, target creature
+# you control can't be blocked this turn." On turn 3 Bot1 casts a Mox Emerald (a noncreature spell) with Bria and a Memnite in
+# play: Bria gets +1/+1 from her own prowess (4/4) and the Memnite from the one she gives it (2/2), and Bria's trigger makes the
+# Memnite unblockable. Bot2's Ornithopter, which cast a Mox Ruby on turn 2 with Bria in play, got no prowess (still 0/2) and
+# may block Bria (and dies to her 4 power) but not the Memnite, so only the Memnite's 2 damage connects.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Bria, Riptide Rogue
+Memnite
+Plains
+Mox Emerald
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bria, Riptide Rogue.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Memnite)
+? Stack.Count = 4
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bria, Riptide Rogue.Power = 4
+? Bot1.Battlefield.Memnite.Power = 2
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bria, Riptide Rogue > Bot2; Memnite > Bot2)
+! Bot2.Block(Ornithopter > Memnite)
+Bot2.Block(Ornithopter > Bria, Riptide Rogue)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Bria, Riptide Rogue.Toughness = 4
+Bot1.Battlefield.Memnite.Toughness = 2
