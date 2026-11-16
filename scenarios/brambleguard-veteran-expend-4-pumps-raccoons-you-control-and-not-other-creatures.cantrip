@@ -1,0 +1,51 @@
+# Brambleguard Veteran: on turn three Black Lotus is a free spell, the Veteran mana 1-3 and Elvish Mystic mana 4, so its
+# controller expends 4 (CR 700.14). Raccoons they control as it resolves - the Veteran and Bakersbane Duo, a Squirrel
+# Raccoon - get +1/+1 and vigilance until end of turn; Llanowar Elves (an Elf) and the Mystic do not. The Duo's own expend
+# ability gives it another +1/+1. Turn one's three mana are another turn's and count nothing (the count is per turn).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Bakersbane Duo
+Lotus Petal
+Llanowar Elves
+Brambleguard Veteran
+Black Lotus
+Elvish Mystic
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bakersbane Duo.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Lotus Petal.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Brambleguard Veteran.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Brambleguard Veteran.Power = 4
+? Bot1.Battlefield.Brambleguard Veteran.Toughness = 5
+? Bot1.Battlefield.Brambleguard Veteran.Keywords = Vigilance
+? Bot1.Battlefield.Bakersbane Duo.Power = 4
+? Bot1.Battlefield.Bakersbane Duo.Toughness = 4
+? Bot1.Battlefield.Bakersbane Duo.Keywords = Vigilance
+? Bot1.Battlefield.Llanowar Elves.Power = 1
+? Bot1.Battlefield.Llanowar Elves.Keywords = (absent)
+? Bot1.Battlefield.Elvish Mystic.Keywords = (absent)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Brambleguard Veteran.Power = 3
+Bot1.Battlefield.Brambleguard Veteran.Toughness = 4
+Bot1.Battlefield.Brambleguard Veteran.Keywords = (absent)
+Bot1.Battlefield.Bakersbane Duo.Power = 2

@@ -1,0 +1,33 @@
+# Brambleguard Veteran: "whenever you expend 4" counts only its controller's spending (CR 700.14). On turn two the
+# opponent casts two Grizzly Bears off Black Lotus and a Forest - four mana of their own - and the Veteran stays 3/4 with
+# no vigilance.
+
+[Bot1 Deck]
+Black Lotus
+Brambleguard Veteran
+Forest x20
+
+[Bot2 Deck]
+Forest
+Black Lotus
+Grizzly Bears
+Grizzly Bears
+Forest x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Brambleguard Veteran.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main2]
+? Bot2.Battlefield = Forest; Grizzly Bears; Grizzly Bears
+
+[Expect]
+Bot1.Battlefield.Brambleguard Veteran.Power = 3
+Bot1.Battlefield.Brambleguard Veteran.Keywords = (absent)
