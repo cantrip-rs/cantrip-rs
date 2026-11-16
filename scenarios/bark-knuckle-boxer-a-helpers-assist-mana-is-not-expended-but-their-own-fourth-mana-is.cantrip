@@ -1,0 +1,77 @@
+# Bark-Knuckle Boxer: mana a player spends assisting another player's spell (CR 702.132a) is not mana they spent to
+# cast spells, so it counts toward nobody's expend (CR 700.14; the user's ruling: only the caster casts the spell, and
+# the caster counts only their own mana). On turn 5 Bot1 casts Charging Binox and Bot2, who controls the Boxer, pays {2}
+# of it: the Boxer does not trigger. Still in that turn Bot2 casts Shock (its own mana 1), Think Twice (2-3) and Giant
+# Growth (4): the Boxer gains indestructible only at Giant Growth, the fourth mana Bot2 itself spent to cast. Counting
+# the assist would make Think Twice (2 + 3 = 5) expend 4 instead.
+
+[Bot1 Deck]
+Black Lotus
+Forest
+Forest
+Forest
+Charging Binox
+Forest
+Forest
+Forest x16
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Bark-Knuckle Boxer
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Shock
+Forest
+Think Twice
+Giant Growth
+Forest x16
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Bark-Knuckle Boxer.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Charging Binox.Cast
+Bot1.Accept
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot2.PayCost(X: 2)
+Bot1.Pass
+? Bot2.Battlefield.Bark-Knuckle Boxer.Keywords = (absent)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot1.Pass
+? Bot2.Battlefield.Bark-Knuckle Boxer.Keywords = (absent)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Think Twice.Cast
+Bot1.Pass
+? Bot2.Battlefield.Bark-Knuckle Boxer.Keywords = (absent)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Giant Growth.Cast(Bark-Knuckle Boxer)
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Bark-Knuckle Boxer.Keywords = Indestructible
+Bot2.Battlefield.Bark-Knuckle Boxer.Power = 6
+Bot1.Battlefield.Charging Binox.Power = 7
+Bot1.Life = 18

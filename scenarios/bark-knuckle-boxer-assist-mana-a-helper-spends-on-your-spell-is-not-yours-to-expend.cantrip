@@ -1,0 +1,45 @@
+# Bark-Knuckle Boxer: mana a helper spends on its controller's spell through assist (CR 702.132a) is not mana its
+# controller spent (CR 700.14; the user's ruling). On turn 4 Bot2 casts Charging Binox, paying three of its own mana, and
+# Bot1 assists with {5}: Bot2 has spent three, not eight, and the Boxer does not trigger.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Bark-Knuckle Boxer
+Charging Binox
+Forest
+Forest x16
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Bark-Knuckle Boxer.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Charging Binox.Cast
+Bot2.Accept
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Battlefield.Forest#2.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot1.PayCost(X: 5)
+Bot2.Pass
+[T4 Bot2.Main2]
+? Bot2.Battlefield.Charging Binox.Power = 7
+
+[Expect]
+Bot2.Battlefield.Bark-Knuckle Boxer.Keywords = (absent)

@@ -1,0 +1,37 @@
+# Bark-Knuckle Boxer: mana paid for an additional cost counts toward expend (CR 700.14, 601.2f-h; the expend ruling on
+# changed costs). The Boxer is mana 1-2; Bloodchief's Thirst kicked is mana 3-6, so casting it expends 4 and the trigger
+# resolves first: the Boxer gains indestructible and the Thirst aimed at it destroys nothing (CR 702.12b). Unkicked it would
+# be only the third mana (the other scenario).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Bark-Knuckle Boxer
+Black Lotus
+Mox Jet
+Bloodchief's Thirst
+Forest
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bark-Knuckle Boxer.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bloodchief's Thirst.Cast(Kicked: 1)
+Bot1.Target(Bark-Knuckle Boxer)
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Bark-Knuckle Boxer.Keywords = Indestructible
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Bark-Knuckle Boxer.Keywords = (absent)
+Bot1.Graveyard = Bloodchief's Thirst; Black Lotus

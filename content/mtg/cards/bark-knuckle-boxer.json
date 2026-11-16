@@ -1,0 +1,8 @@
+{
+  "name": "Bark-Knuckle Boxer",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Raccoon Berserker",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Whenever you expend 4, this creature gains indestructible until end of turn. (You expend 4 as you spend your fourth total mana to cast spells during a turn.)"
+}

@@ -1,0 +1,30 @@
+# Bark-Knuckle Boxer: the control for the kicker scenario. Bloodchief's Thirst unkicked costs {B}: the Boxer's two mana and the
+# Thirst's one make three, short of expend 4 (CR 700.14), so nothing triggers and the Thirst destroys the Boxer (mana value 2).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Bark-Knuckle Boxer
+Mox Jet
+Bloodchief's Thirst
+Forest
+Forest
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bark-Knuckle Boxer.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bloodchief's Thirst.Cast
+Bot1.Target(Bark-Knuckle Boxer)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Bloodchief's Thirst; Bark-Knuckle Boxer
