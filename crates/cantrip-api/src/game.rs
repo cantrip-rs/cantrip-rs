@@ -81,6 +81,10 @@ pub struct CastTerms {
     pub less: u32,
     /// Life paid with its cost (CR 118.9, 119.4): Bolas's Citadel's mana value.
     pub life: u8,
+    /// Cards discarded as the cost paid rather than the mana cost (CR 118.9, 701.9): "you may cast that card by discarding a
+    /// card rather than paying its mana cost" (The Infamous Cruelclaw). It is the one alternative cost of the cast (CR 118.9a),
+    /// its X is 0 (CR 107.3b) and additional costs are paid as usual (CR 118.8); a cast it cannot pay for is not made.
+    pub discard: u8,
     /// "If that spell would be put into your graveyard, exile it instead" (CR 614.1a), as the effect's text words it: of any
     /// spell (`ExileInstead::Spell`), or only of an instant or sorcery spell (`ExileInstead::InstantOrSorcery`). A move to a
     /// hand or a library is not replaced.
