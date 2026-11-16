@@ -3570,7 +3570,7 @@ mod tests {
     fn ordered_subtypes_are_typed_linked_and_do_not_enlarge_choices() {
         assert_eq!(std::mem::size_of::<Kept>(), 8);
         assert_eq!(std::mem::size_of::<Choices>(), 72);
-        assert_eq!(std::mem::size_of::<Obj>(), 912);
+        assert_eq!(std::mem::size_of::<Obj>(), 928);
         let text = CardId(4);
         let own = Linked { object: ObjectId(2), text, acquired: Acquired::OWN };
         let pair = [Subtype::Forest, Subtype::Island];
