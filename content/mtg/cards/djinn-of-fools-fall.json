@@ -1,0 +1,11 @@
+{
+  "name": "Djinn of Fool's Fall",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Djinn",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Flying\nPlot {3}{U} (You may pay {3}{U} and exile this card from your hand. Cast it as a sorcery on a later turn without paying its mana cost. Plot only as a sorcery.)",
+  "keywords": [
+    "Flying"
+  ]
+}

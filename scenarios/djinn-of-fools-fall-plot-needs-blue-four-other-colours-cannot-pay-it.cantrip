@@ -1,0 +1,30 @@
+# Plot {3}{U} (CR 702.170a) costs a blue mana: Mox Jet, Ruby, Pearl and Emerald make four mana, none blue, so Bot1 cannot plot the
+# Djinn (Mox Sapphire is in hand, not on the battlefield); it stays in hand and nothing is exiled.
+
+[Bot1 Deck]
+Djinn of Fool's Fall
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Djinn of Fool's Fall.Activate(Ability: Plot; Mana: short)
+
+[Expect]
+Bot1.Hand.Count = 3
+Exile.Count = 0

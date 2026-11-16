@@ -1,0 +1,40 @@
+# Plot {3}{U} (CR 702.170a) is a special action: Bot1 pays it with four Moxen on turn one, exiling the Djinn (the pool is empty),
+# and cannot cast it that turn (the refusal). On turn three it is cast from exile without paying its mana cost; Bot1 then has no
+# mana in the pool and the Djinn resolves.
+
+[Bot1 Deck]
+Djinn of Fool's Fall
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Djinn of Fool's Fall.Activate(Ability: Plot)
+? Bot1.Mana =
+? Exile = Djinn of Fool's Fall
+! Bot1.Exile.Djinn of Fool's Fall.Cast
+[T3 Bot1.Main1]
+Bot1.Exile.Djinn of Fool's Fall.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Djinn of Fool's Fall.Power = 4
+Bot1.Battlefield.Djinn of Fool's Fall.Toughness = 3
+Exile.Count = 0

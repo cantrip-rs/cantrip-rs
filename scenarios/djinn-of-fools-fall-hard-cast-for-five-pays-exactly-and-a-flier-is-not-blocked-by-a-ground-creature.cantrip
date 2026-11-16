@@ -1,0 +1,44 @@
+# Djinn of Fool's Fall costs {4}{U}: five Moxen (blue among them) pay it exactly, nothing is left in the pool (CR 202.1, 601.2f).
+# It is a 4/3 with flying (CR 702.9b): on turn three it attacks into Bot2's Memnite, which cannot block it, so Bot2 takes 4.
+
+[Bot1 Deck]
+Djinn of Fool's Fall
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Island
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Djinn of Fool's Fall.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Djinn of Fool's Fall > Bot2)
+! Bot2.Block(Memnite > Djinn of Fool's Fall)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Djinn of Fool's Fall.Tapped = true
+Bot2.Life = 16
+Bot2.Battlefield.Memnite.Tapped = false

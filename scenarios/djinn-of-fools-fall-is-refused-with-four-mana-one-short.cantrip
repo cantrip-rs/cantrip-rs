@@ -1,0 +1,29 @@
+# Djinn of Fool's Fall costs {4}{U}: Mox Sapphire, Jet, Pearl and Ruby make four mana, blue among it, so the cast is refused for being
+# one mana short (CR 202.1, 601.2f); the Djinn is still in hand.
+
+[Bot1 Deck]
+Djinn of Fool's Fall
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Djinn of Fool's Fall.Cast(Mana: short)
+
+[Expect]
+Bot1.Hand.Count = 3
