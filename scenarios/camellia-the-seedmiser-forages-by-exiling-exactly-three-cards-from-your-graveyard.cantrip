@@ -1,0 +1,66 @@
+# Camellia, the Seedmiser: "{2}, Forage: Put a +1/+1 counter on each other Squirrel you control." Turn 1: Camellia, Gilded Goose
+# with its Food, and Black Lotus. Turn 3: the Goose sacrifices the Food for mana and Camellia makes a Squirrel. With no Food and a
+# graveyard of one card (Black Lotus, sacrificed for mana) and then two (a Lightning Bolt) the ability cannot be activated: forage
+# takes exactly three cards (CR 701.61a). Turn 5: a second Bolt makes three, and exiling them (the whole graveyard) pays for the
+# counter on the Squirrel, 2/2, but not on Camellia, 3/3.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Camellia, the Seedmiser
+Forest
+Gilded Goose
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Camellia, the Seedmiser.Cast
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Gilded Goose.Cast
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gilded Goose.Activate(Ability: Sacrifice a Food; Sacrifice: Food Token; Color: G)
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: R)
+? Bot1.Graveyard = Black Lotus
+! Bot1.Battlefield.Camellia, the Seedmiser.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt; Black Lotus
+! Bot1.Battlefield.Camellia, the Seedmiser.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Black Lotus
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Camellia, the Seedmiser.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = 
+? Exile.Count = 3
+? Bot1.Battlefield.Squirrel Token.Power = 2
+? Bot1.Battlefield.Squirrel Token.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Camellia, the Seedmiser.Power = 3
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield = Camellia, the Seedmiser; Forest; Gilded Goose; Mox Emerald; Mox Jet; Mox Ruby; Squirrel Token

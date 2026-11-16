@@ -1,0 +1,50 @@
+# Camellia, the Seedmiser: "Whenever you sacrifice one or more Foods" has the sacrifice as its trigger event (CR 701.21a), not the
+# dying, so Teysa Karlov ("if a creature dying causes a triggered ability of a permanent you control to trigger, that ability triggers
+# an additional time") does not double it (the rulings of Teysa Karlov). Turn 1: Teysa and Camellia. Turn 3: Gingerbrute, an artifact
+# creature Food with haste, sacrifices itself for 3 life: one Squirrel, not two.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Emerald
+Mox Ruby
+Teysa Karlov
+Camellia, the Seedmiser
+Gingerbrute
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Teysa Karlov.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Camellia, the Seedmiser.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gingerbrute.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gingerbrute.Activate(Ability: You gain 3 life)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield = Camellia, the Seedmiser; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Squirrel Token; Teysa Karlov
+Bot1.Graveyard = Gingerbrute; Black Lotus

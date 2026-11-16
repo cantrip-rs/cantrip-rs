@@ -1,0 +1,65 @@
+# Camellia, the Seedmiser: "{2}, Forage: Put a +1/+1 counter on each other Squirrel you control." Turn 1: Camellia and a Gilded Goose
+# with its Food. Turn 2: Bot2 casts The Unbeatable Squirrel Girl, which makes a Squirrel token. Turn 3: Bot1 pays {2} and forages by
+# sacrificing its Food (the only way it can, with an empty graveyard, so it is not asked). Camellia's trigger for the sacrificed Food
+# makes a Squirrel on top of the ability, so the new Squirrel gets the counter (2/2); Camellia herself, being no other Squirrel, the
+# Goose, no Squirrel, and Bot2's Squirrels, not Bot1's, get none.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Camellia, the Seedmiser
+Forest
+Gilded Goose
+Forest
+Forest x10
+
+[Bot2 Deck]
+Black Lotus
+Forest
+The Unbeatable Squirrel Girl
+Forest x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Camellia, the Seedmiser.Cast
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Gilded Goose.Cast
+Bot2.Pass
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: G)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.The Unbeatable Squirrel Girl.Cast
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Camellia, the Seedmiser.Activate
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Battlefield.Squirrel Token.Power = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Squirrel Token.Power = 2
+? Bot1.Battlefield.Squirrel Token.Toughness = 2
+? Bot1.Battlefield.Squirrel Token.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Camellia, the Seedmiser.Power = 3
+? Bot1.Battlefield.Gilded Goose.Power = 0
+? Bot2.Battlefield.Squirrel Token.Power = 1
+? Bot2.Battlefield.The Unbeatable Squirrel Girl.Power = 4
+
+[Expect]
+Bot1.Battlefield = Camellia, the Seedmiser; Forest; Forest; Gilded Goose; Mox Emerald; Mox Jet; Mox Ruby; Squirrel Token
+Bot1.Graveyard = 

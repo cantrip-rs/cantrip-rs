@@ -1,0 +1,11 @@
+{
+  "name": "Camellia, the Seedmiser",
+  "manaCost": "{1}{B}{G}",
+  "type": "Legendary Creature — Squirrel Warlock",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Menace\nOther Squirrels you control have menace.\nWhenever you sacrifice one or more Foods, create a 1/1 green Squirrel creature token.\n{2}, Forage: Put a +1/+1 counter on each other Squirrel you control. (To forage, exile three cards from your graveyard or sacrifice a Food.)",
+  "keywords": [
+    "Menace"
+  ]
+}

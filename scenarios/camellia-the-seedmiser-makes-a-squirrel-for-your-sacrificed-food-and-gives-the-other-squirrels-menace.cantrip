@@ -1,0 +1,82 @@
+# Camellia, the Seedmiser {1}{B}{G}, 3/3 with menace: "Other Squirrels you control have menace" and "Whenever you sacrifice one or more
+# Foods, create a 1/1 green Squirrel creature token." Turn 1: Bot1 casts Camellia with three Moxen and a Gilded Goose (a Food Goose makes
+# on entering) with a Forest. Turn 2: Bot2 casts a Goose of its own. Turn 3: Bot1 sacrifices its Food to the Goose (a Food sacrificed
+# as a cost, CR 701.21) and gets a Squirrel, which has menace as another Squirrel, while Camellia keeps her printed menace and the Goose
+# has none; Black Lotus, no Food, sacrificed for mana makes none. Turn 4: Bot2 sacrifices its own Food and casts The Unbeatable Squirrel
+# Girl, which makes a Squirrel token of its own: no Squirrel for Bot1. On turn 6 that token attacks and one Camellia blocks it alone and kills it: it has no menace, being no Squirrel of Bot1's.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Camellia, the Seedmiser
+Forest
+Gilded Goose
+Forest
+Black Lotus
+Forest x10
+
+[Bot2 Deck]
+Forest
+Gilded Goose
+Black Lotus
+The Unbeatable Squirrel Girl
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Camellia, the Seedmiser.Cast
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Gilded Goose.Cast
+Bot2.Pass
+Bot2.Pass
+? Bot1.Battlefield.Camellia, the Seedmiser.Keywords = Menace
+? Bot1.Battlefield = Camellia, the Seedmiser; Food Token; Forest; Gilded Goose; Mox Emerald; Mox Jet; Mox Ruby
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Gilded Goose.Cast
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gilded Goose.Activate(Ability: Sacrifice a Food; Sacrifice: Food Token; Color: G)
+Bot2.Pass
+? Bot1.Battlefield.Squirrel Token.Keywords = Menace
+? Bot1.Battlefield.Squirrel Token.Power = 1
+? Bot1.Battlefield.Squirrel Token.Toughness = 1
+? Bot1.Battlefield.Camellia, the Seedmiser.Power = 3
+? Bot1.Battlefield.Gilded Goose.Keywords = Flying
+Bot1.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield = Camellia, the Seedmiser; Forest; Gilded Goose; Mox Emerald; Mox Jet; Mox Ruby; Squirrel Token
+? Bot1.Graveyard = Black Lotus
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: G)
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest#2.Activate
+Bot2.Battlefield.Gilded Goose.Activate(Ability: Sacrifice a Food; Sacrifice: Food Token; Color: G)
+Bot2.Hand.The Unbeatable Squirrel Girl.Cast
+Bot1.Pass
+Bot1.Pass
+? Bot2.Battlefield = Forest; Forest; Gilded Goose; Squirrel Token; The Unbeatable Squirrel Girl
+[T5 Bot1.Main1]
+[T6 Bot2.Main1]
+Bot2.Attack(Squirrel Token > Bot1)
+Bot1.Block(Camellia, the Seedmiser > Squirrel Token)
+[T6 Bot2.Main2]
+? Bot1.Life = 20
+? Bot2.Battlefield = Forest; Forest; Gilded Goose; The Unbeatable Squirrel Girl
+
+[Expect]
+Bot1.Battlefield = Camellia, the Seedmiser; Forest; Gilded Goose; Mox Emerald; Mox Jet; Mox Ruby; Squirrel Token
