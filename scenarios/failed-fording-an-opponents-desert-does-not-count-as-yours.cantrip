@@ -1,0 +1,36 @@
+# Failed Fording: "If you control a Desert" counts only Bot1's permanents. Bot2 controls Shefet Dunes (a Desert) and an Ornithopter;
+# Bot1 controls no Desert, so the Ornithopter is returned and Bot1 does not surveil.
+
+[Bot1 Deck]
+Mox Sapphire
+Island
+Failed Fording
+Island x4
+Mountain
+Forest
+Island x12
+
+[Bot2 Deck]
+Shefet Dunes
+Ornithopter
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Shefet Dunes.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Failed Fording.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+! Bot1.Arrange
+[T5 Bot1.Main1]
+? Bot1.Hand = Forest; Island; Island; Island; Island; Mountain
+? Bot2.Battlefield = Shefet Dunes
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Failed Fording

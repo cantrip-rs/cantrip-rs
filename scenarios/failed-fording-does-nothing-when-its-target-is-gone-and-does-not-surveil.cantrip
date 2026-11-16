@@ -1,0 +1,45 @@
+# Failed Fording with its target gone (CR 608.2b): Bot1 controls a Desert (Shefet Dunes) and casts Failed Fording at Bot2's
+# Ornithopter, then in response Bot1's own Lightning Bolt kills the Ornithopter. The spell resolves with no legal target, does
+# nothing at all, and so does not surveil even though Bot1 controls a Desert: the Ornithopter is in Bot2's graveyard (not in its
+# hand) and the Forest on top is drawn at turn 5.
+
+[Bot1 Deck]
+Shefet Dunes
+Mox Sapphire
+Mox Ruby
+Island
+Failed Fording
+Lightning Bolt
+Island
+Mountain
+Forest
+Island x11
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Shefet Dunes.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Failed Fording.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange
+[T5 Bot1.Main1]
+? Bot1.Hand = Forest; Island; Mountain
+
+[Expect]
+Bot2.Graveyard = Plains; Ornithopter
+Bot1.Graveyard = Failed Fording; Lightning Bolt
+Stack.Count = 0

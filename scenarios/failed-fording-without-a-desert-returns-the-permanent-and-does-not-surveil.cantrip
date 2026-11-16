@@ -1,0 +1,43 @@
+# Failed Fording: "If you control a Desert, surveil 1." Bot1 controls only an Island and a Plains, so Bot2's Ornithopter is returned
+# to its hand and there is no surveil: the Forest on top stays unseen (an Arrange is refused). The spell costs {1}{U}: Mox Ruby
+# and Mox Jet make two mana but no blue, which is refused; the Island then pays.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Plains
+Failed Fording
+Island
+Island x2
+Mountain
+Forest
+Island x12
+
+[Bot2 Deck]
+Mountain
+Ornithopter
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Failed Fording.Cast(Bot2.Battlefield.Ornithopter; Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Failed Fording.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+! Bot1.Arrange
+[T5 Bot1.Main1]
+? Bot1.Hand = Forest; Island; Island; Mountain
+? Bot2.Hand = Mountain; Mountain; Mountain; Mountain; Mountain; Mountain; Ornithopter
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Failed Fording

@@ -1,0 +1,39 @@
+# Failed Fording: "Return target nonland permanent to its owner's hand. If you control a Desert, surveil 1." Bot1 controls Shefet
+# Dunes (a Desert) and returns Bot2's Ornithopter to Bot2's hand (a land is refused as a target; the Ornithopter is the positive
+# control), then surveils 1 and puts the Forest on top into the graveyard.
+
+[Bot1 Deck]
+Shefet Dunes
+Mox Sapphire
+Island
+Failed Fording
+Island x3
+Mountain
+Forest
+Island x12
+
+[Bot2 Deck]
+Mountain
+Ornithopter
+Mountain x18
+
+[Actions]
+Bot1.Hand.Shefet Dunes.Play
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Failed Fording.Cast(Bot2.Battlefield.Mountain)
+Bot1.Hand.Failed Fording.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Arrange( | Forest)
+? Bot2.Battlefield = Mountain
+? Bot2.Hand = Mountain; Mountain; Mountain; Mountain; Mountain; Mountain; Ornithopter
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Failed Fording; Forest
