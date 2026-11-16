@@ -1,0 +1,49 @@
+# Byrke, Long Ear of the Law: "When Byrke enters, put a +1/+1 counter on each of up to two target creatures." Bot1 controls
+# Memnite and Ornithopter when Byrke enters, so three creatures are candidates (Byrke himself is one): naming all three is
+# refused (at most two), and choosing none is allowed ("up to"), so no creature gets a counter.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Memnite
+Ornithopter
+Byrke, Long Ear of the Law
+Plains x13
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Byrke, Long Ear of the Law.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Memnite; Ornithopter; Byrke, Long Ear of the Law)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Byrke, Long Ear of the Law.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
