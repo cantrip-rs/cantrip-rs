@@ -1,0 +1,50 @@
+# Corpseberry Cultivator: two of them. On turn three Gilded Goose enters with a Food and Giant Growth makes three cards in
+# the graveyard. At the beginning of combat both "you may forage" triggers: the first forages by exiling the three cards,
+# the second - the graveyard now empty - by sacrificing the Food. Each forage is one "whenever you forage" event
+# (CR 701.61a) and both Cultivators see each, so each gets two +1/+1 counters.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Emerald
+Lotus Petal
+Corpseberry Cultivator
+Corpseberry Cultivator
+Gilded Goose
+Giant Growth
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Corpseberry Cultivator.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Lotus Petal.Activate(Color: Green)
+Bot1.Hand.Corpseberry Cultivator.Cast
+[T1 Bot1.Main2]
+? Bot1.Graveyard.Count = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Gilded Goose.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Gilded Goose)
+[T3 Bot1.BeginCombat]
+Bot1.Accept
+Bot1.Accept
+[T3 Bot1.Main2]
+? Bot1.Battlefield = Corpseberry Cultivator; Corpseberry Cultivator; Forest; Gilded Goose; Mox Emerald
+? Bot1.Exile.Black Lotus.Colors.Count = 0
+? Bot1.Exile.Lotus Petal.Colors.Count = 0
+? Bot1.Exile.Giant Growth.Colors.Count = 1
+
+[Expect]
+Bot1.Battlefield.Corpseberry Cultivator#1.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Corpseberry Cultivator#2.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Corpseberry Cultivator#1.Power = 4

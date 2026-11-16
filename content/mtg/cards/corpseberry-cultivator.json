@@ -1,0 +1,8 @@
+{
+  "name": "Corpseberry Cultivator",
+  "manaCost": "{1}{B/G}{B/G}",
+  "type": "Creature — Squirrel Warlock",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "At the beginning of combat on your turn, you may forage. (Exile three cards from your graveyard or sacrifice a Food.)\nWhenever you forage, put a +1/+1 counter on this creature."
+}

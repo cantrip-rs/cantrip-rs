@@ -1,0 +1,44 @@
+# Corpseberry Cultivator: at the beginning of combat on its controller's turn they may forage (CR 701.61a). On turn one,
+# with Black Lotus and two Lightning Bolts in the graveyard, they decline: nothing is exiled and no counter. On turn three
+# they exile the three cards to forage, and "whenever you forage" puts a +1/+1 counter on it. With no Food they are never
+# asked about sacrificing one.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Black Lotus
+Corpseberry Cultivator
+Lightning Bolt
+Lightning Bolt
+Memnite
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Corpseberry Cultivator.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Decline
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Corpseberry Cultivator.Power = 2
+? Bot1.Graveyard.Count = 3
+[T3 Bot1.Main1]
+Bot1.Accept
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Corpseberry Cultivator.Power = 3
+? Bot1.Battlefield.Corpseberry Cultivator.Counters.PlusOnePlusOne = 1
+? Bot1.Exile.Black Lotus.Colors.Count = 0
+? Bot1.Exile.Lightning Bolt#1.Colors.Count = 1
+? Bot1.Exile.Lightning Bolt#2.Colors.Count = 1
+
+[Expect]
+Bot1.Battlefield.Corpseberry Cultivator.Toughness = 4
+Bot1.Graveyard.Count = 0
