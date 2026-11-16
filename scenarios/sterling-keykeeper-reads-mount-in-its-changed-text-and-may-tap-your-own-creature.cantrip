@@ -1,0 +1,67 @@
+# Sterling Keykeeper: "Tap target non-Mount creature" names a creature type, which a text-changing effect may change (CR 612.1).
+# Bot1's Artificial Evolution changes Mount to Thopter in the Keykeeper's text on turn 1. On turn 3 Bot1's own Ornithopter (a
+# Thopter) is refused, and Bot2's Brightfield Glider (a Mount, no longer named) is tapped. The target may be any player's
+# creature: on turn 5 the Keykeeper taps Bot1's own Memnite.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Sterling Keykeeper
+Ornithopter
+Artificial Evolution
+Memnite
+Plains x12
+
+[Bot2 Deck]
+Mox Pearl
+Brightfield Glider
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sterling Keykeeper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artificial Evolution.Cast(Sterling Keykeeper)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Mount)
+Bot1.Modes(Thopter)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Brightfield Glider.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+! Bot1.Battlefield.Sterling Keykeeper.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Sterling Keykeeper.Activate(Bot2.Battlefield.Brightfield Glider)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Brightfield Glider.Tapped = true
+? Bot1.Battlefield.Ornithopter.Tapped = false
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sterling Keykeeper.Activate(Bot1.Battlefield.Memnite)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 5
+Bot1.Battlefield.Memnite.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Sterling Keykeeper.Tapped = true
+Bot1.Graveyard = Artificial Evolution
