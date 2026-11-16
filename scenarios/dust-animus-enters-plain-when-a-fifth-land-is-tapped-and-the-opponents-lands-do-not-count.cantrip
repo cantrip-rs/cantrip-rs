@@ -1,0 +1,44 @@
+# Dust Animus: only untapped lands you control count (CR 614.1c). Turn 9: Bot1 has five Plains but pays for the Animus with Mox Pearl and one of
+# them, leaving four untapped; Bot2 has Islands of its own (four, untapped: they would make nine with Bot1's, so they must not count), so the Animus
+# enters a plain 2/3 flier with no counters and no lifelink.
+
+[Bot1 Deck]
+Dust Animus
+Mox Pearl
+Mox Jet
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T8 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Dust Animus.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dust Animus.Power = 2
+? Bot1.Battlefield.Dust Animus.Toughness = 3
+? Bot1.Battlefield.Dust Animus.Keywords = Flying
+
+[Expect]
+Bot1.Battlefield.Dust Animus.Power = 2

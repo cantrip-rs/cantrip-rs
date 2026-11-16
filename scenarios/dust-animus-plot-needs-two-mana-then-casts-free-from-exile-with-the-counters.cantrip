@@ -1,0 +1,38 @@
+# Dust Animus: Plot {1}{W} (CR 702.170a). Turn 1: with only the Plains' {W} in the pool the plot is refused, and with {1}{W} (Plains and Mox Pearl)
+# it is plotted (exiled); it cannot be cast the same turn. Turn 9: with five untapped Plains it is cast from exile for free as the fifth Plains
+# arrives and enters with two +1/+1 counters and a lifelink counter (the free cast leaves the lands untapped).
+
+[Bot1 Deck]
+Dust Animus
+Mox Pearl
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+! Bot1.Hand.Dust Animus.Activate(Ability: Plot; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dust Animus.Activate(Ability: Plot)
+? Bot1.Exile.Dust Animus.Power = 2
+! Bot1.Exile.Dust Animus.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Exile.Dust Animus.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dust Animus.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Dust Animus.Counters.Lifelink = 1
+
+[Expect]
+Bot1.Battlefield.Dust Animus.Power = 4
+Bot1.Battlefield.Dust Animus.Toughness = 5

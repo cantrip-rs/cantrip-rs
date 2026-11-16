@@ -1,0 +1,11 @@
+{
+  "name": "Dust Animus",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Spirit",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying\nIf you control five or more untapped lands, this creature enters with two +1/+1 counters and a lifelink counter on it.\nPlot {1}{W} (You may pay {1}{W} and exile this card from your hand. Cast it as a sorcery on a later turn without paying its mana cost. Plot only as a sorcery.)",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,45 @@
+# Dust Animus: "If you control five or more untapped lands, this creature enters with two +1/+1 counters and a lifelink counter on it"
+# (CR 614.1c, 122.1b). Bot1 plays a Plains each of turns 1, 3, 5, 7 and 9; on turn 9 the five Plains are all untapped (exactly the limit)
+# and the Animus is paid for with Mox Pearl and Mox Jet (artifacts, not lands), so it enters a 4/5 with two +1/+1 counters, a lifelink counter
+# and flying. Turn 11: it attacks for 4 and the lifelink counter gains 4 (Bot1 20 to 24, Bot2 20 to 16).
+
+[Bot1 Deck]
+Dust Animus
+Mox Pearl
+Mox Jet
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dust Animus.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dust Animus.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Dust Animus.Counters.Lifelink = 1
+? Bot1.Battlefield.Dust Animus.Power = 4
+? Bot1.Battlefield.Dust Animus.Toughness = 5
+? Bot1.Battlefield.Dust Animus.Keywords = Flying; Lifelink
+[T11 Bot1.DeclareAttackers]
+Bot1.Attack(Dust Animus > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T11 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 16
