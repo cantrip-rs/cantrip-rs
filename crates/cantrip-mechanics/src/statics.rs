@@ -190,6 +190,13 @@ pub fn itself_while_you_drew_two_or_more(q: &dyn LayerQuery, source: ObjectId, a
     source == affected && q.history().drawn(q.state().obj(source).controller) >= 2
 }
 
+/// "... as long as you've committed a crime this turn" (CR 611.3a, 700.13) as a static ability's `StaticDef::affects`: only the
+/// source itself, and only while its controller has committed a crime this turn. The layers ask again whenever characteristics are
+/// computed, so it turns on with the crime and off as the turn ends. Nimble Brigand and Slickshot Vault-Buster print it.
+pub fn itself_while_you_committed_a_crime(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Chars) -> bool {
+    source == affected && crate::history::committed_a_crime_this_turn(q.history(), q.state().obj(source).controller)
+}
+
 /// "Delirium - This creature gets/has ... as long as there are four or more card types among cards in your graveyard"
 /// (CR 207.2c, 604.1, 611.3a) as a static ability's `StaticDef::affects`: only the source itself, and only while four or more
 /// card types are among the cards in its controller's graveyard, each judged as the layers make it (the types are asked

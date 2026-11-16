@@ -407,6 +407,14 @@ pub fn you_gained_five_or_more_life_this_turn(q: &dyn Query, asker: &Asker) -> b
     q.history().life_gained(asker.controller) >= 5
 }
 
+/// "If you've committed a crime this turn" (CR 700.13): whether `player` has committed a crime this turn, as the history records it
+/// (`Event::CrimeCommitted`, made as a spell is cast or an ability goes on the stack with an opponent, something of theirs or a
+/// card in their graveyard targeted). Nimble Brigand and Slickshot Vault-Buster ask it as a static ability
+/// (`statics::itself_while_you_committed_a_crime`), Seize the Secrets as its cost change.
+pub fn committed_a_crime_this_turn(history: History<'_>, player: PlayerId) -> bool {
+    history.this_turn().iter().any(|r| matches!(r.event, Event::CrimeCommitted { player: p, .. } if p == player))
+}
+
 /// "If you lost life this turn" (CR 603.4, 119.3): whether `player` has lost any life this turn, however much they also gained
 /// (damage and paying life count). Lunar Convocation and Thought-Stalker Warlock print it.
 pub fn lost_life_this_turn(q: &dyn Query, player: PlayerId) -> bool {
