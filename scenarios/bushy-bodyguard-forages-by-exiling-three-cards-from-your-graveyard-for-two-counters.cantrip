@@ -1,0 +1,45 @@
+# Bushy Bodyguard ({1}{G}, 2/1): "When this creature enters, you may forage. If you do, put two +1/+1 counters on it." Turn 1: Bot1
+# casts a Black Lotus (it is sacrificed for mana, so goes to the graveyard) and two Shocks at Bot2, three cards in all, then the Bodyguard.
+# The trigger asks to forage by exiling three cards from the graveyard, Bot1 accepts and the graveyard empties: the Bodyguard is a 4/3.
+
+[Bot1 Deck]
+Black Lotus
+Shock
+Shock
+Mox Emerald
+Mox Jet
+Bushy Bodyguard
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 3
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bushy Bodyguard.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Battlefield.Bushy Bodyguard.Power = 4
+Bot1.Battlefield.Bushy Bodyguard.Toughness = 3
+Bot1.Graveyard.Count = 0
+Bot2.Life = 16

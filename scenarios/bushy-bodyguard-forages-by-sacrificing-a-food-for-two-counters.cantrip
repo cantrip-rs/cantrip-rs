@@ -1,0 +1,46 @@
+# Bushy Bodyguard: "To forage, exile three cards from your graveyard or sacrifice a Food." Bot1 casts a Heaped Harvest (a Food) with a
+# Black Lotus, declining its search; the graveyard holds only the Lotus, so exiling three cards is not offered and the only way is to
+# sacrifice the Food. Bot1 accepts: the Harvest is sacrificed (its own trigger, declined) and the Bodyguard gets two counters, a 4/3.
+
+[Bot1 Deck]
+Black Lotus
+Heaped Harvest
+Mox Emerald
+Mox Jet
+Bushy Bodyguard
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Heaped Harvest.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bushy Bodyguard.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Bot1.Battlefield.Bushy Bodyguard.Power = 4
+Bot1.Battlefield.Bushy Bodyguard.Toughness = 3
+Bot1.Graveyard = Heaped Harvest; Black Lotus

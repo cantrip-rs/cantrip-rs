@@ -1,0 +1,59 @@
+# Bushy Bodyguard with offspring {2} paid (four Moxen on turn 3): "create a 1/1 token copy of it" (CR 702.175a). The Bodyguard and its token
+# copy each have the forage trigger. Bot1 has one Food (a Heaped Harvest cast on turn 1) and no graveyard to speak of, so only one forage can be
+# paid: the token's trigger resolves first (it is the newer object) and is accepted (the Food sacrificed, +2 counters on the 1/1 token,
+# a 3/3), and the Bodyguard's own trigger then finds no Food and asks nothing: it stays a 2/1, the Harvest is gone.
+
+[Bot1 Deck]
+Black Lotus
+Heaped Harvest
+Mox Emerald
+Mox Jet
+Mox Ruby
+Bushy Bodyguard
+Island
+Mox Sapphire
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Heaped Harvest.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bushy Bodyguard.Cast(Kicked: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Bot1.Battlefield.Bushy Bodyguard#1.Power = 2
+Bot1.Battlefield.Bushy Bodyguard#1.Toughness = 1
+Bot1.Battlefield.Bushy Bodyguard#1.Token = (absent)
+Bot1.Battlefield.Bushy Bodyguard#2.Power = 3
+Bot1.Battlefield.Bushy Bodyguard#2.Toughness = 3
+Bot1.Battlefield.Bushy Bodyguard#2.Token = true
+Bot1.Graveyard = Heaped Harvest; Black Lotus

@@ -1,0 +1,42 @@
+# Bushy Bodyguard: "...you may forage." With three cards in the graveyard (a Black Lotus and two Shocks) the forage is offered, Bot1
+# declines, and since the only other way (a Food) is unavailable nothing else is asked: the Bodyguard stays a 2/1 and the graveyard keeps all three.
+
+[Bot1 Deck]
+Black Lotus
+Shock
+Shock
+Mox Emerald
+Mox Jet
+Bushy Bodyguard
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bushy Bodyguard.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Bot1.Battlefield.Bushy Bodyguard.Power = 2
+Bot1.Battlefield.Bushy Bodyguard.Toughness = 1
+Bot1.Graveyard.Count = 3

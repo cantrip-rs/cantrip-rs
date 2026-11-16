@@ -1,0 +1,38 @@
+# Bushy Bodyguard: "...you may forage. If you do, put two +1/+1 counters on it." Bot1's graveyard holds only two cards (a Black Lotus and
+# a Shock) and it has no Food, so there is no way to forage and nothing is asked: the Bodyguard stays a 2/1 and the graveyard keeps both
+# (CR 118.3, cannot be paid). The refusal is paired with the positive control in the exile-three-cards scenario.
+
+[Bot1 Deck]
+Black Lotus
+Shock
+Mox Emerald
+Mox Jet
+Bushy Bodyguard
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bushy Bodyguard.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Bushy Bodyguard.Power = 2
+Bot1.Battlefield.Bushy Bodyguard.Toughness = 1
+Bot1.Graveyard.Count = 2
