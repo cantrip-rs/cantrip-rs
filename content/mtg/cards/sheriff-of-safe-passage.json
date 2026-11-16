@@ -1,0 +1,8 @@
+{
+  "name": "Sheriff of Safe Passage",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Knight",
+  "power": 0,
+  "toughness": 0,
+  "oracleText": "This creature enters with a +1/+1 counter on it plus an additional +1/+1 counter on it for each other creature you control.\nPlot {1}{W} (You may pay {1}{W} and exile this card from your hand. Cast it as a sorcery on a later turn without paying its mana cost. Plot only as a sorcery.)"
+}

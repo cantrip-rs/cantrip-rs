@@ -1,0 +1,39 @@
+# Sheriff of Safe Passage (0/0) "enters with a +1/+1 counter on it plus an additional +1/+1 counter on it for each other creature you control." Bot1 controls an Ornithopter
+# and a Memnite and Bot2 a Memnite: on turn 3 Bot1 casts the Sheriff ({2}{W}: Moxen Pearl, Jet, Ruby) and it enters with 1 + 2 = 3 counters, a 3/3 - its own creatures count, the
+# opponent's does not, and it does not count itself.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Ornithopter
+Memnite
+Sheriff of Safe Passage
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Island x7
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sheriff of Safe Passage.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Sheriff of Safe Passage.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Sheriff of Safe Passage.Power = 3
+Bot1.Battlefield.Sheriff of Safe Passage.Toughness = 3

@@ -1,0 +1,31 @@
+# Sheriff of Safe Passage cast with no other creature on either side enters with just the one +1/+1 counter: a 1/1, so it survives (0/0 with no counter would die).
+# Bot2 controls a Memnite, which does not count.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Sheriff of Safe Passage
+Plains x4
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Island x7
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sheriff of Safe Passage.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Sheriff of Safe Passage.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Sheriff of Safe Passage.Power = 1
+Bot1.Battlefield.Sheriff of Safe Passage.Toughness = 1

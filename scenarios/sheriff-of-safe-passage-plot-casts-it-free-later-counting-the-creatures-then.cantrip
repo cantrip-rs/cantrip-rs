@@ -1,0 +1,35 @@
+# Sheriff of Safe Passage has Plot {1}{W} (CR 702.170a): on turn 1 Bot1 pays {1}{W} off Mox Pearl and Mox Jet and exiles it plotted (it cannot be cast the same turn). The
+# counters are counted when it enters, not when it was plotted: Bot1 casts an Ornithopter on turn 1 after plotting, and on turn 3 the Sheriff is cast free from exile and enters
+# with 1 + 1 = 2 counters, a 2/2, the Moxen untapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Ornithopter
+Sheriff of Safe Passage
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Island x7
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sheriff of Safe Passage.Activate(Ability: Plot)
+? Bot1.Mana =
+! Bot1.Exile.Sheriff of Safe Passage.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Exile.Sheriff of Safe Passage.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Sheriff of Safe Passage.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Sheriff of Safe Passage.Power = 2
+Bot1.Battlefield.Mox Pearl.Tapped = false
+Bot1.Battlefield.Mox Jet.Tapped = false
