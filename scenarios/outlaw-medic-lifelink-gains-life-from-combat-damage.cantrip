@@ -1,0 +1,27 @@
+# Outlaw Medic (1/3 lifelink): cast on turn 1 off Mox Pearl + Mox Jet, it attacks unblocked on turn 3 and deals 1 damage:
+# Bot2 20 -> 19 and Bot1 20 -> 21 (CR 702.15b). Control: no death, so the "dies" trigger draws nothing (Bot1's hand is the normal turn-3 draw).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Outlaw Medic
+Plains x4
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Outlaw Medic.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Outlaw Medic > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19
+Bot1.Battlefield.Outlaw Medic.Keywords = Lifelink

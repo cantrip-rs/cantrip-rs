@@ -1,0 +1,11 @@
+{
+  "name": "Outlaw Medic",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Rogue",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Lifelink\nWhen this creature dies, draw a card.",
+  "keywords": [
+    "Lifelink"
+  ]
+}

@@ -1,0 +1,36 @@
+# Outlaw Medic: "When this creature dies, draw a card." Bot1 casts it off Mox Pearl and Mox Jet on turn 1 (seven cards, three cast, four left);
+# on turn 2 Bot2 Bolts it, it dies (CR 700.4) and the trigger draws exactly one card: five in hand (the hand is four before the Bolt resolves).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Outlaw Medic
+Plains x4
+Plains x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Outlaw Medic.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Outlaw Medic)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+? Bot1.Hand.Count = 4
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Outlaw Medic
+Bot1.Hand.Count = 5

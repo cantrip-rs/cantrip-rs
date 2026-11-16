@@ -1,0 +1,44 @@
+# Sterling Supplier (3/4 flying): "When this creature enters, put a +1/+1 counter on another target creature you control."
+# Bot1 has two Ornithopters and Bot2 one: the counter goes on the chosen one of Bot1's Ornithopters only - never on the Supplier itself, never on
+# Bot2's creature (refused as targets). Black Lotus makes {W}{W}{W}, Mox Pearl {W}, Mox Jet {B}: {4}{W}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Ornithopter x2
+Sterling Supplier
+Plains x2
+Plains x15
+
+[Bot2 Deck]
+Ornithopter x2
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sterling Supplier.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Sterling Supplier)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Ornithopter#2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter#1.Counters.PlusOnePlusOne = (absent)
+? Bot1.Battlefield.Ornithopter#2.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Sterling Supplier.Counters.PlusOnePlusOne = (absent)
+? Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+
+[Expect]
+Bot1.Battlefield.Sterling Supplier.Keywords = Flying
+Bot1.Battlefield.Ornithopter#2.Counters.PlusOnePlusOne = 1
