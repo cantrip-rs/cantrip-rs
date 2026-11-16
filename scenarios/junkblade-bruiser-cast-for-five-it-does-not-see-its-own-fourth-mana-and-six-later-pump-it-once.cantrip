@@ -1,0 +1,52 @@
+# Junkblade Bruiser: on turn one Sol Ring is mana 1 and the Bruiser mana 2-6, so its controller expends 4 while it is on
+# the stack - it was not on the battlefield to see it (the expend rulings), and spending more that turn can't expend 4
+# again. On turn three Black Lotus is free and Craw Wurm costs six: the fourth of them expends 4 (CR 700.14) and the
+# Bruiser gets +2/+1 once - the fifth and sixth trigger nothing - then it is 4/5 again on the opponent's turn.
+
+[Bot1 Deck]
+Forest
+Sol Ring
+Mox Emerald
+Mox Ruby
+Lotus Petal
+Junkblade Bruiser
+Black Lotus
+Craw Wurm
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Lotus Petal.Activate(Color: Green)
+Bot1.Hand.Junkblade Bruiser.Cast
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Junkblade Bruiser.Power = 4
+? Bot1.Battlefield.Junkblade Bruiser.Toughness = 5
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Craw Wurm.Cast
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Craw Wurm.Power = 6
+? Bot1.Battlefield.Junkblade Bruiser.Power = 6
+? Bot1.Battlefield.Junkblade Bruiser.Toughness = 6
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Junkblade Bruiser.Power = 4
+Bot1.Battlefield.Junkblade Bruiser.Toughness = 5
+Bot1.Battlefield.Junkblade Bruiser.Keywords = Trample

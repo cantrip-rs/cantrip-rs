@@ -1,0 +1,11 @@
+{
+  "name": "Junkblade Bruiser",
+  "manaCost": "{3}{R/G}{R/G}",
+  "type": "Creature — Raccoon Berserker",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Trample\nWhenever you expend 4, this creature gets +2/+1 until end of turn. (You expend 4 as you spend your fourth total mana to cast spells during a turn.)",
+  "keywords": [
+    "Trample"
+  ]
+}
