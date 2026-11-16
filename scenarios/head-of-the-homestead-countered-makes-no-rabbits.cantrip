@@ -1,0 +1,47 @@
+# Head of the Homestead: the Rabbits come from "when this creature enters", not from casting it. On turn 3 Bot1 casts the Head
+# (Black Lotus's white and two Mox Pearls) and Bot2 counters it with Counterspell off two Mox Sapphires: nothing enters, so no
+# Rabbits are created and the Head goes to the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Head of the Homestead
+Plains x16
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Counterspell
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Head of the Homestead.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Hand.Counterspell.Cast(Stack.Head of the Homestead)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Pearl
+Bot1.Graveyard = Head of the Homestead; Black Lotus

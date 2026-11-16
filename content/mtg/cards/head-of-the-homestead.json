@@ -1,0 +1,8 @@
+{
+  "name": "Head of the Homestead",
+  "manaCost": "{3}{G/W}{G/W}",
+  "type": "Creature — Rabbit Citizen",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters, create two 1/1 white Rabbit creature tokens."
+}
