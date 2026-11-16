@@ -1,0 +1,6 @@
+{
+  "name": "Fleeting Reflection",
+  "manaCost": "{1}{U}",
+  "type": "Instant",
+  "oracleText": "Target creature you control gains hexproof until end of turn. Untap that creature. Until end of turn, it becomes a copy of up to one other target creature."
+}

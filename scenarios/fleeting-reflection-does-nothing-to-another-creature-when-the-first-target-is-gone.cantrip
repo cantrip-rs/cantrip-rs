@@ -1,0 +1,47 @@
+# Fleeting Reflection with its first target gone (CR 608.2b): Bot1 targets its own Memnite#1 and Bot2's Ornithopter, and Bot2's
+# Lightning Bolt kills Memnite#1 in response. The spell still has a legal target, the Ornithopter, but nothing in it can act on
+# the Ornithopter: it gains no hexproof, and Bot1's other Memnite is not changed.
+
+[Bot1 Deck]
+Island
+Memnite
+Memnite
+Mox Jet
+Fleeting Reflection
+Island x12
+
+[Bot2 Deck]
+Mountain
+Ornithopter
+Lightning Bolt
+Mountain x13
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fleeting Reflection.Cast
+Bot1.Target(Memnite#1)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+
+[Expect]
+Bot1.Graveyard = Fleeting Reflection; Memnite
+Bot2.Graveyard = Lightning Bolt
+Stack.Count = 0

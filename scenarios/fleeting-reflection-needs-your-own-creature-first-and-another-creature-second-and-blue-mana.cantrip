@@ -1,0 +1,46 @@
+# Fleeting Reflection targets: the first must be a creature you control (Bot2's Ornithopter and Bot1's Mox Jet are refused), the
+# second an "other" creature (not the first one, not a Mox) that may be anyone's. It costs {1}{U}: Mox Jet and Mox Ruby make two mana but no
+# blue, which is refused; with an Island it is paid. Memnite#2 is accepted as the second target (an own creature).
+
+[Bot1 Deck]
+Island
+Memnite
+Memnite
+Mox Jet
+Mox Ruby
+Fleeting Reflection
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Fleeting Reflection.Cast(Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Fleeting Reflection.Cast
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+! Bot1.Target(Mox Jet)
+Bot1.Target(Memnite#1)
+! Bot1.Target(Memnite#1)
+! Bot1.Target(Mox Jet)
+Bot1.Target(Memnite#2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Memnite#1.Keywords = Hexproof
+? Bot1.Battlefield.Memnite#2.Keywords = (absent)
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Fleeting Reflection
