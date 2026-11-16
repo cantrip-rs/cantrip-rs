@@ -1,0 +1,43 @@
+# Wandertale Mentor: whenever its controller expends 4 (CR 700.14), a +1/+1 counter on it. On turn one Black Lotus pays for
+# the Mentor (two mana) and Grizzly Bears (two more, the fourth): one counter. A third spell that turn spends a fifth and
+# sixth mana, expending 4 no second time. On turn three the Mentor taps for green (its mana ability), which with a Forest
+# casts another Grizzly Bears: two mana that turn, no expend.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Wandertale Mentor
+Grizzly Bears
+Grizzly Bears
+Grizzly Bears
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Wandertale Mentor.Cast
+Bot1.Pass
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Wandertale Mentor.Counters.PlusOnePlusOne = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Wandertale Mentor.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+? Bot1.Mana = {G}{G}
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Wandertale Mentor.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Wandertale Mentor.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Wandertale Mentor.Power = 3
