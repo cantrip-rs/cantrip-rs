@@ -1,0 +1,8 @@
+{
+  "name": "Muerra, Trash Tactician",
+  "manaCost": "{1}{R}{G}",
+  "type": "Legendary Creature — Raccoon Warrior",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "At the beginning of your first main phase, add {R} or {G} for each Raccoon you control.\nWhenever you expend 4, you gain 3 life. (You expend 4 as you spend your fourth total mana to cast spells during a turn.)\nWhenever you expend 8, exile the top two cards of your library. Until the end of your next turn, you may play those cards."
+}

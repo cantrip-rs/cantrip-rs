@@ -1,0 +1,64 @@
+# Muerra, Trash Tactician: one payment can expend 4 and expend 8 at once (CR 700.14). Muerra is cast on turn one; on turn
+# three its first-main-phase trigger adds one mana for its one Raccoon, and from no mana spent yet that turn, Fireball with X
+# = 7 spends eight - from below four to eight, so both abilities trigger from that payment: its caster gains 3 life, and
+# the top two cards of their library are exiled. Of those, the Plains is played on their next turn, turn five; Memnite,
+# left in exile, can't be cast on turn seven, as the permission ended with turn five (CR 514.2, 611.2a).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Emerald
+Muerra, Trash Tactician
+Forest
+Black Lotus
+Fireball
+Island
+Plains
+Memnite
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Muerra, Trash Tactician.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Colors(Red)
+Bot1.Hand.Forest.Play
+? Bot1.Mana = {R}
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fireball.Cast(X: 7)
+Bot1.Target(Bot2)
+Bot1.Triggers(you gain 3 life; exile the top two)
+? Stack.Count = 3
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Life = 23
+? Bot2.Life = 13
+? Exile.Count = 2
+? Bot1.Exile.Plains.Colors.Count = 0
+? Bot1.Exile.Memnite.Colors.Count = 0
+[T5 Bot1.Main1]
+Bot1.Colors(Green)
+Bot1.Exile.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Colors(Green)
+! Bot1.Exile.Memnite.Cast
+
+[Expect]
+Bot1.Battlefield.Plains.Types = Land
+Bot1.Exile.Memnite.Colors.Count = 0

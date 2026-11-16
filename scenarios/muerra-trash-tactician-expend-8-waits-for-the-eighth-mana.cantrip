@@ -1,0 +1,59 @@
+# Muerra, Trash Tactician's expend 8 (CR 700.14): Fireball with X = 6 spends seven mana, from none spent yet that turn - its
+# caster expends 4 and gains 3 life, but nothing is exiled yet. A Lightning Bolt then spends the eighth: they expend 8, and
+# the top two cards of their library are exiled.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Emerald
+Muerra, Trash Tactician
+Forest
+Black Lotus
+Fireball
+Lightning Bolt
+Plains
+Memnite
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Muerra, Trash Tactician.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Colors(Red)
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fireball.Cast(X: 6)
+Bot1.Target(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Bot2.Life = 14
+? Exile.Count = 0
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Life = 23
+? Bot2.Life = 11
+
+[Expect]
+Exile.Count = 2
+Bot1.Exile.Plains.Colors.Count = 0
+Bot1.Exile.Memnite.Colors.Count = 0
