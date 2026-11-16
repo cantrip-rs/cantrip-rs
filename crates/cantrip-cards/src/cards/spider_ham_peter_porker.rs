@@ -36,13 +36,8 @@ fn other_animals_you_control(q: &dyn LayerQuery, source: ObjectId, affected: Obj
         && ANIMALS.iter().any(|&animal| so_far.has_subtype(words.subtype(animal)))
 }
 
-/// "Create a Food token." (CR 111.1, 111.2)
-fn create_a_food(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create_food(g, item.controller)
-}
-
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(THIS_ENTERS, create_a_food, "When Spider-Ham enters, create a Food token.")],
+    abilities: &[triggered(THIS_ENTERS, tokens::create_a_food_token, "When Spider-Ham enters, create a Food token.")],
     statics: &[static_ability(
         Layer::PtModify,
         other_animals_you_control,

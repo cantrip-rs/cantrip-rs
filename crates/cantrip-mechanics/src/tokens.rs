@@ -288,7 +288,8 @@ pub fn create_food(g: &mut dyn Game, controller: PlayerId) -> Result<(), Suspend
 }
 
 /// "Create a Food token" (CR 111.10b) as an effect: the resolving object's controller makes it. Heroic Feast, Hot Dog Cart, Iroh,
-/// Neelix, Scavenger's Talent, Canyon Crawler, Replicator, Gilded Goose, Midnight Snack and Bake into a Pie print it alone.
+/// Neelix, Scavenger's Talent, Canyon Crawler, Replicator, Gilded Goose, Midnight Snack, Bake into a Pie, Cat Collector, Generous Ent,
+/// Spider-Ham and Bumbleflower's Sharepot print it alone.
 pub fn create_a_food_token(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     create_food(g, item.controller)
 }
