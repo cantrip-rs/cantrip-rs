@@ -1,0 +1,68 @@
+# Prosperity Tycoon (4/2): "When this creature enters, create a 1/1 red Mercenary ..." and "{2}, Sacrifice a token: This creature gains indestructible until end of turn. Tap it."
+# Turn 1: Black Lotus (WWW) and Mox Pearl pay {3}{W}; the Mercenary arrives; Moxen Jet and Ruby stay untapped. Turn 2: Bot2 Bolts the Tycoon, Bot1 pays {2} and sacrifices the
+# Mercenary token in response: the Tycoon survives (3 damage, indestructible), tapped, and with no token left (a nontoken permanent is not enough) it cannot do it again.
+# Turn 4: the effect ended with turn 2, so a second Bolt destroys it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Prosperity Tycoon
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Mountain
+Mountain
+Lightning Bolt
+Lightning Bolt
+Island x3
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Prosperity Tycoon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mercenary Token.Power = 1
+? Bot1.Battlefield.Mercenary Token.Toughness = 1
+? Bot1.Battlefield.Mercenary Token.Colors = Red
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Prosperity Tycoon)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Prosperity Tycoon.Activate(Ability: Sacrifice a token)
+Bot1.Choose(Mercenary Token)
+? Bot1.Mana =
+? Bot1.Battlefield.Mercenary Token = (absent)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Prosperity Tycoon.Tapped = true
+? Bot1.Battlefield.Prosperity Tycoon.Damage = 3
+? Bot1.Battlefield.Prosperity Tycoon.Keywords = Indestructible
+! Bot1.Battlefield.Prosperity Tycoon.Activate(Ability: Sacrifice a token)
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Prosperity Tycoon)
+Bot2.Battlefield.Mountain.Activate
+? Bot1.Battlefield.Prosperity Tycoon.Keywords = (absent)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Prosperity Tycoon = (absent)

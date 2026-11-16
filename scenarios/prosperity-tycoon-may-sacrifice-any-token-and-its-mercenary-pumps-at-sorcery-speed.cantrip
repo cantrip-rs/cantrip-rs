@@ -1,0 +1,60 @@
+# Prosperity Tycoon: "{2}, Sacrifice a token" takes any token, not only a creature. On turn 3 Bot1 controls the Tycoon's
+# Mercenary and Thraben Inspector's Clue. The Mercenary's "{T}: Target creature you control gets +1/+0 until end of turn.
+# Activate only as a sorcery." makes the Tycoon 5/2 in Bot1's main phase. Then Bot1 pays {2} and
+# sacrifices the Clue (asked which token): the Tycoon gains indestructible and taps, and the Mercenary stays.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Prosperity Tycoon
+Thraben Inspector
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Prosperity Tycoon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Thraben Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clue Token.Types = Artifact
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mercenary Token.Activate(Bot1.Battlefield.Prosperity Tycoon)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Prosperity Tycoon.Power = 5
+? Bot1.Battlefield.Mercenary Token.Tapped = true
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Prosperity Tycoon.Activate(Ability: Sacrifice a token)
+Bot1.Choose(Clue Token)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Prosperity Tycoon.Keywords = Indestructible
+Bot1.Battlefield.Prosperity Tycoon.Tapped = true
+Bot1.Battlefield.Prosperity Tycoon.Power = 5
+Bot1.Battlefield.Mercenary Token.Tapped = true
+Bot1.Battlefield.Clue Token = (absent)
