@@ -540,6 +540,15 @@ pub fn pump_creatures_where(g: &mut dyn Game, source: ObjectId, counts: impl Fn(
     });
 }
 
+/// "Attacking creatures you control get +`P`/+`T` until end of turn" (CR 611.2c): the creatures `item`'s controller controls
+/// that are attacking as it resolves, and none that attack or enter attacking later. Warren Warleader ("Attacking creatures
+/// you control get +1/+1 until end of turn") and Painter's Studio // Defaced Gallery print it.
+pub fn attacking_creatures_you_control_get<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let you = item.controller;
+    pump_creatures_where(g, item.object, |q, id| q.is_attacking(id) && q.controller(id) == you, P, T);
+    Ok(())
+}
+
 /// "Creatures your opponents control get +`power`/+`toughness` until end of turn" (CR 611.2, 611.2c): the creatures each opponent
 /// of `item`'s controller controls as it resolves, and no creature that enters later. Sandman's Quicksand (-2/-2 when its mayhem
 /// cost was paid) and Sephiroth, Planet's Heir (-2/-2) print it.
