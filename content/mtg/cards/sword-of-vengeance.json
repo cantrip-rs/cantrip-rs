@@ -1,0 +1,6 @@
+{
+  "name": "Sword of Vengeance",
+  "manaCost": "{3}",
+  "type": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +2/+0 and has first strike, vigilance, trample, and haste.\nEquip {3}"
+}

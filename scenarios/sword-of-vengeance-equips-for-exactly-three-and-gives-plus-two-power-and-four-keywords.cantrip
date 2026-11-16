@@ -1,0 +1,56 @@
+# Sword of Vengeance ({3} Equipment): "Equipped creature gets +2/+0 and has first strike, vigilance, trample, and haste" and
+# "Equip {3}" (CR 702.6). Turn 1: Black Lotus pays for it. Turn 3 (Bot2's Memnite is on the table): two Moxen are short of
+# Equip {3}, the third pays it exactly (pool empty after), an opponent's creature is no target, and Bot1's Memnite 1/1 becomes
+# 3/1 (the toughness unchanged) with all four keywords.
+
+[Bot1 Deck]
+Black Lotus
+Sword of Vengeance
+Memnite
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Swamp x15
+
+[Bot2 Deck]
+Memnite
+Swamp x18
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Sword of Vengeance.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Sword of Vengeance.Activate(Bot1.Battlefield.Memnite; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Sword of Vengeance.Activate(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Sword of Vengeance.Activate(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Sword of Vengeance.AttachedTo = Memnite
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Memnite.Keywords = FirstStrike; Haste; Trample; Vigilance
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Keywords = (absent)
