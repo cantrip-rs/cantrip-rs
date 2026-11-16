@@ -1,0 +1,62 @@
+# Oltec Matterweaver with a Food token (an artifact token) in play offers both modes: the first creature spell takes the Gnome
+# mode anyway (CR 700.2). The second takes the copy mode on the Food token, and in response Bot1 sacrifices the Food ({2}, {T},
+# sacrifice: gain 3 life): the target is illegal on resolution, so the ability does nothing (CR 608.2b) and no token is made.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Oltec Matterweaver
+Replicator
+Ornithopter
+Ornithopter
+Plains x9
+
+[Bot2 Deck]
+Plains x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Oltec Matterweaver.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Replicator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Food Token.Types = Artifact
+Bot1.Hand.Ornithopter.Cast
+Bot1.Modes(Create a 1/1 colorless Gnome artifact creature token.)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gnome Token.Power = 1
+Bot1.Hand.Ornithopter.Cast
+Bot1.Modes(Create a token that's a copy of target artifact token you control.)
+Bot1.Target(Bot1.Battlefield.Food Token)
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Battlefield.Food Token.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield.Count = 9

@@ -1,0 +1,8 @@
+{
+  "name": "Oltec Matterweaver",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Artificer",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Whenever you cast a creature spell, choose one —\n• Create a 1/1 colorless Gnome artifact creature token.\n• Create a token that's a copy of target artifact token you control."
+}

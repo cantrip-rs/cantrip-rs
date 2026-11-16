@@ -1,0 +1,59 @@
+# Oltec Matterweaver {2}{W} 2/4: "Whenever you cast a creature spell, choose one — Create a 1/1 colorless Gnome artifact creature
+# token. / Create a token that's a copy of target artifact token you control." Casting Oltec itself does not trigger it (it is
+# not on the battlefield yet), nor does a noncreature spell (a Mox Pearl), nor does Bot2's creature spell; Bot1's Ornithopter does
+# and the Gnome mode makes a colorless 1/1 artifact creature Gnome token.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Oltec Matterweaver
+Ornithopter
+Mox Pearl
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Plains x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Oltec Matterweaver.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Oltec Matterweaver.Power = 2
+? Bot1.Battlefield.Oltec Matterweaver.Toughness = 4
+Bot1.Hand.Mox Pearl.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 5
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gnome Token.Power = 1
+? Bot1.Battlefield.Gnome Token.Toughness = 1
+? Bot1.Battlefield.Gnome Token.Types = Artifact; Creature
+? Bot1.Battlefield.Gnome Token.Subtypes = Gnome
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 7
+Bot1.Battlefield = Gnome Token; Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl; Oltec Matterweaver; Ornithopter

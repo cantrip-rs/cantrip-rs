@@ -1,0 +1,85 @@
+# Oltec Matterweaver's second mode, "Create a token that's a copy of target artifact token you control", targets an artifact
+# token you control (CR 115.1, 700.2a). With only Spirit tokens (not artifacts), a Mox Pearl (an artifact, not a token) and
+# Oltec itself, the mode is not offered, so the first creature spell makes a Gnome. The second creature spell offers it: Bot2's
+# Food token (an artifact token someone else controls), Bot1's Mox Pearl, Spirit token and Oltec are refused; Bot1's Gnome is
+# copied, and the copy is a new, summoning-sick 1/1 Gnome artifact creature while the original is untouched.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Oltec Matterweaver
+Lingering Souls
+Ornithopter
+Ornithopter
+Ornithopter
+Plains x9
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Replicator
+Plains x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Oltec Matterweaver.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Replicator.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Food Token.Types = Artifact
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spirit Token#1.Power = 1
+? Bot1.Battlefield.Spirit Token#2.Power = 1
+Bot1.Hand.Ornithopter.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gnome Token.Power = 1
+Bot1.Hand.Ornithopter.Cast
+Bot1.Modes(Create a token that's a copy of target artifact token you control.)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gnome Token#1.Power = 1
+? Bot1.Battlefield.Gnome Token#2.Power = 1
+? Bot1.Battlefield.Gnome Token#2.SummoningSick = true
+Bot1.Hand.Ornithopter.Cast
+Bot1.Modes(Create a token that's a copy of target artifact token you control.)
+! Bot1.Target(Bot2.Battlefield.Food Token)
+! Bot1.Target(Bot1.Battlefield.Mox Pearl#1)
+! Bot1.Target(Bot1.Battlefield.Spirit Token#1)
+! Bot1.Target(Bot1.Battlefield.Oltec Matterweaver)
+Bot1.Target(Bot1.Battlefield.Gnome Token#2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 12
+Bot1.Battlefield.Gnome Token#3.Power = 1
+Bot2.Battlefield.Count = 4
