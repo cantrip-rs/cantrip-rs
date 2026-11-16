@@ -226,6 +226,13 @@ artifact", `ManaRestriction::Card`) is the `ManaSpendFilterView` `Card`, with th
 where it is, or for the spell it became as it is cast, and none for a card gone anywhere else. The host reads the card back
 from the option offered, never from what the handle names now. Version 240.
 
+**Pawprints.** A modal spell whose modes are counted in pawprints (CR 700.2i, 107.18: the Seasons of Bloomburrow, "Choose up
+to five {P} worth of modes. You may choose the same mode more than once.") asks a `ChooseModesPromptMessage` with `Pawprints`
+(key 14), each mode's {P} index for index, `AtMost` the most they may add up to, `Count` 0 and `MayRepeat` set: any number of
+modes, none among them, the same one again, so long as their pawprints add up to no more than `AtMost`; the host refuses an
+answer that adds up to more. `Pawprints` is empty for every other choice of modes. The web client counts the {P} spent and
+lets a mode be pressed while it still fits; the automatic seats spend them all on a spread of the modes worth most. Version 243.
+
 An unrestricted `SeparatePiles` selection (`AnyNumber`, no parts or candidate restriction) uses the existing non-targeted
 `ChooseTargetPromptMessage` presentation; its `TargetsChosenAnswer` is translated to the engine's card selection and
 checked by the same validator. A pile-choice mode names its members, with an empty pile named "nothing" (CR 700.3d). The same
@@ -388,3 +395,5 @@ whose index is a byte); the first event is the default. The replacement for that
 Protocol 241 adds the cumulative-upkeep-only mana spend filter (CR 106.6, 702.24a); prior filter values are unchanged.
 
 Protocol 242 adds `producesAlternatives` to action options: complete, mutually exclusive mana bundles for one activation. The player chooses the bundle as the ability resolves; existing `produces` contains only mana common to all bundles.
+
+Protocol 243 adds `Pawprints` (key 14) to `ChooseModesPromptMessage` (see **Pawprints** above); every other choice of modes sends it empty.

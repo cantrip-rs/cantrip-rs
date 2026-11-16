@@ -790,6 +790,7 @@ pub(crate) fn announce_trigger(cx: &mut Cx, trigger: PendingTrigger, by: Option<
                 affordable: Vec::new(),
                 additional_cost: false,
                 repeat: modal.repeat,
+                pawprints: modal.pawprint_weights(),
             };
             match cx.ask_core(trigger.controller, ask, false)? {
                 Answer::Modes(modes) => modes,

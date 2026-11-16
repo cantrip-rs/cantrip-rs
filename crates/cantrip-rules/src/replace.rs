@@ -1598,7 +1598,7 @@ fn apply_printed(cx: &mut Cx, proposal: &mut Proposal, source: ObjectId, index: 
         let choices = types(&*cx, &asker, m.permanent, m.player);
         if !choices.is_empty() {
             let choice = if choices.len() == 1 { 0 } else {
-                let ask = RequestKind::ChooseModes { source, modes: choices.iter().copied().map(Label::ManaType).collect(), eligible: (0..choices.len() as u8).collect(), count: 1, at_most: 1, affordable: Vec::new(), additional_cost: false, repeat: false };
+                let ask = RequestKind::ChooseModes { source, modes: choices.iter().copied().map(Label::ManaType).collect(), eligible: (0..choices.len() as u8).collect(), count: 1, at_most: 1, affordable: Vec::new(), additional_cost: false, repeat: false, pawprints: Vec::new() };
                 match cx.ask_core(m.player, ask, false) { Ok(Answer::Modes(chosen)) => chosen.first().copied().unwrap_or(0) as usize, _ => 0 }
             };
             let total = m.total();

@@ -3974,6 +3974,10 @@ pub(crate) fn eligible_modes(cx: &Cx, asker: &Asker, modal: &ModalDef) -> Vec<u8
 
 /// Whether enough modes could be chosen for the spell or ability to be announced at all (CR 700.2a).
 fn modes_possible(cx: &Cx, asker: &Asker, modal: &ModalDef) -> bool {
+    // A modal counted in pawprints may choose none at all (CR 700.2i), so it can always be announced.
+    if modal.pawprints > 0 {
+        return true;
+    }
     // A mode that may be chosen more than once is enough for any number (CR 700.2d).
     eligible_modes(cx, asker, modal).len() >= if modal.repeat { 1 } else { modal.min.max(1) as usize }
 }
@@ -4506,18 +4510,21 @@ fn count_bound<'a>(cx: &Cx, asker: &Asker, specs: impl Iterator<Item = &'a Targe
 fn mode_masks(cx: &Cx, asker: &Asker, modal: &ModalDef, range: (u8, u8)) -> Vec<u32> {
     fn go(modal: &ModalDef, eligible: &[u8], at: usize, chosen: u8, mask: u32, (min, max): (u8, u8), out: &mut Vec<u32>) {
         let Some(&mode) = eligible.get(at) else {
-            if chosen >= min.max(1) {
+            // A modal counted in pawprints may choose none (CR 700.2i).
+            if chosen >= if modal.pawprints > 0 { min } else { min.max(1) } {
                 out.push(mask);
             }
             return;
         };
-        let most = if modal.repeat { max.saturating_sub(chosen).min(15) } else { u8::from(chosen < max) };
+        // What one choice of the mode takes of `max`: its pawprints (CR 107.18), or one mode.
+        let weight = if modal.pawprints > 0 { modal.modes.get(usize::from(mode)).map_or(1, |m| m.pawprints.max(1)) } else { 1 };
+        let most = if modal.repeat { (max.saturating_sub(chosen) / weight).min(15) } else { u8::from(chosen < max) };
         let shift = if modal.repeat { 4 * u32::from(mode) } else { u32::from(mode) };
         if shift >= 32 {
             return go(modal, eligible, at + 1, chosen, mask, (min, max), out);
         }
         for times in 0..=most {
-            go(modal, eligible, at + 1, chosen + times, mask | (u32::from(times) << shift), (min, max), out);
+            go(modal, eligible, at + 1, chosen + times * weight, mask | (u32::from(times) << shift), (min, max), out);
         }
     }
     let eligible = eligible_modes(cx, asker, modal);
@@ -10553,6 +10560,7 @@ fn choose_own_flash(cx: &mut Cx, player: PlayerId, spell: ObjectId, others: &[Op
         affordable: Vec::new(),
         additional_cost: false,
         repeat: false,
+        pawprints: Vec::new(),
     };
     Ok(match cx.ask_core(player, ask, false)? {
         Answer::Modes(chosen) => chosen.first().is_none_or(|&n| n == 0),
@@ -11649,6 +11657,7 @@ fn cast_during_resolution_inner(cx: &mut Cx, card: ObjectId, terms: CastTerms) -
                 affordable: Vec::new(),
                 additional_cost: false,
                 repeat: false,
+                pawprints: Vec::new(),
             };
             match cx.ask_core(player, ask, false)? {
                 Answer::Modes(chosen) => ways[chosen.first().copied().unwrap_or(0) as usize % ways.len()].way,
@@ -11744,6 +11753,7 @@ fn cast_during_resolution_inner(cx: &mut Cx, card: ObjectId, terms: CastTerms) -
                     affordable: Vec::new(),
                     additional_cost: false,
                     repeat: false,
+                    pawprints: Vec::new(),
                 };
                 match cx.ask_core(player, ask, false)? {
                     Answer::Modes(chosen) => chosen.first().map_or(0, |&n| n as usize).min(choices.len() - 1),
@@ -12206,6 +12216,7 @@ fn choose_modes(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, ab
         affordable,
         additional_cost: false,
         repeat: modal.repeat,
+        pawprints: modal.pawprint_weights(),
     };
     match cx.ask_core(player, ask, true)? {
         Answer::Modes(chosen) => {
@@ -12283,6 +12294,7 @@ fn announce_twobrids_for(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: 
             affordable: if start == 0 { affordable.clone() } else { Vec::new() },
             additional_cost: true,
             repeat: false,
+            pawprints: Vec::new(),
         };
         let chosen = match cx.ask_core(player, ask, true)? {
             Answer::Modes(chosen) => chosen,
@@ -12334,6 +12346,7 @@ fn announce_reduction(cx: &mut Cx, player: PlayerId, source: ObjectId, costed: C
         affordable,
         additional_cost: true,
         repeat: false,
+        pawprints: Vec::new(),
     };
     let chosen = match cx.ask_core(player, ask, true)? {
         Answer::Modes(chosen) => chosen,
@@ -12412,6 +12425,7 @@ fn announce_hybrids(cx: &mut Cx, player: PlayerId, source: ObjectId, costed: Cos
         affordable,
         additional_cost: true,
         repeat: false,
+        pawprints: Vec::new(),
     };
     let chosen = match cx.ask_core(player, ask, true)? {
         Answer::Modes(chosen) => chosen,
@@ -12481,6 +12495,7 @@ fn announce_life_for(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &mut
             affordable,
             additional_cost: true,
             repeat: false,
+            pawprints: Vec::new(),
         };
         let chosen = match cx.ask_core(player, ask, true)? {
             Answer::Modes(chosen) => chosen,
@@ -12644,6 +12659,7 @@ fn ask_optional(cx: &mut Cx, player: PlayerId, spell: ObjectId, face: CardId, la
         affordable: Vec::new(),
         additional_cost: true,
         repeat: false,
+        pawprints: Vec::new(),
     };
     match cx.ask_core(player, ask, true)? {
         Answer::Modes(chosen) => Ok(chosen.first() == Some(&1)),
@@ -12704,6 +12720,7 @@ fn choose_cost_way(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abi
             affordable,
             additional_cost: true,
             repeat: false,
+            pawprints: Vec::new(),
         };
         match cx.ask_core(player, ask, true)? {
             Answer::Modes(chosen) => picked = chosen.first().copied().unwrap_or(first),
@@ -12731,6 +12748,7 @@ fn choose_additional(cx: &mut Cx, player: PlayerId, spell: ObjectId, face: CardI
             affordable: Vec::new(),
             additional_cost: true,
             repeat: false,
+            pawprints: Vec::new(),
         };
         match cx.ask_core(player, ask, true)? {
             Answer::Modes(chosen) => picked = chosen.first().copied().unwrap_or(first),
@@ -13598,7 +13616,7 @@ fn activate_mana_as(
                     let modes = (0..bundles.len() as u8).map(|i| Label::Card(ability.card, first_label + i)).collect();
                     let eligible = (0..bundles.len() as u8).collect();
                     let request = RequestKind::ChooseModes { source, modes, eligible, count: 1, at_most: 0,
-                        affordable: Vec::new(), additional_cost: false, repeat: false };
+                        affordable: Vec::new(), additional_cost: false, repeat: false, pawprints: Vec::new() };
                     let Answer::Modes(chosen) = cx.ask_core(player, request, true)? else { return Err(Stop::Cancel) };
                     def.adds = bundles[chosen[0] as usize];
                 }
@@ -14276,7 +14294,7 @@ fn hypothetical_modes(cx: &mut Cx, asker: &Asker, ability: AbilityRef, modal: &M
     let ask = RequestKind::ChooseModes { source: asker.source,
         modes: (0..modal.modes.len() as u8).map(|i| Label::Mode(ability, i)).collect(),
         eligible, count: modal.min, at_most: if most > modal.min { most } else { 0 },
-        affordable: Vec::new(), additional_cost: false, repeat: modal.repeat };
+        affordable: Vec::new(), additional_cost: false, repeat: modal.repeat, pawprints: modal.pawprint_weights() };
     let Answer::Modes(chosen) = cx.ask_core(asker.controller, ask, true)? else { return Err(Stop::Cancel) };
     let mask = chosen.iter().fold(0u32, |mask, &i| modal.with(mask, i as usize));
     cx.emit(Event::ModesChosen { player: asker.controller, source: asker.source, ability, modes: mask });

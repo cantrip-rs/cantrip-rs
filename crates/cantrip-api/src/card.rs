@@ -2395,6 +2395,9 @@ pub struct ModeDef {
     pub targets: &'static [TargetSpec],
     pub effect: Effect,
     pub cost: ManaCost,
+    /// How many pawprint symbols ({P}) the mode is listed with (CR 107.18, 700.2i), 0 for a mode with a bullet point. Only a
+    /// modal with a pawprint budget (`ModalDef::pawprints`) reads it.
+    pub pawprints: u8,
 }
 
 /// Modes chosen as a spell is cast or an ability activated (CR 601.2b, 602.2b, 700.2): between `min` and `max` of
@@ -2429,6 +2432,9 @@ pub struct ModalDef {
     pub up_to_if: Option<(ModeCondition, u8)>,
     /// An instruction common to every mode, done once after the chosen modes on all of the item's targets (`ModalDef::shared`).
     pub shared: Option<Effect>,
+    /// "Choose up to N {P} worth of modes" (CR 700.2i): the modes chosen may list N pawprint symbols together at most
+    /// (`ModeDef::pawprints`), any number of modes, none too. 0 for a modal without pawprints, whose `min` and `max` count modes.
+    pub pawprints: u8,
 }
 
 impl ModalDef {
@@ -2485,6 +2491,17 @@ impl ModalDef {
     /// How many modes a mask chooses, repeats included.
     pub fn chosen(&self, mask: u32) -> u8 {
         (0..self.modes.len()).map(|i| self.times(mask, i)).fold(0u8, u8::saturating_add)
+    }
+
+    /// How many pawprint symbols the modes a mask chooses list together, each as often as it is chosen (CR 700.2i).
+    pub fn pawprints_of(&self, mask: u32) -> u32 {
+        (0..self.modes.len()).map(|i| u32::from(self.times(mask, i)) * u32::from(self.modes[i].pawprints)).sum()
+    }
+
+    /// The pawprints of each mode, for a question of the modes (`RequestKind::ChooseModes::pawprints`): empty for a modal
+    /// without a pawprint budget.
+    pub fn pawprint_weights(&self) -> Vec<u8> {
+        if self.pawprints == 0 { Vec::new() } else { self.modes.iter().map(|m| m.pawprints).collect() }
     }
 }
 
@@ -5977,6 +5994,7 @@ fn miracle_resolves(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
             affordable: Vec::new(),
             additional_cost: false,
             repeat: false,
+            pawprints: Vec::new(),
         };
         match g.ask(item.controller, ask)? {
             Answer::Modes(chosen) => ways[chosen.first().copied().unwrap_or(0) as usize % ways.len()],

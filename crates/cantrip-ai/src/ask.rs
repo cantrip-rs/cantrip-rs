@@ -249,7 +249,7 @@ mod worded_label_tests {
         let labels = vec![Label::Card(card, 1), Label::Option(card, 0), Label::Option(card, 0).with_words(words), Label::Option(card, 0).with_words(changed)];
         let request = Request { id: 1, player: PlayerId(0), may_cancel: false,
             kind: RequestKind::ChooseModes { source, modes: labels, eligible: vec![0, 2, 3], count: 1,
-                at_most: 0, affordable: vec![3, 0], additional_cost: false, repeat: false } };
+                at_most: 0, affordable: vec![3, 0], additional_cost: false, repeat: false, pawprints: Vec::new() } };
         let (ask, _) = ask_of(&game, &request, &HashMap::from([(source, 0)]));
         let AskKind::ChooseModes { labels, eligible, affordable, count, .. } = ask.kind else { panic!("modes") };
         assert_eq!(labels[0], "Card:Observation Choices:1");
@@ -552,6 +552,7 @@ pub(crate) fn ask_of(
             affordable,
             additional_cost,
             repeat,
+            pawprints,
         } => {
             source = r(*s);
             AskKind::ChooseModes {
@@ -562,6 +563,7 @@ pub(crate) fn ask_of(
                 affordable: affordable.clone(),
                 additional_cost: *additional_cost,
                 repeat: *repeat,
+                pawprints: pawprints.clone(),
             }
         }
         RequestKind::ChooseColors {
@@ -618,6 +620,7 @@ pub(crate) fn ask_of(
                     affordable: Vec::new(),
                     additional_cost: false,
                     repeat: false,
+                    pawprints: Vec::new(),
                 }
             }
         }

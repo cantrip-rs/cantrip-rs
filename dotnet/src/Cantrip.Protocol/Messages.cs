@@ -1026,6 +1026,46 @@ public sealed class ChooseModesPromptMessage : PromptPayload
     public List<string> Texts { get; set; } = [];
 
     /// <summary>
+    /// Each mode's pawprints ({P}), index for index, where the choice is counted in them (CR 700.2i, 107.18): then
+    /// <see cref="AtMost"/> is the most pawprints the modes chosen may add up to, and any number of modes may be chosen -
+    /// none among them, and the same mode more than once. Empty for every other choice of modes.
+    /// </summary>
+    [Key(14)]
+    public List<int> Pawprints { get; set; } = [];
+
+    /// <summary>What choosing <paramref name="mode"/> once takes of <see cref="Most"/>: its pawprints, or one mode.</summary>
+    public int Weight(int mode) => Pawprints.Count > 0 ? Math.Max(1, mode < Pawprints.Count ? Pawprints[mode] : 1) : 1;
+
+    /// <summary>
+    /// Modes for a choice counted in pawprints: each of <paramref name="ranked"/> once, best first, where it still fits, then
+    /// again while any fits - so a spread of the modes worth most rather than the one mode over and over. In printed order.
+    /// </summary>
+    public List<int> PawprintSpread(IEnumerable<int> ranked)
+    {
+        List<int> order = [.. ranked.Where(Eligible.Contains)];
+        List<int> chosen = [];
+        int left = AtMost;
+        bool added = true;
+
+        while (added)
+        {
+            added = false;
+            foreach (int mode in order)
+            {
+                if (Weight(mode) <= left)
+                {
+                    chosen.Add(mode);
+                    left -= Weight(mode);
+                    added = true;
+                }
+            }
+        }
+
+        chosen.Sort();
+        return chosen;
+    }
+
+    /// <summary>
     /// The eligible modes in the order worth trying them: those <see cref="Affordable"/> names first, then the rest, each
     /// group in printed order.
     /// </summary>
@@ -1039,11 +1079,13 @@ public sealed class ChooseModesPromptMessage : PromptPayload
     /// <summary>
     /// The first eligible modes, affordable ones first, repeating the last one it may when repeats are allowed and too
     /// few are eligible. The fewest a range will take, since the modes past the first are what escalate and spree charge
-    /// for.
+    /// for. A choice counted in pawprints spends them all, a spread with the dearest modes first.
     /// </summary>
     public override AnswerPayload Default() => new ModesChosenAnswer
     {
-        Modes = MayRepeat
+        Modes = Pawprints.Count > 0
+            ? PawprintSpread(Preferred.OrderByDescending(Weight))
+            : MayRepeat
             ? [.. Enumerable.Range(0, Count).Select(i => Eligible[Math.Min(i, Eligible.Count - 1)])]
             : [.. Preferred.Take(Count)],
     };

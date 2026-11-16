@@ -170,7 +170,7 @@ pub fn venture(cx: &mut Cx, player: PlayerId) -> R<()> {
                 let source = cx.resolving().map_or(ObjectId(0), |i| i.object);
                 let modes: Vec<Label> = arrows.iter().map(|&r| Label::Card(dungeon, r)).collect();
                 let eligible: Vec<u8> = (0..arrows.len() as u8).collect();
-                let ask = RequestKind::ChooseModes { source, modes, eligible, count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false };
+                let ask = RequestKind::ChooseModes { source, modes, eligible, count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false, pawprints: Vec::new() };
                 let chosen = match cx.ask_core(player, ask, false)? {
                     Answer::Modes(m) => m.first().copied().unwrap_or(0) as usize,
                     _ => 0,

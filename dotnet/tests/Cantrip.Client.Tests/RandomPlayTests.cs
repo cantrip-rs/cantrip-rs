@@ -854,4 +854,29 @@ public sealed class RandomPlayTests
         {
         }
     }
+
+    /// <summary>Pawprints (CR 700.2i): drawn modes never add up to more than the most, and none at all is among the draws.</summary>
+    [Fact]
+    public void Pawprint_modes_drawn_stay_within_the_pawprints()
+    {
+        var prompt = new ChooseModesPromptMessage
+        {
+            Player = 0,
+            Modes = ["a", "b", "c"],
+            Eligible = [0, 1, 2],
+            AtMost = 5,
+            MayRepeat = true,
+            Pawprints = [1, 2, 3],
+        };
+        var bot = new RandomPlay(seed: 5);
+        bool none = false;
+        for (int i = 0; i < 200; i++)
+        {
+            List<int> modes = Assert.IsType<ModesChosenAnswer>(bot.Decide(prompt)).Modes;
+            Assert.True(modes.Sum(prompt.Weight) <= 5);
+            none |= modes.Count == 0;
+        }
+
+        Assert.True(none);
+    }
 }

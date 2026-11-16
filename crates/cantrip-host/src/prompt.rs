@@ -1274,7 +1274,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 for_player: slot_player.map_or(0, seat),
             })
         }
-        RequestKind::ChooseModes { source, modes, eligible, count, at_most, affordable, additional_cost, repeat } => {
+        RequestKind::ChooseModes { source, modes, eligible, count, at_most, affordable, additional_cost, repeat, pawprints } => {
             // The faces a card may be cast as (CR 709.3): not modes, so each is its name and its cost, and the question says so.
             let faces = !modes.is_empty() && modes.iter().all(|l| matches!(l, Label::Face(_) | Label::Fused(_)));
             let (mut detail, extra_modes_cost) = modes_detail(game, modes, faces);
@@ -1362,6 +1362,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 },
                 at_most: i32::from(*at_most),
                 affordable: affordable.iter().map(|&m| i32::from(m)).collect(),
+                pawprints: pawprints.iter().map(|&p| i32::from(p)).collect(),
                 cost_kind: if *additional_cost { cost_kind(game, *source).into() } else { String::new() },
                 detail,
                 extra_modes_cost,
@@ -2237,7 +2238,7 @@ mod tests {
             let request = Request {
                 id: 1,
                 player: seat,
-                kind: RequestKind::ChooseModes { source: hand[0], modes, eligible: vec![0, 1], count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false },
+                kind: RequestKind::ChooseModes { source: hand[0], modes, eligible: vec![0, 1], count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false, pawprints: Vec::new() },
                 may_cancel: false,
             };
             match prompt(&game, &request, &mut HandleSpace::new()).expect("a prompt").0 {
@@ -2259,7 +2260,7 @@ mod tests {
             kind: RequestKind::ChooseModes { source: hand[0],
                 modes: vec![Label::Counter(CounterKind::PlusOne), Label::Counter(CounterKind::MinusOne)],
                 eligible: vec![0, 1], count: 1, at_most: 1, affordable: Vec::new(),
-                additional_cost: false, repeat: false },
+                additional_cost: false, repeat: false, pawprints: Vec::new() },
         };
         let PromptPayload::ChooseModesPromptMessage(p) = prompt(&game, &request, &mut HandleSpace::new()).unwrap().0
             else { panic!("a counter kind choice") };
@@ -2299,7 +2300,7 @@ mod tests {
             id: 1, player: PlayerId(0), may_cancel: false,
             kind: RequestKind::ChooseModes { source,
                 modes: vec![Label::Option(card, 0).with_words(words), Label::Option(card, 1).with_words(words)],
-                eligible: vec![0, 1], count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false },
+                eligible: vec![0, 1], count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false, pawprints: Vec::new() },
         };
         let PromptPayload::ChooseModesPromptMessage(prompt) = prompt(&game, &request, &mut HandleSpace::new()).unwrap().0
             else { panic!("a modes prompt") };
@@ -2327,6 +2328,7 @@ mod tests {
                 affordable: Vec::new(),
                 additional_cost: false,
                 repeat: false,
+                pawprints: Vec::new(),
             },
             may_cancel: false,
         };
@@ -2382,7 +2384,7 @@ mod tests {
             id: 2, player: seat, may_cancel: false,
             kind: RequestKind::ChooseModes {
                 source, modes: vec![Label::Pile { first: true, cards: first }, Label::Pile { first: false, cards: second }],
-                eligible: vec![0, 1], count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false,
+                eligible: vec![0, 1], count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false, pawprints: Vec::new(),
             },
         };
         let request = ask(vec![hand[1]], vec![hand[2]]);
@@ -2433,7 +2435,7 @@ mod tests {
             id: 2, player: seat, may_cancel: false,
             kind: RequestKind::ChooseModes {
                 source, modes: vec![Label::FaceUpPile { cards: face_up }, Label::FaceDownPile { count: face_down }],
-                eligible: vec![0, 1], count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false,
+                eligible: vec![0, 1], count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false, pawprints: Vec::new(),
             },
         };
         let request = ask(vec![hand[1], hand[2]], 1);
@@ -2463,7 +2465,7 @@ mod tests {
             id: 1, player: seat, may_cancel: false,
             kind: RequestKind::ChooseModes {
                 source, eligible: (0..modes.len() as u8).collect(), modes,
-                count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false,
+                count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false, pawprints: Vec::new(),
             },
         };
         let request = modes(renamed, vec![Label::TargetSlot("target creature", Target::Object(renamed)), Label::TargetSlot("target spell", Target::Object(renamed))]);

@@ -231,7 +231,7 @@ pub fn one_of(g: &mut dyn Game, player: PlayerId, source: ObjectId, mut modes: V
 /// whose new text is printed must not recapture its underlying object's words.
 fn one_of_captured(g: &mut dyn Game, player: PlayerId, source: ObjectId, modes: Vec<Label>) -> Result<u8, Suspend> {
     let eligible = (0..modes.len() as u8).collect();
-    let ask = RequestKind::ChooseModes { source, modes, eligible, count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false };
+    let ask = RequestKind::ChooseModes { source, modes, eligible, count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false, pawprints: Vec::new() };
     match g.ask(player, ask)? {
         Answer::Modes(chosen) => Ok(chosen.first().copied().unwrap_or(0)),
         _ => Ok(0),

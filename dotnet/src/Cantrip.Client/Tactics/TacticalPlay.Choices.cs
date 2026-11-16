@@ -454,6 +454,15 @@ public sealed partial class TacticalPlay
             .ThenByDescending(pair => pair.Worth)];
         List<int> ranked = [.. worths.Select(pair => pair.Mode)];
 
+        // Pawprints (CR 700.2i): a spread of the modes worth most, the dearer of two worth alike first, all the pawprints spent.
+        if (prompt.Pawprints.Count > 0)
+        {
+            return new ModesChosenAnswer
+            {
+                Modes = prompt.PawprintSpread(worths.OrderByDescending(pair => pair.Worth).ThenByDescending(pair => prompt.Weight(pair.Mode)).Select(pair => pair.Mode)),
+            };
+        }
+
         if (prompt.MayRepeat)
         {
             return new ModesChosenAnswer { Modes = [.. Enumerable.Repeat(ranked[0], prompt.Count)] };

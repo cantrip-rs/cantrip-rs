@@ -666,6 +666,28 @@ public sealed class RandomPlay : IAutoPlayer
             return prompt.Default();
         }
 
+        // Pawprints (CR 700.2i): drawn modes while any still fits, stopping at a drawn point - none at all among the answers.
+        if (prompt.Pawprints.Count > 0)
+        {
+            List<int> drawn = [];
+            int left = prompt.AtMost;
+            while (_random.Next(prompt.AtMost + 1) > 0)
+            {
+                List<int> fits = [.. prompt.Eligible.Where(mode => prompt.Weight(mode) <= left)];
+                if (fits.Count == 0)
+                {
+                    break;
+                }
+
+                int mode = Any(fits);
+                drawn.Add(mode);
+                left -= prompt.Weight(mode);
+            }
+
+            drawn.Sort();
+            return new ModesChosenAnswer { Modes = drawn };
+        }
+
         int count = prompt.Most > prompt.Count
             ? prompt.Count + _random.Next(prompt.Most - prompt.Count + 1)
             : prompt.Count;

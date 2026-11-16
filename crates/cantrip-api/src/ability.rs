@@ -1020,7 +1020,7 @@ impl TargetSpec {
 
 /// One mode of a modal spell or ability (CR 700.2).
 pub const fn mode(effect: Effect, text: &'static str) -> ModeDef {
-    ModeDef { text, targets: &[], effect, cost: ManaCost::ZERO }
+    ModeDef { text, targets: &[], effect, cost: ManaCost::ZERO, pawprints: 0 }
 }
 
 impl ModeDef {
@@ -1033,11 +1033,16 @@ impl ModeDef {
     pub const fn cost(self, cost: ManaCost) -> ModeDef {
         ModeDef { cost, ..self }
     }
+
+    /// Listed with `n` pawprint symbols ({P}) rather than a bullet point (CR 107.18, 700.2i).
+    pub const fn pawprints(self, n: u8) -> ModeDef {
+        ModeDef { pawprints: n, ..self }
+    }
 }
 
 /// "Choose one —" (CR 700.2): the modes, in printed order.
 pub const fn modes(modes: &'static [ModeDef]) -> ModalDef {
-    ModalDef { modes, min: 1, max: 1, escalate: None, repeat: false, allowed: None, when_paid: None, up_to_if: None, shared: None }
+    ModalDef { modes, min: 1, max: 1, escalate: None, repeat: false, allowed: None, when_paid: None, up_to_if: None, shared: None, pawprints: 0 }
 }
 
 impl ModalDef {
@@ -1076,6 +1081,13 @@ impl ModalDef {
     /// "You may choose the same mode more than once" (CR 700.2d).
     pub const fn repeat(self) -> ModalDef {
         ModalDef { repeat: true, ..self }
+    }
+
+    /// "Choose up to `budget` {P} worth of modes. You may choose the same mode more than once." (CR 700.2i, 700.2d): any
+    /// number of modes, the same one again too, whose pawprints (`ModeDef::pawprints`) come to `budget` at most. None at
+    /// all is a choice (CR 700.2i: "any number of modes"); a mode can't be chosen more often than `budget`.
+    pub const fn pawprints(self, budget: u8) -> ModalDef {
+        ModalDef { pawprints: budget, min: 0, max: budget, repeat: true, ..self }
     }
 
     /// Whether a mode may be chosen now, beyond its targets.

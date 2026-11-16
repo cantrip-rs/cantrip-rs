@@ -1034,6 +1034,7 @@ pub fn choose_one_or_more_colors(g: &mut dyn Game, player: PlayerId, source: Obj
             affordable: Vec::new(),
             additional_cost: false,
             repeat: false,
+            pawprints: Vec::new(),
         },
     )? else {
         unreachable!("the core answers a choice of modes with modes")

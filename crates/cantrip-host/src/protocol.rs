@@ -1513,6 +1513,10 @@ pub struct ChooseModesPrompt {
     pub detail: String,
     pub extra_modes_cost: bool,
     pub texts: Vec<String>,
+    /// Each mode's pawprints, index for index, where the choice is counted in them (CR 700.2i, 107.18): then `at_most` is the
+    /// most pawprints the modes chosen may add up to, any number of modes may be chosen, none among them, and the same mode
+    /// more than once. Empty for every other choice of modes.
+    pub pawprints: Vec<i32>,
 }
 
 /// A bounded scalar choice, used when enumerating every number would exceed the small modes presentation.

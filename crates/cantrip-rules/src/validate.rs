@@ -235,10 +235,16 @@ pub fn check(game: &Game, request: &Request, answer: &Answer) -> Result<(), Reje
                 Ok(())
             }
         }
-        (RequestKind::ChooseModes { eligible, count, at_most, repeat, .. }, Answer::Modes(modes)) => {
+        (RequestKind::ChooseModes { eligible, count, at_most, repeat, pawprints, .. }, Answer::Modes(modes)) => {
             let most = (*at_most).max(*count) as usize;
+            // With pawprints the modes' pawprints together are at most `at_most`, however many modes that is (CR 700.2i).
+            let size = if pawprints.is_empty() {
+                modes.len()
+            } else {
+                modes.iter().map(|&m| pawprints.get(usize::from(m)).map_or(usize::MAX / 256, |&w| usize::from(w))).sum()
+            };
             if modes.len() >= *count as usize
-                && modes.len() <= most
+                && size <= most
                 && (*repeat || distinct(modes))
                 && modes.iter().all(|m| eligible.contains(m))
             {

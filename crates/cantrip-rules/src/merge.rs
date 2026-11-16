@@ -57,6 +57,7 @@ pub(crate) fn merge(cx: &mut Cx, item: &StackItem, target: ObjectId) -> R<()> {
         affordable: Vec::new(),
         additional_cost: false,
         repeat: false,
+        pawprints: Vec::new(),
     };
     let on_top = match cx.ask_core(item.controller, ask, false)? {
         Answer::Modes(chosen) => chosen.first().is_none_or(|&n| n == 0),

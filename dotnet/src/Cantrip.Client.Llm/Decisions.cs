@@ -1313,10 +1313,23 @@ public sealed class Decisions
 
         List<int> left = [.. prompt.Eligible];
         List<int> chosen = [];
+        // Pawprints (CR 700.2i): what the modes chosen so far leave of the most, and only the modes that still fit it.
+        int budget = prompt.Most;
 
         for (int slot = 0; slot < prompt.Most && left.Count > 0; slot++)
         {
-            List<string> choices = [.. left.Select(mode => prompt.Modes[mode])];
+            if (prompt.Pawprints.Count > 0)
+            {
+                left.RemoveAll(mode => prompt.Weight(mode) > budget);
+                if (left.Count == 0)
+                {
+                    break;
+                }
+            }
+
+            List<string> choices = [.. left.Select(mode => prompt.Pawprints.Count > 0 && !prompt.Modes[mode].StartsWith("{P}", StringComparison.Ordinal)
+                ? $"{string.Concat(Enumerable.Repeat("{P}", prompt.Weight(mode)))} {prompt.Modes[mode]}"
+                : prompt.Modes[mode])];
             bool mayStop = slot >= prompt.Count;
 
             if (mayStop)
@@ -1343,6 +1356,7 @@ public sealed class Decisions
             }
 
             chosen.Add(left[pick]);
+            budget -= prompt.Weight(left[pick]);
 
             if (!prompt.MayRepeat)
             {

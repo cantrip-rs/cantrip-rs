@@ -378,8 +378,19 @@ pub enum AskKind {
     ChooseCards { purpose: String, cards: Vec<Ref>, eligible: Vec<Ref>, count: u8, up_to: bool, total: Option<TotalObs> },
     /// `least` to `count` of `candidates` (sorted), `total` index for index with them.
     ChooseTarget { purpose: String, candidates: Vec<Ref>, optional: bool, least: u8, count: u8, any_number: bool, slot_player: Option<u8>, total: Option<TotalObs> },
-    /// Modes by index: `labels` says what each is.
-    ChooseModes { labels: Vec<String>, eligible: Vec<u8>, count: u8, at_most: u8, affordable: Vec<u8>, additional_cost: bool, repeat: bool },
+    /// Modes by index: `labels` says what each is. `pawprints`, when not empty, is each mode's pawprint symbols (CR 700.2i),
+    /// and `at_most` then bounds their total.
+    ChooseModes {
+        labels: Vec<String>,
+        eligible: Vec<u8>,
+        count: u8,
+        at_most: u8,
+        affordable: Vec<u8>,
+        additional_cost: bool,
+        repeat: bool,
+        #[serde(default)]
+        pawprints: Vec<u8>,
+    },
     /// `count` colors of `choices` (bits W U B R G); `purpose` the engine's `ColorUse` number.
     ChooseColors { choices: u8, count: u32, purpose: u8 },
     /// A card name: from names supplied by the caller. `looked_at` the cards just seen; `kind` 0 any, 1 nonland, 2 land.

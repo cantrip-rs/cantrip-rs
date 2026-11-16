@@ -569,8 +569,9 @@ pub enum RequestKind {
     /// `count` to `at_most` of them when `at_most` is more than `count` (zero `count` is "up to"). `affordable` is
     /// the eligible modes whose own cost the chooser could pay as well, advice for a default; `additional_cost`
     /// marks choices that are costs (Phyrexian mana paid with life, CR 107.4f) rather than modes; `repeat` lets one
-    /// mode be chosen more than once (CR 700.2d).
-    ChooseModes { source: ObjectId, modes: Vec<Label>, eligible: Vec<u8>, count: u8, at_most: u8, affordable: Vec<u8>, additional_cost: bool, repeat: bool },
+    /// mode be chosen more than once (CR 700.2d). `pawprints`, when not empty, is how many pawprint symbols each mode lists
+    /// (CR 700.2i): then `at_most` bounds the pawprints of the modes chosen together, not their number.
+    ChooseModes { source: ObjectId, modes: Vec<Label>, eligible: Vec<u8>, count: u8, at_most: u8, affordable: Vec<u8>, additional_cost: bool, repeat: bool, pawprints: Vec<u8> },
     /// `purpose` says what the colors are for, which a player or a bot choosing them reads (`ColorUse`).
     ChooseColors { source: ObjectId, choices: ColorSet, count: u32, purpose: ColorUse },
     /// A card name (CR 201.3, 614.12a): any card the game knows. `looked_at` are the cards the player has just been

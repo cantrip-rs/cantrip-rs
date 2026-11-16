@@ -108,7 +108,8 @@ public static class AutoPlay
                 // Monocolored hybrid symbols ({2/W}, CR 601.2b): those the server advises paying with {2} for the mana to cover it.
                 client.Answer(new ModesChosenAnswer
                 {
-                    Modes = modes.MayRepeat ? [.. Enumerable.Repeat(modes.Eligible[0], modes.Count)]
+                    Modes = modes.Pawprints.Count > 0 ? ((ModesChosenAnswer)modes.Default()).Modes
+                        : modes.MayRepeat ? [.. Enumerable.Repeat(modes.Eligible[0], modes.Count)]
                         : modes.AdditionalCost && modes.Count == 0 && modes.Modes.Count > 0
                             && modes.Modes.TrueForAll(mode => mode.StartsWith("Pay {2} for {2/", StringComparison.Ordinal)) ? [.. modes.Affordable]
                         : [.. modes.Preferred.Take(modes.Count)],

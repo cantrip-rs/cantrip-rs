@@ -380,6 +380,7 @@ pub fn choose_kind(cx: &mut Cx, player: PlayerId, source: ObjectId, object: Obje
         affordable: Vec::new(),
         additional_cost: cost,
         repeat: false,
+        pawprints: Vec::new(),
     };
     match cx.ask_core(player, ask, cost)? {
         Answer::Modes(chosen) => Ok(chosen.first().map(|&index| kinds[index as usize])),

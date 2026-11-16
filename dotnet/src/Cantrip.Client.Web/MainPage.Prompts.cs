@@ -1209,7 +1209,8 @@ public sealed partial class MainPage
     /// </summary>
     /// <summary>How many modes a range takes, in the words the card would use: "choose one or both", "choose up to two".</summary>
     private static string RangeTitle(ChooseModesPromptMessage prompt) =>
-        prompt.Count == 0 ? $"choose up to {Spelled(prompt.Most)}"
+        prompt.Pawprints.Count > 0 ? $"choose up to {Spelled(prompt.Most)} {{P}} worth of modes"
+        : prompt.Count == 0 ? $"choose up to {Spelled(prompt.Most)}"
         : prompt.Count == 1 && prompt.Most == 2 ? "choose one or both"
         : $"choose {Spelled(prompt.Count)} to {Spelled(prompt.Most)}";
 
@@ -1221,6 +1222,9 @@ public sealed partial class MainPage
         bool range = prompt.Most > prompt.Count;
         bool oneClick = prompt.Count == 1 && !range;
         bool searched = prompt.Modes.Count > LongOptionList;
+        // Pawprints (CR 700.2i): the modes chosen are counted in their {P}, any number of them, none among them.
+        bool pawprints = prompt.Pawprints.Count > 0;
+        int spent = _pickedModes.Sum(prompt.Weight);
 
         Prompt(
             prompt.Heading.Length > 0 ? prompt.Heading
@@ -1234,6 +1238,8 @@ public sealed partial class MainPage
                 ? "Paid along with its mana cost"
                 : oneClick
                 ? prompt.Detail.Length > 0 ? prompt.Detail : "Each mode's target is chosen next"
+                : pawprints
+                ? $"{spent} of {prompt.Most} {{P}} spent  ·  the same mode may be chosen more than once"
                 : range
                 ? prompt.Detail.Length > 0 ? $"{_pickedModes.Count} chosen  ·  {prompt.Detail}" : $"{_pickedModes.Count} chosen"
                 : $"{_pickedModes.Count} of {prompt.Count} chosen{(prompt.MayRepeat ? "  ·  the same mode may be chosen more than once" : string.Empty)}")
@@ -1242,12 +1248,15 @@ public sealed partial class MainPage
         string Label(int mode)
         {
             int times = _pickedModes.Count(picked => picked == mode);
-            return times == 0 ? prompt.Modes[mode] : $"×{times}  {prompt.Modes[mode]}";
+            string text = pawprints && !prompt.Modes[mode].StartsWith("{P}", StringComparison.Ordinal)
+                ? $"{string.Concat(Enumerable.Repeat("{P}", prompt.Weight(mode)))} {prompt.Modes[mode]}"
+                : prompt.Modes[mode];
+            return times == 0 ? text : $"×{times}  {text}";
         }
 
         bool Pressable(int mode) =>
             prompt.Eligible.Contains(mode)
-            && (oneClick || _pickedModes.Count < prompt.Most || (!prompt.MayRepeat && _pickedModes.Contains(mode)));
+            && (pawprints ? spent + prompt.Weight(mode) <= prompt.Most : oneClick || _pickedModes.Count < prompt.Most || (!prompt.MayRepeat && _pickedModes.Contains(mode)));
 
         void Press(int mode)
         {
@@ -1263,7 +1272,7 @@ public sealed partial class MainPage
                 return;
             }
 
-            if (_pickedModes.Count < prompt.Most)
+            if (pawprints ? spent + prompt.Weight(mode) <= prompt.Most : _pickedModes.Count < prompt.Most)
             {
                 _pickedModes.Add(mode);
                 _needsRedraw = true;
@@ -1297,7 +1306,7 @@ public sealed partial class MainPage
             AddButton(
                 "Done",
                 () => Send(client, new ModesChosenAnswer { Modes = [.. _pickedModes] }),
-                enabled: _pickedModes.Count >= prompt.Count && _pickedModes.Count <= prompt.Most,
+                enabled: pawprints ? spent <= prompt.Most : _pickedModes.Count >= prompt.Count && _pickedModes.Count <= prompt.Most,
                 primary: true);
         }
     }

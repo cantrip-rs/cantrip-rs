@@ -135,6 +135,39 @@ public sealed class TacticalPromptsTests
         Assert.Single(Assert.IsType<ModesChosenAnswer>(Bot().Decide(client, OneOrBoth(extraModesCost: true))).Modes);
     }
 
+    // --- Pawprints (CR 700.2i) -----------------------------------------------------------------------------------------
+
+    private static ChooseModesPromptMessage Season() => new()
+    {
+        Player = Me,
+        Modes = ["Draw a card.", "Destroy target creature.", "Each opponent loses 3 life."],
+        Eligible = [0, 1, 2],
+        AtMost = 5,
+        MayRepeat = true,
+        Pawprints = [1, 2, 3],
+    };
+
+    [Fact]
+    public void Spends_every_pawprint_on_a_spread_of_modes()
+    {
+        GameClient client = Seated([Creature(3, "Giant", 4, 3, Them)]);
+        ChooseModesPromptMessage prompt = Season();
+
+        List<int> modes = Assert.IsType<ModesChosenAnswer>(Bot().Decide(client, prompt)).Modes;
+
+        Assert.Equal(5, modes.Sum(prompt.Weight));
+        Assert.True(modes.Distinct().Count() > 1, string.Join(",", modes));
+    }
+
+    [Fact]
+    public void A_pawprint_default_spends_them_all_dearest_first()
+    {
+        Assert.Equal([1, 2], Assert.IsType<ModesChosenAnswer>(Season().Default()).Modes);
+        ChooseModesPromptMessage single = Season();
+        single.Eligible = [0];
+        Assert.Equal([0, 0, 0, 0, 0], Assert.IsType<ModesChosenAnswer>(single.Default()).Modes);
+    }
+
     // --- A choice between discarding one card or two ------------------------------------------------------------------
 
     // The host sends no Texts for a card's own labels (Label::Card), so the faces branch does not answer first.

@@ -1655,6 +1655,7 @@ pub(crate) fn apply_riot(cx: &mut Cx, entering: &mut Entering) {
         affordable: Vec::new(),
         additional_cost: false,
         repeat: false,
+        pawprints: Vec::new(),
     };
     // The core checks the answer is one offered (`validate`).
     let chosen = match cx.ask_core(entering.controller, ask, false) {
@@ -3710,7 +3711,7 @@ pub fn change_a_target_to(cx: &mut Cx, of: Target, to: ObjectId, chooser: Player
                 })
                 .collect();
             let eligible = (0..modes.len() as u8).collect();
-            let ask = RequestKind::ChooseModes { source: to, modes, eligible, count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false };
+            let ask = RequestKind::ChooseModes { source: to, modes, eligible, count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false, pawprints: Vec::new() };
             match cx.ask_core(chooser, ask, false)? {
                 Answer::Modes(chosen) => changeable[chosen.first().map_or(0, |&m| m as usize).min(changeable.len() - 1)],
                 _ => changeable[0],
@@ -3886,6 +3887,7 @@ fn which_miracle(cx: &mut Cx, player: PlayerId, card: ObjectId, miracles: &[cant
         affordable: Vec::new(),
         additional_cost: false,
         repeat: false,
+        pawprints: Vec::new(),
     };
     match cx.ask_core(player, ask, false) {
         Ok(Answer::Modes(chosen)) => chosen.first().and_then(|&i| miracles.get(i as usize)).copied(),

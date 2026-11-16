@@ -2565,7 +2565,8 @@ impl<'s> Run<'s> {
 
     fn modes(&self, step: &ActionStep, modes: &[Label], eligible: &[u8], count: u8, most: u8) -> R<Answer> {
         let mut chosen = Vec::new();
-        for spec in step.positional() {
+        // `Modes()` chooses none, where none may be chosen (CR 700.2i).
+        for spec in step.positional().filter(|s| !s.trim().is_empty()) {
             let index = match spec.trim().parse::<usize>() {
                 Ok(n) if n >= 1 => n - 1,
                 _ => match modes.iter().position(|m| label_text_in(self.game.cards, m).to_lowercase().contains(&spec.trim().to_lowercase())) {

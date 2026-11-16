@@ -839,16 +839,21 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
             count,
             at_most,
             repeat,
+            pawprints,
             ..
         } => {
             let most = (*at_most).max(*count) as usize;
+            // Pawprints (CR 700.2i): `at_most` bounds the modes' pawprints together, each mode one at least.
+            let weight = |m: u8| pawprints.get(usize::from(m)).map_or(1, |&w| usize::from(w.max(1)));
+            let mut spent = 0usize;
             let mut modes: Vec<u8> = Vec::new();
-            while modes.len() < most {
+            while if pawprints.is_empty() { modes.len() < most } else { spent < most } {
                 let mut step = Step::default();
                 for &m in eligible {
+                    let fits = pawprints.is_empty() || spent + weight(m) <= most;
                     step.push(
                         Token::n(Tok::Mode, u32::from(m)),
-                        *repeat || !modes.contains(&m),
+                        fits && (*repeat || !modes.contains(&m)),
                     );
                 }
                 step.push(Token::new(Tok::Done), modes.len() >= *count as usize);
@@ -857,6 +862,7 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
                     break;
                 }
                 modes.push(t.n as u8);
+                spent += weight(t.n as u8);
             }
             Ok(F::Modes(modes))
         }
@@ -2484,8 +2490,35 @@ mod tests {
             affordable: vec![],
             additional_cost: false,
             repeat: false,
+            pawprints: vec![],
         });
         round_trip(&modes, &FactoredAnswer::Modes(vec![2]));
         round_trip(&modes, &FactoredAnswer::Modes(vec![2, 0]));
+    }
+
+    #[test]
+    fn pawprint_modes_stop_at_their_budget() {
+        // A Season (CR 700.2i): {P}, {P}{P}, {P}{P}{P}, up to five {P} worth, the same mode again, none at all.
+        let a = ask(AskKind::ChooseModes {
+            labels: vec![],
+            eligible: vec![0, 1, 2],
+            count: 0,
+            at_most: 5,
+            affordable: vec![],
+            additional_cost: false,
+            repeat: true,
+            pawprints: vec![1, 2, 3],
+        });
+        let mut m = Machine::new(&a, &[]);
+        assert!(legal(&m, Token::new(Tok::Done)), "none is a choice");
+        m.choose_token(Token::n(Tok::Mode, 2));
+        assert!(legal(&m, Token::n(Tok::Mode, 1)));
+        assert!(!legal(&m, Token::n(Tok::Mode, 2)), "3 + 3 is over five");
+        m.choose_token(Token::n(Tok::Mode, 0));
+        assert!(!legal(&m, Token::n(Tok::Mode, 1)), "4 + 2 is over five");
+        assert!(legal(&m, Token::n(Tok::Mode, 0)));
+        round_trip(&a, &FactoredAnswer::Modes(vec![2, 1]));
+        round_trip(&a, &FactoredAnswer::Modes(vec![0, 0, 0, 0, 0]));
+        round_trip(&a, &FactoredAnswer::Modes(vec![]));
     }
 }
