@@ -1,0 +1,12 @@
+{
+  "name": "Starseer Mentor",
+  "manaCost": "{3}{W}{B}",
+  "type": "Creature — Bat Warlock",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Flying, vigilance\nAt the beginning of your end step, if you gained or lost life this turn, target opponent loses 3 life unless they sacrifice a nonland permanent of their choice or discard a card.",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}
