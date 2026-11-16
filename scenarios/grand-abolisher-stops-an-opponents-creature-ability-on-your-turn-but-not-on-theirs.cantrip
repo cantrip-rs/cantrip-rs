@@ -1,0 +1,51 @@
+# Grand Abolisher bars an opponent's creature's activated abilities during your turn. Bot1 casts it on turn 1 and, on turn 3, a
+# Circle of Protection: Red. Bot2's Felidar Cub (cast on turn 2 with a Plains and a Mox Pearl) has "Sacrifice this creature: Destroy
+# target enchantment", no tap needed, but on Bot1's turn Bot2 can't activate it (the refusal; the Circle is a legal target, so the
+# Abolisher is the only reason). Bot1's own Mox Pearl taps on its own turn, the Abolisher's controller being no opponent. On Bot2's
+# turn 4 the Cub is sacrificed and the Circle destroyed.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Grand Abolisher
+Circle of Protection: Red
+Plains x12
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Felidar Cub
+Plains x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grand Abolisher.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Felidar Cub.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Circle of Protection: Red.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot2.Battlefield.Felidar Cub.Activate(Bot1.Battlefield.Circle of Protection: Red)
+? Bot2.Battlefield = Plains; Mox Pearl; Felidar Cub
+[T4 Bot2.Main1]
+Bot2.Battlefield.Felidar Cub.Activate(Bot1.Battlefield.Circle of Protection: Red)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Turn = 4
+Bot2.Battlefield = Plains; Mox Pearl
+Bot2.Graveyard = Felidar Cub
+Bot1.Battlefield = Plains; Plains; Mox Pearl; Grand Abolisher
+Bot1.Graveyard = Circle of Protection: Red

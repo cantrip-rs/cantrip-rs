@@ -1,0 +1,44 @@
+# Grand Abolisher bars an opponent's enchantment's activated abilities during your turn. Bot2 casts a Circle of Protection: Red on
+# turn 2 (paid with a Mox Pearl and a Mox Jet), keeping its Plains untapped. On Bot1's turn 3 Bot2 can tap the Plains for mana (a land
+# is no artifact, creature or enchantment) but can't activate the Circle's {1} ability (the refusal). On Bot2's own turn 4 the same
+# activation works: the Circle's ability goes on the stack.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Grand Abolisher
+Plains x13
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Circle of Protection: Red
+Plains x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grand Abolisher.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Circle of Protection: Red.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot2.Battlefield.Plains.Activate
+? Bot2.Mana = {W}
+! Bot2.Battlefield.Circle of Protection: Red.Activate
+[T4 Bot2.Main1]
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Circle of Protection: Red.Activate
+? Stack.Count = 1
+
+[Expect]
+Bot2.Battlefield = Circle of Protection: Red; Mox Jet; Mox Pearl; Plains

@@ -1,0 +1,45 @@
+# Grand Abolisher: "your opponents can't ... activate abilities of artifacts, creatures, or enchantments" is about who
+# activates, not who controls the source. Bot1 controls Grand Abolisher and Land's Edge ("Discard a land card: ... Any player
+# may activate this ability"). On Bot2's turn 2 Bot2 activates Bot1's Land's Edge, discarding a Mountain: 2 damage to Bot1. On
+# Bot1's turn 3 Bot2 may not activate it, though Bot1 controls the enchantment, and Bot1 still may.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Grand Abolisher
+Black Lotus
+Land's Edge
+Mountain
+Mountain
+Plains x13
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grand Abolisher.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Land's Edge.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Battlefield.Land's Edge.Activate(Bot1)
+Bot2.Choose(Mountain)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 18
+[T3 Bot1.Main1]
+! Bot2.Battlefield.Land's Edge.Activate(Bot1)
+Bot1.Battlefield.Land's Edge.Activate(Bot2)
+Bot1.Choose(Mountain)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Life = 18
+Bot2.Life = 18

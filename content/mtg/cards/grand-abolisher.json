@@ -1,0 +1,8 @@
+{
+  "name": "Grand Abolisher",
+  "manaCost": "{W}{W}",
+  "type": "Creature — Human Cleric",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "During your turn, your opponents can't cast spells or activate abilities of artifacts, creatures, or enchantments."
+}

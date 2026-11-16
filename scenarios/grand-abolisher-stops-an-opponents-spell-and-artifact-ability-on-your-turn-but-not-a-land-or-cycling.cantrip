@@ -1,0 +1,46 @@
+# Grand Abolisher: "During your turn, your opponents can't cast spells or activate abilities of artifacts, creatures, or
+# enchantments." Bot1 casts it on turn 1. On Bot1's turn 3 Bot2, holding an untapped Mox Ruby (an artifact: its mana ability is
+# barred too, this text has no mana-ability exception) and an untapped Mountain, can cast neither Lightning Bolt (the refusal) nor
+# tap the Mox for mana. The Mountain is a land, no artifact, creature or enchantment, so its mana ability still works, and
+# Footfall Crater's cycling from the hand is no ability of an artifact, creature or enchantment permanent (CR 602.5): Bot2 cycles it
+# with the Mountain's mana. On Bot2's own turn 4 the Mox taps and the Bolt is cast.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Grand Abolisher
+Plains x13
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Footfall Crater
+Mountain x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grand Abolisher.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+! Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Battlefield.Mountain.Activate
+? Bot2.Mana = {R}
+Bot2.Hand.Footfall Crater.Activate(Ability: Cycling)
+? Bot2.Graveyard = Footfall Crater
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Turn = 4
+Bot1.Life = 17
+Bot2.Graveyard = Lightning Bolt; Footfall Crater

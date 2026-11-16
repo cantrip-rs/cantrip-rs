@@ -1,0 +1,39 @@
+# Grand Abolisher bars only its controller's opponents (CR 602.5): Bot2 controls Land's Edge ("Discard a land card: ... Any
+# player may activate this ability"), and on Bot1's turn 3 Bot1, who controls Grand Abolisher, activates it, discarding a
+# Mountain: 2 damage to Bot2. Bot2, the enchantment's controller, may not activate it on Bot1's turn.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Grand Abolisher
+Mountain
+Plains x16
+
+[Bot2 Deck]
+Black Lotus
+Land's Edge
+Mountain x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grand Abolisher.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Land's Edge.Cast
+? Bot2.Mana =
+[T3 Bot1.Main1]
+! Bot2.Battlefield.Land's Edge.Activate(Bot1)
+Bot1.Battlefield.Land's Edge.Activate(Bot2)
+Bot1.Choose(Mountain)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Life = 20
+Bot2.Life = 18
+Bot1.Graveyard = Mountain
