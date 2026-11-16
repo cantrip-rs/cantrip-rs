@@ -1,0 +1,60 @@
+# Moonrise Cleric: "Flying" and "Whenever this creature attacks, you gain 1 life." Bot1 attacks with the Cleric and an Ornithopter
+# together: only the Cleric's own attack trigger gains life (CR 508.1m, 603.2), so Bot1 gains 1, not 2, and nothing is gained
+# before the attack. Bot2's Grizzly Bears cannot block the Cleric (flying, CR 702.9b) while Bot2's Ornithopter, which also flies, can:
+# the refusal sits beside the allowed block. Bot2's own life is only reduced by the unblocked damage.
+
+[Bot1 Deck]
+Moonrise Cleric
+Mox Pearl
+Mox Jet
+Mox Emerald
+Ornithopter
+Plains x20
+
+[Bot2 Deck]
+Mox Emerald
+Ornithopter
+Grizzly Bears
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Moonrise Cleric.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Life = 20
+Bot1.Attack(Moonrise Cleric > Bot2; Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+! Bot2.Block(Grizzly Bears > Moonrise Cleric)
+Bot2.Block(Ornithopter > Moonrise Cleric)
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 20

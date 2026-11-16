@@ -1,0 +1,11 @@
+{
+  "name": "Moonrise Cleric",
+  "manaCost": "{1}{W/B}{W/B}",
+  "type": "Creature — Bat Cleric",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying\nWhenever this creature attacks, you gain 1 life.",
+  "keywords": [
+    "Flying"
+  ]
+}
