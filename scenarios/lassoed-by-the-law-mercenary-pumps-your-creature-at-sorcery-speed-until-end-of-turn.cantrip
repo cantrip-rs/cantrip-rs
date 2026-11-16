@@ -1,0 +1,60 @@
+# The Mercenary token's "{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery." Bot1 made it
+# on turn three (Lassoed by the Law exiled Bot2's Ornithopter). On turn five it is no longer summoning sick: the ability is
+# refused during the upkeep (sorcery speed), refuses Bot2's creature as a target, and accepts Bot1's Ornithopter (and the
+# Mercenary itself, tapped as the cost). The bonus is power only and is gone by the next turn.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Ornithopter
+Lassoed by the Law
+Plains
+Plains x9
+
+[Bot2 Deck]
+Plains
+Ornithopter
+Ornithopter
+Plains x11
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Lassoed by the Law.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Exile = Ornithopter
+! Bot1.Battlefield.Mercenary Token.Activate
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+[T5 Bot1.Upkeep]
+! Bot1.Battlefield.Mercenary Token.Activate
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Mercenary Token.Activate(Bot2.Battlefield.Ornithopter)
+? Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Mercenary Token.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Mercenary Token.Tapped = true
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+
+[Expect]
+Bot1.Battlefield.Mercenary Token.Tapped = false

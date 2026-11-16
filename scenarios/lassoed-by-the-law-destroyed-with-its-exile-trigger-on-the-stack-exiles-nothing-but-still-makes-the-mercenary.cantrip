@@ -1,0 +1,54 @@
+# Lassoed by the Law {3}{W}, ruling 2024-04-12: "If Lassoed by the Law leaves the battlefield before its first triggered
+# ability resolves, the target permanent won't be exiled at all." (CR 610.3b) Bot1 casts it on turn three and aims the exile
+# trigger at Bot2's Ornithopter; with both triggers on the stack Bot2 destroys the enchantment with Disenchant. The exile
+# trigger then does nothing: the Ornithopter stays in play. The second trigger is its own ability, so Bot1 still gets the Mercenary.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Lassoed by the Law
+Plains
+Plains x10
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Disenchant
+Ornithopter
+Plains x11
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Lassoed by the Law.Cast
+Bot1.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Lassoed by the Law)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard = Lassoed by the Law
+Bot2.Battlefield = Ornithopter; Plains; Mox Pearl
+Bot1.Battlefield.Mercenary Token.Power = 1

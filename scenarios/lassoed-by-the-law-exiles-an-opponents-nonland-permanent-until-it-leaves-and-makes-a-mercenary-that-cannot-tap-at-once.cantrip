@@ -1,0 +1,63 @@
+# Lassoed by the Law {3}{W}: "When this enchantment enters, exile target nonland permanent an opponent controls until this
+# enchantment leaves the battlefield." and "When this enchantment enters, create a 1/1 red Mercenary creature token...". On turn
+# three both triggers go on the stack: the first offers Bot2's Ornithopter and not Bot1's own Ornithopter or Bot2's Plains. The
+# Mercenary token is new that turn, so its {T} ability is refused (summoning sick). On turn four Bot2's Disenchant destroys
+# Lassoed by the Law and the Ornithopter comes back under its owner's control as a new object.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Ornithopter
+Lassoed by the Law
+Plains
+Plains x9
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Disenchant
+Ornithopter
+Plains x11
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Lassoed by the Law.Cast
+Bot1.Pass
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Plains)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+? Bot2.Battlefield = Plains; Mox Pearl
+? Exile = Ornithopter
+? Bot1.Battlefield.Mercenary Token.Power = 1
+! Bot1.Battlefield.Mercenary Token.Activate
+[T4 Bot2.Main1]
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Lassoed by the Law)
+[T4 Bot2.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard = Lassoed by the Law
+Bot2.Battlefield = Plains; Mox Pearl; Ornithopter
+Bot2.Battlefield.Ornithopter.SummoningSick = true
+Bot1.Battlefield.Mercenary Token.Power = 1
+Bot1.Battlefield.Mercenary Token.Toughness = 1
+Bot1.Battlefield.Mercenary Token.Colors = Red
+Bot1.Battlefield.Mercenary Token.Subtypes = Mercenary

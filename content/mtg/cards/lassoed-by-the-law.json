@@ -1,0 +1,6 @@
+{
+  "name": "Lassoed by the Law",
+  "manaCost": "{3}{W}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, exile target nonland permanent an opponent controls until this enchantment leaves the battlefield.\nWhen this enchantment enters, create a 1/1 red Mercenary creature token with \"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\""
+}
