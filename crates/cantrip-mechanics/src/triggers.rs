@@ -2191,6 +2191,14 @@ pub fn another_creature_you_control_enters(q: &dyn Query, me: &Asker, event: &Ev
     }
 }
 
+/// "Whenever another creature you control with flying enters" (CR 603.6a, 702.9): a creature other than the source, under your control
+/// as it enters, that has flying as it enters (the layers give it, CR 603.6a). Momo, Friendly Flier prints it.
+pub fn another_creature_you_control_with_flying_enters(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    another_creature_you_control_enters(q, me, event)?;
+    let Event::ZoneChange { new, .. } = event else { return None };
+    if q.chars(*new).has(Keyword::Flying) { Fired::PLAIN } else { None }
+}
+
 /// "Whenever a creature dies" (CR 700.4, 603.10a), looked back on: any creature, anyone's, as it last was on the battlefield.
 /// The ability carries the player who then controlled it (CR 608.2h). On a permanent or an emblem alike (the Sephiroth,
 /// One-Winged Angel emblem), a dies ability is a leaves-the-battlefield ability wherever it functions from, and looks back
@@ -2984,6 +2992,7 @@ pub const NONTOKEN_ARTIFACT_YOU_CONTROL_ENTERS: Trigger =
     when_asked(EventMask::ZONE_CHANGE, nontoken_you_control_enters::<ARTIFACT_TYPE>);
 pub const ANOTHER_ARTIFACT_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, another_artifact_you_control_enters);
 pub const ANOTHER_CREATURE_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, another_creature_you_control_enters);
+pub const ANOTHER_CREATURE_YOU_CONTROL_WITH_FLYING_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, another_creature_you_control_with_flying_enters);
 pub const CREATURE_DIES: Trigger = when(EventMask::ZONE_CHANGE, creature_dies);
 
 /// A different creature dies, using the characteristics it last had on the battlefield.
