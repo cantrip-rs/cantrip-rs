@@ -1,0 +1,8 @@
+{
+  "name": "Bria, Riptide Rogue",
+  "manaCost": "{2}{U}{R}",
+  "type": "Legendary Creature — Otter Rogue",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nOther creatures you control have prowess. (If a creature has multiple instances of prowess, each triggers separately.)\nWhenever you cast a noncreature spell, target creature you control can't be blocked this turn."
+}
