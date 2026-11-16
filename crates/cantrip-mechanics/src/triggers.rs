@@ -542,6 +542,16 @@ pub fn sacrificed_by(q: &dyn Query, player: PlayerId, event: &Event) -> Option<O
     }
 }
 
+/// "Whenever you sacrifice a [subtype]" (CR 701.21a, 205.3): a permanent of yours with the subtype that a sacrifice moved from the
+/// battlefield, as it last was there, the subtype a word of the text of the source (CR 612.2) and `SUBTYPE` a `Subtype` as `u16`
+/// (`lands::sub`). The ability is `.on_sacrifice()`; with `.once_per_batch()` it is "one or more". Camellia, the Seedmiser prints it
+/// for Foods (and Tireless Tracker for Clues).
+pub fn you_sacrifice_a_subtype<const SUBTYPE: u16>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    let sacrificed = sacrificed_by(q, me.controller, event)?;
+    let subtype = q.words(me.source).subtype(crate::lands::printed(SUBTYPE));
+    if q.chars(sacrificed).has_subtype(subtype) { Fired::PLAIN } else { None }
+}
+
 /// "Whenever this creature attacks or blocks" (CR 508.1m, 509.1, 603.2): its own attack or its own block of any
 /// attacker. Smuggler's Copter and Bebop & Rocksteady print it.
 pub fn this_attacks_or_blocks(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
