@@ -2226,6 +2226,7 @@ pub fn step_began(cx: &mut Cx, step: Step) {
             | DelayedWhen::WatchingThisTurn
             | DelayedWhen::UntilEvent
             | DelayedWhen::UntilNextTurnOf(_)
+            | DelayedWhen::ThroughNextTurnOf { .. }
             | DelayedWhen::NextThisTurn
             | DelayedWhen::WhenEvent
             | DelayedWhen::ThatMana(_)

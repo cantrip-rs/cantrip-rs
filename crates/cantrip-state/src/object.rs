@@ -2418,6 +2418,11 @@ pub enum DelayedWhen {
     UntilEvent,
     /// "Until your next turn, whenever [event]" (CR 603.7b, 611.2b): as `ThisTurn`, until that player's next turn begins.
     UntilNextTurnOf(PlayerId),
+    /// "Until the end of your next turn, whenever [event]" (CR 603.7b, 611.2a, 514.2): as `ThisTurn`, through the rest of the
+    /// turn it was made in (turn number `after`) and the whole of `player`'s first turn to begin after it, cleanup step
+    /// included; it ends as that turn does, or as it would have begun for a player who has left (CR 800.4m). Season of the
+    /// Bold's "until the end of your next turn, whenever you cast a spell".
+    ThroughNextTurnOf { player: PlayerId, after: u32 },
     /// "When [that object does something], [effect]" with no stated duration (CR 603.7, 603.7b): a delayed triggered ability
     /// that triggers once, the next time its `listens`/`matches` accept an event, whenever that is, and is then used up. Its
     /// `matches` is asked of the object it watches, its `subject` (`Delayed::watched`), judged as it was for an event that
@@ -2473,6 +2478,7 @@ impl DelayedWhen {
                 | DelayedWhen::WatchingThisTurn
                 | DelayedWhen::UntilEvent
                 | DelayedWhen::UntilNextTurnOf(_)
+                | DelayedWhen::ThroughNextTurnOf { .. }
                 | DelayedWhen::NextThisTurn
                 | DelayedWhen::WhenEvent
                 | DelayedWhen::ThatMana(_)

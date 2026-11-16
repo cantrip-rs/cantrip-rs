@@ -888,6 +888,7 @@ impl<'a> Projector<'a> {
                         | DelayedWhen::StepOfNextTurn { .. }
                         | DelayedWhen::NextThisTurn
                         | DelayedWhen::UntilNextTurnOf(_)
+                        | DelayedWhen::ThroughNextTurnOf { .. }
                         | DelayedWhen::EachStep { .. }
                         | DelayedWhen::ExtraTurnStep { .. }
                         | DelayedWhen::NextTurnStep { .. }

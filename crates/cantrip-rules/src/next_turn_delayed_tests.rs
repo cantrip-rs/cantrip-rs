@@ -135,3 +135,18 @@ fn rolling_back_and_replaying_the_step_restores_and_consumes_the_same_delayed_ab
     g.state.rollback(mark); g.log.truncate(log); assert_eq!(state_hash(&g), before); assert_eq!(g.state.delayed.len(), 1);
     step(&mut g, Step::Upkeep); assert_eq!(state_hash(&g), after); assert_eq!(g.state.triggers.len(), 1);
 }
+
+/// "Until the end of your next turn" (CR 611.2a, 800.4m): a departed player's ends where their turn would have begun, and
+/// another player's, still waiting for their own next turn, is kept.
+#[test]
+fn a_departed_players_through_next_turn_ability_ends_when_their_turn_would_have_begun() {
+    let (mut g, source) = game_with(3); let ability = AbilityRef::delayed(g.state.obj(source).card, 0);
+    cx(&mut g).delayed_trigger(DelayedWhen::ThroughNextTurnOf { player: THEM, after: 10 }, source, THEM, ability, Target::None);
+    cx(&mut g).delayed_trigger(DelayedWhen::ThroughNextTurnOf { player: PlayerId(2), after: 10 }, source, PlayerId(2), ability, Target::None);
+    g.state.update_player(THEM, |p| p.lost = true);
+    g.state.update_turn(|t| t.set_step(Step::Cleanup));
+    crate::turn::next_step(&mut g);
+    assert_eq!(g.state.turn.active, PlayerId(2));
+    assert_eq!(g.state.delayed.len(), 1);
+    assert!(matches!(g.state.delayed[0].when, DelayedWhen::ThroughNextTurnOf { player: PlayerId(2), .. }));
+}

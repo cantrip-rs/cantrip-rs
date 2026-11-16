@@ -336,6 +336,8 @@ fn next_turn_taker(s: &mut GameState, after: PlayerId) -> PlayerId {
         // skipped turn ends here too, under the player who skipped it, but it is not their next turn, and the ability waits
         // for the first that isn't skipped (CR 614.10a).
         DelayedWhen::NextTurnStep { player, after, .. } => s.turn.active == player && s.player(player).turn_began > after,
+        // "Until the end of your next turn" ends with that turn, cleanup step and all (CR 514.2, 611.2a).
+        DelayedWhen::ThroughNextTurnOf { player, after } => s.turn.active == player && s.player(player).turn_began > after,
         DelayedWhen::WhenEvent => s.obj(d.watched()).became.is_some(),
         // These exact identities cannot leave again once all have changed zones. A phased-out object retains its
         // identity and remains watched (CR 702.26d); the creating source is independent of the watched group.
@@ -377,7 +379,7 @@ fn turn_would_have_begun(s: &mut GameState, p: PlayerId) {
         s.effects_retain(|e| !waits(e));
     }
     for at in (0..s.delayed.len()).rev() {
-        if matches!(s.delayed[at].when, DelayedWhen::UntilNextTurnOf(q) | DelayedWhen::NextTurnStep { player: q, .. } if q == p)
+        if matches!(s.delayed[at].when, DelayedWhen::UntilNextTurnOf(q) | DelayedWhen::NextTurnStep { player: q, .. } | DelayedWhen::ThroughNextTurnOf { player: q, .. } if q == p)
             || matches!(s.delayed[at].when, DelayedWhen::StepOfNextTurn { of: Some(player), .. } if player == p) {
             s.delayed_remove(at);
         }
