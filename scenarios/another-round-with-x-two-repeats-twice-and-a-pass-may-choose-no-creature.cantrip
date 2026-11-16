@@ -1,0 +1,59 @@
+# Another Round: "Then repeat this process X more times." With X = 2 the process runs three times, each pass choosing afresh
+# among the creatures Bot1 controls then (the creature that came back is a new object, CR 400.7). "Any number" includes none.
+# Bot1 has one Thraben Inspector (one Clue as it entered) and chooses it on the first and third passes and nothing on the
+# second: two more Clues, three in all. Cast with {X}{X}{2}{W} = seven mana: three Moxen, Plains and a Black Lotus.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Another Round
+Thraben Inspector
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Thraben Inspector.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Another Round.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Bot1.Battlefield.Thraben Inspector)
+? Bot1.Battlefield = Clue Token; Mox Emerald; Mox Pearl; Mox Ruby; Plains; Thraben Inspector
+Bot1.Choose()
+? Bot1.Battlefield = Clue Token; Mox Emerald; Mox Pearl; Mox Ruby; Plains; Thraben Inspector
+Bot1.Choose(Bot1.Battlefield.Thraben Inspector)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Clue Token; Clue Token; Clue Token; Mox Emerald; Mox Pearl; Mox Ruby; Plains; Thraben Inspector
+Bot1.Graveyard = Another Round; Black Lotus
+Exile.Count = 0

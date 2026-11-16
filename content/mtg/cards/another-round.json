@@ -1,0 +1,6 @@
+{
+  "name": "Another Round",
+  "manaCost": "{X}{X}{2}{W}",
+  "type": "Sorcery",
+  "oracleText": "Exile any number of creatures you control, then return them to the battlefield under their owner's control. Then repeat this process X more times."
+}

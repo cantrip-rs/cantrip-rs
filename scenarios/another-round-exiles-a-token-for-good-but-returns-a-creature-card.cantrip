@@ -1,0 +1,61 @@
+# Another Round: a token exiled this way ceases to exist and does not return (CR 111.7), while a creature card does, as a new
+# object (CR 400.7) with its enters trigger. Bot1 has a Knight Luminary (it made a Human Soldier token as it entered), a second
+# creature in a Thraben Inspector, and chooses all three: the old token is gone and the Knight's new enters trigger made a new
+# one, so one token remains, and the Inspector returned and made a second Clue.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Plains
+Knight Luminary
+Thraben Inspector
+Another Round
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Knight Luminary.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Thraben Inspector.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Another Round.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Bot1.Battlefield.Knight Luminary; Bot1.Battlefield.Thraben Inspector; Bot1.Battlefield.Human Soldier Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Clue Token; Clue Token; Human Soldier Token; Knight Luminary; Mox Emerald; Mox Pearl; Mox Ruby; Plains; Thraben Inspector
+Exile.Count = 0

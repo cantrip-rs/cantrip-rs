@@ -1,0 +1,60 @@
+# Another Round, {X}{X}{2}{W}: "Exile any number of creatures you control, then return them to the battlefield under their
+# owner's control. Then repeat this process X more times." With X = 0 it runs once. Bot1 has two Thraben Inspectors (each
+# investigates as it enters) and chooses one: that one returns as a new object (CR 400.7) and investigates again, a third Clue,
+# while the other stays put. Bot2's Ornithopter is not a creature Bot1 controls, so it cannot be chosen (the refusal).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Another Round
+Thraben Inspector
+Thraben Inspector
+Plains
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Thraben Inspector.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Thraben Inspector.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Another Round.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Bot1.Battlefield.Thraben Inspector#1)
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Clue Token; Clue Token; Clue Token; Mox Emerald; Mox Pearl; Mox Ruby; Plains; Thraben Inspector; Thraben Inspector
+Bot1.Graveyard = Another Round
+Bot2.Battlefield = Ornithopter
+Exile.Count = 0
