@@ -1,0 +1,67 @@
+# Oakhollow Village ("{G}, {T}: Put a +1/+1 counter on each Frog, Rabbit, Raccoon, or Squirrel you control that entered the
+# battlefield this turn", CR 122.1, 608.2c): on turn 1 a Frog (Burrog Banemaker) and a Squirrel (Squirrelanoids) enter and each
+# gets a counter. On turn 3 a Raccoon (Keen-Eyed Curator) and a Rabbit (Nasty Little Rabbit) enter and each gets a counter, while
+# the turn 1 creatures, which did not enter this turn, get no second one.
+
+[Bot1 Deck]
+Oakhollow Village
+Black Lotus
+Mox Emerald
+Black Lotus
+Burrog Banemaker
+Squirrelanoids
+Keen-Eyed Curator
+Nasty Little Rabbit
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Oakhollow Village.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Squirrelanoids.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Oakhollow Village.Activate(Ability: Put a +1/+1 counter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Burrog Banemaker.Power = 2
+? Bot1.Battlefield.Burrog Banemaker.Toughness = 2
+? Bot1.Battlefield.Squirrelanoids.Power = 2
+? Bot1.Battlefield.Squirrelanoids.Toughness = 2
+? Bot1.Battlefield.Oakhollow Village.Tapped = true
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Nasty Little Rabbit.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Keen-Eyed Curator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Oakhollow Village.Activate(Ability: Put a +1/+1 counter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Burrog Banemaker.Power = 2
+Bot1.Battlefield.Burrog Banemaker.Toughness = 2
+Bot1.Battlefield.Squirrelanoids.Power = 2
+Bot1.Battlefield.Squirrelanoids.Toughness = 2
+Bot1.Battlefield.Nasty Little Rabbit.Power = 2
+Bot1.Battlefield.Nasty Little Rabbit.Toughness = 3
+Bot1.Battlefield.Keen-Eyed Curator.Power = 4
+Bot1.Battlefield.Keen-Eyed Curator.Toughness = 4

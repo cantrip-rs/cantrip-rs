@@ -1,0 +1,36 @@
+# Oakhollow Village ("{G}, {T}: Put a +1/+1 counter on each Frog, Rabbit, Raccoon, or Squirrel you control that entered the
+# battlefield this turn"): Squirrelanoids and Memnite (a Construct) both enter on turn 1; only the Squirrel gets a counter.
+
+[Bot1 Deck]
+Oakhollow Village
+Mox Jet
+Mox Emerald
+Squirrelanoids
+Memnite
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Oakhollow Village.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Squirrelanoids.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Oakhollow Village.Activate(Ability: Put a +1/+1 counter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Squirrelanoids.Power = 2
+Bot1.Battlefield.Squirrelanoids.Toughness = 2
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Oakhollow Village.Tapped = true

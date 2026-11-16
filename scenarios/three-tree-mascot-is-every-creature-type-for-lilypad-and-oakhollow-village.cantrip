@@ -1,0 +1,49 @@
+# Changeling (CR 702.73a) on Three Tree Mascot makes it every creature type, so it is the Bird, Frog, Otter or Rat that Lilypad
+# Village's surveil asks for and a Frog, Rabbit, Raccoon or Squirrel for Oakhollow Village's counter. Turn 3: before the Mascot enters
+# the surveil is refused (only Moxen entered this game, on turn 1); once Black Lotus pays for the Mascot, both villages work and the
+# 2/1 Mascot becomes 3/2.
+
+[Bot1 Deck]
+Lilypad Village
+Oakhollow Village
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Three Tree Mascot
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Lilypad Village.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Oakhollow Village.Play
+! Bot1.Battlefield.Lilypad Village.Activate(Ability: Surveil 2)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Three Tree Mascot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Lilypad Village.Activate(Ability: Surveil 2)
+Bot1.Arrange( | Island; Island)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Oakhollow Village.Activate(Ability: Put a +1/+1 counter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Island; Island; Black Lotus
+Bot1.Battlefield.Three Tree Mascot.Power = 3
+Bot1.Battlefield.Three Tree Mascot.Toughness = 2
+Bot1.Battlefield.Lilypad Village.Tapped = true
+Bot1.Battlefield.Oakhollow Village.Tapped = true
