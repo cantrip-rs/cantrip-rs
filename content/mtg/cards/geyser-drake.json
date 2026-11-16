@@ -1,0 +1,11 @@
+{
+  "name": "Geyser Drake",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Drake",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying\nDuring turns other than yours, spells you cast cost {1} less to cast.",
+  "keywords": [
+    "Flying"
+  ]
+}

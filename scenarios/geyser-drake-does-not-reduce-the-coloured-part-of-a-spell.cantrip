@@ -1,0 +1,33 @@
+# With Geyser Drake out, Bot1's only untapped source on Bot2's turn 2 is Mox Jet. Think Twice would cost {U} there: the reduction
+# takes only the generic {1} (CR 118.7a), so the black mana does not pay for it.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Geyser Drake
+Think Twice
+Island
+Island x12
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Geyser Drake.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Think Twice.Cast(Mana: short)
+
+[Expect]
+Bot1.Hand = Island; Think Twice
