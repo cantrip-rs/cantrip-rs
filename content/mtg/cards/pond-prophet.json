@@ -1,0 +1,8 @@
+{
+  "name": "Pond Prophet",
+  "manaCost": "{G/U}{G/U}",
+  "type": "Creature — Frog Advisor",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature enters, draw a card."
+}
