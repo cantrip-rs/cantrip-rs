@@ -1,0 +1,52 @@
+# Bumbleflower's Sharepot ({2} Artifact): "When this artifact enters, create a Food token" (CR 111.10b) and "{5}, {T}, Sacrifice this
+# artifact: Destroy target nonland permanent. Activate only as a sorcery" (CR 602.5d, 701.8). Turn 1: the Lotus pays {2}, the Food
+# trigger is on the stack, so five untapped Moxen still cannot activate it (not a sorcery's timing); once the Food exists the
+# five Moxen (the Lotus mana has emptied by the second main phase) pay and the Sharepot destroys the Food, going to the graveyard as its cost.
+
+[Bot1 Deck]
+Bumbleflower's Sharepot
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Bumbleflower's Sharepot.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+! Bot1.Battlefield.Bumbleflower's Sharepot.Activate(Bot1.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T1 Bot1.Main2]
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Bumbleflower's Sharepot.Activate(Bot1.Battlefield.Food Token)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Bumbleflower's Sharepot; Black Lotus

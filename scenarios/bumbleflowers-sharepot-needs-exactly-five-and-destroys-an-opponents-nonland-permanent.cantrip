@@ -1,0 +1,58 @@
+# Bumbleflower's Sharepot ("{5}, {T}, Sacrifice this artifact: Destroy target nonland permanent. Activate only as a sorcery"):
+# the {5} is exact (four Moxen are short), the target is any nonland permanent of any player (CR 115.2) but not a land: the
+# opponent's Island is refused and their Memnite is destroyed. The Black Lotus adds the missing mana.
+
+[Bot1 Deck]
+Bumbleflower's Sharepot
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Plains x14
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bumbleflower's Sharepot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Food Token.Tapped = false
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Bumbleflower's Sharepot.Activate(Bot2.Battlefield.Memnite; Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Battlefield.Bumbleflower's Sharepot.Activate(Bot2.Battlefield.Island)
+Bot1.Battlefield.Bumbleflower's Sharepot.Activate(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Food Token; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Bumbleflower's Sharepot; Black Lotus
+Bot2.Battlefield = Island
+Bot2.Graveyard = Memnite
