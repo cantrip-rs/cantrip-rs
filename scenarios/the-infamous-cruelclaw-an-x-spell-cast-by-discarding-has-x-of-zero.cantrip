@@ -1,0 +1,56 @@
+# The Infamous Cruelclaw: a card cast "by discarding a card rather than paying its mana cost" is cast without paying its mana
+# cost, so an {X} in that cost can only be 0 (CR 107.3b, 118.9). Bot1's Cruelclaw hits Bot2 (17) and its trigger exiles a Forest
+# and stops at Fireball ({X}{R}: X damage divided among any number of targets, here Bot2). Bot1 casts Fireball by discarding a
+# Swamp, though the three Moxen are untapped: X is 0 (the spell's mana value on the stack is 1), Fireball deals no damage and Bot2
+# stays at 17.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+The Infamous Cruelclaw
+Island
+Swamp
+Island
+Plains
+Forest
+Fireball
+Island x5
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Infamous Cruelclaw.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(The Infamous Cruelclaw > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Pass
+Bot2.Pass
+? Exile = Forest; Fireball
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Choose(Swamp)
+? Stack.Count = 1
+? Stack.Fireball.ManaValue = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Fireball; Swamp
+Exile = Forest
+Bot1.Battlefield.Mox Ruby.Tapped = false

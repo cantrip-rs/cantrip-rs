@@ -1,0 +1,63 @@
+# The Infamous Cruelclaw, {1}{B}{R} 3/3 menace: "Whenever The Infamous Cruelclaw deals combat damage to a player, exile cards from the top
+# of your library until you exile a nonland card. You may cast that card by discarding a card rather than paying its mana cost" (CR 701.13a,
+# 608.2g, 118.9, 701.9). Bot1 casts it on turn 1 with three Moxen and attacks on turn 3 (Bot2 has no blockers): 20 - 3 = 17. The trigger exiles
+# Forest and Mountain (lands, skipped over) and stops at Lightning Bolt, the nonland card. Bot1 accepts, discards a Swamp and casts the
+# Bolt at Bot2 without paying {R}: 17 - 3 = 14, and the Moxen stay untapped. Both lands stay in exile; the Bolt goes to the graveyard
+# with the discarded Swamp; the rest of the library is untouched.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+The Infamous Cruelclaw
+Island
+Swamp
+Island
+Plains
+Forest
+Mountain
+Lightning Bolt
+Island x5
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Infamous Cruelclaw.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(The Infamous Cruelclaw > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Stack.Count = 1
+? Exile.Count = 0
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 3
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Choose(Swamp)
+? Stack.Count = 1
+? Bot1.Mana =
+? Bot1.Hand = Island; Plains
+? Bot1.Graveyard = Swamp
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 14
+? Bot1.Graveyard = Lightning Bolt; Swamp
+? Exile = Forest; Mountain
+? Bot1.Battlefield.Mox Ruby.Tapped = false
+? Bot1.Battlefield.Mox Jet.Tapped = false
+? Bot1.Battlefield.Mox Pearl.Tapped = false
+? Bot1.Library.Count = 5
