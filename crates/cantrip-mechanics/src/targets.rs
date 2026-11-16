@@ -107,6 +107,15 @@ fn any_target_other_than_those_chosen_filter(q: &dyn Query, asker: &Asker, t: Ta
 pub const ANY_TARGET_OTHER_THAN_THOSE_CHOSEN: TargetSpec = target(any_target_other_than_those_chosen_filter);
 pub const CREATURE: TargetSpec = target(creature_filter);
 
+/// "Target creature token" as a filter (CR 115.1, 111.1): a creature permanent on the battlefield that is a token, any controller's.
+/// Hivespine Wolverine and Conduct Electricity print it.
+pub fn creature_token_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_filter(q, asker, t) && matches!(t, Target::Object(id) if q.obj(id).token)
+}
+
+/// "Target creature token" (CR 115.1, 111.1). Hivespine Wolverine and Conduct Electricity print it.
+pub const CREATURE_TOKEN: TargetSpec = target(creature_token_filter);
+
 /// "Target Wall creature" (CR 115.1, 205.3m): any controller's Wall creature on the battlefield.
 /// Glyph of Life and Glyph of Doom print it. The subtype is read through the source's text (CR 612.2).
 pub const WALL_CREATURE: TargetSpec = target(wall_creature_filter);
