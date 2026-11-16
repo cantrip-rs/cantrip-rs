@@ -1,0 +1,6 @@
+{
+  "name": "Steer Clear",
+  "manaCost": "{W}",
+  "type": "Instant",
+  "oracleText": "Steer Clear deals 2 damage to target attacking or blocking creature. Steer Clear deals 4 damage to that creature instead if you controlled a Mount as you cast this spell."
+}

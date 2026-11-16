@@ -1,0 +1,45 @@
+# "If you controlled a Mount as you cast this spell" (CR 601.2i): the board as the spell was cast is what counts. With Steer Clear on the
+# stack Bot1 sacrifices its Bulwark Ox (a Mount) in response, and Bot2's attacking Arni still takes 4, not 2.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Bulwark Ox
+Steer Clear
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Arni, Renowned Champion
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bulwark Ox.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Arni, Renowned Champion.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Arni, Renowned Champion > Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Steer Clear.Cast(Bot2.Battlefield.Arni, Renowned Champion)
+Bot1.Battlefield.Bulwark Ox.Activate(Ability: Sacrifice)
+Bot1.Pass
+[Bot2.Main2]
+
+[Expect]
+Turn = 4
+Bot2.Battlefield.Arni, Renowned Champion.Damage = 4
+Bot1.Battlefield.Bulwark Ox = (absent)
+Bot1.Graveyard = Steer Clear; Bulwark Ox
