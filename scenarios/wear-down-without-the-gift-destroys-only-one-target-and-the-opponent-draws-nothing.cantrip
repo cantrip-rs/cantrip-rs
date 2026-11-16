@@ -1,0 +1,42 @@
+# Wear Down, gift declined (CR 702.174a): one target artifact or enchantment - Bot1's Forest (a land, neither) is refused, and Bot1 picks Bot2's Propaganda (an enchantment), it is destroyed, and the
+# Ornithopter and the Memnite stay. Bot2 draws nothing (the gift is not given), so their hand is what their turn left it (8 cards after the draw, 4 cast).
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Wear Down
+Plains x17
+
+[Bot2 Deck]
+Black Lotus
+Propaganda
+Ornithopter
+Memnite
+Island x16
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Propaganda.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wear Down.Cast
+Bot1.Decline
+! Bot1.Target(Bot1.Battlefield.Forest)
+Bot1.Target(Bot2.Battlefield.Propaganda)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Wear Down
+Bot2.Graveyard = Propaganda; Black Lotus
+Bot2.Battlefield = Ornithopter; Memnite
+Bot2.Hand.Count = 4

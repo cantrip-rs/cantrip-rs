@@ -1,0 +1,6 @@
+{
+  "name": "Wear Down",
+  "manaCost": "{1}{G}",
+  "type": "Sorcery",
+  "oracleText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)\nDestroy target artifact or enchantment. If the gift was promised, instead destroy two target artifacts and/or enchantments."
+}

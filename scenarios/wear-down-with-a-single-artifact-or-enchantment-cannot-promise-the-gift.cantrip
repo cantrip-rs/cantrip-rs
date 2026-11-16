@@ -1,0 +1,33 @@
+# Wear Down (CR 702.174a, 601.2c): promising the gift asks for two different target artifacts and/or enchantments (the same object cannot be chosen twice,
+# CR 115.3). With the Ornithopter the only artifact or enchantment anywhere, the gift cannot be promised: the spell is cast for one target, with no gift
+# question, and Bot2 draws nothing.
+
+[Bot1 Deck]
+Forest
+Forest
+Wear Down
+Plains x17
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Wear Down.Cast
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Wear Down
+Bot2.Graveyard = Ornithopter
+Bot2.Hand.Count = 7

@@ -1,0 +1,45 @@
+# Wear Down, gift a card promised (CR 702.174a, 702.174j): the opponent draws first, then "instead destroy two target artifacts and/or enchantments" - Bot1
+# picks Bot2's Propaganda (an enchantment) and its own Mox Ruby (an artifact), both are destroyed together, and Bot2's Ornithopter, which was legal and not
+# chosen, stays. One target alone, and three, are refused: it is exactly two. Bot2's hand is one card bigger (5) than without the gift (4).
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Wear Down
+Plains x17
+
+[Bot2 Deck]
+Black Lotus
+Propaganda
+Ornithopter
+Memnite
+Island x16
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Propaganda.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wear Down.Cast
+Bot1.Accept
+! Bot1.Target(Bot2.Battlefield.Propaganda)
+! Bot1.Target(Bot2.Battlefield.Propaganda; Bot1.Battlefield.Mox Ruby; Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Propaganda; Bot1.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Wear Down; Mox Ruby
+Bot1.Battlefield = Forest
+Bot2.Graveyard = Propaganda; Black Lotus
+Bot2.Battlefield = Ornithopter; Memnite
+Bot2.Hand.Count = 5
