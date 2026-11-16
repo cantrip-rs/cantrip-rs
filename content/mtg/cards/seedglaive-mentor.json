@@ -1,0 +1,12 @@
+{
+  "name": "Seedglaive Mentor",
+  "manaCost": "{1}{R}{W}",
+  "type": "Creature — Mouse Soldier",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Vigilance, haste\nValiant — Whenever this creature becomes the target of a spell or ability you control for the first time each turn, put a +1/+1 counter on it.",
+  "keywords": [
+    "Vigilance",
+    "Haste"
+  ]
+}
