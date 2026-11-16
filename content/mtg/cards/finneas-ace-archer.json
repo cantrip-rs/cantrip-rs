@@ -1,0 +1,12 @@
+{
+  "name": "Finneas, Ace Archer",
+  "manaCost": "{G}{W}",
+  "type": "Legendary Creature — Rabbit Archer",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Reach, vigilance\nWhenever Finneas attacks, put a +1/+1 counter on each other creature you control that's a token or a Rabbit. Then if creatures you control have total power 10 or greater, draw a card.",
+  "keywords": [
+    "Reach",
+    "Vigilance"
+  ]
+}

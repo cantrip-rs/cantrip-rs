@@ -1,0 +1,56 @@
+# Finneas, Ace Archer: "Then if creatures you control have total power 10 or greater, draw a card." Total power is read after
+# the counters are on (CR 608.2c): Finneas 2 + three Rabbit tokens from Hop to It (1/1, 2/2 with the counter) + Third Path
+# Iconoclast 2 = 10 exactly, though it is only 7 before the counters, so Bot1 draws. The sibling scenario with a power-1
+# creature instead (total 9) draws nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Finneas, Ace Archer
+Hop to It
+Third Path Iconoclast
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Finneas, Ace Archer.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hop to It.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Third Path Iconoclast.Cast
+Bot1.Pass
+? Bot1.Hand.Count = 0
+Bot1.Attack(Finneas, Ace Archer > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 1
+Bot1.Battlefield.Finneas, Ace Archer.Power = 2
+Bot1.Battlefield.Third Path Iconoclast.Power = 2
+Bot1.Battlefield.Rabbit Token#1.Power = 2
+Bot1.Battlefield.Rabbit Token#2.Power = 2
