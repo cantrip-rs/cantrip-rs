@@ -354,6 +354,20 @@ pub(crate) fn ask_of(
         v.sort();
         v
     };
+    // The restrictions on how many creatures a whole declaration has (CR 506.5, 508.1c, 509.1b), as the validator holds them.
+    let groups_obs = |groups: &[CombatGroup]| -> Vec<CombatGroupObs> {
+        let mut v: Vec<CombatGroupObs> = groups
+            .iter()
+            .map(|g| CombatGroupObs {
+                subjects: rs(&g.subjects),
+                members: rs(&g.members),
+                at_least: g.at_least,
+                at_most: g.at_most,
+            })
+            .collect();
+        v.sort();
+        v
+    };
     // A rule that keeps a running total of mana value (CR 202.3; `Tally::ManaValueAtMost`): its most, and each eligible
     // card's mana value, index for index, read where it is (as the host's prompt reads it).
     let total_obs = |eligible: &[Target], most: Option<u32>| -> (Vec<Ref>, Option<TotalObs>) {
@@ -801,6 +815,7 @@ pub(crate) fn ask_of(
                 barred,
                 alone,
                 sacrifices,
+                groups: groups_obs(&requirements.groups),
             }
         }
         RequestKind::AssignCombatDamage { divisions } => {
@@ -866,6 +881,7 @@ pub(crate) fn ask_of(
                 min_blockers,
                 max_blockers,
                 capacities,
+                groups: groups_obs(&requirements.groups),
             }
         }
         RequestKind::DiscardToHandSize { count, hand } => AskKind::DiscardToHandSize {

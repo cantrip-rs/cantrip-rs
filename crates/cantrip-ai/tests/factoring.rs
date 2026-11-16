@@ -358,6 +358,12 @@ fn scenarios_that_once_failed_factor() {
             // Lands to sacrifice for attacking creatures (CR 508.1j, 118.3) where a land is itself one of the creatures
             // that may attack: Dryad Arbor attacking raises the count it would pay.
             "flooded-woodlands-an-enlisted-dryad-arbor-is-tapped-before-it-is-sacrificed",
+            // Restrictions on how many creatures a whole declaration has (CR 506.5, 508.1c, 509.1b): no more than two
+            // attack or block, and at least three where Orcish Conscripts attacks or blocks.
+            "caverns-of-despair-limits-bot2-attacks-bot1-blocks",
+            "orcish-conscripts-attacks-with-two-others",
+            "orcish-conscripts-blocks-with-two-others",
+            "errantry-attacks-alone",
         ]
         .iter()
         .map(|n| {

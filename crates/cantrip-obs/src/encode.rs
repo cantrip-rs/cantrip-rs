@@ -1961,7 +1961,7 @@ mod tests {
             eligible: vec![Ref::Object(2)], attackers: vec![Ref::Object(1), Ref::Object(3)],
             allowed: vec![(Ref::Object(2), Ref::Object(1)), (Ref::Object(2), Ref::Object(3))],
             required: vec![], most: 0, min_blockers: vec![1, 1], max_blockers: vec![255, 255],
-            capacities: vec![(Ref::Object(2), 2)],
+            capacities: vec![(Ref::Object(2), 2)], groups: vec![],
         }};
         obs.request.as_mut().unwrap().ask = Some(ask.clone());
         let machine = Machine::new(&ask, &[]);

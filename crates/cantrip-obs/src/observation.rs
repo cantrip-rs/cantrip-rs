@@ -295,6 +295,38 @@ pub struct AttackSacrificeObs {
     pub candidates: Vec<Ref>,
 }
 
+/// A restriction on how many creatures a whole declaration has (CR 506.5, 508.1c, 509.1b; `cantrip_state::CombatGroup`,
+/// whose judgement it carries into the factoring's terms): where any of `subjects` attacks (or blocks), at least
+/// `at_least` and no more than `at_most` of `members` must. Caverns of Despair's "No more than two creatures can attack
+/// each combat", every eligible creature a subject and a member; Errantry's "Enchanted creature can only attack alone",
+/// the enchanted creature the subject; Orcish Conscripts' "can't attack unless at least two other creatures attack", at
+/// least three with it. `subjects` and `members` sorted.
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+pub struct CombatGroupObs {
+    pub subjects: Vec<Ref>,
+    pub members: Vec<Ref>,
+    pub at_least: u32,
+    pub at_most: u32,
+}
+
+impl CombatGroupObs {
+    pub fn count(&self, participates: impl Fn(Ref) -> bool) -> u32 {
+        u32::try_from(self.members.iter().filter(|&&r| participates(r)).count()).unwrap_or(u32::MAX)
+    }
+    /// Whether a subject participates: the restriction holds only then.
+    pub fn binds(&self, participates: impl Fn(Ref) -> bool) -> bool {
+        self.subjects.iter().any(|&r| participates(r))
+    }
+    /// Whether a complete declaration obeys it.
+    pub fn allows(&self, participates: impl Fn(Ref) -> bool + Copy) -> bool {
+        !self.binds(participates) || (self.at_least..=self.at_most).contains(&self.count(participates))
+    }
+    /// Whether a declaration has more members than it allows where it binds: no more participants mend that.
+    pub fn exceeded(&self, participates: impl Fn(Ref) -> bool + Copy) -> bool {
+        self.binds(participates) && self.count(participates) > self.at_most
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DivisionObs {
     /// The creature whose combat damage it is.
@@ -373,7 +405,7 @@ pub enum AskKind {
     /// attack alone (CR 508.1c: Pet Sehlat's "can't attack alone"): a declaration whose only attacker is one of them is
     /// illegal. `sacrifices` the permanents attacks cost (sorted; Flooded Woodlands' lands): no permanent pays for two
     /// (CR 118.3), so a declaration whose parts can't each be given permanents of their own can't be paid, and is illegal
-    /// (CR 508.1j).
+    /// (CR 508.1j). `groups` the restrictions on how many creatures the whole declaration has (sorted; CR 506.5, 508.1c).
     DeclareAttackers {
         eligible: Vec<Ref>,
         defenders: Vec<Ref>,
@@ -388,12 +420,15 @@ pub enum AskKind {
         alone: Vec<Ref>,
         #[serde(default)]
         sacrifices: Vec<AttackSacrificeObs>,
+        #[serde(default)]
+        groups: Vec<CombatGroupObs>,
     },
     /// One division per creature with a choice, sorted by source.
     AssignCombatDamage { divisions: Vec<DivisionObs> },
     /// Each of `eligible` blocks one attacker of `allowed` or none - or, one listed in `capacities`, up to that many
     /// (`u32::MAX` for any number, CR 509.1a). `required` the blocks effects require if able, of which a declaration obeys
-    /// `most`; `min_blockers`/`max_blockers` each attacker's, index for index with `attackers`.
+    /// `most`; `min_blockers`/`max_blockers` each attacker's, index for index with `attackers`. `groups` the restrictions on
+    /// how many creatures the whole declaration has (sorted; CR 509.1b), a creature blocking several one of them.
     DeclareBlockers {
         eligible: Vec<Ref>,
         attackers: Vec<Ref>,
@@ -404,6 +439,8 @@ pub enum AskKind {
         max_blockers: Vec<u8>,
         #[serde(default)]
         capacities: Vec<(Ref, u32)>,
+        #[serde(default)]
+        groups: Vec<CombatGroupObs>,
     },
     DiscardToHandSize { count: u8, hand: Vec<Ref> },
     Mulligan { mulligans: u8 },

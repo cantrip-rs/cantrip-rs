@@ -87,7 +87,7 @@ mod tests {
                 ObjectObs::Ability { position: 0, source: Ref::Object(2), name: "Grizzly Bears".into(), kind: 2, controller: 1, targets: vec![Ref::Object(0), Ref::Player(0)], x: 0 },
             ],
             events: vec![EventObs { turn: 3, kind: 2, player: Some(1), objects: vec![Ref::Object(2), Ref::None], from: Some(Place { zone: ZoneObs::Hand, player: 1 }), to: Some(Place { zone: ZoneObs::Battlefield, player: 0 }), amount: 0 }],
-            request: Some(RequestObs { player: 0, kind: "DeclareBlockers".into(), candidates: vec![2], ask: Some(Ask { may_cancel: false, source: Ref::None, kind: AskKind::DeclareBlockers { eligible: vec![Ref::Object(2)], attackers: vec![Ref::Object(3)], allowed: vec![(Ref::Object(2), Ref::Object(3))], required: vec![], most: 0, min_blockers: vec![2], max_blockers: vec![255], capacities: vec![] } }) }),
+            request: Some(RequestObs { player: 0, kind: "DeclareBlockers".into(), candidates: vec![2], ask: Some(Ask { may_cancel: false, source: Ref::None, kind: AskKind::DeclareBlockers { eligible: vec![Ref::Object(2)], attackers: vec![Ref::Object(3)], allowed: vec![(Ref::Object(2), Ref::Object(3))], required: vec![], most: 0, min_blockers: vec![2], max_blockers: vec![255], capacities: vec![], groups: vec![] } }) }),
             decklist: vec![Count { name: "Forest".into(), count: 17 }],
             pools: vec![vec![], vec![Count { name: "Shock".into(), count: 3 }]],
             seen: vec![vec![], vec![Count { name: "Grizzly Bears".into(), count: 1 }]],

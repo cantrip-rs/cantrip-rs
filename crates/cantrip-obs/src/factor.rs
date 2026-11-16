@@ -10,7 +10,10 @@
 //!   requirements' maximum (CR 509.1c);
 //! - attackers: where a cap on how many may attack a defender (CR 508.1c) leaves a declaration short of the most
 //!   requirements it must obey (CR 508.1d); without a cap the mask carries the requirements exactly. A creature that
-//!   can't attack alone (CR 508.1c) is masked exactly: a lone attacker is left only where another can still join it;
+//!   can't attack alone (CR 508.1c) is masked exactly: a lone attacker is left only where another can still join it. So
+//!   is a restriction on how many creatures a whole declaration of attackers or blockers has (CR 506.5, 508.1c, 509.1b:
+//!   Caverns of Despair, Errantry, Orcish Conscripts): a choice is left only where the creatures still to come can make
+//!   a declaration that obeys every one;
 //! - a band with more than one creature without banding (CR 702.22c);
 //! - targets that break their slot's rule together past a running total of mana value (different mana values: Agadeem's
 //!   Awakening), and cards that break a selection rule (CR 601.2c);
@@ -546,6 +549,63 @@ fn sacrifices_payable(sacrifices: &[crate::AttackSacrificeObs], attacks: &[(Ref,
     (0..slots.len()).all(|slot| place(slot, &slots, &mut paid_by, &mut Vec::new()))
 }
 
+/// Where to a creature may go: the `i`th of a declaration's targets (a defender, or an attacker to block), if the rules let
+/// `c` go there beside `pairs` with `counts` at each target.
+type To<'a> = dyn Fn(&[(Ref, Ref)], &[usize], Ref, usize) -> Option<Ref> + 'a;
+
+/// Whether the creatures still to come (`later`, each once at most) can complete `pairs` - each a creature and what it
+/// attacks or blocks, `counts` how many at each of `targets` targets - to a declaration that obeys every one of `groups`
+/// (CR 506.5, 508.1c, 509.1b: `cantrip_state::CombatGroup`, the validator's judgement, in the factoring's terms) and
+/// whose one attacker, where it has only one, is not forbidden to attack alone (`lone`, CR 508.1c). `to` says where a
+/// creature may go; a pair added never opens a place, so where the creatures to come can go now bounds where they may
+/// later. One pair for each creature is enough: a creature blocking several is still one member.
+fn completes(
+    groups: &[crate::CombatGroupObs],
+    lone: &[Ref],
+    targets: usize,
+    to: &To,
+    pairs: &mut Vec<(Ref, Ref)>,
+    counts: &mut Vec<usize>,
+    later: &[Ref],
+) -> bool {
+    {
+        let has = |id: Ref| pairs.iter().any(|p| p.0 == id);
+        let able = |c: Ref| (0..targets).any(|i| to(pairs, counts, c, i).is_some());
+        // Too many members where a group binds stays too many; too few where those to come can't make up its minimum
+        // stays too few.
+        let doomed = |g: &crate::CombatGroupObs| {
+            g.exceeded(has)
+                || g.binds(has) && {
+                    let more = later.iter().filter(|&&l| g.members.contains(&l) && able(l)).count();
+                    u64::from(g.count(has)) + (more as u64) < u64::from(g.at_least)
+                }
+        };
+        if groups.iter().any(doomed) {
+            return false;
+        }
+        if later.is_empty() {
+            return groups.iter().all(|g| g.allows(has)) && !matches!(pairs[..], [(a, _)] if lone.contains(&a));
+        }
+    }
+    let (c, rest) = (later[0], &later[1..]);
+    if completes(groups, lone, targets, to, pairs, counts, rest) {
+        return true;
+    }
+    for i in 0..targets {
+        if let Some(t) = to(pairs, counts, c, i) {
+            pairs.push((c, t));
+            counts[i] += 1;
+            let done = completes(groups, lone, targets, to, pairs, counts, rest);
+            pairs.pop();
+            counts[i] -= 1;
+            if done {
+                return true;
+            }
+        }
+    }
+    false
+}
+
 /// Payment windows whose source quality or snow demand requires an explicit allocation choice.
 /// Ordinary costs retain their established automatic payment factoring.
 pub fn snow_payment(kind: &AskKind) -> bool {
@@ -927,6 +987,7 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
             barred,
             alone,
             sacrifices,
+            groups,
             ..
         } => {
             // A defender at its cap takes no more attackers (CR 508.1c). A declaration obeys `most` requirements (CR
@@ -962,14 +1023,16 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
                 with.push(more);
                 sacrifices_payable(sacrifices, &with)
             };
-            let mended = |attacks: &[(Ref, Ref)], attacking: &[usize], later: &[Ref]| match attacks {
-                [(a, _)] if alone.contains(a) => later.iter().any(|&l| {
-                    defenders
-                        .iter()
-                        .enumerate()
-                        .any(|(i, &d)| open(l, d) && room(attacking, i) && payable(attacks, (l, d)))
-                }),
-                _ => true,
+            // CR 506.5, 508.1c: a declaration with more or fewer creatures than a restriction on the whole declaration
+            // allows (Caverns of Despair, Errantry, Orcish Conscripts) is illegal, and so is a lone attacker forbidden to
+            // attack alone - both exactly: a choice is offered only where the creatures still to come can make a
+            // declaration that obeys them all, each attack open, with room and payable.
+            let to = |attacks: &[(Ref, Ref)], attacking: &[usize], c: Ref, i: usize| {
+                let d = defenders[i];
+                (open(c, d) && room(attacking, i) && payable(attacks, (c, d))).then_some(d)
+            };
+            let mended = |attacks: &[(Ref, Ref)], attacking: &[usize], later: &[Ref]| {
+                completes(groups, alone, defenders.len(), &to, &mut attacks.to_vec(), &mut attacking.to_vec(), later)
             };
             for (j, &c) in eligible.iter().enumerate() {
                 rest -= best(c);
@@ -1015,24 +1078,47 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
             allowed,
             max_blockers,
             capacities,
+            groups,
             ..
         } => {
-            let mut blocked = vec![0u8; attackers.len()];
+            // CR 509.1b: a declaration with more or fewer blocking creatures than a restriction on the whole declaration
+            // allows (Caverns of Despair, Orcish Conscripts) is illegal - exactly: a block, or none, is offered only where
+            // the creatures still to come can make a declaration that obeys them all.
+            let to = |blocks: &[(Ref, Ref)], blocked: &[usize], c: Ref, i: usize| {
+                let a = attackers[i];
+                let most = max_blockers.get(i).copied().unwrap_or(u8::MAX);
+                let room = most == u8::MAX || blocked[i] < usize::from(most);
+                (room && allowed.contains(&(c, a)) && !blocks.contains(&(c, a))).then_some(a)
+            };
+            let mended = |blocks: &[(Ref, Ref)], blocked: &[usize], later: &[Ref]| {
+                groups.is_empty()
+                    || completes(groups, &[], attackers.len(), &to, &mut blocks.to_vec(), &mut blocked.to_vec(), later)
+            };
+            let mut blocked = vec![0usize; attackers.len()];
             let mut blocks = Vec::new();
-            for &c in eligible {
+            for (j, &c) in eligible.iter().enumerate() {
+                let later = &eligible[j + 1..];
                 // One block, or none; a creature that can block several (CR 509.1a) is asked again after each, until it
                 // stops (`NoBlock`) or blocks as many as it can.
                 let capacity = capacities.iter().find(|x| x.0 == c).map_or(1, |x| x.1);
                 let mut made = 0u32;
                 while made < capacity {
                     let mut step = Step::default();
-                    step.push(Token::on(Tok::NoBlock, c), true);
+                    step.push(Token::on(Tok::NoBlock, c), mended(&blocks, &blocked, later));
                     for (i, &a) in attackers.iter().enumerate() {
-                        let room = blocked[i] < max_blockers.get(i).copied().unwrap_or(u8::MAX);
-                        step.push(
-                            Token::of(Tok::Block, c, a, i as u32),
-                            room && allowed.contains(&(c, a)) && !blocks.contains(&(c, a)),
-                        );
+                        let lawful = to(&blocks, &blocked, c, i).is_some() && {
+                            let mut with = blocks.clone();
+                            with.push((c, a));
+                            let mut now = blocked.clone();
+                            now[i] += 1;
+                            mended(&with, &now, later)
+                        };
+                        step.push(Token::of(Tok::Block, c, a, i as u32), lawful);
+                    }
+                    // Every choice so far leaves a legal declaration within reach, so one of these is lawful; should none
+                    // be, stopping is the validator's to judge.
+                    if !step.mask.iter().any(|&m| m) {
+                        step.mask[0] = true;
                     }
                     let t = p.pick(step)?;
                     if t.kind != Tok::Block {
@@ -1652,7 +1738,7 @@ mod tests {
         let a = ask(AskKind::DeclareBlockers {
             eligible: vec![o(1)], attackers: vec![o(2), o(3)],
             allowed: vec![(o(1), o(2)), (o(1), o(3))], required: vec![], most: 0,
-            min_blockers: vec![1, 1], max_blockers: vec![255, 255], capacities: vec![(o(1), 2)],
+            min_blockers: vec![1, 1], max_blockers: vec![255, 255], capacities: vec![(o(1), 2)], groups: vec![],
         });
         round_trip(&a, &FactoredAnswer::Block(vec![]));
         round_trip(&a, &FactoredAnswer::Block(vec![(o(1), o(2))]));
@@ -1664,7 +1750,7 @@ mod tests {
         let ordinary = ask(AskKind::DeclareBlockers {
             eligible: vec![o(1)], attackers: vec![o(2), o(3)],
             allowed: vec![(o(1), o(2)), (o(1), o(3))], required: vec![], most: 0,
-            min_blockers: vec![1, 1], max_blockers: vec![255, 255], capacities: vec![],
+            min_blockers: vec![1, 1], max_blockers: vec![255, 255], capacities: vec![], groups: vec![],
         });
         round_trip(&ordinary, &FactoredAnswer::Block(vec![(o(1), o(2))]));
         assert!(decompose(&ordinary, &[], &FactoredAnswer::Block(vec![(o(1), o(2)), (o(1), o(3))])).is_err());
@@ -1681,7 +1767,7 @@ mod tests {
             most: 1,
             min_blockers: vec![2, 1],
             max_blockers: vec![255, 1],
-            capacities: vec![],
+            capacities: vec![], groups: vec![],
         });
         let mut m = Machine::new(&a, &[]);
         assert_eq!(m.bound(), 2);
@@ -1718,7 +1804,7 @@ mod tests {
             most: 0,
             min_blockers: vec![1, 1, 1],
             max_blockers: vec![255, 255, 255],
-            capacities: vec![(o(1), u32::MAX), (o(2), 2)],
+            capacities: vec![(o(1), u32::MAX), (o(2), 2)], groups: vec![],
         });
         let mut m = Machine::new(&a, &[]);
         m.choose_token(Token::of(Tok::Block, o(1), o(4), 1));
@@ -1839,6 +1925,7 @@ mod tests {
             barred: vec![],
             alone: vec![],
             sacrifices: vec![],
+            groups: vec![],
         });
         let mut m = Machine::new(&a, &[]);
         m.choose_token(Token::on(Tok::Stay, o(1)));
@@ -1865,6 +1952,7 @@ mod tests {
             barred: vec![(o(1), Ref::Player(1))],
             alone: vec![],
             sacrifices: vec![],
+            groups: vec![],
         });
         let m = Machine::new(&a, &[]);
         assert!(!legal(&m, Token::of(Tok::Attack, o(1), Ref::Player(1), 0)));
@@ -1886,6 +1974,7 @@ mod tests {
             barred: vec![],
             alone: vec![],
             sacrifices: vec![],
+            groups: vec![],
         });
         let mut m = Machine::new(&a, &[]);
         m.choose_token(Token::of(Tok::Attack, o(1), Ref::Player(1), 0));
@@ -1913,6 +2002,7 @@ mod tests {
             barred: vec![],
             alone: vec![],
             sacrifices: vec![],
+            groups: vec![],
         });
         assert!(!legal(&Machine::new(&open, &[]), Token::on(Tok::Stay, o(3))));
         // Where attacking that player costs something (Ghostly Prison), the requirement is not to pay (CR 508.1d): it may.
@@ -1928,6 +2018,7 @@ mod tests {
             barred: vec![],
             alone: vec![],
             sacrifices: vec![],
+            groups: vec![],
         });
         assert!(legal(&Machine::new(&taxed, &[]), Token::on(Tok::Stay, o(3))));
         round_trip(&taxed, &FactoredAnswer::Attack(vec![(o(3), Ref::Player(1))]));
@@ -1952,6 +2043,7 @@ mod tests {
             barred: vec![],
             alone: vec![],
             sacrifices: vec![],
+            groups: vec![],
         });
         let m = Machine::new(&goaded, &[]);
         assert!(!legal(&m, Token::on(Tok::Stay, o(1))));
@@ -1969,6 +2061,7 @@ mod tests {
             barred: vec![],
             alone: vec![],
             sacrifices: vec![],
+            groups: vec![],
         });
         round_trip(&gone, &FactoredAnswer::Attack(vec![]));
         // One creature may make up for another: one paying to obey two leaves the other free to stay home.
@@ -1987,6 +2080,7 @@ mod tests {
             barred: vec![],
             alone: vec![],
             sacrifices: vec![],
+            groups: vec![],
         });
         let m = walk(&paid, &[Token::on(Tok::Stay, o(1))]);
         assert!(!legal(&m, Token::on(Tok::Stay, o(2))));
@@ -2009,6 +2103,7 @@ mod tests {
             barred: vec![(o(3), Ref::Player(1))],
             alone: vec![o(1), o(2)],
             sacrifices: vec![],
+            groups: vec![],
         });
         // Alone, the first may attack: either other creature can join it.
         let m = walk(&a, &[Token::of(Tok::Attack, o(1), o(9), 0)]);
@@ -2037,6 +2132,7 @@ mod tests {
             barred: vec![],
             alone: vec![o(1)],
             sacrifices: vec![],
+            groups: vec![],
         });
         assert!(!legal(&Machine::new(&lone, &[]), Token::of(Tok::Attack, o(1), Ref::Player(1), 0)));
         round_trip(&a, &FactoredAnswer::Attack(vec![(o(1), Ref::Player(1)), (o(2), Ref::Player(1))]));
@@ -2059,6 +2155,7 @@ mod tests {
             barred: vec![],
             alone: vec![],
             sacrifices: vec![land(o(1)), land(o(2))],
+            groups: vec![],
         });
         // The first attacking takes the land: the second may not, and the third may.
         let m = walk(&a, &[Token::of(Tok::Attack, o(1), Ref::Player(1), 0)]);
@@ -2080,6 +2177,7 @@ mod tests {
             barred: vec![],
             alone: vec![o(3)],
             sacrifices: vec![crate::AttackSacrificeObs { attacker: o(1), defender: Ref::Player(1), count: 1, candidates: vec![] }],
+            groups: vec![],
         });
         let m = Machine::new(&lone, &[]);
         assert!(!legal(&m, Token::of(Tok::Attack, o(3), Ref::Player(1), 0)));
