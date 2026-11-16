@@ -1,0 +1,77 @@
+# Mind Drill Assailant: "Threshold — As long as there are seven or more cards in your graveyard, this creature gets +3/+0" (CR 207.2c, 604.1,
+# 613.4c). Black Lotus is sacrificed for {B}{B}{B} and Mox Jet's {B} pays the Assailant ({2}{U/B}{U/B}, CR 107.4e). Graveyard count: Black
+# Lotus (1); Faithless Looting and the two Islands it discards (4); Thought Scour aimed at Bot2, so it adds only itself (5); a {2}{U/B}
+# surveil 1 (paid with no black source on turn 3 and no blue on turn 5, so both halves of {U/B} work and the empty pool shows the cost is exact) putting an Island there on turn 3 (6: still a 2/5); and a second on turn 5 (7: a 5/5). Bot2's graveyard (two milled
+# cards) is not Bot1's and does not count.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mind Drill Assailant
+Faithless Looting
+Thought Scour
+Island
+Island
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mind Drill Assailant.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mind Drill Assailant.Power = 2
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Island; Island)
+? Bot1.Graveyard.Count = 4
+? Bot1.Battlefield.Mind Drill Assailant.Power = 2
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 5
+? Bot2.Graveyard.Count = 2
+? Bot1.Battlefield.Mind Drill Assailant.Power = 2
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mind Drill Assailant.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(| Island)
+? Bot1.Mana =
+? Bot1.Graveyard.Count = 6
+? Bot1.Battlefield.Mind Drill Assailant.Power = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mind Drill Assailant.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(| Island)
+? Bot1.Mana =
+
+[Expect]
+Bot1.Graveyard.Count = 7
+Bot1.Battlefield.Mind Drill Assailant.Power = 5
+Bot1.Battlefield.Mind Drill Assailant.Toughness = 5
