@@ -862,6 +862,16 @@ pub static ZOMBIE: CardDef = CardDef {
     ..token!(Zombie)
 };
 
+/// The 2/2 blue and black Zombie Rogue creature token (CR 111.1, 111.4). Geralf, the Fleshwright and Outlaw Stitcher make it.
+pub static ZOMBIE_ROGUE: CardDef = CardDef {
+    // Blue (bit 1) and black (bit 2).
+    colors: Some(ColorSet(0b00110)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    ..token!(Zombie Rogue)
+};
+
 /// The 2/2 black Zombie Druid creature token (CR 111.1, 111.4). Essence Anchor, Adorned Crocodile, Sultai Monument, Teval's
 /// Judgment, Teval, the Balanced Scale, The Sibsig Ceremony and Welcome the Dead make it.
 pub static ZOMBIE_DRUID: CardDef = CardDef {
