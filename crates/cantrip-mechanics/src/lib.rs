@@ -1338,6 +1338,24 @@ pub fn shuffle_hands_and_graveyards_in_and_draw_seven(g: &mut dyn Game, players:
     }
 }
 
+const SHUFFLE_IN: Question = Question::new("ShuffleIn", "shuffle your hand and graveyard into your library?", "Chosen as the spell resolves", "Shuffle", "Don't");
+
+/// "Each player may shuffle their hand and graveyard into their library. Each player who does draws seven cards": each player in turn
+/// order from the active player chooses, knowing the choices before theirs (CR 101.4); the hands and graveyards of those who said yes
+/// move together (CR 701.24), their libraries are shuffled, and each of them draws seven in turn order. The spell is still on the
+/// stack, so it is in neither pile. Turtles in Time (after its creatures return) and Step Between Worlds print it.
+pub fn each_player_may_shuffle_hand_and_graveyard_in_and_draw_seven(g: &mut dyn Game, source: ObjectId) -> Result<(), Suspend> {
+    let players: Vec<PlayerId> = g.state().apnap().collect();
+    let mut shuffling: Vec<PlayerId> = Vec::new();
+    for &p in &players {
+        if effects::ask_may(g, p, source, Purpose::Ask(&SHUFFLE_IN))? {
+            shuffling.push(p);
+        }
+    }
+    shuffle_hands_and_graveyards_in_and_draw_seven(g, &shuffling);
+    Ok(())
+}
+
 /// Hideaway N (CR 702.75a): look at the top N cards of the library, exile one of them (exactly one, with fewer than N
 /// cards it is one of those there are), and put the rest on the bottom in a random order. The exiled card is linked to
 /// the resolving ability (CR 607.2a), so its own "play the exiled card" ability finds it with `Query::exiled_with`. Windbrisk Heights,
