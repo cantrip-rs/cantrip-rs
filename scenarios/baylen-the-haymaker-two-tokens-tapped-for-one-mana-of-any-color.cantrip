@@ -1,0 +1,43 @@
+# Baylen, the Haymaker: "Tap two untapped tokens you control: Add one mana of any color." A mana ability (CR 605.1a) whose cost
+# is tapping tokens, not the {T} symbol: on turn 1 the two Spirit tokens made that turn (summoning sick) are tapped and the
+# mana is chosen when it is activated, here red to cast Lightning Bolt at Bot2 (17). Both tokens are tapped and Baylen is not.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Jet
+Baylen, the Haymaker
+Lingering Souls
+Lightning Bolt
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Baylen, the Haymaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Baylen, the Haymaker.Activate(Color: Red)
+? Bot1.Mana = {R}
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Baylen, the Haymaker.Tapped = false
+Bot1.Battlefield.Spirit Token#1.Tapped = true
+Bot1.Battlefield.Spirit Token#2.Tapped = true

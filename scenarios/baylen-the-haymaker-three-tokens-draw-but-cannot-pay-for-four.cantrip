@@ -1,0 +1,42 @@
+# Baylen, the Haymaker: "Tap three untapped tokens you control: Draw a card." / "Tap four untapped tokens you control: Put three
+# +1/+1 counters on Baylen." On turn 3 Bot1 casts Hop to It for exactly three Rabbit tokens: tapping all three draws a card,
+# while the four-token ability, which needs a fourth, is refused beforehand and nothing is tapped for it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Baylen, the Haymaker
+Hop to It
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Baylen, the Haymaker.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hop to It.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+! Bot1.Battlefield.Baylen, the Haymaker.Activate(Ability: Put three)
+Bot1.Battlefield.Baylen, the Haymaker.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Baylen, the Haymaker.Counters.PlusOnePlusOne = (absent)

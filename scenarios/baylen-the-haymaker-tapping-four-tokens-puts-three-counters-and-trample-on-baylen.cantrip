@@ -1,0 +1,53 @@
+# Baylen, the Haymaker: "Tap four untapped tokens you control: Put three +1/+1 counters on Baylen. It gains trample until end of
+# turn." The ability's cost is tapping tokens, not the {T} symbol, so the Spirit tokens made by Lingering Souls on turn 1 and its
+# flashback on turn 3 can all be tapped at once. Baylen (4/3) becomes 7/6 and has trample until end of turn only; it is
+# 7/6 without trample on turn 5.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Jet
+Baylen, the Haymaker
+Lingering Souls
+Mox Pearl
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Baylen, the Haymaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Baylen, the Haymaker.Power = 4
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Lingering Souls.Cast(Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Baylen, the Haymaker.Activate(Ability: Put three)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Baylen, the Haymaker.Power = 7
+? Bot1.Battlefield.Baylen, the Haymaker.Toughness = 6
+? Bot1.Battlefield.Baylen, the Haymaker.Keywords = Trample
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Baylen, the Haymaker.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Baylen, the Haymaker.Power = 7
+Bot1.Battlefield.Baylen, the Haymaker.Keywords = (absent)
