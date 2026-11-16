@@ -1,0 +1,89 @@
+# Finneas, Ace Archer: "Whenever Finneas attacks, put a +1/+1 counter on each other creature you control that's a token or a
+# Rabbit." Bot1 controls Finneas, Third Path Iconoclast (a Human Monk, neither a token nor a Rabbit), Hare Apparent (a Rabbit
+# that is not a token) and a Soldier token from Iconoclast (a token that is not a Rabbit); Bot2 controls its own Iconoclast,
+# Soldier token and Hare Apparent. On attacking, Hare Apparent and the Soldier token get a counter; Finneas itself ("other"),
+# the Iconoclast and all of Bot2's creatures do not. Total power is 2 + 2 + 3 + 2 = 9, so no card is drawn (the same attack
+# with ten power draws, see finneas-ace-archer-draws-when-creatures-you-control-have-total-power-ten).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Finneas, Ace Archer
+Third Path Iconoclast
+Hare Apparent
+Mox Jet
+Plains x13
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Third Path Iconoclast
+Mox Jet
+Hare Apparent
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Finneas, Ace Archer.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Third Path Iconoclast.Cast
+Bot1.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Third Path Iconoclast.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Hare Apparent.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hare Apparent.Cast
+Bot1.Pass
+Bot1.Attack(Finneas, Ace Archer > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Finneas, Ace Archer.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Finneas, Ace Archer.Power = 2
+Bot1.Battlefield.Third Path Iconoclast.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Hare Apparent.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Hare Apparent.Power = 3
+Bot1.Battlefield.Soldier Token.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Soldier Token.Power = 2
+Bot2.Battlefield.Third Path Iconoclast.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Hare Apparent.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Soldier Token.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand.Count = 0
