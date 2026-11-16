@@ -1,0 +1,48 @@
+# Seedpod Squire's target is "creature you control without flying" (CR 115.1, 702.9): with only the Squire and an Ornithopter (both flying)
+# under Bot1's control, and Bot2's Memnite (not Bot1's) the only creature without flying, the triggered ability has no legal target and is
+# removed from the stack (CR 603.3d), so nothing is pumped: the Squire stays a 3/3, the Ornithopter a 0/2 and Bot2's Memnite a 1/1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Ornithopter
+Seedpod Squire
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Seedpod Squire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Seedpod Squire > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Memnite.Power = 1
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Seedpod Squire.Power = 3
+Bot1.Battlefield.Seedpod Squire.Toughness = 3
+Bot1.Battlefield.Ornithopter.Toughness = 2

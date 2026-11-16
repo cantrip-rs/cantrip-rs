@@ -1,0 +1,58 @@
+# Seedpod Squire: "Whenever this creature attacks, target creature you control without flying gets +1/+1 until end of turn." Bot1 controls
+# the Squire, an Ornithopter (flying) and a Memnite; Bot2 controls its own Memnite. Hybrid {W/U} is paid with Mox Pearl's {W} (CR 107.4e). On
+# turn 3 the attack's only legal target is Bot1's Memnite (CR 115.1; the flyers and Bot2's creature are not), so it becomes 2/2 (CR 611.2a) and
+# the Ornithopter and Bot2's Memnite are untouched. The effect ends in the cleanup step (CR 514.2).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Ornithopter
+Memnite
+Seedpod Squire
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Seedpod Squire.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Seedpod Squire.Power = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Seedpod Squire > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Seedpod Squire.Power = 3
+? Bot2.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Memnite.Toughness = 1
