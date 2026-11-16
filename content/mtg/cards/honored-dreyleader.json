@@ -1,0 +1,11 @@
+{
+  "name": "Honored Dreyleader",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Squirrel Warrior",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Trample\nWhen this creature enters, put a +1/+1 counter on it for each other Squirrel and/or Food you control.\nWhenever another Squirrel or Food you control enters, put a +1/+1 counter on this creature.",
+  "keywords": [
+    "Trample"
+  ]
+}

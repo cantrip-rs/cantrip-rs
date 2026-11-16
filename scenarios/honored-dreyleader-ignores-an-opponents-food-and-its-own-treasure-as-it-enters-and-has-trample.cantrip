@@ -1,0 +1,57 @@
+# Honored Dreyleader: "...put a +1/+1 counter on it for each other Squirrel and/or Food you control." Bot2 controls a Heaped Harvest (a
+# Food); Bot1 has a Memnite and a Gold Pan, whose Treasure token is spent on turn 3 for the Dreyleader's mana. None of these is a Squirrel
+# and/or Food Bot1 controls, so the Dreyleader enters with no counters (a 1/1 with trample), the trigger putting on zero.
+
+[Bot1 Deck]
+Black Lotus
+Honored Dreyleader
+Mox Emerald
+Mox Jet
+Memnite
+Gold Pan
+Island x1
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Heaped Harvest
+Island x3
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gold Pan.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Heaped Harvest.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Treasure Token.Activate(Color: Green)
+Bot1.Hand.Honored Dreyleader.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Honored Dreyleader.Power = 1
+Bot1.Battlefield.Honored Dreyleader.Toughness = 1
+Bot1.Battlefield.Honored Dreyleader.Keywords = Trample

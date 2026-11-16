@@ -1,0 +1,64 @@
+# Honored Dreyleader ({2}{G}, 1/1 Squirrel Warrior, trample): "When this creature enters, put a +1/+1 counter on it for each other Squirrel
+# and/or Food you control. Whenever another Squirrel or Food you control enters, put a +1/+1 counter on this creature." Turn 1: Bot1
+# has a Heaped Harvest (a Food) and a Memnite (an artifact creature, neither a Squirrel nor a Food), so the first Dreyleader enters
+# with one counter (a 2/2): the Memnite and the Dreyleader itself do not count. Turn 3: a second Dreyleader counts the first (a Squirrel)
+# and the Harvest (a Food), two counters (a 3/3), and entering it is a Squirrel entering for the first, which grows to a 3/3 as well.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Heaped Harvest
+Memnite
+Honored Dreyleader
+Honored Dreyleader
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Heaped Harvest.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Honored Dreyleader.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Honored Dreyleader.Power = 2
+? Bot1.Battlefield.Honored Dreyleader.Toughness = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Honored Dreyleader.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Heaped Harvest; Honored Dreyleader; Honored Dreyleader; Memnite; Mox Emerald; Mox Jet; Mox Ruby
+Bot1.Battlefield.Honored Dreyleader#1.Power = 3
+Bot1.Battlefield.Honored Dreyleader#1.Toughness = 3
+Bot1.Battlefield.Honored Dreyleader#2.Power = 3
+Bot1.Battlefield.Honored Dreyleader#2.Toughness = 3
+Bot1.Battlefield.Memnite.Power = 1
