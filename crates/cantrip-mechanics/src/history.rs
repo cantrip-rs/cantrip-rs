@@ -25,6 +25,13 @@ pub fn done_this_turn(q: &dyn Query, asker: &Asker) -> bool {
     asker.asked_ability().is_some_and(|ability| q.history().done(asker.source, ability, asker.controller))
 }
 
+/// "If you haven't cast a spell from your hand this turn" (CR 603.4, 601.2i, 400.1), the intervening "if" of a triggered ability: true
+/// while its controller has cast no spell this turn from their own hand, the card being theirs. A spell cast from a graveyard,
+/// exile or the library, from another player's hand, or by an opponent does not count. Canyon Crab and Emergent Haunting print it.
+pub fn you_havent_cast_a_spell_from_your_hand(q: &dyn Query, asker: &Asker) -> bool {
+    !q.history().casts_by(asker.controller).any(|cast| cast.from == ZoneKind::Hand && q.state().obj(cast.spell).owner == asker.controller)
+}
+
 /// "[It] attacked during your last turn" (CR 508.1, 500.1): `object` was declared as an attacker in the most recent turn before
 /// this one that `player` was the active player of (turns they had no events in do not count, so a skipped turn is not
 /// their last). The object is the one that attacked, so a permanent that left and came back has not (CR 400.7). Giant Turtle
