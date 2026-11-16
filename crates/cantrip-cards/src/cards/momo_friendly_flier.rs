@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::targets;
+use cantrip_mechanics::{targets, triggers};
 use cantrip_oracle as oracle;
 
 /// A non-Lemur creature spell with flying (CR 601.2, 702.9): as the spell's characteristics `c` are, Lemur read through the
@@ -22,22 +22,6 @@ fn first_flying_non_lemur_costs_less(q: &dyn Query, source: ObjectId, player: Pl
     if earlier { CostDelta::NONE } else { CostDelta::less(1) }
 }
 
-/// "Whenever another creature you control with flying enters" (CR 603.6a): flying as it enters.
-fn another_flyer_enters(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
-    match event {
-        Event::ZoneChange { new, to, .. }
-            if *new != source
-                && to.is(ZoneKind::Battlefield)
-                && q.controller(*new) == q.controller(source)
-                && q.chars(*new).is(CardType::Creature)
-                && q.chars(*new).has(Keyword::Flying) =>
-        {
-            Fired::PLAIN
-        }
-        _ => None,
-    }
-}
-
 /// Momo gets +1/+1 until end of turn (CR 611.2a), if it is still on the battlefield.
 fn grow(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if targets::permanent(g, item.object) {
@@ -47,7 +31,7 @@ fn grow(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 }
 
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(when(EventMask::ZONE_CHANGE, another_flyer_enters), grow, "Whenever another creature you control with flying enters, Momo gets +1/+1 until end of turn.")],
+    abilities: &[triggered(triggers::ANOTHER_CREATURE_YOU_CONTROL_WITH_FLYING_ENTERS, grow, "Whenever another creature you control with flying enters, Momo gets +1/+1 until end of turn.")],
     cost_changes: &[first_flying_non_lemur_costs_less],
     ..oracle::MOMO_FRIENDLY_FLIER
 };
