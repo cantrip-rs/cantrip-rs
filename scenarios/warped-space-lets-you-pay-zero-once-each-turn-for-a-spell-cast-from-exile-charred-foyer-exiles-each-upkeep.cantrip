@@ -1,0 +1,75 @@
+# Charred Foyer: "At the beginning of your upkeep, exile the top card of your library. You may play it this turn." Warped
+# Space: "Once each turn, you may pay {0} rather than pay the mana cost for a spell you cast from exile" (CR 118.9). Bot1
+# casts Charred Foyer; in turn 3 its upkeep exiles Hill Giant, which can't be cast for {0} while Warped Space is locked.
+# Bot1 unlocks Warped Space and its alternative applies at once (CR 709.5). Bonecrusher Giant's Stomp, cast from hand,
+# can't use it; Hill Giant, cast from exile, does. Bonecrusher Giant, in exile after its adventure, then can't: the once is
+# used this turn. In turn 5 the Foyer exiles Lightning Bolt, which Bot1 casts paying {R}: a cast through the Foyer's
+# permission paid in full doesn't use the once, and Bonecrusher Giant is then cast from exile for {0} - in the main phase:
+# the alternative gives no flash, so in the draw step it was refused.
+
+[Bot1 Deck]
+Mountain
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Charred Foyer // Warped Space
+Black Lotus
+Bonecrusher Giant
+Hill Giant
+Mountain
+Lightning Bolt
+Mountain
+Mountain x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Charred Foyer // Warped Space.Cast(Ability: Charred Foyer)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Exile.Hill Giant.Power = 3
+? Bot1.Hand = Black Lotus; Bonecrusher Giant; Mountain
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+! Bot1.Exile.Hill Giant.Cast(Ability: Once each turn)
+Bot1.Battlefield.Charred Foyer.Activate(Ability: right door)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Bonecrusher Giant.Cast(Bot2; Ability: Stomp: Once each turn)
+Bot1.Exile.Hill Giant.Cast(Ability: Once each turn)
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Hill Giant.Power = 3
+Bot1.Hand.Bonecrusher Giant.Cast(Bot2; Ability: Stomp)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+! Bot1.Exile.Bonecrusher Giant.Cast(Ability: Once each turn)
+[T5 Bot1.Draw]
+! Bot1.Exile.Bonecrusher Giant.Cast(Ability: Once each turn)
+[T5 Bot1.Main1]
+? Bot1.Exile.Lightning Bolt.Colors.Count = 1
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot1.Exile.Bonecrusher Giant.Cast(Ability: Once each turn)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Bonecrusher Giant.Power = 4
+Bot1.Battlefield.Hill Giant.Power = 3
+Bot1.Battlefield.Charred Foyer // Warped Space.Doors = Charred Foyer; Warped Space
