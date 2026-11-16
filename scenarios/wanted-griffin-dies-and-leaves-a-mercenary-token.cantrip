@@ -1,0 +1,43 @@
+# Wanted Griffin: "When this creature dies, create a 1/1 red Mercenary creature token ..." Bot1 casts it off four Moxen on turn 1; on turn 2 Bot2 Bolts it
+# (3 damage, toughness 2), it dies (CR 700.4) and its controller gets exactly one 1/1 red Mercenary with the tap ability (CR 111.1).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Wanted Griffin
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Wanted Griffin.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Wanted Griffin)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Mercenary Token = (absent)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Wanted Griffin
+Bot1.Battlefield.Mercenary Token.Power = 1
+Bot1.Battlefield.Mercenary Token.Toughness = 1
+Bot1.Battlefield.Mercenary Token.Colors = Red

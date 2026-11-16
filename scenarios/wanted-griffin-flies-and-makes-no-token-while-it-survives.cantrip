@@ -1,0 +1,43 @@
+# Wanted Griffin has flying: on turn 3 it attacks; Bot2's Memnite (no flying or reach) may not block it, Bot2's Ornithopter (flying) may. Ornithopter blocks, takes 3 and
+# dies; the Griffin takes no damage (Ornithopter has 0 power), so it did not die and no Mercenary token was made.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Wanted Griffin
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Wanted Griffin.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Wanted Griffin > Bot2)
+! Bot2.Block(Memnite > Wanted Griffin)
+Bot2.Block(Ornithopter > Wanted Griffin)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Wanted Griffin.Keywords = Flying
+Bot1.Battlefield.Wanted Griffin.Damage = 0
+Bot1.Battlefield.Mercenary Token = (absent)
+Bot2.Graveyard = Ornithopter
+Bot2.Life = 20
