@@ -1,0 +1,47 @@
+# Season of Gathering with {P} twice and {P}{P}{P} (five pawprints, CR 700.2d, 700.2i): each {P} chooses a creature its
+# caster controls as it resolves, the same one both times, so Memnite gets two +1/+1 counters and vigilance and trample
+# until end of turn. The modes run in printed order, so the {P}{P}{P} counts the greatest power after those counters: 3,
+# three cards drawn. The keywords end with the turn; the counters stay.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Jet
+Mox Sapphire
+Season of Gathering
+Memnite
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Season of Gathering.Cast
+! Bot1.Modes(1; 1; 3; 1)
+Bot1.Modes(1; 1; 3)
+Bot1.Pass
+Bot1.Choose(Memnite)
+Bot1.Choose(Memnite)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Keywords = Trample; Vigilance
+? Bot1.Hand.Count = 5
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 3
+
+[Expect]
+Bot1.Graveyard = Season of Gathering; Black Lotus
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 2

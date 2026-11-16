@@ -1,0 +1,52 @@
+# Season of Gathering with {P}{P} and {P}{P}{P} (five pawprints): choosing artifact destroys every artifact on the
+# battlefield, each player's Memnite (an artifact creature) and both players' Moxen alike (CR 701.8a). The {P}{P}{P}
+# resolves after it (CR 700.2d) and counts the greatest power among creatures its caster controls then: none are left, so
+# no card is drawn. Llanowar Elves, the opponent's non-artifact creature, stays.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Jet
+Mox Sapphire
+Season of Gathering
+Memnite
+Island
+Island x20
+
+[Bot2 Deck]
+Forest
+Memnite
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Season of Gathering.Cast
+! Bot1.Modes(2; 2; 2)
+Bot1.Modes(2; 3)
+Bot1.Pass
+Bot1.Modes(Artifact)
+[T3 Bot1.Main2]
+? Bot1.Battlefield = Forest
+? Bot2.Battlefield = Forest; Llanowar Elves
+? Bot1.Hand.Count = 2
+
+[Expect]
+Bot1.Graveyard = Season of Gathering; Mox Sapphire; Mox Jet; Memnite; Black Lotus
+Bot2.Graveyard = Memnite

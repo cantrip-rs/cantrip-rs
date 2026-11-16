@@ -1,0 +1,53 @@
+# Season of Gathering with {P} and {P}{P} (three of five pawprints, CR 700.2i): the {P} puts a counter on Memnite, and the
+# {P}{P} asks for the type as it resolves (CR 608.2d). Enchantment destroys every enchantment, the opponent's Bad Moon
+# included, and leaves every artifact - both players' Moxen and Memnite itself. Six pawprints is refused.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Jet
+Mox Sapphire
+Season of Gathering
+Memnite
+Island
+Island x20
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Bad Moon
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Bad Moon.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Season of Gathering.Cast
+! Bot1.Modes(3; 3)
+Bot1.Modes(1; 2)
+Bot1.Pass
+Bot1.Choose(Memnite)
+Bot1.Modes(Enchantment)
+[T3 Bot1.Main2]
+? Bot2.Battlefield = Swamp; Mox Jet
+? Bot1.Battlefield = Forest; Memnite; Mox Jet; Mox Sapphire
+? Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+
+[Expect]
+Bot2.Graveyard = Bad Moon
+Bot1.Graveyard = Season of Gathering; Black Lotus
