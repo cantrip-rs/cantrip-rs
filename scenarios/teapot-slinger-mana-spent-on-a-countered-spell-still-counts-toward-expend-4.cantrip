@@ -1,0 +1,54 @@
+# Teapot Slinger: on turn three its controller spends three mana on Gray Ogre, which the opponent counters - mana spent
+# on a spell counts toward expend whether or not it resolves (CR 700.14, the expend rulings). Lightning Bolt, off Lotus
+# Petal, is the fourth mana: they expend 4 and the Slinger deals 2 damage to each opponent, before the Bolt's 3. On turn
+# one, cast for four, it didn't see its own fourth mana.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Teapot Slinger
+Mountain
+Mox Ruby
+Gray Ogre
+Lightning Bolt
+Lotus Petal
+Mountain x20
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Counterspell
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Teapot Slinger.Cast
+[T1 Bot1.Main2]
+? Bot2.Life = 20
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gray Ogre.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Counterspell.Cast(Stack.Gray Ogre)
+? Bot2.Life = 20
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Lotus Petal.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T3 Bot1.Main2]
+? Bot1.Graveyard = Lightning Bolt; Lotus Petal; Gray Ogre; Black Lotus
+
+[Expect]
+Bot2.Life = 15
+Bot2.Graveyard = Counterspell
+Bot1.Battlefield.Teapot Slinger.Keywords = Menace
