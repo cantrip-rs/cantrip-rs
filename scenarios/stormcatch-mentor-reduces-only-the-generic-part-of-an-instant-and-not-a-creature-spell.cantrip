@@ -1,0 +1,58 @@
+# Stormcatch Mentor reduces only generic mana (CR 118.7a) and only instant and sorcery spells (CR 601.2f). With every mana source tapped and
+# the pool empty, Lightning Bolt ({R}) is refused: the reduction did not take away its coloured mana. Grizzly Bears ({1}{G}, a creature
+# spell) is refused with only Mox Emerald's {G}, so it was not reduced, and it is cast once Mox Pearl's {W} pays the generic part. A
+# creature spell gives no prowess (CR 702.108a): the Mentor's Power is the same before and after Bears. On turn 3 Ruby's {R} pays Bolt exactly.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Stormcatch Mentor
+Lightning Bolt
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stormcatch Mentor.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Lightning Bolt.Cast(Bot2; Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Grizzly Bears.Cast(Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stormcatch Mentor.Power = 3
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stormcatch Mentor.Power = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Grizzly Bears.Power = 2
