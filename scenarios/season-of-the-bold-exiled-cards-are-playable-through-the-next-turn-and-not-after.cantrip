@@ -1,0 +1,44 @@
+# Season of the Bold with only {P}{P} chosen, two of its five pawprints (CR 700.2i): the top two cards of its controller's
+# library are exiled, and they may play them until the end of their next turn. Memnite is cast from exile on that next
+# turn; Ornithopter, left in exile, can no longer be cast the turn after (CR 514.2).
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Season of the Bold
+Island
+Island
+Island
+Memnite
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Season of the Bold.Cast
+Bot1.Modes(2)
+Bot1.Pass
+[T1 Bot1.Main2]
+? Delayed.Count = 0
+? Exile.Count = 2
+? Bot1.Exile.Memnite.Colors.Count = 0
+? Bot1.Exile.Ornithopter.Colors.Count = 0
+? Bot1.Battlefield = Mountain; Mox Ruby
+[T3 Bot1.Main1]
+Bot1.Exile.Memnite.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+! Bot1.Exile.Ornithopter.Cast
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Exile.Ornithopter.Colors.Count = 0

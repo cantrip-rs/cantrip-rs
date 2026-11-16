@@ -1,0 +1,38 @@
+# Browser
+# Season of the Bold at a table, Bot1 a page: the choice of modes is counted in pawprints (CR 700.2i) and the same mode may
+# be chosen more than once (CR 700.2d). The dock says "choose up to 5 {P} worth of modes" and keeps a running count of the
+# {P} spent against the five; Bot1 clicks the {P} mode three times (three of the five) and confirms, and the spell makes
+# three tapped Treasure tokens (CR 111.10a).
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Season of the Bold
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Season of the Bold.Cast
+? Client.Bot1.Prompt.Title = Season of the Bold: choose up to 5 {P} worth of modes
+? Client.Bot1.Prompt.Detail = 0 of 5 {P} spent  ·  the same mode may be chosen more than once
+Bot1.Modes(1; 1; 1)
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mountain; Mox Ruby; Treasure Token; Treasure Token; Treasure Token
+Bot1.Battlefield.Treasure Token#1.Tapped = true
+Bot1.Battlefield.Treasure Token#2.Tapped = true
+Bot1.Battlefield.Treasure Token#3.Tapped = true
+Bot1.Graveyard = Season of the Bold; Black Lotus

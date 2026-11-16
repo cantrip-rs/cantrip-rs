@@ -1,0 +1,83 @@
+# Season of the Bold with {P}{P}{P} and {P}{P} chosen (CR 700.2i, five pawprints): its controller exiles the top two cards
+# of their library, which they may play until the end of their next turn, and until then whenever they cast a spell it
+# deals 2 damage to up to one target creature (a delayed triggered ability, CR 603.7b). Turn one: casting Memnite burns the
+# Memnite already there. Turn two, the opponent's: the opponent's own Hill Giant spell does not trigger it. Turn three:
+# the exiled Mountain is played and the exiled Shock cast, each spell cast dealing 2 to Hill Giant until it dies. It ends
+# with turn three (CR 514.2): turn four, the opponent's, it is already gone, and on turn five casting Ornithopter asks no
+# target.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Season of the Bold
+Memnite
+Memnite
+Memnite
+Shock
+Mountain
+Island
+Ornithopter
+Island x18
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Hill Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite#1.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Season of the Bold.Cast
+Bot1.Modes(3; 2)
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+? Delayed.Count = 1
+? Bot1.Exile.Shock.Colors.Count = 1
+? Bot1.Exile.Mountain.Colors.Count = 0
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield = Mountain; Mox Ruby; Memnite
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Hill Giant.Cast
+! Bot1.Target
+Bot2.Pass
+? Bot2.Battlefield = Mountain; Hill Giant
+[T3 Bot1.Main1]
+? Delayed.Count = 1
+Bot1.Exile.Mountain.Play
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Exile.Shock.Cast(Bot2)
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+? Bot2.Life = 18
+? Bot2.Battlefield.Hill Giant.Damage = 2
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot2.Battlefield = Mountain
+[T4 Bot2.Main1]
+? Delayed.Count = 0
+[T5 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Target
+Bot1.Pass
+
+[Expect]
+Bot2.Graveyard = Hill Giant; Black Lotus
+Bot1.Battlefield.Memnite#1.Damage = 0
+Bot1.Battlefield.Ornithopter.Power = 0

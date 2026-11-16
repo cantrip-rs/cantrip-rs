@@ -1,0 +1,36 @@
+# Season of the Bold: the same mode may be chosen more than once (CR 700.2d), so long as the pawprints add up to five or
+# fewer (CR 700.2i). {P}{P}{P}, {P}{P} and {P} together (six) and {P}{P}{P} twice are refused; {P} three times, three
+# pawprints of the five, makes three tapped Treasure tokens (CR 111.10a) and leaves no delayed ability behind.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Season of the Bold
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Season of the Bold.Cast
+! Bot1.Modes(3; 2; 1)
+! Bot1.Modes(3; 3)
+Bot1.Modes(1; 1; 1)
+Bot1.Pass
+[T1 Bot1.Main2]
+? Delayed.Count = 0
+? Bot1.Battlefield = Mountain; Mox Ruby; Treasure Token; Treasure Token; Treasure Token
+? Bot1.Battlefield.Treasure Token#1.Tapped = true
+? Bot1.Battlefield.Treasure Token#2.Tapped = true
+? Bot1.Battlefield.Treasure Token#3.Tapped = true
+? Exile.Count = 0
+
+[Expect]
+Bot1.Graveyard = Season of the Bold; Black Lotus
