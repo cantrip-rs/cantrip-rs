@@ -40,6 +40,14 @@ pub fn at_end_of_combat(g: &mut dyn Game, item: &StackItem, ability: u8, subject
     );
 }
 
+/// "At end of combat, ..." about this object (CR 603.7, 603.7c): the trigger's effect, setting up the card's delayed ability number 0
+/// about the permanent whose ability triggered, so the delayed ability can tell it is still the same object. Time Elemental and
+/// Fortune, Loyal Steed use it.
+pub fn at_end_of_combat_about_this(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    at_end_of_combat(g, item, 0, Target::Object(item.object));
+    Ok(())
+}
+
 /// "Destroy that creature at end of combat" (CR 603.7c): the trigger's effect, setting up `DESTROY_THAT_CREATURE_AT_END_OF_COMBAT`
 /// (the card's delayed ability number 0) about the creature the trigger is about.
 pub fn destroy_that_creature_at_end_of_combat(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {

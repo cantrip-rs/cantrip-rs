@@ -12,12 +12,6 @@ fn delayed(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "When this creature attacks or blocks, at end of combat, sacrifice it and it deals 5 damage to you" (CR 603.7).
-fn combat_sacrifice_deals_5_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    delayed::at_end_of_combat(g, item, 0, Target::Object(item.object));
-    Ok(())
-}
-
 /// "Return target permanent that isn't enchanted to its owner's hand" (CR 115.1).
 fn unenchanted_permanent(q: &dyn Query, _: &Asker, t: Target) -> bool {
     matches!(t, Target::Object(id) if targets::permanent(q, id) && !targets::is_enchanted(q, id))
@@ -27,7 +21,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
             THIS_ATTACKS_OR_BLOCKS,
-            combat_sacrifice_deals_5_damage,
+            delayed::at_end_of_combat_about_this,
             "When this creature attacks or blocks, at end of combat, sacrifice it and it deals 5 damage to you.",
         ),
         ability(
