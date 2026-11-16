@@ -822,30 +822,32 @@ pub fn this_gets<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem)
     Ok(())
 }
 
+/// "[This creature] gets +`P`/+`T` and gains [keywords] until end of turn" (CR 611.2a, 613.4c, 702): one instruction of two
+/// continuous effects from the ability's source, both of which do nothing once it has left the battlefield (CR 400.7).
+/// `KEYWORDS` is a `Keywords` as `u128` (`Keywords::of(&[Keyword::FirstStrike]).0`). Veteran Guardmouse (+1/+0, first strike)
+/// prints it, and the menace and flying ones below are this for one keyword.
+pub fn this_gets_and_gains_until_end_of_turn<const P: i32, const T: i32, const KEYWORDS: u128>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.one_instruction(&mut |g| {
+        crate::pump(g, item.object, item.object, P, T);
+        if g.is_on_battlefield(item.object) {
+            g.add_effect(item.object, item.object, EffectKind::AddKeywords(Keywords(KEYWORDS)), Duration::EndOfTurn);
+        }
+        Ok(())
+    })
+}
+
 /// "[This creature] gets +`P`/+`T` and gains menace until end of turn" (CR 611.2a, 613.4c, 702.111): one instruction ("gets +1/+0 and
 /// gains menace") of two continuous effects from the ability's source, both of which do nothing once it has left the battlefield
 /// (CR 400.7). Flame-Chain Mauler and Inner Demons Gangsters (+1/+0) print it.
 pub fn this_gets_and_gains_menace<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.one_instruction(&mut |g| {
-        crate::pump(g, item.object, item.object, P, T);
-        if g.is_on_battlefield(item.object) {
-            gain_until_end_of_turn(g, item.object, item.object, Keyword::Menace);
-        }
-        Ok(())
-    })
+    this_gets_and_gains_until_end_of_turn::<P, T, { Keywords::of(&[Keyword::Menace]).0 }>(g, item)
 }
 
 /// "[This creature] gets +`P`/+`T` and gains flying until end of turn" (CR 611.2a, 613.4c, 702.9a): one instruction of two
 /// continuous effects from the ability's source, both of which do nothing once it has left the battlefield (CR 400.7).
 /// Brightfield Glider (+1/+2, when it attacks while saddled) and Kithkeeper (+3/+0) print it.
 pub fn this_gets_and_gains_flying<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.one_instruction(&mut |g| {
-        crate::pump(g, item.object, item.object, P, T);
-        if g.is_on_battlefield(item.object) {
-            gain_until_end_of_turn(g, item.object, item.object, Keyword::Flying);
-        }
-        Ok(())
-    })
+    this_gets_and_gains_until_end_of_turn::<P, T, { Keywords::of(&[Keyword::Flying]).0 }>(g, item)
 }
 
 fn creatures_on_the_battlefield(g: &dyn Game) -> Vec<ObjectId> {
