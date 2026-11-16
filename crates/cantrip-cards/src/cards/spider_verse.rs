@@ -1,5 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::effects::ask_may;
+use cantrip_mechanics::history::done_this_turn;
 use cantrip_mechanics::targets::is_permanent_card;
 use cantrip_oracle as oracle;
 
@@ -11,11 +12,6 @@ fn spider_you_control(q: &dyn Query, asker: &Asker, legend: ObjectId) -> bool {
     q.controller(legend) == asker.controller && q.chars(legend).has_subtype(q.words(asker.source).subtype(Subtype::Spider))
 }
 
-/// The triggered ability's place among the card's abilities.
-fn copy_ability(q: &dyn Query, source: ObjectId) -> AbilityRef {
-    AbilityRef { card: q.chars(source).card, index: 0 }
-}
-
 /// "Whenever you cast a spell from anywhere other than your hand" (CR 601.2, 603.2): a spell its controller cast from any zone but
 /// their hand. Not at all once its controller has chosen to copy a spell with this ability this turn (CR 603.2h).
 fn you_cast_a_spell_from_outside_your_hand(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
@@ -23,7 +19,7 @@ fn you_cast_a_spell_from_outside_your_hand(q: &dyn Query, me: &Asker, event: &Ev
         Event::SpellCast { spell, player, .. }
             if *player == me.controller
                 && q.obj(*spell).cast_from.is_some_and(|zone| zone != ZoneKind::Hand)
-                && !q.history().done(me.source, copy_ability(q, me.source), me.controller) =>
+                && !done_this_turn(q, me) =>
         {
             Fired::about(Target::Object(*spell))
         }

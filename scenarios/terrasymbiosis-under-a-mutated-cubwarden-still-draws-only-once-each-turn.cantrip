@@ -1,0 +1,70 @@
+# Terrasymbiosis, made a creature by Opalescence, has Cubwarden mutated over it (CR 702.140c): the merged permanent is
+# Cubwarden with Terrasymbiosis's abilities as well (CR 702.140e), and "do this only once each turn" (CR 603.2h) is still
+# asked of that ability, which is Terrasymbiosis's whichever card is on top. On turn 5 Bot1's first Snakeskin Veil puts a
+# +1/+1 counter on the merged creature and Bot1 draws a card; the second Veil's counter that turn does not trigger it -
+# nothing goes on the stack.
+
+[Bot1 Deck]
+Gleemox
+Black Lotus
+Sol Ring
+Mox Pearl
+Mox Emerald
+Terrasymbiosis
+Opalescence
+Cubwarden
+Snakeskin Veil
+Snakeskin Veil
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Terrasymbiosis.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Opalescence.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Cubwarden.Cast(Terrasymbiosis; Ability: Mutate)
+Bot1.Pass
+Bot1.Modes(1)
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Snakeskin Veil.Cast(Cubwarden)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Hand = Snakeskin Veil
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Snakeskin Veil.Cast(Cubwarden)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+! Bot1.Accept
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Battlefield.Cubwarden.Counters.PlusOnePlusOne = 2
+Bot1.Hand.Count = 0
+Bot1.Library.Count = 10

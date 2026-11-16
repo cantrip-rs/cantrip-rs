@@ -1,27 +1,23 @@
 use cantrip_api::*;
 use cantrip_mechanics::targets;
 use cantrip_mechanics::statics;
+use cantrip_mechanics::history::done_this_turn;
 use cantrip_oracle as oracle;
 
 const ASK: Question = Question::new("DealDamage", "deal that much damage to the target?", "Only once each turn", "Deal the damage", "Don't");
 
 // --- The Sensational She-Hulk -----------------------------------------------------------------------------------
 
-/// The one ability of the back face, which a "once each turn" record is kept under.
-fn retaliation(q: &dyn Query, source: ObjectId) -> AbilityRef {
-    AbilityRef { card: q.chars(source).card, index: 0 }
-}
-
 /// "Whenever a creature you control is dealt damage" (CR 120.2): once for each creature dealt some, however many
 /// sources dealt it at once (`sums_per_subject`), carrying that much. Not at all once her controller has done the
 /// "do this only once each turn" (CR 603.2h).
-fn creature_you_control_is_dealt_damage(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+fn creature_you_control_is_dealt_damage(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
         Event::Damage { target: target @ Target::Object(id), amount, .. }
             if *amount > 0
-                && q.controller(*id) == q.controller(source)
+                && q.controller(*id) == me.controller
                 && q.chars(*id).is(CardType::Creature)
-                && !q.history().done(source, retaliation(q, source), q.controller(source)) =>
+                && !done_this_turn(q, me) =>
         {
             Some(Fired { subject: *target, data: [0, 0] })
         }
@@ -49,7 +45,7 @@ fn retaliate(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 }
 
 pub static BACK: CardDef = CardDef {
-    abilities: &[triggered(when(EventMask::DAMAGE, creature_you_control_is_dealt_damage), retaliate, "Whenever a creature you control is dealt damage, you may have The Sensational She-Hulk deal that much damage to any target. Do this only once each turn.").damage_amount()
+    abilities: &[triggered(when_asked(EventMask::DAMAGE, creature_you_control_is_dealt_damage), retaliate, "Whenever a creature you control is dealt damage, you may have The Sensational She-Hulk deal that much damage to any target. Do this only once each turn.").damage_amount()
         .targets(&[targets::ANY])
         .sums_per_subject()],
     cast_rules: &[statics::opponents_cant_cast_spells_during_your_turn],

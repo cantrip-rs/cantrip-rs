@@ -1,0 +1,79 @@
+# Planetarium of Wan Shi Tong, made a creature by Animate Artifact, has Cubwarden mutated over it (CR 702.140c): the merged
+# permanent is Cubwarden with the Planetarium's abilities as well (CR 702.140e), and "do this only once each turn" (CR
+# 603.2h) is still asked of that ability, which is the Planetarium's whichever card is on top. On turn 7 Opt's scry
+# triggers it and Bot1 casts Ornithopter from the top of its library; the merged permanent's own scry 2 that turn does not
+# trigger it, so nothing goes on the stack and the second Ornithopter is never offered.
+
+[Bot1 Deck]
+Gleemox
+Sol Ring
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Planetarium of Wan Shi Tong
+Animate Artifact
+Cubwarden
+Opt
+Island
+Island
+Ornithopter
+Ornithopter
+Island x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Planetarium of Wan Shi Tong.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Animate Artifact.Cast(Planetarium of Wan Shi Tong)
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Cubwarden.Cast(Planetarium of Wan Shi Tong; Ability: Mutate)
+Bot1.Pass
+Bot1.Modes(1)
+Bot1.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+Bot1.Arrange(Island |)
+Bot1.Pass
+Bot1.Accept
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Cubwarden.Activate(Ability: Scry)
+Bot1.Pass
+Bot1.Arrange(Ornithopter; Island |)
+? Stack.Count = 0
+! Bot1.Accept
+
+[Expect]
+Turn = 7
+Stack.Count = 0
+Bot1.Looked = Ornithopter
+Bot1.Battlefield = Gleemox; Mox Sapphire; Sol Ring; Mox Pearl; Cubwarden; Cat Token; Cat Token; Ornithopter
+Bot1.Library = Ornithopter; Island; Island; Island; Island; Island

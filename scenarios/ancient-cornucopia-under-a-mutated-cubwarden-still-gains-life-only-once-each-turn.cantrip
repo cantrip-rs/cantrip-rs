@@ -1,0 +1,66 @@
+# Ancient Cornucopia, made a creature by Animate Artifact, has Cubwarden mutated over it (CR 702.140c): the merged
+# permanent is Cubwarden with Cornucopia's abilities as well (CR 702.140e), and "do this only once each turn" (CR 603.2h)
+# is still asked of that ability, which is Cornucopia's whichever card is on top. On turn 5 Bot1 casts Dark Ritual and
+# gains 1 life with the trigger; the second Dark Ritual that turn does not trigger it: nothing goes on the stack above it.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Ancient Cornucopia
+Animate Artifact
+Cubwarden
+Dark Ritual
+Dark Ritual
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Ancient Cornucopia.Cast
+Bot1.Pass
+Bot1.Battlefield.Ancient Cornucopia.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Animate Artifact.Cast(Ancient Cornucopia)
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Ancient Cornucopia.Activate(Color: White)
+Bot1.Hand.Cubwarden.Cast(Ancient Cornucopia; Ability: Mutate)
+Bot1.Pass
+Bot1.Pass
+Bot1.Modes(1)
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Cubwarden.Activate(Color: Black)
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot1.Accept
+Bot1.Pass
+? Bot1.Life = 21
+Bot1.Hand.Dark Ritual.Cast
+? Stack = Dark Ritual
+Bot1.Pass
+! Bot1.Accept
+Bot1.Pass
+
+[Expect]
+Turn = 5
+Bot1.Life = 21
+Bot1.Battlefield = Cat Token; Cat Token; Cubwarden; Forest; Mox Pearl; Mox Sapphire
+Bot1.Graveyard = Dark Ritual; Dark Ritual; Animate Artifact; Black Lotus

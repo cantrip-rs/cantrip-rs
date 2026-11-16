@@ -1,0 +1,82 @@
+# Spider-Verse, made a creature by Opalescence, has Cubwarden mutated over it (CR 702.140c): the merged permanent is
+# Cubwarden with Spider-Verse's abilities as well (CR 702.140e), and "do this only once each turn" (CR 603.2h) is still
+# asked of that ability, which is Spider-Verse's whichever card is on top. On turn 9 Bot1 casts both Lava Darts from its
+# graveyard: the first is copied (Bot2 takes 2), and the second does not trigger it - nothing goes on the stack above it.
+
+[Bot1 Deck]
+Gleemox
+Black Lotus
+Sol Ring
+Mox Pearl
+Mountain
+Spider-Verse
+Opalescence
+Mountain
+Cubwarden
+Lava Dart
+Lava Dart
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Spider-Verse.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Opalescence.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Cubwarden.Cast(Spider-Verse; Ability: Mutate)
+Bot1.Pass
+Bot1.Modes(1)
+Bot1.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lava Dart.Cast(Bot2)
+Bot1.Pass
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lava Dart.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+Bot1.Graveyard.Lava Dart#1.Cast(Bot2; Ability: Flashback)
+Bot1.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+Bot1.Graveyard.Lava Dart.Cast(Bot2; Ability: Flashback)
+Bot1.Choose(Mountain)
+? Stack = Lava Dart
+Bot1.Pass
+! Bot1.Accept
+Bot1.Pass
+
+[Expect]
+Turn = 9
+Bot2.Life = 15
+Bot1.Battlefield = Cat Token; Cat Token; Cubwarden; Gleemox; Mox Pearl; Opalescence; Sol Ring
+Exile = Lava Dart; Lava Dart

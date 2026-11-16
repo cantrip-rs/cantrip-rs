@@ -3,11 +3,6 @@ use cantrip_mechanics::effects::{self, ask_may};
 use cantrip_mechanics::{top_of_library, triggers};
 use cantrip_oracle as oracle;
 
-/// The triggered ability, second in the card's list: what "do this only once each turn" is recorded against.
-fn look_ability(q: &dyn Query, source: ObjectId) -> AbilityRef {
-    AbilityRef { card: q.chars(source).card, index: 1 }
-}
-
 /// "Whenever you scry or surveil" (CR 701.22d, 701.25d: once the scry or surveil is complete, whatever made its
 /// controller do it). "Do this only once each turn" (CR 603.2h): "This ability triggers only if its source's controller
 /// has not yet taken the indicated action that turn" - the controller, so the action is looked for among what that
@@ -15,7 +10,8 @@ fn look_ability(q: &dyn Query, source: ObjectId) -> AbilityRef {
 /// ruling: "Once you choose to cast the top card of your library, Planetarium of Wan Shi Tong's ability won't trigger
 /// again that turn").
 fn you_scry_or_surveil_not_yet_cast(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
-    let mine = look_ability(q, me.source);
+    // The ability asked (`Asker::asked_ability`): Planetarium's whichever card of a merged permanent is on top (CR 702.140e).
+    let Some(mine) = me.asked_ability() else { return None };
     let you = me.controller;
     let cast = q.history().this_turn().iter().any(|r| matches!(r.event, Event::Done { ability, player, .. } if ability == mine && player == you));
     if cast {

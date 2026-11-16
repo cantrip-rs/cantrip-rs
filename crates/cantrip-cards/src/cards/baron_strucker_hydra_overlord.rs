@@ -1,19 +1,15 @@
 use cantrip_api::*;
 use cantrip_mechanics::effects::ask_may;
+use cantrip_mechanics::history::done_this_turn;
 use cantrip_mechanics::{connive, cost_reduction, lands, triggers};
 use cantrip_oracle as oracle;
 
 const ASK: Question = Question::new("Connive", "have it connive?", "Draw a card, then discard a card  ·  only once each turn", "Connive", "Don't");
 
-/// The ability the once-each-turn record is kept under.
-fn connive_ability(q: &dyn Query, source: ObjectId) -> AbilityRef {
-    AbilityRef { card: q.chars(source).card, index: 0 }
-}
-
 /// "Whenever another Villain you control enters" (CR 603.2, 603.6a), not at all once its controller has done the "do this only
 /// once each turn" (CR 603.2h), as Terrasymbiosis does.
 fn another_villain_enters(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
-    if q.history().done(me.source, connive_ability(q, me.source), me.controller) {
+    if done_this_turn(q, me) {
         return None;
     }
     triggers::another_of_subtype_you_control_enters::<{ lands::sub(Subtype::Villain) }>(q, me, event)

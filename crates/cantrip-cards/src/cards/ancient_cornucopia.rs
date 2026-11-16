@@ -1,13 +1,9 @@
 use cantrip_api::*;
 use cantrip_mechanics::effects::ask_may;
+use cantrip_mechanics::history::done_this_turn;
 use cantrip_oracle as oracle;
 
 const ASK: Question = Question::new("GainLife", "gain 1 life for each of that spell's colors?", "One life for each color of the spell you cast  ·  only once each turn", "Gain life", "Don't gain life");
-
-/// The triggered ability's place among the card's abilities (the mana ability is the first).
-fn gain_ability(q: &dyn Query, source: ObjectId) -> AbilityRef {
-    AbilityRef { card: q.chars(source).card, index: 1 }
-}
 
 /// "Whenever you cast a spell that's one or more colors" (CR 603.2, 601.2i): a spell its controller cast, judged on the
 /// spell as it is on the stack, with at least one color; the number of its colors is carried as `data[0]`, so a spell that
@@ -15,7 +11,7 @@ fn gain_ability(q: &dyn Query, source: ObjectId) -> AbilityRef {
 /// life with it this turn (CR 603.2h).
 fn you_cast_a_colored_spell(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
-        Event::SpellCast { spell, player, .. } if *player == me.controller && !q.history().done(me.source, gain_ability(q, me.source), me.controller) => {
+        Event::SpellCast { spell, player, .. } if *player == me.controller && !done_this_turn(q, me) => {
             let colors = q.chars(*spell).colors.iter().count() as u32;
             (colors > 0).then_some(Fired { subject: Target::Object(*spell), data: [colors, 0] })
         }
