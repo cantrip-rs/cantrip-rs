@@ -94,6 +94,8 @@ mod cloak_tests;
 #[cfg(test)]
 mod coin_flip_rules_tests;
 #[cfg(test)]
+mod permission_caption_tests;
+#[cfg(test)]
 mod sideboard_tests;
 #[cfg(test)]
 mod morph_tests;

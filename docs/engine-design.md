@@ -2042,7 +2042,9 @@ special action; an ability's own ("this ability costs {1} less to activate ...":
 it (`TakeActionAnswer::OptionId`): the grants stay engine-side, so no hidden object leaks, and an answer naming an option by
 kind, source and index alone is refused where two options share them. A cast another object makes possible says which on
 its menu row where its cost does not (`describe`), and so does a land play: "Mystic Forge", "Retrace", "Yawgmoth's Will", "Pay {E} rather than its
-mana cost (Lurrus of the Dream-Den)"; an ordinary cast reads as it always has.
+mana cost (Lurrus of the Dream-Den)"; an ordinary cast reads as it always has. Where the permission is one of several ways one
+card gives to cast from the same zone (Muldrotha, the Gravetide's kind), the row names that way's own words instead of the
+permanent (`permission_label`), so the rows read apart.
 
 ### Ways a permanent gives: from a graveyard or from a hand
 

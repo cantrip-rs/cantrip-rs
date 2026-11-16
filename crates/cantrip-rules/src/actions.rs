@@ -9999,6 +9999,20 @@ fn permission_name(cards: &CardTable, state: &GameState, g: Grant) -> String {
     if g.ability.is_retrace() { "Retrace".to_string() } else { cards.get(state.obj(g.object).card).name.to_string() }
 }
 
+/// What a cast's menu row names the permission `g` by: what made it possible (`permission_name`), unless it is one of several
+/// ways one card gives to cast cards from the same zone (Muldrotha, the Gravetide's, one for each permanent type, CR 601.3) -
+/// then the way's own words, which say which permission the row casts by, and so which type the card is cast as: two rows
+/// that differ only in that read apart ("Impending 4—{1}{G}{G} (... an enchantment spell from your graveyard.)").
+fn permission_label(cards: &CardTable, state: &GameState, g: Grant) -> String {
+    if let Some(way) = named_way(state, cards, g)
+        && way.what.permission
+        && cards.get(g.ability.card).granted_ways.iter().filter(|w| w.permission && w.from == way.what.from).count() > 1
+    {
+        return way.what.text.to_string();
+    }
+    permission_name(cards, state, g)
+}
+
 /// Whether a menu row names what made it possible: always a rule of a permanent's, a way it gives, retrace or an effect's
 /// say-so (Yawgmoth's Will); a play permission an effect gave only where another permission for the card would let it be
 /// played or cast too, so the rows read apart.
@@ -10028,7 +10042,7 @@ fn describe_cast(cards: &'static CardTable, state: &GameState, log: &[Record], o
     let reader = crate::resolve::Reader { cards, state, events: log };
     let player = asked_player(state);
     let through = option.granted_by.and_then(|_| through(&reader, cards, player, source, option.granted_by));
-    let permission = |g: Grant| permission_name(cards, state, g);
+    let permission = |g: Grant| permission_label(cards, state, g);
     // An alternative cost another object gives (CR 118.9): its own words, after the face it casts where the card has more than
     // one, as a way a permanent gives says them ("Peter Parker: Web-slinging"), then the permission it is cast by, if any.
     if let Some(alternative) = option.paid_by.and_then(|g| named_alternative(state, cards, g)) {
