@@ -1,0 +1,29 @@
+# Cindering Cutthroat: with no life lost this turn it enters without the counter, a plain 3/2. Bot1 pays {2}{B/R} with a Mox Jet
+# (the hybrid {B/R} with black), a Mox Ruby and a Mox Pearl.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Cindering Cutthroat
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cindering Cutthroat.Cast
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Cindering Cutthroat.Power = 3
+Bot1.Battlefield.Cindering Cutthroat.Toughness = 2

@@ -1,0 +1,35 @@
+# Cindering Cutthroat: "{1}{B/R}: This creature gains menace until end of turn." Bot1 casts it from the Black Lotus's red, then pays
+# {1}{B/R} with a Mox Ruby and a Mox Jet (hybrid paid with black): it has menace for the turn and has lost it by turn 3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Cindering Cutthroat
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Cindering Cutthroat.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cindering Cutthroat.Keywords = (absent)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Cindering Cutthroat.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Cindering Cutthroat.Keywords = Menace
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Cindering Cutthroat.Keywords = (absent)
