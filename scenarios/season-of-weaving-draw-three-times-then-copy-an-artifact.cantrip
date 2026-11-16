@@ -1,0 +1,40 @@
+# Season of Weaving with {P} three times and {P}{P} (five pawprints; the same mode again, CR 700.2d, 700.2i): its caster
+# draws three cards, one at a time, then chooses an artifact or creature they control - here Mox Sapphire, an artifact - and
+# creates a token that's a copy of it (CR 707.2). The choice is not a target.
+# Six pawprints are refused, whether six {P} or three {P}{P} (CR 700.2i).
+
+[Bot1 Deck]
+Island
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Season of Weaving
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Season of Weaving.Cast
+! Bot1.Modes(1; 1; 1; 1; 1; 1)
+! Bot1.Modes(2; 2; 2)
+Bot1.Modes(1; 1; 1; 2)
+Bot1.Pass
+Bot1.Choose(Mox Sapphire)
+[T1 Bot1.Main2]
+? Bot1.Hand.Count = 4
+? Bot1.Battlefield = Island; Mox Sapphire; Mox Jet; Mox Ruby; Mox Sapphire
+
+[Expect]
+Bot1.Battlefield.Mox Sapphire#2.Types = Artifact

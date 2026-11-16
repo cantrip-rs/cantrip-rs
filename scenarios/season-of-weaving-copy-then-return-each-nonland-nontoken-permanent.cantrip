@@ -1,0 +1,52 @@
+# Season of Weaving with {P}{P}{P} and {P}{P} (CR 700.2i): the modes run in printed order (CR 700.2d), so its caster first
+# chooses Memnite, a creature they control, and creates a token copy of it (CR 707.2), then each nonland, nontoken permanent
+# returns to its owner's hand - the Memnite card and both Moxen to the caster's, the opponent's Ornithopter to theirs. The
+# token copy and the lands stay.
+
+[Bot1 Deck]
+Island
+Island
+Black Lotus
+Mox Sapphire
+Mox Jet
+Memnite
+Season of Weaving
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Season of Weaving.Cast
+! Bot1.Modes(3; 3)
+Bot1.Modes(3; 2)
+Bot1.Pass
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Memnite)
+[T3 Bot1.Main2]
+? Bot1.Battlefield = Island; Island; Memnite
+? Bot2.Battlefield = 
+? Bot1.Hand.Count = 4
+? Bot2.Hand.Count = 8
+
+[Expect]
+Bot1.Graveyard = Season of Weaving; Black Lotus
+Bot2.Hand.Ornithopter.Colors.Count = 0
+Bot1.Hand.Memnite.Colors.Count = 0
+Bot1.Hand.Mox Sapphire.Colors.Count = 0

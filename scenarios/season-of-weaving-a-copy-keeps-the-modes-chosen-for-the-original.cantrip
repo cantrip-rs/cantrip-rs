@@ -1,0 +1,44 @@
+# Season of Weaving copied by Fork: a copy of a modal spell has the modes the original's controller chose (CR 707.10), so
+# its controller is asked no modes; the copy of {P} chosen three times draws three, and so does the original - six cards in
+# all. (None of the Season's modes targets, so there are no targets to change, CR 707.10c.)
+
+[Bot1 Deck]
+Island
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Season of Weaving
+Black Lotus
+Fork
+Mountain
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Season of Weaving.Cast
+Bot1.Modes(1; 1; 1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Fork.Cast(Stack.Season of Weaving)
+! Bot1.Modes
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Hand.Count = 6
+
+[Expect]
+Bot1.Graveyard = Season of Weaving; Fork; Black Lotus
