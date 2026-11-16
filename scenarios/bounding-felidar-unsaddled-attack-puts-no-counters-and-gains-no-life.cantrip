@@ -1,0 +1,57 @@
+# Bounding Felidar: Saddle 2 (CR 702.171a) cannot be paid by Mons's Goblin Raiders (power 1), and a Felidar that attacks unsaddled does not trigger
+# (CR 702.171b, the 2024-04-12 ruling). Turn 1: Felidar (6 mana from Black Lotus and three Moxen). Turn 3: Raiders come down and saddling is
+# refused; Savannah Lions come down too, and Felidar attacks without saddling: Raiders and Lions stay 1/1 and 2/1, Bot1 stays at 20, and Bot2 takes 4 (16).
+
+[Bot1 Deck]
+Bounding Felidar
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mons's Goblin Raiders
+Savannah Lions
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bounding Felidar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mons's Goblin Raiders.Power = 1
+! Bot1.Battlefield.Bounding Felidar.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bounding Felidar > Bot2)
+? Stack.Count = 0
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 16
+Bot1.Battlefield.Savannah Lions.Power = 2
+Bot1.Battlefield.Savannah Lions.Toughness = 1
+Bot1.Battlefield.Mons's Goblin Raiders.Power = 1
+Bot1.Battlefield.Mons's Goblin Raiders.Toughness = 1
