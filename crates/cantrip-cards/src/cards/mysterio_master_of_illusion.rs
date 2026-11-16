@@ -24,9 +24,7 @@ fn create_illusions(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         .filter(|&id| !g.obj(id).token && g.chars(id).has_subtype(villain))
         .count() as u32;
     let made = tokens::create(g, item.controller, &ILLUSION_VILLAIN, count)?;
-    let o = *g.obj(item.object);
-    let card = o.copied_card().unwrap_or(o.card);
-    g.delayed_trigger_about(DelayedWhen::WhenEvent, item.object, item.controller, AbilityRef::delayed(card, 0), &made);
+    g.delayed_trigger_about(DelayedWhen::WhenEvent, item.object, item.controller, AbilityRef::delayed(item.ability.card, 0), &made);
     Ok(())
 }
 
