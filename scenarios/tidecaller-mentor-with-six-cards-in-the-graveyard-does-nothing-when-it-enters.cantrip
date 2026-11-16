@@ -1,0 +1,53 @@
+# Tidecaller Mentor: the threshold is an intervening "if" (CR 603.4), checked when it enters and again on resolution. Bot1's graveyard holds
+# six cards on turn 3 (Faithless Looting, its two discarded Islands, and Thought Scour with its two milled Islands), one short, so the
+# trigger is not put on the stack and Bot2's Memnite stays. Bot1 never casts Black Lotus here.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Island
+Faithless Looting
+Thought Scour
+Tidecaller Mentor
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Island; Island)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 6
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tidecaller Mentor.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target
+? Stack.Count = 0
+
+[Expect]
+Bot2.Battlefield = Island; Memnite
+Bot2.Hand.Count = 6
+Bot1.Battlefield = Mox Ruby; Mox Sapphire; Mox Jet; Tidecaller Mentor
