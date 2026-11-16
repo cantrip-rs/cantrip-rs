@@ -1,0 +1,85 @@
+# Kastral, the Windcrested triggers only when a Bird its controller controls deals combat damage to a player (CR 603.2).
+# T3: Bot1 attacks with Kastral and Balduvian Bears; Bot2's City Pigeon blocks Kastral (damage to a creature) and Bears (not a
+# Bird) hits Bot2: no trigger, so Bot1's hand stays at the one card it drew. T4: Bot2's Coast Watcher (a Bird Bot1 does not
+# control) hits Bot1: no trigger. T5: Kastral is unblocked and Bot1 chooses "Draw a card", drawing one.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Mox Jet
+Kastral, the Windcrested
+Balduvian Bears
+Plains x10
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+City Pigeon
+Coast Watcher
+Swamp x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kastral, the Windcrested.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Balduvian Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.City Pigeon.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Coast Watcher.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Kastral, the Windcrested > Bot2; Balduvian Bears > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(City Pigeon > Kastral, the Windcrested)
+[T3 Bot1.Main2]
+? Bot1.Hand.Count = 1
+? Bot2.Life = 18
+[T4 Bot2.Main1]
+Bot2.Attack(Coast Watcher > Bot1)
+[T4 Bot2.Main2]
+? Bot1.Life = 19
+? Bot1.Hand.Count = 1
+[T5 Bot1.Main1]
+? Bot1.Hand.Count = 2
+Bot1.Attack(Kastral, the Windcrested > Bot2)
+[T5 Bot1.CombatDamage]
+Bot1.Modes(3)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Hand.Count = 3

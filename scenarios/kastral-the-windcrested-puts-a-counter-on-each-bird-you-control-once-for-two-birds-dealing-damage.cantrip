@@ -1,0 +1,79 @@
+# Kastral, the Windcrested and Coast Watcher (Birds) both connect with Bot2 in the same combat damage step: "one or more Birds you
+# control deal combat damage to a player" triggers once (CR 603.2c), so one mode is chosen and each Bird gets one +1/+1 counter,
+# not two. "Put a +1/+1 counter on each Bird you control" (CR 608.2c, 122.1) leaves Bot1's Balduvian Bears and Bot2's own Coast
+# Watcher alone.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Kastral, the Windcrested
+Coast Watcher
+Mox Emerald
+Balduvian Bears
+Plains x10
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Emerald
+Coast Watcher
+Swamp x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kastral, the Windcrested.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Coast Watcher.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Coast Watcher.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Balduvian Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Kastral, the Windcrested > Bot2; Coast Watcher > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Kastral, the Windcrested.Power = 5
+Bot1.Battlefield.Kastral, the Windcrested.Toughness = 6
+Bot1.Battlefield.Kastral, the Windcrested.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Coast Watcher.Power = 2
+Bot1.Battlefield.Coast Watcher.Toughness = 2
+Bot1.Battlefield.Coast Watcher.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Balduvian Bears.Power = 2
+Bot1.Battlefield.Balduvian Bears.Toughness = 2
+Bot2.Battlefield.Coast Watcher.Power = 1
+Bot2.Battlefield.Coast Watcher.Toughness = 1
+Bot1.Hand.Count = 0
