@@ -1,0 +1,18 @@
+{
+  "name": "Mirror Room // Fractured Realm",
+  "oracleText": "",
+  "halves": [
+    {
+      "name": "Mirror Room",
+      "manaCost": "{2}{U}",
+      "type": "Enchantment — Room",
+      "oracleText": "When you unlock this door, create a token that's a copy of target creature you control, except it's a Reflection in addition to its other creature types.\n(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)"
+    },
+    {
+      "name": "Fractured Realm",
+      "manaCost": "{5}{U}{U}",
+      "type": "Enchantment — Room",
+      "oracleText": "If a triggered ability of a permanent you control triggers, that ability triggers an additional time.\n(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)"
+    }
+  ]
+}
