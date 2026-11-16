@@ -1,0 +1,18 @@
+{
+  "name": "Greenhouse // Rickety Gazebo",
+  "oracleText": "",
+  "halves": [
+    {
+      "name": "Greenhouse",
+      "manaCost": "{2}{G}",
+      "type": "Enchantment — Room",
+      "oracleText": "Lands you control have \"{T}: Add one mana of any color.\"\n(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)"
+    },
+    {
+      "name": "Rickety Gazebo",
+      "manaCost": "{3}{G}",
+      "type": "Enchantment — Room",
+      "oracleText": "When you unlock this door, mill four cards, then return up to two permanent cards from among them to your hand.\n(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)"
+    }
+  ]
+}
