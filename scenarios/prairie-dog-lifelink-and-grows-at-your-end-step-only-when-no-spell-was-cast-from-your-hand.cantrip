@@ -1,0 +1,38 @@
+# Prairie Dog (2/2 lifelink): "At the beginning of your end step, if you haven't cast a spell from your hand this turn, put a +1/+1
+# counter on this creature" (CR 603.4). Turn 1 it is cast from the hand (and two Moxen), so no counter at that end step. On turn 3
+# nothing is cast: it attacks, lifelink gains 2 (CR 702.15b) for Bot1 as Bot2 loses 2, and at the end step it grows to 3/3. On turn 5
+# Bot1 casts Memnite from its hand, so it stays 3/3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Prairie Dog
+Memnite
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Prairie Dog.Cast
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Prairie Dog.Power = 2
+? Bot1.Battlefield.Prairie Dog.Keywords = Lifelink
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Prairie Dog > Bot2)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Prairie Dog.Power = 3
+? Bot1.Battlefield.Prairie Dog.Toughness = 3
+? Bot1.Life = 22
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+[T6 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Prairie Dog.Power = 3
+Bot1.Battlefield.Prairie Dog.Toughness = 3

@@ -1,0 +1,59 @@
+# Prairie Dog's replacement needs both: "you would put" and "a creature you control" (CR 614.1a, 122.6). With it active on turn 3,
+# Bot1's Honor puts one counter on Bot2's Memnite (not Bot1's creature): a 2/2, not 3/3. Bot2's own Fleeting Flight, cast on Bot1's
+# Dog in response, puts one counter on it (Bot2 is the putter): 3/3. Bot1's Dog then grows at the end step - Bot1 cast Honor, a spell
+# from its hand, so there is no counter and it stays 3/3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Prairie Dog
+Honor
+Mox Pearl
+Island x14
+
+[Bot2 Deck]
+Memnite
+Mox Pearl
+Fleeting Flight
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Prairie Dog.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Prairie Dog.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Honor.Cast(Bot2.Battlefield.Memnite)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Fleeting Flight.Cast(Bot1.Battlefield.Prairie Dog)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Prairie Dog.Power = 3
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Prairie Dog.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Prairie Dog.Power = 3

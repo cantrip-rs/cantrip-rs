@@ -1,0 +1,40 @@
+# The replacement applies to any +1/+1 counters you would put on a creature you control, including Prairie Dog's own end-step trigger
+# (CR 614.1a). On turn 3 Bot1 casts nothing but pays {4}{W} with its five Moxen: at the end step the Dog (2/2) puts one counter on
+# itself, which becomes two - a 4/4.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Prairie Dog
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Prairie Dog.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Prairie Dog.Activate
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Prairie Dog.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Prairie Dog.Power = 4
+Bot1.Battlefield.Prairie Dog.Toughness = 4

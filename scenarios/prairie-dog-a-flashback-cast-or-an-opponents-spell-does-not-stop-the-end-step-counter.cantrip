@@ -1,0 +1,47 @@
+# Prairie Dog's end-step counter looks only at spells you cast "from your hand" (CR 601.2a): on turn 1 Bot1 casts the Dog and Faithless
+# Looting from its hand (no counter at that end step), and on turn 3 flashes Looting back from its graveyard - a cast, but not from
+# the hand - while Bot2 casts a Lightning Bolt at Bot1 from its own hand, which is not "your" spell: the Dog still grows to 3/3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Prairie Dog
+Faithless Looting
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Prairie Dog.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+? Bot1.Battlefield.Prairie Dog.Power = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Faithless Looting.Cast(Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Prairie Dog.Power = 3
+
+[Expect]
+Bot1.Life = 17
+Exile = Faithless Looting

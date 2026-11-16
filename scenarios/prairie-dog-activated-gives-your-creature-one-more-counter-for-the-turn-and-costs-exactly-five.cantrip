@@ -1,0 +1,59 @@
+# Prairie Dog's "{4}{W}: Until end of turn, if you would put one or more +1/+1 counters on a creature you control, put that many plus
+# one instead" (CR 614.1a, 122.6). On turn 1, with only three Moxen untapped after casting the Dog, it is refused (Mana: short);
+# on turn 3 all five pay for it exactly and the pool is empty. Honor (a +1/+1 counter on target creature) then puts two on the Dog,
+# a 4/4. The effect is gone on turn 5: a second Honor puts one, a 5/5.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Prairie Dog
+Honor
+Mox Pearl
+Honor
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Prairie Dog.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Prairie Dog.Activate(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Prairie Dog.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Honor.Cast(Bot1.Battlefield.Prairie Dog)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Prairie Dog.Power = 4
+? Bot1.Battlefield.Prairie Dog.Counters.PlusOnePlusOne = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Honor.Cast(Bot1.Battlefield.Prairie Dog)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Prairie Dog.Power = 5
+Bot1.Battlefield.Prairie Dog.Toughness = 5
+Bot1.Battlefield.Prairie Dog.Counters.PlusOnePlusOne = 3
