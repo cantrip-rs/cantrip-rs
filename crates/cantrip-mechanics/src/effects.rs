@@ -2749,6 +2749,22 @@ pub fn damage_each_creature_and_planeswalker(g: &mut dyn Game, item: &StackItem,
     g.damage_together(&hits);
 }
 
+/// "[This] deals `n` damage to each creature with flying and each player" (Hurricane's X, Ifh-Bíff Efreet's 1): one damage
+/// event for every creature with flying on the battlefield as the effect is carried out (CR 608.2c) and every player, in
+/// APNAP order, all dealt together (CR 120.3).
+pub fn damage_each_creature_with_flying_and_each_player(g: &mut dyn Game, item: &StackItem, n: u32) {
+    let mut hits: Vec<(ObjectId, Target, u32)> = g
+        .state()
+        .battlefield()
+        .iter()
+        .copied()
+        .filter(|&id| crate::targets::has_flying_creature(g, id))
+        .map(|id| (item.object, Target::Object(id), n))
+        .collect();
+    hits.extend(g.state().apnap().map(|player| (item.object, Target::Player(player), n)));
+    g.damage_together(&hits);
+}
+
 /// `damage_each_creature`, answering which creatures were actually dealt damage by it (CR 120.3), for "a creature dealt
 /// damage this way" (Anger of the Gods, Pyroclasm's kin). They are read from the damage events the resolution recorded, so a
 /// creature whose damage was prevented is not among them and one a redirection sent the damage to (CR 614.9, Ancient

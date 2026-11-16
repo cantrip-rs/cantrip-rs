@@ -1,15 +1,10 @@
 use cantrip_api::*;
-use cantrip_mechanics::targets;
+use cantrip_mechanics::effects;
 use cantrip_oracle as oracle;
 
-/// Deal damage simultaneously to each player and each creature with flying (CR 101.4, 608.2h).
+/// "Hurricane deals X damage to each creature with flying and each player." (CR 120.3, 608.2h).
 fn hurricane(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let mut recipients: Vec<Target> = g.state().battlefield().iter().copied()
-        .filter(|&id| targets::has_flying_creature(g, id))
-        .map(Target::Object).collect();
-    recipients.extend(g.state().apnap().map(Target::Player));
-    let damage: Vec<_> = recipients.into_iter().map(|target| (item.object, target, item.x as u32)).collect();
-    g.damage_together(&damage);
+    effects::damage_each_creature_with_flying_and_each_player(g, item, item.x as u32);
     Ok(())
 }
 
