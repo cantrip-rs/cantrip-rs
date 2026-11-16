@@ -1,0 +1,66 @@
+# Veteran Guardmouse: Valiant triggers only when it becomes the target of a spell or ability its controller controls. On turn 2
+# Bot2 casts Giant Growth on Bot1's Guardmouse: it gets +3/+3 but nothing triggers (no first strike, no scry). Later that turn
+# Bot1 targets it with a Giant Growth of its own: that is the first time this turn a spell Bot1 controls targets it, so Valiant
+# triggers (+1/+0, first strike, scry 1, keeping the Forest on top) and the Guardmouse ends the turn a 10/10.
+
+[Bot1 Deck]
+Veteran Guardmouse
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Giant Growth
+Forest x20
+
+[Bot2 Deck]
+Mox Emerald
+Giant Growth
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Veteran Guardmouse.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Giant Growth.Cast(Bot1.Battlefield.Veteran Guardmouse)
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Veteran Guardmouse.Power = 6
+? Bot1.Battlefield.Veteran Guardmouse.Keywords = (absent)
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Veteran Guardmouse)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Forest |)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Veteran Guardmouse.Power = 10
+? Bot1.Battlefield.Veteran Guardmouse.Toughness = 10
+? Bot1.Battlefield.Veteran Guardmouse.Keywords = FirstStrike
+
+[Expect]
+Bot1.Library.Top = Forest
+Bot1.Graveyard = Giant Growth
+Bot2.Graveyard = Giant Growth

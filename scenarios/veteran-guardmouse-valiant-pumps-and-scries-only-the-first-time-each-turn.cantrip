@@ -1,0 +1,83 @@
+# Veteran Guardmouse: "Valiant - Whenever this creature becomes the target of a spell or ability you control for the first time
+# each turn, it gets +1/+0 and gains first strike until end of turn. Scry 1." Turn 3: the Basilisk Collar's equip targets it first:
+# it gets +1/+0 and first strike (the Collar gives deathtouch and lifelink too) and Bot1 scries 1, sending the Forest on top of the
+# library to the bottom (the second Forest below it is then on top). Rancor, a spell targeting it again the same turn, is the second
+# time: no further +1/+0, no second scry. Turn 5: the turn-3 Forest was drawn, the +1/+0 and first strike have ended (CR 514.2) and
+# the trigger is available again - the scry now looks at the Island on top and keeps it there (the empty bottom group).
+
+[Bot1 Deck]
+Veteran Guardmouse
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Basilisk Collar
+Rancor
+Forest
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Veteran Guardmouse.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Library.Top = Forest
+? Bot1.Battlefield.Veteran Guardmouse.Power = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Basilisk Collar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Basilisk Collar.Activate(Veteran Guardmouse)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(| Forest)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Veteran Guardmouse.Power = 4
+? Bot1.Battlefield.Veteran Guardmouse.Toughness = 4
+? Bot1.Battlefield.Veteran Guardmouse.Keywords = Deathtouch; FirstStrike; Lifelink
+? Bot1.Library.Top = Forest
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rancor.Cast(Veteran Guardmouse)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Veteran Guardmouse.Power = 6
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Veteran Guardmouse.Power = 5
+? Bot1.Battlefield.Veteran Guardmouse.Keywords = Deathtouch; Lifelink; Trample
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Basilisk Collar.Activate(Veteran Guardmouse)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island |)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Veteran Guardmouse.Power = 6
+Bot1.Library.Top = Island
