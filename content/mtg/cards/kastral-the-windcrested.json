@@ -1,0 +1,11 @@
+{
+  "name": "Kastral, the Windcrested",
+  "manaCost": "{3}{W}{U}",
+  "type": "Legendary Creature — Bird Scout",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Flying\nWhenever one or more Birds you control deal combat damage to a player, choose one —\n• You may put a Bird creature card from your hand or graveyard onto the battlefield with a finality counter on it.\n• Put a +1/+1 counter on each Bird you control.\n• Draw a card.",
+  "keywords": [
+    "Flying"
+  ]
+}

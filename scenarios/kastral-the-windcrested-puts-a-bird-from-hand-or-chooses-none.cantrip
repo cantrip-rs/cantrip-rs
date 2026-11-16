@@ -1,0 +1,54 @@
+# Kastral, the Windcrested's first mode names a Bird creature card "from your hand or graveyard", and it is a "may" (CR 700.2,
+# 608.2c, 122.6). T3: Bot1's graveyard holds only Black Lotus, so the Bird comes from its hand: Coast Watcher enters with a
+# finality counter while Keeneye Aven (also a Bird) stays in hand. T5: the mode is chosen again and Bot1 chooses nothing, so
+# Keeneye Aven stays in hand and nothing enters. Only one card may be chosen, and it enters untapped.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Kastral, the Windcrested
+Coast Watcher
+Keeneye Aven
+Balduvian Bears
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kastral, the Windcrested.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Kastral, the Windcrested > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Coast Watcher; Keeneye Aven)
+Bot1.Choose(Coast Watcher)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Coast Watcher.Counters.Finality = 1
+? Bot1.Battlefield.Coast Watcher.Tapped = false
+? Bot1.Hand = Keeneye Aven; Balduvian Bears; Plains
+[T5 Bot1.Main1]
+Bot1.Attack(Kastral, the Windcrested > Bot2)
+[T5 Bot1.CombatDamage]
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 12
+Bot1.Hand = Keeneye Aven; Balduvian Bears; Plains; Plains
+Bot1.Battlefield = Coast Watcher; Kastral, the Windcrested; Mox Pearl; Mox Sapphire
