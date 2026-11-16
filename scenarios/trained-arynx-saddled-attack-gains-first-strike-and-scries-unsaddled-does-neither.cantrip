@@ -1,0 +1,71 @@
+# Trained Arynx (3/1): "Whenever this creature attacks while saddled, it gains first strike until end of turn. Scry 1." and "Saddle 2".
+# Turn 3: two Memnites (total power 2) saddle it, it attacks, and Bot2's Memnite blocks: with first strike the Arynx kills it first and
+# survives (without it the 1-power blocker would kill the 1-toughness Arynx as well). The scry sends the Island on top of Bot1's library
+# to the bottom, so the next card is a Swamp. Turn 4: first strike is gone (until end of turn). Turn 5: unsaddled, it attacks, gains
+# nothing, scries nothing (the Island stays where it is on the bottom, the top card is drawn), and trades with Bot2's other Memnite.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Trained Arynx
+Memnite
+Memnite
+Swamp
+Swamp
+Swamp
+Island
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Memnite
+Memnite
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Trained Arynx.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Trained Arynx.Keywords = (absent)
+Bot1.Battlefield.Trained Arynx.Activate
+Bot1.Choose(Memnite#1; Memnite#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Trained Arynx.Saddled = true
+Bot1.Attack(Trained Arynx > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Island)
+Bot2.Block(Memnite#1 > Trained Arynx)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Trained Arynx.Keywords = FirstStrike
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Trained Arynx.Damage = 0
+? Bot2.Graveyard = Memnite
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Trained Arynx.Keywords = (absent)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Trained Arynx > Bot2)
+Bot2.Block(Memnite > Trained Arynx)
+? Bot1.Battlefield.Trained Arynx.Keywords = (absent)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Trained Arynx
+Bot2.Graveyard = Memnite; Memnite

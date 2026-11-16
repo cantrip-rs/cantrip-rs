@@ -1,0 +1,42 @@
+# Trained Arynx's "Saddle 2": tapping a single Memnite (power 1) is not enough, so saddling is not offered (CR 702.171a); once a second
+# Memnite is on the battlefield (total power 2) it is, the Arynx becomes saddled, and the Memnites are tapped. Bot1's Mox Pearl pays
+# Memnite (free) is cast on turn 1 beside the Arynx ({1}{W} off Pearl and Jet); the second Memnite comes on turn 3.
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Trained Arynx
+Memnite
+Memnite
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Trained Arynx.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Trained Arynx.Activate
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Trained Arynx.Activate
+Bot1.Choose(Memnite#1; Memnite#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Trained Arynx.Saddled = true
+? Bot1.Battlefield.Memnite#1.Tapped = true
+? Bot1.Battlefield.Memnite#2.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Trained Arynx.Saddled = true
