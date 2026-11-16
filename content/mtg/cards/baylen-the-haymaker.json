@@ -1,0 +1,8 @@
+{
+  "name": "Baylen, the Haymaker",
+  "manaCost": "{R}{G}{W}",
+  "type": "Legendary Creature — Rabbit Warrior",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Tap two untapped tokens you control: Add one mana of any color.\nTap three untapped tokens you control: Draw a card.\nTap four untapped tokens you control: Put three +1/+1 counters on Baylen. It gains trample until end of turn."
+}

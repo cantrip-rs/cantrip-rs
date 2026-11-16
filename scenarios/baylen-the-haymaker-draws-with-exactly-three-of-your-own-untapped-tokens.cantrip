@@ -1,0 +1,68 @@
+# Baylen, the Haymaker: "Tap three untapped tokens you control: Draw a card." Only untapped tokens its controller controls count:
+# on turn 3 Bot1 has two Spirit tokens, a Memnite (a creature but not a token) and Bot2 has two Spirit tokens of its own, so
+# neither the draw ability nor the four-token ability can be paid (nothing is tapped for a refused activation). After the
+# flashback of Lingering Souls Bot1 has exactly four tokens: three are tapped to draw a card and the one left untapped cannot
+# pay for another activation.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Jet
+Baylen, the Haymaker
+Lingering Souls
+Memnite
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Lingering Souls
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Baylen, the Haymaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lingering Souls.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Baylen, the Haymaker.Activate(Ability: Draw a card)
+! Bot1.Battlefield.Baylen, the Haymaker.Activate(Ability: Put three)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Lingering Souls.Cast(Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 1
+Bot1.Battlefield.Baylen, the Haymaker.Activate(Ability: Draw a card)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Baylen, the Haymaker.Activate(Ability: Draw a card)
+! Bot1.Battlefield.Baylen, the Haymaker.Activate(Ability: Add one mana)
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot1.Battlefield.Baylen, the Haymaker.Counters.PlusOnePlusOne = (absent)
