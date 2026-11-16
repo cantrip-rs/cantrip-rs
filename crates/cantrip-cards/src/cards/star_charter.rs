@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::history::{lost_life_this_turn, you_gained_life_this_turn};
+use cantrip_mechanics::history::you_gained_or_lost_life_this_turn;
 use cantrip_mechanics::library::{look_at_top, Rest};
 use cantrip_mechanics::triggers::YOUR_END_STEP;
 use cantrip_oracle as oracle;
@@ -10,11 +10,6 @@ use cantrip_oracle as oracle;
 fn look(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     look_at_top(g, item.controller, item.object, 4, (0, 1), true, |c| c.is(CardType::Creature) && c.power.is_some_and(|p| p <= 3), Rest::BottomRandom)?;
     Ok(())
-}
-
-/// "If you gained or lost life this turn" (CR 119.3): each counts whatever else happened (gaining 2 and losing 2 is still both).
-fn you_gained_or_lost_life_this_turn(q: &dyn Query, asker: &Asker) -> bool {
-    you_gained_life_this_turn(q, asker) || lost_life_this_turn(q, asker.controller)
 }
 
 /// "At the beginning of your end step, if you gained or lost life this turn" is an intervening "if" (CR 603.4): checked as the step

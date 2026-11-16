@@ -384,6 +384,13 @@ pub fn lost_life_this_turn(q: &dyn Query, player: PlayerId) -> bool {
     q.history().life_lost(player) > 0
 }
 
+/// "If you gained or lost life this turn" (CR 603.4, 119.3), a condition of the ability's controller: a triggered ability's
+/// intervening "if"; each counts whatever else happened (gaining 2 and losing 2 is still both). Star Charter, Starlit Soothsayer
+/// and Starseer Mentor print it.
+pub fn you_gained_or_lost_life_this_turn(q: &dyn Query, asker: &Asker) -> bool {
+    you_gained_life_this_turn(q, asker) || lost_life_this_turn(q, asker.controller)
+}
+
 /// Whether `player` has activated an equip ability this turn (CR 702.6a, 602.2): what "the first equip ability you activate
 /// [during each of your turns / each turn]" asks of an equip ability being announced, which is not yet in the history.
 /// Forge Anew and Kíli the Resourceful print it.
