@@ -1,0 +1,42 @@
+# A Room's doors are only the permanent's text once unlocked, and only a Room on the battlefield has unlocked
+# designations (CR 709.5, 709.5c). Cast as Porcelain Gallery, the spell has only that half's characteristics (CR 709.3b):
+# mana value 6, not the 8 of both halves. Neither in hand nor on the stack does the
+# Gallery's static ability apply - Ornithopter stays 0/2 - and once the door enters unlocked it does: 1/1, Bot1's one
+# creature.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Jet
+Ornithopter
+Dollmaker's Shop // Porcelain Gallery
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Hand.Dollmaker's Shop // Porcelain Gallery.Cast(Ability: Porcelain Gallery)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Stack.Porcelain Gallery.ManaValue = 6
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Porcelain Gallery.Doors = Porcelain Gallery
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 1

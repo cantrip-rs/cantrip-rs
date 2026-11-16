@@ -256,3 +256,26 @@ fn a_doors_static_ability_names_the_doors_text() {
     let given: Vec<_> = game.chars(bear).abilities.iter().flatten().copied().collect();
     assert_eq!(given, vec![AbilityRef::delayed(table.id_of(&GRANT_DOOR), 0)]);
 }
+
+/// A face-down permanent has none of its card's text (CR 708.2): a face-down Room's doors give it nothing, whatever
+/// designations it has: its unlocked door's static ability applies to nothing.
+#[test]
+fn a_face_down_rooms_doors_do_nothing() {
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&PT_DOOR, &PLAIN_DOOR, &PT_ROOM, &BEAR])));
+    let mut game = Game::new(table, &Setup { decks: vec![Vec::new(), Vec::new()], ..Default::default() });
+    let room = game.state.push_obj(Obj::new(table.id_of(&PT_ROOM), YOU, Zone::BATTLEFIELD));
+    game.state.zone_push(Zone::BATTLEFIELD, room);
+    let bear = game.state.push_obj(Obj::new(table.id_of(&BEAR), YOU, Zone::BATTLEFIELD));
+    game.state.zone_push(Zone::BATTLEFIELD, bear);
+    let mut cx = cx(&mut game);
+    crate::ops::unlock_door(&mut cx, room, DOOR_LEFT, YOU);
+    assert_eq!((game.chars(bear).power, game.chars(bear).toughness), (Some(5), Some(5)));
+    let down = table.id_of(&BEAR);
+    game.state.update_obj(room, |o| {
+        o.face_down = true;
+        o.marks.face_down_as = Some(down);
+    });
+    assert_eq!(game.state.obj(room).marks.doors, DOOR_LEFT);
+    assert_eq!(table.texts(&game.state, game.state.obj(room)).collect::<Vec<_>>(), [down]);
+    assert_eq!((game.chars(bear).power, game.chars(bear).toughness), (Some(2), Some(2)));
+}
