@@ -1,0 +1,55 @@
+# Marauding Sphinx's surveil needs a crime: a Lightning Bolt at yourself (turn 3) targets no opponent and nothing they control, so it is no
+# crime (CR 700.13) and there is no surveil (the stack holds only the Bolt). It also leaves "only once each turn" unspent: the second Bolt, at
+# Bot2, is a crime and triggers, and Plains stays on top while Swamp goes to the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Marauding Sphinx
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Plains
+Swamp
+Forest
+Mountain
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Marauding Sphinx.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains | Swamp)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt; Swamp; Lightning Bolt; Black Lotus
+Bot1.Library.Count = 23

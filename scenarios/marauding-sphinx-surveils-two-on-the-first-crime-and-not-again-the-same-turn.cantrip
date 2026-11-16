@@ -1,0 +1,56 @@
+# Marauding Sphinx: "Whenever you commit a crime, surveil 2. This ability triggers only once each turn." Bot1 casts it turn 1 from a Black Lotus
+# ({U}{U}{U}) and two Moxen, the pool empty. Turn 3 a Lightning Bolt at Bot2 is a crime (CR 700.13): the surveil looks at the top TWO cards,
+# Plains and Swamp: Plains stays on top and Swamp goes to the graveyard (a surveil 1 could not reach it). A second Bolt at Bot2 the same turn
+# is another crime but does not trigger again, so there is no second surveil (the stack holds only the Bolt).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Marauding Sphinx
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Plains
+Swamp
+Forest
+Mountain
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Marauding Sphinx.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains | Swamp)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Swamp; Black Lotus
+Bot1.Library.Count = 23

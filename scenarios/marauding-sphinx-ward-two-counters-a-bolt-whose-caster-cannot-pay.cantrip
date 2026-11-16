@@ -1,0 +1,39 @@
+# Marauding Sphinx, "ward {2}" (CR 702.21a): Bot2's only mana is a Mox Ruby, which pays for the Lightning Bolt at the Sphinx, so the ward
+# trigger counters the Bolt unless Bot2 pays {2}, and it cannot: the Sphinx takes no damage. The Sphinx came down on turn 1 off a Black Lotus
+# and two Moxen.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Marauding Sphinx
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Marauding Sphinx.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Marauding Sphinx)
+[T2 Bot2.Main2]
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Marauding Sphinx.Damage = 0
+Bot2.Graveyard = Lightning Bolt

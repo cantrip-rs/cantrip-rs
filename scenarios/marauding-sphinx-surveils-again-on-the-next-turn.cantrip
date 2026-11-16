@@ -1,0 +1,56 @@
+# Marauding Sphinx triggers once each TURN, not once a game: a Bolt at Bot2 on turn 3 surveils 2 (Plains stays on top, Swamp to the graveyard),
+# and a Bolt at Bot2 on Bot2's turn 4 is a crime on a new turn and surveils again: it sees Plains and Forest, keeps Forest on top and bins Plains.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Marauding Sphinx
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Plains
+Swamp
+Forest
+Mountain
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Marauding Sphinx.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains | Swamp)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Forest | Plains)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Bot1.Graveyard = Lightning Bolt; Plains; Lightning Bolt; Swamp; Black Lotus
+Bot1.Library.Count = 22

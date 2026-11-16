@@ -1,0 +1,37 @@
+# Marauding Sphinx has flying and vigilance: it attacks turn 3 and Bot2's Memnite (no flying or reach) cannot block it (CR 702.9b), so Bot2
+# takes 3, and the Sphinx is not tapped by attacking (CR 702.20b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Marauding Sphinx
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Marauding Sphinx.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Marauding Sphinx > Bot2)
+! Bot2.Block(Memnite > Marauding Sphinx)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Marauding Sphinx.Tapped = false
