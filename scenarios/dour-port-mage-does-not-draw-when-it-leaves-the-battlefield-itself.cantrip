@@ -1,0 +1,30 @@
+# Dour Port-Mage's trigger counts only "other creatures you control": returned to its owner's hand by Unsummon, it leaves the
+# battlefield without dying, but it is not another creature, so no card is drawn (CR 603.6c, 603.10a). Its own departure is
+# looked back on (a leaves-the-battlefield trigger), so only the "other" in its text keeps it from triggering.
+
+[Bot1 Deck]
+Island
+Island
+Dour Port-Mage
+Unsummon
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Dour Port-Mage.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Unsummon.Cast(Dour Port-Mage)
+Bot1.Battlefield.Island.Activate
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Island; Island; Island
+Bot1.Hand = Dour Port-Mage; Island; Island; Island; Island

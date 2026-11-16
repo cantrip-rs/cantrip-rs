@@ -2290,6 +2290,33 @@ pub fn another_creature_you_control_dies(q: &dyn Query, me: &Asker, event: &Even
     }
 }
 
+/// "Whenever a creature you control leaves the battlefield without dying" (CR 603.6c, 603.10a, 700.4): a creature as it last was on
+/// the battlefield, under the controller it last had, that went to any zone but the graveyard (hand, library, exile, command
+/// zone; a token that goes to the graveyard dies). This permanent too, if it is one: it looks back on its own departure.
+/// Three Tree Scribe prints it; Dour Port Mage's "other creatures" form is `another_creature_you_control_leaves_without_dying`.
+pub fn creature_you_control_leaves_without_dying(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { old, from, to, .. }
+            if from.is(ZoneKind::Battlefield)
+                && !to.is(ZoneKind::Graveyard)
+                && q.chars(*old).is(CardType::Creature)
+                && q.obj(*old).controller == me.controller =>
+        {
+            Fired::PLAIN
+        }
+        _ => None,
+    }
+}
+
+/// "Whenever one or more other creatures you control leave the battlefield without dying" (CR 603.6c, 603.10a): the creatures
+/// other than the source; add `.once_per_batch()` for "one or more". Dour Port Mage prints it.
+pub fn another_creature_you_control_leaves_without_dying(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { old, .. } if *old == me.source => None,
+        _ => creature_you_control_leaves_without_dying(q, me, event),
+    }
+}
+
 /// "Whenever you cast a spell during an opponent's turn" (CR 603.2, 601.2i): a spell cast (not copied, CR 707.10) by this
 /// permanent's controller while the active player is another player. Unwelcome Sprite and Voracious Tome-Skimmer print it.
 pub fn spell_you_cast_during_an_opponents_turn(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
@@ -2935,6 +2962,8 @@ pub const CREATURE_AN_OPPONENT_CONTROLS_DIES: Trigger = when_asked(EventMask::ZO
 pub const CREATURE_YOU_CONTROL_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_you_control_dies);
 pub const ANOTHER_CREATURE_YOU_CONTROL_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, another_creature_you_control_dies);
 pub const CREATURE_YOU_CONTROL_WITH_COUNTERS_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_you_control_with_counters_dies);
+pub const CREATURE_YOU_CONTROL_LEAVES_WITHOUT_DYING: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_you_control_leaves_without_dying);
+pub const ANOTHER_CREATURE_YOU_CONTROL_LEAVES_WITHOUT_DYING: Trigger = when_asked(EventMask::ZONE_CHANGE, another_creature_you_control_leaves_without_dying);
 
 /// "Whenever a nontoken creature you control dies" (CR 700.4, 603.10a, 111.7): a creature you controlled as it died, one that was not
 /// a token, looked back on as it last was on the battlefield. This permanent too, if it is one. Zahur, Glory's Past prints it.

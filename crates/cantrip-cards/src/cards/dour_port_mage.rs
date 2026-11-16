@@ -1,16 +1,6 @@
 use cantrip_api::*;
+use cantrip_mechanics::triggers::ANOTHER_CREATURE_YOU_CONTROL_LEAVES_WITHOUT_DYING;
 use cantrip_oracle as oracle;
-
-fn creature_leaves_without_dying(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
-    let Event::ZoneChange { old, from, to, .. } = event else { return None };
-    if *old != source && from.is(ZoneKind::Battlefield) && !to.is(ZoneKind::Graveyard)
-        && q.controller(*old) == q.controller(source) && q.chars(*old).is(CardType::Creature)
-    {
-        Some(Fired { subject: Target::None, data: [0; 2] })
-    } else {
-        None
-    }
-}
 
 fn draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.draw(item.controller, 1);
@@ -26,7 +16,7 @@ fn return_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(when(EventMask::ZONE_CHANGE, creature_leaves_without_dying), draw,
+        triggered(ANOTHER_CREATURE_YOU_CONTROL_LEAVES_WITHOUT_DYING, draw,
             "Whenever one or more other creatures you control leave the battlefield without dying, draw a card.")
             .once_per_batch(),
         ability(cost("{1}{U}").and(TAP), return_creature,
