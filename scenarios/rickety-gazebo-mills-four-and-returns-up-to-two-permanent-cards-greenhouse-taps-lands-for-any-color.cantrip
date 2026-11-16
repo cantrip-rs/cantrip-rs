@@ -1,0 +1,61 @@
+# Rickety Gazebo: "When you unlock this door, mill four cards, then return up to two permanent cards from among them to
+# your hand" (CR 701.17a, 608.2d). Bot1 casts the Gazebo, so it unlocks as the Room enters and triggers (CR 709.5d,
+# 709.5h): Memnite, Lightning Bolt, Ornithopter and Plains are milled, and Bot1 returns Memnite and Ornithopter (Lightning
+# Bolt is no permanent card, and all three permanent cards are refused: up to two). Greenhouse is locked, so Bot1's Plains taps only for {W} and
+# Unsummon can't be cast. In turn 3 Bot1 unlocks Greenhouse: "Lands you control have '{T}: Add one mana of any color'"
+# (layer 6) applies at once (CR 709.5), and the Plains pays Unsummon's {U}. Bot2's Island gains nothing ("you control").
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Greenhouse // Rickety Gazebo
+Mox Emerald
+Mox Pearl
+Mox Jet
+Unsummon
+Memnite
+Lightning Bolt
+Ornithopter
+Plains
+Plains
+Plains x9
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Greenhouse // Rickety Gazebo.Cast(Ability: Rickety Gazebo)
+Bot1.Pass
+! Bot1.Choose(Memnite; Ornithopter; Plains)
+Bot1.Choose(Memnite; Ornithopter)
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+? Bot1.Hand = Memnite; Mox Emerald; Mox Jet; Mox Pearl; Ornithopter; Unsummon
+? Bot1.Graveyard = Plains; Lightning Bolt; Black Lotus
+! Bot1.Hand.Unsummon.Cast(Bot2.Battlefield.Memnite; Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Rickety Gazebo.Activate(Ability: left door)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Unsummon.Cast(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Plains.Activate(Ability: any color; Color: Blue)
+? Bot1.Mana =
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+! Bot2.Battlefield.Island.Activate(Ability: any color)
+
+[Expect]
+Bot1.Battlefield.Greenhouse // Rickety Gazebo.Doors = Greenhouse; Rickety Gazebo
+Bot1.Graveyard = Unsummon; Plains; Lightning Bolt; Black Lotus
+Bot2.Hand = Island; Island; Island; Island; Island; Island; Island; Memnite
+Bot2.Battlefield.Island.Tapped = false
