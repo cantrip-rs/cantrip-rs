@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{choose, select};
+use cantrip_mechanics::{choose, history, select};
 use cantrip_oracle as oracle;
 
 /// Where the noting ability is in the card's list: "{X}, {T}: ... note the type and amount of mana spent to pay this
@@ -18,7 +18,7 @@ fn no_charge_counters(q: &dyn Query, asker: &Asker) -> bool {
 /// ability to name; the permission is to cast it from exile, at the time its type allows and for its costs (the rulings),
 /// for as long as that card stays in exile, whatever becomes of this artifact (CR 400.7, 611.2a). The note is made as the
 /// ability resolves, with or without a card exiled or a counter put: it is this resolution, which the history keeps
-/// (`Event::Resolved`), read back by the mana ability (`last_noted_mana`).
+/// (`Event::Resolved`), read back by the mana ability (`history::last_noted_mana`).
 fn exile_and_charge(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
     let hand = g.state().zone(Zone::hand(you)).to_vec();
@@ -28,69 +28,6 @@ fn exile_and_charge(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     }
     g.add_counters(item.object, CounterKind::Charge, 1);
     Ok(())
-}
-
-/// Where the activation of the stack item `serial` ended, its `AbilityActivated` record, and whether `serial` is a copy of
-/// it (CR 707.10: a copy is not activated, and is followed to the activation it copies). Its `{T}` names it: paying that
-/// cost is recorded with the item's serial (`Event::AbilityCostObjectPaid`), among the costs paid after every mana
-/// ability activated to pay them (CR 601.2g-h by way of 602.2b), and the first activation recorded after it is its own.
-fn activation_of(records: &[Record], before: usize, mut serial: u32) -> Option<(usize, bool)> {
-    let mut copy = false;
-    loop {
-        let paid = records[..before].iter().rposition(|r| matches!(r.event, Event::AbilityCostObjectPaid { serial: s, .. } if s == serial));
-        if let Some(at) = paid {
-            let end = (at..before).find(|&i| matches!(records[i].event, Event::AbilityActivated { .. }))?;
-            return Some((end, copy));
-        }
-        serial = records[..before].iter().rev().find_map(|r| match r.event {
-            Event::AbilityCopied { copy, original } if copy == serial => Some(original),
-            _ => None,
-        })?;
-        copy = true;
-    }
-}
-
-/// "The type and amount of mana spent to pay this activation cost" (CR 106.1b, 601.2h by way of 602.2b), for the activation
-/// whose `AbilityActivated` record is at `end`: every mana spent on an ability of `source` as that activation was paid -
-/// after the last mana ability activated for it, each recorded as activated once paid for, and after anything that resolved
-/// before it (a payment as an ability of the same source resolved). What X was does not matter, only the mana spent (the
-/// ruling: {C}{C}{R}{R} for an X of 6 reduced to 4).
-fn mana_spent_on(records: &[Record], end: usize, source: ObjectId) -> ManaPool {
-    let mut spent = ManaPool::default();
-    for r in records[..end].iter().rev() {
-        match r.event {
-            Event::ManaSpent { on, cast: false, mana, .. } if on == source => {
-                for m in Mana::ALL {
-                    spent.0[m as usize] += u32::from(mana.get(m));
-                }
-            }
-            Event::AbilityActivated { .. } | Event::Resolved { .. } => break,
-            _ => {}
-        }
-    }
-    spent
-}
-
-/// "This artifact's last noted type and amount of mana" (CR 607.2e): the note made as the linked noting ability (`NOTES`) of
-/// this artifact last resolved - the latest of its resolutions (`Event::Resolved`) that was an instance linked to the
-/// asking ability (of the same text, acquired the same way, CR 607.5), whichever of several activations on the stack it was,
-/// one countered leaving no record. A copy of it noted nothing spent (CR 707.10: mana is no object). None noted, nothing.
-fn last_noted_mana(q: &dyn Query, by: Linked) -> ManaPool {
-    let history = q.history();
-    let records = history.all();
-    // An instance the object acquired another way is another linked pair (Experiment Kraj with two animated Cauldrons'): its
-    // activation says how it was had (`History::activation_instance`).
-    let linked = |&(end, _): &(usize, bool)| history.activation_instance(&records[end]).acquired == by.acquired;
-    let last = records.iter().enumerate().rev().find_map(|(at, r)| match r.event {
-        Event::Resolved { source, ability, serial } if source == by.object && ability.index == NOTES && q.linked_card(ability.card) == by.text => {
-            activation_of(records, at, serial).filter(linked)
-        }
-        _ => None,
-    });
-    match last {
-        Some((end, false)) => mana_spent_on(records, end, by.object),
-        Some((_, true)) | None => ManaPool::default(),
-    }
 }
 
 /// "The last card exiled with this artifact" (CR 607.2a): the card its linked ability last exiled, as the object it became
@@ -115,7 +52,7 @@ fn last_card_exiled(q: &dyn Query, by: Linked) -> ObjectId {
 fn add_the_last_noted_mana(g: &mut dyn Game, asker: &Asker, _: Option<Color>) -> Result<(), Suspend> {
     let by = g.linked_to(asker);
     let only = ManaRestriction::Card(last_card_exiled(g, by));
-    let noted = last_noted_mana(g, by);
+    let noted = history::last_noted_mana(g, by, NOTES);
     for m in Mana::ALL {
         let n = noted.get(m);
         if n > 0 {

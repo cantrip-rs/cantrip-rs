@@ -578,3 +578,68 @@ pub fn first_combat_phase_of_the_turn(q: &dyn Query, _: &Asker) -> bool {
 pub fn a_card_left_your_graveyard_this_turn(q: &dyn Query, asker: &Asker) -> bool {
     cards_left_graveyard_this_turn(q, asker.controller) > 0
 }
+
+/// Where the activation of the stack item `serial` ended, its `AbilityActivated` record, and whether `serial` is a copy of
+/// it (CR 707.10: a copy is not activated, and is followed to the activation it copies). Its `{T}` names it: paying that
+/// cost is recorded with the item's serial (`Event::AbilityCostObjectPaid`), among the costs paid after every mana
+/// ability activated to pay them (CR 601.2g-h by way of 602.2b), and the first activation recorded after it is its own.
+fn activation_of(records: &[Record], before: usize, mut serial: u32) -> Option<(usize, bool)> {
+    let mut copy = false;
+    loop {
+        let paid = records[..before].iter().rposition(|r| matches!(r.event, Event::AbilityCostObjectPaid { serial: s, .. } if s == serial));
+        if let Some(at) = paid {
+            let end = (at..before).find(|&i| matches!(records[i].event, Event::AbilityActivated { .. }))?;
+            return Some((end, copy));
+        }
+        serial = records[..before].iter().rev().find_map(|r| match r.event {
+            Event::AbilityCopied { copy, original } if copy == serial => Some(original),
+            _ => None,
+        })?;
+        copy = true;
+    }
+}
+
+/// "The type and amount of mana spent to pay this activation cost" (CR 106.1b, 601.2h by way of 602.2b), for the activation
+/// whose `AbilityActivated` record is at `end`: every mana spent on an ability of `source` as that activation was paid -
+/// after the last mana ability activated for it, each recorded as activated once paid for, and after anything that resolved
+/// before it (a payment as an ability of the same source resolved). What X was does not matter, only the mana spent (the
+/// ruling on Ice Cauldron: {C}{C}{R}{R} for an X of 6 reduced to 4).
+fn mana_spent_on(records: &[Record], end: usize, source: ObjectId) -> ManaPool {
+    let mut spent = ManaPool::default();
+    for r in records[..end].iter().rev() {
+        match r.event {
+            Event::ManaSpent { on, cast: false, mana, .. } if on == source => {
+                for m in Mana::ALL {
+                    spent.0[m as usize] += u32::from(mana.get(m));
+                }
+            }
+            Event::AbilityActivated { .. } | Event::Resolved { .. } => break,
+            _ => {}
+        }
+    }
+    spent
+}
+
+/// "This artifact's last noted type [and amount] of mana" (CR 607.2e), asked by the ability linked to `by`: the mana spent
+/// to pay the activation of the noting ability, the `notes`th of the card, as it last resolved - the latest of its
+/// resolutions (`Event::Resolved`) that was an instance linked to the asking ability (of the same text, acquired the same
+/// way, CR 607.5), whichever of several activations on the stack it was, one countered leaving no record (the note is made
+/// as the ability resolves). A copy of it noted nothing spent (CR 707.10: a copy's cost was not paid). None noted, nothing.
+/// The noting ability's cost has {T}, which names its activation (`activation_of`). Ice Cauldron and Jeweled Amulet print it.
+pub fn last_noted_mana(q: &dyn Query, by: Linked, notes: u8) -> ManaPool {
+    let history = q.history();
+    let records = history.all();
+    // An instance the object acquired another way is another linked pair (Experiment Kraj with two animated Cauldrons'): its
+    // activation says how it was had (`History::activation_instance`).
+    let linked = |&(end, _): &(usize, bool)| history.activation_instance(&records[end]).acquired == by.acquired;
+    let last = records.iter().enumerate().rev().find_map(|(at, r)| match r.event {
+        Event::Resolved { source, ability, serial } if source == by.object && ability.index == notes && q.linked_card(ability.card) == by.text => {
+            activation_of(records, at, serial).filter(linked)
+        }
+        _ => None,
+    });
+    match last {
+        Some((end, false)) => mana_spent_on(records, end, by.object),
+        Some((_, true)) | None => ManaPool::default(),
+    }
+}
