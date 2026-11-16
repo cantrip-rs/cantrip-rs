@@ -1,0 +1,11 @@
+{
+  "name": "Bridled Bighorn",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Sheep Mount",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Vigilance\nWhenever this creature attacks while saddled, create a 1/1 white Sheep creature token.\nSaddle 2 (Tap any number of other creatures you control with total power 2 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}

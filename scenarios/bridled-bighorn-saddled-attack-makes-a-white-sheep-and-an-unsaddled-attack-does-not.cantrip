@@ -1,0 +1,61 @@
+# Bridled Bighorn: "Whenever this creature attacks while saddled, create a 1/1 white Sheep creature token" (CR 702.171b, 111.1); vigilance keeps it untapped
+# when it attacks (CR 702.20b). Turn 1: Saddle 2 (CR 702.171a) is refused with only Mons's Goblin Raiders (power 1) to tap. Turn 3: Savannah Lions (power 2) saddles it,
+# it attacks, and one 1/1 white Sheep arrives while Bot2 takes 3 (17). Turn 5: attacking unsaddled makes no second Sheep.
+
+[Bot1 Deck]
+Bridled Bighorn
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Plains
+Mons's Goblin Raiders
+Savannah Lions
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Bridled Bighorn.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mons's Goblin Raiders.Power = 1
+! Bot1.Battlefield.Bridled Bighorn.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Bridled Bighorn.Activate
+! Bot1.Choose(Bridled Bighorn)
+Bot1.Choose(Savannah Lions)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bridled Bighorn > Bot2)
+? Bot1.Battlefield.Bridled Bighorn.Tapped = false
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sheep Token.Power = 1
+? Bot1.Battlefield.Sheep Token.Toughness = 1
+? Bot1.Battlefield.Sheep Token.Colors = White
+? Bot1.Battlefield.Count = 9
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Bridled Bighorn > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Count = 9
