@@ -1,0 +1,33 @@
+# Frontier Seeker: "You may reveal" - Bot1 declines to take either the Bridled Bighorn or the Plains among the top five (with a Savannah Lions, a Bolt and an Ornithopter): all five go to the
+# bottom, nothing is revealed and the hand is unchanged (CR 701.20a).
+
+[Bot1 Deck]
+Frontier Seeker
+Mox Pearl
+Mox Jet
+Island x4
+Bridled Bighorn
+Plains
+Savannah Lions
+Lightning Bolt
+Ornithopter
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Frontier Seeker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Arrange( | Bridled Bighorn; Plains; Savannah Lions; Lightning Bolt; Ornithopter)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island
+Bot1.Library.Count = 15

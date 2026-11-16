@@ -1,0 +1,46 @@
+# Frontier Seeker: "look at the top five cards of your library. You may reveal a Mount creature card or a Plains card from among them
+# and put it into your hand. Put the rest on the bottom of your library in a random order." (CR 701.20a, 401.4). The top five are Savannah
+# (a Forest Plains: a Plains card though not basic), Bridled Bighorn (a Mount creature), Ornithopter, Lightning Bolt and an Island; the sixth,
+# Bounding Felidar (a Mount), is not looked at. Bot1 may not take the Ornithopter or the Bolt, nor two cards, takes Savannah revealing it, and
+# the other four go to the bottom: the Felidar is the new top card and is drawn on turn 3. Bot2's Plains on top of its own library is not touched.
+
+[Bot1 Deck]
+Frontier Seeker
+Mox Pearl
+Mox Jet
+Island x4
+Savannah
+Bridled Bighorn
+Ornithopter
+Lightning Bolt
+Island
+Bounding Felidar
+Island x10
+
+[Bot2 Deck]
+Island x7
+Plains x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Frontier Seeker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+! Bot1.Arrange(Ornithopter | Savannah; Bridled Bighorn; Lightning Bolt; Island)
+! Bot1.Arrange(Lightning Bolt | Savannah; Bridled Bighorn; Ornithopter; Island)
+! Bot1.Arrange(Savannah; Bridled Bighorn | Ornithopter; Lightning Bolt; Island)
+Bot1.Arrange(Savannah | Bridled Bighorn; Ornithopter; Lightning Bolt; Island)
+? Bot1.Revealed = Savannah
+? Bot1.Hand = Island; Island; Island; Island; Savannah
+? Bot1.Library.Count = 15
+? Bot2.Hand = Island; Island; Island; Island; Island; Island; Island
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 6
+? Bot1.Hand = Island; Island; Island; Island; Savannah; Bounding Felidar
+
+[Expect]
+Bot1.Library.Count = 14

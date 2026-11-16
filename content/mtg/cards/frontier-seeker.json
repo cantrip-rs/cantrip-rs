@@ -1,0 +1,8 @@
+{
+  "name": "Frontier Seeker",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Scout",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "When this creature enters, look at the top five cards of your library. You may reveal a Mount creature card or a Plains card from among them and put it into your hand. Put the rest on the bottom of your library in a random order."
+}

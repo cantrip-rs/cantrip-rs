@@ -1,0 +1,40 @@
+# Frontier Seeker: the "Mount creature card" half (CR 205.3). The top five are Savannah Lions (a creature, not a Mount), Plains, Bounding Felidar
+# (a Cat Beast Mount), Lightning Bolt and Ornithopter. Bot1 may not take the Lions, and takes the Felidar (not the Plains with it): revealed, in hand,
+# the other four to the bottom with the sixth card, a Mountain, the new top card drawn on turn 3.
+
+[Bot1 Deck]
+Frontier Seeker
+Mox Pearl
+Mox Jet
+Island x4
+Savannah Lions
+Plains
+Bounding Felidar
+Lightning Bolt
+Ornithopter
+Mountain
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Frontier Seeker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+! Bot1.Arrange(Savannah Lions | Plains; Bounding Felidar; Lightning Bolt; Ornithopter)
+! Bot1.Arrange(Plains; Bounding Felidar | Savannah Lions; Lightning Bolt; Ornithopter)
+Bot1.Arrange(Bounding Felidar | Plains; Savannah Lions; Lightning Bolt; Ornithopter)
+? Bot1.Revealed = Bounding Felidar
+? Bot1.Hand = Island; Island; Island; Island; Bounding Felidar
+? Bot1.Library.Count = 15
+[T3 Bot1.Main1]
+? Bot1.Hand = Island; Island; Island; Island; Bounding Felidar; Mountain
+
+[Expect]
+Bot1.Library.Count = 14

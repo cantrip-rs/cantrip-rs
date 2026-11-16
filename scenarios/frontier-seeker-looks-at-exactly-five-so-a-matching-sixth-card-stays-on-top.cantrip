@@ -1,0 +1,34 @@
+# Frontier Seeker: exactly five cards are looked at (CR 701.20a). None of the top five (Savannah Lions, Lightning Bolt, Ornithopter, Island and Mox Ruby) is a Mount
+# creature or a Plains card, so nothing can be taken; the Bounding Felidar sixth is not looked at, and with the five on the bottom it is the new top card,
+# drawn on turn 3.
+
+[Bot1 Deck]
+Frontier Seeker
+Mox Pearl
+Mox Jet
+Island x4
+Savannah Lions
+Lightning Bolt
+Ornithopter
+Island
+Mox Ruby
+Bounding Felidar
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Frontier Seeker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand = Island; Island; Island; Island; Bounding Felidar
+
+[Expect]
+Bot1.Library.Count = 15
