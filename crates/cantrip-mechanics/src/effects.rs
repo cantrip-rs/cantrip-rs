@@ -2282,6 +2282,23 @@ pub fn choose_sacrifice_nonland_or_discard_or_lose_life(
     Ok(())
 }
 
+/// "Target opponent [or player] loses `LIFE` life unless they sacrifice a nonland permanent of their choice or discard a card"
+/// (CR 608.2d, 119.3, 701.9, 701.21a) as an ability's whole effect, its target slot saying which players it may name: the target
+/// player chooses as it resolves to sacrifice a nonland permanent, to discard a card, or to lose the life, and always may lose the
+/// life, even holding cards and permanents; with neither to give they lose it (`choose_sacrifice_nonland_or_discard_or_lose_life`,
+/// whose labels the card prints). The choice is done as one action (`Game::together`). With the target gone the ability does
+/// nothing (CR 608.2b). Thornplate Intimidator and Starseer Mentor (target opponent) and Tergrid's Lantern (target player) print it.
+pub fn target_player_loses_life_unless_they_sacrifice_a_nonland_permanent_or_discard_a_card<const LIFE: i32>(
+    g: &mut dyn Game,
+    item: &StackItem,
+) -> Result<(), Suspend> {
+    let Some(opponent) = item.target(0).player() else { return Ok(()) };
+    let (mut sacrificed, mut discarded, mut losses) = (Vec::new(), Vec::new(), Vec::new());
+    choose_sacrifice_nonland_or_discard_or_lose_life(g, item, opponent, LIFE, &mut sacrificed, &mut discarded, &mut losses)?;
+    g.together(Together { sacrifices: &sacrificed, discards: &discarded, life: &losses, ..Together::default() });
+    Ok(())
+}
+
 /// "Each player sacrifices `N` creature[s] of their choice" (CR 701.21a, 101.4): every player, the controller included, chooses
 /// in turn order from the active player knowing the earlier choices, and the creatures chosen are sacrificed together; a player
 /// with fewer than `N` creatures sacrifices them all. Innocent Blood, Dghor, Bloodletter, Liliana, Dreadhorde General (two) and
