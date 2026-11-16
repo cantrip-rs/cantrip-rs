@@ -1,0 +1,43 @@
+# Rust-Shield Rampager with offspring {2} paid (CR 702.175a): the 4/4 enters and its 1/1 token copy follows, with the same evasion (CR 509.1b).
+# Black Lotus and three Moxen pay {3}{G} and the offspring {2} exactly: the pool is empty after the cast.
+# Bot1 attacks on turn 3 with the token alone: Bot2's Ornithopter (power 0) may not block it, so the token deals its 1 damage (Bot2 20 -> 19);
+# the card is not attacking and stays untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Pearl
+Rust-Shield Rampager
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rust-Shield Rampager.Cast(Kicked: 1)
+Bot1.Pass
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Rust-Shield Rampager#2 > Bot2)
+Bot1.Pass
+! Bot2.Block(Ornithopter > Rust-Shield Rampager#2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Rust-Shield Rampager#2.Token = true
+Bot1.Battlefield.Rust-Shield Rampager#2.Power = 1
+Bot1.Battlefield.Rust-Shield Rampager#1.Token = (absent)
+Bot1.Battlefield.Rust-Shield Rampager#1.Power = 4

@@ -1,0 +1,8 @@
+{
+  "name": "Rust-Shield Rampager",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Raccoon Warrior",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Offspring {2} (You may pay an additional {2} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nThis creature can't be blocked by creatures with power 2 or less."
+}

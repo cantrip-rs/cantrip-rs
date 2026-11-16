@@ -1,0 +1,57 @@
+# Rust-Shield Rampager (CR 509.1b): "This creature can't be blocked by creatures with power 2 or less." Bot2 has an Ornithopter (power 0), a Memnite
+# (1), Grizzly Bears (2, exactly the limit) and Centaur Courser (3, one past it). The Rampager (4/4, cast turn 1) attacks on turn 3: the first three
+# may not block it, the Courser may and does. The Courser dies to 4 damage and deals the Rampager only 3 (it survives), and Bot2 takes none.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Rust-Shield Rampager
+Island x15
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Ornithopter
+Memnite
+Grizzly Bears
+Centaur Courser
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rust-Shield Rampager.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Centaur Courser.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Rust-Shield Rampager > Bot2)
+Bot1.Pass
+! Bot2.Block(Ornithopter > Rust-Shield Rampager)
+! Bot2.Block(Memnite > Rust-Shield Rampager)
+! Bot2.Block(Grizzly Bears > Rust-Shield Rampager)
+Bot2.Block(Centaur Courser > Rust-Shield Rampager)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Centaur Courser; Black Lotus
+Bot1.Battlefield.Rust-Shield Rampager.Damage = 3
+Bot2.Battlefield.Grizzly Bears.Power = 2
