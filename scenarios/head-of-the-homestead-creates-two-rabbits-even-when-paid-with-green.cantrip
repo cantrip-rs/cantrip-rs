@@ -1,0 +1,32 @@
+# Head of the Homestead: the hybrid {G/W}{G/W} may be paid with green as well. Bot1 pays with the Black Lotus's green and two Mox
+# Emeralds; two Rabbits come out of the one trigger, under Bot1, and Bot2 has nothing on the battlefield.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Head of the Homestead
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Head of the Homestead.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Emerald; Head of the Homestead; Rabbit Token; Rabbit Token
+Bot2.Battlefield.Count = 0

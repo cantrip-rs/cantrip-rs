@@ -1,0 +1,41 @@
+# Head of the Homestead: "When this creature enters, create two 1/1 white Rabbit creature tokens." Bot1 pays {3}{G/W}{G/W} with
+# the Black Lotus's white and two Mox Pearls (both hybrid symbols paid with white). The Head enters, its trigger resolves, and
+# Bot1 has two Rabbit tokens beside the 3/2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Head of the Homestead
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Head of the Homestead.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Pearl; Mox Pearl; Head of the Homestead; Rabbit Token; Rabbit Token
+Bot1.Battlefield.Head of the Homestead.Power = 3
+Bot1.Battlefield.Head of the Homestead.Toughness = 2
+Bot1.Battlefield.Rabbit Token#1.Token = true
+Bot1.Battlefield.Rabbit Token#1.Colors = White
+Bot1.Battlefield.Rabbit Token#1.Power = 1
+Bot1.Battlefield.Rabbit Token#1.Toughness = 1
+Bot1.Battlefield.Rabbit Token#2.Power = 1
