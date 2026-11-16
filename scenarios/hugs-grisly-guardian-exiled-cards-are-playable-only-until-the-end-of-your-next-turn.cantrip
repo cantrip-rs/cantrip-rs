@@ -1,0 +1,49 @@
+# Hugs, Grisly Guardian: "Until the end of your next turn, you may play those cards." Cast with X = 2 on turn 1 (Black Lotus for
+# red, Mox Ruby and two Mox Emeralds pay {2}{R}{R}{G}{G}), Hugs exiles two Lightning Bolts. On turn 3, Bot1's next turn, one Bolt
+# is cast from exile with a Mountain at Bot2 (17). On turn 5 the permission has ended: the other Bolt stays in exile and can't be
+# cast, though a Mountain is untapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Emerald
+Hugs, Grisly Guardian
+Mountain
+Mountain
+Lightning Bolt
+Lightning Bolt
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hugs, Grisly Guardian.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt; Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Exile = Lightning Bolt
+Bot2.Life = 17

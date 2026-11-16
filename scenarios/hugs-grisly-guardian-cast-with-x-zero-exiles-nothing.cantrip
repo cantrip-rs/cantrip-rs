@@ -1,0 +1,33 @@
+# Hugs, Grisly Guardian: "When Hugs enters, exile the top X cards of your library." Cast for X = 0 ({R}{R}{G}{G}: Black Lotus
+# for red, two Mox Emeralds) nothing is exiled and the library is untouched; the trigger still goes on the stack and resolves.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Hugs, Grisly Guardian
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hugs, Grisly Guardian.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Library.Count = 10

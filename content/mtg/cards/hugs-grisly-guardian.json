@@ -1,0 +1,11 @@
+{
+  "name": "Hugs, Grisly Guardian",
+  "manaCost": "{X}{R}{R}{G}{G}",
+  "type": "Legendary Creature — Badger Warrior",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Trample\nWhen Hugs enters, exile the top X cards of your library. Until the end of your next turn, you may play those cards.\nYou may play an additional land on each of your turns.",
+  "keywords": [
+    "Trample"
+  ]
+}
