@@ -1,0 +1,34 @@
+# Archangel of Tithes: its attack tax lasts only "as long as this creature is untapped" (CR 508.1d, 604.1). On turn 3 Bot1
+# attacks with it (it taps; no vigilance) and Bot2, with no mana, takes 3. On turn 4 Bot2's Memnite attacks Bot1 with the
+# Archangel still tapped and pays nothing: no cost is asked and Bot1 takes 1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Archangel of Tithes
+Memnite
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Archangel of Tithes.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Archangel of Tithes > Bot2)
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+[T4 Bot2.Main2]
+
+[Expect]
+Turn = 4
+Bot2.Life = 17
+Bot1.Life = 19

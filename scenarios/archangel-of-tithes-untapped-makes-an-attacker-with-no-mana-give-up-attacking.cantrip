@@ -1,0 +1,33 @@
+# Archangel of Tithes: an untapped Archangel makes each creature attacking its controller cost {1} (CR 508.1d, 508.1h). Bot2,
+# with no mana, declares its Memnite attacking Bot1 on turn 4: a cost of {1} is asked for, it cannot pay, and the attack is given
+# up, so Bot1 takes nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Archangel of Tithes
+Memnite
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Archangel of Tithes.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+? Combat.AttackCost = {1}
+Bot2.Cancel
+[T4 Bot2.Main2]
+
+[Expect]
+Turn = 4
+Bot1.Life = 20

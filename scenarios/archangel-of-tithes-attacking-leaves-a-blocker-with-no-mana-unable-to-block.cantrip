@@ -1,0 +1,35 @@
+# Archangel of Tithes: while it is attacking, no creature can block unless its controller pays {1} (CR 509.1d-e). Bot2 has no
+# mana, so declaring Ornithopter blocking Bot1's Memnite shows a cost of {1} that it cannot pay and the block is given up: the
+# Memnite and the Archangel are both unblocked and Bot2 takes 1 + 3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Archangel of Tithes
+Memnite
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Archangel of Tithes.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Archangel of Tithes > Bot2; Memnite > Bot2)
+Bot2.Block(Ornithopter > Memnite)
+? Combat.BlockCost = {1}
+Bot2.Cancel
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot2.Life = 16
+Bot2.Battlefield.Ornithopter.Damage = 0

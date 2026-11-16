@@ -1,0 +1,34 @@
+# Archangel of Tithes taxes blockers only "as long as this creature is attacking": on turn 3 Bot1 attacks with the Memnite alone
+# and the Archangel stays home untapped, so Bot2 with no mana at all declares Ornithopter blocking the Memnite at no cost and
+# the block stands (Combat.BlockCost is not even asked for). Bot2 takes no damage.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Archangel of Tithes
+Memnite
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Archangel of Tithes.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Ornithopter > Memnite)
+? Combat.Blocks = Ornithopter > Memnite
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot2.Life = 20
+Bot2.Battlefield.Ornithopter.Damage = 1
