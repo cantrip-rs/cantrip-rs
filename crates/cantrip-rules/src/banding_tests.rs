@@ -203,6 +203,20 @@ fn assignment_control_needs_a_pair_but_allows_other_nonmatching_combatants() {
     assert!(!banding::controls_assignment(&g, &[wrong, peer]));
 }
 #[test]
+fn family_loss_removes_all_kinds_but_keeps_ordinary_banding_and_later_grants() {
+    let mut g = board();
+    let p = put(&mut g, &ORDINARY, A);
+    let giver = put(&mut g, &GIVER, A);
+    let given = AbilityRef::delayed(g.cards.id_of(&GIVER), 0);
+    cx(&mut g).add_effect(giver, p, EffectKind::AddAbility(given), Duration::Indefinite);
+    assert!(g.chars(p).abilities().any(|a| a == given));
+    cx(&mut g).add_effect(giver, p, EffectKind::LoseBandsWithOthers, Duration::EndOfTurn);
+    assert!(g.chars(p).has(Keyword::Banding));
+    assert!(!g.chars(p).abilities().any(|a| a == given));
+    cx(&mut g).add_effect(giver, p, EffectKind::AddAbility(given), Duration::Indefinite);
+    assert!(g.chars(p).abilities().any(|a| a == given));
+}
+#[test]
 fn losing_ordinary_banding_also_loses_every_other_kind_even_without_an_ordinary_instance() {
     let mut g = board();
     let p = put(&mut g, &PROVIDER, A);

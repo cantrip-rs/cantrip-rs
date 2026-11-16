@@ -3079,6 +3079,7 @@ pub(crate) fn effect_layer(kind: EffectKind) -> Option<Layer> {
         | EffectKind::AddKeywords(_)
         | EffectKind::Suspected
         | EffectKind::LoseKeywords(_)
+        | EffectKind::LoseBandsWithOthers
         | EffectKind::AddAbility(_)
         | EffectKind::Enchant(_)
         | EffectKind::LoseEnchant(_)
@@ -3245,6 +3246,9 @@ fn apply_effect(cards: &CardTable, effect: &ContinuousEffect, layer: Layer, char
                 if k.has(Keyword::Banding) {
                     lose_bands_with_others(cards, chars);
                 }
+            }
+            (Layer::Ability, EffectKind::LoseBandsWithOthers) => {
+                lose_bands_with_others(cards, chars);
             }
             (Layer::Ability, EffectKind::AddAbility(ability)) => {
                 if let Some(slot) = chars.abilities.iter().position(|a| a.is_none()) {

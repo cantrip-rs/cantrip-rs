@@ -3190,8 +3190,9 @@ lethal-order or trample constraints. The active player divides first, then each
 defending player (CR 510.1). The client receives the existing `DamageDivision`
 and band number. Suggestions still spare a creature where possible.
 
-Losing ordinary banding also removes the parameterized instances, even when the
-creature had no ordinary banding instance (CR 702.22b). Later grants work
+`EffectKind::LoseBandsWithOthers` removes only the parameterized instances, at
+its layer 6 timestamp (Shelkin Brownie). Losing ordinary banding also removes
+them, even when the creature had no ordinary banding instance (CR 702.22b). Later grants work
 normally; copying and losing all abilities use the ordinary ability list.
 
 ### Becoming blocked and rampage

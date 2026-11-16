@@ -1590,6 +1590,10 @@ pub enum EffectKind {
     /// and indestructible" (Shadowspear). Named landwalk references include the matching snow variant
     /// (`Keywords::for_effect`); grants stay exact. What is granted after it is kept.
     LoseKeywords(Keywords),
+    /// Loses every "bands with other" ability (CR 702.22, 613.1f), layer 6, at the effect's timestamp, ordinary banding
+    /// kept: Shelkin Brownie's "target creature loses all 'bands with other' abilities until end of turn". What is granted
+    /// after it is kept.
+    LoseBandsWithOthers,
     /// Gains this ability (activated, triggered or a supported static rule), layer 6.
     AddAbility(AbilityRef),
     /// Protection from a player (CR 702.16a): their spells and abilities can't target it, their creatures can't block
