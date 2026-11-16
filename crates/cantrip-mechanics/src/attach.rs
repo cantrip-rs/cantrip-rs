@@ -266,6 +266,13 @@ pub fn attached_to_it(q: &dyn Query, asker: &Asker, affected: ObjectId) -> bool 
     q.obj(asker.source).attached_to == Some(affected)
 }
 
+/// "Activate only if enchanted land is untapped" (CR 602.5): a restriction on activating an Aura's ability, true while the
+/// permanent the source is attached to is untapped, and false while the source is attached to nothing. Earthlore and
+/// Tourach's Gate print it.
+pub fn enchanted_permanent_untapped(q: &dyn Query, asker: &Asker) -> bool {
+    q.attached_to(asker.source).is_some_and(|id| !q.obj(id).tapped)
+}
+
 /// "Tap enchanted creature" / "tap equipped creature" (CR 701.26a, 303.4m): the permanent the source is attached to when
 /// the ability resolves. The creature, if there is one, for what the rest of the text does to it. Frozen in Ice and
 /// Infinite Coursework print it.
