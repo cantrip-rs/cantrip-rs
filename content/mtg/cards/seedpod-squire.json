@@ -1,0 +1,11 @@
+{
+  "name": "Seedpod Squire",
+  "manaCost": "{3}{W/U}",
+  "type": "Creature — Bird Scout",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nWhenever this creature attacks, target creature you control without flying gets +1/+1 until end of turn.",
+  "keywords": [
+    "Flying"
+  ]
+}
