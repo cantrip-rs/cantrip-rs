@@ -1,0 +1,48 @@
+# Hugs, Grisly Guardian: X is the value Hugs was cast with (CR 107.3m), and the enters trigger still uses it after Hugs has left
+# the battlefield. Cast with X = 2 on turn 1, Hugs is returned to Bot1's hand by Bot1's own Unsummon in response to its trigger;
+# the trigger still exiles the top two cards (a Lightning Bolt and a Plains), and the Bolt is cast from exile at Bot2 (17).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Emerald
+Mox Sapphire
+Hugs, Grisly Guardian
+Unsummon
+Lightning Bolt
+Plains
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hugs, Grisly Guardian.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unsummon.Cast(Bot1.Battlefield.Hugs, Grisly Guardian)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt; Plains
+[T3 Bot1.Main1]
+Bot1.Exile.Plains.Play
+
+[Expect]
+Exile = Lightning Bolt
+Bot1.Hand = Hugs, Grisly Guardian; Plains
+Bot1.Battlefield.Count = 5
