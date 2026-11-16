@@ -1,0 +1,61 @@
+# Esoteric Duplicator: "{2}, Sacrifice this artifact: Draw a card." costs exactly {2} (Mox Sapphire and Mox Jet pay it, the Mox Ruby
+# stays untapped and the pool is empty). Sacrificing itself triggers it ("this artifact or another artifact", CR 603.10a): Bot1
+# pays {2} when it resolves, one Mox is not enough, two are. At the beginning of the next end step a token that's a copy of it is
+# created (CR 707.2): a Clue artifact Esoteric Duplicator, a token, there only after that end step began.
+
+[Bot1 Deck]
+Esoteric Duplicator
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Esoteric Duplicator.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Esoteric Duplicator.Activate
+? Bot1.Mana = 
+? Bot1.Battlefield.Mox Ruby.Tapped = false
+? Stack.Count = 2
+? Bot1.Battlefield.Esoteric Duplicator = (absent)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+[T3 Bot1.End]
+? Stack.Count = 1
+? Bot1.Battlefield.Esoteric Duplicator = (absent)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Esoteric Duplicator.Token = true
+Bot1.Battlefield.Esoteric Duplicator.Types = Artifact
+Bot1.Battlefield.Esoteric Duplicator.Subtypes = Clue
+Bot1.Graveyard = Esoteric Duplicator

@@ -1,0 +1,49 @@
+# Esoteric Duplicator: Bot1 sacrifices another artifact, a Black Lotus, for {B}{B}{B} while the Duplicator stays on the battlefield. The
+# trigger resolves with the Lotus's mana paying {2}; at the next end step a token that's a copy of the Black Lotus (not of the
+# Duplicator) is made, and the Duplicator is untouched. A Prismatic Vista Bot1 sacrifices (a land, no artifact) triggers nothing.
+
+[Bot1 Deck]
+Esoteric Duplicator
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Prismatic Vista
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Esoteric Duplicator.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Prismatic Vista.Play
+Bot1.Battlefield.Prismatic Vista.Activate
+? Stack.Count = 1
+Bot1.Search()
+? Stack.Count = 0
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+? Stack.Count = 0
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Black Lotus.Token = true
+Bot1.Battlefield.Esoteric Duplicator.Token = (absent)
+Bot1.Graveyard = Black Lotus; Prismatic Vista

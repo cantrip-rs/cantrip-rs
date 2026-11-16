@@ -1,0 +1,6 @@
+{
+  "name": "Esoteric Duplicator",
+  "manaCost": "{2}{U}",
+  "type": "Artifact — Clue",
+  "oracleText": "Whenever you sacrifice this artifact or another artifact, you may pay {2}. If you do, at the beginning of the next end step, create a token that's a copy of that artifact.\n{2}, Sacrifice this artifact: Draw a card."
+}
