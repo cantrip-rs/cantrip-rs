@@ -1,0 +1,43 @@
+# Glarb, Calamity's Augur: "{T}: Surveil 2." Cast on turn 1 and untapped by turn 3, Glarb looks at the top TWO cards of
+# Bot1's library: the second (Counterspell) goes to the graveyard while the first (Lightning Bolt) stays on top. It is
+# tapped for the ability, and a surveil 1 could not reach the second card.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Glarb, Calamity's Augur
+Island
+Island
+Island
+Island
+Lightning Bolt
+Counterspell
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Glarb, Calamity's Augur.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Glarb, Calamity's Augur.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt | Counterspell)
+
+[Expect]
+Bot1.Battlefield.Glarb, Calamity's Augur.Tapped = true
+Bot1.Graveyard = Counterspell
+Bot1.Library.Lightning Bolt.Power = (absent)

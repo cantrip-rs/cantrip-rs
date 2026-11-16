@@ -1,0 +1,54 @@
+# Glarb, Calamity's Augur: "You may look at the top card of your library any time. You may play lands and cast spells with mana
+# value 4 or greater from the top of your library." The Juggernaut (mana value 4, exactly the limit) on top of Bot1's library is
+# cast from there with a Black Lotus and a Mox Ruby; Bot2, whose top card is also a Juggernaut, may look at nothing.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Glarb, Calamity's Augur
+Black Lotus
+Mox Ruby
+Island
+Juggernaut
+Island x12
+
+[Bot2 Deck]
+Island x7
+Juggernaut
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Glarb, Calamity's Augur.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.MayLookAtLibraryTop = true
+? Bot2.MayLookAtLibraryTop = (absent)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Library.Juggernaut.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 1
+Bot1.Battlefield.Glarb, Calamity's Augur.Power = 2
+Bot1.Battlefield.Glarb, Calamity's Augur.Toughness = 4
+Bot1.Battlefield.Glarb, Calamity's Augur.Keywords = Deathtouch
+Bot1.Battlefield.Juggernaut.Power = 5
+Bot1.Library.Count = 12
+Bot2.Library.Juggernaut.Power = 5
