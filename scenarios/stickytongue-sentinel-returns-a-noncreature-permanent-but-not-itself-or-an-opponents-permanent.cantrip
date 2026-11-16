@@ -1,0 +1,39 @@
+# Stickytongue Sentinel: the target is "other target permanent you control" (CR 115.1), any permanent type: the Sentinel itself and Bot2's
+# Plains are refused, and Bot1's Mox Jet, an artifact that is not a creature, goes back to its owner's hand (CR 400.3). The other two
+# Moxen stay (a positive control that exactly the chosen permanent is returned). It has reach and is a 3/3.
+
+[Bot1 Deck]
+Stickytongue Sentinel
+Mox Emerald
+Mox Jet
+Mox Pearl
+Plains x10
+
+[Bot2 Deck]
+Plains x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Stickytongue Sentinel.Cast
+! Bot1.Target(Stickytongue Sentinel)
+! Bot1.Target(Bot2.Battlefield.Plains)
+Bot1.Target(Bot1.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield = Plains
+Bot1.Battlefield = Mox Emerald; Mox Pearl; Stickytongue Sentinel
+Bot1.Hand = Mox Jet; Plains; Plains; Plains; Plains
+Bot1.Battlefield.Stickytongue Sentinel.Power = 3
+Bot1.Battlefield.Stickytongue Sentinel.Toughness = 3
+Bot1.Battlefield.Stickytongue Sentinel.Keywords = Reach

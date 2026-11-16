@@ -1,0 +1,11 @@
+{
+  "name": "Stickytongue Sentinel",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Frog Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Reach\nWhen this creature enters, return up to one other target permanent you control to its owner's hand.",
+  "keywords": [
+    "Reach"
+  ]
+}
