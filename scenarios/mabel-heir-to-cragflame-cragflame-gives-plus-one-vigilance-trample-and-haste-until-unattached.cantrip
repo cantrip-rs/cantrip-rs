@@ -1,0 +1,82 @@
+# Mabel, Heir to Cragflame's Cragflame: "Equipped creature gets +1/+1 and has vigilance, trample, and haste" and equip {2} (CR 301.5, 702.6,
+# 613.4c, 702.10, 702.19, 702.20). Bot1 casts Mabel on turn 1 ({1}{R}{W}). On turn 3 it casts Memnite, a 1/1 that would be summoning sick,
+# and pays equip {2} with two Moxen: the Memnite becomes 2/2 and can attack at once (haste). Bot2's Scurryfoot blocks it, and trample
+# assigns 1 damage to the 1/1 blocker and the other 1 to Bot2 (19), and vigilance leaves the Memnite untapped. Memnite is no Mouse, so Mabel's
+# +1/+1 is not what makes it 2/2. On turn 5 a second equip, onto Mabel, moves Cragflame (CR 701.3a): Memnite is a 1/1 again (it took no damage that turn) and Mabel a 4/4.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Memnite
+Mabel, Heir to Cragflame
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Stampeding Scurryfoot
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mabel, Heir to Cragflame.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Stampeding Scurryfoot.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Cragflame.Activate(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Memnite.Keywords = Haste; Trample; Vigilance
+? Bot1.Mana =
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Block(Stampeding Scurryfoot > Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+? Bot1.Battlefield.Memnite.Tapped = false
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Cragflame.Activate(Bot1.Battlefield.Mabel, Heir to Cragflame)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield = Mox Emerald
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Mabel, Heir to Cragflame.Power = 4
+Bot1.Battlefield.Mabel, Heir to Cragflame.Toughness = 4

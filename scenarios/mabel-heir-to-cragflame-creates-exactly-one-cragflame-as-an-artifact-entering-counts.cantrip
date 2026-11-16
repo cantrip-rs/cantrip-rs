@@ -1,0 +1,68 @@
+# Mabel, Heir to Cragflame: the enters trigger creates one Cragflame, not more. Donatello, Way with Machines puts a +1/+1 counter
+# on itself whenever an artifact Bot1 controls enters. With Donatello in play Bot1 casts Mabel ({1}{R}{W}) off Mox Ruby, Mox Pearl
+# and Mox Jet: the one Cragflame entering adds exactly one counter. (Two tokens would add two, the legend rule then putting one
+# into the graveyard.)
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Donatello, Way with Machines
+Mox Ruby
+Mox Pearl
+Mabel, Heir to Cragflame
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Donatello, Way with Machines.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Donatello, Way with Machines.Counters.PlusOnePlusOne = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Donatello, Way with Machines.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mabel, Heir to Cragflame.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Donatello, Way with Machines.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Cragflame.Token = true
+Bot1.Graveyard = Black Lotus
