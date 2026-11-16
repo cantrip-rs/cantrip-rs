@@ -1,0 +1,52 @@
+# Dazzling Theater: "Creature spells you cast have convoke." Prop Room: "Untap each creature you control during each other
+# player's untap step" (CR 502.3). Bot1 casts Dazzling Theater; Mind Stone, no creature spell, can't be convoked with
+# Memnite, but Alpha Myr is, paid with the Plains and Memnite. Prop Room is locked, so in Bot2's turn 2 untap step Memnite
+# stays tapped. In turn 3 Bot1 unlocks Prop Room (its rule applies at once, CR 709.5) and attacks with both creatures; in
+# Bot2's turn 4 untap step they untap, and the tapped Mox Pearl and Plains, no creatures, don't.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Dazzling Theater // Prop Room
+Memnite
+Alpha Myr
+Mox Pearl
+Mind Stone
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Dazzling Theater // Prop Room.Cast(Ability: Dazzling Theater)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+! Bot1.Hand.Mind Stone.Cast(Convoke: Memnite; Mana: short)
+Bot1.Hand.Alpha Myr.Cast(Convoke: Memnite)
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Tapped = true
+? Bot1.Battlefield.Alpha Myr.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Dazzling Theater.Activate(Ability: right door)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Attack(Memnite > Bot2; Alpha Myr > Bot2)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Tapped = false
+? Bot1.Battlefield.Alpha Myr.Tapped = false
+? Bot1.Battlefield.Mox Pearl.Tapped = true
+
+[Expect]
+Bot2.Life = 17
+Bot1.Hand = Mind Stone
+Bot1.Battlefield.Dazzling Theater // Prop Room.Doors = Dazzling Theater; Prop Room
