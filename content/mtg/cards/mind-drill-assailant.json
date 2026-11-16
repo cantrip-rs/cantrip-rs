@@ -1,0 +1,8 @@
+{
+  "name": "Mind Drill Assailant",
+  "manaCost": "{2}{U/B}{U/B}",
+  "type": "Creature — Rat Warlock",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Threshold — As long as there are seven or more cards in your graveyard, this creature gets +3/+0.\n{2}{U/B}: Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)"
+}
