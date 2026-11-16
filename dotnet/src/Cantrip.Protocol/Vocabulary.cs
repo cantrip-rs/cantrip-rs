@@ -476,6 +476,8 @@ public enum ManaSpendFilterView
     Card = 29,
     /// <summary>Only to pay cumulative upkeep costs (CR 702.24a).</summary>
     CumulativeUpkeep = 30,
+    /// <summary>Only to cast a spell with one of the subtypes named beside it or unlock a door: "Room spells and unlock doors".</summary>
+    SubtypeSpellsOrUnlockingDoors = 31,
 }
 
 /// <summary>What spending some mana does to whatever it pays for (CR 106.6): the effect half of a restriction.</summary>

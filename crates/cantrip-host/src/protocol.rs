@@ -386,6 +386,9 @@ pub enum ManaSpendFilterView {
     Card,
     /// Only to pay cumulative upkeep costs (CR 702.24a).
     CumulativeUpkeep,
+    /// Spells with one of the subtypes named beside it, or the special action of unlocking a door: "Room spells and unlock
+    /// doors" (CR 709.5e).
+    SubtypeSpellsOrUnlockingDoors,
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Serialize, Deserialize)]

@@ -233,6 +233,12 @@ modes, none among them, the same one again, so long as their pawprints add up to
 answer that adds up to more. `Pawprints` is empty for every other choice of modes. The web client counts the {P} spent and
 lets a mode be pressed while it still fits; the automatic seats spend them all on a spread of the modes worth most. Version 243.
 
+**Mana for Rooms and doors.** Mana that may be spent only to cast Room spells and unlock doors (CR 106.6, 709.5e: Smoky
+Lounge's "Spend this mana only to cast Room spells and unlock doors") is the `ManaSpendFilterView`
+`SubtypeSpellsOrUnlockingDoors`, with the subtypes beside it as for `SubtypeSpells`. Unlocking a door is a special action
+(CR 116.2), so the restriction says so itself rather than through an ability kind. The pool chip reads "room spells & unlocking
+doors", its tooltip "Spend this mana only to cast Room spells or unlock doors." Version 244.
+
 An unrestricted `SeparatePiles` selection (`AnyNumber`, no parts or candidate restriction) uses the existing non-targeted
 `ChooseTargetPromptMessage` presentation; its `TargetsChosenAnswer` is translated to the engine's card selection and
 checked by the same validator. A pile-choice mode names its members, with an empty pile named "nothing" (CR 700.3d). The same
@@ -397,3 +403,5 @@ Protocol 241 adds the cumulative-upkeep-only mana spend filter (CR 106.6, 702.24
 Protocol 242 adds `producesAlternatives` to action options: complete, mutually exclusive mana bundles for one activation. The player chooses the bundle as the ability resolves; existing `produces` contains only mana common to all bundles.
 
 Protocol 243 adds `Pawprints` (key 14) to `ChooseModesPromptMessage` (see **Pawprints** above); every other choice of modes sends it empty.
+
+Protocol 244 adds the Room-spells-and-unlocking-doors mana spend filter (`SubtypeSpellsOrUnlockingDoors`, CR 106.6, 709.5e); prior filter values are unchanged.

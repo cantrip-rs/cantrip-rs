@@ -131,6 +131,11 @@ pub fn restriction_view(restriction: ManaRestriction) -> (ManaSpendFilterView, M
             subtypes = s.subtypes.iter().map(|t| t.name().to_string()).collect();
             ManaSpendFilterView::SubtypeSpellsOrEquipAbilities
         }
+        // Room spells and unlocking doors: the unlock comes with no other kind of ability or creature limit.
+        ManaRestriction::Subtypes(s) if s.unlock && !s.creature && s.abilities.is_none() && !s.equip => {
+            subtypes = s.subtypes.iter().map(|t| t.name().to_string()).collect();
+            ManaSpendFilterView::SubtypeSpellsOrUnlockingDoors
+        }
         ManaRestriction::Subtypes(s) => {
             subtypes = s.subtypes.iter().map(|t| t.name().to_string()).collect();
             match (s.creature, s.abilities) {
@@ -225,6 +230,7 @@ pub fn restriction_of(filter: ManaSpendFilterView, effect: ManaSpendEffectView, 
             | ManaSpendFilterView::SubtypeCreatureSpellsOrAbilities
             | ManaSpendFilterView::SubtypeSpellsOrAbilitiesOfPermanents
             | ManaSpendFilterView::SubtypeSpellsOrEquipAbilities
+            | ManaSpendFilterView::SubtypeSpellsOrUnlockingDoors
     ) {
         let mut named = SubtypeSet::NONE;
         for name in subtypes {
@@ -236,6 +242,7 @@ pub fn restriction_of(filter: ManaSpendFilterView, effect: ManaSpendEffectView, 
             creature: matches!(filter, ManaSpendFilterView::SubtypeCreatureSpells | ManaSpendFilterView::SubtypeCreatureSpellsOrAbilities),
             uncounterable: effect == ManaSpendEffectView::CantBeCountered,
             equip: filter == ManaSpendFilterView::SubtypeSpellsOrEquipAbilities,
+            unlock: filter == ManaSpendFilterView::SubtypeSpellsOrUnlockingDoors,
             abilities: match filter {
                 ManaSpendFilterView::SubtypeSpellsOrAbilities | ManaSpendFilterView::SubtypeCreatureSpellsOrAbilities => Some(AbilitiesOf::Sources),
                 ManaSpendFilterView::SubtypeSpellsOrAbilitiesOfPermanents => Some(AbilitiesOf::Permanents),
@@ -2497,6 +2504,11 @@ mod tests {
         let (filter, effect, subtypes, mana_value) = restriction_view(carnelian);
         assert_eq!((filter, effect, subtypes.as_slice()), (ManaSpendFilterView::None, ManaSpendEffectView::GainsHaste, ["Dragon".to_string()].as_slice()));
         assert_eq!(restriction_of(filter, effect, &subtypes, mana_value, ObjectId::NONE), Some(carnelian));
+        // Smoky Lounge's: Room spells and unlocking doors.
+        let lounge = ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Room).or_unlocking_doors());
+        let (filter, effect, subtypes, mana_value) = restriction_view(lounge);
+        assert_eq!((filter, subtypes.as_slice()), (ManaSpendFilterView::SubtypeSpellsOrUnlockingDoors, ["Room".to_string()].as_slice()));
+        assert_eq!(restriction_of(filter, effect, &subtypes, mana_value, ObjectId::NONE), Some(lounge));
     }
 
     /// A power and toughness printed as stars are not a number on the printed card: the goyfs' sizes are their abilities'

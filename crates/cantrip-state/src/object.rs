@@ -2867,33 +2867,36 @@ pub struct SubtypeSpells {
     /// the subtypes of its source - not another ability of an Equipment (a reconfigure cost, an ability of its own) nor a
     /// triggered ability's cost. Ronin, Shadow Stalker's Equipment spells.
     pub equip: bool,
+    /// "... and unlock doors" (CR 106.6, 709.5e): it pays too for the special action of unlocking a door, whatever the
+    /// subtypes of the permanent - not an ability, nor any other special action. Smoky Lounge's Room spells.
+    pub unlock: bool,
 }
 
 impl SubtypeSpells {
     /// "Spend this mana only to cast a creature spell of the chosen type."
     pub const CHOSEN_TYPE_CREATURE: SubtypeSpells =
-        SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: true, creature: true, uncounterable: false, abilities: None, equip: false };
+        SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: true, creature: true, uncounterable: false, abilities: None, equip: false, unlock: false };
 
     /// "Spend this mana only to cast a spell of the chosen type or activate an ability of a source of the chosen type"
     /// (Eclipsed Realms).
     pub const CHOSEN_TYPE_SPELLS_OR_ABILITIES: SubtypeSpells =
-        SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: true, creature: false, uncounterable: false, abilities: Some(AbilitiesOf::Sources), equip: false };
+        SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: true, creature: false, uncounterable: false, abilities: Some(AbilitiesOf::Sources), equip: false, unlock: false };
 
     /// "Spend this mana only to cast a creature spell of the chosen type or activate an ability of a creature source of the
     /// chosen type" (Secluded Courtyard): `creature` limits the ability's source as it does the spell.
     pub const CHOSEN_TYPE_CREATURE_SPELLS_OR_ABILITIES: SubtypeSpells =
-        SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: true, creature: true, uncounterable: false, abilities: Some(AbilitiesOf::Sources), equip: false };
+        SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: true, creature: true, uncounterable: false, abilities: Some(AbilitiesOf::Sources), equip: false, unlock: false };
 
     /// "Spend this mana only to cast [subtype] spells."
     pub const fn of(subtype: Subtype) -> SubtypeSpells {
-        SubtypeSpells { subtypes: SubtypeSet::of(&[subtype]), chosen: false, creature: false, uncounterable: false, abilities: None, equip: false }
+        SubtypeSpells { subtypes: SubtypeSet::of(&[subtype]), chosen: false, creature: false, uncounterable: false, abilities: None, equip: false, unlock: false }
     }
 
     /// "Spend this mana only to cast a [subtype] spell or a [subtype] spell [or ...]": any number of subtypes, any one of
     /// which the spell must have. This is the one way to say "any of these subtypes"; `ManaRestriction::AnyOf` is for a union
     /// of restrictions of different kinds.
     pub const fn of_any(subtypes: &[Subtype]) -> SubtypeSpells {
-        SubtypeSpells { subtypes: SubtypeSet::of(subtypes), chosen: false, creature: false, uncounterable: false, abilities: None, equip: false }
+        SubtypeSpells { subtypes: SubtypeSet::of(subtypes), chosen: false, creature: false, uncounterable: false, abilities: None, equip: false, unlock: false }
     }
 
     /// "... and that spell can't be countered."
@@ -2909,6 +2912,11 @@ impl SubtypeSpells {
     /// "... or activate equip abilities" (CR 702.6a): Ronin, Shadow Stalker's Equipment spells.
     pub const fn or_equip_abilities(self) -> SubtypeSpells {
         SubtypeSpells { equip: true, ..self }
+    }
+
+    /// "... and unlock doors" (CR 709.5e): Smoky Lounge's Room spells.
+    pub const fn or_unlocking_doors(self) -> SubtypeSpells {
+        SubtypeSpells { unlock: true, ..self }
     }
 
     /// "... or activate abilities of [subtype]s", permanents only (CR 109.2): Smokebraider's Elementals, Myr Reservoir's Myr.
@@ -2944,6 +2952,9 @@ pub enum ManaPayment {
     Ability { source: TypeSet, subtypes: SubtypeSet, on_battlefield: bool, equip: bool },
     /// Activating an ability granted to a player; it has no object whose types can satisfy a source restriction.
     PlayerAbility,
+    /// Unlocking a door (CR 709.5e): a special action (CR 116.2), so no activation, which only restricted mana that says
+    /// "unlock doors" may pay.
+    UnlockDoor,
     /// Anything else: a special action, "unless ... pays", a cost a resolving effect asks for.
     Other,
     /// Paying the cost of cumulative upkeep (CR 702.24a).
@@ -3166,6 +3177,7 @@ impl ManaRestriction {
                         && (!s.creature || source.has(CardType::Creature))
                         && s.subtypes.intersects(*subtypes))
             }
+            (ManaRestriction::Subtypes(s), ManaPayment::UnlockDoor) => s.unlock,
             _ => false,
         }
     }
@@ -3234,6 +3246,9 @@ impl ManaRestriction {
             if s.equip {
                 name.push_str("OrEquipAbilities");
             }
+            if s.unlock {
+                name.push_str("OrUnlockingDoors");
+            }
             if s.uncounterable {
                 name.push_str(", CantBeCountered");
             }
@@ -3281,9 +3296,13 @@ impl ManaRestriction {
             return None;
         }
         let limit = text.iter().find(|w| *w != "cantbecountered")?;
-        let (limit, equip) = match limit.strip_suffix("orequipabilities") {
+        let (limit, unlock) = match limit.strip_suffix("orunlockingdoors") {
             Some(rest) => (rest, true),
             None => (limit.as_str(), false),
+        };
+        let (limit, equip) = match limit.strip_suffix("orequipabilities") {
+            Some(rest) => (rest, true),
+            None => (limit, false),
         };
         let (limit, abilities) = match (limit.strip_suffix("orabilities"), limit.strip_suffix("orabilitiesofpermanents")) {
             (Some(rest), _) => (rest, Some(AbilitiesOf::Sources)),
@@ -3306,7 +3325,7 @@ impl ManaRestriction {
             })
         }
         let subtypes = if body == "notype" { SubtypeSet::NONE } else { names(body)? };
-        Some(ManaRestriction::Subtypes(SubtypeSpells { subtypes, chosen: false, creature, uncounterable, abilities, equip }))
+        Some(ManaRestriction::Subtypes(SubtypeSpells { subtypes, chosen: false, creature, uncounterable, abilities, equip, unlock }))
     }
 }
 
@@ -3699,14 +3718,15 @@ mod tests {
         all.push(ManaRestriction::Subtypes(SubtypeSpells::of_any(&[Subtype::Dragon, Subtype::Omen])));
         all.push(ManaRestriction::Subtypes(SubtypeSpells::of_any(&[Subtype::Dragon, Subtype::Omen, Subtype::Elf])));
         all.push(ManaRestriction::Subtypes(SubtypeSpells::of_any(&[Subtype::Horror, Subtype::Orc, Subtype::Warrior])));
-        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::of(&[Subtype::Elf]), chosen: false, creature: true, uncounterable: true, abilities: None, equip: false }));
-        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: false, creature: true, uncounterable: false, abilities: None, equip: false }));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::of(&[Subtype::Elf]), chosen: false, creature: true, uncounterable: true, abilities: None, equip: false, unlock: false }));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: false, creature: true, uncounterable: false, abilities: None, equip: false, unlock: false }));
         all.push(ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Elemental).or_abilities()));
-        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::of(&[Subtype::Elf]), chosen: false, creature: true, uncounterable: false, abilities: Some(AbilitiesOf::Sources), equip: false }));
-        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: false, creature: false, uncounterable: false, abilities: Some(AbilitiesOf::Sources), equip: false }));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::of(&[Subtype::Elf]), chosen: false, creature: true, uncounterable: false, abilities: Some(AbilitiesOf::Sources), equip: false, unlock: false }));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: false, creature: false, uncounterable: false, abilities: Some(AbilitiesOf::Sources), equip: false, unlock: false }));
         all.push(ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Elemental).or_abilities_of_permanents()));
         all.push(ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Myr).or_abilities_of_permanents()));
         all.push(ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Equipment).or_equip_abilities()));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Room).or_unlocking_doors()));
         all.push(ManaRestriction::mana_value_at_least(4));
         all.push(ManaRestriction::mana_value_at_least_or_x(5));
         all.push(ManaRestriction::mana_value_at_least(12));
@@ -3890,6 +3910,25 @@ mod tests {
         assert!(!restriction.may_pay(&ManaPayment::Other));
         assert!(!ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Equipment)).may_pay(&ability(equipment, true)), "Equipment spells alone");
         assert_eq!(restriction.name(), "EquipmentSpellsOrEquipAbilities");
+        assert!(restriction.is_known() && restriction.names_subtypes());
+    }
+
+    /// "Spend this mana only to cast Room spells and unlock doors" (CR 106.6, 709.5e; Smoky Lounge): a Room spell, and the
+    /// special action of unlocking a door - not an ability, nor a spell that is not a Room, nor any other special action.
+    #[test]
+    fn room_spells_and_unlocking_doors() {
+        let restriction = ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Room).or_unlocking_doors());
+        let enchantment = TypeSet::of(&[CardType::Enchantment]);
+        let spell = |subtypes| ManaPayment::Spell { types: enchantment, subtypes, legendary: false, mana_value: 3, x: false, from: ZoneKind::Hand, commander: false, card: ObjectId::NONE };
+        let room = SubtypeSet::of(&[Subtype::Room]);
+        assert!(restriction.may_pay(&spell(room)));
+        assert!(!restriction.may_pay(&spell(SubtypeSet::NONE)), "an enchantment that is no Room");
+        assert!(restriction.may_pay(&ManaPayment::UnlockDoor));
+        assert!(!restriction.may_pay(&ManaPayment::Other), "another special action");
+        assert!(!restriction.may_pay(&ManaPayment::Ability { source: enchantment, subtypes: room, on_battlefield: true, equip: false }), "an ability of a Room");
+        assert!(!ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Room)).may_pay(&ManaPayment::UnlockDoor), "Room spells alone");
+        assert!(!ManaRestriction::ABILITIES.may_pay(&ManaPayment::UnlockDoor), "an unlock is no ability (CR 116.2)");
+        assert_eq!(restriction.name(), "RoomSpellsOrUnlockingDoors");
         assert!(restriction.is_known() && restriction.names_subtypes());
     }
 
