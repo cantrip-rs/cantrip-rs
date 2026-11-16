@@ -2008,6 +2008,24 @@ pub fn return_it_tapped(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
     Ok(())
 }
 
+/// "Exile target creature you control, then return that card to the battlefield under its owner's control with a +1/+1
+/// counter on it." (CR 400.7: a new object; CR 122.6: it enters with the counter; CR 111.7: a token exiled this way ceases to
+/// exist and does not return.) Nothing happens if the target is no longer legal (CR 608.2b). Each card of a merged permanent
+/// returns, together, each with its counter (CR 730.3c). Daydream and Lilysplash Mentor print it.
+pub fn exile_target_then_return_with_a_plus_one_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    let returning: Vec<(ObjectId, PlayerId, bool)> = g
+        .exile_all(&[creature])
+        .into_iter()
+        .filter(|&c| !g.obj(c).token && g.obj(c).zone.is(ZoneKind::Exile))
+        .map(|c| (c, g.obj(c).owner, false))
+        .collect();
+    if !returning.is_empty() {
+        g.put_all_onto_battlefield_with_counters(&returning, &[(CounterKind::PlusOne, 1)])?;
+    }
+    Ok(())
+}
+
 /// "You may pay [cost]. If you do, untap this [permanent]" (CR 608.2c, 701.26).
 /// Brass Man and Mana Vault print this; the payment is offered even if the source has left.
 pub fn may_pay_to_untap_self(g: &mut dyn Game, item: &StackItem, payment: Cost) -> Result<(), Suspend> {
