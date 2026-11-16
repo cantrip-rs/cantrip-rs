@@ -1,0 +1,6 @@
+{
+  "name": "One Last Job",
+  "manaCost": "{2}{W}",
+  "type": "Sorcery",
+  "oracleText": "Spree (Choose one or more additional costs.)\n+ {2} — Return target creature card from your graveyard to the battlefield.\n+ {1} — Return target Mount or Vehicle card from your graveyard to the battlefield.\n+ {1} — Return target Aura or Equipment card from your graveyard to the battlefield attached to a creature you control."
+}

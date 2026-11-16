@@ -1,0 +1,57 @@
+# One Last Job's "target Mount or Vehicle card" names a creature type, read through the words of the spell's own text (CR 612.2).
+# Bot1 casts its Mount-or-Vehicle mode on turn 3 targeting Bulwark Ox, a Mount. In response Bot2's Artificial Evolution changes
+# Mount to Thopter in the spell's text: as One Last Job resolves the Ox is no Thopter and no Vehicle, so its only target is illegal
+# and the spell does not resolve (CR 608.2b): the Ox stays in the graveyard. The Moxen pay {2}{W} + {1} exactly (white from Pearl).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Otherworldly Gaze
+One Last Job
+Island
+Island
+Savannah Lions
+Bulwark Ox
+Island x10
+
+[Bot2 Deck]
+Mox Sapphire
+Artificial Evolution
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Otherworldly Gaze.Cast
+Bot1.Arrange(Island | Savannah Lions; Bulwark Ox)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.One Last Job.Cast
+Bot1.Modes(2)
+Bot1.Target(Bulwark Ox)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Artificial Evolution.Cast(One Last Job)
+Bot2.Pass
+Bot1.Pass
+Bot2.Modes(Mount)
+Bot2.Modes(Thopter)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = One Last Job; Otherworldly Gaze; Bulwark Ox; Savannah Lions
+Bot2.Graveyard = Artificial Evolution
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire

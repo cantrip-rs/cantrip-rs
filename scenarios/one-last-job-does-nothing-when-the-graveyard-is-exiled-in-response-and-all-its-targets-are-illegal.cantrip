@@ -1,0 +1,54 @@
+# One Last Job with its creature and Vehicle modes (CR 608.2b): in response, Bot2 sacrifices Tormod's Crypt to exile Bot1's graveyard,
+# so the Savannah Lions and Passenger Ferry it targets are gone (new objects in exile, CR 400.7). With all its targets illegal the
+# spell does not resolve at all: nothing returns, the spell is not put onto the battlefield, and it goes to the graveyard as a countered
+# spell would. It was paid for exactly, {2}{W} + {2} + {1} = six mana from Black Lotus (white) and three Moxen.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Otherworldly Gaze
+One Last Job
+Island
+Savannah Lions
+Passenger Ferry
+Island x12
+
+[Bot2 Deck]
+Tormod's Crypt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Otherworldly Gaze.Cast
+Bot1.Arrange(Island | Savannah Lions; Passenger Ferry)
+[T2 Bot2.Main1]
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.One Last Job.Cast
+Bot1.Modes(1; 2)
+Bot1.Target(Savannah Lions)
+Bot1.Target(Passenger Ferry)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard.Count = 0
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Graveyard = One Last Job

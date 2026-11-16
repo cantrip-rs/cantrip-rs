@@ -1,0 +1,44 @@
+# One Last Job's Mount-or-Vehicle mode alone ({2}{W} + {1} = four mana): Bulwark Ox is a Mount, so a creature card is a legal
+# target here too (CR 205.3m), while Savannah Lions, a creature card with neither type, is refused at the same slot. The Ox
+# returns and the Lions stay in the graveyard. The Moxen pay exactly (white from Pearl).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Otherworldly Gaze
+One Last Job
+Island
+Island
+Savannah Lions
+Bulwark Ox
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Otherworldly Gaze.Cast
+Bot1.Arrange(Island | Savannah Lions; Bulwark Ox)
+[T3 Bot1.Main1]
+Bot1.Hand.One Last Job.Cast
+Bot1.Modes(2)
+! Bot1.Target(Savannah Lions)
+Bot1.Target(Bulwark Ox)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana =
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = One Last Job; Otherworldly Gaze; Savannah Lions
+Bot1.Battlefield = Bulwark Ox; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire

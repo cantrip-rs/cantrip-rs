@@ -1,0 +1,49 @@
+# One Last Job's creature mode (+{2}) takes any creature card, so Bulwark Ox, a Mount, qualifies, while Passenger Ferry, a Vehicle
+# card that is no creature in a graveyard (CR 301.7), is refused at that slot (CR 205.2a, 115.1). The Mount-or-Vehicle mode (+{1})
+# refuses Savannah Lions, a creature card that is neither. Modes 1 and 2 cost {2}{W} + {2} + {1} = six mana, paid exactly by Black
+# Lotus (three white) and three Moxen. The Lions stay in the graveyard, the Ox and the Ferry enter untapped, in printed order.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Otherworldly Gaze
+One Last Job
+Savannah Lions
+Passenger Ferry
+Bulwark Ox
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Otherworldly Gaze.Cast
+Bot1.Arrange(| Savannah Lions; Passenger Ferry; Bulwark Ox)
+[T3 Bot1.Main1]
+Bot1.Hand.One Last Job.Cast
+Bot1.Modes(1; 2)
+! Bot1.Target(Passenger Ferry)
+Bot1.Target(Bulwark Ox)
+! Bot1.Target(Savannah Lions)
+Bot1.Target(Passenger Ferry)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana =
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = One Last Job; Black Lotus; Otherworldly Gaze; Savannah Lions
+Bot1.Battlefield = Bulwark Ox; Mox Pearl; Mox Ruby; Mox Sapphire; Passenger Ferry
+Bot1.Battlefield.Bulwark Ox.Tapped = false
+Bot1.Battlefield.Passenger Ferry.Tapped = false
