@@ -1,0 +1,8 @@
+{
+  "name": "Tender Wildguide",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Possum Druid",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Offspring {2} (You may pay an additional {2} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\n{T}: Add one mana of any color.\n{T}: Put a +1/+1 counter on this creature."
+}

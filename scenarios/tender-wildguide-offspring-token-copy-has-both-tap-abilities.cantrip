@@ -1,0 +1,41 @@
+# Tender Wildguide with offspring {2} paid (CR 702.175a): the Wildguide enters and its 1/1 token copy follows, with the same two {T}
+# abilities. Four Moxen pay {1}{G} and the offspring {2} exactly: the pool is empty after the cast. Turn 3 the token (not summoning sick any more) taps for a +1/+1 counter (a 2/2 token) while the card taps for {U}: the pool holds
+# exactly that mana and the card, untouched, is still a 2/2 with no counter.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Tender Wildguide
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tender Wildguide.Cast(Kicked: 1)
+Bot1.Pass
+? Bot1.Mana =
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Tender Wildguide#2.Power = 1
+Bot1.Battlefield.Tender Wildguide#2.Activate(Ability: +1/+1 counter)
+Bot1.Battlefield.Tender Wildguide#1.Activate(Ability: any color; Color: Blue)
+? Bot1.Mana = {U}
+
+[Expect]
+Bot1.Battlefield.Tender Wildguide#1.Token = (absent)
+Bot1.Battlefield.Tender Wildguide#1.Power = 2
+Bot1.Battlefield.Tender Wildguide#1.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Tender Wildguide#2.Token = true
+Bot1.Battlefield.Tender Wildguide#2.Power = 2
+Bot1.Battlefield.Tender Wildguide#2.Toughness = 2
+Bot1.Battlefield.Tender Wildguide#2.Counters.PlusOnePlusOne = 1

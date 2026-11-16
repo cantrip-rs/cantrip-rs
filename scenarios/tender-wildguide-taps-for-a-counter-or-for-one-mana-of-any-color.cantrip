@@ -1,0 +1,38 @@
+# Tender Wildguide (CR 106.1a, 122.1a, 605.1a, 302.6): "{T}: Add one mana of any color." and "{T}: Put a +1/+1 counter on this creature." are
+# two abilities sharing one {T}. Turn 3 (not summoning sick): Bot1 uses the counter one - the Wildguide is a 3/3, tapped, no mana in the pool,
+# and neither ability can be used again while tapped. Turn 5 it untaps and Bot1 uses the mana one for {R} (a color none of this deck's
+# sources make): the pool holds exactly that one mana, and the counter stays one.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Tender Wildguide
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tender Wildguide.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Tender Wildguide.Activate(Ability: +1/+1 counter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Tender Wildguide.Power = 3
+! Bot1.Battlefield.Tender Wildguide.Activate(Ability: +1/+1 counter)
+! Bot1.Battlefield.Tender Wildguide.Activate(Ability: any color; Color: Red)
+[T5 Bot1.Main1]
+? Bot1.Mana =
+Bot1.Battlefield.Tender Wildguide.Activate(Ability: any color; Color: Red)
+? Bot1.Mana = {R}
+
+[Expect]
+Bot1.Battlefield.Tender Wildguide.Tapped = true
+Bot1.Battlefield.Tender Wildguide.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Tender Wildguide.Power = 3
+Bot1.Battlefield.Tender Wildguide.Toughness = 3
