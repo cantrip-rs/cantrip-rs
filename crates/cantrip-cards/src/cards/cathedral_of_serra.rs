@@ -2,18 +2,11 @@ use cantrip_api::*;
 use cantrip_mechanics::{banding, statics};
 use cantrip_oracle as oracle;
 
-/// "White legendary creatures you control" (CR 604.1, 109.2).
-fn white_legendary_creatures_you_control(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
-    statics::your_creatures(q, source, affected, so_far)
-        && so_far.supertypes.legendary
-        && so_far.colors.has(q.words(source).color(Color::White))
-}
-
 pub static CARD: CardDef = CardDef {
     statics: &[
         static_ability(
             Layer::Ability,
-            white_legendary_creatures_you_control,
+            statics::colored_legendary_creatures_you_control::<{ Color::White as u8 }>,
             statics::grant_delayed_ability,
             "White legendary creatures you control have \"bands with other legendary creatures.\"",
         ),

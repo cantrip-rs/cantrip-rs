@@ -11,6 +11,16 @@ pub fn your_creatures(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, 
     so_far.is(CardType::Creature) && q.controller(affected) == q.controller(source)
 }
 
+/// "[Color] legendary creatures you control" (CR 604.1, 613.1f, layer 6): `your_creatures` that are legendary and `COLOR`
+/// (`Color::Green as u8` and so on), all as the earlier layers made them, the color word read through the source's text
+/// (CR 612). Adventurers' Guildhouse (green), Cathedral of Serra (white), Seafarer's Quay (blue), Mountain Stronghold (red)
+/// and Unholy Citadel (black) print it.
+pub fn colored_legendary_creatures_you_control<const COLOR: u8>(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
+    your_creatures(q, source, affected, so_far)
+        && so_far.supertypes.legendary
+        && so_far.colors.has(q.words(source).color(Color::ALL[COLOR as usize]))
+}
+
 /// "Creatures your opponents control" (CR 613.1f, layer 6): every creature, as the earlier layers made it, under the control of
 /// a player other than the source's controller (CR 102.2), both read through the view (`LayerQuery::controller`, CR 613.1b). M.O.D.O.K.,
 /// Melira, Sylvok Outcast and Mindwhisker use it as `StaticDef::affects`.
