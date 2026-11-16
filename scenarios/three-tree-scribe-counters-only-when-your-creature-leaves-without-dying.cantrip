@@ -1,0 +1,63 @@
+# Three Tree Scribe (CR 603.6c, 700.4, 115.1): "Whenever this creature or another creature you control leaves the battlefield without
+# dying, put a +1/+1 counter on target creature you control." Bot2 exiles one of its own Memnites with Swords to Plowshares (an
+# opponent's creature leaves: no trigger), then Bot1's Ornithopter (exiled, not dying: one trigger), then Lightning Bolts Bot1's Memnite
+# (it dies: no trigger). The one trigger's target must be a creature Bot1 controls: Bot2's other Memnite and Bot1's Mox Jet are refused,
+# and Bot1 puts the counter on the Scribe itself: exactly one counter in all.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Three Tree Scribe
+Ornithopter
+Memnite
+Island x15
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Mox Ruby
+Memnite
+Memnite
+Swords to Plowshares
+Swords to Plowshares
+Lightning Bolt
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Three Tree Scribe.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Three Tree Scribe.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Target(Bot2.Battlefield.Memnite)
+! Bot1.Target(Mox Jet)
+Bot1.Target(Three Tree Scribe)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Memnite
+Exile = Memnite; Ornithopter
+Bot1.Battlefield.Three Tree Scribe.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Three Tree Scribe.Power = 3

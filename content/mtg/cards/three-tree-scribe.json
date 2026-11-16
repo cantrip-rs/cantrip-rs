@@ -1,0 +1,8 @@
+{
+  "name": "Three Tree Scribe",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Frog Druid",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever this creature or another creature you control leaves the battlefield without dying, put a +1/+1 counter on target creature you control."
+}

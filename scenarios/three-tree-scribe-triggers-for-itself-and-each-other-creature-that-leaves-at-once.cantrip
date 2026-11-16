@@ -1,0 +1,51 @@
+# Three Tree Scribe, rulings 2024-07-26: "If Three Tree Scribe leaves the battlefield without dying at the same time one or more other
+# creatures you control leave the battlefield without dying, its ability will still trigger once for each of those creatures, including
+# itself." Bot2's Aetherize returns Bot1's attacking Scribe and Ornithopter to hand in one event (CR 603.6c, 603.10a): two triggers,
+# each putting a +1/+1 counter (CR 122.1a) on target creature Bot1 controls, the Memnite that stayed home: it ends with two counters (a 3/3).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Three Tree Scribe
+Ornithopter
+Memnite
+Island x15
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Aetherize
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Three Tree Scribe.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Three Tree Scribe; Ornithopter)
+Bot2.Hand.Aetherize.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Three Tree Scribe.Power = 2
+Bot1.Hand.Ornithopter.Power = 0
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 3
