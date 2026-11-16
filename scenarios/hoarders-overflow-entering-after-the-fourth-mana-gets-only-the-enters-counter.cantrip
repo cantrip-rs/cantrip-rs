@@ -1,0 +1,32 @@
+# Hoarder's Overflow: two Lightning Bolts off Black Lotus are mana 1 and 2, and the Overflow is cast with the last red and
+# the Mountain - the fourth mana, spent while it is on the stack. Its controller expends 4 then, but the Overflow was not on
+# the battlefield to see it, and it can't happen again this turn (CR 700.14, the expend rulings): it has only the stash
+# counter from entering.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Hoarder's Overflow
+Memnite
+Grizzly Bears
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Hoarder's Overflow.Cast
+[T1 Bot1.Main2]
+? Bot2.Life = 14
+
+[Expect]
+Bot1.Battlefield.Hoarder's Overflow.Counters.Stash = 1

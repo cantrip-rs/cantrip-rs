@@ -1,0 +1,48 @@
+# Hoarder's Overflow: one ability, two trigger conditions (CR 603.2). Black Lotus is a free spell, the Overflow mana 1-2 and
+# enters with a stash counter; a Lightning Bolt is mana 3 and a second, off the Mountain, mana 4 - its controller expends 4
+# (CR 700.14) and it gets a second. On turn three, {1}{R} and sacrificing it discard the hand (Memnite and a Mountain) and
+# draw cards equal to the two stash counters it had as it was sacrificed (CR 608.2h). The third mana adds no counter, and
+# another permanent entering (the Mountain) doesn't trigger it.
+
+[Bot1 Deck]
+Mountain
+Mountain
+Black Lotus
+Hoarder's Overflow
+Lightning Bolt
+Lightning Bolt
+Memnite
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Hoarder's Overflow.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 1
+? Bot1.Battlefield.Hoarder's Overflow.Counters.Stash = 1
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Hoarder's Overflow.Counters.Stash = 2
+? Bot2.Life = 14
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+? Stack.Count = 0
+? Bot1.Hand = Memnite; Mountain
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Hoarder's Overflow.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Mountain; Mountain
+Bot1.Graveyard.Count = 6
+Bot1.Battlefield = Mountain; Mountain
