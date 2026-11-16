@@ -1,0 +1,24 @@
+# "Tap target permanent" may target one already tapped (ruling 2024-04-12): the Mox Sapphire that paid for Harrier Strix stays
+# tapped, and the trigger resolves without trouble.
+
+[Bot1 Deck]
+Mox Sapphire
+Harrier Strix
+Island x16
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Harrier Strix.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Mox Sapphire.Tapped = true
+Bot1.Battlefield.Harrier Strix.Tapped = false

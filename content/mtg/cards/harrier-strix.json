@@ -1,0 +1,11 @@
+{
+  "name": "Harrier Strix",
+  "manaCost": "{U}",
+  "type": "Creature — Bird",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying\nWhen this creature enters, tap target permanent.\n{2}{U}: Draw a card, then discard a card.",
+  "keywords": [
+    "Flying"
+  ]
+}

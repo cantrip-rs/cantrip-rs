@@ -1,0 +1,47 @@
+# {2}{U}: draw a card, then discard a card. With only Island and Mox Jet untapped (two mana) the ability cannot be activated; with Mox
+# Pearl cast as well it can. The hand is empty, so the card is drawn first and then discarded: the Forest from the library ends
+# in the graveyard (discarding first would find no card and leave the Forest in hand).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Harrier Strix
+Mox Pearl
+Memnite
+Ornithopter
+Forest
+Island x16
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Harrier Strix.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Harrier Strix.Activate(Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+? Bot1.Hand.Count = 0
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Harrier Strix.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Forest
+Bot1.Hand.Count = 0
+Bot1.Battlefield.Island.Tapped = true
+Bot1.Battlefield.Mox Jet.Tapped = true
+Bot1.Battlefield.Mox Pearl.Tapped = true

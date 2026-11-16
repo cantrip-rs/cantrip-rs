@@ -1,0 +1,26 @@
+# Harrier Strix's enters trigger targets "permanent", not just creatures: on turn 3 it taps Bot2's Island.
+
+[Bot1 Deck]
+Island
+Harrier Strix
+Island x16
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Harrier Strix.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Island.Tapped = true

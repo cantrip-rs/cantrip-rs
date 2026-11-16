@@ -1,0 +1,30 @@
+# Three mana from Mox Jet, Mox Pearl and Mox Ruby is enough in total but none is blue, so {2}{U} cannot be paid.
+
+[Bot1 Deck]
+Island
+Mox Jet
+Mox Pearl
+Mox Ruby
+Harrier Strix
+Island x16
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Harrier Strix.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Harrier Strix)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Harrier Strix.Activate(Mana: short)
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Mox Jet.Tapped = false
