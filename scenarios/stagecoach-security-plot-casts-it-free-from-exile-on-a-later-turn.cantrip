@@ -1,0 +1,45 @@
+# Stagecoach Security has Plot {3}{W} (CR 702.170a): on turn 1 Bot1 pays {3}{W} off four Moxen and exiles it plotted; it cannot be cast the same turn, but on turn 3 it is cast
+# from exile without paying its mana cost (the Moxen stay untapped) and its enters trigger still pumps the creatures Bot1 controls.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Stagecoach Security
+Ornithopter
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stagecoach Security.Activate(Ability: Plot)
+? Bot1.Mana =
+! Bot1.Exile.Stagecoach Security.Cast
+[T3 Bot1.Main1]
+Bot1.Exile.Stagecoach Security.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stagecoach Security.Power = 5
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Vigilance
+
+[Expect]
+Exile = 
+Bot1.Battlefield.Mox Pearl.Tapped = false
+Bot1.Battlefield.Mox Sapphire.Tapped = false

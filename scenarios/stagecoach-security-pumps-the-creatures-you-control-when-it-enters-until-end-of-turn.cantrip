@@ -1,0 +1,61 @@
+# Stagecoach Security: "When this creature enters, creatures you control get +1/+1 and gain vigilance until end of turn." Bot1 has an Ornithopter; Bot2 has a Memnite.
+# On turn 3 Bot1 hard-casts Security off five Moxen: it, the Ornithopter and nothing of Bot2's get +1/+1 and vigilance (the opponent's Memnite stays 1/1, CR 611.2c),
+# and a Memnite Bot1 casts afterwards is not affected (the set of creatures was fixed as the ability resolved). On turn 4 the effect is gone.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Stagecoach Security
+Ornithopter
+Memnite
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Stagecoach Security.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stagecoach Security.Power = 5
+? Bot1.Battlefield.Stagecoach Security.Toughness = 6
+? Bot1.Battlefield.Stagecoach Security.Keywords = Vigilance
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Vigilance
+? Bot2.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Memnite.Toughness = 1
+? Bot2.Battlefield.Memnite.Keywords = (absent)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Stagecoach Security.Power = 4
+Bot1.Battlefield.Stagecoach Security.Keywords = (absent)
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ornithopter.Keywords = Flying
