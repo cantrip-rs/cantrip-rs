@@ -1,0 +1,30 @@
+# Cindering Cutthroat: only an opponent's life loss counts. Bot1 bolts itself (20 -> 17) with the Black Lotus's red, then casts the
+# Cutthroat from the rest of the Lotus's red and a Mox Ruby: no opponent has lost life, so it enters a plain 3/2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Lightning Bolt
+Cindering Cutthroat
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot1.Hand.Cindering Cutthroat.Cast
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 20
+Bot1.Battlefield.Cindering Cutthroat.Power = 3
+Bot1.Battlefield.Cindering Cutthroat.Toughness = 2

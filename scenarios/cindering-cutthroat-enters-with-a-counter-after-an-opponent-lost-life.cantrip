@@ -1,0 +1,32 @@
+# Cindering Cutthroat: "This creature enters with a +1/+1 counter on it if an opponent lost life this turn." Bot1 bolts Bot2
+# (20 -> 17) with the Black Lotus's red, then casts the Cutthroat ({2}{B/R}) from the rest of the Lotus's red and a Mox Ruby: it
+# enters a 4/3 with the counter on it, paying the hybrid {B/R} with red.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Lightning Bolt
+Cindering Cutthroat
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Hand.Cindering Cutthroat.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Cindering Cutthroat.Power = 4
+Bot1.Battlefield.Cindering Cutthroat.Toughness = 3
+Bot1.Battlefield.Cindering Cutthroat.Counters.PlusOnePlusOne = 1
