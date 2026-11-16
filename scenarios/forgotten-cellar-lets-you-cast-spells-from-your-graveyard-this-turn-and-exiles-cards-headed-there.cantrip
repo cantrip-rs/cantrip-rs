@@ -1,0 +1,58 @@
+# Forgotten Cellar: "When you unlock this door, you may cast spells from your graveyard this turn, and if a card would be
+# put into your graveyard from anywhere this turn, exile it instead." Bot1 casts the door in turn 3; it enters unlocked
+# and the ability triggers (CR 709.5d, 709.5h). Black Lotus, sacrificed to pay for it before the ability resolved, is in
+# the graveyard and is cast from there; sacrificed again, it is exiled. The permission is about spells only (CR 305.9):
+# Strip Mine, also in the graveyard, is not played from there though Bot1 has a land play left. In turn 5 both effects
+# are gone, and the second Strip Mine goes to the graveyard.
+
+[Bot1 Deck]
+Strip Mine
+Mox Emerald
+Sol Ring
+Black Lotus
+Walk-In Closet // Forgotten Cellar
+Forest
+Forest
+Forest
+Strip Mine
+Forest x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Strip Mine.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Strip Mine.Activate(Bot2.Battlefield.Island; Ability: Destroy)
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Walk-In Closet // Forgotten Cellar.Cast(Ability: Forgotten Cellar)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Forgotten Cellar.Doors = Forgotten Cellar
+? Bot1.Graveyard = Black Lotus; Strip Mine
+! Bot1.Graveyard.Strip Mine.Play
+Bot1.Graveyard.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+? Bot1.Graveyard = Strip Mine
+? Bot1.Exile.Black Lotus.Colors.Count = 0
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Strip Mine.Play
+Bot1.Battlefield.Strip Mine.Activate(Bot2.Battlefield.Island; Ability: Destroy)
+Bot1.Pass
+
+[Expect]
+Turn = 5
+Bot1.Graveyard = Strip Mine; Strip Mine
+Bot1.Exile.Black Lotus.Colors.Count = 0
+Bot1.Battlefield = Forgotten Cellar; Mox Emerald; Sol Ring
