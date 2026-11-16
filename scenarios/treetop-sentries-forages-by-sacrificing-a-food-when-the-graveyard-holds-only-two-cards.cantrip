@@ -1,0 +1,59 @@
+# Treetop Sentries (CR 701.61a): a forage is exiling three cards from your graveyard or sacrificing a Food. Bot1's graveyard holds only two cards (a Lightning
+# Bolt and the City Pigeon Bot2's Bolt killed), one short of exiling, so the only way is the Food the Pigeon left behind: Bot1 is asked about that alone,
+# accepts, sacrifices the Food (it is gone from the battlefield) and draws a card (the Island it drew on turn 3 makes two). Nothing is exiled.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Mox Ruby
+City Pigeon
+Lightning Bolt
+Treetop Sentries
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.City Pigeon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.City Pigeon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard = City Pigeon; Lightning Bolt
+? Bot1.Battlefield.Food Token.Token = true
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Treetop Sentries.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = City Pigeon; Lightning Bolt
+Bot1.Battlefield = Mox Pearl; Mox Emerald; Mox Jet; Mox Ruby; Treetop Sentries
+Bot1.Hand.Count = 2

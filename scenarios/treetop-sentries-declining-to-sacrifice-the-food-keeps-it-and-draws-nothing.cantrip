@@ -1,0 +1,59 @@
+# Treetop Sentries, the Food forage declined (CR 701.61a, 608.2d): with only the Food to forage by (two cards in the graveyard), Bot1 refuses - the Food stays,
+# nothing is drawn (the hand is the one Island drawn on turn 3).
+
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Mox Ruby
+City Pigeon
+Lightning Bolt
+Treetop Sentries
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.City Pigeon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.City Pigeon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard = City Pigeon; Lightning Bolt
+? Bot1.Battlefield.Food Token.Token = true
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Treetop Sentries.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = City Pigeon; Lightning Bolt
+Bot1.Battlefield = Food Token; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Treetop Sentries
+Bot1.Hand.Count = 1

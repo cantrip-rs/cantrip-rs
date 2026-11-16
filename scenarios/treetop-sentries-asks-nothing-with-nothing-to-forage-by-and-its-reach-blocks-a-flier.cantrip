@@ -1,0 +1,44 @@
+# Treetop Sentries (CR 701.61a, 118.3, 702.17b): with no Food and an empty graveyard nothing can be paid, so the forage is not even offered and no card is
+# drawn (the hand is the three cards left after the Sentries was cast). Its reach lets it block Bot2's Ornithopter (a flier), which dies to its 2 power.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Mox Ruby
+Treetop Sentries
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Treetop Sentries.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+Bot2.Pass
+Bot1.Block(Treetop Sentries > Ornithopter)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Treetop Sentries.Keywords = Reach
+Bot1.Hand.Count = 3
