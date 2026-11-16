@@ -430,6 +430,35 @@ pub static GNOME: CardDef = CardDef {
     ..token!(Gnome)
 };
 
+/// The 1/1 red Mercenary creature token with "{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a
+/// sorcery." (CR 111.1, 602.5d): the target is chosen as the ability is activated, and may be the token itself. Angelic
+/// Sell-Sword, At Knifepoint, Brimstone Roundup, Ertha Jo, Form a Posse, Hellspur Posse Boss, Lassoed by the Law, Mourner's
+/// Surprise, Nezumi Linkbreaker, Prickly Pair, Prosperity Tycoon, Rakish Crew, Selvala, Unfortunate Accident, Wanted Griffin
+/// and We Ride at Dawn make it.
+pub static MERCENARY: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Red)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    abilities: &[ability(
+        TAP,
+        crate::effects::target_creature_gets::<1, 0>,
+        "{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.",
+    )
+    .sorcery_speed()
+    .targets(&[crate::targets::CREATURE_YOU_CONTROL])],
+    text: "{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.",
+    ..token!(Mercenary)
+};
+
+/// "Create a 1/1 red Mercenary creature token with \"{T}: Target creature you control gets +1/+0 until end of turn. Activate
+/// only as a sorcery.\"" (CR 111.1): one `MERCENARY` under `item`'s controller, the card file listing it in its `EXTRA`. The
+/// sixteen cards that print it (see `MERCENARY`) call it as a whole effect.
+pub fn create_a_mercenary(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &MERCENARY, 1)?;
+    Ok(())
+}
+
 /// The 3/2 colorless Vehicle artifact token with crew 1 (CR 111, 301.7, 702.122). Chandra, Spark Hunter and Mu Yanling, Wind Rider
 /// make it.
 pub static VEHICLE_CREW_1: CardDef = CardDef {
