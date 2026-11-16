@@ -1,0 +1,53 @@
+# Vinereap Mentor: "When this creature enters or dies, create a Food token." One Food as it enters. Bot2's Lightning Bolt kills
+# Bot1's Ornithopter first: another creature dying creates nothing (CR 603.2, 603.10a: the ability looks back only at the Mentor's
+# own death), the Food count stays 1. The second Bolt kills the Mentor and its death creates the second Food (CR 111.10b).
+
+[Bot1 Deck]
+Vinereap Mentor
+Mox Jet
+Mox Emerald
+Ornithopter
+Forest x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Vinereap Mentor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 4
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Vinereap Mentor)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Food Token; Food Token; Mox Emerald; Mox Jet
+Bot1.Graveyard = Vinereap Mentor; Ornithopter

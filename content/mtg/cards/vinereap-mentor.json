@@ -1,0 +1,8 @@
+{
+  "name": "Vinereap Mentor",
+  "manaCost": "{B}{G}",
+  "type": "Creature — Squirrel Druid",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters or dies, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")"
+}
