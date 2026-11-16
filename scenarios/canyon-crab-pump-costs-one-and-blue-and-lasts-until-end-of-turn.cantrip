@@ -1,0 +1,41 @@
+# Canyon Crab: "{1}{U}: This creature gets +2/-2 until end of turn" (CR 611.2a). Two Mox Sapphires pay the cast. With a single
+# Mox Sapphire left the pump is refused (one mana is short); with a second it is paid exactly ({1}{U}: the pool is empty right
+# after). The 0/5 Crab is a 2/3 for the rest of the turn and a 0/5 again in the next turn, the effect having ended.
+
+[Bot1 Deck]
+Canyon Crab
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Canyon Crab.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Canyon Crab.Activate(Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Mox Sapphire#4.Activate
+Bot1.Battlefield.Canyon Crab.Activate
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Canyon Crab.Power = 2
+? Bot1.Battlefield.Canyon Crab.Toughness = 3
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Canyon Crab.Power = 0
+Bot1.Battlefield.Canyon Crab.Toughness = 5

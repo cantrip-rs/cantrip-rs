@@ -1,0 +1,38 @@
+# Canyon Crab: "At the beginning of your end step, if you haven't cast a spell from your hand this turn, draw a card, then discard
+# a card." Bot1 casts the Crab from their hand on turn one, so nothing triggers at that end step. On turn three they cast nothing:
+# the trigger goes on the stack, draws the Plains on top of the library, and Bot1 discards the Forest drawn for the turn (a card
+# that was already in hand), keeping the Plains: hand and graveyard each change by that one card.
+
+[Bot1 Deck]
+Canyon Crab
+Mox Sapphire
+Mox Sapphire
+Island x4
+Forest
+Plains
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Canyon Crab.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+? Stack.Count = 0
+? Bot1.Hand.Count = 4
+[T3 Bot1.End]
+? Stack.Count = 1
+? Bot1.Hand = Forest; Island; Island; Island; Island
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest)
+
+[Expect]
+Bot1.Graveyard = Forest
+Bot1.Hand = Island; Island; Island; Island; Plains

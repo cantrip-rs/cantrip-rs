@@ -1,0 +1,8 @@
+{
+  "name": "Canyon Crab",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Crab",
+  "power": 0,
+  "toughness": 5,
+  "oracleText": "{1}{U}: This creature gets +2/-2 until end of turn.\nAt the beginning of your end step, if you haven't cast a spell from your hand this turn, draw a card, then discard a card."
+}

@@ -1,0 +1,44 @@
+# The condition is an intervening "if" (CR 603.4): true as the ability triggers and again as it resolves. On turn three nothing has
+# been cast from Bot1's hand, so the loot trigger goes on the stack at the end step; in response Bot1 casts Think Twice from hand
+# (two untapped Mox Sapphires). The trigger now does nothing: no card is drawn for it and none discarded, so Bot1 ends with the
+# card Think Twice drew and an empty discard pile apart from Think Twice itself.
+
+[Bot1 Deck]
+Canyon Crab
+Think Twice
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Island
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Canyon Crab.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+? Stack.Count = 1
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Mox Sapphire#4.Activate
+Bot1.Hand.Think Twice.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Graveyard = Think Twice

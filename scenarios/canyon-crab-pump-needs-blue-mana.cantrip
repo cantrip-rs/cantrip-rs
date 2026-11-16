@@ -1,0 +1,39 @@
+# Canyon Crab: the {U} of "{1}{U}: This creature gets +2/-2" cannot be paid with other colours. Mox Jet and Mox Ruby make two
+# mana but none of it blue, so the pump is refused; once a Mox Sapphire is there to pay {U} (the Mox Jet and Mox Ruby paying {1})
+# it is paid.
+
+[Bot1 Deck]
+Canyon Crab
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Canyon Crab.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Canyon Crab.Activate(Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Canyon Crab.Activate
+? Bot1.Battlefield.Canyon Crab.Power = 0
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Canyon Crab.Power = 2

@@ -1,0 +1,61 @@
+# Canyon Crab: only a spell Bot1 cast from their hand stops the end-step loot. On turn one Bot1 casts Think Twice from hand (so no
+# trigger at that end step); on turn three they cast it again with flashback from the graveyard ({2}{U}, three Mox Sapphires) and
+# in response to the end-step trigger Bot2 casts Lightning Bolt at them: neither is a spell Bot1 cast from their hand, so the
+# trigger resolves and loots (draw, discard) despite both.
+
+[Bot1 Deck]
+Canyon Crab
+Think Twice
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Island
+Island x8
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Canyon Crab.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Mox Sapphire#4.Activate
+Bot1.Hand.Think Twice.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+? Stack.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Graveyard.Think Twice.Cast(Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+
+[Expect]
+Bot1.Graveyard = Island
