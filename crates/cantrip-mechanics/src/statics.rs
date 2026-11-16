@@ -456,6 +456,13 @@ pub fn have_flying(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
     chars.keywords = chars.keywords.with(Keyword::Flying);
 }
 
+/// "... loses flying" (CR 613.1f, layer 6) as a static ability's `StaticDef::apply`: the keyword is taken away from what the
+/// ability applies to. Colossus Hammer and Starforged Sword print it for their equipped creature, and Earthbind grants it
+/// for its enchanted creature.
+pub fn lose_flying(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
+    chars.keywords = Keywords(chars.keywords.0 & !(1 << Keyword::Flying as u8));
+}
+
 /// "... has reach" (CR 702.17, layer 6). Web, Hawkeye's Bow, The Black Arrow and Web-Shooters grant it.
 pub fn have_reach(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
     chars.keywords = chars.keywords.with(Keyword::Reach);
