@@ -1,0 +1,51 @@
+# Curious Forager: "you may forage. When you do, ..." Four cards (a Black Lotus and three Shocks) are in the graveyard, so exiling three is
+# offered, and Bot1 declines: no forage, no reflexive trigger, nothing is exiled and the Lotus is not returned. Paired with the scenario that
+# accepts and exiles three Shocks to return the Lotus.
+
+[Bot1 Deck]
+Black Lotus
+Shock
+Shock
+Shock
+Mox Emerald
+Mox Jet
+Mox Ruby
+Curious Forager
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Curious Forager.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 4
+Bot1.Hand.Count = 0

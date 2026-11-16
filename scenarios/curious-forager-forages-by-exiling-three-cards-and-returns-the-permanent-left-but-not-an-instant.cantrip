@@ -1,0 +1,55 @@
+# Curious Forager ({2}{G}, 3/2): "When this creature enters, you may forage. When you do, return target permanent card from your graveyard
+# to your hand." Turn 1: Bot1's Black Lotus (a permanent, sacrificed for mana) and three Shocks (instants) cast at Bot2 fill the graveyard with
+# four cards. Turn 3 the Forager enters and Bot1 forages by exiling the three Shocks; the reflexive trigger then returns the Black Lotus,
+# the one permanent card left, to hand (exiled cards are no longer there to be returned).
+
+[Bot1 Deck]
+Black Lotus
+Shock
+Shock
+Shock
+Mox Emerald
+Mox Jet
+Mox Ruby
+Curious Forager
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 4
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Curious Forager.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Shock; Shock; Shock)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Hand = Black Lotus
+Bot1.Battlefield = Curious Forager; Mox Emerald; Mox Jet; Mox Ruby

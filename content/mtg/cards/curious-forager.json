@@ -1,0 +1,8 @@
+{
+  "name": "Curious Forager",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Squirrel Druid",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters, you may forage. When you do, return target permanent card from your graveyard to your hand. (To forage, exile three cards from your graveyard or sacrifice a Food.)"
+}

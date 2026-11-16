@@ -1,0 +1,54 @@
+# Curious Forager: "...you may forage. When you do, return target permanent card from your graveyard to your hand." The graveyard holds a
+# Black Lotus and three Shocks; Bot1 forages by exiling the Lotus and two Shocks, which leaves one Shock, an instant and not a permanent card.
+# The forage was paid, but the reflexive trigger has no legal target and is removed from the stack (CR 603.3d): the Shock stays in the
+# graveyard, and the hand stays empty (compare the scenario that exiles the three Shocks and gets the Lotus back).
+
+[Bot1 Deck]
+Black Lotus
+Shock
+Shock
+Shock
+Mox Emerald
+Mox Jet
+Mox Ruby
+Curious Forager
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Curious Forager.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Black Lotus; Shock; Shock)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Shock
+Bot1.Hand.Count = 0
+Bot1.Battlefield = Curious Forager; Mox Emerald; Mox Jet; Mox Ruby

@@ -1,0 +1,50 @@
+# Curious Forager: the second way to forage is to sacrifice a Food. Bot1 casts a Heaped Harvest (a Food) with a Black Lotus, declining its
+# search, so the graveyard holds only the Lotus and exiling three is not offered. The Forager's trigger is accepted, the Harvest is
+# sacrificed as the cost (its own trigger declined), and the reflexive trigger, put on the stack after that, targets the Harvest just
+# sacrificed, a permanent card in the graveyard, and returns it to hand.
+
+[Bot1 Deck]
+Black Lotus
+Heaped Harvest
+Mox Emerald
+Mox Jet
+Mox Ruby
+Curious Forager
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Heaped Harvest.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Curious Forager.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot1.Graveyard.Heaped Harvest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Heaped Harvest; Island
+Bot1.Graveyard = Black Lotus

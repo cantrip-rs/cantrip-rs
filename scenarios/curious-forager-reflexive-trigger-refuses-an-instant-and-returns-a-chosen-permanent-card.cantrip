@@ -1,0 +1,58 @@
+# Curious Forager: "return target permanent card from your graveyard to your hand". Bot1's graveyard holds a Black Lotus (an artifact) and a
+# Shock (an instant, cast on turn 1 with the Mox Ruby) when the Forager enters on turn 3: two cards, so exiling three is not offered and the
+# Food way is, the Heaped Harvest. Once it is sacrificed the reflexive trigger refuses the Shock (not a permanent card) and takes the Black Lotus,
+# which was in the graveyard all along: the Lotus returns to hand, the Harvest and the Shock stay.
+
+[Bot1 Deck]
+Black Lotus
+Heaped Harvest
+Shock
+Mox Emerald
+Mox Jet
+Mox Ruby
+Island
+Curious Forager
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Heaped Harvest.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Curious Forager.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Target(Bot1.Graveyard.Shock)
+Bot1.Target(Bot1.Graveyard.Black Lotus)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Black Lotus; Island
+Bot1.Graveyard = Heaped Harvest; Shock
