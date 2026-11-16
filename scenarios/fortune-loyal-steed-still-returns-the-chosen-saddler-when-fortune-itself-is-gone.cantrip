@@ -1,0 +1,79 @@
+# Fortune, Loyal Steed's delayed trigger still returns the creature Bot1 chooses when Fortune itself is gone (CR 603.7, 608.2):
+# Bot2 exiles Fortune with Swords to Plowshares (Bot1 gains 2) while the trigger waits, so at resolution Fortune is not on the
+# battlefield and is not exiled again or returned, no scry happens, and the chosen Thraben Inspector is blinked alone.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Fortune, Loyal Steed
+Plains
+Thraben Inspector
+Savannah Lions
+Plains x12
+
+[Bot2 Deck]
+Plains
+Swords to Plowshares
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Fortune, Loyal Steed.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Plains | )
+Bot1.Hand.Thraben Inspector.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Fortune, Loyal Steed.Activate
+Bot1.Choose(Thraben Inspector; Savannah Lions)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Fortune, Loyal Steed > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.EndOfCombat]
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Fortune, Loyal Steed)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Thraben Inspector)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Clue Token; Clue Token; Mox Emerald; Mox Pearl; Mox Ruby; Plains; Savannah Lions; Thraben Inspector
+Bot1.Battlefield.Thraben Inspector.Tapped = false
+Bot1.Battlefield.Savannah Lions.Tapped = true
+Bot1.Life = 22
+Bot2.Life = 18
+Exile = Fortune, Loyal Steed
+Bot2.Graveyard = Swords to Plowshares

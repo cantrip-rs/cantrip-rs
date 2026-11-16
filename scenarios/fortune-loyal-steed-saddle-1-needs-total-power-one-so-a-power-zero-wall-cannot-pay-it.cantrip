@@ -1,0 +1,71 @@
+# Fortune, Loyal Steed has Saddle 1 (CR 702.171a): the creatures tapped must have total power 1 or more. A Wall of Wood (power 0)
+# alone cannot pay it, so that saddle is refused, but a Thraben Inspector (power 1) alone can: Fortune becomes saddled and on
+# turn 3 its attack trigger and end-of-combat blink work, returning the Inspector (a second Clue) while the Wall stays untapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Fortune, Loyal Steed
+Plains
+Thraben Inspector
+Wall of Wood
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Fortune, Loyal Steed.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Plains | )
+Bot1.Hand.Thraben Inspector.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wall of Wood.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Fortune, Loyal Steed.Activate
+! Bot1.Choose(Wall of Wood)
+Bot1.Choose(Thraben Inspector)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Fortune, Loyal Steed > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.EndOfCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Thraben Inspector)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Plains | )
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Clue Token; Clue Token; Fortune, Loyal Steed; Mox Emerald; Mox Pearl; Mox Ruby; Plains; Thraben Inspector; Wall of Wood
+Bot1.Battlefield.Thraben Inspector.Tapped = false
+Bot1.Battlefield.Wall of Wood.Tapped = false
+Bot2.Life = 18

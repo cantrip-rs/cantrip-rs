@@ -1,0 +1,86 @@
+# Fortune, Loyal Steed: "up to one creature that saddled it this turn" is a creature that saddled Fortune, each one once.
+# On turn 3 Savannah Lions saddle Fortune, then Fortune saddles Bulwark Ox (Fortune saddled a Mount, but not itself), Rustler
+# Rampage untaps all of Bot1's creatures, and the Lions saddle Fortune a second time. Fortune attacks; at end of combat
+# Fortune is not offered as a creature that saddled it, and the Lions are the one choice (asked once, though they saddled
+# twice). The Lions come back untapped with Fortune, which scries again.
+
+[Bot1 Deck]
+Black Lotus
+Plains
+Mox Pearl
+Mox Ruby
+Fortune, Loyal Steed
+Bulwark Ox
+Savannah Lions
+Rustler Rampage
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Fortune, Loyal Steed.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Rustler Rampage; Plains | )
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bulwark Ox.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Fortune, Loyal Steed.Activate
+Bot1.Choose(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Bulwark Ox.Activate(Ability: Saddle)
+Bot1.Choose(Fortune, Loyal Steed)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fortune, Loyal Steed.Tapped = true
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rustler Rampage.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fortune, Loyal Steed.Tapped = false
+? Bot1.Battlefield.Savannah Lions.Tapped = false
+Bot1.Battlefield.Fortune, Loyal Steed.Activate
+Bot1.Choose(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Fortune, Loyal Steed > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.EndOfCombat]
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Fortune, Loyal Steed)
+Bot1.Choose(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Plains | )
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield.Savannah Lions.Tapped = false
+Bot1.Battlefield.Fortune, Loyal Steed.Tapped = false
+Bot1.Graveyard = Rustler Rampage; Black Lotus
+Bot2.Life = 18

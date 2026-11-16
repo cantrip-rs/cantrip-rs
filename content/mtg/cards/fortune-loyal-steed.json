@@ -1,0 +1,8 @@
+{
+  "name": "Fortune, Loyal Steed",
+  "manaCost": "{2}{W}",
+  "type": "Legendary Creature — Beast Mount",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "When Fortune enters, scry 2.\nWhenever Fortune attacks while saddled, at end of combat, exile it and up to one creature that saddled it this turn, then return those cards to the battlefield under their owner's control.\nSaddle 1"
+}

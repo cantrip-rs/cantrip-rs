@@ -1,0 +1,81 @@
+# Fortune, Loyal Steed's end-of-combat trigger offers only "a creature that saddled it this turn" that is still on the battlefield
+# (CR 400.7): after Bot2 Lightning Bolts the saddling Savannah Lions in response, the Lions are dead and not a choice, so Bot1 can
+# pick only the Thraben Inspector, which comes back untapped and makes a second Clue as Fortune returns and scries again.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Fortune, Loyal Steed
+Plains
+Thraben Inspector
+Savannah Lions
+Plains x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Fortune, Loyal Steed.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Plains | )
+Bot1.Hand.Thraben Inspector.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Fortune, Loyal Steed.Activate
+Bot1.Choose(Thraben Inspector; Savannah Lions)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Fortune, Loyal Steed > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.EndOfCombat]
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Savannah Lions)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Savannah Lions)
+Bot1.Choose(Thraben Inspector)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Plains | )
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Clue Token; Clue Token; Fortune, Loyal Steed; Mox Emerald; Mox Pearl; Mox Ruby; Plains; Thraben Inspector
+Bot1.Battlefield.Thraben Inspector.Tapped = false
+Bot1.Graveyard = Savannah Lions
+Bot2.Graveyard = Lightning Bolt
+Bot2.Life = 18

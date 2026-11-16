@@ -1,0 +1,69 @@
+# Fortune, Loyal Steed returns "up to one creature that saddled it" of Bot1's choice as a new object (CR 400.7): choosing the Thraben
+# Inspector brings it back untapped and its enters trigger makes a second Clue (the first came when it was cast on turn 1), while the unchosen Savannah Lions stays tapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Fortune, Loyal Steed
+Plains
+Thraben Inspector
+Savannah Lions
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Fortune, Loyal Steed.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Plains | )
+Bot1.Hand.Thraben Inspector.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Fortune, Loyal Steed.Activate
+Bot1.Choose(Thraben Inspector; Savannah Lions)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Fortune, Loyal Steed > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.EndOfCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Thraben Inspector)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Plains | )
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Clue Token; Clue Token; Fortune, Loyal Steed; Mox Emerald; Mox Pearl; Mox Ruby; Plains; Savannah Lions; Thraben Inspector
+Bot1.Battlefield.Thraben Inspector.Tapped = false
+Bot1.Battlefield.Savannah Lions.Tapped = true
+Bot2.Life = 18
