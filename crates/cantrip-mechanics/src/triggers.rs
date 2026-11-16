@@ -1660,10 +1660,7 @@ pub fn creature_dealt_damage_by_this_dies(q: &dyn Query, me: &Asker, event: &Eve
     if from.is(ZoneKind::Battlefield)
         && to.is(ZoneKind::Graveyard)
         && q.chars(*old).is(CardType::Creature)
-        && q.history().this_turn().iter().any(|r| {
-            matches!(r.event, Event::Damage { source, target: Target::Object(target), amount, .. }
-                if source == me.source && target == *old && amount > 0)
-        })
+        && crate::history::was_dealt_damage_by_this_turn(q.history(), *old, me.source)
     {
         return Fired::about(Target::Object(*old));
     }

@@ -115,6 +115,18 @@ pub fn this_turn_watching(g: &mut dyn Game, item: &StackItem, watched: ObjectId)
     g.delayed_trigger(DelayedWhen::WatchingThisTurn, item.object, item.controller, AbilityRef::delayed(card, 0), Target::Object(watched));
 }
 
+/// "Target creature gets +`P`/+`T` until end of turn. When that creature leaves the battlefield this turn, sacrifice this creature."
+/// (CR 611.2a, 603.7c): the pump, its sentence ended, then the delayed ability 0 watching that creature (`triggers::THIS_LEAVES`
+/// into `effects::sacrifice_self`). Nothing if the target is no longer legal. Kjeldoran Elite Guard (+2/+2) and Kjeldoran Guard
+/// (+1/+1) print it.
+pub fn target_creature_gets_then_sacrifice_this_when_it_leaves<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(watched) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    crate::effects::target_creature_gets::<P, T>(g, item)?;
+    g.end_sentence();
+    this_turn_watching(g, item, watched);
+    Ok(())
+}
+
 /// Sets up the card's delayed ability number `ability` to trigger "when you next [event] this turn" (CR 603.7b): once, the
 /// first time its `listens`/`matches` accept an event this turn, controlled by the resolving ability's controller; it ends
 /// with the turn if it never does. `source` is the object its `matches` is asked of, as for `this_turn`. Each call is a
