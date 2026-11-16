@@ -1,0 +1,44 @@
+# Loan Shark's "if you've cast two or more spells this turn" counts your own spells only (CR 603.4): Bot1's Shark is its only spell turn 3 (the
+# Moxen were cast on turn 1), and Bot2's Lightning Bolt in response is a second spell this turn but not Bot1's, so the trigger does not
+# draw and the Shark arrives alone.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Loan Shark
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Loan Shark.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+? Bot1.Battlefield.Loan Shark.Power = 3
+
+[Expect]
+Bot1.Hand.Count = 3

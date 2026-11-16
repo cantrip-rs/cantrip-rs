@@ -1,0 +1,40 @@
+# Loan Shark: "When this creature enters, if you've cast two or more spells this turn, draw a card." Turn 1 Bot1 casts four Moxen (spells, but
+# the Shark is not yet cast), a turn later on turn 3 it casts Mox Emerald (one spell) and then the Shark from four Moxen exactly (the pool
+# empty after): the Shark is the second spell, exactly two, so the trigger draws: the hand is two cards before it resolves and three after.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Loan Shark
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Loan Shark.Cast
+? Bot1.Mana =
+? Bot1.Hand.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Loan Shark.Power = 3
+Bot1.Battlefield.Loan Shark.Toughness = 4

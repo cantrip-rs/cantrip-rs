@@ -1,0 +1,43 @@
+# Loan Shark's Plot {3}{U} (CR 702.170a, a special action): Bot1 pays it with four Moxen on turn 1 (the pool empty after) and cannot cast it
+# that turn (the refusal). On turn 3 it casts Mox Emerald, then the Shark from exile without paying its mana cost: a spell cast from exile
+# counts as the second this turn, so the trigger draws. Hand: Emerald and Island left after turn 1, the turn 3 draw, Emerald cast: two; the Shark's draw: three.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Loan Shark
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Loan Shark.Activate(Ability: Plot)
+? Bot1.Mana =
+? Exile = Loan Shark
+! Bot1.Exile.Loan Shark.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+? Bot1.Hand.Count = 2
+Bot1.Exile.Loan Shark.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Loan Shark.Power = 3
+Exile.Count = 0
