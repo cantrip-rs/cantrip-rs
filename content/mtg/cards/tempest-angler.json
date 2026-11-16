@@ -1,0 +1,8 @@
+{
+  "name": "Tempest Angler",
+  "manaCost": "{1}{U/R}{U/R}",
+  "type": "Creature — Otter Wizard",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever you cast a noncreature spell, put a +1/+1 counter on this creature."
+}

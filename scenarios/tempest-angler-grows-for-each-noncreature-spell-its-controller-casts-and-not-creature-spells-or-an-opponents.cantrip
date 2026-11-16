@@ -1,0 +1,65 @@
+# Tempest Angler: "Whenever you cast a noncreature spell, put a +1/+1 counter on this creature." Hybrid {U/R}{U/R} is paid with a blue
+# and a red mana (CR 107.4e). After the Angler is on the battlefield: Bot1's Ornithopter (a creature spell, an artifact one) gives
+# nothing, Bot1's Mox Pearl (a noncreature artifact spell) gives one counter, Bot2's Mox cast in Bot2's turn gives nothing (it is
+# not Bot1's spell), and on turn 3 Bot1's Lightning Bolt (an instant) gives the second. The trigger counts only casts made while the
+# Angler is on the battlefield, so the Moxen cast before it are not counted.
+
+[Bot1 Deck]
+Tempest Angler
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Ornithopter
+Mox Pearl
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tempest Angler.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tempest Angler.Power = 2
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tempest Angler.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tempest Angler.Counters.PlusOnePlusOne = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Tempest Angler.Counters.PlusOnePlusOne = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Tempest Angler.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Tempest Angler.Power = 4
+Bot2.Life = 17
