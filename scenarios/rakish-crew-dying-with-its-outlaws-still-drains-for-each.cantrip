@@ -1,0 +1,66 @@
+# Rakish Crew watches the outlaws die even as it leaves the battlefield with them (CR 603.10a: "dies" triggers look back at
+# what was on the battlefield as the event happened). Bot1 has the Crew, its Mercenary token and a Triton Shorethief (a Rogue);
+# on turn 4 Bot2's Nevinyrral's Disk destroys every artifact, creature and enchantment at once. Each of Bot1's two outlaws
+# triggers the Crew once: Bot1 gains 2 and Bot2 loses 2. The Crew itself is no creature, so it makes no third.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Rakish Crew
+Triton Shorethief
+Swamp
+Swamp x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Nevinyrral's Disk
+Island
+Island
+Island
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rakish Crew.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Triton Shorethief.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Nevinyrral's Disk.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Mercenary Token.Power = 1
+? Bot1.Battlefield.Triton Shorethief.Power = 1
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Nevinyrral's Disk.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Rakish Crew = (absent)
+Bot1.Battlefield.Mercenary Token = (absent)
+Bot1.Battlefield.Triton Shorethief = (absent)
+Bot1.Graveyard.Count = 6
+Bot1.Life = 22
+Bot2.Life = 18

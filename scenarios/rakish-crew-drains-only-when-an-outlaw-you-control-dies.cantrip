@@ -1,0 +1,80 @@
+# Rakish Crew: "Whenever an outlaw you control dies, each opponent loses 1 life and you gain 1 life." On turn 1 Bot1 casts it
+# (its Mercenary token enters) and a Muck Rats, which is no outlaw. On turn 2 Bot2 casts a Triton Shorethief (a Rogue, so an outlaw,
+# but Bot2's) and shocks first the Rats (no trigger: a creature, not an outlaw) and then the Mercenary token (an outlaw Bot1
+# controls: Bot1 gains 1 and Bot2 loses 1). On turn 3 Bot1 shocks Bot2's Shorethief, an outlaw an opponent controls: no trigger
+# (CR 700.12, 603.10a).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Swamp
+Rakish Crew
+Muck Rats
+Shock
+Mountain
+Swamp x12
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Ruby
+Mountain
+Triton Shorethief
+Shock
+Shock
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rakish Crew.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mercenary Token.Power = 1
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Muck Rats.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Triton Shorethief.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Muck Rats)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Muck Rats = (absent)
+? Bot1.Life = 20
+? Bot2.Life = 20
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Mercenary Token)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Mercenary Token = (absent)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 21
+? Bot2.Life = 19
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Triton Shorethief)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Triton Shorethief = (absent)
+Bot2.Graveyard.Count = 3
+Bot1.Life = 21
+Bot2.Life = 19
