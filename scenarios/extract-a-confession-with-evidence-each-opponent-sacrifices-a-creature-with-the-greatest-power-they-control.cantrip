@@ -1,0 +1,60 @@
+# Extract a Confession with evidence collected: Bot1's graveyard holds Hero of Bladehold (4), Thieving Skydiver (2) and the Faithless Looting just cast (1). Exiling Hero and Skydiver is exactly 6 (CR 701.59a, "6 or
+# greater"). "If evidence was collected, instead each opponent sacrifices a creature with the greatest power among creatures they control" (CR 701.21a, 608.2c): Bot2 controls a Memnite (power 1), a Llanowar Elves
+# (power 1) and an Ornithopter (power 0), so only the two with power 1 can be sacrificed; the Ornithopter is refused, and Bot2 picks the Memnite. Only the evidence is exiled; the Looting stays in the graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Hero of Bladehold
+Thieving Skydiver
+Mox Jet
+Mox Jet
+Extract a Confession
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Mox Emerald
+Llanowar Elves
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hero of Bladehold; Thieving Skydiver)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Extract a Confession.Cast
+Bot1.Modes(Collect evidence 6)
+Bot1.Choose(Hero of Bladehold; Thieving Skydiver)
+Bot1.Pass
+Bot2.Pass
+! Bot2.Choose(Ornithopter)
+Bot2.Choose(Memnite)
+
+[Expect]
+Bot2.Battlefield = Llanowar Elves; Mox Emerald; Ornithopter
+Bot2.Graveyard = Memnite
+Exile = Hero of Bladehold; Thieving Skydiver
+Bot1.Graveyard = Extract a Confession; Faithless Looting

@@ -1,0 +1,51 @@
+# Extract a Confession: "As an additional cost to cast this spell, you may collect evidence 6." (CR 701.59a, 601.2b) Bot1's graveyard holds Hero of Bladehold (4), the Faithless Looting just cast (1) and an Island (0), total 5:
+# not enough, so the option is refused. Without it "each opponent sacrifices a creature of their choice" (CR 701.21a, 101.4): Bot2 controls a Memnite and an Ornithopter and sacrifices the Ornithopter, the one with the
+# lower power, so no greatest-power restriction applies here. Nothing of Bot1's is exiled.
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Hero of Bladehold
+Mox Jet
+Mox Jet
+Extract a Confession
+Island
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hero of Bladehold; Island)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Extract a Confession.Cast
+! Bot1.Modes(Collect evidence 6)
+Bot1.Modes(Cast without collecting evidence)
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Ornithopter)
+
+[Expect]
+Bot2.Battlefield = Memnite
+Bot2.Graveyard = Ornithopter
+Exile.Count = 0
+Bot1.Graveyard = Extract a Confession; Faithless Looting; Island; Hero of Bladehold

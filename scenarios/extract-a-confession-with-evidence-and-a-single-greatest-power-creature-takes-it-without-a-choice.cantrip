@@ -1,0 +1,48 @@
+# Extract a Confession with evidence collected: when exactly one creature has the greatest power among the creatures the opponent controls, that creature is the one sacrificed and there is nothing to choose (CR 701.21a, 608.2c).
+# Bot2 controls a Memnite (power 1) and an Ornithopter (power 0): the Memnite is sacrificed, the Ornithopter stays, and the scenario ends with no choice outstanding. The evidence is Hero of Bladehold and Thieving Skydiver (4 + 2).
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Hero of Bladehold
+Thieving Skydiver
+Mox Jet
+Mox Jet
+Extract a Confession
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hero of Bladehold; Thieving Skydiver)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Extract a Confession.Cast
+Bot1.Modes(Collect evidence 6)
+Bot1.Choose(Hero of Bladehold; Thieving Skydiver)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Ornithopter
+Bot2.Graveyard = Memnite
+Exile = Hero of Bladehold; Thieving Skydiver
