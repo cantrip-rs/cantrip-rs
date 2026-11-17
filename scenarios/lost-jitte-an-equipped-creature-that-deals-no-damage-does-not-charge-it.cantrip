@@ -1,0 +1,35 @@
+# Lost Jitte is equipped to an Ornithopter (power 0), which attacks unblocked on turn 3: it deals no combat damage
+# (CR 510.1a), so "whenever equipped creature deals combat damage" does not trigger and Bot2 stays at 20.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Ornithopter
+Lost Jitte
+Forest
+Forest
+Forest x13
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Lost Jitte.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Lost Jitte.Activate(Ability: Equip; Ornithopter)
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Lost Jitte.AttachedTo = Ornithopter
+Bot1.Battlefield.Lost Jitte.Counters.Charge = (absent)

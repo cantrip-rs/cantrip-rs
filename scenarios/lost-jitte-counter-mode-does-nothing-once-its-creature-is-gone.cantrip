@@ -1,0 +1,57 @@
+# Lost Jitte is charged on turn 3 by its equipped Basking Rootwalla; Bot2's Lightning Bolt kills that Rootwalla on turn
+# 4, leaving the Jitte unattached with a charge. On turn 5 Bot1 removes the charge for "put a +1/+1 counter on equipped
+# creature": there is no equipped creature, so the other Rootwalla (never equipped) gets nothing; the cost was still paid.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Basking Rootwalla
+Basking Rootwalla
+Lost Jitte
+Forest
+Forest
+Forest
+Forest x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Basking Rootwalla.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Basking Rootwalla.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lost Jitte.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Lost Jitte.Activate(Ability: Equip; Basking Rootwalla)
+Bot1.Attack(Basking Rootwalla > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Lost Jitte.Counters.Charge = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Basking Rootwalla#1)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Lost Jitte.AttachedTo = (absent)
+? Bot1.Battlefield.Basking Rootwalla.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Lost Jitte.Activate(Ability: Remove)
+Bot1.Modes(Put a +1/+1 counter on equipped creature.)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lost Jitte.Counters.Charge = (absent)
+
+[Expect]
+Bot1.Battlefield.Basking Rootwalla.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Basking Rootwalla.Power = 1
+Bot1.Graveyard.Count = 1

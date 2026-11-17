@@ -1,0 +1,47 @@
+# Lost Jitte is equipped to one of two Basking Rootwallas, and both attack on turn 3. Only the equipped one's combat
+# damage charges the Jitte (one counter, not two, though both connect: Bot2 is at 18). Bot1 removes the charge for
+# "put a +1/+1 counter on equipped creature": the equipped Rootwalla gets the counter (a 2/2) and the other stays 1/1.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Basking Rootwalla
+Basking Rootwalla
+Lost Jitte
+Forest
+Forest
+Forest x12
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Basking Rootwalla.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Basking Rootwalla.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lost Jitte.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Lost Jitte.Activate(Ability: Equip; Basking Rootwalla)
+Bot1.Attack(Basking Rootwalla > Bot2; Basking Rootwalla#2 > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Bot1.Battlefield.Lost Jitte.Counters.Charge = 1
+Bot1.Battlefield.Lost Jitte.Activate(Ability: Remove)
+Bot1.Modes(Put a +1/+1 counter on equipped creature.)
+[T3 Bot1.End]
+? Bot1.Battlefield.Lost Jitte.Counters.Charge = (absent)
+
+[Expect]
+Bot1.Battlefield.Lost Jitte.AttachedTo = Basking Rootwalla
+Bot1.Battlefield.Basking Rootwalla#1.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Basking Rootwalla#1.Power = 2
+Bot1.Battlefield.Basking Rootwalla#2.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Basking Rootwalla#2.Power = 1

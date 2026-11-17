@@ -1,0 +1,43 @@
+# Lost Jitte is equipped to a Basking Rootwalla on turn 3 with a Forest's mana (the Forest stays tapped) and the
+# Rootwalla connects: one charge counter. Bot1 removes it for "untap target land" aimed at the tapped Forest; the
+# Forest is untapped and the counter is gone.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Basking Rootwalla
+Lost Jitte
+Forest
+Forest
+Forest x12
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Basking Rootwalla.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Lost Jitte.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Lost Jitte.Activate(Ability: Equip; Basking Rootwalla)
+Bot1.Attack(Basking Rootwalla > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Lost Jitte.Counters.Charge = 1
+? Bot1.Battlefield.Forest#1.Tapped = true
+Bot1.Battlefield.Lost Jitte.Activate(Ability: Remove)
+Bot1.Modes(Untap target land.)
+Bot1.Target(Bot1.Battlefield.Forest#1)
+[T3 Bot1.End]
+? Bot1.Battlefield.Lost Jitte.Counters.Charge = (absent)
+
+[Expect]
+Bot1.Battlefield.Forest#1.Tapped = false
+Bot1.Battlefield.Basking Rootwalla.Counters.PlusOnePlusOne = (absent)

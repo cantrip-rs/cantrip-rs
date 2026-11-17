@@ -1,0 +1,6 @@
+{
+  "name": "Lost Jitte",
+  "manaCost": "{1}",
+  "type": "Legendary Artifact — Equipment",
+  "oracleText": "Whenever equipped creature deals combat damage, put a charge counter on Lost Jitte.\nRemove a charge counter from Lost Jitte: Choose one —\n• Untap target land.\n• Target creature can't block this turn.\n• Put a +1/+1 counter on equipped creature.\nEquip {1}"
+}

@@ -1,0 +1,57 @@
+# Lost Jitte is charged on turn 3 by an unblocked Basking Rootwalla. Bot2 puts two Ornithopters onto the battlefield on
+# turn 4. On turn 5 Bot1 removes the charge for "target creature can't block this turn", aimed at the first
+# Ornithopter, then attacks: that Ornithopter may not block (the refusal) and the other may (the control), and the
+# Rootwalla's damage to the blocker charges the Jitte again.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Basking Rootwalla
+Lost Jitte
+Forest
+Forest
+Forest
+Forest x12
+
+[Bot2 Deck]
+Ornithopter x2
+Island x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Basking Rootwalla.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Lost Jitte.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Lost Jitte.Activate(Ability: Equip; Basking Rootwalla)
+Bot1.Attack(Basking Rootwalla > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Lost Jitte.Counters.Charge = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Lost Jitte.Activate(Ability: Remove)
+Bot1.Modes(Target creature can't block this turn.)
+Bot1.Target(Bot2.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lost Jitte.Counters.Charge = (absent)
+Bot1.Attack(Basking Rootwalla > Bot2)
+! Bot2.Block(Ornithopter#1 > Basking Rootwalla)
+Bot2.Block(Ornithopter#2 > Basking Rootwalla)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Lost Jitte.Counters.Charge = 1
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield.Ornithopter#2.Damage = 1

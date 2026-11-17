@@ -1,0 +1,38 @@
+# Lost Jitte is equipped to one Basking Rootwalla, but only the other Rootwalla attacks on turn 3. Its combat damage (Bot2
+# is at 19) is not the equipped creature's, so the Jitte gets no charge counter.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Basking Rootwalla
+Basking Rootwalla
+Lost Jitte
+Forest
+Forest
+Forest x12
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Basking Rootwalla.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Basking Rootwalla.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lost Jitte.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Lost Jitte.Activate(Ability: Equip; Basking Rootwalla)
+Bot1.Attack(Basking Rootwalla#2 > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Lost Jitte.AttachedTo = Basking Rootwalla
+Bot1.Battlefield.Lost Jitte.Counters.Charge = (absent)

@@ -1,0 +1,44 @@
+# "Whenever equipped creature deals combat damage" is one event however many things the creature hits at once (CR 510.2,
+# 603.2c): a Rancor-ed Rootwalla equipped with Lost Jitte tramples over Bot2's Rootwalla, dealing damage to the blocker and
+# to Bot2 in the same combat damage step, and the Jitte gets one charge counter, not two.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Basking Rootwalla
+Lost Jitte
+Rancor
+Forest x14
+
+[Bot2 Deck]
+Forest
+Basking Rootwalla
+Forest x15
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Basking Rootwalla.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Lost Jitte.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Basking Rootwalla.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Rancor.Cast(Bot1.Battlefield.Basking Rootwalla)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Lost Jitte.Activate(Ability: Equip; Bot1.Battlefield.Basking Rootwalla)
+Bot1.Attack(Basking Rootwalla > Bot2)
+Bot2.Block(Bot2.Battlefield.Basking Rootwalla > Bot1.Battlefield.Basking Rootwalla)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Bot2.Graveyard = Basking Rootwalla
+
+[Expect]
+Bot1.Battlefield.Lost Jitte.Counters.Charge = 1
