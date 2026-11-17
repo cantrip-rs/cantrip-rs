@@ -1,0 +1,37 @@
+# Abraded Bluffs: it is a Desert, it enters tapped, and its enters trigger deals exactly 1 damage to target opponent. Its controller
+# is not a legal target, so the opponent is the only candidate and no target question is asked (a trigger that could
+# target either player would ask); its controller stays at 20. Next turn it untaps and adds {R} or {W} and nothing else:
+# the other colors and colorless are refused beside the color it does add, and the pool holds exactly one mana after the
+# tap (the cost {T} paid once); the turn after, it adds the other color.
+
+[Bot1 Deck]
+Abraded Bluffs
+Mountain x19
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Abraded Bluffs.Play
+! Bot1.Target
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Life = 20
+? Bot1.Battlefield.Abraded Bluffs.Tapped = true
+? Bot1.Battlefield.Abraded Bluffs.Subtypes = Desert
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Abraded Bluffs.Activate(Color: Blue)
+! Bot1.Battlefield.Abraded Bluffs.Activate(Color: Black)
+! Bot1.Battlefield.Abraded Bluffs.Activate(Color: Green)
+! Bot1.Battlefield.Abraded Bluffs.Activate(Color: Colorless)
+Bot1.Battlefield.Abraded Bluffs.Activate(Color: Red)
+? Bot1.Mana = {R}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Abraded Bluffs.Activate(Color: White)
+? Bot1.Mana = {W}
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20
+Bot1.Battlefield.Abraded Bluffs.Tapped = true
