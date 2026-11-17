@@ -1,0 +1,60 @@
+# The Gitrog, Ravenous Ride (6/5 trample, haste, Saddle 1): "Whenever The Gitrog deals combat damage to a player, you may sacrifice a creature that saddled it this turn.
+# If you do, draw X cards, then put up to X land cards from your hand onto the battlefield tapped, where X is the sacrificed creature's power" (CR 702.171c, 701.21a, 608.2h).
+# Savannah Lions (power 2) saddles it, Bot2 takes 6 from the Gitrog, Bot1 sacrifices the Lions and draws two cards (Forest, Mountain), then puts both onto the battlefield tapped;
+# the Mox Ruby in the same hand is no land card and is refused.
+# Bot1 sacrifices the creature while it is a 2/1, so X = 2 (not 3 nor 1).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Mox Pearl
+Savannah Lions
+The Gitrog, Ravenous Ride
+Mox Ruby
+Forest
+Mountain
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Gitrog, Ravenous Ride.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.The Gitrog, Ravenous Ride.Activate
+Bot1.Choose(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Gitrog, Ravenous Ride.Saddled = true
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(The Gitrog, Ravenous Ride > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Savannah Lions)
+? Bot1.Hand = Mox Ruby; Forest; Mountain
+! Bot1.Choose(Mox Ruby)
+Bot1.Choose(Forest; Mountain)
+
+[Expect]
+Bot2.Life = 14
+Bot1.Graveyard = Savannah Lions; Black Lotus
+Bot1.Hand = Mox Ruby
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Mountain.Tapped = true

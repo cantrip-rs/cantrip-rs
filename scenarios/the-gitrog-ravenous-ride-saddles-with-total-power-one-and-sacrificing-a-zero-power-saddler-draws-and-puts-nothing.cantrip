@@ -1,0 +1,63 @@
+# The Gitrog, Ravenous Ride (Saddle 1): total power 1 is enough to saddle it, and with nothing to tap it cannot be saddled (CR 702.171a). Turn 1 the lone Gitrog is refused. Turn 3
+# Zephyr Sprite (power 1) saddles it, Fleeting Distraction (-1/-0) then makes the Sprite a 0/1, and after the Gitrog hits Bot2 for 6 Bot1 sacrifices the Sprite: X is its power, 0, so
+# nothing is drawn by the Gitrog (only Fleeting Distraction's card) and no land is put onto the battlefield (CR 608.2h).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Zephyr Sprite
+The Gitrog, Ravenous Ride
+Island
+Fleeting Distraction
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Gitrog, Ravenous Ride.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.The Gitrog, Ravenous Ride.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.The Gitrog, Ravenous Ride.Activate
+Bot1.Choose(Zephyr Sprite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Gitrog, Ravenous Ride.Saddled = true
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Fleeting Distraction.Cast(Zephyr Sprite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Zephyr Sprite.Power = 0
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(The Gitrog, Ravenous Ride > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Zephyr Sprite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Graveyard = Zephyr Sprite; Fleeting Distraction; Black Lotus
+Bot1.Hand.Count = 1
+Bot1.Library.Count = 11

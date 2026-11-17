@@ -1,0 +1,59 @@
+# The Gitrog, Ravenous Ride: only "a creature that saddled it this turn" can be sacrificed, and it puts "up to X" lands, not X. Savannah Lions (power 2) saddles it; the
+# Ornithopter (power 0, so it could not even have saddled it) is refused as the sacrifice. Bot1 sacrifices the Lions and draws two (Forest, Mountain) but puts only the Forest
+# onto the battlefield (tapped); the Mountain stays in hand.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Mox Pearl
+Savannah Lions
+The Gitrog, Ravenous Ride
+Ornithopter
+Forest
+Mountain
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Gitrog, Ravenous Ride.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.The Gitrog, Ravenous Ride.Activate
+Bot1.Choose(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(The Gitrog, Ravenous Ride > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Savannah Lions)
+Bot1.Choose(Forest)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Hand = Mountain
+Bot1.Graveyard = Savannah Lions; Black Lotus
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = false

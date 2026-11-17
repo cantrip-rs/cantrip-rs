@@ -1,0 +1,54 @@
+# The Gitrog, Ravenous Ride: "you may sacrifice a creature that saddled it this turn" (CR 702.171c, 701.21a). Savannah Lions saddles it and the Gitrog deals 6 to Bot2, but Bot1
+# declines: the Lions stay, nothing is drawn (Forest and Mountain stay in the library) and no land is put onto the battlefield.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Mox Pearl
+Savannah Lions
+The Gitrog, Ravenous Ride
+Mox Ruby
+Forest
+Mountain
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Gitrog, Ravenous Ride.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.The Gitrog, Ravenous Ride.Activate
+Bot1.Choose(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(The Gitrog, Ravenous Ride > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Hand = Mox Ruby
+Bot1.Library.Count = 14
+Bot1.Battlefield.Savannah Lions.Tapped = true
+Bot1.Graveyard = Black Lotus
