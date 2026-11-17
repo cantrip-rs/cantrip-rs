@@ -1,0 +1,59 @@
+# Roxanne, Starfall Savant: "Whenever Roxanne enters or attacks, create a tapped colorless artifact token named Meteorite ..." and
+# "Whenever you tap an artifact token for mana, add one mana of any type that artifact token produced" (CR 603.2, 106.12a).
+# Turn 1 she enters: a tapped Meteorite whose entering deals 2 to Bot2 (18). Turn 3 the untapped Meteorite taps for red and
+# Roxanne adds a second {R} for it, while the Mox Pearl (an artifact, not a token) adds only its own {W}. She attacks: a second
+# tapped Meteorite, 2 more damage (16), then her 4 combat damage (12).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Roxanne, Starfall Savant
+Plains
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Roxanne, Starfall Savant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+? Bot1.Battlefield.Meteorite.Tapped = true
+? Bot1.Battlefield.Meteorite.Types = Artifact
+[T3 Bot1.Main1]
+Bot1.Battlefield.Meteorite.Activate(Color: Red)
+? Bot1.Mana = {R}{R}
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana = {W}{R}{R}
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Roxanne, Starfall Savant > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+? Bot1.Battlefield.Meteorite#2.Tapped = true
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 12

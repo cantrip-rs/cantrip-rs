@@ -1,0 +1,8 @@
+{
+  "name": "Roxanne, Starfall Savant",
+  "manaCost": "{3}{R}{G}",
+  "type": "Legendary Creature — Cat Druid",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Whenever Roxanne enters or attacks, create a tapped colorless artifact token named Meteorite with \"When this token enters, it deals 2 damage to any target\" and \"{T}: Add one mana of any color.\"\nWhenever you tap an artifact token for mana, add one mana of any type that artifact token produced."
+}

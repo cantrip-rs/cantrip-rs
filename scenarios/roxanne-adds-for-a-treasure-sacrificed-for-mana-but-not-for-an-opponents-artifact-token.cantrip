@@ -1,0 +1,80 @@
+# Roxanne, Starfall Savant: "Whenever you tap an artifact token for mana, add one mana of any type that artifact token produced"
+# (CR 106.12a, 605.1b, 603.10a). Turn 2: Bot2 taps its own Treasure (Deadly Dispute's) for {R}: not Bot1's tapping, so Bot2 has only
+# the {B} left from Black Lotus and that {R}. Turn 3: Bot1 taps its Treasure for {G}; the Treasure is sacrificed as part of the same
+# cost and gone before the ability triggers, and Roxanne still sees an artifact token tapped for mana and adds a second {G}. That
+# {G}{G} channels Careful Cultivation: turn 5, its Human Monk token (a creature token, no artifact) taps for {G} and nothing more.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Black Lotus
+Mox Jet
+Memnite
+Roxanne, Starfall Savant
+Deadly Dispute
+Careful Cultivation
+Plains x20
+
+[Bot2 Deck]
+Mox Jet
+Memnite
+Black Lotus
+Deadly Dispute
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Roxanne, Starfall Savant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Deadly Dispute.Cast
+Bot2.Choose(Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield = Mox Jet; Treasure Token
+? Bot2.Mana = {B}
+Bot2.Battlefield.Treasure Token.Activate(Color: Red)
+? Bot2.Mana = {B}{R}
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Deadly Dispute.Cast
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Battlefield.Treasure Token.Activate(Color: Green)
+? Bot1.Mana = {G}{G}
+? Bot1.Graveyard = Deadly Dispute; Memnite; Black Lotus
+Bot1.Hand.Careful Cultivation.Activate(Ability: Channel)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Human Monk Token.Types = Creature
+[T5 Bot1.Main1]
+Bot1.Battlefield.Human Monk Token.Activate
+? Bot1.Mana = {G}
+
+[Expect]
+Bot1.Mana = {G}
+Bot2.Life = 18
