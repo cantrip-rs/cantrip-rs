@@ -14,6 +14,21 @@ pub fn become_plotted(g: &mut dyn Game, exiled: ObjectId) {
     }
 }
 
+/// "You may exile a nonland card with mana value 3 or less from your hand. If you do, it becomes plotted." (CR 702.170a) It is
+/// a choice made as the effect resolves (CR 608.2d): declining is the empty answer to an up-to-one choice, and nothing is asked
+/// of a hand with no such card. Jace Reawakened (+1) and Kellan Joins Up print it.
+pub fn may_exile_a_cheap_nonland_card_from_hand_and_plot(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let you = item.controller;
+    let hand = g.state().zone(Zone::hand(you)).to_vec();
+    let eligible: Vec<ObjectId> = hand.iter().copied().filter(|&card| !g.chars(card).is(CardType::Land) && g.mana_value(card) <= 3).collect();
+    let chosen = crate::choose::cards_from_kind(g, you, item.object, Purpose::Plot, "nonland", hand, eligible, 1, true)?;
+    if let Some(&card) = chosen.first() {
+        let exiled = g.exile(card);
+        become_plotted(g, exiled);
+    }
+    Ok(())
+}
+
 /// Exile the card from the hand and let its owner cast it for free as a sorcery on a later turn (CR 702.170d).
 fn plot_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let exiled = g.exile(item.object);
