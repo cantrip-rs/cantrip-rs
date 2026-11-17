@@ -1,0 +1,66 @@
+# Quilled Charger: "Whenever this creature attacks while saddled, it gets +1/+2 and gains menace until end of turn" (CR 702.171b, 611.2a, 702.111a).
+# Turn 3: Saddle 2 is refused with a lone Memnite (power 1) and allowed with two; the saddled Charger attacks as a 5/5 with menace, so Bot2's single
+# Memnite cannot block it (refused) and Bot2 takes 5. Turn 5: unsaddled, it attacks as a plain 4/3 without menace and Bot2's Memnite may block it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Quilled Charger
+Memnite
+Memnite
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Quilled Charger.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Quilled Charger.Activate
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Quilled Charger.Activate
+Bot1.Choose(Memnite#1; Memnite#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Quilled Charger.Saddled = true
+Bot1.Attack(Quilled Charger > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Quilled Charger.Power = 5
+? Bot1.Battlefield.Quilled Charger.Toughness = 5
+? Bot1.Battlefield.Quilled Charger.Keywords = Menace
+! Bot2.Block(Memnite > Quilled Charger)
+[T3 Bot1.Main2]
+? Bot2.Life = 15
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Quilled Charger.Power = 4
+? Bot1.Battlefield.Quilled Charger.Keywords = (absent)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Quilled Charger > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Quilled Charger.Power = 4
+? Bot1.Battlefield.Quilled Charger.Toughness = 3
+Bot2.Block(Memnite > Quilled Charger)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot2.Battlefield.Memnite = (absent)
+Bot1.Battlefield.Quilled Charger.Saddled = (absent)

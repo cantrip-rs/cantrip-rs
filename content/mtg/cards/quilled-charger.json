@@ -1,0 +1,8 @@
+{
+  "name": "Quilled Charger",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Porcupine Mount",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Whenever this creature attacks while saddled, it gets +1/+2 and gains menace until end of turn. (It can't be blocked except by two or more creatures.)\nSaddle 2 (Tap any number of other creatures you control with total power 2 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)"
+}
