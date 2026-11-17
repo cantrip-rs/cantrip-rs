@@ -1,0 +1,32 @@
+# Festerleech: "Whenever this creature deals combat damage to a player, you mill two cards." Damage dealt to a blocking creature is not damage to a player, so the trigger is
+# not met (CR 510.2, 603.2). Bot1's Leech attacks on turn 3 and Bot2's Memnite blocks it; both die, nothing is milled and Bot2 stays at 20. The unblocked attack in
+# festerleech-pumps-once-each-turn-and-combat-damage-to-a-player-mills-two is the positive control.
+
+[Bot1 Deck]
+Festerleech
+Mox Jet
+Island x5
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Festerleech.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Festerleech > Bot2)
+Bot2.Block(Memnite > Festerleech)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Festerleech
+Bot2.Graveyard = Memnite

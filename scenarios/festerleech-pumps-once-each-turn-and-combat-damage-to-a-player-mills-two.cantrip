@@ -1,0 +1,59 @@
+# Festerleech: "{1}{B}: This creature gets +2/+2 until end of turn. Activate only once each turn" (CR 602.5b) and "Whenever this creature deals combat damage to a player,
+# you mill two cards" (CR 510.2, 701.17a). Bot1 has Mox Jet and two Black Lotuses. On turn 3 the Leech is pumped to 3/3 for a Lotus's mana; a second pump the same turn is
+# refused even with a second Lotus's mana available. It attacks unblocked: Bot2 takes 3 and Bot1 mills two Swamps. On turn 5 the once-each-turn limit has reset and a
+# pump paid with the Mox and an Island is accepted, and the 3/3 is back to 1/1 on turn 4 (the pump ended with the turn).
+
+[Bot1 Deck]
+Festerleech
+Mox Jet
+Black Lotus
+Black Lotus
+Island
+Island
+Island
+Swamp x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Festerleech.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Festerleech.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Festerleech.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Festerleech.Power = 3
+? Bot1.Battlefield.Festerleech.Toughness = 3
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Battlefield.Festerleech.Activate
+? Bot1.Graveyard.Count = 2
+Bot1.Attack(Festerleech > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Festerleech.Power = 1
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Festerleech.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Festerleech.Power = 3
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Festerleech.Toughness = 3
