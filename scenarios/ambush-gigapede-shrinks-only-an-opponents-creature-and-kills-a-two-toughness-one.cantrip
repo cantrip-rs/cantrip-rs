@@ -1,0 +1,54 @@
+# Ambush Gigapede: "When this creature enters, target creature an opponent controls gets -2/-2 until end of turn." On turn 3
+# the trigger offers Bot2's two creatures and not Bot1's own Ornithopter (the refusal, beside the positive control: the legal
+# target that is chosen). Bot2's Ornithopter, 0/2, becomes -2/0 and dies as a state-based action (CR 704.5f), while its
+# Concealing Curtains, not chosen, stays untouched. Bot1's own Ornithopter is not affected.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Ornithopter
+Ambush Gigapede
+Swamp x20
+
+[Bot2 Deck]
+Mox Jet
+Ornithopter
+Concealing Curtains
+Swamp x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Concealing Curtains.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ambush Gigapede.Cast
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield = Mox Jet; Concealing Curtains
+Bot2.Battlefield.Concealing Curtains.Toughness = 4
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ambush Gigapede.Toughness = 2

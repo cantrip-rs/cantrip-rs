@@ -1,0 +1,11 @@
+{
+  "name": "Ambush Gigapede",
+  "manaCost": "{4}{B}{B}",
+  "type": "Creature — Insect",
+  "power": 6,
+  "toughness": 2,
+  "oracleText": "Flash\nWhen this creature enters, target creature an opponent controls gets -2/-2 until end of turn.",
+  "keywords": [
+    "Flash"
+  ]
+}

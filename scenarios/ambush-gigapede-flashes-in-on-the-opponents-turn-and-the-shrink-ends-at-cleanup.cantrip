@@ -1,0 +1,54 @@
+# Ambush Gigapede has flash (CR 702.8a): Bot1 sets up its mana on turn 1, leaves it untapped, and casts the Gigapede during
+# Bot2's turn 2 once Bot2's Concealing Curtains (0/4) has resolved. The -2/-2 lasts until end of turn (CR 611.2, 514.2):
+# the Curtains is -2/2 for the rest of turn 2 and an ordinary 0/4 again on turn 3. The amount is exactly 2: a 4-toughness
+# creature survives with 2 toughness left.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Ambush Gigapede
+Swamp x20
+
+[Bot2 Deck]
+Mox Jet
+Concealing Curtains
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Concealing Curtains.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ambush Gigapede.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Ambush Gigapede; Mox Jet; Mox Pearl; Mox Sapphire
+? Bot2.Battlefield.Concealing Curtains.Power = -2
+? Bot2.Battlefield.Concealing Curtains.Toughness = 2
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Concealing Curtains.Power = 0
+? Bot2.Battlefield.Concealing Curtains.Toughness = 4
+
+[Expect]
+Turn = 3
+Bot2.Battlefield = Mox Jet; Concealing Curtains
