@@ -1,0 +1,39 @@
+# Map the Frontier: "Search your library for up to two basic land cards and/or Desert cards, put them onto the battlefield tapped, then shuffle" (CR 701.23,
+# 205.3i). A Desert and a Forest are found together (any mix of the two); a Volcanic Island, a nonbasic land that is no Desert, is refused, and so is a
+# third card. Both arrive tapped and the library is shuffled once.
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Map the Frontier
+Plains
+Plains
+Plains
+Plains
+Desert
+Forest
+Volcanic Island
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Map the Frontier.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Volcanic Island)
+! Bot1.Search(Desert; Forest; Forest)
+Bot1.Search(Desert; Forest)
+? Bot1.Battlefield.Desert.Tapped = true
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Library.Count = 11
+? Bot1.Shuffles = 1
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Desert; Forest
+Bot1.Graveyard = Map the Frontier; Black Lotus

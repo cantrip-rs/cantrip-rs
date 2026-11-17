@@ -1,0 +1,41 @@
+# Map the Frontier: "up to two" (CR 701.23b). Taking only the Desert brings one land onto the battlefield tapped. With nothing eligible left in the library
+# (only Memnites) a second Map finds nothing, and both Maps shuffle the library: two shuffles.
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Map the Frontier
+Map the Frontier
+Black Lotus
+Plains
+Plains
+Desert
+Memnite x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Map the Frontier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Desert)
+? Bot1.Battlefield.Desert.Tapped = true
+? Bot1.Shuffles = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Map the Frontier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search()
+? Bot1.Shuffles = 2
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Desert
+Bot1.Library.Count = 11

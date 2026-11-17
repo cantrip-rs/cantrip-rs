@@ -1,0 +1,6 @@
+{
+  "name": "Map the Frontier",
+  "manaCost": "{3}{G}",
+  "type": "Sorcery",
+  "oracleText": "Search your library for up to two basic land cards and/or Desert cards, put them onto the battlefield tapped, then shuffle."
+}
