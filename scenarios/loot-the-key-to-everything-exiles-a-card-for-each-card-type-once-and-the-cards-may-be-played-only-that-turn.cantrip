@@ -1,0 +1,65 @@
+# "...exile the top X cards ... X is the number of card types among other nonland permanents you control. You may play those
+# cards this turn." Bot1 controls three Moxen (artifacts, one type however many), a Grizzly Bears (creature) and an Exploration
+# (enchantment): on turn 5 the upkeep trigger exiles three cards (a Lightning Bolt and two Islands; one Island is still in exile
+# from turn 3, where one type exiled one card). Bot1 plays an Island and casts the Bolt from exile that turn; the Islands left in
+# exile (turn 3's too) may no longer be played on turn 7, when the upkeep trigger exiles three Forests instead.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Loot, the Key to Everything
+Forest
+Grizzly Bears
+Exploration
+Island
+Forest
+Lightning Bolt
+Island
+Island
+Island
+Forest x3
+Island x11
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Loot, the Key to Everything.Cast
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Exploration.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 4
+[T5 Bot1.Main1]
+Bot1.Exile.Island.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+! Bot1.Exile.Island.Play
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt
+Exile.Count = 5

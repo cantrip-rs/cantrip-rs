@@ -1,0 +1,51 @@
+# "...the number of card types among other nonland permanents you control": lands are disregarded, an artifact land's artifact
+# type too. Bot1 casts Loot on turn 5 with a Forest, an Island and a Mountain, and has no other nonland permanent: the upkeep
+# trigger on turn 7 counts no types and exiles nothing. On turn 7 Bot1 plays a Darksteel Citadel (an artifact land), and on turn 9
+# the trigger still exiles nothing, so nothing is in exile and the library is untouched (every card Bot1 drew is a Swamp).
+
+[Bot1 Deck]
+Forest
+Island
+Mountain
+Loot, the Key to Everything
+Darksteel Citadel
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Loot, the Key to Everything.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+[T7 Bot1.Main1]
+Bot1.Hand.Darksteel Citadel.Play
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+[T9 Bot1.Main1]
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield = Darksteel Citadel; Forest; Island; Loot, the Key to Everything; Mountain

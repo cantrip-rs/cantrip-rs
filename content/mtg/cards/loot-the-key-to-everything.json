@@ -1,0 +1,8 @@
+{
+  "name": "Loot, the Key to Everything",
+  "manaCost": "{G}{U}{R}",
+  "type": "Legendary Creature — Beast Noble",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Ward {1}\nAt the beginning of your upkeep, exile the top X cards of your library, where X is the number of card types among other nonland permanents you control. You may play those cards this turn."
+}

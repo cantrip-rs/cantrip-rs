@@ -1,0 +1,58 @@
+# "At the beginning of your upkeep, exile the top X cards of your library, where X is the number of card types among other
+# nonland permanents you control. You may play those cards this turn." Bot1 casts Loot (a creature) on turn 1 with three Moxen
+# (artifacts). Bot2 casts a Grizzly Bears on turn 2: not Bot1's permanent, so its type isn't counted. On turn 3 the upkeep
+# trigger counts one type (artifact; "other" leaves out Loot's own creature type), so it exiles the top card (a Lightning Bolt),
+# not the Island under it, which Bot1 then draws. Bot1 casts the Bolt from exile this turn.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Loot, the Key to Everything
+Island
+Island
+Island
+Lightning Bolt
+Island
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Loot, the Key to Everything.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 1
+? Bot1.Exile.Lightning Bolt.Colors.Count = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt
+Exile.Count = 0
+Bot1.Hand = Island; Island; Island; Island
