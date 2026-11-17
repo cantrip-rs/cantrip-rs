@@ -1,0 +1,57 @@
+# Plan the Heist's "Plot {3}{U}": on turn 1 Bot1 has four mana from four Moxen that make no blue and cannot plot (the {U} is
+# missing). On turn 3 Mox Sapphire makes the {U}, and with three other Moxen it is plotted for exactly {3}{U}, the pool empty after.
+# It is not cast on the turn it was plotted, and on turn 5 it is cast from exile for free: Bot1 has cards in hand, so no surveil,
+# and draws three.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Plan the Heist
+Island x2
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Plan the Heist.Activate(Ability: Plot; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Plan the Heist.Activate(Ability: Plot)
+? Bot1.Mana =
+! Bot1.Exile.Plan the Heist.Cast
+[T5 Bot1.Main1]
+Bot1.Exile.Plan the Heist.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Graveyard = Plan the Heist
+Bot1.Hand.Count = 6
