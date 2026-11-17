@@ -1,0 +1,32 @@
+# Giant Beaver: the trigger needs "attacks while saddled" (CR 702.171b): attacking unsaddled puts nothing on the stack and no counter anywhere. It also keeps vigilance.
+
+[Bot1 Deck]
+Black Lotus
+Giant Beaver
+Mox Emerald
+Memnite
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Beaver.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Giant Beaver > Bot2; Memnite > Bot2)
+? Stack.Count = 0
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Giant Beaver.Power = 4
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15

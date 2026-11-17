@@ -1,0 +1,11 @@
+{
+  "name": "Giant Beaver",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Beaver Mount",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Vigilance\nWhenever this creature attacks while saddled, put a +1/+1 counter on target creature that saddled it this turn.\nSaddle 3 (Tap any number of other creatures you control with total power 3 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}
