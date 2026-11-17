@@ -1,0 +1,39 @@
+# Seasoned Consultant: "Whenever you attack with three or more creatures" counts all of Bot1's attackers, not the Consultant: the
+# Consultant stays home and Bot1 attacks with Memnite, Ornithopter and Phyrexian Walker (three), so its trigger resolves once and
+# the unattacking Consultant is 3/3 (it gets the pump though it is not attacking). Combat damage: 1 + 0 + 0 = 1, Bot2 20 to 19.
+# One trigger for the attack: the power is 3, not 5.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Seasoned Consultant
+Memnite
+Ornithopter
+Phyrexian Walker
+Plains x10
+
+[Bot2 Deck]
+Island x10
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Seasoned Consultant.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2; Ornithopter > Bot2; Phyrexian Walker > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Seasoned Consultant.Power = 3
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Seasoned Consultant.Power = 3
+Bot1.Battlefield.Seasoned Consultant.Tapped = false

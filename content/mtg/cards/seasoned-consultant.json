@@ -1,0 +1,8 @@
+{
+  "name": "Seasoned Consultant",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Detective",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Whenever you attack with three or more creatures, this creature gets +2/+0 until end of turn."
+}
