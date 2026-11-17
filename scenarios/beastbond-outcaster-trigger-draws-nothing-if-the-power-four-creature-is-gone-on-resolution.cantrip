@@ -1,0 +1,50 @@
+# Beastbond Outcaster: the intervening "if" is checked as the ability triggers and again as it resolves (CR 603.4). Drover Grizzly (4/2) is
+# there when the Outcaster enters, so the ability triggers; Bot2 answers with Lightning Bolt on the Grizzly, and with no creature of
+# power 4 or greater left when the trigger resolves, Bot1 draws nothing: 7 - 4 + 1 - 2 = 2 cards.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Black Lotus
+Drover Grizzly
+Forest
+Beastbond Outcaster
+Forest
+Forest x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Drover Grizzly.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Beastbond Outcaster.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Drover Grizzly)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Drover Grizzly; Black Lotus
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand.Count = 2
