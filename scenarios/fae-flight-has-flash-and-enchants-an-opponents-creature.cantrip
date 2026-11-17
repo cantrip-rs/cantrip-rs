@@ -1,0 +1,40 @@
+# Fae Flight has flash and "Enchant creature" is not limited to your own: on Bot2's turn 2 Bot1 casts it onto Bot2's Memnite once it has resolved (CR 702.8a, 303.4).
+# The Memnite is a 2/1 with flying and hexproof until the end of that turn, then just flying, and it stays Bot2's (controlling the Aura is not controlling the creature).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Fae Flight
+Island
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fae Flight.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Power = 2
+? Bot2.Battlefield.Memnite.Keywords = Flying; Hexproof
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Memnite.Keywords = Flying
+
+[Expect]
+Bot2.Battlefield.Memnite.Power = 2
+Bot2.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Fae Flight.AttachedTo = Memnite
+Bot1.Battlefield = Mox Jet; Mox Sapphire; Fae Flight
