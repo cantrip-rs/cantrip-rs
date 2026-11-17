@@ -300,6 +300,17 @@ pub fn put_counter_on_that_creature(g: &mut dyn Game, item: &StackItem, kind: Co
     Ok(())
 }
 
+/// "Shuffle enchanted creature/permanent into its owner's library" as an effect of the Aura (CR 701.24, 303.4m, 608.2h): the permanent
+/// the Aura is attached to as the ability resolves goes into its owner's library, which is shuffled even if the permanent can't get
+/// there (CR 701.24c). If the Aura has left the battlefield by then, it is the permanent it was attached to as it left (CR 608.2h).
+/// Stay Hidden, Stay Silent and Dramatic Accusation print it.
+pub fn shuffle_enchanted_into_library(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(permanent) = g.obj(item.object).attached_to {
+        g.put_into_library(&[permanent], LibraryPlace::ShuffledIn);
+    }
+    Ok(())
+}
+
 /// "When this Aura enters, tap enchanted creature/permanent" as a triggered effect: taps the permanent the Aura is attached to as
 /// the trigger resolves (CR 303.4m, 701.26a, 608.2h). Frozen in Ice, Paralyze, Sleep Magic, Tractor Beam and others print it.
 pub fn tap_enchanted(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {

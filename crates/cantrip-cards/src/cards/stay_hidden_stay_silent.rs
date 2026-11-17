@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::{
-    attach::{attached_to_it, tap_enchanted},
+    attach::{self, attached_to_it, tap_enchanted},
     manifest_dread, targets,
     triggers::THIS_ENTERS,
 };
@@ -10,9 +10,7 @@ use cantrip_oracle as oracle;
 /// is attached to as the ability resolves (CR 303.4m, 608.2h); it is shuffled into its owner's library, which is shuffled even
 /// if the creature can't get there (CR 701.24c), and then the ability's controller manifests dread from their own library.
 fn shuffle_enchanted_then_manifest_dread(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = g.obj(item.object).attached_to {
-        g.put_into_library(&[creature], LibraryPlace::ShuffledIn);
-    }
+    attach::shuffle_enchanted_into_library(g, item)?;
     manifest_dread::controller_manifests_dread(g, item)
 }
 
