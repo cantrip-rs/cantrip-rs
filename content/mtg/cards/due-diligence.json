@@ -1,0 +1,6 @@
+{
+  "name": "Due Diligence",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhen this Aura enters, target creature you control other than enchanted creature gets +2/+2 and gains vigilance until end of turn.\nEnchanted creature gets +2/+2 and has vigilance."
+}

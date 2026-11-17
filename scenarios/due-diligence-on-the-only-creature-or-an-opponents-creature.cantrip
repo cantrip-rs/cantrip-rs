@@ -1,0 +1,52 @@
+# Due Diligence has "enchant creature", so it may enchant Bot2's Ornithopter, which gets +2/+2 and vigilance while the Aura stays. "Target creature you control
+# other than enchanted creature" is then Bot1's own Ornithopter, pumped until end of turn. And on a second Aura cast on Bot1's only creature, no creature of Bot1's is
+# a legal target, so the trigger leaves no effect and the enchanted Ornithopter is 2/4 for good with nothing else changed.
+
+[Bot1 Deck]
+Ornithopter
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Due Diligence
+Due Diligence
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Due Diligence.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 2
+? Bot2.Battlefield.Ornithopter.Keywords = Flying; Vigilance
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Vigilance
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Due Diligence.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Ornithopter.Power = 2
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot2.Battlefield.Ornithopter.Power = 2
