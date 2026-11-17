@@ -1,0 +1,54 @@
+# Mistway Spy (Disguise {1}{U}): cast face down (a Black Lotus pays the {3}), it is turned face up for exactly {1}{U} (CR 702.168d, 116.2b): one Mox short and two Moxen with no blue among them are each refused (judged
+# again with mana to spare), and Mox Jet with Mox Sapphire pays it, the pool empty right after. "When this creature is turned face up, until end of turn, whenever a creature you control deals combat damage to
+# a player, investigate" (CR 701.40b, 603.7b, 603.2c): on turn 3 the Spy (Flying) and the Memnite both connect and Bot1 investigates twice, once for each; on turn 5, the effect over, the same attack makes no Clue.
+
+[Bot1 Deck]
+Black Lotus
+Mistway Spy
+Memnite
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mistway Spy.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mistway Spy.Keywords = Disguise; Flying
+Bot1.Attack(Mistway Spy > Bot2; Memnite > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+Bot1.Attack(Mistway Spy > Bot2; Memnite > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield = Mistway Spy; Memnite; Mox Jet; Mox Pearl; Mox Sapphire; Clue Token; Clue Token

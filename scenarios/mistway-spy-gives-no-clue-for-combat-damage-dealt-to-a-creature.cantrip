@@ -1,0 +1,48 @@
+# Mistway Spy: "Until end of turn, whenever a creature you control deals combat damage to a player, investigate" (CR 510.2, 603.2): only damage dealt to a player counts. Turned face up on turn 3, the Spy attacks beside
+# a Memnite; Bot2's Ornithopter blocks the Memnite, which deals its damage to the Ornithopter and makes no Clue, while the unblocked Spy hits Bot2 for 1 and makes the one Clue.
+
+[Bot1 Deck]
+Black Lotus
+Mistway Spy
+Memnite
+Mox Jet
+Mox Sapphire
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mistway Spy.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Mistway Spy > Bot2; Memnite > Bot2)
+Bot2.Block(Ornithopter > Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield.Ornithopter.Damage = 1
+Bot1.Battlefield = Mistway Spy; Memnite; Mox Jet; Mox Sapphire; Clue Token

@@ -1,0 +1,11 @@
+{
+  "name": "Mistway Spy",
+  "manaCost": "{U}",
+  "type": "Creature — Merfolk Detective",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying\nDisguise {1}{U} (You may cast this card face down for {3} as a 2/2 creature with ward {2}. Turn it face up any time for its disguise cost.)\nWhen this creature is turned face up, until end of turn, whenever a creature you control deals combat damage to a player, investigate.",
+  "keywords": [
+    "Flying"
+  ]
+}

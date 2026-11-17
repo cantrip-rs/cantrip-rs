@@ -1,0 +1,41 @@
+# Mistway Spy: "Until end of turn, whenever a creature you control deals combat damage to a player, investigate" (CR 603.2): "you control" is the Spy's controller. Bot1 turns the Spy face up on turn 4, in
+# Bot2's declare attackers step (it may be turned up any time Bot1 has priority, CR 702.168d); Bot2's attacking Memnite then hits Bot1 and Bot1, whose creatures dealt nothing, investigates nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mistway Spy
+Mox Jet
+Mox Sapphire
+Island x3
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mistway Spy.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield = Mistway Spy; Mox Jet; Mox Sapphire
