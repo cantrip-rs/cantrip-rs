@@ -1,0 +1,56 @@
+# Basilica Stalker, Disguise {4}{B}: face down it is a 2/2 with ward {2} and no abilities (CR 702.168a, 708.2): on turn 3 Bot1's face-down Stalker hits Bot2 for 2 and there is no
+# life gain and no surveil. On turn 5 Bot1 turns it face up for {4}{B} (a special action, CR 116.2b, 702.168b), it is the 3/4 flyer again, and its next combat damage to a player
+# gains 1 life and surveils 1 (Island to the graveyard).
+
+[Bot1 Deck]
+Basilica Stalker
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Ruby
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Basilica Stalker.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(#1 > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Bot1.Life = 20
+? Bot1.Graveyard = Black Lotus
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Battlefield.Basilica Stalker.Power = 3
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Basilica Stalker > Bot2)
+Bot1.Arrange( | Island)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Life = 21
+Bot1.Graveyard = Island; Black Lotus

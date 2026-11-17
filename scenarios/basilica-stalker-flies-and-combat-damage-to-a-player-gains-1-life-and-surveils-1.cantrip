@@ -1,0 +1,42 @@
+# Basilica Stalker: "Whenever this creature deals combat damage to a player, you gain 1 life and surveil 1." (CR 510.2, 119.3, 701.25a) Bot1 casts it on turn 1 for {5}{B} (a Black
+# Lotus, two Mox Jets and a Mox Ruby). On turn 3 it attacks unblocked: Bot2 takes 3, Bot1 gains 1 and looks at the top card of its library - an Island - and puts it into its graveyard.
+
+[Bot1 Deck]
+Basilica Stalker
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Ruby
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Basilica Stalker.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+? Bot1.Graveyard = Black Lotus
+Bot1.Attack(Basilica Stalker > Bot2)
+Bot1.Arrange( | Island)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 21
+Bot1.Graveyard = Island; Black Lotus

@@ -1,0 +1,49 @@
+# Basilica Stalker has flying (CR 702.9b): Bot2's Memnite cannot block it (refused), but its Ornithopter, which has flying, can. Damage dealt to a blocking creature is not damage
+# to a player, so there is no life gain and no surveil (CR 510.2): Bot1 stays at 20 and the top of its library is untouched. The Stalker takes no damage from the 0/2 Ornithopter
+# and deals its 3 to it, killing it; the unblocked attack in basilica-stalker-flies-and-combat-damage-to-a-player-gains-1-life-and-surveils-1 is the positive control.
+
+[Bot1 Deck]
+Basilica Stalker
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Ruby
+Island x21
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Basilica Stalker.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Basilica Stalker > Bot2)
+! Bot2.Block(Memnite > Basilica Stalker)
+Bot2.Block(Ornithopter > Basilica Stalker)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 20
+Bot1.Graveyard = Black Lotus
+Bot2.Graveyard = Ornithopter
