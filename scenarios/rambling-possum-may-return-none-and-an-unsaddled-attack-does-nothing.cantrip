@@ -1,0 +1,50 @@
+# Rambling Possum: the "may" is real: turn 3, saddled with the Memnite, it attacks as a 4/5 and Bot1 returns none (an empty choice), so the Memnite stays tapped
+# on the battlefield. Turn 5, unsaddled, it attacks as a plain 3/3 with no trigger and nothing is asked (Bot2 16 -> 13).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Rambling Possum
+Memnite
+Plains
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Rambling Possum.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Rambling Possum.Activate(Ability: Saddle)
+Bot1.Choose(Memnite)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Rambling Possum > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot1.Battlefield.Rambling Possum.Power = 4
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+? Bot1.Battlefield.Memnite.Tapped = true
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Rambling Possum > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Rambling Possum.Power = 3
+Bot1.Battlefield.Memnite.Tapped = false

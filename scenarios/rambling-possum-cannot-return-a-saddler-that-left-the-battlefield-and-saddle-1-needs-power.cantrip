@@ -1,0 +1,67 @@
+# Rambling Possum: only creatures still on the battlefield that saddled it can be returned. Turn 3: Saddle 1 is refused with just the Ornithopter (power 0).
+# Memnite and Grizzly Bears are cast and tapped to saddle it; in response Bot2 Lightning Bolts the Memnite (it was tapped for the cost, so it still saddled the Possum,
+# but it is in the graveyard now, a new object, CR 400.7). The Possum attacks saddled; the Memnite cannot be chosen, the Bears can and returns to hand.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Rambling Possum
+Ornithopter
+Memnite
+Grizzly Bears
+Plains x17
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Rambling Possum.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Rambling Possum.Activate(Ability: Saddle)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Rambling Possum.Activate(Ability: Saddle)
+Bot1.Choose(Memnite; Grizzly Bears)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Memnite
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Rambling Possum > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Memnite)
+Bot1.Choose(Grizzly Bears)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Graveyard = Memnite
+Bot1.Hand = Grizzly Bears; Plains
+Bot1.Battlefield.Rambling Possum.Power = 4
