@@ -1,0 +1,40 @@
+# Treasure Dredger: "{1}, {T}, Pay 1 life: Create a Treasure token." Bot1 casts it from Black Lotus on turn 1, leaving no mana
+# source: on turn 3 the ability is not offered for want of mana ({1} is part of the cost), then with exactly one Swamp it is: the
+# pool is empty right after the payment, Bot1 has paid 1 life (20 to 19), the Dredger is tapped and a Treasure token has been
+# created (CR 602.2, 119.4, 111.10a).
+
+[Bot1 Deck]
+Black Lotus
+Treasure Dredger
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Treasure Dredger.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Treasure Dredger.Activate(Mana: short)
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Treasure Dredger.Activate
+? Bot1.Mana =
+? Bot1.Life = 19
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 19
+Bot1.Battlefield.Treasure Dredger.Tapped = true
+Bot1.Battlefield.Treasure Token.Tapped = false
+Bot1.Battlefield.Count = 3

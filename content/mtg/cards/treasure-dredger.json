@@ -1,0 +1,8 @@
+{
+  "name": "Treasure Dredger",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Human Rogue",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{1}, {T}, Pay 1 life: Create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")"
+}
