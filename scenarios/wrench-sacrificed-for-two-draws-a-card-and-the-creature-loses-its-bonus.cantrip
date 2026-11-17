@@ -1,0 +1,50 @@
+# Wrench: "{2}, Sacrifice this Equipment: Draw a card." (CR 602.2, 701.21a). Bot1's Memnite is equipped on turn 3 (2/2). With only Mox
+# Pearl's {W} left the sacrifice is refused (short of {2}); with Black Lotus cast and its three mana it is paid, Wrench goes to the graveyard
+# as a cost, Bot1 draws one card (hand 2 to 3 after the Lotus left it) and the Memnite is 1/1 again and has no ability to tap a creature. It is also a Clue Equipment artifact.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Wrench
+Memnite
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wrench.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Wrench.Types = Artifact
+? Bot1.Battlefield.Wrench.Subtypes = Clue; Equipment
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Wrench.Activate(Ability: Equip {2}; Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Wrench.AttachedTo = Memnite
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Wrench.Activate(Ability: Sacrifice; Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Wrench.Activate(Ability: Sacrifice)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+! Bot1.Battlefield.Memnite.Activate(Memnite)
+
+[Expect]
+Bot1.Graveyard = Wrench; Black Lotus

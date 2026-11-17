@@ -1,0 +1,6 @@
+{
+  "name": "Wrench",
+  "manaCost": "{W}",
+  "type": "Artifact — Clue Equipment",
+  "oracleText": "Equipped creature gets +1/+1 and has vigilance and \"{3}, {T}: Tap target creature.\"\n{2}, Sacrifice this Equipment: Draw a card.\nEquip {2}"
+}
