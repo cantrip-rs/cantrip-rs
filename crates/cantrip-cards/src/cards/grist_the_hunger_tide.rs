@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, select};
+use cantrip_mechanics::effects;
 use cantrip_mechanics::targets;
 use cantrip_oracle as oracle;
 
@@ -48,19 +48,6 @@ fn plus_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     }
 }
 
-/// -2: "You may sacrifice a creature. When you do, destroy target creature or planeswalker." The creature is chosen
-/// as the ability resolves, not targeted, and the reflexive trigger exists only if one was sacrificed (CR 603.12),
-/// whether or not Grist is still on the battlefield.
-fn minus_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let player = item.controller;
-    if effects::may_sacrifice(g, player, item.object, select::creature_cards(select::up_to(1)))?.is_empty() {
-        return Ok(());
-    }
-    let me = g.card_id(&CARD);
-    g.reflexive_trigger(item.object, player, AbilityRef::delayed(me, 0), Target::None);
-    Ok(())
-}
-
 fn destroy_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     cantrip_mechanics::destroy_target(g, item, 0);
     Ok(())
@@ -79,7 +66,7 @@ fn minus_five(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 pub static CARD: CardDef = CardDef {
     abilities: &[
         ability(loyalty(1), plus_one, "+1: Create a 1/1 black and green Insect creature token, then mill a card. If an Insect card was milled this way, put a loyalty counter on Grist and repeat this process."),
-        ability(loyalty(-2), minus_two, "\u{2212}2: You may sacrifice a creature. When you do, destroy target creature or planeswalker."),
+        ability(loyalty(-2), effects::may_sacrifice_a_creature_when_you_do, "\u{2212}2: You may sacrifice a creature. When you do, destroy target creature or planeswalker."),
         ability(loyalty(-5), minus_five, "\u{2212}5: Each opponent loses life equal to the number of creature cards in your graveyard."),
     ],
     delayed: &[delayed_trigger(destroy_target, "When you do, destroy target creature or planeswalker.")

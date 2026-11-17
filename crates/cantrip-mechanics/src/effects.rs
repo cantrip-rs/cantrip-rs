@@ -2325,6 +2325,18 @@ pub fn sacrifice_this_when_you_do(g: &mut dyn Game, item: &StackItem) -> Result<
     Ok(())
 }
 
+/// "You may sacrifice a creature. When you do, ..." (CR 701.21a, 603.12): the creature is chosen as the ability resolves, not
+/// targeted, and may be the source itself; the card's `delayed` ability number 0 triggers as a reflexive ability only if one was
+/// sacrificed, whether or not the source is still on the battlefield. Grist, the Hunger Tide (-2) and Unscrupulous Contractor
+/// print it, as do Cabal Therapist, Fireblade Artist, Kardur's Vicious Return and Shrapnel Slinger.
+pub fn may_sacrifice_a_creature_when_you_do(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if may_sacrifice(g, item.controller, item.object, crate::select::creature_cards(crate::select::up_to(1)))?.is_empty() {
+        return Ok(());
+    }
+    g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(item.ability.card, 0), Target::None);
+    Ok(())
+}
+
 /// "The owner of [a permanent] puts it into their library second from the top or on the bottom" (CR 401.4, 400.3): its owner,
 /// not the ability's controller, chooses which, and it moves as it stands on the battlefield. The card lists the two options
 /// in its `labels`, "Second from the top" first and "On the bottom" second. Wan Shi Tong, All-Knowing and Trickster's
