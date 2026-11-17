@@ -1,0 +1,6 @@
+{
+  "name": "Tumbleweed Rising",
+  "manaCost": "{1}{G}",
+  "type": "Sorcery",
+  "oracleText": "Create an X/X green Elemental creature token, where X is the greatest power among creatures you control.\nPlot {2}{G} (You may pay {2}{G} and exile this card from your hand. Cast it as a sorcery on a later turn without paying its mana cost. Plot only as a sorcery.)"
+}

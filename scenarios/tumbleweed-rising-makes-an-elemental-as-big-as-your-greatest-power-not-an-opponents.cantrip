@@ -1,0 +1,44 @@
+# Tumbleweed Rising {1}{G}: "Create an X/X green Elemental creature token, where X is the greatest power among creatures you control."
+# Bot1 controls a Memnite (power 1); Bot2 casts Grizzly Bears (power 2) on turn 2, a creature Bot1 does not control, so it isn't counted. On
+# turn 3 the Elemental is a green 1/1 token (not 2/2).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Memnite
+Tumbleweed Rising
+Plains x16
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Tumbleweed Rising.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Tumbleweed Rising
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Elemental Token.Power = 1
+Bot1.Battlefield.Elemental Token.Toughness = 1
+Bot1.Battlefield.Elemental Token.Colors = Green
+Bot1.Battlefield.Elemental Token.Token = true
