@@ -1,0 +1,35 @@
+# Inside Source: "When this creature enters, create a 2/2 white and blue Detective creature token." Cast with Bot1's three Moxen it leaves a 2/2 token that is both
+# white and blue, a Detective, a token and a creature; the Source is a 1/1 Human Citizen and is not itself a Detective.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Inside Source
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Inside Source.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Detective Token.Tapped = false
+Bot1.Battlefield.Detective Token.Power = 2
+Bot1.Battlefield.Detective Token.Toughness = 2
+Bot1.Battlefield.Detective Token.Colors = Blue; White
+Bot1.Battlefield.Detective Token.Subtypes = Detective
+Bot1.Battlefield.Detective Token.Token = true
+Bot1.Battlefield.Inside Source.Subtypes = Citizen; Human
+Bot1.Battlefield.Inside Source.Power = 1

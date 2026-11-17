@@ -1,0 +1,8 @@
+{
+  "name": "Inside Source",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Citizen",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature enters, create a 2/2 white and blue Detective creature token.\n{3}, {T}: Target Detective you control gets +2/+0 and gains vigilance until end of turn. Activate only as a sorcery."
+}

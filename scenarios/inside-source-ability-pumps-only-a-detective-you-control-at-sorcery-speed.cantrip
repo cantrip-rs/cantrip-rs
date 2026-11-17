@@ -1,0 +1,72 @@
+# Inside Source: "{3}, {T}: Target Detective you control gets +2/+0 and gains vigilance until end of turn. Activate only as a sorcery." The Source is summoning sick on
+# turn 1. On turn 3 (with Bot1's Ornithopter and Bot2's Detective from Bot2's own Inside Source present) the only target offered is Bot1's Detective token: the Source
+# itself (Human Citizen), Bot1's Ornithopter and Bot2's Detective token are refused. With another spell on the stack the ability is refused too (sorcery speed, CR 602.5d).
+# Then it makes the token a 4/2 with vigilance until end of turn, the Source taps, and the token is 2/2 again on turn 5.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Inside Source
+Ornithopter
+Mox Pearl
+Mox Pearl
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Inside Source
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Inside Source.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.Hand.Inside Source.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Battlefield.Inside Source.Activate(Bot1.Battlefield.Detective Token)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Inside Source.Activate(Bot1.Battlefield.Inside Source)
+! Bot1.Battlefield.Inside Source.Activate(Bot1.Battlefield.Ornithopter)
+! Bot1.Battlefield.Inside Source.Activate(Bot2.Battlefield.Detective Token)
+Bot1.Battlefield.Inside Source.Activate(Bot1.Battlefield.Detective Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Detective Token.Power = 4
+? Bot1.Battlefield.Detective Token.Toughness = 2
+? Bot1.Battlefield.Detective Token.Keywords = Vigilance
+? Bot1.Battlefield.Inside Source.Tapped = true
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Detective Token.Power = 2
+? Bot1.Battlefield.Detective Token.Keywords = (absent)
+
+[Expect]
+Bot2.Battlefield.Detective Token.Power = 2
