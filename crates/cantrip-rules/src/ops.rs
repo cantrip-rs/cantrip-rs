@@ -5513,13 +5513,15 @@ pub fn monstrosity(cx: &mut Cx, id: ObjectId, n: i32, by: PlayerId) {
     cx.emit(Event::Monstrous { permanent: id });
 }
 
-/// A permanent becomes saddled until end of turn (CR 702.171b).
+/// A permanent becomes saddled until end of turn (CR 702.171b), and what watches for it triggers: each resolution of a saddle
+/// ability does so, a permanent already saddled this turn included.
 pub fn saddle(cx: &mut Cx, id: ObjectId) {
     if !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield) {
         return;
     }
     let turn = cx.s().turn.number;
     cx.st().update_obj(id, |o| o.marks.saddled_turn = turn);
+    cx.emit(Event::BecameSaddled { permanent: id });
 }
 
 /// A permanent becomes solved (CR 719.3a): it is given the solved designation (CR 719.3b), which it keeps until it leaves

@@ -1575,7 +1575,7 @@ pub trait Game: Query {
     /// Monstrosity N (CR 701.37a): if the permanent is not monstrous, it gets N +1/+1 counters and becomes monstrous,
     /// which abilities that watch for it see.
     fn monstrosity(&mut self, permanent: ObjectId, counters: i32);
-    /// A creature becomes saddled until end of turn (CR 702.171b).
+    /// A creature becomes saddled until end of turn (CR 702.171b), seen as `Event::BecameSaddled` each time it happens.
     fn become_saddled(&mut self, permanent: ObjectId);
     /// A permanent becomes solved (CR 719.3a-b): one on the battlefield that is not solved is given the designation, and
     /// what watches for it sees `Event::Solved`. One that has left the battlefield, or is solved already, is unchanged.
