@@ -1,0 +1,49 @@
+# Servant of the Stinger: the sacrifice is a "may" (CR 603.5): after a crime, the unblocked Servant connects, but Bot1 declines.
+# Nothing is sacrificed and nothing is searched for: the Servant stays on the battlefield, the library is untouched (the
+# Black Lotus is still in it), and the hand holds only the four Swamps.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Servant of the Stinger
+Shock
+Swamp
+Swamp
+Swamp
+Swamp
+Black Lotus
+Swamp x10
+
+[Bot2 Deck]
+Island x12
+Black Lotus
+Island x7
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Servant of the Stinger.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Servant of the Stinger.Keywords = Deathtouch
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+Bot1.Attack(Servant of the Stinger > Bot2)
+[T3 Bot1.CombatDamage]
+? Bot2.Life = 17
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Bot1.Battlefield.Servant of the Stinger.Power = 1
+Bot1.Graveyard = Shock
+Bot1.Hand = Swamp; Swamp; Swamp; Swamp
+Bot1.Library.Count = 11

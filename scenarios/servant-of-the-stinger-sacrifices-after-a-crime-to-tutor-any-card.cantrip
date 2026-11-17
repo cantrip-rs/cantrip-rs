@@ -1,0 +1,53 @@
+# Servant of the Stinger: "Deathtouch. Whenever this creature deals combat damage to a player, if you've committed a crime this
+# turn, you may sacrifice this creature. If you do, search your library for a card, put it into your hand, then shuffle."
+# Bot1 casts it on turn 1 with two Moxen. On turn 3 a Shock at Bot2 is a crime (CR 700.13); its attack is unblocked for 1
+# (Bot2 17 after the Shock), and Bot1 accepts the sacrifice and finds Black Lotus (CR 701.23): the Servant is in the graveyard,
+# the Lotus in hand, and Bot2's library, which holds a Lotus too, is untouched.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Servant of the Stinger
+Shock
+Swamp
+Swamp
+Swamp
+Swamp
+Black Lotus
+Swamp x10
+
+[Bot2 Deck]
+Island x12
+Black Lotus
+Island x7
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Servant of the Stinger.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Servant of the Stinger.Keywords = Deathtouch
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+Bot1.Attack(Servant of the Stinger > Bot2)
+[T3 Bot1.CombatDamage]
+? Bot2.Life = 17
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Search(Black Lotus)
+
+[Expect]
+Bot1.Battlefield.Servant of the Stinger = (absent)
+Bot1.Graveyard = Servant of the Stinger; Shock
+Bot1.Hand = Swamp; Swamp; Swamp; Swamp; Black Lotus
+Bot2.Library.Count = 12
+Bot2.Hand.Black Lotus = (absent)

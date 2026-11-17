@@ -1,0 +1,11 @@
+{
+  "name": "Servant of the Stinger",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Human Warlock",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Deathtouch\nWhenever this creature deals combat damage to a player, if you've committed a crime this turn, you may sacrifice this creature. If you do, search your library for a card, put it into your hand, then shuffle. (Targeting opponents, anything they control, and/or cards in their graveyards is a crime.)",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

@@ -1,0 +1,43 @@
+# Servant of the Stinger: the trigger has an intervening "if you've committed a crime this turn" (CR 603.4). On turn 3 Bot1
+# casts the Shock at its own face (not a crime: it targets only itself, CR 700.13) and attacks; the Servant deals 1 damage
+# to Bot2 but nothing triggers, so there is no stack object, no question, and the Servant stays.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Servant of the Stinger
+Shock
+Swamp
+Swamp
+Swamp
+Swamp
+Black Lotus
+Swamp x10
+
+[Bot2 Deck]
+Island x12
+Black Lotus
+Island x7
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Servant of the Stinger.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+Bot1.Attack(Servant of the Stinger > Bot2)
+[T3 Bot1.CombatDamage]
+? Bot2.Life = 19
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Servant of the Stinger.Power = 1
+Bot1.Hand = Swamp; Swamp; Swamp; Swamp
