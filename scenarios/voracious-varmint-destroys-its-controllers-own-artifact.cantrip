@@ -1,0 +1,31 @@
+# Voracious Varmint: the target may be the controller's own (CR 115.1; "target artifact or enchantment", not "an opponent's"). Bot1 taps
+# its Mox Jet for the {1} and the Varmint is sacrificed to destroy that same Mox Jet; Bot2's Ornithopter, an artifact too, stays.
+
+[Bot1 Deck]
+Black Lotus
+Voracious Varmint
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Voracious Varmint.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Voracious Varmint.Activate(Bot1.Battlefield.Mox Jet)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Mox Jet; Voracious Varmint; Black Lotus
+Bot1.Battlefield.Count = 0
+Bot2.Battlefield = Ornithopter
