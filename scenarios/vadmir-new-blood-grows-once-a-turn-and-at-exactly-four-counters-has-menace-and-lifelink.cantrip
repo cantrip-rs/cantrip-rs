@@ -1,0 +1,82 @@
+# "Whenever you commit a crime, put a +1/+1 counter on Vadmir. This ability triggers only once each turn" (CR 700.13):
+# on turn one Bot1 casts Vadmir, then three Shocks at Bot2 with Black Lotus mana: the first is a crime that triggers it (the
+# stack holds Shock, the trigger, Shock, Shock), the other two don't, so it has one counter. A Shock a turn on turns three, five
+# and seven makes two, three and four counters. "As long as Vadmir has four or more +1/+1 counters on it, it has menace and
+# lifelink" (CR 122.1): at three (a 5/5) it has neither; at exactly four (a 6/6) both, and its attack gains its controller 6 life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Vadmir, New Blood
+Shock
+Shock
+Shock
+Shock
+Shock
+Shock
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vadmir, New Blood.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Shock.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Hand.Shock.Cast(Bot2)
+? Stack.Count = 4
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 14
+? Bot1.Battlefield.Vadmir, New Blood.Counters.PlusOnePlusOne = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vadmir, New Blood.Counters.PlusOnePlusOne = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vadmir, New Blood.Counters.PlusOnePlusOne = 3
+? Bot1.Battlefield.Vadmir, New Blood.Power = 5
+? Bot1.Battlefield.Vadmir, New Blood.Keywords = (absent)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vadmir, New Blood.Counters.PlusOnePlusOne = 4
+? Bot1.Battlefield.Vadmir, New Blood.Power = 6
+? Bot1.Battlefield.Vadmir, New Blood.Keywords = Lifelink; Menace
+Bot1.Attack(Vadmir, New Blood > Bot2)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 2
+Bot1.Life = 26
+Bot1.Battlefield.Vadmir, New Blood.Keywords = Lifelink; Menace

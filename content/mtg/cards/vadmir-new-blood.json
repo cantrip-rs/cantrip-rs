@@ -1,0 +1,8 @@
+{
+  "name": "Vadmir, New Blood",
+  "manaCost": "{1}{B}",
+  "type": "Legendary Creature — Vampire Rogue",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever you commit a crime, put a +1/+1 counter on Vadmir. This ability triggers only once each turn. (Targeting opponents, anything they control, and/or cards in their graveyards is a crime.)\nAs long as Vadmir has four or more +1/+1 counters on it, it has menace and lifelink."
+}
