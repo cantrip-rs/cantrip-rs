@@ -1,0 +1,77 @@
+# Annie Joins Up enters: its own enters ability (a legendary enchantment's, not a creature's) triggers once, refuses Bot1's
+# Memnite (Bot2's Ornithopter is also there) and deals exactly 5 damage to Bot2's Colossal Dreadmaw, which survives. Then
+# Ajani, Nacatl Pariah, a legendary creature Bot1 controls, enters and its enters ability triggers an additional time
+# (CR 603.2d): two Cat Warrior tokens.
+# Annie Joins Up {1}{R}{G}{W}: Legendary Enchantment
+#   When Annie Joins Up enters, it deals 5 damage to target creature or planeswalker an opponent controls.
+#   If a triggered ability of a legendary creature you control triggers, that ability triggers an additional time.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Annie Joins Up
+Ajani, Nacatl Pariah
+Memnite
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Colossal Dreadmaw
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Colossal Dreadmaw.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Annie Joins Up.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot2.Battlefield.Colossal Dreadmaw)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Colossal Dreadmaw.Damage = 5
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ajani, Nacatl Pariah.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Ajani, Nacatl Pariah; Annie Joins Up; Cat Warrior Token; Cat Warrior Token; Memnite; Mox Emerald; Mox Pearl; Mox Ruby; Mox Sapphire
