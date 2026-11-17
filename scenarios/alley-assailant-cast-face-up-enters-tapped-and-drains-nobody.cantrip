@@ -1,0 +1,26 @@
+# Alley Assailant: "This creature enters tapped" (CR 614.1c) and "When this creature is turned face up, target opponent loses 3 life and you gain 3 life." Cast face up for {2}{B} it
+# enters tapped as a 3/3 (it did not need to be turned face up), and since it was never turned face up its trigger never happens: both players stay at 20.
+
+[Bot1 Deck]
+Alley Assailant
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Alley Assailant.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Alley Assailant.Tapped = true
+Bot1.Battlefield.Alley Assailant.Power = 3
+Bot1.Battlefield.Alley Assailant.Toughness = 3
+Bot1.Life = 20
+Bot2.Life = 20
+Stack.Count = 0

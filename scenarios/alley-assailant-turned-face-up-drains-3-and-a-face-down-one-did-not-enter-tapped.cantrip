@@ -1,0 +1,52 @@
+# Alley Assailant, Disguise {4}{B}{B}: cast face down for {3} it is a 2/2 with no abilities, so it does not enter tapped (CR 708.2, 614.1c); on turn 3 Bot1 turns it face up for
+# {4}{B}{B} (a special action, CR 116.2b, 702.168b) and its trigger, "when this creature is turned face up" (CR 603.2, 708.8), has Bot2 lose 3 life and Bot1 gain 3. Turning it
+# face up does not tap it.
+
+[Bot1 Deck]
+Alley Assailant
+Black Lotus
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Ruby
+Island
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Alley Assailant.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Tapped = false
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Stack.Count = 1
+? Bot2.Life = 20
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 23
+Bot1.Battlefield.Alley Assailant.Tapped = false
+Bot1.Battlefield.Alley Assailant.Power = 3
+Stack.Count = 0

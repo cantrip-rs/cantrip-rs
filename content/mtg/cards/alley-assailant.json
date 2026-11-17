@@ -1,0 +1,8 @@
+{
+  "name": "Alley Assailant",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Vampire Rogue",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "This creature enters tapped.\nDisguise {4}{B}{B} (You may cast this card face down for {3} as a 2/2 creature with ward {2}. Turn it face up any time for its disguise cost.)\nWhen this creature is turned face up, target opponent loses 3 life and you gain 3 life."
+}
