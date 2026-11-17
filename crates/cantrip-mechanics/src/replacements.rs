@@ -371,8 +371,9 @@ fn that_much_life_plus_one(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
 }
 
 /// "If you would draw a card while your library has no cards in it": one draw (CR 121.1), judged before any card is moved,
-/// with nothing left to draw (CR 121.6a).
-fn you_would_draw_from_nothing(q: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
+/// with nothing left to draw (CR 121.6a). The `applies` of Laboratory Maniac's and Jace, Wielder of Mysteries's replacement
+/// (`WIN_INSTEAD_OF_DRAWING_FROM_AN_EMPTY_LIBRARY`) and of Living Conundrum's, which skips the draw instead.
+pub fn you_would_draw_from_nothing(q: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
     matches!(proposal, Proposal::Draw(d) if d.player == asker.controller && q.state().zone(Zone::library(d.player)).is_empty())
 }
 
