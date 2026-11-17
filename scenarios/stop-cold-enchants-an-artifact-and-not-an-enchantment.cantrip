@@ -1,0 +1,64 @@
+# Stop Cold's "Enchant artifact or creature" (CR 303.4a, 115.1): at Bot2's end step Bot2 controls a Crusade (an enchantment,
+# refused as the Aura's target - the other four mana are there to pay for it) and a Mox Jet (an artifact that is not a creature,
+# accepted). The Mox is tapped by the enters trigger and loses its mana ability (CR 613.1f), and it stays tapped through Bot2's
+# untap step on turn 4 (CR 502.3), so it makes no mana then.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Stop Cold
+Island x20
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Crusade
+Mox Jet
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Crusade.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.End]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Stop Cold.Cast(Bot2.Battlefield.Crusade)
+Bot1.Hand.Stop Cold.Cast(Bot2.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Mox Jet.Tapped = true
+[T4 Bot2.Main1]
+! Bot2.Battlefield.Mox Jet.Activate
+
+[Expect]
+Bot2.Battlefield.Mox Jet.Tapped = true
+Bot2.Battlefield.Crusade.Types = Enchantment
