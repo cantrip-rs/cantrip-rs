@@ -1,6 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::lands::is_basic_land_card;
-use cantrip_mechanics::library::{search_to_hand, Find};
+use cantrip_mechanics::library::find_to_hand;
+use cantrip_mechanics::select;
 use cantrip_mechanics::triggers::ward;
 use cantrip_oracle as oracle;
 
@@ -8,8 +8,7 @@ use cantrip_oracle as oracle;
 /// life." (CR 701.23, 119.1.) The Desert card is a card with the Desert subtype, the word read through the words of this
 /// card's text (CR 612); the life is gained whether or not a card was found.
 fn search_then_gain_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let desert = g.words(item.object).subtype(Subtype::Desert);
-    search_to_hand(g, item.controller, item.object, Find::ONE.revealed(), |q, c| is_basic_land_card(q, c) || q.chars(c).has_subtype(desert))?;
+    find_to_hand(g, item.controller, item.object, select::BASIC_LAND_OR_DESERT_CARD, true)?;
     g.gain_life(item.controller, 3);
     Ok(())
 }
