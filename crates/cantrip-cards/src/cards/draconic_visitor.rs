@@ -1,12 +1,7 @@
 use cantrip_api::*;
+use cantrip_mechanics::replacements::artifact_tokens_under_your_control;
 use cantrip_mechanics::tokens::DRAGON_5_5;
 use cantrip_oracle as oracle;
-
-/// "If one or more artifact tokens would be created under your control" (CR 111.1, 614.1a): whose they would be, and
-/// what they would be as created - a copy exception that makes one an artifact counts (CR 707.9b).
-fn artifact_tokens_under_your_control(q: &dyn Query, me: &Asker, p: &Proposal) -> bool {
-    matches!(p, Proposal::TokenCreation(t) if t.controller == me.controller && q.token_chars(t.token, t.copy).is(CardType::Artifact))
-}
 
 /// "... that many 5/5 red Dragon creature tokens with flying are created instead": the same count, of a token that is
 /// no copy of anything, but what Draconic Visitor's text says now (CR 612.4, 612.2a: Sleight of Mind's blue, Artificial

@@ -89,6 +89,14 @@ pub fn tokens_under_your_control(_: &dyn Query, asker: &Asker, proposal: &Propos
     matches!(proposal, Proposal::TokenCreation(t) if t.controller == asker.controller && t.count > 0)
 }
 
+/// "If one or more artifact tokens would be created under your control" (CR 111.1, 614.1a): whose they would be, and what they
+/// would be as created - a copy exception that makes one an artifact counts (CR 707.9b). The condition of Draconic Visitor and
+/// Worldwalker Helm. `tokens_under_your_control`, narrowed to artifacts.
+pub fn artifact_tokens_under_your_control(q: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
+    tokens_under_your_control(q, asker, proposal)
+        && matches!(proposal, Proposal::TokenCreation(t) if q.token_chars(t.token, t.copy).is(CardType::Artifact))
+}
+
 /// "... twice that many of those tokens are created instead."
 fn twice_that_many_tokens(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     if let Proposal::TokenCreation(t) = proposal {
