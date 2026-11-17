@@ -847,10 +847,11 @@ pub fn exile_target_until_leaves_effect(g: &mut dyn Game, item: &StackItem) -> R
     Ok(())
 }
 
-/// "Exile up to one target nonland permanent an opponent controls until this enchantment leaves the battlefield. You gain 2
-/// life." (CR 610.3): the life is gained whether or not a target was chosen. A target that was chosen and is illegal as the
-/// ability resolves makes the whole ability not resolve, the life included (CR 608.2b, the rulings): the core never runs this.
-fn exile_target_until_leaves_and_you_gain_2_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+/// "Exile <target> until this enchantment leaves the battlefield. You gain 2 life." (CR 610.3), whatever the slot 0 target
+/// is: the life is gained whether or not a target was chosen (an "up to one" slot). A target that was chosen and is illegal as
+/// the ability resolves makes the whole ability not resolve, the life included (CR 608.2b, the rulings): the core never runs
+/// this. Liminal Hold, Prayer of Binding and Makeshift Binding print it.
+pub fn exile_target_until_leaves_and_you_gain_2_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     exile_target_until_leaves(g, item, 0);
     effects::gain_life(g, item, 2)
 }
