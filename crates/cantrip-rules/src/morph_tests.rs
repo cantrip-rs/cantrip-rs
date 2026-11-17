@@ -151,6 +151,24 @@ static BEAR: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+/// "As this creature is turned face up, put four +1/+1 counters on it." (CR 708.11): Bubble Smuggler's.
+fn four_counters(g: &mut dyn cantrip_api::Game, asker: &Asker) {
+    g.add_counters(asker.source, CounterKind::PlusOne, 4);
+}
+
+/// A 2/1 with disguise {1}{U} and that ability.
+static BUBBLER: CardDef = CardDef {
+    name: "Morph Test Bubbler",
+    cost: mana("{1}{U}"),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(1),
+    text: "Disguise {1}{U}\nAs this creature is turned face up, put four +1/+1 counters on it.",
+    ways: &[face_down_way(WayKind::Disguise, Cost::mana(mana("{1}{U}")), "Disguise {1}{U}")],
+    as_turned_face_up: Some(four_counters),
+    ..CardDef::BLANK
+};
+
 fn creature(_: &dyn LayerQuery, _: ObjectId, _: ObjectId, c: &Chars) -> bool {
     c.is(CardType::Creature)
 }
@@ -195,7 +213,7 @@ fn cx(game: &mut Game) -> Cx<'_> {
 
 /// Your main phase with priority and an empty stack.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &SKYWARDEN, &GROWER, &MASK, &CUTTHROAT, &SWELLER, &BIRD_FLASH, &CREATURE_FLASH, &COLORLESS_FROM_TOP, &WHITE_FROM_TOP, &NO_WHITE, &NO_COLORLESS, &CASTER, &BEAR, &HUMBLER, &SHROUDER, &WATCHER])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &SKYWARDEN, &GROWER, &MASK, &CUTTHROAT, &SWELLER, &BIRD_FLASH, &CREATURE_FLASH, &COLORLESS_FROM_TOP, &WHITE_FROM_TOP, &NO_WHITE, &NO_COLORLESS, &CASTER, &BEAR, &HUMBLER, &SHROUDER, &WATCHER, &BUBBLER])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -412,6 +430,38 @@ fn a_megamorph_turned_up_for_its_megamorph_cost_gets_a_counter() {
     let put_at = g.log.iter().position(|r| matches!(r.event, Event::CountersPut { object, .. } if object == permanent)).expect("the counter");
     let up_at = g.log.iter().position(|r| matches!(r.event, Event::TurnedFaceUp { permanent: p, .. } if p == permanent)).expect("turned up");
     assert!(put_at < up_at);
+}
+
+/// CR 708.11: "As this permanent is turned face up" is applied while it is turned up, by the special action or by an effect, so
+/// what triggers on its being turned up sees the counters; a permanent that has lost all its abilities (CR 613.1f) has none.
+#[test]
+fn an_as_turned_face_up_ability_is_applied_as_it_is_turned_up_by_any_means() {
+    let mut g = game();
+    let card = put(&mut g, &BUBBLER, Zone::hand(YOU));
+    add(&mut g, Mana::C, 3);
+    let spell = cast_face_down(&mut g, card);
+    resolve_all(&mut g);
+    let permanent = g.state.obj(spell).became.expect("it resolved");
+    assert_eq!(g.state.obj(permanent).counters(CounterKind::PlusOne), 0, "face down it has no abilities");
+    add(&mut g, Mana::U, 1);
+    add(&mut g, Mana::C, 1);
+    let option = turn_up_option(&mut g, permanent, TurnUp::Disguise).expect("turning it face up is offered");
+    take(&mut g, &option);
+    assert_eq!(g.state.obj(permanent).counters(CounterKind::PlusOne), 4);
+    assert_eq!((g.chars(permanent).power, g.chars(permanent).toughness), (Some(6), Some(5)));
+    let put_at = g.log.iter().position(|r| matches!(r.event, Event::CountersPut { object, .. } if object == permanent)).expect("the counters");
+    let up_at = g.log.iter().position(|r| matches!(r.event, Event::TurnedFaceUp { permanent: p, .. } if p == permanent)).expect("turned up");
+    assert!(put_at < up_at, "put as it is turned up, not afterward");
+    // Manifested, then turned up by an effect: the ability counts the same.
+    let manifested = manifest(&mut g, &BUBBLER);
+    crate::ops::turn_face_up(&mut cx(&mut g), manifested, YOU);
+    assert_eq!(g.state.obj(manifested).counters(CounterKind::PlusOne), 4);
+    // Losing all abilities, it would have none face up (CR 708.11, 613.1f).
+    let silenced = manifest(&mut g, &BUBBLER);
+    loses_all_abilities_now(&mut g, silenced);
+    crate::ops::turn_face_up(&mut cx(&mut g), silenced, YOU);
+    assert!(!g.state.obj(silenced).face_down);
+    assert_eq!(g.state.obj(silenced).counters(CounterKind::PlusOne), 0);
 }
 
 /// CR 701.40b-c, 702.37b: a manifested megamorph card turned face up for its mana cost gets no counter; turned face up for

@@ -1180,6 +1180,16 @@ Sephiroth, One-Winged Angel ("you get an emblem"), Shinryu, Transcendent Rival (
 test cards. The benchmark measured 11.57 and 11.55 us per decision before and 11.15 and 11.26 us after (with two noisy
 runs of 11.93 and 13.57 between, on a shared machine, 2026-10-18): the check is one field read per transformation.
 
+"As this [permanent] is turned face up, ..." is `CardDef::as_turned_face_up` (`AsTurnedFaceUp`, CR 708.11: an ability the
+permanent would have face up "is applied while that permanent is being turned face up"), the same shape for `ops::turn_face_up_as`,
+where every turning up happens (a special action's, an effect's). Once the permanent is face up it reads the ability from the
+permanent as it now is (the card, or what a copy effect makes it, CR 708.8) unless it has lost all its abilities (CR 613.1f),
+runs it with the permanent's controller as "you" and as the one doing it (CR 122.6a), and only then puts megamorph's counter
+(CR 702.37b) and records `Event::TurnedFaceUp`, so what triggers on its being turned up sees what it did. It cannot ask, as
+turning up cannot suspend. Bubble Smuggler ("four +1/+1 counters") prints it; `cantrip-rules/src/morph_tests.rs` proves it.
+`cantrip-bench --games 128` measured 15.83 and 19.96 us per decision before and 16.27 and 16.70 after (a loaded shared machine,
+2026-11-17): a field read per turning up.
+
 Becoming a target is `Event::BecameTarget { target, by, controller }`, emitted by `ops::became_targets` as a spell is cast,
 an ability activated or put on the stack, a copy put on the stack (CR 707.10) and targets changed or chosen anew (CR 115.7):
 once per distinct object or player, since one chosen for several instances of "target" (CR 115.3) becomes the target of that

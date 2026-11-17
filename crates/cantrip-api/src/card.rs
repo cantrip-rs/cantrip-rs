@@ -67,6 +67,16 @@ pub type Enters = fn(&mut dyn Game, &mut Entering) -> Result<(), Suspend>;
 /// Olag, Ludevic's Hubris's "it becomes a copy of a creature card exiled with it" print it.
 pub type AsTransforms = fn(&mut dyn Game, &Asker) -> Result<(), Suspend>;
 
+/// "As this [permanent] is turned face up, ..." (CR 708.11): "If a face-down permanent would have an 'As [this permanent] is turned
+/// face up . . .' ability after it's turned face up, that ability is applied while that permanent is being turned face up, not
+/// afterward." A static ability of the card it is once face up (`CardDef::as_turned_face_up`), read as the permanent would have it
+/// then - so a permanent that would have lost all its abilities has none (CR 613.1f) - and applied by the core as part of turning
+/// it up, whatever rule, spell or ability turns it up (`Game::turn_face_up`, the special actions of morph and disguise), before
+/// the `Event::TurnedFaceUp` it is part of, so "whenever this is turned face up" sees what it did. `asker` is the permanent and its
+/// controller, the ability's "you". It asks nothing. Bubble Smuggler (four +1/+1 counters) and Hooded Hydra (five) print it, as
+/// megamorph (CR 702.37b) does for one.
+pub type AsTurnedFaceUp = fn(&mut dyn Game, &Asker);
+
 /// A permanent about to enter the battlefield, and how.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Entering {
@@ -3867,6 +3877,8 @@ pub struct CardDef {
     /// Its "as this transforms into [this face]" ability (CR 712.20), on the face it is printed on: applied as the permanent
     /// turns over to this face. See `AsTransforms`.
     pub as_transforms: Option<AsTransforms>,
+    /// Its "as this permanent is turned face up" ability (CR 708.11), applied as it is turned face up. See `AsTurnedFaceUp`.
+    pub as_turned_face_up: Option<AsTurnedFaceUp>,
     /// Abilities its effects create to trigger later (CR 603.7), as `AbilityRef::delayed(card, n)`.
     pub delayed: &'static [AbilityDef],
     /// Its prepare spell (CR 722): what a copy cast while it is prepared is a copy of.
@@ -4358,6 +4370,7 @@ impl CardDef {
         enters: None,
         enters_as_copy: None,
         as_transforms: None,
+        as_turned_face_up: None,
         delayed: &[],
         prepare: None,
         madness: None,

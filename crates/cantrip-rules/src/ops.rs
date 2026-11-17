@@ -1282,6 +1282,22 @@ pub fn turn_face_up_as(cx: &mut Cx, id: ObjectId, player: PlayerId, megamorph: b
         o.marks.face_down_as = None;
     });
     note_statics(cx, id);
+    // CR 708.11: "As this permanent is turned face up" abilities it would have face up are applied while it is turned up. Read
+    // from the permanent as it is now (the card it is, or what a copy effect makes it, CR 708.8), unless it has lost all its
+    // abilities (CR 613.1f).
+    let texts: Vec<(CardId, Option<Linked>)> = cx.cards().texts_linked(cx.s(), id).collect();
+    for (face, by) in texts {
+        if let Some(as_turned_face_up) = cx.cards().get(face).as_turned_face_up
+            && !cx.lost_all_abilities(id)
+        {
+            // The ability is the permanent's, so what it does is its controller's doing (CR 122.6a), whichever player's special
+            // action or effect turns it up.
+            let controller = cx.s().obj(id).controller;
+            let doer = cx.doer.replace(controller);
+            as_turned_face_up(cx, &Asker { instance: None, source: id, controller, by, spell: false });
+            cx.doer = doer;
+        }
+    }
     // Put by its own megamorph ability, the permanent's controller's (CR 122.6a), as it is turned face up.
     if megamorph {
         let controller = cx.s().obj(id).controller;
