@@ -1,0 +1,48 @@
+# Jaded Analyst: "Whenever you draw your second card each turn, this creature loses defender and gains vigilance until end of turn" (CR 121.2, 603.2). "Each turn" is every turn and
+# "you" is the drawer: both players control an Analyst. On turn 2 Bot2's Ancestral Recall makes Bot1 draw three cards, its first three that turn, and the second turns Bot1's Analyst
+# into a vigilant creature without defender; Bot2's own Analyst has seen only one card drawn by Bot2 (the draw step's) and keeps defender. On turn 3 Bot1's Analyst has defender again.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Jaded Analyst
+Island x17
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Jaded Analyst
+Ancestral Recall
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jaded Analyst.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Jaded Analyst.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Ancestral Recall.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Jaded Analyst.Keywords = Vigilance
+? Bot2.Battlefield.Jaded Analyst.Keywords = Defender
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Jaded Analyst.Keywords = Defender
+Bot2.Battlefield.Jaded Analyst.Keywords = Defender

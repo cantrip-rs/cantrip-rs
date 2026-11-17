@@ -1,0 +1,11 @@
+{
+  "name": "Jaded Analyst",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human Detective",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Defender\nWhenever you draw your second card each turn, this creature loses defender and gains vigilance until end of turn.",
+  "keywords": [
+    "Defender"
+  ]
+}

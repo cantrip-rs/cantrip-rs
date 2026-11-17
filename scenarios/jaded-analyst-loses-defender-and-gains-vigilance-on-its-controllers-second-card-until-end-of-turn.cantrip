@@ -1,0 +1,48 @@
+# Jaded Analyst: "Defender. Whenever you draw your second card each turn, this creature loses defender and gains vigilance until end of turn" (CR 702.3, 702.20,
+# 121.1, 611.2a). Cast on turn 1 off Mox Sapphire and Mox Pearl beside a Memnite. On turn 3 the draw step's card is only Bot1's first: it still has defender. Ancestral
+# Recall's first card is the second: it loses defender and gains vigilance, attacks for 3 and stays untapped. On turn 5 the effect is over: defender again, so it may not
+# attack beside the Memnite that does.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Jaded Analyst
+Ancestral Recall
+Memnite
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jaded Analyst.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Jaded Analyst.Keywords = Defender
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jaded Analyst.Keywords = Vigilance
+Bot1.Attack(Jaded Analyst > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Battlefield.Jaded Analyst.Tapped = false
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Jaded Analyst.Keywords = Defender
+! Bot1.Attack(Jaded Analyst > Bot2)
+Bot1.Attack(Memnite > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot2.Life = 16
+Bot1.Battlefield.Jaded Analyst.Keywords = Defender
