@@ -1,0 +1,81 @@
+# Cactusfolk Sureshot: "Reach. At the beginning of combat on your turn, other creatures you control with power 4 or greater gain
+# trample and haste until end of turn." Turn 3: Bot1 casts Alpine Grizzly (4/2) and Hill Giant (3/3). At the beginning of combat
+# the Grizzly gains trample and haste and attacks the turn it came; Hill Giant (power 3) gains neither and cannot attack; the
+# Sureshot itself (not "other") and Bot2's Serra Angel (4/4, not Bot1's) gain nothing. Memnite blocks the Grizzly, and 3 of its 4
+# damage tramples over. Turn 4: Bot2's beginning of combat is not Bot1's, and the keywords, gone at the end of turn 3, stay gone.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Cactusfolk Sureshot
+Alpine Grizzly
+Hill Giant
+Black Lotus
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Serra Angel
+Memnite
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cactusfolk Sureshot.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cactusfolk Sureshot.Keywords = Reach
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Serra Angel.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Alpine Grizzly.Keywords = (absent)
+[T3 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Alpine Grizzly.Keywords = Haste; Trample
+? Bot1.Battlefield.Hill Giant.Keywords = (absent)
+? Bot1.Battlefield.Cactusfolk Sureshot.Keywords = Reach
+? Bot2.Battlefield.Serra Angel.Keywords = Flying; Vigilance
+! Bot1.Attack(Hill Giant > Bot2)
+Bot1.Attack(Alpine Grizzly > Bot2; Cactusfolk Sureshot > Bot2)
+Bot2.Block(Memnite > Alpine Grizzly)
+[T3 Bot1.Main2]
+? Bot2.Life = 13
+? Bot2.Graveyard = Memnite; Black Lotus
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Alpine Grizzly.Keywords = (absent)
+Bot2.Life = 13

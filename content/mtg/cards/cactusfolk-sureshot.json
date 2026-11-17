@@ -1,0 +1,11 @@
+{
+  "name": "Cactusfolk Sureshot",
+  "manaCost": "{2}{R}{G}",
+  "type": "Creature — Plant Mercenary",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Reach\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nAt the beginning of combat on your turn, other creatures you control with power 4 or greater gain trample and haste until end of turn.",
+  "keywords": [
+    "Reach"
+  ]
+}
