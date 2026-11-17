@@ -1,0 +1,69 @@
+# Sword of Wealth and Power: "Equipped creature gets +2/+2 and has protection from instants and from sorceries." The equipped
+# Ornithopter (0/2, now 2/4) cannot be targeted by Bot2's Lightning Bolt (an instant) or Flame Slash (a sorcery), CR 702.16b; the
+# same spells do target and kill the unequipped Memnites (1/1), so it is the protection that refuses them. Equip {2} leaves the
+# Sword's controller's pool empty (cast for {3}).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Sword of Wealth and Power
+Ornithopter
+Memnite
+Memnite
+Island x12
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Flame Slash
+Mountain
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sword of Wealth and Power.Cast
+? Bot1.Mana =
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sword of Wealth and Power.Activate(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+! Bot2.Hand.Flame Slash.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite#1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Flame Slash.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Damage = 0
+Bot1.Battlefield.Sword of Wealth and Power.AttachedTo = Ornithopter
+Bot1.Graveyard.Count = 2
+Bot2.Graveyard = Flame Slash; Lightning Bolt

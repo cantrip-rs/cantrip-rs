@@ -1,0 +1,80 @@
+# Sword of Wealth and Power: the equipped Ornithopter (0/2, now 2/4) hits Bot2 on turn 3. "Whenever equipped creature deals combat
+# damage to a player, create a Treasure token. When you next cast an instant or sorcery spell this turn, copy that spell."
+# Bot1 gets the Treasure, then the delayed ability is waiting (Delayed.Count = 1). A creature spell (Memnite) does not use it up;
+# the next instant, a Lightning Bolt at Bot2, is copied once (the copy is not cast, CR 707.10) and the copy is aimed at Bot2's
+# Ornithopter instead: Bot2 takes 3 from the original and 2 from combat, the Ornithopter dies. The second Bolt is not copied.
+# Cast for {3} and equipped for {2}, each paying exactly.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Sword of Wealth and Power
+Ornithopter
+Memnite
+Lightning Bolt
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sword of Wealth and Power.Cast
+? Bot1.Mana =
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sword of Wealth and Power.Activate(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Attack(Ornithopter > Bot2)
+Bot2.Block()
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Treasure Token.Token = true
+? Delayed.Count = 1
+[T3 Bot1.Main2]
+Bot1.Hand.Memnite.Cast
+? Delayed.Count = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Delayed.Count = 0
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 15
+? Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Treasure Token.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 12
+Bot2.Battlefield.Count = 0
+Bot1.Battlefield = Memnite; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter; Sword of Wealth and Power
+Bot2.Graveyard.Count = 1
+Delayed.Count = 0

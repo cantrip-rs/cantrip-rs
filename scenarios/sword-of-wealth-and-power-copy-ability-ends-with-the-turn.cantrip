@@ -1,0 +1,55 @@
+# Sword of Wealth and Power: "When you next cast an instant or sorcery spell this turn, copy that spell." The equipped Ornithopter
+# hits Bot2 on turn 3 (Treasure made, copy waiting, Delayed.Count = 1) and no instant or sorcery is cast that turn: the delayed
+# ability ends with the turn (Delayed.Count = 0), so Bot1's Lightning Bolt on turn 5 is not copied (Bot2 20 -> 18 -> 15).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Sword of Wealth and Power
+Ornithopter
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sword of Wealth and Power.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sword of Wealth and Power.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Delayed.Count = 1
+? Bot2.Life = 18
+[T4 Bot2.Main1]
+? Delayed.Count = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 15
+Delayed.Count = 0
+Bot1.Battlefield.Count = 6

@@ -1,0 +1,53 @@
+# Sword of Wealth and Power triggers only on combat damage to a player: the equipped Ornithopter (2/4) is blocked by Bot2's
+# Ornithopter and deals its 2 to it, so no Treasure is made and no copy is set up (Delayed.Count stays 0). Bot1's Lightning Bolt
+# afterwards is a single Bolt: Bot2 goes 20 -> 17 and nothing asks for a copy's targets.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Sword of Wealth and Power
+Ornithopter
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sword of Wealth and Power.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sword of Wealth and Power.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Ornithopter > Bot2)
+Bot2.Block(Ornithopter > Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Delayed.Count = 0
+? Bot2.Life = 20
+? Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield = Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter; Sword of Wealth and Power
+Delayed.Count = 0
