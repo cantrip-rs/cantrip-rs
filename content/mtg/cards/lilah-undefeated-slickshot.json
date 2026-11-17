@@ -1,0 +1,8 @@
+{
+  "name": "Lilah, Undefeated Slickshot",
+  "manaCost": "{1}{U}{R}",
+  "type": "Legendary Creature — Human Rogue",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nWhenever you cast a multicolored instant or sorcery spell from your hand, exile that spell instead of putting it into your graveyard as it resolves. If you do, it becomes plotted. (You may cast it as a sorcery on a later turn without paying its mana cost.)"
+}

@@ -1,0 +1,57 @@
+# "...a multicolored instant or sorcery spell": a sorcery too. Bot1 casts Pursue the Past ({R}{W} sorcery) from its hand on turn 3
+# (declining the discard): it gains 2 life, then is exiled and plotted instead of going to the graveyard. It can't be cast the
+# turn it became plotted; on turn 5 Bot1 casts it from exile as a sorcery without paying, gaining 2 more.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Mountain
+Lilah, Undefeated Slickshot
+Pursue the Past
+Island
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lilah, Undefeated Slickshot.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pursue the Past.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack = Pursue the Past
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot1.Life = 22
+? Bot1.Graveyard.Count = 0
+? Exile.Count = 1
+! Bot1.Exile.Pursue the Past.Cast
+[T5 Bot1.Main1]
+Bot1.Exile.Pursue the Past.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 24
+Bot1.Graveyard = Pursue the Past
+Exile.Count = 0

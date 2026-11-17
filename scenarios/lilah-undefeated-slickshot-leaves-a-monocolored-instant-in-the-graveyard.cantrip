@@ -1,0 +1,41 @@
+# "Whenever you cast a multicolored instant or sorcery spell from your hand": a monocolored spell doesn't qualify. Bot1 has
+# Lilah, and casts a Lightning Bolt (red) from its hand on turn 3: it resolves, Bot2 takes 3, and it goes to the graveyard, not
+# exile. Only prowess triggers, so the stack holds the Bolt and the one trigger.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Mountain
+Lilah, Undefeated Slickshot
+Lightning Bolt
+Island
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lilah, Undefeated Slickshot.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt
+Exile.Count = 0

@@ -1,0 +1,45 @@
+# "Whenever you cast ...": only its controller's spells. Bot1 has Lilah; Bot2 casts a Lightning Helix (multicolored) from its own
+# hand on turn 2: it resolves (Bot1 takes 3, Bot2 gains 3), and goes to Bot2's graveyard, not exile, with no trigger for Bot1.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Mountain
+Lilah, Undefeated Slickshot
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Lightning Helix
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lilah, Undefeated Slickshot.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Lightning Helix.Cast(Bot1)
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 23
+Bot2.Graveyard = Lightning Helix
+Exile.Count = 0
