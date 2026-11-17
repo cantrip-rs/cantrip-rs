@@ -1,0 +1,63 @@
+# Hotshot Investigators: "return up to one other target creature to its owner's hand. If you controlled it, investigate" (CR 400.3, 608.2h). On turn 3 Bot1 casts it (Black Lotus and five Moxen pay the {5}{U}) with its own Ornithopter and
+# Bot2's Grizzly Bears in play: the Investigators itself is no legal target ("other"), two targets are refused (up to one), and returning Bot2's Bears, which goes to Bot2's hand, gives Bot1 no Clue.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Black Lotus
+Hotshot Investigators
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Grizzly Bears
+Lightning Bolt
+Island
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Hotshot Investigators.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Hotshot Investigators)
+! Bot1.Target(Bot2.Battlefield.Grizzly Bears; Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears = (absent)
+Bot2.Hand.Grizzly Bears.Power = 2
+Bot1.Battlefield = Hotshot Investigators; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter
