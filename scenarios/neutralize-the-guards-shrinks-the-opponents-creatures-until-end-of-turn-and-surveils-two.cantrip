@@ -1,0 +1,54 @@
+# Neutralize the Guards ({2}{B}) at Bot2: each creature Bot2 controls gets -1/-1 until end of turn, so its Memnite (1/1) dies and
+# its Ornithopter (0/2) becomes -1/1 and survives, while Bot1's own Memnite is untouched (CR 611.2c). Then Bot1 surveils 2
+# (CR 701.25): Forest and Island are the top two; Island goes back on top and Forest to the graveyard. The shrink ends at the
+# cleanup step (CR 514.2): the Ornithopter is 0/2 again on turn 4.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Mox Pearl
+Mox Ruby
+Neutralize the Guards
+Swamp
+Swamp
+Mountain
+Forest
+Island
+Swamp x15
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Neutralize the Guards.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | Forest)
+? Bot2.Battlefield.Ornithopter.Power = -1
+? Bot2.Battlefield.Ornithopter.Toughness = 1
+? Bot2.Graveyard = Memnite
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Graveyard = Neutralize the Guards; Forest
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Library = Island; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp
