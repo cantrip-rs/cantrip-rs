@@ -1,0 +1,66 @@
+# Rooftop Assassin's target is a creature "an opponent controls": on turn 3 Bot1 shocks its own Wall of Wood and Bot2's Wall of Wood
+# (both survive with 2 damage), then casts the Assassin. Its trigger can choose only Bot2's damaged Wall, which is destroyed; Bot1's
+# own damaged Wall and Bot2's undamaged Grizzly Bears stay (CR 115.1, 120.2, 701.8a).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Wall of Wood
+Shock
+Shock
+Rooftop Assassin
+Black Lotus
+Swamp x14
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Wall of Wood
+Island
+Island
+Island
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wall of Wood.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Wall of Wood.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Wall of Wood)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Wall of Wood)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wall of Wood.Damage = 2
+? Bot2.Battlefield.Wall of Wood.Damage = 2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rooftop Assassin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Wall of Wood = (absent)
+Bot2.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Battlefield.Wall of Wood.Damage = 2
+Bot1.Battlefield.Rooftop Assassin.Power = 2

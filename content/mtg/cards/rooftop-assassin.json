@@ -1,0 +1,13 @@
+{
+  "name": "Rooftop Assassin",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Vampire Assassin",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flash\nFlying, lifelink\nWhen this creature enters, destroy target creature an opponent controls that was dealt damage this turn.",
+  "keywords": [
+    "Flash",
+    "Flying",
+    "Lifelink"
+  ]
+}

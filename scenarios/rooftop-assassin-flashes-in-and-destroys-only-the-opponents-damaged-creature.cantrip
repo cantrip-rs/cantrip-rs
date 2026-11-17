@@ -1,0 +1,57 @@
+# Rooftop Assassin: "Flash. Flying, lifelink. When this creature enters, destroy target creature an opponent controls that was dealt
+# damage this turn." On turn 2, at Bot2's end step, Bot1 shocks Bot2's Wall of Wood (it survives with 2 damage) and flashes in the
+# Assassin (CR 702.8a) with Black Lotus and a Mox: its trigger can choose the damaged Wall but not Bot2's undamaged Grizzly Bears
+# (CR 115.1, 120.2), so the Wall alone is destroyed (CR 701.8a) and the Bears are untouched. The Assassin has the keywords its text gives.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Shock
+Rooftop Assassin
+Swamp
+Swamp
+Swamp x14
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Wall of Wood
+Island
+Island
+Island
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Wall of Wood.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.End]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Wall of Wood)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Wall of Wood.Damage = 2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Rooftop Assassin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Wall of Wood = (absent)
+Bot2.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Battlefield.Rooftop Assassin.Keywords = Flash; Flying; Lifelink
