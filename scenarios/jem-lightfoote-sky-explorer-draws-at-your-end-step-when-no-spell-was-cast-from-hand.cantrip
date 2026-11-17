@@ -1,0 +1,46 @@
+# Jem Lightfoote, Sky Explorer: "Flying, vigilance" and "At the beginning of your end step, if you haven't cast a spell from
+# your hand this turn, draw a card." (CR 603.4). Jem is cast on turn 1 (a spell from hand, so no draw at that end step) and
+# Bot2's turn 2 end step is not Bot1's. On turn 3 Bot1 plays a land (not a spell) and attacks with Jem, who stays untapped
+# (vigilance) and deals 3 in the air (17): at Bot1's end step the trigger draws one card, 2 in hand -> 3.
+
+[Bot1 Deck]
+Jem Lightfoote, Sky Explorer
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mountain
+Island
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Jem Lightfoote, Sky Explorer.Cast
+? Bot1.Hand.Count = 2
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 3
+? Bot1.Battlefield.Jem Lightfoote, Sky Explorer.Keywords = Flying; Vigilance
+Bot1.Hand.Mountain.Play
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Jem Lightfoote, Sky Explorer > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jem Lightfoote, Sky Explorer.Tapped = false
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Hand.Count = 3

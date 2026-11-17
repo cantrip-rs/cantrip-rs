@@ -1,0 +1,41 @@
+# Jem Lightfoote, Sky Explorer: the intervening "if" is checked again as the ability resolves (CR 603.4; ruling 2024-04-12).
+# At Bot1's turn 3 end step no spell has been cast from hand, so the trigger goes on the stack; Bot1 then casts Death Ward
+# on Jem from hand in response and the trigger does nothing when it resolves: hand Mountain, Island = 2 (the neighbouring
+# scenario, with no response, draws to 3).
+
+[Bot1 Deck]
+Jem Lightfoote, Sky Explorer
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mountain
+Island
+Death Ward
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Jem Lightfoote, Sky Explorer.Cast
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Death Ward.Cast(Bot1.Battlefield.Jem Lightfoote, Sky Explorer)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot1.Graveyard = Death Ward
