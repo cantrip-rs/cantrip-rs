@@ -1,0 +1,37 @@
+# Jagged Barrens: it is a Desert, it enters tapped, and its enters trigger deals exactly 1 damage to target opponent. Its controller
+# is not a legal target, so the opponent is the only candidate and no target question is asked (a trigger that could
+# target either player would ask); its controller stays at 20. Next turn it untaps and adds {B} or {R} and nothing else:
+# the other colors and colorless are refused beside the color it does add, and the pool holds exactly one mana after the
+# tap (the cost {T} paid once); the turn after, it adds the other color.
+
+[Bot1 Deck]
+Jagged Barrens
+Swamp x19
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Jagged Barrens.Play
+! Bot1.Target
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Life = 20
+? Bot1.Battlefield.Jagged Barrens.Tapped = true
+? Bot1.Battlefield.Jagged Barrens.Subtypes = Desert
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Jagged Barrens.Activate(Color: White)
+! Bot1.Battlefield.Jagged Barrens.Activate(Color: Blue)
+! Bot1.Battlefield.Jagged Barrens.Activate(Color: Green)
+! Bot1.Battlefield.Jagged Barrens.Activate(Color: Colorless)
+Bot1.Battlefield.Jagged Barrens.Activate(Color: Black)
+? Bot1.Mana = {B}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Jagged Barrens.Activate(Color: Red)
+? Bot1.Mana = {R}
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20
+Bot1.Battlefield.Jagged Barrens.Tapped = true
