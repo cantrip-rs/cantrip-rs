@@ -9,21 +9,13 @@ fn instant_or_sorcery_card_with_mana_value_2_or_less_in_your_graveyard(q: &dyn Q
     targets::card_in_your_graveyard_with_mana_value_at_most(q, asker, t, &[CardType::Instant, CardType::Sorcery], 2)
 }
 
-/// "Exile up to one target ... card. Copy it. You may cast the copy without paying its mana cost" (CR 400.7, 707.12, 608.2g): the
-/// target is exiled (a new object) and "it" is the card in exile, copied there and cast as the shared recipe says. With the target
-/// gone, or none chosen ("up to one"), nothing is exiled or copied (CR 608.2b).
-fn exile_and_may_cast_a_copy_without_paying(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(card) = targets::object(g, item, 0) else { return Ok(()) };
-    let exiled = g.exile(card);
-    copy::may_cast_a_copy_without_paying(g, item.controller, exiled)
-}
-
 /// Void is an ability word (CR 207.2c): the intervening "if" (CR 603.4) is `history::void`, checked as the creature enters
-/// and again as the ability resolves. "Up to one target" may be none; the copy is cast by the shared recipe.
+/// and again as the ability resolves. "Up to one target" may be none: then, or with the target gone, nothing is exiled or copied
+/// (CR 608.2b); `copy::exile_first_target_and_may_cast_a_copy_without_paying` does the rest.
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         THIS_ENTERS,
-        exile_and_may_cast_a_copy_without_paying,
+        copy::exile_first_target_and_may_cast_a_copy_without_paying,
         "Void \u{2014} When this creature enters, if a nonland permanent left the battlefield this turn or a spell was warped this turn, exile up to one target instant or sorcery card with mana value 2 or less from your graveyard. Copy it. You may cast the copy without paying its mana cost.",
     )
     .condition(|q, _| history::void(q))

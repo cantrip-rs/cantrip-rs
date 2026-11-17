@@ -232,6 +232,16 @@ pub fn may_cast_a_copy_without_paying(g: &mut dyn Game, player: PlayerId, of: Ob
     Ok(())
 }
 
+/// "Exile target [card]. Copy it. You may cast the copy without paying its mana cost" (CR 400.7, 707.12, 608.2g): the first target is
+/// exiled (a new object) and "it" is the card in exile, copied there and cast as `may_cast_a_copy_without_paying` says. With the
+/// target gone, or none chosen ("up to one"), nothing is exiled or copied (CR 608.2b). Shiko, Paragon of the Way, Roving Actuator and
+/// Reenact the Crime print it.
+pub fn exile_first_target_and_may_cast_a_copy_without_paying(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(card) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    let exiled = g.exile(card);
+    may_cast_a_copy_without_paying(g, item.controller, exiled)
+}
+
 /// "Copy it. You may cast the copy" (CR 707.12, 608.2g): `may_cast_a_copy_without_paying` with every cost paid (CR 601.2f-h), its mana
 /// cost or an alternative cost it has, and an {X} chosen as it is cast. It is cast as the effect resolves or not at all; a copy not
 /// cast ceases to exist in exile (CR 707.10a, 704.5e). Whether the copy was cast comes back, for an "if you do" (CR 608.2c): false
