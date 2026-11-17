@@ -313,6 +313,12 @@ pub enum Event {
     /// for free as a sorcery on a later turn (CR 702.170d). "When this card becomes plotted" (Aloe Alchemist) is the card's own ability,
     /// functioning in exile.
     Plotted { card: ObjectId, player: PlayerId },
+    /// A permanent became saddled (CR 702.171a-b): the resolution of a saddle ability, as the permanent is given the designation. A
+    /// permanent that was already saddled this turn becomes saddled again when another saddle ability resolves (it is "saddle N"
+    /// that makes it so, whatever it was), which is why "becomes saddled for the first time each turn" is a limit (Stubborn
+    /// Burrowfiend). Not emitted for a permanent that has left the battlefield by then. The creatures that were tapped to pay for
+    /// it are `Saddled`, at activation.
+    BecameSaddled { permanent: ObjectId },
     /// A player became the monarch (CR 725.1, 725.4): it was not theirs before.
     BecameMonarch { player: PlayerId },
     /// A player took the initiative (CR 726.1), even one who had it (CR 726.5): what makes them venture into Undercity
@@ -698,7 +704,8 @@ impl Event {
             | Event::PhasedOut { permanent, .. }
             | Event::PhasedIn { permanent }
             | Event::ControlChanged { permanent, .. }
-            | Event::DoorUnlocked { permanent, .. } => permanent == object,
+            | Event::DoorUnlocked { permanent, .. }
+            | Event::BecameSaddled { permanent } => permanent == object,
             Event::Mutated { permanent, spell, .. } => permanent == object || spell == object,
             Event::Melded { permanent, card } => permanent == object || card == object,
             Event::Unattached { attachment, from } => attachment == object || from == object,
@@ -817,6 +824,8 @@ impl EventMask {
     pub const SADDLED: EventMask = EventMask(1 << 66);
     /// A player foraged (CR 701.61a).
     pub const FORAGED: EventMask = EventMask(1 << 68);
+    /// A permanent became saddled (CR 702.171a).
+    pub const BECAME_SADDLED: EventMask = EventMask(1 << 73);
     /// A spell merged with a permanent (CR 702.140d), a distinct event from transforming.
     pub const MUTATED: EventMask = EventMask(1 << 70);
     /// A player manifested dread (CR 701.62b).
@@ -907,6 +916,7 @@ impl EventMask {
             Event::Crewed { .. } => EventMask::CREWED,
             Event::Saddled { .. } => EventMask::SADDLED,
             Event::Plotted { .. } => EventMask::PLOTTED,
+            Event::BecameSaddled { .. } => EventMask::BECAME_SADDLED,
             Event::BecameMonarch { .. } => EventMask::BECAME_MONARCH,
             Event::TookInitiative { .. } => EventMask::TOOK_INITIATIVE,
             Event::CoinFlipped { .. } => EventMask::COIN_FLIPPED,
