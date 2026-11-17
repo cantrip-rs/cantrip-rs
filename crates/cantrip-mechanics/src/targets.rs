@@ -543,6 +543,15 @@ fn spell_or_permanent_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     spell_filter(q, asker, t) || permanent_filter(q, asker, t)
 }
 
+/// "Target spell or nonland permanent" (CR 115.1): a spell on the stack, of any kind, or a permanent on the battlefield that is not a
+/// land. Sudden Setback prints it; Sink into Stupor narrows it to an opponent's (`spell_or_nonland_permanent_filter`).
+pub const SPELL_OR_NONLAND_PERMANENT: TargetSpec = target(spell_or_nonland_permanent_filter);
+
+/// The filter of `SPELL_OR_NONLAND_PERMANENT`, for a card that narrows it further.
+pub fn spell_or_nonland_permanent_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    spell_filter(q, asker, t) || nonland_permanent_filter(q, asker, t)
+}
+
 /// Whether a target is a card in a graveyard with one of these types.
 pub fn card_in_graveyard(q: &dyn Query, t: Target, types: &[CardType]) -> bool {
     match t {

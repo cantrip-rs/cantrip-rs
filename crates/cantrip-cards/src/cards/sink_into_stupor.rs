@@ -15,7 +15,7 @@ fn controller_of(q: &dyn Query, id: ObjectId) -> Option<PlayerId> {
 fn spell_or_nonland_permanent_of_an_opponent(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     let Target::Object(id) = t else { return false };
     let Some(controller) = controller_of(q, id) else { return false };
-    controller != asker.controller && (q.state().stack.iter().any(|i| i.kind == StackKind::Spell && i.object == id) || !q.chars(id).is(CardType::Land))
+    controller != asker.controller && targets::spell_or_nonland_permanent_filter(q, asker, t)
 }
 
 /// Return target spell or nonland permanent an opponent controls to its owner's hand. A spell is not countered: it
