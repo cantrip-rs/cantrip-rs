@@ -1,0 +1,59 @@
+# Forensic Researcher: "{T}: Untap another target permanent you control." Turn 3: Mox Sapphire (an artifact), tapped for mana, is untapped by the
+# Researcher and taps for mana again ({U}{U} in all). Turn 5: Memnite (a creature) attacks and is untapped after combat. The Researcher itself is
+# refused as its own target (another), and so are Bot2's tapped Mox Jet and Bot2's own Memnite (you control).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Forensic Researcher
+Memnite
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Jet
+Memnite
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Forensic Researcher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Jet.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana = {U}
+! Bot1.Battlefield.Forensic Researcher.Activate(Forensic Researcher; Ability: Untap)
+! Bot1.Battlefield.Forensic Researcher.Activate(Bot2.Battlefield.Mox Jet; Ability: Untap)
+! Bot1.Battlefield.Forensic Researcher.Activate(Bot2.Battlefield.Memnite; Ability: Untap)
+? Bot2.Battlefield.Mox Jet.Tapped = true
+Bot1.Battlefield.Forensic Researcher.Activate(Bot1.Battlefield.Mox Sapphire; Ability: Untap)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Sapphire.Tapped = false
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana = {U}{U}
+[T5 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+? Bot1.Battlefield.Memnite.Tapped = true
+[T5 Bot1.Main2]
+Bot1.Battlefield.Forensic Researcher.Activate(Bot1.Battlefield.Memnite; Ability: Untap)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Battlefield.Forensic Researcher.Tapped = true

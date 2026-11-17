@@ -1,0 +1,8 @@
+{
+  "name": "Forensic Researcher",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Merfolk Detective",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "{T}: Untap another target permanent you control.\n{T}, Collect evidence 3: Tap target creature you don't control. (To collect evidence 3, exile cards with total mana value 3 or greater from your graveyard.)"
+}

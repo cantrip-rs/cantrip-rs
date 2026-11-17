@@ -1,0 +1,51 @@
+# Forensic Researcher: "{T}, Collect evidence 3: Tap target creature you don't control." (CR 701.59a). Turn 1 Bot1 casts the Researcher with three
+# Moxes; turn 3 it casts Entomb for Counterspell, so its graveyard holds Entomb (mana value 1) and Counterspell (2): exactly 3. It exiles both
+# as the cost, the ability taps Bot2's Memnite, and the Researcher is tapped. Its own creature is no target ("you don't control").
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Jet
+Forensic Researcher
+Entomb
+Island
+Island
+Counterspell
+Island x11
+
+[Bot2 Deck]
+Memnite
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Forensic Researcher.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Search(Counterspell)
+Bot2.Pass
+? Bot1.Graveyard = Entomb; Counterspell
+! Bot1.Battlefield.Forensic Researcher.Activate(Forensic Researcher; Ability: Collect evidence)
+Bot1.Battlefield.Forensic Researcher.Activate(Bot2.Battlefield.Memnite; Ability: Collect evidence)
+Bot1.Choose(Counterspell; Entomb)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Memnite.Tapped = true
+Bot1.Battlefield.Forensic Researcher.Tapped = true
+Bot1.Graveyard = 
+Exile = Counterspell; Entomb

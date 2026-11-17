@@ -1,0 +1,47 @@
+# Forensic Researcher: "Collect evidence 3" needs cards with total mana value 3 or greater (CR 701.59a); with fewer the cost cannot be paid at all
+# (CR 701.59b, the rulings). The same game as the exact-three one, but Entomb fetches Lightning Bolt: the graveyard holds Entomb (1) and the Bolt (1),
+# only 2, so the ability is refused and Bot2's Memnite stays untapped; nothing is exiled.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Jet
+Forensic Researcher
+Entomb
+Island
+Island
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Memnite
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Forensic Researcher.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Search(Lightning Bolt)
+Bot2.Pass
+? Bot1.Graveyard = Entomb; Lightning Bolt
+! Bot1.Battlefield.Forensic Researcher.Activate(Bot2.Battlefield.Memnite; Ability: Collect evidence)
+
+[Expect]
+Bot2.Battlefield.Memnite.Tapped = false
+Bot1.Battlefield.Forensic Researcher.Tapped = false
+Bot1.Graveyard = Entomb; Lightning Bolt
+Exile = 
