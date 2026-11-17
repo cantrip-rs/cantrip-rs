@@ -1,0 +1,51 @@
+# Disguise {1}{U} (CR 702.168d): the Falcon is cast face down for {3}, then turned face up on turn 3 for exactly Mox Sapphire's {U} and Mox Emerald's {G} (the pool is empty afterwards). "When this creature is turned
+# face up, target opponent gains control of any number of target permanents you control. Draw a card for each one they gained control of this way": Bot1 aims it at Mox Ruby and Mox Pearl, Bot2 gains both
+# (CR 613.1b) - Bot2's own Ornithopter cannot be chosen - and Bot1 draws two cards in one draw (hand 2 -> 4), and keeps everything else, the Falcon included.
+
+[Bot1 Deck]
+Coveted Falcon
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Island
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Coveted Falcon.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Mana =
+? Bot1.Hand.Count = 2
+Bot1.Target(Bot2)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Mox Ruby; Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+
+[Expect]
+Bot2.Battlefield = Ornithopter; Mox Ruby; Mox Pearl
+Bot1.Battlefield = Coveted Falcon; Mox Jet; Mox Sapphire; Mox Emerald
+Bot1.Hand.Count = 4

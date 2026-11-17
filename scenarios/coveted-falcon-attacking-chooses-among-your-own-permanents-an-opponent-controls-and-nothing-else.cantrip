@@ -1,0 +1,60 @@
+# "Gain control of target permanent you own but don't control": with two of Bot1's Moxen in Bot2's hands (Pearl, Jet - two Harmless Offerings, on turns 1 and 3) the attack trigger asks for a choice among
+# exactly those two. Bot1's own Mox Ruby (it controls it) and Bot2's own Ornithopter (it owns it) are refused; Bot1 takes the Jet back and Bot2 keeps the Pearl.
+
+[Bot1 Deck]
+Black Lotus
+Coveted Falcon
+Harmless Offering
+Harmless Offering
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Coveted Falcon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Ornithopter; Mox Pearl; Mox Jet
+Bot1.Attack(Coveted Falcon > Bot2)
+! Bot1.Target(Bot1.Battlefield.Mox Ruby)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Ornithopter; Mox Pearl
+Bot1.Battlefield = Coveted Falcon; Mox Ruby; Mox Sapphire; Mox Jet

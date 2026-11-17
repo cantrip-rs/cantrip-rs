@@ -1,0 +1,47 @@
+# "Any number of target permanents": Bot1 turns the Falcon face up and chooses no permanents at all. The trigger still goes on the stack and resolves (CR 115.1d, 601.2c), Bot2 gains nothing, so
+# no card is drawn ("a card for each one they gained control of this way", CR 608.2c): Bot1's hand stays at the two it drew and held, and every permanent stays where it was.
+
+[Bot1 Deck]
+Coveted Falcon
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Island
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Coveted Falcon.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Target(Bot2)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot2.Battlefield = Ornithopter
+Bot1.Battlefield = Coveted Falcon; Mox Ruby; Mox Jet; Mox Pearl; Mox Sapphire; Mox Emerald

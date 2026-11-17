@@ -1,0 +1,53 @@
+# "Whenever this creature attacks, gain control of target permanent you own but don't control" (CR 108.3, 109.4): Bot1 gives Bot2 its Mox Sapphire with Harmless Offering, then attacks with the Falcon;
+# the trigger has exactly one legal target - not Bot1's own Moxen (it controls them) nor Bot2's own Ornithopter (it owns it) - so it is put on the stack aimed at the Sapphire with no choice asked, and takes it back with no duration (CR 611.2), so it is still Bot1's
+# on the next turn. The Falcon (1/4 flying) is the one that attacked.
+
+[Bot1 Deck]
+Black Lotus
+Coveted Falcon
+Harmless Offering
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Coveted Falcon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Mox Sapphire.Tapped = false
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Coveted Falcon > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Sapphire.Tapped = false
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Count = 1
+? Bot1.Battlefield.Mox Sapphire.Tapped = false
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Coveted Falcon; Mox Ruby; Mox Jet; Mox Pearl
+Bot2.Battlefield = Ornithopter

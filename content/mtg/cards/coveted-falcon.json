@@ -1,0 +1,11 @@
+{
+  "name": "Coveted Falcon",
+  "manaCost": "{1}{U}{U}",
+  "type": "Artifact Creature — Bird",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Flying\nWhenever this creature attacks, gain control of target permanent you own but don't control.\nDisguise {1}{U}\nWhen this creature is turned face up, target opponent gains control of any number of target permanents you control. Draw a card for each one they gained control of this way.",
+  "keywords": [
+    "Flying"
+  ]
+}
