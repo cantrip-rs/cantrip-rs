@@ -1,0 +1,36 @@
+# Vault Plunderer: "When this creature enters, target player draws a card and loses 1 life." Bot1 targets the opponent: Bot2 goes
+# from seven cards to eight and from 20 life to 19 (CR 121.1, 119.3), while Bot1 (seven cards less three Moxen and the Plunderer)
+# and its life are untouched.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Vault Plunderer
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Vault Plunderer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Vault Plunderer.Power = 3
+Bot1.Battlefield.Vault Plunderer.Toughness = 1
+Bot1.Hand.Count = 3
+Bot1.Life = 20
+Bot2.Hand.Count = 8
+Bot2.Life = 19

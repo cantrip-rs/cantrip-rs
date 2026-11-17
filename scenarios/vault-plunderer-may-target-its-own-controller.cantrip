@@ -1,0 +1,35 @@
+# Vault Plunderer's target is "target player", not "target opponent": Bot1 may choose itself, drawing a card (four left in hand
+# instead of three) and going from 20 life to 19, while Bot2 is untouched (pair of the opponent scenario, CR 115.1, 121.1, 119.3).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Vault Plunderer
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Vault Plunderer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Vault Plunderer.Power = 3
+Bot1.Battlefield.Vault Plunderer.Toughness = 1
+Bot1.Hand.Count = 4
+Bot1.Life = 19
+Bot2.Hand.Count = 7
+Bot2.Life = 20

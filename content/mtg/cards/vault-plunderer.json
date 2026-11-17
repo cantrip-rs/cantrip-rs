@@ -1,0 +1,8 @@
+{
+  "name": "Vault Plunderer",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Human Rogue",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "When this creature enters, target player draws a card and loses 1 life."
+}
