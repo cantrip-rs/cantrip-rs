@@ -1,0 +1,8 @@
+{
+  "name": "Riku of Many Paths",
+  "manaCost": "{G}{U}{R}",
+  "type": "Legendary Creature — Human Wizard",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever you cast a modal spell, choose up to X, where X is the number of times you chose a mode for that spell —\n• Exile the top card of your library. Until the end of your next turn, you may play it.\n• Put a +1/+1 counter on Riku. It gains trample until end of turn.\n• Create a 1/1 blue Bird creature token with flying."
+}

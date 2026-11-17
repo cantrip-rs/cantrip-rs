@@ -1,0 +1,111 @@
+# Riku of Many Paths: "Whenever you cast a modal spell, choose up to X, where X is the number of times you chose a mode for that
+# spell" (CR 700.2, 603.3c). Turn 1: Riku comes down with Mox Emerald, Mox Sapphire and Mox Ruby. Turn 3: Kolaghan's Command with
+# two modes gives X = 2, so three modes are refused beside two chosen: the top card (Ornithopter) is exiled and a 1/1 blue flying
+# Bird is made; Ornithopter, cast from exile, is no modal spell and triggers nothing. Turn 4: Bot2's Boros Charm is not Bot1's spell,
+# and Bot1's Holy Day in response to it is no modal spell either (the last modal spell cast was Bot2's): no trigger. Turn 5: Boros
+# Charm with one mode gives X = 1, so only the counter-and-trample mode is taken (two are refused): Riku is a 4/4 with trample.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Riku of Many Paths
+Mox Jet
+Kolaghan's Command
+Mox Pearl
+Holy Day
+Ornithopter
+Boros Charm
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Boros Charm
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Riku of Many Paths.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Kolaghan's Command.Cast
+Bot1.Modes(2; 4)
+Bot1.Target(Bot2)
+Bot1.Target(Bot2)
+! Bot1.Modes(1; 2; 3)
+Bot1.Modes(1; 3)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Island)
+? Exile.Count = 1
+? Bot2.Life = 18
+? Bot1.Battlefield.Bird Token.Colors = Blue
+? Bot1.Battlefield.Bird Token.Power = 1
+? Bot1.Battlefield.Bird Token.Toughness = 1
+? Bot1.Battlefield.Bird Token.Keywords = Flying
+Bot1.Exile.Ornithopter.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Boros Charm.Cast
+Bot2.Modes(1)
+Bot2.Target(Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Holy Day.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Life = 16
+? Exile.Count = 0
+? Bot1.Battlefield.Count = 8
+? Bot1.Battlefield.Riku of Many Paths.Power = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Boros Charm.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot2)
+! Bot1.Modes(1; 2)
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Riku of Many Paths.Power = 4
+Bot1.Battlefield.Riku of Many Paths.Toughness = 4
+Bot1.Battlefield.Riku of Many Paths.Keywords = Trample
+Bot1.Battlefield.Count = 8
