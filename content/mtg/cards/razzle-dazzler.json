@@ -1,0 +1,8 @@
+{
+  "name": "Razzle-Dazzler",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human Wizard",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Whenever you cast your second spell each turn, put a +1/+1 counter on this creature. It can't be blocked this turn."
+}

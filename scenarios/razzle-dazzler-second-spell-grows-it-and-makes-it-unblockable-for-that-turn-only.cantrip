@@ -1,0 +1,75 @@
+# Razzle-Dazzler: 1/2; "Whenever you cast your second spell each turn, put a +1/+1 counter on this creature. It can't be blocked
+# this turn." Turn 1: Bot1 casts Mox Ruby, Mox Sapphire, then the Dazzler itself as the third spell (spells cast before it came in count,
+# so no trigger: it was the third, not the second). Turn 2: Bot2's own second spell (Mox Ruby after an Ornithopter) does nothing.
+# Turn 3: Bot1's second spell (Ornithopter, after Mox Pearl) triggers it: a counter (2/3) and no blocks this turn - Bot2's
+# Ornithopter cannot block it, and 2 damage lands; the third spell adds nothing. Turn 5: only a first spell, so no counter and
+# the Ornithopter blocks it again (the unblockable effect ended with turn 3).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Razzle-Dazzler
+Mox Pearl
+Ornithopter
+Mox Jet
+Ornithopter
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Razzle-Dazzler.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Razzle-Dazzler.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Razzle-Dazzler.Power = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Razzle-Dazzler.Power = 2
+? Bot1.Battlefield.Razzle-Dazzler.Toughness = 3
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Razzle-Dazzler.Power = 2
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Razzle-Dazzler > Bot2)
+! Bot2.Block(Ornithopter > Razzle-Dazzler)
+[T3 Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Razzle-Dazzler > Bot2)
+Bot2.Block(Ornithopter > Razzle-Dazzler)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Razzle-Dazzler.Power = 2
+Bot1.Battlefield.Razzle-Dazzler.Counters.PlusOnePlusOne = 1
