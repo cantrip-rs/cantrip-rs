@@ -1,0 +1,46 @@
+# Consuming Ashes: "Exile target creature. If it had mana value 3 or less, surveil 2." Bot2's Blacksnag Buzzard has mana value 3,
+# exactly the limit (CR 202.3): it is exiled and its controller's deck is not touched, while Bot1 surveils 2 - Mox Pearl to the graveyard and
+# Mox Ruby kept on top (CR 701.25a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Consuming Ashes
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Mox Pearl
+Mox Ruby
+Swamp x9
+
+[Bot2 Deck]
+Black Lotus
+Blacksnag Buzzard
+Swamp x18
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Blacksnag Buzzard.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Consuming Ashes.Cast(Target: Blacksnag Buzzard)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Mox Ruby | Mox Pearl)
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield = 
+Bot2.Exile.Blacksnag Buzzard.Power = 2
+Bot1.Graveyard = Consuming Ashes; Mox Pearl; Black Lotus
+Bot1.Library.Top = Mox Ruby
+Bot1.Surveilled = 2 requested, 2 looked

@@ -1,0 +1,44 @@
+# Consuming Ashes: Bot2's Walking Ballista was cast for X=1 (cost 2) and carries a +1/+1 counter, but on the battlefield X is 0
+# (CR 202.3e), so its mana value is 0: it is exiled and Bot1 surveils 2 (Mox Pearl to the graveyard, Mox Ruby kept on top).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Consuming Ashes
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Mox Pearl
+Mox Ruby
+Swamp x9
+
+[Bot2 Deck]
+Black Lotus
+Walking Ballista
+Swamp x18
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Walking Ballista.Cast(X: 1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Consuming Ashes.Cast(Bot2.Battlefield.Walking Ballista)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Mox Ruby | Mox Pearl)
+
+[Expect]
+Stack.Count = 0
+Bot2.Exile.Walking Ballista.Power = 0
+Bot1.Graveyard = Consuming Ashes; Mox Pearl; Black Lotus
+Bot1.Library.Top = Mox Ruby
+Bot1.Surveilled = 2 requested, 2 looked

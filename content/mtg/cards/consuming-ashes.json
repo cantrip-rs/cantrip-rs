@@ -1,0 +1,6 @@
+{
+  "name": "Consuming Ashes",
+  "manaCost": "{2}{B}{B}",
+  "type": "Instant",
+  "oracleText": "Exile target creature. If it had mana value 3 or less, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)"
+}

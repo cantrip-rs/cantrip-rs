@@ -1,0 +1,46 @@
+# Consuming Ashes: Bot2's Boneyard Desecrator has mana value 4, one past the limit: it is exiled, and Bot1 does not surveil (CR 608.2c).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Consuming Ashes
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Mox Pearl
+Mox Ruby
+Swamp x9
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Boneyard Desecrator
+Swamp x17
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Boneyard Desecrator.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Consuming Ashes.Cast(Target: Boneyard Desecrator)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield = Mox Jet
+Bot2.Exile.Boneyard Desecrator.Power = 3
+Bot1.Graveyard = Consuming Ashes; Black Lotus
+Bot1.Library.Top = Mox Pearl
+Bot1.Surveilled = (absent)
