@@ -1,0 +1,60 @@
+# Freestrider Lookout: "This ability triggers only once each turn" (CR 603.4a). Bot1's second Bolt at Bot2 in turn 1 is another crime and is not asked
+# (one item on the stack). On turn 3 a third Bolt is a new turn's first crime and the trigger looks at five again (Bot1 drew the Savannah Lions; the top
+# five are now Islands) and Bot1 puts an Island onto the battlefield tapped.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Black Lotus
+Freestrider Lookout
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Memnite
+Forest
+Memnite
+Forest
+Memnite
+Savannah Lions
+Island x7
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Freestrider Lookout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 1
+! Bot1.Choose
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 14
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+? Bot1.Battlefield.Island.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 11
+
+[Expect]
+Bot1.Battlefield = Mountain; Freestrider Lookout; Mox Ruby; Forest; Island

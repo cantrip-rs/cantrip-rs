@@ -1,0 +1,32 @@
+# Freestrider Lookout: only a crime triggers it (CR 700.13): Bot1's Lightning Bolt at itself targets no opponent, nothing of theirs and no card in
+# their graveyard, so the Bolt is the only item on the stack and nothing is looked at.
+
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Freestrider Lookout
+Lightning Bolt
+Plains x3
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Freestrider Lookout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+? Stack.Count = 1
+! Bot1.Choose
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 13
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield = Freestrider Lookout; Mox Ruby

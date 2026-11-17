@@ -1,0 +1,41 @@
+# Freestrider Lookout: "You may put a land card from among them onto the battlefield tapped." Bot1 declines: the Forest among the five looked at goes
+# to the bottom with the other four and the library keeps its thirteen cards.
+
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Freestrider Lookout
+Lightning Bolt
+Plains
+Plains
+Plains
+Memnite
+Forest
+Memnite
+Memnite
+Memnite
+Savannah Lions
+Island x7
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Freestrider Lookout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot1.Library.Count = 13
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Freestrider Lookout; Mox Ruby
+Bot2.Life = 17
