@@ -273,6 +273,14 @@ pub fn attached_to_it(q: &dyn Query, asker: &Asker, affected: ObjectId) -> bool 
     q.obj(asker.source).attached_to == Some(affected)
 }
 
+/// "For as long as [this Equipment / that Aura] remains attached to it" (CR 611.2b) as a `Lasting` condition: the attachment is
+/// the object recorded as the effect's source (the handle the duration follows), still the same object on the battlefield and attached to the permanent the effect affects; one that has
+/// moved to another permanent, become unattached, or left (a new object, CR 400.7) ends it for good. Assimilation Aegis (its own
+/// Equipment) and Eriette the Beguiler (the Aura that set off its trigger) print it.
+pub fn source_remains_attached_to_it(q: &dyn Query, e: &ContinuousEffect) -> bool {
+    q.attached_to(e.source) == Some(e.affected)
+}
+
 /// "Activate only if enchanted land is untapped" (CR 602.5): a restriction on activating an Aura's ability, true while the
 /// permanent the source is attached to is untapped, and false while the source is attached to nothing. Earthlore and
 /// Tourach's Gate print it.

@@ -1,15 +1,9 @@
 use cantrip_api::*;
-use cantrip_mechanics::attach::equip;
+use cantrip_mechanics::attach::{equip, source_remains_attached_to_it};
 use cantrip_mechanics::exile_target_until_leaves_effect;
 use cantrip_mechanics::targets;
 use cantrip_mechanics::triggers::{THIS_BECOMES_ATTACHED_TO_A_CREATURE, THIS_ENTERS};
 use cantrip_oracle as oracle;
-
-/// "For as long as this Equipment remains attached to it" (CR 611.2b): the Equipment is the effect's source, and it is still
-/// on the battlefield attached to the creature the effect affects.
-fn remains_attached(q: &dyn Query, e: &ContinuousEffect) -> bool {
-    q.attached_to(e.source) == Some(e.affected)
-}
 
 /// "That creature becomes a copy of a creature card exiled with this Equipment" (CR 707.2, 611.2b, 607.2a). The Equipment is
 /// a new object each time it enters, and it exiles at most one card (an "up to one" target), so there is at most one card
@@ -38,6 +32,6 @@ pub static CARD: CardDef = CardDef {
         ),
         equip(mana("{2}"), "Equip {2}"),
     ],
-    lasting: &[Lasting { text: "{source} remains attached to it", holds: remains_attached }],
+    lasting: &[Lasting { text: "{source} remains attached to it", holds: source_remains_attached_to_it }],
     ..oracle::ASSIMILATION_AEGIS
 };
