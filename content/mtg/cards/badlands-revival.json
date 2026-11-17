@@ -1,0 +1,6 @@
+{
+  "name": "Badlands Revival",
+  "manaCost": "{3}{B}{G}",
+  "type": "Sorcery",
+  "oracleText": "Return up to one target creature card from your graveyard to the battlefield. Return up to one target permanent card from your graveyard to your hand."
+}

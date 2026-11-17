@@ -1,0 +1,42 @@
+# Badlands Revival with its creature target left unchosen (CR 115.1a, 601.2c): the Llanowar Elves chosen as the permanent target
+# goes to its controller's hand, not to the battlefield - the second instruction acts on the second target alone.
+# Badlands Revival {3}{B}{G}: Sorcery
+#   Return up to one target creature card from your graveyard to the battlefield. Return up to one target permanent card
+#   from your graveyard to your hand.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Llanowar Elves
+Lightning Bolt
+Badlands Revival
+Black Lotus
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Llanowar Elves)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Badlands Revival.Cast
+Bot1.Target
+Bot1.Target(Bot1.Graveyard.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Llanowar Elves; Swamp
+Bot1.Battlefield.Count = 3
+Bot1.Graveyard = Badlands Revival; Black Lotus; Lightning Bolt

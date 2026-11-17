@@ -1,0 +1,80 @@
+# Badlands Revival returns its first target to the battlefield and its second to its controller's hand, in that order
+# (CR 608.2c). The creature target accepts only a creature card in its controller's graveyard: Bot2's Grizzly Bears in
+# Bot2's graveyard and the Lightning Bolt in Bot1's are no candidates; the permanent target accepts Black Lotus (an
+# artifact card) but not the Bolt. The two returns are two instructions, so cards leave the graveyard twice and
+# Attuned Hunter ("Whenever one or more cards leave your graveyard during your turn") triggers twice (CR 603.2c). The Elves
+# enter untapped.
+# Badlands Revival {3}{B}{G}: Sorcery
+#   Return up to one target creature card from your graveyard to the battlefield. Return up to one target permanent card
+#   from your graveyard to your hand.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Llanowar Elves
+Lightning Bolt
+Badlands Revival
+Mox Ruby
+Attuned Hunter
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Grizzly Bears
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Grizzly Bears)
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Black Lotus; Llanowar Elves; Lightning Bolt
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Attuned Hunter.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Badlands Revival.Cast
+! Bot1.Target(Bot2.Graveyard.Grizzly Bears)
+! Bot1.Target(Bot1.Graveyard.Lightning Bolt)
+Bot1.Target(Bot1.Graveyard.Llanowar Elves)
+! Bot1.Target(Bot1.Graveyard.Lightning Bolt)
+Bot1.Target(Bot1.Graveyard.Black Lotus)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Attuned Hunter.Power = 5
+Bot1.Battlefield.Llanowar Elves.Tapped = false
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Hand = Black Lotus
+Bot1.Graveyard = Badlands Revival; Lightning Bolt
+Bot2.Graveyard = Grizzly Bears; Lightning Bolt
