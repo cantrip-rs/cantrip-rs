@@ -1,0 +1,6 @@
+{
+  "name": "Assemble the Players",
+  "manaCost": "{1}{W}",
+  "type": "Enchantment",
+  "oracleText": "You may look at the top card of your library any time.\nOnce each turn, you may cast a creature spell with power 2 or less from the top of your library."
+}

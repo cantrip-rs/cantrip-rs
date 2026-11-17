@@ -1,0 +1,67 @@
+# Assemble the Players: "Once each turn, you may cast a creature spell with power 2 or less from the top of your library." (CR 601.3).
+# Bot1 casts it on turn 1 with two Mox Pearls, then Memnite (power 1) from the top: the next card, Ornithopter, is refused, a second cast this
+# turn. On turn 3 the top card is Goblin Roughrider (power 3), refused with the mana for it; on turn 5 it is Lightning Bolt, no creature, refused
+# with the mana for it; on turn 7 it is Goblin Piker (power 2), cast. Bot2, with no Assemble the Players of its own, cannot cast its own top Memnite.
+# "You may look at the top card of your library any time." (CR 401.2): Bot1 does not see its top card before the enchantment is out, and sees it after,
+# while Bot2 never does.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Ruby
+Assemble the Players
+Island
+Island
+Island
+Memnite
+Ornithopter
+Goblin Roughrider
+Lightning Bolt
+Goblin Piker
+Island x18
+
+[Bot2 Deck]
+Island x8
+Memnite
+Island x21
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+? Bot1.Sees.Bot1.LibraryTop = (hidden)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Assemble the Players.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Library.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+! Bot1.Library.Ornithopter.Cast
+[T2 Bot2.Main1]
+! Bot2.Library.Memnite.Cast
+[T3 Bot1.Main1]
+? Bot1.Sees.Bot1.LibraryTop = Goblin Roughrider
+? Bot2.Sees.Bot1.LibraryTop = (hidden)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Library.Goblin Roughrider.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+! Bot1.Library.Lightning Bolt.Cast(Bot2)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Library.Goblin Piker.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Pearl; Mox Ruby; Assemble the Players; Memnite; Goblin Piker
+Bot1.Hand = Island; Island; Island; Ornithopter; Goblin Roughrider; Lightning Bolt
+Bot1.Library.Count = 18
+Bot2.Library.Count = 20
