@@ -1,0 +1,62 @@
+# Rattleback Apothecary: "Deathtouch. Whenever you commit a crime, target creature you control gains your choice of menace or
+# lifelink until end of turn." On turn one Bot1 casts it with Black Lotus and Grizzly Bears with two Moxen. On turn three a Shock
+# at Bot1's own face is no crime (nothing goes on the stack beside it); a Shock at Bot2 is (CR 700.13): the trigger's target
+# refuses Bot2's Memnite (it must be a creature you control) and takes the Bears, which gain menace (CR 608.2d, 611.2a,
+# 702.111) and not lifelink; the Apothecary keeps just deathtouch. On Bot2's turn four the Bears have lost it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Rattleback Apothecary
+Grizzly Bears
+Shock
+Mountain
+Shock
+Swamp x10
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Rattleback Apothecary.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rattleback Apothecary.Keywords = Deathtouch
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Menace)
+? Bot1.Battlefield.Grizzly Bears.Keywords = Menace
+? Bot1.Battlefield.Rattleback Apothecary.Keywords = Deathtouch
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Battlefield.Grizzly Bears.Keywords = (absent)

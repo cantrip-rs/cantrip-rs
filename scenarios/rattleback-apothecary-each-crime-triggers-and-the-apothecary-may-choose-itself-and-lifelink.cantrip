@@ -1,0 +1,47 @@
+# Each crime triggers it separately (CR 700.13, 603.2): on turn three Bot1 casts two Shocks at Bot2 with a Mountain and Mox
+# Ruby, so two triggers go on the stack. With the Apothecary the only creature Bot1 controls, each targets it; the first
+# resolution chooses lifelink and the second menace, so it has deathtouch, lifelink and menace until end of turn (CR 611.2a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Rattleback Apothecary
+Mountain
+Shock
+Shock
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Rattleback Apothecary.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Hand.Shock.Cast(Bot2)
+? Stack.Count = 4
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Lifelink)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Menace)
+? Bot1.Battlefield.Rattleback Apothecary.Keywords = Deathtouch; Lifelink; Menace
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 16
+Bot1.Battlefield.Rattleback Apothecary.Keywords = Deathtouch; Lifelink; Menace
