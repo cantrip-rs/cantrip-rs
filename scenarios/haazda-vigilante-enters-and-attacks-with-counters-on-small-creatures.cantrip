@@ -1,0 +1,62 @@
+# Haazda Vigilante (a 4/4): "Whenever this creature enters or attacks, put a +1/+1 counter on target creature you control with power 2 or less." Entering, the only
+# creature it can aim at is Bot1's Ornithopter (power 0): the Vigilante itself is 4/4 and Bot2's Ornithopter, which arrives later, is not Bot1's. The Ornithopter
+# becomes 1/3. Attacking on turn 3 it is power 1 (legal) and becomes 2/4; attacking on turn 5 it is power 2, still "2 or less", and becomes 3/5; attacking on turn 7 it
+# is power 3, no creature is a legal target and nothing happens. The Vigilante and Bot2's Ornithopter never get a counter.
+
+[Bot1 Deck]
+Ornithopter
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Haazda Vigilante
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Hand.Haazda Vigilante.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Haazda Vigilante.Power = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Haazda Vigilante > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+[T5 Bot1.Main1]
+Bot1.Attack(Haazda Vigilante > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 3
+[T7 Bot1.Main1]
+Bot1.Attack(Haazda Vigilante > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 3
+Bot1.Battlefield.Ornithopter.Toughness = 5
+Bot1.Battlefield.Haazda Vigilante.Power = 4
+Bot2.Battlefield.Ornithopter.Power = 0

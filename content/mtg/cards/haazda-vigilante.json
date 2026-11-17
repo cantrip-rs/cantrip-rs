@@ -1,0 +1,8 @@
+{
+  "name": "Haazda Vigilante",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Giant Soldier",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Whenever this creature enters or attacks, put a +1/+1 counter on target creature you control with power 2 or less."
+}
