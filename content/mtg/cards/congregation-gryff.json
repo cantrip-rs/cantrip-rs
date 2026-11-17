@@ -1,0 +1,12 @@
+{
+  "name": "Congregation Gryff",
+  "manaCost": "{1}{G}{W}",
+  "type": "Creature — Hippogriff Mount",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Flying, lifelink\nWhenever this creature attacks while saddled, it gets +X/+X until end of turn, where X is the number of Mounts you control.\nSaddle 3 (Tap any number of other creatures you control with total power 3 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)",
+  "keywords": [
+    "Flying",
+    "Lifelink"
+  ]
+}

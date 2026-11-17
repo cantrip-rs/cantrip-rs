@@ -1,0 +1,44 @@
+# Congregation Gryff: the pump needs the Gryff to attack while saddled. With Caustic Bronco (another Mount) on the battlefield
+# but no saddle paid, the Gryff attacks as a plain 1/4 flier with lifelink: no trigger, 1 damage, Bot1 gains 1.
+
+[Bot1 Deck]
+Forest
+Mox Pearl
+Mox Emerald
+Mox Jet
+Black Lotus
+Congregation Gryff
+Caustic Bronco
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Congregation Gryff.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Caustic Bronco.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Congregation Gryff > Bot2)
+? Stack.Count = 0
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 21
+Bot1.Battlefield.Congregation Gryff.Power = 1
+Bot1.Battlefield.Congregation Gryff.Toughness = 4
+Bot1.Battlefield.Congregation Gryff.Keywords = Flying; Lifelink

@@ -1,0 +1,69 @@
+# Congregation Gryff: "Whenever this creature attacks while saddled, it gets +X/+X until end of turn, where X is the number of
+# Mounts you control." Turn 1: the Gryff and Caustic Bronco (a Mount); Bronco's 2 power alone cannot pay Saddle 3 (the refusal).
+# Turn 2: the opponent casts Brightfield Glider, a Mount they control. Turn 3: Mother of Runes (power 1) and the Bronco (power 2)
+# saddle the Gryff. It attacks, and X counts the Gryff and the tapped Bronco but not the opponent's Glider: 3/6. It is a
+# flier with lifelink, so it hits for 3 and Bot1 gains 3.
+
+[Bot1 Deck]
+Forest
+Mox Pearl
+Mox Emerald
+Mox Jet
+Black Lotus
+Congregation Gryff
+Caustic Bronco
+Mother of Runes
+Swamp x20
+
+[Bot2 Deck]
+Plains
+Brightfield Glider
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Congregation Gryff.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Caustic Bronco.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Congregation Gryff.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Brightfield Glider.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mother of Runes.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Congregation Gryff.Activate
+Bot1.Choose(Caustic Bronco; Mother of Runes)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Congregation Gryff.Saddled = true
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Congregation Gryff > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Congregation Gryff.Power = 3
+? Bot1.Battlefield.Congregation Gryff.Toughness = 6
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 23
+Bot1.Battlefield.Caustic Bronco.Tapped = True
+Bot2.Battlefield.Brightfield Glider.Tapped = False
