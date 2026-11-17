@@ -1,0 +1,24 @@
+# Freestrider Commando: "enters with two +1/+1 counters on it if it wasn't cast or no mana was spent to cast it" (CR 614.1c, 122.6). Cast from hand
+# for {2}{G} paid with Black Lotus's mana, mana was spent, so neither condition holds: it enters as a plain 3/3 with no counters.
+
+[Bot1 Deck]
+Black Lotus
+Freestrider Commando
+Forest x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Freestrider Commando.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Freestrider Commando.Counters.PlusOnePlusOne = (absent)
+? Bot1.Battlefield.Freestrider Commando.Power = 3
+? Bot1.Battlefield.Freestrider Commando.Toughness = 3
+
+[Expect]
+Bot1.Battlefield.Freestrider Commando.Power = 3

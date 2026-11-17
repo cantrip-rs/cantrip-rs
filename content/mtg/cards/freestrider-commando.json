@@ -1,0 +1,8 @@
+{
+  "name": "Freestrider Commando",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Centaur Mercenary",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "This creature enters with two +1/+1 counters on it if it wasn't cast or no mana was spent to cast it.\nPlot {3}{G} (You may pay {3}{G} and exile this card from your hand. Cast it as a sorcery on a later turn without paying its mana cost. Plot only as a sorcery.)"
+}
