@@ -1,0 +1,41 @@
+# Outlaw Stitcher: "Plot {4}{U}", and the counters count only "this turn". On turn 1 Bot1 casts Mox Sapphire, Mox Jet and Black Lotus (three
+# spells) and plots the Stitcher with them: plotting is a special action, no spell cast. On turn 3 the Stitcher is cast from exile as
+# the first spell of that turn, so there is no spell other than the first: the Zombie Rogue stays a 2/2, whatever was cast on turn 1.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Black Lotus
+Outlaw Stitcher
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Outlaw Stitcher.Activate(Ability: Plot)
+! Bot1.Exile.Outlaw Stitcher.Cast
+[T3 Bot1.Main1]
+Bot1.Exile.Outlaw Stitcher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Zombie Rogue Token.Power = 2
+Bot1.Battlefield.Zombie Rogue Token.Toughness = 2
+Bot1.Battlefield.Zombie Rogue Token.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Outlaw Stitcher.Power = 1

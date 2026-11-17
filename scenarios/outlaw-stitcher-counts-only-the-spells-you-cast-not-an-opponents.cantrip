@@ -1,0 +1,41 @@
+# Outlaw Stitcher counts "each spell you've cast this turn other than the first": only its controller's spells. On turn 3 Bot1
+# casts Mox Pearl (its first spell) and then the Stitcher (its second); Bot2 answers the Stitcher with a Lightning Bolt at Bot1, a
+# spell cast this turn but not by Bot1. The Zombie Rogue gets two counters for the Stitcher alone (a 4/4), not four.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Outlaw Stitcher
+Island x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Outlaw Stitcher.Cast
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Zombie Rogue Token.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Zombie Rogue Token.Power = 4
