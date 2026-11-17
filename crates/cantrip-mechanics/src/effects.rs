@@ -2696,6 +2696,16 @@ pub fn return_first_target_to_hand(g: &mut dyn Game, item: &StackItem) -> Result
     Ok(())
 }
 
+/// "Return [up to one] target [permanent] to its owner's hand. If you controlled it, ..." (CR 400.3, 608.2h): returns the first
+/// target and says whether the ability's controller controlled it, read as the effect resolves and before it leaves (CR 608.2h).
+/// False when there was no target or it is no longer a legal one (CR 608.2b). Boomerang Basics and Hotshot Investigators print it.
+pub fn return_first_target_to_hand_was_yours(g: &mut dyn Game, item: &StackItem) -> Result<bool, Suspend> {
+    let Some(permanent) = crate::targets::object(g, item, 0) else { return Ok(false) };
+    let yours = g.controller(permanent) == item.controller;
+    g.return_to_hand(&[permanent]);
+    Ok(yours)
+}
+
 const MAY_RETURN_TARGET_TO_BATTLEFIELD: Question = Question::new("ReturnToBattlefield", "return the targeted card to the battlefield?", "", "Return it", "Leave it");
 
 /// "You may return target [permanent] card from your graveyard to the battlefield" (CR 608.2b, 117.3, 110.2a): the target is
