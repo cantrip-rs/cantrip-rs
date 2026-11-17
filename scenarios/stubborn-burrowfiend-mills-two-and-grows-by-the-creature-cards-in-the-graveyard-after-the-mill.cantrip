@@ -1,0 +1,60 @@
+# Stubborn Burrowfiend {1}{G} (2/2, Saddle 2): "Whenever this creature becomes saddled for the first time each turn, mill two cards, then this creature gets +X/+X
+# until end of turn, where X is the number of creature cards in your graveyard" (CR 702.171b, 701.17a). Turn 1: Bot1 casts the Burrowfiend and Memnite and Lightning Bolts
+# its own Memnite, so one creature card (and the Bolt) are in the graveyard. Turn 3: Grizzly Bears is cast and tapped to saddle; two cards (Grizzly Bears and Memnite,
+# both creature cards) are milled first, so X is 3 (the Memnite from turn 1 and the two milled), not 1: the Burrowfiend is a 5/5 until end of turn and is a 2/2 again after.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Stubborn Burrowfiend
+Memnite
+Grizzly Bears
+Lightning Bolt
+Plains
+Grizzly Bears
+Memnite
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Stubborn Burrowfiend.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 17
+Bot1.Battlefield.Stubborn Burrowfiend.Activate(Ability: Saddle)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Graveyard.Count = 2
+? Bot1.Battlefield.Stubborn Burrowfiend.Power = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 15
+
+[Expect]
+Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Stubborn Burrowfiend.Power = 5
+Bot1.Battlefield.Stubborn Burrowfiend.Toughness = 5
