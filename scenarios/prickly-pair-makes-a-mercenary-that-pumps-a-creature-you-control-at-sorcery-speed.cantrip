@@ -1,0 +1,48 @@
+# Prickly Pair makes a 1/1 red Mercenary token (CR 111.1) whose "{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a
+# sorcery" needs the token to have been under Bot1's control since its turn began (CR 302.6): it cannot be used the turn it arrives, and on turn 3 it
+# cannot target Bot2's Memnite (CR 115.1) but may target Prickly Pair (3/2 afterwards) until end of turn.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Prickly Pair
+Island x16
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Prickly Pair.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mercenary Token.Power = 1
+? Bot1.Battlefield.Mercenary Token.Toughness = 1
+? Bot1.Battlefield.Mercenary Token.Colors = Red
+? Bot1.Battlefield.Mercenary Token.Subtypes = Mercenary
+! Bot1.Battlefield.Mercenary Token.Activate(Bot1.Battlefield.Prickly Pair)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Mercenary Token.Activate(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Mercenary Token.Activate(Bot1.Battlefield.Prickly Pair)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Prickly Pair.Power = 3
+? Bot1.Battlefield.Prickly Pair.Toughness = 2
+? Bot1.Battlefield.Mercenary Token.Power = 1
+? Bot2.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Prickly Pair.Power = 2
+
+[Expect]
+Bot1.Battlefield.Mercenary Token.Tapped = true
