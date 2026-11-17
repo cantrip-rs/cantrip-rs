@@ -163,11 +163,15 @@ fn every_creature_tapped_to_saddle_saddled_the_mount_and_crewed_nothing() {
         })
         .collect();
     assert_eq!(saddled, [(b, horse), (a, horse)]);
+    // `History::saddled` names the creatures that saddled the Mount, in the order they were tapped, and no other permanent's.
+    assert_eq!(game.history().saddled(horse).collect::<Vec<_>>(), [b, a]);
+    assert_eq!(game.history().saddled(van).count(), 0);
     // The record is about the creature and the Mount, so a history question about either finds it.
     assert_eq!(game.history().count(EventQuery::kind(EventMask::SADDLED).object(a)), 1);
     assert_eq!(game.history().count(EventQuery::kind(EventMask::SADDLED).object(horse)), 2);
     assert_eq!(game.history().count(EventQuery::kind(EventMask::SADDLED).object(c)), 0);
     assert_eq!(crewed(&game, van), []);
     assert_eq!(crewed(&game, horse), []);
+    assert_eq!(game.history().crewed(horse).count(), 0);
     assert!(!game.state.obj(c).tapped);
 }
