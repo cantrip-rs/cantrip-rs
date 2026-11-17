@@ -1,0 +1,6 @@
+{
+  "name": "Ferocification",
+  "manaCost": "{2}{R}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of combat on your turn, choose one —\n• Target creature you control gets +2/+0 until end of turn.\n• Target creature you control gains menace and haste until end of turn."
+}
