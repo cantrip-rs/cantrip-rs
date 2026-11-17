@@ -3071,6 +3071,17 @@ pub const THIS_ENTERS_OR_LEAVES: Trigger = when(EventMask::ZONE_CHANGE, this_ent
 pub const THIS_TRANSFORMS: Trigger = when(EventMask::TRANSFORMED, this_transforms);
 pub const THIS_ENTERS_OR_TRANSFORMS: Trigger = when(EventMask(EventMask::ZONE_CHANGE.0 | EventMask::TRANSFORMED.0), this_enters_or_transforms);
 
+/// "When this creature is turned face up" (CR 701.40b, 708.8, 603.2): the face-down permanent that is turned up is this one, whoever turns
+/// it. Its face-up abilities exist from the moment it is turned up (CR 708.8), so the ability triggers on that event. A creature that
+/// enters face up has not been turned up. Aurelia's Vindicator, Essence of Antiquity and Forum Familiar print it.
+fn this_turned_face_up(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::TurnedFaceUp { permanent, .. } if *permanent == source => Fired::PLAIN,
+        _ => None,
+    }
+}
+pub const THIS_TURNED_FACE_UP: Trigger = when(EventMask::TURNED_FACE_UP, this_turned_face_up);
+
 /// "Whenever this creature deals combat damage to a player or planeswalker": one triggering for each player or
 /// planeswalker it dealt damage to (CR 603.2c), judged as the damage is dealt (CR 510.2). Psychic Frog prints it, and Sygg,
 /// Wanderwine Wisdom grants it.
