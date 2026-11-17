@@ -1,0 +1,71 @@
+# Seraphic Steed: "Whenever this creature attacks while saddled, create a 3/3 white Angel creature token with flying" and Saddle 4
+# (CR 702.171a-b). Turn 1: Fearless Halberdier (power 3) alone is one short of Saddle 4, so the Steed cannot be saddled. Turn 3:
+# Halberdier alone is refused again; Tyrox (power 4, exactly enough, drawn this turn) saddles it; the Steed attacks, and its trigger makes a 3/3 white flying Angel
+# (Bot2 takes 2 from the first-strike lifelink Steed, Bot1 gains 2). Turn 5: not saddled, it attacks again and makes no second
+# Angel; Bot2 is at 16 and Bot1 at 24.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Pearl
+Mox Ruby
+Seraphic Steed
+Fearless Halberdier
+Plains
+Tyrox, Saurid Tyrant
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Seraphic Steed.Cast
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Fearless Halberdier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Seraphic Steed.Activate
+? Bot1.Battlefield.Fearless Halberdier.Tapped = False
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Tyrox, Saurid Tyrant.Cast
+Bot1.Battlefield.Seraphic Steed.Activate
+! Bot1.Choose(Fearless Halberdier)
+Bot1.Choose(Tyrox, Saurid Tyrant)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Seraphic Steed > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Angel Token.Power = 3
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Seraphic Steed > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Life = 24
+Bot1.Battlefield.Angel Token.Power = 3
+Bot1.Battlefield.Angel Token.Toughness = 3
+Bot1.Battlefield.Angel Token.Colors = White
+Bot1.Battlefield.Angel Token.Keywords = Flying
+Bot1.Battlefield.Count = 9
