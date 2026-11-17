@@ -1,0 +1,64 @@
+# "Whenever another creature you control with power 2 or less enters, surveil 1." Bot1 (all on turn 1, off Mox Jet, Mox Ruby and
+# Mox Emerald): the Gorehound entering asks nothing ("another"); the Memnite (power 1) and the Grizzly Bears (power 2, exactly
+# the limit) each ask for a surveil - the Island on top goes to the graveyard, the Forest under it stays. Turn 2: Bot2's Memnite
+# asks Bot1 nothing ("you control"). Turn 3: the Hill Giant (power 3, one over the limit) asks nothing either, and the Forest
+# is Bot1's draw for the turn. Each "nothing" is pinned by the empty stack after the creature entered.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Snarling Gorehound
+Memnite
+Grizzly Bears
+Hill Giant
+Island
+Forest
+Swamp x14
+
+[Bot2 Deck]
+Memnite
+Swamp x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Snarling Gorehound.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Island)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Forest | )
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Graveyard = Island
+Bot1.Hand = Forest
+Bot1.Battlefield.Hill Giant.Power = 3
+Bot1.Battlefield.Snarling Gorehound.Keywords = Menace

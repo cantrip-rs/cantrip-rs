@@ -1,0 +1,11 @@
+{
+  "name": "Snarling Gorehound",
+  "manaCost": "{B}",
+  "type": "Creature — Dog",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Menace\nWhenever another creature you control with power 2 or less enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "keywords": [
+    "Menace"
+  ]
+}
