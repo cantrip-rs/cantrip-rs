@@ -1,0 +1,41 @@
+# Reasonable Doubt: each part checks its own target on resolution (CR 608.2b). Bot1 casts Lightning Bolt and then Reasonable Doubt,
+# aimed at the Bolt and Bot1's Memnite, and in response casts Counterspell on the Bolt. The Counterspell resolves first, so when Doubt
+# resolves its spell target is gone: it counters nothing, but the Memnite is still suspected. (A noncreature, Mox Sapphire, is refused as
+# the creature, and with no spell on the stack Doubt cannot be cast just to suspect the Memnite.) Bot2 takes no damage.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Memnite
+Lightning Bolt
+Reasonable Doubt
+Counterspell
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Reasonable Doubt.Cast
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Reasonable Doubt.Cast
+Bot1.Target(Lightning Bolt)
+! Bot1.Target(Bot1.Battlefield.Mox Sapphire)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Counterspell.Cast(Lightning Bolt)
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Reasonable Doubt; Counterspell; Lightning Bolt; Black Lotus
+Bot1.Battlefield.Memnite.Suspected = true
+Stack.Count = 0

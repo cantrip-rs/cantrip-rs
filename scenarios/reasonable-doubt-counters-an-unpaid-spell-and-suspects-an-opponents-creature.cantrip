@@ -1,0 +1,39 @@
+# Reasonable Doubt: "Counter target spell unless its controller pays {2}. Suspect up to one target creature." On turn 2 Bot2 casts Lightning
+# Bolt at Bot1 with its only Mox Ruby; Bot1 answers with Reasonable Doubt (two Mox Sapphires) targeting the Bolt and Bot2's Memnite. Bot2
+# has nothing to pay {2} with, so the Bolt is countered (Bot1 keeps 20 life) and the Memnite, an opponent's creature, is suspected: it has
+# menace and can't block (CR 701.60c).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Reasonable Doubt
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Reasonable Doubt.Cast
+Bot1.Target(Lightning Bolt)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Lightning Bolt
+Bot1.Graveyard = Reasonable Doubt
+Bot2.Battlefield.Memnite.Suspected = true
+Bot2.Battlefield.Memnite.Keywords = CantBlock; Menace

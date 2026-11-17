@@ -1,0 +1,48 @@
+# Reasonable Doubt: the {2} is exactly two (CR 118.12). Bot1 has a Memnite; on turn 2 Bot2 casts Lightning Bolt at Bot1 with Mox Ruby
+# and keeps Mox Jet and Mox Emerald, which it taps to pay {2} when asked. The Bolt resolves (Bot1 at 17), but the spell's other part
+# still works: Bot1's own Memnite is suspected (menace, can't block).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Memnite
+Reasonable Doubt
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Reasonable Doubt.Cast
+Bot1.Target(Lightning Bolt)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.PayCost
+
+[Expect]
+Bot1.Life = 17
+Bot2.Graveyard = Lightning Bolt
+Bot1.Graveyard = Reasonable Doubt
+Bot1.Battlefield.Memnite.Suspected = true
+Bot2.Battlefield.Mox Jet.Tapped = true
+Bot2.Battlefield.Mox Emerald.Tapped = true

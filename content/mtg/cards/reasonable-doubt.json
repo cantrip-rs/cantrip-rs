@@ -1,0 +1,6 @@
+{
+  "name": "Reasonable Doubt",
+  "manaCost": "{1}{U}",
+  "type": "Instant",
+  "oracleText": "Counter target spell unless its controller pays {2}.\nSuspect up to one target creature. (A suspected creature has menace and can't block.)"
+}
