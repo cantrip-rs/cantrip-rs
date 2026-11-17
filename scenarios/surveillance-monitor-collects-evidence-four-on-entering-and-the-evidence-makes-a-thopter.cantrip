@@ -1,0 +1,47 @@
+# Surveillance Monitor: "When this creature enters, you may collect evidence 4." and "Whenever you collect evidence, create a 1/1 colorless Thopter
+# artifact creature token with flying." (CR 701.59a). Turn 1 Bot1 casts four Moxes and Entomb for Wrath of God, so its graveyard holds Entomb (mana
+# value 1) and Wrath of God (4): 5. Turn 3 it casts the Monitor, accepts, and exiles both; collecting evidence makes the Thopter.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Jet
+Surveillance Monitor
+Entomb
+Island
+Island
+Wrath of God
+Island x11
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Search(Wrath of God)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Surveillance Monitor.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Entomb; Wrath of God
+Bot1.Accept
+Bot1.Choose(Entomb; Wrath of God)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard =
+Exile = Entomb; Wrath of God
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire; Mox Emerald; Surveillance Monitor; Thopter Token

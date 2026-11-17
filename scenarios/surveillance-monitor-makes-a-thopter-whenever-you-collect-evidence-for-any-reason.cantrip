@@ -1,0 +1,65 @@
+# Surveillance Monitor: "Whenever you collect evidence, create a 1/1 colorless Thopter artifact creature token with flying." (CR 701.59a, 603.2): any
+# evidence you collect counts, not only the Monitor's own. Turn 1 Bot1 casts the Monitor (an empty graveyard, so no question) with four
+# Moxes; turn 3 it casts Forensic Researcher and Entomb for Counterspell; turn 5 the Researcher collects evidence 3 (Entomb 1 and Counterspell 2) to tap
+# Bot2's Memnite, and the Monitor makes a Thopter.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Jet
+Surveillance Monitor
+Forensic Researcher
+Entomb
+Island
+Island
+Island
+Counterspell
+Island x10
+
+[Bot2 Deck]
+Memnite
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Surveillance Monitor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire; Mox Emerald; Surveillance Monitor
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Forensic Researcher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Search(Counterspell)
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forensic Researcher.Activate(Bot2.Battlefield.Memnite; Ability: Collect evidence)
+Bot1.Choose(Counterspell; Entomb)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Memnite.Tapped = true
+Bot1.Graveyard =
+Exile = Counterspell; Entomb
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire; Mox Emerald; Surveillance Monitor; Forensic Researcher; Thopter Token

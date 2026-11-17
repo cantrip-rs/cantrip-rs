@@ -1,0 +1,70 @@
+# Surveillance Monitor: "Whenever you collect evidence" is its controller's evidence only. Bot1 casts the Monitor on turn 1; Bot2 casts Forensic Researcher
+# and Entombs Counterspell on turn 2, then on turn 4 the Researcher collects evidence 3 (Entomb 1 and Counterspell 2) to tap Bot1's Monitor. Bot2 collected
+# the evidence, not Bot1, so no Thopter is made for either player (CR 701.59a, 603.2).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Jet
+Surveillance Monitor
+Island x15
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Jet
+Forensic Researcher
+Entomb
+Island
+Island
+Island
+Counterspell
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Surveillance Monitor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Forensic Researcher.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Pass
+Bot2.Search(Counterspell)
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Forensic Researcher.Activate(Bot1.Battlefield.Surveillance Monitor; Ability: Collect evidence)
+Bot2.Choose(Counterspell; Entomb)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Surveillance Monitor.Tapped = true
+? Stack.Count = 0
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Exile = Counterspell; Entomb
+Bot2.Graveyard =
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire; Mox Emerald; Surveillance Monitor
+Bot2.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire; Mox Emerald; Forensic Researcher

@@ -1,0 +1,43 @@
+# Surveillance Monitor: "you may collect evidence 4" (CR 701.59a): with Entomb (1) and Wrath of God (4) in the graveyard Bot1 could, but declines, so
+# nothing is exiled and no Thopter is made ("whenever you collect evidence" never happens).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Jet
+Surveillance Monitor
+Entomb
+Island
+Island
+Wrath of God
+Island x11
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Search(Wrath of God)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Surveillance Monitor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Entomb; Wrath of God
+Exile =
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire; Mox Emerald; Surveillance Monitor

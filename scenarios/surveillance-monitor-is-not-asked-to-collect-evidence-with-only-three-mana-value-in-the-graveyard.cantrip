@@ -1,0 +1,45 @@
+# Surveillance Monitor: "you may collect evidence 4" (CR 701.59b): a player who cannot exile cards with total mana value 4 cannot collect evidence, so is
+# not asked. Entomb (1) and Counterspell (2) make 3: the Monitor enters, nothing is asked, the graveyard stays and no Thopter is made.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Jet
+Surveillance Monitor
+Entomb
+Island
+Island
+Counterspell
+Island x11
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Search(Counterspell)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Surveillance Monitor.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire; Mox Emerald; Surveillance Monitor
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+
+[Expect]
+Bot1.Graveyard = Entomb; Counterspell
+Exile =
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire; Mox Emerald; Surveillance Monitor

@@ -1,0 +1,78 @@
+# Conspiracy Unraveler's alternative cost and a spell's own "collect evidence" additional cost are each collecting evidence (CR 701.59a; the 2024-02-02 ruling):
+# with Surveillance Monitor out ("Whenever you collect evidence, create a 1/1 Thopter"), Bot1 casts Crimestopper Sprite on turn 5 for "collect evidence 10"
+# (Emrakul, the Promised End, 13) rather than its mana cost, and also collects evidence 6 (Craw Wurm, 6) as its optional additional cost: two collections,
+# two Thopters, and the Sprite's stun counter, since its own evidence was collected. The Monitor's own "you may collect evidence 4" was declined: no Thopter from it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Conspiracy Unraveler
+Faithless Looting
+Emrakul, the Promised End
+Craw Wurm
+Surveillance Monitor
+Crimestopper Sprite
+Island x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Conspiracy Unraveler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Emrakul, the Promised End; Craw Wurm)
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Surveillance Monitor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+? Bot1.Battlefield.Thopter Token = (absent)
+Bot1.Hand.Crimestopper Sprite.Cast(Ability: Collect evidence 10)
+Bot1.Modes(Collect evidence)
+Bot1.Choose(Emrakul, the Promised End)
+Bot1.Choose(Craw Wurm)
+? Exile.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 8
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Conspiracy Unraveler; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Surveillance Monitor; Thopter Token; Thopter Token; Crimestopper Sprite
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Ornithopter.Counters.Stun = 1
