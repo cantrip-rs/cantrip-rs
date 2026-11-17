@@ -1,0 +1,49 @@
+# Kambal, Profiteering Mayor (CR 603.2c, 707.2, 614.1c): Bot2 casts Dragon Fodder, two Goblin tokens enter together, and Bot1 gets
+# one tapped token copy for each of them (two, not one for the batch). The copies are tokens Bot1 controls entering, so the second
+# ability drains once for the batch: Bot2 20 -> 19, Bot1 20 -> 21.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Kambal, Profiteering Mayor
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Dragon Fodder
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kambal, Profiteering Mayor.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Dragon Fodder.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Count = 2
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 6
+? Bot1.Battlefield.Goblin Token#1.Tapped = true
+? Bot1.Battlefield.Goblin Token#2.Tapped = true
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 21
+? Bot2.Life = 19
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot2.Battlefield.Count = 2

@@ -1,0 +1,50 @@
+# Kambal, Profiteering Mayor: each new token copies the original characteristics of the token and nothing else, "any non-copy effects
+# that have changed its power, toughness ... " are not copied (the rulings, CR 707.2). Bot2 casts Dragon Fodder and, with Kambal's
+# ability on the stack, Giant Growth on one Goblin (4/4 until end of turn). Bot1 still gets two plain 1/1 tapped Goblins.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Kambal, Profiteering Mayor
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Dragon Fodder
+Giant Growth
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kambal, Profiteering Mayor.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Dragon Fodder.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Giant Growth.Cast(Bot2.Battlefield.Goblin Token#1)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Goblin Token#1.Power = 4
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Goblin Token#1.Power = 1
+? Bot1.Battlefield.Goblin Token#2.Power = 1
+? Bot1.Battlefield.Goblin Token#1.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Count = 6

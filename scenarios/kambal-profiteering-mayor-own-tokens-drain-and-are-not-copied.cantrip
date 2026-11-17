@@ -1,0 +1,44 @@
+# Kambal, Profiteering Mayor: "Whenever one or more tokens you control enter, each opponent loses 1 life and you gain 1 life", and only
+# tokens your opponents control are copied (CR 603.2c). Bot1 casts Dragon Fodder on turn 3: the two Goblins entering together drain once
+# (Bot2 20 -> 19, Bot1 20 -> 21), and no copies follow: Bot1 has exactly the two untapped Goblins, not four.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Kambal, Profiteering Mayor
+Black Lotus
+Dragon Fodder
+Island
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kambal, Profiteering Mayor.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 6
+? Bot1.Life = 21
+? Bot2.Life = 19
+? Bot1.Battlefield.Goblin Token#1.Tapped = false
+? Bot1.Battlefield.Goblin Token#2.Tapped = false
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Life = 21
+Bot2.Life = 19

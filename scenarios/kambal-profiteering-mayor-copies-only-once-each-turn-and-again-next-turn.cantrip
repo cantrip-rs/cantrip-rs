@@ -1,0 +1,70 @@
+# Kambal, Profiteering Mayor: "This ability triggers only once each turn" (CR 603.2h). Bot2 casts two Dragon Fodders on turn 2: the first
+# batch of Goblins is copied (Bot1 gets two tapped Goblins, Bot2 20 -> 19), the second is not (Bot1 still has two, Bot2 has four).
+# On turn 4 the ability triggers again for a third Fodder (Bot1 four Goblins, Bot2 18). Only the copied batches drain.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Kambal, Profiteering Mayor
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Dragon Fodder
+Dragon Fodder
+Dragon Fodder
+Island
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kambal, Profiteering Mayor.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dragon Fodder.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 19
+? Bot1.Battlefield.Count = 6
+Bot2.Hand.Dragon Fodder.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot2.Battlefield.Count = 5
+? Bot1.Battlefield.Count = 6
+? Bot2.Life = 19
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Dragon Fodder.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 8
+? Bot2.Battlefield.Count = 7
+? Bot2.Life = 18
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22

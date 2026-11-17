@@ -1,0 +1,37 @@
+# Kambal, Profiteering Mayor: only tokens are copied and drained for (CR 111.1, 603.6a). Bot2 casts a Memnite, a nontoken creature
+# under an opponent's control, on turn 2: nothing triggers, Bot1 has no Memnite token and both players stay on 20. (The Goblin tokens in
+# the first scenario are the positive control.)
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Kambal, Profiteering Mayor
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kambal, Profiteering Mayor.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot2.Battlefield.Count = 1
+
+[Expect]
+Bot1.Battlefield.Count = 4
+Bot1.Life = 20
+Bot2.Life = 20
