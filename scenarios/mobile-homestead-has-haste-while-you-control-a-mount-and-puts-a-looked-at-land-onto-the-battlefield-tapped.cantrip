@@ -1,0 +1,54 @@
+# Mobile Homestead (3/3 Vehicle, Crew 2): "This Vehicle has haste as long as you control a Mount." Turn 1 Bot1 casts it and a Bulwark Ox
+# (a Mount, summoning sick, but power 2 crews anyway), crews it (a lone Memnite, power 1, could not: CR 702.122a) and attacks with it at once, which only haste allows (CR 702.10, 302.6):
+# Bot2 takes 3. "Whenever this Vehicle attacks, look at the top card of your library. If it's a land card, you may put it onto the
+# battlefield tapped": the top card is an Island, Bot1 puts it onto the battlefield and it enters tapped (CR 701.20a, 305.4).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mobile Homestead
+Bulwark Ox
+Memnite
+Island
+Plains x12
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mobile Homestead.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Mobile Homestead.Activate(Ability: Crew)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bulwark Ox.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mobile Homestead.Activate(Ability: Crew)
+Bot1.Choose(Bulwark Ox)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mobile Homestead.Keywords = Haste
+Bot1.Attack(Mobile Homestead > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Battlefield.Island.Tapped = true
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Island.Tapped = true
+Bot1.Battlefield.Bulwark Ox.Tapped = true

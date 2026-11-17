@@ -1,0 +1,62 @@
+# Mobile Homestead: "look at the top card of your library. If it's a land card, you may put it onto the battlefield tapped." Cast on
+# turn 1 and crewed by Savannah Lions on turn 3, it attacks (no haste needed). The top card is an Island: Bot1 declines, the Island
+# stays on top (CR 701.20a) and Bot1 draws it on turn 5. Then the top card is a Lightning Bolt: it is looked at all the same (it alone,
+# not the Plains under it: the cards looked at are the Island and the Bolt), but it is no land card, nothing is asked,
+# and it stays on top too. Bot2 takes 3 each time.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mobile Homestead
+Savannah Lions
+Plains
+Plains
+Plains
+Island
+Lightning Bolt
+Plains x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mobile Homestead.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mobile Homestead.Activate(Ability: Crew)
+Bot1.Choose(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Mobile Homestead > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Looked = Island
+? Bot1.Library.Top = Island
+? Bot1.Battlefield.Island = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mobile Homestead.Activate(Ability: Crew)
+Bot1.Choose(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Mobile Homestead > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Looked = Island; Lightning Bolt
+? Bot1.Library.Top = Lightning Bolt
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Hand = Island; Plains; Plains; Plains

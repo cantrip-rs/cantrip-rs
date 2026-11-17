@@ -1,0 +1,55 @@
+# Mobile Homestead: haste only "as long as you control a Mount" (CR 702.10, 613.1f). Bot2's Bulwark Ox is a Mount but is not one
+# Bot1 controls, so on turn 3, the turn Bot1 casts the Homestead, a Lions-crewed Homestead shows no haste and cannot attack
+# (summoning sick, CR 302.6): Bot2 stays at 20. Scenario the haste scenario is the positive control.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Savannah Lions
+Mobile Homestead
+Plains
+Plains x12
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Bulwark Ox
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Bulwark Ox.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Bulwark Ox.Types = Creature
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mobile Homestead.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mobile Homestead.Activate(Ability: Crew)
+Bot1.Choose(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mobile Homestead.Types = Artifact; Creature
+? Bot1.Battlefield.Mobile Homestead.Keywords = (absent)
+! Bot1.Attack(Mobile Homestead > Bot2)
+Bot1.Attack()
+
+[Expect]
+Bot2.Life = 20
