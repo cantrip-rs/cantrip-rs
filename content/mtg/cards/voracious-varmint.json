@@ -1,0 +1,11 @@
+{
+  "name": "Voracious Varmint",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Varmint",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Vigilance\n{1}, Sacrifice this creature: Destroy target artifact or enchantment.",
+  "keywords": [
+    "Vigilance"
+  ]
+}

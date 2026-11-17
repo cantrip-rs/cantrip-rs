@@ -1,0 +1,40 @@
+# Voracious Varmint: "Destroy target artifact or enchantment" (CR 115.1). Bot2 has a Fastbond (enchantment), an Elvish Mystic (creature, no
+# artifact) and a Forest; Bot1 has the Varmint (a creature) and a Forest. Neither creature nor either land is a target (refused); Bot2's
+# Fastbond, an enchantment it controls, is, and is destroyed.
+
+[Bot1 Deck]
+Black Lotus
+Voracious Varmint
+Forest
+Island x20
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Fastbond
+Forest x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Voracious Varmint.Cast
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Fastbond.Cast
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Voracious Varmint.Activate(Bot2.Battlefield.Elvish Mystic)
+! Bot1.Battlefield.Voracious Varmint.Activate(Bot2.Battlefield.Forest)
+! Bot1.Battlefield.Voracious Varmint.Activate(Bot1.Battlefield.Forest)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Voracious Varmint.Activate(Fastbond)
+
+[Expect]
+Bot1.Graveyard = Voracious Varmint; Black Lotus
+Bot2.Graveyard = Fastbond
+Bot2.Battlefield = Forest; Forest; Elvish Mystic

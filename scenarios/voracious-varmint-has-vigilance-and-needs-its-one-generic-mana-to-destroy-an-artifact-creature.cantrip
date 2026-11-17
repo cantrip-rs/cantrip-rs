@@ -1,0 +1,38 @@
+# Voracious Varmint: "{1}, Sacrifice this creature: Destroy target artifact or enchantment" (CR 602.2b). With Black Lotus gone and no land
+# played the {1} is not there and the ability is refused even with Bot2's Ornithopter, an artifact creature, on the battlefield. Vigilance
+# (CR 702.20b): the Varmint attacks and stays untapped (Bot2 takes 2). In the second main phase a Forest pays exactly {1} (the pool is empty
+# after) and the Varmint is sacrificed to destroy the Ornithopter.
+
+[Bot1 Deck]
+Black Lotus
+Voracious Varmint
+Forest
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Voracious Varmint.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Voracious Varmint.Activate(Ornithopter; Mana: short)
+Bot1.Attack(Voracious Varmint > Bot2)
+? Bot1.Battlefield.Voracious Varmint.Tapped = false
+[T3 Bot1.Main2]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Voracious Varmint.Activate(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Voracious Varmint; Black Lotus
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield = Forest
