@@ -1,0 +1,56 @@
+# Mourner's Surprise: "Return up to one target creature card from your graveyard to your hand. Create a 1/1 red Mercenary creature
+# token ..." With Ornithopter (a creature card), Desert's Due and Black Lotus (neither a creature) in Bot1's graveyard, Ornithopter
+# returns to the hand and exactly one 1/1 red Mercenary token appears. The non-creature cards stay in the graveyard, and so does the
+# Memnite in Bot2's graveyard, a creature card but not in Bot1's.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Ornithopter
+Desert's Due
+Mourner's Surprise
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Desert's Due.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Ornithopter; Desert's Due; Black Lotus
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Memnite; Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+! Bot1.Hand.Mourner's Surprise.Cast(Bot1.Graveyard.Desert's Due)
+! Bot1.Hand.Mourner's Surprise.Cast(Bot2.Graveyard.Memnite)
+Bot1.Hand.Mourner's Surprise.Cast(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Ornithopter.Power = 0
+Bot1.Graveyard = Mourner's Surprise; Desert's Due; Black Lotus
+Bot2.Graveyard = Memnite; Lightning Bolt
+Bot1.Battlefield.Mercenary Token.Power = 1
+Bot1.Battlefield.Mercenary Token.Toughness = 1
+Bot1.Battlefield.Mercenary Token.Colors = Red
+Bot1.Battlefield.Count = 3

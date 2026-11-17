@@ -1,0 +1,24 @@
+# Mourner's Surprise: the target is "up to one", so with no creature card in the graveyard (only Black Lotus) it is cast with none and
+# still makes its Mercenary token.
+
+[Bot1 Deck]
+Black Lotus
+Mourner's Surprise
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mourner's Surprise.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Mourner's Surprise; Black Lotus
+Bot1.Hand.Count = 5
+Bot1.Battlefield.Mercenary Token.Power = 1
+Bot1.Battlefield.Count = 1
