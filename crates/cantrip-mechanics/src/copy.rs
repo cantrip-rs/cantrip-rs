@@ -90,6 +90,17 @@ pub fn enter_as_copy_of_creature_you_control(
     enter_as_copy_of_one_you_control(g, entry, |c| c.is(CardType::Creature), exception)
 }
 
+/// "You may have this creature enter as a copy of a creature you control, except it's a Shapeshifter Rogue in addition to its
+/// other types" (CR 614.1c, 707.2, 707.9): `enter_as_copy_of_creature_you_control` with the added types, which become part of the
+/// copy's own copiable values, on top of the copied creature's own and any copy exceptions already in them (CR 707.9b). Use it as
+/// `CardDef::enters_as_copy`. Glasspool Mimic and Visage Bandit print it.
+pub fn enter_as_copy_of_creature_you_control_and_a_shapeshifter_rogue(g: &mut dyn Game, entry: &mut Entering) -> Result<(), Suspend> {
+    enter_as_copy_of_creature_you_control(g, entry, |_, mut copy| {
+        copy.extra_subtypes = copy.extra_subtypes.with(Subtype::Shapeshifter).with(Subtype::Rogue);
+        copy
+    })
+}
+
 /// What a land that may "enter tapped as a copy" asks: entering as a copy is entering tapped, so the question says both.
 const ENTER_TAPPED_AS_A_COPY: Question = Question::new(
     "CopyAsEnters",
