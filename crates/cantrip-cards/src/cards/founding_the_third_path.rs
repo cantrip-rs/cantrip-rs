@@ -18,7 +18,8 @@ fn cast_from_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 fn exile_and_copy(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(card) = targets::object(g, item, 0) else { return Ok(()) };
     let exiled = g.exile(card);
-    copy::may_cast_a_copy_paying_costs(g, item.controller, exiled)
+    copy::may_cast_a_copy_paying_costs(g, item.controller, exiled)?;
+    Ok(())
 }
 
 pub static CARD: CardDef = CardDef {

@@ -19,7 +19,8 @@ fn still_exiled(q: &dyn Query, asker: &Asker) -> bool {
 /// is, and cast as the ability resolves for its own costs, or not at all - a copy that isn't cast ceases to exist (CR 707.10a,
 /// 704.5e). A copy of a permanent spell becomes a token (CR 707.10f, 608.3f).
 fn copy_and_cast(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    copy::may_cast_a_copy_paying_costs(g, item.controller, item.object)
+    copy::may_cast_a_copy_paying_costs(g, item.controller, item.object)?;
+    Ok(())
 }
 
 /// "When Q enters, shuffle your library, then exile cards from the top of your library until you exile a nonland card. That

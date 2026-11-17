@@ -234,15 +234,17 @@ pub fn may_cast_a_copy_without_paying(g: &mut dyn Game, player: PlayerId, of: Ob
 
 /// "Copy it. You may cast the copy" (CR 707.12, 608.2g): `may_cast_a_copy_without_paying` with every cost paid (CR 601.2f-h), its mana
 /// cost or an alternative cost it has, and an {X} chosen as it is cast. It is cast as the effect resolves or not at all; a copy not
-/// cast ceases to exist in exile (CR 707.10a, 704.5e). Founding the Third Path's chapter III and Demilich print it.
-pub fn may_cast_a_copy_paying_costs(g: &mut dyn Game, player: PlayerId, of: ObjectId) -> Result<(), Suspend> {
+/// cast ceases to exist in exile (CR 707.10a, 704.5e). Whether the copy was cast comes back, for an "if you do" (CR 608.2c): false
+/// when it could not be cast, was declined or the player gave the cast up (CR 733.1). Founding the Third Path's chapter III, Q,
+/// Stacking the Deck and Kaervek, the Punisher print it.
+pub fn may_cast_a_copy_paying_costs(g: &mut dyn Game, player: PlayerId, of: ObjectId) -> Result<bool, Suspend> {
     let copy = g.create_copy_in_exile(of, player);
     if g.could_cast_during_resolution_by(copy, player) && g.ask(player, RequestKind::May { source: copy, purpose: Purpose::Cast })? == Answer::Yes {
         let ways = g.cast_ways_during_resolution_by(copy, player);
         let way = crate::choose::cast_way(g, player, copy, ways)?.map(|w| w.way);
-        g.cast_during_resolution_as(copy, CastTerms { instead: None, way, caster: Some(player), ..CastTerms::default() })?;
+        return g.cast_during_resolution_as(copy, CastTerms { instead: None, way, caster: Some(player), ..CastTerms::default() });
     }
-    Ok(())
+    Ok(false)
 }
 
 /// "Create a token that's a copy of target [permanent]" (CR 707.2, 111.1): the copiable values of the first target, for
