@@ -1,0 +1,23 @@
+# Freestrider Commando: "if it wasn't cast" (CR 614.1c): Show and Tell puts it onto the battlefield from the hand without casting it, so it enters
+# with two +1/+1 counters, a 5/5, though Bot1 spent {2}{U} on Show and Tell itself. Bot2's hand of Lightning Bolts has nothing to put.
+
+[Bot1 Deck]
+Black Lotus
+Show and Tell
+Freestrider Commando
+Forest x17
+
+[Bot2 Deck]
+Lightning Bolt x7
+Lightning Bolt x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Freestrider Commando)
+? Bot1.Battlefield.Freestrider Commando.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Freestrider Commando.Power = 5
+
+[Expect]
+Bot1.Battlefield.Freestrider Commando.Toughness = 5
