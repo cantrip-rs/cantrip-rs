@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::effects::plus_one_counter_on_this;
-use cantrip_mechanics::{choose, select};
+use cantrip_mechanics::half_chosen_to_sacrifice;
 use cantrip_oracle as oracle;
 
 /// "Each player sacrifices half the non-God creatures they control of their choice, rounded down" (CR 701.21a, 101.4, 107.1a): each
@@ -12,10 +12,7 @@ fn each_player_sacrifices_half(g: &mut dyn Game, item: &StackItem) -> Result<(),
     let god = g.words(item.object).subtype(Subtype::God);
     for who in g.state().apnap().collect::<Vec<_>>() {
         let creatures: Vec<ObjectId> = g.permanents_of(who).into_iter().filter(|&id| g.chars(id).is(CardType::Creature) && !g.chars(id).has_subtype(god)).collect();
-        let half = creatures.len() / 2;
-        let eligible: Vec<ObjectId> = creatures.into_iter().filter(|&id| g.can_sacrifice(who, id)).collect();
-        let count = half.min(eligible.len()) as u32;
-        let chosen = choose::select(g, who, item.object, Purpose::Sacrifice, eligible, select::cards(select::exactly(count)))?;
+        let chosen = half_chosen_to_sacrifice(g, who, item.object, creatures, false)?;
         doomed.extend(chosen.into_iter().map(|id| (who, id)));
     }
     g.sacrifice_each(&doomed);

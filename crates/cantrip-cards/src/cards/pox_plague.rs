@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{choose, choose_from_hand, players, select};
+use cantrip_mechanics::{choose_from_hand, half_chosen_to_sacrifice, players};
 use cantrip_oracle as oracle;
 
 /// "Each player loses half their life, then discards half the cards in their hand, then sacrifices half the permanents they
@@ -24,13 +24,7 @@ fn pox_plague(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let mut sacrificing = Vec::new();
     for &player in &players {
         let controlled = g.permanents_of(player);
-        let half = controlled.len() / 2;
-        let eligible: Vec<ObjectId> = controlled.into_iter().filter(|&id| g.can_sacrifice(player, id)).collect();
-        let chosen = if eligible.len() <= half {
-            eligible
-        } else {
-            choose::select(g, player, item.object, Purpose::Sacrifice, eligible, select::cards(select::exactly(half as u32)))?
-        };
+        let chosen = half_chosen_to_sacrifice(g, player, item.object, controlled, false)?;
         sacrificing.extend(chosen.into_iter().map(|id| (player, id)));
     }
     g.sacrifice_each(&sacrificing);

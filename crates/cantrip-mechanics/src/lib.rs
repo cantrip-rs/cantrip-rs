@@ -532,6 +532,16 @@ fn chosen_to_sacrifice(g: &mut dyn Game, player: PlayerId, source: ObjectId, cou
     choose::cards(g, player, source, Purpose::Sacrifice, eligible, count, false)
 }
 
+/// What `player` will sacrifice for "sacrifices half the [kind] they control of their choice, rounded up (or down)" (CR 107.1a, 701.21a):
+/// half of `counted`, all they control of the kind, those they can't be made to sacrifice counted among them, chosen from those they
+/// can (`chosen_to_sacrifice`) - all of those when there are not that many (CR 101.2). Nothing is sacrificed yet, so that several players'
+/// choices, or a later step, can be done together (CR 101.4). Pox Plague ("permanents ... round down"), Zodiark, Umbral God (non-God
+/// creatures, rounded down) and Rush of Dread (creatures, rounded up) print it.
+pub fn half_chosen_to_sacrifice(g: &mut dyn Game, player: PlayerId, source: ObjectId, counted: Vec<ObjectId>, round_up: bool) -> Result<Vec<ObjectId>, Suspend> {
+    let half = (counted.len() + usize::from(round_up)) / 2;
+    chosen_to_sacrifice(g, player, source, half as u32, counted)
+}
+
 /// "An untapped creature you control" as the permanents a cost taps (CR 118.3): `TAP_AN_UNTAPPED_CREATURE` taps one, Group Project's
 /// flashback (`tap_untapped(3, ..)`) three. A creature that came under your control this turn counts (CR 302.6 limits only {T}).
 pub fn untapped_creature_you_control(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
