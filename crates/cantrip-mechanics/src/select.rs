@@ -193,8 +193,8 @@ pub const CONTROLLED_BY_YOU: Part = part(&(controlled_by_chooser as SelectFn), 0
 pub const EQUIPMENT: Part = subtype_card(Subtype::Equipment);
 
 /// "A basic land card or a [subtype] card" (CR 205.4a, 205.3i): a basic land card, or a card with `subtype`, the type read through
-/// the words of the text of the card that asks (CR 612.2) and a card as it is where it is. Spinewoods Armadillo's Desert is
-/// the same shape; `BASIC_LAND_OR_PLANET` is Final Frontier's and Genesis Device's.
+/// the words of the text of the card that asks (CR 612.2) and a card as it is where it is. `BASIC_LAND_OR_PLANET` is Final Frontier's and Genesis Device's,
+/// `BASIC_LAND_OR_DESERT_CARD` Spinewoods Armadillo's and Silver Deputy's.
 pub const fn basic_land_or_subtype(subtype: Subtype) -> Part {
     part(&(basic_land_or_subtype_rule as SelectFn), crate::lands::sub(subtype) as u32, "")
 }
@@ -553,6 +553,9 @@ pub const fn basic_land_cards(count: Count) -> Selection {
 
 /// "A basic land card or Planet card", which may be left unfound (CR 701.23b): Final Frontier and Genesis Device.
 pub const BASIC_LAND_OR_PLANET_CARD: Selection = Selection::of(up_to(1), &[BASIC_LAND_OR_PLANET]).called("basic land or Planet");
+
+/// "A basic land card or a Desert card", which may be left unfound (CR 701.23b): Spinewoods Armadillo and Silver Deputy.
+pub const BASIC_LAND_OR_DESERT_CARD: Selection = Selection::of(up_to(1), &[basic_land_or_subtype(Subtype::Desert)]).called("basic land or Desert");
 
 /// "A basic Plains card", which may be left unfound (CR 701.23b): Clay-Fired Bricks and Oberth-Class Starship.
 pub const BASIC_PLAINS_CARD: Selection = Selection::of(up_to(1), &[basic_land_of_type(Subtype::Plains)]).called("basic Plains");
