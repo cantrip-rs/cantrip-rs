@@ -1,0 +1,54 @@
+# The Key to the Vault: Bot1's equipped Savannah Lions (2/1) deals 2 combat damage to Bot2, so Bot1 looks at exactly the top two
+# cards of their library (the third, a Mox Jet, is not among them, so an Arrange naming just two cards is complete only for exactly two), exiles the Shivan Dragon (mana value 6) among them, puts the Island on the bottom and
+# casts the Dragon for nothing (CR 608.2g, 118.9). Bot2's own top card, a Shivan Dragon too, stays in Bot2's library.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+The Key to the Vault
+Savannah Lions
+Plains
+Shivan Dragon
+Island
+Mox Jet
+Plains x10
+
+[Bot2 Deck]
+Plains x8
+Shivan Dragon
+Plains x11
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Key to the Vault.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.The Key to the Vault.Activate(Bot1.Battlefield.Savannah Lions)
+? Bot1.Mana =
+Bot1.Attack(Savannah Lions > Bot2)
+! Bot1.Arrange(shuffle)
+Bot1.Arrange(Shivan Dragon | Island)
+Bot1.Accept
+[T5 Bot1.Main1]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Shivan Dragon.Tapped = false
+Bot1.Battlefield.Count = 8
+Exile.Count = 0
+Bot1.Hand = Mox Jet; Plains
+Bot1.Library.Count = 11
+Bot2.Library.Count = 11

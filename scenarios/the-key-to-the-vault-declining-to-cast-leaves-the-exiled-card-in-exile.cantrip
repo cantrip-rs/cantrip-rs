@@ -1,0 +1,44 @@
+# The Key to the Vault: "You may cast the exiled card": Bot1 exiles the Sol Ring and declines to cast it, so it stays in exile (it is not put on the bottom with the Island) and the Sol Ring never enters the battlefield.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+The Key to the Vault
+Savannah Lions
+Plains
+Sol Ring
+Island
+Mox Jet
+Plains x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Key to the Vault.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.The Key to the Vault.Activate(Bot1.Battlefield.Savannah Lions)
+Bot1.Attack(Savannah Lions > Bot2)
+Bot1.Arrange(Sol Ring | Island)
+Bot1.Decline
+[T5 Bot1.Main1]
+
+[Expect]
+Exile.Count = 1
+Bot1.Battlefield.Count = 7
+Bot1.Hand = Mox Jet; Plains

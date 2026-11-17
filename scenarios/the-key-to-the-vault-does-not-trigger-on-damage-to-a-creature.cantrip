@@ -1,0 +1,49 @@
+# The Key to the Vault: "deals combat damage to a player" (CR 510.2): Bot1's equipped Savannah Lions is blocked by Bot2's Ornithopter
+# and deals its 2 damage to that creature, so there is no trigger and no Arrange prompt (`! Bot1.Arrange`); the top cards stay put.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+The Key to the Vault
+Savannah Lions
+Plains
+Sol Ring
+Island
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Key to the Vault.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.The Key to the Vault.Activate(Bot1.Battlefield.Savannah Lions)
+Bot1.Attack(Savannah Lions > Bot2)
+Bot2.Block(Ornithopter > Savannah Lions)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+! Bot1.Arrange
+[T5 Bot1.Main1]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Hand = Sol Ring; Plains
+Exile.Count = 0

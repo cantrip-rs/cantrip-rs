@@ -1,0 +1,39 @@
+# The Key to the Vault: Bot1's library is empty when the Savannah Lions deals 2, so there are no cards to look at and nothing is asked or cast (CR 609.3).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+The Key to the Vault
+Savannah Lions
+Plains
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Key to the Vault.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.The Key to the Vault.Activate(Bot1.Battlefield.Savannah Lions)
+Bot1.Attack(Savannah Lions > Bot2)
+[Bot1.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot2.Life = 18
+Bot1.Battlefield.Count = 7
+Bot1.Library.Count = 0
