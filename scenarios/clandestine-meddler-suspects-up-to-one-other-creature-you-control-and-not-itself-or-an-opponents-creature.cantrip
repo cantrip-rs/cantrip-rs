@@ -1,0 +1,50 @@
+# Clandestine Meddler: "When this creature enters, suspect up to one other target creature you control." (CR 115.1, 701.60a, 603.3d) Bot1 has two Memnites, Bot2 has one. Bot1 casts the Meddler on turn 3:
+# the trigger may not target the Meddler itself ("other") or Bot2's Memnite, and "up to one" refuses a second target, but one of Bot1's Memnites is a legal target and becomes suspected (menace, can't block); the Meddler is not.
+
+[Bot1 Deck]
+Memnite
+Memnite
+Mox Jet
+Mox Jet
+Clandestine Meddler
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Memnite
+Mountain x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Clandestine Meddler.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Clandestine Meddler)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+! Bot1.Target(Bot1.Battlefield.Memnite#1; Bot1.Battlefield.Memnite#2)
+Bot1.Target(Bot1.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite#1.Suspected = true
+Bot1.Battlefield.Memnite#2.Suspected = (absent)
+Bot1.Battlefield.Clandestine Meddler.Suspected = (absent)
+Bot2.Battlefield.Memnite.Suspected = (absent)

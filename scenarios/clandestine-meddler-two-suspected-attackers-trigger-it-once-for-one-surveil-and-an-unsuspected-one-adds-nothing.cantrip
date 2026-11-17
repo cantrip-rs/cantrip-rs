@@ -1,0 +1,55 @@
+# Clandestine Meddler: "Whenever one or more suspected creatures you control attack, surveil 1." (CR 508.1m, 603.2c, 701.25a, 701.60a) Bot1 casts two Meddlers and a Memnite on turn 1: the first Meddler
+# suspects the Memnite, the second suspects the first Meddler, so the Memnite and one Meddler are suspected and the other Meddler is not. On turn 3 all three attack together: the ability
+# triggers once for the whole batch, one surveil that Bot1 puts into the graveyard (a second trigger would leave a second surveil to answer).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Ruby
+Clandestine Meddler
+Clandestine Meddler
+Memnite
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Clandestine Meddler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Clandestine Meddler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Clandestine Meddler)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Suspected = true
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2; Clandestine Meddler#1 > Bot2; Clandestine Meddler#2 > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Island)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Island; Black Lotus
+Bot2.Life = 13

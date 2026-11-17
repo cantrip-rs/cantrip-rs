@@ -1,0 +1,47 @@
+# Clandestine Meddler: "suspect up to one other target creature you control" (CR 115.1, 601.2c, 603.3d): "up to one" lets its controller choose no target. With a Memnite on the battlefield Bot1 picks none, so nothing
+# is suspected; a Meddler entering when Bot1 controls no other creature has nothing it could target, and neither it nor anything else is suspected.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Mox Jet
+Clandestine Meddler
+Clandestine Meddler
+Island
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Clandestine Meddler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clandestine Meddler.Suspected = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Clandestine Meddler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Suspected = (absent)
+Bot1.Battlefield.Clandestine Meddler#1.Suspected = (absent)
+Bot1.Battlefield.Clandestine Meddler#2.Suspected = (absent)
