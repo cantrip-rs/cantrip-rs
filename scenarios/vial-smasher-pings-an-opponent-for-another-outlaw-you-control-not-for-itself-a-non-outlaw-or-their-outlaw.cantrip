@@ -1,0 +1,53 @@
+# Vial Smasher, Gleeful Grenadier: "Whenever another outlaw you control enters, Vial Smasher deals 1 damage to target opponent"
+# (CR 603.6a, 700.12). Turn 1: Vial Smasher is itself an outlaw (Goblin Mercenary) but "another" leaves it out, and the Memnite is
+# no outlaw: Bot2 stays at 20. The Spyglass Siren (a Pirate) is the only damage: 19. Turn 2: Bot2's own Spyglass Siren is not
+# one of Bot1's: Bot2 is not damaged further and Bot1 is at 20 (each Siren brings a Map token along: 7 and 3 permanents).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Vial Smasher, Gleeful Grenadier
+Spyglass Siren
+Memnite
+Island x13
+
+[Bot2 Deck]
+Island
+Spyglass Siren
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vial Smasher, Gleeful Grenadier.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Spyglass Siren.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Spyglass Siren.Cast
+[T3 Bot1.Upkeep]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20
+Bot1.Battlefield.Count = 7
+Bot2.Battlefield.Count = 3
