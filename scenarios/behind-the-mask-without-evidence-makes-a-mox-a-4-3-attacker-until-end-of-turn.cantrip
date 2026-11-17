@@ -1,0 +1,34 @@
+# Behind the Mask without evidence (CR 613.4b, 205.1b): Bot1's Mox Pearl becomes an artifact creature with base power and toughness
+# 4/3 until end of turn and attacks for 4 on turn 3 (it has been under Bot1's control since turn 1), and on turn 5 is a plain artifact again.
+# With nothing in the graveyard the collect-evidence option is not offered (CR 701.59a, the ruling).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Behind the Mask
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Behind the Mask.Cast(Bot1.Battlefield.Mox Pearl)
+! Bot1.Modes(Collect evidence)
+Bot1.Modes(Cast without)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Pearl.Power = 4
+? Bot1.Battlefield.Mox Pearl.Toughness = 3
+? Bot1.Battlefield.Mox Pearl.Types = Artifact; Creature
+Bot1.Attack(Mox Pearl > Bot2)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Mox Pearl.Types = Artifact
+
+[Expect]
+Bot2.Life = 16

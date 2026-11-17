@@ -1,0 +1,46 @@
+# Behind the Mask's "you may collect evidence 6" (CR 701.59a) paid with exactly 6: Craw Wurm (mana value 6) alone is exiled from Bot1's graveyard,
+# leaving the spent Faithless Looting (mana value 1) there, and the evidence turns Bot1's Ornithopter into a 1/1 (not 4/3) that attacks for 1.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Faithless Looting
+Behind the Mask
+Craw Wurm
+Ornithopter
+Island
+Island
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Craw Wurm; Island)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Behind the Mask.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Modes(Collect evidence)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Craw Wurm)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 1
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Craw Wurm
+Bot2.Life = 19
+Bot1.Graveyard = Behind the Mask; Faithless Looting; Island

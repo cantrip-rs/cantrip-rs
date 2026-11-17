@@ -1,0 +1,46 @@
+# Behind the Mask with evidence collected (Griselbrand, mana value 8, exiled from the graveyard as the cost, CR 701.59a): "it has base power and
+# toughness 1/1 until end of turn instead" (CR 608.2c). Bot1's Ornithopter, a 0/2 artifact creature, is set to 1/1 (not 4/3, and not 1/2): it attacks
+# for 1 on turn 3, with the Griselbrand the only card in exile.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Faithless Looting
+Behind the Mask
+Griselbrand
+Ornithopter
+Island
+Island
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Griselbrand; Island)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Behind the Mask.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Modes(Collect evidence)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Griselbrand)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 1
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Griselbrand
+Bot2.Life = 19
