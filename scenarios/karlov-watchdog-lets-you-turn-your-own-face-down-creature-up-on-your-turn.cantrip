@@ -1,0 +1,52 @@
+# Karlov Watchdog: the ban is on "permanents your opponents control", not yours (CR 101.2, 708.7). Bot1 controls the Watchdog (cast with four Moxen on turn 1) and
+# casts a Bolrac-Clan Basher face down on turn 3. On turn 5, still its own turn, Bot1 turns its own creature up for its disguise cost {3}{R}{R}: it is a 3/2
+# Bolrac-Clan Basher with double strike and trample.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Ruby
+Karlov Watchdog
+Bolrac-Clan Basher
+Plains x12
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.Karlov Watchdog.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Bolrac-Clan Basher.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+
+[Expect]
+Bot1.Battlefield.Bolrac-Clan Basher.Power = 3
+Bot1.Battlefield.Bolrac-Clan Basher.Toughness = 2
+Bot1.Battlefield.Bolrac-Clan Basher.Keywords = Disguise; DoubleStrike; Trample

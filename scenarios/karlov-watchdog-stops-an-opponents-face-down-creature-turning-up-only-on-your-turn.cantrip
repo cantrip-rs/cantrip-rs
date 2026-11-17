@@ -1,0 +1,70 @@
+# Karlov Watchdog: "Permanents your opponents control can't be turned face up during your turn." (CR 101.2, 708.7). Bot1 casts the Watchdog on turn 1. Bot2 casts
+# Bolrac-Clan Basher face down on turn 2 (a Black Lotus pays the {3}) and keeps five Moxen untapped for its disguise cost {3}{R}{R}. On Bot1's turn 3 the cost is paid in
+# full (the pool shows it) and Bot2 is still refused the special action, so the creature stays a face-down 2/2. On Bot2's own turn 4 the same cost turns it up: a 3/2
+# Bolrac-Clan Basher with double strike and trample.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Jet
+Mox Jet
+Karlov Watchdog
+Plains x12
+
+[Bot2 Deck]
+Bolrac-Clan Basher
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Ruby
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.Karlov Watchdog.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Bolrac-Clan Basher.Cast(Ability: Disguise)
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield..FaceDown = true
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Battlefield.Mox Jet#1.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Battlefield.Mox Jet#3.Activate
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+? Bot2.Mana = {B}{B}{B}{R}{R}
+! Bot2.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot2.Battlefield..FaceDown = true
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Jet#1.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Battlefield.Mox Jet#3.Activate
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.#1.Activate(Ability: disguise cost)
+
+[Expect]
+Bot2.Battlefield.Bolrac-Clan Basher.Power = 3
+Bot2.Battlefield.Bolrac-Clan Basher.Toughness = 2
+Bot2.Battlefield.Bolrac-Clan Basher.Keywords = Disguise; DoubleStrike; Trample
