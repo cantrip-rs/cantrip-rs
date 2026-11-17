@@ -1,0 +1,56 @@
+# Ghired, Mirror of the Wilds: "Nontoken creatures you control have '{T}: Create a token that's a copy of target token you
+# control that entered this turn.'" Turn 1: Dragon Fodder makes two Goblins and Ghired (haste) taps to copy one: three Goblins.
+# Turn 3: Lingering Souls makes two Spirits. A Goblin token has no such ability (a token is refused); Ghired cannot target a
+# Goblin, which entered on turn 1; it copies a Spirit, which entered this turn: three Spirits.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Pearl
+Black Lotus
+Ghired, Mirror of the Wilds
+Dragon Fodder
+Lingering Souls
+Mountain
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ghired, Mirror of the Wilds.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ghired, Mirror of the Wilds.Activate(Goblin Token)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Ghired, Mirror of the Wilds.Tapped = true
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Goblin Token.Activate(Spirit Token)
+! Bot1.Battlefield.Ghired, Mirror of the Wilds.Activate(Goblin Token)
+Bot1.Battlefield.Ghired, Mirror of the Wilds.Activate(Spirit Token)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Forest; Mox Ruby; Mox Pearl; Ghired, Mirror of the Wilds; Goblin Token; Goblin Token; Goblin Token; Mountain; Spirit Token; Spirit Token; Spirit Token

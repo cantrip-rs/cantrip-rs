@@ -1,0 +1,51 @@
+# Ghired, Mirror of the Wilds grants its ability only to nontoken creatures its controller controls, at tokens its controller
+# controls. Turn 2: Bot2 casts Llanowar Elves. Turn 4 (Bot2's): Bot2 casts Dragon Fodder; its Goblins entered this turn. The
+# Elves, no longer summoning sick, have no "{T}: Create a token ..." to activate at them (refused), and Bot1's untapped Ghired
+# cannot target them: they are Bot2's (refused). No token is copied.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Pearl
+Ghired, Mirror of the Wilds
+Swamp x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mox Ruby
+Dragon Fodder
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ghired, Mirror of the Wilds.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dragon Fodder.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+! Bot2.Battlefield.Llanowar Elves.Activate(Ability: Create; Goblin Token)
+Bot2.Pass
+! Bot1.Battlefield.Ghired, Mirror of the Wilds.Activate(Goblin Token)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Forest; Mox Ruby; Mox Pearl; Ghired, Mirror of the Wilds
+Bot2.Battlefield = Forest; Llanowar Elves; Mox Ruby; Goblin Token; Goblin Token

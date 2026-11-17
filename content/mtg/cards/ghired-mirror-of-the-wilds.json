@@ -1,0 +1,11 @@
+{
+  "name": "Ghired, Mirror of the Wilds",
+  "manaCost": "{R}{G}{W}",
+  "type": "Legendary Creature — Human Shaman",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Haste\nNontoken creatures you control have \"{T}: Create a token that's a copy of target token you control that entered this turn.\"",
+  "keywords": [
+    "Haste"
+  ]
+}
