@@ -256,6 +256,37 @@ pub fn pile(g: &mut dyn Game, chooser: PlayerId, source: ObjectId, first: Vec<Ob
     Ok(if one_of(g, chooser, source, piles)? == 1 { (second, first) } else { (first, second) })
 }
 
+/// "Reveal the top `N` cards of your library and separate them into two piles. [You separate them / An opponent separates those
+/// cards.] [An opponent chooses one of those piles / You choose one pile.] Put that pile into your hand and the other into your
+/// graveyard" as one effect (CR 701.20a, 700.3, 608.2c-d): the cards are revealed to every player; the opponent, chosen as it
+/// resolves and not targeted (CR 115.10a), is the one who separates when `YOU_SEPARATE` is false and the one who chooses the pile
+/// when it is true, the controller doing the other; either pile may be empty (CR 700.3c-d). A library with fewer cards shows what it
+/// has (CR 609.3). The chosen pile goes to the hand, then the other to the graveyard, each card seen by all as it moves. Returns
+/// how many cards were put into a graveyard (not those a replacement put elsewhere). Fact or Fiction (an opponent separates) and Intrude on the Mind (you separate) print it.
+pub fn reveal_top_cards_two_piles_one_to_hand_other_to_graveyard<const N: usize, const YOU_SEPARATE: bool>(g: &mut dyn Game, item: &StackItem) -> Result<u32, Suspend> {
+    let you = item.controller;
+    let revealed = crate::top_of_library(g, you, N);
+    if revealed.is_empty() {
+        return Ok(0);
+    }
+    g.reveal(you, &revealed);
+    let opponents: Vec<PlayerId> = g.state().opponents(you).collect();
+    let verb = if YOU_SEPARATE { "chooses which of the two piles you put into your hand; the other goes into your graveyard" } else { "SeparatePiles" };
+    let amount = if YOU_SEPARATE { 0 } else { revealed.len() as u32 }; // at most N
+    let Some(opponent) = player(g, you, item.object, opponents, verb, amount)? else { return Ok(0) };
+    let (separator, chooser) = if YOU_SEPARATE { (you, opponent) } else { (opponent, you) };
+    let (first, second) = separate(g, Some(separator), item.object, revealed)?;
+    let (keep, rest) = pile(g, chooser, item.object, first, second)?;
+    // Two actions in the order written (CR 608.2c): one pile into the hand, then the other into the graveyard, each pile
+    // together (CR 608.2f) and still revealed as it moves (CR 701.20a, 603.10a).
+    g.return_to_hand_revealed(&keep);
+    let moves: Vec<(ObjectId, Zone)> = rest.iter().map(|&c| (c, Zone::graveyard(g.obj(c).owner))).collect();
+    // "Put into your graveyard this way" counts only the cards that arrived there, not those a replacement sent elsewhere
+    // (CR 614.6).
+    let moved = g.move_together_revealed(&moves, MoveReason::Other);
+    Ok(moved.into_iter().filter(|&c| g.obj(c).zone.is(ZoneKind::Graveyard)).count() as u32)
+}
+
 /// "Look at [these] and separate them into a face-down pile and a face-up pile" (CR 700.3a): `separator` looks at the cards
 /// and chooses those of the face-down pile, the rest being the face-up pile, so either pile may be empty (CR 700.3d); the two
 /// piles come back in that order. Nothing is asked when there is nothing to separate. The face-up cards are then revealed to
