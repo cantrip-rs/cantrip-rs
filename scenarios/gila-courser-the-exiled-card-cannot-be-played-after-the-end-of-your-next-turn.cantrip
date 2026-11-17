@@ -1,0 +1,39 @@
+# Gila Courser: the exiled card may be played only until the end of Bot1's next turn (CR 611.2a). Turn 3: Memnite saddles the Courser, it attacks, and the top Lightning Bolt is exiled
+# (turn 3 and turn 5 both allow it, turn 4 would too). Turn 5: not cast. Turn 7: even with a Mox Ruby ready it can no longer be cast.
+[Bot1 Deck]
+Black Lotus
+Gila Courser
+Memnite
+Mox Ruby
+Island x3
+Island
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Gila Courser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gila Courser.Activate
+Bot1.Choose(Memnite)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Gila Courser > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt
+[T5 Bot1.Main1]
+? Exile = Lightning Bolt
+[T7 Bot1.Main1]
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Exile = Lightning Bolt
+Bot2.Life = 16

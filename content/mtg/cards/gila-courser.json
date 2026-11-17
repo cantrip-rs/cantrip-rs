@@ -1,0 +1,8 @@
+{
+  "name": "Gila Courser",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Lizard Mount",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Whenever this creature attacks while saddled, exile the top card of your library. Until the end of your next turn, you may play that card.\nSaddle 1 (Tap any number of other creatures you control with total power 1 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)"
+}

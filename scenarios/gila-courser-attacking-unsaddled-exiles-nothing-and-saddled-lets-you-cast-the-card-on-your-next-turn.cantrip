@@ -1,0 +1,52 @@
+# Gila Courser: "Whenever this creature attacks while saddled, exile the top card of your library. Until the end of your next turn, you may play that card" (CR 702.171b, 611.2a, 601.2).
+# Turn 3: the Courser attacks unsaddled and nothing is exiled. Turn 5: Memnite saddles it (Saddle 1, CR 702.171a), it attacks saddled, the Lightning Bolt on top is exiled,
+# and the Bolt is cast from exile with the Mox Ruby that same turn (Bot2 goes 20 -> 16 -> 12 -> 9).
+[Bot1 Deck]
+Black Lotus
+Gila Courser
+Memnite
+Mox Ruby
+Island x3
+Island
+Island
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Gila Courser.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Gila Courser.Activate
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Gila Courser > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+? Stack.Count = 0
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T5 Bot1.Main1]
+Bot1.Battlefield.Gila Courser.Activate
+Bot1.Choose(Memnite)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Gila Courser > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt
+[T5 Bot1.Main2]
+? Bot2.Life = 12
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 9
+Exile.Count = 0
