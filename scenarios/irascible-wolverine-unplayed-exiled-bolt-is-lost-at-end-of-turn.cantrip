@@ -1,0 +1,28 @@
+# Irascible Wolverine: the exiled Lightning Bolt is not cast this turn, so on a later turn, with a Mox Ruby ready to pay, it cannot be cast (CR 611.2a).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Irascible Wolverine
+Island x4
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Irascible Wolverine.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt
+[T3 Bot1.Main1]
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Exile = Lightning Bolt
+Bot2.Life = 20

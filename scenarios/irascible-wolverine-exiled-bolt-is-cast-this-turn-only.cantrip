@@ -1,0 +1,33 @@
+# Irascible Wolverine: the exiled card may be played only until end of turn (CR 611.2a, 608.2b). Turn 1: the exiled Lightning Bolt is
+# cast from exile the same turn with a Mox Ruby (3 damage to Bot2). The unused case is the next scenario.
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Irascible Wolverine
+Island x4
+Lightning Bolt
+Black Lotus
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Irascible Wolverine.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+
+[Expect]
+Bot2.Life = 17
+Exile.Count = 0

@@ -1,0 +1,28 @@
+# Irascible Wolverine: "When this creature enters, exile the top card of your library. Until end of turn, you may play that card" (CR 701.13a, 305.1, 603.1).
+# Turn 1: Black Lotus pays {2}{R}; the top card, a Mountain, is exiled and played from exile as the turn's land drop.
+[Bot1 Deck]
+Black Lotus
+Irascible Wolverine
+Island x5
+Mountain
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Irascible Wolverine.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Mountain
+Bot1.Exile.Mountain.Play
+? Bot1.Battlefield.Mountain.Tapped = false
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Irascible Wolverine.Power = 3

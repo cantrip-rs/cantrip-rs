@@ -1,0 +1,30 @@
+# Irascible Wolverine: "Plot {2}{R}" (CR 702.170a, 702.170d). Turn 1: plotted from hand for {2}{R} (Black Lotus), the pool empty after, no card exiled yet.
+# Turn 3: cast from exile for nothing, its enter trigger exiles the top Mountain and it is played from exile.
+[Bot1 Deck]
+Black Lotus
+Irascible Wolverine
+Island x6
+Mountain
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Irascible Wolverine.Activate(Ability: Plot)
+? Bot1.Mana =
+! Bot1.Exile.Irascible Wolverine.Cast
+[T3 Bot1.Main1]
+Bot1.Exile.Irascible Wolverine.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Mountain
+Bot1.Exile.Mountain.Play
+
+[Expect]
+Bot1.Battlefield.Irascible Wolverine.Power = 3
+Exile.Count = 0
