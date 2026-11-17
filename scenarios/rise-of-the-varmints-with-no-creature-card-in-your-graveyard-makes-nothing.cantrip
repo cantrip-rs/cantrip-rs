@@ -1,0 +1,40 @@
+# Rise of the Varmints {3}{G}: with only a noncreature card (the Lightning Bolt that was cast at Bot2) in the graveyard, X is 0 and no
+# token is created, the spell going to the graveyard after resolving.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Rise of the Varmints
+Lightning Bolt
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt
+Bot1.Hand.Rise of the Varmints.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Rise of the Varmints; Lightning Bolt
+Bot1.Battlefield.Count = 5
+Bot2.Life = 17
