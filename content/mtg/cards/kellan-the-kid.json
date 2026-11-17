@@ -1,0 +1,12 @@
+{
+  "name": "Kellan, the Kid",
+  "manaCost": "{G}{W}{U}",
+  "type": "Legendary Creature — Human Faerie Rogue",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying, lifelink\nWhenever you cast a spell from anywhere other than your hand, you may cast a permanent spell with equal or lesser mana value from your hand without paying its mana cost. If you don't, you may put a land card from your hand onto the battlefield.",
+  "keywords": [
+    "Flying",
+    "Lifelink"
+  ]
+}

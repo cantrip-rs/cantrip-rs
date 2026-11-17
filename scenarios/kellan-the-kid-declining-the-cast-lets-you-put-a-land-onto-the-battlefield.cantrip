@@ -1,0 +1,47 @@
+# "If you don't": declining the free cast (Memnite stays in hand) lets Bot1 put the Island onto the battlefield instead.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Kellan, the Kid
+Wrenn's Resolve
+Gleemox
+Island
+Memnite
+Mind Stone
+Island
+Island x17
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kellan, the Kid.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Wrenn's Resolve.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+Bot1.Choose(Island)
+
+[Expect]
+Bot1.Battlefield = Gleemox; Island; Kellan, the Kid; Mind Stone; Mox Emerald; Mox Pearl; Mox Sapphire
+Bot1.Hand = Memnite
