@@ -1,0 +1,71 @@
+# Eliminate the Impossible: "Investigate. Creatures your opponents control get -2/-0 until end of turn. If any of them are suspected, they're no longer suspected."
+# Bot1 suspects Bot2's Grizzly Bears (menace, can't block) with J. Jonah Jameson, then casts Eliminate the Impossible on turn 3: Bot1 investigates (a Clue token), both of Bot2's creatures
+# get -2/-0 (Bears 2 -> 0, Memnite 1 -> -1) and the Bears are no longer suspected (CR 701.60); Bot1's own Jameson is untouched (2 power). The pump lasts until end of turn only
+# (CR 611.2c): on turn 4 the Bears are back to 2 power and still not suspected, the Memnite to 1.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+J. Jonah Jameson
+Eliminate the Impossible
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Grizzly Bears
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.J. Jonah Jameson.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Suspected = true
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+? Bot2.Battlefield.Memnite.Suspected = (absent)
+Bot1.Hand.Eliminate the Impossible.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Suspected = (absent)
+? Bot2.Battlefield.Grizzly Bears.Power = 0
+? Bot2.Battlefield.Grizzly Bears.Toughness = 2
+? Bot2.Battlefield.Memnite.Power = -1
+? Bot2.Battlefield.Memnite.Suspected = (absent)
+? Bot1.Battlefield.J. Jonah Jameson.Power = 2
+? Bot1.Battlefield.Clue Token.Token = True
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+? Bot2.Battlefield.Grizzly Bears.Suspected = (absent)
+? Bot2.Battlefield.Memnite.Power = 1
+
+[Expect]
+Bot1.Graveyard = Eliminate the Impossible

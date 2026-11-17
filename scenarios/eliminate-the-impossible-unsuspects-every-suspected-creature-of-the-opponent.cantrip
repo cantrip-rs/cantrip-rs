@@ -1,0 +1,70 @@
+# Eliminate the Impossible: "If any of them are suspected, they're no longer suspected." with two of them suspected
+# Bot2's Case of the Stashed Skeleton makes a suspected Skeleton token and Bot1's J. Jonah Jameson suspects Bot2's Grizzly Bears. Eliminate the
+# Impossible then shrinks both and both stop being suspected at once (CR 701.60, 608.2c), the -2/-0 and the unsuspecting as two sentences.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+J. Jonah Jameson
+Eliminate the Impossible
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Case of the Stashed Skeleton
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Case of the Stashed Skeleton.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Skeleton Token.Suspected = true
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.J. Jonah Jameson.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Suspected = true
+Bot1.Hand.Eliminate the Impossible.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Suspected = (absent)
+? Bot2.Battlefield.Grizzly Bears.Power = 0
+? Bot2.Battlefield.Skeleton Token.Suspected = (absent)
+? Bot2.Battlefield.Skeleton Token.Power = 0
+? Bot1.Battlefield.Clue Token.Token = True
+
+[Expect]
+Bot1.Graveyard = Eliminate the Impossible

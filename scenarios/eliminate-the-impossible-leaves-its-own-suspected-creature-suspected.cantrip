@@ -1,0 +1,51 @@
+# Eliminate the Impossible: "Creatures your opponents control get -2/-0 until end of turn. If any of them are suspected, they're no longer suspected." Only the opponents' creatures are named.
+# Bot1's J. Jonah Jameson suspects itself (an own creature is a legal target of "up to one target creature"); Eliminate the Impossible leaves it suspected and at 2 power, shrinks the opponent's Memnite (1 -> -1) without inventing a suspected state for it, and Bot1 gets its Clue.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+J. Jonah Jameson
+Eliminate the Impossible
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.J. Jonah Jameson.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.J. Jonah Jameson)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.J. Jonah Jameson.Suspected = true
+Bot1.Hand.Eliminate the Impossible.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.J. Jonah Jameson.Suspected = true
+? Bot1.Battlefield.J. Jonah Jameson.Power = 2
+? Bot2.Battlefield.Memnite.Power = -1
+? Bot2.Battlefield.Memnite.Suspected = (absent)
+? Bot1.Battlefield.Clue Token.Token = True
+
+[Expect]
+Bot1.Graveyard = Eliminate the Impossible
