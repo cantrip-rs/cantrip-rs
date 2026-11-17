@@ -1,0 +1,47 @@
+# Desert's Due: -2/-2 and an additional -1/-1 for each Desert YOU control. Bot1 controls one Desert (Desert) and Bot2 one as well:
+# only Bot1's counts (CR 109.4), so Boneyard Desecrator (3/4) gets -3/-3 and is left a 0/1 (one more would kill it). The Deserts
+# are counted as it resolves and the effect lasts until the turn ends (CR 611.2a, 514.2): on turn 4 the Desecrator is a 3/4 again.
+
+[Bot1 Deck]
+Desert
+Black Lotus
+Desert's Due
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Boneyard Desecrator
+Desert
+Swamp x16
+
+[Actions]
+Bot1.Hand.Desert.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Desert.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Boneyard Desecrator.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Desert's Due.Cast(Bot2.Battlefield.Boneyard Desecrator)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Boneyard Desecrator.Power = 0
+? Bot2.Battlefield.Boneyard Desecrator.Toughness = 1
+[T4 Bot2.Main1]
+
+[Expect]
+Turn = 4
+Bot2.Battlefield.Boneyard Desecrator.Power = 3
+Bot2.Battlefield.Boneyard Desecrator.Toughness = 4
+Bot1.Graveyard = Desert's Due; Black Lotus

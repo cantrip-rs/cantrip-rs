@@ -1,0 +1,42 @@
+# Desert's Due with two Deserts you control (Desert and Ramunap Ruins, both Deserts): -2/-2 and -2/-2 more is -4/-4, which kills
+# Bot2's Boneyard Desecrator (toughness 4) where one Desert would not (CR 704.5f).
+
+[Bot1 Deck]
+Desert
+Ramunap Ruins
+Black Lotus
+Desert's Due
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Boneyard Desecrator
+Swamp x17
+
+[Actions]
+Bot1.Hand.Desert.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Boneyard Desecrator.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ramunap Ruins.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Desert's Due.Cast(Bot2.Battlefield.Boneyard Desecrator)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield = Mox Jet
+Bot2.Graveyard = Boneyard Desecrator; Black Lotus
+Bot1.Graveyard = Desert's Due; Black Lotus

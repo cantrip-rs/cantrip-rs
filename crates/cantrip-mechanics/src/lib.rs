@@ -927,8 +927,8 @@ pub fn attacking_creatures(q: &dyn Query) -> usize {
 }
 
 /// "The number of [subtype]s [player] controls" (CR 205.3, 109.4): every permanent of that subtype they control, read through
-/// the layers, so a changeling counts for each creature type. Beorn the Fierce's Bears, The Notary Hobbits' Halflings and Gloom Ripper's Elves
-/// are such counts.
+/// the layers, so a changeling counts for each creature type. Beorn the Fierce's Bears, The Notary Hobbits' Halflings, Gloom Ripper's Elves
+/// and Desert's Due's Deserts are such counts.
 pub fn permanents_with_subtype_you_control(q: &dyn Query, player: PlayerId, subtype: Subtype) -> usize {
     q.permanents_of(player).into_iter().filter(|&id| q.chars(id).has_subtype(subtype)).count()
 }

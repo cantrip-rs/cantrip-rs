@@ -1,0 +1,30 @@
+# Desert's Due with no Desert is a plain -2/-2 until end of turn, and any creature is a legal target, one of your own included:
+# Bot1's Ornithopter (0/2) dies to it (CR 704.5f).
+
+[Bot1 Deck]
+Ornithopter
+Mox Jet
+Desert's Due
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Swamp x18
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Desert's Due.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Jet; Swamp
+Bot1.Graveyard = Ornithopter; Desert's Due
