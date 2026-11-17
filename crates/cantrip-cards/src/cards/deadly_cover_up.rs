@@ -1,11 +1,9 @@
 use cantrip_api::*;
-use cantrip_mechanics::{choose, library};
+use cantrip_mechanics::{choose, collect_evidence, library};
 use cantrip_oracle as oracle;
 
 /// "As an additional cost to cast this spell, you may collect evidence 6" (CR 701.59a, 601.2b): announced like any
 /// optional additional cost; the spell has `paid` set when it was paid.
-const OPTIONAL_COST: OptionalCost = OptionalCost::new(Cost { collect_evidence: 6, ..Cost::NONE });
-
 const LABELS: &[&str] = &["Cast without collecting evidence", "Collect evidence 6"];
 
 /// "Destroy all creatures. If evidence was collected, exile a card from an opponent's graveyard. Then search its
@@ -35,7 +33,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     spell: spell(&[], effect),
-    optional_cost: Some(OPTIONAL_COST),
+    optional_cost: Some(collect_evidence::optional(6)),
     labels: LABELS,
     ..oracle::DEADLY_COVER_UP
 };
