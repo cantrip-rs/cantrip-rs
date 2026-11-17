@@ -1,0 +1,44 @@
+# Candlestick: "Equipped creature gets +1/+1 and has 'Whenever this creature attacks, surveil 2.'" (CR 301.5, 613.4c, 701.25a).
+# Bot1 equips an Ornithopter (a 1/3 with it), attacks on turn 3: surveil 2 puts the Forest in the graveyard and keeps the Plains on top.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Ornithopter
+Candlestick
+Island x3
+Island
+Forest
+Plains
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Candlestick.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Candlestick.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip {2})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot1.Graveyard.Count = 0
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Arrange(Plains | Forest)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Forest
+Bot1.Library.Count = 11
+Bot2.Life = 19
+Bot1.Battlefield.Candlestick.AttachedTo = Ornithopter
