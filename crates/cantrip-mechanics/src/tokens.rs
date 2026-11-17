@@ -799,6 +799,15 @@ pub static RHINO_WARRIOR: CardDef = CardDef {
     ..token!(Rhino Warrior)
 };
 
+/// The 2/2 white Ox creature token. Bovine Intervention and Bruse Tarl, Roving Rancher make it.
+pub static OX: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::White)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    ..token!(Ox)
+};
+
 /// The 1/1 white Ally creature token. Appa, Steadfast Guardian and Iroh, Tea Master make it.
 pub static ALLY: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::White)),
