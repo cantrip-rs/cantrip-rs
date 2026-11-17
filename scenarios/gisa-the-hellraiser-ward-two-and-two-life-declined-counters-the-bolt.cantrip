@@ -1,0 +1,44 @@
+# Gisa, the Hellraiser has Ward--{2}, Pay 2 life: Bot2 could pay both for its Lightning Bolt but declines, so the Bolt is countered:
+# Gisa takes no damage (a 4/4 that would otherwise be marked 3) and Bot2 keeps its life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Gisa, the Hellraiser
+Swamp x3
+Swamp x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mox Emerald
+Mox Sapphire
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gisa, the Hellraiser.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Gisa, the Hellraiser)
+Bot2.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Gisa, the Hellraiser.Damage = 0
+Bot2.Graveyard = Lightning Bolt

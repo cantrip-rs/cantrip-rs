@@ -1,0 +1,61 @@
+# Gisa, the Hellraiser: targeting your own creature is not a crime (CR 700.13), so Desert's Due on Bot1's own Ornithopter on turn 3
+# makes no Zombie Rogues (four permanents left: Gisa, Mox Ruby, two Swamps). On turn 5 Desert's Due at Bot2's Ornithopter is a
+# crime and makes two (seven with Mox Jet): the once-each-turn limit resets with the turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Swamp
+Gisa, the Hellraiser
+Ornithopter
+Desert's Due
+Desert's Due
+Swamp
+Mox Jet
+Swamp x11
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Swamp x18
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gisa, the Hellraiser.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Desert's Due.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 4
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Desert's Due.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 7
+Bot2.Battlefield.Count = 1

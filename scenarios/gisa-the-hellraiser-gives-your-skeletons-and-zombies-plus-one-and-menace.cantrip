@@ -1,0 +1,71 @@
+# Gisa, the Hellraiser: Skeletons and Zombies you control get +1/+1 and have menace (CR 613.1f, 702.111). Bot1's Drudge Skeletons
+# (1/1) is a 2/2 and its Dregscape Zombie (2/1) a 3/2, both with menace; Bot1's Ornithopter (a Thopter, 0/2) and Gisa herself (a
+# Human Warlock, 4/4) are not buffed; Bot2's own Dregscape Zombie stays 2/1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Gisa, the Hellraiser
+Drudge Skeletons
+Dregscape Zombie
+Swamp
+Swamp
+Ornithopter
+Swamp x11
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Dregscape Zombie
+Swamp x17
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gisa, the Hellraiser.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Dregscape Zombie.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Drudge Skeletons.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dregscape Zombie.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Gisa, the Hellraiser.Power = 4
+Bot1.Battlefield.Gisa, the Hellraiser.Toughness = 4
+Bot1.Battlefield.Drudge Skeletons.Power = 2
+Bot1.Battlefield.Drudge Skeletons.Toughness = 2
+Bot1.Battlefield.Drudge Skeletons.Keywords = Menace
+Bot1.Battlefield.Dregscape Zombie.Power = 3
+Bot1.Battlefield.Dregscape Zombie.Toughness = 2
+Bot1.Battlefield.Dregscape Zombie.Keywords = Menace
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Dregscape Zombie.Power = 2
+Bot2.Battlefield.Dregscape Zombie.Toughness = 1

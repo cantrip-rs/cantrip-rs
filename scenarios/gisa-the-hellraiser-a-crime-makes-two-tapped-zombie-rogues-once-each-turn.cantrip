@@ -1,0 +1,62 @@
+# Gisa, the Hellraiser: "Whenever you commit a crime, create two tapped 2/2 blue and black Zombie Rogue creature tokens. This
+# ability triggers only once each turn." On turn 3 Bot1 casts Desert's Due at one of Bot2's two Ornithopters (a crime, CR 700.13):
+# two tapped Zombie Rogues appear, 3/3 with menace under Gisa herself. A second crime the same turn (Desert's Due at the other
+# Ornithopter) makes no more: two tokens in all.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Swamp
+Gisa, the Hellraiser
+Mox Jet
+Desert's Due
+Desert's Due
+Swamp
+Swamp x11
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Swamp x18
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gisa, the Hellraiser.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Desert's Due.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Zombie Rogue Token#1.Tapped = true
+? Bot1.Battlefield.Zombie Rogue Token#2.Tapped = true
+? Bot1.Battlefield.Zombie Rogue Token#1.Power = 3
+? Bot1.Battlefield.Zombie Rogue Token#2.Toughness = 3
+? Bot1.Battlefield.Zombie Rogue Token#1.Keywords = Menace
+? Bot1.Battlefield.Zombie Rogue Token#1.Colors = Black; Blue
+Bot1.Hand.Desert's Due.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield = 
+Bot1.Battlefield.Count = 7
