@@ -1,0 +1,45 @@
+# Bristlebud Farmer: "When this creature enters, create two Food tokens" (CR 111.10b) and "Whenever this creature attacks, you may sacrifice a Food. If you do, mill three cards.
+# You may put a permanent card from among them into your hand" (CR 701.21a, 701.17, 608.2c).
+# Turn 1: a Black Lotus and a Mox Emerald pay for the Farmer; two Food tokens arrive. Turn 3: the Farmer attacks, Bot1 sacrifices one Food, mills Lightning Bolt, Memnite and
+# Forest, refuses to take the instant (only a permanent card is allowed) and takes Memnite. One Food is left; Bot2 takes the Farmer's damage.
+
+[Bot1 Deck]
+Black Lotus
+Bristlebud Farmer
+Forest
+Mox Emerald
+Plains x3
+Plains
+Lightning Bolt
+Memnite
+Forest
+Plains x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bristlebud Farmer.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bristlebud Farmer > Bot2)
+Bot1.Pass
+Bot1.Choose(Food Token)
+! Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Memnite)
+? Bot1.Battlefield.Count = 4
+? Bot1.Hand.Count = 5
+
+[Expect]
+Bot1.Graveyard.Count = 3
+Bot1.Library.Count = 9
