@@ -1,0 +1,11 @@
+{
+  "name": "Hellspur Brute",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Minotaur Mercenary",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Affinity for outlaws (This spell costs {1} less to cast for each Assassin, Mercenary, Pirate, Rogue, and/or Warlock you control.)\nTrample",
+  "keywords": [
+    "Trample"
+  ]
+}

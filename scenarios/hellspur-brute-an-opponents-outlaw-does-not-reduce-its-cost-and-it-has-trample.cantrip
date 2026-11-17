@@ -1,0 +1,48 @@
+# Hellspur Brute: "Affinity for outlaws (This spell costs {1} less to cast for each Assassin, Mercenary, Pirate, Rogue, and/or Warlock you control)" (CR 702.41a).
+# Bot2 controls an Assassin (Bile-Vial Boggart) but Bot1 controls no outlaw, so on turn 3 four mana (Black Lotus's three red and a Mox Ruby) cannot cast the {4}{R} Brute;
+# with a fifth from a Mox Jet cast then it can, and the pool is empty (nothing was discounted).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Hellspur Brute
+Island x3
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Bile-Vial Boggart
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Bile-Vial Boggart.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Count = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Hellspur Brute.Cast(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hellspur Brute.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Hellspur Brute.Power = 5
+Bot1.Battlefield.Hellspur Brute.Keywords = Trample

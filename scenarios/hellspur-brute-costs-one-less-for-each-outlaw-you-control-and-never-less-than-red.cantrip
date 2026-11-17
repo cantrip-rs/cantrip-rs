@@ -1,0 +1,57 @@
+# Hellspur Brute: affinity for outlaws reduces only the generic part of {4}{R} (CR 702.41a, 118.7c). Turn 1: Hellspur Posse Boss (a Rogue) and its two Mercenary
+# tokens, Bile-Vial Boggart (Assassin) and Burrog Banemaker (Warlock) are five outlaws, more than the four generic mana; on turn 3 the Brute still costs {R}:
+# a single red mana from the Mox Ruby pays for it exactly (no other source is tapped for it and nothing is left in the pool).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mountain
+Hellspur Posse Boss
+Bile-Vial Boggart
+Burrog Banemaker
+Hellspur Brute
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Bile-Vial Boggart.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Hellspur Posse Boss.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 8
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hellspur Brute.Cast
+? Bot1.Mana =
+? Bot1.Battlefield.Mox Jet.Tapped = false
+? Bot1.Battlefield.Mountain.Tapped = false
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Hellspur Brute.Power = 5
+Bot1.Battlefield.Count = 9
