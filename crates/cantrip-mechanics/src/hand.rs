@@ -222,9 +222,21 @@ pub fn may_put_up_to_onto_battlefield_tapped(
     source: ObjectId,
     rule: Selection,
 ) -> Result<Vec<ObjectId>, Suspend> {
+    put_up_to_from_hand(g, player, source, rule, true)
+}
+
+/// `may_put_up_to_onto_battlefield_tapped` for "You may put up to N cards from your hand onto the battlefield" (CR 608.2d, 101.4):
+/// the cards `rule` selects, chosen together from the whole hand and put onto the battlefield untapped all at once. Smuggler's
+/// Surprise prints it, of two creature cards (`select::creature_cards(select::up_to(2))`); Tooth and Nail, The World Spell and
+/// Ugin, the Spirit Dragon print the same instruction.
+pub fn may_put_up_to_onto_battlefield(g: &mut dyn Game, player: PlayerId, source: ObjectId, rule: Selection) -> Result<Vec<ObjectId>, Suspend> {
+    put_up_to_from_hand(g, player, source, rule, false)
+}
+
+fn put_up_to_from_hand(g: &mut dyn Game, player: PlayerId, source: ObjectId, rule: Selection, tapped: bool) -> Result<Vec<ObjectId>, Suspend> {
     let hand = g.state().zone(Zone::hand(player)).to_vec();
     let chosen = choose::select(g, player, source, Purpose::PutOntoBattlefield, hand, rule)?;
-    let cards: Vec<(ObjectId, PlayerId, bool)> = chosen.iter().map(|&c| (c, player, true)).collect();
+    let cards: Vec<(ObjectId, PlayerId, bool)> = chosen.iter().map(|&c| (c, player, tapped)).collect();
     g.put_all_onto_battlefield_as(&cards)
 }
 
