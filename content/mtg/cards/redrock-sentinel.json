@@ -1,0 +1,11 @@
+{
+  "name": "Redrock Sentinel",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Golem",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Defender\n{2}, {T}, Sacrifice a land: Draw a card and create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "keywords": [
+    "Defender"
+  ]
+}

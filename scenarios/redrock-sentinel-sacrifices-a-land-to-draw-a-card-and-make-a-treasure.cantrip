@@ -1,0 +1,49 @@
+# Redrock Sentinel, a 2/4 Golem with defender: "{2}, {T}, Sacrifice a land: Draw a card and create a Treasure token" (CR 602.2,
+# 701.21a, 111.10a). On turn 3 Bot1 controls no land, so there is
+# nothing to sacrifice (refused; a Mox is an artifact, not a land); with a Plains played the ability is activated paying {2} with
+# two Moxen, exactly (the pool is empty after, the third Mox untapped), tapping the Sentinel and sacrificing the Plains (it goes
+# to the graveyard). It resolves into one card drawn (hand 3 -> 4) and one Treasure token.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Redrock Sentinel
+Plains x30
+
+[Bot2 Deck]
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Redrock Sentinel.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Redrock Sentinel.Subtypes = Golem
+? Bot1.Battlefield.Redrock Sentinel.Keywords = Defender
+? Bot1.Battlefield.Redrock Sentinel.Power = 2
+? Bot1.Battlefield.Redrock Sentinel.Toughness = 4
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Redrock Sentinel.Activate
+Bot1.Hand.Plains.Play
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Redrock Sentinel.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+? Bot1.Battlefield.Redrock Sentinel.Tapped = true
+? Bot1.Battlefield.Mox Ruby.Tapped = false
+? Bot1.Graveyard = Plains
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Jet; Mox Ruby; Redrock Sentinel; Treasure Token
+Bot1.Graveyard = Plains
+Bot1.Hand.Count = 4
