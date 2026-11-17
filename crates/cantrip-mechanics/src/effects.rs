@@ -2662,6 +2662,17 @@ pub fn return_this_to_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Sus
     Ok(())
 }
 
+const MAY_RETURN_THIS_TO_HAND: Question = Question::new("ReturnThis", "return {subject} to its owner's hand?", "", "Return", "Keep");
+
+/// "You may return this [permanent] to its owner's hand" (CR 400.3, 603.5) as the ability resolves: asked only while it is still
+/// the object that triggered (CR 400.7), returned on a yes. Tell Me What You See and Intimidation Campaign print it.
+pub fn may_return_this_to_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if ask_may_this_card(g, item, Purpose::Ask(&MAY_RETURN_THIS_TO_HAND))? {
+        return_this_to_hand(g, item)?;
+    }
+    Ok(())
+}
+
 /// "Return it [that card] to its owner's hand" (CR 400.3) for the card a dies or put-into-graveyard trigger is about
 /// (`StackItem::subject`, the new object in the graveyard, CR 400.7): returned only if it is still there. Rancor and Ares,
 /// God of War print it.
