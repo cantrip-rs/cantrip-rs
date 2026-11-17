@@ -1,0 +1,34 @@
+# "Return another target creature": turned face up (CR 702.168d) with no other creature on the battlefield, the trigger has no legal target and is removed from the stack
+# (CR 603.3d); the Specialist itself is not returned.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Exit Specialist
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Exit Specialist.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Stack.Count = 0
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Exit Specialist.Power = 2
+Bot1.Hand.Exit Specialist = (absent)
+Bot1.Battlefield.Count = 4

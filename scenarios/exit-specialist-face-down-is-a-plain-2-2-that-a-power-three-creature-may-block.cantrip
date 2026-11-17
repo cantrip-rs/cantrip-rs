@@ -1,0 +1,42 @@
+# Cast face down for {3} (CR 702.168a) the Specialist is a nameless 2/2 with ward {2} and no other abilities (CR 708.2), so "can't be blocked by creatures with power 3 or greater"
+# is not in force: Bot2's Hill Giant (3/3) blocks it on turn 3 and kills it.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Exit Specialist
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Hill Giant
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Exit Specialist.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(#1 > Bot2)
+Bot2.Block(Hill Giant > #1)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Exit Specialist
+Bot2.Life = 20

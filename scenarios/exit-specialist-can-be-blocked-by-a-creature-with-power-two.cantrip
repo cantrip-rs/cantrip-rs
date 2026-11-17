@@ -1,0 +1,37 @@
+# Exit Specialist's "can't be blocked by creatures with power 3 or greater" (CR 509.1b) leaves a power-2 blocker alone: Bot2's Grizzly Bears (2/2) blocks the face-up 2/1
+# Specialist on turn 3, and both die.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Exit Specialist
+Island x17
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Exit Specialist.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Exit Specialist > Bot2)
+Bot2.Block(Grizzly Bears > Exit Specialist)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Exit Specialist
+Bot2.Graveyard = Grizzly Bears; Black Lotus
+Bot2.Life = 20

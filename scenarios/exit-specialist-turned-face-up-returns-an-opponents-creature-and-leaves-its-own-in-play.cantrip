@@ -1,0 +1,57 @@
+# Exit Specialist: Disguise {1}{U} (CR 702.168a): cast face down for {3} on turn 1, turned face up on turn 3 as a special action for exactly {1}{U}
+# (CR 702.168d, 116.2b). "When this creature is turned face up, return another target creature to its owner's hand" (CR 708.8, 603.6): of Bot1's Ornithopter
+# and Bot2's Grizzly Bears, Bot1 chooses the Bears, which go back to Bot2's hand; the Ornithopter stays, and so does the Specialist (it says "another").
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Exit Specialist
+Ornithopter
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Exit Specialist.Cast(Ability: Disguise)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Mana =
+
+! Bot1.Target(Bot1.Battlefield.Exit Specialist)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears = (absent)
+Bot2.Hand.Count = 6
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Exit Specialist.Power = 2

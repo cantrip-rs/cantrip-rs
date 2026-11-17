@@ -1,0 +1,47 @@
+# Exit Specialist's trigger says "another target creature", not "target creature an opponent controls": turned face up (CR 702.168d) with only Bot1's own Ornithopter
+# besides itself on the battlefield, the Ornithopter is the one legal target and returns to Bot1's hand. The Specialist stays on the battlefield.
+# The disguise cost {1}{U} needs a blue source (CR 702.168d, 107.4): with only black, white and red sources untapped it is refused; the Mox Sapphire cast then makes it payable.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Exit Specialist
+Ornithopter
+Mox Sapphire
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Exit Specialist.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Exit Specialist.Power = 2
+Bot1.Hand = Island; Island; Ornithopter
