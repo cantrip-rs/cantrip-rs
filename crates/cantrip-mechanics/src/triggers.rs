@@ -768,6 +768,18 @@ pub fn attached_creature_attacks_subject(q: &dyn Query, source: ObjectId, event:
 /// The original Equipment-specific name has the same attached-creature subject contract.
 pub use attached_creature_attacks_subject as equipped_creature_attacks_subject;
 
+/// "Whenever equipped creature deals combat damage" (CR 510.2, 603.2c): the creature this Equipment is attached to dealing more
+/// than 0 combat damage, to anything. Damage dealt together is one event, so the ability is `.once_per_batch()`: however many
+/// recipients, it triggers once. Umezawa's Jitte and Lost Jitte print it.
+pub fn equipped_creature_deals_combat_damage(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::Damage { source: dealer, amount, kind, .. } if kind.is_combat() && *amount > 0 && q.attached_to(source) == Some(*dealer) => {
+            Fired::PLAIN
+        }
+        _ => None,
+    }
+}
+
 /// "Whenever equipped creature deals combat damage to a player" (CR 510.2, 603.2c): the creature this Equipment is attached to
 /// dealing more than 0 combat damage to a player; each such event is one player and one trigger. The player is the trigger's
 /// subject, with the amount in bounded `data[0]`; `.damage_amount()` freezes the bounded amount ("that damage"). Bloodforged Battle-Axe, Orcrist, Goblin Cleaver and Buster
