@@ -42,7 +42,7 @@ pub static CARD: CardDef = CardDef {
             "At the beginning of combat on your turn, choose up to one target Vehicle you control. Until end of turn, it becomes an artifact creature and gains haste.",
         )
         .targets(&[targets::VEHICLE_YOU_CONTROL.optional()]),
-        ability(loyalty(2), |g, item| effects::may_sacrifice_an_artifact_or_discard_to_draw(g, item, 1), "+2: You may sacrifice an artifact or discard a card. If you do, draw a card."),
+        ability(loyalty(2), |g, item| effects::may_sacrifice_or_discard_to_draw(g, item, CardType::Artifact, 1), "+2: You may sacrifice an artifact or discard a card. If you do, draw a card."),
         ability(loyalty(0), tokens::create_a_crew_1_vehicle, "0: Create a 3/2 colorless Vehicle artifact token with crew 1."),
         ability(loyalty(-7), emblem, "\u{2212}7: You get an emblem with \"Whenever an artifact you control enters, this emblem deals 3 damage to any target.\""),
     ],

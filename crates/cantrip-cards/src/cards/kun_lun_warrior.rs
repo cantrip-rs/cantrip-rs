@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::effects::may_sacrifice_an_artifact_or_discard_to_draw;
+use cantrip_mechanics::effects::may_sacrifice_or_discard_to_draw;
 use cantrip_mechanics::triggers::THIS_ENTERS;
 use cantrip_oracle as oracle;
 
@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         THIS_ENTERS,
-        |g, item| may_sacrifice_an_artifact_or_discard_to_draw(g, item, 1),
+        |g, item| may_sacrifice_or_discard_to_draw(g, item, CardType::Artifact, 1),
         "When this creature enters, you may sacrifice an artifact or discard a card. If you do, draw a card.",
     )],
     labels: &["Sacrifice an artifact", "Discard a card", "Neither"],

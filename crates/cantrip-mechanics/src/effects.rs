@@ -1286,23 +1286,25 @@ pub fn may_sacrifice(g: &mut dyn Game, player: PlayerId, source: ObjectId, rule:
     Ok(g.sacrifice(player, &chosen))
 }
 
-/// "You may sacrifice an artifact or discard [a kind of] card" (CR 608.2c-d, 701.9, 701.21): the player chooses as the effect
-/// resolves which of the two to do, or neither; the discard is one card `discard` allows of their hand. An option with nothing
-/// to do it with (no artifact, no card of the kind in hand) is not offered, and nothing is asked with neither possible.
-/// Returns whether the sacrifice or the discard actually happened, for the "if you do" or reflexive "when you do" (CR 608.2c,
-/// 603.12) that follows. The options are the card's `labels`, in the order "Sacrifice an artifact", "Discard ...", "Neither".
-/// Chandra, Spark Hunter and Vision of Love (a card) and Bullseye, Death Dealer (a nonland card) print it.
-pub fn may_sacrifice_an_artifact_or_discard(g: &mut dyn Game, player: PlayerId, source: ObjectId, discard: Selection) -> Result<bool, Suspend> {
+/// "You may sacrifice [a permanent of a type] or discard [a kind of] card" (CR 608.2c-d, 701.9, 701.21): the player chooses as
+/// the effect resolves which of the two to do, or neither; the sacrifice is one permanent of `sacrifice`'s type they control,
+/// the discard one card `discard` allows of their hand. An option with nothing to do it with (no such permanent, no card of
+/// the kind in hand) is not offered, and nothing is asked with neither possible. Returns whether the sacrifice or the discard
+/// actually happened, for the "if you do" or reflexive "when you do" (CR 608.2c, 603.12) that follows. The options are the
+/// card's `labels`, in the order "Sacrifice ...", "Discard ...", "Neither". Chandra, Spark Hunter, Vision of Love and Kun Lun
+/// Warrior (an artifact, a card), Bullseye, Death Dealer (an artifact, a nonland card) and Highway Robbery (a land, a card)
+/// print it.
+pub fn may_sacrifice_or_discard(g: &mut dyn Game, player: PlayerId, source: ObjectId, sacrifice: CardType, discard: Selection) -> Result<bool, Suspend> {
     const SACRIFICE: u8 = 0;
     const DISCARD: u8 = 1;
     const NEITHER: u8 = 2;
-    // An artifact that can't be sacrificed is nothing to do it with (CR 101.2: the option can't be taken).
-    let artifacts: Vec<ObjectId> =
-        g.permanents_of(player).into_iter().filter(|&id| g.chars(id).is(CardType::Artifact) && g.can_sacrifice(player, id)).collect();
+    // A permanent that can't be sacrificed is nothing to do it with (CR 101.2: the option can't be taken).
+    let permanents: Vec<ObjectId> =
+        g.permanents_of(player).into_iter().filter(|&id| g.chars(id).is(sacrifice) && g.can_sacrifice(player, id)).collect();
     let rule = discard.taking(crate::select::exactly(1));
     let hand = g.state().zone(Zone::hand(player)).to_vec();
     let mut options = Vec::new();
-    if !artifacts.is_empty() {
+    if !permanents.is_empty() {
         options.push(SACRIFICE);
     }
     if cantrip_api::select::first_answer(&*g, &rule, player, source, &hand, true).is_some_and(|cards| !cards.is_empty()) {
@@ -1316,7 +1318,7 @@ pub fn may_sacrifice_an_artifact_or_discard(g: &mut dyn Game, player: PlayerId, 
     let labels = options.iter().map(|&i| Label::Card(card, i)).collect();
     Ok(match options[crate::choose::one_of(g, player, source, labels)? as usize] {
         SACRIFICE => {
-            let chosen = crate::choose::cards(g, player, source, Purpose::Sacrifice, artifacts, 1, false)?;
+            let chosen = crate::choose::cards(g, player, source, Purpose::Sacrifice, permanents, 1, false)?;
             !g.sacrifice(player, &chosen).is_empty()
         }
         DISCARD => {
@@ -1327,11 +1329,11 @@ pub fn may_sacrifice_an_artifact_or_discard(g: &mut dyn Game, player: PlayerId, 
     })
 }
 
-/// "You may sacrifice an artifact or discard a card. If you do, draw `n` cards" (CR 608.2c-d, 701.9, 701.21):
-/// `may_sacrifice_an_artifact_or_discard` for any card, then the cards are drawn only if it happened. Chandra, Spark Hunter
-/// (one card) and Vision of Love (two) print it.
-pub fn may_sacrifice_an_artifact_or_discard_to_draw(g: &mut dyn Game, item: &StackItem, n: u32) -> Result<(), Suspend> {
-    if may_sacrifice_an_artifact_or_discard(g, item.controller, item.object, crate::select::CARD)? {
+/// "You may sacrifice [a permanent of a type] or discard a card. If you do, draw `n` cards" (CR 608.2c-d, 701.9, 701.21):
+/// `may_sacrifice_or_discard` for any card, then the cards are drawn only if it happened. Chandra, Spark Hunter and Kun Lun
+/// Warrior (an artifact, one card), Vision of Love (an artifact, two) and Highway Robbery (a land, two) print it.
+pub fn may_sacrifice_or_discard_to_draw(g: &mut dyn Game, item: &StackItem, sacrifice: CardType, n: u32) -> Result<(), Suspend> {
+    if may_sacrifice_or_discard(g, item.controller, item.object, sacrifice, crate::select::CARD)? {
         g.draw(item.controller, n);
     }
     Ok(())

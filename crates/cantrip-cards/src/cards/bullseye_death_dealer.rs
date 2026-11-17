@@ -6,7 +6,7 @@ use cantrip_oracle as oracle;
 /// 701.21): chosen as the triggered ability resolves, and the reflexive trigger is created only if the sacrifice or the
 /// discard was actually done.
 fn sacrifice_or_discard_for_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if effects::may_sacrifice_an_artifact_or_discard(g, item.controller, item.object, select::NONLAND_CARD)? {
+    if effects::may_sacrifice_or_discard(g, item.controller, item.object, CardType::Artifact, select::NONLAND_CARD)? {
         g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(g.card_id(&CARD), 0), Target::None);
     }
     Ok(())
