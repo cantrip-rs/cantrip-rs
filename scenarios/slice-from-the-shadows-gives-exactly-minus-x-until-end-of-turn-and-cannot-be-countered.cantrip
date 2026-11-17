@@ -1,0 +1,63 @@
+# "This spell can't be countered. Target creature gets -X/-X until end of turn." Bot1 casts it with X = 2 ({2}{B}: Mox Jet, Mox Ruby,
+# Mox Pearl) at Bot2's Aegis Turtle (0/5) on turn 3, into Bot2's two open blue mana and Counterspell. The Counterspell may be cast
+# at it (a spell is still a legal target) but does nothing (CR 101.2): the Turtle is -2/3 exactly, so a wrong X is seen either way,
+# and by Bot2's turn 4 the effect has ended (CR 514.2) and it is 0/5 again.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Slice from the Shadows
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Mox Sapphire
+Aegis Turtle
+Counterspell
+Island
+Island
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Slice from the Shadows.Cast(Aegis Turtle; X: 2)
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Hand.Counterspell.Cast(Slice from the Shadows)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Aegis Turtle.Power = -2
+? Bot2.Battlefield.Aegis Turtle.Toughness = 3
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Graveyard = Counterspell
+Bot1.Graveyard = Slice from the Shadows
+Bot2.Battlefield.Aegis Turtle.Power = 0
+Bot2.Battlefield.Aegis Turtle.Toughness = 5

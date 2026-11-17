@@ -1,0 +1,9 @@
+{
+  "name": "Slice from the Shadows",
+  "manaCost": "{X}{B}",
+  "type": "Instant",
+  "oracleText": "This spell can't be countered. (This includes by the ward ability.)\nTarget creature gets -X/-X until end of turn.",
+  "keywords": [
+    "CantBeCountered"
+  ]
+}
