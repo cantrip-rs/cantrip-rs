@@ -1,0 +1,39 @@
+# Sterling Hound: when it enters it surveils 2 (CR 701.25) -- of the Island, Swamp and Forest on top of the library only the top two
+# are looked at: Bot1 puts the Island into the graveyard and keeps the Swamp on top. The turn-3 draw is the Swamp, the turn-5
+# draw the Forest, which was not looked at (so nothing was milled or reordered past two).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Sterling Hound
+Plains x3
+Island
+Swamp
+Forest
+Plains x10
+
+[Bot2 Deck]
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sterling Hound.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Swamp | Island)
+? Bot1.Graveyard = Island
+? Bot1.Battlefield.Sterling Hound.Power = 3
+? Bot1.Battlefield.Sterling Hound.Toughness = 2
+[T3 Bot1.Main1]
+? Bot1.Hand = Plains; Plains; Plains; Swamp
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Swamp; Forest
+Bot1.Graveyard = Island
