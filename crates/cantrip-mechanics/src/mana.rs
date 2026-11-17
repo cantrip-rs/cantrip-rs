@@ -345,6 +345,16 @@ pub fn one_of_the_chosen_color_per_charge_counter(g: &mut dyn Game, asker: &Aske
     Ok(())
 }
 
+/// "{T}: Choose a color. Add one mana of that color for each different power among creatures you control" (CR 605.1a, 106.3, 208.1):
+/// the mana ability's effect, for the color the player chose. The powers are those the creatures have as it resolves, through the
+/// layers, counted once each (`coven::different_powers`). Loot the Nexus and Selvala, Eager Trailblazer print it.
+pub fn one_of_the_chosen_color_per_different_power(g: &mut dyn Game, asker: &Asker, chosen: Option<Color>) -> Result<(), Suspend> {
+    let Some(chosen) = chosen else { return Ok(()) };
+    let different = crate::coven::different_powers(g, asker.controller) as u32;
+    g.add_mana(asker.controller, chosen.mana(), different);
+    Ok(())
+}
+
 /// "... its controller adds an additional one mana of the chosen color." A triggered mana ability (CR 605.1b), resolving at
 /// once (CR 605.4a): the enchanted permanent's controller adds it, whoever controls the Aura. The color was chosen as the Aura
 /// entered; "the chosen color" is no color word (CR 612.2). An Aura that entered without choosing (none does) adds nothing.
