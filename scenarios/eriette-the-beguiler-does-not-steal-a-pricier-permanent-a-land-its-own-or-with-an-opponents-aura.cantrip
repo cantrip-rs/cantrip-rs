@@ -1,0 +1,85 @@
+# Eriette, the Beguiler does not trigger unless all of it holds (CR 603.2): Bot1's Holy Strength (mana value 1) on Bot2's Grizzly
+# Bears (mana value 2: more than the Aura's); Bot1's Wild Growth (1) on Bot2's Forest (0, but a land); Bot2's own Holy Strength
+# (1) on Bot2's Savannah Lions (1: an Aura Bot1 does not control); Bot1's Ethereal Armor on Eriette (Bot1's own permanent).
+# Nothing triggers and nothing changes control.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Eriette, the Beguiler
+Holy Strength
+Wild Growth
+Ethereal Armor
+Island x16
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Plains
+Mox Pearl
+Savannah Lions
+Holy Strength
+Island
+Island x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Eriette, the Beguiler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Holy Strength.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wild Growth.Cast(Bot2.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Holy Strength.Cast(Bot2.Battlefield.Savannah Lions)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot2.Battlefield.Savannah Lions.Power = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ethereal Armor.Cast(Bot1.Battlefield.Eriette, the Beguiler)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Plains; Mox Pearl; Mox Sapphire; Mox Emerald; Eriette, the Beguiler; Holy Strength; Wild Growth; Ethereal Armor
+Bot2.Battlefield = Forest; Mox Emerald; Grizzly Bears; Plains; Mox Pearl; Savannah Lions; Holy Strength
+Bot1.Battlefield.Eriette, the Beguiler.Power = 7

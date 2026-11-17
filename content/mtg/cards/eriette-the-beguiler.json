@@ -1,0 +1,11 @@
+{
+  "name": "Eriette, the Beguiler",
+  "manaCost": "{1}{W}{U}{B}",
+  "type": "Legendary Creature — Human Warlock",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Lifelink\nWhenever an Aura you control becomes attached to a nonland permanent an opponent controls with mana value less than or equal to that Aura's mana value, gain control of that permanent for as long as that Aura is attached to it.",
+  "keywords": [
+    "Lifelink"
+  ]
+}

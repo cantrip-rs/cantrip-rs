@@ -1,0 +1,87 @@
+# Eriette, the Beguiler: the control effect comes from Eriette's triggered ability (CR 113.7) and lasts "for as long as that
+# Aura is attached to it" (CR 611.2b), not as long as Eriette stays. Turn 3: Bot1's Pacifism on Bot2's Grizzly Bears; with
+# the trigger on the stack Bot2 Disenchants the Pacifism, so the duration never begins and the Bears stay Bot2's (ruling
+# 2024-04-12). Turn 5: a second Pacifism steals the Bears; turn 6 Bot2 exiles Eriette with Swords to Plowshares and Bot1
+# keeps the Bears while the Pacifism stays attached.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Eriette, the Beguiler
+Pacifism
+Pacifism
+Plains x16
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Black Lotus
+Disenchant
+Plains
+Swords to Plowshares
+Island x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Eriette, the Beguiler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pacifism.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Pacifism)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pacifism.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+[T6 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Eriette, the Beguiler)
+Bot2.Pass
+Bot1.Pass
+[T6 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Grizzly Bears; Mox Pearl; Mox Sapphire; Pacifism; Plains
+Exile = Eriette, the Beguiler
+Bot2.Battlefield = Forest; Mox Emerald; Plains
+Bot1.Life = 24

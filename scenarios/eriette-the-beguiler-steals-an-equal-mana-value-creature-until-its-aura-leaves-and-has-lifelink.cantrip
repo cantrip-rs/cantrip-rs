@@ -1,0 +1,75 @@
+# Eriette, the Beguiler: Bot1's Pacifism (mana value 2) becomes attached to Bot2's Grizzly Bears (mana value 2, not more), so
+# Bot1 gains control of the Bears (CR 603.2, 202.3) for as long as that Aura is attached to it (CR 611.2b). Eriette attacks
+# with lifelink: Bot2 16, Bot1 24. Turn 4: Bot2 Disenchants the Pacifism, and the Bears return to Bot2.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Eriette, the Beguiler
+Pacifism
+Island
+Plains x16
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Disenchant
+Island
+Island
+Island
+Plains
+Island x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Eriette, the Beguiler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pacifism.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Eriette, the Beguiler > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+? Bot1.Life = 24
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Pacifism)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Plains; Mox Pearl; Mox Sapphire; Eriette, the Beguiler
+Bot2.Battlefield = Forest; Mox Emerald; Grizzly Bears; Plains
+Bot2.Life = 16
+Bot1.Life = 24
