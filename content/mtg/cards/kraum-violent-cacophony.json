@@ -1,0 +1,11 @@
+{
+  "name": "Kraum, Violent Cacophony",
+  "manaCost": "{2}{U}{R}",
+  "type": "Legendary Creature — Zombie Horror",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying\nWhenever you cast your second spell each turn, put a +1/+1 counter on Kraum and draw a card.",
+  "keywords": [
+    "Flying"
+  ]
+}

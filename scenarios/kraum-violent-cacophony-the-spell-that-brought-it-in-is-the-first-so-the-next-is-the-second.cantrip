@@ -1,0 +1,40 @@
+# Kraum, Violent Cacophony: ruling 2024-04-12: if Kraum was the first spell cast this turn, the next spell is the second
+# (CR 207.2c). On turn 3 Bot1 casts Kraum first from untapped Moxen, then a Memnite: the Memnite is the second spell and
+# Kraum, already on the battlefield, grows and Bot1 draws (hand: Island, the card drawn for the turn, and the one drawn here).
+[Bot1 Deck]
+Kraum, Violent Cacophony
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Memnite
+Island
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kraum, Violent Cacophony.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kraum, Violent Cacophony.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Kraum, Violent Cacophony.Counters.PlusOnePlusOne = 1
+Bot1.Hand.Count = 3

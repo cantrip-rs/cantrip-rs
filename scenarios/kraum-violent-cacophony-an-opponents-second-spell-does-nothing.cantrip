@@ -1,0 +1,36 @@
+# Kraum, Violent Cacophony: "your second spell" (CR 207.2c): Bot2 casts two Moxen on turn 2, its second spell of the turn,
+# and Kraum, controlled by Bot1, neither grows nor draws for Bot1 (Bot1 keeps its two Islands in hand).
+
+[Bot1 Deck]
+Kraum, Violent Cacophony
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Island
+Island x16
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kraum, Violent Cacophony.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Kraum, Violent Cacophony.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand = Island; Island
