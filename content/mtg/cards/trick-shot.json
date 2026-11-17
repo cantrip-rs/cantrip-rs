@@ -1,0 +1,6 @@
+{
+  "name": "Trick Shot",
+  "manaCost": "{4}{R}",
+  "type": "Instant",
+  "oracleText": "Trick Shot deals 6 damage to target creature and 2 damage to up to one other target creature token."
+}

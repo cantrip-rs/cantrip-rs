@@ -1,0 +1,52 @@
+# Trick Shot (CR 115.1, 120.3): the first target takes 6 and the optional second target, an other creature token (here a Goblin token, which may be either player's),
+# takes 2; each dies, and the creature that wasn't targeted is unharmed. A nontoken creature, or the first target again, is refused for the second.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Dragon Fodder
+Trick Shot
+Island x13
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Trick Shot.Cast
+Bot1.Target(Bot2.Battlefield.Memnite)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Goblin Token#1)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Count = 1
+? Bot2.Graveyard = Memnite
+? Bot1.Battlefield.Count = 6
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Damage = 0
+Bot1.Battlefield.Count = 6
