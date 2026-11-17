@@ -1,0 +1,42 @@
+# Raucous Entertainer: "each creature you control". Bot1 keeps its Entertainer untapped on turn 3; on turn 4 Bot2's Memnite enters and Bot1
+# pays {1} with Mox Emerald: Bot2's Memnite, which did enter this turn, gets no counter (1/1), and neither does Bot1's older Memnite, with nothing
+# new on its side (1/1); the Entertainer, a creature that entered on turn 1, stays 2/2.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Raucous Entertainer
+Memnite
+Plains x16
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Raucous Entertainer.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Raucous Entertainer.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Raucous Entertainer.Power = 2
+Bot1.Battlefield.Raucous Entertainer.Tapped = true

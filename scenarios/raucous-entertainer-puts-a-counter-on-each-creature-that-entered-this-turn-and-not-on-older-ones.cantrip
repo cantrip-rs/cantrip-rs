@@ -1,0 +1,47 @@
+# Raucous Entertainer, "{1}, {T}: Put a +1/+1 counter on each creature you control that entered this turn." Cast on turn 1 with a Memnite;
+# on turn 3 Bot1 casts a second Memnite and an Ornithopter, then pays {1} with Mox Emerald: both new creatures get a counter at once
+# (Memnite 2/2, Ornithopter 1/3), the Memnite and the Entertainer, which came in on turn 1, get none (1/1, 2/2).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Raucous Entertainer
+Memnite
+Memnite
+Ornithopter
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Raucous Entertainer.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Raucous Entertainer.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Raucous Entertainer.Power = 2
+Bot1.Battlefield.Raucous Entertainer.Tapped = true
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Memnite#1.Power = 1
+Bot1.Battlefield.Memnite#2.Power = 2
