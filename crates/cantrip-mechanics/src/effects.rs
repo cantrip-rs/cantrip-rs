@@ -1944,6 +1944,17 @@ pub fn damage_first_target_by_creatures_you_control(g: &mut dyn Game, item: &Sta
     Ok(())
 }
 
+/// "Suspect up to one target creature" (CR 701.60a): the creature in target slot `SLOT`, if one was chosen and it is still a legal
+/// target as this resolves (CR 608.2b); it becomes suspected, which gives it menace and "can't block" until it leaves the battlefield.
+/// Suspecting a creature already suspected changes nothing. J. Jonah Jameson (slot 0) and Reasonable Doubt (slot 1, after the spell
+/// it counters) print it.
+pub fn suspect_target<const SLOT: usize>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, SLOT) {
+        g.suspect(creature);
+    }
+    Ok(())
+}
+
 /// "Counter target spell unless its controller pays {N}" (CR 701.6, 118.12): the spell that is the first target is countered
 /// unless its controller pays the generic cost, which they may make mana for while asked; nothing if it is no longer a legal
 /// target as this resolves (CR 608.2b). Which spells may be targeted is the card's own. Mana Leak ({3}), Daze ({1}) and Spell
