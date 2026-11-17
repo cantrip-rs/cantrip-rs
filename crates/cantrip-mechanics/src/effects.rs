@@ -805,6 +805,15 @@ pub fn plus_one_counter_on_this(g: &mut dyn Game, item: &StackItem) -> Result<()
     Ok(())
 }
 
+/// "Put a +1/+1 counter on [this creature] and draw a card" (CR 122.1, 121.1): both, in one effect. The counter goes on only while
+/// the source is still the permanent that triggered (CR 400.7), the card is drawn whatever became of it. Sunstar Lightsmith,
+/// Thought Shucker and Kraum, Violent Cacophony print it.
+pub fn plus_one_counter_on_this_and_draw_a_card(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    plus_one_counter_on_this(g, item)?;
+    g.end_sentence();
+    draw(g, item, 1)
+}
+
 /// "You may put a +1/+1 counter on [this creature]" (CR 122.1, 608.2d): asked of the ability's controller as it resolves, and only
 /// while the source is still the permanent that triggered; once it has left the battlefield it is a new object (CR 400.7), so
 /// nothing is asked and nothing is put. Mold Adder and Taurean Mauler print it.
