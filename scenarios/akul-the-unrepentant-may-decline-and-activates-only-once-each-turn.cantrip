@@ -1,0 +1,64 @@
+# Akul the Unrepentant: "you MAY put": with Colossal Dreadmaw in hand Bot1 sacrifices Memnite, Ornithopter and Phyrexian
+# Walker and declines, so the Dreadmaw stays in hand. Four Goblin tokens are still there, but the ability can't be
+# activated a second time that turn (CR 602.5b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Akul the Unrepentant
+Memnite
+Ornithopter
+Phyrexian Walker
+Dragon Fodder
+Dragon Fodder
+Colossal Dreadmaw
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Akul the Unrepentant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Akul the Unrepentant.Activate
+Bot1.Choose(Memnite; Ornithopter; Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot1.Battlefield.Count = 7
+! Bot1.Battlefield.Akul the Unrepentant.Activate
+
+[Expect]
+Bot1.Battlefield = Akul the Unrepentant; Goblin Token; Goblin Token; Goblin Token; Goblin Token; Mox Ruby; Mox Ruby
+Bot1.Graveyard = Phyrexian Walker; Ornithopter; Memnite; Dragon Fodder; Dragon Fodder; Black Lotus
+Bot1.Hand = Colossal Dreadmaw

@@ -1,0 +1,12 @@
+{
+  "name": "Akul the Unrepentant",
+  "manaCost": "{B}{B}{R}{R}",
+  "type": "Legendary Creature — Scorpion Dragon Rogue",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Flying, trample\nSacrifice three other creatures: You may put a creature card from your hand onto the battlefield. Activate only as a sorcery and only once each turn.",
+  "keywords": [
+    "Flying",
+    "Trample"
+  ]
+}

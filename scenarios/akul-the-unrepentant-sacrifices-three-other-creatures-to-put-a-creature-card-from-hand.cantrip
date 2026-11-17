@@ -1,0 +1,56 @@
+# Akul the Unrepentant: with only two other creatures the ability can't be activated (Akul is not "other"); with three it
+# can, but only as a sorcery (CR 602.5d: not at the beginning of combat). Sacrificing Memnite, Ornithopter and Phyrexian
+# Walker puts Colossal Dreadmaw from hand onto the battlefield (not cast, CR 608.2d).
+# Akul the Unrepentant {B}{B}{R}{R}: Legendary Creature — Scorpion Dragon Rogue 5/5
+#   Flying, trample
+#   Sacrifice three other creatures: You may put a creature card from your hand onto the battlefield. Activate only as a
+#   sorcery and only once each turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Akul the Unrepentant
+Memnite
+Ornithopter
+Colossal Dreadmaw
+Phyrexian Walker
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Akul the Unrepentant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Akul the Unrepentant.Keywords = Flying; Trample
+! Bot1.Battlefield.Akul the Unrepentant.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+! Bot1.Battlefield.Akul the Unrepentant.Activate
+[T3 Bot1.Main2]
+Bot1.Battlefield.Akul the Unrepentant.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Colossal Dreadmaw)
+
+[Expect]
+Bot1.Battlefield = Akul the Unrepentant; Colossal Dreadmaw; Mox Ruby; Mox Ruby
+Bot1.Graveyard = Phyrexian Walker; Ornithopter; Memnite; Black Lotus
+Bot1.Hand.Count = 0
