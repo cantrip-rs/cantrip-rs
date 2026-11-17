@@ -1,0 +1,8 @@
+{
+  "name": "Ruthless Lawbringer",
+  "manaCost": "{1}{W}{B}",
+  "type": "Creature — Vampire Assassin",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters, you may sacrifice another creature. When you do, destroy target nonland permanent."
+}
