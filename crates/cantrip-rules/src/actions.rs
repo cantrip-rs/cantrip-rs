@@ -3591,6 +3591,11 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
     for _ in 0..forages {
         cx.emit(Event::Foraged { player, by: spell });
     }
+    // Each cost to collect evidence paid is collecting evidence (CR 701.59a), recorded as the whole payment is made.
+    let collected = usize::from(cost.collect_evidence > 0) + extra.iter().filter(|(_, part)| part.collect_evidence > 0).count() + options.iter().filter(|part| part.collect_evidence > 0).count();
+    for _ in 0..collected {
+        cx.emit(Event::CollectedEvidence { player, by: spell });
+    }
     Ok((members, exiled, way_attacking, spent, restrictions, taken, variable_paid, beheld_type, mana_adds_nothing))
 }
 
