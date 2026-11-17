@@ -10,11 +10,7 @@ use cantrip_api::*;
 pub fn become_plotted(g: &mut dyn Game, exiled: ObjectId) {
     if g.obj(exiled).zone.is(ZoneKind::Exile) {
         let owner = g.obj(exiled).owner;
-        g.allow_play(
-            exiled,
-            owner,
-            PlayGrant { instead: Some(ManaCost::ZERO), later_turns: true, sorcery_speed: true, ..PlayGrant::CAST },
-        );
+        g.allow_play(exiled, owner, PlayGrant::PLOT);
     }
 }
 

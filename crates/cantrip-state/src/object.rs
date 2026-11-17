@@ -2289,6 +2289,10 @@ pub enum ExileInstead {
     /// spell is (Goliath Daydreamer): the counter is put on the card as it arrives in exile (CR 122.1, 614.1a), by the
     /// spell's controller. Set after the cast, by the effect that has the spell go to exile (`Game::exile_spell_instead`).
     Dream,
+    /// "Exile that spell instead of putting it into your graveyard as it resolves. If you do, it becomes plotted" (Lilah,
+    /// Undefeated Slickshot): exiled in place of its move to the graveyard, and, once there, plotted (CR 702.170a, `PlayGrant::PLOT`).
+    /// As the resolution alone (CR 701.6a), the way `Dream` is.
+    Plot,
 }
 
 /// A condition on a standing permission to play a card, worked out whenever the permission is asked.
@@ -2308,6 +2312,8 @@ pub enum PlayCondition {
 }
 
 impl PlayGrant {
+    /// "It becomes plotted" (CR 702.170a, 702.170d): its owner may cast it without paying its mana cost, as a sorcery, on a later turn.
+    pub const PLOT: PlayGrant = PlayGrant { instead: Some(ManaCost::ZERO), later_turns: true, sorcery_speed: true, ..PlayGrant::CAST };
     /// "You may cast it": for as long as it stays where it is, for its mana cost.
     pub const CAST: PlayGrant = PlayGrant { instead: None, lands: false, expiry: Expiry::Never, any_type: false, any_color: false, more: 0, later_turns: false, flashback: false, exile_instead: ExileInstead::Never, when: None, sorcery_speed: false, enters_tapped: false, adventure_only: false, life_for_mana_value: false };
 }

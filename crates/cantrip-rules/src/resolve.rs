@@ -539,9 +539,9 @@ fn leave_stack(cx: &mut Cx, items: &[StackItem], reason: ZoneReason) {
 pub(crate) fn its_own_exile(cx: &Cx, item: &StackItem, moving: ops::Moving, reason: ZoneReason) -> ops::Moving {
     let card = cx.s().obj(item.object).card;
     let flashback = item.flashback || (item.way > 0 && cx.card(card).ways.get(item.way as usize - 1).is_some_and(|w| w.exile_after));
-    // "Instead of putting it into your graveyard as it resolves" (Goliath Daydreamer) is of the resolution alone: a spell that is
-    // countered does not resolve and goes to the graveyard (CR 701.6a).
-    let exile_instead = if item.exile_instead == ExileInstead::Dream && reason != ZoneReason::Resolve { ExileInstead::Never } else { item.exile_instead };
+    // "Instead of putting it into your graveyard as it resolves" (Goliath Daydreamer, Lilah) is of the resolution alone: a spell
+    // that is countered does not resolve and goes to the graveyard (CR 701.6a).
+    let exile_instead = if matches!(item.exile_instead, ExileInstead::Dream | ExileInstead::Plot) && reason != ZoneReason::Resolve { ExileInstead::Never } else { item.exile_instead };
     ops::Moving { flashback, exile_instead, ..moving }
 }
 

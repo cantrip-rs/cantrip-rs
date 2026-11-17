@@ -250,6 +250,7 @@ fn it_is_judged_again_after_a_replacement_changes_how_it_enters() {
         rebound: false,
         on_adventure: false,
         rebounding: false,
+        plotted: false,
         destroy: false,
         regenerated: false,
             regeneration_shield: false,

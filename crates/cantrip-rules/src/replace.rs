@@ -100,6 +100,9 @@ const EXILE_INSTEAD_HINT: &str = "exile it instead of putting it into the gravey
 /// What the dream-counter exile of a spell says it does (Goliath Daydreamer's trigger; CR 616.1).
 const DREAM_EXILE_HINT: &str = "exile it with a dream counter on it instead of putting it into the graveyard";
 
+/// What the plotting exile of a spell says it does (Lilah, Undefeated Slickshot's trigger; CR 616.1).
+const PLOT_EXILE_HINT: &str = "exile it instead of putting it into the graveyard, and it becomes plotted";
+
 /// What the rules' replacements of a spell resolving, a permanent leaving and a destruction say they do, for the player who
 /// orders them with others (CR 616.1).
 const ADVENTURE_HINT: &str = "exile it on an Adventure, to be cast later as itself";
@@ -226,7 +229,7 @@ fn exile_instead_applies(cx: &Cx, z: &ZoneChange) -> bool {
     }
     match z.exile_instead {
         ExileInstead::Never => false,
-        ExileInstead::Spell | ExileInstead::Dream => true,
+        ExileInstead::Spell | ExileInstead::Dream | ExileInstead::Plot => true,
         ExileInstead::InstantOrSorcery => {
             let chars = cx.chars(z.object);
             chars.is(CardType::Instant) || chars.is(CardType::Sorcery)
@@ -815,6 +818,7 @@ fn hint_of(cx: &Cx, proposal: &Proposal, c: &Candidate) -> &'static str {
         Origin::Flashback => FLASHBACK_HINT,
         Origin::ExileInstead => match proposal {
             Proposal::ZoneChange(z) if z.exile_instead == ExileInstead::Dream => DREAM_EXILE_HINT,
+            Proposal::ZoneChange(z) if z.exile_instead == ExileInstead::Plot => PLOT_EXILE_HINT,
             _ => EXILE_INSTEAD_HINT,
         },
         Origin::Adventure => ADVENTURE_HINT,
@@ -1196,6 +1200,10 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
                     if matches!(origin, Origin::ExileInstead) && z.exile_instead == ExileInstead::Dream {
                         z.counters[CounterKind::Dream as usize] += 1;
                         z.counters_by = cx.s().obj(z.object).controller;
+                    }
+                    // "If you do, it becomes plotted" (Lilah): only if this exile is the one that applied (CR 616.1).
+                    if matches!(origin, Origin::ExileInstead) && z.exile_instead == ExileInstead::Plot {
+                        z.plotted = true;
                     }
                 }
             }
@@ -3881,6 +3889,7 @@ mod tests {
             rebound: false,
             on_adventure: false,
             rebounding: false,
+            plotted: false,
             destroy: false,
             regenerated: false,
             regeneration_shield: false,

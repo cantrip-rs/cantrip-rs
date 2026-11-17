@@ -86,6 +86,9 @@ pub struct ZoneChange {
     pub on_adventure: bool,
     /// Rebound's exile applied (`rebound`): its delayed triggered ability is created with the move.
     pub rebounding: bool,
+    /// Lilah, Undefeated Slickshot's exile applied (`ExileInstead::Plot`): "if you do, it becomes plotted" (CR 702.170a), so
+    /// the card is plotted as it arrives in exile, and only if this exile is what put it there.
+    pub plotted: bool,
     /// The move is a destruction (CR 701.8a) that a regeneration shield may replace (CR 701.19a, 614.8): by an effect that
     /// destroys, or by lethal damage (CR 704.5g-h), and not one that says it can't be regenerated (CR 701.19c). Set by the
     /// move. Continuous regeneration prohibitions are checked by the core when

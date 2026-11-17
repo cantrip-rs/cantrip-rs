@@ -1,0 +1,52 @@
+# Lilah's "exile that spell instead ... If you do, it becomes plotted" and Rest in Peace both replace the Helix's move
+# to the graveyard (CR 614.1a); the spell's controller chooses which applies (CR 616.1). With Rest in Peace's first the
+# card is exiled by it, Lilah's replacement no longer applies, and the card is not plotted: it cannot be cast from exile.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Lilah, Undefeated Slickshot
+Rest in Peace
+Lightning Helix
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lilah, Undefeated Slickshot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Rest in Peace.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack = Lightning Helix
+Bot1.Pass
+Bot2.Pass
+Bot1.Replace(Rest in Peace)
+[T5 Bot1.Main1]
+! Bot1.Exile.Lightning Helix.Cast(Bot2)
+
+[Expect]
+Exile = Black Lotus; Island; Island; Lightning Helix

@@ -1,0 +1,78 @@
+# Lilah's "exile that spell instead ... If you do, it becomes plotted" set on Bot1's Lightning Helix, then Bot2 takes the
+# Helix with Sudden Substitution (and the Memnite goes to Bot1) and retargets it at Bot1. As the Helix resolves Bot2 controls
+# it, so Bot2 orders Lilah's exile and Rest in Peace (CR 616.1, the affected object's controller): Rest in Peace first, and
+# the Helix is exiled unplotted - Bot1 can not cast it from exile on a later turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Lilah, Undefeated Slickshot
+Rest in Peace
+Lightning Helix
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Memnite
+Sudden Substitution
+Island
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lilah, Undefeated Slickshot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Rest in Peace.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack = Lightning Helix
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Sudden Substitution.Cast
+Bot2.Target(Stack.Lightning Helix)
+Bot2.Target(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Target(Bot1)
+? Stack = Lightning Helix
+Bot1.Pass
+Bot2.Pass
+Bot2.Replace(Rest in Peace)
+? Bot1.Life = 17
+[T5 Bot1.Main1]
+! Bot1.Exile.Lightning Helix.Cast(Bot2)
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot2.Life = 23
+Exile = Black Lotus; Black Lotus; Lightning Helix; Sudden Substitution
