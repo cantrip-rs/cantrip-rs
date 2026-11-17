@@ -1,0 +1,25 @@
+# Cactarantula: the reduction is exactly {1} (CR 601.2f): with a Desert its cost is {3}{G}{G}, so the Desert's {C} and Black Lotus's {G}{G}{G}, four mana,
+# are one short and the cast is not offered; the same mana still pays for Grizzly Bears.
+
+[Bot1 Deck]
+Desert
+Black Lotus
+Cactarantula
+Grizzly Bears
+Forest x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Desert.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Desert.Activate(Ability: Add)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Hand.Cactarantula.Cast(Mana: short)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Desert; Grizzly Bears
