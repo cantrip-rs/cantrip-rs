@@ -1,0 +1,65 @@
+# Calamity, Galloping Inferno: "Repeat this process once" makes a fresh choice, so with only Memnite having saddled it, Memnite is copied twice (CR 702.171b, 707.2). Turn 1: Calamity (4) and two
+# tapped and attacking Memnite tokens (1 + 1): Bot2 goes to 14, and the tokens are sacrificed at the end step. Turn 3: Calamity attacks unsaddled and the trigger does not happen: Bot2 takes only 4.
+[Bot1 Deck]
+Calamity, Galloping Inferno
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Memnite
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Calamity, Galloping Inferno.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Calamity, Galloping Inferno.Activate
+Bot1.Choose(Memnite)
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Calamity, Galloping Inferno > Bot2)
+Bot1.Choose(Memnite)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#2.Token = true
+? Bot1.Battlefield.Memnite#3.Token = true
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Bot2.Life = 14
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Calamity, Galloping Inferno > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 10
+Bot1.Battlefield.Count = 5

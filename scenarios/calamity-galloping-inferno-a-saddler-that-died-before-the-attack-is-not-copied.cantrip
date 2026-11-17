@@ -1,0 +1,72 @@
+# Calamity, Galloping Inferno: "choose a nonlegendary creature that saddled it this turn" (CR 702.171c, 400.7) names a creature,
+# so one that saddled it and has since died is not among the choices. Turn 3: Memnite and Ornithopter saddle Calamity, and Bot2's
+# Lightning Bolt kills Memnite in response to the saddle ability. Calamity attacks saddled: Memnite is not offered, and both
+# tokens copy Ornithopter, the only nonlegendary creature that saddled it and is still one (Bot2 takes Calamity's 4, to 16).
+
+[Bot1 Deck]
+Calamity, Galloping Inferno
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Memnite
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Calamity, Galloping Inferno.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Calamity, Galloping Inferno.Activate
+Bot1.Choose(Memnite; Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Memnite; Black Lotus
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Calamity, Galloping Inferno > Bot2)
+! Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#2.Token = true
+? Bot1.Battlefield.Ornithopter#3.Token = true
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield = Calamity, Galloping Inferno; Mox Jet; Mox Ruby; Mox Sapphire; Ornithopter; Ornithopter; Ornithopter
+Bot1.Graveyard = Memnite; Black Lotus

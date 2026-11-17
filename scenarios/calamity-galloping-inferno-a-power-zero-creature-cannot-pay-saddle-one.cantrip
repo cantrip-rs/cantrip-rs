@@ -1,0 +1,56 @@
+# Calamity, Galloping Inferno, "Saddle 1": tapping creatures with total power 1 or more is the cost (CR 702.171a), so Ornithopter (power 0) alone cannot saddle it (the refusal). Calamity is then
+# not saddled and its attack makes no copy (Bot2 takes only Calamity's 4, to 16); an unsaddled attack does not trigger the saddled-attack ability.
+[Bot1 Deck]
+Mox Pearl
+Ornithopter
+Memnite
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Calamity, Galloping Inferno
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Calamity, Galloping Inferno.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Calamity, Galloping Inferno.Activate
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Calamity, Galloping Inferno > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Ornithopter.Tapped = false

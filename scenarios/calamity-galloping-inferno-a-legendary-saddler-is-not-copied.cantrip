@@ -1,0 +1,77 @@
+# Calamity, Galloping Inferno: only a nonlegendary creature that saddled it can be chosen (CR 702.171b). Turn 3: Isamaru, Hound of Konda (a legendary 2/2) alone saddles Calamity, so there is
+# nothing to choose and the attack makes no token (Bot2 takes only Calamity's 4, to 16). Turn 5: Memnite and Isamaru together saddle it; Memnite is the only choice and is copied twice
+# (Bot2 takes 4 + 1 + 1, to 10), and Isamaru is never copied.
+[Bot1 Deck]
+Mox Pearl
+Isamaru, Hound of Konda
+Memnite
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Calamity, Galloping Inferno
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Calamity, Galloping Inferno.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Calamity, Galloping Inferno.Activate
+Bot1.Choose(Isamaru, Hound of Konda)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Calamity, Galloping Inferno > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 6
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Calamity, Galloping Inferno.Activate
+Bot1.Choose(Isamaru, Hound of Konda; Memnite)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Calamity, Galloping Inferno > Bot2)
+Bot1.Choose(Memnite)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#2.Token = true
+? Bot1.Battlefield.Memnite#3.Token = true
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 10

@@ -1,0 +1,67 @@
+# Calamity, Galloping Inferno: "Whenever Calamity attacks while saddled, choose a nonlegendary creature that saddled it this turn and create a tapped and attacking token that's a copy of it.
+# Sacrifice that token at the beginning of the next end step. Repeat this process once." (CR 702.171b, 707.2, 508.4, 603.7a). Turn 1: Calamity (haste, a Black Lotus and three Moxen pay {4}{R}{R}) is saddled
+# by tapping Memnite and Ornithopter; attacking with it, the first token copies Memnite and the second (a fresh choice) copies Ornithopter. Calamity 4 + Memnite 1 + Ornithopter 0: Bot2 goes to 15.
+# Both tokens are still there in the second main phase and are sacrificed at the beginning of the end step.
+[Bot1 Deck]
+Calamity, Galloping Inferno
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Memnite
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Calamity, Galloping Inferno.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Battlefield.Calamity, Galloping Inferno.Activate
+Bot1.Choose(Memnite; Ornithopter)
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Calamity, Galloping Inferno > Bot2)
+Bot1.Choose(Memnite)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#2.Token = true
+? Bot1.Battlefield.Memnite#2.Tapped = true
+? Bot1.Battlefield.Ornithopter#2.Token = true
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Bot2.Life = 15
+? Bot1.Battlefield.Memnite#2.Power = 1
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield = Calamity, Galloping Inferno; Memnite; Mox Jet; Mox Ruby; Mox Sapphire; Ornithopter
