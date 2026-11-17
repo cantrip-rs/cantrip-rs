@@ -1,0 +1,62 @@
+# Explosive Derailment, second mode ({R}{2}): destroy target artifact (CR 701.8). Memnite is an artifact creature, so it is a legal target; Aegis Turtle and Bile-Vial Boggart are not artifacts. Mox Jet stays.
+[Bot1 Deck]
+Explosive Derailment
+Black Lotus
+Mox Ruby
+Mox Jet
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Island
+Bile-Vial Boggart
+Aegis Turtle
+Memnite
+Island
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Bile-Vial Boggart.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Explosive Derailment.Cast
+Bot1.Modes(Destroy target artifact)
+! Bot1.Target(Aegis Turtle)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot2.Graveyard = Memnite
+Bot2.Battlefield.Count = 4
+Bot2.Battlefield.Aegis Turtle.Damage = 0

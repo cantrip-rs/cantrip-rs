@@ -1,0 +1,65 @@
+# Explosive Derailment, both modes (spree {R} + {2} + {2} = five mana: a Black Lotus, a Mox Ruby and a Mox Jet): 4 damage to Bile-Vial Boggart and destroy Bot2's Mox Jet, one target for each mode (CR 702.172a, 601.2c).
+[Bot1 Deck]
+Explosive Derailment
+Black Lotus
+Mox Ruby
+Mox Jet
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Island
+Bile-Vial Boggart
+Aegis Turtle
+Memnite
+Island
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Bile-Vial Boggart.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Explosive Derailment.Cast
+Bot1.Modes(4 damage; Destroy target artifact)
+Bot1.Target(Bile-Vial Boggart)
+Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot2.Graveyard = Bile-Vial Boggart; Mox Jet
+Bot2.Battlefield.Count = 3
+Bot2.Battlefield.Aegis Turtle.Damage = 0
+Bot2.Battlefield.Memnite.Damage = 0

@@ -1,0 +1,61 @@
+# Explosive Derailment, spree {R} + {2} per mode: the first mode deals 4 damage to target creature (CR 702.172a, 120.3). A Black Lotus's RRR pays {R}{2} exactly. Aegis Turtle (0/5) takes exactly 4 and lives; Mox Jet is an artifact but not a creature, so it cannot be chosen.
+[Bot1 Deck]
+Explosive Derailment
+Black Lotus
+Mox Ruby
+Mox Jet
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Island
+Bile-Vial Boggart
+Aegis Turtle
+Memnite
+Island
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Bile-Vial Boggart.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Explosive Derailment.Cast
+Bot1.Modes(4 damage)
+! Bot1.Target(Mox Jet)
+Bot1.Target(Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot2.Battlefield.Aegis Turtle.Damage = 4
+Bot2.Battlefield.Count = 5
