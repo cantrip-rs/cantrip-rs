@@ -1,0 +1,49 @@
+# Unyielding Gatekeeper: a token that leaves the battlefield ceases to exist (CR 111.8, 704.5d), so "return it to the battlefield"
+# does nothing for it. Bot1's Release the Dogs ({3}{W}: Black Lotus and Mox Pearl on turn 1) makes four 1/1 Dogs; on turn 3 the
+# Gatekeeper, cast face down with three Moxen and turned face up with Plains and Mox Pearl, exiles one of them. Bot1 controlled it
+# so it makes no Detective, and the Dog is gone: three Dogs remain and nothing stays in exile.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Release the Dogs
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Unyielding Gatekeeper
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Release the Dogs.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unyielding Gatekeeper.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Target(Dog Token)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Exile = 
+
+[Expect]
+Bot1.Battlefield = Dog Token; Dog Token; Dog Token; Mox Pearl; Mox Jet; Mox Ruby; Mox Sapphire; Plains; Unyielding Gatekeeper

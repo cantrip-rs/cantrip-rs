@@ -1,0 +1,51 @@
+# Unyielding Gatekeeper, turned face up, exiles Bot1's own Cubwarden mutated over Ornithopter: a merged permanent exiled is
+# both cards, and "return it to the battlefield tapped" returns every one of them, tapped (CR 730.3c), not only the first.
+# The Gatekeeper is cast face down by disguise on turn 1 and turned up for {1}{W} on turn 3, after the mutate resolves.
+
+[Bot1 Deck]
+Plains
+Plains
+Ornithopter
+Mox Pearl
+Mox Jet
+Unyielding Gatekeeper
+Black Lotus
+Cubwarden
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Unyielding Gatekeeper.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cubwarden.Cast(Ornithopter; Ability: Mutate)
+Bot1.Pass
+Bot1.Modes(1)
+Bot1.Pass
+? Bot1.Battlefield.Cubwarden.Power = 3
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Target(Cubwarden)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Cubwarden.Tapped = true

@@ -1,0 +1,8 @@
+{
+  "name": "Unyielding Gatekeeper",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Elephant Cleric",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Disguise {1}{W} (You may cast this card face down for {3} as a 2/2 creature with ward {2}. Turn it face up any time for its disguise cost.)\nWhen this creature is turned face up, exile another target nonland permanent. If you controlled it, return it to the battlefield tapped. Otherwise, its controller creates a 2/2 white and blue Detective creature token."
+}

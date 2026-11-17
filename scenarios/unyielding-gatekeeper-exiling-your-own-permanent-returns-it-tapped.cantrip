@@ -1,0 +1,47 @@
+# Unyielding Gatekeeper (Disguise {1}{W}): "When this creature is turned face up, exile another target nonland permanent. If you
+# controlled it, return it to the battlefield tapped." (CR 701.13a, 400.7, 702.168). Cast face down for {3} (Black Lotus) on turn 1
+# beside an untapped Ornithopter, it is turned face up on turn 3 for {1}{W} (Mox Pearl, Mox Jet); the trigger exiles Bot1's own
+# Ornithopter (the Gatekeeper itself and Bot2's Island are not legal or wanted), which comes straight back, a new object, tapped
+# and still Bot1's, and Bot1 gets no Detective.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Unyielding Gatekeeper
+Ornithopter
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Unyielding Gatekeeper.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+! Bot1.Target(Unyielding Gatekeeper)
+! Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Target(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Ornithopter.Tapped = true
+? Exile.Count = 0
+
+[Expect]
+Bot1.Battlefield = Unyielding Gatekeeper; Ornithopter; Mox Pearl; Mox Jet
+Bot2.Battlefield = Island

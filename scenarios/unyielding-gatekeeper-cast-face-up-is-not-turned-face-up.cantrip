@@ -1,0 +1,28 @@
+# Unyielding Gatekeeper: its ability triggers only when it is turned face up (CR 702.168), not when it is simply cast for its mana
+# cost {1}{W} (Black Lotus). Bot1 has an Ornithopter on the battlefield; casting the Gatekeeper face up leaves the stack empty after
+# it resolves, with no target asked for and nothing exiled.
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Unyielding Gatekeeper
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Unyielding Gatekeeper.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Exile = 
+? Bot1.Battlefield.Ornithopter.Tapped = false
+
+[Expect]
+Bot1.Battlefield = Unyielding Gatekeeper; Ornithopter

@@ -1,0 +1,58 @@
+# Unyielding Gatekeeper: "If you controlled it, return it to the battlefield tapped" (CR 110.2a, 400.7): control, not ownership,
+# decides. Bot1 casts the Gatekeeper face down on turn 1 with three Moxen, takes Bot2's Ornithopter with Steal Artifact on turn 3
+# (Black Lotus for blue, Mox Ruby for the generic), then turns the Gatekeeper up for {1}{W} (Mox Pearl, Mox Sapphire) and exiles it.
+# Bot1 controlled it, so nobody gets a Detective, and since the ability tells Bot1 to return it, it returns tapped under Bot1's
+# control (not its owner's), a new object: Steal Artifact (Bot1's) is in the graveyard and Bot2 has nothing.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Unyielding Gatekeeper
+Black Lotus
+Steal Artifact
+Mox Emerald
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Unyielding Gatekeeper.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Steal Artifact.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Exile = 
+? Bot1.Battlefield.Ornithopter.Tapped = true
+
+[Expect]
+Bot1.Graveyard = Steal Artifact; Black Lotus
+Bot2.Graveyard = 
+Bot2.Battlefield = 

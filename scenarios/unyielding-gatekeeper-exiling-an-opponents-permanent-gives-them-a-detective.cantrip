@@ -1,0 +1,42 @@
+# Unyielding Gatekeeper: "Otherwise, its controller creates a 2/2 white and blue Detective creature token." (CR 701.13a, 111.1).
+# Bot1 turns it face up on turn 3 (Black Lotus for the face-down cast, Mox Pearl and Mox Jet for {1}{W}) and exiles Bot2's
+# Ornithopter: Bot1 did not control it, so it stays exiled and Bot2, its controller, creates the Detective; Bot1 gets none.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Unyielding Gatekeeper
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Unyielding Gatekeeper.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Exile = Ornithopter
+
+[Expect]
+Bot1.Battlefield = Unyielding Gatekeeper; Mox Pearl; Mox Jet
+Bot2.Battlefield = Detective Token
+Bot2.Battlefield.Detective Token.Power = 2
+Bot2.Battlefield.Detective Token.Colors = Blue; White
