@@ -1,0 +1,66 @@
+# Slickshot Lockpicker's enters trigger: "target instant or sorcery card in your graveyard gains flashback until end of turn. The
+# flashback cost is equal to its mana cost" (CR 603.1, 115.1, 702.34a). With an Ornithopter (a creature card) and Bot2's Lightning
+# Bolt (the wrong graveyard) also in graveyards, the trigger refuses them and takes Bot1's Lightning Bolt (an instant) over its
+# Ancestral Recall. The Bolt is cast from the graveyard for its mana cost {R}, at Bot2, and exiled afterwards.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Lightning Bolt
+Ancestral Recall
+Ornithopter
+Slickshot Lockpicker
+Plains x10
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x5
+Mountain x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Slickshot Lockpicker.Cast
+Bot1.Pass
+! Bot1.Target(Ornithopter; Bot2.Graveyard.Lightning Bolt)
+Bot1.Target(Lightning Bolt)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Lightning Bolt.Cast(Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Lightning Bolt
+Bot1.Graveyard = Ornithopter; Ancestral Recall
+Bot1.Life = 20
+Bot2.Life = 14
+Bot1.Battlefield.Slickshot Lockpicker.Power = 2
