@@ -484,6 +484,7 @@ pub fn printed(def: &CardDef) -> ObjectView {
         other_face: def.back.map(|back| Box::new(printed(back))),
         halves: def.split.map_or_else(Vec::new, |(left, right)| vec![printed(left), printed(right)]),
         inset_spell: inset_spell(def),
+        prepare_spell: prepare_spell(def),
         prototype: def.prototype.map_or_else(String::new, |p| p.text.to_string()),
         prototyped: def.prototyped,
         ..Default::default()
@@ -494,6 +495,12 @@ pub fn printed(def: &CardDef) -> ObjectView {
 /// card: it is part of the card in every zone, though the card has only its normal characteristics there (CR 715.4, 720.4).
 fn inset_spell(def: &CardDef) -> Option<Box<ObjectView>> {
     def.inset_faces().next().map(|(_, face)| Box::new(printed(face)))
+}
+
+/// A preparation card's prepare spell (CR 722.2a), as printed, for a player to read beside the card as a double-faced card's
+/// back is: printed on the card, it is part of it whether or not the permanent is prepared.
+fn prepare_spell(def: &CardDef) -> Option<Box<ObjectView>> {
+    def.prepare.map(|spell| Box::new(printed(spell)))
 }
 
 fn target_view(game: &Game, handles: &mut HandleSpace, target: Target) -> Option<TargetMessage> {
@@ -1631,6 +1638,8 @@ impl<'a> Projector<'a> {
             halves: def.split.map_or_else(Vec::new, |(left, right)| vec![printed(left), printed(right)]),
             // Cast as its Adventure or Omen, it is that face alone (CR 715.3b, 720.3b), whose definition has no inset.
             inset_spell: inset_spell(def),
+            // A preparation card's prepare spell is printed beside the creature (CR 722.2a): read with it, prepared or not.
+            prepare_spell: prepare_spell(def),
             // The prototype line is part of the card, and of its prototyped face (CR 718.2a).
             prototype: def.prototype.map_or_else(String::new, |p| p.text.to_string()),
             prototyped: def.prototyped,
@@ -1937,6 +1946,7 @@ impl<'a> Projector<'a> {
                 view.produces_mana = false;
                 view.other_face = None;
                 view.inset_spell = None;
+                view.prepare_spell = None;
                 view.starting_counter = None;
                 view.station_pt = String::new();
                 // Nothing the layers or the printed card say about it crosses either (CR 406.3): not that it is every creature

@@ -1525,6 +1525,19 @@ mod tests {
         assert!(!options_of(&step).iter().any(|o| o.kind == ActionKindView::UndoManaAbility), "no Undo");
     }
 
+    /// A preparation card's prepare spell is printed on it (CR 722.2a): its view carries it, as printed, for the client to
+    /// hold up beside the card as it does a double-faced card's back; a card with none carries none.
+    #[test]
+    fn a_preparation_card_shows_its_prepare_spell() {
+        let mut session = Session::new(deal(&["Emeritus of Abundance"], "Forest", 30)).ok().unwrap();
+        let mine = session.view(1).ok().unwrap();
+        let emeritus = mine.objects.iter().find(|o| o.name == "Emeritus of Abundance").unwrap();
+        let spell = emeritus.prepare_spell.as_deref().unwrap();
+        assert_eq!(spell.name, "Regrowth");
+        assert_eq!(spell.oracle_text, "Return target card from your graveyard to your hand.");
+        assert!(mine.objects.iter().filter(|o| o.name == "Forest").all(|o| o.prepare_spell.is_none()));
+    }
+
     /// A seat's sideboard is the cards it owns outside the game (CR 400.11a): its owner sees what is in it, the other seat
     /// only how many, and neither sees the other's cards among the objects of the view.
     #[test]
