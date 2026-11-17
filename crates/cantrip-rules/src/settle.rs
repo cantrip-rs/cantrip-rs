@@ -1702,9 +1702,12 @@ fn that_mana_spent(cx: &Cx, rider: u32, event: &Event) -> u32 {
 }
 
 /// Every triggered ability this event triggers (CR 603.2).
-/// Ask the event of the watched object, but ask the creating ability's conditions of its actual source.
+/// Ask the event of the watched object, but ask the creating ability's conditions of its actual source. A "whenever [event] this
+/// turn" ability (`ThisTurn`) made about a player or object (Great Train Heist's "that player") tells its `matches` which, as
+/// the `event_subject` (CR 603.7c).
 pub(crate) fn delayed_fires(q: &dyn Query, d: &cantrip_state::Delayed, t: &TriggeredDef, asker: &Asker, event: &Event) -> Option<Fired> {
-    let own = crate::resolve::Given { q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, data: [u32::MAX; 2],
+    let about = if d.when == DelayedWhen::ThisTurn { d.subject } else { Target::None };
+    let own = crate::resolve::Given { q, earlier: &[], subject: about, slot_player: None, gift: false, x: None, data: [u32::MAX; 2],
         text: d.words.map(|w| (d.watched(), w)) };
     if d.when == DelayedWhen::WatchingThisTurn {
         let source_asker = Asker { source: d.source, ..*asker };
