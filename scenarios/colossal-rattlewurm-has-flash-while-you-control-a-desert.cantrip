@@ -1,0 +1,27 @@
+# Colossal Rattlewurm: "This spell has flash as long as you control a Desert" (CR 601.3b, 702.8a): Bot1 has a Desert, so at Bot2's end step it casts the Wurm
+# ({2}{G}{G}: the Desert's {C} and Black Lotus's {G}{G}{G}) and it enters a 6/5. Trample is a core keyword.
+
+[Bot1 Deck]
+Desert
+Black Lotus
+Colossal Rattlewurm
+Forest x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Desert.Play
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.End]
+Bot1.Battlefield.Desert.Activate(Ability: Add)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Colossal Rattlewurm.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Colossal Rattlewurm.Power = 6
+? Bot1.Battlefield.Colossal Rattlewurm.Toughness = 5
+
+[Expect]
+Bot1.Battlefield = Desert; Colossal Rattlewurm

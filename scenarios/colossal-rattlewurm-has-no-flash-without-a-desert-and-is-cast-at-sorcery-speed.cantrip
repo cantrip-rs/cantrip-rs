@@ -1,0 +1,36 @@
+# Colossal Rattlewurm: without a Desert it has no flash (CR 601.3b): at Bot2's end step Bot1 has the four mana ({G} from a Forest, {G}{G}{G} from
+# Black Lotus) but is not offered the cast. On its own turn 3 a second Lotus pays and the Wurm is cast at sorcery speed and resolves.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Colossal Rattlewurm
+Black Lotus
+Forest
+Forest
+Forest
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.End]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Hand.Colossal Rattlewurm.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Colossal Rattlewurm.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield = Forest; Forest; Colossal Rattlewurm

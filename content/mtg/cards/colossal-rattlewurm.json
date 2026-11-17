@@ -1,0 +1,11 @@
+{
+  "name": "Colossal Rattlewurm",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Wurm",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": "Colossal Rattlewurm has flash as long as you control a Desert.\nTrample\n{1}{G}, Exile this card from your graveyard: Search your library for a Desert card, put it onto the battlefield tapped, then shuffle.",
+  "keywords": [
+    "Trample"
+  ]
+}

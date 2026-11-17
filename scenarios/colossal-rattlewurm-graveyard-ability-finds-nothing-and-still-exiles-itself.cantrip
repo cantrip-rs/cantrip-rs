@@ -1,0 +1,47 @@
+# Colossal Rattlewurm: with no Desert in the library the search finds nothing (CR 701.23b) but the Wurm was exiled as a cost (CR 602.2c) and the library is
+# still shuffled.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Colossal Rattlewurm
+Forest
+Forest
+Forest
+Forest
+Forest x13
+
+[Bot2 Deck]
+Black Lotus
+Terror
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Colossal Rattlewurm.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Terror.Cast(Bot1.Battlefield.Colossal Rattlewurm)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Graveyard.Colossal Rattlewurm.Activate
+Bot1.Search()
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Shuffles = 1
+
+[Expect]
+Exile = Colossal Rattlewurm
+Bot1.Battlefield = Forest; Forest
+Bot1.Graveyard = Black Lotus
