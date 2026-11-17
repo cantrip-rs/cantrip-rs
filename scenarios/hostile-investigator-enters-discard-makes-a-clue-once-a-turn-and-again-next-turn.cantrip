@@ -1,0 +1,70 @@
+# Hostile Investigator: "When this creature enters, target opponent discards a card" and "Whenever one or more players discard
+# one or more cards, investigate. This ability triggers only once each turn." On turn 1 its own enters discard (Bot2 picks the
+# Plains) makes the first Clue, and Corrupt Court Official's discard the same turn makes none. On turn 3 another discard makes a
+# second Clue: the limit is once each turn, not once. It watches the other player's discards too.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Hostile Investigator
+Corrupt Court Official
+Swamp
+Corrupt Court Official
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Plains
+Island x23
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hostile Investigator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Plains)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Plains
+? Bot1.Battlefield.Clue Token.Token = true
+Bot1.Hand.Corrupt Court Official.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Island)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 2
+? Bot1.Battlefield = Clue Token; Corrupt Court Official; Hostile Investigator; Mox Jet; Mox Ruby; Swamp
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Corrupt Court Official.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Island)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard.Count = 3
+Bot1.Battlefield.Clue Token#1.Token = true
+Bot1.Battlefield.Clue Token#2.Token = true
+Bot1.Battlefield.Corrupt Court Official#2.Power = 1

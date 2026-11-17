@@ -1,0 +1,49 @@
+# Hostile Investigator watches every player's discards, its controller's own included, and "one or more cards" is one trigger
+# however many are discarded (CR 603.2c). Turn 1: its enters ability makes Bot2 discard the Plains and the first Clue. Turn 3:
+# Bot1's Faithless Looting draws two and discards two (Swamp and Swamp) at once: exactly one more Clue, two in all.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Hostile Investigator
+Faithless Looting
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Plains
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hostile Investigator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Plains)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clue Token.Token = true
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Swamp; Swamp)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Faithless Looting; Swamp; Swamp; Black Lotus
+Bot1.Battlefield.Clue Token#1.Token = true
+Bot1.Battlefield.Clue Token#2.Token = true
+Bot1.Battlefield.Count = 5
