@@ -753,3 +753,19 @@ pub fn last_noted_mana(q: &dyn Query, by: Linked, notes: u8) -> ManaPool {
         Some((_, true)) | None => ManaPool::default(),
     }
 }
+
+/// "A creature card was put into [a/your] graveyard from anywhere this turn" (CR 400.7): the creature cards, counted once each,
+/// that a move into a graveyard this turn made, whether or not they are still there, destroyed, sacrificed, discarded, milled,
+/// countered or put there by any other way, from any zone. With `owner`, only that player's graveyard. A token is not a card
+/// (CR 111.7): the object that arrived, which for a merged permanent with a token on top is each of its card components still
+/// (CR 730.3). Case of the Gorgon's Kiss ("three or more ... into graveyards", any player's) and Macabre Reconstruction ("into your
+/// graveyard") print it.
+pub fn creature_cards_put_into_graveyards_this_turn(q: &dyn Query, owner: Option<PlayerId>) -> usize {
+    q.history()
+        .select(EventQuery::kind(EventMask::ZONE_CHANGE).to(ZoneKind::Graveyard).this_turn())
+        .filter(|r| {
+            matches!(r.event, Event::ZoneChange { new, to, .. }
+                if owner.is_none_or(|p| to == Zone::graveyard(p)) && !q.obj(new).token && q.chars(new).is(CardType::Creature))
+        })
+        .count()
+}
