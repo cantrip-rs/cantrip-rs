@@ -1,0 +1,67 @@
+# Railway Brawler: the counters are put on "it", the creature that entered, and X is read as the ability resolves. Bot1 casts Memnite with the
+# Brawler out (plotted turn 1, cast free turn 3); with the trigger on the stack Bot2 (a Mox Ruby played on turn 2) Lightning Bolts the Memnite. It
+# dies (the trigger's subject is now a new object in the graveyard, CR 400.7), the trigger resolves and does nothing (no error, no
+# counters on any other creature: the Brawler is still 5/5), and the Memnite in Bot1's graveyard is a plain card.
+# Ornithopter (0/2) then enters: X is its power, zero, so no counters (0/2, not 1/3).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Railway Brawler
+Memnite
+Ornithopter
+Plains x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Railway Brawler.Activate(Ability: Plot)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Exile.Railway Brawler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Memnite
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Memnite
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield.Railway Brawler.Power = 5
+Bot1.Battlefield.Railway Brawler.Toughness = 5
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
