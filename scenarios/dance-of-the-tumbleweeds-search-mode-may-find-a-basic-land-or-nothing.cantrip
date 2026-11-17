@@ -1,0 +1,37 @@
+# Dance of the Tumbleweeds, mode 1: a basic land is as good as a Desert, and "search" may find nothing (CR 701.23b): the Forest comes in untapped; a second Dance with
+# only Memnites left in the library finds nothing but still shuffles.
+
+[Bot1 Deck]
+Black Lotus
+Dance of the Tumbleweeds
+Dance of the Tumbleweeds
+Black Lotus
+Plains x3
+Forest
+Memnite x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Dance of the Tumbleweeds.Cast
+Bot1.Modes(1)
+Bot1.Search(Forest)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Tapped = false
+? Bot1.Shuffles = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Dance of the Tumbleweeds.Cast
+Bot1.Modes(1)
+Bot1.Search()
+Bot1.Pass
+Bot2.Pass
+? Bot1.Shuffles = 2
+
+[Expect]
+Bot1.Battlefield = Forest

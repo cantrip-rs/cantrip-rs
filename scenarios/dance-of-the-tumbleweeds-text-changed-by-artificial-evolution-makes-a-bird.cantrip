@@ -1,0 +1,44 @@
+# Artificial Evolution changes Elemental to Bird in Dance of the Tumbleweeds on the stack (CR 612.2a, 612.4): its token mode makes
+# a 2/2 green Bird, as the text now says, not an Elemental.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Dance of the Tumbleweeds
+Forest
+Plains x3
+Forest x12
+
+[Bot2 Deck]
+Island
+Artificial Evolution
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Dance of the Tumbleweeds.Cast
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Artificial Evolution.Cast(Stack.Dance of the Tumbleweeds)
+Bot2.Pass
+Bot1.Pass
+Bot2.Modes(Elemental)
+Bot2.Modes(Bird)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Bird Token; Forest; Forest
+Bot1.Battlefield.Bird Token.Subtypes = Bird
+Bot1.Battlefield.Bird Token.Power = 2
+Bot1.Battlefield.Bird Token.Colors = Green

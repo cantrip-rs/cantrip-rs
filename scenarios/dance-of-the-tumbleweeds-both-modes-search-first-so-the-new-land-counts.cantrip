@@ -1,0 +1,37 @@
+# Dance of the Tumbleweeds with both modes ({1}{G} + {1} + {3} = six mana: a Black Lotus (sacrificed for it), Mox Emerald and two Forests): modes are followed in printed order (CR 700.2d), so the
+# land the search puts onto the battlefield is counted when the token's X is set: three lands, a 3/3 Elemental (the Forests are two and the searched Forest the third).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Black Lotus
+Dance of the Tumbleweeds
+Forest
+Plains x2
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Dance of the Tumbleweeds.Cast
+Bot1.Modes(1; 2)
+Bot1.Search(Forest)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Elemental Token.Power = 3
+? Bot1.Battlefield.Elemental Token.Toughness = 3
+? Bot1.Shuffles = 1
+
+[Expect]
+Bot1.Battlefield.Count = 5

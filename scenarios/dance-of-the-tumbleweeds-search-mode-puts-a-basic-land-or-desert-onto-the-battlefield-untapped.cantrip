@@ -1,0 +1,33 @@
+# Dance of the Tumbleweeds, mode 1: "{1} - Search your library for a basic land card or a Desert card, put it onto the battlefield, then shuffle" (CR 702.172a, 701.23, 205.3i).
+# Spree costs {1}{G} plus the mode's {1}: three mana, a Black Lotus's {G}{G}{G}. Only one card is found and
+# it is a basic land or a Desert: a Volcanic Island (nonbasic, no Desert) and two cards are refused, the Desert comes in untapped and the library is shuffled once.
+
+[Bot1 Deck]
+Black Lotus
+Dance of the Tumbleweeds
+Plains x5
+Volcanic Island
+Desert
+Forest
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Dance of the Tumbleweeds.Cast
+Bot1.Modes(1)
+! Bot1.Search(Volcanic Island)
+! Bot1.Search(Desert; Forest)
+Bot1.Search(Desert)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Desert.Tapped = false
+? Bot1.Shuffles = 1
+
+[Expect]
+Bot1.Battlefield = Desert
+Bot1.Graveyard = Dance of the Tumbleweeds; Black Lotus
