@@ -1,0 +1,77 @@
+# Ertha Jo, Frontier Mentor. Turn 1: it enters and makes a Mercenary token. Turn 3: the Mercenary's "{T}: Target creature you
+# control gets +1/+0" targets Ertha Jo; Ertha Jo copies it and the copy is given a new target, Prodigal Sorcerer: each gets
+# +1/+0. Prodigal Sorcerer's "{T}: 1 damage to any target" at Bot2 (a player) is copied too, keeping its target: Bot2 takes 2.
+# The copies were not activated, so they copy nothing more. Then Strip Mine is sacrificed to destroy the Wasteland: that ability
+# targets only a land, so Ertha Jo does not trigger (one item on the stack).
+
+[Bot1 Deck]
+Wasteland
+Mox Ruby
+Mox Pearl
+Mox Jet
+Black Lotus
+Ertha Jo, Frontier Mentor
+Prodigal Sorcerer
+Strip Mine
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Wasteland.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Wasteland.Activate(Ability: Add)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ertha Jo, Frontier Mentor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mercenary Token.Power = 1
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Prodigal Sorcerer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mercenary Token.Activate(Ertha Jo, Frontier Mentor)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Prodigal Sorcerer)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Ertha Jo, Frontier Mentor.Power = 3
+? Bot1.Battlefield.Prodigal Sorcerer.Power = 2
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Life = 18
+Bot1.Hand.Strip Mine.Play
+Bot1.Battlefield.Strip Mine.Activate(Ability: Destroy; Wasteland)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Ertha Jo, Frontier Mentor.Power = 3
+Bot1.Battlefield.Prodigal Sorcerer.Power = 2
+Bot1.Battlefield.Mercenary Token.Power = 1
+Bot1.Battlefield.Mercenary Token.Colors = Red
+Bot1.Graveyard = Wasteland; Strip Mine; Black Lotus
