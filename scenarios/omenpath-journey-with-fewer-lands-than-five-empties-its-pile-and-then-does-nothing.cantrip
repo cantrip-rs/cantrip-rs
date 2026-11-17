@@ -1,0 +1,56 @@
+# Omenpath Journey with only two land names in the library (Plains x2, Island): Bot1 searches for both names (the second Plains is not allowed), so two cards
+# are exiled. Turn 1's end step puts one onto the battlefield tapped, turn 3's the other; turn 5's end step finds nothing exiled with it and does nothing.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Omenpath Journey
+Forest
+Forest
+Forest
+Plains
+Plains
+Island
+Memnite x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Omenpath Journey.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Plains; Plains)
+Bot1.Search(Plains; Island)
+? Exile.Count = 2
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 1
+? Bot1.Battlefield.Count = 6
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+? Bot1.Battlefield.Count = 7
+[T5 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Count = 7
+Bot1.Hand.Count = 4
+Stack.Count = 0

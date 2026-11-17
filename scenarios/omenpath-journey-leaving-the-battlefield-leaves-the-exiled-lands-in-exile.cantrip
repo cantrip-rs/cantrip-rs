@@ -1,0 +1,54 @@
+# Omenpath Journey exiles the lands without the "until it leaves" clause (CR 610.3 does not apply): the search finds Plains and Island, turn 1's end step puts
+# one onto the battlefield, and when Bot2's Disenchant destroys the Journey on turn 2 the other stays in exile (not returned to the library, which stays at 11).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Omenpath Journey
+Forest
+Forest
+Forest
+Plains
+Island
+Memnite x11
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Disenchant
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Omenpath Journey.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Plains; Island)
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Omenpath Journey)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Exile.Count = 1
+Bot1.Library.Count = 11
+Bot1.Graveyard = Omenpath Journey
+Stack.Count = 0

@@ -1,0 +1,6 @@
+{
+  "name": "Omenpath Journey",
+  "manaCost": "{3}{G}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, search your library for up to five land cards that have different names, exile them, then shuffle.\nAt the beginning of your end step, choose a card at random exiled with this enchantment and put it onto the battlefield tapped."
+}
