@@ -1,0 +1,76 @@
+# Rakdos Joins Up: "Whenever a legendary creature you control dies, Rakdos Joins Up deals damage equal to that creature's power to
+# target opponent." Bot2's Wrath of God destroys Bot1's Isamaru (legendary, power 2), Tyrox (legendary, power 4) and Memnite (not
+# legendary) and Bot2's own Isamaru (legendary, but not Bot1's) together: Rakdos Joins Up, an enchantment, stays. It triggers once
+# for Isamaru and once for Tyrox only (CR 700.4, 603.10a), 2 and 4 damage to Bot2, who ends on 14. The graveyard has no creature card
+# when Rakdos enters, so its first ability has no target and leaves the stack (CR 603.3d).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Rakdos Joins Up
+Isamaru, Hound of Konda
+Memnite
+Tyrox, Saurid Tyrant
+Plains x15
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Wrath of God
+Isamaru, Hound of Konda
+Plains x4
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rakdos Joins Up.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Isamaru, Hound of Konda.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tyrox, Saurid Tyrant.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Wrath of God.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Triggers(Rakdos Joins Up; Rakdos Joins Up)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 14
+Bot1.Life = 20
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Rakdos Joins Up
+Bot1.Graveyard.Count = 4
+Bot1.Graveyard = Tyrox, Saurid Tyrant; Memnite; Isamaru, Hound of Konda; Black Lotus
+Bot2.Graveyard.Count = 3

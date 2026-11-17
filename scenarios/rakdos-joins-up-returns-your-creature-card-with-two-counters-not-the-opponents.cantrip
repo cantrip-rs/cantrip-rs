@@ -1,0 +1,69 @@
+# Rakdos Joins Up: "When Rakdos Joins Up enters, return target creature card from your graveyard to the battlefield with two
+# additional +1/+1 counters on it." Entomb has put Isamaru (2/2, legendary) and Memnite in Bot1's graveyard, Entomb itself is
+# there too (with the spent Black Lotus), and Tyrox is in Bot2's: Tyrox (the opponent's card) and Entomb (not a creature card) are refused as the target
+# (CR 115.1). Isamaru is chosen and returned entering with exactly two +1/+1 counters, so 4/4 (CR 122.6, 614.1c); Memnite stays.
+# Cast with Black Lotus, Mox Jet and Mox Ruby: {3}{B}{R}.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Black Lotus
+Mox Ruby
+Entomb
+Entomb
+Rakdos Joins Up
+Isamaru, Hound of Konda
+Memnite
+Plains x13
+
+[Bot2 Deck]
+Mox Jet
+Entomb
+Island x7
+Tyrox, Saurid Tyrant
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Isamaru, Hound of Konda)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Tyrox, Saurid Tyrant)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rakdos Joins Up.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Graveyard.Tyrox, Saurid Tyrant)
+! Bot1.Target(Bot1.Graveyard.Entomb)
+Bot1.Target(Bot1.Graveyard.Isamaru, Hound of Konda)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Isamaru, Hound of Konda.Power = 4
+Bot1.Battlefield.Isamaru, Hound of Konda.Toughness = 4
+Bot1.Battlefield.Isamaru, Hound of Konda.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Isamaru, Hound of Konda.Tapped = false
+Bot1.Graveyard = Black Lotus; Entomb; Memnite; Entomb
+Bot2.Graveyard = Entomb; Tyrox, Saurid Tyrant
+Bot2.Life = 20
