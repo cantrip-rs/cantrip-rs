@@ -1,0 +1,6 @@
+{
+  "name": "Dance of the Tumbleweeds",
+  "manaCost": "{1}{G}",
+  "type": "Sorcery",
+  "oracleText": "Spree (Choose one or more additional costs.)\n+ {1} — Search your library for a basic land card or a Desert card, put it onto the battlefield, then shuffle.\n+ {3} — Create an X/X green Elemental creature token, where X is the number of lands you control."
+}

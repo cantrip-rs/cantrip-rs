@@ -1,0 +1,29 @@
+# Dance of the Tumbleweeds, mode 2 with no lands: X is 0, the Elemental is a 0/0 and is put into the graveyard by state-based actions (CR 704.5f); it never lives long enough to
+# have power. Five mana from Black Lotus, Mox Emerald and Mox Jet.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Black Lotus
+Dance of the Tumbleweeds
+Plains x3
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Dance of the Tumbleweeds.Cast
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Jet
