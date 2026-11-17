@@ -11,12 +11,6 @@ fn exile_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// II: "Investigate." (CR 701.16a)
-fn investigate(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::investigate(g, item.controller)?;
-    Ok(())
-}
-
 /// III: "Return the exiled card to the battlefield under its owner's control. You gain 2 life." The card is the one exiled
 /// with this Saga, as it is now (CR 607.2a); it returns under its owner's control (CR 110.2a), and the life is gained
 /// whether or not there is one.
@@ -41,7 +35,7 @@ pub static CARD: CardDef = CardDef {
             "I \u{2014} Exile up to one target nontoken artifact or creature.",
         )
         .targets(&[target(targets::nontoken_artifact_or_creature_filter).optional()]),
-        chapter(2, investigate, "II \u{2014} Investigate."),
+        chapter(2, tokens::you_investigate, "II \u{2014} Investigate."),
         chapter(
             3,
             return_it,

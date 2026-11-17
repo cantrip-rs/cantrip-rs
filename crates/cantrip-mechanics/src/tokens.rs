@@ -212,6 +212,12 @@ pub fn investigate(g: &mut dyn Game, controller: PlayerId) -> Result<(), Suspend
     Ok(())
 }
 
+/// "Investigate" as an effect (CR 701.16a): its controller investigates once as the spell or ability resolves. Agent 13, Sam Kirk,
+/// Starfleet Security, Tamiyo, Inquisitive Student, The Measure of a Man and Malcolm, the Eyes print it.
+pub fn you_investigate(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    investigate(g, item.controller)
+}
+
 fn put_plus_one_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Target::Object(creature) = item.target(0) {
         g.add_counters(creature, CounterKind::PlusOne, 1);
