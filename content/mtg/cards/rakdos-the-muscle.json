@@ -1,0 +1,12 @@
+{
+  "name": "Rakdos, the Muscle",
+  "manaCost": "{2}{B}{B}{R}",
+  "type": "Legendary Creature — Demon Mercenary",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": "Flying, trample\nWhenever you sacrifice another creature, exile cards equal to its mana value from the top of target player's library. Until your next end step, you may play those cards, and mana of any type can be spent to cast those spells.\nSacrifice another creature: Rakdos gains indestructible until end of turn. Tap it. Activate only once each turn.",
+  "keywords": [
+    "Flying",
+    "Trample"
+  ]
+}

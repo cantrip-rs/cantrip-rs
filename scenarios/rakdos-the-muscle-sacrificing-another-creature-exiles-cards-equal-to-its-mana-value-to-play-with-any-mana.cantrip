@@ -1,0 +1,98 @@
+# Rakdos, the Muscle: "Whenever you sacrifice another creature, exile cards equal to its mana value from the top of target player's
+# library. Until your next end step, you may play those cards, and mana of any type can be spent to cast those spells" and
+# "Sacrifice another creature: Rakdos gains indestructible until end of turn. Tap it. Activate only once each turn" (CR 701.21a, 609.4b).
+# Turn 3 Rakdos sacrifices Grizzly Bears (mana value 2): the top two cards of Bot2's library, an Island and a Lightning Bolt, are
+# exiled; Rakdos is tapped and indestructible, and a second activation is refused (once each turn) with Memnite still there. Bot1
+# plays the Island as its land drop and casts the Bolt with a Mox Jet's {B} (any type) for 3 damage (Bot2 on 17). Turn 5 a sacrificed
+# Black Lotus (no creature) triggers nothing, and Memnite (mana value 0) exiles nothing. Turn 6 Bot2's Diabolic Edict makes Bot1
+# sacrifice Rakdos itself, the only creature left: it is no "another creature", so nothing is exiled from Bot2's library.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Black Lotus
+Rakdos, the Muscle
+Grizzly Bears
+Memnite
+Black Lotus
+Island x13
+
+[Bot2 Deck]
+Diabolic Edict
+Swamp x2
+Island x5
+Island
+Lightning Bolt
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rakdos, the Muscle.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Rakdos, the Muscle.Activate
+Bot1.Choose(Grizzly Bears)
+Bot1.Target(Bot2)
+! Bot1.Battlefield.Rakdos, the Muscle.Activate
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rakdos, the Muscle.Tapped = true
+? Bot1.Battlefield.Rakdos, the Muscle.Keywords = Flying; Indestructible; Trample
+Bot1.Exile.Island.Play
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Exile.Count = 0
+? Bot1.Battlefield.Island.Tapped = false
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Stack.Count = 0
+? Exile.Count = 0
+Bot1.Battlefield.Rakdos, the Muscle.Activate
+Bot1.Choose(Memnite)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+[T6 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Diabolic Edict.Cast(Bot1)
+Bot2.Battlefield.Swamp#1.Activate
+Bot2.Battlefield.Swamp#2.Activate
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Exile.Count = 0
+Stack.Count = 0
+Bot1.Graveyard.Count = 5
+Bot2.Life = 17

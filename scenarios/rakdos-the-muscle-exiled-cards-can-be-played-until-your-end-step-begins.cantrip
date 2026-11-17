@@ -1,0 +1,63 @@
+# Rakdos, the Muscle: "Until your next end step, you may play those cards" (CR 609.4b, 513.1). Turn 3 Rakdos sacrifices Grizzly
+# Bears (mana value 2): two Lightning Bolts are exiled from the top of Bot2's library. Bot1 casts one in its main phase (Bot2 on 17);
+# as Bot1's end step begins the permission is over, so the other is refused there with an untapped Mox Ruby, and on Bot2's turn 4.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Black Lotus
+Rakdos, the Muscle
+Grizzly Bears
+Island x13
+
+[Bot2 Deck]
+Island x8
+Lightning Bolt
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rakdos, the Muscle.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Rakdos, the Muscle.Activate
+Bot1.Choose(Grizzly Bears)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Exile.Count = 1
+[T3 Bot1.End]
+? Bot1.Battlefield.Mox Ruby.Tapped = false
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+[T4 Bot2.Upkeep]
+Bot2.Pass
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Exile.Count = 1
+Bot2.Life = 17
