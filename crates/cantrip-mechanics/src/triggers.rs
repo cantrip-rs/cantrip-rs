@@ -1689,6 +1689,17 @@ pub fn you_cast_a_spell_from_exile(q: &dyn Query, me: &Asker, event: &Event) -> 
     }
 }
 
+/// "Whenever you cast a spell from anywhere other than your hand" (CR 601.2, 603.2): a spell its controller cast from any zone but
+/// their hand, the zone it was cast from being recorded on it. The trigger is about that spell. Spider-Verse and Kellan, the Kid print it.
+pub fn you_cast_a_spell_from_outside_your_hand(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::SpellCast { spell, player, .. } if *player == me.controller && q.obj(*spell).cast_from.is_some_and(|zone| zone != ZoneKind::Hand) => {
+            Fired::about(Target::Object(*spell))
+        }
+        _ => None,
+    }
+}
+
 fn prowess_pump(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     crate::pump(g, item.object, item.object, 1, 1);
     Ok(())
@@ -2964,6 +2975,7 @@ pub const THIS_BECOMES_THE_TARGET_OF_A_SPELL_OR_ABILITY: Trigger = when(EventMas
 pub const NONCREATURE_SPELL_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, noncreature_spell_you_cast);
 pub const NONCREATURE_SPELL_YOU_CAST_ABOUT_IT: Trigger = when_asked(EventMask::SPELL_CAST, noncreature_spell_you_cast_about_it);
 pub const YOU_CAST_A_SPELL_FROM_EXILE: Trigger = when_asked(EventMask::SPELL_CAST, you_cast_a_spell_from_exile);
+pub const YOU_CAST_A_SPELL_FROM_OUTSIDE_YOUR_HAND: Trigger = when_asked(EventMask::SPELL_CAST, you_cast_a_spell_from_outside_your_hand);
 pub const THIS_DIES: Trigger = when(EventMask::ZONE_CHANGE, this_dies);
 pub const CREATURE_DEALT_DAMAGE_BY_THIS_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_dealt_damage_by_this_dies);
 pub const THIS_ENTERS_OR_DIES: Trigger = when(EventMask::ZONE_CHANGE, this_enters_or_dies);
