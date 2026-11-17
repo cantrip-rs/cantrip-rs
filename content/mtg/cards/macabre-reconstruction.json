@@ -1,0 +1,6 @@
+{
+  "name": "Macabre Reconstruction",
+  "manaCost": "{3}{B}",
+  "type": "Sorcery",
+  "oracleText": "This spell costs {2} less to cast if a creature card was put into your graveyard from anywhere this turn.\nReturn up to two target creature cards from your graveyard to your hand."
+}

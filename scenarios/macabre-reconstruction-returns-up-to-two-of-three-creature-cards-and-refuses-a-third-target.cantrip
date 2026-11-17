@@ -1,0 +1,50 @@
+# Macabre Reconstruction: "This spell costs {2} less to cast if a creature card was put into your graveyard from anywhere this turn. Return up to two target creature cards from your graveyard to your hand." (CR 601.2f, 118.7,
+# 700.4, 115.1) Bot1 Lightning Bolts its own Memnite (a creature card put into its graveyard from the battlefield) and Faithless Looting discards a second Memnite and an Ornithopter, three creature cards in the graveyard. The
+# spell costs {3}{B} less {2}, so two Mox Jets pay for it. "Up to two" refuses naming all three, and with two targets it returns those two and the third stays in the graveyard. The scenario where the creature card went to the
+# graveyard on an earlier turn is the control for the full price.
+
+[Bot1 Deck]
+Black Lotus
+Lightning Bolt
+Faithless Looting
+Memnite
+Mox Jet
+Mox Jet
+Macabre Reconstruction
+Ornithopter
+Memnite
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Memnite; Lightning Bolt; Black Lotus
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite; Ornithopter)
+? Bot1.Graveyard.Count = 6
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Macabre Reconstruction.Cast
+! Bot1.Target(Bot1.Graveyard.Memnite#1; Bot1.Graveyard.Memnite#2; Bot1.Graveyard.Ornithopter)
+Bot1.Target(Bot1.Graveyard.Memnite#1; Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Memnite; Ornithopter
+Bot1.Graveyard = Macabre Reconstruction; Faithless Looting; Memnite; Lightning Bolt; Black Lotus

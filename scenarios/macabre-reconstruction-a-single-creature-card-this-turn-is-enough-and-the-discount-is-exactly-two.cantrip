@@ -1,0 +1,40 @@
+# Macabre Reconstruction: "This spell costs {2} less to cast if a creature card was put into your graveyard from anywhere this turn." (CR 601.2f, 118.7) Bot1 casts Faithless Looting and discards one Memnite and an Island:
+# exactly one creature card was put into its graveyard this turn, which is enough. The spell then costs {3}{B} less {2} = {1}{B}: a lone Mox Jet is not enough (refused, so the reduction is not more than {2}), with a Mox Emerald as
+# well it is cast. The scenario with three creature cards is the control for several, and the one where it went to the graveyard on an earlier turn the control for the full price.
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Memnite
+Island
+Mox Jet
+Mox Emerald
+Macabre Reconstruction
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite; Island)
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Macabre Reconstruction.Cast(Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Macabre Reconstruction.Cast
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island; Island; Memnite
+Bot1.Graveyard = Macabre Reconstruction; Faithless Looting; Island

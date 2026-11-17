@@ -1,0 +1,43 @@
+# Macabre Reconstruction: the discount needs a creature card put into your graveyard *this turn* (CR 601.2f, 118.7). Bot1 discards a Memnite to Faithless Looting on turn 1; on turn 3 it is no longer "this turn", so
+# the spell costs the full {3}{B}: two Mox Jets are not enough (refused), and with a Mox Ruby and an Island as well it is cast, targeting just the Memnite ("up to two" allows one target, CR 115.1).
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Memnite
+Mox Jet
+Mox Jet
+Macabre Reconstruction
+Island
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite; Island)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+! Bot1.Hand.Macabre Reconstruction.Cast(Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Macabre Reconstruction.Cast
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island; Island; Memnite
+Bot1.Graveyard = Macabre Reconstruction; Faithless Looting; Island

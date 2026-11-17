@@ -1,0 +1,47 @@
+# Macabre Reconstruction: the discount counts creature cards put into *your* graveyard (CR 700.4, 118.7), not an opponent's. On turn 3 Bot1 Bolts Bot2's Memnite, which goes to Bot2's graveyard: Macabre Reconstruction still costs
+# {3}{B}, so Bot1's three remaining mana (two Mox Jets and an Island) can't pay for it (refused); with a second Island it is cast, with no target at all ("up to two" allows none, CR 115.1) and it returns nothing.
+
+[Bot1 Deck]
+Mox Ruby
+Lightning Bolt
+Mox Jet
+Mox Jet
+Island
+Island
+Macabre Reconstruction
+Island x20
+
+[Bot2 Deck]
+Memnite
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Macabre Reconstruction.Cast(Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Macabre Reconstruction.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Macabre Reconstruction; Lightning Bolt
+Bot2.Graveyard = Memnite
