@@ -1,0 +1,49 @@
+# Living Conundrum: "your library" (CR 604.1): Bot2's library is empty after its draw on turn 2, Bot1's is not, and the Conundrum stays a 2/5 without flying. Hexproof (CR 702.11): Bot2 cannot target it with a Lightning Bolt, though it
+# has the Mox Ruby for the Bolt and can still aim it at Bot1.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Living Conundrum
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island
+Island
+Island
+Island
+Island
+Island
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Living Conundrum.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot2.Library.Count = 0
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Living Conundrum)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Living Conundrum.Power = 2
+Bot1.Battlefield.Living Conundrum.Toughness = 5
+Bot1.Battlefield.Living Conundrum.Keywords = Hexproof
+Bot2.Library.Count = 0

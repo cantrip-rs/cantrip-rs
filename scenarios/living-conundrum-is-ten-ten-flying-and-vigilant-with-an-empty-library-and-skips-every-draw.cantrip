@@ -1,0 +1,52 @@
+# Living Conundrum: "As long as there are no cards in your library, ... base power and toughness 10/10 and has flying and vigilance" and "If you would draw a card while your library has no cards in it, skip that draw instead"
+# (CR 604.1, 614.1a, 121.6). Bot1 has one card left in its library on turn 1, with the Conundrum a 2/5 with Hexproof only. Turn 3's draw takes the Island and empties the library: 10/10 Flying, Hexproof and Vigilance. Ancestral
+# Recall then draws three, every one skipped, Bot1's hand left with the Island it drew, no card gone from anywhere and no loss for drawing from an empty library; on turn 5 the draw step is skipped too.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Living Conundrum
+Ancestral Recall
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Living Conundrum.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Living Conundrum.Power = 2
+? Bot1.Battlefield.Living Conundrum.Toughness = 5
+? Bot1.Battlefield.Living Conundrum.Keywords = Hexproof
+? Bot1.Library.Count = 1
+[T3 Bot1.Main1]
+? Bot1.Library.Count = 0
+? Bot1.Battlefield.Living Conundrum.Power = 10
+? Bot1.Battlefield.Living Conundrum.Toughness = 10
+? Bot1.Battlefield.Living Conundrum.Keywords = Flying; Hexproof; Vigilance
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 1
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Hand.Count = 1
+Bot1.Graveyard = Ancestral Recall
+Bot1.Library.Count = 0
+Bot1.Battlefield.Living Conundrum.Power = 10

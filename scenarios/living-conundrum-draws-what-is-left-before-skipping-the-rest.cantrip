@@ -1,0 +1,45 @@
+# Living Conundrum: "If you would draw a card while your library has no cards in it, skip that draw instead" (CR 121.6, the rulings): each draw is judged as it is made. Bot1's library holds two cards at turn 3, one after the
+# draw step, and Ancestral Recall draws it and skips the other two: the hand is the two Islands, the library empty and the Conundrum 10/10.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Living Conundrum
+Ancestral Recall
+Island
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Living Conundrum.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Library.Count = 1
+? Bot1.Battlefield.Living Conundrum.Power = 2
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot1.Library.Count = 0
+Bot1.Battlefield.Living Conundrum.Power = 10
+Bot1.Battlefield.Living Conundrum.Toughness = 10
