@@ -1,0 +1,59 @@
+# "Target creature gains deathtouch and lifelink until end of turn. Investigate." Bot1 casts it ({B}, Mox Jet) on its own Memnite,
+# not an opponent's: the Memnite (1/1) gains both keywords and its controller makes a Clue; the keywords are gone again once the
+# turn ends. Bot2's Grizzly Bears is another legal target of the same spell (any creature), and Bot1 is the one who investigates, not
+# the creature's controller: cast again on turn 3 at Bot2's Bears, Bot1 makes a second Clue and Bot2 none.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Memnite
+Toxin Analysis
+Toxin Analysis
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Toxin Analysis.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Deathtouch; Lifelink
+? Bot1.Battlefield = Clue Token; Memnite; Mox Jet; Mox Jet
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Toxin Analysis.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Keywords = Deathtouch; Lifelink
+Bot1.Battlefield = Clue Token; Clue Token; Memnite; Mox Jet; Mox Jet
+Bot2.Battlefield = Grizzly Bears; Mox Emerald; Mox Ruby
+Bot1.Graveyard.Count = 2
