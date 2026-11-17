@@ -1,0 +1,58 @@
+# Malcolm, the Eyes: "Flying, haste" and "Whenever you cast your second spell each turn, investigate." (CR 207.2c, 701.16a).
+# Bot1 casts Malcolm as its third spell on turn 1 (no trigger: Malcolm was not on the battlefield for the second). On
+# turn 3 a Mox Jet (first) and a Memnite (second: one Clue) and an Ornithopter (third: no more); on turn 5 the count
+# starts over, a Mox Pearl (first) and a Mox Emerald (second: a second Clue).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Malcolm, the Eyes
+Mox Jet
+Memnite
+Mox Emerald
+Island
+Ornithopter
+Mox Pearl
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Malcolm, the Eyes.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Malcolm, the Eyes.Keywords = Flying; Haste
+? Bot1.Battlefield.Clue Token = (absent)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clue Token = (absent)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clue Token.Token = true
+? Bot1.Battlefield.Clue Token.Types = Artifact
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 7
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 8
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 10

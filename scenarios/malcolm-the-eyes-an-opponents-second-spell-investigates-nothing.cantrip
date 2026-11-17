@@ -1,0 +1,29 @@
+# Malcolm, the Eyes: "your second spell" (CR 207.2c): Bot2 casts two Moxen on turn 2, and Bot1 (Malcolm's controller)
+# gets no Clue.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Malcolm, the Eyes
+Island x17
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Malcolm, the Eyes.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Clue Token = (absent)
+Bot2.Battlefield.Clue Token = (absent)
