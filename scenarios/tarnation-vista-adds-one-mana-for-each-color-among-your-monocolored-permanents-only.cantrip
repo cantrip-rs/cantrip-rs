@@ -1,0 +1,78 @@
+# Tarnation Vista: "{1}, {T}: For each color among monocolored permanents you control, add one mana of that color" (CR 106.5, 105.2,
+# 605.1a). Bot1's Vista (choosing blue) enters tapped and its second ability is refused that turn. Turn 5 Bot1 controls two Savannah
+# Lions (white, monocolored: one {W} between them), Kitchen Finks (green and white: multicolored, counts nothing: the pool would
+# show {G} otherwise), an Ornithopter and Moxen (colorless, count nothing), and Bot2 a red Frenzied Goblin (an opponent's permanent
+# counts nothing: {R} would show). Paying {1} from a Mox Ruby, the pool is exactly {W} and the other Moxen stay untapped (one
+# generic mana paid). Turn 7 a Llanowar Elves (green) joins them: the pool is {W}{G}, the colors each once.
+
+[Bot1 Deck]
+Tarnation Vista
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Savannah Lions
+Kitchen Finks
+Savannah Lions
+Ornithopter
+Llanowar Elves
+Island x20
+
+[Bot2 Deck]
+Frenzied Goblin
+Mountain x20
+
+[Actions]
+Bot1.Hand.Tarnation Vista.Play
+Bot1.Colors(Blue)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tarnation Vista.Tapped = true
+! Bot1.Battlefield.Tarnation Vista.Activate(Ability: {1}, {T})
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Frenzied Goblin.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Frenzied Goblin.Tapped = false
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Kitchen Finks.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kitchen Finks.Tapped = false
+? Bot1.Battlefield.Ornithopter.Tapped = false
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions#2.Tapped = false
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tarnation Vista.Activate(Ability: {1}, {T})
+? Bot1.Mana = {W}
+? Bot1.Battlefield.Tarnation Vista.Tapped = true
+? Bot1.Battlefield.Mox Emerald.Tapped = false
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tarnation Vista.Activate(Ability: {1}, {T})
+? Bot1.Mana = {W}{G}
+
+[Expect]
+Bot1.Battlefield.Tarnation Vista.Tapped = true

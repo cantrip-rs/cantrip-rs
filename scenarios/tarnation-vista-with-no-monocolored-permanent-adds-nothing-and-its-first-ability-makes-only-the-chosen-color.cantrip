@@ -1,0 +1,41 @@
+# Tarnation Vista: with no monocolored permanent you control (only the colorless Vista and Moxen, while the opponent's Frenzied
+# Goblin is red) "{1}, {T}: For each color among monocolored permanents you control, add one mana of that color" still costs {1}
+# and {T} and adds no mana (the pool, {R} from the Mox Ruby, is spent and empty after). "{T}: Add one mana of the chosen color"
+# (chosen blue as it entered, enters tapped) adds {U} only: other colors and colorless are refused, and the pool is exactly {U} (CR 106.5, 605.1a, 607.2d).
+
+[Bot1 Deck]
+Tarnation Vista
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Frenzied Goblin
+Mountain x20
+
+[Actions]
+Bot1.Hand.Tarnation Vista.Play
+Bot1.Colors(Blue)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tarnation Vista.ChosenColor = Blue
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Frenzied Goblin.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tarnation Vista.Activate(Ability: {1}, {T})
+? Bot1.Mana =
+? Bot1.Battlefield.Tarnation Vista.Tapped = true
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Tarnation Vista.Activate(Ability: {T}: Add one mana of the chosen color.; Color: Colorless)
+! Bot1.Battlefield.Tarnation Vista.Activate(Ability: {T}: Add one mana of the chosen color.; Color: Green)
+! Bot1.Battlefield.Tarnation Vista.Activate(Ability: {T}: Add one mana of the chosen color.; Color: Red)
+Bot1.Battlefield.Tarnation Vista.Activate(Ability: {T}: Add one mana of the chosen color.; Color: Blue)
+? Bot1.Mana = {U}
+
+[Expect]
+Bot1.Battlefield.Tarnation Vista.Tapped = true
