@@ -32,7 +32,8 @@ fn nonlegendary_enchantment_you_control(q: &dyn Query, asker: &Asker, t: Target)
 /// after the draw step.
 fn copy_an_enchantment(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(enchantment) = targets::object(g, item, 0) else { return Ok(()) };
-    let tokens = copy::create_token_copy_with_haste(g, item, enchantment)?;
+    let values = g.copiable_values(enchantment);
+    let tokens = copy::create_token_copy_with_haste(g, item, values, Duration::Indefinite)?;
     for &token in &tokens {
         if g.is_on_battlefield(token) && g.chars(token).has_subtype(Subtype::Saga) {
             let counters = choose::number(g, item.controller, item.object, 0, 3, "How many lore counters to put on it")?;

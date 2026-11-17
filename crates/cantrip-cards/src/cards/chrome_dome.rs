@@ -14,7 +14,8 @@ fn another_artifact_you_control(q: &dyn Query, asker: &Asker, t: Target) -> bool
 /// copied X is 0.
 fn copy_with_haste(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(target) = targets::object(g, item, 0) else { return Ok(()) };
-    copy::create_token_copy_with_haste_sacrificed_at_end_step(g, item, target, 0)
+    let values = g.copiable_values(target);
+    copy::create_token_copy_with_haste_sacrificed_at_end_step(g, item, values, Duration::Indefinite, 0)
 }
 
 pub static CARD: CardDef = CardDef {

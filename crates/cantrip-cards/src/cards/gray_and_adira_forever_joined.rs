@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{delayed, haste_until_end_of_turn, targets, triggers};
+use cantrip_mechanics::{copy, targets, triggers};
 use cantrip_oracle as oracle;
 
 /// "If you've cast a noncreature spell this turn" (CR 601.2i, 603.4): this checks the current turn's cast history when the
@@ -12,22 +12,12 @@ fn cast_noncreature_this_turn(q: &dyn Query, asker: &Asker) -> bool {
 }
 
 /// "Create a token that's a copy of target creature you control, except it isn't legendary. It gains haste until end of
-/// turn. Sacrifice it at the beginning of the next end step" (CR 707.2, 707.9b, 702.10b, 611.2a, 603.7c, 400.7). The copy
-/// exception removes legendary from its copiable values; haste is a separate end-of-turn effect. The delayed ability tracks
-/// exactly the token objects created here, not a later object with the same name.
+/// turn. Sacrifice it at the beginning of the next end step" (`copy::create_token_copy_with_haste_sacrificed_at_end_step`,
+/// CR 707.2, 707.9b, 611.2a, 603.7c): the copy exception removes legendary from its copiable values.
 fn copy_hasty_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
     let values = g.copiable_values(creature).nonlegendary();
-    let created = g.create_token_copies_of(values, item.controller, 1)?;
-    g.end_sentence();
-    instruction(g, |g| {
-        for &token in &created {
-            haste_until_end_of_turn(g, item.object, token);
-        }
-    });
-    g.end_sentence();
-    delayed::at_next_end_step_about(g, item, 0, &created);
-    Ok(())
+    copy::create_token_copy_with_haste_sacrificed_at_end_step(g, item, values, Duration::EndOfTurn, 0)
 }
 
 pub static CARD: CardDef = CardDef {
@@ -38,6 +28,6 @@ pub static CARD: CardDef = CardDef {
     )
     .condition(cast_noncreature_this_turn)
     .targets(&[targets::CREATURE_YOU_CONTROL])],
-    delayed: &[delayed_trigger(delayed::sacrifice_created, "Sacrifice it at the beginning of the next end step.")],
+    delayed: &[copy::SACRIFICE_IT_AT_END_STEP],
     ..oracle::GRAY_AND_ADIRA_FOREVER_JOINED
 };

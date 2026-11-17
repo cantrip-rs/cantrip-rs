@@ -8,7 +8,8 @@ use cantrip_oracle as oracle;
 fn exile_copy_with_haste(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(card) = targets::object(g, item, 0) else { return Ok(()) };
     let exiled = g.exile(card);
-    copy::create_token_copy_with_haste_sacrificed_at_end_step(g, item, exiled, 0)
+    let values = g.copiable_values(exiled);
+    copy::create_token_copy_with_haste_sacrificed_at_end_step(g, item, values, Duration::Indefinite, 0)
 }
 
 pub static CARD: CardDef = CardDef {
