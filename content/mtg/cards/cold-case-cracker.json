@@ -1,0 +1,11 @@
+{
+  "name": "Cold Case Cracker",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Spirit Detective",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nWhen this creature dies, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")",
+  "keywords": [
+    "Flying"
+  ]
+}

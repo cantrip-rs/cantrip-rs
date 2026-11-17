@@ -1,0 +1,49 @@
+# Cold Case Cracker: "When this creature dies" means put into a graveyard from the battlefield (CR 700.4). Bot2's Swords to Plowshares exiles it
+# instead, so Bot1 makes no Clue: its battlefield is the four Moxen and nothing else.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Cold Case Cracker
+Island x16
+
+[Bot2 Deck]
+Plains
+Swords to Plowshares
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Cold Case Cracker.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Cold Case Cracker)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Cold Case Cracker
+Bot1.Pass
+! Bot1.Accept
+
+[Expect]
+Exile = Cold Case Cracker
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Clue Token = (absent)
+Bot1.Life = 23

@@ -1,0 +1,50 @@
+# Cold Case Cracker: "When this creature dies, investigate." (CR 700.4, 701.16a). Bot1 casts the 3/3 flier for exactly {3}{U} off four Moxen
+# (pool empty right after), Bot2 Lightning Bolts it on turn 2: it dies and its controller - Bot1, not the Bolt's caster - gets a Clue token.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Cold Case Cracker
+Island x16
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Cold Case Cracker.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cold Case Cracker.Keywords = Flying
+? Bot1.Battlefield.Clue Token = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Cold Case Cracker)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Cold Case Cracker
+Bot1.Battlefield.Cold Case Cracker = (absent)
+Bot1.Battlefield.Clue Token.Token = True
+Bot1.Battlefield.Count = 5
+Bot2.Battlefield.Clue Token = (absent)
+Stack.Count = 0
