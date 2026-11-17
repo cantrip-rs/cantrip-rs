@@ -188,6 +188,12 @@ pub fn spells_cast_this_turn(q: &dyn Query) -> usize {
     q.history().casts().count()
 }
 
+/// "You've cast N or more instant and sorcery spells this turn" (CR 601.2i): how many instant and sorcery spells `player` has cast this
+/// turn, counted as they were cast, countered ones too. Arclight Phoenix and Case of the Ransacked Lab print it.
+pub fn instants_and_sorceries_cast_this_turn(q: &dyn Query, player: PlayerId) -> usize {
+    q.history().casts_by(player).filter(|c| c.is(CardType::Instant) || c.is(CardType::Sorcery)).count()
+}
+
 /// Revolt (CR 207.2c): whether a permanent `player` controlled left the battlefield this turn. The leaving object's
 /// row is as it was when it left, so its controller then is read from it.
 pub fn permanent_left_battlefield_this_turn(q: &dyn Query, player: PlayerId) -> bool {

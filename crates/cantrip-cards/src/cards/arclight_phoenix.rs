@@ -1,11 +1,11 @@
 use cantrip_api::*;
-use cantrip_mechanics::triggers;
+use cantrip_mechanics::{history, triggers};
 use cantrip_oracle as oracle;
 
 /// "If you've cast three or more instant and sorcery spells this turn" (CR 603.4): an intervening if, asked as it
 /// triggers and again as it resolves. The history keeps the spells cast this turn as they were cast (CR 601.2i).
 fn cast_three_instants_and_sorceries(q: &dyn Query, asker: &Asker) -> bool {
-    q.history().casts_by(asker.controller).filter(|c| c.is(CardType::Instant) || c.is(CardType::Sorcery)).count() >= 3
+    history::instants_and_sorceries_cast_this_turn(q, asker.controller) >= 3
 }
 
 pub static CARD: CardDef = CardDef {
