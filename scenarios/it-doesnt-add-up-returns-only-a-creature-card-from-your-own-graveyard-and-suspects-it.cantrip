@@ -1,0 +1,67 @@
+# It Doesn't Add Up: "Return target creature card from your graveyard to the battlefield. Suspect it." (CR 115.1, 400.3, 701.60a). Bot1's graveyard holds a Memnite (a creature card) and a
+# Black Lotus (not a creature card), and Bot2's graveyard holds a Memnite too. Casting at Bot1's Lotus or at Bot2's Memnite is refused; Bot1's own Memnite is the positive control: it
+# comes back untapped under Bot1's control and is suspected (menace, can't block), and Bot2's Memnite stays where it was.
+
+[Bot1 Deck]
+Black Lotus
+Memnite
+Mox Jet
+Mox Jet
+Mox Ruby
+It Doesn't Add Up
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Memnite
+Lightning Bolt
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Memnite; Black Lotus
+? Bot2.Graveyard = Memnite; Lightning Bolt; Lightning Bolt; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Island#1.Activate
+! Bot1.Hand.It Doesn't Add Up.Cast(Bot1.Graveyard.Black Lotus)
+! Bot1.Hand.It Doesn't Add Up.Cast(Bot2.Graveyard.Memnite)
+Bot1.Hand.It Doesn't Add Up.Cast(Bot1.Graveyard.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Suspected = true
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Graveyard = It Doesn't Add Up; Black Lotus
+Bot2.Graveyard = Memnite; Lightning Bolt; Lightning Bolt; Black Lotus
