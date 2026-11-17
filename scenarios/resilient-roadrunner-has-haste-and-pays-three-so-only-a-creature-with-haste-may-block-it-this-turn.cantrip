@@ -1,0 +1,70 @@
+# Resilient Roadrunner (CR 702.10a haste, 509.1b): Bot1 casts it on turn 1 and attacks with it at once (haste), Bot2 at 18. "{3}: can't be blocked this turn except by creatures with
+# haste": with only the two untapped Moxes (two mana) the activation is refused, on turn 3 three Moxes pay it exactly (the pool ends empty). Llanowar Elves (no haste) may then not
+# block it but Fanatical Firebrand, which has haste as blockers are declared, may, and dies to the Roadrunner (2 damage) while dealing it 1. The restriction ends with the turn
+# (CR 514.2): on turn 5, with no activation, Llanowar Elves blocks it and is killed.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Resilient Roadrunner
+Island x14
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mox Ruby
+Fanatical Firebrand
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Resilient Roadrunner.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Resilient Roadrunner.Activate(Mana: short)
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Resilient Roadrunner > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 18
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Fanatical Firebrand.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Resilient Roadrunner.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Resilient Roadrunner.BlockRestriction = Can't be blocked except by creatures with haste
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Resilient Roadrunner > Bot2)
+! Bot2.Block(Llanowar Elves > Resilient Roadrunner)
+Bot2.Block(Fanatical Firebrand > Resilient Roadrunner)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Bot1.Battlefield.Resilient Roadrunner.Damage = 1
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Resilient Roadrunner.BlockRestriction = (absent)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Resilient Roadrunner > Bot2)
+Bot2.Block(Llanowar Elves > Resilient Roadrunner)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard = Llanowar Elves; Fanatical Firebrand
+Bot1.Battlefield.Resilient Roadrunner.Damage = 1
+Bot1.Battlefield.Resilient Roadrunner.BlockRestriction = (absent)

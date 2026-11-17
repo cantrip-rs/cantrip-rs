@@ -1,0 +1,11 @@
+{
+  "name": "Resilient Roadrunner",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Bird",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Haste, protection from Coyotes\n{3}: This creature can't be blocked this turn except by creatures with haste.",
+  "keywords": [
+    "Haste"
+  ]
+}

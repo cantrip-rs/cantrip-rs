@@ -1,0 +1,52 @@
+# Resilient Roadrunner, "protection from Coyotes" (CR 702.16b, 702.16f): Bot2's Driftgloom Coyote (an Elemental Coyote) enters and its "exile target creature an opponent controls" may not
+# target the Roadrunner, a creature of Bot1's, so with the Memnite (the control) the only legal target, no target is asked for and the Memnite is exiled (its power 1, so the Coyote gets
+# a +1/+1 counter). On turn 3 the Roadrunner attacks: the Coyote may not block it, though Ornithopter, colorless and no Coyote, may (the control) and is killed.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Memnite
+Resilient Roadrunner
+Island x16
+
+[Bot2 Deck]
+Mox Pearl
+Black Lotus
+Sol Ring
+Driftgloom Coyote
+Ornithopter
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Resilient Roadrunner.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Sol Ring.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Hand.Driftgloom Coyote.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Exile = Memnite
+? Bot2.Battlefield.Driftgloom Coyote.Power = 4
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Resilient Roadrunner > Bot2)
+! Bot2.Block(Driftgloom Coyote > Resilient Roadrunner)
+Bot2.Block(Ornithopter > Resilient Roadrunner)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Resilient Roadrunner
+Bot1.Battlefield.Resilient Roadrunner.Damage = 0
+Bot2.Graveyard = Ornithopter; Black Lotus
+Bot2.Life = 20
