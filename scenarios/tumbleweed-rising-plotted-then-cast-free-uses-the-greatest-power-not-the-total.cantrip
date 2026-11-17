@@ -1,0 +1,41 @@
+# Tumbleweed Rising, Plot {2}{G}: plotted on turn 1 with three Moxen, beside a free Memnite (power 1). On turn 3 Bot1 casts Grizzly Bears
+# (power 2) and then Tumbleweed Rising for free: the Elemental is 2/2, the greatest power among the creatures (not 3, the total).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Memnite
+Tumbleweed Rising
+Plains x3
+Grizzly Bears
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tumbleweed Rising.Activate(Ability: Plot)
+? Exile = Tumbleweed Rising
+[T3 Bot1.Main1]
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Exile.Tumbleweed Rising.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Tumbleweed Rising
+Bot1.Battlefield.Elemental Token.Power = 2
+Bot1.Battlefield.Elemental Token.Toughness = 2

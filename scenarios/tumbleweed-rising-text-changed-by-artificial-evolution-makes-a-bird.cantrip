@@ -1,0 +1,38 @@
+# Artificial Evolution changes Elemental to Bird in Tumbleweed Rising on the stack (CR 612.2a, 612.4): the token is a Bird.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Memnite
+Tumbleweed Rising
+Plains x16
+
+[Bot2 Deck]
+Island
+Artificial Evolution
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Tumbleweed Rising.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Artificial Evolution.Cast(Stack.Tumbleweed Rising)
+Bot2.Pass
+Bot1.Pass
+Bot2.Modes(Elemental)
+Bot2.Modes(Bird)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Bird Token.Subtypes = Bird
+Bot1.Battlefield.Bird Token.Power = 1

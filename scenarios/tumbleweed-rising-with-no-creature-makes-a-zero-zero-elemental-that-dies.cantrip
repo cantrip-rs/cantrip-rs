@@ -1,0 +1,25 @@
+# Tumbleweed Rising: with no creature X is 0 (CR 107.1b): the 0/0 Elemental token is made and, as a state-based action, put into the
+# graveyard (CR 704.5f); the Tumbleweed Rising itself is in the graveyard after resolving and only the two Moxen stay on the battlefield.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Tumbleweed Rising
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Tumbleweed Rising.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Tumbleweed Rising
+Bot1.Battlefield.Count = 2
