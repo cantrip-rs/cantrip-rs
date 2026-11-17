@@ -1,0 +1,43 @@
+# Aloe Alchemist: "When this card becomes plotted" sees every way a card becomes plotted, not only its own plot action (CR 702.170c):
+# Bot2 casts Aloe Alchemist on turn 2 and Bot1 flashes in Aven Interrupter in response, whose enters trigger exiles the Aloe
+# Alchemist spell and makes it plotted. Its ability, functioning in exile, triggers for its owner, Bot2 (CR 113.6k), who targets
+# its own Memnite: a 4/3 with trample until end of turn. The Aloe Alchemist is plotted in exile, not in the graveyard.
+
+[Bot1 Deck]
+Mox Pearl x3
+Aven Interrupter
+Island x12
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Memnite
+Aloe Alchemist
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Aloe Alchemist.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aven Interrupter.Cast
+Bot2.Target(Bot2.Battlefield.Memnite)
+[Bot2.Main2]
+? Bot2.Battlefield.Memnite.Power = 4
+? Bot2.Battlefield.Memnite.Toughness = 3
+? Bot2.Battlefield.Memnite.Keywords = Trample
+[T3 Bot1.Main1]
+
+[Expect]
+Exile = Aloe Alchemist
+Bot2.Graveyard.Count = 0
+Bot2.Battlefield.Memnite.Power = 1

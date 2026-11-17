@@ -1,0 +1,11 @@
+{
+  "name": "Aloe Alchemist",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Plant Warlock",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Trample\nWhen this card becomes plotted, target creature gets +3/+2 and gains trample until end of turn.\nPlot {1}{G} (You may pay {1}{G} and exile this card from your hand. Cast it as a sorcery on a later turn without paying its mana cost. Plot only as a sorcery.)",
+  "keywords": [
+    "Trample"
+  ]
+}

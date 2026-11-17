@@ -1,0 +1,39 @@
+# Aloe Alchemist: the target is "target creature", any creature (CR 115.1): Bot1 plots it on turn 3 (Forest and Mox Emerald) and targets Bot2's Memnite, which is a 4/3 with
+# trample until end of turn; Bot1's own Memnite is untouched.
+
+[Bot1 Deck]
+Forest
+Plains
+Mox Emerald
+Memnite
+Aloe Alchemist
+Plains x15
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Aloe Alchemist.Activate(Ability: Plot)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Power = 4
+? Bot2.Battlefield.Memnite.Toughness = 3
+? Bot2.Battlefield.Memnite.Keywords = Trample
+? Bot1.Battlefield.Memnite.Power = 1
+
+[Expect]
+Bot1.Battlefield.Memnite.Keywords = (absent)
