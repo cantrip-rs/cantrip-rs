@@ -1,0 +1,48 @@
+# Sanctuary Wall: its only target is no longer legal as the ability tries to resolve, so it does not resolve and none of its effects
+# happen (CR 608.2b): in response to the activation Bot2 Lightning Bolts its own Ornithopter. Nothing is asked of Bot1, the Wall has
+# no stun counter (it is tapped for the cost only) and Bot1's Black Lotus is spent.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Sanctuary Wall
+Black Lotus
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Mountain
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sanctuary Wall.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Sanctuary Wall.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot2.Graveyard = Ornithopter; Lightning Bolt
+? Bot1.Battlefield.Sanctuary Wall.Tapped = true
+? Bot1.Battlefield.Sanctuary Wall.Counters.Stun = (absent)
+
+[Expect]
+Bot1.Graveyard = Black Lotus

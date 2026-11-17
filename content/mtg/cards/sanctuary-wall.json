@@ -1,0 +1,11 @@
+{
+  "name": "Sanctuary Wall",
+  "manaCost": "{1}{W}",
+  "type": "Artifact Creature — Wall",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": "Defender\n{2}{W}, {T}: Tap target creature. You may put a stun counter on it. If you do, put a stun counter on this creature. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+  "keywords": [
+    "Defender"
+  ]
+}

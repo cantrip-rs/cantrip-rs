@@ -1,0 +1,45 @@
+# Sanctuary Wall: the tap and the counter are separate instructions (CR 701.26a, 122.1d): a creature that is already tapped is no
+# illegal target and, if its controller's opponent accepts, still gets the stun counter, so the Wall gets one too. Bot1 cast the
+# Wall on turn 1 and holds Black Lotus; on turn 4 Bot2's Ornithopter attacks (tapped by attacking) and Bot1 activates the Wall at it
+# in the declare attackers step and accepts: both have a stun counter, the Ornithopter still tapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Sanctuary Wall
+Black Lotus
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sanctuary Wall.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter > Bot1)
+? Bot2.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Sanctuary Wall.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Stack.Count = 0
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = 1
+? Bot1.Battlefield.Sanctuary Wall.Counters.Stun = 1
+
+[Expect]
+Bot1.Graveyard = Black Lotus

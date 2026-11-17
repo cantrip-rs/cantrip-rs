@@ -1,0 +1,45 @@
+# Sanctuary Wall: "You may put a stun counter on it. If you do, ..." (CR 608.2c): Bot1 activates it at Bot2's Ornithopter and
+# declines. The Ornithopter is tapped, but neither it nor the Wall has a stun counter, so both untap normally; the Wall, tapped for
+# the cost, is untapped again on turn 5.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Sanctuary Wall
+Black Lotus
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sanctuary Wall.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Sanctuary Wall.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Stack.Count = 0
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)
+? Bot1.Battlefield.Sanctuary Wall.Counters.Stun = (absent)
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = false
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Sanctuary Wall.Tapped = false
+
+[Expect]
+Bot1.Graveyard = Black Lotus
