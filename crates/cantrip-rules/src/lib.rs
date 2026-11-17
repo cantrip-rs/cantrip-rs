@@ -252,6 +252,8 @@ mod mana_producible_tests;
 #[cfg(test)]
 mod replacement_instruction_tests;
 #[cfg(test)]
+mod unsuspect_tests;
+#[cfg(test)]
 mod damage_expansion_tests;
 #[cfg(test)]
 mod entry_order_tests;
@@ -3120,6 +3122,10 @@ impl cantrip_api::Game for Cx<'_> {
 
     fn suspect(&mut self, permanent: ObjectId) {
         ops::suspect(self, permanent);
+    }
+
+    fn unsuspect(&mut self, permanent: ObjectId) {
+        ops::unsuspect(self, permanent);
     }
 
     fn fight(&mut self, first: ObjectId, second: ObjectId) {

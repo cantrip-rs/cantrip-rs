@@ -1583,6 +1583,9 @@ pub trait Game: Query {
     /// Suspect a creature (CR 701.60a): a permanent on the battlefield that is not suspected becomes suspected (CR
     /// 701.60d) until it leaves the battlefield, having menace and "This creature can't block" (CR 701.60c).
     fn suspect(&mut self, permanent: ObjectId);
+    /// A permanent is no longer suspected (CR 701.60a): a suspected one loses the designation, and the menace and "This
+    /// creature can't block" it gave (CR 701.60c). One that is not suspected is unchanged.
+    fn unsuspect(&mut self, permanent: ObjectId);
     /// Two creatures fight (CR 701.14a): each deals damage equal to its power to the other, at once; one that fights
     /// itself deals twice its power to itself (CR 701.14c). Nothing happens unless both are creatures on the battlefield
     /// (CR 701.14b).
