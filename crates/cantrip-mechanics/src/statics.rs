@@ -977,6 +977,14 @@ pub fn base_pt<const P: i32, const T: i32>(_: &dyn LayerQuery, _: ObjectId, char
     chars.toughness = Some(T);
 }
 
+/// "... spells you cast" as a `CardDef::flash_rules` entry or a `SpellAlternative::applies`, asked as a spell is about to be cast
+/// (CR 601.3, 601.2b): every spell the source's controller casts, from whatever zone and of whatever type, and no opponent's.
+/// High Fae Trickster ("you may cast spells as though they had flash"), Leyline of Mutation and Conspiracy Unraveler (an
+/// alternative cost "for spells you cast") print it.
+pub fn spells_you_cast(_: &dyn Query, asker: &Asker, _: ObjectId, caster: PlayerId) -> bool {
+    caster == asker.controller
+}
+
 /// "Spells you cast" (CR 601.2i, 707.10): `affected` is a spell on the stack that was cast, from the zone it was cast from
 /// (a copy of a spell was cast from none, CR 707.10; a copy of a card that was cast, a prepare spell's, CR 707.12, 722.3c,
 /// is a spell cast), and its controller is `source`'s controller. It is one from the moment it is put on the stack (CR 601.2a),
