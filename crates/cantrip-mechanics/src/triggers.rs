@@ -1652,6 +1652,16 @@ pub fn you_cast_instant_or_sorcery(q: &dyn Query, me: &Asker, event: &Event) -> 
     }
 }
 
+/// "Whenever you cast an instant or sorcery spell from your hand" (CR 601.2a, 603.2): `you_cast_instant_or_sorcery`, of a spell cast
+/// from its controller's hand, which is still on the stack as the trigger is put there. Goliath Daydreamer and Lilah, Undefeated
+/// Slickshot (a multicolored one) print it.
+pub fn you_cast_an_instant_or_sorcery_from_your_hand(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match you_cast_instant_or_sorcery(q, me, event) {
+        Some(fired) if matches!(event, Event::SpellCast { spell, .. } if crate::zone_cast_from(q, *spell) == Some(ZoneKind::Hand)) => Some(fired),
+        _ => None,
+    }
+}
+
 /// "Whenever an opponent casts an instant or sorcery spell" (CR 603.2, 601.2i): a spell cast, not one copied (CR 707.10), by a
 /// player other than the ability's controller, read as it stands on the stack. The spell rides along as the trigger's subject.
 /// Arasta of the Endless Web and Wandering Archaic print it.

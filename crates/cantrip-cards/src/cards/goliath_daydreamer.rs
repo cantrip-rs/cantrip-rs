@@ -1,15 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{choose, select, triggers, zone_cast_from};
+use cantrip_mechanics::{choose, select, triggers};
 use cantrip_oracle as oracle;
-
-/// "Whenever you cast an instant or sorcery spell from your hand" (CR 601.2a, 603.2): about the spell, which is still on the
-/// stack as the trigger is put there.
-fn you_cast_an_instant_or_sorcery_from_your_hand(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
-    match triggers::you_cast_instant_or_sorcery(q, me, event) {
-        Some(fired) if matches!(event, Event::SpellCast { spell, .. } if zone_cast_from(q, *spell) == Some(ZoneKind::Hand)) => Some(fired),
-        _ => None,
-    }
-}
 
 /// "Exile that card with a dream counter on it instead of putting it into your graveyard as it resolves": the spell, if it is
 /// still on the stack, will be exiled in place of its move to the graveyard, the counter put on it as it arrives (CR 614.1a,
@@ -40,7 +31,7 @@ fn cast_a_dreamed_spell(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
-            when_asked(EventMask::SPELL_CAST, you_cast_an_instant_or_sorcery_from_your_hand),
+            when_asked(EventMask::SPELL_CAST, triggers::you_cast_an_instant_or_sorcery_from_your_hand),
             dream,
             "Whenever you cast an instant or sorcery spell from your hand, exile that card with a dream counter on it instead of putting it into your graveyard as it resolves.",
         ),
