@@ -1,0 +1,49 @@
+# Hunted Bonebrute, Disguise {1}{B}: turning it face up is a special action, not a permanent entering (CR 702.168a, 116.2b), so the "enters" trigger does not happen and Bot2
+# gets no Dogs. It is then a 6/2 menace creature, and when Bot2 Bolts it (no ward any more) the dies trigger it now has makes Bot2 lose 3 life (CR 603.10a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Hunted Bonebrute
+Island
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Hunted Bonebrute.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Battlefield.Hunted Bonebrute.Power = 6
+? Bot2.Battlefield.Count = 0
+? Stack.Count = 0
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Hunted Bonebrute)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot2.Battlefield.Count = 0
+Bot1.Graveyard = Hunted Bonebrute; Black Lotus

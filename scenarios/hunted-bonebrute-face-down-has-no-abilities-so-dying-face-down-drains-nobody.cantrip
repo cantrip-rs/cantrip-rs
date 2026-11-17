@@ -1,0 +1,42 @@
+# Hunted Bonebrute, Disguise {1}{B}: cast face down for {3} it is a 2/2 colourless creature with ward {2} and none of its abilities (CR 708.2, 702.168a), so its enters trigger
+# does not give Bot2 any Dogs and, when Bot2 pays ward {2} and Bolts it, the dies trigger
+# it would have had face up does not exist (CR 603.10a looks back at the permanent as it was on the battlefield: face down): Bot2 stays at 20.
+
+[Bot1 Deck]
+Black Lotus
+Hunted Bonebrute
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Hunted Bonebrute.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+? Bot2.Battlefield.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.#1)
+Bot2.PayCost
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 0
+Bot1.Graveyard = Hunted Bonebrute; Black Lotus
+Bot2.Life = 20
+Bot2.Battlefield.Count = 0

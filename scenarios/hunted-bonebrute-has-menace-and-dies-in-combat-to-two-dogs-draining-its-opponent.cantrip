@@ -1,0 +1,32 @@
+# Hunted Bonebrute: menace (CR 702.110b: it can't be blocked except by two or more creatures) and its dies trigger after combat damage. Bot2's two Dogs (from the enters trigger)
+# cannot block the Bonebrute one at a time (refused), but may both block it: the Bonebrute's 6 damage kills both and the Dogs' 2 damage kills it. Bot2 loses 3 life from the
+# dies trigger and takes no combat damage.
+
+[Bot1 Deck]
+Black Lotus
+Hunted Bonebrute
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Hunted Bonebrute.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Dog Token; Dog Token
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Hunted Bonebrute > Bot2)
+! Bot2.Block(Dog Token#1 > Hunted Bonebrute)
+Bot2.Block(Dog Token#1 > Hunted Bonebrute; Dog Token#2 > Hunted Bonebrute)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot2.Battlefield.Count = 0
+Bot1.Graveyard = Hunted Bonebrute; Black Lotus

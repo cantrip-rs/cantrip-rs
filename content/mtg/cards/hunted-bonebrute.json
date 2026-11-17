@@ -1,0 +1,11 @@
+{
+  "name": "Hunted Bonebrute",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Skeleton Beast",
+  "power": 6,
+  "toughness": 2,
+  "oracleText": "Menace\nWhen this creature enters, target opponent creates two 1/1 white Dog creature tokens.\nWhen this creature dies, each opponent loses 3 life.\nDisguise {1}{B}",
+  "keywords": [
+    "Menace"
+  ]
+}
