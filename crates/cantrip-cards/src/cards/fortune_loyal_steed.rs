@@ -3,17 +3,13 @@ use cantrip_mechanics::triggers::{THIS_ATTACKS_WHILE_SADDLED, THIS_ENTERS};
 use cantrip_mechanics::{choose, delayed, effects, saddle, select};
 use cantrip_oracle as oracle;
 
-/// The creatures that saddled `mount` this turn (CR 702.171a: the creatures tapped for the cost), each once, that are still the
-/// object they were (CR 400.7) and still on the battlefield (the choice then only offers creatures): asked of the history, so one that
-/// has since untapped still counts. A Saddled record is about both creatures, so one where `mount` saddled another Mount is left out.
+/// The creatures that saddled `mount` this turn (CR 702.171a: the creatures tapped for the cost), each once, that are still on the
+/// battlefield (the choice then only offers creatures): asked of the history (`History::saddled`), so one that has since untapped
+/// still counts.
 fn creatures_that_saddled_this_turn(q: &dyn Query, mount: ObjectId) -> Vec<ObjectId> {
     let mut saddlers: Vec<ObjectId> = Vec::new();
-    for record in q.history().select(EventQuery::kind(EventMask::SADDLED).object(mount).this_turn()) {
-        if let Event::Saddled { creature, mount: m } = record.event
-            && m == mount
-            && q.is_on_battlefield(creature)
-            && !saddlers.contains(&creature)
-        {
+    for creature in q.history().saddled(mount) {
+        if q.is_on_battlefield(creature) && !saddlers.contains(&creature) {
             saddlers.push(creature);
         }
     }

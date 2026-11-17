@@ -306,7 +306,7 @@ pub enum Event {
     /// (CR 608.2h). "Creatures that crewed it this turn" asks `History::crewed`.
     Crewed { creature: ObjectId, vehicle: ObjectId },
     /// `creature` saddled `mount` (CR 702.171c): it was tapped to pay the cost of the permanent's saddle ability, the saddle
-    /// counterpart of `Crewed`, emitted the same way (Canyon Vaulter).
+    /// counterpart of `Crewed`, emitted the same way (Canyon Vaulter). "Creatures that saddled it this turn" asks `History::saddled` (Giant Beaver).
     Saddled { creature: ObjectId, mount: ObjectId },
     /// A player became the monarch (CR 725.1, 725.4): it was not theirs before.
     BecameMonarch { player: PlayerId },
