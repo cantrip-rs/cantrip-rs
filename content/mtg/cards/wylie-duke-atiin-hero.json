@@ -1,0 +1,11 @@
+{
+  "name": "Wylie Duke, Atiin Hero",
+  "manaCost": "{1}{G}{W}",
+  "type": "Legendary Creature — Human Ranger",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Vigilance\nWhenever Wylie Duke becomes tapped, you gain 1 life and draw a card.",
+  "keywords": [
+    "Vigilance"
+  ]
+}

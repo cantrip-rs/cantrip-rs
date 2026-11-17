@@ -1,0 +1,59 @@
+# Wylie Duke: "Whenever Wylie Duke becomes tapped, you gain 1 life and draw a card" (CR 701.26a, 603.2). On turn 1 Bot1 taps it
+# (power 4, enough for Saddle 4) to saddle Seraphic Steed: it becomes tapped as a cost, so Bot1 gains 1 (21) and draws a card (the
+# hand goes from 0 to 1). On turn 3 Wylie Duke attacks with vigilance and stays untapped (CR 702.20b), and Seraphic Steed attacks and
+# taps: neither triggers it, so Bot1 draws only for its turn and gains only the 2 of the Steed's lifelink (23); Bot2 takes 6.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Pearl
+Mox Pearl
+Mox Jet
+Wylie Duke, Atiin Hero
+Seraphic Steed
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wylie Duke, Atiin Hero.Cast
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Seraphic Steed.Cast
+? Bot1.Life = 20
+? Bot1.Hand.Count = 0
+Bot1.Battlefield.Seraphic Steed.Activate
+Bot1.Choose(Wylie Duke, Atiin Hero)
+? Bot1.Battlefield.Wylie Duke, Atiin Hero.Tapped = true
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+? Bot1.Hand.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Seraphic Steed.Saddled = true
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Wylie Duke, Atiin Hero > Bot2; Seraphic Steed > Bot2)
+? Bot1.Battlefield.Wylie Duke, Atiin Hero.Tapped = false
+? Bot1.Battlefield.Seraphic Steed.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Life = 23
+Bot1.Hand.Count = 2
