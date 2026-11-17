@@ -1,0 +1,70 @@
+# Crimestopper Sprite cast with evidence collected (Craw Wurm exiled), then returned to Bot1's hand by Bot2's Unsummon while its enters trigger is on the stack.
+# "If evidence was collected" asks how the Sprite was cast, as it last existed on the battlefield (CR 608.2h, 400.7): the trigger still taps Bot2's
+# Grizzly Bears and puts a stun counter on it, though the Sprite is now a new object in Bot1's hand.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Faithless Looting
+Crimestopper Sprite
+Craw Wurm
+Island x17
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Grizzly Bears
+Unsummon
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Craw Wurm; Island)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Crimestopper Sprite.Cast
+Bot1.Modes(Collect evidence)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Choose(Craw Wurm)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Unsummon.Cast(Bot1.Battlefield.Crimestopper Sprite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Crimestopper Sprite.Power = 2
+? Bot2.Battlefield.Grizzly Bears.Tapped = false
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Grizzly Bears.Tapped = true
+? Bot2.Battlefield.Grizzly Bears.Counters.Stun = 1
+
+[Expect]
+Exile = Craw Wurm
+Bot1.Hand.Crimestopper Sprite.Power = 2
+Bot2.Battlefield.Grizzly Bears.Counters.Stun = 1

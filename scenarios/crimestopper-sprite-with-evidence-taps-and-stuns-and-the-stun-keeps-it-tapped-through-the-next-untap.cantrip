@@ -1,0 +1,65 @@
+# Crimestopper Sprite cast with evidence collected: Craw Wurm (mana value 6, exactly) is exiled from Bot1's graveyard as an additional cost (CR 701.59a, 601.2b).
+# When it enters, "tap target creature. If evidence was collected, put a stun counter on it": Bot2's Grizzly Bears is tapped and gets a stun counter, and a noncreature
+# (Bot2's Mox Ruby) is refused as the target. At Bot2's untap step the counter is removed instead of untapping the Bears (CR 122.1d): still tapped, no counter.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Faithless Looting
+Crimestopper Sprite
+Craw Wurm
+Island x17
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Grizzly Bears
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Craw Wurm; Island)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Crimestopper Sprite.Cast
+Bot1.Modes(Collect evidence)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Choose(Craw Wurm)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Mox Ruby)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Tapped = true
+? Bot2.Battlefield.Grizzly Bears.Counters.Stun = 1
+[T4 Bot2.Main1]
+
+[Expect]
+Exile = Craw Wurm
+Bot2.Battlefield.Grizzly Bears.Tapped = true
+Bot2.Battlefield.Grizzly Bears.Counters.Stun = (absent)

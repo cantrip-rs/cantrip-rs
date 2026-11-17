@@ -1,0 +1,11 @@
+{
+  "name": "Crimestopper Sprite",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Faerie Detective",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "As an additional cost to cast this spell, you may collect evidence 6. (Exile cards with total mana value 6 or greater from your graveyard.)\nFlying\nWhen this creature enters, tap target creature. If evidence was collected, put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+  "keywords": [
+    "Flying"
+  ]
+}
