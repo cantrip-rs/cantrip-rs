@@ -1,0 +1,31 @@
+# Intrepid Stablemaster: its two restricted mana can pay for a Mount spell (CR 205.3, 106.6): turn 1 a Black Lotus casts it; in turn 3 two green mana and a Forest's {G}
+# cast Drover Grizzly ({2}{G}).
+
+[Bot1 Deck]
+Black Lotus
+Intrepid Stablemaster
+Drover Grizzly
+Forest
+Plains x3
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Intrepid Stablemaster.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Intrepid Stablemaster.Activate(Ability: Add two mana; Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Drover Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield = Forest; Intrepid Stablemaster; Drover Grizzly

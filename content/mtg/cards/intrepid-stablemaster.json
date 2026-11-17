@@ -1,0 +1,11 @@
+{
+  "name": "Intrepid Stablemaster",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Human Scout",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Reach\n{T}: Add {G}.\n{T}: Add two mana of any one color. Spend this mana only to cast Mount or Vehicle spells.",
+  "keywords": [
+    "Reach"
+  ]
+}
