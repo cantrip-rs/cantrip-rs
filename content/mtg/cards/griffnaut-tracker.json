@@ -1,0 +1,11 @@
+{
+  "name": "Griffnaut Tracker",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Human Detective",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying\nWhen this creature enters, exile up to two target cards from a single graveyard.",
+  "keywords": [
+    "Flying"
+  ]
+}

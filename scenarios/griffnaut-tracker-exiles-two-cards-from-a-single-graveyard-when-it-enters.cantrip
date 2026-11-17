@@ -1,0 +1,60 @@
+# Griffnaut Tracker: "When this creature enters, exile up to two target cards from a single graveyard." Bot2 Bolts Bot1 on
+# turns 2 and 4, so Bot2's graveyard holds two Lightning Bolts, and Bot1's own graveyard holds a Bolt. On turn 5 Bot1 casts the
+# Sunshield ({3}{W} from four Moxes): the first target is a Bolt of Bot2's; the Bolt from Bot1's graveyard cannot be the second
+# (the refusal beside the allowed second card from the same graveyard), so Bot2's other Bolt is. Both are exiled and Bot1's Bolt
+# stays.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Griffnaut Tracker
+Lightning Bolt
+Forest x13
+
+[Bot2 Deck]
+Mountain
+Mountain
+Lightning Bolt
+Lightning Bolt
+Mountain x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T5 Bot1.Main1]
+Bot1.Hand.Griffnaut Tracker.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Graveyard.Lightning Bolt#1)
+! Bot1.Target(Bot1.Graveyard.Lightning Bolt)
+Bot1.Target(Bot2.Graveyard.Lightning Bolt#2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 2
+Bot2.Graveyard.Count = 0
+Bot1.Graveyard = Lightning Bolt

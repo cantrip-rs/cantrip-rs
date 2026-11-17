@@ -1,0 +1,49 @@
+# Griffnaut Tracker: both target slots are optional, so entering with no card chosen exiles nothing: Bot2's Bolt and Bot1's Bolt both stay in their graveyards.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Griffnaut Tracker
+Lightning Bolt
+Forest x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Griffnaut Tracker.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Graveyard = Lightning Bolt
+Bot1.Graveyard = Lightning Bolt
+Bot1.Battlefield.Griffnaut Tracker.Power = 3
+Bot1.Battlefield.Griffnaut Tracker.Toughness = 2
+Bot1.Battlefield.Griffnaut Tracker.Keywords = Flying
