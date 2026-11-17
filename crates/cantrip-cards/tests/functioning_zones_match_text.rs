@@ -86,6 +86,10 @@ fn condition_zones(condition: &str, text: &str, name: &str) -> ZoneKinds {
         // Leyline of the Void exiles the discarded card), and its return finds nothing there.
         return WHERE_A_DISCARD_ENDS;
     }
+    // "When this card becomes plotted" (CR 702.170a): a plotted card is in exile, where the plot action put it.
+    if condition.contains("this card becomes plotted") {
+        return ZoneKinds::of(&[ZoneKind::Exile]);
+    }
     // The zones the condition itself puts its own object into (CR 113.6m's exception).
     let mut put_into = ZoneKinds::NONE;
     for (verb, zone) in [
@@ -153,6 +157,8 @@ fn the_reader_reads_the_printed_forms() {
         ("Whenever you cycle or discard another card, scry 1.", "Test", ON_THE_BATTLEFIELD),
         ("Offspring {2} (You may pay an additional {2} as you cast this spell.)", "Pawpatch Recruit", ON_THE_BATTLEFIELD),
         ("Whenever you cast a colorless spell, exile up to one target permanent that's one or more colors.", "Ugin, Eye of the Storms", ON_THE_BATTLEFIELD),
+        ("When this card becomes plotted, target creature gets +3/+2 until end of turn.", "Aloe Alchemist", ZoneKinds::of(&[ZoneKind::Exile])),
+        ("When this creature becomes plotted, you gain 1 life.", "Test", ON_THE_BATTLEFIELD),
         // Suspend's two triggered abilities function in exile by CR 702.62a, not by their words.
         ("Suspend: at the beginning of your upkeep, if this card is suspended, remove a time counter from it.", "Lotus Bloom", ZoneKinds::of(&[ZoneKind::Exile])),
         ("Suspend: when the last time counter is removed from this card, if it's exiled, you may cast it without paying its mana cost.", "Lotus Bloom", ZoneKinds::of(&[ZoneKind::Exile])),

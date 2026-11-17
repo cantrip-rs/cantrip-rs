@@ -886,6 +886,18 @@ pub fn you_cycle_this_card(q: &dyn Query, me: &Asker, event: &Event) -> Option<F
 
 pub const YOU_CYCLE_THIS_CARD: Trigger = when_asked(EventMask::CYCLED, you_cycle_this_card).functions_in(WHERE_A_DISCARD_ENDS);
 
+/// "When this card becomes plotted" (CR 702.170a): the ability of a card with plot, functioning in exile where the plot action (or an
+/// effect that says it becomes plotted) has just put it (CR 113.6k). `Event::Plotted` names the card where it is in exile, the ability's
+/// source. Aloe Alchemist and Longhorn Sharpshooter print it.
+fn this_becomes_plotted(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::Plotted { card, .. } if *card == source => Fired::PLAIN,
+        _ => None,
+    }
+}
+
+pub const THIS_BECOMES_PLOTTED: Trigger = when(EventMask::PLOTTED, this_becomes_plotted).functions_in(ZoneKinds::of(&[ZoneKind::Exile]));
+
 fn cycle_draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.draw(item.controller, 1);
     Ok(())
