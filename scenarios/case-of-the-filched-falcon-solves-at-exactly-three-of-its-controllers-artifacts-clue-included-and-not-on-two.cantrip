@@ -1,0 +1,56 @@
+# Case of the Filched Falcon: "When this Case enters, investigate" gives Bot1 a Clue on turn 1. "To solve - You control three or more artifacts" (CR 719.3a, an intervening
+# "if", CR 603.4): at the turn-1 end step Bot1 controls two artifacts (Mox Sapphire and the Clue), so it does not solve. At Bot1's turn-3 end step it still controls two while
+# Bot2 controls four (Mox Ruby, Mox Jet, Ornithopter, Memnite): the opponent's artifacts do not count. On turn 5 Bot1 casts Mox Jet: exactly three (Sapphire, Jet, the Clue,
+# the Island is not an artifact) and before the end step the Case's ability is refused though {2}{U} could be paid (it is not solved); at the end step it becomes solved
+# (CR 719.3a), and from then on the ability is offered.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Case of the Filched Falcon
+Island
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Ornithopter
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Case of the Filched Falcon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clue Token.Token = true
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Case of the Filched Falcon.Solved = (absent)
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Case of the Filched Falcon.Solved = (absent)
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+! Bot1.Battlefield.Case of the Filched Falcon.Activate(Bot2.Battlefield.Mox Ruby)
+[T5 Bot1.End]
+? Stack.Count = 1
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Case of the Filched Falcon.Solved = true
+
+[Expect]
+Bot1.Battlefield = Case of the Filched Falcon; Clue Token; Island; Mox Jet; Mox Sapphire

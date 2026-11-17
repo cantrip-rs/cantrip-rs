@@ -1,0 +1,65 @@
+# Case of the Filched Falcon (solved at the turn-1 end step with four Moxen and its Clue) sacrificed on turn 3 for {2}{U}: "target noncreature artifact" is any such artifact, an opponent's
+# included, but not an artifact creature - Bot2's Ornithopter is refused. Bot2's Smuggler's Copter (a 3/3 Vehicle, not a creature until crewed) gets four +1/+1 counters and becomes a 0/0 Bird
+# creature with flying in addition to its other types: 4/4 (its printed 3/3 is overridden by the 0/0 base, CR 613.4b, so not 7/7), a Vehicle still, and a creature without crewing; it has been
+# under Bot2's control since turn 2, so it attacks on turn 4 (ruling 2024-02-02) and Bot1 takes 4.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Case of the Filched Falcon
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Smuggler's Copter
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Case of the Filched Falcon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Smuggler's Copter.Types = Artifact
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Case of the Filched Falcon.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Case of the Filched Falcon.Activate(Bot2.Battlefield.Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Smuggler's Copter.Types = Artifact; Creature
+? Bot2.Battlefield.Smuggler's Copter.Subtypes = Bird; Vehicle
+? Bot2.Battlefield.Smuggler's Copter.Keywords = Flying
+? Bot2.Battlefield.Smuggler's Copter.Power = 4
+? Bot2.Battlefield.Smuggler's Copter.Toughness = 4
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Smuggler's Copter > Bot1)
+[T4 Bot2.Main2]
+? Bot1.Life = 16
+
+[Expect]
+Bot1.Graveyard = Case of the Filched Falcon

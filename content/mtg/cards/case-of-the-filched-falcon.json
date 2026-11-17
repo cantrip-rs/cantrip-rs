@@ -1,0 +1,6 @@
+{
+  "name": "Case of the Filched Falcon",
+  "manaCost": "{U}",
+  "type": "Enchantment — Case",
+  "oracleText": "When this Case enters, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")\nTo solve — You control three or more artifacts. (If unsolved, solve at the beginning of your end step.)\nSolved — {2}{U}, Sacrifice this Case: Put four +1/+1 counters on target noncreature artifact. It becomes a 0/0 Bird creature with flying in addition to its other types."
+}

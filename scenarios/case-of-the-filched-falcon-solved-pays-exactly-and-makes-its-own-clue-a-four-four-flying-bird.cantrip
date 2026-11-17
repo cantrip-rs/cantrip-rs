@@ -1,0 +1,59 @@
+# Case of the Filched Falcon with five artifacts (four Moxen and its Clue) is solved at the turn-1 end step. "Solved - {2}{U}, Sacrifice this Case: Put four +1/+1 counters on target
+# noncreature artifact. It becomes a 0/0 Bird creature with flying in addition to its other types." On Bot2's turn 2 only Moxen without blue are untapped (Mox Sapphire paid for the Case),
+# so the ability is refused for mana (the {U} is short). On turn 3 it is paid exactly with Sapphire, Jet and Pearl (Mox Ruby stays untapped, the pool is empty) and sacrifices the
+# Case; its own Clue becomes a Bird artifact creature with four +1/+1 counters, base 0/0 and flying: 4/4, still a Clue (its own sacrifice ability still works), and it is
+# not a creature before. A noncreature artifact only: Bot1's own Clue is a legal target.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Case of the Filched Falcon
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Case of the Filched Falcon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clue Token.Types = Artifact
+? Bot1.Battlefield.Clue Token.Power = (absent)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Case of the Filched Falcon.Solved = true
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+! Bot1.Battlefield.Case of the Filched Falcon.Activate(Mana: short; Bot1.Battlefield.Clue Token)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Case of the Filched Falcon.Activate(Bot1.Battlefield.Clue Token)
+? Bot1.Mana =
+? Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clue Token.Types = Artifact; Creature
+? Bot1.Battlefield.Clue Token.Subtypes = Bird; Clue
+? Bot1.Battlefield.Clue Token.Keywords = Flying
+? Bot1.Battlefield.Clue Token.Power = 4
+? Bot1.Battlefield.Clue Token.Toughness = 4
+? Bot1.Battlefield.Clue Token.Counters.PlusOnePlusOne = 4
+[T4 Bot2.End]
+? Bot1.Battlefield.Clue Token.Power = 4
+
+[Expect]
+Bot1.Graveyard = Case of the Filched Falcon
