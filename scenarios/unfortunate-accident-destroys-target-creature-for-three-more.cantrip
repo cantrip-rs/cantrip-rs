@@ -1,0 +1,52 @@
+# Unfortunate Accident, the {2}{B} mode alone (CR 702.172a, 118.8): Bot1 pays {B} plus {2}{B} (four mana in all) to destroy
+# Bot2's Spined Karok. No Mercenary token is made: the {1} mode was not chosen.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Pearl
+Unfortunate Accident
+Swamp x2
+Swamp x15
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Spined Karok
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Spined Karok.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Unfortunate Accident.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot2.Battlefield.Spined Karok)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Spined Karok
+Bot1.Graveyard = Unfortunate Accident
+Bot1.Battlefield = Mox Jet; Mox Jet; Mox Ruby; Mox Pearl

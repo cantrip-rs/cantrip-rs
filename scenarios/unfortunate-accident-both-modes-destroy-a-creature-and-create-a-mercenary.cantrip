@@ -1,0 +1,55 @@
+# Unfortunate Accident with both modes (CR 702.172a): five mana ({B}, {2}{B} and {1}). The modes are followed in the order written
+# (CR 700.2): Bot2's Spined Karok is destroyed and Bot1 gets a Mercenary token, which the Karok's death does not touch.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Unfortunate Accident
+Swamp x1
+Swamp x15
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Spined Karok
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Spined Karok.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Unfortunate Accident.Cast
+Bot1.Modes(1; 2)
+Bot1.Target(Bot2.Battlefield.Spined Karok)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Spined Karok
+Bot1.Battlefield.Mercenary Token.Power = 1
+Bot1.Graveyard = Unfortunate Accident

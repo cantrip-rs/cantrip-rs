@@ -1,0 +1,6 @@
+{
+  "name": "Unfortunate Accident",
+  "manaCost": "{B}",
+  "type": "Instant",
+  "oracleText": "Spree (Choose one or more additional costs.)\n+ {2}{B} — Destroy target creature.\n+ {1} — Create a 1/1 red Mercenary creature token with \"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\""
+}
