@@ -1,0 +1,36 @@
+# No Witnesses: the caster has no claim on the Clue (CR 701.16a). Bot1 controls one creature (Memnite) and Bot2 two (Memnite,
+# Ornithopter). On turn 3 Bot1 casts No Witnesses: only Bot2 creates a Clue, and then every creature is destroyed.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+No Witnesses
+Memnite
+Plains x14
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.No Witnesses.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Pearl
+Bot2.Battlefield = Clue Token
+Bot1.Graveyard = No Witnesses; Memnite; Black Lotus
+Bot2.Graveyard = Ornithopter; Memnite

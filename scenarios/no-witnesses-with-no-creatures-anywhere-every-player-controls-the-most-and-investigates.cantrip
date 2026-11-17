@@ -1,0 +1,28 @@
+# No Witnesses: with no creatures on either side each player controls the most creatures (zero, tied; CR 701.16a), so both players
+# create a Clue and the destruction finds nothing. Bot1 casts it on turn 3 (Black Lotus for white and Mox Pearl).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+No Witnesses
+Plains x14
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.No Witnesses.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Clue Token
+Bot2.Battlefield = Clue Token
+Bot1.Graveyard = No Witnesses; Black Lotus

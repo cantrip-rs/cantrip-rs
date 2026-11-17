@@ -1,0 +1,39 @@
+# No Witnesses: "Each player who controls the most creatures investigates. Then destroy all creatures." (CR 701.16a, 701.8a,
+# 608.2c). Bot1 controls two creatures (Memnite, Ornithopter) and Bot2 one (Memnite). On turn 3 Bot1 casts No Witnesses ({2}{W}{W}:
+# Black Lotus for white and Mox Pearl): only Bot1, who controls the most, creates a Clue; then all three creatures are destroyed
+# (the Clue, not being a creature, stays) and Bot2 gets no Clue.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+No Witnesses
+Memnite
+Ornithopter
+Plains x14
+
+[Bot2 Deck]
+Memnite
+Island x14
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.No Witnesses.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Clue Token
+Bot2.Battlefield = 
+Bot1.Graveyard = No Witnesses; Ornithopter; Memnite; Black Lotus
+Bot2.Graveyard = Memnite
+Bot1.Battlefield.Clue Token.Tapped = false
