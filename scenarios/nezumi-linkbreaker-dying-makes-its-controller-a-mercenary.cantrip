@@ -1,0 +1,33 @@
+# Nezumi Linkbreaker ({B}): "When this creature dies, create a 1/1 red Mercenary creature token ..." Bot2 kills Bot1's Linkbreaker
+# with Lightning Bolt: Bot1, its controller, gets exactly one 1/1 red Mercenary and Bot2, who killed it, gets none (CR 603.3a).
+
+[Bot1 Deck]
+Nezumi Linkbreaker
+Swamp x22
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x22
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Nezumi Linkbreaker.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nezumi Linkbreaker)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Nezumi Linkbreaker
+Bot1.Battlefield.Mercenary Token.Power = 1
+Bot1.Battlefield.Mercenary Token.Toughness = 1
+Bot1.Battlefield.Mercenary Token.Colors = Red
+Bot1.Battlefield.Count = 2
+Bot2.Battlefield.Count = 1
