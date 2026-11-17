@@ -1,11 +1,7 @@
 use cantrip_api::*;
-use cantrip_mechanics::tokens::{self, investigate};
+use cantrip_mechanics::tokens;
 use cantrip_mechanics::{choose_color, exile_and_return_transformed, targets, weaken_attackers};
 use cantrip_oracle as oracle;
-
-fn investigate_effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    investigate(g, item.controller)
-}
 
 /// "When you draw your third card in a turn": the history is as it was just before this draw, so two already drawn.
 fn third_draw(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
@@ -71,7 +67,7 @@ pub static BACK: CardDef = CardDef {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(cantrip_mechanics::triggers::THIS_ATTACKS, investigate_effect, "Whenever Tamiyo attacks, investigate."),
+        triggered(cantrip_mechanics::triggers::THIS_ATTACKS, tokens::you_investigate, "Whenever Tamiyo attacks, investigate."),
         triggered(when(EventMask::DREW, third_draw), transform_her, "When you draw your third card in a turn, exile Tamiyo, then return her to the battlefield transformed under her owner's control."),
     ],
     back: Some(&BACK),
