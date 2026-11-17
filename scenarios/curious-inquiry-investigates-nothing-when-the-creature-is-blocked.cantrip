@@ -1,0 +1,40 @@
+# Curious Inquiry: only combat damage dealt to a PLAYER investigates. Bot1's enchanted Ornithopter (1/3 flying) is blocked by Bot2's Ornithopter
+# on turn 3 and damages the creature (0/2 -> 1 damage), not the player: no Clue, Bot2 stays at 20.
+
+[Bot1 Deck]
+Mox Sapphire
+Ornithopter
+Curious Inquiry
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Curious Inquiry.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+Bot2.Block(Ornithopter > Ornithopter)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+! Bot1.Accept
+[T3 Bot1.End]
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield.Ornithopter.Damage = 1
+Bot1.Battlefield.Clue Token = (absent)
+Bot1.Battlefield.Count = 3

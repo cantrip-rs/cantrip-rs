@@ -1,0 +1,34 @@
+# Curious Inquiry on Bot2's Ornithopter: the granted ability is the creature's own (CR 113.8), so when it deals combat damage to Bot1 on turn 4
+# it is Bot2, the creature's controller, who investigates - not Bot1, the Aura's controller. Bot1 takes 1 (the +1/+1).
+
+[Bot1 Deck]
+Mox Sapphire
+Curious Inquiry
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Curious Inquiry.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter > Bot1)
+[T4 Bot2.Main2]
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 19
+Bot2.Battlefield.Clue Token.Token = True
+Bot1.Battlefield.Clue Token = (absent)
+Bot2.Battlefield.Ornithopter.Power = 1
