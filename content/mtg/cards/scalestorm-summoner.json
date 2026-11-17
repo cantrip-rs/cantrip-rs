@@ -1,0 +1,8 @@
+{
+  "name": "Scalestorm Summoner",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Human Warlock",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever this creature attacks, create a 3/1 red Dinosaur creature token if you control a creature with power 4 or greater."
+}

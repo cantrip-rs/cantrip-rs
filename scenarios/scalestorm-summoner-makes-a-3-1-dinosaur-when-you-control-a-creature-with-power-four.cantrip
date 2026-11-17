@@ -1,0 +1,45 @@
+# Scalestorm Summoner: with Barkhide Mauler (a 4/4, power exactly 4) on Bot1's side, attacking makes a 3/1 red Dinosaur token (it just enters, it is not
+# attacking). On turn 1 Bot1 casts the Summoner; on turn 3 Black Lotus ({G}{G}{G}) and two Moxes pay for the Mauler, then the Summoner attacks.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Black Lotus
+Scalestorm Summoner
+Barkhide Mauler
+Forest
+Forest x14
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Scalestorm Summoner.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Barkhide Mauler.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Barkhide Mauler.Power = 4
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Scalestorm Summoner > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Dinosaur Token.Power = 3
+Bot1.Battlefield.Dinosaur Token.Toughness = 1
+Bot1.Battlefield.Dinosaur Token.Colors = Red
+Bot1.Battlefield.Count = 6
