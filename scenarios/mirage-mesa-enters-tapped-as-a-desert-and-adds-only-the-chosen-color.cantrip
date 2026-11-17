@@ -1,0 +1,29 @@
+# Mirage Mesa, a Desert: "This land enters tapped. As it enters, choose a color. {T}: Add one mana of the chosen color" (CR 614.1c,
+# 605.1a, 607.2d). Bot1 plays it on turn 1 and chooses red: it is a Desert, enters tapped and cannot be tapped yet (refused). On
+# turn 3 it adds red (the pool holds exactly one mana) and no other color or colorless (refused beside the one it adds).
+
+[Bot1 Deck]
+Mirage Mesa
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mirage Mesa.Play
+Bot1.Colors(Red)
+? Bot1.Battlefield.Mirage Mesa.Tapped = true
+? Bot1.Battlefield.Mirage Mesa.ChosenColor = Red
+? Bot1.Battlefield.Mirage Mesa.Subtypes = Desert
+! Bot1.Battlefield.Mirage Mesa.Activate(Color: Red)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Mirage Mesa.Activate(Color: Blue)
+! Bot1.Battlefield.Mirage Mesa.Activate(Color: Green)
+! Bot1.Battlefield.Mirage Mesa.Activate(Color: Colorless)
+Bot1.Battlefield.Mirage Mesa.Activate(Color: Red)
+? Bot1.Mana = {R}
+? Bot1.Battlefield.Mirage Mesa.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Mirage Mesa.ChosenColor = Red
+Bot1.Battlefield.Mirage Mesa.Tapped = true
