@@ -2,12 +2,6 @@ use cantrip_api::*;
 use cantrip_mechanics::{Animation, animate, targets, tokens, triggers::NONCREATURE_SPELL_YOU_CAST};
 use cantrip_oracle as oracle;
 
-/// "Target artifact token you control" (CR 115.1, 111.1): a token on the battlefield that the ability's controller controls and
-/// that is an artifact as the layers make it now.
-fn artifact_token_you_control(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    matches!(t, Target::Object(id) if targets::permanent(q, id) && targets::token_you_control(q, asker, id) && q.chars(id).is(CardType::Artifact))
-}
-
 /// "Until end of turn, target artifact token you control becomes a 3/1 Construct artifact creature with flying" (CR 613.1d, 613.4b):
 /// Artifact and Creature are added to its types, Construct (read through the Mechanist's words, CR 612) replaces any creature types
 /// it had, since the text does not say it is still what it was (CR 205.1b), its base power and toughness are set to 3/1 over any
@@ -37,7 +31,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(NONCREATURE_SPELL_YOU_CAST, |g, item| tokens::create(g, item.controller, &tokens::CLUE, 1).map(|_| ()), "Whenever you cast a noncreature spell, create a Clue token. (It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")"),
         ability(TAP, becomes_construct, "{T}: Until end of turn, target artifact token you control becomes a 3/1 Construct artifact creature with flying.")
-            .targets(&[target(artifact_token_you_control)]),
+            .targets(&[targets::ARTIFACT_TOKEN_YOU_CONTROL]),
     ],
     ..oracle::THE_MECHANIST_AERIAL_ARTISAN
 };

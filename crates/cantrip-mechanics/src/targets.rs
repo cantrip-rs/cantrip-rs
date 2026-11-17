@@ -864,6 +864,14 @@ fn token_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
 /// "Target token you control" (CR 115.1). Esika's Chariot prints it.
 pub const TOKEN_YOU_CONTROL: TargetSpec = target(token_you_control_filter);
 
+fn artifact_token_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    token_you_control_filter(q, asker, t) && matches!(t, Target::Object(id) if q.chars(id).is(CardType::Artifact))
+}
+
+/// "Target artifact token you control" (CR 115.1, 111.1): a token on the battlefield its controller controls that is an artifact
+/// as the layers make it now. The Mechanist, Aerial Artisan and Worldwalker Helm print it.
+pub const ARTIFACT_TOKEN_YOU_CONTROL: TargetSpec = target(artifact_token_you_control_filter);
+
 fn permanent_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
     matches!(t, Target::Object(id) if on_battlefield(q, id))
 }
