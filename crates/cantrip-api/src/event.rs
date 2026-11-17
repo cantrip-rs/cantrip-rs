@@ -495,6 +495,10 @@ pub enum Event {
     /// ability or as a resolving one asks (CR 118.12), by `by`, the spell or ability's source. Recorded once the whole
     /// payment is made, for "whenever you forage".
     Foraged { player: PlayerId, by: ObjectId },
+    /// `player` collected evidence (CR 701.59a): paid a cost that exiles cards from their graveyard with total mana value N or
+    /// greater (`Cost::collect_evidence`), as a cost of a spell or an ability or as a resolving one asks (CR 118.12), by `by`, the
+    /// spell or ability's source. Recorded once the whole payment is made, for "whenever you collect evidence".
+    CollectedEvidence { player: PlayerId, by: ObjectId },
     /// `player`'s speed became `speed` (CR 702.179): set to 1 by the state-based action (CR 704.5aa), or increased
     /// (CR 702.179c-d). Never for an increase that changed nothing.
     SpeedChanged { player: PlayerId, speed: u8 },
@@ -616,6 +620,7 @@ impl Event {
             | Event::Surveilled { player, .. }
             | Event::ManifestedDread { player, .. }
             | Event::Foraged { player, .. }
+            | Event::CollectedEvidence { player, .. }
             | Event::SpeedChanged { player, .. }
             | Event::CrimeCommitted { player, .. }
             | Event::GameLost { player, .. }
@@ -697,7 +702,7 @@ impl Event {
             Event::Convoked { creature, spell } | Event::TappedForTeamwork { creature, spell } => creature == object || spell == object,
             Event::Crewed { creature, vehicle } => creature == object || vehicle == object,
             Event::Saddled { creature, mount } => creature == object || mount == object,
-            Event::LifeChange { .. } | Event::Searched { .. } | Event::AttackersDeclared { .. } | Event::StepBegan { .. } | Event::BecameMonarch { .. } | Event::TookInitiative { .. } | Event::GaveGift { .. } | Event::ChosenAtRandom { .. } | Event::CoinFlipped { .. } | Event::DieRolled { .. } | Event::TurnEnded { .. } | Event::TurnBegan { .. } | Event::DungeonCompleted { .. } | Event::Scried { .. } | Event::Surveilled { .. } | Event::Foraged { .. } | Event::SpeedChanged { .. } | Event::GameLost { .. } | Event::GameDrawn { .. } | Event::Shuffled { .. } | Event::PlayerControlled { .. } => false,
+            Event::LifeChange { .. } | Event::Searched { .. } | Event::AttackersDeclared { .. } | Event::StepBegan { .. } | Event::BecameMonarch { .. } | Event::TookInitiative { .. } | Event::GaveGift { .. } | Event::ChosenAtRandom { .. } | Event::CoinFlipped { .. } | Event::DieRolled { .. } | Event::TurnEnded { .. } | Event::TurnBegan { .. } | Event::DungeonCompleted { .. } | Event::Scried { .. } | Event::Surveilled { .. } | Event::Foraged { .. } | Event::CollectedEvidence { .. } | Event::SpeedChanged { .. } | Event::GameLost { .. } | Event::GameDrawn { .. } | Event::Shuffled { .. } | Event::PlayerControlled { .. } => false,
         }
     }
 }
@@ -810,6 +815,8 @@ impl EventMask {
     pub const MUTATED: EventMask = EventMask(1 << 65);
     /// A player manifested dread (CR 701.62b).
     pub const MANIFESTED_DREAD: EventMask = EventMask(1 << 67);
+    /// A player collected evidence (CR 701.59a).
+    pub const COLLECTED_EVIDENCE: EventMask = EventMask(1 << 71);
     /// A meld card's counterpart melded with it (CR 701.42a): recorded only, sharing transforming's bit.
     pub const MELDED: EventMask = EventMask::TRANSFORMED;
 
@@ -917,6 +924,7 @@ impl EventMask {
             Event::Surveilled { .. } => EventMask::SURVEILLED,
             Event::ManifestedDread { .. } => EventMask::MANIFESTED_DREAD,
             Event::Foraged { .. } => EventMask::FORAGED,
+            Event::CollectedEvidence { .. } => EventMask::COLLECTED_EVIDENCE,
             Event::DamagePrevented { .. } => EventMask::DAMAGE_PREVENTED,
             Event::SpeedChanged { .. } => EventMask::SPEED_CHANGED,
             // "When [a player] loses the game" (CR 603.10f): Shinryu, Transcendent Rival's Burning Chains. A drawn game
