@@ -1,0 +1,41 @@
+# Not on My Watch: "target attacking creature" is any attacking creature, including your own (CR 506.4, 701.13a). On turn 3 Bot1
+# attacks with Savannah Lions and then casts Not on My Watch (Plains and Mox Pearl) on them: they are exiled and deal no damage, so
+# Bot2 stays at 20.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Not on My Watch
+Savannah Lions
+Plains
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Plains x25
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Savannah Lions > Bot2)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Not on My Watch.Cast(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Savannah Lions
+Bot1.Graveyard = Not on My Watch
+Bot1.Battlefield = Plains; Mox Pearl
+Bot2.Life = 20

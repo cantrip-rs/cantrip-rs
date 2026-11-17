@@ -1,0 +1,6 @@
+{
+  "name": "Not on My Watch",
+  "manaCost": "{1}{W}",
+  "type": "Instant",
+  "oracleText": "Exile target attacking creature."
+}

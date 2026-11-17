@@ -1,0 +1,55 @@
+# Not on My Watch: "Exile target attacking creature." (CR 506.4, 701.13a). Bot2 has two Ornithopters and on turn 4 attacks Bot1
+# with one; with the attack declared Bot1 casts Not on My Watch (Plains and Mox Pearl). Its target question refuses Bot1's own
+# Savannah Lions (not attacking) and Bot2's Ornithopter that stayed home; the attacker is exiled (not put in the graveyard) and the
+# one at home is untouched. Bot1 takes no damage.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Not on My Watch
+Savannah Lions
+Plains
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter#1 > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Not on My Watch.Cast(Savannah Lions)
+! Bot1.Hand.Not on My Watch.Cast(Bot2.Battlefield.Ornithopter#2)
+Bot1.Hand.Not on My Watch.Cast(Bot2.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Not on My Watch
+Bot2.Graveyard = 
+Exile = Ornithopter
+Bot2.Battlefield = Ornithopter
+Bot1.Battlefield = Plains; Mox Pearl; Savannah Lions
+Bot1.Life = 20
