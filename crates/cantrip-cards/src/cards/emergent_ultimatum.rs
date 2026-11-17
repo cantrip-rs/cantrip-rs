@@ -4,7 +4,7 @@ use cantrip_oracle as oracle;
 
 /// "Search your library for up to three monocolored cards with different names and exile them. An opponent chooses one of those cards. Shuffle that card into your library. You may cast the other cards without paying their mana costs. Exile Emergent Ultimatum." (CR 608.2).
 fn search_0_quality(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
-    Verdict::each(choice, |id| (q.chars(id).colors.iter().count() as i64) == 1)
+    Verdict::each(choice, |id| q.chars(id).colors.is_monocolored())
 }
 
 /// "Search your library for up to three monocolored cards with different names and exile them. An opponent chooses one of those cards. Shuffle that card into your library. You may cast the other cards without paying their mana costs. Exile Emergent Ultimatum." (CR 608.2, 406.3, 701.24a).

@@ -184,6 +184,11 @@ impl ColorSet {
         self.0 & other.0 != 0
     }
 
+    /// "Monocolored" (CR 105.2a): exactly one color. A colorless object is not (CR 105.2c), nor is one of two or more (CR 105.2b).
+    pub fn is_monocolored(self) -> bool {
+        self.0.count_ones() == 1
+    }
+
     pub fn iter(self) -> impl Iterator<Item = Color> {
         Color::ALL.into_iter().filter(move |c| self.has(*c))
     }
