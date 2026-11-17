@@ -1002,6 +1002,14 @@ pub fn draw_a_card_and_gain_life<const N: i32>(g: &mut dyn Game, item: &StackIte
     gain_life(g, item, N)
 }
 
+/// "Draw N cards and create a Treasure token" (CR 121.1, 111.10a, 608.2c): one sentence, so the draw is finished before the token is
+/// made. Deadly Dispute and Seize the Spoils (two cards) and The Sackville-Bagginses and Redrock Sentinel (one) print it.
+pub fn draw_cards_and_create_a_treasure<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    draw(g, item, N)?;
+    g.end_sentence();
+    crate::tokens::create_treasure(g, item.controller)
+}
+
 /// "You draw a card and lose 1 life" (CR 121.1, 119.3): the controller draws, then loses the life. Plumb the Forbidden,
 /// Robot Domination (before its counter) and Elegy Acolyte print it.
 pub fn draw_a_card_and_lose_1_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {

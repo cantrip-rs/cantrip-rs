@@ -1,15 +1,9 @@
 use cantrip_api::*;
-use cantrip_mechanics::tokens;
+use cantrip_mechanics::{effects, tokens};
 use cantrip_oracle as oracle;
 
-/// Draw two cards and create a Treasure token.
-fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.draw(item.controller, 2);
-    tokens::create_treasure(g, item.controller)
-}
-
 pub static CARD: CardDef = CardDef {
-    spell: spell(&[], effect),
+    spell: spell(&[], effects::draw_cards_and_create_a_treasure::<2>),
     // As an additional cost to cast this spell, sacrifice an artifact or creature.
     additional_cost: Some(Cost::sacrifice(1, cantrip_mechanics::targets::filters::artifact_or_creature)),
     ..oracle::DEADLY_DISPUTE

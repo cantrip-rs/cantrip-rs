@@ -12,8 +12,7 @@ fn sacrifice_for_a_card(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
     if effects::may_sacrifice(g, you, item.object, rule)?.is_empty() {
         return Ok(());
     }
-    effects::draw(g, item, 1)?;
-    tokens::create_treasure(g, you)
+    effects::draw_cards_and_create_a_treasure::<1>(g, item)
 }
 
 /// "Whenever you sacrifice a token" (CR 701.21a): a token of yours moved from the battlefield by a sacrifice, judged as it
