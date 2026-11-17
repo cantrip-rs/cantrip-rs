@@ -1,0 +1,74 @@
+# Vraska Joins Up: "When Vraska Joins Up enters, put a deathtouch counter on each creature you control" (CR 122.1b) and "Whenever a
+# legendary creature you control deals combat damage to a player, draw a card" (CR 510.2). Turn 1: Bot1's legendary Isamaru and
+# nonlegendary Memnite each get a counter, and so does nothing of Bot2's (turn 2: its Isamaru, also legendary, and Memnite come after
+# the counters are put on). Turn 3: Isamaru and Memnite hit Bot2, and only the legendary one draws (hand: 1 left over, the turn's draw,
+# the one from Isamaru). Turn 4: Bot2's legendary Isamaru hits Bot1, who draws nothing (hand: 3 plus the turn 5 draw = 4).
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Pearl
+Isamaru, Hound of Konda
+Memnite
+Vraska Joins Up
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Plains
+Isamaru, Hound of Konda
+Memnite
+Plains x4
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Isamaru, Hound of Konda.Power = 2
+Bot1.Hand.Vraska Joins Up.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Isamaru, Hound of Konda.Counters.Deathtouch = 1
+? Bot1.Battlefield.Memnite.Counters.Deathtouch = 1
+? Bot1.Battlefield.Isamaru, Hound of Konda.Keywords = Deathtouch
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Isamaru, Hound of Konda.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+? Bot2.Battlefield.Isamaru, Hound of Konda.Counters.Deathtouch = (absent)
+? Bot2.Battlefield.Memnite.Counters.Deathtouch = (absent)
+Bot1.Attack(Isamaru, Hound of Konda > Bot2; Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Hand.Count = 3
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Isamaru, Hound of Konda > Bot1)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 18
+Bot1.Hand.Count = 4
