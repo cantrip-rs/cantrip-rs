@@ -1,0 +1,50 @@
+# Giant Beaver: "target creature that saddled it this turn" must still be a creature on the battlefield (CR 115.1, 702.171c). Turn 3: three Memnites saddle the Beaver (power 3), then a
+# Lightning Bolt (Mox Ruby) kills Memnite #3 before attackers: it saddled the Beaver this turn but is gone, so it is refused as the target; Memnite #1 is chosen and grows to a 2/2.
+
+[Bot1 Deck]
+Black Lotus
+Giant Beaver
+Mox Emerald
+Mox Ruby
+Memnite
+Memnite
+Memnite
+Lightning Bolt
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Beaver.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Giant Beaver.Activate
+Bot1.Choose(Memnite#1; Memnite#2; Memnite#3)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite#3)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Giant Beaver.Saddled = true
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Giant Beaver > Bot2)
+! Bot1.Target(Bot1.Graveyard.Memnite)
+Bot1.Target(Bot1.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#1.Power = 2
+
+[Expect]
+Bot1.Battlefield.Memnite#1.Toughness = 2
+Bot1.Graveyard.Count = 3
