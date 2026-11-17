@@ -1,0 +1,45 @@
+# Plot {2}{B} (CR 702.170) is a special action: short of mana it is refused, then Bot1 pays {2}{B} from Black Lotus on turn one
+# to exile the Robber (it cannot be cast that turn, the refusal). On turn three Bot1 Bolts its own Memnite,
+# then casts the Robber from exile without paying: a creature died this turn, so the token is made.
+
+[Bot1 Deck]
+Rictus Robber
+Black Lotus
+Mox Ruby
+Memnite
+Lightning Bolt
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+! Bot1.Hand.Rictus Robber.Activate(Ability: Plot)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Rictus Robber.Activate(Ability: Plot)
+? Bot1.Mana = 
+! Bot1.Exile.Rictus Robber.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 3
+Bot1.Exile.Rictus Robber.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Rictus Robber.Power = 4
+Bot1.Battlefield.Zombie Rogue Token.Power = 2
+Bot1.Mana = 

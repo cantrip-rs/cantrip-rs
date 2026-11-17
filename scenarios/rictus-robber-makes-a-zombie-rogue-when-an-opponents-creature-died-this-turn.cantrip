@@ -1,0 +1,47 @@
+# "When this creature enters, if a creature died this turn, create a 2/2 blue and black Zombie Rogue creature token" (CR 603.4,
+# 700.4): any creature's death counts. Bot2's Memnite is cast on turn 2 and Bolted by Bot1 on turn 3 before the Robber is cast
+# with Black Lotus and Mox Jet; the Robber enters as a 4/3 with a 2/2 Zombie Rogue token beside it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Lightning Bolt
+Rictus Robber
+Swamp
+Swamp
+Swamp x14
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Rictus Robber.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Rictus Robber.Power = 4
+Bot1.Battlefield.Rictus Robber.Toughness = 3
+Bot1.Battlefield.Zombie Rogue Token.Power = 2
+Bot1.Battlefield.Zombie Rogue Token.Toughness = 2
