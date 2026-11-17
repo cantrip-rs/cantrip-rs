@@ -40,13 +40,22 @@ pub fn power_less_than_its_cant_block_it(q: &dyn Query, source: ObjectId, blocke
 /// "[This creature] can't be blocked this turn except by creatures with haste" (CR 509.1b): the restriction on the creature `on`,
 /// as an attacker, that only a creature with haste as blockers are declared may block it. It says nothing of its blocking, nor of
 /// a block already made. A card lists `EXCEPT_BY_HASTE` in its `lasting_block_rules` and the resolved ability adds
-/// `EffectKind::BlockRestriction` for it. Gingerbrute and Speed, Young Avenger print it.
+/// `EffectKind::BlockRestriction` for it. Gingerbrute, Resilient Roadrunner and Speed, Young Avenger print it.
 pub fn except_by_haste(q: &dyn Query, on: ObjectId, blocker: ObjectId, attacker: ObjectId) -> bool {
     on != attacker || q.chars(blocker).has(Keyword::Haste)
 }
 
 /// The `LastingBlockRule` of `except_by_haste`.
 pub const EXCEPT_BY_HASTE: LastingBlockRule = LastingBlockRule { text: "Can't be blocked except by creatures with haste", allows: except_by_haste };
+
+/// "This creature can't be blocked this turn except by creatures with haste" as an ability's effect: a resolved effect on this
+/// creature, not an ability it gains (CR 113.1a, 611.2c), so it lasts the turn whatever abilities the creature loses afterwards
+/// (CR 613.1f) and ends if the creature leaves the battlefield (CR 400.7). The card lists `EXCEPT_BY_HASTE` first in its
+/// `lasting_block_rules`. Gingerbrute and Resilient Roadrunner print it.
+pub fn this_cant_be_blocked_this_turn_except_by_haste(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.add_effect(item.object, item.object, EffectKind::BlockRestriction { card: item.ability.card, index: 0 }, Duration::EndOfTurn);
+    Ok(())
+}
 
 /// "This creature must be blocked if able" (CR 509.1c) as a `CardDef::must_be_blocked` entry: the requirement is on this creature as
 /// an attacker, and any creature that can block it obeys it. A creature that can't be blocked, or that nothing able to block can
