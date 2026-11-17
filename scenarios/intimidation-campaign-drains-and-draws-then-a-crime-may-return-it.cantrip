@@ -1,0 +1,46 @@
+# Intimidation Campaign: "When this enchantment enters, each opponent loses 1 life, you gain 1 life, and you draw a card."
+# (CR 603.6a). Then "Whenever you commit a crime, you may return this enchantment to its owner's hand" (CR 700.13,
+# 400.3): Bot1 targets Bot2 with a Lightning Bolt, which is a crime, and accepts, so the enchantment is back in hand and
+# Bot2 took 3 from the Bolt plus 1 from the drain (20 -> 16), Bot1 gained 1 (21).
+
+[Bot1 Deck]
+Intimidation Campaign
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Swamp
+Lightning Bolt
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Intimidation Campaign.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Life = 21
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Life = 21
+Bot1.Hand = Intimidation Campaign; Island; Island
+Bot1.Battlefield.Intimidation Campaign = (absent)

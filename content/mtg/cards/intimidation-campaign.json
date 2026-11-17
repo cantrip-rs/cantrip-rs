@@ -1,0 +1,6 @@
+{
+  "name": "Intimidation Campaign",
+  "manaCost": "{1}{U}{B}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, each opponent loses 1 life, you gain 1 life, and you draw a card.\nWhenever you commit a crime, you may return this enchantment to its owner's hand. (It returns only from the battlefield. Targeting opponents, anything they control, and/or cards in their graveyards is a crime.)"
+}

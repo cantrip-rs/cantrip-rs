@@ -1,0 +1,45 @@
+# Intimidation Campaign: a Lightning Bolt at its own controller targets no opponent, nothing of theirs and no card in their
+# graveyard, so it is not a crime (CR 700.13) and the enchantment is never offered a return: control for the crime scenario.
+
+
+[Bot1 Deck]
+Intimidation Campaign
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Swamp
+Lightning Bolt
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Intimidation Campaign.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Life = 21
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 18
+Bot1.Hand = Island; Island
+Bot1.Battlefield.Intimidation Campaign.Tapped = false
