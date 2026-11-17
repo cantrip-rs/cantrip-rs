@@ -1,0 +1,32 @@
+# Reckless Lackey (CR 702.10a haste, CR 702.7b first strike): Bot1 casts it on turn 1 and attacks at once with it (haste), Bot2 at 19. On turn 3 it attacks
+# into Bot2's Memnite (1/1): the Lackey (1/2) deals its damage first and kills the blocker, which never deals damage back, so the Lackey is undamaged.
+
+[Bot1 Deck]
+Mox Ruby
+Reckless Lackey
+Island x18
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Reckless Lackey.Cast
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Reckless Lackey > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 19
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Reckless Lackey > Bot2)
+Bot2.Block(Memnite > Reckless Lackey)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Memnite = (absent)
+Bot2.Graveyard = Memnite
+Bot1.Battlefield.Reckless Lackey.Damage = 0
+Bot2.Life = 19

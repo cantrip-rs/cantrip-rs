@@ -1,0 +1,35 @@
+# Reckless Lackey's cost has a colored symbol ({2}{R}): three mana from Mox Jet, Mox Pearl and Mox Sapphire (black, white, blue) is enough generic mana but no red, so the
+# activation is refused (CR 601.2h) and the Lackey stays on the battlefield, no card drawn and no Treasure made.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Reckless Lackey
+Island
+Island
+Forest
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Reckless Lackey.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Reckless Lackey.Activate
+
+[Expect]
+Bot1.Battlefield.Reckless Lackey.Types = Creature
+Bot1.Hand = Island; Island
+Bot1.Library.Count = 14
+Bot1.Battlefield.Treasure Token = (absent)
+Bot1.Mana = {W}{U}{B}

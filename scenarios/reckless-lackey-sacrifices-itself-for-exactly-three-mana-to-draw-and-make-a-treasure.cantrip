@@ -1,0 +1,45 @@
+# Reckless Lackey's ability ({2}{R}, Sacrifice this creature: Draw a card and create a Treasure token): the cost is exactly {2}{R} (CR 601.2h) -- with only a Mountain and a
+# Mox Jet in the pool (two mana) the activation is refused; with a third mana it is paid exactly (the pool ends empty). The Lackey is sacrificed as a cost (so it is in
+# the graveyard while the ability is on the stack, CR 602.2b), then on resolution Bot1 draws the top card (the Forest) and creates one untapped Treasure.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Reckless Lackey
+Mountain
+Island
+Island
+Forest
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Reckless Lackey.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Reckless Lackey.Activate(Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Library.Count = 14
+Bot1.Battlefield.Reckless Lackey.Activate
+? Bot1.Graveyard = Reckless Lackey
+? Bot1.Mana =
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand = Forest; Island; Island
+Bot1.Library.Count = 13
+Bot1.Battlefield.Treasure Token.Types = Artifact
+Bot1.Battlefield.Treasure Token.Tapped = false
+Bot1.Battlefield.Reckless Lackey = (absent)
+Bot1.Mana =

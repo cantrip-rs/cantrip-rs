@@ -1,0 +1,12 @@
+{
+  "name": "Reckless Lackey",
+  "manaCost": "{R}",
+  "type": "Creature — Goblin Pirate",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "First strike, haste\n{2}{R}, Sacrifice this creature: Draw a card and create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "keywords": [
+    "FirstStrike",
+    "Haste"
+  ]
+}
