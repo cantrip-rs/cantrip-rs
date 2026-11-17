@@ -1,0 +1,8 @@
+{
+  "name": "Ornery Tumblewagg",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Brushwagg Mount",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "At the beginning of combat on your turn, put a +1/+1 counter on target creature.\nWhenever this creature attacks while saddled, double the number of +1/+1 counters on target creature.\nSaddle 2 (Tap any number of other creatures you control with total power 2 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)"
+}

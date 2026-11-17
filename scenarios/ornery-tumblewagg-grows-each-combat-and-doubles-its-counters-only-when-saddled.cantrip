@@ -1,0 +1,71 @@
+# Ornery Tumblewagg {2}{G} (2/2, Saddle 2): at the beginning of combat on Bot1's turn it puts a +1/+1 counter on target creature (itself here: one counter in
+# turn 1's combat, a second in turn 3's). Turn 3: Grizzly Bears (power 2) is tapped to saddle it, it attacks saddled and its trigger doubles the two counters
+# on itself to four (6 damage: Bot2 20 -> 14). Turn 5: not saddled, so the attack doubles nothing; only the combat counter is added (five counters, 7 power,
+# Bot2 14 -> 7). Saddle 2 is refused with a lone Memnite (power 1).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Ornery Tumblewagg
+Grizzly Bears
+Memnite
+Plains
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornery Tumblewagg.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Ornery Tumblewagg.Counters.PlusOnePlusOne = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Ornery Tumblewagg.Activate(Ability: Saddle)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ornery Tumblewagg.Activate(Ability: Saddle)
+Bot1.Choose(Grizzly Bears)
+[T3 Bot1.BeginCombat]
+Bot1.Target(Bot1.Battlefield.Ornery Tumblewagg)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornery Tumblewagg.Counters.PlusOnePlusOne = 2
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornery Tumblewagg > Bot2)
+Bot1.Target(Bot1.Battlefield.Ornery Tumblewagg)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornery Tumblewagg.Counters.PlusOnePlusOne = 4
+? Bot2.Life = 14
+[T5 Bot1.BeginCombat]
+Bot1.Target(Bot1.Battlefield.Ornery Tumblewagg)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ornery Tumblewagg > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornery Tumblewagg.Counters.PlusOnePlusOne = 5
+Bot1.Battlefield.Ornery Tumblewagg.Power = 7
+Bot2.Life = 7

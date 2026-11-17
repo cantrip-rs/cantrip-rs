@@ -1,0 +1,80 @@
+# Ornery Tumblewagg's two triggers target any creature (CR 115.1), not just itself. Turn 1: its combat counter goes on itself (the only creature). Turn 3: saddled by
+# Grizzly Bears, its combat counter goes on Bot2's Memnite (2/2), and the saddled attack doubles the Memnite's counter to two (3/3); the Tumblewagg keeps its one.
+# Turn 5: saddled again, the combat counter goes on Bot1's Grizzly Bears (3/3); the attack trigger targets the Bears and a Lightning Bolt kills them in response,
+# so the doubling does nothing (CR 608.2b): the Tumblewagg still has one counter and the Memnite two.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Ornery Tumblewagg
+Grizzly Bears
+Lightning Bolt
+Plains x14
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornery Tumblewagg.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Ornery Tumblewagg.Counters.PlusOnePlusOne = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ornery Tumblewagg.Activate(Ability: Saddle)
+Bot1.Choose(Grizzly Bears)
+[T3 Bot1.BeginCombat]
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornery Tumblewagg > Bot2)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = 2
+? Bot2.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Ornery Tumblewagg.Counters.PlusOnePlusOne = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Ornery Tumblewagg.Activate(Ability: Saddle)
+Bot1.Choose(Grizzly Bears)
+[T5 Bot1.BeginCombat]
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 1
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ornery Tumblewagg > Bot2)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornery Tumblewagg.Counters.PlusOnePlusOne = 1
+? Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = 2
+
+[Expect]
+Bot1.Battlefield.Ornery Tumblewagg.Counters.PlusOnePlusOne = 1
