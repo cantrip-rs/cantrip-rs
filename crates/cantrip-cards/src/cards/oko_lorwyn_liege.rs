@@ -36,21 +36,6 @@ fn mill_three_and_take_a_permanent(g: &mut dyn Game, item: &StackItem) -> Result
     Ok(())
 }
 
-/// The 3/3 green Elk creature token.
-pub static ELK: CardDef = CardDef {
-    colors: Some(ColorSet::of(Color::Green)),
-    types: TypeSet::of(&[CardType::Creature]),
-    power: Some(3),
-    toughness: Some(3),
-    ..token!(Elk)
-};
-
-/// "-3: Create two 3/3 green Elk creature tokens."
-fn two_elks(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &ELK, 2)?;
-    Ok(())
-}
-
 /// "-6: Choose a creature type. You get an emblem with ..." The type is chosen as the ability resolves (CR 608.2d) and kept on
 /// the emblem, which every ability of it reads (CR 607.2d).
 fn emblem_of_a_creature_type(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -80,7 +65,7 @@ pub static BACK: CardDef = CardDef {
     abilities: &[
         triggered(triggers::YOUR_FIRST_MAIN_PHASE, pay_blue, "At the beginning of your first main phase, you may pay {U}. If you do, transform Oko."),
         ability(loyalty(-1), mill_three_and_take_a_permanent, "\u{2212}1: Mill three cards. You may put a permanent card from among them into your hand."),
-        ability(loyalty(-3), two_elks, "\u{2212}3: Create two 3/3 green Elk creature tokens."),
+        ability(loyalty(-3), tokens::create_elks::<2>, "\u{2212}3: Create two 3/3 green Elk creature tokens."),
         ability(loyalty(-6), emblem_of_a_creature_type, "\u{2212}6: Choose a creature type. You get an emblem with \"Creatures you control of the chosen type get +3/+3 and have vigilance and hexproof.\""),
     ],
     ..oracle::OKO_SHADOWMOOR_SCION
@@ -96,4 +81,4 @@ pub static CARD: CardDef = CardDef {
     ..oracle::OKO_LORWYN_LIEGE
 };
 
-pub static EXTRA: &[&CardDef] = &[&ELK, &EMBLEM];
+pub static EXTRA: &[&CardDef] = &[&tokens::ELK, &EMBLEM];

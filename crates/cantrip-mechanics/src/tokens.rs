@@ -991,6 +991,22 @@ pub static ELEPHANT_5_5: CardDef = CardDef {
     ..token!(Elephant)
 };
 
+/// The 3/3 green Elk creature token. Oko, Lorwyn Liege and Oko, the Ringleader make it.
+pub static ELK: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Green)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(3),
+    toughness: Some(3),
+    ..token!(Elk)
+};
+
+/// "Create `COUNT` 3/3 green Elk creature tokens" as an effect (CR 111.1): `ELK`s under the controller of the resolving spell or
+/// ability. Oko, Lorwyn Liege (two) and Oko, the Ringleader (one) print it.
+pub fn create_elks<const COUNT: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &ELK, COUNT)?;
+    Ok(())
+}
+
 /// The 3/3 green Elephant creature token. Autarch Mammoth and March of the World Ooze make it.
 pub static ELEPHANT_3_3: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::Green)),
