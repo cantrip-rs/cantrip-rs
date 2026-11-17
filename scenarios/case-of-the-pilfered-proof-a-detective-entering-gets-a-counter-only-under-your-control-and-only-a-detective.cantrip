@@ -1,0 +1,57 @@
+# Case of the Pilfered Proof: "Whenever a Detective you control enters or is turned face up, put a +1/+1 counter on it." (CR 603.6a, 122.1). With the Case out, Bot1's Memnite
+# (not a Detective) enters as a 1/1, and its Novice Inspector (a Human Detective, 1/2) enters with the trigger putting a +1/+1 counter on it, a 2/3. On turn 2 Bot2's own
+# Novice Inspector enters and stays 1/2: a Detective, but not one Bot1 controls. The Case is unsolved throughout, so the Inspector's investigate makes exactly one Clue.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Case of the Pilfered Proof
+Memnite
+Novice Inspector
+Plains x13
+
+[Bot2 Deck]
+Plains
+Novice Inspector
+Plains x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Case of the Pilfered Proof.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Novice Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Novice Inspector.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Novice Inspector.Power = 2
+Bot1.Battlefield.Novice Inspector.Toughness = 3
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Count = 7
+Bot2.Battlefield.Novice Inspector.Power = 1
+Bot2.Battlefield.Novice Inspector.Toughness = 2
+Bot2.Battlefield.Count = 3

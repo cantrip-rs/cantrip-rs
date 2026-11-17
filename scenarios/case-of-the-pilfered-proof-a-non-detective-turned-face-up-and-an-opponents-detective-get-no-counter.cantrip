@@ -1,0 +1,75 @@
+# Case of the Pilfered Proof: only "a Detective you control" that is turned face up gets the counter (CR 701.40b, 205.3). Bot1's Case is out. Bot1's Forum Familiar (a Cat) is cast
+# face down and turned up on turn 3; its own trigger puts a +1/+1 counter on it, and the Case adds none: a 2/2, not a 3/3. On turn 4 Bot2's Cryptic Coat cloaks a Novice Inspector,
+# which Bot2 turns up as a Detective: Bot1's Case does not count it, and it is a 2/2 with the Coat's +1/+0, not a 3/3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Case of the Pilfered Proof
+Forum Familiar
+Memnite
+Plains x10
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Cryptic Coat
+Island
+Island
+Island
+Novice Inspector
+Island x9
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Case of the Pilfered Proof.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Forum Familiar.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Cryptic Coat.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.Battlefield.#1.Activate(Ability: mana cost)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Novice Inspector.Power = 2
+? Bot2.Battlefield.Novice Inspector.Toughness = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Forum Familiar.Power = 2
+Bot1.Battlefield.Forum Familiar.Toughness = 2
+
+Bot2.Battlefield.Novice Inspector.Power = 2
+

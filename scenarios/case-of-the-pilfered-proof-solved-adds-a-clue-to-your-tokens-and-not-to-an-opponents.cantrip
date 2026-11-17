@@ -1,0 +1,111 @@
+# Case of the Pilfered Proof: "Solved — If one or more tokens would be created under your control, those tokens plus a Clue token are created instead." (CR 614.1a, 702.169b). The Case
+# is solved at the end of Bot1's turn 5 (three Novice Inspectors, as in the solving scenario), and every investigate before then made one Clue: 12 permanents (five Moxen, the Case, three
+# Inspectors, three Clues). On turn 6 Bot2's own Novice Inspector makes its one Clue and no more, tokens not under Bot1's control. On turn 7 Bot1's Inside Source makes its 2/2 Detective
+# token and the Case adds one Clue to that event: Source, token and Clue make 15 permanents, and the token has the Case's +1/+1 counter, a 3/3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Case of the Pilfered Proof
+Novice Inspector
+Novice Inspector
+Novice Inspector
+Inside Source
+Plains x10
+
+[Bot2 Deck]
+Plains
+Novice Inspector
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains
+Novice Inspector
+Plains x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Case of the Pilfered Proof.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Novice Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Novice Inspector.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Novice Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+? Bot1.Battlefield.Case of the Pilfered Proof.Solved = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Hand.Novice Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Case of the Pilfered Proof.Solved = (absent)
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Count = 12
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains#3.Activate
+Bot2.Hand.Novice Inspector.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Count = 7
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Inside Source.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 15
+Bot1.Battlefield.Detective Token.Power = 3
+Bot1.Battlefield.Detective Token.Toughness = 3
+Bot2.Battlefield.Count = 7

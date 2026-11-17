@@ -1,0 +1,45 @@
+# Case of the Pilfered Proof: "Whenever a Detective you control ... is turned face up, put a +1/+1 counter on it." (CR 701.40b, 701.58, 122.1). With the Case out, Bot1's Cryptic Coat
+# cloaks the top card of its library, a Novice Inspector, face down as a 2/2 with no subtypes: a face-down permanent is no Detective, so nothing happens as it enters. Turned face up
+# for its mana cost, {W}, it is a Human Detective, 1/2, and the Case puts a +1/+1 counter on it. With the Coat's +1/+0 it is a 3/3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Mox Sapphire
+Case of the Pilfered Proof
+Cryptic Coat
+Plains
+Novice Inspector
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Case of the Pilfered Proof.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Cryptic Coat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 3
+? Bot1.Battlefield..Toughness = 2
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.#1.Activate(Ability: mana cost)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Novice Inspector.Power = 3
+Bot1.Battlefield.Novice Inspector.Toughness = 3

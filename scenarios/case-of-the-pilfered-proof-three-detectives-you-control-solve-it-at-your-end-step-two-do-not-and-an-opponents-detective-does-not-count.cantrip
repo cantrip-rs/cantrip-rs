@@ -1,0 +1,75 @@
+# Case of the Pilfered Proof: "To solve — You control three or more Detectives." (CR 719.3a, 603.4). Bot1 has the Case and one Novice Inspector after turn 1; on turn 2 Bot2 casts its own Novice
+# Inspector. On turn 3 Bot1 casts a second one: two Detectives of its own and a third on the table, Bot2's, which does not count, so the Case is still unsolved after Bot1's end step.
+# On turn 5 Bot1's third Inspector is exactly three: the Case becomes solved at that end step.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Case of the Pilfered Proof
+Novice Inspector
+Novice Inspector
+Novice Inspector
+Plains x10
+
+[Bot2 Deck]
+Plains
+Novice Inspector
+Plains x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Case of the Pilfered Proof.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Novice Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Novice Inspector.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Novice Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Case of the Pilfered Proof.Solved = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Hand.Novice Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Case of the Pilfered Proof.Solved = (absent)
+[T6 Bot2.Upkeep]
+
+[Expect]
+Bot1.Battlefield.Case of the Pilfered Proof.Solved = true
