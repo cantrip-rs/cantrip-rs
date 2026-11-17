@@ -1842,6 +1842,15 @@ pub static CITIZEN_1_1_WHITE: CardDef = CardDef {
     ..token!(Citizen)
 };
 
+/// The 1/1 white Dog creature token. Release the Dogs and Krovod Haunch make it.
+pub static DOG: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::White)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Dog)
+};
+
 #[cfg(test)]
 mod tests {
     use super::*;
