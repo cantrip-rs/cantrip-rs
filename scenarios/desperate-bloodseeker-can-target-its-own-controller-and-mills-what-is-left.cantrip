@@ -1,0 +1,27 @@
+# Desperate Bloodseeker may target any player, its controller too: Bot1, whose library holds only one card after the draw (a
+# player mills as many as there are, CR 701.17a), puts that one card, Mox Pearl, into their own graveyard; Bot2's library is untouched.
+
+[Bot1 Deck]
+Black Lotus
+Desperate Bloodseeker
+Swamp x5
+Mox Pearl
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Desperate Bloodseeker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Library.Count = 0
+Bot1.Graveyard = Mox Pearl; Black Lotus
+Bot2.Library.Count = 13

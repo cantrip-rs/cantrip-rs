@@ -1,0 +1,11 @@
+{
+  "name": "Desperate Bloodseeker",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Vampire",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Lifelink\nWhen this creature enters, target player mills two cards. (They put the top two cards of their library into their graveyard.)",
+  "keywords": [
+    "Lifelink"
+  ]
+}
