@@ -1,0 +1,6 @@
+{
+  "name": "Full Steam Ahead",
+  "manaCost": "{3}{G}{G}",
+  "type": "Sorcery",
+  "oracleText": "Until end of turn, each creature you control gets +2/+2 and gains trample and \"This creature can't be blocked by more than one creature.\""
+}
