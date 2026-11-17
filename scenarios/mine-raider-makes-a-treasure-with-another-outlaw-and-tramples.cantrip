@@ -1,0 +1,61 @@
+# Mine Raider's intervening "if" (CR 603.4, 700.12a): Bot1 controls Triton Shorethief, a Rogue and so another outlaw, as the Raider enters, so the trigger
+# goes on the stack and resolves into one Treasure token (CR 111.10a). Trample (CR 702.19b): the Raider (3 power) attacks into Bot2's Memnite (1/1)
+# blocker, assigns lethal 1 to it and tramples over for 2.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Triton Shorethief
+Mine Raider
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Triton Shorethief.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mine Raider.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Treasure Token.Tapped = false
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Mine Raider > Bot2)
+Bot2.Block(Memnite > Mine Raider)
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Treasure Token.Tapped = false
+Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Mine Raider.Power = 3
+Bot1.Battlefield.Mine Raider.Toughness = 2
+Bot2.Battlefield.Memnite = (absent)
+Bot2.Life = 18

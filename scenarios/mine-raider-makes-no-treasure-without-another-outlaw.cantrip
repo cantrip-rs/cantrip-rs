@@ -1,0 +1,52 @@
+# Mine Raider's intervening "if" (CR 603.4, 700.12a): the Raider is a Rogue itself but not "another" outlaw, Bot1's Memnite is not an outlaw, and Bot2's
+# Triton Shorethief is an outlaw Bot1 does not control, so the trigger never goes on the stack and no Treasure is made. The positive control is the
+# scenario where Bot1 has its own Rogue.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Memnite
+Mine Raider
+Island x14
+
+[Bot2 Deck]
+Mox Sapphire
+Triton Shorethief
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Triton Shorethief.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mine Raider.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Treasure Token = (absent)
+Bot1.Battlefield.Count = 5
+Bot2.Battlefield.Count = 2
