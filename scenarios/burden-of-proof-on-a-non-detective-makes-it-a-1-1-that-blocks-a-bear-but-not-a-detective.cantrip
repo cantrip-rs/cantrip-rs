@@ -1,0 +1,54 @@
+# Burden of Proof on Bot1's Ornithopter (0/2, not a Detective): "otherwise" applies, so its base power and toughness are 1/1 (not +2/+2, not 0/2) and it
+# can't block Detectives (CR 509.1b). Bot2 attacks on turn 4 with a Novice Inspector (a Detective) and a Grizzly Bears: blocking the Inspector is refused,
+# blocking the Bears is allowed, and the 1/1 dies to the 2/2.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Ornithopter
+Burden of Proof
+Island x17
+
+[Bot2 Deck]
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Novice Inspector
+Grizzly Bears
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Burden of Proof.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Novice Inspector.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Novice Inspector > Bot1; Grizzly Bears > Bot1)
+! Bot1.Block(Ornithopter > Novice Inspector)
+Bot1.Block(Ornithopter > Grizzly Bears)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Burden of Proof; Ornithopter
+Bot1.Life = 19
+Bot2.Battlefield.Grizzly Bears.Damage = 1

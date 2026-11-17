@@ -1,0 +1,50 @@
+# Burden of Proof on Bot1's own Detective (Novice Inspector, 1/2): "as long as it's a Detective you control" holds, so it gets +2/+2 (3/4) and the
+# "otherwise" half (base 1/1, can't block Detectives) is off. It blocks Bot2's Novice Inspector (also a Detective) and kills it, taking only 1.
+# Burden of Proof has flash (CR 702.8a): it is cast on turn 1 in Bot1's own main phase here and then again as an instant in the next scenario.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Novice Inspector
+Burden of Proof
+Island x17
+
+[Bot2 Deck]
+Mox Pearl
+Novice Inspector
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Novice Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Novice Inspector.Power = 1
+? Bot1.Battlefield.Novice Inspector.Toughness = 2
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Burden of Proof.Cast(Bot1.Battlefield.Novice Inspector)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Novice Inspector.Power = 3
+? Bot1.Battlefield.Novice Inspector.Toughness = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Novice Inspector.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Novice Inspector > Bot1)
+Bot1.Block(Novice Inspector > Novice Inspector)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Burden of Proof.AttachedTo = Novice Inspector
+Bot1.Battlefield.Novice Inspector.Damage = 1
+Bot2.Graveyard = Novice Inspector
+Bot1.Life = 20

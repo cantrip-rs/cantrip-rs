@@ -1,0 +1,9 @@
+{
+  "name": "Burden of Proof",
+  "manaCost": "{1}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature\nEnchanted creature gets +2/+2 as long as it's a Detective you control. Otherwise, it has base power and toughness 1/1 and can't block Detectives.",
+  "keywords": [
+    "Flash"
+  ]
+}
