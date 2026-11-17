@@ -1,0 +1,91 @@
+# Case File Auditor: "... whenever you solve a Case, look at the top six cards of your library." (CR 719.3b, 603.2). Bot1's Auditor enters on turn 1 and takes a Case of the Gateway Express from
+# the top six. On turn 2 Bot2 casts and, at its end step, solves its own Case of the Crimson Pulse (no cards in hand): Bot1's Auditor does not look at anything, so Bot1's library and hand are as they were.
+# On turn 3 Bot1 attacks with three Memnite, casts the Gateway Express in its second main phase, and it is solved at Bot1's end step; the Auditor looks at the top six, a Pacifism and five Plains,
+# and takes the Pacifism.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Case File Auditor
+Memnite
+Memnite
+Memnite
+Case of the Gateway Express
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains
+Pacifism
+Plains x12
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Case of the Crimson Pulse
+Mox Ruby x13
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Case File Auditor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Arrange(Case of the Gateway Express | Plains; Plains; Plains; Plains; Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Hand.Case of the Crimson Pulse.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Upkeep]
+? Bot2.Battlefield.Case of the Crimson Pulse.Solved = true
+? Bot1.Hand = Case of the Gateway Express
+? Bot1.Library.Count = 19
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite#1 > Bot2; Memnite#2 > Bot2; Memnite#3 > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Case of the Gateway Express.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Pacifism | Plains; Plains; Plains; Plains; Plains)
+
+[Expect]
+Bot1.Battlefield.Case of the Gateway Express.Solved = true
+Bot1.Hand = Pacifism; Plains
+Bot1.Library.Count = 17

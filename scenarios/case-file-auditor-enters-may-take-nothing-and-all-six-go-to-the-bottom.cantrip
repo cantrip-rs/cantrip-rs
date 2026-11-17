@@ -1,0 +1,44 @@
+# Case File Auditor: "You may reveal an enchantment card" - the answer may be none (CR 701.20a, 401.4). Bot1 casts it with three Mox Pearls; a Pacifism is among the top six and Bot1 takes nothing
+# (Arrange with an empty hand group): the Pacifism goes to the bottom with the five Plains, so the hand gains nothing and the library keeps its size. The six cards are all there to be seen: taking a card
+# that is not among them cannot be named.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Case File Auditor
+Plains
+Plains
+Plains
+Plains
+Plains
+Pacifism
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Case File Auditor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+! Bot1.Arrange(Plains | Plains; Plains; Plains; Plains; Pacifism)
+Bot1.Arrange( | Plains; Plains; Plains; Plains; Pacifism; Plains)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains
+Bot1.Library.Count = 20
+Bot1.Revealed = (absent)

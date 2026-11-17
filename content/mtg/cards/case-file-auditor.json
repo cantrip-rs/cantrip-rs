@@ -1,0 +1,8 @@
+{
+  "name": "Case File Auditor",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Detective",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "When this creature enters and whenever you solve a Case, look at the top six cards of your library. You may reveal an enchantment card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.\nYou may spend mana as though it were mana of any color to cast Case spells."
+}

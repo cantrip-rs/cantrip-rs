@@ -1,0 +1,70 @@
+# Case File Auditor: "You may spend mana as though it were mana of any color to cast Case spells." (CR 609.4b, 601.2h). Bot1's Auditor takes a Case of the Crimson Pulse ({2}{R}) from the top six and
+# Bot1, with six Mox Pearls and nothing but white mana, casts it: a Case spell is cast with mana of any color. On turn 3 the same white mana does not cast a Lightning Bolt ({R}): the permission is for
+# Case spells only. On turn 2 Bot2, with three white mana and no Auditor of its own, cannot cast its own Case of the Crimson Pulse: the Auditor's permission is its controller's.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Case File Auditor
+Case of the Crimson Pulse
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains
+Lightning Bolt
+Plains x12
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Case of the Crimson Pulse
+Island
+Island
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Case File Auditor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Arrange(Case of the Crimson Pulse | Plains; Plains; Plains; Plains; Plains)
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Battlefield.Mox Pearl#6.Activate
+Bot1.Hand.Case of the Crimson Pulse.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Case of the Crimson Pulse.Colors = Red
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Battlefield.Mox Pearl#3.Activate
+! Bot2.Hand.Case of the Crimson Pulse.Cast(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+! Bot1.Hand.Lightning Bolt.Cast(Bot2; Mana: short)
+
+[Expect]
+Bot2.Hand = Case of the Crimson Pulse; Island; Island; Island; Island
+Bot2.Life = 20
