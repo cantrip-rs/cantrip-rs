@@ -1,0 +1,48 @@
+# Makeshift Binding ({2}{W} enchantment): "When this enchantment enters, exile target creature an opponent controls until this enchantment
+# leaves the battlefield. You gain 2 life." (CR 610.3, 400.7). Bot1 casts it on turn 3 (Black Lotus's white): Bot2's Ornithopter is
+# exiled and Bot1 gains 2 (22). On turn 4 Bot2 destroys the Binding with Disenchant (Black Lotus's white), and the Ornithopter returns
+# to the battlefield under its owner's control, exile empty.
+
+[Bot1 Deck]
+Black Lotus
+Makeshift Binding
+Memnite
+Plains x17
+
+[Bot2 Deck]
+Black Lotus
+Disenchant
+Ornithopter
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Makeshift Binding.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Exile.Ornithopter.Power = 0
+? Exile.Count = 1
+? Bot2.Battlefield.Count = 0
+? Bot1.Life = 22
+? Bot1.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Makeshift Binding)
+Bot2.Pass
+Bot1.Pass
+? Exile.Count = 0
+? Bot2.Battlefield.Ornithopter.Power = 0
+
+[Expect]
+Bot1.Life = 22
+Bot1.Graveyard = Makeshift Binding; Black Lotus

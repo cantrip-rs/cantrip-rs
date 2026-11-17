@@ -1,0 +1,6 @@
+{
+  "name": "Makeshift Binding",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, exile target creature an opponent controls until this enchantment leaves the battlefield. You gain 2 life."
+}
