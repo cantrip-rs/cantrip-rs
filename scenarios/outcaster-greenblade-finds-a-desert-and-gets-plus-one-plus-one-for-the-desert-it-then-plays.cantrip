@@ -1,0 +1,40 @@
+# Outcaster Greenblade: the Desert card is found as well as a basic land. The Desert goes to hand (revealed), then is played from there: the
+# Greenblade (1/2) gets +1/+1 for each Desert Bot1 controls, so it is 2/3 once the Desert is on the battlefield.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Outcaster Greenblade
+Island x3
+Forest
+Desert
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Outcaster Greenblade.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Desert)
+? Bot1.Revealed = Desert
+? Bot1.Battlefield.Outcaster Greenblade.Power = 1
+Bot1.Hand.Desert.Play
+? Bot1.Battlefield.Outcaster Greenblade.Power = 2
+
+[Expect]
+Bot1.Battlefield.Outcaster Greenblade.Power = 2
+Bot1.Battlefield.Outcaster Greenblade.Toughness = 3
+Bot1.Hand = Island; Island; Island

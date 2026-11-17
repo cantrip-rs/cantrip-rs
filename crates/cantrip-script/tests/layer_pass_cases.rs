@@ -460,6 +460,10 @@ const INERT: &[(&str, &str)] = &[
         "its effect adds its controller's speed to the power, and the synthetic players have none (speed starts when a player's engine starts); its scenarios show the +X/+0 at speed 1 and 2 for its controller and for the opponent when Samut is theirs",
     ),
     (
+        "Outcaster Greenblade",
+        "its effect counts the Deserts its controller controls, and the synthetic boards hold none; its scenarios show +1/+1 for a Desert it controls, and none for an opponent's Desert or a land that is no Desert",
+    ),
+    (
         "Tempest Djinn",
         "its effect counts the basic Islands its controller controls, and the synthetic boards hold none; its scenario shows +1/+0 for each basic Island, and none for an opponent's Island or a nonbasic one",
     ),
