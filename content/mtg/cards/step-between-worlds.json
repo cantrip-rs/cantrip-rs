@@ -1,0 +1,6 @@
+{
+  "name": "Step Between Worlds",
+  "manaCost": "{3}{U}{U}",
+  "type": "Sorcery",
+  "oracleText": "Each player may shuffle their hand and graveyard into their library. Each player who does draws seven cards. Exile Step Between Worlds.\nPlot {4}{U}{U} (You may pay {4}{U}{U} and exile this card from your hand. Cast it as a sorcery on a later turn without paying its mana cost. Plot only as a sorcery.)"
+}

@@ -1,0 +1,64 @@
+# Step Between Worlds's "Plot {4}{U}{U}" (CR 702.170a): six mana with one {U} (the five Moxen and a Plains) cannot plot it. On the
+# next turn an Island adds the second {U} and it is plotted for exactly {4}{U}{U}, the pool empty after; it cannot be cast from exile
+# that turn. On turn 7 it is cast from exile without paying its mana cost and Bot1 shuffles in and draws seven; Bot2 declines.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Step Between Worlds
+Plains
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Step Between Worlds.Activate(Ability: Plot; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Step Between Worlds.Activate(Ability: Plot)
+? Bot1.Mana =
+! Bot1.Exile.Step Between Worlds.Cast
+[T7 Bot1.Main1]
+Bot1.Exile.Step Between Worlds.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot2.Decline
+
+[Expect]
+Bot1.Hand.Count = 7
+Exile = Step Between Worlds
