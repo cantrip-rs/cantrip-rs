@@ -1,0 +1,37 @@
+# "-1: Create a 3/3 green Elk creature token." Bot1 casts Oko with four Moxen and uses -1: Oko has 2 loyalty and Bot1 controls a
+# green Elk creature token with power and toughness 3.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Oko, the Ringleader
+Forest
+Island
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Oko, the Ringleader.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Oko, the Ringleader.Activate(Ability: Create a 3/3 green Elk)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Oko, the Ringleader.Counters.Loyalty = 2
+? Bot1.Battlefield.Elk Token.Power = 3
+? Bot1.Battlefield.Elk Token.Toughness = 3
+? Bot1.Battlefield.Elk Token.Colors = Green
+? Bot1.Battlefield.Elk Token.Types = Creature
+? Bot1.Battlefield.Elk Token.Subtypes = Elk

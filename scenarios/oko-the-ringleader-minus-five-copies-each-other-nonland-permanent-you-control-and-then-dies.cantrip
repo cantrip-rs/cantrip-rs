@@ -1,0 +1,61 @@
+# "-5: For each other nonland permanent you control, create a token that's a copy of that permanent." Oko is cast on turn 1 and
+# gains a loyalty counter on turns 1 and 3 (4, then 5). On turn 5 Bot1 controls four Moxen, a Forest and a Grizzly Bears: -5 makes five tokens,
+# a copy of each (not of Oko, of the Forest or of Bot2's Memnite), and Oko, at 0 loyalty, goes to the graveyard.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Oko, the Ringleader
+Grizzly Bears
+Forest
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x6
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Oko, the Ringleader.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Oko, the Ringleader.Activate(Ability: Draw two cards)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island; Island)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Oko, the Ringleader.Activate(Ability: Draw two cards)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island; Island)
+? Bot1.Battlefield.Oko, the Ringleader.Counters.Loyalty = 5
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Oko, the Ringleader.Activate(Ability: For each other nonland permanent)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Forest; Grizzly Bears; Grizzly Bears; Mox Emerald; Mox Emerald; Mox Pearl; Mox Pearl; Mox Ruby; Mox Ruby; Mox Sapphire; Mox Sapphire
+? Bot1.Battlefield.Count = 11
+? Bot1.Graveyard.Count = 5
+? Bot2.Battlefield = Memnite

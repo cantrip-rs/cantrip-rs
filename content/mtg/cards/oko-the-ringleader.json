@@ -1,0 +1,7 @@
+{
+  "name": "Oko, the Ringleader",
+  "manaCost": "{2}{G}{U}",
+  "type": "Legendary Planeswalker — Oko",
+  "loyalty": 3,
+  "oracleText": "At the beginning of combat on your turn, Oko becomes a copy of up to one target creature you control until end of turn, except he has hexproof.\n+1: Draw two cards. If you've committed a crime this turn, discard a card. Otherwise, discard two cards.\n−1: Create a 3/3 green Elk creature token.\n−5: For each other nonland permanent you control, create a token that's a copy of that permanent."
+}

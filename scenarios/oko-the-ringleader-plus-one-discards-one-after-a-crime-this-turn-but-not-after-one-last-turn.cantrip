@@ -1,0 +1,54 @@
+# "If you've committed a crime this turn, discard a card." On turn 1 Bot1 casts Oko, then a Lightning Bolt at Bot2 (targeting an
+# opponent is a crime) and uses +1: it draws a Forest and an Island and discards only one (the Island). On turn 3, with that crime a
+# turn behind it, +1 draws two Islands to the Forest, Grizzly Bears and Island of the hand and discards two.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Oko, the Ringleader
+Lightning Bolt
+Forest
+Island
+Grizzly Bears
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Oko, the Ringleader.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Oko, the Ringleader.Activate(Ability: Draw two cards)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+? Bot1.Hand = Forest
+? Bot1.Graveyard = Island; Lightning Bolt
+? Bot1.Battlefield.Oko, the Ringleader.Counters.Loyalty = 4
+[T3 Bot1.Main1]
+Bot1.Battlefield.Oko, the Ringleader.Activate(Ability: Draw two cards)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island; Island)
+? Bot1.Hand = Forest; Grizzly Bears
+? Bot1.Graveyard.Count = 4
+? Bot1.Battlefield.Oko, the Ringleader.Counters.Loyalty = 5

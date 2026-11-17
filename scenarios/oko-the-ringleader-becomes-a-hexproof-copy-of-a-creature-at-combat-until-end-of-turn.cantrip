@@ -1,0 +1,54 @@
+# "At the beginning of combat on your turn, Oko becomes a copy of up to one target creature you control until end of turn, except
+# he has hexproof." Oko is cast on turn 1. On turn 3 Bot1 casts an Ornithopter and at the beginning of combat Oko targets it and
+# becomes a 0/2 Ornithopter: Bot2 can not target him with a Lightning Bolt (hexproof, a refusal paired with the Bolt that does
+# target the real Ornithopter), and he is no longer a planeswalker. At the end of turn he is Oko again, with his loyalty counters.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Oko, the Ringleader
+Ornithopter
+Forest
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Oko, the Ringleader.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Target(Bot1.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Types = Artifact; Creature
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#2)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 5
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Oko, the Ringleader.Counters.Loyalty = 3
+? Bot1.Battlefield.Oko, the Ringleader.Types = Planeswalker

@@ -1,0 +1,38 @@
+# "+1: Draw two cards. If you've committed a crime this turn, discard a card. Otherwise, discard two cards." Bot1 casts Oko with
+# four Moxen and uses +1 with no crime committed: it draws a Lightning Bolt and a Grizzly Bears to the Forest and Island left in
+# hand, then discards two of the four (the Island and the Grizzly Bears), and Oko's loyalty is 4.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Oko, the Ringleader
+Forest
+Island
+Lightning Bolt
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Oko, the Ringleader.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Oko, the Ringleader.Activate(Ability: Draw two cards)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island; Grizzly Bears)
+? Bot1.Hand = Forest; Lightning Bolt
+? Bot1.Graveyard = Grizzly Bears; Island
+? Bot1.Battlefield.Oko, the Ringleader.Counters.Loyalty = 4
