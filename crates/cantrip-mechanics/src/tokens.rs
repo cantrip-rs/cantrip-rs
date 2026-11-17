@@ -459,6 +459,15 @@ pub fn create_a_mercenary(g: &mut dyn Game, item: &StackItem) -> Result<(), Susp
     Ok(())
 }
 
+/// A 3/1 red Dinosaur creature token (CR 111.1, 111.4). Bonehoard Dracosaur and Scalestorm Summoner make it (Poetic Ingenuity too).
+pub static DINOSAUR: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Red)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(3),
+    toughness: Some(1),
+    ..token!(Dinosaur)
+};
+
 /// The 3/2 colorless Vehicle artifact token with crew 1 (CR 111, 301.7, 702.122). Chandra, Spark Hunter and Mu Yanling, Wind Rider
 /// make it.
 pub static VEHICLE_CREW_1: CardDef = CardDef {
