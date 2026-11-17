@@ -831,6 +831,12 @@ pub trait Query {
         self.state().last_known(id).is_some_and(|row| row.attacking)
     }
 
+    /// Whether a creature that has left the battlefield was suspected as it last was there (CR 701.60b, 608.2h), from its
+    /// last-known information: the designation ended with the object, so `is_suspected` no longer says.
+    fn was_suspected(&self, id: ObjectId) -> bool {
+        self.state().last_known(id).is_some_and(|row| row.suspected)
+    }
+
     /// Whether an attacking creature has been blocked (CR 509.1h): it stays blocked when its blockers leave.
     fn is_blocked(&self, id: ObjectId) -> bool {
         self.state().attackers.iter().any(|a| a.id == id && a.blocked)

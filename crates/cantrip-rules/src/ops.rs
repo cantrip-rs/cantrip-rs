@@ -2801,6 +2801,7 @@ pub(crate) fn departure_known_of(cx: &mut Cx, id: ObjectId) -> LastKnown {
     let enchanted = cx.battlefield_source_is_enchanted(id);
     let mut row = last_known_of(cx, id);
     row.enchanted = enchanted;
+    row.suspected = Query::is_suspected(cx, id);
     row
 }
 
@@ -2873,6 +2874,7 @@ pub fn last_known_from(cx: &mut Cx, id: ObjectId, c: &Chars) -> LastKnown {
         must_attack: c.must_attack,
         attacking: cx.s().attackers.iter().any(|a| a.id == id),
         enchanted: cx.s().last_known(id).or_else(|| cx.s().phased_last_known(id)).is_some_and(|last| last.enchanted),
+        suspected: cx.s().last_known(id).or_else(|| cx.s().phased_last_known(id)).is_some_and(|last| last.suspected),
         blocked_creatures,
         blocking_creatures,
         banded_creatures,

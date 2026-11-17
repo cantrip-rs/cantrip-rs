@@ -1183,6 +1183,7 @@ impl Game {
                     must_attack: c.must_attack,
                     attacking: false,
                     enchanted: false,
+                    suspected: false,
                     blocked_creatures: Default::default(),
                     blocking_creatures: Default::default(),
                     banded_creatures: Default::default(),

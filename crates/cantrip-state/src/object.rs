@@ -2581,6 +2581,9 @@ pub struct LastKnown {
     pub attacking: bool,
     /// Whether an Aura enchanted this object as it left or phased out (CR 303.4b, 608.2h).
     pub enchanted: bool,
+    /// Whether it was suspected (CR 701.60b) as it left the battlefield (CR 608.2h): the designation ends with the object, so
+    /// "if the sacrificed creature was suspected" asks this.
+    pub suspected: bool,
     /// Exact incarnations this object was blocking, and creatures blocking it, at this snapshot (CR 608.2h, 113.7a).
     /// Runs of the existing immutable `GameState::members` arena; no fixed blocker limit or per-card remembered state.
     /// Source queries use these only after leaving its expected battlefield zone; current relationships stay separate.
