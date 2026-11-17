@@ -1,0 +1,11 @@
+{
+  "name": "Deadeye Duelist",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Assassin",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Reach\n{1}, {T}: This creature deals 1 damage to target opponent.",
+  "keywords": [
+    "Reach"
+  ]
+}

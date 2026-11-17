@@ -1,0 +1,48 @@
+# Deadeye Duelist: "Reach. {1}, {T}: This creature deals 1 damage to target opponent" (CR 702.17, 602.1, 120.3).
+# Turn 4: Bot2's Ornithopter (a flier) attacks; the Duelist (reach) can block it, a Memnite (no reach) cannot.
+# Turn 5: {1} from a Mountain pays, the pool is empty after, the Duelist taps, Bot1 cannot target itself and Bot2 goes 20 to 19;
+# the tapped Duelist cannot activate again.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Deadeye Duelist
+Memnite
+Mountain
+Mountain
+Plains
+Mountain x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Deadeye Duelist.Cast
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+! Bot1.Block(Memnite > Ornithopter)
+Bot1.Block(Deadeye Duelist > Ornithopter)
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+! Bot1.Battlefield.Deadeye Duelist.Activate(Bot1)
+Bot1.Battlefield.Deadeye Duelist.Activate(Bot2)
+? Bot1.Mana =
+? Bot1.Battlefield.Deadeye Duelist.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+Bot1.Battlefield.Mountain#2.Activate
+! Bot1.Battlefield.Deadeye Duelist.Activate(Bot2)
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Deadeye Duelist.Keywords = Reach
