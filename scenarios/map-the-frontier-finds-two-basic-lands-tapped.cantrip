@@ -1,0 +1,35 @@
+# Map the Frontier: two basic lands, one of them a type the Desert is not (an Island and a Forest), come onto the battlefield tapped; the Desert left in the
+# library stays there. The library is shuffled once.
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Map the Frontier
+Plains
+Plains
+Plains
+Plains
+Island
+Forest
+Desert
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Map the Frontier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Island; Forest)
+? Bot1.Battlefield.Island.Tapped = true
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Library.Count = 11
+? Bot1.Shuffles = 1
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Island; Forest
