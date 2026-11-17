@@ -1,0 +1,11 @@
+{
+  "name": "Bristlebud Farmer",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Plant Druid",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Trample\nWhen this creature enters, create two Food tokens. (They're artifacts with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\nWhenever this creature attacks, you may sacrifice a Food. If you do, mill three cards. You may put a permanent card from among them into your hand.",
+  "keywords": [
+    "Trample"
+  ]
+}

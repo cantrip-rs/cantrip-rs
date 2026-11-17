@@ -1,0 +1,40 @@
+# Bristlebud Farmer: after the mill, "you may put a permanent card from among them into your hand" is optional too (CR 701.17): Bot1 sacrifices a Food, mills three cards
+# (Lightning Bolt, Memnite, Forest) and takes none, so all three stay in the graveyard with the Lotus and the hand is unchanged.
+
+[Bot1 Deck]
+Black Lotus
+Bristlebud Farmer
+Forest
+Mox Emerald
+Plains x3
+Plains
+Lightning Bolt
+Memnite
+Forest
+Plains x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bristlebud Farmer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bristlebud Farmer > Bot2)
+Bot1.Pass
+Bot1.Choose(Food Token)
+Bot1.Choose()
+
+[Expect]
+Bot1.Battlefield.Count = 4
+Bot1.Graveyard.Count = 4
+Bot1.Library.Count = 9
+Bot1.Hand.Count = 4

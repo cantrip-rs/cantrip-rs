@@ -1,0 +1,38 @@
+# Bristlebud Farmer: the sacrifice is a "may" (CR 608.2c): declined, no card is milled (no "if you do") and both Food tokens stay.
+
+[Bot1 Deck]
+Black Lotus
+Bristlebud Farmer
+Forest
+Mox Emerald
+Plains x3
+Plains
+Lightning Bolt
+Memnite
+Forest
+Plains x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bristlebud Farmer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bristlebud Farmer > Bot2)
+Bot1.Pass
+Bot1.Choose()
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Bot1.Graveyard.Count = 1
+Bot1.Library.Count = 12
+Bot1.Hand.Count = 4

@@ -1,0 +1,53 @@
+# Bristlebud Farmer: with no Food to sacrifice nothing is asked and nothing is milled (CR 608.2c). Turn 3: both Foods are paid for and sacrificed first ({2}, {T}, Sacrifice:
+# gain 3 life, twice, with a Forest, a second Forest and two Mox Emeralds), then the Farmer attacks: the trigger resolves without a question and the library is untouched.
+
+[Bot1 Deck]
+Black Lotus
+Bristlebud Farmer
+Forest
+Mox Emerald
+Mox Emerald
+Forest
+Plains
+Plains
+Lightning Bolt
+Memnite
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Bristlebud Farmer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Food Token#1.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Food Token.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 26
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bristlebud Farmer > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Graveyard.Count = 1
+Bot1.Library.Count = 13
