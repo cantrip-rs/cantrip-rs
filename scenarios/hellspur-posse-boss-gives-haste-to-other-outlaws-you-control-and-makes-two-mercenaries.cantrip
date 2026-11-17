@@ -1,0 +1,73 @@
+# Hellspur Posse Boss: "Other outlaws you control have haste. When this creature enters, create two 1/1 red Mercenary creature tokens with '{T}: Target creature you control
+# gets +1/+0 until end of turn. Activate only as a sorcery'" (CR 702.10, 111.1, 700.12). Turn 1: the Boss, Bile-Vial Boggart (an Assassin) and Memnite (not an outlaw) are cast;
+# the two Mercenary tokens have haste, so one taps at once to give Memnite +1/+0, and the Mercenary and the Boggart can attack while the Boss and Memnite cannot.
+# Turn 4: Bot2 casts its own Assassin, which does not get Bot1's haste (its Memnite from turn 2 can attack, the new Assassin cannot).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mountain
+Hellspur Posse Boss
+Bile-Vial Boggart
+Memnite
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Memnite
+Bile-Vial Boggart
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Hellspur Posse Boss.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mercenary Token#1.Power = 1
+? Bot1.Battlefield.Mercenary Token#2.Power = 1
+Bot1.Hand.Bile-Vial Boggart.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mercenary Token#1.Activate(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+[T1 Bot1.DeclareAttackers]
+! Bot1.Attack(Hellspur Posse Boss > Bot2)
+! Bot1.Attack(Memnite > Bot2)
+Bot1.Attack(Bile-Vial Boggart > Bot2; Mercenary Token#2 > Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Bile-Vial Boggart.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+! Bot2.Attack(Bot2.Battlefield.Bile-Vial Boggart > Bot1)
+Bot2.Attack(Memnite > Bot1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 19

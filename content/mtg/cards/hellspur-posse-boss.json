@@ -1,0 +1,8 @@
+{
+  "name": "Hellspur Posse Boss",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Lizard Rogue",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Other outlaws you control have haste. (Assassins, Mercenaries, Pirates, Rogues, and Warlocks are outlaws.)\nWhen this creature enters, create two 1/1 red Mercenary creature tokens with \"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\""
+}
