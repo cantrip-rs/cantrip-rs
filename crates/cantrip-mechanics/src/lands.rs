@@ -95,6 +95,11 @@ pub fn chosen_color(q: &dyn Query, asker: &Asker) -> ColorSet {
     q.state().chosen_color(q.linked_to(asker)).map_or(ColorSet::NONE, ColorSet::of)
 }
 
+/// "{T}: Add one mana of the chosen color." (CR 605.1a, 106.5): the mana ability of every permanent that chooses a color as it
+/// enters (`chosen_color`). Crossroads Village, Heraldic Banner, Mirage Mesa, Night Market, Room of Refuge, Sunken Citadel,
+/// Tarnation Vista, Uncharted Haven and Valgavoth's Lair print it.
+pub const TAP_FOR_THE_CHOSEN_COLOR: AbilityDef = mana_ability(TAP, add_any_color(1), "{T}: Add one mana of the chosen color.").colors_from(chosen_color);
+
 /// "This land enters tapped unless you control a [land type]" (CR 614.12, 614.1d): read on the battlefield as it is while the land
 /// enters, so the land itself is not counted, through the layers (a land of any kind may have the type). Arena of Glory
 /// (Mountain), Castle Locthwain (Swamp) and Shifting Woodland (Forest) print it.

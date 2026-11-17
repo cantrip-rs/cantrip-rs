@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::choose_color_for;
-use cantrip_mechanics::lands::chosen_color;
+use cantrip_mechanics::lands::TAP_FOR_THE_CHOSEN_COLOR;
 use cantrip_mechanics::statics::{plus_pt, your_creatures};
 use cantrip_oracle as oracle;
 
@@ -18,7 +18,7 @@ fn your_creatures_of_the_chosen_color(q: &dyn LayerQuery, source: ObjectId, affe
 
 pub static CARD: CardDef = CardDef {
     enters: Some(enters),
-    abilities: &[mana_ability(TAP, add_any_color(1), "{T}: Add one mana of the chosen color.").colors_from(chosen_color)],
+    abilities: &[TAP_FOR_THE_CHOSEN_COLOR],
     statics: &[static_ability(Layer::PtModify, your_creatures_of_the_chosen_color, plus_pt::<1, 0>, "Creatures you control of the chosen color get +1/+0.")],
     ..oracle::HERALDIC_BANNER
 };
