@@ -1,0 +1,67 @@
+# Aurelia's Vindicator: "exile up to X other target creatures ..." (CR 702.168e, 107.3d, 601.2c). "Up to" lets the player choose none of the possible targets: turned up for
+# X = 1 with a Memnite on the battlefield and one in the graveyard to choose from, Bot1 chooses neither and nothing is exiled.
+
+[Bot1 Deck]
+Black Lotus
+Aurelia's Vindicator
+Mox Pearl
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Mox Jet
+Plains x10
+
+[Bot2 Deck]
+Memnite
+Memnite
+Mountain
+Lightning Bolt
+Mountain x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Aurelia's Vindicator.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; X: 1)
+Bot1.Choose(Confirm X)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+? Bot2.Graveyard.Count = 1
+? Bot2.Battlefield.Count = 3
+
+[Expect]
+Exile.Count = 0
+Bot2.Graveyard = Memnite
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Aurelia's Vindicator.Power = 4

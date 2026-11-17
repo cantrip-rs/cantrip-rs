@@ -1,0 +1,70 @@
+# Aurelia's Vindicator: the two abilities are linked (CR 607.2a) and each trigger resolves on its own (CR 608.2b). Bot1 turns it up for X = 1 (paying {1}{3}{W}) targeting
+# Bot2's Memnite. With the trigger on the stack Bot2 Bolts the Vindicator, paying Ward {2} out of three Moxen: it dies, and its leaves-the-battlefield trigger resolves first and
+# returns nothing, because nothing is exiled yet. Then the turned-up trigger resolves and exiles the Memnite, which stays exiled for good.
+
+[Bot1 Deck]
+Black Lotus
+Aurelia's Vindicator
+Mox Pearl
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Mox Jet
+Plains x10
+
+[Bot2 Deck]
+Memnite
+Mox Ruby
+Mox Jet
+Mox Pearl
+Lightning Bolt
+Mountain x11
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Aurelia's Vindicator.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Memnite.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; X: 1)
+Bot1.Choose(Confirm X)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Aurelia's Vindicator)
+Bot2.PayCost
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Memnite
+Bot2.Graveyard = Lightning Bolt
+Bot2.Hand = Mountain; Mountain; Mountain
+Bot1.Graveyard.Aurelia's Vindicator.Colors = White

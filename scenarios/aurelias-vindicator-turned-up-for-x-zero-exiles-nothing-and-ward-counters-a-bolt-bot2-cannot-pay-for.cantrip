@@ -1,0 +1,68 @@
+# Aurelia's Vindicator: "exile up to X other target creatures ..." and "Ward {2}" (CR 702.168e, 107.3d, 702.21a). Turned up for X = 0 (paying {3}{W}), the trigger needs and
+# has no targets, and nothing is exiled. On turn 6 Bot2 has two Mountains: it can pay for a Lightning Bolt aimed at the Vindicator but not for the ward cost {2} as well, so the
+# ward trigger counters the Bolt and the 4/2 survives.
+
+[Bot1 Deck]
+Black Lotus
+Aurelia's Vindicator
+Mox Pearl
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Mox Jet
+Plains x10
+
+[Bot2 Deck]
+Memnite
+Memnite
+Mountain
+Lightning Bolt
+Mountain x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Aurelia's Vindicator.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; X: 0)
+Bot1.Choose(Confirm X)
+? Bot1.Mana =
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+? Bot2.Battlefield.Count = 3
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Battlefield.Mountain#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Aurelia's Vindicator)
+! Bot2.PayCost
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield.Aurelia's Vindicator.Damage = 0
+Bot1.Battlefield.Aurelia's Vindicator.Power = 4

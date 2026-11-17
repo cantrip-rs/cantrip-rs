@@ -1,0 +1,86 @@
+# Aurelia's Vindicator (4/2 flying, lifelink, ward {2}; Disguise {X}{3}{W}): "When this creature is turned face up, exile up to X other target creatures from the
+# battlefield and/or creature cards from graveyards. When this creature leaves the battlefield, return the exiled cards to their owners' hands." (CR 702.168d-e, 107.3d,
+# 607.2a). Bot1 casts it face down with a Black Lotus on turn 1; on turn 3 it Bolts one of Bot2's two Memnites. On turn 5 it turns the Vindicator up with X = 2, paying
+# {2}{3}{W} (six Moxen, the pool empty after): two targets may be chosen, the Vindicator itself and a Mox are refused, and the Memnite in Bot2's graveyard and the one on its
+# battlefield are exiled. On turn 6 Bot2 Bolts the Vindicator (4/2): both Memnites go to Bot2's hand, their owner's, the Memnite on the battlefield and the card from the
+# graveyard alike.
+
+[Bot1 Deck]
+Black Lotus
+Aurelia's Vindicator
+Mox Pearl
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Mox Jet
+Plains x10
+
+[Bot2 Deck]
+Memnite
+Memnite
+Mountain
+Lightning Bolt
+Mountain x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Aurelia's Vindicator.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; X: 2)
+Bot1.Choose(Confirm X)
+? Bot1.Mana =
+! Bot1.Target(Bot1.Battlefield.Aurelia's Vindicator)
+! Bot1.Target(Bot1.Battlefield.Mox Pearl)
+Bot1.Target(Bot2.Battlefield.Memnite; Bot2.Graveyard.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 2
+? Bot2.Graveyard.Count = 0
+? Bot2.Battlefield.Count = 2
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Battlefield.Mountain#2.Activate
+Bot2.Battlefield.Mountain#3.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Aurelia's Vindicator)
+Bot2.PayCost
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Hand = Memnite; Memnite; Mountain; Mountain; Mountain; Mountain
+Bot2.Graveyard = Lightning Bolt
+Bot1.Graveyard.Aurelia's Vindicator.Power = 4
