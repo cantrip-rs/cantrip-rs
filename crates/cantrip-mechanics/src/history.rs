@@ -398,6 +398,16 @@ pub fn a_creature_died_this_turn(q: &dyn Query, _: &Asker) -> bool {
     creatures_died_this_turn(q, None) > 0
 }
 
+/// "This creature enters with a +1/+1 counter on it if a creature died this turn" (CR 614.1c, 700.4): judged as it enters, from the
+/// event history; any creature's death this turn counts, the opponents' and tokens' too, and the entering permanent is not yet on the
+/// battlefield, so it is not one of them. Cackling Slasher and Blacksnag Buzzard print it.
+pub fn enters_with_a_plus_one_counter_if_a_creature_died(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
+    if creatures_died_this_turn(g, None) > 0 {
+        entering.counters[CounterKind::PlusOne as usize] += 1;
+    }
+    Ok(())
+}
+
 /// "If you gained life this turn" (CR 603.4, 119.3): whether `player` has gained any life this turn. Ocelot Pride's and
 /// Enlightened Confidant's intervening ifs print it.
 pub fn gained_life_this_turn(q: &dyn Query, player: PlayerId) -> bool {
