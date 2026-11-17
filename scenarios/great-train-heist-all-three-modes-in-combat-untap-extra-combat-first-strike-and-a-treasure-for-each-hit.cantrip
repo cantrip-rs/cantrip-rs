@@ -1,0 +1,72 @@
+# Great Train Heist, spree {R} + {2}{R} + {2} + {R} = seven mana (a Black Lotus, three Moxen and a Mountain). Cast in turn 3's declare attackers step with Memnite attacking
+# (CR 702.172a, 500.8): it untaps Memnite and adds a combat phase (it is Bot1's combat), Memnite gets +1/+0 and first strike, and each time a creature Bot1 controls deals combat damage to
+# Bot2 this turn Bot1 makes a tapped Treasure (CR 603.7c). Memnite is 2/1 in both combats: Bot2 goes 20 -> 18 -> 16 and Bot1 has two tapped Treasures.
+[Bot1 Deck]
+Memnite
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mountain
+Great Train Heist
+Island
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Great Train Heist.Cast
+Bot1.Modes(Untap all creatures; get +1/+0; Choose target opponent)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Memnite.Tapped = false
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Keywords = FirstStrike
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Treasure Token.Tapped = true
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Treasure Token#1.Tapped = true
+Bot1.Battlefield.Treasure Token#2.Tapped = true
+Bot1.Battlefield.Memnite.Tapped = true

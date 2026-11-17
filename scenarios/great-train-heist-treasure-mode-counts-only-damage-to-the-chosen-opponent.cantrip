@@ -1,0 +1,43 @@
+# Great Train Heist, third mode ({R} + {R}): "Choose target opponent. Whenever a creature you control deals combat damage to
+# that player this turn, create a tapped Treasure token" (CR 603.7b, 603.7c). In a game of three, Bot1 casts it on turn 4
+# choosing Bot3, then Memnite attacks Bot2 and Bile-Vial Boggart attacks Bot3: both connect (Bot2 19, Bot3 19), but only the
+# Boggart's damage was dealt to the chosen player, so there is one tapped Treasure, not two.
+
+[Bot1 Deck]
+Memnite
+Mox Ruby
+Mox Jet
+Bile-Vial Boggart
+Mountain
+Great Train Heist
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bile-Vial Boggart.Cast
+Bot1.Hand.Memnite.Cast
+[T4 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Great Train Heist.Cast
+Bot1.Modes(Choose target opponent)
+Bot1.Target(Bot3)
+[T4 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2; Bile-Vial Boggart > Bot3)
+[T4 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot3.Life = 19
+Bot1.Battlefield = Bile-Vial Boggart; Memnite; Mountain; Mox Jet; Mox Ruby; Treasure Token
+Bot1.Battlefield.Treasure Token.Tapped = true

@@ -1,0 +1,69 @@
+# Great Train Heist, second mode ({R} + {2}): "Creatures you control get +1/+0 and gain first strike until end of turn" (CR 611.2c). Memnite attacks and Bot2 blocks with Bile-Vial Boggart;
+# Heist in the declare blockers step makes Memnite 2/1 with first strike, so it kills the Boggart before it deals damage. The effect only reaches creatures Bot1 controlled when it resolved:
+# an Ornithopter cast afterwards is 0/2 with Flying only. Bot2's Boggart did not get it (it died without dealing damage).
+[Bot1 Deck]
+Memnite
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Ornithopter
+Great Train Heist
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Bile-Vial Boggart
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Bile-Vial Boggart.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Bile-Vial Boggart > Memnite)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Great Train Heist.Cast
+Bot1.Modes(get +1/+0)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot2.Battlefield.Bile-Vial Boggart.Power = 1
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Bile-Vial Boggart
+? Bot1.Battlefield.Memnite.Damage = 0
+[T3 Bot1.Main2]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Memnite.Keywords = FirstStrike

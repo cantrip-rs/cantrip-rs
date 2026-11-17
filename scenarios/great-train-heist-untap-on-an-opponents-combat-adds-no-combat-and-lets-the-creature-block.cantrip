@@ -1,0 +1,63 @@
+# Great Train Heist, first mode: the additional combat phase is only "if it's your combat phase" (CR 500.8), the untap works on any turn. Bot1's Memnite attacked on turn 3 and is still tapped
+# on turn 4. Bot2's Memnite attacks, Bot1 casts the untap mode in Bot2's declare attackers step, and the untapped Memnite blocks it: both die, and play goes on to Bot2's second main phase (no extra combat).
+
+[Bot1 Deck]
+Memnite
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mountain
+Great Train Heist
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Great Train Heist.Cast
+Bot1.Modes(Untap all creatures)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Block(Memnite > Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Step = Main2
+Bot1.Graveyard = Memnite; Great Train Heist
+Bot2.Graveyard = Memnite
