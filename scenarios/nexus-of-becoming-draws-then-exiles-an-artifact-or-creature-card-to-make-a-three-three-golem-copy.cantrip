@@ -1,0 +1,60 @@
+# Nexus of Becoming: "At the beginning of combat on your turn, draw a card. Then you may exile an artifact or creature card from your
+# hand. If you do, create a token that's a copy of the exiled card, except it's a 3/3 Golem artifact creature in addition to its
+# other types." Turn 1 Bot1 casts it with two Black Lotuses. At its combat it draws (Plains), may exile only an artifact or
+# creature card (the Lightning Bolt and the Plains are refused) and exiles Savannah Lions: the token is a Savannah Lions copy, white,
+# a Cat Golem artifact creature, 3/3 instead of 2/1 (CR 707.2, 707.9b). Turn 3 Bot1 exiles Mox Pearl, a non-creature artifact, and
+# the token is an artifact creature Mox 3/3 that still taps for {W} (the copy keeps its abilities). Bot2's turn 2 combat draws nothing.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Nexus of Becoming
+Savannah Lions
+Lightning Bolt
+Mox Pearl
+Plains
+Plains
+Plains
+Plains x8
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Nexus of Becoming.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+! Bot1.Choose(Lightning Bolt)
+! Bot1.Choose(Plains)
+Bot1.Choose(Savannah Lions)
+? Exile = Savannah Lions
+? Bot1.Battlefield.Savannah Lions.Token = true
+? Bot1.Battlefield.Savannah Lions.Power = 3
+? Bot1.Battlefield.Savannah Lions.Toughness = 3
+? Bot1.Battlefield.Savannah Lions.Colors = White
+? Bot1.Battlefield.Savannah Lions.Types = Creature; Artifact
+? Bot1.Battlefield.Savannah Lions.Subtypes = Cat; Golem
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 5
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mox Pearl)
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Savannah Lions; Mox Pearl
+Bot1.Battlefield.Mox Pearl.Token = true
+Bot1.Battlefield.Mox Pearl.Power = 3
+Bot1.Battlefield.Mox Pearl.Toughness = 3
+Bot1.Battlefield.Mox Pearl.Types = Artifact; Creature
+Bot1.Battlefield.Mox Pearl.Subtypes = Golem
+Bot1.Battlefield.Savannah Lions.Power = 3

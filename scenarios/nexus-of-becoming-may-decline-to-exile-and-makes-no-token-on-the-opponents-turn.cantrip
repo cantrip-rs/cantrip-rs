@@ -1,0 +1,38 @@
+# Nexus of Becoming: "Then you may exile an artifact or creature card from your hand." Declining the choice exiles nothing and makes
+# no token (the draw still happened). The opponent's own combat (turn 2) does not trigger it ("on your turn").
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Nexus of Becoming
+Savannah Lions
+Lightning Bolt
+Mox Pearl
+Plains
+Plains
+Plains x9
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Nexus of Becoming.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+Bot1.Choose()
+? Bot1.Hand.Count = 5
+? Bot1.Battlefield.Count = 1
+[T2 Bot2.BeginCombat]
+? Bot1.Hand.Count = 5
+
+[Expect]
+Bot1.Battlefield.Count = 1
+Bot1.Hand.Count = 5
