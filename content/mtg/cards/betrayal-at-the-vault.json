@@ -1,0 +1,6 @@
+{
+  "name": "Betrayal at the Vault",
+  "manaCost": "{4}{G}{G}",
+  "type": "Instant",
+  "oracleText": "Target creature you control deals damage equal to its power to each of two other target creatures."
+}
