@@ -1,0 +1,8 @@
+{
+  "name": "Nimble Brigand",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Human Rogue",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "This creature can't be blocked if you've committed a crime this turn. (Targeting opponents, anything they control, and/or cards in their graveyards is a crime.)\nWhenever this creature deals combat damage to a player, draw a card."
+}
