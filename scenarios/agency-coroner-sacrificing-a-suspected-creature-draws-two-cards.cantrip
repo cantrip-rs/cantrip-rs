@@ -1,0 +1,57 @@
+# Agency Coroner: "If the sacrificed creature was suspected, draw two cards instead." Barbed Servitor is suspected as it enters (CR 701.60a); the Coroner's cost sacrifices it on
+# turn 5 and, looking back at it as it last existed on the battlefield (CR 608.2h), Bot1 draws two cards instead of one. The unsuspected Memnite in
+# agency-coroner-sacrificing-an-unsuspected-creature-draws-one-card-and-needs-another-creature is the control.
+
+[Bot1 Deck]
+Agency Coroner
+Barbed Servitor
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Ruby
+Island
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Agency Coroner.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Barbed Servitor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island#1.Activate
+? Bot1.Hand.Count = 1
+Bot1.Battlefield.Agency Coroner.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Barbed Servitor = (absent)
+Bot1.Graveyard = Barbed Servitor; Black Lotus

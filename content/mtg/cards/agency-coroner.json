@@ -1,0 +1,8 @@
+{
+  "name": "Agency Coroner",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Ogre Cleric",
+  "power": 3,
+  "toughness": 6,
+  "oracleText": "{2}{B}, Sacrifice another creature: Draw a card. If the sacrificed creature was suspected, draw two cards instead."
+}

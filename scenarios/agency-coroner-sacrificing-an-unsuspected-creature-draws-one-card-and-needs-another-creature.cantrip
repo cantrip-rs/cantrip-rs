@@ -1,0 +1,50 @@
+# Agency Coroner: "{2}{B}, Sacrifice another creature: Draw a card. If the sacrificed creature was suspected, draw two cards instead." (CR 602.2, 701.21a, 701.60). The cost's
+# "another creature" cannot be the Coroner itself, so with the Coroner alone the ability is refused even with the mana ready; with a Memnite (not suspected) sacrificed Bot1
+# draws exactly one card.
+
+[Bot1 Deck]
+Agency Coroner
+Black Lotus
+Mox Jet
+Mox Jet
+Memnite
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Agency Coroner.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+? Bot1.Mana = {U}{B}{B}
+! Bot1.Battlefield.Agency Coroner.Activate
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Agency Coroner.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Memnite = (absent)
+Bot1.Graveyard = Memnite; Black Lotus
+Bot1.Battlefield.Agency Coroner.Power = 3
