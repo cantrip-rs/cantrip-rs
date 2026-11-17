@@ -1,0 +1,50 @@
+# Take for a Ride (CR 702.8a, 700.13): the crime must be this turn's. Bot1 Bolts Bot2 on turn one (a crime), but on Bot2's turn two the card has no flash again and can't be
+# cast, even though Bot1 has the mana; on its own turn three it is cast as a sorcery with no crime needed, taking Bot1's own Memnite back for a turn (any creature is
+# a legal target, CR ruling) and refusing a non-creature.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Lightning Bolt
+Take for a Ride
+Memnite
+Island x12
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Take for a Ride.Cast(Bot2.Battlefield.Memnite)
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Take for a Ride.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Take for a Ride.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Haste
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
