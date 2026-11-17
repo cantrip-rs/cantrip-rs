@@ -1,0 +1,33 @@
+# "{3}, {T}: Look at the top card of your library": the Ranch's own {T} cannot also pay the {3}, so with two Moxen the
+# ability is refused (`Mana: short`) and nothing is looked at. With a third Mox it is offered and looks at the Bulwark
+# Ox on top (revealed into the hand: the positive control).
+
+[Bot1 Deck]
+Bucolic Ranch
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Island x3
+Bulwark Ox
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Bucolic Ranch.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+! Bot1.Battlefield.Bucolic Ranch.Activate(Ability: Look; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Bucolic Ranch.Activate(Ability: Look)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Looked = Bulwark Ox
+Bot1.Accept
+
+[Expect]
+Bot1.Hand = Bulwark Ox; Island; Island; Island

@@ -1,0 +1,33 @@
+# A card that is not a Mount card, declined for the bottom of the library, stays on top and is drawn on turn 3.
+
+[Bot1 Deck]
+Bucolic Ranch
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Island x3
+Mountain
+Swamp
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Bucolic Ranch.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Bucolic Ranch.Activate(Ability: Look)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Looked = Mountain
+Bot1.Decline
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Hand = Island; Island; Island; Mountain

@@ -1,0 +1,22 @@
+# Bucolic Ranch's first ability: "{T}: Add {C}." The {C} pays for a Sol Ring, leaving the Ranch tapped.
+
+[Bot1 Deck]
+Bucolic Ranch
+Sol Ring
+Island x5
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Bucolic Ranch.Play
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Bucolic Ranch.Activate(Ability: {T}: Add {C}.)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Sol Ring.ManaValue = 1
+Bot1.Battlefield.Bucolic Ranch.Tapped = true

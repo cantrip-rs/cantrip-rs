@@ -1,0 +1,31 @@
+# "Spend this mana only to cast a Mount spell" (CR 106.6): the Ranch's one mana of any color ({W} here) is the only mana
+# in the pool, so `! Hinterland Sanctifier` - a one-mana white creature spell that is no Mount, which the white mana
+# would pay for if it could - is refused. The positive control is the same mana and pool paying the {W} of a Bulwark Ox
+# (a Mount, {1}{W}), the {1} coming from a Mox Jet. The Ox enters the battlefield.
+
+[Bot1 Deck]
+Bucolic Ranch
+Mox Jet
+Hinterland Sanctifier
+Bulwark Ox
+Island x3
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Bucolic Ranch.Play
+Bot1.Battlefield.Bucolic Ranch.Activate(Ability: any color; Color: White)
+? Bot1.Mana = {W} (MountSpells)
+! Bot1.Hand.Hinterland Sanctifier.Cast(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Bulwark Ox.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Bulwark Ox.Power = 2
+Bot1.Hand = Hinterland Sanctifier; Island; Island; Island
