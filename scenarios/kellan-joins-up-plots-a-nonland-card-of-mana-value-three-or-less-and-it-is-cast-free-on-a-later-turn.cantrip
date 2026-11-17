@@ -1,0 +1,45 @@
+# "When Kellan Joins Up enters, you may exile a nonland card with mana value 3 or less from your hand. If you do, it becomes
+# plotted." Bot1's hand holds Island (a land), Wrath of God (mana value 4) and Lightning Bolt (1): only the Bolt may be chosen
+# (the others are refused), and it is exiled and plotted. It can't be cast the turn it became plotted, but on turn 3 Bot1 casts
+# it from exile without paying its mana cost and Bot2 takes 3.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Kellan Joins Up
+Lightning Bolt
+Wrath of God
+Island
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kellan Joins Up.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Wrath of God)
+! Bot1.Choose(Island)
+Bot1.Choose(Lightning Bolt)
+! Bot1.Exile.Lightning Bolt.Cast
+[T3 Bot1.Main1]
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt
+Bot1.Hand = Island; Wrath of God; Island
+Exile.Count = 0

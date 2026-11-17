@@ -1,0 +1,42 @@
+# Kellan Joins Up: "you may exile a nonland card with mana value 3 or less from your hand. If you do, it becomes plotted."
+# The limit is met exactly: Centaur Courser (mana value 3) may be chosen, and "a nonland card" is one - choosing it and the
+# Lightning Bolt (mana value 1) together is refused. The Courser is exiled and plotted, and on turn 3 Bot1 casts it from
+# exile without paying its mana cost, the Bolt still in hand.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Kellan Joins Up
+Centaur Courser
+Lightning Bolt
+Island
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kellan Joins Up.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Centaur Courser; Lightning Bolt)
+Bot1.Choose(Centaur Courser)
+[T3 Bot1.Main1]
+Bot1.Exile.Centaur Courser.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Centaur Courser.Power = 3
+Bot1.Hand = Lightning Bolt; Island; Island
+Exile.Count = 0

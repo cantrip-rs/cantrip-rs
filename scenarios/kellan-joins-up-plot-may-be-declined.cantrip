@@ -1,0 +1,33 @@
+# The enters trigger is "you may": Bot1 declines (the empty answer) with Lightning Bolt eligible in hand, so nothing is exiled
+# and the Bolt stays in the hand (and can't be cast free from exile).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Kellan Joins Up
+Lightning Bolt
+Island x2
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kellan Joins Up.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+! Bot1.Exile.Lightning Bolt.Cast
+
+[Expect]
+Exile.Count = 0
+Bot1.Hand = Island; Island; Lightning Bolt

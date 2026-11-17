@@ -1,0 +1,57 @@
+# "Whenever a legendary creature you control enters, put a +1/+1 counter on each creature you control." On turn 3 Bot1 casts
+# Memnite and Ornithopter (not legendary: no counters), then Aunt May, a legendary creature: Memnite, Ornithopter and Aunt
+# May each get a counter (it has entered by the time the trigger resolves), and Bot2's Memnite gets none.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Kellan Joins Up
+Memnite
+Ornithopter
+Aunt May
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x6
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kellan Joins Up.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aunt May.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Aunt May.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
