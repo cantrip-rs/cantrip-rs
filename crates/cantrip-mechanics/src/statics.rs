@@ -978,7 +978,7 @@ pub fn instant_or_sorcery_spell_you_cast(view: &dyn LayerQuery, source: ObjectId
 /// `CardDef::activation_rules` entry: a source is anything with the name (`library::object_has_name`), in any zone it has the
 /// ability in. It binds every player, the permanent's controller too; with no name chosen it stops nothing. Petrified Hamlet (a
 /// land card name) and Sorcerous Spyglass (any card name) print it.
-pub fn chosen_name_activations_barred(q: &dyn Query, asker: &Asker, source: ObjectId, def: &ActivatedDef) -> bool {
+pub fn chosen_name_activations_barred(q: &dyn Query, asker: &Asker, _: PlayerId, source: ObjectId, def: &ActivatedDef) -> bool {
     def.is_mana_ability() || !q.state().chosen_card(q.linked_to(asker)).is_some_and(|name| crate::library::object_has_name(q, source, name))
 }
 

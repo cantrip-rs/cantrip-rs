@@ -3628,7 +3628,7 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, window: ManaWindow, option
                 || def.from != ZoneKind::Battlefield
                 || def.cost.tap && tapping.contains(&id)
                 || limit_reached(cx, id, &chars, index, def)
-                || static_rules::activation_barred(cx, &forbidders, id, def)
+                || static_rules::activation_barred(cx, &forbidders, player, id, def)
             {
                 continue;
             }
@@ -3745,7 +3745,7 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, window: ManaWindow, option
             if !a.is_mana_ability()
                 || !window.allows(a)
                 || a.from != ZoneKind::Hand
-                || static_rules::activation_barred(cx, &forbidders, id, a)
+                || static_rules::activation_barred(cx, &forbidders, player, id, a)
             {
                 continue;
             }
@@ -6384,7 +6384,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
                 || !window.allows(def)
                 || def.from != ZoneKind::Battlefield
                 || limit_reached(cx, id, &chars, index, def)
-                || static_rules::activation_barred(cx, &forbidders, id, def)
+                || static_rules::activation_barred(cx, &forbidders, player, id, def)
             {
                 continue;
             }
@@ -7833,7 +7833,7 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
                 || (split && !def.special_action)
                 || def.from != zone
                 || limit_reached(cx, id, &chars, index, def)
-                || static_rules::activation_barred(cx, &forbidders, id, def)
+                || static_rules::activation_barred(cx, &forbidders, player, id, def)
             {
                 continue;
             }
@@ -10037,7 +10037,7 @@ fn has_mana_source(cx: &Cx, id: ObjectId, player: PlayerId) -> bool {
                 && ManaWindow::Payment.allows(def)
                 && !limit_reached(cx, id, &chars, index, def)
                 && can_pay_activation(cx, id, player, &def.cost, Some(CostFor::ManaAbility), by)
-                && !static_rules::activation_barred(cx, &forbidders, id, def)
+                && !static_rules::activation_barred(cx, &forbidders, player, id, def)
         })
     })
 }

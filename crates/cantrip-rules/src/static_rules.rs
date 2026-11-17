@@ -793,8 +793,8 @@ pub fn activation_forbidders(cx: &Cx) -> Vec<ObjectId> {
         .collect()
 }
 
-/// Whether one of the `forbidders` (from `activation_forbidders`) stops `source`'s ability `def` being activated (CR 602.5).
-pub fn activation_barred(cx: &Cx, forbidders: &[ObjectId], source: ObjectId, def: &ActivatedDef) -> bool {
+/// Whether one of the `forbidders` (from `activation_forbidders`) stops `activator` activating `source`'s ability `def` (CR 602.5).
+pub fn activation_barred(cx: &Cx, forbidders: &[ObjectId], activator: PlayerId, source: ObjectId, def: &ActivatedDef) -> bool {
     // A special action is no activated ability (CR 116.2, 602.1): what forbids activating abilities (CR 602.5) - an effect on
     // the object, a static ability's rule - forbids none of them. Turning a face-down creature face up, foretelling,
     // suspending, plotting and unlocking a door stay allowed; what stops the cast suspend needs is judged as a cast is.
@@ -816,7 +816,7 @@ pub fn activation_barred(cx: &Cx, forbidders: &[ObjectId], source: ObjectId, def
         let obj = cx.s().obj(id);
         cx.cards().texts_linked(cx.s(), id).any(|(c, by)| {
             let asker = Asker { instance: None, source: id, controller: obj.controller, by, spell: false };
-            cx.card(c).activation_rules.iter().any(|rule| !rule(cx, &asker, source, def))
+            cx.card(c).activation_rules.iter().any(|rule| !rule(cx, &asker, activator, source, def))
         })
     })
 }

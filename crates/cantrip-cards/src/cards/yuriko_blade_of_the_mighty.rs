@@ -10,7 +10,7 @@ fn no_casting_during_combat(q: &dyn Query, _: &Asker, _: PlayerId, _: ZoneKind) 
 
 /// "... or activate abilities that aren't mana abilities" (CR 101.2, 602.5): any permanent's activated ability but a mana
 /// ability (CR 605.1a), which stays allowed.
-fn no_activating_during_combat(q: &dyn Query, _: &Asker, _: ObjectId, def: &ActivatedDef) -> bool {
+fn no_activating_during_combat(q: &dyn Query, _: &Asker, _: PlayerId, _: ObjectId, def: &ActivatedDef) -> bool {
     !during_combat(q) || def.is_mana_ability()
 }
 

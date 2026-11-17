@@ -75,7 +75,7 @@ fn changes_nothing(_: &dyn Query, _: ObjectId, _: PlayerId, _: Costed, _: &[Targ
     CostDelta::NONE
 }
 
-fn allows_everything(_: &dyn Query, _: &Asker, _: ObjectId, _: &ActivatedDef) -> bool {
+fn allows_everything(_: &dyn Query, _: &Asker, _: PlayerId, _: ObjectId, _: &ActivatedDef) -> bool {
     false
 }
 

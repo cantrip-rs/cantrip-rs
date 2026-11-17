@@ -10,7 +10,7 @@ fn no_casting_from_graveyards(_: &dyn Query, _: &Asker, _: PlayerId, from: ZoneK
 
 /// "... or activate abilities of cards in graveyards" (CR 602.5): an activated ability of a card that is in a graveyard
 /// (unearth, embalm, scavenge). Triggered abilities are not activated.
-fn no_activating_in_graveyards(q: &dyn Query, _: &Asker, source: ObjectId, _: &ActivatedDef) -> bool {
+fn no_activating_in_graveyards(q: &dyn Query, _: &Asker, _: PlayerId, source: ObjectId, _: &ActivatedDef) -> bool {
     !q.obj(source).zone.is(ZoneKind::Graveyard)
 }
 

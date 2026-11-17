@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 /// "Players can't activate planeswalkers' loyalty abilities." (CR 602.5, 606.3): a planeswalker permanent's ability with
 /// a loyalty cost can't be activated, by either player; anything else - a planeswalker's non-loyalty abilities, and
 /// abilities in other zones - still can.
-fn planeswalker_loyalty_cant_activate(q: &dyn Query, _: &Asker, source: ObjectId, def: &ActivatedDef) -> bool {
+fn planeswalker_loyalty_cant_activate(q: &dyn Query, _: &Asker, _: PlayerId, source: ObjectId, def: &ActivatedDef) -> bool {
     !q.is_on_battlefield(source) || !q.chars(source).is(CardType::Planeswalker) || def.cost.loyalty.is_none()
 }
 
