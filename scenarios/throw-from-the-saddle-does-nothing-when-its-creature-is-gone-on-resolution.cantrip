@@ -1,0 +1,55 @@
+# Throw from the Saddle: Bot2 Lightning Bolts the Bears (Bot1's target) in response, so neither the +1/+1 nor the bite happens and Bot2's Memnite is not damaged, though it
+# is still a legal target (CR 608.2b, 608.2c).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Throw from the Saddle
+Plains
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Memnite
+Lightning Bolt
+Mountain
+Mountain
+Mountain
+Mountain x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Throw from the Saddle.Cast
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Throw from the Saddle; Grizzly Bears
+Bot2.Battlefield.Memnite.Damage = 0
+Bot2.Graveyard = Lightning Bolt

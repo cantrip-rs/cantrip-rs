@@ -1,0 +1,56 @@
+# Throw from the Saddle: Bot1 Lightning Bolts Bot2's targeted Memnite in response (a Mox Ruby kept open), so the spell's second target is gone but the first is not: the Bears still
+# gets +1/+1 until end of turn (CR 608.2b), and nothing is dealt. A Throw whose second target would be Bot1's own creature is refused (it must be one you don't control).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Grizzly Bears
+Throw from the Saddle
+Lightning Bolt
+Plains
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Throw from the Saddle.Cast
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Count = 0
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Grizzly Bears.Toughness = 3
+Bot1.Graveyard = Throw from the Saddle; Lightning Bolt

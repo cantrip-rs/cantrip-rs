@@ -1,0 +1,59 @@
+# Throw from the Saddle {1}{G}: Stubborn Burrowfiend is a Mount, so it gets a +1/+1 counter instead of the +1/+1 until end of turn (not both): a 3/3 that stays a 3/3, which deals 3
+# damage to Bot2's Wall of Stone (0/8), not 4 (CR 122.1a, 608.2c). Next turn it still has the counter.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Stubborn Burrowfiend
+Throw from the Saddle
+Plains
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Wall of Stone
+Mountain
+Mountain
+Mountain
+Mountain x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Stubborn Burrowfiend.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Wall of Stone.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Throw from the Saddle.Cast
+Bot1.Target(Bot1.Battlefield.Stubborn Burrowfiend)
+Bot1.Target(Bot2.Battlefield.Wall of Stone)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Stubborn Burrowfiend.Power = 3
+? Bot1.Battlefield.Stubborn Burrowfiend.Counters.PlusOnePlusOne = 1
+? Bot2.Battlefield.Wall of Stone.Damage = 3
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Stubborn Burrowfiend.Power = 3
+Bot1.Battlefield.Stubborn Burrowfiend.Toughness = 3
+Bot1.Battlefield.Stubborn Burrowfiend.Counters.PlusOnePlusOne = 1
