@@ -1,0 +1,40 @@
+# Omenpath Journey with no land cards left in the library (the three Forests are in Bot1's hand): the search may find nothing (CR 701.23b), the library is
+# still shuffled, nothing is exiled, and the end step ability, with nothing exiled with it, does nothing.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Omenpath Journey
+Forest
+Forest
+Forest
+Memnite x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Omenpath Journey.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Shuffles = 1
+Bot1.Battlefield.Count = 5
+Bot1.Library.Count = 13
+Stack.Count = 0

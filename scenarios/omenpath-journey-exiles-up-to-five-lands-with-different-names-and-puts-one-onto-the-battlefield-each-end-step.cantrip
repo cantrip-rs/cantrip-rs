@@ -1,0 +1,66 @@
+# Omenpath Journey {3}{G}: cast on turn 1 with three Moxen and a Forest. Its enters ability searches Bot1's library (Plains x3, Island x2, Swamp, Mountain,
+# Wastes, Snow-Covered Plains, four Memnites): two lands of one name (Plains; Plains), a non-land (Memnite) and six names at once are all refused; five
+# different names (Plains, Island, Swamp, Mountain, Wastes) are exiled and the library shuffled once (Bot2's is not). At Bot1's end step one of the exiled lands
+# is chosen at random and put onto the battlefield tapped: four cards stay in exile and a Swamp is on the battlefield tapped (the random pick is the
+# corpus's fixed seed). Turn 3's end step puts a second, so three stay in exile and seven permanents are on the battlefield.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Omenpath Journey
+Forest
+Forest
+Forest
+Plains
+Plains
+Plains
+Island
+Island
+Swamp
+Mountain
+Wastes
+Snow-Covered Plains
+Memnite x4
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Omenpath Journey.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Plains; Plains)
+! Bot1.Search(Memnite)
+! Bot1.Search(Plains; Island; Swamp; Mountain; Wastes; Snow-Covered Plains)
+Bot1.Search(Plains; Island; Swamp; Mountain; Wastes)
+? Exile.Count = 5
+? Bot1.Library.Count = 8
+? Bot1.Shuffles = 1
+? Bot2.Shuffles = 0
+? Bot1.Battlefield.Count = 5
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Exile.Count = 4
+? Bot1.Battlefield.Count = 6
+? Bot1.Battlefield.Swamp.Tapped = true
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 3
+Bot1.Battlefield.Count = 7
+Stack.Count = 0
