@@ -1,0 +1,40 @@
+# Essence of Antiquity (Disguise {2}{W}): the cost to turn it face up includes a white mana (CR 702.168d, 116.2b). Bot1 casts it face down with a Black Lotus; on turn 3
+# three Mox Jets give {B}{B}{B}, three mana but no white, and the turn-up is refused. A Mox Pearl's {W} added, the pool {B}{B}{B}{W} pays {2}{W} and one {B}
+# is left (exactly {2}{W} was taken), and the Essence is a face-up 1/10.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Jet
+Essence of Antiquity
+Mox Pearl
+Plains x10
+
+[Bot2 Deck]
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Essence of Antiquity.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+? Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana = {W}{B}{B}{B}
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Mana = {B}
+
+[Expect]
+Bot1.Battlefield.Essence of Antiquity.Power = 1
+Bot1.Battlefield.Essence of Antiquity.Toughness = 10
