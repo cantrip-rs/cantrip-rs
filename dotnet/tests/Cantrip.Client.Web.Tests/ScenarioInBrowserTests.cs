@@ -63,6 +63,19 @@ public sealed class ScenarioInBrowserTests(WebClient web)
     }
 
     /// <summary>
+    /// Auto-mana with lands of one colour or another: Prismari Charm's {U}{R} paid by clicking Spirebluff Canal and then
+    /// Stormcarved Coast, each "{T}: Add {U} or {R}.", with no menu asked - the first for the {U}, the second for the {R}
+    /// still owed. The table judges each colour the page chose against the script.
+    /// </summary>
+    [Fact]
+    public async Task Lands_of_one_colour_or_another_are_tapped_by_auto_mana_for_the_colours_still_owed()
+    {
+        const string name = "prismari-charm-paid-with-two-lands-of-blue-or-red-each-tapped-for-the-colour-still-owed";
+        string? failure = await ScenarioPlayer.PlayAsync(web, Path.Combine(WebClient.Root, "scenarios", name + ".cantrip"), autoMana: true);
+        Assert.True(failure is null, $"{name}:\n{failure}");
+    }
+
+    /// <summary>
     /// Mana planned for X as it is announced (CR 601.2b, 601.2g): the three Mountains clicked during Fireball's announcement are
     /// not tapped then, raise X to 2, and are tapped by the page once the payment is asked - each tap the answer the script
     /// means, so the table judges the page's own payment as it judges a click.

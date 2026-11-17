@@ -1,0 +1,35 @@
+# Auto-mana: Prismari Charm, {U}{R}, paid for with Spirebluff Canal and Stormcarved Coast, each "{T}: Add {U} or {R}."
+# Clicked in turn while the cost is paid, the first land pays the {U} and the second, only {R} being owed then, the {R}:
+# the page tapping a land for a colour the cost no longer asks for would leave the spell unpaid. Played in the browser with
+# auto-mana on (ScenarioInBrowserTests), the table judges each colour the page chose against the script.
+
+[Bot1 Deck]
+Stormcarved Coast
+Spirebluff Canal
+Prismari Charm
+Island x4
+Island
+Lightning Bolt
+Counterspell
+Island x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Stormcarved Coast.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Spirebluff Canal.Play
+Bot1.Hand.Prismari Charm.Cast
+Bot1.Modes(Surveil 2)
+Bot1.Battlefield.Spirebluff Canal.Activate(Color: Blue)
+Bot1.Battlefield.Stormcarved Coast.Activate(Color: Red)
+Bot2.Pass
+Bot1.Arrange(Counterspell | Lightning Bolt)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Spirebluff Canal.Tapped = true
+Bot1.Battlefield.Stormcarved Coast.Tapped = true
+Bot1.Graveyard = Prismari Charm; Lightning Bolt
+Bot1.Hand = Island; Island; Island; Island; Island; Counterspell

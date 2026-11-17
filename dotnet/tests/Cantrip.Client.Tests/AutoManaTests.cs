@@ -26,6 +26,30 @@ public sealed class AutoManaTests
         Assert.Null(AutoMana.Pick([(option, ColorView.Red), (option, ColorView.Blue)], [option], Owed(generic: 0, ColorView.Red)));
         Assert.NotNull(AutoMana.Pick([(option, ColorView.Red), (option, ColorView.Blue)], [option], Owed(generic: 1)));
     }
+    /// <summary>
+    /// Prismari Charm, {U}{R}, with Spirebluff Canal and Stormcarved Coast ("{T}: Add {U} or {R}.", one ability of a colour
+    /// chosen from two): the first land pays the {U}, and the second, all that is owed then being {R}, pays the {R} - as the
+    /// server offers it after the first, the second land's single row of a choice between the two.
+    /// </summary>
+    [Fact]
+    public void A_land_of_one_colour_or_another_pays_the_colour_still_owed()
+    {
+        ActionOptionMessage Land(int handle) => new()
+        {
+            Kind = ActionKindView.ActivateAbility,
+            Source = new ViewHandle(handle),
+            ProducesOfAnyOneColor = 1,
+            ColorChoices = [ColorView.Blue, ColorView.Red],
+        };
+
+        ActionOptionMessage canal = Land(1), coast = Land(2);
+        List<(ActionOptionMessage, ColorView?)> MenuOf(ActionOptionMessage land) =>
+            [.. Cantrip.Client.Presentation.CardActions.ManaRows([land]).Select(row => (row.Option, row.Color))];
+
+        Assert.Equal(ColorView.Blue, AutoMana.Pick(MenuOf(canal), [canal, coast], Owed(generic: 0, ColorView.Blue, ColorView.Red))?.Color);
+        Assert.Equal(ColorView.Red, AutoMana.Pick(MenuOf(coast), [coast], Owed(generic: 0, ColorView.Red))?.Color);
+    }
+
     [Fact]
     public void A_dual_land_pays_the_colour_the_rest_of_the_board_cannot()
     {
