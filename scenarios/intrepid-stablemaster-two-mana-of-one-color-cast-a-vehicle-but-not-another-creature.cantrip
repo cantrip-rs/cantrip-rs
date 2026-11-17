@@ -1,0 +1,31 @@
+# Intrepid Stablemaster: "{T}: Add two mana of any one color. Spend this mana only to cast Mount or Vehicle spells." (CR 106.6, 601.2h). Turn 1 a Black Lotus casts the
+# Stablemaster and is gone. In turn 3 its two red mana are enough for Grizzly Bears' {1}{G} by count, but cannot be spent on it: the cast is not offered, while
+# Smuggler's Copter, a Vehicle spell, is paid {2} by exactly that mana.
+
+[Bot1 Deck]
+Black Lotus
+Intrepid Stablemaster
+Smuggler's Copter
+Grizzly Bears
+Plains x3
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Intrepid Stablemaster.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Intrepid Stablemaster.Activate(Ability: Add two mana; Color: Red)
+! Bot1.Hand.Grizzly Bears.Cast(Mana: short)
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield = Intrepid Stablemaster; Smuggler's Copter

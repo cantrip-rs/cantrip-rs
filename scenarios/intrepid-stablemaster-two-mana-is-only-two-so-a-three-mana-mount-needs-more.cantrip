@@ -1,0 +1,25 @@
+# Intrepid Stablemaster adds exactly two mana (not three): with only those two green mana, Drover Grizzly ({2}{G}) cannot be cast; a Forest's {G} makes up the third (CR 106.6).
+
+[Bot1 Deck]
+Black Lotus
+Intrepid Stablemaster
+Drover Grizzly
+Forest
+Plains x3
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Intrepid Stablemaster.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Intrepid Stablemaster.Activate(Ability: Add two mana; Color: Green)
+! Bot1.Hand.Drover Grizzly.Cast(Mana: short)
+
+[Expect]
+Bot1.Battlefield = Intrepid Stablemaster
