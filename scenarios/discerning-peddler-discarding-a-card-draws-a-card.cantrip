@@ -1,0 +1,32 @@
+# Discerning Peddler: "When this creature enters, you may discard a card. If you do, draw a card." (CR 603.1, 701.9a, 121.1).
+# Turn 1: the Peddler is cast with Mountain and Mox Ruby, accepts the discard, discards Ornithopter and draws Mox Jet, the top
+# card of the library (so the hand ends with the same number of cards it had before the trigger).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Discerning Peddler
+Lightning Bolt
+Ornithopter
+Plains
+Plains
+Mox Jet
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Discerning Peddler.Cast
+Bot1.Pass
+Bot1.Choose(Ornithopter)
+
+[Expect]
+Bot1.Graveyard = Ornithopter
+Bot1.Hand = Lightning Bolt; Mox Jet; Plains; Plains
+Bot1.Battlefield.Discerning Peddler.Power = 2

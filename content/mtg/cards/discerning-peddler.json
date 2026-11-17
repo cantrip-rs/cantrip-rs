@@ -1,0 +1,8 @@
+{
+  "name": "Discerning Peddler",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Rogue",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, you may discard a card. If you do, draw a card."
+}

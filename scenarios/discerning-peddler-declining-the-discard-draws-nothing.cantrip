@@ -1,0 +1,32 @@
+# Discerning Peddler: "you may discard a card. If you do, draw a card" (CR 603.1, 701.9a, 121.1). Declining the discard (an empty
+# answer) means no draw: the hand keeps all four of its cards and the library's top card, Mox Jet, is still the top card.
+# Pair: discerning-peddler-discarding-a-card-draws-a-card (the same deck and plays, the discard made).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Discerning Peddler
+Lightning Bolt
+Ornithopter
+Plains
+Plains
+Mox Jet
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Discerning Peddler.Cast
+Bot1.Pass
+Bot1.Choose()
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Hand = Lightning Bolt; Ornithopter; Plains; Plains
+Bot1.Library.Count = 13
