@@ -1,0 +1,47 @@
+# Quick Draw has two targets (CR 115.1, 608.2b): with Quick Draw on the stack Bot1 Bolts its own Memnite, so the creature target is illegal as it
+# resolves and nothing happens to it, but the other target, Bot2, is still legal and Bot2's Youthful Knight still loses first strike this turn.
+
+[Bot1 Deck]
+Mox Ruby
+Mountain
+Memnite
+Quick Draw
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Youthful Knight
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Youthful Knight.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Quick Draw.Cast
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot2)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite = (absent)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Youthful Knight.Keywords = (absent)
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Youthful Knight.Keywords = FirstStrike
+
+[Expect]
+Bot1.Graveyard = Quick Draw; Memnite; Lightning Bolt

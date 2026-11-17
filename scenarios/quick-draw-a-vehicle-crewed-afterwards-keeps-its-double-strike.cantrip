@@ -1,0 +1,58 @@
+# Quick Draw's "creatures target opponent controls lose first strike and double strike" (CR 611.2c, 702.4): the creatures Bot2 controls as it
+# resolves. Bot2's Rover Blades is an uncrewed Vehicle then, not a creature, so it is not one of them; crewed by Grizzly Bears afterwards in the
+# same turn (CR 702.122), it is a creature with its double strike.
+
+[Bot1 Deck]
+Mox Ruby
+Memnite
+Quick Draw
+Island x17
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Rover Blades
+Grizzly Bears
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Rover Blades.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Quick Draw.Cast
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = FirstStrike
+? Bot2.Battlefield.Rover Blades.Keywords = DoubleStrike
+Bot1.Pass
+Bot2.Battlefield.Rover Blades.Activate(Ability: Crew)
+Bot2.Choose(Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Rover Blades.Types = Artifact; Creature
+
+[Expect]
+Bot2.Battlefield.Rover Blades.Types = Artifact; Creature
+Bot2.Battlefield.Rover Blades.Keywords = DoubleStrike
+Bot1.Graveyard = Quick Draw
