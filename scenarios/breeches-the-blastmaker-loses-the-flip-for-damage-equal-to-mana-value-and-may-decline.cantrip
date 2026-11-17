@@ -1,0 +1,82 @@
+# Breeches, the Blastmaker: "When you lose the flip, Breeches deals damage equal to that spell's mana value to any target."
+# Turn 2: Bot2 casts two spells, and Bot2's second spell is not Bot1's: nothing is asked. Turn 3: Black Lotus is Bot1's first
+# spell, Think Twice ({1}{U}, mana value 2) the second; Bot1 sacrifices Mox Jet and loses the flip (die face 2), and the
+# reflexive ability, targeting Bot2, deals 2. Turn 5: Bot1's second spell, Ancestral Recall, triggers again, but Bot1 declines
+# the sacrifice: no coin is flipped (the next die, face 1, would have copied the Recall) and nothing more happens.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Breeches, the Blastmaker
+Black Lotus
+Think Twice
+Lightning Bolt
+Ancestral Recall
+Island x15
+
+[Bot2 Deck]
+Memnite
+Memnite
+Island x20
+
+[Dice]
+2; 1
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Breeches, the Blastmaker.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Think Twice.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mox Jet)
+Bot1.Target(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot2.Life = 15
+Bot1.Battlefield = Mox Ruby; Mox Sapphire; Breeches, the Blastmaker
+Bot2.Battlefield = Memnite; Memnite

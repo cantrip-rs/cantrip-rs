@@ -1,0 +1,70 @@
+# Breeches, the Blastmaker: "Whenever you cast your second spell each turn, you may sacrifice an artifact. If you do, flip a
+# coin. When you win the flip, copy that spell. You may choose new targets for the copy." Turn 3: Black Lotus is Bot1's first
+# spell (no trigger), the first Lightning Bolt at Bot2 is the second: Bot1 sacrifices Mox Jet (one artifact at most), wins the
+# flip (die face 1), and the reflexive ability copies the Bolt, the copy retargeted at Bot2's Memnite. The second Bolt is the
+# third spell and triggers nothing. Breeches has menace.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Black Lotus
+Breeches, the Blastmaker
+Lightning Bolt
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Dice]
+1
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Breeches, the Blastmaker.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Mox Jet; Mox Ruby)
+Bot1.Choose(Mox Jet)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Memnite)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot2.Life = 14
+Bot2.Battlefield =
+Bot2.Graveyard = Memnite
+Bot1.Battlefield = Mox Ruby; Mox Sapphire; Breeches, the Blastmaker
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Mox Jet; Black Lotus
+Bot1.Battlefield.Breeches, the Blastmaker.Keywords = Menace

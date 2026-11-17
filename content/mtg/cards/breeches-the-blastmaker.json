@@ -1,0 +1,11 @@
+{
+  "name": "Breeches, the Blastmaker",
+  "manaCost": "{1}{U}{R}",
+  "type": "Legendary Creature — Goblin Pirate",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Menace\nWhenever you cast your second spell each turn, you may sacrifice an artifact. If you do, flip a coin. When you win the flip, copy that spell. You may choose new targets for the copy. When you lose the flip, Breeches deals damage equal to that spell's mana value to any target.",
+  "keywords": [
+    "Menace"
+  ]
+}
