@@ -1,0 +1,36 @@
+# Unauthorized Exit: "Return target nonland permanent to its owner's hand. Surveil 1." Bot1 returns Bot2's Ornithopter to Bot2's hand (its owner's), not Bot1's, then
+# surveils 1 and puts the Forest on top into the graveyard (CR 701.25a). Bot2's land is refused as a target.
+
+[Bot1 Deck]
+Mox Sapphire
+Island
+Unauthorized Exit
+Island x5
+Forest
+Island x12
+
+[Bot2 Deck]
+Mountain
+Ornithopter
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Unauthorized Exit.Cast(Bot2.Battlefield.Mountain)
+Bot1.Hand.Unauthorized Exit.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Arrange( | Forest)
+? Bot2.Battlefield = Mountain
+? Bot2.Hand = Mountain; Mountain; Mountain; Mountain; Mountain; Mountain; Ornithopter
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Unauthorized Exit; Forest
+Bot1.Hand.Count = 5
