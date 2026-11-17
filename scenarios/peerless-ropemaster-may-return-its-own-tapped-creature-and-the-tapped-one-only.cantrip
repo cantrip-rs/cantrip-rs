@@ -1,0 +1,44 @@
+# Peerless Ropemaster's "target tapped creature" is not an opponent's only: on turn 3 Bot1 taps its own Llanowar Elves for
+# mana to pay for the Ropemaster, and then returns that tapped Elves to its own hand. The Ropemaster itself (untapped as it
+# enters) is no legal target.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Llanowar Elves
+Peerless Ropemaster
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Hand.Peerless Ropemaster.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Peerless Ropemaster)
+Bot1.Target(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Llanowar Elves.Colors = Green
+Bot1.Battlefield = Island; Mox Emerald; Mox Pearl; Mox Ruby; Mox Sapphire; Peerless Ropemaster
+Stack.Count = 0

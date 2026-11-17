@@ -1,0 +1,8 @@
+{
+  "name": "Peerless Ropemaster",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Human Rogue",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When this creature enters, return up to one target tapped creature to its owner's hand."
+}
