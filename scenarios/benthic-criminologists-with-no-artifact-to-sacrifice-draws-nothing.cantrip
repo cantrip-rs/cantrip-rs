@@ -1,0 +1,31 @@
+# "You may sacrifice an artifact. If you do, draw a card." (CR 701.21a, 608.2c-d): with no artifact to sacrifice nothing is
+# asked and nothing is drawn. Bot1 pays for Benthic Criminologists with two Black Lotuses (each sacrificed for UUU), so it
+# controls no artifact when the enters trigger resolves, and the hand stays at its four Islands with the library untouched.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Benthic Criminologists
+Island x4
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Benthic Criminologists.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Count = 1
+Bot1.Graveyard.Count = 2
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 13

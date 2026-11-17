@@ -1,0 +1,8 @@
+{
+  "name": "Benthic Criminologists",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Merfolk Wizard",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Whenever this creature enters or attacks, you may sacrifice an artifact. If you do, draw a card."
+}

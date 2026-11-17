@@ -1,0 +1,44 @@
+# "Whenever this creature enters or attacks, you may sacrifice an artifact. If you do, draw a card." (CR 701.21a, 608.2c-d).
+# Bot1 casts Benthic Criminologists with Mox Sapphire, Mox Jet and Black Lotus (sacrificed for UUU), keeping Mox Pearl.
+# As the enters trigger resolves it may sacrifice one artifact: not two Moxen, and not Benthic Criminologists (not an artifact).
+# Bot1 sacrifices Mox Pearl and draws a card (the hand goes from 3 to 4).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Black Lotus
+Benthic Criminologists
+Island x2
+Forest
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Benthic Criminologists.Cast
+? Bot1.Hand.Count = 3
+Bot1.Pass
+Bot1.Pass
+! Bot1.Choose(Benthic Criminologists)
+! Bot1.Choose(Mox Pearl; Mox Jet)
+Bot1.Choose(Mox Pearl)
+Bot1.Pass
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Graveyard.Count = 2
+Bot1.Battlefield.Mox Pearl = (absent)
+Bot1.Battlefield.Benthic Criminologists.Power = 4
+Stack.Count = 0
