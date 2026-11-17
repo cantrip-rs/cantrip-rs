@@ -1,0 +1,6 @@
+{
+  "name": "Thunder Salvo",
+  "manaCost": "{1}{R}",
+  "type": "Instant",
+  "oracleText": "Thunder Salvo deals X damage to target creature, where X is 2 plus the number of other spells you've cast this turn."
+}

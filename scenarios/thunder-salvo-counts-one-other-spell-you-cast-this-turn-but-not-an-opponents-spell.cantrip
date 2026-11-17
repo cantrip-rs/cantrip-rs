@@ -1,0 +1,48 @@
+# Thunder Salvo (CR 601.2i): Bot1 casts Mox Ruby first, so X is 3 and Bot2's Wall of Fire takes exactly 3. Bot2 answers with Lightning Bolt, which is an opponent's spell and
+# does not count (X would be 4).
+
+[Bot1 Deck]
+Island
+Mountain
+Mox Jet
+Mox Ruby
+Thunder Salvo
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mountain
+Wall of Fire
+Lightning Bolt
+Island
+Island x16
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Fire.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Thunder Salvo.Cast(Bot2.Battlefield.Wall of Fire)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Wall of Fire.Damage = 3
+
+[Expect]
+Bot2.Battlefield.Wall of Fire.Damage = 3

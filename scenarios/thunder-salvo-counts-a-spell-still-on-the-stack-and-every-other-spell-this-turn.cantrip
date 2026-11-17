@@ -1,0 +1,51 @@
+# Thunder Salvo (CR 601.2i): X counts other spells cast this turn that have not resolved. Bot1 casts Mox Ruby and a Lightning Bolt (still on the stack), then Thunder Salvo
+# in response: X is 4.
+
+[Bot1 Deck]
+Island
+Mountain
+Mox Jet
+Mox Ruby
+Lightning Bolt
+Thunder Salvo
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mountain
+Wall of Fire
+Lightning Bolt
+Island
+Island x16
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Fire.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Thunder Salvo.Cast(Bot2.Battlefield.Wall of Fire)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Wall of Fire.Damage = 4
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+
+[Expect]
+Bot2.Battlefield.Wall of Fire.Damage = 4
