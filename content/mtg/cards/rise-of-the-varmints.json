@@ -1,0 +1,6 @@
+{
+  "name": "Rise of the Varmints",
+  "manaCost": "{3}{G}",
+  "type": "Sorcery",
+  "oracleText": "Create X 2/1 green Varmint creature tokens, where X is the number of creature cards in your graveyard.\nPlot {2}{G} (You may pay {2}{G} and exile this card from your hand. Cast it as a sorcery on a later turn without paying its mana cost. Plot only as a sorcery.)"
+}

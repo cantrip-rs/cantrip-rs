@@ -1,0 +1,65 @@
+# Rise of the Varmints, Plot {2}{G}: Bot1 kills its own Memnite and Ornithopter on turn 1 (Lightning Bolt, Fatal Push), so its graveyard has two creature
+# cards and two noncreature cards (the Bolt and the Push); Bot2 kills its own Memnite on turn 2, a creature card in an opponent's graveyard, not
+# counted. It plots Rise on turn 3 and casts it free on turn 5: two 2/1 green Varmint tokens (not four, not three).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Memnite
+Ornithopter
+Lightning Bolt
+Fatal Push
+Rise of the Varmints
+Plains x16
+
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Fatal Push.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Lightning Bolt.Cast(Memnite)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard.Count = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Rise of the Varmints.Activate(Ability: Plot)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+? Exile = Rise of the Varmints
+[T5 Bot1.Main1]
+Bot1.Exile.Rise of the Varmints.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; Varmint Token; Varmint Token
+Bot1.Battlefield.Varmint Token#1.Power = 2
+Bot1.Battlefield.Varmint Token#2.Power = 2
+Bot1.Battlefield.Varmint Token#1.Toughness = 1
+Bot1.Battlefield.Varmint Token#2.Toughness = 1
+Bot1.Battlefield.Varmint Token#1.Colors = Green
+Bot1.Battlefield.Varmint Token#2.Colors = Green
+Bot1.Graveyard.Count = 5
