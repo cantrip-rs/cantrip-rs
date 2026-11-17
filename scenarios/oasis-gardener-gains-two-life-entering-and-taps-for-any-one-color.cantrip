@@ -1,0 +1,44 @@
+# Oasis Gardener, an artifact creature: "When this creature enters, you gain 2 life" (CR 119.3: its controller, Bot1, 22, Bot2 stays
+# 20) and "{T}: Add one mana of any color" (CR 605.1a, 106.5). Its {T} cannot be paid the turn it comes (summoning sick, CR 302.6;
+# refused). Turn 3 it adds one green (the pool is exactly {G}) and nothing for the other colors; turn 5 it adds white, so the
+# color is the player's choice each time. Bot1 casts it with three Moxen.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Oasis Gardener
+Plains x16
+
+[Bot2 Deck]
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Oasis Gardener.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+? Bot2.Life = 20
+? Bot1.Battlefield.Oasis Gardener.Subtypes = Scarecrow
+! Bot1.Battlefield.Oasis Gardener.Activate(Color: Green)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Oasis Gardener.Activate(Color: Colorless)
+Bot1.Battlefield.Oasis Gardener.Activate(Color: Green)
+? Bot1.Mana = {G}
+? Bot1.Battlefield.Oasis Gardener.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Battlefield.Oasis Gardener.Activate(Color: White)
+? Bot1.Mana = {W}
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 20
+Bot1.Battlefield.Oasis Gardener.Tapped = true

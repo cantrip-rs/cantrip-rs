@@ -1,0 +1,8 @@
+{
+  "name": "Oasis Gardener",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Scarecrow",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, you gain 2 life.\n{T}: Add one mana of any color."
+}
