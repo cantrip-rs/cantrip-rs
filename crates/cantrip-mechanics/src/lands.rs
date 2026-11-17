@@ -9,7 +9,7 @@
 
 use crate::library::{ask_may_search, find_to_battlefield, find_to_hand, find_to_top, search_to_battlefield, Find};
 use crate::select;
-use crate::{choose, effects, mana, tokens, triggers};
+use crate::{choose, effects, mana, targets, tokens, triggers};
 use cantrip_api::*;
 
 /// "A basic land card" (CR 205.4a, 305.6): a land card with the basic supertype, as the library search of every fetch below
@@ -446,6 +446,18 @@ pub const fn bounce_land(a: Mana, b: Mana, text: &'static str) -> [AbilityDef; 2
 pub const fn gain_land(a: Color, b: Color, text: &'static str) -> [AbilityDef; 2] {
     [
         triggered(triggers::THIS_ENTERS, effects::gain_one_life, "When this land enters, you gain 1 life."),
+        mana_ability(TAP, add_one_of(&[a, b]), text),
+    ]
+}
+
+/// A ping land's two abilities, damage trigger first: "When this land enters, it deals 1 damage to target opponent" (CR 603.6a,
+/// 120.3) and "{T}: Add {A} or {B}." (`text` is its full text), the color chosen as it resolves (CR 608.2d). With `enters:
+/// Some(mana::enters_tapped)` it is Abraded Bluffs, Bristling Backwoods, Creosote Heath, Eroded Canyon, Festering Gulch,
+/// Forlorn Flats, Jagged Barrens, Lonely Arroyo, Lush Oasis and Soured Springs, the Desert cycle of Outlaws of Thunder Junction.
+pub const fn ping_land(a: Color, b: Color, text: &'static str) -> [AbilityDef; 2] {
+    [
+        triggered(triggers::THIS_ENTERS, effects::damage_first_target::<1>, "When this land enters, it deals 1 damage to target opponent.")
+            .targets(&[targets::OPPONENT]),
         mana_ability(TAP, add_one_of(&[a, b]), text),
     ]
 }
