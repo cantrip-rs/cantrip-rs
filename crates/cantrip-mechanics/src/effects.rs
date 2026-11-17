@@ -3662,6 +3662,20 @@ pub fn set_first_target_base_pt<const P: i32, const T: i32>(g: &mut dyn Game, it
     Ok(())
 }
 
+/// "Until end of turn, target artifact or creature becomes an artifact creature with base power and toughness P/T" (CR 205.1b,
+/// 613.1d, 613.4b, 611.2a): the first target, if still legal, gets the artifact and creature types added to what it is (a land stays
+/// a land) and a layer 7b setting effect, so counters and pumps count on top and a later setting effect overrides it by timestamp.
+/// The two parts are one instruction. Whether there was a target to do it to is returned, for a spell whose later sentences
+/// do nothing without one. Mind Transfer Protocol and Behind the Mask print it.
+pub fn first_target_becomes_artifact_creature_with_base_pt(g: &mut dyn Game, item: &StackItem, power: i32, toughness: i32) -> bool {
+    let Some(permanent) = crate::targets::object(g, item, 0) else { return false };
+    instruction(g, |g| {
+        g.add_effect(item.object, permanent, EffectKind::AddTypes(TypeSet::of(&[CardType::Artifact, CardType::Creature])), Duration::EndOfTurn);
+        g.add_effect(item.object, permanent, EffectKind::SetPt(power, toughness), Duration::EndOfTurn);
+    });
+    true
+}
+
 /// Damage equal to the number of cards in a player's hand (CR 608.2h).
 /// Storm Seeker and Emberwilde Captain use this amount.
 pub fn damage_for_cards_in_hand(q: &dyn Query, player: PlayerId) -> u32 {
