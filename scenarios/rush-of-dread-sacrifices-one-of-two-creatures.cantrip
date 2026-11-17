@@ -1,0 +1,46 @@
+# Rush of Dread, the {1} mode: half of two creatures is exactly one (CR 107.1a), so Bot2 sacrifices one of its choice, not two and
+# not "rounded up" to anything more; the Ornithopter stays.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Rush of Dread
+Swamp x14
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x21
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Hand.Rush of Dread.Cast
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Memnite)
+
+[Expect]
+Bot2.Battlefield = Ornithopter
+Bot2.Graveyard = Memnite

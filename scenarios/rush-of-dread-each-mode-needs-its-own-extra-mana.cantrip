@@ -1,0 +1,34 @@
+# Rush of Dread: the {1}{B}{B} is paid with each chosen mode's cost on top (CR 702.172a, 601.2f), and a cast that cannot be paid is
+# not offered (CR 601.2, 118.3). With three black mana only, it cannot be cast. With a fourth, the {1} mode can be chosen and is
+# paid exactly (the pool is empty afterwards).
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Rush of Dread
+Swamp x2
+Swamp x15
+
+[Bot2 Deck]
+Island x22
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+! Bot1.Hand.Rush of Dread.Cast(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Hand.Rush of Dread.Cast
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = 
+
+[Expect]
+Bot1.Graveyard = Rush of Dread

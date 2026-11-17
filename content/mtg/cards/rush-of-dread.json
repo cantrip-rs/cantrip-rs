@@ -1,0 +1,6 @@
+{
+  "name": "Rush of Dread",
+  "manaCost": "{1}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Spree (Choose one or more additional costs.)\n+ {1} — Target opponent sacrifices half the creatures they control of their choice, rounded up.\n+ {2} — Target opponent discards half the cards in their hand, rounded up.\n+ {2} — Target opponent loses half their life, rounded up."
+}

@@ -1,0 +1,64 @@
+# Rush of Dread with all three modes (CR 702.172a): eight mana, {1}{B}{B} plus {1}, {2} and {2} (a Black Lotus for three and five
+# Moxen), the effects following the text in order (CR 700.2). Bot2 has a single creature, and half of one rounded up is one (CR 107.1a),
+# so the Memnite goes with no choice to make; its hand of six is halved to three, Bot2 choosing; and its life of 20 to 10.
+# Bot1 itself is refused as each mode's target: each says "target opponent" (CR 115.1).
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Black Lotus
+Rush of Dread
+Swamp x14
+
+[Bot2 Deck]
+Memnite
+Island
+Island
+Plains
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Battlefield.Mox Jet#5.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Rush of Dread.Cast
+Bot1.Modes(1; 2; 3)
+! Bot1.Target(Bot1)
+Bot1.Target(Bot2)
+! Bot1.Target(Bot1)
+Bot1.Target(Bot2)
+! Bot1.Target(Bot1)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Island; Plains; Mox Ruby)
+? Bot1.Mana = 
+
+[Expect]
+Bot2.Battlefield = Island
+Bot2.Graveyard = Mox Ruby; Plains; Island; Memnite
+Bot2.Hand = Island; Mox Pearl; Mox Sapphire
+Bot2.Life = 10
+Bot1.Graveyard = Rush of Dread; Black Lotus

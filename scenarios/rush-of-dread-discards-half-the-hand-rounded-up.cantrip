@@ -1,0 +1,55 @@
+# Rush of Dread, the {2} discard mode (CR 702.172a, 701.9): Bot2 has seven cards in hand after playing a land, and half of seven is
+# three and a half, rounded up to four (CR 107.1a). Bot2 chooses the four (Island, Island, Plains, Mox Ruby) and keeps the rest; the
+# cost is {1}{B}{B} plus {2}, five mana, paid exactly.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Rush of Dread
+Swamp x14
+
+[Bot2 Deck]
+Island
+Island
+Island
+Plains
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Battlefield.Mox Jet#5.Activate
+Bot1.Hand.Rush of Dread.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Island; Island; Plains; Mox Ruby)
+? Bot1.Mana = 
+
+[Expect]
+Bot2.Hand = Island; Mox Pearl; Mox Sapphire
+Bot2.Graveyard = Mox Ruby; Plains; Island; Island
