@@ -1,0 +1,8 @@
+{
+  "name": "Tomb Trawler",
+  "manaCost": "{2}",
+  "type": "Artifact Creature — Golem",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": "{2}: Put target card from your graveyard on the bottom of your library."
+}

@@ -1,0 +1,69 @@
+# Tomb Trawler, a 0/4 Golem artifact creature: "{2}: Put target card from your graveyard on the bottom of your library" (CR 400.3,
+# 608.2b). Bot1 sacrifices a Lotus Petal for part of the Trawler's cost, so it is in its graveyard. One untapped source is short of
+# {2} (refused); a second pays it exactly (the pool is empty after) and the Petal goes to the bottom of the library: the graveyard
+# is empty, the library is a card bigger, and the top card is still the Island that was there (the Petal is not on top). An opponent's graveyard card (Bot2's
+# Lotus Petal, there from turn 2) is no legal target on turn 3 while Bot1's own card is.
+
+[Bot1 Deck]
+Mox Ruby
+Lotus Petal
+Mox Sapphire
+Mox Jet
+Tomb Trawler
+Lotus Petal
+Mox Pearl
+Island x30
+
+[Bot2 Deck]
+Lotus Petal
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Lotus Petal.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tomb Trawler.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tomb Trawler.Power = 0
+? Bot1.Battlefield.Tomb Trawler.Toughness = 4
+? Bot1.Battlefield.Tomb Trawler.Subtypes = Golem
+? Bot1.Graveyard = Lotus Petal
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Tomb Trawler.Activate(Bot1.Graveyard.Lotus Petal; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Tomb Trawler.Activate(Bot1.Graveyard.Lotus Petal)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 0
+? Bot1.Library.Count = 31
+? Bot1.Library.Top = Island
+[T2 Bot2.Main1]
+Bot2.Hand.Lotus Petal.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Lotus Petal.Activate(Color: Black)
+[T3 Bot1.Main1]
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Lotus Petal.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Tomb Trawler.Activate(Bot2.Graveyard.Lotus Petal)
+Bot1.Battlefield.Tomb Trawler.Activate(Bot1.Graveyard.Lotus Petal)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard.Count = 1
+Bot1.Library.Count = 31
