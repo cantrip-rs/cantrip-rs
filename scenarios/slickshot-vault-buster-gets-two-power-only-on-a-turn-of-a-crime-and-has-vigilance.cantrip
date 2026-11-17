@@ -1,0 +1,55 @@
+# Slickshot Vault-Buster: 1/4, vigilance; "This creature gets +2/+0 as long as you've committed a crime this turn." Turn 1: Bot1 casts
+# it with Black Lotus. Turn 3: a Lightning Bolt at Bot1 itself is no crime (nothing of an opponent's is targeted), so it is still 1/4;
+# a Bolt at Bot2 is (as it is cast), so it is 3/4 - toughness unchanged - and its attack deals 3, and it stays untapped (vigilance).
+# Turn 5: the crime is over with turn 3, so it is 1/4 again.
+
+[Bot1 Deck]
+Black Lotus
+Slickshot Vault-Buster
+Mox Ruby
+Mountain
+Lightning Bolt
+Lightning Bolt
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Slickshot Vault-Buster.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Slickshot Vault-Buster.Power = 1
+? Bot1.Battlefield.Slickshot Vault-Buster.Toughness = 4
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+? Bot1.Battlefield.Slickshot Vault-Buster.Power = 1
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Bot1.Battlefield.Slickshot Vault-Buster.Power = 3
+? Bot1.Battlefield.Slickshot Vault-Buster.Toughness = 4
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Slickshot Vault-Buster > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 14
+? Bot1.Battlefield.Slickshot Vault-Buster.Tapped = false
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Slickshot Vault-Buster.Power = 1
+Bot1.Battlefield.Slickshot Vault-Buster.Toughness = 4

@@ -1,0 +1,11 @@
+{
+  "name": "Slickshot Vault-Buster",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Human Rogue",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Vigilance\nThis creature gets +2/+0 as long as you've committed a crime this turn. (Targeting opponents, anything they control, and/or cards in their graveyards is a crime.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}
