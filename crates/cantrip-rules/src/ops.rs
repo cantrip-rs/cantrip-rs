@@ -5546,6 +5546,18 @@ pub fn suspect(cx: &mut Cx, id: ObjectId) {
     cx.emit(Event::Suspected { permanent: id });
 }
 
+/// A permanent stops being suspected (CR 701.60a: "until a spell or ability causes it to no longer be suspected"): the
+/// suspected designation is removed, and with it the menace and "This creature can't block" it gave (CR 701.60c). One that is
+/// not suspected is unchanged, and it can be suspected again later (CR 701.60d only bars it while it is).
+pub fn unsuspect(cx: &mut Cx, id: ObjectId) {
+    let effects_before = cx.s().effects.len();
+    cx.st().effects_retain(|e| !(e.affected == id && e.kind == EffectKind::Suspected));
+    // An effect that ends changes the game with no event (CR 603.8).
+    if cx.s().effects.len() < effects_before {
+        cx.state_changed();
+    }
+}
+
 /// Two creatures fight (CR 701.14a): each deals damage equal to its power to the other, at once, as one event (CR 120.2;
 /// not combat damage, CR 701.14d). A creature that fights itself deals damage to itself equal to twice its power (CR
 /// 701.14c). Nothing happens unless both are creatures on the battlefield (CR 701.14b).
