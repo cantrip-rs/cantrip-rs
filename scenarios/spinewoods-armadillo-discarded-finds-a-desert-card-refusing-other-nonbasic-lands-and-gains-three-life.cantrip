@@ -25,6 +25,7 @@ Bot1.Hand.Spinewoods Armadillo.Activate(Ability: Search)
 ! Bot1.Search(Bloodstained Mire)
 ! Bot1.Search(Lightning Bolt)
 Bot1.Search(Arid Archway)
+? Bot1.Revealed = Arid Archway; Spinewoods Armadillo
 
 [Expect]
 Bot1.Graveyard = Spinewoods Armadillo
