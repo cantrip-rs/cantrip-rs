@@ -1,0 +1,8 @@
+{
+  "name": "Tenth District Hero",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "{1}{W}, Collect evidence 2: This creature becomes a Human Detective with base power and toughness 4/4 and gains vigilance.\n{2}{W}, Collect evidence 4: If this creature is a Detective, it becomes a legendary creature named Mileva, the Stalwart, it has base power and toughness 5/5, and it gains \"Other creatures you control have indestructible.\""
+}

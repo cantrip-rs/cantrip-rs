@@ -1,0 +1,36 @@
+# Tenth District Hero: "Collect evidence 2" needs cards with total mana value 2 or more in the graveyard (CR 701.59a). After Faithless
+# Looting (1) and two discarded lands (0) the graveyard totals 1, so the ability is refused even though Mox Pearl and Mox Jet pay {1}{W}.
+
+[Bot1 Deck]
+Tenth District Hero
+Mox Pearl
+Mox Jet
+Mox Ruby
+Faithless Looting
+Swamp
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tenth District Hero.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Swamp; Plains)
+? Bot1.Graveyard = Faithless Looting; Plains; Swamp
+! Bot1.Battlefield.Tenth District Hero.Activate(Ability: evidence 2)
+
+[Expect]
+Bot1.Battlefield.Tenth District Hero.Power = 2
+Bot1.Graveyard = Faithless Looting; Plains; Swamp

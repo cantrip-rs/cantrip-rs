@@ -1,0 +1,49 @@
+# Tenth District Hero: "This creature becomes a Human Detective" replaces its creature types rather than adding to them (CR 205.1a). Bot1
+# discards the Hero to Faithless Looting and brings it back with Call a Surprise Witness, which makes it a Human Spirit with flying. Black
+# Lotus's WWW and the exiled Witness (mana value 2) pay for the first ability: it is a Detective Human 4/4 and no longer a Spirit,
+# while its Flying counter keeps its flying.
+
+[Bot1 Deck]
+Tenth District Hero
+Mox Pearl
+Mox Jet
+Mox Ruby
+Faithless Looting
+Call a Surprise Witness
+Black Lotus
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Tenth District Hero; Plains)
+? Bot1.Graveyard = Faithless Looting; Plains; Tenth District Hero
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Call a Surprise Witness.Cast(Bot1.Graveyard.Tenth District Hero)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tenth District Hero.Subtypes = Human; Spirit
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Tenth District Hero.Activate(Ability: evidence 2)
+Bot1.Choose(Call a Surprise Witness)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Tenth District Hero.Subtypes = Detective; Human
+Bot1.Battlefield.Tenth District Hero.Power = 4
+Bot1.Battlefield.Tenth District Hero.Keywords = Flying; Vigilance
+Bot1.Graveyard = Black Lotus; Faithless Looting; Plains

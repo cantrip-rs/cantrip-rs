@@ -1,0 +1,61 @@
+# Tenth District Hero: Ashnod's Transmogrant makes the Hero an artifact in addition to its other types; then "it becomes a
+# legendary creature named Mileva" sets its card type to creature alone (CR 205.1a; 205.1b needs "in addition" or "still"),
+# with a later timestamp, so it is no longer an artifact - and it is legendary, and keeps its Human Detective types.
+
+[Bot1 Deck]
+Tenth District Hero
+Mox Pearl
+Mox Jet
+Mox Ruby
+Faithless Looting
+Griselbrand
+Ashnod's Transmogrant
+Hill Giant
+Black Lotus
+Memnite
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tenth District Hero.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ashnod's Transmogrant.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ashnod's Transmogrant.Activate(Tenth District Hero)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tenth District Hero.Types = Creature; Artifact
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Griselbrand; Hill Giant)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Tenth District Hero.Activate(Ability: evidence 2)
+Bot1.Choose(Hill Giant)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tenth District Hero.Types = Creature; Artifact
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Tenth District Hero.Activate(Ability: evidence 4)
+Bot1.Choose(Griselbrand)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Mileva, the Stalwart.Supertypes = Legendary
+Bot1.Battlefield.Mileva, the Stalwart.Types = Creature
+Bot1.Battlefield.Mileva, the Stalwart.Subtypes = Detective; Human

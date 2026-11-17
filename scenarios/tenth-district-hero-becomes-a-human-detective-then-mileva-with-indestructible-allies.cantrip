@@ -1,0 +1,73 @@
+# Tenth District Hero ({1}{W}, 2/3 Human): "{1}{W}, Collect evidence 2: This creature becomes a Human Detective with base power and toughness
+# 4/4 and gains vigilance." and "{2}{W}, Collect evidence 4: If this creature is a Detective, it becomes a legendary creature named
+# Mileva, the Stalwart, it has base power and toughness 5/5, and it gains "Other creatures you control have indestructible."" (CR 701.59a,
+# 613.4, 205.1a, 205.4, 201.3). Bot1 discards Griselbrand and Hill Giant to Faithless Looting on turn 3, exiles Hill Giant (mana value 4) for
+# the first ability: the Hero is a 4/4 Human Detective with vigilance, name unchanged, the Memnite not indestructible. Then Black Lotus's WWW
+# and Griselbrand (8) pay for the second: Mileva, the Stalwart, 5/5, legendary, the Memnite indestructible and Mileva herself not.
+
+[Bot1 Deck]
+Tenth District Hero
+Mox Pearl
+Mox Jet
+Mox Ruby
+Faithless Looting
+Griselbrand
+Hill Giant
+Black Lotus
+Memnite
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tenth District Hero.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Tenth District Hero.Power = 2
+? Bot1.Battlefield.Tenth District Hero.Toughness = 3
+? Bot1.Battlefield.Tenth District Hero.Subtypes = Human
+? Bot1.Battlefield.Tenth District Hero.Keywords = (absent)
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Griselbrand; Hill Giant)
+? Bot1.Graveyard = Faithless Looting; Hill Giant; Griselbrand
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Tenth District Hero.Activate(Ability: evidence 2)
+Bot1.Choose(Hill Giant)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tenth District Hero.Power = 4
+? Bot1.Battlefield.Tenth District Hero.Toughness = 4
+? Bot1.Battlefield.Tenth District Hero.Subtypes = Detective; Human
+? Bot1.Battlefield.Tenth District Hero.Keywords = Vigilance
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+? Exile.Count = 1
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Tenth District Hero.Activate(Ability: evidence 4)
+Bot1.Choose(Griselbrand)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+
+[Expect]
+Bot1.Battlefield.Mileva, the Stalwart.Power = 5
+Bot1.Battlefield.Mileva, the Stalwart.Toughness = 5
+Bot1.Battlefield.Mileva, the Stalwart.Supertypes = Legendary
+Bot1.Battlefield.Mileva, the Stalwart.Subtypes = Detective; Human
+Bot1.Battlefield.Mileva, the Stalwart.Keywords = Vigilance
+Bot1.Battlefield.Memnite.Keywords = Indestructible
+Exile.Count = 2

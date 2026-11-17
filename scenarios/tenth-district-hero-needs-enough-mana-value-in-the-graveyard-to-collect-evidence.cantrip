@@ -1,0 +1,49 @@
+# Tenth District Hero: "Collect evidence N" needs cards with total mana value N or more in the graveyard, exiled as a cost (CR 701.59a,
+# 602.2b). With an empty graveyard neither ability is offered, though Bot1 has the mana for both ({1}{W} from Mox Pearl and Mox Jet, then
+# {2}{W} from Black Lotus). After Faithless Looting (1) and a discarded Grizzly Bears (2) the total is 3: the first ability (2) is
+# offered and is paid by exiling the Bears alone (exactly 2), the Looting staying in the graveyard; the second (4) is refused.
+
+[Bot1 Deck]
+Tenth District Hero
+Mox Pearl
+Mox Jet
+Mox Ruby
+Faithless Looting
+Grizzly Bears
+Black Lotus
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tenth District Hero.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Tenth District Hero.Activate(Ability: evidence 2)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+! Bot1.Battlefield.Tenth District Hero.Activate(Ability: evidence 4)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Plains)
+? Bot1.Graveyard = Faithless Looting; Plains; Grizzly Bears; Black Lotus
+! Bot1.Battlefield.Tenth District Hero.Activate(Ability: evidence 4)
+Bot1.Battlefield.Tenth District Hero.Activate(Ability: evidence 2)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 1
+
+[Expect]
+Bot1.Battlefield.Tenth District Hero.Power = 4
+Bot1.Battlefield.Tenth District Hero.Subtypes = Detective; Human
+Bot1.Graveyard = Faithless Looting; Plains; Black Lotus
