@@ -1,0 +1,46 @@
+# Dramatic Accusation on Bot1's own Ornithopter (an own creature is a legal "enchant creature" target): the Aura taps it and it does not untap in Bot1's turn-3 untap step
+# either ("its controller's untap step", CR 502.3), while the Moxen do. The Aura's controller activates {U}{U}: the creature is shuffled into its owner's library, here Bot1's
+# (Bot1's library is shuffled once) and the Aura goes to the graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Ornithopter
+Dramatic Accusation
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dramatic Accusation.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = true
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Tapped = true
+? Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Dramatic Accusation.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter = (absent)
+
+[Expect]
+Bot1.Shuffles = 1
+Bot1.Graveyard = Dramatic Accusation

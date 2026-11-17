@@ -1,0 +1,64 @@
+# Dramatic Accusation on a creature whose owner is not its controller: Bot1's Control Magic takes Bot2's Ornithopter, then Bot1 enchants it with
+# Dramatic Accusation (tapped as the Aura enters). "{U}{U}: Shuffle enchanted creature into its owner's library" puts it into Bot2's library, its
+# owner's (CR 108.3, 400.3), not Bot1's: Bot2's library is shuffled and Bot1's is not, and both Auras, their creature gone, go to Bot1's graveyard (CR 704.5m).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Control Magic
+Dramatic Accusation
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Control Magic.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = false
+? Bot2.Battlefield.Count = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dramatic Accusation.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = true
+? Bot2.Library.Count = 12
+? Bot1.Library.Count = 12
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Dramatic Accusation.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Bot2.Battlefield.Count = 0
+Bot2.Library.Count = 13
+Bot1.Library.Count = 12
+Bot2.Shuffles = 1
+Bot1.Shuffles = 0
+Bot1.Graveyard = Dramatic Accusation; Control Magic

@@ -1,0 +1,6 @@
+{
+  "name": "Dramatic Accusation",
+  "manaCost": "{2}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhen this Aura enters, tap enchanted creature.\nEnchanted creature doesn't untap during its controller's untap step.\n{U}{U}: Shuffle enchanted creature into its owner's library."
+}

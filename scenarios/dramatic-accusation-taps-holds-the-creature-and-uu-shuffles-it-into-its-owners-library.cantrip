@@ -1,0 +1,56 @@
+# Dramatic Accusation on Bot2's Ornithopter: "When this Aura enters, tap enchanted creature" taps it on turn 3, and "Enchanted creature doesn't untap
+# during its controller's untap step" (CR 502.3) keeps it tapped through Bot2's turn-4 untap step. {U}{U}: with one blue source left on turn 3
+# (Mox Sapphire and Mox Ruby: two mana, one of them blue) the ability is refused; on turn 5 with both Sapphires untapped it is paid exactly ({U}{U}, the pool
+# empty afterwards) and resolves: the Ornithopter is shuffled into Bot2's library (Bot2's library is shuffled once) and the Aura, its creature gone,
+# goes to the graveyard (CR 704.5m).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Dramatic Accusation
+Island
+Island x14
+
+[Bot2 Deck]
+Ornithopter x4
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dramatic Accusation.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+! Bot1.Battlefield.Dramatic Accusation.Activate(Mana: short)
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Dramatic Accusation.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Count = 0
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Shuffles = 1
+Bot1.Graveyard = Dramatic Accusation

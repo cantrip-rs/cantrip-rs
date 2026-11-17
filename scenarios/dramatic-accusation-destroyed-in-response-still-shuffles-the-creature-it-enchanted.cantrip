@@ -1,0 +1,60 @@
+# Dramatic Accusation's "{U}{U}: Shuffle enchanted creature into its owner's library" with the Aura gone before it resolves: Bot1 activates it on turn 5,
+# then Disenchants the Aura in response. "Enchanted creature" is then the creature it enchanted as it last existed on the battlefield (CR 608.2h), so Bot2's
+# Ornithopter is still shuffled into Bot2's library (Bot2's library is shuffled once).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Dramatic Accusation
+Disenchant
+Island x14
+
+[Bot2 Deck]
+Ornithopter x4
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dramatic Accusation.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+! Bot1.Battlefield.Dramatic Accusation.Activate(Mana: short)
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Dramatic Accusation.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Dramatic Accusation)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dramatic Accusation = (absent)
+? Bot2.Battlefield.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Count = 0
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Shuffles = 1
+Bot1.Graveyard = Disenchant; Dramatic Accusation
