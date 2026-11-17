@@ -1,0 +1,51 @@
+# Reenact the Crime: the target must still be in the graveyard when the spell resolves (CR 608.2b, 400.7). Bot1 bolts Bot2 on turn 3
+# and targets the Bolt with Reenact the Crime; in response Bot2 sacrifices its Soul-Guide Lantern to exile Bot1's graveyard. The target
+# is gone, so the spell does not resolve: no copy is cast and Bot2 has taken only the first 3 damage. The exile holds the Bolt and the
+# Black Lotus the sacrifice exiled; Reenact the Crime goes to the graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Lightning Bolt
+Reenact the Crime
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Mox Jet
+Soul-Guide Lantern
+Swamp x5
+Swamp x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Soul-Guide Lantern.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Reenact the Crime.Cast(Bot1.Graveyard.Lightning Bolt)
+Bot1.Pass
+Bot2.Battlefield.Soul-Guide Lantern.Activate(Ability: Exile each)
+? Stack.Count = 2
+
+[Expect]
+Bot2.Life = 17
+Exile = Black Lotus; Lightning Bolt
+Bot1.Graveyard = Reenact the Crime
+Stack.Count = 0

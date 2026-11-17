@@ -1,0 +1,43 @@
+# Reenact the Crime: "Exile target nonland card in a graveyard that was put there from anywhere this turn. Copy it. You may cast the
+# copy without paying its mana cost." Bot1 casts Lightning Bolt on turn 1 (3 damage), then Reenact the Crime for {1}{U}{U}{U} (Black
+# Lotus and Mox Sapphire) targeting the Bolt in its own graveyard. The Bolt card is exiled and its copy, cast for free while Reenact
+# resolves (CR 707.12, 608.2g), hits Bot2 for 3 more: Bot2 has taken 6. The Bolt card stays exiled (the copy ceases to exist,
+# CR 707.10a, 704.5e); Reenact the Crime and the sacrificed Black Lotus are in the graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Lightning Bolt
+Reenact the Crime
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Bot1.Graveyard = Lightning Bolt
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Reenact the Crime.Cast(Bot1.Graveyard.Lightning Bolt)
+Bot1.Pass
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 14
+Exile = Lightning Bolt
+Bot1.Graveyard = Reenact the Crime; Black Lotus
+Stack.Count = 0

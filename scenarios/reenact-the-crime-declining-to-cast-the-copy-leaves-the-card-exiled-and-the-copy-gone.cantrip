@@ -1,0 +1,37 @@
+# Reenact the Crime: the cast of the copy is optional ("you may cast the copy"). Bot1 bolts Bot2 on turn 1, then exiles the Bolt with
+# Reenact the Crime and declines; the copy ceases to exist in exile (CR 707.10a, 704.5e) and the Bolt card stays exiled, so Bot2 has
+# taken only the first 3 damage.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Lightning Bolt
+Reenact the Crime
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Reenact the Crime.Cast(Bot1.Graveyard.Lightning Bolt)
+Bot1.Pass
+Bot1.Decline
+
+[Expect]
+Bot2.Life = 17
+Exile = Lightning Bolt
+Bot1.Graveyard = Reenact the Crime; Black Lotus
+Stack.Count = 0

@@ -1,0 +1,48 @@
+# Reenact the Crime: "a graveyard" is either player's. Bot2's Giver of Runes (cast on turn 2) is bolted on turn 3 and so put into Bot2's
+# graveyard this turn; Reenact the Crime exiles it, copies the card in exile and Bot1 casts the copy for free. A permanent spell's copy
+# becomes a token as it resolves (CR 707.10f), under Bot1's control: Bot1 has the Giver, Bot2's graveyard is empty and the Giver card
+# stays in exile.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Lightning Bolt
+Reenact the Crime
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Plains
+Giver of Runes
+Plains x5
+Plains x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Giver of Runes.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Giver of Runes)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Giver of Runes
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Reenact the Crime.Cast(Bot2.Graveyard.Giver of Runes)
+Bot1.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Battlefield = Giver of Runes; Mox Ruby; Mox Sapphire
+Bot2.Graveyard = 
+Exile = Giver of Runes
+Bot1.Graveyard = Reenact the Crime; Black Lotus; Lightning Bolt
+Stack.Count = 0

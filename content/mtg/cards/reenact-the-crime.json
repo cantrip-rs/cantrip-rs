@@ -1,0 +1,6 @@
+{
+  "name": "Reenact the Crime",
+  "manaCost": "{1}{U}{U}{U}",
+  "type": "Instant",
+  "oracleText": "Exile target nonland card in a graveyard that was put there from anywhere this turn. Copy it. You may cast the copy without paying its mana cost."
+}

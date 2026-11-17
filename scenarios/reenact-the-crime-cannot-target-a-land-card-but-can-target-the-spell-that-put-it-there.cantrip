@@ -1,0 +1,40 @@
+# Reenact the Crime: "nonland card". Bot1 casts Entomb, which puts a Swamp into the graveyard this turn. The Swamp is refused as a
+# target, while Entomb itself (also put there this turn) is legal: Reenact the Crime exiles Entomb, Bot1 casts its copy for free and
+# searches for a second Swamp, so both Swamps are in the graveyard and the Entomb card is exiled. A player is no card either: Bot2 is
+# refused too.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Black Lotus
+Entomb
+Reenact the Crime
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Search(Swamp)
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Reenact the Crime.Cast(Bot2)
+! Bot1.Hand.Reenact the Crime.Cast(Bot1.Graveyard.Swamp)
+Bot1.Hand.Reenact the Crime.Cast(Bot1.Graveyard.Entomb)
+Bot1.Pass
+Bot1.Accept
+Bot1.Search(Swamp)
+
+[Expect]
+Exile = Entomb
+Bot1.Graveyard = Swamp; Reenact the Crime; Black Lotus; Swamp

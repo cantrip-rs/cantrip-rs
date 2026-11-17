@@ -1,0 +1,35 @@
+# Reenact the Crime: "put there ... this turn" (CR 400.7). Bot1's Lightning Bolt went to the graveyard on turn 1; on turn 3, with the
+# mana for Reenact the Crime ready, targeting it is refused, so the spell stays in hand and nothing is exiled.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Lightning Bolt
+Reenact the Crime
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Reenact the Crime.Cast(Bot1.Graveyard.Lightning Bolt)
+
+[Expect]
+Bot1.Hand = Reenact the Crime; Swamp; Swamp; Swamp
+Bot1.Graveyard = Black Lotus; Lightning Bolt
+Exile = 
+Bot2.Life = 17
