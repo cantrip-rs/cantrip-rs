@@ -1,0 +1,49 @@
+# Marketwatch Phantom: "Whenever another creature you control with power 2 or less enters, this creature gains flying until end
+# of turn" (CR 603.2, 611.2a, 702.9b). Bot1 casts the Phantom on turn 1 (Mox Pearl and Mox Jet): its own entering gives it nothing
+# ("another"). Bot2's Memnite on turn 2 gives it nothing ("you control"). Bot1's Memnite (power 1) on turn 3 gives it flying, and
+# on turn 4 the flying is gone.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Marketwatch Phantom
+Memnite
+Plains x14
+
+[Bot2 Deck]
+Memnite
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Marketwatch Phantom.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Marketwatch Phantom.Keywords = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Marketwatch Phantom.Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Marketwatch Phantom.Keywords = Flying
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Marketwatch Phantom.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.Marketwatch Phantom.Keywords = (absent)
+Bot1.Battlefield.Marketwatch Phantom.Power = 2
+Bot1.Battlefield.Marketwatch Phantom.Toughness = 2

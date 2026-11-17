@@ -1,0 +1,8 @@
+{
+  "name": "Marketwatch Phantom",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Spirit Detective",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever another creature you control with power 2 or less enters, this creature gains flying until end of turn."
+}
