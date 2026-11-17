@@ -20,23 +20,13 @@ fn enter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// Tap up to that many target creatures and put a stun counter on each of them: each target still legal as it
-/// resolves (CR 608.2b), an already tapped one included.
-fn tap_and_stun(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let creatures = targets::legal_objects(g, item);
-    g.tap_together(&creatures);
-    let puts: Vec<(ObjectId, CounterKind, i32)> = creatures.iter().map(|&creature| (creature, CounterKind::Stun, 1)).collect();
-    g.add_counters_together(&puts);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(THIS_ENTERS, enter, "When this creature enters, draw two cards, then discard two cards. When you discard one or more nonland cards this way, tap up to that many target creatures and put a stun counter on each of them."),
         ability(cost("{3}{U}{U}").and(EXILE_THIS), |g, item| effects::draw(g, item, 2), "{3}{U}{U}, Exile this card from your graveyard: Draw two cards.")
             .from(ZoneKind::Graveyard),
     ],
-    delayed: &[delayed_trigger(tap_and_stun, "When you discard one or more nonland cards this way, tap up to that many target creatures and put a stun counter on each of them.")
+    delayed: &[delayed_trigger(effects::tap_and_stun_each_target, "When you discard one or more nonland cards this way, tap up to that many target creatures and put a stun counter on each of them.")
         .targets(&[targets::CREATURE.between(0, TargetSpec::COUNTED)])],
     ..oracle::SEASONED_CRYOMANCER
 };

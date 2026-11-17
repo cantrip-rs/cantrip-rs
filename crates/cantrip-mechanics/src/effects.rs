@@ -2300,6 +2300,17 @@ pub fn tap_and_stun<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<
     Ok(())
 }
 
+/// "Tap [up to N] target creatures. Put a stun counter on each of them." (CR 701.26a, 122.1d, 608.2b): the targets still legal as it
+/// resolves are tapped together, then each gets its counter together (CR 101.4), an already tapped one included; with none chosen it
+/// does nothing. Rime Chill, Out Cold, Seasoned Cryomancer's reflexive trigger and Hapatra, the Desert Frost print it.
+pub fn tap_and_stun_each_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let creatures = crate::targets::legal_objects(g, item);
+    g.tap_together(&creatures);
+    let puts: Vec<(ObjectId, CounterKind, i32)> = creatures.into_iter().map(|creature| (creature, CounterKind::Stun, 1)).collect();
+    g.add_counters_together(&puts);
+    Ok(())
+}
+
 /// "Tap [up to one] target creature and put a stun counter on it. Draw a card." (CR 701.26a, 122.1d, 121.1): Cryogenic Stasis and Consider the Prime Directive.
 pub fn tap_and_stun_then_draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     tap_and_stun::<1>(g, item)?;

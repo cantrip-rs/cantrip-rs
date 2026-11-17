@@ -16,21 +16,11 @@ const FOR_EACH_OPPONENT: TargetSpec = target(creature_the_slots_opponent_control
     .between(0, TargetSpec::EACH_OPPONENT)
     .labelled("Creature {player} controls to tap and put a stun counter on");
 
-/// "... tap up to one target creature that player controls. Put a stun counter on each of those creatures" (CR 115.1d):
-/// the targets still legal when it resolves are tapped together and each gets a stun counter (CR 122.1).
-fn tap_and_stun(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let creatures = targets::legal_objects(g, item);
-    g.tap_together(&creatures);
-    let puts: Vec<(ObjectId, CounterKind, i32)> = creatures.into_iter().map(|id| (id, CounterKind::Stun, 1)).collect();
-    g.add_counters_together(&puts);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
             THIS_ENTERS,
-            tap_and_stun,
+            effects::tap_and_stun_each_target,
             "When Hapatra enters, for each opponent, tap up to one target creature that player controls. Put a stun counter on each of those creatures.",
         )
         .targets(&[FOR_EACH_OPPONENT]),
