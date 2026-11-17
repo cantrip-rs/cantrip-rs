@@ -1969,6 +1969,19 @@ pub fn suspect_target<const SLOT: usize>(g: &mut dyn Game, item: &StackItem) -> 
     Ok(())
 }
 
+/// "[Source] deals damage equal to that spell's mana value to any target" (CR 120.3, 202.3, 608.2h): the subject spell's mana value
+/// as the ability resolves, or as it last was on the stack if it has left, an {X} in its cost counting as the X announced
+/// (CR 202.3e); nothing for 0 or a target that is no longer legal (CR 608.2b). Which targets are allowed is the card's own. Thor,
+/// God of Thunder and Breeches, the Blastmaker print it.
+pub fn damage_first_target_equal_to_the_spells_mana_value(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Target::Object(spell) = item.subject else { return Ok(()) };
+    let amount = g.mana_value(spell);
+    if amount > 0 {
+        crate::damage_target(g, item, 0, amount);
+    }
+    Ok(())
+}
+
 /// "Counter target spell unless its controller pays {N}" (CR 701.6, 118.12): the spell that is the first target is countered
 /// unless its controller pays the generic cost, which they may make mana for while asked; nothing if it is no longer a legal
 /// target as this resolves (CR 608.2b). Which spells may be targeted is the card's own. Mana Leak ({3}), Daze ({1}) and Spell

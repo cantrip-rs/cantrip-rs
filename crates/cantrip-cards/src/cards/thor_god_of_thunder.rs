@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{damage_target, targets, triggers};
+use cantrip_mechanics::{effects, targets, triggers};
 use cantrip_oracle as oracle;
 
 /// "Target Equipment, instant, or sorcery card from your graveyard."
@@ -26,22 +26,11 @@ fn exile_and_play(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Thor deals damage equal to that spell's mana value to any target": the spell's as the ability resolves, or as it last
-/// was on the stack if it has left (CR 608.2h) - an {X} in its cost counting as the X announced (CR 202.3e).
-fn spell_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Target::Object(spell) = item.subject else { return Ok(()) };
-    let amount = g.mana_value(spell);
-    if amount > 0 {
-        damage_target(g, item, 0, amount);
-    }
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(triggers::THIS_ENTERS, exile_and_play, "When Thor enters, exile target Equipment, instant, or sorcery card from your graveyard. Until the end of your next turn, you may play that card.")
             .targets(&[target(equipment_instant_or_sorcery_in_your_graveyard)]),
-        triggered(triggers::NONCREATURE_SPELL_YOU_CAST_ABOUT_IT, spell_damage, "Whenever you cast a noncreature spell, Thor deals damage equal to that spell's mana value to any target.")
+        triggered(triggers::NONCREATURE_SPELL_YOU_CAST_ABOUT_IT, effects::damage_first_target_equal_to_the_spells_mana_value, "Whenever you cast a noncreature spell, Thor deals damage equal to that spell's mana value to any target.")
             .targets(&[targets::ANY]),
     ],
     ..oracle::THOR_GOD_OF_THUNDER
