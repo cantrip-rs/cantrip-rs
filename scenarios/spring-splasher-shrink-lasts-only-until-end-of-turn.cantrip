@@ -1,0 +1,55 @@
+# Spring Splasher: the -3/-0 lasts "until end of turn" (CR 611.2a, 514.2). On turn 3 the attack makes Bot2's lone Grizzly Bears
+# (the only creature defending player controls, so the target) -1/2; the effect ends in the cleanup step, so on turn 4 it is a 2/2
+# again, and it never had damage marked - it survives.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Spring Splasher
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Spring Splasher.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Spring Splasher > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Grizzly Bears.Power = -1
+? Bot2.Battlefield.Grizzly Bears.Toughness = 2
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+
+[Expect]
+Turn = 4
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Grizzly Bears.Toughness = 2

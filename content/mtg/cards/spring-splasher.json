@@ -1,0 +1,8 @@
+{
+  "name": "Spring Splasher",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Frog Beast",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Whenever this creature attacks, target creature defending player controls gets -3/-0 until end of turn."
+}

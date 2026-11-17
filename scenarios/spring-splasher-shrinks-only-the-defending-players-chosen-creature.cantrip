@@ -1,0 +1,66 @@
+# Spring Splasher: "Whenever this creature attacks, target creature defending player controls gets -3/-0 until end of turn"
+# (CR 508.1m, 603.3, 115.1). Bot2 has two creatures, so the trigger asks which: Bot1's own Ornithopter is refused (not a creature
+# the defending player controls), and so is Bot2's Mox Jet - an artifact but not a creature - while Bot2's Ornithopter is the one
+# accepted and becomes -3/2 (CR 611.2a). Bot2's Grizzly Bears is untouched: the -3/-0 is applied to the chosen creature alone.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Spring Splasher
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Spring Splasher.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Spring Splasher > Bot2)
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Ornithopter.Power = -3
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = -3
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Battlefield.Ornithopter.Power = 0
