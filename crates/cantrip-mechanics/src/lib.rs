@@ -58,6 +58,7 @@ pub mod cleave;
 pub mod clockwork;
 pub mod craft;
 pub mod crew;
+pub mod collect_evidence;
 pub mod coven;
 pub mod devoid;
 pub mod double;
