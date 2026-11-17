@@ -1,0 +1,41 @@
+# Territory Forge's enters trigger needs "if you cast it" (CR 603.4): Tinker (sacrificing a Mox) puts it onto the battlefield, so nothing happens and
+# Bot2's Mana Vault stays; with nothing exiled the Forge has no ability and its controller has no way to add mana with it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Tinker
+Island x5
+Territory Forge
+Island x10
+
+[Bot2 Deck]
+Mox Jet
+Mana Vault
+Island x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Mana Vault.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tinker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Territory Forge)
+? Stack.Count = 0
+? Exile.Count = 0
+? Bot2.Battlefield.Mana Vault.Types = Artifact
+? Bot1.Battlefield.Territory Forge.Types = Artifact
+! Bot1.Battlefield.Territory Forge.Activate
+
+[Expect]
+Bot2.Battlefield.Mana Vault.Types = Artifact

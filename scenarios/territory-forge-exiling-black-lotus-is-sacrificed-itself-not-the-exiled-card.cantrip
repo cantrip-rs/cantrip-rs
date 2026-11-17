@@ -1,0 +1,44 @@
+# Territory Forge exiling Bot2's Black Lotus: the Forge has "{T}, Sacrifice this artifact: Add three mana of any one color" as its own ability (the ruling:
+# the card's name or "this" in it means the Forge), so activating it sacrifices Territory Forge for {R}{R}{R}; the Lotus stays in exile.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Territory Forge
+Island
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Territory Forge.Cast
+Bot1.Pass
+Bot1.Target(Black Lotus)
+Bot1.Pass
+Bot2.Pass
+? Exile = Black Lotus
+Bot1.Battlefield.Territory Forge.Activate(Color: Red)
+? Bot1.Mana = {R}{R}{R}
+
+[Expect]
+Bot1.Battlefield.Territory Forge = (absent)
+Exile = Black Lotus
+Bot1.Graveyard = Territory Forge

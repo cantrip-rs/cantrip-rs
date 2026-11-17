@@ -1,0 +1,6 @@
+{
+  "name": "Territory Forge",
+  "manaCost": "{4}{R}",
+  "type": "Artifact",
+  "oracleText": "When this artifact enters, if you cast it, exile target artifact or land.\nThis artifact has all activated abilities of the exiled card."
+}

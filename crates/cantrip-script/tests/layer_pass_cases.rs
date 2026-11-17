@@ -428,6 +428,10 @@ const INERT: &[(&str, &str)] = &[
         "its effect gives the abilities of the creature cards exiled with it (`Obj::exiled`), a link no synthetic state makes; it reads them through the view and writes abilities only",
     ),
     (
+        "Territory Forge",
+        "its effect gives the activated abilities of the artifact or land card exiled with it, and the mana ability a basic land's subtype implies (CR 305.6), a link no synthetic state makes; it reads them through the view and writes abilities only",
+    ),
+    (
         "Locus of Enlightenment",
         "its effect gives the activated abilities of the cards used to craft it, a link no synthetic state makes; it writes abilities only",
     ),

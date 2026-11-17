@@ -1,0 +1,50 @@
+# Territory Forge exiling Bot2's Forest: a Forest has "{T}: Add {G}" because of its land type (CR 305.6), an activated ability of the exiled card, so the
+# Forge has it too and taps for {G}. Bot2's Grizzly Bears (neither an artifact nor a land) is not a legal target; the Forest stays in exile.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Territory Forge
+Island
+Island x14
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Territory Forge.Cast
+Bot1.Pass
+! Bot1.Target(Grizzly Bears)
+Bot1.Target(Forest)
+Bot1.Pass
+Bot2.Pass
+? Exile = Forest
+? Bot2.Battlefield.Forest = (absent)
+Bot1.Battlefield.Territory Forge.Activate
+? Bot1.Mana = {G}
+
+[Expect]
+Bot1.Battlefield.Territory Forge.Tapped = true

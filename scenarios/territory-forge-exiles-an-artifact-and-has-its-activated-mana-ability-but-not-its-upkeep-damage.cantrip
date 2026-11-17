@@ -1,0 +1,53 @@
+# Territory Forge (CR 607.2a, 613.1f): cast on turn 3, its enters trigger exiles Bot2's Mana Vault and it has the Vault's activated ability, "{T}: Add {C}{C}{C}",
+# as its own: it is an artifact (no summoning sickness), so Bot1 taps it at once for {C}{C}{C}. It does not have the Vault's triggered
+# upkeep damage, nor its static ability of not untapping (they are not activated abilities): it untaps in Bot1's turn-five untap step.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Territory Forge
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Jet
+Mana Vault
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Mana Vault.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Territory Forge.Cast
+Bot1.Pass
+Bot1.Target(Mana Vault)
+Bot1.Pass
+Bot2.Pass
+? Exile = Mana Vault
+? Bot2.Battlefield.Mana Vault = (absent)
+Bot1.Battlefield.Territory Forge.Activate
+? Bot1.Mana = {C}{C}{C}
+? Bot1.Battlefield.Territory Forge.Tapped = true
+[T4 Bot2.Main1]
+? Bot1.Life = 20
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Territory Forge.Tapped = false
+
+[Expect]
+Bot1.Life = 20
+Exile.Count = 1
