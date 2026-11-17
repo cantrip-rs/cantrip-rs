@@ -1,0 +1,98 @@
+# Vraska, the Silencer: "Whenever a nontoken creature an opponent controls dies, you may pay {1}. If you do, return that card to the
+# battlefield tapped under your control. It's a Treasure artifact ... and it loses all other card types" (CR 700.4, 111.7, 118.12, 205.1a).
+# Turn 3 a Lightning Bolt on a Goblin token returns nothing (a token). Turn 5 a Bolt kills Bot2's Memnite and Bot1 pays {1}: it returns tapped
+# as a Treasure artifact, no longer a creature, and the Treasure's own mana pays for another Bolt. Turn 7 a Bolt kills a second Memnite and
+# Bot1 declines: it stays in the graveyard. A third Bolt kills the last Memnite and Bot2 exiles its graveyard with Tormod's Crypt in
+# response: Bot1 pays, but the card is gone, so nothing returns.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Vraska, the Silencer
+Mox Pearl
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Memnite
+Memnite
+Memnite
+Mox Ruby
+Dragon Fodder
+Tormod's Crypt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vraska, the Silencer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Dragon Fodder.Cast
+Bot2.Hand.Tormod's Crypt.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Goblin Token#1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Battlefield.Count = 7
+? Bot1.Battlefield.Count = 5
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.PayCost
+? Bot2.Battlefield.Count = 6
+? Bot1.Battlefield.Count = 6
+? Bot1.Battlefield.Memnite.Tapped = true
+? Bot1.Battlefield.Memnite.Types = Artifact
+? Bot1.Battlefield.Memnite.Subtypes = Treasure
+[T7 Bot1.Main1]
+Bot1.Battlefield.Memnite.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Decline
+? Bot2.Battlefield.Count = 5
+? Bot2.Graveyard = Memnite; Memnite; Dragon Fodder
+? Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+? Bot2.Graveyard = 
+? Exile.Count = 5
+? Bot1.Battlefield.Count = 5
+
+[Expect]
+Bot1.Life = 20

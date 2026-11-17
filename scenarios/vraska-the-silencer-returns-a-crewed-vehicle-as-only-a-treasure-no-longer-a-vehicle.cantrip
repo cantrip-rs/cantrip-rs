@@ -1,0 +1,58 @@
+# A crewed Smuggler's Copter (a Vehicle artifact creature) dies; Vraska returns it as "a Treasure artifact": its artifact
+# subtype is set to Treasure (CR 205.1a), so it is no longer a Vehicle.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Vraska, the Silencer
+Mox Pearl
+Mox Sapphire
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Smuggler's Copter
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Vraska, the Silencer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot2.Choose(Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Smuggler's Copter.Types = Artifact; Creature
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.PayCost
+? Bot1.Battlefield.Smuggler's Copter.Types = Artifact
+? Bot1.Battlefield.Smuggler's Copter.Subtypes = Treasure
+
+[Expect]
+Bot1.Battlefield.Smuggler's Copter.Subtypes = Treasure
