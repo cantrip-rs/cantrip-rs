@@ -1,0 +1,56 @@
+# Selvala, Eager Trailblazer: "Whenever you cast a creature spell, create a 1/1 red Mercenary creature token ..." (CR 603.2, 601.2i).
+# Turn 1: casting Selvala herself (not on the battlefield yet) makes none; the Memnite and the Ornithopter make one each (two).
+# Turn 2: Bot2's own creature spell makes none for Bot1. Turn 3: the Mox Sapphire (an artifact spell, no creature) makes none.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Mox Jet
+Selvala, Eager Trailblazer
+Memnite
+Ornithopter
+Mox Sapphire
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Selvala, Eager Trailblazer.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 7
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 9
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield = Memnite; Mercenary Token; Mercenary Token; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter; Selvala, Eager Trailblazer
+Bot2.Battlefield = Memnite
