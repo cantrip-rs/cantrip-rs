@@ -573,6 +573,12 @@ pub fn have_lifelink(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
     chars.keywords = chars.keywords.with(Keyword::Lifelink);
 }
 
+/// "... has lifelink and menace" (CR 702.15, 702.111, layer 6) as a static ability's `StaticDef::apply`. Foggy Swamp Hunters and
+/// Vadmir, New Blood print it.
+pub fn have_lifelink_and_menace(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
+    chars.keywords = chars.keywords.with(Keyword::Lifelink).with(Keyword::Menace);
+}
+
 /// "... has trample and lifelink" (CR 702.19, 702.15, layer 6) as a static ability's `StaticDef::apply`. Loxodon Warhammer's and
 /// Shadowspear's equipped creature and Unflinching Courage's enchanted creature have it.
 pub fn have_trample_and_lifelink(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
@@ -892,6 +898,13 @@ pub fn opponents_cant_draw_more_than_one_card_each_turn(q: &dyn Query, asker: &A
 /// or not, while the permanent is on the battlefield. Sunspine Lynx, Leyline of Punishment and Everlasting Torment print it.
 pub fn damage_cant_be_prevented(_: &dyn Query, _: &Asker, _: ObjectId, _: Target, _: bool) -> bool {
     true
+}
+
+/// "As long as this creature has N or more +1/+1 counters on it" (CR 122.1, 604.1): only +1/+1 counters are counted, asked again
+/// whenever characteristics are computed, so it follows the counters as they come and go. Skyknight Squire (three) and Vadmir,
+/// New Blood (four) print it.
+pub fn itself_with_plus_one_counters<const N: u32>(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Chars) -> bool {
+    source == affected && q.state().obj(source).counters(CounterKind::PlusOne) >= N as _
 }
 
 /// "This creature ... as long as it's untapped" (CR 604.1): Giant Tortoise and Illusion Spinners.
