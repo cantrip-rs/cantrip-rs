@@ -1,0 +1,57 @@
+# Wrangler of the Damned: "At the beginning of your end step, if you haven't cast a spell from your hand this turn, create a 2/2 white
+# Spirit creature token with flying" (CR 603.4, 513.1). Turn 3: Bot1 casts the Wrangler from hand, so no Spirit at its end step. Turn 4
+# (Bot2's end step, "your" end step only): none. Turn 5: Bot1 casts only Faithless Looting from its graveyard (flashback is not a cast
+# from hand): a Spirit at its end step. Turn 7: Bot1 casts a Mox Jet from hand, so none. The Wrangler and five Moxen are 6 permanents,
+# the one Spirit makes 7, and the Mox Jet makes 8.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Wrangler of the Damned
+Faithless Looting
+Mountain x6
+Mox Jet
+Mountain x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Mountain; Mountain)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wrangler of the Damned.Cast
+[T5 Bot1.Upkeep]
+? Bot1.Battlefield.Count = 6
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Faithless Looting.Cast(Ability: Flashback)
+Bot1.Choose(Mountain; Mountain)
+[T7 Bot1.Upkeep]
+? Bot1.Battlefield.Count = 7
+[T7 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+[T9 Bot1.Upkeep]
+
+[Expect]
+Bot1.Battlefield.Count = 8
+Bot1.Battlefield.Spirit Token.Power = 2
+Bot1.Battlefield.Spirit Token.Toughness = 2
+Bot1.Battlefield.Spirit Token.Colors = White
+Bot1.Battlefield.Spirit Token.Keywords = Flying
