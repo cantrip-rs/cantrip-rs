@@ -1,0 +1,8 @@
+{
+  "name": "Drover Grizzly",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Bear Mount",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Whenever this creature attacks while saddled, creatures you control gain trample until end of turn.\nSaddle 1 (Tap any number of other creatures you control with total power 1 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)"
+}

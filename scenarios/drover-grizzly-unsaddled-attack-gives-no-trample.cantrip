@@ -1,0 +1,28 @@
+# Drover Grizzly: the trigger needs "attacks while saddled" (CR 702.171b): an unsaddled attack gives nothing, neither to the Grizzly nor to Memnite.
+
+[Bot1 Deck]
+Black Lotus
+Drover Grizzly
+Memnite
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Drover Grizzly.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Drover Grizzly > Bot2; Memnite > Bot2)
+? Stack.Count = 0
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+? Bot1.Battlefield.Drover Grizzly.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.Count = 2
