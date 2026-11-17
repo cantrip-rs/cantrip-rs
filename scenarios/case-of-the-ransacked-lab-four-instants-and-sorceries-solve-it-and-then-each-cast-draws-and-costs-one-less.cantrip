@@ -1,0 +1,70 @@
+# Case of the Ransacked Lab (cast on turn 1 with Black Lotus's {U}{U}{U}): on turn 3 Bot1 casts three Mutagenic Growths (instants, 2 life each) and Gitaxian Probe (a sorcery, 2 life) -
+# four instant and sorcery spells this turn, so "To solve" holds at the end step and it becomes solved (CR 719.3a); the spells cast while it was unsolved drew nothing. On turn 5, with only
+# Mox Sapphire untapped, Quick Study ({2}{U} instant) is refused - it costs {1} less ({1}{U}, CR 601.2f), still two mana - and with Mox Jet cast too it is paid exactly with Sapphire and
+# Jet (the pool is empty): the solved Case's "Whenever you cast an instant or sorcery spell, draw a card" draws one as it is cast, and Quick Study then draws two.
+
+[Bot1 Deck]
+Black Lotus
+Case of the Ransacked Lab
+Mox Sapphire
+Mutagenic Growth
+Mutagenic Growth
+Mutagenic Growth
+Gitaxian Probe
+Quick Study
+Mox Jet
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Case of the Ransacked Lab.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mutagenic Growth.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mutagenic Growth.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mutagenic Growth.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Case of the Ransacked Lab.Solved = (absent)
+Bot1.Hand.Gitaxian Probe.Cast(Bot2)
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 12
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Case of the Ransacked Lab.Solved = true
+? Bot1.Hand.Count = 2
+[T5 Bot1.Main1]
+! Bot1.Hand.Quick Study.Cast(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Quick Study.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Graveyard.Count = 6

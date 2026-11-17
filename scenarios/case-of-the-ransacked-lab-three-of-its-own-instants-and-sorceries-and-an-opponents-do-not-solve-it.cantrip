@@ -1,0 +1,57 @@
+# Case of the Ransacked Lab: on turn 3 Bot1 casts two Mutagenic Growths and Quick Study (three instants, paid exactly with Mox Sapphire and Mox Jet because the Case makes it cost {1}{U}, CR 601.2f)
+# while Bot2 answers with its own Mutagenic Growth - four instants cast this turn in all, but only Bot1's three count as "you've cast" (CR 719.3a), so at Bot1's end step the Case stays
+# unsolved, and the unsolved Case draws nothing for the casts (only Quick Study's own two cards come to Bot1's hand).
+
+[Bot1 Deck]
+Black Lotus
+Case of the Ransacked Lab
+Mox Sapphire
+Mox Jet
+Mutagenic Growth
+Mutagenic Growth
+Quick Study
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Mutagenic Growth
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Case of the Ransacked Lab.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mutagenic Growth.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mutagenic Growth.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Quick Study.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Mutagenic Growth.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Modes(1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Case of the Ransacked Lab.Solved = (absent)
+
+[Expect]
+Bot1.Hand.Count = 3

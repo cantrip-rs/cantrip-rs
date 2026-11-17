@@ -1,0 +1,6 @@
+{
+  "name": "Case of the Ransacked Lab",
+  "manaCost": "{2}{U}",
+  "type": "Enchantment — Case",
+  "oracleText": "Instant and sorcery spells you cast cost {1} less to cast.\nTo solve — You've cast four or more instant and sorcery spells this turn. (If unsolved, solve at the beginning of your end step.)\nSolved — Whenever you cast an instant or sorcery spell, draw a card."
+}
