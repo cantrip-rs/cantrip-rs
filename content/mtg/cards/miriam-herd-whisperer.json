@@ -1,0 +1,8 @@
+{
+  "name": "Miriam, Herd Whisperer",
+  "manaCost": "{G}{W}",
+  "type": "Legendary Creature — Human Druid",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "During your turn, Mounts and Vehicles you control have hexproof.\nWhenever a Mount or Vehicle you control attacks, put a +1/+1 counter on it."
+}

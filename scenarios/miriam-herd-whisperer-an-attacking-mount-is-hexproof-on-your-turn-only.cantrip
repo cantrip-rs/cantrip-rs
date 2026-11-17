@@ -1,0 +1,56 @@
+# Miriam, Herd Whisperer: "During your turn, Mounts and Vehicles you control have hexproof" (CR 611.3a, 702.11b) and the attack
+# counter. On turn 3 Bot1's Brightfield Glider (a 1/1 Mount, not saddled) attacks and gets its counter; Bot2's Lightning Bolt
+# cannot target the Glider that turn (refusal), but can target Miriam herself (neither Mount nor Vehicle: the positive
+# control), who dies. On Bot2's turn 4 the Glider is no longer hexproof and the other Bolt kills it (2/2 with the counter).
+
+[Bot1 Deck]
+Plains
+Mox Emerald
+Mox Pearl
+Miriam, Herd Whisperer
+Brightfield Glider
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Miriam, Herd Whisperer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Brightfield Glider.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Brightfield Glider > Bot2)
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Brightfield Glider)
+Bot2.Hand.Lightning Bolt.Cast(Miriam, Herd Whisperer)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Brightfield Glider.Counters.PlusOnePlusOne = 1
+? Bot1.Graveyard = Miriam, Herd Whisperer
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Brightfield Glider)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Brightfield Glider; Miriam, Herd Whisperer
+Bot1.Battlefield = Plains; Mox Emerald; Mox Pearl

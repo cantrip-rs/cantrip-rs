@@ -1,0 +1,39 @@
+# Miriam, Herd Whisperer: "Whenever a Mount or Vehicle you control attacks" (CR 508.3a, 603.2c): Bot2's Brightfield Glider (a
+# Mount) attacks on turn 4 and Bot1's Miriam puts no counter on it.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Miriam, Herd Whisperer
+Island x17
+
+[Bot2 Deck]
+Plains
+Brightfield Glider
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Miriam, Herd Whisperer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Brightfield Glider.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Brightfield Glider > Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot2.Battlefield.Brightfield Glider.Counters.PlusOnePlusOne = (absent)
+Bot1.Life = 19

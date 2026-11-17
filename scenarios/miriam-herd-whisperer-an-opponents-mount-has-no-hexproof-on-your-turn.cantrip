@@ -1,0 +1,42 @@
+# Miriam, Herd Whisperer: "you control" (CR 611.3a): "During your turn, Mounts and Vehicles you control have hexproof" gives
+# nothing to Bot2's Brightfield Glider (a Mount) on turn 3, Bot1's turn: Bot1's Lightning Bolt targets it and kills it.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Miriam, Herd Whisperer
+Lightning Bolt
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Plains
+Brightfield Glider
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Miriam, Herd Whisperer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Brightfield Glider.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Brightfield Glider)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Brightfield Glider

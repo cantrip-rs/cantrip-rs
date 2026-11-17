@@ -1,0 +1,56 @@
+# Miriam, Herd Whisperer: "Whenever a Mount or Vehicle you control attacks, put a +1/+1 counter on it." (CR 508.3a, 603.2c,
+# 122.1). On turn 3 Bot1's Memnite (summoning sick, which does not matter for a crew cost) crews Air Response Unit (a 3/3
+# Vehicle); the Unit and Miriam (a Human Druid, neither Mount nor Vehicle) attack together: the Unit gets exactly one counter
+# and hits for 4, Miriam gets none and hits for 3, so Bot2 is at 20 - 7 = 13.
+
+[Bot1 Deck]
+Plains
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Ruby
+Miriam, Herd Whisperer
+Air Response Unit
+Memnite
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Miriam, Herd Whisperer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Air Response Unit.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Air Response Unit.Activate(Ability: Crew)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Air Response Unit > Bot2; Miriam, Herd Whisperer > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Air Response Unit.Counters.PlusOnePlusOne = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Air Response Unit.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Miriam, Herd Whisperer.Counters.PlusOnePlusOne = (absent)
