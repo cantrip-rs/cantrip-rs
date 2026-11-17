@@ -1,0 +1,26 @@
+# Form a Posse with X = 0 creates no Mercenary (CR 107.3a).
+# Form a Posse {X}{R}{W}: Sorcery
+#   Create X 1/1 red Mercenary creature tokens with "{T}: Target creature you control gets +1/+0 until end of turn.
+#   Activate only as a sorcery."
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Form a Posse
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Form a Posse.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Ruby
+Bot1.Graveyard = Form a Posse

@@ -1,0 +1,35 @@
+# Form a Posse with X = 2 creates two Mercenary tokens (CR 107.3a, 111.1). On the next turn one Mercenary taps to give the
+# other +1/+0 (CR 602.5d: only as a sorcery, so not during combat).
+# Form a Posse {X}{R}{W}: Sorcery
+#   Create X 1/1 red Mercenary creature tokens with "{T}: Target creature you control gets +1/+0 until end of turn.
+#   Activate only as a sorcery."
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Form a Posse
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Form a Posse.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 3
+? Bot1.Battlefield.Mercenary Token#2.Colors = Red
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mercenary Token#1.Activate(Bot1.Battlefield.Mercenary Token#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mercenary Token#2.Power = 2
+[T3 Bot1.BeginCombat]
+! Bot1.Battlefield.Mercenary Token#2.Activate
+
+[Expect]
+Bot1.Battlefield = Mercenary Token; Mercenary Token; Mox Ruby
