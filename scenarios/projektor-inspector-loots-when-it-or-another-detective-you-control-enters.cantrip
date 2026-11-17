@@ -1,0 +1,72 @@
+# Projektor Inspector: "Whenever this creature or another Detective you control enters ..., you may draw a card. If you do, discard a card" (CR 603.6a). Bot1 casts it on turn 1 off a Black Lotus and
+# accepts: it draws an Island and discards an Island. Bot2's Jaded Analyst on turn 2 (a Detective, but not Bot1's) loots nothing. On turn 3 Bot1's Memnite (no Detective) loots nothing either,
+# and its own Jaded Analyst, another Detective, does: accepted again.
+
+[Bot1 Deck]
+Black Lotus
+Projektor Inspector
+Jaded Analyst
+Memnite
+Mox Sapphire
+Mox Pearl
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Jaded Analyst
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Projektor Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Island)
+? Bot1.Hand.Count = 5
+? Bot1.Graveyard = Island; Black Lotus
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Jaded Analyst.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield = Mox Sapphire; Mox Pearl; Jaded Analyst
+? Bot1.Hand.Count = 5
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 6
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jaded Analyst.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Island)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot1.Graveyard = Island; Island; Black Lotus
+Bot1.Library.Count = 10

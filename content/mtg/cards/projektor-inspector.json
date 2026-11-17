@@ -1,0 +1,8 @@
+{
+  "name": "Projektor Inspector",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Human Detective",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Whenever this creature or another Detective you control enters and whenever a Detective you control is turned face up, you may draw a card. If you do, discard a card."
+}

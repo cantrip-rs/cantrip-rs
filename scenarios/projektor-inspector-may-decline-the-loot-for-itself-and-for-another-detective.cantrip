@@ -1,0 +1,47 @@
+# Projektor Inspector: "you may draw a card. If you do, discard a card" (CR 608.2c): declined, nothing is drawn or discarded, for the Inspector's own entering on turn 1 and for another Detective, a Jaded
+# Analyst, on turn 3.
+
+[Bot1 Deck]
+Black Lotus
+Projektor Inspector
+Jaded Analyst
+Mox Sapphire
+Mox Pearl
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Projektor Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Hand.Count = 5
+? Bot1.Library.Count = 13
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jaded Analyst.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Graveyard = Black Lotus
+Bot1.Library.Count = 12

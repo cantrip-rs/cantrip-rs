@@ -1,0 +1,61 @@
+# Projektor Inspector: "whenever a Detective you control is turned face up" (CR 702.168d, 708.8, 603.2). A face-down Mistway Spy has no creature types (CR 708.2a), so its entering on turn 3 is no Detective entering and
+# Bot1 is asked nothing: the hand stays at 2. On turn 5 it is turned face up for {1}{U}, becomes a Detective and the loot is accepted: a card drawn, an Island discarded. (Its own "turned face up" trigger, the Clue
+# one, is on the stack as well, with Bot1 passing both.)
+
+[Bot1 Deck]
+Black Lotus
+Projektor Inspector
+Mistway Spy
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Projektor Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Island)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mistway Spy.Cast(Ability: Disguise)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Hand.Count = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Pass
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Island)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Graveyard = Island; Island; Black Lotus
+Bot1.Library.Count = 9

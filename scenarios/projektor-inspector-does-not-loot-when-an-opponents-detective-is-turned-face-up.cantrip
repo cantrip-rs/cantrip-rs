@@ -1,0 +1,63 @@
+# Projektor Inspector: "a Detective you control is turned face up" (CR 603.2): Bot2's Mistway Spy, cast face down on turn 2 and turned up for {1}{U} on turn 4, is Bot2's Detective, so Bot1's Inspector asks nothing.
+# Bot1 looted once, on turn 1, and has drawn only for turns 3 and 5 since (turn 5 only starts if no loot question is outstanding): 7 cards.
+
+[Bot1 Deck]
+Black Lotus
+Projektor Inspector
+Island
+Island
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Mistway Spy
+Mox Jet
+Mox Sapphire
+Island
+Island
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Projektor Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Island)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Mistway Spy.Cast(Ability: Disguise)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield..FaceDown = true
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.#1.Activate(Ability: disguise cost)
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Hand.Count = 7
+Bot1.Graveyard = Island; Black Lotus
+Bot1.Library.Count = 10
