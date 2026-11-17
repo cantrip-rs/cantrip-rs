@@ -1,0 +1,61 @@
+# Homicide Investigator: "Whenever one or more nontoken creatures you control die, investigate. This ability triggers only once each turn." (CR 603.2, 603.2h, 701.16a)
+# Bot1 has the Investigator and three Memnites. On turn 2 Bot2 kills two of them with two Lightning Bolts: only the first death makes a Clue (the ability triggers only once that
+# turn). On turn 4 Bot2 kills the third and the limit has reset: a second Clue.
+
+[Bot1 Deck]
+Black Lotus
+Homicide Investigator
+Memnite
+Memnite
+Memnite
+Island
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Homicide Investigator.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite#1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield = Clue Token; Homicide Investigator; Memnite; Memnite
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite#1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Memnite; Memnite; Black Lotus
+? Bot1.Battlefield = Clue Token; Homicide Investigator; Memnite
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Clue Token; Clue Token; Homicide Investigator
+Bot1.Battlefield.Homicide Investigator.Power = 2

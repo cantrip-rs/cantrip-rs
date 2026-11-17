@@ -1,0 +1,63 @@
+# Homicide Investigator: only nontoken creatures *you control* dying trigger it (CR 603.2, 111.7). Bot2 casts Hunted Bonebrute, so Bot1 creates two Dog tokens. Bot2 Bolts a
+# Dog: a token dying is not a nontoken creature, no Clue. Bot2 then Bolts its own Memnite: not Bot1's creature, no Clue (and neither death uses up the once-each-turn limit).
+# On turn 4 a Bolt on Bot1's Memnite makes the Clue, the positive control.
+
+[Bot1 Deck]
+Black Lotus
+Homicide Investigator
+Memnite
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Hunted Bonebrute
+Memnite
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Homicide Investigator.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Hunted Bonebrute.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield = Dog Token; Dog Token; Homicide Investigator; Memnite
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Dog Token#1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield = Dog Token; Homicide Investigator; Memnite
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield = Hunted Bonebrute; Mountain; Mox Ruby
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Clue Token; Dog Token; Homicide Investigator

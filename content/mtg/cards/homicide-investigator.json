@@ -1,0 +1,8 @@
+{
+  "name": "Homicide Investigator",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Human Detective",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever one or more nontoken creatures you control die, investigate. This ability triggers only once each turn. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")"
+}
