@@ -1,0 +1,42 @@
+# Barbed Servitor: "Whenever this creature is dealt damage, target opponent loses that much life." Damage dealt to it by several sources at the same time is one trigger for the
+# total (CR 603.2c, 120.2; the card's rulings): Bot2 blocks the menace Servitor with both Memnites, they deal 1 each, and Bot2 loses 2 life, not 1 twice. The Servitor deals its
+# 1 damage to a Memnite, not to a player, so Bot1 draws nothing and loses nothing, and is indestructible.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Barbed Servitor
+Island x20
+
+[Bot2 Deck]
+Memnite
+Memnite
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Barbed Servitor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Barbed Servitor > Bot2)
+Bot2.Block(Memnite#1 > Barbed Servitor; Memnite#2 > Barbed Servitor)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 20
+Bot1.Hand.Count = 5
+Bot1.Battlefield.Barbed Servitor.Damage = 2

@@ -1,0 +1,42 @@
+# Barbed Servitor: suspected (CR 701.60a), it can't block (CR 701.60c, 509.1a) though it is untapped. Bot2's Memnite attacks on turn 4: Bot1 may not block it with the Servitor
+# (refused), but may block it with its own Memnite, which is not suspected - the control that the refusal comes from the designation.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Barbed Servitor
+Memnite
+Island x20
+
+[Bot2 Deck]
+Memnite
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Barbed Servitor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+! Bot1.Block(Barbed Servitor > Memnite)
+Bot1.Block(Memnite > Memnite)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Memnite; Black Lotus
+Bot2.Graveyard = Memnite
+Bot1.Battlefield.Barbed Servitor.Damage = 0

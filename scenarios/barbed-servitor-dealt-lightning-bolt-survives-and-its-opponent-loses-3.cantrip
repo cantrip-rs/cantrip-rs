@@ -1,0 +1,42 @@
+# Barbed Servitor: indestructible (CR 702.12b) - lethal damage does not destroy it (704.5g) - and "Whenever this creature is dealt damage, target opponent loses that much life"
+# (CR 120.3e, 603.2): Bot2's Lightning Bolt deals 3 to the 1/1, which survives, and Bot2, the only opponent and so the target, loses 3 life. The 3 damage on the Servitor is more
+# than its toughness: the amount lost is the damage dealt, not what was lethal.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Barbed Servitor
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Barbed Servitor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Barbed Servitor)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 20
+Bot1.Battlefield.Barbed Servitor.Damage = 3
+Bot1.Graveyard = Black Lotus

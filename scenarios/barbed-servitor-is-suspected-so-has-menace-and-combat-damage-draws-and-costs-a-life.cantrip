@@ -1,0 +1,43 @@
+# Barbed Servitor: "When this creature enters, suspect it" (CR 701.60a): a suspected creature has menace and can't block (CR 701.60c). "Whenever this creature deals combat damage
+# to a player, you draw a card and you lose 1 life." Bot1 casts it on turn 1. On turn 3 Bot2's lone Memnite may not block it (menace, CR 702.110b); unblocked it deals 1 to Bot2
+# and Bot1 draws a card and goes to 19.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Barbed Servitor
+Island x20
+
+[Bot2 Deck]
+Memnite
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Barbed Servitor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Barbed Servitor.Suspected = true
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+? Bot1.Hand.Count = 5
+Bot1.Attack(Barbed Servitor > Bot2)
+! Bot2.Block(Memnite > Barbed Servitor)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+? Bot1.Life = 19
+? Bot1.Hand.Count = 6
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Bot1.Hand.Count = 6
