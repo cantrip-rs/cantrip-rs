@@ -982,6 +982,17 @@ pub static SOLDIER_2_2: CardDef = CardDef {
     ..token!(Soldier)
 };
 
+/// The X/X green Elemental creature token (CR 111.4): the generic definition, 0/0, its size given as it is made with
+/// `create_sized` (CR 707.2), so it is never a 0/0 for a moment. Dance of the Tumbleweeds and Tumbleweed Rising make it,
+/// as do Budoka Gardener, Marath, Will of the Wild and Seed Guardian.
+pub static ELEMENTAL_X_X_GREEN: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Green)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(0),
+    toughness: Some(0),
+    ..token!(Elemental)
+};
+
 /// The 5/5 green Elephant creature token. Mammoth Bellow, Roar of Endless Song and Temur Monument make it.
 pub static ELEPHANT_5_5: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::Green)),
