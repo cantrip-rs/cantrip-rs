@@ -1,0 +1,116 @@
+# Bonny Pall, Clearcutter: "draw a card, then you may put a land card from your hand or graveyard" (CR 608.2c). In turn 5
+# the trigger draws the Forest and that very card goes onto the battlefield, so the draw came first; Bot2's Plains (binned
+# by Entomb in turn 2) is in an opponent's graveyard and can't be chosen. Beau goes 1/1 to 2/2. In turn 7 Bot1 declines:
+# the Island drawn stays in hand, Beau stays 2/2. Hand: Dress Down after turn 3; the turn-5 Mountain and the Forest drawn,
+# the Forest put 2; the turn-7 Swamp and the Island drawn 4. Then Giant Growth on Beau and Dress Down (CR 613.1f) takes
+# Beau's characteristic-defining ability away (CR 604.3): with no other source its power and toughness are 0/0, so 3/3 with
+# the Growth; Dress Down's own card puts the hand at 3. Beau is a legendary token and no World (CR 205.4): Bot2's Concordant
+# Crossroads, a World enchantment cast in turn 2, stays on the battlefield (CR 704.5k).
+# Bonny Pall, Clearcutter {3}{G}{U}{U}: Legendary Creature - Giant Scout 6/5
+#   Reach
+#   When Bonny Pall enters, create Beau, a legendary blue Ox creature token with "Beau's power and toughness are each
+#   equal to the number of lands you control."
+#   Whenever you attack, draw a card, then you may put a land card from your hand or graveyard onto the battlefield.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Bonny Pall, Clearcutter
+Dress Down
+Island
+Giant Growth
+Forest
+Swamp
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Entomb
+Mox Emerald
+Concordant Crossroads
+Island x4
+Plains
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Concordant Crossroads.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Search(Plains)
+? Bot2.Graveyard = Entomb; Plains
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bonny Pall, Clearcutter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Hand.Count = 1
+? Bot1.Battlefield.Beau.Power = 1
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Bonny Pall, Clearcutter > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Plains)
+Bot1.Choose(Forest)
+? Stack.Count = 0
+? Bot1.Hand = Dress Down; Giant Growth
+? Bot2.Graveyard = Entomb; Plains
+? Bot1.Battlefield.Beau.Power = 2
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Bonny Pall, Clearcutter > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[T7 Bot1.Main2]
+? Bot1.Hand.Count = 4
+? Bot1.Battlefield.Beau.Power = 2
+? Bot1.Battlefield.Beau.Toughness = 2
+? Bot1.Battlefield = Beau; Bonny Pall, Clearcutter; Forest; Island; Mox Emerald; Mox Jet; Mox Pearl; Mox Sapphire
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Beau)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beau.Power = 5
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Dress Down.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield = Beau; Bonny Pall, Clearcutter; Dress Down; Forest; Island; Mox Emerald; Mox Jet; Mox Pearl; Mox Sapphire
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 8
+Bot1.Hand.Count = 3
+Bot2.Graveyard = Entomb; Plains
+Bot2.Battlefield.Concordant Crossroads.Types = Enchantment
+Bot1.Battlefield.Beau.Supertypes = Legendary
+Bot1.Battlefield.Beau.Power = 3
+Bot1.Battlefield.Beau.Toughness = 3

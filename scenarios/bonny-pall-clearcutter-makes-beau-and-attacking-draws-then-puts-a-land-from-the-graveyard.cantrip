@@ -1,0 +1,85 @@
+# Bonny Pall, Clearcutter: it enters in turn 3 and makes Beau, a legendary blue Ox whose power and toughness are the lands
+# Bot1 controls (CR 604.3): 1/1 with one Island, Bot2's two Plains not counted. In turn 5 Bonny attacks (reach doesn't stop
+# it attacking; it shows as a keyword); the trigger draws a card, then Bot1 puts the Forest Entomb binned in turn 1 from its
+# graveyard onto the battlefield: Beau 2/2. That isn't a land play (2024-04-12 ruling): an Island drawn in turn 5 is
+# still played after combat, Beau 3/3. Hand: Bonny after turn 1; the Island drawn and played, Bonny cast: 0; the turn-5
+# draw and the trigger's card (Islands; Entomb shuffled the library) 2, one played 1.
+# Bonny Pall, Clearcutter {3}{G}{U}{U}: Legendary Creature - Giant Scout 6/5
+#   Reach
+#   When Bonny Pall enters, create Beau, a legendary blue Ox creature token with "Beau's power and toughness are each
+#   equal to the number of lands you control."
+#   Whenever you attack, draw a card, then you may put a land card from your hand or graveyard onto the battlefield.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Bonny Pall, Clearcutter
+Entomb
+Island
+Forest
+Island x20
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Forest)
+? Bot1.Graveyard = Entomb; Forest
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bonny Pall, Clearcutter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Hand.Count = 0
+? Bot1.Battlefield.Beau.Power = 1
+? Bot1.Battlefield.Beau.Toughness = 1
+? Bot1.Battlefield.Beau.Colors = Blue
+? Bot1.Battlefield.Beau.Supertypes = Legendary
+? Bot1.Battlefield.Beau.Subtypes = Ox
+? Bot1.Battlefield.Bonny Pall, Clearcutter.Keywords = Reach
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+? Bot2.Battlefield = Plains; Plains
+? Bot1.Battlefield.Beau.Power = 1
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Bonny Pall, Clearcutter > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest)
+? Stack.Count = 0
+? Bot1.Hand.Count = 2
+? Bot1.Battlefield.Beau.Power = 2
+[T5 Bot1.Main2]
+Bot1.Hand.Island.Play
+[T5 Bot1.End]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 14
+Bot1.Hand.Count = 1
+Bot1.Hand = Island
+Bot1.Graveyard = Black Lotus; Entomb
+Bot1.Battlefield.Beau.Power = 3
+Bot1.Battlefield.Beau.Toughness = 3
+Bot1.Battlefield = Beau; Bonny Pall, Clearcutter; Forest; Island; Island; Mox Emerald; Mox Jet; Mox Pearl; Mox Sapphire
