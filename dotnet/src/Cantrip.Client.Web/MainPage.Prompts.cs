@@ -2902,14 +2902,13 @@ public sealed partial class MainPage
 
     private void ShowErrors(GameClient client)
     {
-        if (client.Errors.Count == 0)
+        if (client.StandingError is not { } latest)
         {
             _errorLabel.Text = string.Empty;
             _errorLabel.Visibility = Visibility.Collapsed;
             return;
         }
 
-        ErrorMessage latest = client.Errors[^1];
         _errorLabel.Text = $"{latest.Code}: {latest.Detail}";
         _errorLabel.Visibility = Visibility.Visible;
     }

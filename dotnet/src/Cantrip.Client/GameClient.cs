@@ -122,6 +122,12 @@ public sealed class GameClient
     /// </summary>
     public IReadOnlyList<ErrorMessage> Errors => _errors;
 
+    /// <summary>
+    /// The newest rejection while it is still about the question at hand, for a player to read: the server asks a refused
+    /// question again under the same request, and the rejection stands through that; any other question asked lets it go.
+    /// </summary>
+    public ErrorMessage? StandingError { get; private set; }
+
     /// <summary>True when the server has asked something this client has not yet answered.</summary>
     public bool IsWaitingOnMe => Prompt is not null;
 
@@ -1293,6 +1299,8 @@ public sealed class GameClient
             case PromptMessage prompt:
                 // The question an answer is being settled for, asked again (a resumed connection): the answer is still on its way.
                 if (_settling?.Asked.RequestId == prompt.RequestId || _blocks.SettlingFor == prompt.RequestId || _attacks.SettlingFor == prompt.RequestId) break;
+                // A new question: what was refused before is not about it. The refused one asked again keeps its error.
+                if (prompt.RequestId != LastAnswered) StandingError = null;
                 _settling = null;
                 _blocks.Reset();
                 _attacks.Reset();
@@ -1322,6 +1330,7 @@ public sealed class GameClient
 
             case ErrorMessage error:
                 _errors.Add(error);
+                StandingError = error;
 
                 // The check of this answer's own question refused while it was being settled (the error names the request it is
                 // about; any other error is not this answer's): nothing unsettled is sent.
