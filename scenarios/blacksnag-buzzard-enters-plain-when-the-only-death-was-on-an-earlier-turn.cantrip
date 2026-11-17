@@ -1,0 +1,43 @@
+# Blacksnag Buzzard looks at "this turn" only (CR 700.4): Bot2's Llanowar Elves is bolted on turn 3 and the Buzzard cast two turns
+# later enters as a plain 2/1, no creature having died on turn 5.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Blacksnag Buzzard
+Mox Ruby
+Lightning Bolt
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Target: Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Llanowar Elves
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Blacksnag Buzzard.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Blacksnag Buzzard.Power = 2
+? Bot1.Battlefield.Blacksnag Buzzard.Toughness = 1
+
+[Expect]
+Bot1.Battlefield.Blacksnag Buzzard.Toughness = 1

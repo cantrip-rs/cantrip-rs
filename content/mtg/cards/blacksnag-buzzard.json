@@ -1,0 +1,11 @@
+{
+  "name": "Blacksnag Buzzard",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Bird",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying\nThis creature enters with a +1/+1 counter on it if a creature died this turn.\nPlot {1}{B} (You may pay {1}{B} and exile this card from your hand. Cast it as a sorcery on a later turn without paying its mana cost. Plot only as a sorcery.)",
+  "keywords": [
+    "Flying"
+  ]
+}

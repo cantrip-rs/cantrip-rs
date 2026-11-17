@@ -1,0 +1,22 @@
+# Plot {1}{B} needs black mana: Mox Ruby and a Mountain make {R}{R}, two mana but none of them black, and the plot is refused
+# (CR 702.170a, 601.2f).
+
+[Bot1 Deck]
+Blacksnag Buzzard
+Mox Ruby
+Mountain
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Hand.Blacksnag Buzzard.Activate(Ability: Plot; Mana: short)
+
+[Expect]
+Bot1.Battlefield = Mountain; Mox Ruby

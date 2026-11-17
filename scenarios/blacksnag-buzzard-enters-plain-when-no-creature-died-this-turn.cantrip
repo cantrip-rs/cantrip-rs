@@ -1,0 +1,22 @@
+# Blacksnag Buzzard enters without a counter when no creature has died this turn (CR 614.1c): a 2/1 flier.
+
+[Bot1 Deck]
+Black Lotus
+Blacksnag Buzzard
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Blacksnag Buzzard.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Blacksnag Buzzard.Power = 2
+? Bot1.Battlefield.Blacksnag Buzzard.Toughness = 1
+? Bot1.Battlefield.Blacksnag Buzzard.Keywords = Flying
+
+[Expect]
+Bot1.Battlefield.Blacksnag Buzzard.Toughness = 1

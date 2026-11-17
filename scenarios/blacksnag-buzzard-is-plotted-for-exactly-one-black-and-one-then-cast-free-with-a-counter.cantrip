@@ -1,0 +1,48 @@
+# Plot {1}{B} (CR 702.170a) is a special action costing exactly {1}{B}: with only Mox Jet's {B} (one short) the plot is refused;
+# with Swamp and Mox Jet it is taken and the pool is left empty. The Buzzard cannot be cast the turn it was plotted (the
+# refusal). On turn 3 Bot1 bolts Bot2's Llanowar Elves, then casts the plotted Buzzard free: a creature died this turn, so it
+# enters as a 3/2 with a counter.
+
+[Bot1 Deck]
+Blacksnag Buzzard
+Mox Jet
+Swamp
+Mox Ruby
+Lightning Bolt
+Swamp x15
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Blacksnag Buzzard.Activate(Ability: Plot; Mana: short)
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Blacksnag Buzzard.Activate(Ability: Plot)
+? Bot1.Mana =
+! Bot1.Exile.Blacksnag Buzzard.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Target: Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Llanowar Elves
+Bot1.Exile.Blacksnag Buzzard.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Blacksnag Buzzard.Power = 3
+
+[Expect]
+Bot1.Battlefield.Blacksnag Buzzard.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = Lightning Bolt

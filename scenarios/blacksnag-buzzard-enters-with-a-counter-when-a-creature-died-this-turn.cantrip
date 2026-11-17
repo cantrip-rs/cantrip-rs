@@ -1,0 +1,45 @@
+# Blacksnag Buzzard: "This creature enters with a +1/+1 counter on it if a creature died this turn." Bot2's Llanowar Elves is
+# bolted in turn 3 and the Buzzard cast afterwards, in the same turn, enters as a 3/2 with one counter (CR 614.1c, 700.4): the
+# creature that died was the opponent's, and not the Buzzard itself. It has flying.
+
+[Bot1 Deck]
+Swamp
+Swamp
+Black Lotus
+Blacksnag Buzzard
+Mox Ruby
+Lightning Bolt
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Target: Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Llanowar Elves
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Blacksnag Buzzard.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Blacksnag Buzzard.Power = 3
+? Bot1.Battlefield.Blacksnag Buzzard.Toughness = 2
+? Bot1.Battlefield.Blacksnag Buzzard.Keywords = Flying
+
+[Expect]
+Bot1.Battlefield.Blacksnag Buzzard.Counters.PlusOnePlusOne = 1
