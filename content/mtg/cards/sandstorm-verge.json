@@ -1,0 +1,5 @@
+{
+  "name": "Sandstorm Verge",
+  "type": "Land — Desert",
+  "oracleText": "{T}: Add {C}.\n{3}, {T}: Target creature can't block this turn. Activate only as a sorcery."
+}

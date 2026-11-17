@@ -1,0 +1,67 @@
+# Sandstorm Verge: "{T}: Add {C}." and "{3}, {T}: Target creature can't block this turn. Activate only as a sorcery." (CR 509.1b,
+# 611.2a, 602.5d). Bot1's Verge, two Moxen and two Ornithopters come down on turn 1. Turn 2 Bot2 plays its Ornithopter, and the
+# Verge cannot be activated on Bot2's turn (the window is not a sorcery's). Turn 3: with only two Moxen, both tapped, {3} is not
+# paid (`Mana: short`); with the third Mox cast and tapped it is, exactly (the pool is empty right after) and targets Bot2's Ornithopter, which then
+# cannot block Bot1's attacking Ornithopter. Turn 5: the same Ornithopter does block (the effect lasted that turn only), and
+# the ability accepts Bot1's own Ornithopter as its target. Turn 6: Bot1's Ornithopter blocks Bot2's attacker (an effect on it
+# from turn 5 is over). Turn 7: the Verge taps for {C} alone.
+
+[Bot1 Deck]
+Sandstorm Verge
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Ornithopter
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Sandstorm Verge.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot1.Battlefield.Sandstorm Verge.Activate(Ability: {3}, {T}; Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Sandstorm Verge.Activate(Ability: {3}, {T}; Bot2.Battlefield.Ornithopter; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sandstorm Verge.Activate(Ability: {3}, {T}; Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Sandstorm Verge.Tapped = true
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter#1 > Bot2)
+! Bot2.Block(Ornithopter > Ornithopter#1)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter#1 > Bot2)
+Bot2.Block(Ornithopter > Ornithopter#1)
+[T5 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sandstorm Verge.Activate(Ability: {3}, {T}; Bot1.Battlefield.Ornithopter#2)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+Bot1.Block(Ornithopter#2 > Ornithopter)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Sandstorm Verge.Activate(Ability: {C})
+? Bot1.Mana = {C}
+
+[Expect]
+Bot1.Battlefield.Sandstorm Verge.Tapped = true
