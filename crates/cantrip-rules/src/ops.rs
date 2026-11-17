@@ -2731,9 +2731,15 @@ impl Copies<'_> {
 /// its own copiable values, all enter together and what watches them sees one event (CR 603.2c), so each token sees the
 /// others enter (the Face Yourself ruling). `copies` are the values and who controls the token.
 pub fn create_token_copies_together(cx: &mut Cx, copies: &[(Copiable, PlayerId)]) -> R<Vec<ObjectId>> {
+    create_token_copies_together_tapped(cx, copies, false)
+}
+
+/// `create_token_copies_together`, each token entering tapped when `tapped` (CR 110.5b, 614.1c): created tapped, not tapped
+/// afterwards, so nothing sees one of them untapped. "Create a tapped token that's a copy of it" for each of several tokens.
+pub fn create_token_copies_together_tapped(cx: &mut Cx, copies: &[(Copiable, PlayerId)], tapped: bool) -> R<Vec<ObjectId>> {
     let tokens: Vec<(CardId, PlayerId)> = copies.iter().map(|&(values, controller)| (values.card, controller)).collect();
     let values: Vec<Copiable> = copies.iter().map(|&(values, _)| values).collect();
-    create_tokens_onto(cx, &tokens, false, Copies::Each(&values), &[], Words::NONE, None, None, None)
+    create_tokens_onto(cx, &tokens, tapped, Copies::Each(&values), &[], Words::NONE, None, None, None)
 }
 
 /// One token for each of `entries`, created together as one instruction (CR 101.4, 111.1) and each entering attacking

@@ -2782,6 +2782,10 @@ impl cantrip_api::Game for Cx<'_> {
         ops::create_token_copies_together(self, copies).map_err(|_| Suspend)
     }
 
+    fn create_tapped_token_copies_together(&mut self, copies: &[(Copiable, PlayerId)]) -> Result<Vec<ObjectId>, Suspend> {
+        ops::create_token_copies_together_tapped(self, copies, true).map_err(|_| Suspend)
+    }
+
     fn create_token_copies_tapped(&mut self, values: Copiable, controller: PlayerId, count: u32, tapped: bool) -> Result<Vec<ObjectId>, Suspend> {
         ops::create_token_copies_tapped(self, values, controller, count, tapped).map_err(|_| Suspend)
     }

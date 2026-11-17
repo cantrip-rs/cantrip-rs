@@ -1243,6 +1243,9 @@ pub trait Game: Query {
     /// together, so each sees the others enter (CR 603.2c). Each is the values and who controls the token. Face Yourself's
     /// "for each creature target player controls, create a token that's a copy of that creature".
     fn create_token_copies_together(&mut self, copies: &[(Copiable, PlayerId)]) -> Result<Vec<ObjectId>, Suspend>;
+    /// `create_token_copies_together`, each token entering tapped (CR 110.5b, 614.1c), not tapped afterwards: "for each of them,
+    /// create a tapped token that's a copy of it" (Kambal, Profiteering Mayor).
+    fn create_tapped_token_copies_together(&mut self, copies: &[(Copiable, PlayerId)]) -> Result<Vec<ObjectId>, Suspend>;
     /// `create_token_copies_of`, each token tapped when `tapped` ("a token that's a copy of ..., tapped" - myriad's, CR 702.116a):
     /// they all enter together, tapped as they enter, not tapped afterwards.
     fn create_token_copies_tapped(&mut self, values: Copiable, controller: PlayerId, count: u32, tapped: bool) -> Result<Vec<ObjectId>, Suspend>;
