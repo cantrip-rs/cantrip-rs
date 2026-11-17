@@ -1,0 +1,26 @@
+# Bristlepack Sentry: "Defender" (CR 702.3b) and "as long as you control a creature with power 4 or greater, this creature can attack as though it
+# didn't have defender". Bot1 controls only the Sentry (power 3) and a Llanowar Elves (1/1), so on T3 the Sentry cannot be declared as an
+# attacker, though the Elves can be (the question is asked because one creature may attack) and deal 1.
+
+[Bot1 Deck]
+Black Lotus
+Bristlepack Sentry
+Llanowar Elves
+Forest x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Bristlepack Sentry.Cast
+Bot1.Hand.Llanowar Elves.Cast
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Bristlepack Sentry > Bot2)
+Bot1.Attack(Llanowar Elves > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield = Bristlepack Sentry; Llanowar Elves

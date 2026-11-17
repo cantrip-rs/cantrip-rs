@@ -1,0 +1,28 @@
+# Bristlepack Sentry: it fulfils its own condition when its power reaches 4 (Bristlepack Sentry's 2024-04-12 ruling). Giant Growth on T3 makes it a
+# 6/6, so it can attack as though it didn't have defender and deals 6 combat damage.
+
+[Bot1 Deck]
+Black Lotus
+Bristlepack Sentry
+Giant Growth
+Forest x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Bristlepack Sentry.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Bristlepack Sentry)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bristlepack Sentry.Power = 6
+Bot1.Attack(Bristlepack Sentry > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
