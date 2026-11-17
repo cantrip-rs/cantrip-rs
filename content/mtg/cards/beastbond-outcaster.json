@@ -1,0 +1,8 @@
+{
+  "name": "Beastbond Outcaster",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Human Druid",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When this creature enters, if you control a creature with power 4 or greater, draw a card.\nPlot {1}{G} (You may pay {1}{G} and exile this card from your hand. Cast it as a sorcery on a later turn without paying its mana cost. Plot only as a sorcery.)"
+}

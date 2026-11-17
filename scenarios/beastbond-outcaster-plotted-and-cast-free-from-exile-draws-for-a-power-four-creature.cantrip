@@ -1,0 +1,43 @@
+# Beastbond Outcaster: "Plot {1}{G}" (CR 702.170a) exiles it from hand for {1}{G} as a special action, and on a later turn it is cast from exile
+# without paying its mana cost (CR 702.170d). Bot1 plots it on T1 (Forest and Mox Emerald) after casting Drover Grizzly (4/2) with Black Lotus;
+# the card cannot be cast the turn it was plotted. On T3 it is cast for free and enters with a 4-power creature around, so its ability
+# draws: 7 - 5 on T1 (Forest, Mox, Lotus, Grizzly, plotted Outcaster) + 1 on T3 + 1 = 4 cards.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Black Lotus
+Drover Grizzly
+Beastbond Outcaster
+Forest
+Forest
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Drover Grizzly.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Beastbond Outcaster.Activate(Ability: Plot)
+? Exile = Beastbond Outcaster
+! Bot1.Exile.Beastbond Outcaster.Cast
+[T3 Bot1.Main1]
+Bot1.Exile.Beastbond Outcaster.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Hand.Count = 3
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Battlefield = Forest; Mox Emerald; Drover Grizzly; Beastbond Outcaster
+Exile.Count = 0

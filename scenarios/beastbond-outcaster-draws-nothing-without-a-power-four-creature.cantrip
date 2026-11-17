@@ -1,0 +1,37 @@
+# Beastbond Outcaster: "When this creature enters, if you control a creature with power 4 or greater, draw a card" (CR 603.4): Bot1 controls
+# only a Grizzly Bears (2/2), power 2, and the Outcaster itself has power 3, so the ability does not trigger at all and nothing is put on
+# the stack. Hand: 7 - 4 played on T1 (Forest, Mox, Lotus, Bears) + 1 drawn - 2 (Forest, Outcaster) = 2 cards.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Black Lotus
+Grizzly Bears
+Forest
+Beastbond Outcaster
+Forest
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Beastbond Outcaster.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Beastbond Outcaster.Power = 3
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot1.Battlefield = Forest; Forest; Mox Emerald; Grizzly Bears; Beastbond Outcaster
