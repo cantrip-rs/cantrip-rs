@@ -562,9 +562,10 @@ pub fn attacking_creatures_you_control_get<const P: i32, const T: i32>(g: &mut d
 }
 
 /// "Creatures your opponents control get +`power`/+`toughness` until end of turn" (CR 611.2, 611.2c): the creatures each opponent
-/// of `item`'s controller controls as it resolves, and no creature that enters later. Sandman's Quicksand (-2/-2 when its mayhem
-/// cost was paid) and Sephiroth, Planet's Heir (-2/-2) print it.
-pub fn pump_creatures_your_opponents_control(g: &mut dyn Game, item: &StackItem, power: i32, toughness: i32) {
+/// of `item`'s controller controls as it resolves, and no creature that enters later. Those creatures are returned, for what the rest of
+/// the sentence does to them (Eliminate the Impossible: "If any of them are suspected, they're no longer suspected"). Sandman's Quicksand
+/// (-2/-2 when its mayhem cost was paid) and Sephiroth, Planet's Heir (-2/-2) print it.
+pub fn pump_creatures_your_opponents_control(g: &mut dyn Game, item: &StackItem, power: i32, toughness: i32) -> Vec<ObjectId> {
     let creatures: Vec<ObjectId> = g
         .state()
         .opponents(item.controller)
@@ -572,10 +573,11 @@ pub fn pump_creatures_your_opponents_control(g: &mut dyn Game, item: &StackItem,
         .filter(|&id| g.chars(id).is(CardType::Creature))
         .collect();
     instruction(g, |g| {
-        for id in creatures {
+        for &id in &creatures {
             crate::pump(g, item.object, id, power, toughness);
         }
     });
+    creatures
 }
 
 /// "Creatures your opponents control get +`P`/+`T` until end of turn" (CR 611.2c) as an ability's effect:
