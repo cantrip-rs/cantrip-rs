@@ -1,0 +1,8 @@
+{
+  "name": "Visage Bandit",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Shapeshifter Rogue",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "You may have this creature enter as a copy of a creature you control, except it's a Shapeshifter Rogue in addition to its other types.\nPlot {2}{U} (You may pay {2}{U} and exile this card from your hand. Cast it as a sorcery on a later turn without paying its mana cost. Plot only as a sorcery.)"
+}

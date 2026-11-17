@@ -1,0 +1,30 @@
+# Visage Bandit's "You may have this creature enter as a copy of a creature you control, except it's a Shapeshifter Rogue in
+# addition to its other types" (CR 614.1c, 707.9b): accepting copies Bot1's Ornithopter, a 0/2 Thopter with flying, and adds
+# Shapeshifter and Rogue to the copied Thopter type. The Bandit's own 2/2 power is replaced by the copy's 0.
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Island
+Visage Bandit
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Visage Bandit.Cast
+Bot1.Accept
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Island; Ornithopter; Ornithopter
+Bot1.Battlefield.Ornithopter#2.Subtypes = Rogue; Shapeshifter; Thopter
+Bot1.Battlefield.Ornithopter#2.Power = 0
+Bot1.Battlefield.Ornithopter#2.Toughness = 2

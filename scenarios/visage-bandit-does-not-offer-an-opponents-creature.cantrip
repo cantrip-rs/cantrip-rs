@@ -1,0 +1,33 @@
+# Visage Bandit copies "a creature you control" (CR 614.1c): with only Bot2's Ornithopter on the battlefield Bot1 is not asked
+# and the Bandit enters as itself, a 2/2 Shapeshifter Rogue. `! Bot1.Accept` fails if Bot1 is asked whether to copy, as an
+# engine that offered the opponent's creature would ask.
+
+[Bot1 Deck]
+Black Lotus
+Visage Bandit
+Island x18
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Visage Bandit.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+
+[Expect]
+Bot1.Battlefield = Island; Visage Bandit
+Bot1.Battlefield.Visage Bandit.Power = 2
+Bot1.Battlefield.Visage Bandit.Subtypes = Rogue; Shapeshifter
+Bot2.Battlefield = Ornithopter

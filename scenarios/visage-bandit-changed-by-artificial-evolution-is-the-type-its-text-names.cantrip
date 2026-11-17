@@ -1,0 +1,41 @@
+# Visage Bandit's copy exception, "except it's a Shapeshifter Rogue in addition to its other types", becomes part of the copy's
+# copiable values (CR 707.9b), so it is in the type line of the permanent. Bot1 casts the Bandit and, holding priority, its own
+# Artificial Evolution on the spell, replacing "Rogue" with "Goblin" (CR 612.1, 612.2); the effect goes on applying to the
+# permanent the spell becomes (CR 400.7a). The Bandit enters as a copy of Bot1's Ornithopter and is a Goblin Shapeshifter Thopter,
+# not a Rogue.
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Island
+Visage Bandit
+Mox Sapphire
+Artificial Evolution
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Visage Bandit.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artificial Evolution.Cast(Stack.Visage Bandit)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Rogue)
+Bot1.Modes(Goblin)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Island; Mox Sapphire; Ornithopter; Ornithopter
+Bot1.Battlefield.Ornithopter#2.Subtypes = Goblin; Shapeshifter; Thopter

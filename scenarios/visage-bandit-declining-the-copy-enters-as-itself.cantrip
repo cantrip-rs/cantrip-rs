@@ -1,0 +1,29 @@
+# "You may have this creature enter as a copy" (CR 614.1c): declining with a creature to copy available leaves Visage Bandit
+# entering as itself, a 2/2 Shapeshifter Rogue, while the Ornithopter stays the only 0/2 Thopter.
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Island
+Visage Bandit
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Visage Bandit.Cast
+Bot1.Decline
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Island; Ornithopter; Visage Bandit
+Bot1.Battlefield.Visage Bandit.Subtypes = Rogue; Shapeshifter
+Bot1.Battlefield.Visage Bandit.Power = 2
+Bot1.Battlefield.Visage Bandit.Toughness = 2

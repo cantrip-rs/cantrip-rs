@@ -1,0 +1,52 @@
+# Visage Bandit's "Plot {2}{U}" (CR 702.170a): on turn 1 Bot1 has three mana from Moxen that make no blue and cannot plot (the
+# {U} is missing). On turn 3 Mox Sapphire makes the {U}, and with two other Moxen it is plotted for exactly {2}{U}, the pool
+# empty after; it cannot be cast from exile that turn. On turn 5, with Bot1 controlling an Ornithopter, it is cast from exile
+# without paying its mana cost and enters as a copy of it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Visage Bandit
+Ornithopter
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Visage Bandit.Activate(Ability: Plot; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Visage Bandit.Activate(Ability: Plot)
+? Bot1.Mana =
+! Bot1.Exile.Visage Bandit.Cast
+[T5 Bot1.Main1]
+Bot1.Exile.Visage Bandit.Cast
+Bot1.Accept
+
+[Expect]
+Bot1.Battlefield.Ornithopter#2.Subtypes = Rogue; Shapeshifter; Thopter
+Exile.Count = 0
