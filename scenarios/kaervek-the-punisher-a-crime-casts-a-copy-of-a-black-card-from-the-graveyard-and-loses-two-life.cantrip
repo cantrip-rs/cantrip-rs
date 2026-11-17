@@ -1,0 +1,81 @@
+# Kaervek, the Punisher: "Whenever you commit a crime, exile up to one target black card from your graveyard and copy it. You may cast
+# the copy. If you do, you lose 2 life." Turn 3: Desert's Due at your own Ornithopter is no crime and goes to the graveyard (black).
+# Turn 5: Desert's Due at Bot2's Ornithopter is a crime (CR 700.13): the ability exiles the first Due (Black Lotus, in the
+# graveyard too, is colorless and no target; Bot2's Dark Ritual is black but in the other graveyard), copies it and casts the
+# copy at Bot2's other Ornithopter (a crime again, but nothing black is left to target). Bot1 loses exactly 2 life (20 to 18),
+# both Ornithopters die and the original Due stays exiled.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Kaervek, the Punisher
+Ornithopter
+Desert's Due
+Desert's Due
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Swamp
+Dark Ritual
+Swamp x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Kaervek, the Punisher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Dark Ritual.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Desert's Due.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Ornithopter; Desert's Due; Black Lotus
+? Bot1.Life = 20
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Desert's Due.Cast(Bot2.Battlefield.Ornithopter)
+! Bot1.Target(Bot2.Graveyard.Dark Ritual)
+! Bot1.Target(Black Lotus)
+Bot1.Target(Desert's Due)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Ornithopter#2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 18
+Bot2.Battlefield = Swamp
+Bot1.Exile.Desert's Due.Colors = Black
+Bot2.Graveyard = Ornithopter; Ornithopter; Dark Ritual

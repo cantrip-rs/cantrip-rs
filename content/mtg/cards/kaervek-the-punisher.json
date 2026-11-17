@@ -1,0 +1,8 @@
+{
+  "name": "Kaervek, the Punisher",
+  "manaCost": "{1}{B}{B}",
+  "type": "Legendary Creature — Human Warlock",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever you commit a crime, exile up to one target black card from your graveyard and copy it. You may cast the copy. If you do, you lose 2 life. (Targeting opponents, anything they control, and/or cards in their graveyards is a crime. Copies of permanent spells become tokens.)"
+}

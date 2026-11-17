@@ -1,0 +1,43 @@
+# Kaervek, the Punisher: "exile up to one target black card from your graveyard". With only Black Lotus there (colorless, so not black), a crime
+# (Desert's Due at Bot2's Ornithopter, CR 700.13) has nothing to target: nothing is exiled or cast and Bot1 keeps all 20 life. The Due resolves
+# and kills the Ornithopter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Kaervek, the Punisher
+Desert's Due
+Swamp x20
+
+[Bot2 Deck]
+Ornithopter
+Swamp x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Kaervek, the Punisher.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Desert's Due.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot2.Battlefield = 
+Bot1.Graveyard = Desert's Due; Black Lotus
+Exile.Count = 0
