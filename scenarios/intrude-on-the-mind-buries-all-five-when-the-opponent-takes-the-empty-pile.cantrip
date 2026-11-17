@@ -1,0 +1,43 @@
+# Intrude on the Mind: "You may choose to put all of the cards into one pile and leave the other pile empty" (the rulings). Bot1 puts all five revealed cards in the first pile, Bot2 chooses the empty second pile, so nothing
+# goes to Bot1's hand and all five go to its graveyard: a 5/5 flying Thopter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Intrude on the Mind
+Island
+Island
+Island
+Lightning Bolt
+Counterspell
+Dark Ritual
+Mox Emerald
+Mox Jet
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Intrude on the Mind.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.ChoosePlayer(Bot2)
+Bot1.Choose(Lightning Bolt; Counterspell; Dark Ritual; Mox Emerald; Mox Jet)
+Bot2.Modes(Second pile: nothing)
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Library.Count = 8
+Bot1.Graveyard.Count = 7
+Bot1.Battlefield = Mox Sapphire; Mox Ruby; Thopter Token
+Bot1.Battlefield.Thopter Token.Power = 5
+Bot1.Battlefield.Thopter Token.Toughness = 5

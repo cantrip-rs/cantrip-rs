@@ -1,0 +1,48 @@
+# Intrude on the Mind under Rest in Peace: the "graveyard" pile is exiled instead (CR 614.6), so no card is "put into your graveyard this way" and the Thopter gets no +1/+1 counters: a 0/0 that dies at once (CR 704.5f).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Rest in Peace
+Intrude on the Mind
+Lightning Bolt
+Counterspell
+Dark Ritual
+Mox Emerald
+Island
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rest in Peace.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Intrude on the Mind.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.ChoosePlayer(Bot2)
+Bot1.Choose(Lightning Bolt; Counterspell)
+Bot2.Modes(Second pile)
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Exile = Black Lotus; Counterspell; Intrude on the Mind; Lightning Bolt
+LeftBattlefield = Black Lotus (tapped); Thopter Token
+Bot1.Battlefield = Mox Sapphire; Mox Ruby; Mox Pearl; Mox Jet; Rest in Peace

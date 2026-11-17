@@ -1,0 +1,41 @@
+# Intrude on the Mind: "the top five cards" (CR 609.3): Bot1's library holds only three. Bot1 makes Lightning Bolt the first pile, Counterspell and Dark Ritual the second and Bot2 chooses the first for the hand: two cards buried,
+# a 2/2 flying Thopter, not a 5/5.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Intrude on the Mind
+Island
+Island
+Island
+Lightning Bolt
+Counterspell
+Dark Ritual
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Intrude on the Mind.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.ChoosePlayer(Bot2)
+Bot1.Choose(Lightning Bolt)
+Bot2.Modes(First pile)
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 0
+Bot1.Graveyard = Intrude on the Mind; Dark Ritual; Counterspell; Black Lotus
+Bot1.Revealed = Lightning Bolt; Counterspell; Dark Ritual
+Bot1.Battlefield = Mox Sapphire; Mox Ruby; Thopter Token
+Bot1.Battlefield.Thopter Token.Power = 2
+Bot1.Battlefield.Thopter Token.Toughness = 2

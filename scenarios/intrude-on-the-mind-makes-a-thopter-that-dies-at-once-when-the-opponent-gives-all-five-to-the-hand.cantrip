@@ -1,0 +1,40 @@
+# Intrude on the Mind: with all five cards in the pile Bot2 chooses for Bot1's hand and none put into the graveyard, "a +1/+1 counter for each card put into your graveyard this way" is none: the 0/0 Thopter is made and dies
+# as a state-based action (CR 704.5f), a token that ceases to exist and goes nowhere. Bot1's hand is its three Islands and the five cards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Intrude on the Mind
+Island
+Island
+Island
+Lightning Bolt
+Counterspell
+Dark Ritual
+Mox Emerald
+Mox Jet
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Intrude on the Mind.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.ChoosePlayer(Bot2)
+Bot1.Choose(Lightning Bolt; Counterspell; Dark Ritual; Mox Emerald; Mox Jet)
+Bot2.Modes(First pile)
+
+[Expect]
+Bot1.Hand.Count = 8
+Bot1.Graveyard.Count = 2
+Bot1.Battlefield = Mox Sapphire; Mox Ruby
