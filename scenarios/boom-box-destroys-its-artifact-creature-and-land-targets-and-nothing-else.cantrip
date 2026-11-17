@@ -1,0 +1,63 @@
+# Boom Box is cast on turn 1 with two Moxen. Bot2 puts a Mox Jet, a Mox Emerald, a Basking Rootwalla and a Forest onto the
+# battlefield on turn 2. On turn 3 Bot1 pays {6} (five Moxen and an Island) and taps and sacrifices the Boom Box, aiming
+# at the Mox Jet (artifact), the Rootwalla (creature) and the Forest (land): each slot takes only its own type (the
+# Rootwalla is refused as the artifact, the Forest as the creature), all three are destroyed, and the Mox Emerald, which
+# nothing targeted, stays.
+
+[Bot1 Deck]
+Island
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Boom Box
+Island x14
+
+[Bot2 Deck]
+Forest
+Mox Jet
+Mox Emerald
+Basking Rootwalla
+Forest x14
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Boom Box.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Basking Rootwalla.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Boom Box.Activate
+! Bot1.Target(Bot2.Battlefield.Basking Rootwalla)
+Bot1.Target(Bot2.Battlefield.Mox Jet)
+! Bot1.Target(Bot2.Battlefield.Forest)
+Bot1.Target(Bot2.Battlefield.Basking Rootwalla)
+Bot1.Target(Bot2.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Boom Box = (absent)
+Bot2.Battlefield.Mox Jet = (absent)
+Bot2.Battlefield.Basking Rootwalla = (absent)
+Bot2.Battlefield.Forest = (absent)
+Bot2.Battlefield.Mox Emerald.Tapped = false
+Bot2.Graveyard.Count = 3

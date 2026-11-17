@@ -1,0 +1,55 @@
+# Boom Box needs no target at all ("up to one" of each): Bot1 activates it on turn 3 choosing none, and it is simply tapped
+# and sacrificed. Bot2's Mox Jet, Ornithopter and Forest all stay.
+
+[Bot1 Deck]
+Island
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Boom Box
+Island x14
+
+[Bot2 Deck]
+Forest
+Mox Jet
+Ornithopter
+Forest x14
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Boom Box.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Boom Box.Activate
+Bot1.Target()
+Bot1.Target()
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Boom Box = (absent)
+Bot1.Graveyard = Boom Box
+Bot2.Battlefield.Mox Jet.Tapped = false
+Bot2.Battlefield.Ornithopter.Tapped = false
+Bot2.Battlefield.Forest.Tapped = false
+Bot2.Graveyard.Count = 0

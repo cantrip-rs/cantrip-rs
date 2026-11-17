@@ -1,0 +1,61 @@
+# Boom Box is aimed at Bot2's Mox Emerald (artifact), Basking Rootwalla (creature) and Mountain (land). In response Bot2's Lightning
+# Bolt kills the Rootwalla; as the ability resolves that target is gone and the other two are still destroyed (CR 608.2b).
+
+[Bot1 Deck]
+Island
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Boom Box
+Island x14
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Emerald
+Basking Rootwalla
+Lightning Bolt
+Mountain x14
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Boom Box.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Basking Rootwalla.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Boom Box.Activate
+Bot1.Target(Bot2.Battlefield.Mox Emerald)
+Bot1.Target(Bot2.Battlefield.Basking Rootwalla)
+Bot1.Target(Bot2.Battlefield.Mountain)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Basking Rootwalla)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Mox Emerald = (absent)
+Bot2.Battlefield.Basking Rootwalla = (absent)
+Bot2.Battlefield.Mountain = (absent)
+Bot2.Battlefield.Mox Ruby.Tapped = true
+Bot1.Battlefield.Boom Box = (absent)

@@ -1,0 +1,6 @@
+{
+  "name": "Boom Box",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "{6}, {T}, Sacrifice this artifact: Destroy up to one target artifact, up to one target creature, and up to one target land."
+}
