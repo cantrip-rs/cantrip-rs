@@ -1,0 +1,53 @@
+# Silver Deputy: "{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery." The turn it enters it
+# is summoning sick (CR 302.6). Turn 3, with Bot1's Ornithopter spell on the stack, the pump cannot be activated (CR 307.1); once
+# it has resolved the pump may not target Bot2's Frenzied Goblin, and on Bot1's Ornithopter it makes a 1/2 and taps the Deputy.
+# The +1/+0 ends with the turn: on turn 5 Ornithopter is 0/2 again (CR 514.2).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Silver Deputy
+Ornithopter
+Plains x3
+Plains x14
+
+[Bot2 Deck]
+Frenzied Goblin
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silver Deputy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+! Bot1.Battlefield.Silver Deputy.Activate(Ability: Target creature you control gets +1/+0; Bot1.Battlefield.Silver Deputy)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Frenzied Goblin.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Battlefield.Silver Deputy.Activate(Ability: Target creature you control gets +1/+0; Bot1.Battlefield.Silver Deputy)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Silver Deputy.Activate(Ability: Target creature you control gets +1/+0; Bot2.Battlefield.Frenzied Goblin)
+Bot1.Battlefield.Silver Deputy.Activate(Ability: Target creature you control gets +1/+0; Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Silver Deputy.Tapped = true
+? Bot2.Battlefield.Frenzied Goblin.Power = 1
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Silver Deputy.Tapped = false

@@ -1,0 +1,32 @@
+# Silver Deputy: the same "basic land card or a Desert card" search finds a basic land card: the Island is revealed and, with the
+# library shuffled, placed on top, so it is turn 3's draw (CR 701.23, 701.20). The Desert Arid Archway is not taken.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Silver Deputy
+Plains x4
+Arid Archway
+Island
+Plains x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silver Deputy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Search(Island)
+? Bot1.Revealed = Island
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains; Island

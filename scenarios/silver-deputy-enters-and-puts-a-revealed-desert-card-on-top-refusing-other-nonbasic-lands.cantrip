@@ -1,0 +1,40 @@
+# Silver Deputy: "When this creature enters, you may search your library for a basic land card or a Desert card, reveal it, then
+# shuffle and put it on top." Bot1 accepts and may find only a basic land card or a Desert card: Bloodstained Mire (a nonbasic land
+# that is no Desert), Lightning Bolt and a Forest-less nonland are refused; Arid Archway (a nonbasic Desert) is found, revealed and
+# ends on top, so it is turn 3's draw (CR 701.23, 701.20, 205.3i).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Silver Deputy
+Plains x4
+Bloodstained Mire
+Lightning Bolt
+Arid Archway
+Plains x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silver Deputy.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Search(Bloodstained Mire)
+! Bot1.Search(Lightning Bolt)
+Bot1.Search(Arid Archway)
+? Bot1.Revealed = Arid Archway
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains; Arid Archway
+Bot1.Battlefield.Silver Deputy.Power = 1
+Bot1.Battlefield.Silver Deputy.Toughness = 2

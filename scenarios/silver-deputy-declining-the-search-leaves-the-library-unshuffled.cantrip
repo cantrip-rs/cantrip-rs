@@ -1,0 +1,32 @@
+# Silver Deputy: the search is a "may": Bot1 declines it, the library is neither searched nor shuffled, so turn 3's draw is the
+# next Plains in order and the Arid Archway and Island stay where they were (CR 701.23, 701.24).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Silver Deputy
+Plains x4
+Plains
+Arid Archway
+Island
+Plains x8
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silver Deputy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains; Plains
+Bot1.Library.Count = 10
