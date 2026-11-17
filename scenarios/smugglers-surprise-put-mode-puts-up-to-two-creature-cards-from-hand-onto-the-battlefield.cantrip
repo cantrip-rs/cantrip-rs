@@ -1,0 +1,41 @@
+# Smuggler's Surprise {G}, mode "+ {4}{G}": a Black Lotus and three Moxen pay the six mana on turn 3. Bot1's hand then holds three creature cards (Grizzly Bears, Memnite and the
+# Ornithopter it drew): it may put up to two creature cards from its hand onto the battlefield, all three is refused, and it takes the Bears and the Ornithopter, leaving the
+# Memnite in hand. A card put this way is not cast (CR 608.2d, 101.4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Pearl
+Smuggler's Surprise
+Grizzly Bears
+Memnite
+Ornithopter
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Smuggler's Surprise.Cast
+Bot1.Modes(2)
+! Bot1.Choose(Grizzly Bears; Memnite; Ornithopter)
+Bot1.Choose(Grizzly Bears; Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Hand = Memnite
+Bot1.Battlefield.Count = 5

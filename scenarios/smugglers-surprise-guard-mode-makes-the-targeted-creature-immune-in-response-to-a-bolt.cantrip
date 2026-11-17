@@ -1,0 +1,51 @@
+# Smuggler's Surprise {G}, mode "+ {1}": Bot2 Lightning Bolts Bot1's Alpine Grizzly (4/2) on turn 2; with the Bolt on the stack Bot1 (Mox Emerald and Mox Pearl kept
+# open) casts the Surprise: creatures it controls with power 4 or greater (the Grizzly) gain hexproof and indestructible until end of turn (CR 611.2c). The Bolt's target is then
+# illegal and it is countered on resolution, so the Grizzly takes no damage and lives (CR 608.2b, 702.11d).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Forest
+Alpine Grizzly
+Smuggler's Surprise
+Forest x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Forest.Play
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Alpine Grizzly)
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Smuggler's Surprise.Cast
+Bot1.Modes(3)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Alpine Grizzly.Keywords = Hexproof; Indestructible
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Alpine Grizzly.Damage = 0
+Bot1.Graveyard = Smuggler's Surprise
+Bot2.Graveyard = Lightning Bolt

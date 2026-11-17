@@ -1,0 +1,52 @@
+# Smuggler's Surprise with all three modes ({G}+{2}+{4}{G}+{1} = nine mana: five Moxen, a Black Lotus and a Plains): "No matter which modes you choose, you always follow the
+# instructions in the order they are written" (CR 700.2a). Turn 3: the mill comes first (Alpine Grizzly, Lightning Bolt, Hill Giant and a Plains are milled) and Bot1 takes the Alpine
+# Grizzly (power 4) and the Hill Giant (power 3) into its hand; then it puts both onto the battlefield; then creatures with power 4 or greater gain hexproof and indestructible:
+# only the Alpine Grizzly, as the mode resolves (CR 611.2c), not the Hill Giant. Out of order, nothing would be in hand to put or on the battlefield to guard.
+
+[Bot1 Deck]
+Black Lotus
+Smuggler's Surprise
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Plains
+Alpine Grizzly
+Lightning Bolt
+Hill Giant
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Smuggler's Surprise.Cast
+Bot1.Modes(1; 2; 3)
+Bot1.Choose(Alpine Grizzly; Hill Giant)
+Bot1.Choose(Alpine Grizzly; Hill Giant)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 0
+Bot1.Battlefield.Alpine Grizzly.Keywords = Hexproof; Indestructible
+Bot1.Battlefield.Hill Giant.Keywords = (absent)
+Bot1.Graveyard = Smuggler's Surprise; Plains; Lightning Bolt; Black Lotus

@@ -1,0 +1,33 @@
+# Smuggler's Surprise {G}, spree, mode "+ {2}": Black Lotus pays {G} and {2}. Mill four: Grizzly Bears, Lightning Bolt, Forest and Memnite go to the graveyard; of them Bot1 may
+# put up to two creature and/or land cards into hand (the Bolt is not offered, three are eligible and a third is refused): it takes the Bears and the Forest, leaving the Memnite and the
+# Bolt in the graveyard (CR 701.17a, 608.2d).
+
+[Bot1 Deck]
+Black Lotus
+Smuggler's Surprise
+Plains x5
+Grizzly Bears
+Lightning Bolt
+Forest
+Memnite
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Smuggler's Surprise.Cast
+Bot1.Modes(1)
+! Bot1.Choose(Lightning Bolt)
+! Bot1.Choose(Grizzly Bears; Forest; Memnite)
+Bot1.Choose(Grizzly Bears; Forest)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Forest; Grizzly Bears; Plains; Plains; Plains; Plains; Plains
+Bot1.Library.Count = 14
+Bot1.Graveyard = Smuggler's Surprise; Memnite; Lightning Bolt; Black Lotus
