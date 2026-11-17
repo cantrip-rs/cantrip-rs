@@ -1,0 +1,50 @@
+# Freestrider Lookout: "Whenever you commit a crime, look at the top five cards of your library. You may put a land card from among them onto the
+# battlefield tapped. Put the rest on the bottom of your library in a random order." (CR 700.13, 701.20, 401.4). Bot1's Lightning Bolt at Bot2 is a crime;
+# exactly five cards are looked at (Memnite, Forest, Memnite, Forest, Memnite), a Memnite is refused and so are two cards, the Forest comes in tapped, and
+# the sixth card (Savannah Lions) is not looked at: it is still on top and is Bot1's turn 3 draw. The other four go to the bottom, so the library is 12.
+
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Freestrider Lookout
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Plains
+Memnite
+Forest
+Memnite
+Forest
+Memnite
+Savannah Lions
+Island x7
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Freestrider Lookout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Memnite)
+! Bot1.Choose(Forest; Forest)
+Bot1.Choose(Forest)
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Library.Count = 12
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T3 Bot1.Main1]
+? Bot1.Hand = Lightning Bolt; Lightning Bolt; Plains; Savannah Lions
+
+[Expect]
+Bot1.Battlefield = Freestrider Lookout; Mox Ruby; Forest
+Bot1.Library.Count = 11
