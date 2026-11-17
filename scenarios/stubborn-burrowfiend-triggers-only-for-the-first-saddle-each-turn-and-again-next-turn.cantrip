@@ -1,0 +1,75 @@
+# Stubborn Burrowfiend {1}{G} (2/2, Saddle 2): the trigger is "the first time each turn" it becomes saddled (CR 702.171b, 603.2). Turn 1: a lone Memnite (power 1) cannot pay
+# Saddle 2 (refused); with the second Memnite out it is not yet saddled. Turn 3: Grizzly Bears saddles it (1st time this turn: mill Grizzly Bears and Plains, X = 1, a 3/3);
+# the two Memnites then saddle it again (it is already saddled, so nothing triggers: no more cards milled, still 3/3). Turn 5: the two Memnites saddle it again,
+# a new turn so it triggers again: Memnite and Plains are milled, X = 2 (Grizzly Bears, Memnite), a 4/4.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Stubborn Burrowfiend
+Memnite
+Memnite
+Grizzly Bears
+Plains
+Plains
+Grizzly Bears
+Plains
+Plains
+Memnite
+Plains
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Stubborn Burrowfiend.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Stubborn Burrowfiend.Activate(Ability: Saddle)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Stubborn Burrowfiend.Activate(Ability: Saddle)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 2
+? Bot1.Battlefield.Stubborn Burrowfiend.Power = 3
+Bot1.Battlefield.Stubborn Burrowfiend.Activate(Ability: Saddle)
+Bot1.Choose(Memnite#1; Memnite#2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Graveyard.Count = 2
+? Bot1.Battlefield.Stubborn Burrowfiend.Power = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Stubborn Burrowfiend.Activate(Ability: Saddle)
+Bot1.Choose(Memnite#1; Memnite#2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Stubborn Burrowfiend.Power = 4
+Bot1.Battlefield.Stubborn Burrowfiend.Toughness = 4
