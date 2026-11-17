@@ -39,6 +39,9 @@ fn zone_words_are_read_from_the_oracle_text() {
             .iter()
             .flat_map(|def| def.abilities.iter().chain(def.delayed))
             .filter_map(|a| match a {
+                // A Case's "To solve - [condition]" is "at the beginning of your end step, if [condition]" (CR 719.3a): its words after the
+                // dash are an intervening "if" the end step checks, not a trigger condition that looks back in time.
+                AbilityDef::Triggered(t) if t.text.starts_with("To solve") => None,
                 AbilityDef::Triggered(t) => Some(read_zone_words(t.text)),
                 _ => None,
             })
