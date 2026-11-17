@@ -1,0 +1,8 @@
+{
+  "name": "Honest Rutstein",
+  "manaCost": "{1}{B}{G}",
+  "type": "Legendary Creature — Human Warlock",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When Honest Rutstein enters, return target creature card from your graveyard to your hand.\nCreature spells you cast cost {1} less to cast."
+}

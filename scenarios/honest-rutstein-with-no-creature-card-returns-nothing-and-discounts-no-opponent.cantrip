@@ -1,0 +1,46 @@
+# With no creature card in its controller's graveyard, Honest Rutstein's enters trigger has no target and is removed from the
+# stack (CR 603.3d), and Black Lotus in the graveyard is no creature card. Its discount covers only its
+# controller's spells: Bot2's Grizzly Bears {1}{G} still needs two mana (CR 601.2f).
+# Honest Rutstein {1}{B}{G}: Legendary Creature — Human Warlock 3/2
+#   When Honest Rutstein enters, return target creature card from your graveyard to your hand.
+#   Creature spells you cast cost {1} less to cast.
+
+[Bot1 Deck]
+Black Lotus
+Honest Rutstein
+Lightning Bolt
+Mox Jet
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Grizzly Bears
+Grizzly Bears
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Honest Rutstein.Cast
+? Bot1.Mana = {G}
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+! Bot2.Hand.Grizzly Bears.Cast(Mana: short)
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+? Bot2.Mana =
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Honest Rutstein.Power = 3
+Bot1.Hand = Lightning Bolt; Swamp; Swamp; Swamp; Swamp
+Bot1.Graveyard = Black Lotus
+Bot2.Battlefield.Grizzly Bears.Power = 2

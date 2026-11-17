@@ -1,0 +1,72 @@
+# Honest Rutstein returns a creature card from its controller's graveyard on entry, and its controller's creature spells cost
+# {1} less (CR 601.2f, 118.7c).
+# Honest Rutstein {1}{B}{G}: Legendary Creature — Human Warlock 3/2
+#   When Honest Rutstein enters, return target creature card from your graveyard to your hand.
+#   Creature spells you cast cost {1} less to cast.
+# Bot1's graveyard holds Llanowar Elves and Lightning Bolt; Bot2's holds Grizzly Bears. The only legal target is the Elves
+# (Bolt is no creature card, the Bears are in another player's graveyard). Afterwards Hill Giant {3}{R} takes all three
+# Moxen ({2}{R}), and with nothing left the Elves {G} can't be cast: the reduction takes only generic mana.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Llanowar Elves
+Lightning Bolt
+Honest Rutstein
+Hill Giant
+Lightning Bolt
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Grizzly Bears
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Llanowar Elves)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Grizzly Bears)
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Llanowar Elves; Lightning Bolt
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Honest Rutstein.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Llanowar Elves.Colors = Green
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hill Giant.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Llanowar Elves.Cast(Mana: short)
+
+[Expect]
+Bot1.Battlefield.Hill Giant.Power = 3
+Bot1.Hand = Llanowar Elves; Lightning Bolt; Swamp
+Bot2.Graveyard = Grizzly Bears; Lightning Bolt
+Bot1.Graveyard = Lightning Bolt
