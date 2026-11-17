@@ -1,0 +1,48 @@
+# Bubble Smuggler's "as this creature is turned face up" (CR 708.11) is not "as it enters": one cast face up for {1}{U} is a plain 2/1 with no counters.
+# A cloaked one (CR 701.58a, Cryptic Coat cloaks the top card of the library) turned up for its mana cost {1}{U} (CR 701.58c) is turned face up too, and gets
+# four +1/+1 counters as it does: with the Coat's +1/+0 it is a 7/5, and the one cast face up is still a 2/1.
+
+[Bot1 Deck]
+Mox Sapphire
+Bubble Smuggler
+Black Lotus
+Cryptic Coat
+Mox Pearl
+Island
+Island
+Bubble Smuggler
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bubble Smuggler.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bubble Smuggler.Power = 2
+? Bot1.Battlefield.Bubble Smuggler.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Cryptic Coat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.#1.Activate(Ability: mana cost)
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Cryptic Coat.AttachedTo = Bubble Smuggler
+Bot1.Battlefield.Bubble Smuggler#1.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Bubble Smuggler#1.Power = 2
+Bot1.Battlefield.Bubble Smuggler#2.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Bubble Smuggler#2.Power = 7
+Bot1.Battlefield.Bubble Smuggler#2.Toughness = 5

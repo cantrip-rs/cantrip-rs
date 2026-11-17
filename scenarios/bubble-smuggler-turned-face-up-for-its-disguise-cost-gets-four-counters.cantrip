@@ -1,0 +1,54 @@
+# Bubble Smuggler (Disguise {5}{U}; "As this creature is turned face up, put four +1/+1 counters on it"): cast face down for {3} (CR 702.168a), then
+# turned face up as a special action for exactly {5}{U} (CR 702.168d, 116.2b): five black sources are one short, and the sixth, a blue one, makes it affordable.
+# Face up it is Bubble Smuggler, a 2/1 with four +1/+1 counters put on it as it is turned up (CR 708.11): 6/5.
+
+[Bot1 Deck]
+Bubble Smuggler
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Sapphire
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Bubble Smuggler.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Bubble Smuggler.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Bubble Smuggler.Power = 6
+Bot1.Battlefield.Bubble Smuggler.Toughness = 5
