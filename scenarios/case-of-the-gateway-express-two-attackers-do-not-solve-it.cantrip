@@ -1,0 +1,52 @@
+# Case of the Gateway Express: "To solve — Three or more creatures attacked this turn." (CR 719.3a). Bot1 has three Memnite but attacks with only two: the condition needs three, so at its end step
+# the Case stays unsolved and the Memnite stay 1/1.
+
+[Bot1 Deck]
+Memnite
+Memnite
+Memnite
+Mox Pearl
+Mox Jet
+Case of the Gateway Express
+Plains x12
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x12
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite#1 > Bot2; Memnite#2 > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Case of the Gateway Express.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Case of the Gateway Express.Solved = (absent)
+? Bot1.Battlefield.Memnite#1.Power = 1
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Case of the Gateway Express.Solved = (absent)
+? Bot1.Battlefield.Memnite#1.Power = 1
+? Bot1.Battlefield.Memnite#3.Power = 1
+
+[Expect]
+Bot1.Battlefield.Case of the Gateway Express.Solved = (absent)
+Bot2.Graveyard = Ornithopter
+Bot2.Life = 18

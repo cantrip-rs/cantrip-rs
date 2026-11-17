@@ -1,0 +1,56 @@
+# Case of the Gateway Express: "To solve — Three or more creatures attacked this turn." and "Solved — Creatures you control get +1/+0." (CR 719.3a, 702.169b). Bot1 attacks on turn 3
+# with three Memnite and only then, in its second main phase, casts the Case: it was not there when they attacked, and the condition looks at the turn, not at the Case. Unsolved
+# when it enters (the Memnite are 1/1), it becomes solved at the beginning of Bot1's end step, and from then on its Memnite are 2/1 and Bot2's Memnite stays 1/1.
+
+[Bot1 Deck]
+Memnite
+Memnite
+Memnite
+Mox Pearl
+Mox Jet
+Case of the Gateway Express
+Plains x12
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x12
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite#1 > Bot2; Memnite#2 > Bot2; Memnite#3 > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Case of the Gateway Express.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Case of the Gateway Express.Solved = (absent)
+? Bot1.Battlefield.Memnite#1.Power = 1
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Case of the Gateway Express.Solved = true
+? Bot1.Battlefield.Memnite#1.Power = 2
+? Bot1.Battlefield.Memnite#1.Toughness = 1
+? Bot1.Battlefield.Memnite#3.Power = 2
+? Bot2.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Memnite.Toughness = 1
+
+[Expect]
+Bot1.Battlefield.Case of the Gateway Express.Solved = true
+Bot2.Graveyard = Ornithopter
+Bot2.Life = 17

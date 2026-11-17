@@ -1,0 +1,6 @@
+{
+  "name": "Case of the Gateway Express",
+  "manaCost": "{1}{W}",
+  "type": "Enchantment — Case",
+  "oracleText": "When this Case enters, choose target creature you don't control. Each creature you control deals 1 damage to that creature.\nTo solve — Three or more creatures attacked this turn. (If unsolved, solve at the beginning of your end step.)\nSolved — Creatures you control get +1/+0."
+}

@@ -1,0 +1,38 @@
+# Case of the Gateway Express: "Each creature you control deals 1 damage to that creature" (CR 120.3, 608.2c). With a single Memnite, Bot1's trigger deals one damage to Bot2's
+# Ornithopter (0/2), though Bot2 controls two creatures: it survives with 1 damage marked, so the amount is one per creature and not two.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Memnite
+Case of the Gateway Express
+Plains x12
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x12
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Case of the Gateway Express.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Damage = 1
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield.Memnite.Damage = 0

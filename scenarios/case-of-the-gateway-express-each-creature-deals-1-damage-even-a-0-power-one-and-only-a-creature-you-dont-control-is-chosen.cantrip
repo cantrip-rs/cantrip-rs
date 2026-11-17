@@ -1,0 +1,48 @@
+# Case of the Gateway Express: "When this Case enters, choose target creature you don't control. Each creature you control deals 1 damage to that creature." (CR 120.3, 608.2c).
+# Bot1 has a Memnite and an Ornithopter; on turn 3 it casts the Case (Mox Pearl and Mox Jet) and the trigger's target must be a creature Bot2 controls: Bot1's own Memnite and Bot2's Island are
+# refused, and Bot2's Ornithopter (0/2) is chosen (its Memnite is a legal choice too and is left alone). Each creature deals 1 damage, the Ornithopter too though it has no power, two in all, exactly its toughness, and it dies.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Ornithopter
+Memnite
+Case of the Gateway Express
+Plains x12
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x12
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Case of the Gateway Express.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Memnite)
+! Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Ornithopter
+? Bot2.Battlefield.Memnite.Damage = 0
+? Stack.Count = 0
+
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Memnite.Damage = 0
+Bot1.Battlefield.Case of the Gateway Express.Solved = (absent)
+Bot1.Battlefield.Memnite.Power = 1
