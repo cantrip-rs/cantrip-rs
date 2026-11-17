@@ -1,0 +1,9 @@
+{
+  "name": "Out Cold",
+  "manaCost": "{3}{U}",
+  "type": "Instant",
+  "oracleText": "This spell can't be countered. (This includes by the ward ability.)\nTap up to two target creatures and put a stun counter on each of them. Investigate. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+  "keywords": [
+    "CantBeCountered"
+  ]
+}

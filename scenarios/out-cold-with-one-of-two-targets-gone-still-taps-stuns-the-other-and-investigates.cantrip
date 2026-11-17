@@ -1,0 +1,47 @@
+# Out Cold: "Tap up to two target creatures and put a stun counter on each of them. Investigate." Bot1 targets its own Memnite and Bot2's Ornithopter; Bot2 Bolts the Ornithopter in response and it dies.
+# One target is still legal, so Out Cold resolves (CR 608.2b): the Memnite is tapped and stunned and Bot1 investigates.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Memnite
+Out Cold
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Out Cold.Cast
+Bot1.Target(Memnite; Bot2.Battlefield.Ornithopter)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Graveyard = Out Cold
+Bot1.Battlefield = Mox Pearl; Mox Sapphire; Mox Jet; Mox Ruby; Memnite; Clue Token
+Bot1.Battlefield.Memnite.Tapped = true
+Bot1.Battlefield.Memnite.Counters.Stun = 1

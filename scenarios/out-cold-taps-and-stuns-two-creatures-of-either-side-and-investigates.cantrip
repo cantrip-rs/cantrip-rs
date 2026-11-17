@@ -1,0 +1,53 @@
+# Out Cold {3}{U}: "Tap up to two target creatures and put a stun counter on each of them. Investigate." Four Moxen pay for it exactly. Bot1 taps and stuns its own Memnite
+# and Bot2's Ornithopter (a Mox is no creature: refused), already tapped or not (CR 122.1d), then investigates once: Bot1 gets the one Clue, Bot2 none (CR 701.16a). On turn 4
+# Bot2's untap step spends the Ornithopter's stun counter instead of untapping it (CR 122.1d).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Memnite
+Ornithopter
+Out Cold
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Out Cold.Cast
+! Bot1.Target(Mox Jet)
+! Bot1.Target(Memnite; Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Ornithopter)
+Bot1.Target(Memnite; Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Tapped = true
+? Bot1.Battlefield.Memnite.Counters.Stun = 1
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = 1
+? Bot1.Battlefield = Mox Pearl; Mox Sapphire; Mox Jet; Mox Ruby; Memnite; Ornithopter; Clue Token
+? Bot1.Battlefield.Ornithopter.Tapped = false
+? Bot1.Battlefield.Ornithopter.Counters.Stun = (absent)
+? Bot2.Battlefield = Ornithopter
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)
+
+[Expect]
+Bot1.Graveyard = Out Cold
+Bot2.Battlefield = Ornithopter
