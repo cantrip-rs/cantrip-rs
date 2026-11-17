@@ -1,0 +1,8 @@
+{
+  "name": "Outcaster Greenblade",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Human Mercenary",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "When this creature enters, search your library for a basic land card or a Desert card, reveal it, put it into your hand, then shuffle.\nThis creature gets +1/+1 for each Desert you control."
+}

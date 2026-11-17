@@ -1,0 +1,45 @@
+# Outcaster Greenblade: "When this creature enters, search your library for a basic land card or a Desert card, reveal it, put it into your
+# hand, then shuffle." Cast with the three Moxes. Bloodstained Mire (a nonbasic land that is no Desert) and Lightning Bolt are refused; the
+# Desert beside them could be found but the basic Forest is chosen. No Desert is controlled, so it stays a 1/2. Bot2's library is untouched.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Outcaster Greenblade
+Island x3
+Bloodstained Mire
+Lightning Bolt
+Forest
+Desert
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Outcaster Greenblade.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Bloodstained Mire)
+! Bot1.Search(Lightning Bolt)
+Bot1.Search(Forest)
+? Bot1.Revealed = Forest
+? Bot1.Battlefield.Outcaster Greenblade.Power = 1
+? Bot1.Battlefield.Outcaster Greenblade.Toughness = 2
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Forest
+Bot1.Library.Count = 13
+Bot2.Library.Count = 13
+Bot2.Hand.Count = 7
