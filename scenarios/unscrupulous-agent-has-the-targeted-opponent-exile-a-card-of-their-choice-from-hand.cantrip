@@ -1,0 +1,43 @@
+# "When this creature enters, target opponent exiles a card from their hand": the opponent, not the controller, picks which one
+# (CR 608.2d), here the Island of their Forest, Island and Mountain, and the controller's own hand loses nothing. A refusal
+# to target oneself (a player who is no opponent) sits beside the allowed target of Bot2.
+# Cast off two Moxen on turn 1; Bot1 starts with 7 cards, Mox Jet, Mox Ruby, Agent and four Swamps, then draws nothing.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Unscrupulous Agent
+Swamp
+Swamp
+Swamp
+Swamp
+10 Swamp
+
+[Bot2 Deck]
+Forest
+Island
+Mountain
+Plains
+Swamp
+Plains
+Plains
+10 Swamp
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Unscrupulous Agent.Cast(Bot1)
+Bot1.Hand.Unscrupulous Agent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Island)
+
+[Expect]
+Exile = Island
+Bot2.Hand.Count = 6
+Bot1.Hand.Count = 4
+Bot1.Battlefield.Unscrupulous Agent.Power = 1
