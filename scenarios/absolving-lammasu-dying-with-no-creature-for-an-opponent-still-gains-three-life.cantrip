@@ -1,0 +1,43 @@
+# Absolving Lammasu: the target is "up to one" (CR 601.2c): with no creature an opponent controls the ability goes on the stack with none, and its controller still gains 3 life (CR 608.2c). Bot1's own
+# Memnite is no legal target and is not suspected when the Lammasu, Bolted on turn 2, dies.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Absolving Lammasu
+Memnite
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Absolving Lammasu.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Absolving Lammasu)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot1.Graveyard = Absolving Lammasu; Black Lotus
+Bot1.Battlefield.Memnite.Suspected = (absent)

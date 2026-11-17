@@ -1,0 +1,56 @@
+# Absolving Lammasu: "When this creature dies, you gain 3 life and suspect up to one target creature an opponent controls." (CR 701.60a, 119.3). Bot1 casts it on turn 1 with a Black Lotus and two
+# Moxen, beside its own Memnite. On turn 2 Bot2 casts a Memnite and an Ornithopter and Bolts the Lammasu (3 toughness): Bot1 gains 3 life and chooses Bot2's Memnite to suspect, two targets being refused (it is "up to one"); its own Memnite,
+# a creature no opponent controls, is refused as the target and stays as it was.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Absolving Lammasu
+Memnite
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Island x3
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Absolving Lammasu.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Absolving Lammasu)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Target(Bot1.Battlefield.Memnite)
+! Bot1.Target(Bot2.Battlefield.Memnite; Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Bot2.Battlefield.Memnite.Suspected = true
+? Bot1.Battlefield.Memnite.Suspected = (absent)
+? Bot2.Battlefield.Ornithopter.Suspected = (absent)
+
+[Expect]
+Bot1.Graveyard = Absolving Lammasu; Black Lotus
+Bot2.Battlefield.Memnite.Keywords = CantBlock; Menace
