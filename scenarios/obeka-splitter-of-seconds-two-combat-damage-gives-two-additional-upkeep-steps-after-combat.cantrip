@@ -1,0 +1,41 @@
+# Obeka, Splitter of Seconds (CR 500.8, 500.10): "Whenever Obeka deals combat damage to a player, you get that many additional upkeep
+# steps after this phase." Obeka (power 2) is cast on turn 1 and attacks on turn 3: Bot2 goes 20 -> 18, the end of combat step is
+# followed by two beginning phases that hold only an upkeep step each (the rulings), and then the second main phase.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Obeka, Splitter of Seconds
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Obeka, Splitter of Seconds.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Obeka, Splitter of Seconds)
+[T3 Bot1.EndCombat]
+? Bot2.Life = 18
+Bot1.Pass
+Bot2.Pass
+? Step = Upkeep
+Bot1.Pass
+Bot2.Pass
+? Step = Upkeep
+Bot1.Pass
+Bot2.Pass
+? Step = Main2
+
+[Expect]
+Bot2.Life = 18

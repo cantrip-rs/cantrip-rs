@@ -1,0 +1,11 @@
+{
+  "name": "Obeka, Splitter of Seconds",
+  "manaCost": "{1}{U}{B}{R}",
+  "type": "Legendary Creature — Ogre Warlock",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Menace\nWhenever Obeka deals combat damage to a player, you get that many additional upkeep steps after this phase.",
+  "keywords": [
+    "Menace"
+  ]
+}

@@ -1,0 +1,42 @@
+# Obeka, Splitter of Seconds has menace (CR 702.111b: one Memnite alone can not block it) and deals combat damage to creatures too, but the trigger wants combat damage to a player
+# (CR 510.2): two Memnites double-block it, no damage goes to Bot2 (20) and the second main phase follows the end of combat
+# directly, with no additional upkeep step. The unblocked attack in the first scenario is the positive control.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Obeka, Splitter of Seconds
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Memnite
+Memnite
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Obeka, Splitter of Seconds.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Obeka, Splitter of Seconds)
+! Bot2.Block(Memnite#1 > Obeka, Splitter of Seconds)
+Bot2.Block(Memnite#1 > Obeka, Splitter of Seconds; Memnite#2 > Obeka, Splitter of Seconds)
+[T3 Bot1.EndCombat]
+? Bot2.Life = 20
+Bot1.Pass
+Bot2.Pass
+? Step = Main2
+
+[Expect]
+Bot2.Life = 20

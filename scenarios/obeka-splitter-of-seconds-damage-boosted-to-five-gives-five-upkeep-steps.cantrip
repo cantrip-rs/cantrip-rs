@@ -1,0 +1,54 @@
+# Obeka, Splitter of Seconds: "that many" is the damage actually dealt (CR 510.2), not its printed power. Giant Growth cast in the first main phase
+# makes Obeka 5/8, so Bot2 goes 20 -> 15 and five additional upkeep steps follow the combat phase, not two.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Obeka, Splitter of Seconds
+Mox Emerald
+Giant Growth
+Island
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Obeka, Splitter of Seconds.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Obeka, Splitter of Seconds)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Obeka, Splitter of Seconds)
+[T3 Bot1.EndCombat]
+? Bot2.Life = 15
+Bot1.Pass
+Bot2.Pass
+? Step = Upkeep
+Bot1.Pass
+Bot2.Pass
+? Step = Upkeep
+Bot1.Pass
+Bot2.Pass
+? Step = Upkeep
+Bot1.Pass
+Bot2.Pass
+? Step = Upkeep
+Bot1.Pass
+Bot2.Pass
+? Step = Upkeep
+Bot1.Pass
+Bot2.Pass
+? Step = Main2
+
+[Expect]
+Bot2.Life = 15
