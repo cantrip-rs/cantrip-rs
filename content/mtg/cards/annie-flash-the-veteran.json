@@ -1,0 +1,11 @@
+{
+  "name": "Annie Flash, the Veteran",
+  "manaCost": "{3}{R}{G}{W}",
+  "type": "Legendary Creature — Human Rogue",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Flash\nWhen Annie Flash enters, if you cast it, return target permanent card with mana value 3 or less from your graveyard to the battlefield tapped.\nWhenever Annie Flash becomes tapped, exile the top two cards of your library. You may play those cards this turn.",
+  "keywords": [
+    "Flash"
+  ]
+}

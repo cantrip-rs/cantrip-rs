@@ -1,0 +1,50 @@
+# Annie Flash, the Veteran put onto the battlefield by Sneak Attack was not cast, so her enters ability doesn't trigger and
+# the Black Lotus (mana value 0) stays in the graveyard. Hasted, she attacks and the two exiled cards are left unplayed (the
+# "may": declined); on Bot1's next turn neither the Mountain nor the Lightning Bolt can be played from exile any more
+# (CR 514.2: "this turn" ended), though untapped Moxen could pay for the Bolt.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Sneak Attack
+Annie Flash, the Veteran
+Island
+Island
+Mountain
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sneak Attack.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Sneak Attack.Activate
+Bot1.Choose(Annie Flash, the Veteran)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Black Lotus
+? Stack.Count = 0
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Annie Flash, the Veteran > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt; Mountain
+[T3 Bot1.Main1]
+! Bot1.Exile.Mountain.Play
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Bot2.Life = 16
+Exile = Lightning Bolt; Mountain
+Bot1.Graveyard = Annie Flash, the Veteran; Black Lotus
+Bot2.Library.Count = 12

@@ -1,0 +1,87 @@
+# Annie Flash, the Veteran is cast with flash during Bot2's turn (CR 702.8a), so her enters ability triggers (CR 603.4): Hill
+# Giant (mana value 4), a sorcery and Bot2's Glorious Anthem are refused targets, and Bot1's Glorious Anthem (mana value 3,
+# a noncreature permanent card) returns tapped. On Bot1's turn she attacks, becomes tapped and exiles exactly the top two
+# cards of Bot1's library (Bot2's library is untouched): the Mountain is played from exile as the turn's land drop and the
+# Lightning Bolt is cast from exile with its mana (CR 305.1, 601.2), while the Forest drawn that turn stays in hand.
+# Annie Flash, the Veteran {3}{R}{G}{W}: Legendary Creature — Human Rogue 4/5
+#   Flash
+#   When Annie Flash enters, if you cast it, return target permanent card with mana value 3 or less from your graveyard to the
+#   battlefield tapped.
+#   Whenever Annie Flash becomes tapped, exile the top two cards of your library. You may play those cards this turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Annie Flash, the Veteran
+Faithless Looting
+Hill Giant
+Glorious Anthem
+Forest
+Mountain
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Mox Jet
+Entomb
+Island x20
+Glorious Anthem
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hill Giant; Glorious Anthem)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Search(Glorious Anthem)
+[T2 Bot2.End]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Annie Flash, the Veteran.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Graveyard.Hill Giant)
+! Bot1.Target(Bot1.Graveyard.Faithless Looting)
+! Bot1.Target(Bot2.Graveyard.Glorious Anthem)
+Bot1.Target(Bot1.Graveyard.Glorious Anthem)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Glorious Anthem.Tapped = true
+? Bot1.Battlefield.Annie Flash, the Veteran.Power = 5
+? Bot1.Battlefield.Annie Flash, the Veteran.Keywords = Flash
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Annie Flash, the Veteran > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt; Mountain
+? Bot1.Hand = Forest
+[T3 Bot1.Main2]
+Bot1.Exile.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 12
+Bot1.Hand = Forest
+Exile.Count = 0
+Bot1.Library.Count = 10
+Bot2.Library.Count = 14
+Bot2.Graveyard = Entomb; Glorious Anthem
