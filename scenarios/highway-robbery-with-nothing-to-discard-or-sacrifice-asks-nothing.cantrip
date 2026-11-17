@@ -1,0 +1,32 @@
+# Highway Robbery: "You may discard a card or sacrifice a land. If you do, draw two cards" (CR 608.2c-d, 701.9, 701.21, 121.1). Bot1 casts Memnite four times first, so the hand is empty and there is no land: there is nothing to choose, no question is asked and no card is drawn.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Highway Robbery
+Memnite x4
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Highway Robbery.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 0
+? Bot1.Graveyard = Highway Robbery
+
+[Expect]
+Stack.Count = 0
