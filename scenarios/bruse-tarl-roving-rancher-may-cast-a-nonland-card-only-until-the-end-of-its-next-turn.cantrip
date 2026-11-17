@@ -1,0 +1,61 @@
+# Bruse Tarl, Roving Rancher: a nonland card exiled as it enters may be cast "until the end of your next turn" (CR 514.2), and no
+# Ox is made for it. Turn 1: Bruse enters and exiles Lightning Bolt; Bot1 does not cast it on turn 3, its next turn, and on
+# turn 5 it can no longer be cast. Turn 3: Bruse attacks and exiles a Forest: a 2/2 Ox is made, after attackers were declared
+# (it is not attacking), and the Forest may not be played from exile. Turn 5: the attack exiles Shatterskull Smashing, a modal
+# double-faced card: Bot1 may cast it but not play its land face, Shatterskull, the Hammer Pass (CR 712.12).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Black Lotus
+Bruse Tarl, Roving Rancher
+Island
+Island
+Island
+Lightning Bolt
+Island
+Forest
+Island
+Shatterskull Smashing
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bruse Tarl, Roving Rancher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Exile = Lightning Bolt
+? Bot1.Battlefield = Mox Ruby; Mox Pearl; Bruse Tarl, Roving Rancher
+[T3 Bot1.Main1]
+Bot1.Attack(Bruse Tarl, Roving Rancher > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Exile = Forest; Lightning Bolt
+? Combat.Attackers = Bruse Tarl, Roving Rancher > Bot2
+[T3 Bot1.Main2]
+! Bot1.Exile.Forest.Play
+? Bot2.Life = 16
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Attack(Bruse Tarl, Roving Rancher > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+! Bot1.Exile.Shatterskull Smashing.Play
+
+[Expect]
+Bot2.Life = 12
+Exile = Shatterskull Smashing; Forest; Lightning Bolt
+Bot1.Battlefield.Ox Token.Power = 2

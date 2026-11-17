@@ -1,0 +1,70 @@
+# Bruse Tarl, Roving Rancher: "Oxen you control have double strike. Whenever Bruse Tarl enters or attacks, exile the top card
+# of your library. If it's a land card, create a 2/2 white Ox creature token. Otherwise, you may cast it until the end of your
+# next turn." Turn 1: Bruse enters and exiles a Forest, making a 2/2 white Ox. Turn 3: Bot1's Bovine Intervention gives Bot2
+# an Ox of its own, which does not get double strike (not Bot1's); Bruse (no double strike, not an Ox) and Bot1's Ox attack,
+# the attack exiles Lightning Bolt, and Bot2 takes 4 + 2 + 2. Turn 5, Bot1's next turn: the Bolt is cast from exile.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Black Lotus
+Bruse Tarl, Roving Rancher
+Bovine Intervention
+Island
+Island
+Forest
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bruse Tarl, Roving Rancher.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Exile = Forest
+? Bot1.Battlefield.Ox Token.Power = 2
+? Bot1.Battlefield.Ox Token.Toughness = 2
+? Bot1.Battlefield.Ox Token.Colors = White
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Bovine Intervention.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Ox Token
+Bot1.Attack(Bruse Tarl, Roving Rancher > Bot2; Ox Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt; Forest
+[T3 Bot1.Main2]
+? Bot2.Life = 12
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 9
+Exile = Forest
+Bot1.Battlefield.Ox Token.Keywords = DoubleStrike
+Bot2.Battlefield.Ox Token.Keywords = (absent)
+Bot1.Battlefield.Bruse Tarl, Roving Rancher.Keywords = (absent)
