@@ -1,0 +1,61 @@
+# "Then you may exile a card from a graveyard": Bot1 chooses nothing (the empty answer) with cards in graveyards, so nothing is exiled and no copy is offered, but the counter was already put on Lazav.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Lazav, Familiar Stranger
+Lightning Bolt
+Lightning Bolt
+Gleemox
+Lightning Bolt
+Island
+Island x18
+
+[Bot2 Deck]
+Memnite
+Island x6
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lazav, Familiar Stranger.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lazav, Familiar Stranger.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lazav, Familiar Stranger.Counters.PlusOnePlusOne = 1
+? Bot2.Life = 17
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+! Bot1.Accept
+
+[Expect]
+Exile.Count = 0
+Bot2.Graveyard = Island; Memnite
+Bot1.Battlefield.Lazav, Familiar Stranger.Counters.PlusOnePlusOne = 2
