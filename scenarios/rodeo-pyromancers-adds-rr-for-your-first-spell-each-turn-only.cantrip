@@ -1,0 +1,70 @@
+# Rodeo Pyromancers (CR 603.2, 605.1b): "Whenever you cast your first spell each turn, add {R}{R}" -- a triggered ability that uses the stack, so the mana is added when it resolves.
+# On turn 1 Bot1 casts four Moxes and then the Pyromancers (all before it is on the battlefield, so no trigger), and its Memnite afterwards is not the first spell that turn (nothing triggers).
+# Bot2's spell on turn 2 does not trigger it (not "you"). On turn 3 the first Memnite triggers it: the trigger is on the stack above the spell and, resolved, {R}{R} is in the pool; the
+# second Memnite adds nothing more. On turn 5 the first spell again triggers it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Rodeo Pyromancers
+Memnite
+Memnite
+Memnite
+Memnite
+Island x12
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Rodeo Pyromancers.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Hand.Memnite.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R}
+? Stack.Count = 1
+? Bot1.Battlefield.Count = 6
+Bot1.Hand.Memnite.Cast
+? Stack.Count = 1
+? Bot1.Mana = {R}{R}
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R}
+[T5 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R}
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Memnite#1.Power = 1
+Bot1.Battlefield.Count = 9

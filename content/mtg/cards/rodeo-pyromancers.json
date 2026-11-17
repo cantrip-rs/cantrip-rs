@@ -1,0 +1,8 @@
+{
+  "name": "Rodeo Pyromancers",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Human Mercenary",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Whenever you cast your first spell each turn, add {R}{R}."
+}
