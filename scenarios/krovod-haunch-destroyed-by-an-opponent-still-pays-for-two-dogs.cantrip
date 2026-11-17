@@ -1,0 +1,43 @@
+# Krovod Haunch: it is "put into a graveyard from the battlefield" however it gets there, destroyed as well as sacrificed (CR 700.4). Bot2
+# destroys it with Disenchant on turn 2 (Black Lotus's white), and Bot1 pays {1}{W} with the Plains and Mox Jet it left untapped: two
+# white 1/1 Dogs. Bot1 gained no life (the Food ability was never used).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Krovod Haunch
+Plains x17
+
+[Bot2 Deck]
+Black Lotus
+Disenchant
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Krovod Haunch.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Krovod Haunch)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Krovod Haunch
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+? Bot1.Battlefield.Count = 5
+? Bot1.Battlefield.Dog Token#1.Colors = White
+? Bot1.Battlefield.Dog Token#2.Power = 1
+? Bot1.Battlefield.Dog Token#2.Toughness = 1
+
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Krovod Haunch

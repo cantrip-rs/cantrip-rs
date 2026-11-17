@@ -1,0 +1,42 @@
+# Krovod Haunch ({W}, Food Equipment): "Equipped creature gets +2/+0" and "Equip {2}" (CR 702.6a, 301.5, 611.3a). Bot1 casts Ornithopter
+# (0/2 flyer) and the Haunch (Mox Pearl), then equips it: with only Mox Jet's {B} the equip is refused (short of {2}); with Mox Ruby
+# as well it is paid exactly (pool empty) and the Ornithopter is 2/2, power up and toughness unchanged. Equipped to a creature, the
+# Haunch still has its Food ability, and it is a Food artifact, not a creature.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Krovod Haunch
+Ornithopter
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Krovod Haunch.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Krovod Haunch.Types = Artifact
+? Bot1.Battlefield.Krovod Haunch.Subtypes = Equipment; Food
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Krovod Haunch.Activate(Ability: Equip {2}; Bot1.Battlefield.Ornithopter; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Krovod Haunch.Activate(Ability: Equip {2}; Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Krovod Haunch.AttachedTo = Ornithopter

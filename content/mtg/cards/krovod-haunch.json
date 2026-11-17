@@ -1,0 +1,6 @@
+{
+  "name": "Krovod Haunch",
+  "manaCost": "{W}",
+  "type": "Artifact — Food Equipment",
+  "oracleText": "Equipped creature gets +2/+0.\n{2}, {T}, Sacrifice this Equipment: You gain 3 life.\nWhen this Equipment is put into a graveyard from the battlefield, you may pay {1}{W}. If you do, create two 1/1 white Dog creature tokens.\nEquip {2}"
+}

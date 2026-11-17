@@ -1,0 +1,35 @@
+# Krovod Haunch: "you may pay {1}{W}. If you do, create two 1/1 white Dog creature tokens." Bot1 sacrifices it for {2} out of Black Lotus's WWW,
+# leaving only {W}, which cannot pay {1}{W}: the trigger asks, the payment is refused for want of mana, and Bot1 declines: no Dogs. Bot1 gains 3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Krovod Haunch
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Krovod Haunch.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Krovod Haunch.Activate(Ability: Sacrifice)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 2
+? Bot1.Mana = {W}
+! Bot1.PayCost(Mana: short)
+Bot1.Decline
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield.Count = 1

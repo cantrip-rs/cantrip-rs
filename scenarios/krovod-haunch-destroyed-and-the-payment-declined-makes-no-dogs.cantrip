@@ -1,0 +1,38 @@
+# Krovod Haunch: "you may pay {1}{W}. If you do" - the payment is optional (CR 608.2d). Bot2 destroys the Haunch with Disenchant while Bot1
+# has the Plains and Mox Jet untapped, and Bot1 declines: no Dogs, Bot1 keeps the Plains and Mox Jet untapped, and the Haunch stays in the graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Krovod Haunch
+Plains x17
+
+[Bot2 Deck]
+Black Lotus
+Disenchant
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Krovod Haunch.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Krovod Haunch)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Decline
+? Stack.Count = 0
+? Bot1.Battlefield.Count = 3
+? Bot1.Battlefield.Plains.Tapped = false
+? Bot1.Battlefield.Mox Jet.Tapped = false
+
+[Expect]
+Bot1.Graveyard = Krovod Haunch

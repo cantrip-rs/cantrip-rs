@@ -1,0 +1,43 @@
+# Krovod Haunch: "{2}, {T}, Sacrifice this Equipment: You gain 3 life." and "When this Equipment is put into a graveyard from the battlefield,
+# you may pay {1}{W}. If you do, create two 1/1 white Dog creature tokens." (CR 602.2, 701.21a, 603.6c). Bot1 has Black Lotus (white), Mox Jet:
+# the Lotus's WWW pays the {2} of the Food ability, the Haunch is in the graveyard at once (a cost) and its trigger resolves first: the W left
+# over with Mox Jet's B pays the {1}{W}, so two white 1/1 Dogs arrive while Bot1 is still on 20, then the ability resolves: 23.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Krovod Haunch
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Krovod Haunch.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Krovod Haunch.Activate(Ability: Sacrifice)
+? Bot1.Graveyard = Krovod Haunch; Black Lotus
+? Bot1.Mana = {W}
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+? Bot1.Battlefield.Count = 4
+? Bot1.Battlefield.Dog Token#1.Colors = White
+? Bot1.Battlefield.Dog Token#2.Power = 1
+? Bot1.Battlefield.Dog Token#2.Toughness = 1
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 23
