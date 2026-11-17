@@ -1,0 +1,52 @@
+# Lotus Ring is cast with three Moxen on turn 1 along with an Ornithopter (a 0/2 flyer). On turn 3 the Moxen pay
+# Equip {3}: the Ornithopter is a 3/5 and its attack for 3 (Bot2 is at 17) leaves it untapped (vigilance). In the
+# second main phase it taps and sacrifices itself for three mana of one color chosen at activation: {U}{U}{U}, not one
+# mana (and not one of each). The Ring stays on the battlefield, unattached.
+
+[Bot1 Deck]
+Island
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Ornithopter
+Lotus Ring
+Island
+Island x13
+
+[Bot2 Deck]
+Plains x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lotus Ring.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Lotus Ring.Activate(Ability: Equip; Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 3
+? Bot1.Battlefield.Ornithopter.Toughness = 5
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Ornithopter.Activate(Color: Blue)
+? Bot1.Mana = {U}{U}{U}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Lotus Ring.Tapped = false
+Bot1.Battlefield.Lotus Ring.AttachedTo = (absent)
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Graveyard.Count = 1

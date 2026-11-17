@@ -1,0 +1,45 @@
+# Lotus Ring is cast on turn 1 off three Moxen. On turn 3 Bot1 casts an Ornithopter and equips the Ring to it: the
+# granted "{T}, Sacrifice this creature" ability has {T} in its cost, so the summoning-sick Ornithopter cannot use it
+# (the refusal). On turn 5 it can, and gives three mana of one color: {R}{R}{R}.
+
+[Bot1 Deck]
+Island
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Ornithopter
+Lotus Ring
+Island
+Island x13
+
+[Bot2 Deck]
+Plains x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lotus Ring.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Lotus Ring.Activate(Ability: Equip; Ornithopter)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Ornithopter.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Ornithopter.Activate(Color: Red)
+? Bot1.Mana = {R}{R}{R}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Battlefield.Lotus Ring.AttachedTo = (absent)
