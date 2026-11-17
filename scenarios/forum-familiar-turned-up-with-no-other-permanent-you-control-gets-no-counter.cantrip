@@ -1,0 +1,33 @@
+# Forum Familiar: "another target permanent you control" (CR 115.1, 603.3d). Bot1 casts it face down with a Black Lotus on turn 1 and, on turn 3, a second Black Lotus pays
+# {1}{W} to turn it up (the Lotus is sacrificed for its mana). Nothing else is under Bot1's control, the Familiar is not "another", so the trigger has no legal target and
+# is removed from the stack: no +1/+1 counter, the Familiar stays a 1/1.
+
+[Bot1 Deck]
+Black Lotus
+Forum Familiar
+Plains x5
+Black Lotus
+Plains x10
+
+[Bot2 Deck]
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forum Familiar.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Forum Familiar.Power = 1
+Bot1.Battlefield.Forum Familiar.Toughness = 1
+Bot1.Battlefield.Forum Familiar.Counters.PlusOnePlusOne = (absent)
+Bot1.Graveyard = Black Lotus; Black Lotus

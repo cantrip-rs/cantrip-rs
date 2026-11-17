@@ -1,0 +1,47 @@
+# Forum Familiar (1/1, Disguise {1}{W}): "When this creature is turned face up, return another target permanent you control to its owner's hand and put a +1/+1
+# counter on this creature." (CR 702.168d, 701.40b, 603.2, 400.3, 122.1). Bot1 casts it face down with a Black Lotus, next to a Memnite; Bot2 has a Memnite. On turn 3 Bot1
+# turns it up for exactly {1}{W} (a Mox Pearl and a Mox Jet): the trigger refuses the Familiar itself ("another") and Bot2's Memnite (not Bot1's), and Bot1 chooses its own
+# Memnite, which goes back to its hand while the Familiar becomes a 2/2 with a +1/+1 counter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Forum Familiar
+Memnite
+Plains x10
+
+[Bot2 Deck]
+Memnite
+Island x10
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forum Familiar.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Mana =
+! Bot1.Target(Bot1.Battlefield.Forum Familiar)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Memnite.Power = 1
+Bot1.Battlefield.Memnite = (absent)
+Bot1.Battlefield.Forum Familiar.Power = 2
+Bot1.Battlefield.Forum Familiar.Toughness = 2
+Bot1.Battlefield.Forum Familiar.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Memnite.Power = 1

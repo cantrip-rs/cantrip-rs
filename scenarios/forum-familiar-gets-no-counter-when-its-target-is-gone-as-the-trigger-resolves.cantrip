@@ -1,0 +1,46 @@
+# Forum Familiar: the trigger's one target is checked again as it resolves (CR 608.2b), and an ability whose targets are all illegal does nothing, the counter included.
+# Bot1 turns the Familiar up on turn 3 for a Mox Pearl and a Mox Jet and aims at its Memnite; with the trigger on the stack Bot2 kills the Memnite with a Lightning Bolt.
+# The Memnite is in the graveyard, not returned to hand, and the Familiar stays a 1/1 with no counter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Forum Familiar
+Memnite
+Plains x10
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x10
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forum Familiar.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Memnite; Black Lotus
+Bot1.Battlefield.Forum Familiar.Power = 1
+Bot1.Battlefield.Forum Familiar.Counters.PlusOnePlusOne = (absent)
