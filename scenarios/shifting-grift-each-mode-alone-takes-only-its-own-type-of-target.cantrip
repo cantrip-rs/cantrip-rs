@@ -1,0 +1,134 @@
+# Shifting Grift, one mode at a time, each type of target only its own: the same board as the three-mode scenario. Turn 3, only
+# "creatures" ({U}{U}{2}, the four Moxen): an artifact or an enchantment is no target, nor is one creature alone, nor
+# the same creature twice; the Bears and the Elves are exchanged. Turn 5, only "artifacts" ({U}{U}{1}: the three mana the Sapphires and
+# Jet make exactly): a creature or an enchantment is no target; the Ring and the Mox Pearl are exchanged. Turn 7, only "enchantments"
+# ({U}{U}{1}): the Moon and the Crusade are exchanged. Each turn the earlier exchanges stand.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Sol Ring
+Bad Moon
+Grizzly Bears
+Shifting Grift
+Shifting Grift
+Shifting Grift
+Island x16
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Mox Emerald
+Mox Emerald
+Crusade
+Llanowar Elves
+Hardened Scales
+Memnite
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bad Moon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Crusade.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Hardened Scales.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Shifting Grift.Cast
+Bot1.Modes(Exchange control of two target creatures)
+! Bot1.Target(Bot1.Battlefield.Sol Ring; Bot2.Battlefield.Mox Pearl)
+! Bot1.Target(Bot1.Battlefield.Bad Moon; Bot2.Battlefield.Crusade)
+! Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot1.Battlefield.Grizzly Bears; Bot2.Battlefield.Llanowar Elves; Bot2.Battlefield.Memnite)
+! Bot1.Target(Bot1.Battlefield.Grizzly Bears; Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears; Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Shifting Grift.Cast
+Bot1.Modes(Exchange control of two target artifacts)
+! Bot1.Target(Bot1.Battlefield.Llanowar Elves; Bot2.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot1.Battlefield.Bad Moon; Bot2.Battlefield.Crusade)
+! Bot1.Target(Bot1.Battlefield.Sol Ring)
+! Bot1.Target(Bot1.Battlefield.Sol Ring; Bot2.Battlefield.Mox Pearl; Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Sol Ring; Bot2.Battlefield.Mox Pearl)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Shifting Grift.Cast
+Bot1.Modes(Exchange control of two target enchantments)
+! Bot1.Target(Bot1.Battlefield.Llanowar Elves; Bot2.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot1.Battlefield.Mox Pearl; Bot2.Battlefield.Sol Ring)
+! Bot1.Target(Bot1.Battlefield.Bad Moon)
+! Bot1.Target(Bot1.Battlefield.Bad Moon; Bot2.Battlefield.Crusade; Bot2.Battlefield.Hardened Scales)
+Bot1.Target(Bot1.Battlefield.Bad Moon; Bot2.Battlefield.Crusade)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Shifting Grift; Shifting Grift; Shifting Grift
+Bot1.Battlefield = Mox Sapphire; Mox Sapphire; Mox Jet; Mox Emerald; Llanowar Elves; Mox Pearl; Crusade
+Bot2.Battlefield = Plains; Mox Emerald; Mox Emerald; Hardened Scales; Memnite; Grizzly Bears; Sol Ring; Bad Moon

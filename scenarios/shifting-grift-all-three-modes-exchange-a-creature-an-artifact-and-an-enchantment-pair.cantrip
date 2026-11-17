@@ -1,0 +1,101 @@
+# Shifting Grift, spree: all three modes together cost {U}{U} + {2} + {1} + {1} = six mana. On turn 1 Bot1 makes a Sol Ring, a Bad Moon
+# and Grizzly Bears (Mox Sapphire pays for the Ring, the Ring's {C}{C} and Mox Jet's {B} for the Moon, a floating {C} and Mox Emerald's {G}
+# for the Bears); on turn 2 Bot2 makes a Mox Pearl, a Crusade and Llanowar Elves. On turn 3 the six sources (two Sapphires, Jet,
+# Emerald and the Ring's two) pay for every mode and each exchange is made at once: Bot1 ends with the Elves, the Mox Pearl and the
+# Crusade, and Bot2 with the Bears, the Sol Ring and the Bad Moon.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Sol Ring
+Bad Moon
+Grizzly Bears
+Shifting Grift
+Island x16
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Mox Emerald
+Mox Emerald
+Crusade
+Llanowar Elves
+Hardened Scales
+Memnite
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bad Moon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Crusade.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Hardened Scales.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Shifting Grift.Cast
+Bot1.Modes(Exchange control of two target creatures; Exchange control of two target artifacts; Exchange control of two target enchantments)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears; Bot2.Battlefield.Llanowar Elves)
+Bot1.Target(Bot1.Battlefield.Sol Ring; Bot2.Battlefield.Mox Pearl)
+Bot1.Target(Bot1.Battlefield.Bad Moon; Bot2.Battlefield.Crusade)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Shifting Grift
+Bot1.Battlefield = Mox Sapphire; Mox Sapphire; Mox Jet; Mox Emerald; Llanowar Elves; Mox Pearl; Crusade
+Bot2.Battlefield = Plains; Mox Emerald; Mox Emerald; Hardened Scales; Memnite; Grizzly Bears; Sol Ring; Bad Moon

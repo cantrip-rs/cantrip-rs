@@ -1,0 +1,6 @@
+{
+  "name": "Shifting Grift",
+  "manaCost": "{U}{U}",
+  "type": "Sorcery",
+  "oracleText": "Spree (Choose one or more additional costs.)\n+ {2} — Exchange control of two target creatures.\n+ {1} — Exchange control of two target artifacts.\n+ {1} — Exchange control of two target enchantments."
+}
