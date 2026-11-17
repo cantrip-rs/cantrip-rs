@@ -1,0 +1,36 @@
+# "If you control an outlaw" (CR 700.12a): only Bot1's own permanents count. Bot2 controls the Faerie Miscreant (a Faerie Rogue, so
+# an outlaw), Bot1 controls none, so Take the Fall on that very Miscreant gives it -1/-0 only: a 0/1, not -3/1.
+
+[Bot1 Deck]
+Mox Sapphire
+Take the Fall
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Faerie Miscreant
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Faerie Miscreant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Take the Fall.Cast(Bot2.Battlefield.Faerie Miscreant)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Faerie Miscreant.Power = 0
+
+[Expect]
+Bot2.Battlefield.Faerie Miscreant.Power = 0
+Bot2.Battlefield.Faerie Miscreant.Toughness = 1
+Bot1.Graveyard = Take the Fall

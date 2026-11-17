@@ -1,0 +1,6 @@
+{
+  "name": "Take the Fall",
+  "manaCost": "{U}",
+  "type": "Instant",
+  "oracleText": "Target creature gets -1/-0 until end of turn. It gets -4/-0 until end of turn instead if you control an outlaw. (Assassins, Mercenaries, Pirates, Rogues, and Warlocks are outlaws.)\nDraw a card."
+}

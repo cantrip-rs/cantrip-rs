@@ -1,0 +1,47 @@
+# Take the Fall with no outlaw among Bot1's permanents: "Target creature gets -1/-0 until end of turn" (CR 611.2a). Bot2's Mox Jet is
+# not a creature and is refused as the target (CR 115.1); Bot2's Grizzly Bears is the one accepted and becomes 1/2 for the turn.
+# Bot1 draws a card (CR 121.1), so its hand is back to seven (Mox Sapphire cast, Take the Fall cast, turn 3's draw and the spell's).
+# The effect ends at the cleanup step (CR 514.2): on turn 4 the Bears is a 2/2 again.
+
+[Bot1 Deck]
+Mox Sapphire
+Take the Fall
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Take the Fall.Cast(Bot2.Battlefield.Mox Jet)
+Bot1.Hand.Take the Fall.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Power = 1
+? Bot2.Battlefield.Grizzly Bears.Toughness = 2
+? Bot1.Hand.Count = 7
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+
+[Expect]
+Bot1.Graveyard = Take the Fall
+Bot1.Hand.Count = 7

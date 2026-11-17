@@ -1,0 +1,42 @@
+# Take the Fall while Bot1 controls an outlaw (CR 700.12a): Faerie Miscreant is a Faerie Rogue, and Rogues are outlaws, so "It gets
+# -4/-0 until end of turn instead if you control an outlaw". Bot1 aims it at its own Ornithopter (a creature of its own is a legal
+# target, CR 115.1), which becomes -4/2 - not -5 as it would if "instead" left the -1/-0 in force too (CR 608.2c) - and draws a card
+# (CR 121.1): hand seven at the start, five cards cast, one drawn.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Faerie Miscreant
+Ornithopter
+Take the Fall
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Faerie Miscreant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Take the Fall.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = -4
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = -4
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Faerie Miscreant.Power = 1
+Bot1.Graveyard = Take the Fall
+Bot1.Hand.Count = 3
