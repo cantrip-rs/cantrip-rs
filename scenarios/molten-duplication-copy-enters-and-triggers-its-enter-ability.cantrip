@@ -1,0 +1,43 @@
+# Molten Duplication on Mine Raider: the token is a copy, so it enters and Mine Raider's "When this creature enters, if you control another outlaw"
+# trigger fires for it (CR 603.6a); the original Mine Raider (Human Rogue) is the other outlaw (CR 700.12a), so one Treasure is made. The Raider
+# cast alone made no Treasure (nothing else was an outlaw), which checks the "another" half of the condition.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mountain
+Mine Raider
+Molten Duplication
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mine Raider.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Treasure Token = (absent)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Molten Duplication.Cast(Bot1.Battlefield.Mine Raider)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mine Raider#2.Token = true
+? Bot1.Battlefield.Mine Raider#2.Types = Creature; Artifact
+? Bot1.Battlefield.Mine Raider#2.Keywords = Haste; Trample
+[T1 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Treasure Token.Subtypes = Treasure
+Bot1.Battlefield.Mine Raider#2 = (absent)

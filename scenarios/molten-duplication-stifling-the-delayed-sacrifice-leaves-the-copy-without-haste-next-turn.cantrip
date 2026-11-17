@@ -1,0 +1,45 @@
+# Molten Duplication's token "gains haste until end of turn" (CR 611.2a, 702.10): Bot2 Stifles the delayed sacrifice at turn 3's end step
+# (CR 603.7c), so the token lives into Bot1's next turn, where the haste is gone while the token is still an artifact (the exception is a
+# copiable value, CR 707.9b).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Grizzly Bears
+Molten Duplication
+Island x16
+
+[Bot2 Deck]
+Island
+Stifle
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Molten Duplication.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears#2.Keywords = Haste
+[T3 Bot1.End]
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Stifle.Cast(Stack.Molten Duplication)
+[T5 Bot1.Main1]
+
+[Expect]
+Turn = 5
+Delayed.Count = 0
+Bot1.Battlefield.Grizzly Bears#2.Token = true
+Bot1.Battlefield.Grizzly Bears#2.Types = Creature; Artifact
+Bot1.Battlefield.Grizzly Bears#2.Keywords = (absent)
+Bot2.Graveyard.Stifle.Colors = Blue

@@ -1,0 +1,40 @@
+# Molten Duplication on Bot1's Ornithopter: the copy of an artifact is simply that artifact (it is already an artifact, CR 707.9b), keeping flying, and
+# gains haste until end of turn so it attacks as soon as it is made. Bot2's Memnite is not "you control", so it is not a legal target (CR 115.1).
+# Bot2 has no flyer, so the token connects for 0 (Ornithopter is 0/2) -- the attack only proves the haste; the token is sacrificed at the next end step.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Ornithopter
+Molten Duplication
+Island x16
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Molten Duplication.Cast(Bot2.Battlefield.Memnite)
+Bot1.Hand.Molten Duplication.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter#2.Token = true
+? Bot1.Battlefield.Ornithopter#2.Types = Artifact; Creature
+? Bot1.Battlefield.Ornithopter#2.Keywords = Flying; Haste
+? Bot1.Battlefield.Ornithopter#1.Keywords = Flying
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bot1.Battlefield.Ornithopter#2 > Bot2)
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Ornithopter#2 = (absent)
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Battlefield.Memnite.Types = Artifact; Creature

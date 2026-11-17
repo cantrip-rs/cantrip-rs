@@ -1,0 +1,46 @@
+# Molten Duplication on Grizzly Bears (CR 707.2, 707.9b, 702.10): the token is a copy except it is an artifact in addition to its other types, it
+# gains haste until end of turn so it attacks the turn it is made while the original (cast this turn, no haste) cannot, and it is sacrificed at the
+# beginning of the next end step (CR 603.7c) while the original stays. Bot2's Memnite is not Bot1's, so it is no target (CR 115.1).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Grizzly Bears
+Molten Duplication
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Molten Duplication.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears#2.Token = true
+? Bot1.Battlefield.Grizzly Bears#2.Types = Creature; Artifact
+? Bot1.Battlefield.Grizzly Bears#2.Keywords = Haste
+? Bot1.Battlefield.Grizzly Bears#1.Types = Creature
+? Bot1.Battlefield.Grizzly Bears#1.Keywords = (absent)
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Bot1.Battlefield.Grizzly Bears#2 > Bot2)
+[T1 Bot1.End]
+? Bot2.Life = 18
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Types = Creature
+Bot1.Battlefield.Grizzly Bears#2 = (absent)
