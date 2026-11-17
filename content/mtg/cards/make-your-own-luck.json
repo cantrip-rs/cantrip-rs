@@ -1,0 +1,6 @@
+{
+  "name": "Make Your Own Luck",
+  "manaCost": "{3}{G}{U}",
+  "type": "Sorcery",
+  "oracleText": "Look at the top three cards of your library. You may exile a nonland card from among them. If you do, it becomes plotted. Put the rest into your hand. (You may cast it as a sorcery on a later turn without paying its mana cost.)"
+}

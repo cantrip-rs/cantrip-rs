@@ -1,0 +1,48 @@
+# "Look at the top three cards of your library. You may exile a nonland card from among them. If you do, it becomes plotted. Put the
+# rest into your hand." Bot1 looks at a Lightning Bolt, an Island and a Grizzly Bears and plots the Bolt: the Island and the Grizzly
+# Bears go to hand, the Bolt is in exile and may not be cast the turn it was plotted (a refusal paired with the free cast on turn 3,
+# which costs no mana).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Make Your Own Luck
+Forest
+Lightning Bolt
+Island
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Make Your Own Luck.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+? Exile.Count = 1
+? Bot1.Hand.Count = 3
+? Bot1.Hand = Forest; Grizzly Bears; Island
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Exile.Count = 0

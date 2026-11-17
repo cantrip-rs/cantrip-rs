@@ -1,0 +1,32 @@
+# "Look at the top three cards of your library." With an empty library there is nothing to look at, choose or put into hand: the
+# spell resolves, asks nothing and plots nothing.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Make Your Own Luck
+Forest
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Make Your Own Luck.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Exile.Count = 0
+? Bot1.Hand = Forest
