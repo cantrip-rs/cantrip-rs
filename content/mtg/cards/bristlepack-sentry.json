@@ -1,0 +1,11 @@
+{
+  "name": "Bristlepack Sentry",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Plant Wolf",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Defender\nAs long as you control a creature with power 4 or greater, this creature can attack as though it didn't have defender.",
+  "keywords": [
+    "Defender"
+  ]
+}

@@ -1,0 +1,31 @@
+# Bristlepack Sentry: "as long as you control a creature with power 4 or greater" (CR 702.3b): Bot2's Drover Grizzly (power 4) is not Bot1's, so the
+# Sentry still has defender on T3 and cannot be declared as an attacker, though Bot1's Llanowar Elves can.
+
+[Bot1 Deck]
+Black Lotus
+Bristlepack Sentry
+Llanowar Elves
+Forest x17
+
+[Bot2 Deck]
+Black Lotus
+Drover Grizzly
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Bristlepack Sentry.Cast
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Drover Grizzly.Cast
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Bristlepack Sentry > Bot2)
+Bot1.Attack(Llanowar Elves > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Drover Grizzly.Power = 4
+Bot2.Life = 19

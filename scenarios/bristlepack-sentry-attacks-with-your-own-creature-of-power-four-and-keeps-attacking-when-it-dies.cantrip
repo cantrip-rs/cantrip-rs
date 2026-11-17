@@ -1,0 +1,42 @@
+# Bristlepack Sentry: with Drover Grizzly (power 4) under Bot1's control the Sentry can attack as though it didn't have defender (CR 702.3b, 609.4).
+# Bot2 then bolts the Grizzly after attackers are declared: the Sentry was legally declared as an attacker and stays one, so it still deals
+# 3 combat damage (Bristlepack Sentry's 2024-04-12 ruling).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Black Lotus
+Drover Grizzly
+Bristlepack Sentry
+Forest x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Drover Grizzly.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bristlepack Sentry.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bristlepack Sentry > Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Drover Grizzly)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Drover Grizzly; Black Lotus
+? Combat.Attackers = Bristlepack Sentry > Bot2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Bristlepack Sentry.Tapped = true
