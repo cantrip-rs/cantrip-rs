@@ -1,0 +1,11 @@
+{
+  "name": "Boneyard Desecrator",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Zombie Mercenary",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Menace\n{1}{B}, Sacrifice another creature: Put a +1/+1 counter on this creature. If an outlaw was sacrificed this way, create a Treasure token. (Assassins, Mercenaries, Pirates, Rogues, and Warlocks are outlaws.)",
+  "keywords": [
+    "Menace"
+  ]
+}

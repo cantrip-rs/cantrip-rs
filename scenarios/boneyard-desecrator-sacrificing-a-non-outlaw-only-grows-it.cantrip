@@ -1,0 +1,39 @@
+# Boneyard Desecrator: Ornithopter is not an outlaw (a Thopter), so sacrificing it gives the counter but no Treasure. With no other
+# creature on the battlefield the ability is refused though the mana is there (nothing else to sacrifice, CR 602.2b).
+
+[Bot1 Deck]
+Black Lotus
+Boneyard Desecrator
+Mox Jet
+Mox Ruby
+Ornithopter
+Swamp x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Boneyard Desecrator.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Boneyard Desecrator.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Boneyard Desecrator.Activate
+Bot1.Choose(Ornithopter)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Ornithopter; Black Lotus
+Bot1.Battlefield.Boneyard Desecrator.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield = Boneyard Desecrator; Mox Jet; Mox Ruby

@@ -1,0 +1,55 @@
+# Boneyard Desecrator: with its ability on the stack Bot2 exiles it with Swords to Plowshares. The counter has nothing to land on, but
+# "if an outlaw was sacrificed this way" is about the cost, not the Desecrator (CR 602.2b, 608.2b): the sacrificed Vampire Rogue still
+# earns the Treasure.
+
+[Bot1 Deck]
+Swamp
+Swamp
+Black Lotus
+Boneyard Desecrator
+Gas Guzzler
+Mox Jet
+Mox Ruby
+Swamp x13
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Plains x18
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Boneyard Desecrator.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Gas Guzzler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Boneyard Desecrator.Activate
+Bot1.Choose(Gas Guzzler)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Target: Boneyard Desecrator)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Gas Guzzler; Black Lotus
+Bot1.Battlefield = Mox Jet; Mox Ruby; Swamp; Swamp; Treasure Token
