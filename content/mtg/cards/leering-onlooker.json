@@ -1,0 +1,11 @@
+{
+  "name": "Leering Onlooker",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Vampire",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Flying\n{2}{B}{B}, Exile this card from your graveyard: Create two tapped 1/1 black Bat creature tokens with flying.",
+  "keywords": [
+    "Flying"
+  ]
+}

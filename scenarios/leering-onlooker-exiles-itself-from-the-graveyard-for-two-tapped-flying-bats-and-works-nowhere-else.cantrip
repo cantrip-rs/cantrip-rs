@@ -1,0 +1,67 @@
+# Leering Onlooker: "{2}{B}{B}, Exile this card from your graveyard: Create two tapped 1/1 black Bat creature tokens with flying." (CR 602.2, 111.2, 701.13a) It has flying. On turn 1 the
+# Onlooker is on the battlefield and Bot1 has {2}{B}{B} of mana, yet the ability is refused there (it can only be activated from the graveyard, CR 113.6, 602.2). Bot2 Bolts it on turn 2;
+# on turn 3 Bot1 pays {2}{B}{B} and exiles it from the graveyard for two tapped Bats, and the Onlooker is in exile, not the graveyard.
+
+[Bot1 Deck]
+Leering Onlooker
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Ruby
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Leering Onlooker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Leering Onlooker.Activate
+? Bot1.Battlefield.Leering Onlooker.Keywords = Flying
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Leering Onlooker)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Leering Onlooker; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Graveyard.Leering Onlooker.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Bat Token#1.Tapped = true
+Bot1.Battlefield.Bat Token#2.Tapped = true
+Bot1.Battlefield.Bat Token#1.Power = 1
+Bot1.Battlefield.Bat Token#1.Toughness = 1
+Bot1.Battlefield.Bat Token#1.Colors = Black
+Bot1.Battlefield.Bat Token#1.Subtypes = Bat
+Bot1.Battlefield.Bat Token#1.Keywords = Flying
+Bot1.Graveyard = Black Lotus
+Exile = Leering Onlooker
