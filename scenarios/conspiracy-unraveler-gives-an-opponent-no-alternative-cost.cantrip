@@ -1,0 +1,52 @@
+# "Spells you cast": Bot1's Conspiracy Unraveler is on the battlefield, but Bot2's spells are not Bot1's (CR 118.9). Bot2 discards Emrakul, the Promised End (mana value 13) to Faithless Looting on turn 2, so its graveyard
+# could pay evidence 10 many times over, and it is still not offered Night's Whisper for evidence: the option is Bot1's only.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Conspiracy Unraveler
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Faithless Looting
+Night's Whisper
+Island
+Island
+Island
+Island
+Emrakul, the Promised End
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Conspiracy Unraveler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Emrakul, the Promised End; Island)
+? Bot2.Graveyard.Count = 3
+! Bot2.Hand.Night's Whisper.Cast(Ability: Collect evidence 10)
+
+[Expect]
+Bot2.Graveyard = Faithless Looting; Island; Emrakul, the Promised End

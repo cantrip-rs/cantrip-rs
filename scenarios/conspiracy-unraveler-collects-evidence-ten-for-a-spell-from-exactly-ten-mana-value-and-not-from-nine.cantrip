@@ -1,0 +1,61 @@
+# "You may collect evidence 10 rather than pay the mana cost for spells you cast" (CR 118.9, 701.59a): Conspiracy Unraveler (6/6 flying) is cast for {5}{U}{U} on turn 1 with Black Lotus and four Moxen. On turn 3, Faithless Looting
+# draws two Heroes and discards two, so the graveyard holds the spent Black Lotus (0), Looting (1) + Hero (4) + Hero (4) = 9: Hero of Bladehold in hand is not offered for evidence, one mana value short. On turn 5 a Gitaxian Probe cast for 2 life (1) makes
+# exactly 10; the third Hero is then cast for evidence alone (no mana is spent, the Moxen stay untapped, X-less spell with no mana cost paid, CR 118.9) by exiling those four cards, and it resolves.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Conspiracy Unraveler
+Faithless Looting
+Hero of Bladehold
+Hero of Bladehold
+Hero of Bladehold
+Gitaxian Probe
+Hero of Bladehold
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Conspiracy Unraveler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Conspiracy Unraveler.Keywords = Flying
+? Bot1.Battlefield.Conspiracy Unraveler.Power = 6
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Hero of Bladehold; Hero of Bladehold)
+? Bot1.Graveyard.Count = 4
+! Bot1.Hand.Hero of Bladehold.Cast(Ability: Collect evidence 10)
+[T5 Bot1.Main1]
+Bot1.Hand.Gitaxian Probe.Cast(Bot2)
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 5
+Bot1.Hand.Hero of Bladehold.Cast(Ability: Collect evidence 10)
+Bot1.Choose(Faithless Looting; Hero of Bladehold; Hero of Bladehold; Gitaxian Probe)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Hero of Bladehold.Power = 3
+Bot1.Graveyard = Black Lotus
+Exile.Count = 4
+Bot1.Battlefield.Mox Sapphire.Tapped = false

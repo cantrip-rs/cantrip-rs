@@ -1,0 +1,61 @@
+# "You may collect evidence 10 rather than pay the mana cost" - may: both answers (CR 118.9). With Emrakul, the Promised End (mana value 13) discarded by Faithless Looting on turn 3, evidence 10 is available, but Bot1 casts
+# Night's Whisper with Mox Jet and Mox Pearl instead ({1}{B}), declining it: the graveyard keeps Emrakul, the Promised End. On turn 5 a second Night's Whisper is cast for evidence alone, exiling the Emrakul (13 is "10 or greater",
+# CR 701.59a, one card is enough): no mana is paid (the Moxen stay untapped), and Bot1 draws and loses 2 life each time.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Conspiracy Unraveler
+Faithless Looting
+Emrakul, the Promised End
+Night's Whisper
+Island
+Island
+Island
+Night's Whisper
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Conspiracy Unraveler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Emrakul, the Promised End; Island)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Night's Whisper.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+? Bot1.Graveyard.Count = 5
+? Bot1.Battlefield.Mox Jet.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Hand.Night's Whisper.Cast(Ability: Collect evidence 10)
+Bot1.Choose(Emrakul, the Promised End)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 16
+Exile = Emrakul, the Promised End
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield.Mox Pearl.Tapped = false

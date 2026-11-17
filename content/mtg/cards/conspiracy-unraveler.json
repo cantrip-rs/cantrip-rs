@@ -1,0 +1,11 @@
+{
+  "name": "Conspiracy Unraveler",
+  "manaCost": "{5}{U}{U}",
+  "type": "Creature — Sphinx Detective",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Flying\nYou may collect evidence 10 rather than pay the mana cost for spells you cast. (To collect evidence 10, exile cards with total mana value 10 or greater from your graveyard.)",
+  "keywords": [
+    "Flying"
+  ]
+}
