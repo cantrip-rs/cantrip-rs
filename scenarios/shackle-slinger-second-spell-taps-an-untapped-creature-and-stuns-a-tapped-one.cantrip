@@ -1,0 +1,66 @@
+# Shackle Slinger: 3/2; flurry - "Whenever you cast your second spell each turn, choose target creature an opponent controls. If it's
+# tapped, put a stun counter on it. Otherwise, tap it." Turn 1: Black Lotus, then the Slinger as the second spell (it is not yet on the
+# battlefield: no trigger). Turn 3: Bot1's second spell (the second Ornithopter) taps Bot2's untapped Llanowar Elves, with no stun
+# counter; the only legal target (never its own Slinger or Ornithopters: "an opponent controls") is chosen for it. Turn 4: Bot2 untaps and taps its
+# Elves for mana. Turn 5: Bot1's second spell finds the Elves tapped, so it gets a stun counter instead (and stays tapped); the
+# first spell of each turn did nothing.
+
+[Bot1 Deck]
+Black Lotus
+Shackle Slinger
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Island
+Island x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Shackle Slinger.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+? Bot2.Battlefield.Llanowar Elves.Counters.Stun = (absent)
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Llanowar Elves.Tapped = false
+Bot2.Battlefield.Llanowar Elves.Activate
+[T5 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Counters.Stun = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot2.Battlefield.Llanowar Elves.Counters.Stun = 1
+Stack.Count = 0
