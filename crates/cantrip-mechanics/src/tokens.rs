@@ -1403,6 +1403,18 @@ pub static BLUE_FLYING_SPIRIT: CardDef = CardDef {
     ..token!(Spirit)
 };
 
+/// The 2/2 white Spirit creature token with flying (CR 111.4). Phantom Interference, Wrangler of the Damned and Obscura
+/// Ascendancy make it. It shares its name with the 1/1 [`WHITE_FLYING_SPIRIT`].
+pub static WHITE_FLYING_SPIRIT_2_2: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::White)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    keywords: Keywords::of(&[Keyword::Flying]),
+    text: "Flying",
+    ..token!(Spirit)
+};
+
 /// "Create a 1/1 white Spirit creature token with flying" (CR 111.1) for the ability's controller, as the body of a spell or
 /// ability, the controller being the one it has as it resolves (a leaves-the-battlefield trigger: as the creature left, CR 603.10a):
 /// the card file lists `tokens::WHITE_FLYING_SPIRIT` in its `EXTRA`. Bishop of Wings, Doomed Traveler, Kykar, Zephyr

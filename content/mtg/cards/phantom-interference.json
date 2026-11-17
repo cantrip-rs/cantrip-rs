@@ -1,0 +1,6 @@
+{
+  "name": "Phantom Interference",
+  "manaCost": "{U}",
+  "type": "Instant",
+  "oracleText": "Spree (Choose one or more additional costs.)\n+ {3} — Create a 2/2 white Spirit creature token with flying.\n+ {1} — Counter target spell unless its controller pays {2}."
+}

@@ -1,0 +1,60 @@
+# Phantom Interference, "+ {1} — Counter target spell unless its controller pays {2}.": {U}{1} in all, two Moxen. On turn 2 Bot2
+# (one Island) casts an Ornithopter: Bot2 cannot pay {2} with one mana, declines, and the Ornithopter is countered. On turn 4 Bot2
+# casts another with two Islands untapped and pays exactly {2}: it is not countered and enters. Nothing but the countering
+# happens: no Spirit token is made.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Phantom Interference
+Phantom Interference
+Island x15
+
+[Bot2 Deck]
+Island
+Island
+Ornithopter
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Phantom Interference.Cast
+Bot1.Modes(Counter target spell unless its controller pays {2})
+Bot1.Target(Stack.Ornithopter)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Battlefield.Island.Activate
+! Bot2.PayCost
+Bot2.Decline
+? Bot2.Graveyard = Ornithopter
+? Bot2.Battlefield = Island
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Phantom Interference.Cast
+Bot1.Modes(Counter target spell unless its controller pays {2})
+Bot1.Target(Stack.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Island#2.Activate
+Bot2.PayCost
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Phantom Interference; Phantom Interference
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield = Island; Island; Ornithopter
+Bot1.Battlefield = Mox Sapphire; Mox Ruby

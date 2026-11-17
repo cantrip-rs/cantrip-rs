@@ -1,0 +1,55 @@
+# Phantom Interference with both modes ({U} + {3} + {1} = five mana, five Moxen, the pool empty after): on Bot2's turn 2 Bot1
+# makes a 2/2 white flying Spirit and counters Bot2's Ornithopter unless Bot2 pays {2}; Bot2 has one Island and cannot.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Phantom Interference
+Island x14
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Phantom Interference.Cast
+Bot1.Modes(Create a 2/2 white Spirit creature token with flying; Counter target spell unless its controller pays {2})
+Bot1.Target(Stack.Ornithopter)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Battlefield.Island.Activate
+Bot2.Decline
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = Phantom Interference
+Bot1.Battlefield.Spirit Token.Power = 2
+Bot1.Battlefield.Spirit Token.Toughness = 2
