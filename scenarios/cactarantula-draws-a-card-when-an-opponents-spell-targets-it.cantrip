@@ -1,0 +1,38 @@
+# Cactarantula: "Whenever this creature becomes the target of a spell or ability an opponent controls, you may draw a card" (CR 603.3, 115.1): Bot2's
+# Lightning Bolt targets the 6/5 on turn 2, Bot1 accepts and draws (hand 3 -> 4), and the Bolt's 3 damage does not kill it. The trigger
+# resolves first, above the Bolt (CR 608.1), so the draw happens with the Bolt still on the stack.
+
+[Bot1 Deck]
+Desert
+Mox Emerald
+Black Lotus
+Cactarantula
+Forest x16
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Desert.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Desert.Activate(Ability: Add)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Cactarantula.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Cactarantula)
+? Bot1.Hand.Count = 3
+Bot1.Accept
+? Bot1.Hand.Count = 4
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Cactarantula.Damage = 3
+
+[Expect]
+Bot1.Hand.Count = 4

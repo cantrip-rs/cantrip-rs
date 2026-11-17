@@ -1,0 +1,47 @@
+# Cactarantula: only a spell or ability an *opponent* controls triggers it (CR 603.2, 115.1). Bot1's own Giant Growth on the Cactarantula on turn 3
+# asks no question and draws nothing; Bot2's Prodigal Sorcerer (summoning-sick on turn 2, ready on turn 4) pings it with an ability, which does
+# trigger it: Bot1 accepts and draws.
+
+[Bot1 Deck]
+Desert
+Mox Emerald
+Black Lotus
+Cactarantula
+Forest
+Forest
+Giant Growth
+Forest x13
+
+[Bot2 Deck]
+Black Lotus
+Prodigal Sorcerer
+Island x18
+
+[Actions]
+Bot1.Hand.Desert.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Desert.Activate(Ability: Add)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Cactarantula.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Prodigal Sorcerer.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Cactarantula)
+? Bot1.Hand.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Cactarantula.Power = 9
+[T4 Bot2.Main1]
+Bot2.Battlefield.Prodigal Sorcerer.Activate(Bot1.Battlefield.Cactarantula)
+Bot1.Accept
+? Bot1.Hand.Count = 3
+
+[Expect]
+Bot1.Hand.Count = 3

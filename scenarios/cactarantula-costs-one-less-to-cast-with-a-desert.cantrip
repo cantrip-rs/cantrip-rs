@@ -1,0 +1,29 @@
+# Cactarantula: "This spell costs {1} less to cast if you control a Desert" (CR 601.2f, 118.7a). Its cost is {4}{G}{G}; with Bot1's Desert it is {3}{G}{G},
+# five mana: the Desert's {C}, Mox Emerald's {G} and Black Lotus's {G}{G}{G}. Reach is a core keyword; it enters a 6/5.
+
+[Bot1 Deck]
+Desert
+Mox Emerald
+Black Lotus
+Cactarantula
+Forest x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Desert.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Desert.Activate(Ability: Add)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Cactarantula.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Cactarantula.Power = 6
+? Bot1.Battlefield.Cactarantula.Toughness = 5
+
+[Expect]
+Bot1.Battlefield = Desert; Mox Emerald; Cactarantula

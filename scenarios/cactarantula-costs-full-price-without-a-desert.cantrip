@@ -1,0 +1,29 @@
+# Cactarantula: "This spell costs {1} less to cast if you control a Desert" (CR 601.2f): with a Forest instead of a Desert Bot1's five mana (the
+# Forest's {G}, Mox Emerald's {G}, Black Lotus's {G}{G}{G}) is one short of {4}{G}{G}, so the cast is not offered; the same mana still pays for Grizzly Bears.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Black Lotus
+Cactarantula
+Grizzly Bears
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Hand.Cactarantula.Cast(Mana: short)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Forest; Mox Emerald; Grizzly Bears
+Bot1.Hand.Count = 3

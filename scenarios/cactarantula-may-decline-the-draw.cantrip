@@ -1,0 +1,31 @@
+# Cactarantula: "you may draw a card" (CR 603.3, 608.2d): Bot1 declines when Bot2's Lightning Bolt targets it, and the hand stays at 3.
+
+[Bot1 Deck]
+Desert
+Mox Emerald
+Black Lotus
+Cactarantula
+Forest x16
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Desert.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Desert.Activate(Ability: Add)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Cactarantula.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Cactarantula)
+Bot1.Decline
+? Bot1.Hand.Count = 3
+
+[Expect]
+Bot1.Hand.Count = 3
