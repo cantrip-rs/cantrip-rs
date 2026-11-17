@@ -1,0 +1,55 @@
+# Colossal Rattlewurm: "{1}{G}, Exile this card from your graveyard: Search your library for a Desert card, put it onto the battlefield tapped, then shuffle"
+# (CR 602.2, 701.23, 205.3i). Bot2's Terror destroys the Wurm on turn 2; on turn 3 Bot1 pays {1}{G} with two Forests, the Wurm is exiled as the cost,
+# and a Desert comes onto the battlefield tapped. The ability works only from the graveyard: on the battlefield it is not offered.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Colossal Rattlewurm
+Forest
+Forest
+Forest
+Forest
+Forest
+Desert
+Forest x11
+
+[Bot2 Deck]
+Black Lotus
+Terror
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Colossal Rattlewurm.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+! Bot1.Battlefield.Colossal Rattlewurm.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Terror.Cast(Bot1.Battlefield.Colossal Rattlewurm)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Colossal Rattlewurm; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Graveyard.Colossal Rattlewurm.Activate
+Bot1.Search(Desert)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Desert.Tapped = true
+? Exile = Colossal Rattlewurm
+? Bot1.Shuffles = 1
+
+[Expect]
+Bot1.Graveyard = Black Lotus
+Bot1.Battlefield = Forest; Forest; Desert
