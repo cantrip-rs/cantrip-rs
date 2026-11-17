@@ -1,0 +1,43 @@
+# Jolene, Plundering Pugilist: "Whenever you attack with one or more creatures with power 4 or greater, create a Treasure
+# token." (CR 508.1m, 603.2) Jolene is a 4/2, exactly the limit, so attacking with her alone makes one Treasure. "{1}{R},
+# Sacrifice a Treasure: Jolene deals 1 damage to any target." (CR 118.3): the Treasure is the cost, gone as the ability is
+# activated, and Bot2 takes 4 from the attack and 1 from the ping (20 -> 15).
+
+[Bot1 Deck]
+Jolene, Plundering Pugilist
+Mountain
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mountain
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Jolene, Plundering Pugilist.Cast(Spend: R, G, B)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Jolene, Plundering Pugilist > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Treasure Token.Token = true
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Jolene, Plundering Pugilist.Activate(Ability: Sacrifice a Treasure; Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Treasure Token = (absent)

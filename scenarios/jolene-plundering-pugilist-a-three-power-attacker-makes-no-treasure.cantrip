@@ -1,0 +1,47 @@
+# Jolene, Plundering Pugilist: the trigger needs a creature with power 4 or greater (CR 508.1m, 603.2). Leopard-Spotted Jiao
+# (3/1) attacks alone with Jolene at home, one power under the limit, so no Treasure is made: the control with a 4-power
+# attacker (Jolene herself, exactly 4) is the neighbouring scenario. Bot2 takes 3 (17). With no Treasure to sacrifice, the
+# ping is not offered even with {1}{R} in the pool.
+
+[Bot1 Deck]
+Jolene, Plundering Pugilist
+Leopard-Spotted Jiao
+Mountain
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Mountain
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Jolene, Plundering Pugilist.Cast(Spend: R, G, B)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Leopard-Spotted Jiao.Cast(Spend: R, U)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Leopard-Spotted Jiao > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Jolene, Plundering Pugilist.Activate(Ability: Sacrifice a Treasure; Bot2)
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Treasure Token = (absent)
+Bot1.Battlefield.Count = 7

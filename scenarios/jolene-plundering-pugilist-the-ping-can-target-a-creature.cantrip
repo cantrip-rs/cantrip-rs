@@ -1,0 +1,45 @@
+# Jolene, Plundering Pugilist: the ping is "any target" (CR 115.4), so it also hits a creature: Bot2 casts a Memnite (1/1) on
+# turn 2, Jolene attacks on turn 3 (Bot2 does not block; 20 -> 16) and the sacrificed Treasure pays for 1 damage to the
+# Memnite, which dies. The player-target version is the neighbouring scenario.
+
+[Bot1 Deck]
+Jolene, Plundering Pugilist
+Mountain
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mountain
+Island x15
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Jolene, Plundering Pugilist.Cast(Spend: R, G, B)
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Jolene, Plundering Pugilist > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Treasure Token.Token = true
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Jolene, Plundering Pugilist.Activate(Ability: Sacrifice a Treasure; Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 16
+Bot2.Battlefield.Memnite = (absent)
+Bot2.Graveyard = Memnite

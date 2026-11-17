@@ -1,0 +1,48 @@
+# Jolene, Plundering Pugilist: "attack with one or more creatures with power 4 or greater" (CR 508.1m, 603.2) is about the
+# attackers, not about Jolene attacking: Alpine Grizzly (4/2) and Leopard-Spotted Jiao (3/1) attack together on turn 3 while
+# Jolene, cast that turn, stays home, and one Treasure is made (one trigger for the declaration, not one per creature, and
+# the 3-power attacker adds none). Bot2 takes 7 (13).
+
+[Bot1 Deck]
+Alpine Grizzly
+Leopard-Spotted Jiao
+Mountain
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Jolene, Plundering Pugilist
+Mountain
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Alpine Grizzly.Cast(Spend: R, G, B)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Leopard-Spotted Jiao.Cast(Spend: R, U)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Jolene, Plundering Pugilist.Cast(Spend: R, G, B)
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Alpine Grizzly > Bot2; Leopard-Spotted Jiao > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Treasure Token.Token = true
+Bot1.Battlefield.Count = 9

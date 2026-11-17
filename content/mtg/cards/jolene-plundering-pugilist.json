@@ -1,0 +1,8 @@
+{
+  "name": "Jolene, Plundering Pugilist",
+  "manaCost": "{1}{R}{G}",
+  "type": "Legendary Creature — Human Mercenary",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Whenever you attack with one or more creatures with power 4 or greater, create a Treasure token.\n{1}{R}, Sacrifice a Treasure: Jolene deals 1 damage to any target."
+}
