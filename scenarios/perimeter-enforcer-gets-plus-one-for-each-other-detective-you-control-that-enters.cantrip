@@ -1,0 +1,74 @@
+# Perimeter Enforcer (1/1 flying, lifelink): "Whenever another Detective you control enters ... this creature gets +1/+1 until end
+# of turn" (CR 603.6a, 611.2a). Bot1 casts it with Mox Pearl and Mox Jet on turn 1: it does not trigger on itself ("another"), still
+# 1/1. Black Lotus then pays for Novice Inspector (a Detective: 2/2 for the turn) and, after a non-Detective Ornithopter changes
+# nothing, Seasoned Consultant (another Detective: 3/3). On turn 2 the pumps are gone, and Bot2's own Novice Inspector entering
+# under Bot2's control leaves it 1/1.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Perimeter Enforcer
+Black Lotus
+Novice Inspector
+Ornithopter
+Seasoned Consultant
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl
+Novice Inspector
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Perimeter Enforcer.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Perimeter Enforcer.Power = 1
+? Bot1.Battlefield.Perimeter Enforcer.Toughness = 1
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Novice Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Triggers(Perimeter Enforcer; Novice Inspector)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Perimeter Enforcer.Power = 2
+? Bot1.Battlefield.Perimeter Enforcer.Toughness = 2
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Perimeter Enforcer.Power = 2
+Bot1.Hand.Seasoned Consultant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Perimeter Enforcer.Power = 3
+? Bot1.Battlefield.Perimeter Enforcer.Toughness = 3
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Perimeter Enforcer.Power = 1
+? Bot1.Battlefield.Perimeter Enforcer.Toughness = 1
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Novice Inspector.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Perimeter Enforcer.Power = 1
+Bot1.Battlefield.Perimeter Enforcer.Keywords = Flying; Lifelink

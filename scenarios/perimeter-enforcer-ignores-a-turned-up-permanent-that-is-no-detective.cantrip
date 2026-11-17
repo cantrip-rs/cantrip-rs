@@ -1,0 +1,42 @@
+# Perimeter Enforcer: only a *Detective* turned face up triggers it (CR 701.58b, 708.8). Cryptic Coat cloaks Ornithopter, which is
+# no Detective once it is face up either; Bot1 turns it up (its mana cost is {0}) and nothing goes on the stack, the Enforcer is still
+# 1/1.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Perimeter Enforcer
+Black Lotus
+Cryptic Coat
+Plains
+Plains
+Ornithopter
+Plains x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Perimeter Enforcer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Cryptic Coat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDownName = Ornithopter
+[T3 Bot1.Main1]
+Bot1.Battlefield.#1.Activate
+? Stack.Count = 0
+? Bot1.Battlefield.Ornithopter.Types = Artifact; Creature
+
+[Expect]
+Bot1.Battlefield.Perimeter Enforcer.Power = 1
+Bot1.Battlefield.Perimeter Enforcer.Toughness = 1

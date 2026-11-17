@@ -1,0 +1,12 @@
+{
+  "name": "Perimeter Enforcer",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Detective",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying, lifelink\nWhenever another Detective you control enters and whenever a Detective you control is turned face up, this creature gets +1/+1 until end of turn.",
+  "keywords": [
+    "Flying",
+    "Lifelink"
+  ]
+}
