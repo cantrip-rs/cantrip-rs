@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::select::{self, up_to, Selection};
-use cantrip_mechanics::{choose, effects, targets};
+use cantrip_mechanics::{effects, hand, targets};
 use cantrip_oracle as oracle;
 
 /// I — "The owner of up to one target creature draws two cards, then shuffles that creature into their library" (CR 701.24a,
@@ -17,13 +17,7 @@ fn owner_draws_two_then_shuffles(g: &mut dyn Game, item: &StackItem) -> Result<(
 /// II — "You may put a Spacecraft card from your hand or graveyard onto the battlefield" (CR 608.2d): the two zones are shown
 /// together, up to one is taken, and nothing is asked when neither holds one.
 fn may_put_a_spacecraft_from_hand_or_graveyard(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let you = item.controller;
-    let mut shown = g.state().zone(Zone::hand(you)).to_vec();
-    shown.extend_from_slice(g.state().zone(Zone::graveyard(you)));
-    let chosen = choose::select(g, you, item.object, Purpose::PutOntoBattlefield, shown, A_SPACECRAFT)?;
-    if let Some(&card) = chosen.first() {
-        g.put_onto_battlefield(card, you, false)?;
-    }
+    hand::may_put_from_hand_or_graveyard_onto_battlefield(g, item.controller, item.object, A_SPACECRAFT)?;
     Ok(())
 }
 

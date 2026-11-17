@@ -169,6 +169,24 @@ pub fn may_put_onto_battlefield(
     put_from_hand(g, player, source, false, |g, c| eligible(&g.chars(c)))
 }
 
+/// "You may put a [kind of] card from your hand or graveyard onto the battlefield" (CR 608.2d): the player's hand and graveyard
+/// shown together, up to one card `selection` allows taken from either, then put onto the battlefield under that player's
+/// control. Nothing is asked when both zones are empty. Unification and Bonny Pall, Clearcutter print it.
+pub fn may_put_from_hand_or_graveyard_onto_battlefield(
+    g: &mut dyn Game,
+    player: PlayerId,
+    source: ObjectId,
+    selection: crate::select::Selection,
+) -> Result<Option<ObjectId>, Suspend> {
+    let mut shown = g.state().zone(Zone::hand(player)).to_vec();
+    shown.extend_from_slice(g.state().zone(Zone::graveyard(player)));
+    let chosen = choose::select(g, player, source, Purpose::PutOntoBattlefield, shown, selection)?;
+    match chosen.first() {
+        Some(&card) => Ok(Some(g.put_onto_battlefield(card, player, false)?)),
+        None => Ok(None),
+    }
+}
+
 /// `may_put_onto_battlefield` with the card judged as an object in the hand, so what only the game can say (`Query::mana_value`:
 /// X is 0 in a hand, a Room's halves together, CR 107.3b, 202.3) can decide it: "you may put a creature card with mana value 3
 /// or less from your hand onto the battlefield". Curzon Dax, Bound by Blood and Venom, Lethal Protector print it; the tapped
