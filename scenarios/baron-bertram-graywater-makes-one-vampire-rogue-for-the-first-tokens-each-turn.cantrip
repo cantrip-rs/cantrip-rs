@@ -1,0 +1,78 @@
+# Baron Bertram Graywater: "Whenever one or more tokens you control enter, create a 1/1 black Vampire Rogue creature
+# token with lifelink. This ability triggers only once each turn." In turn 3 Lingering Souls puts two Spirits onto the
+# battlefield together: one trigger (CR 603.2c), one Vampire Rogue. That Rogue is itself a token entering, and flashing
+# Souls back puts two more Spirits in, but the ability has already triggered this turn (it triggers only once each turn): no more Rogues. In
+# turn 5 Dragon Fodder's Goblins trigger it again, one more Rogue; the turn-3 Rogue attacks and its lifelink gains
+# Bot1 1.
+# Baron Bertram Graywater {2}{W}{B}: Legendary Creature - Vampire Noble 3/4
+#   Whenever one or more tokens you control enter, create a 1/1 black Vampire Rogue creature token with lifelink. This
+#   ability triggers only once each turn.
+#   {1}{B}, Sacrifice another creature or artifact: Draw a card.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Baron Bertram Graywater
+Lingering Souls
+Dragon Fodder
+Plains
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Baron Bertram Graywater.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Baron Bertram Graywater; Mox Jet; Mox Pearl; Mox Ruby; Plains
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield = Baron Bertram Graywater; Mox Jet; Mox Pearl; Mox Ruby; Plains; Plains; Spirit Token; Spirit Token; Vampire Rogue Token
+? Bot1.Battlefield.Vampire Rogue Token.Keywords = Lifelink
+? Bot1.Battlefield.Vampire Rogue Token.Toughness = 1
+? Bot1.Battlefield.Vampire Rogue Token.Colors = Black
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Lingering Souls.Cast(Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield = Baron Bertram Graywater; Mox Jet; Mox Pearl; Mox Ruby; Plains; Plains; Spirit Token; Spirit Token; Spirit Token; Spirit Token; Vampire Rogue Token
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Vampire Rogue Token#1 > Bot2)
+[T5 Bot1.End]
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 21
+Bot2.Life = 19
+Bot1.Battlefield = Baron Bertram Graywater; Goblin Token; Goblin Token; Mox Jet; Mox Pearl; Mox Ruby; Plains; Plains; Spirit Token; Spirit Token; Spirit Token; Spirit Token; Vampire Rogue Token; Vampire Rogue Token

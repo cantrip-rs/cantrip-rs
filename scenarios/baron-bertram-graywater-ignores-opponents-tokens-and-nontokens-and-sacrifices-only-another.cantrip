@@ -1,0 +1,87 @@
+# Baron Bertram Graywater: "tokens you control" (CR 603.2c): Bot2's two Spirits from Lingering Souls in turn 2 make no
+# Vampire Rogue for Bot1, and neither do Bot1's nontoken Mox Jet, Mox Ruby and Pulse Tracker entering. "{1}{B},
+# Sacrifice another creature or artifact: Draw a card" (CR 118.3, 701.21): with {1}{B} floating and only Baron and
+# lands on the battlefield it can't be activated (Baron isn't "another", a land is neither); then an artifact (Mox Jet,
+# turn 3) and a creature (Pulse Tracker, turn 5) are each sacrificed for one card. Hand: 4 after turn 1, the turn-3
+# draw 5, the Swamp played and Mox Jet cast 3, the draw 4; the turn-5 draw 5, Swamp, Mox Ruby and Pulse Tracker 2, the
+# draw 3.
+# Baron Bertram Graywater {2}{W}{B}: Legendary Creature - Vampire Noble 3/4
+#   Whenever one or more tokens you control enter, create a 1/1 black Vampire Rogue creature token with lifelink. This
+#   ability triggers only once each turn.
+#   {1}{B}, Sacrifice another creature or artifact: Draw a card.
+
+[Bot1 Deck]
+Black Lotus
+Plains
+Baron Bertram Graywater
+Swamp
+Mox Jet
+Mox Ruby
+Pulse Tracker
+Swamp
+Island x20
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Lingering Souls
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Baron Bertram Graywater.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lingering Souls.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot2.Battlefield = Plains; Mox Pearl; Mox Jet; Mox Ruby; Spirit Token; Spirit Token
+? Bot1.Battlefield = Baron Bertram Graywater; Plains
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 5
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Swamp.Activate
+! Bot1.Battlefield.Baron Bertram Graywater.Activate
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Baron Bertram Graywater.Activate
+Bot1.Choose(Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Hand.Count = 4
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Pulse Tracker.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Baron Bertram Graywater.Activate
+Bot1.Choose(Pulse Tracker)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 3
+Bot1.Battlefield = Baron Bertram Graywater; Mox Ruby; Plains; Swamp; Swamp
+Bot1.Graveyard = Pulse Tracker; Mox Jet; Black Lotus
