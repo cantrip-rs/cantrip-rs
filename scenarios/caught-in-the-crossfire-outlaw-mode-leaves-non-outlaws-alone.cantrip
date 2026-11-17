@@ -1,0 +1,80 @@
+# Caught in the Crossfire, outlaw mode only ({R}{R}{1}, three of the four mana a Black Lotus and a Mox Ruby could make: only the Lotus is tapped): 2 damage to each outlaw creature, on both sides of the table, and to nothing else (CR 700.12). Both Bile-Vial Boggarts die; Alley Strangler survives damaged; Memnite and Aegis Turtle are untouched.
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Swamp
+Bile-Vial Boggart
+Alley Strangler
+Caught in the Crossfire
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Sapphire
+Island
+Bile-Vial Boggart
+Aegis Turtle
+Memnite
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bile-Vial Boggart.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Alley Strangler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Bile-Vial Boggart.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Caught in the Crossfire.Cast
+Bot1.Modes(to each outlaw)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Alley Strangler.Damage = 2
+Bot2.Battlefield.Aegis Turtle.Damage = 0
+Bot2.Battlefield.Memnite.Damage = 0
+Bot1.Battlefield.Count = 5
+Bot2.Battlefield.Count = 5
