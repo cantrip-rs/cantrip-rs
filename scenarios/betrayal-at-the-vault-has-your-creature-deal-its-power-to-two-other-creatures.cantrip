@@ -1,0 +1,61 @@
+# Betrayal at the Vault: "Target creature you control deals damage equal to its power to each of two other target creatures" (CR 120.3, 115.3). Bot1's Grizzly Bears
+# (power 2) names Bot2's Memnite and Savannah Lions: each takes 2 and dies and the Bears take none. The first target must be Bot1's own creature and the two others
+# distinct creatures other than it: an opponent's creature as the source, the Bears as a victim, one victim named twice, a single victim and three victims are refused. Six mana: the
+# Moxen's {G}{B}{W} and Black Lotus's {G}{G}{G}.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Black Lotus
+Grizzly Bears
+Betrayal at the Vault
+Plains
+Forest x13
+
+[Bot2 Deck]
+Plains
+Memnite
+Memnite
+Savannah Lions
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Betrayal at the Vault.Cast
+! Bot1.Target(Bot2.Battlefield.Memnite#1)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot2.Battlefield.Memnite#1; Bot2.Battlefield.Memnite#1)
+! Bot1.Target(Bot2.Battlefield.Memnite#1; Bot2.Battlefield.Memnite#2; Bot2.Battlefield.Savannah Lions)
+! Bot1.Target(Bot2.Battlefield.Memnite#1)
+Bot1.Target(Bot2.Battlefield.Memnite#1; Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Battlefield = Plains; Memnite
+Bot2.Graveyard = Savannah Lions; Memnite
+Bot1.Battlefield.Grizzly Bears.Damage = 0

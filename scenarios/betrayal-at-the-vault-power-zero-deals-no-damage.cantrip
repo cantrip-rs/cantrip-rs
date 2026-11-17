@@ -1,0 +1,52 @@
+# Betrayal at the Vault: a creature with power 0 deals no damage (CR 120.3g, 120.8): Bot1's Wall of Mist (0/5) is the source, and Bot2's Memnite and Savannah Lions
+# (2/1) are untouched. Six mana: Mox Sapphire, Mox Ruby, Mox Emerald and Black Lotus.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Black Lotus
+Wall of Mist
+Betrayal at the Vault
+Plains
+Forest x13
+
+[Bot2 Deck]
+Plains
+Memnite
+Savannah Lions
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wall of Mist.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Betrayal at the Vault.Cast
+Bot1.Target(Bot1.Battlefield.Wall of Mist)
+Bot1.Target(Bot2.Battlefield.Memnite; Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Battlefield = Plains; Memnite; Savannah Lions
+Bot2.Battlefield.Memnite.Damage = 0
+Bot2.Battlefield.Savannah Lions.Damage = 0

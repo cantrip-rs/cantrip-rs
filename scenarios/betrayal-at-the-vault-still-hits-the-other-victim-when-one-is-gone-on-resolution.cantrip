@@ -1,0 +1,59 @@
+# Betrayal at the Vault (CR 608.2b, 120.3): Bot2's Lightning Bolt kills Savannah Lions in response. One victim is still legal and the creature is still
+# Bot1's, so the spell resolves and the Grizzly Bears deal 2 to the Memnite alone.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Black Lotus
+Grizzly Bears
+Betrayal at the Vault
+Plains
+Forest x13
+
+[Bot2 Deck]
+Mox Ruby
+Plains
+Memnite
+Savannah Lions
+Lightning Bolt
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Plains.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Betrayal at the Vault.Cast
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Memnite; Bot2.Battlefield.Savannah Lions)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Graveyard = Memnite; Savannah Lions; Lightning Bolt
+Bot2.Battlefield = Mox Ruby; Plains
+Bot1.Battlefield.Grizzly Bears.Damage = 0
