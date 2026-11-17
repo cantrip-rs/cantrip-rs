@@ -1,0 +1,53 @@
+# Outlaws' Fury (CR 611.2c, 700.12a): Bot1 controls Triton Shorethief, a Rogue and so an outlaw, so after the +2/+0 it exiles the top card of its library
+# (the Forest below the turn-three draw) and may play it (CR 305.1): the Forest is played from exile as the turn's land drop. Both of Bot1's creatures get exactly +2/+0 (toughness
+# unchanged); Bot2's Memnite does not; the pump is over by the next turn.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Triton Shorethief
+Memnite
+Outlaws' Fury
+Island
+Forest
+Island x12
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Triton Shorethief.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Hand.Outlaws' Fury.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Triton Shorethief.Power = 3
+? Bot1.Battlefield.Triton Shorethief.Toughness = 2
+? Bot2.Battlefield.Memnite.Power = 1
+? Exile = Forest
+? Bot1.Library.Count = 12
+Bot1.Exile.Forest.Play
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Triton Shorethief.Power = 1
+
+[Expect]
+Bot1.Battlefield.Forest.Types = Land
+Exile.Count = 0

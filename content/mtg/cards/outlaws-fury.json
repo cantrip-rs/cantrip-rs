@@ -1,0 +1,6 @@
+{
+  "name": "Outlaws' Fury",
+  "manaCost": "{2}{R}",
+  "type": "Instant",
+  "oracleText": "Creatures you control get +2/+0 until end of turn. If you control an outlaw, exile the top card of your library. Until the end of your next turn, you may play that card. (Assassins, Mercenaries, Pirates, Rogues, and Warlocks are outlaws.)"
+}
