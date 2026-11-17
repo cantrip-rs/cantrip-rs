@@ -725,22 +725,29 @@ pub fn may_put_land_onto_battlefield(
     Ok(g.is_on_battlefield(arrived))
 }
 
-/// "Look at the top card of your library. If it's a land card, you may put it onto the battlefield [tapped]. If you don't put the card
-/// onto the battlefield, put it into your hand." (CR 701.20a, 608.2c): the card is looked at whatever it is, a land is offered
-/// (`may_put_land_onto_battlefield`), and a card that did not enter - a nonland card, a land the player declined, one a replacement
-/// effect stopped - goes to the hand, wherever it now is. An empty library does nothing. Risen Reef and Fecund Greenshell (tapped) and
-/// Wickerfolk Thresher (untapped) print it.
-pub fn look_at_top_land_onto_battlefield_else_hand(g: &mut dyn Game, item: &StackItem, tapped: bool) -> Result<(), Suspend> {
+/// "Look at the top card of your library. If it's a land card, you may put it onto the battlefield [tapped]." (CR 701.20a,
+/// 608.2c): the card is looked at whatever it is and a land is offered (`may_put_land_onto_battlefield`). The card looked at and
+/// whether it entered, `None` when the library is empty and nothing is looked at; a card that did not enter stays where it is.
+/// Mobile Homestead prints it as it is; `look_at_top_land_onto_battlefield_else_hand` adds the card going to the hand.
+pub fn look_at_top_may_put_land_onto_battlefield(g: &mut dyn Game, item: &StackItem, tapped: bool) -> Result<Option<(ObjectId, bool)>, Suspend> {
     let looked = top_of_library(g, item.controller, 1);
     g.look_at(item.controller, &looked);
     g.end_sentence();
-    for original in looked {
-        let entered = may_put_land_onto_battlefield(g, item.controller, item.object, original, tapped)?;
-        g.end_sentence();
-        if !entered {
-            let card = g.found_after_move(original).unwrap_or(original);
-            g.return_to_hand(&[card]);
-        }
+    let Some(&original) = looked.first() else { return Ok(None) };
+    let entered = may_put_land_onto_battlefield(g, item.controller, item.object, original, tapped)?;
+    g.end_sentence();
+    Ok(Some((original, entered)))
+}
+
+/// "Look at the top card of your library. If it's a land card, you may put it onto the battlefield [tapped]. If you don't put the card
+/// onto the battlefield, put it into your hand." (CR 701.20a, 608.2c): the card is looked at whatever it is, a land is offered
+/// (`look_at_top_may_put_land_onto_battlefield`), and a card that did not enter - a nonland card, a land the player declined, one a
+/// replacement effect stopped - goes to the hand, wherever it now is. An empty library does nothing. Risen Reef and Fecund Greenshell
+/// (tapped) and Wickerfolk Thresher (untapped) print it.
+pub fn look_at_top_land_onto_battlefield_else_hand(g: &mut dyn Game, item: &StackItem, tapped: bool) -> Result<(), Suspend> {
+    if let Some((original, false)) = look_at_top_may_put_land_onto_battlefield(g, item, tapped)? {
+        let card = g.found_after_move(original).unwrap_or(original);
+        g.return_to_hand(&[card]);
     }
     Ok(())
 }
