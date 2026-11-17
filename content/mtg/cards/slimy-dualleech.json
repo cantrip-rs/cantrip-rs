@@ -1,0 +1,8 @@
+{
+  "name": "Slimy Dualleech",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Leech",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "At the beginning of combat on your turn, target creature you control with power 2 or less gets +1/+0 and gains deathtouch until end of turn."
+}
