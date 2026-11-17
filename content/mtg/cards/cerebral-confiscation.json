@@ -1,0 +1,6 @@
+{
+  "name": "Cerebral Confiscation",
+  "manaCost": "{2}{B}",
+  "type": "Sorcery",
+  "oracleText": "Choose one —\n• Target opponent discards two cards.\n• Target opponent reveals their hand. You choose a nonland card from it. That player discards that card."
+}

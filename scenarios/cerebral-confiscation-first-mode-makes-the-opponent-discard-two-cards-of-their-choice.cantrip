@@ -1,0 +1,26 @@
+# Cerebral Confiscation, first mode: "Target opponent discards two cards." (CR 700.2, 701.9a, 701.9b) The discarding player chooses which cards: Bot2 holds a Lightning Bolt, a Memnite and Mountains, and
+# keeps whichever two they do not choose to discard (Bot2 chooses a Mountain and the Bolt, keeping the Memnite). Bot1 is not asked to choose or look at the hand.
+
+[Bot1 Deck]
+Black Lotus
+Cerebral Confiscation
+Island x20
+
+[Bot2 Deck]
+Lightning Bolt
+Memnite
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cerebral Confiscation.Cast
+Bot1.Modes(Target opponent discards two cards)
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Mountain; Lightning Bolt)
+
+[Expect]
+Bot2.Hand = Memnite; Mountain; Mountain; Mountain; Mountain
+Bot2.Graveyard = Lightning Bolt; Mountain

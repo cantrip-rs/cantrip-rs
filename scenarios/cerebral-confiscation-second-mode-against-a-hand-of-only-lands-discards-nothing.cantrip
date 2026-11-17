@@ -1,0 +1,25 @@
+# Cerebral Confiscation, second mode: "You choose a nonland card from it" (CR 608.2c, 701.20a) with no nonland card in the hand there is nothing to choose and nothing is discarded; Bot2's hand of
+# Mountains is intact. The scenario with a Memnite and a Lightning Bolt in the hand is the positive control.
+
+[Bot1 Deck]
+Black Lotus
+Cerebral Confiscation
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cerebral Confiscation.Cast
+Bot1.Modes(Target opponent reveals their hand)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+
+[Expect]
+Bot2.Hand.Count = 7
+Bot2.Graveyard.Count = 0
+Bot1.Graveyard = Cerebral Confiscation; Black Lotus

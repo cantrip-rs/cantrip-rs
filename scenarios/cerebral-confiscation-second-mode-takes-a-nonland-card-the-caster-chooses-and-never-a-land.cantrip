@@ -1,0 +1,27 @@
+# Cerebral Confiscation, second mode: "Target opponent reveals their hand. You choose a nonland card from it. That player discards that card." (CR 700.2, 701.9a, 701.20a, 608.2b) Bot2's hand is a
+# Lightning Bolt, a Memnite and Mountains. Bot1 may not choose a Mountain (a land), chooses the Memnite over the Bolt, and exactly that one card is discarded.
+
+[Bot1 Deck]
+Black Lotus
+Cerebral Confiscation
+Island x20
+
+[Bot2 Deck]
+Lightning Bolt
+Memnite
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cerebral Confiscation.Cast
+Bot1.Modes(Target opponent reveals their hand)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Mountain)
+Bot1.Choose(Memnite)
+
+[Expect]
+Bot2.Hand = Lightning Bolt; Mountain; Mountain; Mountain; Mountain; Mountain
+Bot2.Graveyard = Memnite
