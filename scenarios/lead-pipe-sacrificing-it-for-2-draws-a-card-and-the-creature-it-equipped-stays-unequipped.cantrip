@@ -1,0 +1,59 @@
+# Lead Pipe: "{2}, Sacrifice this Equipment: Draw a card" (CR 701.21a, 121.1, 602.2). Equipped to a Memnite (a 3/1) it is sacrificed for {2} from a Black Lotus: Bot1 draws
+# a card whatever it was attached to, the Memnite is a 1/1 again, and with the Pipe gone a later death of the Memnite drains nobody (its "dies" ability is gone with it). The
+# {2} comes out of a second Black Lotus, leaving one black mana in the pool.
+
+[Bot1 Deck]
+Lead Pipe
+Mox Jet
+Black Lotus
+Black Lotus
+Memnite
+Island
+Island
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lead Pipe.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Lead Pipe.Activate(Ability: Equip {2}; Memnite)
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Lead Pipe.Activate(Ability: Sacrifice this Equipment)
+? Bot1.Mana = {B}
+? Bot1.Hand.Count = 3
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+? Bot1.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard.Lead Pipe.Colors = Black
+Bot1.Battlefield.Memnite = (absent)
+Bot1.Hand.Count = 4

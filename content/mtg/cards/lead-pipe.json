@@ -1,0 +1,6 @@
+{
+  "name": "Lead Pipe",
+  "manaCost": "{B}",
+  "type": "Artifact — Clue Equipment",
+  "oracleText": "Equipped creature gets +2/+0.\nWhenever equipped creature dies, each opponent loses 1 life.\n{2}, Sacrifice this Equipment: Draw a card.\nEquip {2}"
+}

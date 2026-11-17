@@ -1,0 +1,62 @@
+# Lead Pipe: "Equip {2}" (CR 702.6a) and "Equipped creature gets +2/+0" (CR 301.5): Bot1 casts it with a Mox Jet, then pays {2} out of a Black Lotus
+# to equip the first of two Memnites, which is a 3/1; the other stays 1/1. "Whenever equipped creature dies, each opponent loses 1 life" (CR 700.4, 603.10a):
+# Bot2 bolts the unequipped Memnite first, and Bot2 does not lose life; then the equipped one, and Bot2 loses 1 life. The Pipe is left on the battlefield, unattached.
+
+[Bot1 Deck]
+Lead Pipe
+Mox Jet
+Black Lotus
+Memnite
+Memnite
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lead Pipe.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Lead Pipe.Activate(Ability: Equip {2}; Memnite#1)
+Bot1.Pass
+? Bot1.Mana = {B}
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Memnite#1.Power = 3
+? Bot1.Battlefield.Memnite#1.Toughness = 1
+? Bot1.Battlefield.Memnite#2.Power = 1
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite#2)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 20
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite#1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20
+Bot1.Graveyard.Count = 3
