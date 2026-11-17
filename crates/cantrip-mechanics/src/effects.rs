@@ -2819,6 +2819,16 @@ pub fn return_first_target_to_battlefield(g: &mut dyn Game, item: &StackItem) ->
     Ok(())
 }
 
+/// "Return target [card] from your graveyard to the battlefield with two additional +1/+1 counters on it" (CR 614.1c, 122.6): the
+/// first target, under the controller of the spell or ability, entering with the counters, so it is never on the battlefield without
+/// them; nothing if it is no longer a legal target (CR 608.2b). Evil Reawakened and Rakdos Joins Up print it.
+pub fn return_first_target_to_battlefield_with_two_plus_one_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(card) = crate::targets::object(g, item, 0) {
+        g.put_onto_battlefield_with_counters(card, item.controller, false, &[(CounterKind::PlusOne, 2)])?;
+    }
+    Ok(())
+}
+
 /// "Return target [card] from your graveyard to the battlefield tapped" (CR 400.3, 110.2a): `return_first_target_to_battlefield`, but the
 /// card enters tapped. Deadly Plot's second mode, Glimpse the Core's, Helping Hand and Phoenix Down print it.
 pub fn return_first_target_to_battlefield_tapped(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
