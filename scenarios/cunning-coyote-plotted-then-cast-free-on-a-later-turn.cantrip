@@ -1,0 +1,39 @@
+# Cunning Coyote: "Plot {1}{R}" (CR 702.170a, 702.170d). Turn 1: it is plotted from the hand for {1}{R} (the pool is empty after),
+# with a Memnite already out. Cast from exile for nothing on turn 3, as a sorcery on a later turn, it enters with the pump
+# trigger: Memnite becomes a 2/2 with haste. A second plot on the same turn it was plotted is refused (the Coyote is already exiled).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Memnite
+Cunning Coyote
+Plains
+Plains
+Plains
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cunning Coyote.Activate(Ability: Plot)
+? Bot1.Mana =
+! Bot1.Exile.Cunning Coyote.Cast
+[T3 Bot1.Main1]
+Bot1.Exile.Cunning Coyote.Cast
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Memnite.Keywords = Haste
+
+[Expect]
+Bot1.Exile.Cunning Coyote = (absent)
+Bot1.Battlefield.Cunning Coyote.Power = 2
