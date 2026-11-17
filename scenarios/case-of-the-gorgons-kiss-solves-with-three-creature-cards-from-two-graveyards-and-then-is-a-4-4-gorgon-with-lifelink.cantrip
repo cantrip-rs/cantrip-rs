@@ -1,0 +1,63 @@
+# Case of the Gorgon's Kiss: "To solve - Three or more creature cards were put into graveyards from anywhere this turn" (CR 719.3a). On turn 3 Bot1 Bolts Bot2's Memnite and Ornithopter (two creature cards into Bot2's
+# graveyard) and discards a Memnite to Faithless Looting (a third, into Bot1's): across both graveyards that is three, so the Case solves as the end step begins. "Solved - This Case is a 4/4 Gorgon creature with deathtouch and
+# lifelink in addition to its other types" (CR 205.1b, 613.1): it is an enchantment creature Case Gorgon 4/4 with deathtouch and lifelink, and on turn 5 attacking unblocked it deals 4 to Bot2 and Bot1 gains 4. The scenario with only
+# two creature cards that turn is the control.
+
+[Bot1 Deck]
+Case of the Gorgon's Kiss
+Mox Jet
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Faithless Looting
+Memnite
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Case of the Gorgon's Kiss.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Case of the Gorgon's Kiss.Solved = (absent)
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite; Island)
+[T3 Bot1.End]
+[T4 Bot2.Upkeep]
+? Stack.Count = 0
+? Bot1.Battlefield.Case of the Gorgon's Kiss.Solved = true
+? Bot1.Battlefield.Case of the Gorgon's Kiss.Types = Enchantment; Creature
+? Bot1.Battlefield.Case of the Gorgon's Kiss.Subtypes = Case; Gorgon
+? Bot1.Battlefield.Case of the Gorgon's Kiss.Power = 4
+? Bot1.Battlefield.Case of the Gorgon's Kiss.Toughness = 4
+? Bot1.Battlefield.Case of the Gorgon's Kiss.Keywords = Deathtouch; Lifelink
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Case of the Gorgon's Kiss > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Life = 24

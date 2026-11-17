@@ -1,0 +1,52 @@
+# Case of the Gorgon's Kiss: "When this Case enters, destroy up to one target creature that was dealt damage this turn." (CR 115.1, 701.8a, 603.3d) On turn 3 Bot1's two Memnites attack and Bot2 blocks each with an Ornithopter,
+# each of which is dealt 1 damage (and survives, 0/2). After combat Bot1 casts the Case: Bot2's undamaged Memnite and Bot1's own Memnites (dealt no damage, the Ornithopters have 0 power) may not be chosen, a damaged
+# Ornithopter may, "up to one" refuses naming both damaged Ornithopters, and the one chosen is destroyed while the other stays.
+
+[Bot1 Deck]
+Memnite
+Memnite
+Mox Jet
+Case of the Gorgon's Kiss
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Ornithopter
+Mountain x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite#1 > Bot2; Memnite#2 > Bot2)
+Bot2.Block(Ornithopter#1 > Memnite#1; Ornithopter#2 > Memnite#2)
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Ornithopter#1.Damage = 1
+? Bot2.Battlefield.Ornithopter#2.Damage = 1
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Case of the Gorgon's Kiss.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Memnite)
+! Bot1.Target(Bot1.Battlefield.Memnite#1)
+! Bot1.Target(Bot2.Battlefield.Ornithopter#1; Bot2.Battlefield.Ornithopter#2)
+Bot1.Target(Bot2.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Memnite; Ornithopter
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield = Case of the Gorgon's Kiss; Memnite; Memnite; Mox Jet

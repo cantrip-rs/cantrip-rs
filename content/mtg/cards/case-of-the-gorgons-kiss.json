@@ -1,0 +1,6 @@
+{
+  "name": "Case of the Gorgon's Kiss",
+  "manaCost": "{B}",
+  "type": "Enchantment — Case",
+  "oracleText": "When this Case enters, destroy up to one target creature that was dealt damage this turn.\nTo solve — Three or more creature cards were put into graveyards from anywhere this turn. (If unsolved, solve at the beginning of your end step.)\nSolved — This Case is a 4/4 Gorgon creature with deathtouch and lifelink in addition to its other types."
+}

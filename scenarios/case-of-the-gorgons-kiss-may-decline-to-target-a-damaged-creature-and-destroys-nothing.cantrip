@@ -1,0 +1,38 @@
+# Case of the Gorgon's Kiss: "destroy up to one target creature that was dealt damage this turn" (CR 115.1, 601.2c, 701.8a) "up to one" lets the controller choose no target even when a legal one exists. On turn 3 Bot1's Memnite
+# attacks and Bot2 blocks it with an Ornithopter, which is dealt 1 damage and survives. Bot1 casts the Case and declines to target; the damaged Ornithopter stays. The other scenario, which does choose it, is the positive control.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Case of the Gorgon's Kiss
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Mountain x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Ornithopter > Memnite)
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Ornithopter.Damage = 1
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Case of the Gorgon's Kiss.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Ornithopter
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield = Case of the Gorgon's Kiss; Memnite; Mox Jet

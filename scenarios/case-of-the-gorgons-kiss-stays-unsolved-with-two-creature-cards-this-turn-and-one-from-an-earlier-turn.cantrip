@@ -1,0 +1,60 @@
+# Case of the Gorgon's Kiss: "To solve - Three or more creature cards were put into graveyards from anywhere this turn" (CR 719.3a): only this turn's count. Bot1 discards a Memnite to Faithless Looting on turn 1; on turn 3
+# it Bolts Bot2's Memnite and Ornithopter, so two creature cards were put into graveyards this turn and a third on an earlier one: the Case is not solved at the end step and stays a noncreature enchantment (it is not a
+# 4/4 Gorgon, has no keywords). The scenario with the third card on the same turn is the positive control.
+
+[Bot1 Deck]
+Case of the Gorgon's Kiss
+Mox Jet
+Mox Ruby
+Mox Ruby
+Faithless Looting
+Memnite
+Island
+Lightning Bolt
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Case of the Gorgon's Kiss.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite; Island)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+[T4 Bot2.Upkeep]
+? Stack.Count = 0
+? Bot2.Graveyard.Count = 2
+
+[Expect]
+Bot1.Battlefield.Case of the Gorgon's Kiss.Solved = (absent)
+Bot1.Battlefield.Case of the Gorgon's Kiss.Types = Enchantment
+Bot1.Battlefield.Case of the Gorgon's Kiss.Keywords = (absent)
