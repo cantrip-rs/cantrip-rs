@@ -1,0 +1,50 @@
+# Museum Nightwatch (Disguise {1}{W}): cast face down for {3} (Black Lotus) on turn 1, it is turned face up on turn 3 for exactly
+# {1}{W} (CR 702.168d, 116.2b): with only Mox Pearl's {W} the turn-up is refused, with Mox Jet's {B} for the generic as well it
+# is done and the pool is empty. Face up it is Museum Nightwatch again, 3/2 (CR 708.8). On turn 4 Bot2's Lightning Bolt kills it
+# (no ward any more) and, having the ability face up, it makes a Detective for Bot1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Museum Nightwatch
+Plains x14
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Museum Nightwatch.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Mana =
+? Bot1.Battlefield.Museum Nightwatch.Power = 3
+? Bot1.Battlefield.Museum Nightwatch.Toughness = 2
+? Stack.Count = 0
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Museum Nightwatch)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Graveyard = Museum Nightwatch; Black Lotus
+Bot1.Battlefield = Detective Token; Mox Pearl; Mox Jet
