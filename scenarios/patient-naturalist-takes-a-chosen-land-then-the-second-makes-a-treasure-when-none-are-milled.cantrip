@@ -1,0 +1,60 @@
+# Patient Naturalist: with two land cards among the three milled (Forest, Island, Memnite) Bot1 chooses one for its hand (Forest); the Island
+# is left in the graveyard and no Treasure is made. A second Patient Naturalist on turn 3 mills three nonland cards (Memnites): "If you can't"
+# applies - the Island already in the graveyard is not among the milled cards - so Bot1 creates a Treasure token and its hand has no more
+# land. The Treasure, a land-less Island fourth from the top, stays: the library keeps the Island untouched.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Patient Naturalist
+Patient Naturalist
+Memnite
+Memnite
+Forest
+Island
+Memnite
+Memnite
+Memnite
+Memnite
+Memnite
+Island
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Patient Naturalist.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Forest; Memnite; Memnite; Patient Naturalist
+? Bot1.Graveyard = Memnite; Island
+? Bot1.Battlefield.Treasure Token = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Patient Naturalist.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Treasure Token.Token = true
+Bot1.Battlefield.Treasure Token.Types = Artifact
+Bot1.Hand = Forest; Memnite; Memnite; Memnite
+Bot1.Graveyard.Count = 5
+Bot1.Library.Top = Island

@@ -1,0 +1,8 @@
+{
+  "name": "Patient Naturalist",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Human Scout",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "When this creature enters, mill three cards. Put a land card from among the milled cards into your hand. If you can't, create a Treasure token. (To mill three cards, put the top three cards of your library into your graveyard.)"
+}
