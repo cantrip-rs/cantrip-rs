@@ -999,7 +999,9 @@ pub fn grant_activated_abilities_of(view: &dyn LayerQuery, cards: &[CardId], cha
 }
 
 /// Activated abilities of particular cards. Unlike a list of definitions, physical donors retain their identity
-/// when a different donor leaves and the abilities move into earlier slots (CR 113.2c, 602.5c).
+/// when a different donor leaves and the abilities move into earlier slots (CR 113.2c, 602.5c). A land card with a basic land
+/// type has that type's mana ability (CR 305.6) as an object, though its card prints none, so it gives that too, after the
+/// printed ones, in WUBRG order. Agatha's Soul Cauldron, Necrotic Ooze, Territory Forge and Thranduil grant them this way.
 pub fn grant_activated_abilities_from(view: &dyn LayerQuery, cards: &[(ObjectId, CardId)], chars: &mut Chars) {
     grant_activated_from(view, cards.iter().copied(), chars);
 }
@@ -1011,6 +1013,15 @@ fn grant_activated_from(view: &dyn LayerQuery, cards: impl Iterator<Item = (Obje
                 continue;
             }
             chars.grant_ability_from(AbilityRef { card, index: index as u8 }, origin);
+        }
+        if origin == ObjectId::NONE {
+            continue;
+        }
+        let donor = view.chars(origin);
+        for (mana, land_type) in [(Mana::W, Subtype::Plains), (Mana::U, Subtype::Island), (Mana::B, Subtype::Swamp), (Mana::R, Subtype::Mountain), (Mana::G, Subtype::Forest)] {
+            if donor.has_subtype(land_type) {
+                chars.grant_ability_from(AbilityRef { card: view.cards().intrinsic, index: mana as u8 }, origin);
+            }
         }
     }
 }

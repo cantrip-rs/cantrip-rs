@@ -1,0 +1,43 @@
+# Necrotic Ooze: "As long as Necrotic Ooze is on the battlefield, it has all activated abilities of all creature cards in all
+# graveyards" (CR 613.1f). Dryad Arbor is a land creature card with the basic land type Forest, so as an object in the graveyard
+# it has the intrinsic ability "{T}: Add {G}" though its text box prints none (CR 305.6), and the Ooze has it too. Turn 1: the
+# Ooze is cast and Dryad Arbor is played; on turn 2 Bot2's Lightning Bolt kills the Arbor. Turn 3: the Ooze taps for {G}.
+
+[Bot1 Deck]
+Necrotic Ooze
+Black Lotus
+Mox Jet
+Dryad Arbor
+Island x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Necrotic Ooze.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dryad Arbor.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Dryad Arbor)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Dryad Arbor; Black Lotus
+Bot1.Battlefield.Necrotic Ooze.Activate(Ability: Add)
+
+[Expect]
+Bot1.Mana = {G}
+Bot1.Battlefield.Necrotic Ooze.Tapped = true
