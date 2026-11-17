@@ -1,0 +1,50 @@
+# Luxurious Locomotive is cast on turn 1 with four Moxen and the Forest. On turn 3 Bot1 casts two Basking Rootwallas and crews the Locomotive
+# with both in one activation (total power 2): it attacks for 6 (Bot2 is at 14) and its trigger makes two Treasures, one for each
+# creature that crewed it.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Luxurious Locomotive
+Basking Rootwalla
+Basking Rootwalla
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Luxurious Locomotive.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Basking Rootwalla.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Basking Rootwalla.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Luxurious Locomotive.Activate(Ability: Crew)
+Bot1.Choose(Basking Rootwalla#1; Basking Rootwalla#2)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Luxurious Locomotive > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Count = 10
+Bot1.Battlefield.Treasure Token#1.Subtypes = Treasure
+Bot1.Battlefield.Treasure Token#2.Subtypes = Treasure

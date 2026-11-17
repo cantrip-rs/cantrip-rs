@@ -1,0 +1,64 @@
+# Luxurious Locomotive: "Crew 1. Activate only once each turn." On turn 3 Bot1 crews it with the first of two Basking Rootwallas
+# and attacks (one Treasure); a second crew that turn is refused, though the other Rootwalla is untapped and could pay it (the
+# control: the first crew was allowed). On turn 5 the second Rootwalla crews it, which is allowed again, and the attack makes one
+# more Treasure: two in all, not three - the first turn's crew member is not counted again, and the Rootwalla that did not crew
+# this turn is not counted either.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Luxurious Locomotive
+Basking Rootwalla
+Basking Rootwalla
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Luxurious Locomotive.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Basking Rootwalla.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Basking Rootwalla.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Luxurious Locomotive.Activate(Ability: Crew)
+Bot1.Choose(Basking Rootwalla#1)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Luxurious Locomotive.Activate(Ability: Crew)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Luxurious Locomotive > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Count = 9
+[T5 Bot1.Main1]
+Bot1.Battlefield.Luxurious Locomotive.Activate(Ability: Crew)
+Bot1.Choose(Basking Rootwalla#2)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Luxurious Locomotive > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 8
+Bot1.Battlefield.Count = 10
+Bot1.Battlefield.Treasure Token#1.Subtypes = Treasure
+Bot1.Battlefield.Treasure Token#2.Subtypes = Treasure
