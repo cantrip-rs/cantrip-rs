@@ -1,0 +1,44 @@
+# Marchesa, Dealer of Death: the payment is "you may" (CR 603.5): after the crime (Lightning Bolt at Bot2) Bot1 declines to
+# pay {1}, so no card is looked at or taken and the library keeps its order; the Bolt still resolves.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Marchesa, Dealer of Death
+Lightning Bolt
+Island
+Island
+Ancestral Recall
+Dark Ritual
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Marchesa, Dealer of Death.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Hand = Island; Island
+Bot1.Graveyard = Lightning Bolt
+Bot1.Library.Count = 13
+Bot1.Battlefield.Mox Pearl.Tapped = false

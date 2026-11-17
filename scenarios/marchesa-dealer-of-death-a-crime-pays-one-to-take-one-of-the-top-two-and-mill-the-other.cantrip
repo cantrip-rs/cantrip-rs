@@ -1,0 +1,50 @@
+# Marchesa, Dealer of Death: "Whenever you commit a crime, you may pay {1}. If you do, look at the top two cards of your
+# library. Put one of them into your hand and the other into your graveyard." (CR 700.13, 603.2, 701.20e). On turn 3 Bot1's
+# Lightning Bolt at Bot2 is a crime: Bot1 pays exactly {1} (Mox Pearl), takes the second card, Dark Ritual, into hand and
+# Ancestral Recall goes to the graveyard; the pool is empty, and Bot2's library is untouched.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Marchesa, Dealer of Death
+Lightning Bolt
+Island
+Island
+Ancestral Recall
+Dark Ritual
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Marchesa, Dealer of Death.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+? Bot1.Mana =
+Bot1.Arrange(Dark Ritual | Ancestral Recall)
+? Bot1.Hand = Island; Island; Dark Ritual
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Hand = Island; Island; Dark Ritual
+Bot1.Graveyard = Lightning Bolt; Ancestral Recall
+Bot1.Library.Count = 11
+Bot2.Library.Count = 12

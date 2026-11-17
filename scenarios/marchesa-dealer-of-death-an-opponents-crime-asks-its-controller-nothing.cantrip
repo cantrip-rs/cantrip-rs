@@ -1,0 +1,41 @@
+# Marchesa, Dealer of Death: "Whenever you commit a crime" (CR 700.13): Bot2's Lightning Bolt at Bot1 is a crime by Bot2,
+# not by Marchesa's controller, so Bot1 is asked nothing and looks at no card.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Marchesa, Dealer of Death
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Marchesa, Dealer of Death.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+! Bot1.Decline
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Hand = Island; Island
+Bot1.Library.Count = 13

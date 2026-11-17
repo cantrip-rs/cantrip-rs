@@ -1,0 +1,41 @@
+# Marchesa, Dealer of Death: a Lightning Bolt at its own controller targets no opponent, nothing of theirs and no card in
+# their graveyard, so it is not a crime (CR 700.13): nothing is asked and nothing is looked at. Control for the crime scenarios.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Marchesa, Dealer of Death
+Lightning Bolt
+Island
+Island
+Ancestral Recall
+Dark Ritual
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Marchesa, Dealer of Death.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+! Bot1.Decline
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Hand = Island; Island
+Bot1.Library.Count = 13
