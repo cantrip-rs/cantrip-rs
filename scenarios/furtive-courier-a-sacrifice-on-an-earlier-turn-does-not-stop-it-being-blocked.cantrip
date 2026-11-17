@@ -1,0 +1,53 @@
+# Furtive Courier: "can't be blocked as long as you've sacrificed an artifact this turn" (CR 611.3a): it is only this turn that counts. Turn 1 Bot1 casts a
+# Black Lotus and sacrifices it for the Courier, so on turn 3 it has sacrificed nothing this turn: Bot2's Grizzly Bears blocks, and both die. The loot
+# on the attack draws the Plains and Bot1 discards the Swamp.
+
+[Bot1 Deck]
+Black Lotus
+Furtive Courier
+Island
+Forest
+Mountain
+Island
+Island
+Swamp
+Plains
+Island x11
+
+[Bot2 Deck]
+Mox Jet
+Mox Emerald
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Furtive Courier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Furtive Courier > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Swamp)
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Grizzly Bears > Furtive Courier)
+[T3 Bot1.End]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Hand = Forest; Mountain; Island; Island; Plains
+Bot1.Graveyard = Furtive Courier; Swamp; Black Lotus
+Bot2.Graveyard = Grizzly Bears

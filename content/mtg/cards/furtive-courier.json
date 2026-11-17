@@ -1,0 +1,8 @@
+{
+  "name": "Furtive Courier",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Merfolk Advisor",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "This creature can't be blocked as long as you've sacrificed an artifact this turn.\nWhenever this creature attacks, draw a card, then discard a card."
+}

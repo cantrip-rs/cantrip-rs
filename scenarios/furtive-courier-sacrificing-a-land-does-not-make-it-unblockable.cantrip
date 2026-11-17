@@ -1,0 +1,57 @@
+# Furtive Courier: "can't be blocked as long as you've sacrificed an artifact this turn" (CR 701.21a): the sacrifice must be of an artifact. On turn 3
+# Bot1 plays Evolving Wilds and sacrifices it (a land) for an Island, then attacks: Bot2's Grizzly Bears blocks the Courier and both die.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Furtive Courier
+Evolving Wilds
+Island
+Island
+Mountain
+Plains
+Island x11
+
+[Bot2 Deck]
+Mox Jet
+Mox Emerald
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Furtive Courier.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Evolving Wilds.Play
+Bot1.Battlefield.Evolving Wilds.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Island)
+Bot1.Attack(Furtive Courier > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mountain)
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Grizzly Bears > Furtive Courier)
+[T3 Bot1.End]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Furtive Courier; Mountain; Evolving Wilds
+Bot2.Graveyard = Grizzly Bears

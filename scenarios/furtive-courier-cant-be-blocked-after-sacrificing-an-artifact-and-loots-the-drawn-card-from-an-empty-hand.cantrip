@@ -1,0 +1,60 @@
+# Furtive Courier: "can't be blocked as long as you've sacrificed an artifact this turn" and "Whenever this creature attacks, draw a card, then discard a card."
+# (CR 509.1b, 611.3a, 701.21a, 701.9). Turn 1 Bot1 casts the Courier with three Moxes; turn 3 it plays its last card but the Black Lotus, casts and sacrifices
+# the Lotus (an artifact) and attacks: Bot2's Grizzly Bears may not block it (the refusal). The hand is empty, so the loot draws the Mountain and
+# then must discard it (discarding first would discard nothing): the Mountain is in the graveyard, not the hand.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Furtive Courier
+Black Lotus
+Island
+Forest
+Mountain
+Island x11
+
+[Bot2 Deck]
+Mox Jet
+Mox Emerald
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Furtive Courier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Attack(Furtive Courier > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareBlockers]
+! Bot2.Block(Grizzly Bears > Furtive Courier)
+[T3 Bot1.End]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Hand =
+Bot1.Graveyard = Mountain; Black Lotus
