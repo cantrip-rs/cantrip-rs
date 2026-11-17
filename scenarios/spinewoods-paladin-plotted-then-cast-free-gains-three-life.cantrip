@@ -1,0 +1,50 @@
+# Spinewoods Paladin, Plot {3}{G} (CR 702.170a): four Moxen that make no green mana can't plot it (the {G} is owed), and with Mox Emerald in
+# play as well it is plotted for {3}{G} (one of the five mana is left over), a special action, so Bot1's life is still 20 and nothing is on the
+# stack. It can't be cast the turn it was plotted (the refusal). On turn 3 it is cast free (the Moxen stay untapped) and "When this creature
+# enters, you gain 3 life": 23.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Spinewoods Paladin
+Plains x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Spinewoods Paladin.Activate(Ability: Plot; Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Spinewoods Paladin.Activate(Ability: Plot)
+? Bot1.Mana =
+? Exile = Spinewoods Paladin
+? Stack.Count = 0
+? Bot1.Life = 20
+! Bot1.Exile.Spinewoods Paladin.Cast
+[T3 Bot1.Main1]
+Bot1.Exile.Spinewoods Paladin.Cast
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield.Spinewoods Paladin.Power = 5
+Bot1.Battlefield.Spinewoods Paladin.Toughness = 4
+Exile.Count = 0
+Bot1.Battlefield.Mox Emerald.Tapped = false
+Bot1.Battlefield.Mox Sapphire.Tapped = false

@@ -1,0 +1,56 @@
+# Spinewoods Paladin is a 5/4 with trample (CR 702.19b) that gains 3 life when it enters. It costs {4}{G}: four Moxen that make no green mana are
+# one short and refused (the {G} is owed), and with Mox Emerald it is cast for exactly the five mana (the pool is empty after). Entering gains
+# Bot1 3 life (23). On turn 3 it attacks and Bot2's 0/1 Memnite blocks: lethal damage (1) to the blocker, the other 4 tramples over to Bot2: 16.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Spinewoods Paladin
+Plains x14
+
+[Bot2 Deck]
+Mox Jet
+Memnite
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Spinewoods Paladin.Cast(Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Spinewoods Paladin.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Spinewoods Paladin > Bot2)
+Bot2.Block(Memnite > Spinewoods Paladin)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Life = 23
+Bot2.Battlefield.Memnite = (absent)
+Bot1.Battlefield.Spinewoods Paladin.Keywords = Trample
