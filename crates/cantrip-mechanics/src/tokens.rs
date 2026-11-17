@@ -1851,6 +1851,23 @@ pub static DOG: CardDef = CardDef {
     ..token!(Dog)
 };
 
+/// The 2/2 white and blue Detective creature token. Museum Nightwatch, Unyielding Gatekeeper and Inside Source make it.
+pub static WHITE_BLUE_DETECTIVE: CardDef = CardDef {
+    colors: Some(ColorSet(ColorSet::of(Color::White).0 | ColorSet::of(Color::Blue).0)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    ..token!(Detective)
+};
+
+/// "Create a 2/2 white and blue Detective creature token." (CR 111.1) as an ability's whole effect: one `WHITE_BLUE_DETECTIVE` under
+/// `item`'s controller (the ability's controller, as it resolves, CR 603.3a), the card file listing it in its `EXTRA`. Museum
+/// Nightwatch and Inside Source print it.
+pub fn create_a_white_blue_detective(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &WHITE_BLUE_DETECTIVE, 1)?;
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
