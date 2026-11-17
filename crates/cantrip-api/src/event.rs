@@ -308,6 +308,11 @@ pub enum Event {
     /// `creature` saddled `mount` (CR 702.171c): it was tapped to pay the cost of the permanent's saddle ability, the saddle
     /// counterpart of `Crewed`, emitted the same way (Canyon Vaulter). "Creatures that saddled it this turn" asks `History::saddled` (Giant Beaver).
     Saddled { creature: ObjectId, mount: ObjectId },
+    /// `card`, now in exile, became plotted (CR 702.170a): it was exiled to pay a plot special action, or an effect said it becomes
+    /// plotted (Aven Interrupter). It names the card where it is in exile - a new object (CR 400.7) - and its owner, who may cast it
+    /// for free as a sorcery on a later turn (CR 702.170d). "When this card becomes plotted" (Aloe Alchemist) is the card's own ability,
+    /// functioning in exile.
+    Plotted { card: ObjectId, player: PlayerId },
     /// A player became the monarch (CR 725.1, 725.4): it was not theirs before.
     BecameMonarch { player: PlayerId },
     /// A player took the initiative (CR 726.1), even one who had it (CR 726.5): what makes them venture into Undercity
@@ -590,6 +595,7 @@ impl Event {
             | Event::Looked { player, .. }
             | Event::AbilityActivated { player, .. }
             | Event::Cycled { player, .. }
+            | Event::Plotted { player, .. }
             | Event::Searched { player, .. }
             | Event::AttackersDeclared { player, .. }
             | Event::Exerted { player, .. }
@@ -651,7 +657,7 @@ impl Event {
             Event::EntryAttemptFailed { entering } => entering == object,
             Event::Damage { source, target, .. } => source == object || target == Target::Object(object),
             Event::DamagePrevented { source, target, by, .. } => source == object || by == object || target == Target::Object(object),
-            Event::Drew { card, .. } | Event::Discarded { card, .. } | Event::Revealed { card, .. } | Event::Looked { card, .. } | Event::Cycled { card, .. } | Event::Shown { card, .. } | Event::Randomized { card, .. } => {
+            Event::Drew { card, .. } | Event::Discarded { card, .. } | Event::Revealed { card, .. } | Event::Looked { card, .. } | Event::Cycled { card, .. } | Event::Plotted { card, .. } | Event::Shown { card, .. } | Event::Randomized { card, .. } => {
                 card == object
             }
             Event::AbilityActivated { source, .. }
@@ -803,6 +809,8 @@ impl EventMask {
     pub const MUTATED: EventMask = EventMask(1 << 65);
     /// A player manifested dread (CR 701.62b).
     pub const MANIFESTED_DREAD: EventMask = EventMask(1 << 67);
+    /// A card became plotted (CR 702.170a). Bit 68 is the forage event's, on a branch not yet on main.
+    pub const PLOTTED: EventMask = EventMask(1 << 69);
     /// A meld card's counterpart melded with it (CR 701.42a): recorded only, sharing transforming's bit.
     pub const MELDED: EventMask = EventMask::TRANSFORMED;
 
@@ -884,6 +892,7 @@ impl EventMask {
             Event::TappedForTeamwork { .. } => EventMask::TAPPED_FOR_TEAMWORK,
             Event::Crewed { .. } => EventMask::CREWED,
             Event::Saddled { .. } => EventMask::SADDLED,
+            Event::Plotted { .. } => EventMask::PLOTTED,
             Event::BecameMonarch { .. } => EventMask::BECAME_MONARCH,
             Event::TookInitiative { .. } => EventMask::TOOK_INITIATIVE,
             Event::CoinFlipped { .. } => EventMask::COIN_FLIPPED,

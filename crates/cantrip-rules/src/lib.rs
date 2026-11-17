@@ -3451,6 +3451,16 @@ impl cantrip_api::Game for Cx<'_> {
         self.permit(Playable::Card(card), card, player, grant);
     }
 
+    fn become_plotted(&mut self, card: ObjectId) {
+        if !self.g.state.obj(card).zone.is(ZoneKind::Exile) {
+            return;
+        }
+        let owner = self.g.state.obj(card).owner;
+        let grant = PlayGrant { instead: Some(ManaCost::ZERO), later_turns: true, sorcery_speed: true, ..PlayGrant::CAST };
+        self.permit(Playable::Card(card), card, owner, grant);
+        self.emit(Event::Plotted { card, player: owner });
+    }
+
     fn allow_play_exiled_with(&mut self, by: Linked, player: PlayerId, grant: PlayGrant, one: bool) {
         self.permit(Playable::ExiledWith { by, one }, by.object, player, grant);
     }

@@ -5,17 +5,11 @@
 use cantrip_api::*;
 
 /// The card, now in exile, becomes plotted (CR 702.170a): its owner may cast it without paying its mana cost, as a sorcery,
-/// on a later turn (CR 702.170d). Nothing happens to a card that is not in exile (a copy of a spell that was exiled
-/// ceases to exist). Plot's own special action, and Aven Interrupter's "exile target spell. It becomes plotted", use it.
+/// on a later turn (CR 702.170d), and `Event::Plotted` is emitted for "when this card becomes plotted". Nothing happens to a card
+/// that is not in exile (a copy of a spell that was exiled ceases to exist). Plot's own special action, and Aven Interrupter's
+/// "exile target spell. It becomes plotted", use it.
 pub fn become_plotted(g: &mut dyn Game, exiled: ObjectId) {
-    if g.obj(exiled).zone.is(ZoneKind::Exile) {
-        let owner = g.obj(exiled).owner;
-        g.allow_play(
-            exiled,
-            owner,
-            PlayGrant { instead: Some(ManaCost::ZERO), later_turns: true, sorcery_speed: true, ..PlayGrant::CAST },
-        );
-    }
+    g.become_plotted(exiled);
 }
 
 /// Exile the card from the hand and let its owner cast it for free as a sorcery on a later turn (CR 702.170d).
