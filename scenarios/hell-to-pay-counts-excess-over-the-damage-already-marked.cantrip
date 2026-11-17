@@ -1,0 +1,52 @@
+# Hell to Pay: excess damage is what is dealt above lethal damage given damage already marked (CR 120.10, 704.5g). A Shock leaves Bot2's Hill Giant (3/3) with 2 damage, so lethal
+# damage is now 1: Hell to Pay with X = 2 deals 1 lethal and 1 excess and makes exactly one tapped Treasure.
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Shock
+Hell to Pay
+Island x4
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Hill Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Hill Giant.Damage = 2
+Bot1.Hand.Hell to Pay.Cast(Bot2.Battlefield.Hill Giant; X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot2.Battlefield.Hill Giant = (absent)
+? Bot1.Battlefield.Treasure Token.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Count = 2
+Bot2.Graveyard = Hill Giant; Black Lotus

@@ -1,0 +1,44 @@
+# Hell to Pay: X = 2 on Bot2's Hill Giant (3/3) marks 2 damage (CR 120.3e) but is below lethal, so there is no excess, no Treasure, and the Giant survives (CR 120.10).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Hell to Pay
+Island x4
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Hill Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hell to Pay.Cast(Bot2.Battlefield.Hill Giant; X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Hill Giant.Damage = 2
+
+[Expect]
+Bot1.Battlefield.Count = 1
+Bot2.Battlefield.Hill Giant.Damage = 2

@@ -1,0 +1,51 @@
+# Hell to Pay: "Create a number of tapped Treasure tokens equal to the amount of excess damage dealt to that creature this way" (CR 120.10, 614.9). Bot1's Blood of the Martyr lets it have damage that would be
+# dealt to a creature dealt to it instead; X = 2 against Bot2's Memnite (1/1, so 1 would be excess) is redirected to Bot1 (20 -> 18): the Memnite takes no damage, so no excess was dealt to it and no Treasure is made.
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Blood of the Martyr
+Hell to Pay
+Island
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Blood of the Martyr.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hell to Pay.Cast(Bot2.Battlefield.Memnite; X: 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Mana =
+
+[Expect]
+Bot1.Life = 18
+Bot2.Battlefield.Memnite.Damage = 0
+Bot1.Battlefield.Count = 3
