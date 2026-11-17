@@ -1,0 +1,41 @@
+# Skulduggery: Bot2 answers by Lightning Bolting its own Memnite, so the -1/-1 target is gone (CR 608.2b), but Bot1's Memnite
+# still gets +1/+1: each target is judged on its own, and the spell does not resolve only if all of its targets are illegal.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Skulduggery
+Swamp x4
+Swamp x15
+
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Skulduggery.Cast
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Memnite; Lightning Bolt
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2

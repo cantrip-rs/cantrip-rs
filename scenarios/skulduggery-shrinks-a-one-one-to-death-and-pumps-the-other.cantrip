@@ -1,0 +1,38 @@
+# Skulduggery: -1/-1 on Bot2's Memnite leaves it 0/0, so it dies as state-based actions are checked (CR 704.5f), while Bot1's
+# own Memnite gets +1/+1 for the turn (CR 611.2a). Cast on Bot2's turn (it is an instant, CR 304.1): Bot2's Memnite is in the
+# graveyard and Bot1's, a 2/2 until the end of that turn, is a 1/1 again on turn 3.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Skulduggery
+Swamp x4
+Swamp x15
+
+[Bot2 Deck]
+Memnite
+Island x21
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Skulduggery.Cast
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Count = 0
+? Bot2.Graveyard = Memnite
+? Bot1.Battlefield.Memnite.Power = 2
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Graveyard = Skulduggery
