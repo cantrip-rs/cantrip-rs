@@ -1,0 +1,38 @@
+# "You may sacrifice a creature": Bot1 chooses none, so nothing is sacrificed, no "when you do" trigger is put on the stack (so no
+# target is asked for, CR 603.12), and neither player draws or loses life. The Memnite and the Contractor both stay.
+
+[Bot1 Deck]
+Unscrupulous Contractor
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Memnite
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unscrupulous Contractor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Unscrupulous Contractor.Power = 3
+Bot1.Hand.Count = 2
+Bot1.Life = 20
+Bot2.Hand.Count = 7
+Bot2.Life = 20

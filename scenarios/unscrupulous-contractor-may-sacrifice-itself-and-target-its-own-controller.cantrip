@@ -1,0 +1,38 @@
+# The Contractor may sacrifice itself (it is "a creature", already on the battlefield as its trigger resolves), and the reflexive
+# trigger still happens (CR 603.12): with no other creature Bot1 chooses itself as "target player" and draws two cards (three left
+# in hand after the Moxen and the Contractor, so five) and loses 2 life (20 to 18), while Bot2 is untouched (pair of the opponent scenario).
+
+[Bot1 Deck]
+Unscrupulous Contractor
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unscrupulous Contractor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Unscrupulous Contractor)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Unscrupulous Contractor
+Bot1.Hand.Count = 5
+Bot1.Life = 18
+Bot2.Hand.Count = 7
+Bot2.Life = 20

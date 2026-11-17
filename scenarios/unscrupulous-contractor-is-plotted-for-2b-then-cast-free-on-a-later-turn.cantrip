@@ -1,0 +1,39 @@
+# Plot {2}{B} (CR 702.170) is a special action: short of mana it is refused, then Bot1 pays {2}{B} from Black Lotus on turn one to
+# exile the Contractor (it cannot be cast that turn, the refusal) and the pool is empty. On turn three Bot1 casts it from exile
+# without paying: the enters trigger still happens, Bot1 sacrifices the Contractor itself and Bot2 draws two and loses 2 life (it
+# draws for turn two and discards down to seven at cleanup, so nine cards, not ten). The Lotus is in the graveyard too.
+
+[Bot1 Deck]
+Unscrupulous Contractor
+Black Lotus
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+! Bot1.Hand.Unscrupulous Contractor.Activate(Ability: Plot)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unscrupulous Contractor.Activate(Ability: Plot)
+? Bot1.Mana = 
+! Bot1.Exile.Unscrupulous Contractor.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Exile.Unscrupulous Contractor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Unscrupulous Contractor)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Unscrupulous Contractor; Black Lotus
+Bot1.Mana = 
+Bot2.Hand.Count = 9
+Bot2.Life = 18

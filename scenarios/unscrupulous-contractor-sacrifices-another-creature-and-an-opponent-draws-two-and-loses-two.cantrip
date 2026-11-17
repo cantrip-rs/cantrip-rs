@@ -1,0 +1,46 @@
+# Unscrupulous Contractor: "When this creature enters, you may sacrifice a creature. When you do, target player draws two cards
+# and loses 2 life." Bot1 sacrifices its Memnite ("a creature" is one: two are refused, CR 701.21) and the reflexive trigger
+# (CR 603.12) goes on the stack with Bot2 as its target: Bot2 draws exactly two (seven to nine) and loses exactly 2 (20 to 18).
+# Bot1 itself is untouched (hand and life), and the Contractor stays on the battlefield.
+
+[Bot1 Deck]
+Unscrupulous Contractor
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Memnite
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unscrupulous Contractor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Unscrupulous Contractor; Memnite)
+Bot1.Choose(Memnite)
+Bot1.Target(Bot2)
+? Bot1.Graveyard = Memnite
+? Bot2.Life = 20
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Unscrupulous Contractor.Power = 3
+Bot1.Battlefield.Unscrupulous Contractor.Toughness = 2
+Bot1.Graveyard = Memnite
+Bot1.Hand.Count = 2
+Bot1.Life = 20
+Bot2.Hand.Count = 9
+Bot2.Life = 18
