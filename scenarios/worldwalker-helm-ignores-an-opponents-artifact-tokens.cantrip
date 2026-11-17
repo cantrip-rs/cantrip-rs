@@ -1,0 +1,52 @@
+# Worldwalker Helm: "If you would create one or more artifact tokens" - tokens you would create, not the opponent's (CR 614.1a,
+# 111.1). Bot1's Helm adds a Map to its own Epicure's Blood token on turn 1; on turn 2 Bot2's Voldaren Epicure makes a Blood token
+# for Bot2 and no Map appears for anyone: Bot1 still has the single Map and Bot2 has only the Blood token.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Worldwalker Helm
+Voldaren Epicure
+Plains
+Plains x12
+
+[Bot2 Deck]
+Mox Ruby
+Voldaren Epicure
+Plains x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Worldwalker Helm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Voldaren Epicure.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Voldaren Epicure.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Bot1.Battlefield = Blood Token; Map Token; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Voldaren Epicure; Worldwalker Helm
+Bot2.Battlefield = Blood Token; Mox Ruby; Voldaren Epicure

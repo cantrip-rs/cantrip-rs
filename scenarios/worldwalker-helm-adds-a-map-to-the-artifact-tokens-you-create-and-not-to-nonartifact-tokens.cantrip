@@ -1,0 +1,54 @@
+# Worldwalker Helm: "If you would create one or more artifact tokens, instead create those tokens plus an additional Map token"
+# (CR 614.1a, 111.1). Bot1 casts Worldwalker Helm ({2}{U}) and then Voldaren Epicure, whose Blood token is an artifact token: a Map
+# token is created with it, in the same event, and the Blood token is still made (it is "plus", not replaced). Turn 3: Dragon
+# Fodder makes two Goblin tokens, which are not artifacts, so no further Map appears.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Worldwalker Helm
+Voldaren Epicure
+Dragon Fodder
+Mountain
+Mountain
+Plains x10
+
+[Bot2 Deck]
+Plains x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Worldwalker Helm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Voldaren Epicure.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Blood Token.Subtypes = Blood
+Bot1.Battlefield.Map Token.Subtypes = Map
+Bot1.Battlefield.Map Token.Types = Artifact
+Bot1.Battlefield.Goblin Token#1.Power = 1
+Bot1.Battlefield.Goblin Token#2.Power = 1
+Bot1.Battlefield.Count = 11

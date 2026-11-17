@@ -1,0 +1,51 @@
+# Worldwalker Helm costs {2}{U} (CR 202.1). Turn 1: Mox Jet and Mox Pearl make two mana and no blue, so it cannot be cast. Turn 3: Mox Pearl
+# and Mox Ruby are tapped for mana that is lost as the phase ends, leaving Mox Sapphire and Mox Jet: blue, but only two mana, so it cannot be
+# cast. Turn 5: Mox Sapphire, Mox Pearl and Mox Ruby (blue and no black) pay exactly {2}{U}, the pool empty after.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Worldwalker Helm
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Worldwalker Helm.Cast(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Worldwalker Helm.Cast(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Worldwalker Helm.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Worldwalker Helm

@@ -1,0 +1,76 @@
+# Worldwalker Helm: "{1}{U}, {T}: Create a token that's a copy of target artifact token you control" (CR 707.2, 111.1, 115.1). The copy
+# is itself an artifact token being created, so the Helm's replacement adds a Map to it (CR 614.1a). Turn 1: Helm, then Epicure's Blood
+# token and the Map beside it. Turn 2: Bot2's Epicure gives Bot2 its own Blood token. Turn 3: Mox Sapphire is tapped for mana lost as the
+# phase ends, so Jet, Pearl and Ruby make no blue and the Helm cannot be activated (`Mana: short`). Turn 5: a nontoken artifact (Mox Jet),
+# a nonartifact creature (Voldaren Epicure) and the opponent's Blood token are refused as targets; Mox Sapphire and Mox Jet pay exactly
+# {1}{U} to copy Bot1's Blood token, making a second Blood token and a second Map. Dragon Fodder's Goblin tokens (not artifacts) are refused too.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Worldwalker Helm
+Voldaren Epicure
+Plains
+Dragon Fodder
+Plains x11
+
+[Bot2 Deck]
+Mox Ruby
+Voldaren Epicure
+Plains x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Worldwalker Helm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Voldaren Epicure.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Voldaren Epicure.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+[T3 Bot1.Main2]
+! Bot1.Battlefield.Worldwalker Helm.Activate(Bot1.Battlefield.Blood Token; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Worldwalker Helm.Activate(Bot1.Battlefield.Goblin Token#1)
+! Bot1.Battlefield.Worldwalker Helm.Activate(Bot1.Battlefield.Mox Jet)
+! Bot1.Battlefield.Worldwalker Helm.Activate(Bot1.Battlefield.Voldaren Epicure)
+! Bot1.Battlefield.Worldwalker Helm.Activate(Bot2.Battlefield.Blood Token)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Worldwalker Helm.Activate(Bot1.Battlefield.Blood Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Blood Token; Blood Token; Goblin Token; Goblin Token; Map Token; Map Token; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Voldaren Epicure; Worldwalker Helm
+Bot1.Battlefield.Worldwalker Helm.Tapped = true
+Bot2.Battlefield = Blood Token; Mox Ruby; Voldaren Epicure

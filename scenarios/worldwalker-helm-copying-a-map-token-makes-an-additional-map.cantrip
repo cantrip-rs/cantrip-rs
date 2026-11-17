@@ -1,0 +1,44 @@
+# Worldwalker Helm: its own ability copying a Map token (CR 707.2): the copy is an artifact token being created, so the Helm adds one Map
+# too, and three Map tokens result (the original, the copy and the additional one). Turn 1: Helm, Epicure's Blood and the Map. Turn 3:
+# Mox Sapphire and Mox Jet pay {1}{U} for the copy of the Map.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Worldwalker Helm
+Voldaren Epicure
+Plains
+Plains x12
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Worldwalker Helm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Voldaren Epicure.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Worldwalker Helm.Activate(Bot1.Battlefield.Map Token)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Blood Token; Map Token; Map Token; Map Token; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Voldaren Epicure; Worldwalker Helm
