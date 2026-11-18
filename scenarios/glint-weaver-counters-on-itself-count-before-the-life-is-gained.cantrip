@@ -1,0 +1,51 @@
+# Glint Weaver ({3} from Black Lotus plus four Moxen), with Bot2's Llanowar Elves in play too: all three counters go on the Glint Weaver
+# alone, one target being enough though there is a choice (CR 601.2d), and none refused as it needs one target at least: a 6/6. "Then you gain life equal to the greatest toughness among
+# creatures you control" counts after the counters (CR 608.2c): 6, not the 3 toughness it entered with (20 to 26). It has reach.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Glint Weaver
+Island x14
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x18
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Glint Weaver.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Divide()
+Bot1.Divide(Glint Weaver: 3)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 26
+Bot1.Battlefield.Glint Weaver.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Glint Weaver.Power = 6
+Bot1.Battlefield.Glint Weaver.Toughness = 6
+Bot2.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = (absent)

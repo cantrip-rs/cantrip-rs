@@ -1,0 +1,70 @@
+# Glint Weaver ({5}{G}{G}): "one, two, or three target creatures" - all three targets, one counter each (CR 601.2d): Bot2's Grizzly Bears
+# (a 3/3), Bot1's own (a 3/3) and the Glint Weaver itself (a 4/4), the trigger being its own to target. "Then you gain life equal to the
+# greatest toughness among creatures you control" is counted after the counters, so 4, the Glint Weaver's: Bot1 goes 20 to 24.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Glint Weaver
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Glint Weaver.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Divide(Bot2.Battlefield.Grizzly Bears: 1; Bot1.Battlefield.Grizzly Bears: 1; Bot1.Battlefield.Glint Weaver: 1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 24
+Bot2.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Grizzly Bears.Toughness = 3
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Grizzly Bears.Toughness = 3
+Bot1.Battlefield.Glint Weaver.Power = 4
+Bot1.Battlefield.Glint Weaver.Toughness = 4
+Bot1.Battlefield.Glint Weaver.Keywords = Reach
