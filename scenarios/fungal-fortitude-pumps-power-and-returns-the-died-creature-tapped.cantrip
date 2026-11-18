@@ -1,0 +1,37 @@
+# Fungal Fortitude ({1}{B} Aura with flash, "Enchant creature. Enchanted creature gets +2/+0. When enchanted creature dies, return it to the battlefield tapped under its owner's control."):
+# on Bot2's turn 2 Bot1 flashes it onto its own Memnite (a Mox Jet is no legal choice, CR 303.4a): 3/1 exactly - only the power rises, the toughness stays 1. On turn 3 the 3/1 Memnite attacks and Bot2's
+# Memnite blocks: both die (CR 603.6c, 603.10a: looked back), the Aura goes to the graveyard and Bot1's Memnite comes back tapped as a new 1/1 without the Aura (CR 400.7, 110.2a).
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Memnite
+Fungal Fortitude
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Hand.Fungal Fortitude.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Fungal Fortitude.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 1
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Pass
+Bot2.Block(Memnite > Memnite)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Memnite.Tapped = true
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Graveyard = Fungal Fortitude; Black Lotus
+Bot2.Graveyard = Memnite
+Bot2.Life = 20

@@ -1,0 +1,44 @@
+# Probe: Fungal Fortitude on a merged permanent (Cubwarden mutated over Memnite). When it dies, "return it" finds every
+# card the merged permanent became (CR 730.3c): both Memnite and Cubwarden return, tapped.
+[Bot1 Deck]
+Memnite
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Cubwarden
+Fungal Fortitude
+Swamp x20
+[Bot2 Deck]
+Black Lotus
+Murder
+Mox Jet
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cubwarden.Cast(Memnite; Ability: Mutate)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fungal Fortitude.Cast(Bot1.Battlefield.Cubwarden)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Murder.Cast(Bot1.Battlefield.Cubwarden)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Memnite.Tapped = true
+Bot1.Battlefield.Cubwarden.Tapped = true
+Bot1.Graveyard = Fungal Fortitude; Black Lotus

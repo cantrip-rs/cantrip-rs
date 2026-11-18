@@ -1,0 +1,39 @@
+# Probe: Fungal Fortitude's enchanted Memnite dies; with the trigger on the stack Bot2 exiles Bot1's graveyard with
+# Tormod's Crypt. The card in exile is a new object (CR 400.7): nothing returns.
+[Bot1 Deck]
+Memnite
+Mox Jet
+Black Lotus
+Fungal Fortitude
+Swamp x20
+[Bot2 Deck]
+Tormod's Crypt
+Mox Ruby
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Fungal Fortitude.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Exile.Count = 3
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Battlefield = Mox Jet
+Exile.Count = 3

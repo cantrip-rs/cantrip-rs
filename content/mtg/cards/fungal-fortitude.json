@@ -1,0 +1,9 @@
+{
+  "name": "Fungal Fortitude",
+  "manaCost": "{1}{B}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature\nEnchanted creature gets +2/+0.\nWhen enchanted creature dies, return it to the battlefield tapped under its owner's control.",
+  "keywords": [
+    "Flash"
+  ]
+}
