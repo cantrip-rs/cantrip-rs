@@ -1,0 +1,54 @@
+# Council of Echoes: the "if there are four or more permanent cards in your graveyard" (CR 603.4, 110.4a) counts Bot1's graveyard only.
+# Bot1 has three there when Council enters: two Plains milled by Thought Scour and Black Lotus, sacrificed for mana as Council is cast
+# (Thought Scour and Hymn to Tourach are not permanent cards). Hymn to Tourach also put two Ornithopters into Bot2's graveyard, five
+# permanent cards in all, which do not count: the trigger never goes on the stack (with a target to choose among Bot2's Ornithopter and
+# Bot1's Moxen it would have stopped for one), so nothing returns. (The scenarios with exactly four are the positive controls.)
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Jet
+Thought Scour
+Hymn to Tourach
+Black Lotus
+Council of Echoes
+Plains x20
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Hymn to Tourach.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Council of Echoes.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 5
+! Bot1.Target()
+? Stack.Count = 0
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard.Count = 2
+Bot2.Battlefield = Ornithopter
+Bot1.Battlefield = Council of Echoes; Mox Jet; Mox Jet; Mox Sapphire

@@ -1,0 +1,68 @@
+# Council of Echoes {4}{U}{U} (4/4 flying): "Descend 4 - When this creature enters, if there are four or more permanent cards in your
+# graveyard, return up to one target nonland permanent other than this creature to its owner's hand." Bot1 mills four Plains with two
+# Thought Scours (the Scours, instants, are in the graveyard too but are no permanent cards): exactly four (CR 207.2c, 110.4a). Council
+# is paid exactly (Sapphire, two Islands, Sol Ring and Mox Jet, six mana, the pool empty after). The target is Bot1's own Mox Jet, which returns to Bot1's hand (an own permanent is accepted).
+
+[Bot1 Deck]
+Mox Sapphire
+Thought Scour
+Thought Scour
+Island
+Island
+Sol Ring
+Council of Echoes
+Plains
+Plains
+Plains
+Mox Jet
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Plains
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 6
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Sol Ring.Activate
+? Bot1.Mana = {U}{U}{U}{B}{C}{C}
+Bot1.Hand.Council of Echoes.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Mox Jet; Plains; Plains; Plains
+Bot1.Battlefield = Council of Echoes; Island; Island; Mox Sapphire; Sol Ring
+Bot2.Battlefield = Ornithopter; Plains
+Bot1.Graveyard.Count = 6

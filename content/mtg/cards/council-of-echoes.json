@@ -1,0 +1,11 @@
+{
+  "name": "Council of Echoes",
+  "manaCost": "{4}{U}{U}",
+  "type": "Creature — Spirit Advisor",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying\nDescend 4 — When this creature enters, if there are four or more permanent cards in your graveyard, return up to one target nonland permanent other than this creature to its owner's hand.",
+  "keywords": [
+    "Flying"
+  ]
+}
