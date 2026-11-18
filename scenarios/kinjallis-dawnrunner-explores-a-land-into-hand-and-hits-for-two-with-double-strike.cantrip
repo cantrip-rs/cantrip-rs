@@ -1,0 +1,37 @@
+# Kinjalli's Dawnrunner {2}{W}: "Double strike. When this creature enters, it explores." (CR 701.44a) The top card of Bot1's library, a Mountain, is
+# a land card: it goes into the hand and the Dawnrunner stays a 1/1 with no counter. Attacking on turn 3 unblocked, its 1 power is dealt in the
+# first-strike step and again in the regular step (CR 702.4b): Bot2 loses 2.
+
+[Bot1 Deck]
+Black Lotus
+Kinjalli's Dawnrunner
+Island
+Island
+Island
+Island
+Island
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Kinjalli's Dawnrunner.Cast
+! Bot1.Accept
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Kinjalli's Dawnrunner.Power = 1
+? Bot1.Battlefield.Kinjalli's Dawnrunner.Counters.PlusOnePlusOne = (absent)
+? Bot1.Hand = Island; Island; Island; Island; Island; Mountain
+? Bot1.Revealed = Mountain
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Kinjalli's Dawnrunner > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot2.Life = 18
+Bot1.Battlefield.Kinjalli's Dawnrunner.Counters.PlusOnePlusOne = (absent)

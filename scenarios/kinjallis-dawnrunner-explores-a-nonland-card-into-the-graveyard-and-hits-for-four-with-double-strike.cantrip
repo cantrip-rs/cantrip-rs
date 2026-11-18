@@ -1,0 +1,36 @@
+# Kinjalli's Dawnrunner explores a nonland card (CR 701.44a) and Bot1 puts it into the graveyard: the Lightning Bolt revealed on top goes to the
+# graveyard and the Dawnrunner is a 2/2 with its counter. Attacking on turn 3 unblocked, its 2 power is dealt in the first-strike step and again in the
+# regular step (CR 702.4b): Bot2 loses 4.
+
+[Bot1 Deck]
+Black Lotus
+Kinjalli's Dawnrunner
+Island
+Island
+Island
+Island
+Island
+Lightning Bolt
+Mountain
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Kinjalli's Dawnrunner.Cast
+Bot1.Accept
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Kinjalli's Dawnrunner.Power = 2
+? Bot1.Graveyard = Lightning Bolt; Black Lotus
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Kinjalli's Dawnrunner > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot2.Life = 16
+Bot1.Battlefield.Kinjalli's Dawnrunner.Counters.PlusOnePlusOne = 1
