@@ -1,0 +1,36 @@
+# Abuelo's Awakening returns target artifact or non-Aura enchantment card from your graveyard to the battlefield with X additional
+# +1/+1 counters; it is a 1/1 Spirit creature with flying in addition to its other types (CR 205.1b, 613.1d, 613.4b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Abuelo's Awakening
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Abuelo's Awakening.Cast(Bot1.Graveyard.Black Lotus; X: 1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Abuelo's Awakening
+Bot1.Battlefield.Black Lotus.Types = Artifact; Creature
+Bot1.Battlefield.Black Lotus.Power = 2
+Bot1.Battlefield.Black Lotus.Toughness = 2
+Bot1.Battlefield.Black Lotus.Keywords = Flying
+Bot1.Battlefield.Black Lotus.Subtypes = Spirit
+Bot1.Battlefield.Black Lotus.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Black Lotus.Tapped = false

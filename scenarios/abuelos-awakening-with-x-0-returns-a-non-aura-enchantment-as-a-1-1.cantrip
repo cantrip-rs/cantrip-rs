@@ -1,0 +1,43 @@
+# With X = 0 Abuelo's Awakening adds no counters, so the returned card is a plain 1/1 Spirit creature with flying; a non-Aura
+# enchantment card is a legal target (CR 205.1b, 613.4b).
+
+[Bot1 Deck]
+Gaea's Touch
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Emerald
+Abuelo's Awakening
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Gaea's Touch.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gaea's Touch.Activate(Ability: Sacrifice)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Abuelo's Awakening.Cast(Bot1.Graveyard.Gaea's Touch; X: 0)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Abuelo's Awakening
+Bot1.Battlefield.Gaea's Touch.Types = Enchantment; Creature
+Bot1.Battlefield.Gaea's Touch.Power = 1
+Bot1.Battlefield.Gaea's Touch.Toughness = 1
+Bot1.Battlefield.Gaea's Touch.Keywords = Flying
+Bot1.Battlefield.Gaea's Touch.Subtypes = Spirit

@@ -1,0 +1,39 @@
+# Abuelo's Awakening's card enters as a 1/1 Spirit creature with flying (CR 614.12), not as an artifact that becomes a creature
+# afterwards: Hinterland Sanctifier ("Whenever another creature you control enters, you gain 1 life") sees a creature enter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Hinterland Sanctifier
+Abuelo's Awakening
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hinterland Sanctifier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Abuelo's Awakening.Cast(Bot1.Graveyard.Black Lotus; X: 0)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Abuelo's Awakening
+Bot1.Battlefield.Black Lotus.Types = Artifact; Creature
+Bot1.Battlefield.Black Lotus.Power = 1
+Bot1.Battlefield.Black Lotus.Toughness = 1
+Bot1.Life = 21

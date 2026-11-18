@@ -1,0 +1,6 @@
+{
+  "name": "Abuelo's Awakening",
+  "manaCost": "{X}{3}{W}",
+  "type": "Sorcery",
+  "oracleText": "Return target artifact or non-Aura enchantment card from your graveyard to the battlefield with X additional +1/+1 counters on it. It's a 1/1 Spirit creature with flying in addition to its other types."
+}

@@ -1,0 +1,78 @@
+# "Artifact or non-Aura enchantment card": an Aura card in the graveyard is not a legal target, an artifact card is (CR 115.1a,
+# 205.1b), and neither is a player. Bot2's Disenchants put Bot1's Pacifism and Mox Jet into Bot1's graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Ornithopter
+Pacifism
+Abuelo's Awakening
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Plains
+Disenchant
+Disenchant
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pacifism.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Pacifism)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Mox Jet)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Abuelo's Awakening.Cast(Bot1.Graveyard.Pacifism; X: 0)
+! Bot1.Hand.Abuelo's Awakening.Cast(Bot1; X: 0)
+! Bot1.Hand.Abuelo's Awakening.Cast(Bot2; X: 0)
+Bot1.Hand.Abuelo's Awakening.Cast(Bot1.Graveyard.Mox Jet; X: 0)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Abuelo's Awakening; Pacifism
+Bot1.Battlefield.Mox Jet.Types = Artifact; Creature
+Bot1.Battlefield.Mox Jet.Power = 1
+Bot1.Battlefield.Mox Jet.Keywords = Flying
