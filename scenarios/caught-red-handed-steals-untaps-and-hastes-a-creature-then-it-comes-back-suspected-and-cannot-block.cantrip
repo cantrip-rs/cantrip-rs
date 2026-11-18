@@ -1,0 +1,62 @@
+# Caught Red-Handed: "Gain control of target creature until end of turn. Untap that creature. It gains haste until end of
+# turn. Suspect it." Bot2's Llanowar Elves is tapped. Bot1 takes it (CR 613.1b): untapped, with haste, and suspected (CR
+# 701.60a), so it has menace and can't block (CR 701.60c). It attacks Bot2 for 1. At the end of turn control and haste end
+# (CR 611.2a, 514.2) but the Elves stays suspected (CR 701.60c: until it leaves the battlefield): back under Bot2 it has
+# menace and still can't block, so on turn 7 Bot1's Memnite attacks and Bot2 may not block it with the Elves.
+
+[Bot1 Deck]
+Mountain
+Mountain
+Mountain
+Black Lotus
+Memnite
+Caught Red-Handed
+Mountain x14
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves.Activate
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+? Bot2.Battlefield.Llanowar Elves.Suspected = (absent)
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Caught Red-Handed.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Tapped = false
+? Bot1.Battlefield.Llanowar Elves.Suspected = true
+? Bot1.Battlefield.Llanowar Elves.Keywords = CantBlock; Haste; Menace
+Bot1.Attack(Llanowar Elves > Bot2)
+[T5 Bot1.Main2]
+? Bot2.Life = 19
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Llanowar Elves.Suspected = true
+? Bot2.Battlefield.Llanowar Elves.Keywords = CantBlock; Menace
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+! Bot2.Block(Llanowar Elves > Memnite)
+[T7 Bot1.Main2]
+? Bot2.Life = 18
+
+[Expect]
+Bot1.Graveyard = Caught Red-Handed; Black Lotus
+Bot1.Battlefield = Memnite; Mountain; Mountain; Mountain
+Bot2.Battlefield = Forest; Llanowar Elves
+Bot2.Life = 18
