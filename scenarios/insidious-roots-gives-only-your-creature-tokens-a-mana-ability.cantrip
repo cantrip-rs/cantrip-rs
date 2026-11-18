@@ -1,0 +1,64 @@
+# Insidious Roots: "Creature tokens you control have '{T}: Add one mana of any color.'" Bot1 has Roots, a nontoken Ornithopter and two
+# Goblin tokens (Dragon Fodder). The tokens are summoning sick on turn 1 (the granted ability has {T} in its cost, CR 302.6), so it is
+# refused; the nontoken Ornithopter never has it. Bot2 makes its own Goblin tokens with its Dragon Fodder: Roots gives them nothing.
+# On turn 3 a Goblin token taps for {U} (a mana ability, no stack) and pays Ancestral Recall, which draws three.
+
+[Bot1 Deck]
+Insidious Roots
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Dragon Fodder
+Ornithopter
+Ancestral Recall
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Dragon Fodder
+Island x17
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Insidious Roots.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Goblin Token#1.Activate(Color: Blue)
+! Bot1.Battlefield.Ornithopter.Activate(Color: Blue)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Dragon Fodder.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Goblin Token#1.Activate(Color: Blue)
+? Bot1.Mana = {U}
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+! Bot2.Battlefield.Goblin Token#1.Activate(Color: Blue)
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Goblin Token#1.Tapped = true
+Bot1.Battlefield.Goblin Token#2.Tapped = false
+Bot1.Graveyard = Ancestral Recall; Dragon Fodder

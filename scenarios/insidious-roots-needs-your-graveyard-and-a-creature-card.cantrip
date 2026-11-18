@@ -1,0 +1,66 @@
+# Insidious Roots does nothing for what does not match its trigger. Bot1 has Roots and two Tormod's Crypts. Bot1's own graveyard holds only
+# non-creature cards (Faithless Looting and the two Islands it discarded): exiling it with the first Crypt is not "creature cards leave your
+# graveyard". Bot2's graveyard holds two creature cards (Grizzly Bears and Ornithopter, discarded to its Faithless Looting): exiling it
+# with the second Crypt is creature cards leaving another player's graveyard. Neither makes a Plant (Bot1's battlefield stays Roots, three
+# Moxen; the second Crypt, sacrificed to exile Bot2's cards, is the one card in Bot1's graveyard).
+
+[Bot1 Deck]
+Insidious Roots
+Mox Jet
+Mox Emerald
+Mox Ruby
+Faithless Looting
+Tormod's Crypt
+Tormod's Crypt
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Faithless Looting
+Grizzly Bears
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Insidious Roots.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island; Island)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Grizzly Bears; Ornithopter)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Tormod's Crypt#1.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 1
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield = Insidious Roots; Mox Emerald; Mox Jet; Mox Ruby
+Stack.Count = 0

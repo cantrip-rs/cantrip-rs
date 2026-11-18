@@ -1,0 +1,49 @@
+# Insidious Roots: "one or more creature cards leave your graveyard" is one trigger for the cards that leave together (CR 603.2c), whatever
+# their number. Faithless Looting puts Grizzly Bears and Ornithopter (and itself) in Bot1's graveyard; on turn 3 Tormod's Crypt exiles the whole
+# graveyard (three cards, two of them creature cards) and the one trigger makes a single Plant token with its counter, a 1/2.
+
+[Bot1 Deck]
+Insidious Roots
+Mox Jet
+Mox Emerald
+Mox Ruby
+Faithless Looting
+Tormod's Crypt
+Grizzly Bears
+Ornithopter
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Insidious Roots.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Ornithopter)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Plant Token.Power = 1
+Bot1.Battlefield.Plant Token.Toughness = 2
+Stack.Count = 0

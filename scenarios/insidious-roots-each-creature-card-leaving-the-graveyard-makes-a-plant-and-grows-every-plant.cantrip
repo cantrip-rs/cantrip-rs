@@ -1,0 +1,65 @@
+# Insidious Roots {B}{G}: "Whenever one or more creature cards leave your graveyard, create a 0/1 green Plant creature token, then put a +1/+1
+# counter on each Plant you control" (CR 603.2c, 111.1, 122.1). Bot1 pays Roots with Mox Jet and Mox Emerald on turn 1 and Faithless Looting
+# with Mox Ruby, discarding Grizzly Bears and Ornithopter into the graveyard (entering a graveyard is not leaving it: no trigger). On turn 3
+# Raise Dead returns Grizzly Bears: a Plant token is created and then gets its counter, a 1/2 (the counter goes on the token the same ability
+# made). The second Raise Dead (Swamp) returns the Ornithopter: a second Plant is created, and both get a counter, the first Plant 2/3 and the
+# new one 1/2. The Grizzly Bears and the Ornithopter in hand get nothing.
+
+[Bot1 Deck]
+Insidious Roots
+Mox Jet
+Mox Emerald
+Mox Ruby
+Faithless Looting
+Raise Dead
+Raise Dead
+Grizzly Bears
+Ornithopter
+Swamp
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Insidious Roots.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Ornithopter)
+? Bot1.Battlefield.Count = 4
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Raise Dead.Cast(Bot1.Graveyard.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Plant Token.Power = 1
+? Bot1.Battlefield.Plant Token.Toughness = 2
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Raise Dead.Cast(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Plant Token#1.Power = 2
+Bot1.Battlefield.Plant Token#1.Toughness = 3
+Bot1.Battlefield.Plant Token#2.Power = 1
+Bot1.Battlefield.Plant Token#2.Toughness = 2
+Bot1.Hand = Grizzly Bears; Ornithopter
+Stack.Count = 0

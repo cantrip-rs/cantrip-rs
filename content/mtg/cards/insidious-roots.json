@@ -1,0 +1,6 @@
+{
+  "name": "Insidious Roots",
+  "manaCost": "{B}{G}",
+  "type": "Enchantment",
+  "oracleText": "Creature tokens you control have \"{T}: Add one mana of any color.\"\nWhenever one or more creature cards leave your graveyard, create a 0/1 green Plant creature token, then put a +1/+1 counter on each Plant you control."
+}
