@@ -1,0 +1,37 @@
+# Tinker's Tote {2}{W} (artifact): "When this artifact enters, create two 1/1 colorless Gnome artifact creature tokens" (CR 111.1, 603.6a). Bot1 pays exactly {2}{W}
+# with Mox Pearl, Mox Ruby and Mox Jet (the pool is empty afterwards): exactly two Gnome tokens, each a 1/1 colorless artifact creature, are on Bot1's battlefield
+# beside the Tote and the three Moxen (six permanents); Bot2 gets none. The Tote itself is not a creature.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Tinker's Tote
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tinker's Tote.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Tinker's Tote.Types = Artifact
+Bot1.Battlefield.Gnome Token#1.Power = 1
+Bot1.Battlefield.Gnome Token#1.Toughness = 1
+Bot1.Battlefield.Gnome Token#1.Types = Artifact; Creature
+Bot1.Battlefield.Gnome Token#2.Power = 1
+Bot1.Battlefield.Gnome Token#2.Toughness = 1
+Bot1.Battlefield.Gnome Token#2.Types = Artifact; Creature
+Bot2.Battlefield.Count = 0
+Stack.Count = 0

@@ -1,0 +1,6 @@
+{
+  "name": "Tinker's Tote",
+  "manaCost": "{2}{W}",
+  "type": "Artifact",
+  "oracleText": "When this artifact enters, create two 1/1 colorless Gnome artifact creature tokens.\n{W}, Sacrifice this artifact: You gain 3 life."
+}
