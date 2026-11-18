@@ -1,0 +1,37 @@
+# Acrobatic Leap {W} may target any creature: Bot1 Leaps Bot2's Savannah Lions (2/1) on Bot1's turn 3, making it a 3/4 flier for the turn.
+# The Lions was untapped (it did not attack): untapping an untapped creature does nothing.
+
+[Bot1 Deck]
+Plains
+Plains
+Acrobatic Leap
+Plains x17
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Acrobatic Leap.Cast(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Savannah Lions.Power = 3
+? Bot2.Battlefield.Savannah Lions.Toughness = 4
+? Bot2.Battlefield.Savannah Lions.Keywords = Flying
+? Bot2.Battlefield.Savannah Lions.Tapped = false
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Savannah Lions.Power = 2
+Bot2.Battlefield.Savannah Lions.Toughness = 1
+Bot2.Battlefield.Savannah Lions.Keywords = (absent)

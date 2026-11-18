@@ -1,0 +1,42 @@
+# Acrobatic Leap {W}: "Target creature gets +1/+3 and gains flying until end of turn. Untap it." Bot1's attacking Savannah Lions (2/1) is tapped by
+# attacking; the Leap makes it a 3/4 flier and untaps it (it is still attacking, CR 506.4), so it deals 3 to Bot2. The pump and the flying wear off
+# at the end of the turn: on turn 4 the Lions is a 2/1 without flying again (CR 514.2).
+
+[Bot1 Deck]
+Plains
+Plains
+Savannah Lions
+Acrobatic Leap
+Plains x16
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Savannah Lions > Bot2)
+? Bot1.Battlefield.Savannah Lions.Tapped = true
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Acrobatic Leap.Cast(Bot1.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.Power = 3
+? Bot1.Battlefield.Savannah Lions.Toughness = 4
+? Bot1.Battlefield.Savannah Lions.Keywords = Flying
+? Bot1.Battlefield.Savannah Lions.Tapped = false
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+[T4 Bot2.Main1]
+
+[Expect]
+Turn = 4
+Bot2.Life = 17
+Bot1.Battlefield.Savannah Lions.Power = 2
+Bot1.Battlefield.Savannah Lions.Toughness = 1
+Bot1.Battlefield.Savannah Lions.Keywords = (absent)
