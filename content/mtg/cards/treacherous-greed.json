@@ -1,0 +1,6 @@
+{
+  "name": "Treacherous Greed",
+  "manaCost": "{1}{W}{B}",
+  "type": "Instant",
+  "oracleText": "As an additional cost to cast this spell, sacrifice a creature that dealt damage this turn.\nDraw three cards. Each opponent loses 3 life and you gain 3 life."
+}

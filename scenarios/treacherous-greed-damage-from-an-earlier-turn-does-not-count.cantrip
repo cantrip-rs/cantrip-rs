@@ -1,0 +1,48 @@
+# Treacherous Greed: "a creature that dealt damage this turn" - only this turn. Bear Cub dealt combat damage to Bot2 on turn 3, so on
+# turn 5 it has dealt none yet and cannot be sacrificed: Greed is refused (Bot1 can pay, and has no other creature). After Cub attacks
+# again on turn 5 and deals its damage, Greed can be cast. Bot2 is at 20 - 2 - 2 - 3 = 13, Bot1 at 23.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Bear Cub
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Treacherous Greed
+Plains x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bear Cub.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Attack(Bear Cub > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+! Bot1.Hand.Treacherous Greed.Cast
+Bot1.Attack(Bear Cub > Bot2)
+[T5 Bot1.Main2]
+? Bot2.Life = 16
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Treacherous Greed.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Treacherous Greed; Bear Cub
+Bot2.Life = 13
+Bot1.Life = 23

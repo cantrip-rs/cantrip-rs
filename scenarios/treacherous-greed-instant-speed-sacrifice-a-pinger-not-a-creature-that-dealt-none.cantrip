@@ -1,0 +1,67 @@
+# Treacherous Greed is an instant, and "dealt damage" is any damage, not only combat damage. On Bot2's turn 4, with Bot2's Bear Cub
+# on the stack, Bot1 pings Bot2 with Prodigal Sorcerer (19), then casts Greed: Bot1's own Bear Cub has dealt no damage this turn and
+# is refused as the sacrifice, Prodigal Sorcerer (tapped for its ability, damage dealt) is accepted. Bot1 draws three (the hand goes 0 -> 3)
+# and gains 3 (23); Bot2 loses 3 (16). Bot2's Cub resolves afterwards.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Prodigal Sorcerer
+Mox Pearl
+Mox Jet
+Treacherous Greed
+Bear Cub
+Plains x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Bear Cub
+Swamp x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Prodigal Sorcerer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bear Cub.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Bear Cub.Cast
+Bot2.Pass
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Treacherous Greed.Cast
+! Bot1.Choose(Bear Cub)
+Bot1.Choose(Prodigal Sorcerer)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Treacherous Greed; Prodigal Sorcerer
+Bot1.Battlefield.Bear Cub.Power = 2
+Bot1.Hand.Count = 3
+Bot1.Life = 23
+Bot2.Life = 16

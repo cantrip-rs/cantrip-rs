@@ -1,0 +1,44 @@
+# Treacherous Greed: "As an additional cost to cast this spell, sacrifice a creature that dealt damage this turn. Draw three cards.
+# Each opponent loses 3 life and you gain 3 life." Bear Cub attacked this turn and dealt 2 combat damage to Bot2 (20 -> 18), so Bot1
+# sacrifices it to cast Greed after combat: Bot1 draws three (the hand goes 1 -> 4) and gains 3 (23), Bot2 loses 3 (15).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Bear Cub
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Treacherous Greed
+Plains x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bear Cub.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Bear Cub > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Treacherous Greed.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Treacherous Greed; Bear Cub
+Bot1.Hand.Count = 4
+Bot1.Life = 23
+Bot2.Life = 15
