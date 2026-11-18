@@ -1,0 +1,28 @@
+# Sanitation Automaton: "surveil 1" may put the looked-at card into the graveyard (CR 701.25a). The Forest on top goes to the
+# graveyard, so exactly one card (the Forest) is gone from the library and the next draw is an Island.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Sanitation Automaton
+Island x4
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sanitation Automaton.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(| Forest)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Forest
+Bot1.Hand.Forest = (absent)
