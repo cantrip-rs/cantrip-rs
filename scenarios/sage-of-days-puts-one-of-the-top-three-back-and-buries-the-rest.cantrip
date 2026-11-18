@@ -1,0 +1,37 @@
+# Sage of Days ({2}{U}, paid with three Moxen) looks at the top three cards when it enters. Bot1 puts the
+# Forest, the last of the three, back on top and the Lightning Bolt and Ponder go to the graveyard; on turn 3 the Forest is the
+# card drawn. Two cards back on top, or a shuffle, are refused: only one may be put back and nothing is shuffled.
+
+[Bot1 Deck]
+Sage of Days
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Island x3
+Lightning Bolt
+Ponder
+Forest
+Island x13
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sage of Days.Cast
+! Bot1.Arrange(Forest; Ponder | Lightning Bolt)
+! Bot1.Arrange(Shuffle)
+Bot1.Arrange(Forest | Lightning Bolt; Ponder)
+[T3 Bot1.Main1]
+
+[Expect]
+Turn = 3
+Bot1.Graveyard = Ponder; Lightning Bolt
+Bot1.Hand = Island; Island; Island; Forest
+Bot1.Battlefield = Sage of Days; Mox Jet; Mox Emerald; Mox Sapphire
+Bot1.Library.Count = 13

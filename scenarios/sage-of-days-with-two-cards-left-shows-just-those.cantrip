@@ -1,0 +1,30 @@
+# Sage of Days with only two cards in the library looks at those two (CR 609.3): Bot1 keeps the Ponder on top and
+# buries the Lightning Bolt. Only Bot1 has looked at them.
+
+[Bot1 Deck]
+Sage of Days
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Island x3
+Lightning Bolt
+Ponder
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sage of Days.Cast
+Bot1.Arrange(Ponder | Lightning Bolt)
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt
+Bot1.Library.Count = 1
+Bot1.Looked = Lightning Bolt; Ponder
+Bot2.Looked = (absent)

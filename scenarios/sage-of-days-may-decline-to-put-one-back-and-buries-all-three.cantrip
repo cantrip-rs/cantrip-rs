@@ -1,0 +1,34 @@
+# Sage of Days: "you may put one back" - Bot1 puts none back, so all three go to the graveyard and the next card
+# drawn on turn 3 is the one beneath them.
+
+[Bot1 Deck]
+Sage of Days
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Island x3
+Lightning Bolt
+Ponder
+Forest
+Brainstorm
+Island x12
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sage of Days.Cast
+Bot1.Arrange( | Lightning Bolt; Ponder; Forest)
+[T3 Bot1.Main1]
+
+[Expect]
+Turn = 3
+Bot1.Graveyard = Forest; Ponder; Lightning Bolt
+Bot1.Hand = Island; Island; Island; Brainstorm
+Bot1.Library.Count = 12

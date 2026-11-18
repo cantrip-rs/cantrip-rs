@@ -1,0 +1,27 @@
+# Sage of Days with a single card in the library looks at just that one (CR 609.3); Bot1 puts it back on top, so
+# nothing goes to the graveyard.
+
+[Bot1 Deck]
+Sage of Days
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Island x3
+Ponder
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sage of Days.Cast
+Bot1.Arrange(Ponder | )
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Library.Count = 1

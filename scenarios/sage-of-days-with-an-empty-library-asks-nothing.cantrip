@@ -1,0 +1,26 @@
+# Sage of Days with an empty library has nothing to look at: nobody is asked and nothing moves (CR 609.3).
+
+[Bot1 Deck]
+Sage of Days
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Island x3
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sage of Days.Cast
+! Bot1.Arrange
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Library.Count = 0
+Bot1.Battlefield = Sage of Days; Mox Jet; Mox Emerald; Mox Sapphire
