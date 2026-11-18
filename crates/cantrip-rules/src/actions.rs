@@ -5020,18 +5020,30 @@ impl Query for AsFace<'_> {
 /// returns the untargeted total instead. Empty when
 /// nothing could change that cost (no cost changer on the battlefield, none of the ability's own: a card's own "this
 /// spell costs less" is never its abilities'), which is nearly always, or when it is no activated ability with a mana cost.
-pub fn activation_costs(game: &crate::Game, player: PlayerId, source: ObjectId, index: u8, candidates: &[Target]) -> Vec<(ManaCost, u32)> {
+/// `paid_by`: the option is the activation for an alternative cost another permanent lets be paid rather than the
+/// ability's activation cost (`ActionOption::paid_by`, CR 118.9, 602.2b), whose total is the alternative's, changed;
+/// empty where that permanent no longer offers one (`activation_alternative`).
+pub fn activation_costs(game: &crate::Game, player: PlayerId, source: ObjectId, index: u8, candidates: &[Target], paid_by: Option<Grant>) -> Vec<(ManaCost, u32)> {
     let Some(ability) = game.chars(source).abilities().nth(index as usize) else { return Vec::new() };
     let AbilityDef::Activated(def) = game.cards.ability(ability) else { return Vec::new() };
     let changers = game.state.battlefield().iter().any(|&id| {
         game.cards.texts(&game.state, game.state.obj(id)).any(|c| game.cards.cost_changes[c.0 as usize]) && !game.lost_all_abilities(id)
     });
+    // What the total is made from: the ability's mana cost, or the alternative paid rather than its whole cost.
+    let base = match paid_by {
+        Some(g) => match activation_alternative(game, player, source, index, g) {
+            Some(cost) => cost,
+            None => return Vec::new(),
+        },
+        None => def.cost.mana,
+    };
     // An {X} its controller announces is not known here; one the text defines (CR 107.3c) is, and may read the target. Nor is
-    // the mana of a way of paying it the player chooses as it is announced (CR 601.2b by way of 602.2b).
+    // the mana of a way of paying it the player chooses as it is announced (CR 601.2b by way of 602.2b), which an
+    // alternative cost leaves unchosen (CR 118.9).
     if def.special_action
-        || (def.cost.mana.x > 0 && def.x_defined.is_none())
+        || (base.x > 0 && def.x_defined.is_none())
         || !(changers || def.cost_change.is_some() || def.x_defined.is_some())
-        || def.cost_choice.iter().any(|way| !way.cost.mana.is_zero())
+        || (paid_by.is_none() && def.cost_choice.iter().any(|way| !way.cost.mana.is_zero()))
     {
         return Vec::new();
     }
@@ -5041,12 +5053,21 @@ pub fn activation_costs(game: &crate::Game, player: PlayerId, source: ObjectId, 
     // The ability asked as it is (CR 607.5): its own cost change reads its own links.
     let by = cx.link_of_nth(source, index as usize);
     let asker = Asker { instance: None, source, controller: player, by, spell: false };
-    let printed = |targets: &[Target]| with_defined_x(&cx, &asker, def, def.cost.mana, targets);
+    let printed = |targets: &[Target]| with_defined_x(&cx, &asker, def, base, targets);
     if candidates.is_empty() {
         vec![apply_cost_changes_total(&cx, player, Costed::Ability(source, ability, by), printed(&[]), &[])]
     } else {
         candidates.iter().map(|&t| apply_cost_changes_total(&cx, player, Costed::Ability(source, ability, by), printed(&[t]), &[t])).collect()
     }
+}
+
+/// The cost the alternative `grant` (`ActionOption::paid_by`) lets `player` pay rather than the activation cost of the
+/// ability `index` of `source` (CR 118.9, 602.2b), before what changes it: what the activation's row is told apart from.
+/// None where that permanent no longer offers one, or where it is no activated ability.
+pub fn activation_alternative(game: &crate::Game, player: PlayerId, source: ObjectId, index: u8, grant: Grant) -> Option<ManaCost> {
+    let ability = game.chars(source).abilities().nth(index as usize)?;
+    let AbilityDef::Activated(def) = game.cards.ability(ability) else { return None };
+    static_rules::named_activation_alternative(game, grant, player, source, def)
 }
 
 /// What `player` activating the mana ability `index` of `source` would add once the replacement effects on a permanent tapped

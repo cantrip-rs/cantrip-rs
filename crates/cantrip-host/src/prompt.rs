@@ -341,12 +341,18 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
                 {
                     m.description = format!("{} (costs {cost})", m.description);
                 }
+                // What the row's total is told apart from: the ability's mana cost, or for an activation for an alternative
+                // cost another permanent gives (`paid_by`), that cost, paid rather than its whole cost (CR 118.9, 602.2b).
+                let printed = match o.paid_by {
+                    Some(g) => activation_alternative(game, game.state.obj(src).controller, src, o.index, g),
+                    None => Some(d.cost.mana),
+                };
                 // A changed total for an ability whose cost no target decides (CR 601.2f by way of 602.2b).
                 // Mana abilities below also expose the payable cost and any life it adds, and annotate their row once.
                 if !d.special_action && !d.is_mana_ability() && !(o.targets_required == 1 && !o.target_candidates.is_empty()) {
                     let player = game.state.obj(src).controller;
-                    if let Some(&(total, life)) = activation_costs(game, player, src, o.index, &[Target::None]).first()
-                        && (total != d.cost.mana || life > 0)
+                    if let Some(&(total, life)) = activation_costs(game, player, src, o.index, &[Target::None], o.paid_by).first()
+                        && (Some(total) != printed || life > 0)
                     {
                         let total = if life > 0 { format!("{total} and {life} life") } else { total.to_string() };
                         m.description = if m.description.is_empty() { format!("costs {total}") } else { format!("{} (costs {total})", m.description) };
@@ -416,7 +422,8 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
                         m.produces_of_any_one_color = wire(any);
                     }
                     let mut cost = d.cost;
-                    if let Some(&(total, life)) = activation_costs(game, player, src, o.index, &[]).first() {
+                    // A mana ability has no alternative cost (`activated_options` offers none for one).
+                    if let Some(&(total, life)) = activation_costs(game, player, src, o.index, &[], None).first() {
                         cost.mana = total;
                         cost.life += life;
                         m.life_cost = i32::try_from(cost.life).unwrap_or(i32::MAX);
@@ -436,8 +443,8 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
                     // A cost that depends on the target it is announced with (CR 601.2c, 601.2f, 602.2b): the row says what
                     // the activation costs with each candidate, where that is not the printed cost.
                     let player = game.state.obj(src).controller;
-                    let costs = activation_costs(game, player, src, o.index, &o.target_candidates);
-                    if costs.iter().any(|&(c, life)| c != d.cost.mana || life > 0) {
+                    let costs = activation_costs(game, player, src, o.index, &o.target_candidates, o.paid_by);
+                    if costs.iter().any(|&(c, life)| Some(c) != printed || life > 0) {
                         m.description = format!("{} (costs {})", m.description, costs_by_target(game, &o.target_candidates, &costs));
                     }
                 }
@@ -1877,6 +1884,59 @@ mod tests {
         assert_eq!(message.cost_text, "{2}, {T}");
         assert_eq!(message.life_cost, 0);
         assert!(!message.description.contains("(costs"));
+    }
+
+    /// An activation for an alternative cost another permanent gives (`paid_by`, CR 118.9, 602.2b) says what that costs once
+    /// the cost changes meet it (CR 601.2f), not what the ability's own cost would: {0} with a {1} tax is {1}, never {4}.
+    #[test]
+    fn an_alternative_cost_activation_row_shows_the_alternatives_changed_total() {
+        fn nothing(_: &mut dyn cantrip_api::Game, _: &StackItem) -> Result<(), Suspend> { Ok(()) }
+        fn a_creature(q: &dyn Query, _: &Asker, t: Target) -> bool {
+            matches!(t, Target::Object(id) if q.is_on_battlefield(id) && q.chars(id).is(CardType::Creature))
+        }
+        fn tax(_: &dyn Query, _: ObjectId, _: PlayerId, costed: Costed, _: &[Target]) -> CostDelta {
+            if matches!(costed, Costed::Ability(..)) { CostDelta::more(1) } else { CostDelta::NONE }
+        }
+        fn for_nothing(_: &dyn Query, asker: &Asker, activator: PlayerId, _: ObjectId, _: &ActivatedDef) -> Option<ManaCost> {
+            (activator == asker.controller).then_some(ManaCost::ZERO)
+        }
+        static SOURCE: CardDef = CardDef {
+            name: "Alternative row source", types: TypeSet::of(&[CardType::Artifact]),
+            abilities: &[
+                ability(cost("{3}"), nothing, "{3}: Nothing."),
+                ability(cost("{3}"), nothing, "{3}: Nothing happens to target creature.").targets(&[target(a_creature)]),
+            ],
+            ..CardDef::BLANK
+        };
+        static TAX: CardDef = CardDef { name: "Alternative row tax", cost_changes: &[tax], ..CardDef::BLANK };
+        static FREE: CardDef = CardDef { name: "Alternative row free", ability_alternatives: &[for_nothing], ..CardDef::BLANK };
+        static BEAR: CardDef = CardDef { name: "Alternative row bear", types: TypeSet::of(&[CardType::Creature]), power: Some(2), toughness: Some(2), ..CardDef::BLANK };
+        let cards = Box::leak(Box::new(CardTable::new([&SOURCE, &TAX, &FREE, &BEAR])));
+        let mut game = Game::new(cards, &Setup { decks: vec![Vec::new(), Vec::new()], ..Setup::default() });
+        let me = game.state.seats().next().unwrap();
+        let mut put = |def| {
+            let id = game.state.push_obj(Obj::new(cards.id_of(def), me, Zone::BATTLEFIELD));
+            game.state.zone_push(Zone::BATTLEFIELD, id); game.state.see_statics(); id
+        };
+        let (source, free, bear) = (put(&SOURCE), put(&FREE), put(&BEAR));
+        put(&TAX);
+        let paid_by = Some(Grant { object: free, ability: AbilityRef::ability_alternative(cards.id_of(&FREE), 0) });
+        let row = |index: u8, paid_by: Option<Grant>| {
+            let mut option = ActionOption { paid_by, ..ActionOption::on(ActionKind::ActivateAbility, source, index) };
+            if index == 1 {
+                option.target_candidates = vec![Target::Object(bear)];
+                option.targets_required = 1;
+            }
+            option_message(&game, &mut HandleSpace::new(), &option).description
+        };
+        // Its own cost, {3} and the tax: {4}.
+        assert!(row(0, None).contains("costs {4}"), "{}", row(0, None));
+        assert!(row(1, None).contains("{4}"), "{}", row(1, None));
+        // For {0} rather than its cost, the tax makes it {1}, with a target or without.
+        for index in [0, 1] {
+            let text = row(index, paid_by);
+            assert!(text.contains("paying {0} rather than its cost") && text.contains("{1}") && !text.contains("{4}"), "{text}");
+        }
     }
 
     /// A game dealt these two decks, top of the library first, and the objects of the first seat's opening hand.

@@ -377,7 +377,7 @@ fn a_permanents_own_cost_change_reads_its_own_choice_while_a_given_ability_is_ac
     let given = AbilityRef { card: t.id_of(&LENDER), index: 0 };
     lend(&mut game, &LENDER, source, given);
     let nth = game.chars(source).abilities().position(|a| a == given).expect("given");
-    let shown = crate::actions::activation_costs(&game, me, source, nth as u8, &[Target::None]);
+    let shown = crate::actions::activation_costs(&game, me, source, nth as u8, &[Target::None], None);
     assert_eq!(shown.first().map(|(c, _)| c.mana_value()), Some(3), "the menu shows the tax");
     let cx = cx(&mut game);
     let by = cx.link_of_nth(source, nth);

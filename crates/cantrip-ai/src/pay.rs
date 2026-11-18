@@ -212,7 +212,7 @@ fn keep_score(game: &Game, option: &ActionOption, kinds: &[Mana]) -> (u8, u8, u8
         // enchantment's free tap): it costs mana now, as a filter land's does.
         || source.is_some_and(|s| {
             option.index < PLAYER_MANA_ABILITY
-                && activation_costs(game, game.state.obj(s).controller, s, option.index, &[Target::None])
+                && activation_costs(game, game.state.obj(s).controller, s, option.index, &[Target::None], option.paid_by)
                     .first()
                     .is_some_and(|&(c, life)| !c.is_zero() || life > 0)
         });
