@@ -59,6 +59,13 @@ pub fn you_cast_a_spell_with_mana_from_a_treasure(q: &dyn Query, me: &Asker, eve
     }
 }
 
+/// "Mana produced by [this permanent]" is told apart from other mana (CR 106.3): its payer chooses whether to spend it (a
+/// `CardDef::mana_told_apart` entry), where a trigger asks `History::cast_using_mana_from` of the spell. Barracks of the Thousand
+/// and The Myriad Pools print the question.
+pub fn this_permanents_mana_is_told_apart(_: &dyn Query, me: &Asker, source: ObjectId) -> bool {
+    source == me.source
+}
+
 /// Mana a Treasure produced is told apart from other mana (CR 106.3): its payer chooses whether to spend it, where a permanent asks
 /// of the mana spent whether it came from a Treasure (a `CardDef::mana_told_apart` entry). Smaug, Wicked Worm and Mastermind Plum
 /// print the question.

@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{choose, effects, lands, tokens, triggers};
+use cantrip_mechanics::{choose, effects, lands, spent, tokens, triggers};
 use cantrip_oracle as oracle;
 
 const GNOME_SOLDIER_TEXT: &str = "This creature's power and toughness are each equal to the number of artifacts and/or creatures you control.";
@@ -76,12 +76,6 @@ fn artifact_or_creature_spell_cast_with_its_mana(q: &dyn Query, me: &Asker, even
     }
 }
 
-/// "Mana produced by Barracks of the Thousand" is told apart from other mana (CR 106.3): its controller chooses whether to
-/// spend it.
-fn its_own_mana(_: &dyn Query, me: &Asker, source: ObjectId) -> bool {
-    source == me.source
-}
-
 pub static BACK: CardDef = CardDef {
     abilities: &[
         mana_ability(TAP, add(Mana::W), "{T}: Add {W}."),
@@ -91,7 +85,7 @@ pub static BACK: CardDef = CardDef {
             "Whenever you cast an artifact or creature spell using mana produced by Barracks of the Thousand, create a white Gnome Soldier artifact creature token with \"This creature's power and toughness are each equal to the number of artifacts and/or creatures you control.\"",
         ),
     ],
-    mana_told_apart: &[its_own_mana],
+    mana_told_apart: &[spent::this_permanents_mana_is_told_apart],
     ..oracle::BARRACKS_OF_THE_THOUSAND
 };
 
