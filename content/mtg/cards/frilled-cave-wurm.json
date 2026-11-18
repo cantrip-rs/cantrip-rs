@@ -1,0 +1,8 @@
+{
+  "name": "Frilled Cave-Wurm",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Salamander Wurm",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Descend 4 — This creature gets +2/+0 as long as there are four or more permanent cards in your graveyard."
+}

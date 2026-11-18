@@ -1,0 +1,69 @@
+# Frilled Cave-Wurm {3}{U} (2/5): "Descend 4 - This creature gets +2/+0 as long as there are four or more permanent cards in your
+# graveyard" (CR 207.2c, 110.4a, 613.4c). The four Moxen pay it on turn 1. On turn 3: Thought Scour on Bot1 mills two Plains (two
+# permanent cards: still 2/5), Black Lotus is sacrificed for mana (three: still 2/5), a second Thought Scour on Bot2 puts two Ornithopters (plus the one Bot2 discarded to hand size on turn 2)
+# into Bot2's graveyard (six permanent cards in all, but only Bot1's count: still 2/5), and Mind Stone, sacrificed for its "{1}, {T},
+# Sacrifice this artifact: Draw a card", makes four: exactly the limit, 4/5 (the toughness stays 5). (The Scours, instants, are no
+# permanent cards.)
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Frilled Cave-Wurm
+Thought Scour
+Black Lotus
+Thought Scour
+Plains
+Plains
+Mind Stone
+Plains x16
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Frilled Cave-Wurm.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Frilled Cave-Wurm.Power = 2
+? Bot1.Battlefield.Frilled Cave-Wurm.Toughness = 5
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 3
+? Bot1.Battlefield.Frilled Cave-Wurm.Power = 2
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+? Bot1.Battlefield.Frilled Cave-Wurm.Power = 2
+Bot1.Hand.Thought Scour.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 3
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Frilled Cave-Wurm.Power = 2
+? Bot1.Battlefield.Frilled Cave-Wurm.Toughness = 5
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mind Stone.Activate(Ability: Draw a card)
+? Bot1.Battlefield.Frilled Cave-Wurm.Power = 4
+? Bot1.Battlefield.Frilled Cave-Wurm.Toughness = 5
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Frilled Cave-Wurm.Power = 4
+Bot1.Battlefield.Frilled Cave-Wurm.Toughness = 5
+Bot1.Graveyard.Count = 6
+Bot2.Graveyard.Count = 3
