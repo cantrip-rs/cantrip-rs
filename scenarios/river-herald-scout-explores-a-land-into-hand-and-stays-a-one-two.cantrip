@@ -1,0 +1,39 @@
+# River Herald Scout: "When this creature enters, it explores." (CR 701.44a) The top card of Bot1's library, a Mountain, is revealed;
+# a land card goes into the hand, and the Scout gets no +1/+1 counter: it stays a 1/2 and no question about the card is asked.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+River Herald Scout
+Island
+Island
+Island
+Island
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.River Herald Scout.Cast
+! Bot1.Accept
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Battlefield.River Herald Scout.Power = 1
+Bot1.Battlefield.River Herald Scout.Toughness = 2
+Bot1.Battlefield.River Herald Scout.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand = Island; Island; Island; Island; Mountain
+Bot1.Revealed = Mountain
+Bot1.Library.Count = 12
+Bot1.Graveyard.Count = 0
+Stack.Count = 0
