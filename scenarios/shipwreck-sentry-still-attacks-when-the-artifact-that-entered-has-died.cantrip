@@ -1,0 +1,40 @@
+# Shipwreck Sentry: "As long as an artifact entered the battlefield under your control this turn" (CR 603.6a) asks about the
+# entering, not about the artifact now: on turn 3 Bot1 casts an Ornithopter and Lightning Bolts it dead (it is a 0/2) before
+# attacking, and the Sentry (a 3/3, it keeps defender otherwise) still attacks for 3.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Shipwreck Sentry
+Ornithopter
+Lightning Bolt
+Mox Ruby
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Shipwreck Sentry.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Shipwreck Sentry > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Graveyard = Ornithopter; Lightning Bolt
+? Bot2.Life = 17
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Shipwreck Sentry.Tapped = true

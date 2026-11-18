@@ -1,0 +1,49 @@
+# Shipwreck Sentry {1}{U} 3/3, Defender: "As long as an artifact entered the battlefield under your control this turn, this creature can attack as though it
+# didn't have defender." Bot1 casts it turn 1 with two Moxen, then an Ornithopter (the control attacker: it keeps the declaration step happening). Turn 3: no
+# artifact entered under Bot1's control this turn, so the Sentry cannot attack (Bot2's Ornithopter, cast on turn 2, is no help: another turn and another
+# player's) while the Ornithopter can. Turn 5: Bot1 casts Sol Ring, so the Sentry can attack and deals 3. Turn 7: the Sol Ring entered on an earlier turn,
+# so it cannot attack again.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Shipwreck Sentry
+Sol Ring
+Ornithopter
+Island x3
+Forest
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Shipwreck Sentry.Cast
+Bot1.Hand.Ornithopter.Cast
+? Bot1.Battlefield.Shipwreck Sentry.Keywords = Defender
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Attack(Shipwreck Sentry > Bot2)
+Bot1.Attack(Ornithopter > Bot2)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Shipwreck Sentry > Bot2)
+[T5 Bot1.Main2]
+? Bot2.Life = 17
+[T7 Bot1.Main1]
+! Bot1.Attack(Shipwreck Sentry > Bot2)
+Bot1.Attack(Ornithopter > Bot2)
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Shipwreck Sentry.Tapped = false

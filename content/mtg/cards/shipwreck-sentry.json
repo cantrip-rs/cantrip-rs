@@ -1,0 +1,11 @@
+{
+  "name": "Shipwreck Sentry",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human Pirate",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Defender\nAs long as an artifact entered the battlefield under your control this turn, this creature can attack as though it didn't have defender.",
+  "keywords": [
+    "Defender"
+  ]
+}
