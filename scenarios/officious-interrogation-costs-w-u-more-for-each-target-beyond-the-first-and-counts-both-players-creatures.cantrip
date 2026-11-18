@@ -1,0 +1,50 @@
+# Officious Interrogation: "This spell costs {W}{U} more to cast for each target beyond the first" (CR 601.2f, read once the targets are chosen, 601.2c).
+# With both players as its two targets it costs {W}{W}{U}{U}: on turn 1 Bot1 has only Mox Pearl, Mox Sapphire and one land, so the cast is refused (the
+# negative control); on turn 3, with Plains and Island as well, it is cast and every source is spent. X counts both players' creatures:
+# Bot1's one Memnite and Bot2's two, so Bot1 makes three Clues.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Plains
+Island
+Memnite
+Officious Interrogation
+Plains
+Island x20
+
+[Bot2 Deck]
+Memnite
+Memnite
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Officious Interrogation.Cast
+Bot1.Target(Bot1; Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Clue Token; Clue Token; Clue Token; Island; Memnite; Mox Pearl; Mox Sapphire; Plains
+Bot1.Graveyard = Officious Interrogation

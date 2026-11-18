@@ -1,0 +1,43 @@
+# Officious Interrogation {W}{U}: "Choose any number of target players. Investigate X times, where X is the total number of creatures those players
+# control" (CR 115.1, 701.16a, 608.2b). Bot1 controls two Memnites, Bot2 three; Bot1 targets only Bot2, so X is 3 (its own two Memnites are not counted)
+# and Bot1 makes three Clues. One target is no more than the printed {W}{U}: Mox Pearl and Mox Sapphire pay all of it and the pool is empty.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Memnite
+Memnite
+Officious Interrogation
+Plains x20
+
+[Bot2 Deck]
+Memnite
+Memnite
+Memnite
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Officious Interrogation.Cast
+Bot1.Target(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Clue Token; Clue Token; Clue Token; Memnite; Memnite; Mox Pearl; Mox Sapphire
+Bot1.Graveyard = Officious Interrogation

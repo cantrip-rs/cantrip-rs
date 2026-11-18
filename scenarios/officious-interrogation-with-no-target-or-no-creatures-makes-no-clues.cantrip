@@ -1,0 +1,29 @@
+# Officious Interrogation: "any number of target players" includes none (CR 115.1d): cast with no target it costs only {W}{U}, X is 0 and no Clue is made
+# (the Memnites Bot1 and Bot2 control are not counted), and the spell is cast and put into the graveyard all the same.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Memnite
+Officious Interrogation
+Plains x20
+
+[Bot2 Deck]
+Memnite
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Officious Interrogation.Cast
+Bot1.Target()
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Memnite; Mox Pearl; Mox Sapphire
+Bot1.Graveyard = Officious Interrogation

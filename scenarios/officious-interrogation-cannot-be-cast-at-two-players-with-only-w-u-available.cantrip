@@ -1,0 +1,30 @@
+# Officious Interrogation: two targets cost {W}{U} more (CR 601.2f), {W}{W}{U}{U} in all. With only Mox Pearl and Mox Sapphire paying, choosing both players
+# leaves {W}{U} still owed after those two are spent, so the cast cannot be completed and Bot1 cancels it: the card stays in hand, nothing is on the stack and
+# no Clue is made. The positive control is the sibling scenarios, where one target costs only {W}{U} and two targets are paid with {W}{W}{U}{U}.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Memnite
+Officious Interrogation
+Plains x20
+
+[Bot2 Deck]
+Memnite
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Officious Interrogation.Cast
+Bot1.Target(Bot1; Bot2)
+? Bot1.Mana = {W}{U}
+Bot1.Cancel
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Officious Interrogation; Plains; Plains; Plains
+Bot1.Battlefield = Memnite; Mox Pearl; Mox Sapphire
