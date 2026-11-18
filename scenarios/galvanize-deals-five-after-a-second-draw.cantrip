@@ -1,0 +1,43 @@
+# Galvanize after a second draw this turn: Bot1's draw-step card plus an Opt make two, so the Galvanize deals 5 and the
+# Turtle (0/5) dies.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Galvanize
+Opt
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Aegis Turtle
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains | )
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Galvanize.Cast(Bot2.Battlefield.Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Aegis Turtle
+? Bot2.Battlefield.Count = 1
+
+[Expect]
+Bot2.Graveyard = Aegis Turtle
+Bot1.Graveyard = Galvanize; Opt
