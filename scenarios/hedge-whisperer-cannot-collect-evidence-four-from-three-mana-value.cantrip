@@ -1,0 +1,41 @@
+# Hedge Whisperer: "Collect evidence 4" needs cards with total mana value 4 or more in the graveyard (CR 701.59a). Turn 1: Faithless
+# Looting (mana value 1) discards Grizzly Bears (2) and an Island (0) - three in all. On turn 3, with {3}{G} in the pool from Black Lotus
+# and Mox Emerald in Bot1's own main phase, the Whisperer's ability is refused: only three mana value can be exiled.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Black Lotus
+Hedge Whisperer
+Faithless Looting
+Mountain
+Island
+Grizzly Bears
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hedge Whisperer.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Grizzly Bears; Island)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+! Bot1.Battlefield.Hedge Whisperer.Activate(Bot1.Battlefield.Mountain)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Mountain.Types = Land
+Bot1.Battlefield.Hedge Whisperer.Tapped = false
+Bot1.Graveyard = Black Lotus; Faithless Looting; Island; Grizzly Bears
