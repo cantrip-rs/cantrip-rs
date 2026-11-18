@@ -1,6 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::targets;
-use cantrip_mechanics::triggers::THIS_ENTERS_OR_ATTACKS;
+use cantrip_mechanics::triggers::{you_attack_with_a_creature_of_subtype, THIS_ENTERS_OR_ATTACKS};
+use cantrip_mechanics::{lands, targets};
 use cantrip_oracle as oracle;
 
 /// What the payment asks: what paying leads to, the card chosen after (CR 603.12), at most mana value 3 (`amount`, for
@@ -13,19 +13,6 @@ const ASK: Question = Question::new(
     "Don't pay",
 )
 .amount(3);
-
-/// "Whenever a Bat you control attacks" (CR 508.1, 603.2): each attacking creature, as it is declared, that is a Bat
-/// (the type as this card's text reads it, CR 612) under this permanent's controller's control. Zoraline is one herself.
-fn a_bat_you_control_attacks(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
-    match event {
-        Event::Attacks { attacker, .. }
-            if q.controller(*attacker) == q.controller(source) && q.chars(*attacker).has_subtype(q.words(source).subtype(Subtype::Bat)) =>
-        {
-            Fired::PLAIN
-        }
-        _ => None,
-    }
-}
 
 /// "You gain 1 life."
 fn gain_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -55,7 +42,7 @@ fn return_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(when(EventMask::ATTACKS, a_bat_you_control_attacks), gain_one, "Whenever a Bat you control attacks, you gain 1 life."),
+        triggered(when_asked(EventMask::ATTACKS, you_attack_with_a_creature_of_subtype::<{ lands::sub(Subtype::Bat) }>), gain_one, "Whenever a Bat you control attacks, you gain 1 life."),
         triggered(THIS_ENTERS_OR_ATTACKS, pay, "Whenever Zoraline enters or attacks, you may pay {W}{B} and 2 life. When you do, return target nonland permanent card with mana value 3 or less from your graveyard to the battlefield with a finality counter on it."),
     ],
     delayed: &[delayed_trigger(return_it, "When you do, return target nonland permanent card with mana value 3 or less from your graveyard to the battlefield with a finality counter on it.")

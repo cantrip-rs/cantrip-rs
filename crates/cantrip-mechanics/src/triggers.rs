@@ -2398,7 +2398,9 @@ pub fn another_of_subtype_you_control_dies<const SUBTYPE: u16>(q: &dyn Query, me
 /// "Whenever you attack with one or more [subtype]s" (CR 508.1m, 603.2c): a creature its controller declares as an attacker that
 /// has the subtype, `SUBTYPE` a `Subtype` as `u16` (`lands::sub`), read through the words of the source's text (CR 612). The
 /// attackers declared together are one batch, so with `once_per_batch` the ability triggers once however many attack; each is
-/// the subject. Hired Claw (Lizards) and Choco, Seeker of Paradise (Birds) print it.
+/// the subject. Hired Claw (Lizards) and Choco, Seeker of Paradise (Birds) print it. Without `once_per_batch` it is "whenever a
+/// [subtype] you control attacks", once for each such attacker: Zoraline, Cosmos Caller (Bats) and Tolsimir, Midnight's Light
+/// (Wolves) print that.
 pub fn you_attack_with_a_creature_of_subtype<const SUBTYPE: u16>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
         Event::Attacks { attacker, .. }
