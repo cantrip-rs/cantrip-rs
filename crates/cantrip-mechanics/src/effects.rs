@@ -2110,6 +2110,21 @@ pub fn next_spell_cant_be_countered(g: &mut dyn Game, item: &StackItem) -> Resul
     Ok(())
 }
 
+/// "Return up to two creature cards from your graveyard to your hand" (CR 400.3, 608.2d): not targeted, so the choice is made as the
+/// spell or ability resolves - nothing is asked when the graveyard holds no creature card - and the cards chosen return together.
+/// Gix's Command (its third mode) and Another Chance print it.
+pub fn return_up_to_two_creature_cards_from_your_graveyard_to_your_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let player = item.controller;
+    let mut graveyard: Vec<ObjectId> = g.state().zone(Zone::graveyard(player)).to_vec();
+    graveyard.reverse();
+    if !graveyard.iter().any(|&card| g.chars(card).is(CardType::Creature)) {
+        return Ok(());
+    }
+    let taken = crate::choose::select(g, player, item.object, Purpose::PutIntoHand, graveyard, crate::select::creature_cards(crate::select::up_to(2)))?;
+    g.return_to_hand(&taken);
+    Ok(())
+}
+
 /// "Return up to N target [things] to their owners' hands" (CR 400.3, 608.2b): every target still legal as the spell or ability
 /// resolves goes to its owner's hand together, as one event; one that is gone is left out and the others still return. Fight On!,
 /// Pull from the Grave, Wail of War and Macabre Waltz (up to two creature cards), Rewrite History, Rydia's Return, Stray from History,

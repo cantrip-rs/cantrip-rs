@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{choose, select};
+use cantrip_mechanics::{choose, effects};
 use cantrip_mechanics::{greatest_power, targets};
 use cantrip_oracle as oracle;
 
@@ -35,19 +35,6 @@ fn destroy_small(g: &mut dyn Game, _: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// Return up to two creature cards from your graveyard to your hand, together.
-fn return_creatures(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let player = item.controller;
-    let mut graveyard: Vec<ObjectId> = g.state().zone(Zone::graveyard(player)).to_vec();
-    graveyard.reverse();
-    if !graveyard.iter().any(|&card| g.chars(card).is(CardType::Creature)) {
-        return Ok(());
-    }
-    let taken = choose::select(g, player, item.object, Purpose::PutIntoHand, graveyard, select::creature_cards(select::up_to(2)))?;
-    g.return_to_hand(&taken);
-    Ok(())
-}
-
 /// Each opponent sacrifices a creature with the greatest power among creatures they control: chosen by that
 /// opponent, in turn order, when several tie; all of them sacrificed together.
 fn sacrifice_greatest(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -58,7 +45,7 @@ fn sacrifice_greatest(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
 static MODAL: ModalDef = modes(&[
     mode(counters, "Put two +1/+1 counters on up to one creature. It gains lifelink until end of turn."),
     mode(destroy_small, "Destroy each creature with power 2 or less."),
-    mode(return_creatures, "Return up to two creature cards from your graveyard to your hand."),
+    mode(effects::return_up_to_two_creature_cards_from_your_graveyard_to_your_hand, "Return up to two creature cards from your graveyard to your hand."),
     mode(sacrifice_greatest, "Each opponent sacrifices a creature with the greatest power among creatures they control."),
 ])
     .choose(2, 2);
