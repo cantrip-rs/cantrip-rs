@@ -1,0 +1,42 @@
+# Kellan, Inquisitive Prodigy: "destroy up to one target artifact": with the trigger's target left empty, nothing is destroyed and nothing
+# is drawn. Bot1 has a Mox Pearl and Bot2 a Mox Ruby, and both stay; the hand is the four cards left after turn 1 and the turn 3 draw.
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Kellan, Inquisitive Prodigy
+Mox Pearl
+Island x3
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kellan, Inquisitive Prodigy.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Kellan, Inquisitive Prodigy > Bot2)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Kellan, Inquisitive Prodigy; Mox Pearl; Mox Sapphire
+Bot2.Battlefield = Mox Ruby
+Bot1.Hand.Count = 4
+Stack.Count = 0

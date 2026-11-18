@@ -1,0 +1,35 @@
+# Kellan, Inquisitive Prodigy: "destroy up to one target artifact. If you controlled that permanent, draw a card." The draw does not
+# depend on the destruction (CR 608.2c reads the ability's own words): Bot1's Darksteel Citadel, an indestructible artifact land, is
+# targeted. It is not destroyed, but it was controlled by Bot1, so Bot1 draws a card (hand 5: four after turn 1, the turn 3 draw, one more).
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Kellan, Inquisitive Prodigy
+Darksteel Citadel
+Island x3
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Darksteel Citadel.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kellan, Inquisitive Prodigy.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Kellan, Inquisitive Prodigy > Bot2)
+Bot1.Target(Bot1.Battlefield.Darksteel Citadel)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Darksteel Citadel; Kellan, Inquisitive Prodigy; Mox Sapphire
+Bot1.Hand.Count = 5

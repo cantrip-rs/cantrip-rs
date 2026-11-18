@@ -1,0 +1,42 @@
+# Kellan, Inquisitive Prodigy: "Whenever Kellan attacks, destroy up to one target artifact. If you controlled that permanent, draw a card."
+# Bot1 casts Kellan on turn 1 from a Black Lotus (GGG) and a Mox Sapphire, a 3/4 with flying and vigilance. On turn 3 it attacks and
+# targets Bot2's Mox Ruby: the Mox is destroyed, and since Bot1 did not control it, no card is drawn (the hand is the four cards left
+# after turn 1 and the turn 3 draw). Kellan has vigilance, so it is untapped after attacking.
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Kellan, Inquisitive Prodigy
+Island x4
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kellan, Inquisitive Prodigy.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Kellan, Inquisitive Prodigy > Bot2)
+Bot1.Target(Bot2.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Mox Ruby
+Bot1.Hand.Count = 5
+Bot1.Battlefield.Kellan, Inquisitive Prodigy.Tapped = false
+Bot1.Battlefield.Kellan, Inquisitive Prodigy.Keywords = Flying; Vigilance

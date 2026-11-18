@@ -1,0 +1,54 @@
+# Kellan, Inquisitive Prodigy // Tail the Suspect (CR 715): "Investigate. You may play an additional land this turn." On turn 1 Bot1 plays a
+# Forest, casts Tail the Suspect for {G}{U} from a Mox Emerald and a Mox Sapphire, and gets a Clue; it then plays an Island as its second
+# land, and a third is refused (exactly one additional land, CR 305.2). The Adventure card goes to exile, not the graveyard. On turn 3 the
+# permission has ended (until end of turn): one Island is played and the next refused, and Kellan is cast from exile for {2}{G}{U}.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Kellan, Inquisitive Prodigy
+Forest
+Island
+Island
+Island
+Island x4
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kellan, Inquisitive Prodigy.Cast(Ability: Adventure)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Exile = Kellan, Inquisitive Prodigy
+? Bot1.Graveyard.Count = 0
+? Bot1.Battlefield.Clue Token.Subtypes = Clue
+Bot1.Hand.Island.Play
+? Bot1.LandsPlayed = 2
+! Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+! Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Exile.Kellan, Inquisitive Prodigy.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Kellan, Inquisitive Prodigy.Power = 3
+Bot1.Battlefield.Kellan, Inquisitive Prodigy.Toughness = 4
+Bot1.Battlefield = Clue Token; Forest; Island; Island; Kellan, Inquisitive Prodigy; Mox Emerald; Mox Sapphire

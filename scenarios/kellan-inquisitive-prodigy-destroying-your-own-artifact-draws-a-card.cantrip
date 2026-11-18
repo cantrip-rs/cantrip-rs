@@ -1,0 +1,39 @@
+# Kellan, Inquisitive Prodigy: "If you controlled that permanent, draw a card." Bot1 also plays a Mox Pearl on turn 1 and, attacking on
+# turn 3, targets that Mox Pearl: it is destroyed and Bot1 draws a card (the hand is five cards: four left after turn 1, the turn 3 draw,
+# and the card drawn).
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Kellan, Inquisitive Prodigy
+Mox Pearl
+Island x3
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kellan, Inquisitive Prodigy.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Kellan, Inquisitive Prodigy > Bot2)
+! Bot1.Target(Bot1.Battlefield.Mox Pearl; Bot1.Battlefield.Mox Sapphire)
+Bot1.Target(Bot1.Battlefield.Mox Pearl)
+
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Mox Pearl; Black Lotus
+Bot1.Hand.Count = 5
+Bot1.Battlefield = Kellan, Inquisitive Prodigy; Mox Sapphire
