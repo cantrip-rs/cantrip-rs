@@ -1,0 +1,51 @@
+# Flourishing Bloom-Kin turned face up with a single Forest card in the library (the Mountain is not one): Bot1 finds it, and it
+# goes onto the battlefield (tapped, the ruling: "put one onto the battlefield tapped" comes first) and nothing goes into the hand,
+# so Bot1 is not asked which of two goes where (`! Bot1.Choose`). The library is shuffled anyway. Bloom-Kin is then 2/2 with two
+# Forests, the one played and the one found. Black Lotus pays the face-down cast; Forest and four Moxen pay the {4}{G}.
+
+[Bot1 Deck]
+Black Lotus
+Flourishing Bloom-Kin
+Forest
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Ruby
+Forest
+Mountain
+Island x11
+
+[Bot2 Deck]
+Forest
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Flourishing Bloom-Kin.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Forest)
+! Bot1.Choose
+? Stack.Count = 0
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Flourishing Bloom-Kin.Power = 2
+Bot1.Battlefield.Flourishing Bloom-Kin.Toughness = 2
+Bot1.Hand.Count = 0
+Bot1.Battlefield.Count = 7
+Bot1.Library.Count = 12

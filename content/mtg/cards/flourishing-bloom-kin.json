@@ -1,0 +1,8 @@
+{
+  "name": "Flourishing Bloom-Kin",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Plant Elemental",
+  "power": 0,
+  "toughness": 0,
+  "oracleText": "This creature gets +1/+1 for each Forest you control.\nDisguise {4}{G}\nWhen this creature is turned face up, search your library for up to two Forest cards and reveal them. Put one of them onto the battlefield tapped and the other into your hand, then shuffle."
+}

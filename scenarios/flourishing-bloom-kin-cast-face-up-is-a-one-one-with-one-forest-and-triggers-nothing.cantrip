@@ -1,0 +1,40 @@
+# Flourishing Bloom-Kin hard cast for {1}{G} is face up and was never turned face up, so it triggers nothing: the stack is empty
+# after it resolves, the library is not searched (it keeps all thirteen cards less the draws, none) and no Forest moves. With one
+# Forest, Bot1's, it is a 1/1 (0/0, +1/+1 for each Forest you control), and survives; Bot2's Forest, played on turn 2, is not
+# counted. Paid with Forest and Mox Jet. CR 613.4c, 702.168d.
+
+[Bot1 Deck]
+Forest
+Mox Jet
+Flourishing Bloom-Kin
+Island
+Island
+Island
+Island
+Forest
+Forest
+Island x11
+
+[Bot2 Deck]
+Forest
+Island x19
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Flourishing Bloom-Kin.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Flourishing Bloom-Kin.Power = 1
+Bot1.Battlefield.Flourishing Bloom-Kin.Toughness = 1
+Bot1.Battlefield.Count = 3
+Bot1.Library.Count = 12
+Bot1.Hand = Island; Island; Island; Island; Forest

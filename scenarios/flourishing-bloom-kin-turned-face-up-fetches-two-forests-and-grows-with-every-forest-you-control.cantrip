@@ -1,0 +1,74 @@
+# Flourishing Bloom-Kin (Disguise {4}{G}) cast face down with Black Lotus ({3}) is a 2/2 with no abilities (CR 708.2): entering
+# triggers nothing. Turned face up for {4}{G} (CR 702.168d, 116.2b) it is a 0/0 that gets +1/+1 for each Forest Bot1 controls
+# (CR 613.4c): one, the Forest played this turn, so 1/1. The cost is refused with three sources, none green, and with four, one
+# green (a count short), then paid exactly from Forest and four Moxen: the pool is empty right after (`? Bot1.Mana =`).
+# "When this creature is turned face up" (CR 702.168d, 708.8) triggers: Bot1 searches for up to two Forest cards - Bayou, a nonbasic
+# Forest, and a Forest - and the Mountain (not a Forest) and three Forests (it is "up to two") are refused. Both are revealed;
+# Bot1 puts Bayou onto the battlefield tapped (2 Forests, so 2/2) and the Forest into the hand. Bot2's Forest, in its library
+# and then on its battlefield, is untouched and never counted: on turn 3 Bot1 plays the Forest it found and Bloom-Kin is 3/3.
+
+[Bot1 Deck]
+Black Lotus
+Flourishing Bloom-Kin
+Forest
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Ruby
+Bayou
+Forest
+Forest
+Mountain
+Island x9
+
+[Bot2 Deck]
+Forest
+Forest
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Flourishing Bloom-Kin.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Flourishing Bloom-Kin.Power = 1
+! Bot1.Search(Mountain)
+! Bot1.Search(Bayou; Forest; Forest)
+Bot1.Search(Bayou; Forest)
+? Bot1.Revealed = Bayou; Forest
+Bot1.Choose(Bayou)
+? Bot1.Battlefield.Bayou.Tapped = true
+? Stack.Count = 0
+? Bot1.Battlefield.Flourishing Bloom-Kin.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+
+[Expect]
+Bot1.Battlefield.Flourishing Bloom-Kin.Power = 3
+Bot1.Battlefield.Flourishing Bloom-Kin.Toughness = 3
+Bot1.Battlefield.Flourishing Bloom-Kin.FaceDown = (absent)
+Bot1.Hand.Forest = (absent)
+Bot2.Battlefield.Forest.Tapped = false
+Bot2.Library.Count = 12
