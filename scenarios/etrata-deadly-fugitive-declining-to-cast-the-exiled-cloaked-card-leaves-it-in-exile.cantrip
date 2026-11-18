@@ -1,0 +1,51 @@
+# Etrata, Deadly Fugitive: "If you can't [turn it face up], exile it, then you may cast the exiled card without paying its mana cost." A cloaked instant card can't be turned face up (CR 701.58g, 701.40g). Etrata's combat
+# damage on turn 3 cloaks Bot2's top card, Lightning Bolt: it stays face down. The granted ability ({2}{U}{B}) can't turn it face up, so it is exiled (CR 701.58a: the card goes to exile) and Bot1 may cast the Bolt free,
+# targeting Bot2. Here Bot1 declines: the Bolt stays in exile and Bot2 lost only the 1 from Etrata.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Etrata, Deadly Fugitive
+Plains x15
+
+[Bot2 Deck]
+Island x8
+Lightning Bolt
+Island x11
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Etrata, Deadly Fugitive.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Etrata, Deadly Fugitive > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDownName = Lightning Bolt
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.#1.Activate(Ability: Turn this creature face up)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Stack.Count = 0
+Exile = Lightning Bolt
+Bot2.Graveyard = Island
+Bot2.Life = 19
+Bot1.Battlefield = Etrata, Deadly Fugitive; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire

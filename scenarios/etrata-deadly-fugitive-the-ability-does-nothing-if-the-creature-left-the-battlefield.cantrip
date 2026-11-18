@@ -1,0 +1,60 @@
+# Etrata, Deadly Fugitive: the granted ability is on the stack when its source, the face-down Dog Walker, is destroyed by Bot2's Lightning Bolt in response. On resolution the creature is no longer on the battlefield:
+# there is nothing to turn face up and nothing is exiled or cast (CR 400.7, 608.2b). The Dog Walker is in Bot1's graveyard (with its spent Black Lotus), no Dogs were made, and Bot2 pays the ward {2} from the Black Lotus mana, and the 4 mana spent on the ability are gone.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Etrata, Deadly Fugitive
+Dog Walker
+Plains x13
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Dog Walker.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Etrata, Deadly Fugitive.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.#1.Activate(Ability: Turn this creature face up)
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.#1)
+Bot2.Pass
+Bot1.Pass
+Bot2.PayCost
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Graveyard = Dog Walker; Black Lotus
+Bot1.Battlefield.Dog Token#1 = (absent)
+Bot2.Graveyard = Lightning Bolt; Black Lotus

@@ -1,0 +1,53 @@
+# Etrata, Deadly Fugitive (1/4 deathtouch Vampire Assassin): "Whenever an Assassin you control deals combat damage to an opponent, cloak the top card of that player's library." (CR 510.2, 603.2, 701.58a.)
+# Each Assassin has its own trigger. On turn 5 Etrata and Merfolk Assassin (an Assassin as well) and Grizzly Bears (not one) attack Bot2, who has no creatures: Etrata's and the Merfolk's damage trigger twice, so the
+# top two cards of Bot2's library are cloaked under Bot1's control, in the order they were on top (Grizzly Bears, then Llanowar Elves), face-down 2/2 creatures with ward {2}. The Bears' damage cloaks nothing.
+# Bot2 loses 1 + 1 + 2 = 4 life, and has 20 cards, 7 in hand and 2 drawn by turn 5, so 11 left, and two are cloaked, leaving 9.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Etrata, Deadly Fugitive
+Merfolk Assassin
+Forest
+Grizzly Bears
+Forest x13
+
+[Bot2 Deck]
+Island x9
+Grizzly Bears
+Llanowar Elves
+Island x9
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Etrata, Deadly Fugitive.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Merfolk Assassin.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Attack(Etrata, Deadly Fugitive > Bot2; Merfolk Assassin > Bot2; Grizzly Bears > Bot2)
+[T5 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 16
+Bot2.Library.Count = 9

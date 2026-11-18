@@ -1,0 +1,65 @@
+# Etrata, Deadly Fugitive: "{2}{U}{B}: Turn this creature face up. If you can't, exile it, then you may cast the exiled card without paying its mana cost." Bot1's face-down Dog Walker (Disguise, cast for {3} with
+# Black Lotus on turn 1) is turned face up in response to the ability, with its own disguise cost {R/W}{R/W} (Mox Pearl and Plains), a special action (CR 116.2b, 702.168d): its "turned face up" trigger makes two Dogs.
+# When the ability resolves (after the Dogs trigger) the Dog Walker is already face up, so it can't be turned face up: it is exiled and Bot1 may cast the exiled card free (CR 400.7: a new Dog Walker, face up, so no more Dogs).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Etrata, Deadly Fugitive
+Dog Walker
+Mox Pearl
+Plains
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Dog Walker.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Etrata, Deadly Fugitive.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.#1.Activate(Ability: Turn this creature face up)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; Spend: W, W)
+? Bot1.Battlefield.Dog Walker.Power = 3
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dog Token#2.Tapped = true
+? Exile.Count = 0
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Battlefield.Dog Walker.Power = 3
+Bot1.Battlefield.Dog Token#1.Tapped = true
+Bot1.Battlefield.Dog Token#2.Tapped = true
+Bot1.Battlefield.Dog Token#3 = (absent)

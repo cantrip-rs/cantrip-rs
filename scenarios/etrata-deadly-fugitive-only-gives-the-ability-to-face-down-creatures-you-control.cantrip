@@ -1,0 +1,51 @@
+# Etrata, Deadly Fugitive: the static ability gives the turn-face-up ability only to face-down creatures "you control" (CR 613.1f, Layer 6). Bot2 has its own face-down Dog Walker (cast for {3} with Black Lotus)
+# and four Moxen untapped with {2}{U}{B} available: it still can't use Bot1's Etrata's ability on it. Bot2's creature has only its Disguise special action (CR 702.168d).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Etrata, Deadly Fugitive
+Plains x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Dog Walker
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Etrata, Deadly Fugitive.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Dog Walker.Cast(Ability: Disguise)
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield..FaceDownName = Dog Walker
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+! Bot2.Battlefield.#1.Activate(Ability: Turn this creature face up)
+! Bot1.Battlefield.Etrata, Deadly Fugitive.Activate(Ability: Turn this creature face up)
+
+[Expect]
+Bot2.Battlefield..FaceDownName = Dog Walker
+Bot2.Battlefield.Dog Token#1 = (absent)

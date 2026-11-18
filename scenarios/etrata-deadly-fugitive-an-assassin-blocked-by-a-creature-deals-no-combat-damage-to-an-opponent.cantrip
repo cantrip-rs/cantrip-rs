@@ -1,0 +1,47 @@
+# Etrata, Deadly Fugitive: the trigger needs combat damage dealt "to an opponent" (CR 603.2). Etrata attacks on turn 3 and Bot2's Grizzly Bears blocks: Etrata deals her 1 damage to the Bears (deathtouch destroys it, CR 702.2b), not
+# to Bot2, so nothing is cloaked: Bot2's library and life are untouched by her, and Bot1 has no face-down creature.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Etrata, Deadly Fugitive
+Forest x16
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Forest x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Etrata, Deadly Fugitive.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Etrata, Deadly Fugitive > Bot2)
+Bot2.Block(Grizzly Bears > Etrata, Deadly Fugitive)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard = Grizzly Bears
+Bot2.Life = 20
+Bot2.Library.Count = 12
+Bot1.Battlefield = Etrata, Deadly Fugitive; Mox Jet; Mox Ruby; Mox Sapphire

@@ -1,0 +1,11 @@
+{
+  "name": "Etrata, Deadly Fugitive",
+  "manaCost": "{1}{U}{B}",
+  "type": "Legendary Creature — Vampire Assassin",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Deathtouch\nFace-down creatures you control have \"{2}{U}{B}: Turn this creature face up. If you can't, exile it, then you may cast the exiled card without paying its mana cost.\"\nWhenever an Assassin you control deals combat damage to an opponent, cloak the top card of that player's library.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

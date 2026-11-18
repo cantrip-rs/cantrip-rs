@@ -1,0 +1,51 @@
+# Etrata, Deadly Fugitive: a creature card that was cloaked is turned face up by the granted ability for {2}{U}{B} (CR 701.58a, 702.168). Etrata attacks on turn 3 into Bot2's empty board; her combat damage cloaks the
+# top card of Bot2's library, Grizzly Bears (the ninth card; Bot2 drew the eighth on turn 2), face down, 2/2 with ward {2}. After combat the ability turns it face up: a 2/2 Grizzly Bears with no ward again; it is not exiled.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Etrata, Deadly Fugitive
+Plains x15
+
+[Bot2 Deck]
+Island x8
+Grizzly Bears
+Island x11
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Etrata, Deadly Fugitive.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Etrata, Deadly Fugitive > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDownName = Grizzly Bears
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.#1.Activate(Ability: Turn this creature face up)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot2.Life = 19
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Battlefield.Grizzly Bears.FaceDown = (absent)

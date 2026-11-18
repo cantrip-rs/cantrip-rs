@@ -1,0 +1,56 @@
+# Etrata, Deadly Fugitive: "Face-down creatures you control have '{2}{U}{B}: Turn this creature face up. If you can't, exile it, then you may cast the exiled card without paying its mana cost.'" (CR 702.168,
+# 701.40, 116.2b.) Bot1's Dog Walker is cast face down with Disguise for {3} (Black Lotus), then Etrata for {1}{U}{B}. On turn 3 the granted ability turns the Dog Walker face up for {2}{U}{B}: Bot1 gets two Dog tokens
+# from its "turned face up" trigger and the creature is not exiled. Before Etrata arrives the face-down creature has no such ability; Etrata herself, face up, has none either.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Etrata, Deadly Fugitive
+Dog Walker
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Dog Walker.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDownName = Dog Walker
+! Bot1.Battlefield.#1.Activate(Ability: Turn this creature face up)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Etrata, Deadly Fugitive.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Etrata, Deadly Fugitive.Tapped = false
+! Bot1.Battlefield.Etrata, Deadly Fugitive.Activate(Ability: Turn this creature face up)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.#1.Activate(Ability: Turn this creature face up)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Battlefield.Dog Walker.Power = 3
+Bot1.Battlefield.Dog Token#1.Tapped = true
+Bot1.Battlefield.Dog Token#2.Tapped = true
+Bot1.Battlefield.Dog Token#3 = (absent)
