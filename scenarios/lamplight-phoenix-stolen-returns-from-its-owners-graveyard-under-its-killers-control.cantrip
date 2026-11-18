@@ -1,0 +1,56 @@
+# Bot1 takes Bot2's Lamplight Phoenix with Act of Treason and kills it with a Lightning Strike. The trigger is Bot1's, who
+# controlled the Phoenix as it died (CR 603.3a); the card goes to its owner's graveyard (CR 400.3), and Bot1 may still exile
+# it there, with Act of Treason and the Strike from Bot1's own graveyard as evidence (CR 701.59a). "Return this card to the
+# battlefield" names no controller, so it enters under the control of Bot1, the player the effect has put it there (CR 110.2a).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Act of Treason
+Lightning Strike
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Black Lotus
+Lamplight Phoenix
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lamplight Phoenix.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Act of Treason.Cast(Bot2.Battlefield.Lamplight Phoenix)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Lightning Strike.Cast(Bot1.Battlefield.Lamplight Phoenix)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Lamplight Phoenix; Black Lotus
+Bot1.Accept
+Bot1.Choose(Act of Treason; Lightning Strike)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Lamplight Phoenix.Tapped = true
+Bot2.Battlefield.Lamplight Phoenix = (absent)
+Bot2.Graveyard = Black Lotus
+Bot1.Graveyard.Count = 0

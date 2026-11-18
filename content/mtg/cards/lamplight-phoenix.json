@@ -1,0 +1,11 @@
+{
+  "name": "Lamplight Phoenix",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Phoenix",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nWhen this creature dies, you may exile it and collect evidence 4. If you do, return this card to the battlefield tapped. (To collect evidence 4, exile cards with total mana value 4 or greater from your graveyard.)",
+  "keywords": [
+    "Flying"
+  ]
+}

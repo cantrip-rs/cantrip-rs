@@ -1,0 +1,53 @@
+# Cubwarden mutated over Lamplight Phoenix dies to a Lightning Strike with only the Black Lotus (mana value 0) and that Strike
+# (2) besides them in the graveyard. "Exile it" takes both cards the merged permanent became (CR 730.3c), so neither can also be
+# exiled as evidence (CR 118.3, 701.59a): Cubwarden's 4 would reach 4, but the evidence has only 2, so nothing is asked and
+# both cards stay in the graveyard (CR 701.59b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Pearl
+Mox Pearl
+Lamplight Phoenix
+Cubwarden
+Lightning Strike
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Lamplight Phoenix.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Cubwarden.Cast(Lamplight Phoenix; Ability: Mutate)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(2)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Lightning Strike.Cast(Bot1.Battlefield.Lamplight Phoenix)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Lamplight Phoenix = (absent)
+Bot1.Battlefield.Cubwarden = (absent)
+Bot1.Graveyard.Count = 4
+Exile.Count = 0

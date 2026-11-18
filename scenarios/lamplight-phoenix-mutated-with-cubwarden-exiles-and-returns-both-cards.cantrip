@@ -1,0 +1,67 @@
+# Cubwarden mutated over Lamplight Phoenix dies to a Lightning Strike: "exile it" finds both cards the merged permanent
+# became (CR 730.3c), so both are exiled with two Strikes as evidence and both return tapped, as separate permanents.
+# Neither card can also be exiled as the evidence (CR 118.3): Cubwarden alone, worth 4, is refused.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Pearl
+Mox Pearl
+Lamplight Phoenix
+Cubwarden
+Lightning Strike
+Lightning Strike
+Lightning Strike
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Lamplight Phoenix.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Cubwarden.Cast(Lamplight Phoenix; Ability: Mutate)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(2)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Lightning Strike.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Lightning Strike.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Lightning Strike.Cast(Bot1.Battlefield.Lamplight Phoenix)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 6
+Bot1.Accept
+! Bot1.Choose(Cubwarden)
+Bot1.Choose(Lightning Strike; Lightning Strike)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Lamplight Phoenix.Tapped = true
+Bot1.Battlefield.Cubwarden.Tapped = true

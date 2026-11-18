@@ -1,0 +1,57 @@
+# Lamplight Phoenix (3/3 Flying) paid by Black Lotus. Turn 1 Bot1 sends a Lightning Strike (mana value 2) at Bot2. Turn 3 a second
+# Lightning Strike kills the Phoenix: "you may exile it and collect evidence 4" (CR 701.59a) is offered, the two Strikes (4 exactly) are
+# chosen - one alone (2) is refused, and the Phoenix cannot be chosen to pay for itself - and the Phoenix returns to the battlefield
+# tapped (a new object, CR 400.7) as a 3/3 with Flying. Both Strikes are exiled; the Lotus stays in the graveyard.
+
+[Bot1 Deck]
+Lamplight Phoenix
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Lightning Strike
+Lightning Strike
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lamplight Phoenix.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Strike.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Strike.Cast(Bot1.Battlefield.Lamplight Phoenix)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Lamplight Phoenix; Lightning Strike; Lightning Strike; Black Lotus
+Bot1.Accept
+! Bot1.Choose(Lightning Strike)
+! Bot1.Choose(Lamplight Phoenix; Lightning Strike; Lightning Strike)
+Bot1.Choose(Lightning Strike; Lightning Strike)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Lamplight Phoenix.Tapped = true
+Bot1.Battlefield.Lamplight Phoenix.Power = 3
+Bot1.Battlefield.Lamplight Phoenix.Keywords = Flying
+Bot1.Battlefield.Lamplight Phoenix.Damage = 0
+Bot1.Graveyard = Black Lotus
+Exile = Lightning Strike; Lightning Strike
+Bot2.Life = 17
