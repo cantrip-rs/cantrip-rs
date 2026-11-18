@@ -184,6 +184,23 @@ Every card worked on is a GitHub issue, claimed before any work on it (`claims.m
    lists the ones that SURVIVED; the breaks of meaning it cannot make (another filter, the other player's objects, an
    earlier turn) are still yours. A break no scenario catches is a missing expectation, or a change that means the
    same (say which). The report lists each test point with the scenario line that catches it, and what you broke.
+
+   **The breaks of meaning are made by hand and run, every one.** card-mutate's list is not the work: a card that is
+   only data (a static `CardDef`, a cost, a filter, an equip) gives it nothing to mutate and still owes every break
+   below. For each restriction the Oracle text names, make the wrong card and run its scenarios:
+   - a cost's **colour or kind**: `{B}` as `{1}` or `{W}`, an extra `{1}` on a way, the ways' costs swapped;
+   - a **filter widened** to the next broader one (`CREATURE_OR_PLANESWALKER` as `PERMANENT`, creature cards as any
+     card) and narrowed (the planeswalker half dropped, nonland cards only);
+   - **whose and which objects**: the other player's, every player's, all your creatures instead of the equipped or
+     targeted one;
+   - a **duration**: "until end of turn" or "this turn" made to last forever, "your next end step" as "the next end
+     step" (cast on an opponent's turn to tell them apart);
+   - **the event**: damage as loss of life, discarding as moving to the graveyard, things done together as one at a
+     time (a token that sees the other enter tells them apart), a value read as the ability resolves as one read
+     when it triggers.
+   An expectation that passes for the wrong reason catches nothing: a refusal for want of mana or for too few
+   targets, a count the opening hand already meets, a check on a different object than the one the effect touched.
+   A break you reasoned about but did not run is not reported as caught; the report says which line went red.
 6. **Citations:** `python tools/maintenance/cr.py check --show <the card's file> <its scenarios>` prints every `CR`
    citation beside the rule it names. Read each pair: a rule that does not say what the comment claims is fixed or
    the citation dropped - a number copied from another card's comment is the usual way a wrong one gets in.
