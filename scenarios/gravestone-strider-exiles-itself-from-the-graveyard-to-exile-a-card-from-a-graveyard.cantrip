@@ -1,0 +1,45 @@
+# Gravestone Strider: "{2}, Exile this card from your graveyard: Exile target card from a graveyard." Bot2 kills the Strider with a Lightning Bolt
+# on turn 2; on turn 3 Bot1 pays {2} and exiles the Strider from its graveyard to exile Bot2's Lightning Bolt from Bot2's graveyard: both cards are in
+# exile and both graveyards are empty. Before it dies the ability is refused from the battlefield (it functions only in the graveyard).
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Gravestone Strider
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Gravestone Strider.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Gravestone Strider.Activate(Ability: Exile target card)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Gravestone Strider)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Gravestone Strider.Activate(Bot2.Graveyard.Lightning Bolt)
+
+[Expect]
+Exile = Gravestone Strider; Lightning Bolt
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard.Count = 0

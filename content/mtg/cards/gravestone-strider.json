@@ -1,0 +1,8 @@
+{
+  "name": "Gravestone Strider",
+  "manaCost": "{2}",
+  "type": "Artifact Creature — Golem",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "{1}: Add one mana of any color. Activate only once each turn.\n{2}, Exile this card from your graveyard: Exile target card from a graveyard."
+}

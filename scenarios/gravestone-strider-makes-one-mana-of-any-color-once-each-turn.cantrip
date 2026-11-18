@@ -1,0 +1,44 @@
+# Gravestone Strider: "{1}: Add one mana of any color. Activate only once each turn." Turn 1 Bot1 casts it off two Moxen and pays {1} (Mox Sapphire) for
+# red, which casts a Lightning Bolt; a second activation the same turn is refused although Mox Pearl could pay it. On turn 3 it is offered again.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Gravestone Strider
+Lightning Bolt
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gravestone Strider.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gravestone Strider.Activate(Ability: {1}: Add one mana of any color; Color: Red)
+? Bot1.Mana = {R}
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Gravestone Strider.Activate(Ability: {1}: Add one mana of any color; Color: Red)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gravestone Strider.Activate(Ability: {1}: Add one mana of any color; Color: Red)
+? Bot1.Mana = {R}
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14

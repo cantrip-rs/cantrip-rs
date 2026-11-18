@@ -1,0 +1,37 @@
+# Gravestone Strider: "{2}, Exile this card from your graveyard: Exile target card from a graveyard." A graveyard is any player's, its owner's own
+# included: Bot1 kills its own Strider with its own Lightning Bolt on turn 1, and on turn 3 exiles the Strider from its graveyard to exile that Bolt from
+# the same graveyard. Both cards end in exile.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Gravestone Strider
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Gravestone Strider.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Gravestone Strider)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Gravestone Strider; Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Graveyard.Gravestone Strider.Activate(Bot1.Graveyard.Lightning Bolt)
+
+[Expect]
+Exile = Gravestone Strider; Lightning Bolt
+Bot1.Graveyard.Count = 0
