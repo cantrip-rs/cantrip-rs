@@ -1,0 +1,45 @@
+# Canonized in Blood ({1}{B} enchantment): "At the beginning of your end step, if you descended this turn, put a +1/+1 counter on target creature you control" (CR 603.4, 700.11, 115.1).
+# Turn 1 Bot1 casts it with Memnite and Ornithopter, but no permanent card reaches its graveyard: no trigger at its end step, nothing grows. On turn 2 Bot2 puts its own Memnite in play.
+# On turn 3 Bot1 sacrifices a Black Lotus (a permanent card into its graveyard: it descended); at its end step the trigger targets one of its own creatures (Bot2's Memnite is refused: the
+# opponent's creature is no legal target) and only the chosen Ornithopter gets a counter, 0/2 -> 1/3.
+[Bot1 Deck]
+Canonized in Blood
+Black Lotus
+Mox Jet
+Memnite
+Ornithopter
+Island
+Island
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Canonized in Blood.Cast
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Ornithopter.Power = 0
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Graveyard.Count = 1
+[T3 Bot1.End]
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot2.Battlefield.Memnite.Power = 1

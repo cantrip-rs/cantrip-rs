@@ -1,0 +1,35 @@
+# Canonized in Blood: "{5}{B}{B}, Sacrifice this enchantment: Create a 4/3 white and black Vampire Demon creature token with flying" (CR 701.7, 111.1, 118.3).
+# Turn 1 Bot1 casts it with a Black Lotus. On turn 3 two more Black Lotuses make six black mana, one short of {5}{B}{B}: refused. Mox Jet makes the seventh: paid exactly (the pool is empty),
+# the enchantment is sacrificed and a white and black 4/3 flying Vampire Demon token arrives.
+[Bot1 Deck]
+Canonized in Blood
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Jet
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Canonized in Blood.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Battlefield.Canonized in Blood.Activate(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Canonized in Blood.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Canonized in Blood; Black Lotus; Black Lotus; Black Lotus
+Bot1.Battlefield = Mox Jet; Vampire Demon Token
+Bot1.Battlefield.Vampire Demon Token.Power = 4
+Bot1.Battlefield.Vampire Demon Token.Toughness = 3
+Bot1.Battlefield.Vampire Demon Token.Keywords = Flying
+Bot1.Battlefield.Vampire Demon Token.Colors = Black; White

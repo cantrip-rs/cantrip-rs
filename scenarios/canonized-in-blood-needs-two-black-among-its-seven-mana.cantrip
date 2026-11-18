@@ -1,0 +1,26 @@
+# Canonized in Blood: the {B}{B} of "{5}{B}{B}, Sacrifice this enchantment" is two black mana (CR 118.3, 107.4): two Black Lotuses set to red and a Mox Jet are seven mana but only one black,
+# so the ability is refused and nothing is sacrificed; the enchantment stays and no token is made.
+[Bot1 Deck]
+Canonized in Blood
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Jet
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Canonized in Blood.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Canonized in Blood.Activate(Mana: short)
+[Expect]
+Bot1.Battlefield = Canonized in Blood; Mox Jet
+Bot1.Graveyard.Count = 3
