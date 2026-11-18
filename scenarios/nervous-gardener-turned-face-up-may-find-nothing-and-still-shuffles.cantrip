@@ -1,0 +1,41 @@
+# Nervous Gardener's search (CR 701.23b) may find nothing even with a land with a basic land type in the library: Bot1 leaves the Forest and the Tundra there. Nothing is
+# revealed or put into the hand, but the library is shuffled (CR 701.24).
+
+[Bot1 Deck]
+Nervous Gardener
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Island
+Island
+Forest
+Tundra
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Nervous Gardener.Cast(Ability: Disguise)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Pass
+Bot2.Pass
+Bot1.Search()
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Island; Island
+Bot1.Revealed = (absent)
+Bot1.Shuffles = 1
+Bot1.Library.Count = 12

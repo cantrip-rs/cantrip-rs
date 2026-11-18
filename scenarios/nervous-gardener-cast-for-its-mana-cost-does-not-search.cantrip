@@ -1,0 +1,34 @@
+# Nervous Gardener cast face up for {1}{G} (CR 702.168a: disguise is an alternative way, not the only one) never is "turned face up" (CR 603.2, 708.2): it enters as a
+# 2/2 Dryad, nothing triggers, no search happens (the library is not shuffled and nothing is revealed), and the Tundra stays in the library.
+
+[Bot1 Deck]
+Nervous Gardener
+Mox Emerald
+Mox Jet
+Island
+Island
+Island
+Island
+Tundra
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nervous Gardener.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Nervous Gardener.Power = 2
+
+[Expect]
+Bot1.Shuffles = 0
+Bot1.Revealed = (absent)
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 13
