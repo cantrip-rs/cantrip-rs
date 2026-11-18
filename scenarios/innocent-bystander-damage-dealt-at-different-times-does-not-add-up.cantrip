@@ -1,0 +1,59 @@
+# Innocent Bystander: "Whenever this creature is dealt 3 or more damage, investigate." Ruling: it triggers only if dealt 3 or
+# more at once; damage that adds up to 3 or more at different times does not. Bot1 holds a Mox Emerald and a Giant Growth, so
+# in response to Bot2's first Shock the Bystander becomes 5/4. Each Shock deals it 2, four damage in all, which kills it, and
+# neither is 3: no Clue. (CR 603.2c)
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Emerald
+Innocent Bystander
+Giant Growth
+Mountain x12
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Shock x2
+Mountain x12
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Innocent Bystander.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock#1.Cast(Bot1.Battlefield.Innocent Bystander)
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Innocent Bystander)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Innocent Bystander.Toughness = 4
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Innocent Bystander.Damage = 2
+? Stack.Count = 0
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Innocent Bystander)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield = Mountain; Mox Ruby; Mox Emerald
+Bot1.Graveyard = Innocent Bystander; Giant Growth
+Stack.Count = 0

@@ -1,0 +1,8 @@
+{
+  "name": "Innocent Bystander",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin Citizen",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Whenever this creature is dealt 3 or more damage, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")"
+}
