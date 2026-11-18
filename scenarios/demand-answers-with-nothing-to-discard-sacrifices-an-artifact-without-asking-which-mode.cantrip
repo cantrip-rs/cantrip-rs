@@ -1,0 +1,35 @@
+# Bot1 has put its whole hand onto the battlefield before casting Demand Answers, so there is no card to discard and the
+# sacrifice is the only additional cost payable (CR 601.2b, 118.3): no mode is asked, only which artifact. Black Lotus goes
+# (its mana unused); two cards are drawn into an empty hand.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Black Lotus
+Demand Answers
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Demand Answers.Cast
+Bot1.Choose(Mox Jet)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Demand Answers; Mox Jet
+Bot1.Battlefield = Mox Ruby; Mox Emerald; Black Lotus; Mox Pearl; Mox Sapphire
+Bot1.Hand.Count = 2

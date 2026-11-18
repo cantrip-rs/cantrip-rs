@@ -1,0 +1,39 @@
+# Demand Answers: "As an additional cost to cast this spell, sacrifice an artifact or discard a card." Bot1 exiles its six Simian
+# Spirit Guides for {R}{R}{R}{R}{R}{R}, leaving Demand Answers alone in its hand with no artifact on the battlefield: neither
+# additional cost can be paid, so the spell can't be cast (CR 601.2b, 601.2h, 118.3). On turn 7, with two Mountains out and a third
+# in hand, there is a card to discard and it is cast, discarding the Mountain (the positive control).
+
+[Bot1 Deck]
+Demand Answers
+Simian Spirit Guide x6
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Simian Spirit Guide.Activate
+Bot1.Hand.Simian Spirit Guide.Activate
+Bot1.Hand.Simian Spirit Guide.Activate
+Bot1.Hand.Simian Spirit Guide.Activate
+Bot1.Hand.Simian Spirit Guide.Activate
+Bot1.Hand.Simian Spirit Guide.Activate
+? Bot1.Hand = Demand Answers
+? Bot1.Battlefield.Count = 0
+? Bot1.Mana = {R}{R}{R}{R}{R}{R}
+! Bot1.Hand.Demand Answers.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T7 Bot1.Main1]
+? Bot1.Hand = Demand Answers; Mountain
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Demand Answers.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Demand Answers; Mountain
+Bot1.Hand.Count = 2
