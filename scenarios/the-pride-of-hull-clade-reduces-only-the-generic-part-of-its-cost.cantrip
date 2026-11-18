@@ -1,0 +1,51 @@
+# The Pride of Hull Clade's cost reduction applies to generic mana only (CR 601.2f, 118.7a). Bot1 controls three Steel Walls (0/4), then a fourth: total toughness 12 and then 16,
+# more than the ten generic mana of {10}{G}, so the cost is just {G}. On turn 3 only Mox Ruby and Mox Jet are untapped: red and black mana do not pay {G} and the cast is
+# refused. On turn 5 a Forest pays it, and nothing else is spent.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Steel Wall
+Steel Wall
+Steel Wall
+The Pride of Hull Clade
+Steel Wall
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Steel Wall.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Steel Wall.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Steel Wall.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Steel Wall.Cast
+! Bot1.Hand.The Pride of Hull Clade.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.The Pride of Hull Clade.Cast
+? Bot1.Battlefield.Mox Ruby.Tapped = false
+? Bot1.Battlefield.Mox Jet.Tapped = false
+? Bot1.Battlefield.Mox Emerald.Tapped = false
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.The Pride of Hull Clade.Toughness = 15
+Bot1.Battlefield.Count = 9

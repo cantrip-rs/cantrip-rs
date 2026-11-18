@@ -1,0 +1,53 @@
+# The Pride of Hull Clade costs {X} less, X = the total toughness of creatures you control (CR 601.2f, 118.7a), counting only its caster's creatures. On turn 3 Bot1 controls
+# Wall of Wood (0/3) and Steel Wall (0/4): 7 toughness, so the {10}{G} spell costs {3}{G}: four mana, and Bot1's three Moxen (Emerald, Ruby, Jet) are refused. Bot2's Steel
+# Wall (another 4) is not counted: were it, the cost would be {G}. A free Memnite makes it 8 toughness: cost {2}{G}, which the three Moxen pay exactly.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Wall of Wood
+Steel Wall
+Memnite
+The Pride of Hull Clade
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Steel Wall
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wall of Wood.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Steel Wall.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Steel Wall.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Hand.The Pride of Hull Clade.Cast(Mana: short)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.The Pride of Hull Clade.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.The Pride of Hull Clade.Power = 2
+Bot1.Battlefield.The Pride of Hull Clade.Toughness = 15
+Bot1.Battlefield.The Pride of Hull Clade.Keywords = Defender
+Bot1.Battlefield.Count = 7

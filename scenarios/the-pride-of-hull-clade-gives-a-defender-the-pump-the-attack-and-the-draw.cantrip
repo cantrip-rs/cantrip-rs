@@ -1,0 +1,65 @@
+# The Pride of Hull Clade: "{2}{U}{U}: Until end of turn, target creature you control gets +1/+0, gains 'Whenever this creature deals combat damage to a player, draw cards equal to
+# its toughness,' and can attack as though it didn't have defender." Bot1 has three Steel Walls (0/4 defenders), so The Pride costs {G} on turn 3. On turn 5 the ability is refused
+# on Bot2's Memnite (not yours); on the first Steel Wall it makes a 1/4 that can attack past defender, while the second Wall still cannot. The Wall is unblocked: Bot2 takes 1
+# and Bot1 draws four cards, the Wall's toughness.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Steel Wall
+Steel Wall
+Steel Wall
+The Pride of Hull Clade
+Mox Sapphire
+Gleemox
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Steel Wall.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Steel Wall.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Steel Wall.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Pride of Hull Clade.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.The Pride of Hull Clade.Activate(Ability: Until end of turn; Bot2.Battlefield.Memnite)
+Bot1.Battlefield.The Pride of Hull Clade.Activate(Ability: Until end of turn; Bot1.Battlefield.Steel Wall#1)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Steel Wall#1.Power = 1
+? Bot1.Battlefield.Steel Wall#1.Toughness = 4
+? Bot1.Battlefield.Steel Wall#2.Power = 0
+[T5 Bot1.DeclareAttackers]
+! Bot1.Attack(Steel Wall#2 > Bot2)
+Bot1.Attack(Steel Wall#1 > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Hand.Count = 4
