@@ -9561,8 +9561,9 @@ impl<'a> Offer<'a> {
         let _face_up = layers::judged_face_up(cx.s(), card);
         let def = cx.card(cx.s().obj(card).card);
         // A land card is played, never cast (CR 305.1, 305.9), but one with an Adventure may be cast as that (CR 715.3:
-        // Lindblum, Industrial Regency's Mage Siege), and only as that.
-        if def.is(CardType::Land) && def.inset_faces().next().is_none() {
+        // Lindblum, Industrial Regency's Mage Siege), and only as that; one with a way that casts it face down is cast as the
+        // face-down creature spell (CR 702.168a, 708.4: Branch of Vitu-Ghazi), which is no land.
+        if def.is(CardType::Land) && def.inset_faces().next().is_none() && !def.ways.iter().any(|way| way.kind.face_down()) {
             return;
         }
         if !cast_only_if_met(cx, def, &self.asker(card)) {
