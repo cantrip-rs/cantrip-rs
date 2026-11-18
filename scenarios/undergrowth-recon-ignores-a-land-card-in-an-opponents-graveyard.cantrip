@@ -1,0 +1,60 @@
+# Undergrowth Recon: "target land card from your graveyard" (CR 115.1, 108.3). Turn 2 Bot2 Thought Scours itself, milling two Islands
+# into Bot2's graveyard; on turn 3 Bot1's own Thought Scour mills a Forest and a Lightning Bolt. At Bot1's upkeep on turn 5 the only
+# legal target is Bot1's Forest, chosen without asking: it returns tapped, and the Islands stay in Bot2's graveyard.
+# (Bot2 also discards a Swamp to its hand size at turn 4's cleanup.)
+
+[Bot1 Deck]
+Black Lotus
+Undergrowth Recon
+Mox Sapphire
+Thought Scour
+Island
+Island
+Island
+Mountain
+Forest
+Lightning Bolt
+Swamp
+Island x10
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Thought Scour
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Island
+Island
+Swamp x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Undergrowth Recon.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Thought Scour.Cast(Bot2)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Thought Scour; Island; Island
+[T3 Bot1.Main1]
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Thought Scour; Lightning Bolt; Forest; Black Lotus
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Graveyard = Thought Scour; Lightning Bolt; Black Lotus
+Bot2.Graveyard = Swamp; Thought Scour; Island; Island

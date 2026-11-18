@@ -1,0 +1,40 @@
+# Undergrowth Recon: the trigger needs a land card in Bot1's graveyard to target (CR 603.3d). Turn 3's upkeep finds the graveyard
+# empty; on turn 3 Thought Scour (Mox Sapphire) mills Lightning Bolt and Counterspell, nonland cards, so turn 5's upkeep finds
+# only those: the trigger is put on the stack neither time and the Bolt and the Counterspell stay where they are.
+
+[Bot1 Deck]
+Black Lotus
+Undergrowth Recon
+Mox Sapphire
+Thought Scour
+Island
+Island
+Island
+Mountain
+Lightning Bolt
+Counterspell
+Swamp
+Island x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Undergrowth Recon.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+[T3 Bot1.Upkeep]
+? Stack.Count = 0
+[T3 Bot1.Main1]
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Thought Scour; Counterspell; Lightning Bolt; Black Lotus
+[T5 Bot1.Upkeep]
+? Stack.Count = 0
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Graveyard = Thought Scour; Counterspell; Lightning Bolt; Black Lotus
