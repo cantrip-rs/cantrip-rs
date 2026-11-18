@@ -274,6 +274,14 @@ pub fn attached_to_it(q: &dyn Query, asker: &Asker, affected: ObjectId) -> bool 
     q.obj(asker.source).attached_to == Some(affected)
 }
 
+/// "Enchanted permanent's activated abilities can't be activated" (CR 602.5, 605.1a) as a `CardDef::activation_rules` entry: every
+/// activated ability of the permanent this Aura is attached to - mana abilities too - whoever would activate it. The Aura's rule, not an
+/// ability of the permanent (CR 113.1a), so the permanent losing its abilities leaves it in force (CR 613.1f). Stuck in Summoner's
+/// Sanctum and Petrify print it.
+pub fn enchanted_permanent_cant_activate(q: &dyn Query, asker: &Asker, _: PlayerId, source: ObjectId, _: &ActivatedDef) -> bool {
+    !attached_to_it(q, asker, source)
+}
+
 /// "For as long as [this Equipment / that Aura] remains attached to it" (CR 611.2b) as a `Lasting` condition: the attachment is
 /// the object recorded as the effect's source (the handle the duration follows), still the same object on the battlefield and attached to the permanent the effect affects; one that has
 /// moved to another permanent, become unattached, or left (a new object, CR 400.7) ends it for good. Assimilation Aegis (its own
