@@ -1,0 +1,49 @@
+# Glarb, Calamity's Augur: "You may ... cast spells with mana value 4 or greater from the top of your library." Walking Ballista
+# ({X}{X}) on top may be begun to be cast, since an X of 2 or more would make its mana value 4 or greater (the ruling), but
+# announced with X 1 its mana value is 2: no longer allowed once its proposal is complete, the cast is taken back (CR 601.6,
+# 733.1) - the Ballista back on top of the library, the stack empty and the pool's four red mana still there.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Glarb, Calamity's Augur
+Black Lotus
+Mox Ruby
+Island
+Walking Ballista
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Glarb, Calamity's Augur.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Library.Walking Ballista.Cast(X: 1)
+Bot1.Pass
+? Stack.Count = 0
+? Bot1.Mana = {R}{R}{R}{R}
+? Bot1.Library.Count = 13
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Library.Walking Ballista.Power = 0
+Bot1.Library.Count = 13

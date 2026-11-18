@@ -9075,9 +9075,134 @@ impl Allows {
         match *self {
             Allows::Any => true,
             Allows::Exile(asker, c) => (c.allows)(q, &asker, card, player),
-            Allows::Top(asker, f) => f(q, &asker, card),
+            Allows::Top(asker, f) => allowed_with_some_x(q, &asker, f, card),
             Allows::Way(asker, w) => usable_cost(w, q, &asker, card, player).is_some(),
         }
+    }
+}
+
+/// The most mana value a spell's X is tried up to before it is cast (`allowed_with_some_x`): no permission printed asks
+/// for a spell of a mana value past it.
+const MOST_MANA_VALUE_TRIED: u32 = 64;
+
+/// Whether a permission for spells of some quality (`f`) lets `card` be begun to be cast (CR 601.3): where the X the spell
+/// will be announced with could give it the quality, it may be - Glarb, Calamity's Augur's "spells with mana value 4 or
+/// greater" lets an {X} spell be cast with an X that makes its mana value 4 or greater (its ruling), as a choice made in the
+/// proposal lifts a ban (CR 601.3a). The spell with its X announced is judged again once its proposal is complete, and the
+/// cast taken back if the X chosen does not give it the quality (CR 601.6, `cast`). X is read through the spell's mana value
+/// alone (CR 202.3e), so a permission that never asks it is judged once, with X as 0 off the stack (CR 107.3).
+fn allowed_with_some_x(q: &dyn Query, asker: &Asker, f: fn(&dyn Query, &Asker, ObjectId) -> bool, card: ObjectId) -> bool {
+    let as_zero = WithX { q, spell: card, more: 0, read: std::cell::Cell::new(false) };
+    if f(&as_zero, asker, card) {
+        return true;
+    }
+    let per = u32::from(q.mana_cost(card).x);
+    if !as_zero.read.get() || per == 0 {
+        return false;
+    }
+    let least = q.mana_value(card);
+    (1..)
+        .map(|x| per * x)
+        .take_while(|more| least + more <= MOST_MANA_VALUE_TRIED)
+        .any(|more| f(&WithX { q, spell: card, more, read: std::cell::Cell::new(false) }, asker, card))
+}
+
+/// Any query, with `spell` - a card not yet cast - given the mana value it would have with an X announced, `more` the mana
+/// the X adds (CR 202.3e), and noting whether its mana value was read (`read`).
+struct WithX<'a> {
+    q: &'a dyn Query,
+    spell: ObjectId,
+    more: u32,
+    read: std::cell::Cell<bool>,
+}
+
+impl Query for WithX<'_> {
+    fn can_attach_to(&self, attachment: ObjectId, host: ObjectId) -> bool {
+        crate::attach::host_allows(self, attachment, host, true)
+    }
+
+    fn enchanting_forbidden(&self, host: ObjectId, aura: ObjectId) -> bool {
+        self.q.enchanting_forbidden(host, aura)
+    }
+
+    fn can_untap(&self, permanent: ObjectId) -> bool {
+        self.q.can_untap(permanent)
+    }
+
+    fn goaders(&self, creature: ObjectId) -> Vec<PlayerId> {
+        self.q.goaders(creature)
+    }
+
+    fn has_granted_way(&self, card: ObjectId) -> bool {
+        self.q.has_granted_way(card)
+    }
+
+    fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
+        self.q.producible_types(permanent)
+    }
+
+    fn linked_card(&self, card: CardId) -> CardId {
+        self.q.linked_card(card)
+    }
+
+    fn names_its_source(&self, waiting: Waiting) -> bool {
+        self.q.names_its_source(waiting)
+    }
+
+    fn text_linked(&self, source: ObjectId) -> Linked {
+        self.q.text_linked(source)
+    }
+
+    fn state(&self) -> &GameState {
+        self.q.state()
+    }
+
+    fn instructing(&self) -> Option<&StackItem> {
+        self.q.instructing()
+    }
+
+    fn effect_controller(&self) -> Option<PlayerId> {
+        self.q.effect_controller()
+    }
+
+    fn card(&self, id: CardId) -> &'static CardDef {
+        self.q.card(id)
+    }
+
+    fn chars(&self, id: ObjectId) -> Chars {
+        self.q.chars(id)
+    }
+
+    fn mana_value(&self, id: ObjectId) -> u32 {
+        if id != self.spell {
+            return self.q.mana_value(id);
+        }
+        self.read.set(true);
+        self.q.mana_value(id) + self.more
+    }
+
+    fn token_chars(&self, card: CardId, copy: Option<Copiable>) -> Chars {
+        self.q.token_chars(card, copy)
+    }
+
+    fn copiable_colors(&self, id: ObjectId) -> ColorSet {
+        self.q.copiable_colors(id)
+    }
+
+    fn card_id(&self, def: &'static CardDef) -> CardId {
+        self.q.card_id(def)
+    }
+
+    fn lost_all_abilities(&self, id: ObjectId) -> bool {
+        self.q.lost_all_abilities(id)
+    }
+
+    fn events(&self) -> &[Record] {
+        self.q.events()
+    }
+
+    fn can_target(&self, asker: &Asker, target: Target) -> bool {
+        self.q.can_target(asker, target)
     }
 }
 
@@ -11068,6 +11193,14 @@ fn cast(
     // are paid (a legend sacrificed for mana, CR 601.2g) takes it back.
     let forbidders = static_rules::spell_bans(cx, player);
     if !forbidders.is_empty() && static_rules::spell_forbidden(&*cx, &forbidders, player, spell) {
+        return Err(Stop::Cancel);
+    }
+    // CR 601.6: so is a spell the top-of-library permission it is cast by allows no longer, its X announced (CR 202.3e: Glarb,
+    // Calamity's Augur's "mana value 4 or greater", which an X could give it as it was begun, `allowed_with_some_x`).
+    if let Some(g) = by.by
+        && let Some(PlayRule::LibraryTopSpells(f, _)) = play_rule_at(cx.cards(), g.ability)
+        && !f(&*cx, &Asker { instance: None, source: g.object, controller: player, by: None, spell: false }, spell)
+    {
         return Err(Stop::Cancel);
     }
 

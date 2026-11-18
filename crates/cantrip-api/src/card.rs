@@ -3667,7 +3667,9 @@ pub enum PlayRule {
     /// "You may cast [spells that pass the filter] from the top of your library" (CR 601.3), for their mana cost: Mystic Forge's
     /// artifact and colorless spells, Traveling Chocobo's Bird spells. Lands are not played from there. The filter is asked
     /// with the permanent whose rule it is and its controller (`Asker`), so that a creature type it names is read through
-    /// that permanent's words (CR 612), and the card on top.
+    /// that permanent's words (CR 612), and the card on top. A card with {X} may be begun to be cast where some X would give
+    /// it what the filter asks (its mana value: Glarb, Calamity's Augur's "mana value 4 or greater"), and the spell is asked
+    /// again with its X announced once its proposal is complete, the cast taken back if it is no longer allowed (CR 601.6).
     ///
     /// The second field is the rule's "If you cast a [creature] spell this way, [it is replaced]" (CR 614.1a, 614.1c), as
     /// `GrantedWay::spell_replacement` is a granted way's: the index in the permanent's card's `granted_replacements` of a

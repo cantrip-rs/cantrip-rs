@@ -97,8 +97,25 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-167](#ki-167-jotun-grunts-graveyard-choice-is-captioned-as-choosing-an-opponent) | Jötun Grunt's graveyard choice is captioned as choosing an opponent | Pri-2 | Open |
 | [KI-168](#ki-168-card-mutate-hangs-on-a-mutant-that-loops-forever) | card-mutate hangs on a mutant that loops forever | Pri-3 | Open |
 | [KI-169](#ki-169-raging-rivers-piles-and-labels-dont-show-which-resolution-they-belong-to) | Raging River's piles and labels don't show which resolution they belong to | Pri-2 | Open |
+| [KI-170](#ki-170-a-top-of-library-permission-tries-an-x-only-up-to-a-mana-value-of-64) | A top-of-library permission tries an X only up to a mana value of 64 | Pri-3 | Won't fix: beyond practical scale |
 
 ## Issues
+
+### KI-170: A top-of-library permission tries an X only up to a mana value of 64
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-3 | Won't fix: beyond practical scale | engine (`crates/cantrip-rules/src/actions.rs`, `allowed_with_some_x`, `MOST_MANA_VALUE_TRIED`) | 2026-11-18, review of PR #3155 (Glarb, Calamity's Augur) |
+
+**Notes.** A `PlayRule::LibraryTopSpells` filter that reads mana value lets an {X} card on top be begun to be cast where some
+X would give it what the filter asks (Glarb's ruling, CR 601.3a by analogy). The X values tried stop once the mana value
+reaches 64. Past that, a card whose only qualifying X makes its mana value greater than 64 is not offered. The cast of a
+spell that is offered is still judged exactly, with its X announced (CR 601.6). Play cannot reach it: the filter's own text
+would have to ask for a mana value above 64, and no printed card can do that. The only printed top-of-library permission
+keyed on mana value is Glarb's "mana value 4 or greater", which an X of a few already meets. Numbers in rules text are not
+words a text-changing effect can change (CR 612.2).
+
+**Scenarios.** None: no game played by hand reaches it.
 
 ### KI-169: Raging River's piles and labels don't show which resolution they belong to
 

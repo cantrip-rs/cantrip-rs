@@ -1,0 +1,46 @@
+# Glarb, Calamity's Augur: "You may ... cast spells with mana value 4 or greater from the top of your library." Its ruling: a
+# card with {X} is cast with a value of X that makes its mana value 4 or greater. Walking Ballista ({X}{X}, mana value 0 in the
+# library) is cast from the top with X 2 - mana value 4, exactly the limit (CR 601.3, 601.6, 202.3e) - off a Black Lotus and a
+# Mox Ruby, the whole pool spent.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Glarb, Calamity's Augur
+Black Lotus
+Mox Ruby
+Island
+Walking Ballista
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Glarb, Calamity's Augur.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Library.Walking Ballista.Cast(X: 2)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Walking Ballista.Power = 2
+Bot1.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 2
