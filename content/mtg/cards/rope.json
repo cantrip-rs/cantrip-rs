@@ -1,0 +1,6 @@
+{
+  "name": "Rope",
+  "manaCost": "{G}",
+  "type": "Artifact — Clue Equipment",
+  "oracleText": "Equipped creature gets +1/+2, has reach, and can't be blocked by more than one creature.\n{2}, Sacrifice this Equipment: Draw a card.\nEquip {3}"
+}
