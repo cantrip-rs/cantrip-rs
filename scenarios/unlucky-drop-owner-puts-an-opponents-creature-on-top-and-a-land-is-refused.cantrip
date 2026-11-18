@@ -1,0 +1,47 @@
+# Unlucky Drop: "Target artifact or creature's owner puts it on their choice of the top or bottom of their library." Bot1 pays {3}{U} with four
+# Moxen. Bot2's Forest (neither an artifact nor a creature) is refused as a target. Bot2's Llanowar Elves, a creature that is no artifact, is accepted:
+# its owner Bot2 chooses the top (Accept) and draws it again in turn 4.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Unlucky Drop
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Unlucky Drop.Cast(Bot2.Battlefield.Forest)
+Bot1.Hand.Unlucky Drop.Cast(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Accept
+? Bot2.Battlefield = Forest
+? Bot2.Library.Count = 13
+[T4 Bot2.Main1]
+? Bot2.Hand.Llanowar Elves.Power = 1
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Unlucky Drop

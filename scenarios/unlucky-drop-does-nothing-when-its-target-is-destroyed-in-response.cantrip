@@ -1,0 +1,51 @@
+# Unlucky Drop on Bot2's Ornithopter: Bot2 destroys its own Ornithopter with Disenchant in response, so the spell's only target is illegal and it does not
+# resolve (CR 608.2b): nobody is asked where to put anything. The Ornithopter is in Bot2's graveyard, not its library.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Unlucky Drop
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Plains
+Disenchant
+Ornithopter
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Unlucky Drop.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Disenchant.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Unlucky Drop
+Bot2.Graveyard = Disenchant; Ornithopter
+Bot2.Library.Count = 12
