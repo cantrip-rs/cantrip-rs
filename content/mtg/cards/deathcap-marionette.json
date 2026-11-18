@@ -1,0 +1,11 @@
+{
+  "name": "Deathcap Marionette",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Fungus",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Deathtouch\nWhen this creature enters, you may mill two cards. (You may put the top two cards of your library into your graveyard.)",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

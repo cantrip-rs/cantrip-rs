@@ -1,0 +1,34 @@
+# Deathcap Marionette: "you may mill two cards" is a choice (CR 701.17a); Bot1 declines, so the library keeps its top two cards, Island and Mountain, and the graveyard stays empty.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Deathcap Marionette
+Plains
+Plains
+Plains
+Plains
+Island
+Mountain
+Forest
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Deathcap Marionette.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Decline
+
+[Expect]
+Bot1.Library.Count = 23
+Bot1.Library.Top = Island
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield = Mox Jet; Mox Ruby; Deathcap Marionette
