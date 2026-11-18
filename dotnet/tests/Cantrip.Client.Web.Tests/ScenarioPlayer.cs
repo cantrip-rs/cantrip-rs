@@ -494,7 +494,8 @@ public sealed class ScenarioPlayer
                     string label = state.Modes is { } asked && mode < asked.Count
                         ? asked[mode]
                         : throw new NotDrivenException($"mode {mode}, which the page does not list", state);
-                    await ClickButtonNamedAsync(label);
+                    // A mode that may be chosen more than once is drawn "×N  <text>" once it has been chosen N times.
+                    await ClickModeAsync(label);
                 }
 
                 TableState after = await _page.SettledAsync();
@@ -1566,6 +1567,15 @@ public sealed class ScenarioPlayer
         TableState state = await _page.SettledAsync();
         ControlState button = state.Controls.FirstOrDefault(c => c.Kind == "button" && c.Label == label)
             ?? throw new Xunit.Sdk.XunitException($"No button '{label}'. There are: {string.Join(", ", state.Controls.Where(c => c.Kind == "button").Select(c => c.Label))}");
+        await _page.TapAsync(button.X, button.Y);
+    }
+
+    private async Task ClickModeAsync(string label)
+    {
+        TableState state = await _page.SettledAsync();
+        ControlState button = state.Controls.FirstOrDefault(c => c.Kind == "button"
+                && (c.Label == label || (c.Label.StartsWith('×') && c.Label.EndsWith("  " + label, StringComparison.Ordinal))))
+            ?? throw new Xunit.Sdk.XunitException($"No button for the mode '{label}'. There are: {string.Join(", ", state.Controls.Where(c => c.Kind == "button").Select(c => c.Label))}");
         await _page.TapAsync(button.X, button.Y);
     }
 
