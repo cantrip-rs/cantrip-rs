@@ -1,0 +1,46 @@
+# "During your turn, this creature has hexproof" (CR 702.11b, 611.3a): on Bot1's turn (turn 3) Bot2's Lightning Bolt cannot target Pompous Gadabout, while Bot1 can target it
+# with its own Giant Growth (hexproof stops only opponents, CR 702.11b). On Bot2's turn (turn 4) it has no hexproof and Bot2's Lightning Bolt kills it.
+
+[Bot1 Deck]
+Pompous Gadabout
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Giant Growth
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pompous Gadabout.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Pompous Gadabout.Keywords = Hexproof
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Pompous Gadabout)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Pompous Gadabout)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pompous Gadabout.Power = 7
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Pompous Gadabout.Keywords = (absent)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Pompous Gadabout)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Pompous Gadabout; Giant Growth
+Bot2.Graveyard = Lightning Bolt

@@ -1,0 +1,50 @@
+# "This creature can't be blocked by creatures that don't have a name" (CR 509.1b): a face-down creature has no name (CR 708.2a), so Bot2's face-down Nervous Gardener
+# (a disguised 2/2) cannot block Pompous Gadabout, while Ornithopter, which has a name, can: Gadabout (4/2) takes 0 from it and kills it. The restriction is Gadabout's own:
+# the same face-down creature can block Memnite, the other attacker.
+
+[Bot1 Deck]
+Pompous Gadabout
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Memnite
+Island x15
+
+[Bot2 Deck]
+Nervous Gardener
+Ornithopter
+Mox Jet
+Mox Jet
+Mox Ruby
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pompous Gadabout.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Nervous Gardener.Cast(Ability: Disguise)
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Pompous Gadabout > Bot2; Memnite > Bot2)
+! Bot2.Block(#1 > Pompous Gadabout)
+Bot2.Block(Ornithopter > Pompous Gadabout; #1 > Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Pompous Gadabout.Damage = 0
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield..FaceDown = true
+Bot1.Graveyard = Memnite

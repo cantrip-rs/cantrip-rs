@@ -1,0 +1,8 @@
+{
+  "name": "Pompous Gadabout",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Human Citizen",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "During your turn, this creature has hexproof.\nThis creature can't be blocked by creatures that don't have a name."
+}
