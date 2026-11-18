@@ -1,0 +1,49 @@
+# Expose the Culprit, "choose one or both" (CR 700.2): choosing no mode is refused; both modes on Bot1's own face-down Riftburst Hellion (cast face down with a Black
+# Lotus). The modes happen in order: mode 1 turns it face up (it is a face-up creature with disguise at once), so mode 2, "exile any
+# number of face-up creatures you control with disguise in a face-down pile, shuffle that pile, then cloak them", can take it: it is
+# exiled and put back onto the battlefield face down as a cloaked 2/2 with ward {2} (CR 701.58a). A face-down creature never ends up
+# face up, and the Hellion is a new object, untapped.
+
+[Bot1 Deck]
+Black Lotus
+Riftburst Hellion
+Mox Ruby
+Mox Jet
+Expose the Culprit
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Riftburst Hellion.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Expose the Culprit.Cast
+! Bot1.Modes(Count: 0)
+Bot1.Modes(1; 2)
+Bot1.Target(Bot1.Battlefield.#1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Riftburst Hellion)
+
+[Expect]
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..FaceDownName = Riftburst Hellion
+Bot1.Battlefield..Power = 2
+Bot1.Battlefield..Tapped = false
+Bot1.Graveyard = Expose the Culprit; Black Lotus

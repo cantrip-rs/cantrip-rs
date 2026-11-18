@@ -1,0 +1,91 @@
+# Expose the Culprit, mode 2 alone: "Exile any number of face-up creatures you control with disguise in a face-down pile, shuffle
+# that pile, then cloak them" (CR 701.58a, 701.58b). Bot1 has two Riftburst Hellions: the first was cast face down (Black Lotus)
+# and turned face up on turn 5 for its disguise cost, the second was cast face down on turn 7. On turn 9 Bot1 casts a Concealed
+# Weapon face up (it has disguise but is not a creature) and the Expose the Culprit. Only a face-up creature with disguise may be
+# chosen: the face-down Hellion (a nameless 2/2, no abilities) and the Weapon are refused, the face-up Hellion is chosen and comes
+# back as a cloaked face-down 2/2, so no face-up Hellion is left and both are face down.
+
+[Bot1 Deck]
+Black Lotus
+Riftburst Hellion
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Expose the Culprit
+Mox Sapphire
+Mountain
+Riftburst Hellion
+Concealed Weapon
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Riftburst Hellion.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; Spend: R, G, W, U, B, R)
+[T7 Bot1.Main1]
+? Bot1.Battlefield = Mountain; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Riftburst Hellion
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Riftburst Hellion.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Concealed Weapon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Expose the Culprit.Cast
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(#1)
+! Bot1.Choose(Concealed Weapon)
+Bot1.Choose(Riftburst Hellion)
+
+[Expect]
+Bot1.Battlefield.Riftburst Hellion = (absent)
+Bot1.Battlefield.#1.FaceDownName = Riftburst Hellion
+Bot1.Battlefield.#2.FaceDownName = Riftburst Hellion
+Bot1.Battlefield.#1.Power = 2
+Bot1.Battlefield.#2.Power = 2
+Bot1.Battlefield.Count = 9
+Bot1.Graveyard = Expose the Culprit; Black Lotus
+Bot1.Battlefield.Concealed Weapon.Tapped = false
+Bot1.Battlefield.Mox Emerald.Tapped = false
