@@ -1,0 +1,34 @@
+# Public Thoroughfare: "This land enters tapped. When this land enters, sacrifice it unless you tap an untapped artifact or land you control.
+# {T}: Add one mana of any color." Turn 1 Bot1 plays it with an untapped Mox Ruby (an artifact) and taps the Mox to keep it. On turn 3 both untap
+# and the Thoroughfare, tapped for red, alone pays Lightning Bolt (3 to Bot2).
+
+[Bot1 Deck]
+Mox Ruby
+Public Thoroughfare
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Public Thoroughfare.Play
+Bot1.Pass
+Bot1.PayCost
+Bot1.Choose(Mox Ruby)
+? Bot1.Battlefield.Public Thoroughfare.Tapped = true
+? Bot1.Battlefield.Mox Ruby.Tapped = true
+[T3 Bot1.Main1]
+Bot1.Battlefield.Public Thoroughfare.Activate(Color: Red)
+? Bot1.Mana = {R}
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield = Mox Ruby; Public Thoroughfare
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot1.Battlefield.Public Thoroughfare.Tapped = true

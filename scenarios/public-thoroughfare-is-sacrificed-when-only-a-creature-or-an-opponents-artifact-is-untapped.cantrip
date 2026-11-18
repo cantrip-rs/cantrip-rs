@@ -1,0 +1,37 @@
+# Public Thoroughfare: only an untapped artifact or land *you control* pays. On turn 3 Bot1 has tapped its Mox Emerald and has an untapped Llanowar
+# Elves (a creature, neither artifact nor land); Bot2's Mox Ruby is an untapped artifact but is not Bot1's. Nothing can pay, so it is not asked
+# and the Thoroughfare is sacrificed.
+
+[Bot1 Deck]
+Mox Emerald
+Llanowar Elves
+Public Thoroughfare
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Public Thoroughfare.Play
+Bot1.Pass
+Bot2.Pass
+! Bot1.Decline
+
+[Expect]
+Bot1.Battlefield = Llanowar Elves; Mox Emerald
+Bot1.Battlefield.Llanowar Elves.Tapped = false
+Bot2.Battlefield.Mox Ruby.Tapped = false
+Bot1.Graveyard = Public Thoroughfare

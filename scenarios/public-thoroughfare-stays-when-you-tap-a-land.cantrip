@@ -1,0 +1,23 @@
+# Public Thoroughfare: the permanent tapped may be a land. Bot1 has an untapped Island on turn 3 (the Thoroughfare is played on its second land
+# drop) and taps it: the Thoroughfare stays, tapped, and the Island is tapped.
+
+[Bot1 Deck]
+Island
+Public Thoroughfare
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Public Thoroughfare.Play
+Bot1.Pass
+Bot1.PayCost
+Bot1.Choose(Island)
+
+[Expect]
+Bot1.Battlefield.Public Thoroughfare.Tapped = true
+Bot1.Battlefield.Island.Tapped = true
+Bot1.Graveyard.Count = 0

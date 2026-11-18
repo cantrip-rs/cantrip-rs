@@ -1,0 +1,22 @@
+# Public Thoroughfare: "sacrifice it unless you tap ..." is a choice (CR 118.12a). Bot1 has an untapped Mox Ruby but declines to tap it: the
+# Thoroughfare is sacrificed and the Mox stays untapped.
+
+[Bot1 Deck]
+Mox Ruby
+Public Thoroughfare
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Public Thoroughfare.Play
+Bot1.Pass
+Bot1.Decline
+
+[Expect]
+Bot1.Battlefield = Mox Ruby
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot1.Graveyard = Public Thoroughfare
