@@ -1,0 +1,47 @@
+# Another Chance, cast twice on turn 1. First (paid by Black Lotus): Bot1 accepts and Ornithopter and Phyrexian Walker are milled, but chooses no card to return - "up to two"
+# allows none, and both creature cards stay in the graveyard. Second (paid by three Moxen): Bot1 declines the mill, so the library keeps Island on top, and returns the Walker and
+# the Ornithopter that were already there (cards the spell itself did not mill), both of them, two being the most.
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Another Chance
+Another Chance
+Swamp
+Ornithopter
+Phyrexian Walker
+Island
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Another Chance.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Library.Count = 21
+Bot1.Choose()
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Another Chance.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Library.Count = 21
+Bot1.Choose(Ornithopter; Phyrexian Walker)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Phyrexian Walker; Ornithopter; Swamp
+Bot1.Library.Top = Island
+Bot1.Graveyard = Another Chance; Another Chance; Black Lotus

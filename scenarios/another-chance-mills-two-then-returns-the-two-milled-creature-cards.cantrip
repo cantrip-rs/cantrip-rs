@@ -1,0 +1,36 @@
+# Another Chance ({2}{B} instant): "You may mill two cards. Then return up to two creature cards from your graveyard to your hand." Bot1 accepts, so Ornithopter and Phyrexian
+# Walker are milled first (CR 701.17a) and, only because the milling comes first, are in the graveyard to be returned (the graveyard holds no creature card before); both go back
+# to the hand - two, the most "up to two" allows. Black Lotus, sacrificed for the mana and so also in the graveyard, is no creature card and cannot be chosen.
+[Bot1 Deck]
+Black Lotus
+Another Chance
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Ornithopter
+Phyrexian Walker
+Island
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Another Chance.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 23
+Bot1.Accept
+? Bot1.Library.Count = 21
+! Bot1.Choose(Black Lotus)
+Bot1.Choose(Ornithopter; Phyrexian Walker)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Phyrexian Walker; Ornithopter; Swamp; Swamp; Swamp; Swamp; Swamp
+Bot1.Graveyard = Another Chance; Black Lotus
+Bot1.Library.Top = Island

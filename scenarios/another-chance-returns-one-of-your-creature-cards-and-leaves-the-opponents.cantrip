@@ -1,0 +1,51 @@
+# Another Chance on turn 3, after Bot2 has put its own Memnite in its graveyard (Lightning Bolt, Mox Ruby) and holds Mons's Goblin Raiders in hand. Bot1 mills Ornithopter and Phyrexian
+# Walker and returns only the Walker - one, fewer than "up to two" - to its own hand. Bot2's Memnite is a creature card in a graveyard but not "your graveyard", so it cannot be chosen
+# and stays; the Raiders in Bot2's hand are untouched; the milled Ornithopter stays in Bot1's graveyard.
+[Bot1 Deck]
+Black Lotus
+Another Chance
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Ornithopter
+Phyrexian Walker
+Island
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Lightning Bolt
+Mons's Goblin Raiders
+Island
+Island
+Island
+Island x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Another Chance.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Choose(Memnite)
+Bot1.Choose(Phyrexian Walker)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Phyrexian Walker; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp
+Bot1.Graveyard = Another Chance; Ornithopter; Black Lotus
+Bot2.Graveyard = Memnite; Lightning Bolt
+Bot2.Hand = Island; Island; Island; Island; Mons's Goblin Raiders

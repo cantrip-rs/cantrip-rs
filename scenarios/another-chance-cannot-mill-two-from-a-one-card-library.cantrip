@@ -1,0 +1,28 @@
+# Another Chance: "You may mill two cards" cannot be chosen when the library holds fewer than two cards (CR 701.17b; ruling 2023-11-10). Bot1's library holds one card, so it is not asked
+# and nothing is milled; the positive control is the accepting scenario, with a library of two or more. The graveyard holds no creature card, so nothing is returned either.
+[Bot1 Deck]
+Black Lotus
+Another Chance
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Another Chance.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Library.Count = 1
+Bot1.Graveyard = Another Chance; Black Lotus
+Bot1.Hand.Count = 5
