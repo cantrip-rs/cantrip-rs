@@ -1,0 +1,43 @@
+# Magnifying Glass: "{4}, {T}: Investigate" (CR 701.16a) makes one Clue token for its controller. Bot1 casts the Glass off three Moxen,
+# then pays exactly {4} (Black Lotus' three plus the Mox Pearl) for the second ability: one Clue appears and the Glass is tapped, so a
+# second activation is refused although Mox Emerald is still untapped.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Mox Emerald
+Black Lotus
+Magnifying Glass
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Magnifying Glass.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Magnifying Glass.Activate(Ability: Investigate)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Magnifying Glass.Activate(Ability: Investigate)
+
+[Expect]
+Bot1.Battlefield.Clue Token.Token = true
+Bot1.Battlefield.Magnifying Glass.Tapped = true
+Bot1.Battlefield.Mox Emerald.Tapped = false

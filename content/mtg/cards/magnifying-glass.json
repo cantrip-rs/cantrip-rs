@@ -1,0 +1,6 @@
+{
+  "name": "Magnifying Glass",
+  "manaCost": "{3}",
+  "type": "Artifact",
+  "oracleText": "{T}: Add {C}.\n{4}, {T}: Investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")"
+}

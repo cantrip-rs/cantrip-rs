@@ -1,0 +1,34 @@
+# Magnifying Glass: "{T}: Add {C}" is a mana ability, usable the turn it enters (an artifact has no summoning sickness). The
+# colorless mana it adds pays for a Sol Ring ({1}); the Glass is tapped after.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Magnifying Glass
+Sol Ring
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Magnifying Glass.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Magnifying Glass.Activate(Ability: Add {C})
+? Bot1.Mana = {C}
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Magnifying Glass.Tapped = true
+Bot1.Battlefield.Sol Ring.Tapped = false
+Bot1.Mana =
