@@ -1,0 +1,51 @@
+# Out of Air's "costs {2} less" comes off the total after cost increases are added (CR 601.2f): with Bot2's Sphere of Resistance
+# ("Spells cost {1} more to cast") out, Out of Air targeting a creature spell costs {2}{U}{U} + {1} - {2} = {1}{U}{U}. Bot2 taps
+# Island and Mox Sapphire for {U}{U}, casts it at Bot1's Ornithopter (itself taxed to {1}, paid by Bot1's Mox Ruby), and its
+# Mox Jet's {B} pays the last {1}, leaving no mana floating; the Ornithopter is countered.
+
+[Bot1 Deck]
+Mox Ruby
+Ornithopter
+Island x18
+
+[Bot2 Deck]
+Island
+Mox Ruby
+Mox Pearl
+Sphere of Resistance
+Mox Sapphire
+Mox Jet
+Out of Air
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Sphere of Resistance.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Out of Air.Cast(Bot1.Stack.Ornithopter)
+Bot2.Battlefield.Mox Jet.Activate
+? Bot2.Mana = 
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Ornithopter
+Bot1.Battlefield = Mox Ruby
+Bot2.Graveyard = Out of Air

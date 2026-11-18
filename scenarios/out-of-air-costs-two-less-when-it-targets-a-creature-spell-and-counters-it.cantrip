@@ -1,0 +1,34 @@
+# Out of Air ({2}{U}{U}): "This spell costs {2} less to cast if it targets a creature spell. Counter target spell." Bot1 casts Ornithopter; Bot2 counters it
+# with Out of Air paying only {U}{U} from its Island and Mox Sapphire (CR 601.2f), so its Mox Jet stays untapped. The Ornithopter goes to Bot1's graveyard.
+
+[Bot1 Deck]
+Ornithopter
+Island x19
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Out of Air
+Island x16
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Out of Air.Cast(Bot1.Stack.Ornithopter)
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Mox Jet.Tapped = false
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Ornithopter
+Bot1.Battlefield.Count = 0
+Bot2.Graveyard = Out of Air
