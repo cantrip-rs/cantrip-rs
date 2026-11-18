@@ -16,7 +16,7 @@ fn destroy_nonattackers(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
             && chars.is(CardType::Creature)
             && !chars.has_subtype(g.words(item.object).subtype(Subtype::Wall))
             && item.subject.player() == Some(g.controller(id))
-            && !history::this_combat(g).iter().any(|r| matches!(r.event, Event::Attacks { attacker, .. } if attacker == id))
+            && !history::attacked_this_combat(g, id)
             && g.obj(id).controlled_since < g.state().turn.number
     }).collect::<Vec<_>>();
     g.destroy_all(&objects);

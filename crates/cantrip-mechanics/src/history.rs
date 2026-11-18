@@ -690,6 +690,14 @@ pub fn this_combat(q: &dyn Query) -> &[Record] {
     }
 }
 
+/// Whether `object` was declared as an attacker in this combat phase (CR 508.1, 506.1): an `Event::Attacks` of it among
+/// `this_combat`'s records, whether or not it is still attacking or on the battlefield; a creature put onto the battlefield
+/// attacking was never declared (CR 508.4). Total War's "creatures that player controls that didn't attack", Tolsimir,
+/// Midnight's Light's "if Tolsimir attacked this combat" and Tomik, Wielder of Law's "those creatures" ask it.
+pub fn attacked_this_combat(q: &dyn Query, object: ObjectId) -> bool {
+    this_combat(q).iter().any(|r| matches!(r.event, Event::Attacks { attacker, .. } if attacker == object))
+}
+
 /// "If it's the first combat phase of the turn" (CR 603.4, 500.8) as an intervening "if" (`AbilityDef::condition`): the turn's
 /// beginning of combat steps are in its history, and the first combat phase is the only one of them so far. It is asked as the
 /// ability triggers and again as it resolves. Raph & Leo, Sibling Rivals and Genji Glove print it.
