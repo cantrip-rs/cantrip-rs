@@ -1,0 +1,53 @@
+# Song of Stupefaction can enchant a Vehicle that is not a creature (CR 301.7, 303.4): "Enchant creature or Vehicle". Bot1 enchants its Smuggler's Copter on turn 1 and mills
+# two Islands. On turn 3 the Copter, crewed by a Corsair Captain (CR 702.122a), is a 3/3 creature with 2 taken from its power: X is 2 (CR 613.4c, 110.4a), so a 1/3.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Smuggler's Copter
+Song of Stupefaction
+Corsair Captain
+Island
+Island
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Song of Stupefaction.Cast(Bot1.Battlefield.Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Graveyard = Island; Island
+? Bot1.Battlefield.Smuggler's Copter.Types = Artifact
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Corsair Captain.Cast
+Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot1.Choose(Corsair Captain)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Smuggler's Copter.Types = Artifact; Creature
+Bot1.Battlefield.Smuggler's Copter.Power = 1
+Bot1.Battlefield.Smuggler's Copter.Toughness = 3
+Stack.Count = 0

@@ -1,0 +1,54 @@
+# Song of Stupefaction on an opponent's creature: "your graveyard" is the Aura's controller's (CR 109.5), so Bot1's mill of an Island and a Lightning Bolt (X = 1) shrinks Bot2's
+# Corsair Captain to 1/2, and nothing in Bot2's own empty graveyard matters. A permanent that is neither a creature nor a Vehicle (a Mox) is not a legal target (CR 303.4a).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Song of Stupefaction
+Island
+Island
+Island
+Island
+Island
+Island
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Corsair Captain
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Corsair Captain.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Song of Stupefaction.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Song of Stupefaction.Cast(Bot2.Battlefield.Corsair Captain)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt; Island
+Bot2.Graveyard.Count = 0
+Bot2.Battlefield.Corsair Captain.Power = 1
+Bot2.Battlefield.Corsair Captain.Toughness = 2
+Stack.Count = 0

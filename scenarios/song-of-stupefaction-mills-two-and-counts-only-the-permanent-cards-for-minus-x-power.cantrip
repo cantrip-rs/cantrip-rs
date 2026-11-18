@@ -1,0 +1,43 @@
+# Song of Stupefaction: "When this Aura enters, you may mill two cards" and "Fathomless descent — Enchanted permanent gets -X/-0, where X is the number of permanent
+# cards in your graveyard." Bot1 enchants its own Corsair Captain (2/2) and mills an Island and a Lightning Bolt: only the Island is a permanent card (CR 110.4a), so
+# X is 1 and the Captain is a 1/2 (CR 613.4c); the Bolt is in the graveyard but is not counted. The Aura itself is on the battlefield, not in the graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Corsair Captain
+Song of Stupefaction
+Mox Pearl
+Island
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Corsair Captain.Cast
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Song of Stupefaction.Cast(Bot1.Battlefield.Corsair Captain)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt; Island
+Bot1.Library.Count = 11
+Bot1.Battlefield.Corsair Captain.Power = 1
+Bot1.Battlefield.Corsair Captain.Toughness = 2
+Stack.Count = 0
