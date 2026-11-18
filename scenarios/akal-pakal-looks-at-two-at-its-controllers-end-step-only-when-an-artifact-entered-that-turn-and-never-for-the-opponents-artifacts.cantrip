@@ -1,0 +1,63 @@
+# Akal Pakal, First Among Equals {2}{U}: "At the beginning of each player's end step, if an artifact entered the battlefield under your
+# control this turn, look at the top two cards of your library. Put one of them into your hand and the other into your graveyard"
+# (CR 603.4, 701.20e). Turn 1: three Moxen enter and Akal Pakal is cast with them, so at Bot1's own end step it triggers: the top two are
+# Ancestral Recall and Lightning Bolt, Bot1 takes the Recall and the Bolt goes to the graveyard. Turn 2: Bot2's Ornithopter is an
+# artifact entering the battlefield, but under Bot2's control, so Bot2's end step does not trigger it. Turn 3: nothing entered under
+# Bot1's control, so its end step does not either (the library is untouched but for the turn's draw).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Akal Pakal, First Among Equals
+Island
+Island
+Island
+Ancestral Recall
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Akal Pakal, First Among Equals.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 12
+[T1 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Ancestral Recall | Lightning Bolt)
+? Bot1.Library.Count = 10
+? Bot1.Graveyard = Lightning Bolt
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.End]
+? Stack.Count = 0
+? Bot1.Library.Count = 10
+[T3 Bot1.End]
+? Stack.Count = 0
+? Bot1.Library.Count = 9
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 5
+Bot1.Graveyard = Lightning Bolt
+Bot1.Library.Count = 9
+Bot2.Battlefield = Ornithopter

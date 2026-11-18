@@ -1,0 +1,8 @@
+{
+  "name": "Akal Pakal, First Among Equals",
+  "manaCost": "{2}{U}",
+  "type": "Legendary Creature — Human Advisor",
+  "power": 1,
+  "toughness": 5,
+  "oracleText": "At the beginning of each player's end step, if an artifact entered the battlefield under your control this turn, look at the top two cards of your library. Put one of them into your hand and the other into your graveyard."
+}
