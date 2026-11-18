@@ -1,0 +1,14 @@
+{
+  "name": "Cheeky House-Mouse",
+  "manaCost": "{W}",
+  "type": "Creature — Mouse",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "",
+  "adventure": {
+    "name": "Squeak By",
+    "manaCost": "{W}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Target creature you control gets +1/+1 until end of turn. It can't be blocked by creatures with power 3 or greater this turn."
+  }
+}

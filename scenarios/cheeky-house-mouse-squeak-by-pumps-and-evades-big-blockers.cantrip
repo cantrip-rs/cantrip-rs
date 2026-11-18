@@ -1,0 +1,70 @@
+# Squeak By: "Target creature you control gets +1/+1 until end of turn. It can't be blocked by creatures with power 3 or
+# greater this turn." (CR 509.1b, 611.2a). Turn 3 Bot1 casts it as an Adventure on Mouse #1 (3/2): Bot2's Cliffhaven
+# Sell-Sword (power exactly 3) may not block it, Elite Vanguard (power 2) may, and they trade. The Adventure card is exiled and
+# cast as the second Mouse (CR 715.3d), which on turn 5 is a plain 2/1 that Sell-Sword may block. Squeak By can not target the
+# opponent's creature. That the effect ends with the turn is cheeky-house-mouse-squeak-by-ends-with-the-turn.
+
+[Bot1 Deck]
+Cheeky House-Mouse
+Cheeky House-Mouse
+Mox Pearl
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Plains
+Cliffhaven Sell-Sword
+Elite Vanguard
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cheeky House-Mouse.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Cliffhaven Sell-Sword.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Elite Vanguard.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+! Bot1.Hand.Cheeky House-Mouse.Cast(Bot2.Battlefield.Cliffhaven Sell-Sword; Ability: Squeak By)
+Bot1.Hand.Cheeky House-Mouse.Cast(Bot1.Battlefield.Cheeky House-Mouse; Ability: Squeak By)
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Cheeky House-Mouse.Power = 3
+? Bot1.Battlefield.Cheeky House-Mouse.Toughness = 2
+? Exile.Count = 1
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Cheeky House-Mouse#1 > Bot2)
+[T3 Bot1.DeclareBlockers]
+! Bot2.Block(Cliffhaven Sell-Sword > Cheeky House-Mouse#1)
+Bot2.Block(Elite Vanguard > Cheeky House-Mouse#1)
+[T3 Bot1.Main2]
+Bot1.Exile.Cheeky House-Mouse.Cast
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Pass
+[T5 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Cheeky House-Mouse.Power = 2
+Bot1.Attack(Cheeky House-Mouse > Bot2)
+[T5 Bot1.DeclareBlockers]
+Bot2.Block(Cliffhaven Sell-Sword > Cheeky House-Mouse)
+[T5 Bot1.End]
+
+[Expect]
+Turn = 5
+Bot1.Graveyard.Count = 2
+Bot2.Graveyard.Count = 2

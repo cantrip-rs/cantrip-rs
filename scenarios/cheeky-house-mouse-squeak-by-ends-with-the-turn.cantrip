@@ -1,0 +1,62 @@
+# Squeak By lasts the turn it resolves and no longer: "gets +1/+1 until end of turn" and "can't be blocked by creatures with
+# power 3 or greater this turn" (CR 611.2a, 514.2). Turn 3 Bot1 casts it on Mouse #1 (3/2), which carries the restriction:
+# Cliffhaven Sell-Sword (power 3) may not block it and it goes unblocked (Elite Vanguard is there so blockers are asked for).
+# On turn 5 the same Mouse is a 2/1 again with no restriction, and Sell-Sword blocks it; they trade.
+
+[Bot1 Deck]
+Cheeky House-Mouse
+Cheeky House-Mouse
+Mox Pearl
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Plains
+Cliffhaven Sell-Sword
+Elite Vanguard
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cheeky House-Mouse.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Cliffhaven Sell-Sword.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Elite Vanguard.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Cheeky House-Mouse.Cast(Bot1.Battlefield.Cheeky House-Mouse; Ability: Squeak By)
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Cheeky House-Mouse.BlockRestriction = Can't be blocked by creatures with power 3 or greater
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Cheeky House-Mouse > Bot2)
+[T3 Bot1.DeclareBlockers]
+! Bot2.Block(Cliffhaven Sell-Sword > Cheeky House-Mouse)
+Bot2.Block()
+[T5 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Cheeky House-Mouse.Power = 2
+Bot1.Attack(Cheeky House-Mouse > Bot2)
+[T5 Bot1.DeclareBlockers]
+Bot2.Block(Cliffhaven Sell-Sword > Cheeky House-Mouse)
+[T5 Bot1.End]
+
+[Expect]
+Turn = 5
+Bot2.Life = 17
+Bot1.Graveyard = Cheeky House-Mouse
+Bot2.Graveyard = Cliffhaven Sell-Sword
