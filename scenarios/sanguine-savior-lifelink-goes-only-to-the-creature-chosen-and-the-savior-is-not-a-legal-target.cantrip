@@ -1,0 +1,48 @@
+# Sanguine Savior: "another target creature you control gains lifelink until end of turn" (CR 115.1, 702.15). With a Memnite and an
+# Ornithopter also out, Bot1 turns the Savior face up and the Savior is refused as its own target ("another"); it chooses the Ornithopter
+# (0 power), so the attacking Memnite has no lifelink: Bot2 goes to 19 and Bot1 stays at 20. The sibling scenario, choosing the Memnite
+# (21), is the other side of that choice.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Sanguine Savior
+Memnite
+Ornithopter
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Sanguine Savior.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+! Bot1.Target(Sanguine Savior)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Memnite > Bot2; Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Life = 20
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20

@@ -1,0 +1,44 @@
+# Sanguine Savior (Disguise {W/B}{W/B}): each hybrid pip takes white or black (CR 107.4e, 702.168d), so two black mana pay both. Bot1 casts
+# it face down with a Black Lotus on turn 1 beside a Memnite and, on turn 3, turns it face up with two Mox Jets - no white source in play -
+# giving the Memnite lifelink: it attacks and Bot2 goes to 19, Bot1 to 21. The sibling scenario pays with one white and one black.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Sanguine Savior
+Memnite
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Sanguine Savior.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Life = 21
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 21
