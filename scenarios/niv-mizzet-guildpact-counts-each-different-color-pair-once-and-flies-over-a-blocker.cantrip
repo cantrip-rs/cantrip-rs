@@ -1,0 +1,56 @@
+# Niv-Mizzet, Guildpact (5/5 colors, 6/6 flying): "Whenever Niv-Mizzet deals combat damage to a player, it deals X damage to any target, target player
+# draws X cards, and you gain X life, where X is the number of different color pairs among permanents you control that are exactly two colors"
+# (CR 510.2, 603.2, 105.1). Bot1 controls Watchwolf (green-white) and Spike Jester (black-red) on turn 3: two different pairs, so X is 2, and Niv
+# itself (five colors) does not count. Bot2's Memnite cannot block the flyer (CR 702.9). Niv deals 6 combat damage and the trigger deals 2 more to
+# Bot2 (20 -> 12), Bot1 draws exactly two cards and gains 2 (20 -> 22).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Niv-Mizzet, Guildpact
+Watchwolf
+Spike Jester
+Plains x30
+
+[Bot2 Deck]
+Memnite
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Niv-Mizzet, Guildpact.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Watchwolf.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Spike Jester.Cast
+Bot1.Attack(Niv-Mizzet, Guildpact > Bot2)
+! Bot2.Block(Memnite > Niv-Mizzet, Guildpact)
+Bot1.Target(Bot2)
+Bot1.Target(Bot1)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 12
+Bot1.Life = 22
+Bot1.Hand.Count = 2

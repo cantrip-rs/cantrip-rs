@@ -1,0 +1,11 @@
+{
+  "name": "Niv-Mizzet, Guildpact",
+  "manaCost": "{W}{U}{B}{R}{G}",
+  "type": "Legendary Creature — Dragon Avatar",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Flying, hexproof from multicolored\nWhenever Niv-Mizzet deals combat damage to a player, it deals X damage to any target, target player draws X cards, and you gain X life, where X is the number of different color pairs among permanents you control that are exactly two colors.",
+  "keywords": [
+    "Flying"
+  ]
+}

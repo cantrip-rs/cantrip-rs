@@ -1,0 +1,45 @@
+# Niv-Mizzet, Guildpact: a permanent of three colors is not "exactly two colors" (CR 105.1), and Niv itself has five. With only Woolly Thoctar
+# (red-green-white) out X is 0: the trigger still goes on the stack with its targets but deals no damage, the target player draws no cards
+# and Bot1 gains no life. Bot2 takes only the 6 combat damage (20 -> 14), and Bot1's hand holds only the card drawn for the turn.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Niv-Mizzet, Guildpact
+Woolly Thoctar
+Plains x30
+
+[Bot2 Deck]
+Mountain x22
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Niv-Mizzet, Guildpact.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Woolly Thoctar.Cast
+Bot1.Attack(Niv-Mizzet, Guildpact > Bot2)
+Bot1.Target(Bot2)
+Bot1.Target(Bot1)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Life = 20
+Bot1.Hand.Count = 1

@@ -1,0 +1,57 @@
+# Niv-Mizzet, Guildpact has hexproof from multicolored (CR 702.11d): Bot2's Lightning Helix (red-white) may not target it, while Bot2's Lightning Bolt
+# (mono-red) may (the positive control: 3 damage, Niv survives as a 6/6). The restriction is only for spells and abilities its controller's opponents
+# control: Bot1's own Lightning Helix targets it on turn 3 (Niv takes 3 and Bot1 gains 3, 20 -> 23).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Niv-Mizzet, Guildpact
+Lightning Helix
+Plains x30
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Mountain
+Lightning Helix
+Lightning Bolt
+Mountain x3
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Niv-Mizzet, Guildpact.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mountain.Play
+! Bot2.Hand.Lightning Helix.Cast(Bot1.Battlefield.Niv-Mizzet, Guildpact)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Niv-Mizzet, Guildpact)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Niv-Mizzet, Guildpact.Damage = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Niv-Mizzet, Guildpact)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield.Niv-Mizzet, Guildpact.Damage = 3
