@@ -1,0 +1,51 @@
+# Abyssal Gorestalker ({4}{B}{B}, 6/6): "When this creature enters, each player sacrifices two creatures of their choice." Bot1 controls a Memnite and an Ornithopter besides the Gorestalker (three
+# creatures), and Bot2 a Memnite, an Ornithopter and a Phyrexian Walker. Each player chooses two (CR 701.21a, 101.4): Bot1, the active player, sacrifices its Memnite and Ornithopter and keeps the 6/6, and Bot2
+# sacrifices its Memnite and Ornithopter and keeps the Walker (Bot1's graveyard also holds the sacrificed Black Lotus: three cards); the pool is empty right after the cast, so the cost is exactly {4}{B}{B}.
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Memnite
+Ornithopter
+Abyssal Gorestalker
+Swamp x18
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Phyrexian Walker
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Phyrexian Walker.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Abyssal Gorestalker.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite; Ornithopter)
+Bot2.Choose(Memnite; Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Abyssal Gorestalker.Power = 6
+Bot1.Battlefield.Abyssal Gorestalker.Toughness = 6
+Bot1.Graveyard.Count = 3
+Bot2.Battlefield = Phyrexian Walker
+Bot2.Graveyard.Count = 2

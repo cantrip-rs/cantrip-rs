@@ -1,0 +1,8 @@
+{
+  "name": "Abyssal Gorestalker",
+  "manaCost": "{4}{B}{B}",
+  "type": "Creature — Horror",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "When this creature enters, each player sacrifices two creatures of their choice."
+}
