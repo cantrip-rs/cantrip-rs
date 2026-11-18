@@ -1,0 +1,49 @@
+# Sharp-Eyed Rookie (2/2): a creature you control entering with greater POWER only (Lightning Elemental 4/1) triggers it (CR 603.4): +1/+1 counter on the Rookie (3/3) and a Clue (CR 701.16a).
+
+[Bot1 Deck]
+Sharp-Eyed Rookie
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Lightning Elemental
+Giant Growth
+Savannah Lions
+Forest x12
+
+[Bot2 Deck]
+Hill Giant
+Mox Ruby
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sharp-Eyed Rookie.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lightning Elemental.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Sharp-Eyed Rookie.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Sharp-Eyed Rookie.Power = 3
+Bot1.Battlefield.Sharp-Eyed Rookie.Toughness = 3
+Bot1.Battlefield.Clue Token.Token = true
