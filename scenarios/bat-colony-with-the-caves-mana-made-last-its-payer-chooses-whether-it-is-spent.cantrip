@@ -1,0 +1,55 @@
+# Bat Colony {2}{W}: "create a 1/1 black Bat creature token with flying for each mana from a Cave spent to cast it" (CR 601.2h,
+# 106.3). Which of the pool's mana pays is its payer's choice, so the Cave's mana is told apart while the spell is paid for, in
+# whatever order the pool was filled. On turns 3 and 5 Bot1's pool is {C} from Promising Vein (a Cave), {C}{C} from Sol Ring and
+# {W} from Mox Pearl - Sol Ring's {C}{C} is made first, then the Cave's {C}. On turn 3 Bot1 spends the Cave's {C} and one of Sol Ring's: one Bat, and one
+# {C} left. On turn 5 it spends Sol Ring's two: no Bat, and the Cave's {C} left.
+
+[Bot1 Deck]
+Promising Vein
+Mox Pearl
+Mox Jet
+Sol Ring
+Bat Colony
+Bat Colony
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Promising Vein.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Promising Vein.Activate(Ability: Add {C})
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana = {W}{C}{C}{C}
+Bot1.Hand.Bat Colony.Cast(Spend: C from Promising Vein, C, W)
+Bot1.Pass
+? Bot1.ManaFrom = {C} Sol Ring
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 6
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Promising Vein.Activate(Ability: Add {C})
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bat Colony.Cast(Spend: C, C, W)
+Bot1.Pass
+? Bot1.ManaFrom = {C} Promising Vein
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Bat Token.Power = 1

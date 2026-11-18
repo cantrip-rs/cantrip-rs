@@ -1,0 +1,49 @@
+# Bat Colony {2}{W}: "When this enchantment enters, create a 1/1 black Bat creature token with flying for each mana from a Cave
+# spent to cast it." (CR 601.2h, 106.3) In turn 1 Bot1 plays Promising Vein (a Cave) and casts it with the Vein's {C} and Mox
+# Pearl and Mox Jet: one mana from a Cave, one Bat, the other two mana (and the Moxen) count for nothing. In turn 3, with Volatile
+# Fault (another Cave) played too, the second Bat Colony is paid with {C} from each Cave and Mox Pearl's {W}: two more Bats.
+
+[Bot1 Deck]
+Promising Vein
+Volatile Fault
+Mox Pearl
+Mox Jet
+Bat Colony
+Bat Colony
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Promising Vein.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Promising Vein.Activate(Ability: Add {C})
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bat Colony.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+[T3 Bot1.Main1]
+Bot1.Hand.Volatile Fault.Play
+Bot1.Battlefield.Promising Vein.Activate(Ability: Add {C})
+Bot1.Battlefield.Volatile Fault.Activate(Ability: Add {C})
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bat Colony.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 9
+Bot1.Battlefield.Bat Token#3.Power = 1
+Bot1.Battlefield.Bat Token#3.Toughness = 1
+Bot1.Battlefield.Bat Token#3.Keywords = Flying

@@ -1,0 +1,6 @@
+{
+  "name": "Bat Colony",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, create a 1/1 black Bat creature token with flying for each mana from a Cave spent to cast it.\nWhenever a Cave you control enters, put a +1/+1 counter on target creature you control."
+}

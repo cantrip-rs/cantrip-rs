@@ -1,0 +1,34 @@
+# Bat Colony: with Promising Vein (a Cave) on the battlefield but untapped, Bat Colony paid for with Mox Pearl, Mox Jet and Mox
+# Ruby has had no mana from a Cave spent on it: no Bat. The Cave must have paid, not just be there (CR 601.2h, 106.3).
+
+[Bot1 Deck]
+Promising Vein
+Mox Pearl
+Mox Jet
+Mox Ruby
+Bat Colony
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Promising Vein.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bat Colony.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Promising Vein.Tapped = false
