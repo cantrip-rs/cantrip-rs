@@ -1,0 +1,11 @@
+{
+  "name": "Curious Cadaver",
+  "manaCost": "{2}{U}{B}",
+  "type": "Creature — Zombie Detective",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Flying\nWhen you sacrifice a Clue, return this card from your graveyard to your hand.",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,46 @@
+# The Cadaver's ability functions only from the graveyard. Turn 1: Bot1 casts the Cadaver with its four Moxen. Turn 3: Bot1 casts Thraben Inspector (it investigates) and sacrifices the Clue for {2}:
+# the Cadaver, still on the battlefield, is not returned to the hand (and so is not bounced either).
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Curious Cadaver
+Thraben Inspector
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Curious Cadaver.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Thraben Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Clue Token.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clue Token = (absent)
+? Bot1.Hand.Count = 3
+? Bot1.Battlefield.Curious Cadaver.Power = 3
+? Bot1.Battlefield.Curious Cadaver.Keywords = Flying
+
+[Expect]
+Bot1.Battlefield.Curious Cadaver.Toughness = 1

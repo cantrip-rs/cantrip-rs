@@ -1,0 +1,64 @@
+# The Cadaver returns only when YOU sacrifice a CLUE. Turn 1: Bot1 casts the Cadaver with its four Moxen. Turn 2: Bot2 casts Thraben Inspector (it investigates). Turn 3: Bot1 Shocks the Cadaver
+# (Mox Ruby), then casts Black Lotus and sacrifices it for mana: an artifact that is no Clue, the Cadaver stays in the graveyard. Turn 4: Bot2 sacrifices its own Clue: it stays still.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Curious Cadaver
+Shock
+Black Lotus
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Thraben Inspector
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains x13
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Curious Cadaver.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Thraben Inspector.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Curious Cadaver)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Curious Cadaver; Shock
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+? Bot1.Graveyard = Black Lotus; Curious Cadaver; Shock
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Plains#2.Activate
+Bot2.Battlefield.Clue Token.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Black Lotus; Curious Cadaver; Shock
+
+[Expect]
+Bot1.Graveyard = Black Lotus; Curious Cadaver; Shock
