@@ -1,0 +1,56 @@
+# Echo of Dusk ({1}{B}, 2/2): "Descend 4 - As long as there are four or more permanent cards in your graveyard, this creature gets +1/+1 and has lifelink" (CR 207.2c, 700.11, 604.1, 613.4c).
+# Bot1's graveyard: Faithless Looting (a sorcery, not a permanent card) and the two Islands it discards (2 permanent cards), then a sacrificed Black Lotus (3 permanent cards; the
+# Looting does not count): still a 2/2 with no keywords. Turn 2 Bot2 sacrifices its own Black Lotus and casts Lightning Bolt (a permanent card and an instant in Bot2's graveyard,
+# which are not Bot1's): still 2/2. The Bolt kills Bot1's Memnite, the fourth permanent card: exactly four, so 3/3 with lifelink. On turn 3 it attacks an empty board: Bot2 takes 3
+# and Bot1 gains 3.
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Faithless Looting
+Echo of Dusk
+Memnite
+Island
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Island; Island)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Echo of Dusk.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {B}
+? Bot1.Graveyard.Count = 4
+? Bot1.Battlefield.Echo of Dusk.Power = 2
+? Bot1.Battlefield.Echo of Dusk.Toughness = 2
+? Bot1.Battlefield.Echo of Dusk.Keywords = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+? Bot2.Graveyard.Count = 1
+? Bot1.Battlefield.Echo of Dusk.Power = 2
+? Bot1.Battlefield.Echo of Dusk.Keywords = (absent)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard.Count = 5
+? Bot2.Graveyard.Count = 2
+? Bot1.Battlefield.Echo of Dusk.Power = 3
+? Bot1.Battlefield.Echo of Dusk.Toughness = 3
+? Bot1.Battlefield.Echo of Dusk.Keywords = Lifelink
+[T3 Bot1.Main1]
+Bot1.Attack(Echo of Dusk > Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 17
+Bot1.Battlefield.Echo of Dusk.Power = 3
