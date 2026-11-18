@@ -1,0 +1,58 @@
+# Vanguard of the Rose, a 3/1: "{1}, Sacrifice another creature or artifact: This creature gains indestructible until end of turn. Tap it." On turn 3 both
+# Plains pay for the Vanguard, so with the Ornithopter ready to be sacrificed there is no {1} left: refused. On turn 5 a third Plains pays exactly {1}: the pool is
+# empty, the Ornithopter (an artifact creature) is sacrificed as a cost (CR 118.3, 602.2b) in response to Bot2's Lightning Bolt, the Vanguard is tapped and
+# indestructible, and survives the 3 damage (CR 702.12b, 704.5g). On turn 6 the effect has ended (CR 514.2, 611.2a): a second Bolt destroys it.
+
+[Bot1 Deck]
+Plains
+Ornithopter
+Plains
+Vanguard of the Rose
+Plains
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt x13
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Vanguard of the Rose.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = 
+! Bot1.Battlefield.Vanguard of the Rose.Activate(Mana: short)
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Vanguard of the Rose)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Vanguard of the Rose.Activate
+? Bot1.Mana = 
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Vanguard of the Rose.Damage = 3
+? Bot1.Battlefield.Vanguard of the Rose.Keywords = Indestructible
+? Bot1.Battlefield.Vanguard of the Rose.Tapped = true
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Vanguard of the Rose.Damage = 0
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Vanguard of the Rose)
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Vanguard of the Rose; Ornithopter
+Bot1.Battlefield.Count = 3

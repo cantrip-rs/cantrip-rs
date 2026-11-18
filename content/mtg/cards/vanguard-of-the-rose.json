@@ -1,0 +1,8 @@
+{
+  "name": "Vanguard of the Rose",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Vampire Knight",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "{1}, Sacrifice another creature or artifact: This creature gains indestructible until end of turn. Tap it."
+}

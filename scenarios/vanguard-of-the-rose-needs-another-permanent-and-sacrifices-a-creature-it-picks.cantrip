@@ -1,0 +1,43 @@
+# Vanguard of the Rose: "{1}, Sacrifice another creature or artifact: This creature gains indestructible until end of turn. Tap it." Alone on the battlefield with a
+# Plains ready to pay the {1} on turn 5, the Vanguard cannot sacrifice itself: refused (CR 701.21a, "another"). With a Savannah Lions, a creature that is not an
+# artifact, the same ability works: one Plains pays {1} (the pool is empty after), the Lions is sacrificed as a cost (CR 118.3), and the Vanguard is
+# indestructible and tapped.
+
+[Bot1 Deck]
+Plains
+Plains
+Vanguard of the Rose
+Plains
+Savannah Lions
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Vanguard of the Rose.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+! Bot1.Battlefield.Vanguard of the Rose.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Vanguard of the Rose.Activate
+? Bot1.Mana = 
+
+[Expect]
+Bot1.Graveyard = Savannah Lions
+Bot1.Battlefield.Vanguard of the Rose.Tapped = true
+Bot1.Battlefield.Vanguard of the Rose.Keywords = Indestructible
+Bot1.Battlefield.Count = 4

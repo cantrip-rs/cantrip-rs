@@ -1,0 +1,37 @@
+# Vanguard of the Rose: "Sacrifice another creature or artifact" - a Mox Jet is an artifact but not a creature, and the only other permanent besides Plains: it is
+# sacrificed as a cost (CR 118.3) while a Plains pays exactly {1} (the pool is empty after) and the Vanguard becomes indestructible and tapped.
+
+[Bot1 Deck]
+Plains
+Mox Jet
+Plains
+Vanguard of the Rose
+Plains
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Vanguard of the Rose.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Vanguard of the Rose.Activate
+? Bot1.Mana = 
+
+[Expect]
+Bot1.Graveyard = Mox Jet
+Bot1.Battlefield.Vanguard of the Rose.Tapped = true
+Bot1.Battlefield.Vanguard of the Rose.Keywords = Indestructible
+Bot1.Battlefield.Count = 4
