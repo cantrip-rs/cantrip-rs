@@ -1,0 +1,81 @@
+# Izoni, Center of the Web: "Sacrifice four tokens: Surveil 2, then draw two cards. You gain 2 life." (CR 701.21, 701.25, 121.1) The
+# tokens are the controller's own (CR 701.21a). Bot2's Dragon Fodder makes two Goblin tokens on turn 2, so on turn 3 Bot1 has two Goblin
+# tokens of its own beside Bot2's two (four in all): the cost is refused. A second Dragon Fodder gives Bot1 four, and sacrificing them
+# surveils 2 (Mox Pearl to the graveyard, Mox Sapphire kept on top), draws two (Mox Sapphire and an Island) and gains 2 life, Bot2's
+# Goblins left alone and Izoni (not a token) still there.
+
+[Bot1 Deck]
+Izoni, Center of the Web
+Black Lotus
+Mox Jet
+Mox Emerald
+Mox Ruby
+Dragon Fodder
+Dragon Fodder
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Island x11
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Dragon Fodder
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Izoni, Center of the Web.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Dragon Fodder.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Izoni, Center of the Web.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Izoni, Center of the Web.Activate
+Bot1.Choose(Goblin Token#1; Goblin Token#2; Goblin Token#3; Goblin Token#4)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Mox Sapphire | Mox Pearl)
+
+[Expect]
+Bot1.Life = 22
+Bot1.Graveyard = Mox Pearl; Dragon Fodder; Dragon Fodder; Black Lotus
+Bot1.Hand = Island; Mox Sapphire
+Bot1.Battlefield.Izoni, Center of the Web.Power = 5
+Bot1.Battlefield.Count = 5
+Bot2.Battlefield.Goblin Token#1.Token = true
+Bot2.Battlefield.Goblin Token#2.Token = true

@@ -1,0 +1,66 @@
+# Izoni, Center of the Web: "Whenever Izoni enters or attacks, you may collect evidence 4. If you do, create two 2/1 black and green
+# Spider creature tokens with reach and menace." (CR 701.59a, 608.2d) Faithless Looting on turn 3 discards Griselbrand and an Island, then
+# Izoni is cast for {4}{B}{G}. The graveyard holds Faithless Looting (1), Griselbrand (8) and an Island (0): Bot1 accepts, and a choice of
+# Faithless Looting and the Island (1, short of 4) is refused; Griselbrand (8) is exiled and the two Spiders are made, 2/1 black and green
+# with reach and menace, the tokens being Bot1's.
+
+[Bot1 Deck]
+Izoni, Center of the Web
+Mox Jet
+Mox Emerald
+Mox Ruby
+Sol Ring
+Faithless Looting
+Island
+Griselbrand
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Griselbrand; Island)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Izoni, Center of the Web.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Choose(Faithless Looting; Island)
+Bot1.Choose(Griselbrand)
+
+[Expect]
+Exile.Count = 1
+Bot1.Graveyard = Faithless Looting; Island
+Bot1.Battlefield.Spider Token#1.Power = 2
+Bot1.Battlefield.Spider Token#1.Toughness = 1
+Bot1.Battlefield.Spider Token#1.Token = true
+Bot1.Battlefield.Spider Token#1.Colors = Black; Green
+Bot1.Battlefield.Spider Token#1.Subtypes = Spider
+Bot1.Battlefield.Spider Token#1.Keywords = Menace; Reach
+Bot1.Battlefield.Spider Token#2.Power = 2
+Bot1.Battlefield.Spider Token#2.Keywords = Menace; Reach
+Bot2.Battlefield.Count = 0

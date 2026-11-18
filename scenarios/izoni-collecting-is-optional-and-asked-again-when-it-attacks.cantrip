@@ -1,0 +1,64 @@
+# Izoni, Center of the Web: the evidence is optional ("you may", CR 608.2d) and the trigger asks again on each attack. Bot1 casts Izoni
+# on turn 3 with Hill Giant (mana value 4) in its graveyard and declines: nothing is exiled and no Spiders are made. On turn 5 Izoni attacks, the
+# trigger is asked again, Bot1 accepts and exiles Hill Giant: two Spiders are made.
+
+[Bot1 Deck]
+Izoni, Center of the Web
+Mox Jet
+Mox Emerald
+Mox Ruby
+Sol Ring
+Faithless Looting
+Island
+Hill Giant
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hill Giant; Island)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Izoni, Center of the Web.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Exile.Count = 0
+? Bot1.Battlefield.Count = 7
+[T5 Bot1.Main1]
+Bot1.Attack(Izoni, Center of the Web > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Hill Giant)
+
+[Expect]
+Exile.Count = 1
+Bot1.Graveyard = Faithless Looting; Island
+Bot1.Battlefield.Spider Token#1.Power = 2
+Bot1.Battlefield.Spider Token#2.Power = 2
+Bot1.Battlefield.Count = 9
