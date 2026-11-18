@@ -1,0 +1,39 @@
+# Person of Interest ({3}{R} 2/2): "When this creature enters, suspect it. Create a 2/2 white and blue Detective creature
+# token." (CR 701.60a). It is suspected, so it has menace and can't block (CantBlock; Menace); the Detective token is not
+# suspected, so it has no keyword. The token is exactly 2/2, both white and blue, a Detective. Four Moxen pay for it exactly.
+
+[Bot1 Deck]
+Mox Ruby x4
+Person of Interest
+Mountain x15
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Person of Interest.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Person of Interest.Suspected = true
+Bot1.Battlefield.Person of Interest.Keywords = CantBlock; Menace
+Bot1.Battlefield.Person of Interest.Power = 2
+Bot1.Battlefield.Person of Interest.Toughness = 2
+Bot1.Battlefield.Detective Token.Power = 2
+Bot1.Battlefield.Detective Token.Toughness = 2
+Bot1.Battlefield.Detective Token.Colors = Blue; White
+Bot1.Battlefield.Detective Token.Subtypes = Detective
+Bot1.Battlefield.Detective Token.Keywords = (absent)
+Stack.Count = 0
