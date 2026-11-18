@@ -1274,6 +1274,12 @@ pub fn another_permanent_of_subtype_you_control<const SUBTYPE: u16>(q: &dyn Quer
     t != Target::Object(asker.source) && permanent_of_subtype_you_control::<SUBTYPE>(q, asker, t)
 }
 
+/// "Target [creature type] creature you control" (CR 115.1, 109.5, 205.3m): `permanent_of_subtype_you_control` that is also a
+/// creature. Equip [creature type] (CR 702.6a) targets one: Wizard's Staff (Equip Wizard) and Thinking Cap (Equip Detective).
+pub fn creature_of_subtype_you_control<const SUBTYPE: u16>(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    permanent_of_subtype_you_control::<SUBTYPE>(q, asker, t) && matches!(t, Target::Object(id) if q.chars(id).is(CardType::Creature))
+}
+
 /// "Target [type], [type], or [type]" (CR 115.1, 205.3): a permanent on the battlefield, any controller's, with at least one of
 /// the creature types `subtypes` as the layers made it. Each type is read through the words of the text of the object that asks
 /// (CR 612.2). Phoenix Down (Skeleton, Spirit, Zombie) and Animal Sanctuary (Bird, Cat, Dog, Goat, Ox, Snake) print it.

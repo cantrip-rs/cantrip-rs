@@ -2,16 +2,8 @@ use cantrip_api::*;
 use cantrip_mechanics::attach::{attached_object, equip, equip_quality};
 use cantrip_mechanics::statics::grant_delayed_ability;
 use cantrip_mechanics::triggers::PROWESS;
+use cantrip_mechanics::{lands, targets};
 use cantrip_oracle as oracle;
-
-/// "Equip Wizard" (CR 702.6a): the target is a Wizard creature you control, "Wizard" read through the words of this card's
-/// text (CR 612).
-fn wizard_you_control(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    matches!(t, Target::Object(id) if q.is_on_battlefield(id)
-        && q.controller(id) == asker.controller
-        && q.chars(id).is(CardType::Creature)
-        && q.chars(id).has_subtype(q.words(asker.source).subtype(Subtype::Wizard)))
-}
 
 /// "If a triggered ability of equipped creature triggers, that ability triggers an additional time." (CR 603.2d): an ability
 /// the equipped creature has, whoever controls it, that is its own (a delayed triggered ability is no ability the creature has,
@@ -24,7 +16,7 @@ fn equipped_creature_triggers_again(q: &dyn Query, asker: &Asker, _: &Event, tri
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        equip_quality(mana("{1}"), &[target(wizard_you_control)], "Equip Wizard {1}"),
+        equip_quality(mana("{1}"), &[target(targets::creature_of_subtype_you_control::<{ lands::sub(Subtype::Wizard) }>)], "Equip Wizard {1}"),
         equip(mana("{3}"), "Equip {3}"),
     ],
     delayed: &[PROWESS],
