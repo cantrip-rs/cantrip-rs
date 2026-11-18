@@ -1,0 +1,79 @@
+# Hedge Whisperer ({G}, 0/3): "{3}{G}, {T}, Collect evidence 4: Target land you control becomes a 5/5 green Plant Boar creature with
+# haste for as long as this creature remains tapped. It's still a land. Activate only as a sorcery." Turn 1: Mox Emerald pays the
+# Whisperer, Mox Ruby pays Faithless Looting, which discards Hero of Bladehold (mana value 4) and Llanowar Elves (1). Turn 3: Bot1
+# plays a Mountain and pays {3}{G} with Black Lotus (RRR) and Mox Emerald, exiling Hero - exactly four. Bot2's Island and the
+# Whisperer itself are refused as targets (it is not "a land you control"). The Mountain becomes a green 5/5 Plant Boar, still a
+# Mountain land, and attacks the turn it came under Bot1's control (haste, CR 302.6): 20 - 5 = 15. The Whisperer stays tapped as Bot1
+# declines to untap it in turn 5, and the Mountain stays a 5/5; once it untaps in turn 7 the Mountain is only a land again.
+# CR 611.2b, 205.1b, 502.3, 701.59a.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Black Lotus
+Hedge Whisperer
+Faithless Looting
+Mountain
+Island
+Hero of Bladehold
+Llanowar Elves
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hedge Whisperer.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Hero of Bladehold; Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+! Bot1.Battlefield.Hedge Whisperer.Activate(Bot2.Battlefield.Island)
+! Bot1.Battlefield.Hedge Whisperer.Activate(Bot1.Battlefield.Hedge Whisperer)
+Bot1.Battlefield.Hedge Whisperer.Activate(Bot1.Battlefield.Mountain)
+Bot1.Choose(Hero of Bladehold)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mountain.Power = 5
+? Bot1.Battlefield.Mountain.Toughness = 5
+? Bot1.Battlefield.Mountain.Types = Land; Creature
+? Bot1.Battlefield.Mountain.Subtypes = Boar; Mountain; Plant
+? Bot1.Battlefield.Mountain.Colors = Green
+? Bot1.Battlefield.Mountain.Keywords = Haste
+? Bot1.Battlefield.Hedge Whisperer.Tapped = true
+? Bot1.Graveyard = Black Lotus; Faithless Looting; Llanowar Elves
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Mountain > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 15
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Hedge Whisperer.Tapped = true
+? Bot1.Battlefield.Mountain.Power = 5
+? Bot1.Battlefield.Mountain.Types = Land; Creature
+Bot1.Accept
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Hedge Whisperer.Tapped = false
+? Bot1.Battlefield.Mountain.Types = Land
+? Bot1.Battlefield.Mountain.Power = (absent)
+
+[Expect]
+Bot1.Battlefield.Mountain.Subtypes = Mountain
+Bot1.Battlefield.Mountain.Colors = (absent)
+Exile = Hero of Bladehold
+Bot2.Life = 15

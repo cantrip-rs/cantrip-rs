@@ -1,0 +1,58 @@
+# Hedge Whisperer ruling: "If Hedge Whisperer leaves the battlefield before its activated ability resolves, the target land won't become
+# a creature at all" (CR 611.2b): the duration "for as long as this creature remains tapped" never begins. Bot2's Lightning Bolt, paid
+# with a Black Lotus, kills the tapped 0/3 Whisperer with its ability on the stack; the evidence (Hero of Bladehold) and the mana
+# were already paid, so the Mountain stays an ordinary land.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Black Lotus
+Hedge Whisperer
+Faithless Looting
+Mountain
+Island
+Hero of Bladehold
+Llanowar Elves
+Island x12
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hedge Whisperer.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Hero of Bladehold; Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Hedge Whisperer.Activate(Bot1.Battlefield.Mountain)
+Bot1.Choose(Hero of Bladehold)
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Hedge Whisperer)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard.Count = 4
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Mountain.Types = Land
+Bot1.Battlefield.Mountain.Power = (absent)
+Bot1.Graveyard = Hedge Whisperer; Black Lotus; Faithless Looting; Llanowar Elves
+Exile = Hero of Bladehold
