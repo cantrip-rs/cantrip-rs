@@ -1,0 +1,61 @@
+# Pull's delayed sacrifice (CR 603.7c) is about the two objects it returned. Bot2 exiles the Hill Giant with Swords to Plowshares (paid from Mox Pearl) before the end step: it is a new object in
+# exile, so the end-step trigger does not touch it, and sacrifices only the Ornithopter; Bot1 gains the 3 life Swords gives its controller.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Push // Pull
+Hill Giant
+Ornithopter
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Chain of Smog
+Mox Pearl
+Swords to Plowshares
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Chain of Smog.Cast(Target: Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Hill Giant; Ornithopter)
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Push // Pull.Cast(Ability: Pull; Spend: B, B, B, B, R, U)
+Bot1.Target(Bot1.Graveyard.Hill Giant)
+Bot1.Target(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Hill Giant)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Pass
+Bot1.Pass
+? Exile = Hill Giant
+[T3 Bot1.Main2]
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 23
+Exile = Hill Giant
+Bot1.Battlefield.Count = 3
+Bot1.Graveyard = Ornithopter; Push // Pull; Black Lotus

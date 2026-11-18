@@ -1,0 +1,50 @@
+# Pull with the first of its "up to two" targets left empty (CR 601.2c): the second target is not tied to a graveyard by it, so the Ornithopter in Bot1's graveyard is a legal choice
+# alone; it enters with haste and is sacrificed at the end step, and the Hill Giant never moves.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Push // Pull
+Hill Giant
+Ornithopter
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Chain of Smog
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Chain of Smog.Cast(Target: Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Hill Giant; Ornithopter)
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Push // Pull.Cast(Ability: Pull; Spend: B, B, B, B, R, U)
+Bot1.Target()
+Bot1.Target(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Haste
+? Bot1.Graveyard = Push // Pull; Black Lotus; Hill Giant
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Graveyard = Ornithopter; Push // Pull; Black Lotus; Hill Giant
+Bot1.Battlefield.Count = 3

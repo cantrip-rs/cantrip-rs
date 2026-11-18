@@ -1,0 +1,46 @@
+# Push ({1}{W/B}, CR 709.3): "Destroy target tapped creature." Bot1's Hill Giant attacked and is tapped, its Ornithopter did not; Push is cast from the split card in Main2. The untapped
+# Ornithopter is refused in the same prompt that accepts the tapped Hill Giant (CR 115.1). The hybrid {W/B} is paid with white from Mox Pearl (CR 107.4e) and the generic with red, so
+# the pool ends empty; the split card goes to the graveyard as one card, "Push // Pull".
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Hill Giant
+Ornithopter
+Push // Pull
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Hill Giant > Bot2)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Push // Pull.Cast(Bot1.Battlefield.Ornithopter; Ability: Push)
+Bot1.Hand.Push // Pull.Cast(Bot1.Battlefield.Hill Giant; Ability: Push; Spend: W, R)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Push // Pull; Hill Giant
+Bot1.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot1.Battlefield.Count = 5

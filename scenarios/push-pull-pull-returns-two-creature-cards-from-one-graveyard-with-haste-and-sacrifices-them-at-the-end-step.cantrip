@@ -1,0 +1,57 @@
+# Pull ({4}{B/R}{B/R}, CR 709.3): "Put up to two target creature cards from a single graveyard onto the battlefield under your control. They gain haste until
+# end of turn. Sacrifice them at the beginning of the next end step." Bot2's Chain of Smog makes Bot1 discard Hill Giant and Ornithopter. Bot1 casts Pull on its turn with a
+# sacrificed Black Lotus and three Moxen, targeting both; they enter under its control, Hill Giant attacks the turn it arrives for 3 (haste, CR 702.10), and at the end step
+# (CR 603.7) both are sacrificed and go to Bot1's graveyard with the Pull card.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Push // Pull
+Hill Giant
+Ornithopter
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Chain of Smog
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Chain of Smog.Cast(Target: Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Hill Giant; Ornithopter)
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Push // Pull.Cast(Ability: Pull; Spend: B, B, B, B, R, U)
+Bot1.Target(Bot1.Graveyard.Hill Giant)
+Bot1.Target(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Hill Giant.Keywords = Haste
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Haste
+Bot1.Attack(Hill Giant > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Battlefield.Count = 5
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Count = 3
+Bot1.Graveyard = Ornithopter; Hill Giant; Push // Pull; Black Lotus

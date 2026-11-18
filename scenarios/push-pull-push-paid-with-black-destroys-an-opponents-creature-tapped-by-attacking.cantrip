@@ -1,0 +1,38 @@
+# Push ({1}{W/B}, CR 709.3): the hybrid symbol is paid with black this time (CR 107.4e), from Mox Jet, and the target is an opponent's creature. Bot2's Ornithopter attacks on its own
+# turn, so it is still tapped on Bot1's (it untaps only in Bot2's untap step, CR 502.3); Push destroys it, and Bot1's own untapped Ornithopter is refused as a target meanwhile.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Ornithopter
+Push // Pull
+Island x16
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter > Bot1)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Push // Pull.Cast(Bot1.Battlefield.Ornithopter; Ability: Push)
+Bot1.Hand.Push // Pull.Cast(Bot2.Battlefield.Ornithopter; Ability: Push; Spend: B, R)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Island
+Bot2.Battlefield.Count = 0
+Bot1.Graveyard = Push // Pull
+Bot1.Battlefield.Ornithopter.Types = Artifact; Creature
