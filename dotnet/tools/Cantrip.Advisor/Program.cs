@@ -13,7 +13,13 @@ using Microsoft.Extensions.Logging;
 //
 // Usage: cantrip-advisor --mine DECK --theirs DECK --model DIR [--opponent neural|tactical] [--server HOST:PORT]
 //                        [--budget MS] [--opponent-budget MS] [--worlds N] [--seed N] [--port N] [--sessions DIR]
-//                        [--prior DIR] [--rater ID] [--no-browser]
+//                        [--prior DIR] [--rater ID] [--no-browser] [--search KEY=VALUE ...] [--opponent-search KEY=VALUE ...]
+//                        [--no-advice]
+//
+// --no-advice: the plain table against the bot, nothing analysed; every decision is still recorded.
+//
+// --search and --opponent-search set the advice's and the neural opponent's search by the AI host's names
+// (Simulations=512 Worlds=1 Gumbel=true): with Simulations the budget is simulations, not --budget's milliseconds.
 //
 // DECK is a decklist path or a name under --decks (..\ai-data\decks beside the repository by default). --server is the
 // inference server the AI host evaluates on (python -m cantrip_ai.serve); without it the AI host evaluates on the CPU.
@@ -52,6 +58,9 @@ var options = new AdvisorOptions
     BudgetMs = Number("--budget", 3000),
     OpponentBudgetMs = Number("--opponent-budget", Number("--budget", 3000)),
     Worlds = Number("--worlds", 8),
+    AdviceSearch = Settings("--search"),
+    Advice = !args.Contains("--no-advice"),
+    OpponentSearch = Settings("--opponent-search"),
     Seed = seed,
     SessionsRoot = Arg("--sessions") ?? Path.GetFullPath(Path.Combine(root, "..", "ai-data", "sessions")),
     Prior = Arg("--prior") ?? decks,
@@ -69,7 +78,7 @@ await using AdvisorTable table = await AdvisorTable.StartAsync(options);
 await using WebApplication app = AdvisorSite.Build(table, web, Number("--port", 5390));
 await app.StartAsync();
 string site = app.Urls.First();
-string page = $"{site}/?server={Uri.EscapeDataString(table.Table.ToString())}&ticket={table.Ticket}&name={Uri.EscapeDataString(options.PlayerName)}&advisor={Uri.EscapeDataString(site + "/advisor")}";
+string page = $"{site}/?server={Uri.EscapeDataString(table.Table.ToString())}&ticket={table.Ticket}&name={Uri.EscapeDataString(options.PlayerName)}" + (options.Advice ? $"&advisor={Uri.EscapeDataString(site + "/advisor")}" : string.Empty);
 Console.WriteLine($"The table: {page}");
 if (!args.Contains("--no-browser"))
 {
@@ -101,6 +110,25 @@ string? Arg(string name)
 {
     int at = Array.IndexOf(args, name);
     return at >= 0 && at + 1 < args.Length ? args[at + 1] : null;
+}
+
+// --search KEY=VALUE (repeatable): a search setting by the AI host's name (Simulations=512, Worlds=1, Gumbel=true), a
+// number, a flag or text.
+Dictionary<string, JsonNode?> Settings(string name)
+{
+    var settings = new Dictionary<string, JsonNode?>();
+    for (int i = 0; i + 1 < args.Length; i++)
+    {
+        if (args[i] == name && args[i + 1].Split('=', 2) is [string key, string value])
+        {
+            settings[key] = long.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out long n) ? JsonValue.Create(n)
+                : double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out double x) ? JsonValue.Create(x)
+                : bool.TryParse(value, out bool b) ? JsonValue.Create(b)
+                : JsonValue.Create(value);
+        }
+    }
+
+    return settings;
 }
 
 int Number(string name, int fallback) => int.TryParse(Arg(name), NumberStyles.Integer, CultureInfo.InvariantCulture, out int n) ? n : fallback;

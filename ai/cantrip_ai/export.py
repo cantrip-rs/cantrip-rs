@@ -1,9 +1,12 @@
 """Export a trained network to ONNX (docs/ai-player-plan.md, "Network" and "Serving and measuring").
 
     python -m cantrip_ai.export --checkpoint DIR/checkpoint.pt --out DIR [--positions FILE]
+    python -m cantrip_ai.export --add-graphs DIR
 
 Writes into DIR:
-- `model-t{32,64,128}.onnx`: one graph per token bucket, the batch dimension free; the TorchScript exporter
+- `model-t{32,64,96,128}.onnx`: one graph per token bucket (`BUCKETS`: the encoding's 32, 64 and 128, and 96, a bucket
+  for the servers alone, which run a row at the smallest bucket that holds its real tokens), the batch dimension free;
+  the TorchScript exporter
   (`dynamo=False`), opset 17, every operator on `ALLOWED` (the spike's list, and `Concat`).
   Inputs `kind` [B,T] i64, `card` [B,T] i64, `cats` [B,T,9] i64, `ptrs` [B,T,4] i64, `nums` [B,T,96] f32,
   `legal` [B,T] bool; outputs `value` [B], `policy` [B,T] (masked to the legal options), `aux` [B,2] (life swing,
@@ -23,7 +26,12 @@ Writes into DIR:
   plain values, so it loads with `torch.load(weights_only=True)`.
 
 `--weights-only` writes `model.pt` alone into a model directory exported before export wrote it, and changes nothing
-else there.
+else there. `--add-graphs DIR` writes into a model directory exported before a bucket existed (T96) the graphs it lacks,
+from its `model.pt`, each checked against PyTorch on the references that run at it, and adds them to its manifest;
+nothing else there changes. It changes the model's identity: the remote protocol's (`remote::model_identity`, a hash of
+`manifest.json`) and self-play's (`selfplay::model_id`, over `manifest.json` and the `*.onnx` files, which a `--resume`
+holds a run to). So run it between generations: with no server or self-play running the model, and no self-play run
+of it left to resume.
 
 The positions are `--positions` (that format), else the `reference.bin` train.py wrote beside the checkpoint (held-out
 positions).
@@ -51,9 +59,15 @@ sys.path.insert(0, str(AI))
 import shards  # noqa: E402
 
 OPSET = 17
-BUCKETS = (32, 64, 128)
+# The graphs' token counts: the encoding's buckets (positions are padded to those) and 96 between 64 and 128, where 65%
+# of self-play's rows of more than 64 real tokens fit. `gpu::GRAPH_BUCKETS` and serve.py's BUCKETS are the same.
+BUCKETS = (32, 64, 96, 128)
+ENCODED = tuple(model.LAYOUT["buckets"])
+# onnxruntime against PyTorch on the references, at fp32 (`eval::reference::TOLERANCE`).
+TOLERANCE = 1e-3
+SWING_RELATIVE = 50.0  # the life swing's drift is measured against its size above this many points (serve.py's)
 ALLOWED = {
-    "Add", "Cast", "Clip", "Concat", "Constant", "Div", "Erf", "Gather", "Gemm", "Identity", "LayerNormalization",
+    "Add", "Cast", "Clip", "Concat", "Constant", "Div", "Erf", "Gather", "Gemm", "Identity", "LayerNormalization", "Log",
     "MatMul", "Mul", "ReduceSum", "Reshape", "Softmax", "Split", "Squeeze", "Sub", "Tanh", "Transpose", "Unsqueeze",
     "Where",
 }
@@ -122,9 +136,42 @@ def inputs_of(positions: list[bytes], tokens: int) -> dict[str, np.ndarray]:
     return dataset.decode(blob, offset, np.arange(len(positions)), tokens)
 
 
+def bucket_of(length: int) -> int:
+    """The smallest graph bucket that holds `length` real tokens: the one the servers run such a row at."""
+    return next(b for b in BUCKETS if b >= max(length, 1))
+
+
+def graph_drift(net, positions: list[bytes], tokens: int, path: Path) -> tuple[dict, int]:
+    """onnxruntime (Python, CPU) against PyTorch on `positions` at `tokens`: the most the value, the aux outputs and the
+    legal options' logits differ, and how many positions keep their best option."""
+    x = inputs_of(positions, tokens)
+    with torch.no_grad():
+        v, pol, a, _ = net(*(torch.from_numpy(x[k]) for k in model.INPUTS))
+    v, pol, a = v.numpy(), pol.numpy(), a.numpy()
+    session = ort.InferenceSession(str(path), providers=["CPUExecutionProvider"])
+    ov, opol, oa, _ = session.run(None, {k: x[k] for k in model.INPUTS})
+    # The life swing has no bound: held to its size above SWING_RELATIVE points, as serve.py's fp32 check and
+    # `eval::reference::parity` hold it (fp32 cannot hold a swing of a thousand points to 1e-3); dead-next-turn absolute.
+    swing = np.abs(oa[:, 0] - a[:, 0]) / np.maximum(1.0, np.abs(a[:, 0]) / SWING_RELATIVE)
+    drift = dict(value=float(np.abs(ov - v).max()), aux=float(max(swing.max(), np.abs(oa[:, 1] - a[:, 1]).max())),
+                 policy=0.0)
+    finite = np.isfinite(ov).all() and np.isfinite(oa).all() and all(
+        np.isfinite(opol[j][x["legal"][j]]).all() for j in range(len(positions)))
+    if not finite:
+        drift = {k: float("inf") for k in drift}  # NaN compares false against TOLERANCE, and `max` passes over it
+    same = 0
+    for j in range(len(positions)):
+        legal = x["legal"][j]
+        if legal.any():
+            drift["policy"] = max(drift["policy"], float(np.abs(opol[j][legal] - pol[j][legal]).max()))
+        same += int(opol[j].argmax() == pol[j].argmax())
+    return drift, same
+
+
 def references(net, positions: list[bytes], out: Path, paths: dict[int, Path]) -> dict:
-    """PyTorch's outputs for each position at its own bucket, written to `out`; the Python decoders checked
-    against each other; and onnxruntime (Python, CPU) against PyTorch."""
+    """PyTorch's outputs for each position at its own bucket (the encoding's), written to `out`; the Python decoders
+    checked against each other; and onnxruntime (Python, CPU) against PyTorch, each graph on the positions the servers
+    run at it."""
     out.mkdir(parents=True, exist_ok=True)
     write_positions(out / "positions.bin", positions)
     n = len(positions)
@@ -141,7 +188,7 @@ def references(net, positions: list[bytes], out: Path, paths: dict[int, Path]) -
         for k in model.INPUTS:
             if not np.array_equal(mine[k][0], d[k].astype(mine[k].dtype)):
                 raise SystemExit(f"dataset.decode and shards.position disagree on {k} of position {i}")
-    for bucket in BUCKETS:
+    for bucket in ENCODED:
         rows = [i for i, p in enumerate(positions) if p[1] == bucket]
         if not rows:
             continue
@@ -149,18 +196,18 @@ def references(net, positions: list[bytes], out: Path, paths: dict[int, Path]) -
         with torch.no_grad():
             v, pol, a, _ = net(*(torch.from_numpy(x[k]) for k in model.INPUTS))
         v, pol, a = v.numpy(), pol.numpy(), a.numpy()
-        session = ort.InferenceSession(str(paths[bucket]), providers=["CPUExecutionProvider"])
-        ov, opol, oa, _ = session.run(None, {k: x[k] for k in model.INPUTS})
-        drift["value"] = max(drift["value"], float(np.abs(ov - v).max()))
-        drift["aux"] = max(drift["aux"], float(np.abs(oa - a).max()))
         for j, i in enumerate(rows):
             first, options = positions[i][3], positions[i][4]
             value[i] = v[j]
             aux[i] = a[j]
             logits[i] = pol[j, first : first + options]
-            legal = x["legal"][j]
-            drift["policy"] = max(drift["policy"], float(np.abs(opol[j][legal] - pol[j][legal]).max()))
-            same += int(opol[j].argmax() == pol[j].argmax())
+    for t in BUCKETS:
+        rows = [p for p in positions if bucket_of(p[2]) == t]
+        if not rows:
+            continue
+        d, s = graph_drift(net, rows, t, paths[t])
+        drift = {k: max(drift[k], d[k]) for k in drift}
+        same += s
     value.tofile(out / "value.f32")
     aux.tofile(out / "auxiliary.f32")  # not aux.f32: AUX is a reserved file name on Windows
     np.concatenate(logits).astype(np.float32).tofile(out / "policy.f32")
@@ -180,14 +227,58 @@ def write_weights(net, checkpoint: dict, path: Path):
     os.replace(tmp, path)
 
 
+def add_graphs(directory: Path) -> list[int]:
+    """`--add-graphs`: the graphs of `BUCKETS` a model directory lacks, made from its `model.pt`, each checked against
+    PyTorch within `TOLERANCE` on the references the servers run at it (or, without any, on those it holds), and added
+    to its manifest. Returns the buckets added."""
+    from . import serve  # noqa: PLC0415 (serve loads model.pt as the servers do)
+
+    served = serve.Served(directory, torch.device("cpu"))
+    served.net.inputs_in_fp32 = False  # the graph is the network as export writes it
+    manifest = json.loads((directory / "manifest.json").read_text())
+    missing = [t for t in BUCKETS if str(t) not in manifest["buckets"]]
+    positions = read_positions(directory / "reference" / "positions.bin")
+    ops = set(manifest.get("ops", []))
+    for t in missing:
+        path = directory / f"model-t{t}.onnx"
+        tmp = directory / f"model-t{t}.onnx.tmp"  # no *.onnx until checked: self-play's model_id hashes those
+        ops |= set(export(served.net, t, tmp))
+        rows = [p for p in positions if bucket_of(p[2]) == t] or [p for p in positions if p[2] <= t]
+        drift, same = graph_drift(served.net, rows, t, tmp)
+        if max(drift.values()) > TOLERANCE:
+            tmp.unlink()
+            raise SystemExit(f"{directory}: the {t}-token graph drifts {drift} from PyTorch")
+        os.replace(tmp, path)
+        manifest["buckets"][str(t)] = path.name
+        print(f"T={t}: {path.name}, {len(rows)} references within {max(drift.values()):.1e} of PyTorch, "
+              f"{same} of {len(rows)} the same best option")
+    if missing:
+        manifest["ops"] = sorted(ops)
+        tmp = directory / "manifest.json.tmp"
+        tmp.write_text(json.dumps(manifest, indent=1))
+        os.replace(tmp, directory / "manifest.json")
+    return missing
+
+
 def main(argv=None):
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    a.add_argument("--checkpoint", required=True)
-    a.add_argument("--out", required=True)
+    a.add_argument("--checkpoint")
+    a.add_argument("--out")
     a.add_argument("--positions", help="reference positions (default: reference.bin beside the checkpoint)")
     a.add_argument("--weights-only", action="store_true", help="write model.pt alone into an exported model directory")
+    a.add_argument("--add-graphs", metavar="DIR",
+                   help="add the graphs of the buckets a model directory lacks (T96). It changes the model's identity "
+                        "(its manifest's hash, and self-play's model_id): run it with no server or self-play using the "
+                        "model and no self-play run of it to resume")
     args = a.parse_args(argv)
     torch.set_num_threads(os.cpu_count() or 4)
+    if args.add_graphs:
+        added = add_graphs(Path(args.add_graphs))
+        print(f"added {', '.join(f'T{t}' for t in added)}; the model's identity has changed (servers and self-play "
+              "runs that loaded it before must restart, not resume)" if added else "every bucket has its graph already")
+        return
+    if not (args.checkpoint and args.out):
+        a.error("--checkpoint and --out are required (or --add-graphs DIR)")
 
     checkpoint = torch.load(args.checkpoint, map_location="cpu", weights_only=False)
     names = model.checkpoint_cards(checkpoint, args.checkpoint)
@@ -197,10 +288,10 @@ def main(argv=None):
     header = checkpoint["header"]
     if header["schema"] != model.LAYOUT["schema"] or header["encoder_hash"] != dataset.encoder_hash():
         raise SystemExit(f"the checkpoint's encoding ({header['schema']}, {header['encoder_hash']}) is not ai/encoding.json's")
-    net = model.Net(model.Config(**checkpoint["config"]), table)
+    net = model.from_state(model.Config(**checkpoint["config"]), checkpoint["state"])
     net.load_state_dict(checkpoint["state"])
     net.eval()
-    folded = net.config.width < table.shape[1]
+    folded = model.must_fold(net)
     if folded:
         model.fold(net)
 
@@ -220,7 +311,9 @@ def main(argv=None):
         print(f"T={tokens}: {path.name} {path.stat().st_size // 1024} KB")
     text_hash = dataset.index_hash(names)
     basis = checkpoint.get("embed") or {}
-    index = dict(model=basis.get("model", "legacy"), dim=int(table.shape[1]), rows=len(names) + 1, hash=text_hash,
+    features = checkpoint.get("card_features") or {}
+    described = basis.get("model", "legacy") + (f"+{features['model']}" if features else "")
+    index = dict(model=described, dim=int(table.shape[1]), rows=len(names) + 1, hash=text_hash,
                  names=names)
     (out / "cards.json").write_text(json.dumps(index, ensure_ascii=False, indent=0) + "\n", encoding="utf-8")
 

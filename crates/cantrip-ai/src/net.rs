@@ -290,6 +290,7 @@ pub fn answer_by(
     let (obs, index) = observe_indexed(game, knowledge, seat, mode)
         .ok_or_else(|| EvalError("no observation of the request (it is deferred)".into()))?;
     let answering = Answering::new(game, request, &obs, &index);
+    crate::refuse_runaway(&answering.ask)?;
     let names: Vec<String> = Vec::new();
     let mut random = match choice {
         Choice::Sample { seed, .. } => seed | 1,

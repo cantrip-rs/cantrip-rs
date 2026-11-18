@@ -97,6 +97,7 @@ fn go(argv: &[String]) -> Result<(), String> {
     let a = Args::parse(&argv[1..])?;
     match command.as_str() {
         "session" => session(&a),
+        "bot" => bot(&a),
         "sample" => sample(&a),
         "play" => play(&a),
         "mana-report" => mana_report(&a),
@@ -250,6 +251,127 @@ fn session(a: &Args) -> Result<(), String> {
                 })
             );
             host.finish();
+        }
+    }
+    Ok(())
+}
+
+/// `bot --session DIR --request R --model DIR (--server HOST:PORT | --backend tract) [--seat 2] [--modes Decklist,Full]
+/// [--sims N,...] [--worlds N,...] [--set Key=Value,...]`: the neural bot's decision on request R of an advisor session
+/// (its `bot.jsonl`), the game remade from `commands.jsonl` up to the bot's answer through an AI host's mirror (the bot's
+/// seat asked at each of its earlier requests, so its knowledge is kept as the table kept it), then searched again under
+/// each mode, budget and world count: `Full` sees every hidden card (is the choice a matter of what it could not see?).
+/// Prints a JSON line a search: the choice, the root value, and per root option its visits and mean value.
+fn bot(a: &Args) -> Result<(), String> {
+    let dir = PathBuf::from(a.need("session")?);
+    let model = PathBuf::from(a.need("model")?);
+    let request_id: u64 = a.need("request")?.parse().map_err(|_| "--request takes a number")?;
+    let seat = a.num("seat", 2)?;
+    let records: Vec<Value> = std::fs::read_to_string(dir.join("bot.jsonl"))
+        .map_err(|e| e.to_string())?
+        .lines()
+        .filter_map(|l| serde_json::from_str(l).ok())
+        .collect();
+    let asked: std::collections::HashSet<u64> = records
+        .iter()
+        .filter(|r| r["Seat"] == json!(seat))
+        .filter_map(|r| r["RequestId"].as_u64())
+        .collect();
+    let record = records
+        .iter()
+        .find(|r| r["RequestId"].as_u64() == Some(request_id) && r["Seat"] == json!(seat))
+        .ok_or(format!("no decision of seat {seat} on request {request_id} in bot.jsonl"))?;
+    let commands: Vec<String> = std::fs::read_to_string(dir.join("commands.jsonl"))
+        .map_err(|e| e.to_string())?
+        .lines()
+        .map(str::to_string)
+        .collect();
+    let upto = commands
+        .iter()
+        .position(|l| {
+            serde_json::from_str::<Value>(l).is_ok_and(|c| {
+                c["Cmd"] == "Answer" && c["Seat"] == json!(seat) && c["RequestId"].as_u64() == Some(request_id)
+            })
+        })
+        .ok_or(format!("no answer of seat {seat} to request {request_id} in commands.jsonl"))?;
+    let name = model.file_name().map(|n| n.to_string_lossy().into_owned()).unwrap_or_default();
+    let replay = || -> Result<(AiHost, Receiver<Value>, u64), String> {
+        let (send, receive) = channel::<Value>();
+        let send = Mutex::new(send);
+        let sink: Sink = Arc::new(move |v: &Value| {
+            let _ = send.lock().unwrap().send(v.clone());
+        });
+        let loaded = vec![Loaded { name: name.clone(), evaluator: evaluator(a, &model)? }];
+        let mut host = AiHost::new(loaded, "probe", 1, sink);
+        let mut game_id = 0;
+        for line in &commands[..upto] {
+            let c: Value = serde_json::from_str(line).map_err(|e| e.to_string())?;
+            if c["Cmd"] == "NewGame" {
+                game_id = c["GameId"].as_u64().unwrap_or(1);
+            }
+            if c["Cmd"] == "Answer"
+                && c["Seat"] == json!(seat)
+                && c["RequestId"].as_u64().is_some_and(|r| asked.contains(&r))
+            {
+                let r = host.line(&json!({ "Cmd": "AiStart", "GameId": game_id, "Seat": seat, "Mode": "Decklist" }).to_string());
+                if r.get("Ok").is_some() {
+                    result(&receive)?;
+                }
+            }
+            let reply = host.line(line);
+            if reply.get("Ok").is_none() {
+                return Err(format!("replaying {line}: {reply}"));
+            }
+        }
+        Ok((host, receive, game_id))
+    };
+    let list = |k: &str, d: &str| -> Vec<String> { a.get(k).unwrap_or(d).split(',').map(str::to_string).collect() };
+    let modes = list("modes", "Decklist,Full");
+    let sims = list("sims", "512");
+    let worlds = list("worlds", "1");
+    let mut extra = serde_json::Map::new();
+    for kv in a.get("set").into_iter().flat_map(|s| s.split(',')) {
+        let (k, v) = kv.split_once('=').ok_or(format!("--set {kv}: Key=Value"))?;
+        let value = v.parse::<i64>().map(|n| json!(n))
+            .or_else(|_| v.parse::<f64>().map(|x| json!(x)))
+            .or_else(|_| v.parse::<bool>().map(|b| json!(b)))
+            .unwrap_or_else(|_| json!(v));
+        extra.insert(k.to_string(), value);
+    }
+    println!("{}", json!({
+        "recorded": record["Analysis"]["Chosen"]["Label"], "recorded_root": record["Analysis"]["Search"]["RootValue"],
+        "recorded_world0_hand": record["Analysis"]["Worlds"][0]["Hands"], "truth": record["Analysis"]["Truth"],
+    }));
+    for mode in &modes {
+        for n in &sims {
+            for w in &worlds {
+                if mode == "Full" && w != &worlds[0] {
+                    continue; // one search: Full deals no worlds
+                }
+                let (mut host, receive, game_id) = replay()?;
+                let mut start = json!({
+                    "Cmd": "AiStart", "GameId": game_id, "Seat": seat, "Mode": mode,
+                    "Simulations": n.parse::<u64>().map_err(|_| "--sims")?, "Worlds": w.parse::<u64>().map_err(|_| "--worlds")?,
+                    "Report": true,
+                });
+                for (k, v) in &extra {
+                    start[k] = v.clone();
+                }
+                let started = Instant::now();
+                let r = host.line(&start.to_string());
+                let got = r["Ok"]["Started"]["RequestId"].as_u64();
+                if got != Some(request_id) {
+                    return Err(format!("the replay is at request {got:?}, the decision was request {request_id}: {r}"));
+                }
+                let res = result(&receive)?;
+                let an = &res["AiResult"]["Analysis"];
+                println!("{}", json!({
+                    "mode": mode, "sims": n, "worlds": if mode == "Full" { json!(null) } else { json!(w) },
+                    "ms": started.elapsed().as_millis() as u64, "choice": an["Chosen"]["Label"],
+                    "root": an["Search"]["RootValue"], "net": an["Search"]["NetValue"], "options": options_of(an),
+                }));
+                host.finish();
+            }
         }
     }
     Ok(())

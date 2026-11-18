@@ -14,7 +14,10 @@
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 
-use cantrip_ai::eval::reference::{Reference, digest, parity};
+use cantrip_ai::eval::reference::{
+    REDUCED_SWING, REDUCED_TV_MAX, REDUCED_TV_MEAN, REDUCED_TV_P99, REDUCED_VALUE, Reference, SAME_ARGMAX, TOLERANCE,
+    digest, parity,
+};
 use cantrip_ai::eval::{Evaluator, Manifest, Model, TractEvaluator, check};
 use cantrip_ai::net::{Choice, answer};
 use cantrip_ai::record::table;
@@ -63,7 +66,7 @@ fn tract_makes_the_references() {
         let p = parity(&evaluator, &r, batch).unwrap();
         println!("batch {batch}: {p:?}");
         assert!(
-            p.value < 1e-3 && p.aux < 1e-3 && p.policy < 1e-3,
+            p.value < 1e-3 && p.aux < 1e-3 && p.policy < 1e-3 && p.non_finite == 0,
             "batch {batch}: {p:?}"
         );
         assert!(p.same_argmax >= 0.995, "batch {batch}: {p:?}");
@@ -117,6 +120,70 @@ fn another_encoding_is_refused() {
     let e = TractEvaluator::load(&dir, table()).err().expect("refused");
     assert!(e.0.contains("encoder hash"), "{e}");
     std::fs::remove_dir_all(&dir).unwrap();
+}
+
+/// The tiny model's directory copied with its manifest naming a T96 graph that is not there: what a model exported
+/// for the GPU engine's T96 bucket looks like to the CPU evaluators, which run batches at the encoding's buckets.
+fn with_a_t96_graph() -> tempdir::Dir {
+    let dir = tempdir::Dir::new("cantrip-t96");
+    for entry in std::fs::read_dir(tiny()).unwrap() {
+        let path = entry.unwrap().path();
+        if path.is_file() {
+            std::fs::copy(&path, dir.path().join(path.file_name().unwrap())).unwrap();
+        }
+    }
+    std::fs::create_dir(dir.path().join("reference")).unwrap();
+    for entry in std::fs::read_dir(tiny().join("reference")).unwrap() {
+        let path = entry.unwrap().path();
+        std::fs::copy(&path, dir.path().join("reference").join(path.file_name().unwrap())).unwrap();
+    }
+    let path = dir.path().join("manifest.json");
+    let mut m: serde_json::Value = serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap();
+    m["buckets"]["96"] = "model-t96.onnx".into();
+    std::fs::write(&path, serde_json::to_vec(&m).unwrap()).unwrap();
+    dir
+}
+
+/// A temporary directory, removed when dropped.
+mod tempdir {
+    pub struct Dir(std::path::PathBuf);
+
+    impl Dir {
+        pub fn new(name: &str) -> Dir {
+            let id = format!("{name}-{}-{:?}", std::process::id(), std::thread::current().id());
+            let path = std::env::temp_dir().join(id);
+            let _ = std::fs::remove_dir_all(&path);
+            std::fs::create_dir_all(&path).unwrap();
+            Dir(path)
+        }
+
+        pub fn path(&self) -> &std::path::Path {
+            &self.0
+        }
+    }
+
+    impl Drop for Dir {
+        fn drop(&mut self) {
+            let _ = std::fs::remove_dir_all(&self.0);
+        }
+    }
+}
+
+#[test]
+fn the_cpu_evaluators_take_the_encoding_s_buckets_alone() {
+    let dir = with_a_t96_graph();
+    let model = Model::load(dir.path(), &own(dir.path())).unwrap();
+    assert_eq!(model.graphs.keys().copied().collect::<Vec<_>>(), cantrip_obs::encode::BUCKETS.to_vec());
+    // tract and onnxruntime load the model (its T96 graph, not there, never opened) and make its references.
+    let r = Reference::load(&dir.path().join("reference")).unwrap();
+    let tract = TractEvaluator::load(dir.path(), &own(dir.path())).unwrap();
+    let mut evaluators: Vec<Box<dyn Evaluator>> = vec![Box::new(tract)];
+    #[cfg(feature = "ort")]
+    evaluators.push(Box::new(cantrip_ai::eval::OrtEvaluator::load(dir.path(), &own(dir.path()), 2).unwrap()));
+    for e in &evaluators {
+        let p = parity(e.as_ref(), &r, 16).unwrap();
+        assert!(p.value < TOLERANCE, "{p:?}");
+    }
 }
 
 #[test]
@@ -311,7 +378,8 @@ fn network_answers_are_accepted_over_the_corpus() {
 
 /// A real model's references through tract (and onnxruntime, with `--features ort`; the GPU engine, with `--features
 /// gpu`; and the inference server named by `CANTRIP_AI_SERVER`, Python's or the native one): PyTorch's values within
-/// 1e-3 and the same best option on 99.5% of positions.
+/// 1e-3 (the life swing within 1e-3 of its size above `SWING_RELATIVE` points), nothing non-finite, and the same best
+/// option on 99.5% of positions.
 #[test]
 #[ignore]
 fn model_parity() {
@@ -345,7 +413,10 @@ fn model_parity() {
     }
     // The inference server serving this model (`python -m cantrip_ai.serve --model DIR`, or the native one,
     // `cantrip-infer serve --model DIR`), when one is named. `CANTRIP_AI_SERVER_REDUCED=1`: a server below fp32 (fp16,
-    // tf32), held to the reduced bar on its value and dead-next-turn (1e-2) and its logits (5e-2) instead.
+    // tf32), held instead to the bar the server holds itself to at startup (`reference::REDUCED_*`, `gpu::check`):
+    // value and dead-next-turn, the policy's total-variation distance (`PolicyDrift`), and the life swing relative to
+    // its size. Raw logits are not held there: fp16's spacing on a logit of 10-20 is 1/128-1/64, and what search reads
+    // is the probability.
     let reduced = std::env::var("CANTRIP_AI_SERVER_REDUCED").is_ok_and(|v| v == "1");
     if let Ok(address) = std::env::var("CANTRIP_AI_SERVER") {
         runs.push((
@@ -360,14 +431,26 @@ fn model_parity() {
                 "{name} batch {batch}: {p:?} ({:.0} positions a second)",
                 p.positions as f64 / p.seconds
             );
-            // Reduced: value 1e-2, aux (the life swing, in life points, which no search reads) half a point, logits 5e-2.
-            let (value, aux, logits) = if reduced && *name == "remote" { (1e-2, 0.5, 5e-2) } else { (1e-3, 1e-3, 1e-3) };
-            assert!(
-                p.value < value && p.aux < aux && p.policy < logits,
-                "{name}: {p:?}"
-            );
-            assert!(p.same_argmax >= 0.995, "{name}: {p:?}");
+            if reduced && *name == "remote" {
+                assert!(
+                    p.value < REDUCED_VALUE
+                        && p.dead < REDUCED_VALUE
+                        && p.tv_mean < REDUCED_TV_MEAN
+                        && p.tv_p99 < REDUCED_TV_P99
+                        && p.tv_max < REDUCED_TV_MAX
+                        && p.decided_flips == 0
+                        && p.swing_reduced < REDUCED_SWING,
+                    "{name}: {p:?}"
+                );
+            } else {
+                assert!(
+                    p.value < TOLERANCE && p.aux < TOLERANCE && p.policy < TOLERANCE,
+                    "{name}: {p:?}"
+                );
+            }
+            assert!(p.same_argmax >= SAME_ARGMAX, "{name}: {p:?}");
             assert_eq!(p.illegal_argmax, 0);
+            assert_eq!(p.non_finite, 0, "{name}: {p:?}");
         }
     }
 }

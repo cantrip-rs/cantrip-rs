@@ -70,7 +70,7 @@ fn the_native_server_makes_the_references() {
     for batch in [1, 64] {
         let p = parity(&remote, &r, batch).unwrap();
         println!("batch {batch}: {p:?}");
-        assert!(p.value < 1e-3 && p.aux < 1e-3 && p.policy < 1e-3, "{p:?}");
+        assert!(p.value < 1e-3 && p.aux < 1e-3 && p.policy < 1e-3 && p.non_finite == 0, "{p:?}");
         assert_eq!(p.same_argmax, 1.0);
         assert_eq!(p.illegal_argmax, 0);
     }
@@ -79,7 +79,7 @@ fn the_native_server_makes_the_references() {
         Engine::start(
             &[&tiny()],
             Options {
-                batch: [16, 8, 4],
+                batch: [16, 8, 6, 4],
                 ..Options::default()
             },
         )

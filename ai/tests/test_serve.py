@@ -33,7 +33,8 @@ def make_model(directory: Path, seed: int = 0) -> serve.Served:
     directory.mkdir(parents=True, exist_ok=True)
     checkpoint = dict(config=model.config_dict(config), state=net.state_dict())
     export.write_weights(net, checkpoint, directory / "model.pt")
-    manifest = dict(schema=model.LAYOUT["schema"], encoder_hash=dataset.encoder_hash(), seed=seed)
+    manifest = dict(schema=model.LAYOUT["schema"], encoder_hash=dataset.encoder_hash(), seed=seed,
+                    buckets={str(t): f"model-t{t}.onnx" for t in serve.BUCKETS})
     (directory / "manifest.json").write_text(json.dumps(manifest))
     return serve.Served(directory, DEVICE)
 
@@ -177,7 +178,7 @@ class Running(unittest.TestCase):
         cls.tmp = tempfile.TemporaryDirectory()
         cls.served = make_model(Path(cls.tmp.name) / "m")
         cls.other = make_model(Path(cls.tmp.name) / "other", seed=3)
-        cls.batch = {32: 16, 64: 8, 128: 4}
+        cls.batch = {32: 16, 64: 8, 96: 6, 128: 4}
         graphs = DEVICE.type == "cuda"
         cls.server = serve.Server([cls.served, cls.other], DEVICE, cls.batch, 0.002, 2, graphs, log=lambda *_: None)
         listener = socket.socket()

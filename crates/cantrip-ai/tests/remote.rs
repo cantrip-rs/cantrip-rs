@@ -15,6 +15,7 @@
 use std::net::{TcpListener, TcpStream};
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
+use std::sync::atomic::{AtomicUsize, Ordering};
 
 use cantrip_ai::eval::reference::{Reference, parity};
 use cantrip_ai::eval::{Evaluator, FeatureBatch, TractEvaluator};
@@ -83,12 +84,13 @@ fn lengths(b: &FeatureBatch) -> Vec<usize> {
 }
 
 /// A server of the protocol over tract: each row at the smallest bucket that holds it.
-fn serve(model: PathBuf, listener: TcpListener) {
+fn serve(model: PathBuf, listener: TcpListener, open: Arc<AtomicUsize>) {
     let tract = Arc::new(TractEvaluator::load(&model, &own(&model)).unwrap());
     let identity = model_identity(&model).unwrap();
     for stream in listener.incoming() {
         let Ok(mut s) = stream else { return };
         let tract = Arc::clone(&tract);
+        let open = Arc::clone(&open);
         std::thread::spawn(move || {
             let Ok(hello) = read_frame(&mut s) else {
                 return;
@@ -106,6 +108,9 @@ fn serve(model: PathBuf, listener: TcpListener) {
                 return;
             }
             write_frame(&mut s, &remote::status(true, "tract (the test's server)")).unwrap();
+            // A connection welcomed is a client, as the servers count them, until it closes.
+            open.fetch_add(1, Ordering::SeqCst);
+            let _closed = Closed(open);
             while let Ok(frame) = read_frame(&mut s) {
                 let b = match read_request(&frame) {
                     Ok(b) => b,
@@ -135,10 +140,23 @@ fn serve(model: PathBuf, listener: TcpListener) {
     }
 }
 
+struct Closed(Arc<AtomicUsize>);
+
+impl Drop for Closed {
+    fn drop(&mut self) {
+        self.0.fetch_sub(1, Ordering::SeqCst);
+    }
+}
+
 fn server(model: PathBuf) -> String {
+    server_counting(model, Arc::new(AtomicUsize::new(0)))
+}
+
+/// A server whose open connections are counted in `open`.
+fn server_counting(model: PathBuf, open: Arc<AtomicUsize>) -> String {
     let listener = TcpListener::bind("127.0.0.1:0").unwrap();
     let address = listener.local_addr().unwrap().to_string();
-    std::thread::spawn(move || serve(model, listener));
+    std::thread::spawn(move || serve(model, listener, open));
     address
 }
 
@@ -234,7 +252,7 @@ fn the_remote_evaluator_makes_the_references() {
     for batch in [1, 5, 16] {
         let p = parity(&evaluator, &r, batch).unwrap();
         assert!(
-            p.value < 1e-3 && p.aux < 1e-3 && p.policy < 1e-3,
+            p.value < 1e-3 && p.aux < 1e-3 && p.policy < 1e-3 && p.non_finite == 0,
             "batch {batch}: {p:?}"
         );
         assert!(p.same_argmax >= 0.995, "batch {batch}: {p:?}");
@@ -263,6 +281,34 @@ fn the_remote_evaluator_makes_the_references() {
                 .collect::<Vec<_>>()
         );
     }
+}
+
+/// An idle evaluator (a self-play lane waiting for admission) is no client of the server: its connections close, and
+/// the next evaluation connects again and answers alike.
+#[test]
+fn an_idle_evaluator_lets_its_connections_go() {
+    let open = Arc::new(AtomicUsize::new(0));
+    let address = server_counting(tiny(), Arc::clone(&open));
+    let evaluator = RemoteEvaluator::connect(&address, &tiny(), &own(&tiny())).unwrap();
+    let r = references();
+    let batch = FeatureBatch::new(&r.positions.iter().take(4).collect::<Vec<_>>());
+    let before = evaluator.evaluate(&batch).unwrap();
+    let settle = |want: usize| {
+        let until = std::time::Instant::now() + std::time::Duration::from_secs(10);
+        while open.load(Ordering::SeqCst) != want && std::time::Instant::now() < until {
+            std::thread::sleep(std::time::Duration::from_millis(5));
+        }
+        open.load(Ordering::SeqCst)
+    };
+    assert_eq!(settle(1), 1);
+    evaluator.idle();
+    assert_eq!(settle(0), 0, "an idle evaluator holds no connection");
+    let after = evaluator.evaluate(&batch).unwrap();
+    assert_eq!(settle(1), 1, "and connects again to evaluate");
+    assert_eq!(
+        before.value.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+        after.value.iter().map(|v| v.to_bits()).collect::<Vec<_>>()
+    );
 }
 
 #[test]

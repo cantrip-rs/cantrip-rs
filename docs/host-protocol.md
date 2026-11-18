@@ -345,6 +345,7 @@ shipping host compiles neither the AI player nor zstd; a host built without it r
 | `--ai-record-threads N` | 2 | recording workers, each with its own shard |
 | `--ai-record-games N` | 0 (no limit) | games a shard holds before the next is started |
 | `--ai-record-mb N` | 64 | compressed megabytes a shard holds before the next is started |
+| `--ai-record-traces` | off (or `CANTRIP_AI_TRACES=1`, for a table whose command line cannot say it) | each dealt game's trace too, a JSON line each into `DIR/traces/` (`cantrip_ai::trace`, with the table's deal: sideboards, companions, the shuffle, who chooses), so `cantrip-reanalyse` and `cantrip-explore audit` can stand its positions in again. Made from the finished game and written only where it replays as the game up to where it ends; a mana ability activated by hand to pay a cost has no factored form (unless the autotapper would make the same one), so the trace is cut short there and holds the positions before it (`TracesCutShort` in the report) |
 
 A shard recorded here labels each step with the option chosen: its visit field is a one-hot. Self-play shards come
 from `cantrip-selfplay` instead (`docs/ai-host.md`, "Self-play"), not from this host. They have the same layout, with

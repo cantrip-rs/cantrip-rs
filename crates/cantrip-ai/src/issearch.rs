@@ -351,7 +351,7 @@ impl Search<'_> {
             Forward::Done(factored) => match self.forks.play(world, pos, factored, seat) {
                 Reached::Decide(pos, m) => Child::Node(self.node(world, pos, m)),
                 Reached::Over(v) => Child::Value(v),
-                Reached::Capped | Reached::Stuck => {
+                Reached::Capped | Reached::CappedAt(..) | Reached::Stuck => {
                     self.stats.capped += 1;
                     Child::Value(0.0)
                 }
@@ -518,7 +518,7 @@ pub fn search(
     let root_turn = game.state.turn.number;
     let first = if game.state.turn.active == seat { root_turn + 2 } else { root_turn + 3 };
     let mut s = Search {
-        forks: Forks { mode, table, turn_cap: 40, worlds: Vec::new(), refused: 0, atomic: false, last_waste: false, unpayable: 0, t_play: Duration::ZERO, t_setup: Duration::ZERO, t_goto: Duration::ZERO, t_observe: Duration::ZERO, stop: None },
+        forks: Forks { mode, table, turn_cap: 40, worlds: Vec::new(), refused: 0, atomic: false, last_waste: false, unpayable: 0, t_play: Duration::ZERO, t_setup: Duration::ZERO, t_goto: Duration::ZERO, t_observe: Duration::ZERO, stop: None, cap_value: false, skip_forced_observe: false, forced_unobserved: 0 },
         config,
         seat,
         nodes: Vec::new(),

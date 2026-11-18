@@ -22,6 +22,14 @@ name = "cantrip-regret"
 path = "src/bin/regret.rs"
 
 [[bin]]
+name = "cantrip-reanalyse"
+path = "src/bin/reanalyse.rs"
+
+[[bin]]
+name = "cantrip-explore"
+path = "src/bin/explore.rs"
+
+[[bin]]
 name = "cantrip-advisor-host"
 path = "src/bin/advisor.rs"
 
@@ -29,6 +37,10 @@ path = "src/bin/advisor.rs"
 name = "cantrip-infer"
 path = "src/bin/infer.rs"
 required-features = ["gpu"]
+
+[[bin]]
+name = "cantrip-fingerprint"
+path = "src/bin/fingerprint.rs"
 
 [[bin]]
 name = "cantrip-probe"
@@ -40,6 +52,8 @@ cantrip-engine.workspace = true
 # With its recorder (`ai-record`): the AI tools are where it is used, and so `cargo test --workspace` runs its tests.
 cantrip-host = { workspace = true, features = ["ai-record"] }
 cantrip-obs.workspace = true
+# The fingerprint tool's probe positions are scripted games.
+cantrip-script.workspace = true
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
@@ -52,3 +66,15 @@ gpu = ["ort", "cantrip-ai/gpu"]
 
 [target.'cfg(windows)'.dependencies]
 mimalloc = { version = "0.1", default-features = false }
+# Self-play's governor: memory and CPU readings, and the console's Ctrl-C (`governor`).
+windows-sys = { version = "0.61", features = [
+    "Win32_Foundation",
+    "Win32_System_Console",
+    "Win32_System_ProcessStatus",
+    "Win32_System_SystemInformation",
+    "Win32_System_Threading",
+] }
+
+[target.'cfg(unix)'.dependencies]
+# Self-play's governor: SIGINT and SIGTERM (`governor`).
+libc = "0.2"

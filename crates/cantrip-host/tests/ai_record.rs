@@ -264,6 +264,38 @@ fn recording_changes_no_reply_and_writes_the_games_that_ended() {
     let _ = std::fs::remove_dir_all(&dir);
 }
 
+/// `--ai-record-traces`: beside the shards, each dealt game that ended is traced, and each trace replays as the game it
+/// was made of up to where it ends (the host writes none that does not); its seed is the game's. This bot pays some
+/// costs by tapping a land itself, which the factoring cannot say: such an answer is kept as the action itself
+/// (`trace::ByHand`), so the traces run whole, a conceded game's up to the concession.
+#[test]
+fn traces_are_written_beside_the_shards_and_replay() {
+    let dir = temp("ai-record-traces");
+    let path = dir.to_string_lossy().to_string();
+    let mut recording = Host::start(&["--ai-record", &path, "--ai-record-threads", "2", "--ai-record-traces"]);
+    let _ = session(&mut recording);
+    recording.finish();
+    let traces = dir.join("traces");
+    let mut seeds = Vec::new();
+    let mut complete = 0;
+    for entry in std::fs::read_dir(&traces).unwrap() {
+        let text = std::fs::read_to_string(entry.unwrap().path()).unwrap();
+        for line in text.lines().filter(|l| !l.trim().is_empty()) {
+            let t: cantrip_ai::trace::Trace = serde_json::from_str(line).unwrap();
+            assert!(t.deal.is_some(), "a table's deal is said");
+            assert!(!t.steps.is_empty());
+            let (game, _) = t.replay(t.steps.len()).unwrap();
+            assert!(game.pending().is_some() || game.is_over());
+            complete += usize::from(t.complete);
+            seeds.push(t.seed);
+        }
+    }
+    seeds.sort();
+    assert_eq!(seeds, vec![7, 8, 9], "every game that ended is traced");
+    assert_eq!(complete, 3, "every game is traced whole, payments by hand and all");
+    let _ = std::fs::remove_dir_all(&dir);
+}
+
 fn reports(dir: &Path) -> usize {
     std::fs::read_dir(dir)
         .unwrap()

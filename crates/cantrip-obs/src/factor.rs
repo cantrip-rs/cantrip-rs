@@ -30,7 +30,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::{Ask, AskKind, OptionObs, Ref, action};
+use crate::{Ask, AskKind, DivisionObs, OptionObs, Ref, action};
 
 /// The values of X (or a kicker count) a policy chooses among: every value to ten, then wider steps. Those over what
 /// the seat could pay (`x_most`), or that the request cannot move to, are masked.
@@ -69,6 +69,8 @@ pub enum Tok {
     /// Choose mode `n`.
     Mode,
     Yes,
+    /// No. In combat damage (`Damage`), creature `a` spares creature `b` (`n` its index in the division): it is dealt
+    /// less than lethal damage.
     No,
     /// Player `a` (`n` its seat).
     Player,
@@ -86,7 +88,8 @@ pub enum Tok {
     NoBlock,
     /// Creature `a` blocks attacker `b` (`n` its index among the attackers).
     Block,
-    /// One of `a`'s combat damage to creature `b` (`n` its index in the division), or with `b` none to the defender.
+    /// Creature `a` deals lethal combat damage to creature `b` (`n` its index in the division); `No` spares it
+    /// (`divide`).
     Damage,
     /// One unit to `a` (`n` its index): a divided amount to a target, a counter from a pool.
     Unit,
@@ -326,9 +329,8 @@ pub fn bound(ask: &Ask) -> usize {
                 None => 1,
             })
             .sum(),
-        AskKind::AssignCombatDamage { divisions } => {
-            divisions.iter().map(|d| d.damage as usize).sum()
-        }
+        // A step for each creature at most: whether it is dealt lethal damage (`divide`).
+        AskKind::AssignCombatDamage { divisions } => divisions.iter().map(|d| d.creatures.len()).sum(),
         AskKind::OrderTriggers { sources, .. } => sources.len(),
         AskKind::DistributeCards { cards, .. } => cards.len() + 1,
         AskKind::ChooseName { .. }
@@ -507,6 +509,70 @@ fn names_with(ask: &Ask, names: &[String]) -> Vec<String> {
         all.push(s.clone());
     }
     all
+}
+
+/// One creature's combat damage as the AI divides it (CR 510.1c-d), a blocker at a time rather than a point at a time: for
+/// each creature it may be dealt to, in order, whether it is dealt lethal damage. `kill(i)` is asked only where both are
+/// possible: the damage left is lethal to it, and sparing it still leaves the rest somewhere to go. A creature the damage
+/// left can't kill is spared, and one whose lethal is nothing (already dealt lethal damage) counts as dealt it, without a
+/// step. Then the rest goes, with no step of its own: to the defender where it may (trample) and every creature was dealt
+/// lethal; otherwise onto the first creature dealt lethal damage, where more changes nothing; with none, spread under
+/// lethal over the spared ones. The engine still asks for the division point by point, as a person divides it as they
+/// please (CR 510.1c); what the AI chooses is what changes the game - which blockers die, and so whether any tramples
+/// over - in as many steps as there are blockers, however much damage there is.
+fn divide<E>(d: &DivisionObs, mut kill: impl FnMut(usize) -> Result<bool, E>) -> Result<Vec<(Ref, Option<Ref>, u32)>, E> {
+    let n = d.creatures.len();
+    let lethal = |i: usize| d.lethal.get(i).copied().unwrap_or(0);
+    let mut left = d.damage;
+    let mut dealt = vec![0u32; n];
+    let mut killed = vec![false; n];
+    for i in 0..n {
+        let l = lethal(i);
+        let can_kill = l <= left;
+        // Sparing it leaves room for the rest: a creature already dealt lethal takes any more, a later one the rest can
+        // still kill would, and otherwise every creature left spared must hold it under lethal.
+        let can_spare = l > 0
+            && (killed.iter().any(|&k| k)
+                || (i + 1..n).any(|j| lethal(j) <= left)
+                || left as u64 <= (0..n).filter(|&j| j >= i || !killed[j]).map(|j| lethal(j).saturating_sub(1) as u64).sum::<u64>());
+        let dies = match (can_kill, can_spare) {
+            (true, true) => kill(i)?,
+            (true, false) => true,
+            (false, _) => false,
+        };
+        if dies {
+            killed[i] = true;
+            dealt[i] = l;
+            left -= l;
+        }
+    }
+    let mut to_defender = 0u32;
+    if left > 0 {
+        if d.may_assign_to_defender && killed.iter().all(|&k| k) {
+            to_defender = left;
+        } else if let Some(i) = killed.iter().position(|&k| k) {
+            dealt[i] += left;
+        } else {
+            for i in 0..n {
+                let room = lethal(i).saturating_sub(1).saturating_sub(dealt[i]).min(left);
+                dealt[i] += room;
+                left -= room;
+            }
+            // Never left over (sparing is offered only where the rest fits); kept somewhere all the same.
+            if left > 0 {
+                match n.checked_sub(1) {
+                    Some(last) => dealt[last] += left,
+                    None => to_defender = left,
+                }
+            }
+        }
+    }
+    let mut shares: Vec<(Ref, Option<Ref>, u32)> =
+        d.creatures.iter().zip(&dealt).filter(|(_, g)| **g > 0).map(|(c, g)| (d.source, Some(*c), *g)).collect();
+    if to_defender > 0 {
+        shares.push((d.source, None, to_defender));
+    }
+    Ok(shares)
 }
 
 /// Whether every permanent `attacks` cost (`sacrifices`) can be a different one of its candidates (CR 118.3, 508.1j): a
@@ -1139,37 +1205,12 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
         AskKind::AssignCombatDamage { divisions } => {
             let mut shares = Vec::new();
             for d in divisions {
-                let mut got = vec![0u32; d.creatures.len()];
-                let mut to_defender = 0u32;
-                for _ in 0..d.damage {
-                    let lethal = got.iter().zip(&d.lethal).all(|(g, l)| g >= l);
+                shares.extend(divide(d, |i| {
                     let mut step = Step::default();
-                    for (i, &c) in d.creatures.iter().enumerate() {
-                        step.push(Token::of(Tok::Damage, d.source, c, i as u32), true);
-                    }
-                    step.push(
-                        Token::of(Tok::Damage, d.source, Ref::None, d.creatures.len() as u32),
-                        d.may_assign_to_defender && lethal,
-                    );
-                    if !step.mask.iter().any(|&m| m) {
-                        break;
-                    }
-                    let t = p.pick(step)?;
-                    match got.get_mut(t.n as usize) {
-                        Some(g) => *g += 1,
-                        None => to_defender += 1,
-                    }
-                }
-                shares.extend(
-                    d.creatures
-                        .iter()
-                        .zip(got)
-                        .filter(|g| g.1 > 0)
-                        .map(|(&c, g)| (d.source, Some(c), g)),
-                );
-                if to_defender > 0 {
-                    shares.push((d.source, None, to_defender));
-                }
+                    step.push(Token::of(Tok::Damage, d.source, d.creatures[i], i as u32), true);
+                    step.push(Token::of(Tok::No, d.source, d.creatures[i], i as u32), true);
+                    Ok(p.pick(step)?.kind == Tok::Damage)
+                })?);
             }
             Ok(F::Shares(shares))
         }
@@ -1569,30 +1610,16 @@ pub fn decompose(
             }
         }
         (AskKind::AssignCombatDamage { divisions }, F::Shares(shares)) => {
+            // Any division, a person's or another bot's, as the choices `divide` asks: each creature dealt lethal
+            // damage or not. What it did with the rest is no choice of the AI's.
             for d in divisions {
-                for (i, &c) in d.creatures.iter().enumerate() {
-                    let n: u32 = shares
-                        .iter()
-                        .filter(|s| s.0 == d.source && s.1 == Some(c))
-                        .map(|s| s.2)
-                        .sum();
-                    for _ in 0..n {
-                        push(Token::of(Tok::Damage, d.source, c, i as u32));
-                    }
-                }
-                let n: u32 = shares
-                    .iter()
-                    .filter(|s| s.0 == d.source && s.1.is_none())
-                    .map(|s| s.2)
-                    .sum();
-                for _ in 0..n {
-                    push(Token::of(
-                        Tok::Damage,
-                        d.source,
-                        Ref::None,
-                        d.creatures.len() as u32,
-                    ));
-                }
+                divide(d, |i| -> Result<bool, String> {
+                    let c = d.creatures[i];
+                    let given: u32 = shares.iter().filter(|s| s.0 == d.source && s.1 == Some(c)).map(|s| s.2).sum();
+                    let lethal = given >= d.lethal.get(i).copied().unwrap_or(0);
+                    push(Token::of(if lethal { Tok::Damage } else { Tok::No }, d.source, c, i as u32));
+                    Ok(lethal)
+                })?;
             }
         }
         (AskKind::OrderTriggers { sources, .. }, F::Order(order)) => {
@@ -2238,48 +2265,83 @@ mod tests {
         round_trip(&optional, &FactoredAnswer::Divided(vec![]));
     }
 
-    #[test]
-    fn trample_reaches_the_player_only_past_lethal_damage() {
-        // A 5-power trampler blocked by two creatures needing 2 and 1.
-        let a = ask(AskKind::AssignCombatDamage {
+    fn division(damage: u32, lethal: Vec<u32>, trample: bool) -> Ask {
+        ask(AskKind::AssignCombatDamage {
             divisions: vec![DivisionObs {
                 source: o(1),
                 banding: false,
-                damage: 5,
-                creatures: vec![o(2), o(3)],
-                lethal: vec![2, 1],
-                may_assign_to_defender: true,
+                damage,
+                creatures: (0..lethal.len() as u32).map(|i| o(2 + i)).collect(),
+                lethal,
+                may_assign_to_defender: trample,
                 defender: Ref::Player(1),
             }],
-        });
-        let mut m = Machine::new(&a, &[]);
-        assert_eq!(m.bound(), 5);
-        let to = |c: Ref, i: u32| Token::of(Tok::Damage, o(1), c, i);
-        assert!(!legal(&m, to(Ref::None, 2)));
-        m.choose_token(to(o(2), 0));
-        m.choose_token(to(o(3), 1));
-        assert!(!legal(&m, to(Ref::None, 2)));
-        m.choose_token(to(o(2), 0));
-        assert!(legal(&m, to(Ref::None, 2)));
-        m.choose_token(to(Ref::None, 2));
-        m.choose_token(to(Ref::None, 2));
+        })
+    }
+
+    fn kill(i: u32) -> Token {
+        Token::of(Tok::Damage, o(1), o(2 + i), i)
+    }
+
+    fn spare(i: u32) -> Token {
+        Token::of(Tok::No, o(1), o(2 + i), i)
+    }
+
+    #[test]
+    fn combat_damage_is_decided_a_blocker_at_a_time_and_trample_reaches_the_player_past_lethal_to_all() {
+        // A 5-power trampler blocked by two creatures needing 2 and 1: a step a blocker, never one a point.
+        let a = division(5, vec![2, 1], true);
+        assert_eq!(Machine::new(&a, &[]).bound(), 2);
+        let both = walk(&a, &[kill(0), kill(1)]);
+        assert_eq!(
+            both.answer(),
+            Some(&FactoredAnswer::Shares(vec![(o(1), Some(o(2)), 2), (o(1), Some(o(3)), 1), (o(1), None, 2)]))
+        );
+        // Sparing either keeps the rest off the player: it goes onto the one dealt lethal damage.
+        let first = walk(&a, &[kill(0), spare(1)]);
+        assert_eq!(first.answer(), Some(&FactoredAnswer::Shares(vec![(o(1), Some(o(2)), 5)])));
+        // Sparing the first, the second must die: 5 damage can't all stay under lethal (1 and 0).
+        let mut m = walk(&a, &[spare(0)]);
+        assert!(m.step().is_none(), "the second is no choice");
+        assert_eq!(m.answer(), Some(&FactoredAnswer::Shares(vec![(o(1), Some(o(3)), 5)])));
+        assert!(!m.choose_token(kill(1)));
+        for answer in [both.answer(), first.answer()] {
+            round_trip(&a, answer.unwrap());
+        }
+    }
+
+    #[test]
+    fn a_blocker_the_damage_cannot_kill_is_no_choice() {
+        // 3 damage, no trample, blockers needing 5 and 2: only the second can die.
+        let a = division(3, vec![5, 2], false);
+        let m = Machine::new(&a, &[]);
+        assert!(legal(&m, kill(1)) && legal(&m, spare(1)));
+        assert!(!m.step().unwrap().tokens.iter().any(|t| t.b == o(2)));
+        // Killed, the rest goes onto it; spared, all of it under lethal onto the first.
+        assert_eq!(walk(&a, &[kill(1)]).answer(), Some(&FactoredAnswer::Shares(vec![(o(1), Some(o(3)), 3)])));
+        assert_eq!(walk(&a, &[spare(1)]).answer(), Some(&FactoredAnswer::Shares(vec![(o(1), Some(o(2)), 3)])));
+    }
+
+    #[test]
+    fn enormous_damage_takes_a_step_a_blocker() {
+        // A creature with billions of power, its counters doubled turn after turn: as few steps as one with 3.
+        let a = division(4_000_000_000, vec![3, 4], true);
+        assert_eq!(Machine::new(&a, &[]).bound(), 2);
+        let m = walk(&a, &[kill(0), kill(1)]);
         assert_eq!(
             m.answer(),
-            Some(&FactoredAnswer::Shares(vec![
-                (o(1), Some(o(2)), 2),
-                (o(1), Some(o(3)), 1),
-                (o(1), None, 2)
-            ]))
+            Some(&FactoredAnswer::Shares(vec![(o(1), Some(o(2)), 3), (o(1), Some(o(3)), 4), (o(1), None, 3_999_999_993)]))
         );
-        round_trip(
-            &a,
-            &FactoredAnswer::Shares(vec![
-                (o(1), Some(o(2)), 2),
-                (o(1), Some(o(3)), 1),
-                (o(1), None, 2),
-            ]),
-        );
-        round_trip(&a, &FactoredAnswer::Shares(vec![(o(1), Some(o(3)), 5)]));
+    }
+
+    #[test]
+    fn any_division_decomposes_into_which_blockers_die() {
+        // A person's 1 and 4 against needs of 2 and 1: the first spared, the second dealt lethal (no choice then).
+        let a = division(5, vec![2, 1], true);
+        let given = FactoredAnswer::Shares(vec![(o(1), Some(o(2)), 1), (o(1), Some(o(3)), 4)]);
+        let tokens = decompose(&a, &[], &given).unwrap();
+        assert_eq!(tokens, vec![spare(0)]);
+        assert_eq!(walk(&a, &tokens).answer(), Some(&FactoredAnswer::Shares(vec![(o(1), Some(o(3)), 5)])));
     }
 
     #[test]

@@ -161,6 +161,12 @@ pub trait Evaluator: Send + Sync {
     fn evaluate_positions(&self, positions: &[&Encoded]) -> Result<Outputs, EvalError> {
         self.evaluate(&FeatureBatch::new(positions))
     }
+
+    /// Its caller will send nothing for a while (a self-play lane waiting for admission, or switched off): an evaluator
+    /// that counts as a client of a batching engine or server stops counting until it next evaluates, so the others'
+    /// partial batches do not wait on it (`gpu::Engine::client`; the servers count connections). Batching is
+    /// row-invariant, so no result changes. Nothing to let go of, by default.
+    fn idle(&self) {}
 }
 
 /// `manifest.json`: what `export.py` says of a model.
@@ -264,6 +270,7 @@ pub fn input_compatibility(manifest: &Manifest) -> Result<InputCompatibility, Ev
 pub struct Model {
     pub dir: PathBuf,
     pub manifest: Manifest,
+    /// The graph of each of the encoding's `BUCKETS` (a serving bucket's, such as T96, is left out).
     pub graphs: BTreeMap<usize, PathBuf>,
     pub remap: Vec<u32>,
 }
@@ -292,12 +299,16 @@ impl Model {
                 .collect())
         };
         let remap = check(&manifest, table, model_cards)?;
+        // The encoding's buckets only: these evaluators run a batch at its encoded size. A graph for a serving bucket
+        // between them (T96, `GRAPH_BUCKETS`) is the GPU engine's and serve.py's, and is neither opened nor needed.
         let mut graphs = BTreeMap::new();
         for (tokens, file) in &manifest.buckets {
             let t: usize = tokens
                 .parse()
                 .map_err(|_| err(format!("a bucket {tokens:?} that is no token count")))?;
-            graphs.insert(t, dir.join(file));
+            if BUCKETS.contains(&t) {
+                graphs.insert(t, dir.join(file));
+            }
         }
         for t in BUCKETS {
             if !graphs.contains_key(&t) {
@@ -526,7 +537,7 @@ fn rebucket(b: &FeatureBatch, tokens: usize) -> FeatureBatch {
 #[cfg(feature = "ort")]
 pub use self::ort_backend::OrtEvaluator;
 #[cfg(feature = "gpu")]
-pub(crate) use self::ort_backend::environment as ort_environment;
+pub use self::ort_backend::environment as ort_environment;
 
 #[cfg(feature = "ort")]
 mod ort_backend {
@@ -550,7 +561,7 @@ mod ort_backend {
     /// onnxruntime allows one environment a process: every evaluator loaded in it shares this one (self-play loads an
     /// evaluator a lane), the GPU engine's sessions among them. With the `gpu` feature onnxruntime is loaded at run
     /// time (`ORT_DYLIB_PATH`), after `CANTRIP_CUDA_LIBS` is put on the library path.
-    pub(crate) fn environment() -> Result<&'static Environment, EvalError> {
+    pub fn environment() -> Result<&'static Environment, EvalError> {
         static ENV: std::sync::OnceLock<Result<Environment, String>> = std::sync::OnceLock::new();
         ENV.get_or_init(|| {
             #[cfg(feature = "gpu")]
@@ -641,6 +652,91 @@ pub mod reference {
     use cantrip_obs::encode::{Encoded, fnv1a64, from_compact, from_compact_legacy_snow_v2};
 
     use super::{EvalError, Evaluator, FeatureBatch, err};
+
+    /// What a precision below fp32 is held to (`serve.py`'s `REDUCED`): value and dead-next-turn within 1e-2, the policy
+    /// within `PolicyDrift::within_reduced`, the life swing within half a point (or 1% of it above `SWING_RELATIVE`
+    /// points: fp16's own spacing there is a quarter point and more); and the same best option on 99.5%.
+    pub const REDUCED_VALUE: f32 = 1e-2;
+    pub const REDUCED_SWING: f32 = 0.5;
+    /// The policy's reduced bar, over the references with two legal options or more: the total-variation distance
+    /// between the evaluator's legal-option probabilities and PyTorch's, its mean, its 99th percentile (nearest rank)
+    /// and its largest; and no best option changed where PyTorch's top two are `TIE` apart or more. (The owner's
+    /// decision, 2026-11-13. The bar before, one option's largest probability change, was set by the closest tie among
+    /// the references and moved with batching: gen3 of the templates line drifted 0.019 or 0.030 by batch, at a mean
+    /// distance of 1e-4.) Measured on the templates line's gen0-gen3 (the server's check, and its graphs under ORT):
+    /// fp16 means 4e-5 to 1.3e-4, 99th percentiles 0.0007 to 0.0014, largest 0.002 to 0.030; tf32 means 3e-5 to 7e-5;
+    /// no best option changed; bf16 means 5.4e-4 to 8.1e-4 and 99th percentiles 0.008 to 0.018, which fail.
+    pub const REDUCED_TV_MEAN: f64 = 2e-4;
+    pub const REDUCED_TV_P99: f64 = 5e-3;
+    pub const REDUCED_TV_MAX: f64 = 5e-2;
+    pub const TIE: f64 = 2e-2;
+    pub const SWING_RELATIVE: f32 = 50.0;
+    pub const TOLERANCE: f32 = 1e-3;
+    pub const SAME_ARGMAX: f64 = 0.995;
+
+    pub fn softmax(z: &[f32]) -> Vec<f64> {
+        let m = z.iter().copied().fold(f32::NEG_INFINITY, f32::max) as f64;
+        let e: Vec<f64> = z.iter().map(|&x| (x as f64 - m).exp()).collect();
+        let s: f64 = e.iter().sum();
+        e.into_iter().map(|x| x / s).collect()
+    }
+
+    /// The references' policies against PyTorch's, as the reduced bar measures them (`REDUCED_TV_MEAN`).
+    #[derive(Clone, Debug, Default)]
+    pub struct PolicyDrift {
+        tv: Vec<f64>,
+        /// References whose best option changed although PyTorch's top two are `TIE` apart or more.
+        pub decided_flips: usize,
+    }
+
+    impl PolicyDrift {
+        /// One reference's legal-option logits, the evaluator's `got` and PyTorch's `want`. A reference with fewer
+        /// than two legal options has no choice to drift; one with an output that is not finite is counted apart
+        /// (`non_finite`), as its distance has no meaning.
+        pub fn add(&mut self, got: &[f32], want: &[f32]) {
+            if got.len() < 2 || !got.iter().all(|x| x.is_finite()) {
+                return;
+            }
+            let (a, b) = (softmax(got), softmax(want));
+            self.tv
+                .push(0.5 * a.iter().zip(&b).map(|(x, y)| (x - y).abs()).sum::<f64>());
+            let best = |p: &[f64]| (0..p.len()).max_by(|&i, &j| p[i].total_cmp(&p[j]).then(j.cmp(&i)));
+            if best(&a) != best(&b) {
+                let mut s = b.clone();
+                s.sort_by(|x, y| y.total_cmp(x));
+                if s[0] - s[1] >= TIE {
+                    self.decided_flips += 1;
+                }
+            }
+        }
+
+        pub fn mean(&self) -> f64 {
+            self.tv.iter().sum::<f64>() / self.tv.len().max(1) as f64
+        }
+
+        /// The 99th percentile, nearest rank (numpy's `inverted_cdf`, as serve.py takes it).
+        pub fn p99(&self) -> f64 {
+            let mut s = self.tv.clone();
+            s.sort_by(f64::total_cmp);
+            let n = s.len();
+            if n == 0 {
+                0.0
+            } else {
+                s[((0.99 * n as f64).ceil() as usize).clamp(1, n) - 1]
+            }
+        }
+
+        pub fn max(&self) -> f64 {
+            self.tv.iter().copied().fold(0.0, f64::max)
+        }
+
+        pub fn within_reduced(&self) -> bool {
+            self.mean() < REDUCED_TV_MEAN
+                && self.p99() < REDUCED_TV_P99
+                && self.max() < REDUCED_TV_MAX
+                && self.decided_flips == 0
+        }
+    }
 
     pub struct Reference {
         pub positions: Vec<Encoded>,
@@ -749,13 +845,31 @@ pub mod reference {
     pub struct Parity {
         pub positions: usize,
         pub value: f32,
+        /// The auxiliary heads' drift: dead-next-turn's, and the life swing's relative to its size above
+        /// `SWING_RELATIVE` points (as `serve.py`'s fp32 check holds it): the swing has no bound, and fp32 cannot hold a
+        /// swing of a thousand points to 1e-3 (gen3 of the templates line: 0.002 at -1,175, 1.7e-6 of it).
         pub aux: f32,
+        /// The life swing's drift, relative above `SWING_RELATIVE` points (`gpu::Check::swing_reduced`).
+        pub swing_reduced: f32,
+        /// Dead next turn.
+        pub dead: f32,
         /// Over the legal options' logits.
         pub policy: f32,
+        /// Over the legal options' probabilities: the largest change of one (shown; the reduced bar is `tv_*`).
+        pub probability: f32,
+        /// The policy's total-variation distance from PyTorch's (`PolicyDrift`): mean, 99th percentile, largest.
+        pub tv_mean: f64,
+        pub tv_p99: f64,
+        pub tv_max: f64,
+        /// Best options changed where PyTorch's top two are `TIE` apart or more.
+        pub decided_flips: usize,
         /// The fraction of positions whose best legal option is the reference's.
         pub same_argmax: f64,
         /// Positions whose best option is not a legal one.
         pub illegal_argmax: usize,
+        /// Positions whose value, aux or a legal option's logit is not finite: `f32::max` passes over NaN, so the drifts
+        /// above cannot see one (as `gpu::Check::non_finite` and serve.py's check count it).
+        pub non_finite: usize,
         pub seconds: f64,
     }
 
@@ -771,6 +885,7 @@ pub mod reference {
         };
         let start = std::time::Instant::now();
         let mut same = 0;
+        let mut drift = PolicyDrift::default();
         for bucket in cantrip_obs::encode::BUCKETS {
             let rows: Vec<usize> = (0..r.positions.len())
                 .filter(|&i| r.positions[i].bucket == bucket)
@@ -781,14 +896,31 @@ pub mod reference {
                 for (j, &i) in chunk.iter().enumerate() {
                     let e = &r.positions[i];
                     p.value = p.value.max((out.value[j] - r.value[i]).abs());
-                    for k in 0..2 {
-                        p.aux = p.aux.max((out.aux[j][k] - r.aux[i][k]).abs());
-                    }
+                    let swing = (out.aux[j][0] - r.aux[i][0]).abs();
+                    let swing_reduced = swing / (r.aux[i][0].abs() / SWING_RELATIVE).max(1.0);
+                    let dead = (out.aux[j][1] - r.aux[i][1]).abs();
+                    p.aux = p.aux.max(swing_reduced).max(dead);
+                    p.swing_reduced = p.swing_reduced.max(swing_reduced);
+                    p.dead = p.dead.max(dead);
                     let legal: Vec<usize> = (0..e.options)
                         .filter(|&k| e.legal[e.first_option + k])
                         .collect();
+                    if !(out.value[j].is_finite()
+                        && out.aux[j].iter().all(|a| a.is_finite())
+                        && legal.iter().all(|&k| out.policy[j][k].is_finite()))
+                    {
+                        p.non_finite += 1;
+                    }
                     for &k in &legal {
                         p.policy = p.policy.max((out.policy[j][k] - r.policy[i][k]).abs());
+                    }
+                    if !legal.is_empty() {
+                        let got: Vec<f32> = legal.iter().map(|&k| out.policy[j][k]).collect();
+                        let want: Vec<f32> = legal.iter().map(|&k| r.policy[i][k]).collect();
+                        for (a, b) in softmax(&got).iter().zip(softmax(&want)) {
+                            p.probability = p.probability.max((a - b).abs() as f32);
+                        }
+                        drift.add(&got, &want);
                     }
                     let best = |row: &[f32]| {
                         legal
@@ -806,6 +938,8 @@ pub mod reference {
         }
         p.seconds = start.elapsed().as_secs_f64();
         p.same_argmax = same as f64 / p.positions.max(1) as f64;
+        (p.tv_mean, p.tv_p99, p.tv_max, p.decided_flips) =
+            (drift.mean(), drift.p99(), drift.max(), drift.decided_flips);
         Ok(p)
     }
 }

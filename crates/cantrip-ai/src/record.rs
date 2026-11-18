@@ -18,7 +18,7 @@ use cantrip_obs::factor::{FactoredAnswer, Machine};
 
 use crate::knowledge::front;
 use crate::observe::kind_name;
-use crate::search::RootStep;
+use crate::search::{RootOption, RootStep, Searched, StepOrigin, Target};
 use crate::shard::{GameMeta, GameRecord, Sample, mode_name};
 use crate::{Answering, Knowledge, CardIndex, factored_name, final_x, observe_indexed};
 
@@ -43,6 +43,13 @@ pub struct Dealt {
     /// table noted one (the tactical bot's `TacticalModel`, in log-odds of winning: `cantrip-native-host`'s `Note`).
     /// Recorded in the game's meta by decision (`GameMeta::heuristic_values`).
     pub heuristics: HashMap<tree::NodeId, f32>,
+    /// The seats (from 1) the network being trained played, where a game was played against an earlier champion
+    /// (self-play's `--opponents`): recorded in the meta (`GameMeta::learners`); empty, every seat.
+    pub learners: Vec<u8>,
+    /// Where a game began from a scenario's position rather than a deal (self-play's `--starts`): the node of that
+    /// position, and the scenario's name. The answers that brought the game there are the script's, no seat's
+    /// decisions: they make no samples, and the decisions are counted from the position (as the game's trace is).
+    pub start: Option<(tree::NodeId, String)>,
 }
 
 /// How the game ended: read off the game played, since a concession is not in its tree.
@@ -107,14 +114,65 @@ fn swing(lives: &[i64], seat: usize) -> i64 {
             .sum::<i64>()
 }
 
-/// What the search made of one request a seat answered by searching: the root's visits per sub-step and its value.
+/// What the search made of one request a seat answered by searching: the root's visits per sub-step, which sub-steps
+/// it reached, its options' values, and the root's value (`Root::of`, from the search's `Searched`).
 #[derive(Clone, Debug, Default)]
 pub struct Root {
     pub visits: Vec<RootStep>,
+    /// Each sub-step of the answer with a choice, and whether the search reached it (`Searched::steps`): a sample is
+    /// searched only where the search says so (`Sample::searched`).
+    pub steps: Vec<StepOrigin>,
+    /// The tokens before the root's first sub-step with a choice, and that step's options as searched, each with its
+    /// visits and the values backed up through it over every world (`Searched::root_prefix`, `root_options`): the one
+    /// source of the options' root values recorded beside the visits (`Sample::q`).
+    pub prefix: Vec<cantrip_obs::factor::Token>,
+    pub options: Vec<RootOption>,
     pub value: f32,
     /// Whether its visits are a policy target: a fast search of playout-cap randomisation (`selfplay::Options::full_share`)
     /// is not, and its decision is listed in the game's `GameMeta::fast_decisions`; its position is still a value target.
     pub policy: bool,
+    /// Whether its root target is Gumbel's (`Target::Gumbel`): an improved policy at any budget, so a fast search's is a
+    /// policy target too where training asks for it (`GameMeta::gumbel_decisions`, train.py's `--fast-policy`).
+    pub gumbel: bool,
+}
+
+impl Root {
+    /// The search's record of a request it answered; `policy` as above.
+    pub fn of(searched: &Searched, policy: bool) -> Root {
+        Root {
+            visits: searched.visits.clone(),
+            steps: searched.steps.clone(),
+            prefix: searched.root_prefix.clone(),
+            options: searched.root_options.clone(),
+            value: searched.root_value,
+            policy,
+            gumbel: searched.target == Target::Gumbel,
+        }
+    }
+
+    /// Whether the search reached the sub-step after `chosen` and chose its option (`StepOrigin::searched`).
+    fn reached(&self, chosen: &[cantrip_obs::factor::Token]) -> bool {
+        self.steps.iter().any(|s| s.searched && s.prefix.as_slice() == chosen)
+    }
+
+    /// Option `t`'s root value for the seat at the sub-step after `chosen` (`RootOption`'s values over its visits,
+    /// every world's, cut edges included): over the root's options whose tokens from its first sub-step run through
+    /// it - a whole answer's (`Flat`) at each of its steps, a step's option at that step alone. NaN where none of
+    /// them was visited, or where the sub-step lies past what the root's options spell (a later sub-step searched in
+    /// steps of its own).
+    fn q(&self, chosen: &[cantrip_obs::factor::Token], t: cantrip_obs::factor::Token) -> f32 {
+        let Some(rest) = chosen.strip_prefix(self.prefix.as_slice()) else {
+            return f32::NAN;
+        };
+        let (mut n, mut w) = (0u64, 0.0f64);
+        for o in &self.options {
+            if o.path.len() > rest.len() && o.path[..rest.len()] == *rest && o.path[rest.len()] == t {
+                n += u64::from(o.visits);
+                w += f64::from(o.value_sum);
+            }
+        }
+        if n > 0 { (w / n as f64) as f32 } else { f32::NAN }
+    }
 }
 
 /// The searched requests of a game, by the game node the request was asked at (`game.at` before it was answered).
@@ -132,29 +190,40 @@ pub fn record(
 }
 
 /// A sub-step's visit target: the root's visits over the step's options (by option index, legal and not cut by the
-/// cap), normalised to sum to 1; `None` where the search left no visits at this prefix.
+/// cap), normalised to sum to 1 (under Gumbel the root's first sub-step holds the Gumbel target scaled to
+/// `search::TARGET_SCALE`, made shares the same way), and beside each its root value for the seat (`RootStep::q`;
+/// empty where no option's is known); `None` where the search did not reach this sub-step (`Root::reached`) or left no
+/// visits on a legal option there. Each option is the search's own by its index (`RootStep::options`), so two options
+/// of an equal token keep their own visits; an index that is not this step's option of that token falls back to the
+/// first legal option of the token.
 fn visit_target(
     root: Option<&Root>,
     chosen: &[cantrip_obs::factor::Token],
     step: &cantrip_obs::factor::Step,
     e: &encode::Encoded,
-) -> Option<Vec<(u16, f32)>> {
-    let r = root?
-        .visits
-        .iter()
-        .find(|r| r.prefix.as_slice() == chosen)?;
+) -> Option<(Vec<(u16, f32)>, Vec<f32>)> {
+    let root = root.filter(|r| r.reached(chosen))?;
+    let r = root.visits.iter().find(|r| r.prefix.as_slice() == chosen)?;
     let mut out: Vec<(u16, f32)> = Vec::new();
-    for (t, &n) in r.tokens.iter().zip(&r.visits) {
+    let mut q: Vec<f32> = Vec::new();
+    for (k, (t, &n)) in r.tokens.iter().zip(&r.visits).enumerate() {
         if n == 0 {
             continue;
         }
-        let Some(i) = (0..step.tokens.len()).find(|&i| step.tokens[i] == *t && step.mask[i]) else {
+        let own = r.options.get(k).copied().filter(|&i| step.tokens.get(i) == Some(t) && step.mask.get(i) == Some(&true));
+        let Some(i) = own.or_else(|| (0..step.tokens.len()).find(|&i| step.tokens[i] == *t && step.mask[i])) else {
             continue;
         };
         if e.option_token(i).is_none_or(|at| !e.legal[at]) {
             continue;
         }
+        if let Some(entry) = out.iter_mut().find(|(at, _)| usize::from(*at) == i) {
+            // The same option twice (the fallback's): its visits once, summed.
+            entry.1 += n as f32;
+            continue;
+        }
         out.push((i as u16, n as f32));
+        q.push(r.q.get(k).copied().unwrap_or_else(|| root.q(chosen, *t)));
     }
     let total: f32 = out.iter().map(|&(_, n)| n).sum();
     if total <= 0.0 {
@@ -163,12 +232,16 @@ fn visit_target(
     for v in &mut out {
         v.1 /= total;
     }
-    Some(out)
+    if q.iter().all(|x| x.is_nan()) {
+        q.clear();
+    }
+    Some((out, q))
 }
 
 /// `record`, with the search's root visits where the seats searched (`roots`): a sub-step the search visited is
-/// labelled with its visit distribution (summing to 1 over the legal options), any other with the option chosen; each
-/// searched decision's root value goes in the game's meta.
+/// labelled with its visit distribution (summing to 1 over the legal options) and its options' root values, and marked
+/// searched (`Sample::searched`); any other with the option chosen, not searched - a sub-step of a searched decision
+/// the search never reached among them; each searched decision's root value goes in the game's meta.
 pub fn record_searched(
     game: Game,
     dealt: &Dealt,
@@ -201,7 +274,12 @@ pub fn record_distilled(
     let seats = game.state.players.len();
     let final_turn = game.state.turn.number;
     let final_lives = lives(&game);
-    let nodes = game.tree.path(end);
+    let mut nodes = game.tree.path(end);
+    if let Some((at, _)) = &dealt.start
+        && let Some(i) = nodes.iter().position(|n| n == at)
+    {
+        nodes.drain(..=i);
+    }
     let answers: Vec<(_, PlayerId, Answer)> = nodes
         .iter()
         .filter_map(|&n| game.tree.answer(n).map(|(_, p, a)| (n, *p, a.clone())))
@@ -249,6 +327,7 @@ pub fn record_distilled(
     let mut root_values = Vec::new();
     let mut heuristic_values = Vec::new();
     let mut fast_decisions = Vec::new();
+    let mut gumbel_decisions = Vec::new();
     let mut distill_values: Vec<(u32, f32)> = Vec::new();
     let mut k = 0;
     while k < answers.len() {
@@ -293,6 +372,9 @@ pub fn record_distilled(
             root_values.push((start as u32, r.value));
             if !r.policy && fast_decisions.last() != Some(&(start as u32)) {
                 fast_decisions.push(start as u32);
+            }
+            if r.gumbel && gumbel_decisions.last() != Some(&(start as u32)) {
+                gumbel_decisions.push(start as u32);
             }
         }
         game.goto(parent);
@@ -376,8 +458,10 @@ pub fn record_distilled(
             if e.option_token(i).is_none_or(|at| !e.legal[at]) {
                 fail(&kind, "chosen option cut by the cap");
             } else {
-                let visits = visit_target(root, m.chosen(), step, &e)
-                    .unwrap_or_else(|| vec![(i as u16, 1.0)]);
+                let (searched, visits, q) = match visit_target(root, m.chosen(), step, &e) {
+                    Some((visits, q)) => (true, visits, q),
+                    None => (false, vec![(i as u16, 1.0)], Vec::new()),
+                };
                 samples.push(Sample {
                     seat: seat as u8,
                     decision: start as u32,
@@ -388,6 +472,8 @@ pub fn record_distilled(
                     dead_next_turn,
                     chosen: i as u16,
                     visits,
+                    searched,
+                    q,
                     opponent_hand: opponent_hand.clone(),
                     position: to_compact(&e),
                 });
@@ -418,7 +504,65 @@ pub fn record_distilled(
         root_values,
         heuristic_values,
         fast_decisions,
+        gumbel_decisions,
         distill_values,
+        learners: dealt.learners.clone(),
+        start: dealt.start.as_ref().map(|(_, name)| name.clone()).unwrap_or_default(),
+        reanalysed: false,
     };
     (GameRecord { meta, samples }, failures)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use cantrip_obs::factor::{Step, Tok, Token};
+
+    fn token(n: u32) -> Token {
+        Token::of(Tok::Pick, cantrip_obs::Ref::Object(n), cantrip_obs::Ref::None, 0)
+    }
+
+    /// A position whose step's three options are tokens 4 to 6, all legal.
+    fn encoded() -> encode::Encoded {
+        encode::Encoded {
+            bucket: 8,
+            len: 7,
+            kind: vec![0; 8],
+            card: vec![0; 8],
+            cats: Vec::new(),
+            ptrs: Vec::new(),
+            nums: Vec::new(),
+            legal: (0..8).map(|i| (4..7).contains(&i)).collect(),
+            first_option: 4,
+            options: 3,
+            cap_hit: false,
+            origin: Vec::new(),
+        }
+    }
+
+    /// Two options of an equal token keep their own visits and values in the target (each by its option index), and the
+    /// shares sum to 1; a step recorded with no indices reads as before, its options found by token.
+    #[test]
+    fn options_of_an_equal_token_keep_their_own_visits() {
+        let (a, b) = (token(1), token(2));
+        let step = Step { tokens: vec![a, a, b], mask: vec![true; 3] };
+        let rs = RootStep { prefix: Vec::new(), tokens: vec![a, a, b], options: vec![0, 1, 2], visits: vec![3, 1, 4], q: vec![0.5, -0.5, 0.25], chosen: b };
+        let root = Root {
+            visits: vec![rs.clone()],
+            steps: vec![StepOrigin { prefix: Vec::new(), chosen: b, searched: true }],
+            prefix: Vec::new(),
+            options: Vec::new(),
+            value: 0.0,
+            policy: true,
+            gumbel: false,
+        };
+        let (target, q) = visit_target(Some(&root), &[], &step, &encoded()).expect("a target");
+        assert_eq!(target, vec![(0, 3.0 / 8.0), (1, 1.0 / 8.0), (2, 4.0 / 8.0)]);
+        assert!((target.iter().map(|t| t.1).sum::<f32>() - 1.0).abs() < 1e-6);
+        assert_eq!(q, vec![0.5, -0.5, 0.25]);
+        // Without indices (the fallback), an equal token's visits go to its first option, once and summed.
+        let old = Root { visits: vec![RootStep { options: Vec::new(), q: Vec::new(), ..rs }], ..root };
+        let (target, _) = visit_target(Some(&old), &[], &step, &encoded()).expect("a target");
+        assert_eq!(target, vec![(0, 4.0 / 8.0), (2, 4.0 / 8.0)]);
+    }
 }

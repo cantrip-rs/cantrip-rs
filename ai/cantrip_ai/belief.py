@@ -190,6 +190,18 @@ def load(directories: list, base: list, max_games: int | None, every: int, log=p
     return data, names
 
 
+def batch_view(data: Decisions) -> type:
+    """What `dataset.batches` reads of the positions, as a class of three columns (a class, not a `dataset.Data`: it
+    has no `len`, and `batches` counts the samples by a column): every position a choice, dealt once an epoch."""
+
+    class View:
+        length = data.length.astype(np.uint8) if len(data.length) and data.length.max() < 256 else data.length
+        legal = np.full(len(data), 2, np.uint8)
+        repeat = np.ones(len(data), np.float32)
+
+    return View
+
+
 def log_choose(n: torch.Tensor, k: torch.Tensor) -> torch.Tensor:
     return torch.lgamma(n + 1) - torch.lgamma(k + 1) - torch.lgamma(n - k + 1)
 
@@ -301,7 +313,7 @@ class Belief:
         self.names = model.checkpoint_cards(ck, checkpoint)
         self.facts = card_facts(self.names, json.loads(Path(threats).read_text(encoding="utf-8")))
         config = model.Config(**ck["config"])
-        self.net = model.build(config, ck["state"]["table"].numpy())
+        self.net = model.from_state(config, ck["state"])
         self.net.load_state_dict(saved["body"] or ck["state"])
         self.net.to(self.device).eval()
         self.head = Head(config.width).to(self.device)
@@ -361,7 +373,7 @@ def run(args):
     threats = json.loads(Path(args.threats).read_text(encoding="utf-8"))
     facts = card_facts(names, threats)
     config = model.Config(**checkpoint["config"])
-    net = model.build(config, checkpoint["state"]["table"].numpy())
+    net = model.from_state(config, checkpoint["state"])
     net.load_state_dict(checkpoint["state"])
     net.to(device)
     head = Head(config.width).to(device)
@@ -376,10 +388,7 @@ def run(args):
     held = held_games[data.game]
     train_rows, test_rows = np.flatnonzero(~held), np.flatnonzero(held)
 
-    class View:  # what `dataset.batches` reads
-        length = data.length.astype(np.uint8) if data.length.max() < 256 else data.length
-        legal = np.full(len(data), 2, np.uint8)
-        repeat = np.ones(len(data), np.float32)
+    View = batch_view(data)
 
     def inputs_of(rows):
         x = dataset.decode(data.blob, data.offset, rows)

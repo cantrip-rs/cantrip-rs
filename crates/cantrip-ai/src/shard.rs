@@ -9,9 +9,14 @@
 //!   u32 n  meta: n bytes of JSON (`GameMeta`)
 //!   u32 samples, then each sample:
 //!     u8 seat (0-based)  u32 decision  u16 step  u16 turn  i8 outcome  f32 life_swing  u8 dead_next_turn
-//!     u16 chosen  u16 v, then v × (u16 option, f32 visits)  u16 h, then h × u32 card row  u32 n, then n bytes of
-//!     position (`cantrip_obs::encode::to_compact`)
+//!     u16 chosen  u8 flags  u16 v, then v × (u16 option, f32 visits, f32 q)  u16 h, then h × u32 card row
+//!     u32 n, then n bytes of position (`cantrip_obs::encode::to_compact`)
 //! ```
+//!
+//! That is format 2 (`FORMAT`). `flags` bit 0 is `Sample::searched`; `q` is each visited option's root value for the
+//! seat (`Sample::q`), NaN where none is known. Format 1, every shard written before 2026-11-13, has neither the flags
+//! byte nor the q values (a visit is `u16 option, f32 visits`); both formats are read (`ShardReader`), a format 1
+//! sample as not searched and with no q.
 //!
 //! A shard is written as `<name>.part` and renamed when it is closed, so a reader never sees half of one; a game is
 //! written whole or not at all. Shards roll over at about `max_bytes` compressed or `max_games` games, and are named
@@ -29,7 +34,9 @@ use crate::CardIndex;
 
 pub const MAGIC: &[u8; 8] = b"CTRPSHD1";
 /// The layout of the stream above; the observation's own layout is `schema` and `encoder_hash`.
-pub const FORMAT: u32 = 1;
+pub const FORMAT: u32 = 2;
+/// The formats a reader takes: format 1 lacks the per-sample flags and q values (see the module).
+pub const FORMATS: [u32; 2] = [1, 2];
 /// The engine commit this was built from (`build.rs`).
 pub const COMMIT: &str = env!("CANTRIP_COMMIT");
 pub const EXTENSION: &str = "shard.zst";
@@ -133,11 +140,29 @@ pub struct GameMeta {
     /// reads as before.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub fast_decisions: Vec<u32>,
+    /// The decisions (by place) whose root target is Gumbel's (`search::Target::Gumbel`): an improved policy at any
+    /// budget, so training may take a fast search's as a policy target too (train.py's `--fast-policy`), where a fast
+    /// PUCT search's visit counts mostly echo the prior. Absent from a game with none.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub gumbel_decisions: Vec<u32>,
     /// Where a recorder distilled one (`distill::world_mean`): a perfect-information value's mean over worlds dealt from
     /// the answering seat's knowledge, by the decision's place: a Decklist value's distillation target. Absent from a
     /// game with none.
     #[serde(default, skip_serializing_if = "Vec::is_empty", deserialize_with = "values_or_null")]
     pub distill_values: Vec<(u32, f32)>,
+    /// The seats (from 1) the network being trained played, where an earlier champion played the others (self-play's
+    /// `--opponents`): only the learner's decisions are search targets, an earlier champion's recorded one-hot with
+    /// no root value. Absent: every seat was the learner's.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub learners: Vec<u8>,
+    /// The scenario a game began from (self-play's `--starts`), its decisions counted from that position. Absent from a
+    /// dealt game.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub start: String,
+    /// A game's chosen decisions searched again later by a newer network (`cantrip-reanalyse`): only those decisions'
+    /// samples are in it, their positions already in the game's self-play shard as value targets.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub reanalysed: bool,
 }
 
 /// One sub-step a seat answered.
@@ -160,6 +185,14 @@ pub struct Sample {
     pub chosen: u16,
     /// The visit distribution over the options; one-hot on `chosen` for a recorded answer.
     pub visits: Vec<(u16, f32)>,
+    /// Whether `visits` came from a search: the search's root visits at this sub-step. False for an answer no search
+    /// made, and for a sub-step of a searched decision that the search never reached (recorded one-hot on the answer
+    /// given). False in a format 1 shard, which did not say.
+    pub searched: bool,
+    /// Beside each of `visits`, that option's mean value for the seat over the search's visits in every world (from the
+    /// search's `root_options`: `record::Root::q`), NaN where unknown; empty where nothing is known (not searched, a
+    /// sub-step past what the root's options spell, or a format 1 shard).
+    pub q: Vec<f32>,
     /// The opponents' hands, as card rows: the hidden state's labels.
     pub opponent_hand: Vec<u32>,
     /// The encoded position, compact (`cantrip_obs::encode::from_compact`).
@@ -196,7 +229,7 @@ pub fn game_bytes(game: &GameRecord) -> Vec<u8> {
             + game
                 .samples
                 .iter()
-                .map(|s| 40 + s.position.len() + 4 * s.opponent_hand.len())
+                .map(|s| 40 + s.position.len() + 4 * s.opponent_hand.len() + 10 * s.visits.len())
                 .sum::<usize>(),
     );
     put_u32(&mut out, json.len() as u32);
@@ -211,10 +244,12 @@ pub fn game_bytes(game: &GameRecord) -> Vec<u8> {
         out.extend_from_slice(&s.life_swing.to_le_bytes());
         out.push(s.dead_next_turn as u8);
         put_u16(&mut out, s.chosen);
+        out.push(u8::from(s.searched));
         put_u16(&mut out, s.visits.len() as u16);
-        for &(o, v) in &s.visits {
+        for (k, &(o, v)) in s.visits.iter().enumerate() {
             put_u16(&mut out, o);
             out.extend_from_slice(&v.to_le_bytes());
+            out.extend_from_slice(&s.q.get(k).copied().unwrap_or(f32::NAN).to_le_bytes());
         }
         put_u16(&mut out, s.opponent_hand.len() as u16);
         for &r in &s.opponent_hand {
@@ -394,8 +429,11 @@ impl<R: Read> ShardReader<R> {
             return Err(bad("not a cantrip shard"));
         }
         let n = u32_(&mut stream)? as usize;
-        let header = serde_json::from_slice(&bytes(&mut stream, n)?)
+        let header: Header = serde_json::from_slice(&bytes(&mut stream, n)?)
             .map_err(|e| bad(format!("the header: {e}")))?;
+        if !FORMATS.contains(&header.format) {
+            return Err(bad(format!("shard format {}, not one of {FORMATS:?}", header.format)));
+        }
         Ok(ShardReader { stream, header })
     }
 
@@ -406,6 +444,7 @@ impl<R: Read> ShardReader<R> {
             0 => return Ok(None),
             _ => self.stream.read_exact(&mut first[1..])?,
         }
+        let format = self.header.format;
         let r = &mut self.stream;
         let n = u32::from_le_bytes(first) as usize;
         let meta: GameMeta = serde_json::from_slice(&bytes(r, n)?)
@@ -421,10 +460,18 @@ impl<R: Read> ShardReader<R> {
             let life_swing = f32_(r)?;
             let [dead] = take::<1>(r)?;
             let chosen = u16_(r)?;
+            let flags = if format >= 2 { take::<1>(r)?[0] } else { 0 };
             let v = u16_(r)? as usize;
             let mut visits = Vec::with_capacity(v);
+            let mut q = Vec::new();
             for _ in 0..v {
                 visits.push((u16_(r)?, f32_(r)?));
+                if format >= 2 {
+                    q.push(f32_(r)?);
+                }
+            }
+            if q.iter().all(|x| x.is_nan()) {
+                q.clear();
             }
             let h = u16_(r)? as usize;
             let mut opponent_hand = Vec::with_capacity(h);
@@ -443,12 +490,26 @@ impl<R: Read> ShardReader<R> {
                 dead_next_turn: dead != 0,
                 chosen,
                 visits,
+                searched: flags & 1 != 0,
+                q,
                 opponent_hand,
                 position,
             });
         }
         Ok(Some(GameRecord { meta, samples }))
     }
+}
+
+/// A shard written whole at `path` - its header, then each game in a frame of its own, as `ShardWriter` writes them - and
+/// synced to disk. A caller that must not leave half of one writes it under another name and renames it.
+pub fn write(path: &Path, header: &Header, games: &[GameRecord]) -> io::Result<()> {
+    let mut file = BufWriter::new(File::create(path)?);
+    file.write_all(&ShardWriter::frame(&header_bytes(header))?)?;
+    for g in games {
+        file.write_all(&ShardWriter::frame(&game_bytes(g))?)?;
+    }
+    file.flush()?;
+    file.get_ref().sync_all()
 }
 
 /// A shard whole: its header and every game.

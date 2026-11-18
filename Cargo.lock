@@ -116,9 +116,12 @@ dependencies = [
  "cantrip-engine",
  "cantrip-host",
  "cantrip-obs",
+ "cantrip-script",
+ "libc",
  "mimalloc",
  "serde",
  "serde_json",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]

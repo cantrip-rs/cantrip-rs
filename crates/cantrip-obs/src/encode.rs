@@ -31,6 +31,12 @@ use crate::*;
 /// Bumped whenever the layout or the meaning of a number changes (and with it `encoder_hash`).
 pub const SCHEMA_VERSION: u32 = 4;
 pub const BUCKETS: [usize; 3] = [32, 64, 128];
+/// The token counts models are exported and served at: `BUCKETS`, and 96 between 64 and 128, where 65% of self-play's
+/// rows of more than 64 real tokens fit. A position is still encoded at its `BUCKETS` size (this list is no part of the
+/// layout, nor of `encoder_hash`); a server runs each row at the smallest of these its model has a graph for, and a
+/// model exported before T96 has none, so it runs those rows at 128 as it always did. `ai/cantrip_ai/export.py` and
+/// `serve.py` have the same list.
+pub const GRAPH_BUCKETS: [usize; 4] = [32, 64, 96, 128];
 pub const MAX_TOKENS: usize = 128;
 pub const NUMS: usize = 96;
 pub const CATS: usize = 9;

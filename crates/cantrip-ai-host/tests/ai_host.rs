@@ -352,6 +352,12 @@ fn a_searched_answer_carries_its_search_and_the_table_takes_it() {
         json!("InvalidSetup"),
         "{hidden}"
     );
+    // A search setting the host does not know is refused, never searched without (`search::Config::set`).
+    let misspelt = host.line(
+        &json!({ "Cmd": "AiStart", "GameId": 5, "Seat": seat, "Mode": "Full", "Simulations": 8, "PriorTemprature": 1.5 })
+            .to_string(),
+    );
+    assert_eq!(misspelt["Rejected"]["Code"], json!("InvalidSetup"), "{misspelt}");
 
     let (mut answered, mut searched) = (0, 0);
     while !step["Finished"].as_bool().unwrap() && answered < 40 {
@@ -361,7 +367,8 @@ fn a_searched_answer_carries_its_search_and_the_table_takes_it() {
             request["Seat"].as_i64().unwrap() as i32,
         );
         let start = json!({ "Cmd": "AiStart", "GameId": 5, "Seat": seat, "Mode": "Full", "Simulations": 8, "Worlds": 1, "Batch": 4,
-            "Prune": true, "PruneBad": -0.8, "PruneMargin": 0.2, "PruneAfter": 2, "PruneAfterReplies": 1 });
+            "Prune": true, "PruneBad": -0.8, "PruneMargin": 0.2, "PruneAfter": 2, "PruneAfterReplies": 1,
+            "EvalCache": 4096.0, "Snapshots": "4", "CapValue": true });
         ok(host.line(&start.to_string()));
         let result = results
             .recv_timeout(Duration::from_secs(60))

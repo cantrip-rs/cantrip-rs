@@ -13,6 +13,7 @@ use cantrip_engine::visibility::{knows_face, looks_into, observable, request_obj
 use cantrip_engine::*;
 use cantrip_obs::InfoMode;
 
+use crate::belief::HandWeights;
 use crate::knowledge::{Knowledge, front};
 
 /// What decks the seat expects an opponent to play, in Hidden mode: the metagame's main decks, each a list of cards (by
@@ -20,6 +21,9 @@ use crate::knowledge::{Knowledge, front};
 #[derive(Clone, Debug, Default)]
 pub struct Prior {
     lists: Vec<(Vec<CardId>, f64)>,
+    /// How an opponent's hidden hand is drawn from their unseen cards, where a belief says (`with_hand`); uniformly
+    /// where none does.
+    hand: Option<std::sync::Arc<HandWeights>>,
 }
 
 impl Prior {
@@ -38,6 +42,19 @@ impl Prior {
 
     pub fn is_empty(&self) -> bool {
         self.lists.is_empty()
+    }
+
+    /// This prior, the opponents' hidden hands dealt by `weights` (`crate::belief`): each hidden card of an opponent's
+    /// hand drawn from their unseen cards by weighted sampling without replacement, a copy of a card as likely as its
+    /// weight; their other unseen cards dealt uniformly from what is left, as before. The worlds that can be dealt are
+    /// the same; only how likely each is changes.
+    pub fn with_hand(&self, weights: HandWeights) -> Prior {
+        Prior { lists: self.lists.clone(), hand: (!weights.is_empty()).then(|| std::sync::Arc::new(weights)) }
+    }
+
+    /// The hand weights `with_hand` gave, if any.
+    pub fn hand(&self) -> Option<&HandWeights> {
+        self.hand.as_deref()
     }
 
     /// Every main deck in the decklists (`.txt`, "N Name" lines up to a "Sideboard" line) under `dir`, each weighted
@@ -439,9 +456,30 @@ pub fn determinize_owned(game: &mut Game, k: &Knowledge, seat: PlayerId, mode: I
         taken.sort_unstable_by_key(|&(index, _)| std::cmp::Reverse(index));
         for (index, id) in taken { selected.insert(id, pool.swap_remove(index)); }
     }
+    // With hand weights (`Prior::with_hand`), an opponent's hidden hand cards (none of them cast face down: those are
+    // matched above) are drawn next, each from what its owner's pool still holds by weight; the pool is in a uniform
+    // order and alike copies weigh alike, so what is left is still uniform, and the rest are dealt from it as before.
+    let weights = prior.hand.as_deref().filter(|_| mode == InfoMode::Decklist);
+    if let Some(w) = weights {
+        for u in unknown.iter().filter(|u| {
+            u.face_down_casts.is_empty() && u.owner != seat && u.origin == Origin::Library
+                && game.state.obj(u.chain[0]).zone == Zone::hand(u.owner)
+        }) {
+            if let Some(pool) = pools.get_mut(&(u.owner, u.origin))
+                && !pool.is_empty()
+            {
+                let each: Vec<f64> = pool.iter().map(|&c| w.weight(u.owner, c)).collect();
+                selected.insert(u.chain[0], pool.remove(pick(&each, rng)));
+            }
+        }
+    }
     for u in &unknown {
         if let Some(pool) = pools.get_mut(&(u.owner, u.origin)) {
-            let card = if u.face_down_casts.is_empty() { pool.pop() } else { selected.remove(&u.chain[0]) };
+            let card = match selected.remove(&u.chain[0]) {
+                Some(card) => Some(card),
+                None if u.face_down_casts.is_empty() => pool.pop(),
+                None => None,
+            };
             let Some(card) = card else { continue };
             changed |= game.state.obj(u.chain[0]).card != card;
             let mut ways = Vec::new();

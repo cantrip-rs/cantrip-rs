@@ -36,7 +36,7 @@ use std::sync::Mutex;
 use std::time::Duration;
 
 use cantrip_obs::encode::{
-    BUCKETS, CATS, MAX_TOKENS, NO_POINTER, NUMS, PTRS, SCHEMA_VERSION, UNKNOWN_CARD, encoder_hash,
+    CATS, GRAPH_BUCKETS, MAX_TOKENS, NO_POINTER, NUMS, PTRS, SCHEMA_VERSION, UNKNOWN_CARD, encoder_hash,
     f16_bits, f16_value, fnv1a64,
 };
 
@@ -153,11 +153,12 @@ pub fn request(b: &FeatureBatch, remap: &[u32]) -> Result<(Vec<u8>, Vec<usize>),
                 .map_or(0, |k| k + 1)
         })
         .collect();
+    // By the bucket a server runs each row at (`GRAPH_BUCKETS`), so each bucket's rows are one run of the frame.
     let bucket = |l: usize| {
-        BUCKETS
+        GRAPH_BUCKETS
             .iter()
             .position(|&b| b >= l.max(1))
-            .unwrap_or(BUCKETS.len())
+            .unwrap_or(GRAPH_BUCKETS.len())
     };
     let mut order: Vec<usize> = (0..rows).collect();
     order.sort_by_key(|&i| bucket(lengths[i]));
@@ -548,5 +549,10 @@ impl Evaluator for RemoteEvaluator {
             .unwrap_or_else(|p| p.into_inner())
             .push(stream);
         Ok(out)
+    }
+
+    /// Closes the pooled connections, each a client the server counts; the next evaluation connects again.
+    fn idle(&self) {
+        self.pool.lock().unwrap_or_else(|p| p.into_inner()).clear();
     }
 }

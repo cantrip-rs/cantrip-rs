@@ -9,8 +9,10 @@ holding the networks on the GPU, which every self-play lane and every AI host se
 A model directory is export's (`manifest.json` and `model.pt`, the weights the server runs; `export --weights-only`
 writes `model.pt` into a directory exported before export wrote it). At start each model's parity references
 (`reference/`) are run through the serving path and checked against PyTorch's: at fp32 within export's tolerances
-(value, aux and legal logits within 1e-3), below it within `REDUCED` (what the search uses: value, option probabilities,
-dead-next-turn within 1e-2; the life swing within half a point, or 1% above 50 points), and the same best option on 99.5%; a model that fails
+(value, dead-next-turn and legal logits within 1e-3, the life swing within 1e-3 of its size above
+50 points), below it within `REDUCED` (what the search uses: value and dead-next-turn within 1e-2; the policy by its
+total-variation distance from PyTorch's, mean, 99th percentile and largest, with no best option changed outside a tie;
+the life swing within half a point, or 1% above 50 points), and the same best option on 99.5%; a model that fails
 is refused (`--no-check` skips it).
 
 The wire protocol is `crates/cantrip-ai/src/remote.rs`'s: TCP, length-prefixed frames, a hello that names the model by
@@ -68,7 +70,11 @@ EVALUATE = 1
 NUMS_SPARSE = 1
 NUMS_DENSE = 2
 MAX_FRAME = 1 << 28
-BUCKETS = (32, 64, 128)
+# The graph buckets (`export.BUCKETS`): the encoding's, and 96. A model serves at the encoding's and at those of the
+# others its manifest names (`Served.buckets`: a model exported before T96 serves as it did), as the native engine
+# does; a row runs at the smallest of them that holds the tokens it needs (`tokens_needed`).
+BUCKETS = (32, 64, 96, 128)
+ENCODED = tuple(model.LAYOUT["buckets"])
 MAX_TOKENS = BUCKETS[-1]
 CATS, PTRS, NUMS = model.CATS, model.PTRS, model.NUMS
 NO_POINTER = model.NO_POINTER
@@ -76,13 +82,18 @@ MASKED = np.float32(model.MASKED)
 TOLERANCE = 1e-3
 SAME_ARGMAX = 0.995
 # What a precision below fp32 is held to: the outputs the search uses, within what rounding moves them and well inside
-# what the network itself gets wrong. The value (-1..1) and the dead-next-turn probability within 1e-2, each legal
-# option's probability (the search's prior) within 1e-2, the same best option on 99.5%; the life swing (in life points,
+# what the network itself gets wrong. The value (-1..1) and the dead-next-turn probability within 1e-2; the policy (the
+# search's prior), over the references with two legal options or more, by the total-variation distance of its legal
+# probabilities from PyTorch's: mean below 2e-4, 99th percentile (nearest rank) below 5e-3, largest below 5e-2, and no
+# best option changed where PyTorch's top two are TIE (0.02) apart or more (`eval::reference::PolicyDrift`, the project's
+# decision 2026-11-13: one option's largest change, the bar before, was set by the closest tie and moved with batching);
+# the same best option on 99.5%; the life swing (in life points,
 # which no search reads) within half a point, or 1% of the swing above 50 points (`SWING_RELATIVE`: fp16's own spacing is
 # a quarter point at 256, and a network that predicts a swing of hundreds holds it only to its relative precision; A'
 # predicts 329 on one reference and moves it by 0.7-1.2 under autocast, with no activation near fp16's range). Measured on gen0 (docs/ai-training.md): fp16 and tf32 hold to it, bf16
 # does not (its 8-bit mantissa moves logits by up to 1).
-REDUCED = dict(value=1e-2, dead=1e-2, probability=1e-2, swing=0.5)
+REDUCED = dict(value=1e-2, dead=1e-2, swing=0.5, tv_mean=2e-4, tv_p99=5e-3, tv_max=5e-2, decided_flips=1)
+TIE = 0.02  # a best option may change only where PyTorch's top two probabilities are closer than this
 SWING_RELATIVE = 50.0  # above this many points, the swing's drift is measured against 1% of it
 DEFAULT_PORT = 7710
 
@@ -234,8 +245,24 @@ def decode(p: bytes) -> dict:
                 ntok=ntok, nfeat=nfeat, nval=nval)
 
 
-def request(conn, d: dict) -> Request:
-    """A decoded frame as a request: its rows split by the smallest bucket that holds each."""
+def tokens_needed(lengths: np.ndarray, row_of: np.ndarray, ptrs: np.ndarray) -> np.ndarray:
+    """The tokens each row must run with to compute what it does at its encoded bucket (the encoding's smallest that
+    holds it): its real tokens, and every token one of them points at (`gpu::tokens_needed`). A pointer is a row of an
+    identity [256, T], so below the encoded bucket a pointer past the real tokens would read zeros where the encoded
+    bucket reads a padding token; one at or past the encoded bucket reads zeros at either. The encoder never points past
+    a row's real tokens; this keeps the row exact if it ever does."""
+    encoded = np.array(ENCODED)[np.minimum(np.searchsorted(ENCODED, np.maximum(lengths, 1)), len(ENCODED) - 1)]
+    p = ptrs.astype(np.int64)
+    valid = (p != NO_POINTER) & (p < encoded[row_of][:, None])
+    pointed = np.where(valid, p + 1, 0).max(axis=1) if p.size else np.zeros(len(row_of), np.int64)
+    need = np.asarray(lengths, np.int64).copy()
+    np.maximum.at(need, row_of, pointed)
+    return need
+
+
+def request(conn, d: dict, buckets: tuple = BUCKETS) -> Request:
+    """A decoded frame as a request: its rows split by the smallest of `buckets` (the model's) that holds the tokens
+    each needs."""
     if getattr(getattr(conn, "model", None), "input_compatibility", "Native") == "LegacySnowInputV2":
         # A projection column is shared across token kinds. Preserve every old card/event meaning.
         kinds = d["kind"][d["ntok"]]
@@ -247,15 +274,15 @@ def request(conn, d: dict) -> Request:
     np.cumsum(lengths[:-1], out=starts[1:])
     row_of = np.repeat(np.arange(rows), lengths)
     pos = np.arange(len(row_of)) - starts[row_of]
-    bucket = np.searchsorted(np.array(BUCKETS), np.maximum(lengths, 1))
+    bucket = np.searchsorted(np.array(buckets), np.maximum(tokens_needed(lengths, row_of, d["ptrs"]), 1))
     chunks = []
     if rows and (bucket[1:] >= bucket[:-1]).all():
         # Rows by bucket, as the Rust client sends them: each bucket's rows and tokens are one run, taken as views.
-        ends = np.searchsorted(bucket, np.arange(len(BUCKETS)), side="right")
+        ends = np.searchsorted(bucket, np.arange(len(buckets)), side="right")
         tok_ends = np.concatenate([[0], np.cumsum(lengths)])
         num_ends = np.searchsorted(d["ntok"], tok_ends)
         r0 = 0
-        for b, t in enumerate(BUCKETS):
+        for b, t in enumerate(buckets):
             r1 = int(ends[b])
             if r1 == r0:
                 continue
@@ -265,7 +292,7 @@ def request(conn, d: dict) -> Request:
                                 d["legal"][t0:t1], pos[t0:t1], row_of[t0:t1] - r0, d["ntok"][k0:k1] - t0,
                                 d["nfeat"][k0:k1], d["nval"][k0:k1]))
             r0 = r1
-    for b, t in enumerate(BUCKETS if not chunks else ()):
+    for b, t in enumerate(buckets if not chunks else ()):
         mine = np.flatnonzero(bucket == b)
         if not len(mine):
             continue
@@ -342,8 +369,8 @@ def read_reply(p: bytes, legal: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.
 # --- The models ---------------------------------------------------------------------------------------------------
 
 
-def bucket_of(length: int) -> int:
-    for b in BUCKETS:
+def bucket_of(length: int, buckets: tuple = BUCKETS) -> int:
+    for b in buckets:
         if b >= length:
             return b
     raise ProtocolError(f"{length} tokens")
@@ -493,9 +520,10 @@ class Served:
             raise SystemExit(f"{path} is missing: export the model again, or write it with `python -m cantrip_ai.export "
                              f"--checkpoint CHECKPOINT --out {self.dir} --weights-only`")
         w = torch.load(path, map_location="cpu", weights_only=True)
-        net = model.Net(model.Config(**w["config"]), w["state"]["table"].numpy())
+        net = model.from_state(model.Config(**w["config"]), w["state"])
         net.load_state_dict(w["state"])
         net.eval()
+        net.inputs_in_fp32 = True  # the input stage in fp32 under autocast (`model.Net.inputs_in_fp32`)
         if w["folded"]:
             net.folded = w["table"]
         net.to(device)
@@ -503,6 +531,10 @@ class Served:
             net.folded = net.folded.to(device)
         self.net = net
         self.parameters = model.parameters(net)
+        # The buckets it serves at: the encoding's, and each other one its manifest has a graph for (the native engine
+        # runs only graphs; this keeps the two serving a model alike).
+        named = self.manifest.get("buckets", {})
+        self.buckets = tuple(t for t in BUCKETS if t in ENCODED or str(t) in named)
 
 
 # --- The server ---------------------------------------------------------------------------------------------------
@@ -560,13 +592,14 @@ class Server:
         self.log = log or (lambda *parts: print(*parts, flush=True))
         self.log_every = 60.0
         self.lock = threading.Condition()
-        self.queues: dict[tuple[int, int], Queue] = {(m.identity, t): Queue() for m in models for t in BUCKETS}
+        self.queues: dict[tuple[int, int], Queue] = {(m.identity, t): Queue() for m in models for t in m.buckets}
         self.connections = 0  # welcomed and open
         self.waiting = 0  # of those, with a request not yet answered
         self.running = 0  # batches on the GPU
         self.stopping = False
         self.stats = dict(requests=0, rows=0, batches=0, padded=0, gpu_seconds=0.0, started=time.time())
-        self.runners = [{(m.identity, t): Runner(m.net, device, t, batch[t], graphs, half) for m in models for t in BUCKETS}
+        self.runners = [{(m.identity, t): Runner(m.net, device, t, batch[t], graphs, half)
+                         for m in models for t in m.buckets}
                         for _ in range(pipelines)]
         self.workers = [threading.Thread(target=self.work, args=(k,), daemon=True, name=f"serve-{k}")
                         for k in range(pipelines)]
@@ -686,7 +719,7 @@ class Server:
 
     def submit(self, conn: Conn, payload: bytes):
         t0 = time.perf_counter()
-        r = request(conn, decode(payload))
+        r = request(conn, decode(payload), conn.model.buckets if conn.model is not None else BUCKETS)
         r.arrived = time.perf_counter()
         self.add("decode_s", r.arrived - t0)
         if r.rows == 0:
@@ -846,14 +879,25 @@ def check(served: Served, runners: dict, log=print, precision: str = "fp32") -> 
     offsets = np.concatenate([[0], np.cumsum([p[4] for p in positions])])
     drift = dict(value=0.0, aux=0.0, policy=0.0)
     reduced = dict(swing=0.0, dead=0.0, probability=0.0)
+    tv, decided_flips = [], 0
     same = 0
-    for t in BUCKETS:
-        rows = [i for i, p in enumerate(positions) if p[1] == t]
+    # Counted apart (the drifts' max skips a NaN), and any one fails: references with an output that is not finite, and
+    # those with a legal option whose best option is none of them (`reference::parity`'s illegal_argmax).
+    non_finite = illegal = 0
+
+    def bucket(p: bytes) -> int:
+        x = export.inputs_of([p], p[1])
+        n = p[2]
+        return bucket_of(int(tokens_needed(np.array([n]), np.zeros(n, np.int64), x["ptrs"][0, :n])[0]), served.buckets)
+
+    routed = [bucket(p) for p in positions]
+    for t in served.buckets:
+        rows = [i for i in range(len(positions)) if routed[i] == t]
         if not rows:
             continue
         runner = runners[(served.identity, t)]
         x = export.inputs_of([positions[i] for i in rows], t)
-        r = request(None, decode(encode(*(x[k] for k in model.INPUTS))))
+        r = request(None, decode(encode(*(x[k] for k in model.INPUTS))), served.buckets)
         if [c.tokens for c in r.chunks] != [t]:
             raise SystemExit(f"{served.dir}: a reference position of the {t}-token bucket does not fill it")
         c = r.chunks[0]
@@ -873,23 +917,35 @@ def check(served: Served, runners: dict, log=print, precision: str = "fp32") -> 
                 reduced["swing"] = max(reduced["swing"], float(abs(runner.aux[j, 0] - want_aux[i, 0]))
                                        / max(1.0, abs(float(want_aux[i, 0])) / SWING_RELATIVE))
                 reduced["dead"] = max(reduced["dead"], float(abs(runner.aux[j, 1] - want_aux[i, 1])))
+                non_finite += not (np.isfinite(runner.value[j]) and np.isfinite(runner.aux[j]).all()
+                                   and np.isfinite(got[legal]).all())
                 if legal.any():
+                    shown = np.flatnonzero(got > MASKED / 2)  # NaN is not
+                    illegal += not (len(shown) and legal[shown[np.argmax(got[shown])]])
                     drift["policy"] = max(drift["policy"], float(np.abs(got[legal] - want[legal]).max()))
-                    reduced["probability"] = max(reduced["probability"],
-                                                 float(np.abs(softmax(got[legal]) - softmax(want[legal])).max()))
+                    a, b = softmax(got[legal]), softmax(want[legal])
+                    reduced["probability"] = max(reduced["probability"], float(np.abs(a - b).max()))
+                    if legal.sum() >= 2 and np.isfinite(got[legal]).all():
+                        tv.append(0.5 * float(np.abs(a - b).sum()))
+                        top = np.sort(b)[::-1]
+                        if a.argmax() != b.argmax() and top[0] - top[1] >= TIE:
+                            decided_flips += 1
                     choices = np.flatnonzero(legal)
                     same += choices[np.argmax(got[legal])] == choices[np.argmax(want[legal])]
                 else:
                     same += 1
-    out = dict(positions=len(positions), **drift, same_argmax=float(same) / max(len(positions), 1))
+    out = dict(positions=len(positions), **drift, same_argmax=float(same) / max(len(positions), 1),
+               non_finite=int(non_finite), illegal_argmax=int(illegal))
     if precision == "fp32":
         within = max(drift.values()) < TOLERANCE
         bar = f"tolerance {TOLERANCE}"
     else:
-        out.update(reduced)
+        tvs = np.array(tv or [0.0])
+        out.update(reduced, tv_mean=float(tvs.mean()), tv_p99=float(np.percentile(tvs, 99, method="inverted_cdf")),
+                   tv_max=float(tvs.max()), decided_flips=decided_flips)
         within = all(out[k] < limit for k, limit in REDUCED.items())
-        bar = f"{precision}: " + ", ".join(f"{k} {v}" for k, v in REDUCED.items())
-    ok = within and out["same_argmax"] >= SAME_ARGMAX
+        bar = f"{precision}: " + ", ".join(f"{k} < {v}" for k, v in REDUCED.items())
+    ok = within and out["same_argmax"] >= SAME_ARGMAX and non_finite == 0 and illegal == 0
     log(f"serve: {served.name} references {'pass' if ok else 'FAIL'} ({bar}): {out}")
     if not ok:
         raise SystemExit(f"{served.dir}: the served model is not its references ({bar}, argmax {SAME_ARGMAX}): {out}")
@@ -937,16 +993,16 @@ def parse_batch(text: str, device: torch.device) -> dict[int, int]:
     if not text:
         # Measured on an RTX 4080 (docs/ai-training.md): rows a second level off at these sizes, so a larger batch only
         # pads more when the queue is short.
-        return {32: 256, 64: 128, 128: 64} if device.type == "cuda" else {t: 32 for t in BUCKETS}
+        return {32: 256, 64: 128, 96: 96, 128: 64} if device.type == "cuda" else {t: 32 for t in BUCKETS}
     if ":" not in text:
         return {t: int(text) for t in BUCKETS}
-    out = {}
+    # A bucket not named keeps its default, so a list written before T96 still reads.
+    out = parse_batch("", device)
     for part in text.split(","):
         t, n = part.split(":")
+        if int(t) not in BUCKETS:
+            raise SystemExit(f"--batch names a bucket of {t} tokens; the buckets are {BUCKETS}")
         out[int(t)] = int(n)
-    missing = [t for t in BUCKETS if t not in out]
-    if missing:
-        raise SystemExit(f"--batch names no size for buckets {missing}")
     return out
 
 
@@ -956,7 +1012,8 @@ def main(argv=None):
     a.add_argument("--host", default="127.0.0.1")
     a.add_argument("--port", type=int, default=DEFAULT_PORT, help="0 picks a free port (see --ready-file)")
     a.add_argument("--device", default="auto", help="auto, cpu, cuda (HIP on ROCm), cuda:1, ...")
-    a.add_argument("--batch", default="", help="rows a GPU call is padded to: N, or 32:N,64:N,128:N (default 32:256,64:128,128:64; 32 on the CPU)")
+    a.add_argument("--batch", default="", help="rows a GPU call is padded to: N, or 32:N,64:N,96:N,128:N, a bucket "
+                   "not named keeping its default (32:256,64:128,96:96,128:64; 32 on the CPU)")
     a.add_argument("--flush-ms", type=float, default=2.0, help="how long a partial batch waits for more rows")
     a.add_argument("--pipelines", type=int, default=2, help="batches assembled and run at once")
     a.add_argument("--precision", choices=["fp32", "tf32", "fp16", "bf16"], default="fp32",

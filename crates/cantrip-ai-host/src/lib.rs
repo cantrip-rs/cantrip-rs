@@ -10,8 +10,13 @@
 //! The protocol is JSON lines like the native host's: one reply per command, in order, and besides them a line of its
 //! own for each answer asked for (`AiResult`), written when it is ready, from a worker thread. `serve` is the loop;
 //! `AiHost::handle` is one command.
+#![recursion_limit = "256"]
 
 pub mod advisor;
+pub mod explore;
+pub mod governor;
+pub mod mine;
+pub mod reanalyse;
 pub mod regret;
 pub mod selfplay;
 
@@ -216,6 +221,12 @@ enum Command {
         /// Changes no answer; play and self-play never ask it.
         #[serde(rename = "Report", default)]
         report: bool,
+        /// Every other search setting, by the name `search::Config::set` reads (`SharedRoot`, `RootBandit`, `Gumbel`,
+        /// `GumbelNoise`, `EvalCache`, `LazyInner`, `Snapshots`, `EarlyStop`, `RootFloor`, `RootNoise`,
+        /// `ForcedPlayouts`, `RootShortcut`, `CapValue`, `TimeUse`, ...): a number, a flag or text. A name it does not
+        /// know is refused (`InvalidSetup`), so a misspelt setting is never searched without.
+        #[serde(flatten)]
+        more: std::collections::BTreeMap<String, Value>,
     },
     /// The models loaded and the backend.
     Models,
@@ -655,6 +666,7 @@ impl AiHost {
                 pay_classic,
                 pay_split,
                 report,
+                more,
             } => {
                 let received = Instant::now();
                 let Some(mirror) = self.games.get(&game_id).cloned() else {
@@ -722,7 +734,7 @@ impl AiHost {
                     .filter(|&ms| ms > 0)
                     .map(|ms| received + Duration::from_millis(ms));
                 let defaults = search::Config::default();
-                let search = search::Config {
+                let mut search = search::Config {
                     simulations: simulations.filter(|&n| n > 0),
                     // The search stops by the earlier of its own budget and the hard limit.
                     deadline: match (search_deadline, simulations.filter(|&n| n > 0)) {
@@ -775,6 +787,19 @@ impl AiHost {
                     report,
                     ..defaults
                 };
+                for (key, value) in &more {
+                    let text = match value {
+                        Value::String(t) => t.clone(),
+                        Value::Bool(b) => b.to_string(),
+                        Value::Number(n) => n.to_string(),
+                        other => {
+                            return rejected(Rejection::new("InvalidSetup", format!("search setting {key}: {other} is no value")));
+                        }
+                    };
+                    if let Err(e) = search.set(key, &text) {
+                        return rejected(Rejection::new("InvalidSetup", e));
+                    }
+                }
                 if search.searches() && mode == InfoMode::Hidden && self.prior.is_empty() {
                     return rejected(Rejection::new(
                         "InvalidSetup",
@@ -941,6 +966,22 @@ fn answer_job(job: &Job, models: &[Loaded]) -> Value {
                     "DeepestDecisions": s.shape.deepest_decisions,
                     "DeepestTurns": s.shape.deepest_turns,
                     "SearchUs": s.elapsed.as_micros() as u64,
+                    "Rows": s.rows,
+                    "CacheHits": s.cache_hits,
+                    "DuplicateRows": s.duplicate_rows,
+                    "EarlyStopped": s.early_stopped,
+                    "TimeStopped": s.time_stopped,
+                    "ShortcutWould": s.shortcut_would,
+                    "CappedValued": s.capped_valued,
+                    "ForcedUnobserved": s.forced_unobserved,
+                    "RootOptions": s.root_options.iter().map(|o| json!({
+                        "Path": format!("{:?}", o.path),
+                        "Prior": o.prior,
+                        "Visits": o.visits,
+                        "Q": o.q,
+                        "CompletedQ": o.completed_q,
+                        "Target": o.target,
+                    })).collect::<Vec<_>>(),
                 });
             }
         }

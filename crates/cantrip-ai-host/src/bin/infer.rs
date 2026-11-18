@@ -4,12 +4,28 @@
 //! BotLab's `--ai-server` use it as they use serve.py.
 //!
 //! - `cantrip-infer serve --model DIR [--model DIR ...] [--host 127.0.0.1] [--port 7710] [--precision fp32|tf32|fp16]
-//!   [--batch N | 32:N,64:N,128:N] [--flush-ms 2] [--pipelines 2] [--device 0] [--no-check] [--ready-file PATH]
-//!   [--log-every 60] [--priority high|normal]` (`serve` may be left out);
-//! - `cantrip-infer bench --model DIR [--clients 64] [--rows 8] [--seconds 20] [engine options]`: the engine alone, fed
-//!   the model's reference positions by `--clients` threads of `--rows` rows a request: rows a second and latency;
+//!   [--batch N | 32:N,64:N,96:N,128:N] [--shapes N,N,...|T:N/N,...|none] [--flush-ms 2] [--pipelines 2]
+//!   [--device 0] [--no-check] [--ready-file PATH] [--log-every 60] [--priority high|normal]` (`serve` may be left out);
+//! - `cantrip-infer bench --model DIR [--clients 64] [--rows 8|A-B] [--mix T:share,...] [--think-ms MS] [--seconds 20]
+//!   [engine options]`: the engine alone, fed the model's reference positions by `--clients` threads of `--rows` rows a
+//!   request (drawn from each bucket at `--mix`'s shares, a client pausing `--think-ms` between requests as a self-play
+//!   lane searches): rows a second, the share of padded rows real, and latency;
 //! - `cantrip-infer compare --model DIR --a HOST:PORT --b HOST:PORT [--shards DIR] [--limit N]`: the same positions (the
-//!   references, and a shard directory's) through two servers: how far apart their outputs are.
+//!   references, and a shard directory's) through two servers: how far apart their outputs are;
+//! - `cantrip-infer check --model DIR [--model DIR ...] [engine options]`: the engine started and each model held to its
+//!   references, as `serve` starts, and nothing served;
+//! - `cantrip-infer time --model DIR [--bucket 128] [--seconds 20] [engine options]`: the network alone on one stream,
+//!   one session of the bucket at its `--batch` size, every slot a reference position: rows a second;
+//! - `cantrip-infer graph --model DIR [--bucket 128] --out FILE [engine options]`: the bucket's graph as the engine runs
+//!   it (narrowed inputs; at fp16 halved, and its attention fused), for a profiler or a viewer.
+//!
+//! The engine options: `--precision`, `--batch`, `--shapes` (smaller shapes a bucket may also run a partial batch at,
+//! each kept only where it computes every row bitwise as the full shape: `gpu::Options::shapes`), `--flush-ms`,
+//! `--pipelines`, `--device`; `--fp16-graph` (at fp16, what runs in half besides the matrix products, each with the
+//! ones before: `products`, `attention`, `ffn` (the default), `residual` (opt-in: it fails the reduced bar on the
+//! templates line's gen2); `gpu::Fp16Graph`), `--unfused-attention` (`--fp16-graph products`), `--gelu` (a fused GELU's kernel, `gelu` (the default) or `biasgelu`;
+//! `gpu::GeluKernel`), `--inputs-tf32` (at fp16, the input stage's fp32 products in TF32: `Options::inputs_tf32`),
+//! `--no-cuda-graphs` (each batch launched node by node instead of replayed as a CUDA graph).
 //!
 //! onnxruntime-gpu is loaded at run time: `ORT_DYLIB_PATH` (or `--ort-dylib`) names its `onnxruntime.dll`, and
 //! `CANTRIP_CUDA_LIBS` (or `--cuda-libs`) the directory of CUDA 12's and cuDNN 9's libraries.
@@ -26,9 +42,13 @@ use cantrip_ai::remote::{PROTOCOL, read_frame, read_hello, status, write_frame};
 use cantrip_ai::{CardIndex, RemoteEvaluator};
 use cantrip_obs::encode::{BUCKETS, from_compact};
 
-const USAGE: &str = "usage: cantrip-infer [serve] --model DIR [--model DIR ...] [--host H] [--port N] [--precision fp32|tf32|fp16] [--batch N|32:N,64:N,128:N] [--flush-ms MS] [--pipelines N] [--device N] [--no-check] [--ready-file PATH] [--log-every S] [--priority high|normal] [--ort-dylib PATH] [--cuda-libs DIR]
-       cantrip-infer bench --model DIR [--clients N] [--rows N] [--seconds S] [engine options]
-       cantrip-infer compare --model DIR --a HOST:PORT --b HOST:PORT [--shards DIR] [--limit N]";
+const USAGE: &str = "usage: cantrip-infer [serve] --model DIR [--model DIR ...] [--host H] [--port N] [--precision fp32|tf32|fp16] [--batch N|32:N,64:N,96:N,128:N] [--shapes N,N,...|T:N/N,...|none] [--flush-ms MS] [--pipelines N] [--device N] [--no-check] [--ready-file PATH] [--log-every S] [--priority high|normal] [--ort-dylib PATH] [--cuda-libs DIR]
+       cantrip-infer bench --model DIR [--clients N] [--rows N|A-B] [--mix T:share,...] [--think-ms MS] [--seconds S] [engine options]
+       cantrip-infer compare --model DIR --a HOST:PORT --b HOST:PORT [--shards DIR] [--limit N]
+       cantrip-infer check --model DIR [--model DIR ...] [engine options]
+       cantrip-infer time --model DIR [--bucket 32|64|96|128] [--seconds S] [engine options]
+       cantrip-infer graph --model DIR [--bucket 32|64|96|128] --out FILE [engine options]
+engine options: [--precision fp32|tf32|fp16] [--batch N|32:N,64:N,96:N,128:N] [--shapes N,N,...|T:N/N,...|none] [--flush-ms MS] [--pipelines N] [--device N] [--fp16-graph products|attention|ffn|residual] [--gelu gelu|biasgelu] [--unfused-attention] [--inputs-tf32] [--no-cuda-graphs]";
 
 fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();
@@ -49,17 +69,21 @@ struct Args {
     log_every: f64,
     high: bool,
     clients: usize,
-    rows: usize,
+    rows: (usize, usize),
+    mix: Option<Vec<(usize, f64)>>,
+    think_ms: f64,
     seconds: f64,
     a: String,
     b: String,
     shards: Option<PathBuf>,
     limit: usize,
+    bucket: usize,
+    out: Option<PathBuf>,
 }
 
 fn go(mut argv: Vec<String>) -> Result<(), String> {
     let mode = match argv.first().map(String::as_str) {
-        Some("serve") | Some("bench") | Some("compare") => argv.remove(0),
+        Some("serve" | "bench" | "compare" | "check" | "time" | "graph") => argv.remove(0),
         _ => "serve".to_string(),
     };
     let mut a = Args {
@@ -69,9 +93,10 @@ fn go(mut argv: Vec<String>) -> Result<(), String> {
         log_every: 60.0,
         high: true,
         clients: 64,
-        rows: 8,
+        rows: (8, 8),
         seconds: 20.0,
         limit: 4096,
+        bucket: 128,
         ..Args::default()
     };
     let mut i = 0;
@@ -79,6 +104,21 @@ fn go(mut argv: Vec<String>) -> Result<(), String> {
         let flag = argv[i].as_str();
         if flag == "--no-check" {
             a.check = false;
+            i += 1;
+            continue;
+        }
+        if flag == "--unfused-attention" {
+            a.options.fp16 = gpu::Fp16Graph::Products;
+            i += 1;
+            continue;
+        }
+        if flag == "--inputs-tf32" {
+            a.options.inputs_tf32 = true;
+            i += 1;
+            continue;
+        }
+        if flag == "--no-cuda-graphs" {
+            a.options.cuda_graphs = false;
             i += 1;
             continue;
         }
@@ -92,6 +132,7 @@ fn go(mut argv: Vec<String>) -> Result<(), String> {
                 a.options.precision = Precision::parse(&v).ok_or(format!("no precision {v} (fp32, tf32, fp16)"))?
             }
             "--batch" => a.options.batch = gpu::parse_batch(&v)?,
+            "--shapes" => a.options.shapes = gpu::parse_shapes(&v)?,
             "--flush-ms" => a.options.flush = Duration::from_secs_f64(num(&v)? / 1000.0),
             "--pipelines" => a.options.pipelines = (num(&v)? as usize).max(1),
             "--device" => a.options.device = num(&v)? as i32,
@@ -102,12 +143,22 @@ fn go(mut argv: Vec<String>) -> Result<(), String> {
             "--ort-dylib" => unsafe { std::env::set_var("ORT_DYLIB_PATH", v) },
             "--cuda-libs" => unsafe { std::env::set_var("CANTRIP_CUDA_LIBS", v) },
             "--clients" => a.clients = (num(&v)? as usize).max(1),
-            "--rows" => a.rows = (num(&v)? as usize).max(1),
+            "--rows" => a.rows = parse_rows(&v)?,
+            "--mix" => a.mix = Some(parse_mix(&v)?),
+            "--think-ms" => a.think_ms = num(&v)?,
             "--seconds" => a.seconds = num(&v)?,
             "--a" => a.a = v,
             "--b" => a.b = v,
             "--shards" => a.shards = Some(PathBuf::from(v)),
             "--limit" => a.limit = num(&v)? as usize,
+            "--bucket" => a.bucket = num(&v)? as usize,
+            "--out" => a.out = Some(PathBuf::from(v)),
+            "--fp16-graph" => {
+                a.options.fp16 = gpu::Fp16Graph::parse(&v).ok_or(format!(
+                    "no fp16 graph {v} (products, attention, ffn, residual)"
+                ))?
+            }
+            "--gelu" => a.options.gelu = gpu::GeluKernel::parse(&v).ok_or(format!("no GELU kernel {v} (gelu, biasgelu)"))?,
             other => return Err(format!("unknown argument {other}")),
         }
         i += 2;
@@ -118,6 +169,9 @@ fn go(mut argv: Vec<String>) -> Result<(), String> {
     match mode.as_str() {
         "compare" => compare(&a),
         "bench" => bench(&a),
+        "check" => start(&a).map(|_| ()),
+        "time" => time(&a),
+        "graph" => graph(&a),
         _ => serve(&a),
     }
 }
@@ -127,7 +181,13 @@ fn start(a: &Args) -> Result<Arc<Engine>, String> {
     let dirs: Vec<&Path> = a.models.iter().map(PathBuf::as_path).collect();
     let engine = Arc::new(Engine::start(&dirs, a.options.clone()).map_err(|e| e.to_string())?);
     for (k, m) in engine.models().iter().enumerate() {
-        eprintln!("infer: {} ({})", m.name, m.dir.display());
+        eprintln!(
+            "infer: {} ({}), graph: {}; shapes {}",
+            m.name,
+            m.dir.display(),
+            m.rewritten_summary(),
+            m.shapes_summary()
+        );
         if a.check {
             let c = gpu::check(&engine, k).map_err(|e| format!("{}: {e}", m.dir.display()))?;
             eprintln!(
@@ -256,8 +316,59 @@ fn connection(engine: &Engine, stream: TcpStream) -> Result<(), String> {
     }
 }
 
-/// The engine alone: `--clients` threads, each sending requests of `--rows` reference positions (cycling through
-/// them), for `--seconds`.
+/// `N` or `A-B` rows a request (`A-B`: each request draws its size uniformly).
+fn parse_rows(v: &str) -> Result<(usize, usize), String> {
+    let n = |x: &str| x.parse::<usize>().map_err(|_| format!("--rows takes N or A-B, not {v}"));
+    let (lo, hi) = match v.split_once('-') {
+        Some((a, b)) => (n(a)?, n(b)?),
+        None => (n(v)?, n(v)?),
+    };
+    if lo == 0 || hi < lo {
+        return Err(format!("--rows takes N or A-B with 0 < A <= B, not {v}"));
+    }
+    Ok((lo, hi))
+}
+
+/// `T:share,...`: the share of a request's rows drawn from each bucket's references.
+fn parse_mix(v: &str) -> Result<Vec<(usize, f64)>, String> {
+    let mut out = Vec::new();
+    for part in v.split(',') {
+        let (t, w) = part.split_once(':').ok_or(format!("--mix takes T:share,..., not {v}"))?;
+        let t: usize = t.parse().map_err(|_| format!("--mix: no bucket {t}"))?;
+        if !gpu::GRAPH_BUCKETS.contains(&t) {
+            return Err(format!("--mix: no bucket of {t} tokens"));
+        }
+        let w: f64 = w.parse().map_err(|_| format!("--mix: no share {w}"))?;
+        out.push((t, w));
+    }
+    Ok(out)
+}
+
+/// A client's own random stream (splitmix64): the bench's draws, the same every run.
+struct Draw(u64);
+
+impl Draw {
+    fn next(&mut self) -> u64 {
+        self.0 = self.0.wrapping_add(0x9e37_79b9_7f4a_7c15);
+        let mut z = self.0;
+        z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
+        z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
+        z ^ (z >> 31)
+    }
+
+    fn unit(&mut self) -> f64 {
+        (self.next() >> 11) as f64 / (1u64 << 53) as f64
+    }
+
+    fn below(&mut self, n: usize) -> usize {
+        (self.next() % n as u64) as usize
+    }
+}
+
+/// The engine alone: `--clients` threads, each sending requests of `--rows` reference positions for `--seconds`. By
+/// default a client cycles through the references and asks again at once (the GPU the limit); `--mix` draws each row
+/// from a bucket's references at the given shares, and `--think-ms` has a client spend about that long (uniformly half
+/// to one and a half times it) between its requests, as a self-play lane searches between evaluations.
 fn bench(a: &Args) -> Result<(), String> {
     if a.high {
         raise_priority();
@@ -266,25 +377,67 @@ fn bench(a: &Args) -> Result<(), String> {
     let dir = &a.models[0];
     let r = reference::Reference::load(&dir.join("reference")).map_err(|e| e.to_string())?;
     let own = CardIndex::read(&dir.join("cards.json"))?;
+    // The references by the bucket the engine runs them at (the smallest graph bucket holding their tokens).
+    let nb = gpu::GRAPH_BUCKETS.len();
+    let mut by_bucket: Vec<Vec<usize>> = vec![Vec::new(); nb];
+    for (i, p) in r.positions.iter().enumerate() {
+        let k = gpu::GRAPH_BUCKETS.iter().position(|&t| t >= p.len.max(1)).unwrap_or(nb - 1);
+        by_bucket[k].push(i);
+    }
+    let mix: Option<Vec<(usize, f64)>> = match &a.mix {
+        None => None,
+        Some(m) => {
+            let total: f64 = m.iter().map(|&(_, w)| w).sum();
+            let mut acc = 0.0;
+            let mut out = Vec::new();
+            for &(t, w) in m {
+                let k = gpu::GRAPH_BUCKETS.iter().position(|&b| b == t).unwrap_or(0);
+                if by_bucket[k].is_empty() {
+                    return Err(format!("{}: no reference runs at T{t}", dir.display()));
+                }
+                acc += w / total;
+                out.push((k, acc));
+            }
+            Some(out)
+        }
+    };
     let stop = Arc::new(std::sync::atomic::AtomicBool::new(false));
-    let latencies = Arc::new(std::sync::Mutex::new(Vec::<f64>::new()));
+    let latencies = Arc::new(std::sync::Mutex::new(Vec::<(f64, usize)>::new()));
     let positions = Arc::new(r.positions);
     let started = Instant::now();
     std::thread::scope(|s| {
         for c in 0..a.clients {
             let (engine, stop, latencies, positions) = (engine.clone(), stop.clone(), latencies.clone(), positions.clone());
-            let own = &own;
-            let rows = a.rows;
+            let (own, mix, by_bucket) = (&own, &mix, &by_bucket);
+            let (rows, think) = (a.rows, a.think_ms / 1e3);
             s.spawn(move || {
                 let e = gpu::GpuEvaluator::new(engine, 0, own).expect("an evaluator");
+                let mut draw = Draw(c as u64 * 0x5851_f42d_4c95_7f2d + 1);
                 let mut at = c * 7919 % positions.len();
                 let mut mine = Vec::new();
                 while !stop.load(std::sync::atomic::Ordering::Relaxed) {
-                    let es: Vec<_> = (0..rows).map(|k| &positions[(at + k) % positions.len()]).collect();
-                    at = (at + rows) % positions.len();
+                    let n = rows.0 + draw.below(rows.1 - rows.0 + 1);
+                    let idx: Vec<usize> = match mix {
+                        None => {
+                            let idx = (0..n).map(|k| (at + k) % positions.len()).collect();
+                            at = (at + n) % positions.len();
+                            idx
+                        }
+                        Some(m) => (0..n)
+                            .map(|_| {
+                                let u = draw.unit();
+                                let k = m.iter().find(|&&(_, acc)| u < acc).map_or(m[m.len() - 1].0, |&(k, _)| k);
+                                by_bucket[k][draw.below(by_bucket[k].len())]
+                            })
+                            .collect(),
+                    };
+                    let es: Vec<_> = idx.iter().map(|&i| &positions[i]).collect();
                     let t0 = Instant::now();
                     e.evaluate_positions(&es).expect("an evaluation");
-                    mine.push(t0.elapsed().as_secs_f64());
+                    mine.push((t0.elapsed().as_secs_f64(), n));
+                    if think > 0.0 {
+                        std::thread::sleep(Duration::from_secs_f64(think * (0.5 + draw.unit())));
+                    }
                 }
                 latencies.lock().unwrap().extend(mine);
             });
@@ -294,19 +447,71 @@ fn bench(a: &Args) -> Result<(), String> {
     });
     let seconds = started.elapsed().as_secs_f64();
     let mut l = latencies.lock().unwrap().clone();
-    l.sort_by(f64::total_cmp);
-    let pct = |p: f64| l.get(((l.len() as f64 - 1.0) * p) as usize).copied().unwrap_or(0.0) * 1e3;
+    let rows: usize = l.iter().map(|&(_, n)| n).sum();
+    l.sort_by(|x, y| x.0.total_cmp(&y.0));
+    let pct = |p: f64| l.get(((l.len() as f64 - 1.0) * p) as usize).map_or(0.0, |x| x.0) * 1e3;
+    let st = engine.stats();
     println!(
-        "bench: {} clients x {} rows: {} requests, {:.0} rows a second; latency ms p50 {:.2} p90 {:.2} p99 {:.2}",
+        "bench: {} clients x {}-{} rows, think {} ms: {} requests, {:.0} rows a second, {:.0}% of the padded rows real; \
+         latency ms p50 {:.2} p90 {:.2} p99 {:.2}",
         a.clients,
-        a.rows,
+        a.rows.0,
+        a.rows.1,
+        a.think_ms,
         l.len(),
-        (l.len() * a.rows) as f64 / seconds,
+        rows as f64 / seconds,
+        100.0 * st.rows as f64 / st.padded.max(1) as f64,
         pct(0.5),
         pct(0.9),
         pct(0.99)
     );
     println!("{}", engine.summary());
+    Ok(())
+}
+
+/// The bucket's file in the first model's manifest.
+fn bucket_file(a: &Args) -> Result<PathBuf, String> {
+    let dir = &a.models[0];
+    let text = std::fs::read(dir.join("manifest.json")).map_err(|e| format!("{}: {e}", dir.display()))?;
+    let manifest: serde_json::Value = serde_json::from_slice(&text).map_err(|e| format!("{}: {e}", dir.display()))?;
+    let file = manifest["buckets"][a.bucket.to_string()]
+        .as_str()
+        .ok_or(format!("{}: no graph for {} tokens", dir.display(), a.bucket))?;
+    Ok(dir.join(file))
+}
+
+/// The network alone on one stream (`gpu::time_bucket`).
+fn time(a: &Args) -> Result<(), String> {
+    let k = gpu::GRAPH_BUCKETS.iter().position(|&b| b == a.bucket).ok_or(format!("no bucket of {} tokens", a.bucket))?;
+    let batch = a.options.batch[k];
+    let timing = gpu::time_bucket(&a.models[0], &a.options, a.bucket, batch, a.seconds).map_err(|e| e.to_string())?;
+    let graph = if a.options.precision == Precision::Fp16 {
+        format!(" {} ({}): {}", a.options.fp16.name(), a.options.gelu.name(), timing.rewritten.summary())
+    } else {
+        String::new()
+    };
+    println!(
+        "time: {} T{} batch {batch} {}{graph}: {:.0} rows a second; a slot of padding alone {}; a batch: assembled \
+         {:.2} ms, copied in {:.2} ms, network {:.2} ms, copied out {:.2} ms",
+        a.models[0].display(),
+        a.bucket,
+        a.options.precision.name(),
+        timing.rows_per_second,
+        if timing.padding_finite { "finite" } else { "NOT FINITE" },
+        1e3 * timing.assemble,
+        1e3 * timing.run.copy_in,
+        1e3 * timing.run.network,
+        1e3 * timing.run.copy_out,
+    );
+    Ok(())
+}
+
+/// The bucket's graph as the engine runs it, written to `--out`.
+fn graph(a: &Args) -> Result<(), String> {
+    let out = a.out.as_ref().ok_or("graph needs --out")?;
+    let (bytes, rewritten) = gpu::graph_bytes(&bucket_file(a)?, &a.options).map_err(|e| e.to_string())?;
+    std::fs::write(out, bytes).map_err(|e| format!("{}: {e}", out.display()))?;
+    eprintln!("infer: wrote {} ({})", out.display(), rewritten.summary());
     Ok(())
 }
 

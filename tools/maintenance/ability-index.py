@@ -112,13 +112,24 @@ def clean(text, names):
     return re.sub(r" ?\([^)]*\)", "", text)
 
 
-def template(text, level):
+MANA_RUN = r"(?:\{[^}]+\})+"
+NUMBER = r"[+\-−]?\d+"
+# What the numbers level replaces, as one scan in the order the replacements below make it: a mana run is taken whole
+# before the digits in it, and a number word never overlaps either.
+VALUE = re.compile(f"{MANA_RUN}|{NUMBER}|{NUMBER_WORDS}")
+
+
+def _exact(text):
     s = re.sub(r"\s+", " ", text.lower()).strip(" .")
-    s = re.sub(r"^then,? ", "", s)  # sequencing within the ability, not what the sentence does
+    return re.sub(r"^then,? ", "", s)  # sequencing within the ability, not what the sentence does
+
+
+def template(text, level):
+    s = _exact(text)
     if level == "exact":
         return s
-    s = re.sub(r"(?:\{[^}]+\})+", "{M}", s)
-    s = re.sub(r"[+\-−]?\d+", "N", s)
+    s = re.sub(MANA_RUN, "{M}", s)
+    s = re.sub(NUMBER, "N", s)
     s = re.sub(NUMBER_WORDS, "N", s)
     s = re.sub(r"\b(\w\w+?)(?:e?s)\b", r"\1", s)  # plurals: "a card" and "two cards" are one template
     if level == "numbers":
@@ -129,6 +140,12 @@ def template(text, level):
     s = re.sub(CARD_TYPES, "TYPE", s)
     s = re.sub(r"\bTYPE(?: TYPE)+\b", "TYPE", s)
     return s
+
+
+def values(text):
+    """What the numbers level of `template` replaces, in order: each mana run ("{2}{r}"), signed number ("+1", "-2")
+    and number word ("two", "x", "a"), lowercase, so a template's {M} and N can be given back their values."""
+    return VALUE.findall(_exact(text))
 
 
 # ---------------------------------------------------------------------------------------------------------- abilities

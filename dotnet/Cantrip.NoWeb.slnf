@@ -18,6 +18,7 @@
       "src\\Cantrip.Server.InPerson\\Cantrip.Server.InPerson.csproj",
       "src\\Cantrip.Server\\Cantrip.Server.csproj",
       "tests\\Cantrip.Art.Tests\\Cantrip.Art.Tests.csproj",
+      "tests\\Cantrip.BotLab.Tests\\Cantrip.BotLab.Tests.csproj",
       "tests\\Cantrip.Cards.Tests\\Cantrip.Cards.Tests.csproj",
       "tests\\Cantrip.Client.Llm.Tests\\Cantrip.Client.Llm.Tests.csproj",
       "tests\\Cantrip.Client.Tests\\Cantrip.Client.Tests.csproj",

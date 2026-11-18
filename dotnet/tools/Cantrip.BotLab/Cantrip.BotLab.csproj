@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Cantrip.BotLab.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Cantrip.Client\Cantrip.Client.csproj" />
     <ProjectReference Include="..\..\src\Cantrip.Client.Embedded\Cantrip.Client.Embedded.csproj" />
     <ProjectReference Include="..\..\src\Cantrip.Server\Cantrip.Server.csproj" />

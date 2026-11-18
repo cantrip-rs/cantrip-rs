@@ -432,7 +432,8 @@ at that node, so every node trims moves bad for itself, and an opponent's good r
 1. Draw `W` worlds: 1 in full mode, 4-16 otherwise.
 2. In each, PUCT: select by `Q + c · P · √N / (1 + n)`; expand with one batched call (priors and value from the
    acting seat's observation of that world); back up. Moving is `Game::goto` in the fork. Sub-steps of a factored
-   answer are search nodes the engine never sees.
+   answer are search nodes the engine never sees. (With `RootBandit` the root is one bandit over the worlds; with
+   `Gumbel`, sequential halving: below.)
 3. Sum the root visits across worlds; play the most visited (sampled proportionally for self-play's opening moves).
 
 **A world is a game the seat could be in.** Its root observation for the seat must be the real one
@@ -460,13 +461,69 @@ Also noted:
 - Leaves are batched across worlds with virtual loss (`Config::batch`). Across games they are not yet: BotLab runs one
   AI host a game lane, each with its own evaluator, so a batch never holds two games' leaves (Phase 3, under Phases).
 
+### The root, throughput and exploration (the review of 2026-11-13)
+
+Every one of these is a `search::Config` field, set by name with `Config::set` (the AI host's `AiStart` keys, BotLab's
+per-seat `+Key=Value`, `cantrip-selfplay --search Key=Value` and `--full-search Key=Value`), and off by default unless
+said; the module docs of `search.rs` have the detail.
+
+- **The root evaluated once** (`SharedRoot`): every fresh world's root is the same observation, so one evaluation
+  serves every world (one simulation, not one a world).
+- **One bandit at the root** (`RootBandit`, implies `SharedRoot`): selection at a world's root reads each option's
+  visits and values summed over the worlds (an option is its tokens and its class of payment), each simulation still
+  descending into the next world; trimming at the root judges the sums and cuts an option in every world. Below the
+  root nothing changes (single-observer ISMCTS at the root: Cowling, Powley and Whitehouse 2012).
+- **Gumbel** (`Gumbel`, `GumbelConsidered` 16, `GumbelNoise` off, `GumbelCVisit` 50, `GumbelCScale` 0.1,
+  `GumbelBudget` 1,024 for a deadline search; implies `RootBandit`): sequential halving over the top options by
+  `g + logit`, each option's visits in the same worlds in turn; the answer the survivor; the recorded target at the
+  root's first step `softmax(logit + sigma(completed q))` (Danihelka et al. 2022, as `mctx` does it), so every
+  searched decision is a usable policy target. The logits (and the completed values' prior weights) are the
+  network's own priors, never the root's floor or noise. `m`, the options considered, is fixed with its halving table
+  as the simulations begin; an option the engine refuses in every world later leaves the halving, its planned visits
+  going to the least visited option still open. The draw is self-play's exploration; in play it is off. The
+  visit-count path stays the default.
+- **The evaluation cache** (`EvalCache` N rows, `CountDuplicates`): a row whose network input the search already sent
+  is not sent again. Exact where the evaluator's outputs are a function of the row's input; tract on the CPU moves by
+  about 1e-7 with the batch's shape, so there a cached row has its first batch's bits. Measured with the tiny model,
+  Decklist, 8 worlds, trees kept: 42% of rows repeat an input at 64 simulations, 39% at 1,024.
+- **Lazy inner steps** (`LazyInner`): a flattened priority's targets and colours are evaluated when its node is
+  selected again; until then each whole answer has its option's first-step prior shared evenly. A cast split by class
+  of payment (`PaySplit`) is split by the other options' first-step priors in both expansions, so a lazy node, once
+  refined, has the edges an eager one has.
+- **Budget snapshots** (`Snapshots` 256,1024) and **the early stop** (`EarlyStop` N, `EarlyStopMargin` 0.1): the root's
+  visits at those counts for self-play to compare with the final choice; a search whose root, past N simulations, has
+  one option visited (but for virtual loss's detours, fewer than a batch), none cut, and every other visited option at
+  least the margin below it stops, its root value still the visits' mean.
+- **Time use at play** (`TimeUse`, `TimeMinShare` 0.25, `TimeEntropy` 0.2, `TimeSwing` 0.05): past a share of the
+  time, stop on a settled root or one whose visits' entropy and value swing are small.
+- **Exploration at the root** (`RootFloor`, `RootNoise` with `RootNoiseAlpha` 0.3, `ForcedPlayouts` k): a prior
+  floor, Dirichlet noise (the same in every world), and KataGo's forced playouts with policy target pruning (the
+  recorded root visits less the forced ones the values do not justify).
+- **The shortcut audit** (`RootShortcut` false, `search::audit_shortcut`): a full search with a floor under the priors
+  at a root the priority shortcut would pass, reporting passing's value and the best other option's.
+- **For recording** (`Searched`): `root_options` (each root option over the worlds: prior and the network's, visits,
+  `q`, completed `q`, target share; slotted over the worlds through a map, by tokens, class of payment and place among
+  options of equal tokens), `visits` (each recorded sub-step's options by their index in the step, with their visits
+  and root values: two options of an equal token, interchangeable, are counted apart; `equal_tokens` counts such
+  steps, none in 3,460 searched sub-steps of 66 games of the tiny network), `steps` (each sub-step of the answer and
+  whether the search chose it), `target`
+  (what the root's recorded visits are: visits, Gumbel's target times `TARGET_SCALE`, or pruned visits) and
+  `snapshots`. The recorder keeps them (`record::Root::of`): a sample's `searched` flag is `steps`', its options' root
+  values `root_options`', and self-play's report reads `snapshots`.
+
 ### Budgets and fallbacks
 
 - **Self-play**: a fixed simulation count per decision, so the data does not depend on the machine's load.
 - **Play**: a deadline per decision. When it expires, the answer is the best found so far. With no search result,
   it is the network alone; with no network, the tactical bot. A seat never times out the table.
 - **Game length**: self-play games are capped (turns and decisions). A capped game is a draw (value 0), and the cap
-  rate is logged. A loop the engine itself draws for (CR 104.4b) is a draw as well.
+  rate is logged. A loop the engine itself draws for (CR 104.4b) is a draw as well. Inside a search, a line capped at
+  `turn_cap` turns past the root (or by `MAX_FORCED` requests with no choice) takes the network's value at the cap
+  (decision 8; `CapValue`, on), no longer a draw. A kept tree re-rooted further on opens the lines capped at the old
+  horizon that the new one reaches (they are played again when next taken), and a capped node never becomes a root.
+- **Lines' forced passes**: a priority with nothing but passing is passed in a line without observing it
+  (`SkipForcedObserve`, on): the same answer and the same lines, without the observation (37% of the lines' time was
+  observing).
 - **Mulligans and play first** are policy steps like any other, with their own sub-step factoring (keep, which cards
   to bottom). They are in the data from the first generation.
 
@@ -650,7 +707,9 @@ dimension** (`spike-t{32,64,128}.onnx`, 5 MB each): the token count is a constan
 ops, and a backend that wants static shapes pins the batch when it loads (tract builds one plan per (T, B)). The
 graph uses only Add, Cast, Clip, Constant, Div, Erf, Gather, Gemm, Identity, LayerNormalization, MatMul, Mul,
 ReduceSum, Reshape, Softmax, Split, Squeeze, Sub, Tanh, Transpose, Unsqueeze and Where; `export.py` refuses anything
-else. Parity is against PyTorch's outputs on 512 reference positions per bucket: value within 1e-3 and the same
+else but `Concat` and `Log` (a network that reads its numbers through a logarithm, `model.Config.nums_log`, off by
+default; a standard operator tract and onnxruntime implement, though Rust parity of such a graph has not been run
+yet). Parity is against PyTorch's outputs on 512 reference positions per bucket: value within 1e-3 and the same
 argmax on 99.5%.
 
 | Target | Status | Parity | Positions/s, T32 / T64 / T128 (best batch) |

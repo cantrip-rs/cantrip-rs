@@ -346,6 +346,46 @@ internal sealed class Lane : IDisposable
     public IRulesHostFactory Rules { get; }
 
     /// <summary>
+    /// Brings the lane's native host to give its next game the id <paramref name="id"/> (a host numbers its games from 1
+    /// in the order it deals them): deals and closes empty games of 60 Forests on the native host alone, which the AI
+    /// host never mirrors. For replaying a game of a run whose lanes were reused (<c>--game-ids</c>).
+    /// </summary>
+    public void AdvanceTo(int id)
+    {
+        if (id <= 1)
+        {
+            return;
+        }
+
+        var deck = new JsonArray([.. Enumerable.Range(0, 60).Select(_ => (JsonNode)JsonValue.Create("Forest")!)]);
+        while (true)
+        {
+            var deal = new JsonObject
+            {
+                ["Cmd"] = "NewGame",
+                ["Seats"] = new JsonArray(
+                    new JsonObject { ["Name"] = "Advance1", ["Deck"] = deck.DeepClone() },
+                    new JsonObject { ["Name"] = "Advance2", ["Deck"] = deck.DeepClone() }),
+                ["Seed"] = 0,
+                ["Shuffle"] = true,
+                ["MinimumDeckSize"] = 60,
+            };
+            int next = JsonNode.Parse(Native.Exchange(deal.ToJsonString()))?["Ok"]?["GameId"]?.GetValue<int>()
+                ?? throw new InvalidOperationException("the native host dealt no empty game");
+            Native.Exchange(new JsonObject { ["Cmd"] = "Close", ["GameId"] = next }.ToJsonString());
+            if (next + 1 > id)
+            {
+                throw new InvalidOperationException($"the native host is past game id {id}: it dealt {next}");
+            }
+
+            if (next + 1 == id)
+            {
+                return;
+            }
+        }
+    }
+
+    /// <summary>
     /// Whether the lane can play another game: not once its AI host has stalled (<see cref="AiHostProcess.Stalled"/>),
     /// which would leave the next game asking a host still busy with the last one's request.
     /// </summary>
@@ -410,6 +450,29 @@ internal sealed class NeuralPlay : IAutoPlayer
 
     /// <summary>The seat as the command line named it, with its search budget.</summary>
     public NeuralSeat Seat { get; }
+
+    /// <summary>
+    /// The game's number in the run (-1: none given), which with the run's seed makes each search's seed
+    /// (<see cref="SearchSeedFor"/>). Before 2026-11-16 the AI host made it from the table's game id, which a reused lane
+    /// counts up game after game, so a game's searches hung on which lane played it and in what order: gen5's gate could
+    /// be replayed only by recovering each game's lane count, and 90 of its decisive pairs not at all.
+    /// </summary>
+    public int Game { get; init; } = -1;
+
+    /// <summary>A search's seed from the run's seed, the game's number, the seat and the request: splitmix64 over them.</summary>
+    public static ulong SearchSeedFor(ulong run, int game, int seat, long request)
+    {
+        ulong x = run;
+        foreach (ulong part in new[] { (ulong)(uint)game, (ulong)(uint)seat, (ulong)request })
+        {
+            x += 0x9E3779B97F4A7C15UL ^ part;
+            x = (x ^ (x >> 30)) * 0xBF58476D1CE4E5B9UL;
+            x = (x ^ (x >> 27)) * 0x94D049BB133111EBUL;
+            x ^= x >> 31;
+        }
+
+        return x;
+    }
 
     /// <summary>Search settings every searching seat of the run sends (<c>--ai-worlds</c>, <c>--ai-batch</c>, ...).</summary>
     public static JsonObject SearchSettings { get; set; } = [];
@@ -479,6 +542,12 @@ internal sealed class NeuralPlay : IAutoPlayer
             foreach ((string key, JsonNode? value) in Seat.Settings)
             {
                 start[key] = value?.DeepClone();
+            }
+
+            // The search's seed from the game's number, not the table's id (which hangs on the lane): unless one was set.
+            if (Game >= 0 && !start.ContainsKey("SearchSeed"))
+            {
+                start["SearchSeed"] = SearchSeedFor(Program.RunSeed, Game, client.Seat, asked.RequestId);
             }
         }
 

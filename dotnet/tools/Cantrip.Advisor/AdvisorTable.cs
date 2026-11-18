@@ -37,6 +37,22 @@ public sealed class AdvisorOptions
 
     public int OpponentBudgetMs { get; init; } = 3000;
 
+    /// <summary>
+    /// The advice's search settings by the names the AI host reads (docs/ai-host.md, "Asking"), over the defaults: with
+    /// <c>Simulations</c>, the budget is that many simulations instead of <see cref="BudgetMs"/>, so the advice is the same
+    /// on any machine under any load (the deterministic budgets: 128, 512 and 4096 stand for 250 ms, 1 s and 10 s).
+    /// </summary>
+    public IReadOnlyDictionary<string, JsonNode?> AdviceSearch { get; init; } = new Dictionary<string, JsonNode?>();
+
+    /// <summary>
+    /// Whether the AI analyses the person's decisions (the advice). Without, the page is the plain table and each
+    /// decision's record holds the person's play, the prompt and their view, with no analysis.
+    /// </summary>
+    public bool Advice { get; init; } = true;
+
+    /// <summary>The neural opponent's search settings, as <see cref="AdviceSearch"/> is the advice's.</summary>
+    public IReadOnlyDictionary<string, JsonNode?> OpponentSearch { get; init; } = new Dictionary<string, JsonNode?>();
+
     /// <summary>Worlds a Decklist search deals.</summary>
     public int Worlds { get; init; } = 8;
 
@@ -231,6 +247,8 @@ public sealed class AdvisorTable : IAsyncDisposable
             ["SearchMs"] = _options.OpponentBudgetMs,
             ["Worlds"] = _options.Worlds,
         };
+        Apply(start, _options.OpponentSearch, requestId);
+        start["Report"] = true;
         JsonNode? started = _ai.Call(start.ToJsonString(), Patience);
         if (started?["Ok"]?["Started"]?["RequestId"]?.GetValue<int>() is not int id || id != requestId)
         {
@@ -249,6 +267,15 @@ public sealed class AdvisorTable : IAsyncDisposable
 
             if (result["RequestId"]?.GetValue<int>() == requestId && result["Answer"] is JsonNode answer)
             {
+                // The bot's answer and its search's report, one line a decision.
+                lock (_lock)
+                {
+                    if (_sessionDir.Length > 0)
+                    {
+                        File.AppendAllText(Path.Combine(_sessionDir, "bot.jsonl"), result.ToJsonString() + "\n");
+                    }
+                }
+
                 return ProtocolJson.Deserialize<AnswerPayload>(answer.ToJsonString());
             }
         }
@@ -361,6 +388,34 @@ public sealed class AdvisorTable : IAsyncDisposable
         _ai.Send(line, check);
     }
 
+    /// <summary>
+    /// A seat's search settings over an <c>AiStart</c>'s defaults: <c>Simulations</c> replaces the time budget, and a
+    /// search is seeded from the game's seed and the request, so the same game searches the same way again.
+    /// </summary>
+    private void Apply(JsonObject start, IReadOnlyDictionary<string, JsonNode?> search, int requestId)
+    {
+        foreach ((string key, JsonNode? value) in search)
+        {
+            start[key] = value?.DeepClone();
+        }
+
+        if (search.ContainsKey("Simulations"))
+        {
+            start.Remove("SearchMs");
+        }
+
+        if (!start.ContainsKey("SearchSeed"))
+        {
+            start["SearchSeed"] = unchecked(_options.Seed * 0x9E3779B97F4A7C15UL + (ulong)requestId);
+        }
+    }
+
+    private static string SearchText(int ms, IReadOnlyDictionary<string, JsonNode?> search) =>
+        search.Count == 0 ? $"{ms} ms" : string.Join(", ", search.Select(kv => $"{kv.Key}={kv.Value?.ToJsonString().Trim('"')}"));
+
+    private static JsonObject SearchJson(IReadOnlyDictionary<string, JsonNode?> search) =>
+        new([.. search.Select(kv => KeyValuePair.Create(kv.Key, kv.Value?.DeepClone()))]);
+
     private static string Clip(string text) => text.Length > 400 ? text[..400] + "..." : text;
 
     private void BeginSession(JsonNode newGame)
@@ -397,6 +452,9 @@ public sealed class AdvisorTable : IAsyncDisposable
             ["BudgetMs"] = _options.BudgetMs,
             ["OpponentBudgetMs"] = _options.Opponent == "neural" ? _options.OpponentBudgetMs : null,
             ["Worlds"] = _options.Worlds,
+            ["Advice"] = _options.Advice,
+            ["AdviceSearch"] = _options.Advice ? SearchJson(_options.AdviceSearch) : null,
+            ["OpponentSearch"] = _options.Opponent == "neural" ? SearchJson(_options.OpponentSearch) : null,
             ["Decks"] = new JsonObject
             {
                 ["1"] = DeckJson(MyDeck),
@@ -411,6 +469,7 @@ public sealed class AdvisorTable : IAsyncDisposable
                 ["commands.jsonl"] = "the native host's commands in order (NewGame, Start, Answer, Concede, View, Close): the game again, exactly, through the native host or an AI host's NewGame Replay",
                 ["trace.json"] = "the game as a cantrip_ai::trace (written at the end)",
                 ["decisions"] = "one record per decision of seat 1",
+                ["bot.jsonl"] = "the neural bot's every answer with its search's report, one line a decision",
             },
         };
         File.WriteAllText(Path.Combine(_sessionDir, "game.json"), game.ToJsonString(Indented));
@@ -447,6 +506,13 @@ public sealed class AdvisorTable : IAsyncDisposable
             };
             _decisions[requestId] = decision;
             _order.Add(decision);
+            if (!_options.Advice)
+            {
+                // No analysis is asked for: the record is written as soon as the person plays.
+                decision.Analysis = new JsonObject { ["Advice"] = false };
+                Settle(decision);
+                return;
+            }
         }
 
         var start = new JsonObject
@@ -460,6 +526,7 @@ public sealed class AdvisorTable : IAsyncDisposable
             ["Worlds"] = _options.Worlds,
             ["Report"] = true,
         };
+        Apply(start, _options.AdviceSearch, requestId);
         _ai.Send(start.ToJsonString(), node =>
         {
             if (node?["Ok"]?["Started"]?["RequestId"]?.GetValue<int>() is int started && started == requestId)
@@ -750,7 +817,7 @@ public sealed class AdvisorTable : IAsyncDisposable
             ["Game"] = new JsonObject
             {
                 ["Seat"] = UserSeat,
-                ["Opponent"] = _options.Opponent == "tactical" ? "the tactical bot" : $"the neural bot ({_modelName}, {_options.OpponentBudgetMs} ms)",
+                ["Opponent"] = _options.Opponent == "tactical" ? "the tactical bot" : $"the neural bot ({_modelName}, {SearchText(_options.OpponentBudgetMs, _options.OpponentSearch)})",
                 ["Model"] = _modelName,
                 ["BudgetMs"] = _options.BudgetMs,
                 ["MyDeck"] = MyDeck.Name,

@@ -308,7 +308,7 @@ pub fn value_position(trace: &Trace, position: &Position, evaluator: &dyn Evalua
     let request = game.pending().cloned().ok_or("the replayed game asks nothing")?;
     let seat = request.player;
     let step = trace.steps.get(position.at).ok_or("no answer at the position")?;
-    let given = seats.answer(&game, &request, &step.answer)?;
+    let given = seats.step(&game, &request, step)?;
     let knowledge = Knowledge::of(&game, seat);
     let (mut cands, net_value, compact, legal, observation) = candidates(&game, &knowledge, &given, evaluator, options.top)?;
     // The scored players' answers, each a candidate.
@@ -447,7 +447,7 @@ pub fn luck(trace: &Trace, position: &Position, evaluator: &dyn Evaluator) -> Re
     let mut terms = Vec::new();
     for (j, step) in trace.steps.iter().enumerate().skip(position.at) {
         let Some(request) = game.pending().cloned() else { break };
-        let answer = seats.answer(&game, &request, &step.answer).map_err(|e| format!("answer {j}: {e}"))?;
+        let answer = seats.step(&game, &request, step).map_err(|e| format!("answer {j}: {e}"))?;
         let before = game.log.len();
         game.answer(request.id, request.player, answer).map_err(|Rejected(why)| format!("answer {j}: refused: {why}"))?;
         let draws: Vec<(PlayerId, ObjectId)> = game.log[before.min(game.log.len())..].iter().filter_map(|r| match r.event {

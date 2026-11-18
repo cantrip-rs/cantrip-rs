@@ -23,6 +23,8 @@ use cantrip_ai::record::{Dealt, Ending, Failures, record, table};
 #[cfg(feature = "ai-record")]
 use cantrip_ai::shard::{Header, ShardWriter, mode_name, parse_mode};
 #[cfg(feature = "ai-record")]
+use cantrip_ai::trace::{DealSpec, Trace};
+#[cfg(feature = "ai-record")]
 use cantrip_engine::Game;
 #[cfg(feature = "ai-record")]
 use cantrip_obs::InfoMode;
@@ -230,6 +232,29 @@ impl Host {
                     auto_start: scenario.is_none() && first_player.is_some() && chooser.is_none(),
                     ..Dealt::default()
                 });
+                // The game as what deals it again (`--ai-record-traces`): a dealt game's lists and setup, as the session
+                // deals it; a scenario's game is not traced.
+                #[cfg(feature = "ai-record")]
+                let traced = self.recorder.as_ref().filter(|r| r.config.traces && scenario.is_none()).map(|_| {
+                    let first = first_player.and_then(cantrip_host::view::player_at);
+                    let opening = chooser.and_then(cantrip_host::view::player_at).or(first.filter(|_| !shuffle));
+                    let mut t = Trace::new(
+                        seed,
+                        seats.iter().map(|s| s.deck_name.clone().unwrap_or_default()).collect(),
+                        seats.iter().map(|s| s.deck.clone()).collect(),
+                    );
+                    t.deal = Some(DealSpec {
+                        sideboards: seats.iter().map(|s| s.sideboard.clone()).collect(),
+                        companions: seats.iter().map(|s| s.companion.clone()).collect(),
+                        basic_lands_outside: basic_lands_outside.clone(),
+                        minimum_deck_size: minimum_deck_size.unwrap_or_default(),
+                        commander,
+                        commanders: seats.iter().map(|s| s.commanders.clone()).collect(),
+                        shuffle,
+                        opening_chooser: opening.map(|p| p.0),
+                    });
+                    t
+                });
                 let made = match scenario {
                     Some(spec) => Session::scenario(&spec.text, &spec.name, seats.into_iter().map(|s| s.name).collect(), &spec.driven),
                     None if minimum_deck_size.is_none() => {
@@ -265,6 +290,9 @@ impl Host {
                         #[cfg(feature = "ai-record")]
                         if let (Some(recorder), Some(dealt)) = (self.recorder.as_mut(), dealt) {
                             recorder.dealt.insert(id, dealt);
+                            if let Some(t) = traced {
+                                recorder.traces.insert(id, t);
+                            }
                         }
                         ok(json!({ "GameId": id, "Decklists": decklists }))
                     }
@@ -316,7 +344,8 @@ impl Host {
                 {
                     // Closed before it ended: the table's cap. Its samples are recorded with every result 0.
                     let game = session.game();
-                    recorder.send(game.clone(), dealt, Ending::of(game, true));
+                    let trace = recorder.traces.remove(&game_id);
+                    recorder.send(game.clone(), dealt, Ending::of(game, true), trace);
                 }
                 ok(json!({}))
             }
@@ -332,7 +361,8 @@ impl Host {
             && let Some(dealt) = recorder.dealt.remove(&game_id)
         {
             let game = session.game();
-            recorder.send(game.clone(), dealt, Ending::of(game, false));
+            let trace = recorder.traces.remove(&game_id);
+            recorder.send(game.clone(), dealt, Ending::of(game, false), trace);
         }
     }
 
@@ -376,11 +406,16 @@ struct RecordConfig {
     /// A perfect-information value to distil into the main mode's games (`cantrip_ai::distill`): its model directory,
     /// the inference server it is served by, and how many worlds a decision.
     distill: Option<(PathBuf, String, usize)>,
+    /// Each dealt game's trace too, a JSON line each into `DIR/traces/` (`cantrip_ai::trace`), so that its positions can
+    /// be stood in again (`cantrip-reanalyse`): `--ai-record-traces`, or `CANTRIP_AI_TRACES=1` where the table's command
+    /// line cannot say it. A trace is written where it replays as the game up to where it ends (`Trace::replays_into`);
+    /// one a payment by hand cut short (`Trace::of_game`) still holds the positions before it.
+    traces: bool,
 }
 
 #[cfg(feature = "ai-record")]
 const USAGE: &str = "usage: cantrip-native-host [--ai-record DIR [--ai-record-mode full|decklist|hidden] [--ai-record-producer NAME] \
-[--ai-record-seeds TEXT] [--ai-record-games N] [--ai-record-mb N] [--ai-record-threads N] [--ai-record-also MODE ...] [--ai-record-distill MODEL_DIR --ai-record-distill-server HOST:PORT [--ai-record-distill-worlds N]]]";
+[--ai-record-seeds TEXT] [--ai-record-games N] [--ai-record-mb N] [--ai-record-threads N] [--ai-record-also MODE ...] [--ai-record-distill MODEL_DIR --ai-record-distill-server HOST:PORT [--ai-record-distill-worlds N]] [--ai-record-traces]]";
 
 #[cfg(feature = "ai-record")]
 fn config(args: &[String]) -> Result<Option<RecordConfig>, String> {
@@ -391,8 +426,14 @@ fn config(args: &[String]) -> Result<Option<RecordConfig>, String> {
     let (mut shard_games, mut shard_mb, mut threads) = (0usize, 64u64, 2usize);
     let mut also = Vec::new();
     let (mut distill_model, mut distill_server, mut distill_worlds) = (None, None, 8usize);
+    let mut traces = std::env::var("CANTRIP_AI_TRACES").is_ok_and(|v| v != "0" && !v.is_empty());
     let mut i = 0;
     while i < args.len() {
+        if args[i] == "--ai-record-traces" {
+            traces = true;
+            i += 1;
+            continue;
+        }
         let value = args.get(i + 1).cloned().ok_or(format!("{} needs a value", args[i]))?;
         let number = |v: &str| v.parse::<u64>().map_err(|_| format!("{} takes a number, not {v}", args[i]));
         match args[i].as_str() {
@@ -416,7 +457,7 @@ fn config(args: &[String]) -> Result<Option<RecordConfig>, String> {
         (None, None) => None,
         _ => return Err("--ai-record-distill needs --ai-record-distill-server, and the other way round".into()),
     };
-    Ok(dir.map(|dir| RecordConfig { dir, mode, producer, seeds, shard_games, shard_mb, threads, also, distill }))
+    Ok(dir.map(|dir| RecordConfig { dir, mode, producer, seeds, shard_games, shard_mb, threads, also, distill, traces }))
 }
 
 /// Built without the recorder, the host takes no arguments: `--ai-record` asks for a build with it.
@@ -458,7 +499,7 @@ fn main() {
 
 /// A finished game to record: a copy of it, how it was dealt and how it ended.
 #[cfg(feature = "ai-record")]
-type Job = (Game, Dealt, Ending);
+type Job = (Game, Dealt, Ending, Option<Trace>);
 
 /// What a recorder worker did.
 #[cfg(feature = "ai-record")]
@@ -468,6 +509,9 @@ struct Totals {
     samples: u64,
     bytes: u64,
     shards: usize,
+    traces: u64,
+    /// Of `traces`, those cut short (`Trace::complete` false).
+    traces_cut: u64,
     failures: Failures,
 }
 
@@ -479,6 +523,8 @@ struct Recorder {
     workers: Vec<JoinHandle<Totals>>,
     /// The games being recorded, by game id, until they end.
     dealt: HashMap<u32, Dealt>,
+    /// The traces of the games being recorded (`RecordConfig::traces`), as dealt, until they end.
+    traces: HashMap<u32, Trace>,
     config: RecordConfig,
     started: std::time::Instant,
 }
@@ -500,6 +546,14 @@ impl Recorder {
                 let h = Header::new(table(), &config.producer, &config.seeds, m);
                 also.push((m, ShardWriter::new(&dir, &format!("cantrip-w{i}"), h, config.shard_mb << 20, config.shard_games)?));
             }
+            let traces = if config.traces {
+                let dir = config.dir.join("traces");
+                std::fs::create_dir_all(&dir)?;
+                let path = dir.join(format!("cantrip-w{i}-{}.jsonl", std::process::id()));
+                Some(io::BufWriter::new(std::fs::OpenOptions::new().create(true).append(true).open(path)?))
+            } else {
+                None
+            };
             let receive = Arc::clone(&receive);
             let mode = config.mode;
             let distill = config.distill.clone();
@@ -511,17 +565,18 @@ impl Recorder {
                     let evaluator = distill.as_ref().map(|(model, server, worlds)| {
                         (cantrip_ai::RemoteEvaluator::connect(server, model, table()).expect("the distilling model's server answers"), *worlds)
                     });
-                    work(&receive, &mut writer, mode, &mut also, evaluator.as_ref().map(|(e, w)| (e as &dyn cantrip_ai::Evaluator, *w)))
+                    let mut traces = traces;
+                    work(&receive, &mut writer, mode, &mut also, evaluator.as_ref().map(|(e, w)| (e as &dyn cantrip_ai::Evaluator, *w)), traces.as_mut())
                 })
                 .expect("a recorder thread starts");
             workers.push(worker);
         }
-        Ok(Recorder { send: Some(send), workers, dealt: HashMap::new(), config, started: std::time::Instant::now() })
+        Ok(Recorder { send: Some(send), workers, dealt: HashMap::new(), traces: HashMap::new(), config, started: std::time::Instant::now() })
     }
 
-    fn send(&mut self, game: Game, dealt: Dealt, ending: Ending) {
+    fn send(&mut self, game: Game, dealt: Dealt, ending: Ending, trace: Option<Trace>) {
         if let Some(send) = &self.send {
-            let _ = send.send((game, dealt, ending));
+            let _ = send.send((game, dealt, ending, trace));
         }
     }
 
@@ -536,6 +591,8 @@ impl Recorder {
                     all.samples += t.samples;
                     all.bytes += t.bytes;
                     all.shards += t.shards;
+                    all.traces += t.traces;
+                    all.traces_cut += t.traces_cut;
                     for (k, n) in t.failures {
                         *all.failures.entry(k).or_default() += n;
                     }
@@ -551,6 +608,8 @@ impl Recorder {
             "Samples": all.samples,
             "Bytes": all.bytes,
             "Shards": all.shards,
+            "Traces": all.traces,
+            "TracesCutShort": all.traces_cut,
             "Unfinished": self.dealt.len(),
             "Seconds": self.started.elapsed().as_secs_f64(),
             "Failures": all.failures,
@@ -573,12 +632,32 @@ fn work(
     mode: InfoMode,
     also: &mut [(InfoMode, ShardWriter)],
     distill: Option<(&dyn cantrip_ai::Evaluator, usize)>,
+    mut traces: Option<&mut io::BufWriter<std::fs::File>>,
 ) -> Totals {
     let prior = cantrip_ai::Prior::new();
     let mut totals = Totals::default();
     loop {
         let job = receive.lock().map(|r| r.recv());
-        let Ok(Ok((game, dealt, ending))) = job else { break };
+        let Ok(Ok((game, dealt, ending, trace))) = job else { break };
+        // The trace first, from the game as it stands: kept only where it replays as the game up to where it ends.
+        if let (Some(base), Some(w)) = (trace, traces.as_deref_mut()) {
+            let made = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                let t = Trace::of_game(base, &game);
+                let ok = t.replays_into(&game);
+                (t, ok)
+            }));
+            match made {
+                Ok((t, true)) => match serde_json::to_string(&t) {
+                    Ok(line) if writeln!(w, "{line}").and_then(|_| w.flush()).is_ok() => {
+                        totals.traces += 1;
+                        totals.traces_cut += u64::from(!t.complete);
+                    }
+                    _ => *totals.failures.entry("recorder/trace write failed".into()).or_default() += 1,
+                },
+                Ok(_) => *totals.failures.entry("recorder/trace does not replay".into()).or_default() += 1,
+                Err(_) => *totals.failures.entry("recorder/trace panicked".into()).or_default() += 1,
+            }
+        }
         // The other modes first, from copies: the main record walks the game itself.
         for (m, w) in also.iter_mut() {
             let copy = game.clone();

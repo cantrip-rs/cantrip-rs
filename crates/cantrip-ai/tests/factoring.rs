@@ -100,6 +100,20 @@ fn normal(a: &Answer) -> Answer {
 }
 
 /// A factored answer with what is a set to the engine sorted: the machine makes those lists in its own order.
+/// Whether two combat damage divisions kill the same creatures and both deal the defender damage or neither does.
+fn same_deaths(divisions: &[cantrip_obs::DivisionObs], a: &FactoredAnswer, b: &FactoredAnswer) -> bool {
+    let (FactoredAnswer::Shares(a), FactoredAnswer::Shares(b)) = (a, b) else {
+        return false;
+    };
+    let dealt = |shares: &[(cantrip_obs::Ref, Option<cantrip_obs::Ref>, u32)], source, to| -> u32 {
+        shares.iter().filter(|s| s.0 == source && s.1 == to).map(|s| s.2).sum()
+    };
+    divisions.iter().all(|d| {
+        d.creatures.iter().zip(&d.lethal).all(|(&c, &l)| (dealt(a, d.source, Some(c)) >= l) == (dealt(b, d.source, Some(c)) >= l))
+            && (dealt(a, d.source, None) > 0) == (dealt(b, d.source, None) > 0)
+    })
+}
+
 fn canon(f: &FactoredAnswer) -> FactoredAnswer {
     use FactoredAnswer as F;
     let mut f = f.clone();
@@ -218,7 +232,13 @@ fn play(path: &Path, tally: &Mutex<Tally>) {
                     if bucketed && m.answer() != Some(f) {
                         tally.lock().unwrap().clamped += 1;
                     }
-                    if !bucketed && m.answer().map(canon) != Some(canon(f)) {
+                    // Combat damage comes back as the AI divides it (`cantrip_obs::factor::divide`): the same creatures
+                    // dealt lethal damage, and damage to the defender or not, the rest wherever the AI puts it.
+                    let divided = match (&answering.ask.kind, m.answer()) {
+                        (AskKind::AssignCombatDamage { divisions }, Some(made)) => same_deaths(divisions, made, f),
+                        _ => false,
+                    };
+                    if !bucketed && !divided && m.answer().map(canon) != Some(canon(f)) {
                         return Err(format!("the machine made {:?}, not {f:?}", m.answer()));
                     }
                     let made = answering

@@ -51,6 +51,27 @@ public static class Program
         Match.NoteHeuristics = args.Contains("--note-heuristic");
         ExploreDuel = Real(args, "--explore", 0);
         PairingsFile = Text(args, "--pairings", string.Empty);
+        ResultsFile = Text(args, "--results", string.Empty);
+        try
+        {
+            OnlyGames = GamesListed(Text(args, "--only-games", string.Empty));
+        }
+        catch (FormatException error)
+        {
+            Console.Error.WriteLine($"--only-games: {error.Message}");
+            return 2;
+        }
+        PairingsKeepDecks = args.Contains("--pairings-keep-decks");
+        RecordPairs = args.Contains("--ai-record-pairs");
+        try
+        {
+            GameIds = GameIdsListed(Text(args, "--game-ids", string.Empty));
+        }
+        catch (FormatException error)
+        {
+            Console.Error.WriteLine($"--game-ids: {error.Message}");
+            return 2;
+        }
 
         // --hosts N: games dealt among N native hosts of their own rather than all sent to the one shared host. Not with
         // --ai-record, whose recording is the shared host's.
@@ -105,12 +126,130 @@ public static class Program
 
     /// <summary>
     /// <c>--pairings FILE</c>: a matchup a line, <c>first:second</c> by deck name among <c>--decks</c> (as the generation
-    /// driver writes them, by metagame share); each pair of games the next line, its decks swapping seats with the
-    /// players.
+    /// driver writes them, by metagame share); each pair of games the next line. The pair is a true duplicate: both
+    /// games deal <c>first</c> to seat 1 and <c>second</c> to seat 2 from the same shuffle, and the players exchange
+    /// seats, so each plays each side of the same deal and the deal cancels within the pair (<see cref="Pentanomial"/>).
     /// </summary>
-    private static string PairingsFile { get; set; } = string.Empty;
+    internal static string PairingsFile { get; set; } = string.Empty;
 
-    private static List<(DeckList, DeckList)> Pairings { get; set; } = [];
+    /// <summary>
+    /// <c>--results FILE</c>: a duel writes one line a game there (tab-separated, a header first): the game's number in
+    /// the run, its pair, its shuffle, A's seat, the seats' decks, the winning seat (0 a draw, - unfinished), A's
+    /// points, who started and the turns. A game's number with the run's own --seed, seats and decks plays it again
+    /// (<c>--game N</c>, or <c>--only-games</c>), so any result can be looked at afterwards.
+    /// </summary>
+    internal static string ResultsFile { get; set; } = string.Empty;
+
+    /// <summary>
+    /// <c>--only-games LIST</c>: a duel plays only these games of the run (numbers as <c>--results</c> writes them, comma
+    /// separated, or a file of them one a line), each with the shuffle and the seating it had: some games of an earlier
+    /// run again, with other seats or budgets.
+    /// </summary>
+    internal static int[]? OnlyGames { get; set; }
+
+    /// <summary>
+    /// <c>--game-ids FILE</c> (lines <c>game id</c>): each listed game played on a lane of its own, its native host's id
+    /// for the game made <c>id</c> by dealing and closing <c>id - 1</c> empty games there first (<see cref="Lane.AdvanceTo"/>).
+    /// A searching neural seat's search seed is made from that id (the AI host's <c>AiStart</c>: the table's game id and
+    /// the request's), and a lane's host numbers its games from 1 in the order it deals them, so in a run with lanes reused
+    /// game after game a game's id is how many games its lane had played before it: replaying such a game exactly needs
+    /// the id it had.
+    /// </summary>
+    internal static Dictionary<int, int>? GameIds { get; set; }
+
+    /// <summary>
+    /// <c>--ai-record-pairs</c>: a recorded self-duel keeps each pair of games one shuffle (the players exchanged), rather
+    /// than taking <c>--each-shuffle</c> on its own: for recording the two games of each pair, whose seats play differently.
+    /// </summary>
+    internal static bool RecordPairs { get; set; }
+
+    internal static Dictionary<int, int>? GameIdsListed(string path)
+    {
+        if (path.Length == 0)
+        {
+            return null;
+        }
+
+        var ids = new Dictionary<int, int>();
+        foreach (string line in File.ReadAllLines(path))
+        {
+            string[] words = line.Split([' ', '	', ','], StringSplitOptions.RemoveEmptyEntries);
+            if (words.Length == 0 || words[0].StartsWith('#'))
+            {
+                continue;
+            }
+
+            if (words.Length != 2
+                || !int.TryParse(words[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out int game) || game < 0
+                || !int.TryParse(words[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out int id) || id < 1)
+            {
+                throw new FormatException($"'{line}' is no 'game id' line (a game number, and an id from 1)");
+            }
+
+            ids[game] = id;
+        }
+
+        return ids.Count > 0 ? ids : throw new FormatException("no games");
+    }
+
+    private static readonly object ResultsGate = new();
+
+    internal static int[]? GamesListed(string list)
+    {
+        if (list.Length == 0)
+        {
+            return null;
+        }
+
+        string text = File.Exists(list) ? File.ReadAllText(list) : list;
+        int[] games = text.Split([',', '\n', '\r', ' ', '\t'], StringSplitOptions.RemoveEmptyEntries)
+            .Select(word => int.TryParse(word, NumberStyles.Integer, CultureInfo.InvariantCulture, out int game) && game >= 0
+                ? game
+                : throw new FormatException($"'{word}' is no game number"))
+            .Distinct()
+            .Order()
+            .ToArray();
+        return games.Length > 0 ? games : throw new FormatException("no game numbers");
+    }
+
+    private static void WriteResult(int game, ulong shuffle, int seatOfA, IReadOnlyList<DeckList> seated, MatchResult result)
+    {
+        if (ResultsFile.Length == 0)
+        {
+            return;
+        }
+
+        string winner = result.Finished ? result.Winner.ToString(CultureInfo.InvariantCulture) : "-";
+        string points = !result.Finished ? "-" : result.Winner == 0 ? "0.5" : result.Winner == seatOfA ? "1" : "0";
+        string line = string.Join('\t',
+            game.ToString(CultureInfo.InvariantCulture),
+            (EachShuffle ? game : game / 2).ToString(CultureInfo.InvariantCulture),
+            shuffle.ToString(CultureInfo.InvariantCulture),
+            seatOfA.ToString(CultureInfo.InvariantCulture),
+            seated[0].Name,
+            seated[1].Name,
+            winner,
+            points,
+            result.Starter.ToString(CultureInfo.InvariantCulture),
+            result.Turns.ToString(CultureInfo.InvariantCulture));
+        lock (ResultsGate)
+        {
+            if (!File.Exists(ResultsFile))
+            {
+                File.WriteAllText(ResultsFile, "game\tpair\tshuffle\ta_seat\tdeck1\tdeck2\twinner\ta_points\tstarter\tturns\n");
+            }
+
+            File.AppendAllText(ResultsFile, line + "\n");
+        }
+    }
+
+    /// <summary>
+    /// <c>--pairings-keep-decks</c>: the old pairing, in which each player keeps its deck when the seats swap, so the
+    /// second game of a pair deals the decks the other way round and is not the first with the players exchanged.
+    /// </summary>
+    internal static bool PairingsKeepDecks { get; set; }
+
+    internal static List<(DeckList, DeckList)> Pairings { get; set; } = [];
 
     /// <summary><c>--explore P</c> in a duel: a tactical seat's share of decisions drawn at random, so its games differ.</summary>
     private static double ExploreDuel { get; set; }
@@ -130,6 +269,13 @@ public static class Program
 
     /// <summary>Every answer the neural seats of a run made, with what it cost.</summary>
     private static ConcurrentBag<NeuralAnswer> NeuralAnswers { get; } = [];
+
+    /// <summary>
+    /// The run's <c>--seed</c>, which a neural seat's search seeds are made from with its game's number in the run
+    /// (<see cref="NeuralPlay.SearchSeedFor"/>): a game's searches are the same whichever lane plays it, at any
+    /// <c>--parallel</c>, so a game is played again from its number alone (<c>--only-games</c>).
+    /// </summary>
+    internal static ulong RunSeed { get; set; }
 
     /// <summary>The shuffle game number <paramref name="game"/> of a run is dealt from.</summary>
     internal static ulong Shuffle(ulong seed, int game) => seed + (ulong)(EachShuffle ? game : game / 2);
@@ -153,7 +299,10 @@ public static class Program
         ulong seed = (ulong)Number(args, "--seed", Random.Shared.Next(1, 1_000_000_000));
         List<DeckList> decks = Decks(root, args);
 
-        Console.WriteLine($"{a} against {b}, {games} games, {(Versus.Count > 0 ? $"{a} with {decks.Count} decks against {b} with {Versus.Count}" : Named(decks))}, shuffles from {seed}.");
+        string dealt = Versus.Count > 0 ? $"{a} with {decks.Count} decks against {b} with {Versus.Count}"
+            : PairingsFile.Length > 0 ? $"{decks.Count} decks in the pairings of {Path.GetFileName(PairingsFile)}{(PairingsKeepDecks ? ", each deck kept by its player" : ", each pair one deal")}"
+            : Named(decks);
+        Console.WriteLine($"{a} against {b}, {games} games, {dealt}, shuffles from {seed}.");
         Console.WriteLine("Seats swapped every other game, so each plays first as often as the other and each plays each deck.");
 
         // --cards N: which cards each seat won with, the N it did worst and best by.
@@ -161,7 +310,7 @@ public static class Program
 
         // --ai-record DIR: the host records every game that ends as AI training shards (docs/ai-player-plan.md, "Data").
         bool recording = Record(root, args, a, b);
-        if (recording && a == b)
+        if (recording && a == b && !RecordPairs)
         {
             EachShuffle = true;
         }
@@ -174,20 +323,36 @@ public static class Program
 
         var clock = Stopwatch.StartNew();
         // --sprt: stop once the sequential test has its verdict, --games the most it may take (docs/ai-player-plan.md, "Serving and measuring").
-        bool sprt = args.Contains("--sprt");
+        // --sprt-paired: the same by pair, the pentanomial GSPRT. --interval-stop: stop once the paired interval
+        // excludes a half. Whichever says first stops the duel.
+        var stops = new Stops(args.Contains("--sprt"), args.Contains("--sprt-paired"), args.Contains("--interval-stop"));
+        Tally.SprtH0 = Real(args, "--sprt-h0", Tally.SprtH0);
         Tally.SprtH1 = Real(args, "--sprt-h1", Tally.SprtH1);
-        if (!(Tally.SprtH1 > Tally.SprtH0 && Tally.SprtH1 < 1))
+        Tally.Alpha = Real(args, "--sprt-alpha", Tally.Alpha);
+        Tally.Beta = Real(args, "--sprt-beta", Tally.Beta);
+        Tally.IntervalZ = Real(args, "--interval-z", Tally.IntervalZ);
+        Tally.IntervalMinPairs = Number(args, "--interval-min-pairs", Tally.IntervalMinPairs);
+        Tally.IntervalMinDecisive = Number(args, "--interval-min-decisive", Tally.IntervalMinDecisive);
+        if (!(Tally.SprtH0 > 0 && Tally.SprtH1 > Tally.SprtH0 && Tally.SprtH1 < 1))
         {
-            Console.Error.WriteLine($"--sprt-h1 is A's share under H1, above {Tally.SprtH0} and below 1.");
+            Console.Error.WriteLine("--sprt-h0 and --sprt-h1 are A's share under H0 and H1, 0 < H0 < H1 < 1.");
             return 2;
         }
 
-        Tally tally = Play(root, decks, games, seed, Maker(root, a), Maker(root, b, b: true), sample: false, out _, hands: cards > 0, sprt: sprt);
+        if (!(Tally.Alpha is > 0 and < 0.5 && Tally.Beta is > 0 and < 0.5 && Tally.IntervalZ > 0))
+        {
+            Console.Error.WriteLine("--sprt-alpha and --sprt-beta are between 0 and 0.5, --interval-z above 0.");
+            return 2;
+        }
+
+        Tally tally = Play(root, decks, games, seed, Maker(root, a), Maker(root, b, b: true), sample: false, out _, hands: cards > 0, stops: stops);
         tally.Write(a, b, clock.Elapsed);
-        if (sprt)
+        if (stops.Sprt)
         {
             Console.WriteLine(tally.SprtLine(a, b));
         }
+
+        tally.WritePaired(a, stops);
 
         tally.WriteSplits(a, b, NeuralAnswers);
 
@@ -598,7 +763,7 @@ public static class Program
     // --- Playing -------------------------------------------------------------------------------------------------------
 
     /// <summary>Who won a run of games between two ways of playing, A and B.</summary>
-    private sealed class Tally
+    internal sealed class Tally
     {
         public int WinsA;
         public int WinsB;
@@ -640,6 +805,9 @@ public static class Program
 
         public ConcurrentQueue<string> Failures { get; } = [];
 
+        /// <summary>The games by pair, A's points in each (<see cref="PairTally"/>); written under <see cref="Gate"/>.</summary>
+        public PairTally Pairs { get; } = new();
+
         public int Finished => WinsA + WinsB + Draws;
 
         /// <summary>
@@ -657,15 +825,67 @@ public static class Program
             }
         }
 
-        public const double SprtH0 = 0.5;
-        /// <summary>A's share under H1: 55% unless --sprt-h1 says otherwise.</summary>
+        /// <summary>A's share under H0: 50% unless --sprt-h0 says otherwise (both SPRTs).</summary>
+        public static double SprtH0 = 0.5;
+
+        /// <summary>A's share under H1: 55% unless --sprt-h1 says otherwise (both SPRTs).</summary>
         public static double SprtH1 = 0.55;
 
-        /// <summary>Wald's bound for alpha = beta = 0.05: ln((1 - beta) / alpha) = ln 19.</summary>
-        public static readonly double SprtBound = Math.Log(19);
+        /// <summary>The SPRTs' error rates: 0.05 each unless --sprt-alpha and --sprt-beta say otherwise.</summary>
+        public static double Alpha = 0.05;
+
+        public static double Beta = 0.05;
+
+        /// <summary>
+        /// The unpaired SPRT's bound, ln((1 - beta) / alpha) (Wald): ln 19 at alpha = beta = 0.05, when the lower bound
+        /// is its negative.
+        /// </summary>
+        public static double SprtBound => Pentanomial.Bounds(Alpha, Beta).Upper;
 
         /// <summary>The SPRT's verdict so far: +1 H1 (A is the better by 55%), -1 H0 (it is not), 0 not yet.</summary>
-        public int Verdict => Llr >= SprtBound ? 1 : Llr <= -SprtBound ? -1 : 0;
+        public int Verdict => Llr >= SprtBound ? 1 : Llr <= Pentanomial.Bounds(Alpha, Beta).Lower ? -1 : 0;
+
+        /// <summary>The paired SPRT's log-likelihood ratio (the pentanomial GSPRT, <see cref="Pentanomial.Llr"/>).</summary>
+        public double PairedLlr => Pentanomial.Llr(Pairs.Counts, SprtH0, SprtH1);
+
+        /// <summary>The paired SPRT's verdict so far: +1 H1, -1 H0, 0 not yet.</summary>
+        public int PairedVerdict
+        {
+            get
+            {
+                (double lower, double upper) = Pentanomial.Bounds(Alpha, Beta);
+                double llr = PairedLlr;
+                return llr >= upper ? 1 : llr <= lower ? -1 : 0;
+            }
+        }
+
+        /// <summary>The pairs counted when the paired SPRT first had its verdict, and its LLR then; zero before.</summary>
+        public long PairedStoppedAt;
+
+        public double PairedStoppedLlr;
+
+        /// <summary>
+        /// The interval stop's z (2.58, a 99% interval: the duel looks after every pair, which a fixed-sample 95%
+        /// interval does not allow for), the pairs it waits for before it may stop, and the pairs that did not split
+        /// 1-1 it waits for (<see cref="Pentanomial.IntervalVerdict"/>).
+        /// </summary>
+        public static double IntervalZ = 2.58;
+
+        public static int IntervalMinPairs = 100;
+
+        public static int IntervalMinDecisive = 30;
+
+        /// <summary>The interval stop's verdict so far (<see cref="Pentanomial.IntervalVerdict"/>): +1, -1, or 0.</summary>
+        public int IntervalVerdict => Pentanomial.IntervalVerdict(Pairs.Counts, IntervalZ, IntervalMinPairs, IntervalMinDecisive);
+
+        /// <summary>The pairs counted when the interval stop fired, the share and margin then, and which way; zero before.</summary>
+        public long IntervalStoppedAt;
+
+        public double IntervalStoppedShare;
+
+        public double IntervalStoppedMargin;
+
+        public int IntervalStoppedWay;
 
         /// <summary>The games that had finished when the SPRT first reached a verdict, and the LLR then; zero before.</summary>
         public int StoppedAt;
@@ -673,10 +893,56 @@ public static class Program
         public double StoppedLlr;
 
         public string SprtLine(string a, string b) =>
-            $"SPRT (H0 {SprtH0:P0}, H1 {SprtH1:P0}, alpha = beta = 0.05, bounds +/-{SprtBound:N3}): LLR {Llr:N3} after {Finished} games; " +
+            $"SPRT (H0 {SprtH0:P0}, H1 {SprtH1:P0}, {(Alpha == Beta ? $"alpha = beta = {Alpha:0.###}" : $"alpha = {Alpha:0.###}, beta = {Beta:0.###}")}, " +
+            $"bounds {(Alpha == Beta ? $"+/-{SprtBound:N3}" : $"{Pentanomial.Bounds(Alpha, Beta).Lower:N3}/{SprtBound:N3}")}): LLR {Llr:N3} after {Finished} games; " +
             (StoppedAt > 0
                 ? $"{(StoppedLlr > 0 ? $"H1 accepted, {a} is the better" : $"H0 accepted, {a} is not the better by {SprtH1:P0}")} at game {StoppedAt} (LLR {StoppedLlr:N3}; games already in play finished after)."
                 : Verdict != 0 ? $"{(Verdict > 0 ? "H1" : "H0")} by the end." : "no verdict within the games played.");
+
+        /// <summary>
+        /// The duel by pair: the five counts of the pentanomial, the paired share with its interval, and the paired
+        /// tests that ran. Printed after the unpaired lines, which stay as they were for what reads them
+        /// (<c>generation.py</c>'s <c>parse_gate</c> reads both):
+        /// <code>
+        /// Pairs by A's points in a pair (0 / 0.5 / 1 / 1.5 / 2): 12 / 30 / 2900 / 40 / 18; 3000 pairs, 0 incomplete; 96.7 % split 1-1.
+        /// Paired: A scored 50.6 % +/- 0.3 % by pair (95 %, pentanomial); the pairing's variance is 0.07 of the unpaired.
+        /// Paired SPRT (pentanomial GSPRT, H0 50.0 %, H1 52.0 %, alpha = 0.05, beta = 0.05, bounds -2.944/2.944): LLR 1.234 after 3000 pairs; no verdict within the games played.
+        /// Interval stop (the paired 1.96-sigma interval excludes 50 %, from 100 pairs): stopped at pair 812, A ahead (51.8 % +/- 1.7 %; ...).
+        /// </code>
+        /// </summary>
+        public void WritePaired(string a, Stops stops)
+        {
+            long pairs = Pairs.Pairs;
+            (double share, double margin) = Pairs.Interval();
+            string F(double x) => x.ToString("0.000", CultureInfo.InvariantCulture);
+            Console.WriteLine();
+            Console.WriteLine(
+                $"Pairs by {a}'s points in a pair (0 / 0.5 / 1 / 1.5 / 2): {Pairs.CountsText}; {pairs} pairs, {Pairs.Incomplete} incomplete; " +
+                $"{(pairs == 0 ? 0 : Pairs.Counts[2] / (double)pairs):P1} split 1-1.");
+            Console.WriteLine(
+                $"Paired: {a} scored {share:P1} +/- {margin:P1} by pair (95 %, pentanomial); " +
+                $"the pairing's variance is {Pentanomial.VarianceRatio(Pairs.Counts).ToString("0.00", CultureInfo.InvariantCulture)} of the unpaired.");
+
+            if (stops.PairedSprt)
+            {
+                (double lower, double upper) = Pentanomial.Bounds(Alpha, Beta);
+                Console.WriteLine(
+                    $"Paired SPRT (pentanomial GSPRT, H0 {SprtH0:P1}, H1 {SprtH1:P1}, alpha = {Alpha:0.###}, beta = {Beta:0.###}, bounds {F(lower)}/{F(upper)}): " +
+                    $"LLR {F(PairedLlr)} after {pairs} pairs; " +
+                    (PairedStoppedAt > 0
+                        ? $"{(PairedStoppedLlr > 0 ? $"H1 accepted, {a} is the better" : $"H0 accepted, {a} is not the better by {SprtH1:P1}")} at pair {PairedStoppedAt} (LLR {F(PairedStoppedLlr)}; games already in play finished after)."
+                        : PairedVerdict != 0 ? $"{(PairedVerdict > 0 ? "H1" : "H0")} by the end." : "no verdict within the games played."));
+            }
+
+            if (stops.Interval)
+            {
+                Console.WriteLine(
+                    $"Interval stop (the paired {IntervalZ.ToString("0.###", CultureInfo.InvariantCulture)}-sigma interval excludes 50 %, from {IntervalMinPairs} pairs, {IntervalMinDecisive} of them not split): " +
+                    (IntervalStoppedAt > 0
+                        ? $"stopped at pair {IntervalStoppedAt}, {a} {(IntervalStoppedWay > 0 ? "ahead" : "behind")} ({IntervalStoppedShare:P1} +/- {IntervalStoppedMargin:P1}; games already in play finished after)."
+                        : "no stop within the games played."));
+            }
+        }
 
         /// <summary>
         /// Whether A won by more than luck would give it: its share of the decided games is above a half by more than
@@ -888,6 +1154,15 @@ public static class Program
         }
     }
 
+    /// <summary>
+    /// The sequential tests that may stop a duel: the unpaired SPRT (<c>--sprt</c>), the paired one (<c>--sprt-paired</c>),
+    /// and the paired interval's stop (<c>--interval-stop</c>). The first to reach a verdict stops it.
+    /// </summary>
+    internal readonly record struct Stops(bool Sprt, bool PairedSprt, bool Interval)
+    {
+        public bool Any => Sprt || PairedSprt || Interval;
+    }
+
     private static Tally Play(
         string root,
         IReadOnlyList<DeckList> decks,
@@ -898,8 +1173,9 @@ public static class Program
         bool sample,
         out List<Sample> samples,
         bool hands = false,
-        bool sprt = false)
+        Stops stops = default)
     {
+        RunSeed = seed;
         var tally = new Tally();
         var collected = new ConcurrentBag<Sample>();
         string content = Path.Combine(root, "content");
@@ -912,10 +1188,12 @@ public static class Program
         var made = new ConcurrentBag<Lane>();
         NeuralAnswers.Clear();
 
-        Parallel.For(0, games, new ParallelOptions { MaxDegreeOfParallelism = Parallelism }, (game, loop) =>
+        int[] order = OnlyGames ?? Enumerable.Range(0, games).ToArray();
+        Parallel.For(0, order.Length, new ParallelOptions { MaxDegreeOfParallelism = Parallelism }, (index, loop) =>
         {
-            // Once the SPRT has its verdict no new game starts; those in play finish and are counted.
-            if (sprt && loop.ShouldExitCurrentIteration)
+            int game = order[index];
+            // Once a sequential test has its verdict no new game starts; those in play finish and are counted.
+            if (stops.Any && loop.ShouldExitCurrentIteration)
             {
                 return;
             }
@@ -926,7 +1204,15 @@ public static class Program
             (List<DeckList> seated, List<IAutoPlayer> players) = Seating(decks, game, a, b);
 
             Lane? lane = null;
-            if (neural && !lanes.TryTake(out lane))
+            int? gameId = GameIds is { } ids && ids.TryGetValue(game, out int id) ? id : null;
+            if (neural && gameId is int wanted)
+            {
+                // A game whose table id is given plays on a lane of its own, its host brought to that id.
+                lane = new Lane(root, Neural.Arguments, Neural.Echo);
+                made.Add(lane);
+                lane.AdvanceTo(wanted);
+            }
+            else if (neural && !lanes.TryTake(out lane))
             {
                 lane = new Lane(root, Neural.Arguments, Neural.Echo);
                 made.Add(lane);
@@ -941,7 +1227,7 @@ public static class Program
             {
                 // A lane whose AI host stalled is let go (its hosts stopped) rather than handed to the next game, which
                 // would wait behind the request it is still busy with; the next game makes a fresh lane.
-                if (lane is not null && lane.Usable)
+                if (lane is not null && lane.Usable && gameId is null)
                 {
                     lanes.Add(lane);
                 }
@@ -951,10 +1237,16 @@ public static class Program
                 }
             }
 
+            WriteResult(game, Shuffle(seed, game), swapped ? 2 : 1, seated, result);
             if (!result.Finished)
             {
                 // The game's number in the run, with the run's own seed, is what plays it again: watch --game.
                 tally.Failures.Enqueue($"{result.Failure} [game {game}: {seated[0].Name} / {seated[1].Name}]");
+                lock (tally.Gate)
+                {
+                    tally.Pairs.Fail(game);
+                }
+
                 return;
             }
 
@@ -982,6 +1274,7 @@ public static class Program
 
             lock (tally.Gate)
             {
+                tally.Pairs.Add(game, result.Winner == 0 ? 0.5 : result.Winner == seatOfA ? 1 : 0);
                 int seatA = seatOfA - 1;
                 int seatB = 1 - seatA;
                 if (result.Winner != 0)
@@ -1035,27 +1328,52 @@ public static class Program
                 }
             }
 
-            if (sprt)
+            if (stops.Any)
             {
                 lock (tally.Gate)
                 {
-                    if (tally.StoppedAt == 0 && tally.Verdict != 0)
+                    // The first test to reach its verdict stops the duel; the games in play finish and are counted.
+                    bool stopped = tally.StoppedAt > 0 || tally.PairedStoppedAt > 0 || tally.IntervalStoppedAt > 0;
+                    if (stops.Sprt && !stopped && tally.Verdict != 0)
                     {
                         tally.StoppedAt = tally.Finished;
                         tally.StoppedLlr = tally.Llr;
                         Console.WriteLine($"SPRT verdict after {tally.Finished} games: LLR {tally.Llr:N3} ({tally.WinsA} to {tally.WinsB}, {tally.Draws} drawn).");
                         loop.Stop();
                     }
+                    else if (stops.PairedSprt && !stopped && tally.PairedVerdict != 0)
+                    {
+                        tally.PairedStoppedAt = tally.Pairs.Pairs;
+                        tally.PairedStoppedLlr = tally.PairedLlr;
+                        Console.WriteLine(
+                            $"Paired SPRT verdict after {tally.Pairs.Pairs} pairs: LLR {tally.PairedLlr.ToString("0.000", CultureInfo.InvariantCulture)} " +
+                            $"(pairs {tally.Pairs.CountsText}).");
+                        loop.Stop();
+                    }
+                    else if (stops.Interval && !stopped && tally.IntervalVerdict != 0)
+                    {
+                        (double share, double margin) = tally.Pairs.Interval(Tally.IntervalZ);
+                        tally.IntervalStoppedAt = tally.Pairs.Pairs;
+                        tally.IntervalStoppedShare = share;
+                        tally.IntervalStoppedMargin = margin;
+                        tally.IntervalStoppedWay = tally.IntervalVerdict;
+                        Console.WriteLine($"Interval stop after {tally.Pairs.Pairs} pairs: {share:P1} +/- {margin:P1} (pairs {tally.Pairs.CountsText}).");
+                        loop.Stop();
+                    }
                     else if (tally.Finished % 20 == 0)
                     {
-                        Console.WriteLine($"  {tally.Finished} games: {tally.WinsA} to {tally.WinsB}, {tally.Draws} drawn, LLR {tally.Llr:N3}");
+                        string paired = stops.PairedSprt || stops.Interval
+                            ? $"; pairs {tally.Pairs.CountsText}, paired {tally.Pairs.Interval().Share:P1}" +
+                              (stops.PairedSprt ? $", paired LLR {tally.PairedLlr.ToString("0.000", CultureInfo.InvariantCulture)}" : string.Empty)
+                            : string.Empty;
+                        Console.WriteLine($"  {tally.Finished} games: {tally.WinsA} to {tally.WinsB}, {tally.Draws} drawn, LLR {tally.Llr:N3}{paired}");
                     }
                 }
             }
 
             if (Interlocked.Increment(ref done) % 100 == 0 && !Console.IsOutputRedirected)
             {
-                Console.Write($"\r{done} of {games}...    ");
+                Console.Write($"\r{done} of {order.Length}...    ");
             }
         });
 
@@ -1103,7 +1421,11 @@ public static class Program
         if (Pairings.Count > 0)
         {
             (DeckList first, DeckList second) = Pairings[game / 2 % Pairings.Count];
-            return (swapped ? [second, first] : [first, second], swapped ? [b(game, 1), a(game, 2)] : [a(game, 1), b(game, 2)]);
+
+            // A true duplicate: the same decks in the same seats in both games of a pair, the players exchanged. With
+            // --pairings-keep-decks the decks move with the players, as before.
+            List<DeckList> dealt = PairingsKeepDecks && swapped ? [second, first] : [first, second];
+            return (dealt, swapped ? [b(game, 1), a(game, 2)] : [a(game, 1), b(game, 2)]);
         }
 
         if (Versus.Count > 0 && decks.Count > 0)
@@ -1142,7 +1464,7 @@ public static class Program
                 return (_, _) => new AutoPlayer();
             case var _ when NeuralSeat.Parse(name) is { } neural:
                 (string seatModel, string seatName) = Neural.For(neural.Name, b);
-                return (_, _) => new NeuralPlay(seatModel, neural.Mode, Neural.Deadline, NeuralAnswers, neural with { Name = seatName });
+                return (game, _) => new NeuralPlay(seatModel, neural.Mode, Neural.Deadline, NeuralAnswers, neural with { Name = seatName }) { Game = game };
             default:
                 // A frozen build of an earlier seat: champion, referee, champion:NAME.
                 if (Champion.Named(root, name) is { } champion)
@@ -1288,16 +1610,34 @@ public static class Program
             --games N           how many (default 400)
             --seed N            the first shuffle (default: a new one each run)
             --each-shuffle      every game its own shuffle, not each pair of games (on by itself for a recorded self-duel)
+            --results FILE      one line a game: its number, pair, shuffle, A's seat, decks, winner, A's points, starter,
+                                turns (a game's number with the run's --seed, seats and decks plays it again)
+            --only-games LIST   only these games of the run (comma separated, or a file one a line), each with its own
+                                shuffle and seating: an earlier run's games again, with other seats or budgets
+            --game-ids FILE     lines 'game id': each listed game on a lane of its own whose host gives it that table id,
+                                which a searching neural seat's search seed is made from (a lane numbers its games from 1)
             --hosts N           deal the games among N native hosts (default 1, the shared one): one host answers
                                 one request at a time, so this is what lets --parallel use the cores; not with --ai-record
             --cards N           which cards a seat won with: the N it did worst and best by, holding one against not
                                 (--least N: only cards held, and not held, in that many games; default 60)
             --ai-record DIR     the native host records every game that ends as AI training shards there
                                 (docs/ai-player-plan.md, "Data"); --ai-record-mode full|decklist|hidden (default full),
-                                --ai-record-threads N, --ai-record-games N and --ai-record-mb N are passed on to it
+                                --ai-record-threads N, --ai-record-games N and --ai-record-mb N are passed on to it;
+                                --ai-record-pairs keeps a recorded self-duel's pairs one shuffle each
             --sprt              stop once the sequential test says: H0 A wins 50%, H1 55%, alpha = beta = 0.05, a draw
                                 half a game each way; --games is then the most it may take; --sprt-h1 P another H1
-                                (0.52: about 3,700 games to a verdict at 50% or 52%, more between)
+                                (0.52: about 3,700 games to a verdict at 50% or 52%, more between), --sprt-h0 P another
+                                H0, --sprt-alpha X and --sprt-beta X the error rates (both SPRTs)
+            --sprt-paired       the same test by pair (games 2k and 2k+1, one shuffle, the players exchanged): the
+                                pentanomial GSPRT on A's points in each pair, 0 / 0.5 / 1 / 1.5 / 2, with the same
+                                --sprt-h0/-h1/-alpha/-beta; every duel prints the five counts and the paired share
+            --interval-stop     stop once the paired interval excludes 50% either way (--interval-z Z, default 2.58;
+                                --interval-min-pairs N before it may, default 100, and --interval-min-decisive N
+                                pairs not split 1-1, default 30)
+            --pairings FILE     a matchup a line, first:second by deck name among --decks, each pair of games the
+                                next: both games deal first to seat 1 and second to seat 2 from one shuffle, the
+                                players exchanged (a true duplicate); --pairings-keep-decks moves each deck with its
+                                player instead (the old pairing, not a duplicate)
             a neural seat       from cantrip-ai-host beside each worker's own native host (docs/ai-host.md):
                                 neural[:full|:decklist|:hidden][@N|@Nms] - the mode (Full by default), and a search of N
                                 simulations or N ms an answer (none: the network alone), so --a neural@64 --b neural is

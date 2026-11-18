@@ -10,6 +10,7 @@
 
 pub mod alloc;
 pub mod atomic;
+pub mod belief;
 mod answer;
 mod ask;
 pub mod cancel;
@@ -31,7 +32,7 @@ pub mod issearch;
 mod worlds;
 
 pub use eval::{EvalError, Evaluator, FeatureBatch, Manifest, Model, Outputs, TractEvaluator};
-pub use answer::{Answering, Rejection, factored_name, final_x};
+pub use answer::{Answering, MAX_STEPS, RUNAWAY, Rejection, factored_name, final_x, refuse_runaway};
 pub use knowledge::Knowledge;
 pub use observe::{EVENTS, kind_name, observe, observe_indexed};
 pub use index::{CardIndex, CardRows};

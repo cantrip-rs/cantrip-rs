@@ -11,6 +11,7 @@
 //! - branch trimming cuts a move that is clearly worse, keeps the best, and can be turned off.
 
 use std::cell::Cell;
+use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 use std::sync::atomic::{AtomicUsize, Ordering};
@@ -24,6 +25,7 @@ use cantrip_ai::search::{self, Clock, Config, WallClock};
 use cantrip_ai::{EvalError, Knowledge, Prior};
 use cantrip_engine::*;
 use cantrip_obs::InfoMode;
+use cantrip_obs::factor::Token;
 use cantrip_script::GameScript;
 
 fn tiny() -> PathBuf {
@@ -1003,4 +1005,909 @@ fn the_autotapper_keeps_open_what_the_plan_wants_next() {
     assert_eq!(strike_leaves(&[], true), 0, "the old autotapper keeps the Islands for the hand's blue cards");
     assert_eq!(strike_leaves(&[(shock, 0.8), (counterspell, 0.1)], false), 1, "Shock wanted: a Mountain stays open");
     assert_eq!(strike_leaves(&[(shock, 0.1), (counterspell, 0.8)], false), 0, "Counterspell wanted: both Islands stay open");
+}
+
+// The review's search options (2026-11-13): the root shared over the worlds, Gumbel, the evaluation cache, lazy inner
+// steps, budget snapshots, the early stop, exploration at the root, capped lines valued, forced requests unobserved,
+// time use, and what the search reports for recording.
+
+/// A network whose every output is a function of one row's input alone (its real tokens: the padding a batch adds is
+/// left out), so a row's outputs are the same in any batch: what the evaluation cache's exactness is measured against.
+struct Hashed {
+    rows: AtomicUsize,
+}
+
+impl Hashed {
+    fn new() -> Hashed {
+        Hashed { rows: AtomicUsize::new(0) }
+    }
+}
+
+impl Evaluator for Hashed {
+    fn evaluate(&self, b: &FeatureBatch) -> Result<Outputs, EvalError> {
+        use std::hash::{Hash, Hasher};
+        self.rows.fetch_add(b.rows, Ordering::Relaxed);
+        let t = b.tokens;
+        let nums = cantrip_obs::encode::NUMS;
+        let mut out = Outputs { value: Vec::new(), policy: Vec::new(), aux: vec![[0.0; 2]; b.rows] };
+        for r in 0..b.rows {
+            let kind = &b.kind[r * t..(r + 1) * t];
+            let len = kind.iter().rposition(|&k| k != 0).map_or(0, |i| i + 1);
+            let mut h = std::collections::hash_map::DefaultHasher::new();
+            kind[..len].hash(&mut h);
+            b.card[r * t..r * t + len].hash(&mut h);
+            for x in &b.nums[r * t * nums..(r * t + len) * nums] {
+                x.to_bits().hash(&mut h);
+            }
+            b.legal[r * t..r * t + len].hash(&mut h);
+            b.options[r].hash(&mut h);
+            let base = h.finish();
+            let unit = |x: u64| ((x >> 11) as f64 / (1u64 << 53) as f64) as f32;
+            out.value.push(unit(base) - 0.5);
+            out.policy.push((0..b.options[r].1).map(|i| 4.0 * unit(base.rotate_left(7 * i as u32 + 3) ^ i as u64) - 2.0).collect());
+        }
+        Ok(out)
+    }
+}
+
+/// A network sure of one option at every step (`index`, when the step has it): `logit` above the rest, `value` for
+/// whoever is asked. At a priority's first step option 0 is passing.
+struct Peaked {
+    index: usize,
+    logit: f32,
+    value: f32,
+}
+
+impl Evaluator for Peaked {
+    fn evaluate(&self, b: &FeatureBatch) -> Result<Outputs, EvalError> {
+        Ok(Outputs {
+            value: vec![self.value; b.rows],
+            policy: b.options.iter().map(|&(_, n)| (0..n).map(|i| if i == self.index { self.logit } else { 0.0 }).collect()).collect(),
+            aux: vec![[0.0; 2]; b.rows],
+        })
+    }
+}
+
+/// The search's visible result, for comparing two searches that must be the same.
+fn fingerprint(d: &cantrip_ai::net::Decision) -> String {
+    let s = d.search.as_ref().expect("searched");
+    format!(
+        "{:?} {:?} {} {} {} {} {:?}",
+        d.answer, s.visits, s.root_value, s.simulations, s.nodes, s.positions, s.root_options
+    )
+}
+
+/// The root's first step as recorded.
+fn root_step(s: &search::Searched) -> &search::RootStep {
+    s.visits.iter().find(|v| v.prefix == s.root_prefix).expect("the root's first step is recorded")
+}
+
+fn bolt_at(game: &Game, d: &cantrip_ai::net::Decision, target: PlayerId) -> bool {
+    matches!(&d.answer, Answer::Act(a) if a.kind == ActionKind::CastSpell
+        && game.name(a.source.unwrap()) == "Lightning Bolt" && a.targets == [Target::Player(target)])
+}
+
+fn root_visits(s: &search::Searched) -> u32 {
+    s.root_options.iter().map(|o| o.visits).sum()
+}
+
+/// The evaluation cache is exact: on a network whose outputs are a function of each row's input, a search with it is
+/// the same search as without it, and it is used (the worlds' roots are one input). Counting the repeated inputs alone
+/// changes nothing either.
+#[test]
+fn the_evaluation_cache_changes_no_search() {
+    let (game, request) = handed(&unseen("Llanowar Elves x4\nForest x14"), "cache");
+    for mode in [InfoMode::Full, InfoMode::Decklist] {
+        let base = Config { worlds: 4, ..Config::simulations(96) };
+        let plain = Hashed::new();
+        let a = run(&game, &request, mode, &plain, &base);
+        let cached = Hashed::new();
+        let b = run(&game, &request, mode, &cached, &Config { eval_cache: 1 << 16, ..base.clone() });
+        let counted = run(&game, &request, mode, &Hashed::new(), &Config { count_duplicates: true, ..base.clone() });
+        assert_eq!(fingerprint(&a), fingerprint(&b), "{mode:?}");
+        assert_eq!(fingerprint(&a), fingerprint(&counted), "{mode:?}");
+        let (sa, sb, sc) = (a.search.as_ref().unwrap(), b.search.as_ref().unwrap(), counted.search.as_ref().unwrap());
+        assert_eq!(sb.duplicate_rows, sc.duplicate_rows, "{mode:?}");
+        assert_eq!(sb.cache_hits, sb.duplicate_rows, "every repeated input was served by the cache: {mode:?}");
+        assert_eq!(sb.rows + sb.cache_hits, sa.rows, "{mode:?}: {sb:#?}");
+        assert_eq!(cached.rows.load(Ordering::Relaxed), sb.rows, "{mode:?}");
+        if mode == InfoMode::Decklist {
+            assert!(sb.cache_hits >= 3, "the four worlds' roots are one input: {sb:#?}");
+        }
+        println!("{mode:?}: {} rows, {} repeated, {} distinct", sa.rows, sc.duplicate_rows, sc.distinct_rows);
+    }
+}
+
+/// The root evaluated once: every world's root is the same observation, so one evaluation serves them all and counts as
+/// one simulation.
+#[test]
+fn the_root_is_evaluated_once_for_every_world() {
+    let (game, request) = handed(&unseen("Llanowar Elves x4\nForest x14"), "shared root");
+    let a = run(&game, &request, InfoMode::Decklist, &Hashed::new(), &Config { worlds: 4, batch: 4, ..Config::simulations(4) });
+    let b = run(
+        &game,
+        &request,
+        InfoMode::Decklist,
+        &Hashed::new(),
+        &Config { worlds: 4, batch: 4, shared_root: true, ..Config::simulations(4) },
+    );
+    let (sa, sb) = (a.search.unwrap(), b.search.unwrap());
+    // Four simulations: the four roots, or one root and three leaves below it.
+    assert_eq!((sa.simulations, sb.simulations), (4, 4));
+    assert_eq!(root_visits(&sa), 0, "each world's root its own simulation: {sa:#?}");
+    assert_eq!(root_visits(&sb), 3, "the root once, then three simulations below it: {sb:#?}");
+    let one = run(&game, &request, InfoMode::Decklist, &Hashed::new(), &Config { worlds: 1, ..Config::simulations(1) });
+    let priors = |s: &search::Searched| s.root_options.iter().map(|o| o.prior).collect::<Vec<_>>();
+    assert_eq!(priors(&sb), priors(one.search.as_ref().unwrap()));
+}
+
+/// One bandit at the root: the worlds' visits of an option are read together, so the win in one takes most of a small
+/// budget spread over eight worlds, and the answer is still the win.
+#[test]
+fn the_root_is_one_bandit_over_the_worlds() {
+    let (game, request) = handed(WIN_IN_ONE, "bandit");
+    let config = Config { worlds: 8, root_bandit: true, ..Config::simulations(48) };
+    let d = run(&game, &request, InfoMode::Decklist, &Uniform(0.0), &config);
+    assert!(bolt_at(&game, &d, PlayerId(1)), "{d:#?}");
+    let s = d.search.as_ref().unwrap();
+    assert_eq!(s.simulations, 48);
+    let win = s.root_options.iter().find(|o| o.q.is_some_and(|q| q > 0.99)).expect("the win is an option");
+    assert!(win.visits * 2 > root_visits(s), "the win takes most of the root's visits: {s:#?}");
+    // The same search again is the same search.
+    assert_eq!(fingerprint(&d), fingerprint(&run(&game, &request, InfoMode::Decklist, &Uniform(0.0), &config)));
+}
+
+/// Gumbel at the root: the win in one is found, the recorded target is the completed-Q policy (every option some mass,
+/// scaled to `TARGET_SCALE`), and the draw is the search's seed's.
+#[test]
+fn gumbel_finds_the_win_and_records_its_target() {
+    let (game, request) = handed(WIN_IN_ONE, "gumbel");
+    for (mode, worlds) in [(InfoMode::Full, 1), (InfoMode::Decklist, 4)] {
+        let g = search::Gumbel::default();
+        let config = Config { worlds, gumbel: Some(g), ..Config::simulations(48) };
+        let d = run(&game, &request, mode, &Uniform(0.0), &config);
+        assert!(bolt_at(&game, &d, PlayerId(1)), "{mode:?}: {d:#?}");
+        let s = d.search.as_ref().unwrap();
+        assert_eq!(s.target, search::Target::Gumbel);
+        let step = root_step(s);
+        let total: u64 = step.visits.iter().map(|&n| u64::from(n)).sum();
+        assert!((total as f32 - search::TARGET_SCALE).abs() < 0.01 * search::TARGET_SCALE, "{step:?}");
+        assert!(step.visits.iter().filter(|&&n| n > 0).count() > 1, "the target puts mass on more than one option: {step:?}");
+        let shares: f32 = s.root_options.iter().filter_map(|o| o.target).sum();
+        assert!((shares - 1.0).abs() < 1e-3, "{:?}", s.root_options);
+        // With the draw: the same seed draws the same.
+        let noisy = Config { gumbel: Some(search::Gumbel { noise: true, ..g }), seed: 99, ..config.clone() };
+        let a = run(&game, &request, mode, &Uniform(0.0), &noisy);
+        assert_eq!(fingerprint(&a), fingerprint(&run(&game, &request, mode, &Uniform(0.0), &noisy)), "{mode:?}");
+        check_answer(&game, &request, &a.answer).expect("legal");
+    }
+}
+
+/// A flattened priority's inner steps are evaluated when the node is selected again: fewer rows for the same budget,
+/// and the search still finds what it found.
+#[test]
+fn lazy_inner_steps_cost_fewer_rows() {
+    let (game, request) = handed(BOLT_EITHER_WAY, "lazy");
+    let eager = run(&game, &request, InfoMode::Full, &Uniform(0.0), &Config::simulations(200));
+    let lazy = run(&game, &request, InfoMode::Full, &Uniform(0.0), &Config { lazy_inner: true, ..Config::simulations(200) });
+    assert!(bolt_at(&game, &lazy, PlayerId(1)), "{lazy:#?}");
+    let (se, sl) = (eager.search.unwrap(), lazy.search.unwrap());
+    assert_eq!(se.simulations, sl.simulations);
+    assert!(sl.rows < se.rows, "lazy {} rows, eager {}", sl.rows, se.rows);
+    assert!(sl.lazy_refined + sl.lazy_pending_rows > 0, "{sl:#?}");
+}
+
+/// Budget snapshots: the root's visits at each count asked, and at the end.
+#[test]
+fn budget_snapshots_are_taken() {
+    let (game, request) = handed(WIN_IN_ONE, "snapshots");
+    let d = run(&game, &request, InfoMode::Full, &Uniform(0.0), &Config { snapshots: vec![32, 8], ..Config::simulations(96) });
+    let s = d.search.unwrap();
+    assert_eq!(s.snapshots.len(), 3, "{:#?}", s.snapshots);
+    assert!(s.snapshots[0].simulations >= 8 && s.snapshots[1].simulations >= 32, "{:#?}", s.snapshots);
+    assert_eq!(s.snapshots[2].simulations, 96);
+    let sum = |k: usize| s.snapshots[k].options.iter().map(|o| o.1).sum::<u32>();
+    assert!(sum(0) <= sum(1) && sum(1) <= sum(2), "{:#?}", s.snapshots);
+    assert!(s.snapshots[2].best.is_some());
+}
+
+/// The early stop: a root with one option visited after the count, none cut and nothing close, stops; one with several
+/// visited does not.
+#[test]
+fn a_search_with_nothing_to_compare_stops_early() {
+    let (game, request) = handed(WIN_IN_ONE, "early stop");
+    let sure = Peaked { index: 1, logit: 25.0, value: 0.0 };
+    let config = Config { early_stop: 16, batch: 4, ..Config::simulations(256) };
+    let d = run(&game, &request, InfoMode::Full, &sure, &config);
+    let s = d.search.as_ref().unwrap();
+    assert!(s.early_stopped && s.simulations < 64, "{s:#?}");
+    // One option holds the visits, but for a detour of virtual loss's in the first batch.
+    let most = s.root_options.iter().map(|o| o.visits).max().unwrap();
+    assert!(root_visits(s) - most < 4, "{s:#?}");
+    // A batch of one makes no detour: one option visited.
+    let d = run(&game, &request, InfoMode::Full, &sure, &Config { batch: 1, ..config.clone() });
+    let s = d.search.as_ref().unwrap();
+    assert!(s.early_stopped && s.simulations < 64, "{s:#?}");
+    assert_eq!(s.root_options.iter().filter(|o| o.visits > 0).count(), 1, "{s:#?}");
+    let d = run(&game, &request, InfoMode::Full, &Uniform(0.0), &config);
+    let s = d.search.as_ref().unwrap();
+    assert!(!s.early_stopped && s.simulations == 256, "{s:#?}");
+}
+
+/// The root's priors for exploration: a floor lifts every option, noise moves them alike in every world, and the
+/// network's own are kept beside them.
+#[test]
+fn the_roots_priors_take_a_floor_and_noise() {
+    let (game, request) = handed(WIN_IN_ONE, "floor");
+    let sure = Peaked { index: 1, logit: 25.0, value: 0.0 };
+    let d = run(&game, &request, InfoMode::Full, &sure, &Config { root_floor: 0.5, ..Config::simulations(16) });
+    let s = d.search.unwrap();
+    let k = s.root_options.len() as f32;
+    assert!(k >= 3.0, "{:?}", s.root_options);
+    for o in &s.root_options {
+        assert!(o.prior >= 0.5 / k - 1e-6, "{o:?}");
+    }
+    assert!(s.root_options.iter().any(|o| o.net_prior < 1e-6), "{:?}", s.root_options);
+    let noisy = Config { worlds: 3, root_noise: 0.25, report: true, ..Config::simulations(16) };
+    let d = run(&game, &request, InfoMode::Decklist, &Uniform(0.0), &noisy);
+    let s = d.search.unwrap();
+    let sum: f32 = s.root_options.iter().map(|o| o.prior).sum();
+    assert!((sum - 1.0).abs() < 1e-4, "{:?}", s.root_options);
+    assert!(s.root_options.iter().any(|o| (o.prior - o.net_prior).abs() > 1e-4), "{:?}", s.root_options);
+    let worlds = &s.report.as_ref().unwrap().worlds;
+    let priors = |w: &search::WorldReport| w.edges.iter().map(|e| e.prior).collect::<Vec<_>>();
+    assert!(worlds.windows(2).all(|p| priors(&p[0]) == priors(&p[1])), "every world draws the same noise: {worlds:#?}");
+}
+
+/// KataGo's forced playouts at the root: every option with a prior gets its forced visits, and the recorded target
+/// takes back the ones the values do not justify (the most visited keeps all of its).
+#[test]
+fn forced_playouts_are_taken_and_pruned_from_the_target() {
+    let (game, request) = handed(WIN_IN_ONE, "forced");
+    let leaning = Peaked { index: 1, logit: 3.0, value: 0.0 };
+    let d = run(&game, &request, InfoMode::Full, &leaning, &Config { forced_playouts: 2.0, ..Config::simulations(128) });
+    let s = d.search.as_ref().unwrap();
+    assert_eq!(s.target, search::Target::Pruned);
+    let n: u32 = root_visits(s);
+    for o in s.root_options.iter().filter(|o| !o.dead && !o.pruned) {
+        let forced = (2.0 * o.prior * n as f32).sqrt();
+        assert!(o.visits as f32 + 1.0 >= forced.floor(), "{o:?} under its forced visits {forced}");
+    }
+    let step = root_step(s);
+    let mut real: BTreeMap<Token, u32> = BTreeMap::new();
+    for o in &s.root_options {
+        *real.entry(o.path[0]).or_default() += if o.pruned { 0 } else { o.visits };
+    }
+    for (t, &v) in step.tokens.iter().zip(&step.visits) {
+        assert!(v <= real.get(t).copied().unwrap_or(0), "the target never adds visits: {step:?} {real:?}");
+    }
+    let most = real.values().copied().max().unwrap();
+    assert!(step.visits.contains(&most), "the most visited keeps its visits: {step:?} {real:?}");
+}
+
+/// The shortcut audit: at a priority the shortcut passes, a full search with a floor under the priors looks at every
+/// option, and says how the best of them compares with passing.
+#[test]
+fn the_shortcut_audit_searches_what_the_shortcut_passes() {
+    let (game, request) = handed(WIN_IN_ONE, "audit");
+    let pass_sure = Peaked { index: 0, logit: 25.0, value: 0.0 };
+    let d = run(&game, &request, InfoMode::Full, &pass_sure, &Config::simulations(64));
+    assert!(matches!(d.answer, Answer::Pass), "the shortcut passes: {d:#?}");
+    let k = Knowledge::of(&game, request.player);
+    let audit = search::audit_shortcut(
+        &game,
+        &request,
+        &k,
+        InfoMode::Full,
+        table(),
+        &pass_sure,
+        &Config { root_floor: 0.2, ..Config::simulations(200) },
+        prior(),
+        &CancelGuard::default(),
+        &WallClock,
+    )
+    .expect("the audit searches")
+    .expect("the shortcut's rule holds here");
+    let s = audit.decision.search.as_ref().unwrap();
+    assert!(s.shortcut_would && !s.shortcut, "{s:#?}");
+    assert!(s.root_options.iter().filter(|o| o.visits > 0).count() > 1, "{s:#?}");
+    assert!(audit.margin.is_some_and(|m| m > 0.5), "the win in one beats passing: {audit:#?}");
+    assert!(bolt_at(&game, &audit.decision, PlayerId(1)), "{audit:#?}");
+}
+
+/// A line capped at the turn cap takes the network's value there (decision 8), not a draw.
+#[test]
+fn a_capped_line_takes_the_networks_value() {
+    let (game, request) = handed(FORCED_TURN, "capped");
+    let capped = Config { turn_cap: 0, ..Config::simulations(16) };
+    let d = run(&game, &request, InfoMode::Full, &Uniform(0.25), &capped);
+    let s = d.search.as_ref().unwrap();
+    assert!(s.capped_valued > 0, "{s:#?}");
+    assert!((s.root_value.abs() - 0.25).abs() < 1e-4, "every line ends at the cap, valued 0.25 for whoever is asked there: {s:#?}");
+    let d = run(&game, &request, InfoMode::Full, &Uniform(0.25), &Config { cap_value: false, ..capped });
+    let s = d.search.as_ref().unwrap();
+    assert_eq!((s.capped_valued, s.root_value), (0, 0.0), "a draw without it: {s:#?}");
+}
+
+/// A priority with nothing but passing is passed without observing it: the same search, with fewer observations.
+#[test]
+fn forced_passes_are_played_unobserved_and_change_nothing() {
+    let evaluator = TractEvaluator::load(&tiny(), table()).unwrap();
+    for (text, name) in [(FORCED_TURN.to_string(), "forced turn"), (unseen("Llanowar Elves x4\nForest x14"), "unseen")] {
+        let (game, request) = handed(&text, name);
+        for mode in [InfoMode::Full, InfoMode::Decklist] {
+            let on = Config { worlds: 2, ..Config::simulations(48) };
+            let a = run(&game, &request, mode, &evaluator, &on);
+            let b = run(&game, &request, mode, &evaluator, &Config { skip_forced_observe: false, ..on });
+            assert_eq!(fingerprint(&a), fingerprint(&b), "{name} {mode:?}");
+            let (sa, sb) = (a.search.unwrap(), b.search.unwrap());
+            assert!(sa.forced_unobserved > 0 && sb.forced_unobserved == 0, "{name} {mode:?}");
+            println!(
+                "{name} {mode:?}: {} passes unobserved; observing {:?} against {:?}, playing {:?} against {:?}",
+                sa.forced_unobserved, sa.observe_time, sb.observe_time, sa.play_time, sb.play_time
+            );
+        }
+    }
+}
+
+/// Time use at play: past its share of the time, a calm root stops the search before the deadline.
+#[test]
+fn time_use_stops_a_calm_search_early() {
+    let (game, request) = handed(WIN_IN_ONE, "time use");
+    let start = Instant::now();
+    let clock = Ticking { at: Cell::new(start) };
+    let deadline = start + Duration::from_millis(2000);
+    let calm = search::TimeUse { min_share: 0.05, entropy: 10.0, swing: 10.0 };
+    let config = Config { deadline: Some(deadline), time_use: Some(calm), ..Config::default() };
+    let k = Knowledge::of(&game, request.player);
+    let d = search::search(&game, &request, &k, InfoMode::Full, table(), &Uniform(0.0), &config, prior(), &CancelGuard::default(), &clock)
+        .unwrap();
+    let s = d.search.as_ref().unwrap();
+    assert!(s.time_stopped, "{s:#?}");
+    assert!(clock.at.get() < start + Duration::from_millis(400), "stopped soon after its share: {:?}", clock.at.get() - start);
+}
+
+/// What the search reports for recording: each root option once with its visits and values, the sub-steps the search
+/// chose marked so, and the recorded visits at the root the options' visits.
+#[test]
+fn the_search_reports_its_root_options_and_steps() {
+    let (game, request) = handed(WIN_IN_ONE, "report");
+    let d = run(&game, &request, InfoMode::Full, &Uniform(0.0), &Config::simulations(96));
+    let s = d.search.as_ref().unwrap();
+    assert_eq!(s.target, search::Target::Visits);
+    assert!(!s.steps.is_empty() && s.steps[0].searched, "{:#?}", s.steps);
+    assert_eq!(s.steps.iter().filter(|o| o.searched).count(), s.visits.len(), "{:#?}", s.steps);
+    let step = root_step(s);
+    let recorded: u32 = step.visits.iter().sum();
+    let options: u32 = s.root_options.iter().filter(|o| !o.pruned).map(|o| o.visits).sum();
+    assert_eq!(recorded, options, "{s:#?}");
+    for o in &s.root_options {
+        assert_eq!(o.q.is_some(), o.visits > 0, "{o:?}");
+        if let Some(q) = o.q {
+            assert_eq!(o.completed_q, q);
+        }
+    }
+}
+
+#[test]
+fn search_settings_are_set_by_name() {
+    let mut c = Config::default();
+    for pair in [
+        "PriorTemperature=1.5",
+        "Worlds=4.0",
+        "CPuct=2",
+        "Prune=false",
+        "GumbelNoise=true",
+        "EvalCache=65536",
+        "Snapshots=256,1024",
+        "TimeEntropy=0.3",
+        "RootFloor=0.05",
+    ] {
+        c.set_pair(pair).unwrap_or_else(|e| panic!("{pair}: {e}"));
+    }
+    assert_eq!((c.prior_temperature, c.worlds, c.c_puct, c.prune), (1.5, 4, 2.0, false));
+    assert!(c.gumbel.is_some_and(|g| g.noise && g.considered == 16));
+    assert_eq!((c.eval_cache, c.snapshots.clone(), c.root_floor), (65536, vec![256, 1024], 0.05));
+    assert!(c.time_use.is_some_and(|t| t.entropy == 0.3));
+    c.set("Gumbel", "false").unwrap();
+    assert!(c.gumbel.is_none());
+    assert!(c.set("NoSuchSetting", "1").is_err());
+    assert!(c.set("Worlds", "four").is_err());
+}
+
+/// A measurement, not a check (run by name): the share of rows a search sends whose network input it already sent -
+/// what the evaluation cache saves - over whole games of both seats searching in Decklist mode with their trees kept,
+/// as self-play plays, on the tiny model. `CANTRIP_DUP_GAMES` games (2), `CANTRIP_DUP_SIMS` simulations (64). Also
+/// checks the cache against the tract evaluator itself: the same search with and without it.
+#[test]
+#[ignore]
+fn measure_duplicate_inputs() {
+    let evaluator = TractEvaluator::load(&tiny(), table()).unwrap();
+    let decks = [deck("dimir-midrange.txt"), deck("boros-dragons.txt")];
+    let games: u64 = std::env::var("CANTRIP_DUP_GAMES").ok().and_then(|v| v.parse().ok()).unwrap_or(2);
+    let sims: usize = std::env::var("CANTRIP_DUP_SIMS").ok().and_then(|v| v.parse().ok()).unwrap_or(64);
+    let (mut rows, mut repeated, mut searches, mut differ) = (0usize, 0usize, 0usize, 0usize);
+    for seed in 0..games {
+        let mut game = deal(&[decks[0].clone(), decks[1].clone()], 91_000 + seed, true, None).unwrap();
+        let mut ks: Vec<Knowledge> = game.state.seats().map(Knowledge::new).collect();
+        let mut payments = vec![cantrip_ai::net::Payment::default(); 2];
+        let mut trees: Vec<Option<search::Kept>> = vec![None, None];
+        for _ in 0..3000 {
+            if game.is_over() || game.state.turn.number > 20 {
+                break;
+            }
+            let Some(request) = game.pending().cloned() else { break };
+            let p = request.player.index();
+            ks[p].update(&game);
+            let config = Config { seed: request.id as u64, count_duplicates: true, ..Config::simulations(sims) };
+            let k = &ks[p];
+            let tree = &mut trees[p];
+            let d = payments[p]
+                .decide(&game, &request, k, InfoMode::Decklist, |request, guard| {
+                    search::search_keeping(game_ref(&game), request, k, InfoMode::Decklist, table(), &evaluator, &config, prior(), guard, &WallClock, tree)
+                })
+                .unwrap();
+            if let Some(s) = d.search.as_ref().filter(|s| s.simulations > 0) {
+                searches += 1;
+                rows += s.rows;
+                repeated += s.duplicate_rows;
+                // Now and then, the same search fresh with and without the cache, on tract itself.
+                if searches % 25 == 1 {
+                    let fresh = Config { reuse: search::Reuse::None, count_duplicates: false, ..config.clone() };
+                    let a = search::search(&game, &request, k, InfoMode::Decklist, table(), &evaluator, &fresh, prior(), &CancelGuard::default(), &WallClock).unwrap();
+                    let b = search::search(&game, &request, k, InfoMode::Decklist, table(), &evaluator, &Config { eval_cache: 1 << 16, ..fresh }, prior(), &CancelGuard::default(), &WallClock).unwrap();
+                    if a.search.is_some() && fingerprint(&a) != fingerprint(&b) {
+                        differ += 1;
+                    }
+                }
+            }
+            let board = cantrip_ai::cancel::board_hash(&game.state);
+            payments[p].played(&game, board, &request, &d.answer);
+            game.answer(request.id, request.player, d.answer).expect("the answer is taken");
+        }
+    }
+    println!(
+        "{games} games, {searches} searches at {sims}: {rows} rows, {repeated} repeated ({:.1}%); tract with the cache differed in {differ} of {} searches checked",
+        100.0 * repeated as f64 / rows.max(1) as f64,
+        searches.div_ceil(25)
+    );
+}
+
+fn game_ref(g: &Game) -> &Game {
+    g
+}
+
+/// A measurement (run by name): whether the tract evaluator's outputs for a row depend on the batch it is in (the
+/// tiny model's 48 reference positions, alone and all together). The evaluation cache is exact for an evaluator whose
+/// outputs are a function of the row's input (the GPU server's are bit-identical per input); one whose sums move with
+/// the batch's shape gives a cached row the bits of its first batch.
+#[test]
+#[ignore]
+fn measure_tract_batch_invariance() {
+    let evaluator = TractEvaluator::load(&tiny(), table()).unwrap();
+    let r = cantrip_ai::eval::reference::Reference::load(&tiny().join("reference")).unwrap();
+    let all: Vec<&cantrip_obs::encode::Encoded> = r.positions.iter().collect();
+    let together = evaluator.evaluate(&FeatureBatch::new(&all)).unwrap();
+    let (mut same, mut largest) = (0usize, 0.0f32);
+    for (i, e) in r.positions.iter().enumerate() {
+        let alone = evaluator.evaluate(&FeatureBatch::new(&[e])).unwrap();
+        let bits = |o: &Outputs, k: usize| (o.value[k].to_bits(), o.policy[k].iter().map(|x| x.to_bits()).collect::<Vec<_>>());
+        if bits(&alone, 0) == bits(&together, i) {
+            same += 1;
+        }
+        largest = largest.max((alone.value[0] - together.value[i]).abs());
+    }
+    println!("tract: {same} of {} rows bit-identical alone and in a batch of all; largest value difference {largest:e}", r.positions.len());
+}
+
+/// A measurement (run by name, `--ignored --nocapture`): how often a searched sub-step has two legal options with an
+/// equal token (interchangeable options, which make the same answer: `Searched::equal_tokens`), over whole games of the
+/// tiny network searching in both seats, every request (Full and Decklist, several standard pairings).
+#[test]
+#[ignore]
+fn measure_equal_tokens_at_searched_steps() {
+    let evaluator = TractEvaluator::load(&tiny(), table()).unwrap();
+    // Every standard list against the next, in name order.
+    let mut names: Vec<String> = std::fs::read_dir(root().join("decks/standard"))
+        .unwrap()
+        .filter_map(|e| e.ok().map(|e| e.file_name().to_string_lossy().into_owned()))
+        .filter(|n| n.ends_with(".txt"))
+        .filter(|n| deck(n).len() >= 40)
+        .collect();
+    names.sort();
+    let pairings: Vec<(String, String)> = names.chunks(2).filter(|c| c.len() == 2).map(|c| (c[0].clone(), c[1].clone())).collect();
+    let (mut requests, mut steps, mut equal) = (0usize, 0usize, 0usize);
+    for (k, (a, b)) in pairings.iter().enumerate() {
+        for (mode, worlds) in [(InfoMode::Full, 1), (InfoMode::Decklist, 2)] {
+            let mut game = deal(&[deck(a), deck(b)], 91_000 + k as u64, true, None).unwrap();
+            let mut ks: Vec<Knowledge> = game.state.seats().map(Knowledge::new).collect();
+            let mut payments = vec![cantrip_ai::net::Payment::default(); 2];
+            for _ in 0..3000 {
+                if game.is_over() || game.state.turn.number > 16 {
+                    break;
+                }
+                let Some(request) = game.pending().cloned() else { break };
+                let p = request.player.index();
+                ks[p].update(&game);
+                let config = Config { worlds, seed: request.id as u64, ..Config::simulations(24) };
+                let kn = &ks[p];
+                let d = payments[p]
+                    .decide(&game, &request, kn, mode, |request, guard| {
+                        search::search(&game, request, kn, mode, table(), &evaluator, &config, prior(), guard, &WallClock)
+                    })
+                    .unwrap();
+                if let Some(s) = d.search.as_ref().filter(|s| !s.visits.is_empty()) {
+                    requests += 1;
+                    steps += s.visits.len();
+                    equal += s.equal_tokens;
+                }
+                let board = cantrip_ai::cancel::board_hash(&game.state);
+                payments[p].played(&game, board, &request, &d.answer);
+                game.answer(request.id, request.player, d.answer).expect("the answer is taken");
+            }
+        }
+    }
+    println!(
+        "equal tokens: {equal} of {steps} searched sub-steps ({:.3}%), over {requests} searched requests",
+        100.0 * equal as f64 / steps.max(1) as f64
+    );
+    assert!(requests > 100, "too few searches to measure: {requests}");
+}
+
+/// A measurement (run by name with `CANTRIP_SEARCH_DUMP=FILE`): every search of whole games under several
+/// configurations, written as what a search returns and records (the answer, the root's value, each recorded sub-step's
+/// tokens, visits and choice, and the root's options with their priors, visits, values and targets), bit for bit: two
+/// builds that must search alike write the same file.
+#[test]
+#[ignore]
+fn dump_searches() {
+    let Some(out) = std::env::var_os("CANTRIP_SEARCH_DUMP") else { return };
+    let evaluator = TractEvaluator::load(&tiny(), table()).unwrap();
+    let configs: Vec<(&str, InfoMode, Config)> = vec![
+        ("default", InfoMode::Full, Config::simulations(32)),
+        ("worlds", InfoMode::Decklist, Config { worlds: 3, ..Config::simulations(48) }),
+        ("bandit", InfoMode::Decklist, Config { worlds: 3, root_bandit: true, ..Config::simulations(48) }),
+        ("gumbel", InfoMode::Decklist, Config { worlds: 2, gumbel: Some(search::Gumbel { noise: true, ..search::Gumbel::default() }), ..Config::simulations(48) }),
+        ("forced", InfoMode::Full, Config { forced_playouts: 2.0, ..Config::simulations(48) }),
+        ("noise", InfoMode::Full, Config { root_noise: 0.25, root_floor: 0.1, ..Config::simulations(32) }),
+        ("lazy", InfoMode::Full, Config { lazy_inner: true, ..Config::simulations(48) }),
+    ];
+    let bits = |x: f32| format!("{:08x}", x.to_bits());
+    let mut text = String::new();
+    for (name, mode, base) in &configs {
+        for (k, (a, b)) in [("dimir-midrange.txt", "boros-dragons.txt"), ("izzet-elementals.txt", "golgari-midrange.txt")].iter().enumerate() {
+            let mut game = deal(&[deck(a), deck(b)], 95_000 + k as u64, true, None).unwrap();
+            let mut ks: Vec<Knowledge> = game.state.seats().map(Knowledge::new).collect();
+            let mut payments = vec![cantrip_ai::net::Payment::default(); 2];
+            let mut kept: Vec<Option<search::Kept>> = vec![None, None];
+            for _ in 0..600 {
+                if game.is_over() || game.state.turn.number > 10 {
+                    break;
+                }
+                let Some(request) = game.pending().cloned() else { break };
+                let p = request.player.index();
+                ks[p].update(&game);
+                let config = Config { seed: request.id as u64, ..base.clone() };
+                let kn = &ks[p];
+                let keep = &mut kept[p];
+                let d = payments[p]
+                    .decide(&game, &request, kn, *mode, |request, guard| {
+                        search::search_keeping(&game, request, kn, *mode, table(), &evaluator, &config, prior(), guard, &WallClock, keep)
+                    })
+                    .unwrap();
+                text += &format!("{name} {k} {} {:?}\n", request.id, d.answer);
+                if let Some(s) = &d.search {
+                    text += &format!("  value {} sims {} nodes {}\n", bits(s.root_value), s.simulations, s.nodes);
+                    for r in &s.visits {
+                        text += &format!("  step {:?} {:?} {:?} {:?}\n", r.prefix, r.tokens, r.visits, r.chosen);
+                    }
+                    for o in &s.root_options {
+                        text += &format!(
+                            "  option {:?} {:?} {} {} {} {} {} {:?}\n",
+                            o.path, o.keep, bits(o.prior), bits(o.net_prior), o.visits, bits(o.value_sum), bits(o.completed_q),
+                            o.target.map(bits)
+                        );
+                    }
+                }
+                let board = cantrip_ai::cancel::board_hash(&game.state);
+                payments[p].played(&game, board, &request, &d.answer);
+                game.answer(request.id, request.player, d.answer).expect("the answer is taken");
+            }
+        }
+    }
+    std::fs::write(out, text).unwrap();
+}
+
+/// Each recorded sub-step's options carry their index in the step and their root values (`RootStep::options`, `q`):
+/// the values the root's options give, summed over every option whose path runs through it (what a recorder read from
+/// the options before), bit for bit.
+#[test]
+fn a_recorded_step_carries_its_options_indices_and_values() {
+    let (game, request) = handed(BOLT_EITHER_WAY, "indices");
+    for (mode, config) in [
+        (InfoMode::Full, Config::simulations(64)),
+        (InfoMode::Decklist, Config { worlds: 3, root_bandit: true, ..Config::simulations(96) }),
+        (InfoMode::Decklist, Config { worlds: 2, gumbel: Some(search::Gumbel::default()), ..Config::simulations(64) }),
+    ] {
+        let d = run(&game, &request, mode, &Uniform(0.0), &config);
+        let s = d.search.as_ref().unwrap();
+        assert!(!s.visits.is_empty());
+        assert_eq!(s.equal_tokens, 0);
+        for r in &s.visits {
+            assert_eq!((r.options.len(), r.q.len()), (r.tokens.len(), r.tokens.len()), "{r:?}");
+            let rest = r.prefix.strip_prefix(&s.root_prefix[..]);
+            for (k, t) in r.tokens.iter().enumerate() {
+                let want = rest.map_or(f32::NAN, |rest| {
+                    let (mut n, mut w) = (0u64, 0.0f64);
+                    for o in &s.root_options {
+                        if o.path.len() > rest.len() && o.path[..rest.len()] == *rest && o.path[rest.len()] == *t {
+                            n += u64::from(o.visits);
+                            w += f64::from(o.value_sum);
+                        }
+                    }
+                    if n > 0 { (w / n as f64) as f32 } else { f32::NAN }
+                });
+                assert!(want.to_bits() == r.q[k].to_bits() || (want.is_nan() && r.q[k].is_nan()), "{mode:?} {r:?}: {want}");
+            }
+        }
+    }
+}
+
+/// Gumbel reads the network's own priors: its logits and its target are the network's, not the root's floor or noise
+/// (exploration PUCT reads), so a Gumbel search with a floor and noise at the root searches and records as one without.
+#[test]
+fn gumbel_reads_the_networks_own_priors() {
+    let (game, request) = handed(BOLT_EITHER_WAY, "gumbel raw");
+    let leaning = Peaked { index: 1, logit: 2.0, value: 0.0 };
+    for (mode, worlds) in [(InfoMode::Full, 1), (InfoMode::Decklist, 3)] {
+        let g = search::Gumbel { noise: true, ..search::Gumbel::default() };
+        let plain = Config { worlds, gumbel: Some(g), seed: 5, ..Config::simulations(64) };
+        let explored = Config { root_floor: 0.5, root_noise: 0.25, ..plain.clone() };
+        let (a, b) = (run(&game, &request, mode, &leaning, &plain), run(&game, &request, mode, &leaning, &explored));
+        let (sa, sb) = (a.search.as_ref().unwrap(), b.search.as_ref().unwrap());
+        assert_eq!(format!("{:?}", a.answer), format!("{:?}", b.answer), "{mode:?}");
+        assert_eq!(sa.visits, sb.visits, "{mode:?}");
+        assert!(sb.root_options.iter().any(|o| (o.prior - o.net_prior).abs() > 1e-3), "the floor moved the priors: {:?}", sb.root_options);
+        for (x, y) in sa.root_options.iter().zip(&sb.root_options) {
+            assert_eq!((x.visits, x.target, x.net_prior), (y.visits, y.target, y.net_prior), "{mode:?}");
+        }
+    }
+}
+
+/// Bot1 at its fourth main phase with Island, Island, Mountain, Mountain in play and Lightning Strike, Shock, Opt and
+/// Brainstorm in hand: once a blue spell is cast, Lightning Strike can be paid to keep the Island (the other) or a
+/// Mountain (Shock) open, a cast the search splits by class of payment (`Config::pay_split`).
+const STRIKE_SHOCK_OPT: &str = "[Bot1 Deck]
+Island
+Mountain
+Island
+Mountain
+Lightning Strike
+Shock
+Opt
+Brainstorm
+Island x12
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[Handover Bot1.Pass]
+
+[Expect]
+Turn = 7
+";
+
+/// A lazily expanded node (`Config::lazy_inner`), once refined, has the edges an eager expansion makes: a cast split by
+/// class of payment (`Config::pay_split`) is split alike, from the options' first-step priors in both. Checked where
+/// a kept tree's lazily expanded node becomes the root: the reuse check builds the same root fresh, eagerly, and
+/// compares the edges and their priors (`search::ReuseCheck`), over a turn of casts the search splits.
+#[test]
+fn a_lazy_node_refined_has_the_edges_of_an_eager_one() {
+    let (mut rerooted, mut checked, mut splits) = (0usize, 0usize, 0usize);
+    let mut mismatches = std::collections::BTreeMap::<String, usize>::new();
+    for seed in 0..12u64 {
+        let (mut game, _) = handed(STRIKE_SHOCK_OPT, "lazy and eager");
+        // Even priors: the blue spell and Shock weigh alike, so the plan does not settle Lightning Strike's payment.
+        let evaluator = Uniform(0.0);
+        let mut ks: Vec<Knowledge> = game.state.seats().map(Knowledge::new).collect();
+        let mut payments = vec![cantrip_ai::net::Payment::default(); 2];
+        let mut kept: Vec<Option<search::Kept>> = vec![None, None];
+        for _ in 0..200 {
+            if game.is_over() || game.state.turn.number > 12 {
+                break;
+            }
+            let Some(request) = game.pending().cloned() else { break };
+            let p = request.player.index();
+            ks[p].update(&game);
+            let config = Config {
+                seed: seed * 1000 + request.id as u64,
+                lazy_inner: true,
+                reuse: search::Reuse::Add,
+                reuse_follow: search::Follow::All,
+                reuse_check: true,
+                choice: Choice::Sample { temperature: 1.0, seed: seed * 7 + request.id as u64 },
+                ..Config::simulations(160)
+            };
+            let kn = &ks[p];
+            let keep = &mut kept[p];
+            let d = payments[p]
+                .decide(&game, &request, kn, InfoMode::Full, |request, guard| {
+                    search::search_keeping(&game, request, kn, InfoMode::Full, table(), &evaluator, &config, prior(), guard, &WallClock, keep)
+                })
+                .unwrap();
+            if let Some(s) = d.search.as_ref() {
+                splits += s.pay_splits;
+                if let Some(r) = s.reused.as_ref() {
+                    rerooted += 1;
+                    let c = r.check.as_ref().expect("the check ran");
+                    checked += c.worlds;
+                    for (what, n) in &c.mismatches {
+                        *mismatches.entry(what.clone()).or_default() += n;
+                    }
+                }
+            }
+            let board = cantrip_ai::cancel::board_hash(&game.state);
+            payments[p].played(&game, board, &request, &d.answer);
+            game.answer(request.id, request.player, d.answer).expect("the answer is taken");
+        }
+    }
+    println!("{rerooted} re-rooted searches, {checked} worlds checked, {splits} casts split by payment");
+    assert!(rerooted > 8 && splits > 0, "too little to check: {rerooted} searches, {checked} worlds, {splits} splits");
+    assert!(mismatches.is_empty(), "lazily expanded roots differ from eager ones: {mismatches:?} over {checked} worlds");
+}
+
+/// A measurement (run by name with `CANTRIP_SPLIT_DUMP=FILE`): the turn of `STRIKE_SHOCK_OPT`, searched eagerly at
+/// every request on even and on leaning priors, written as each search's root options with their classes of payment.
+#[test]
+#[ignore]
+fn dump_split_searches() {
+    let Some(out) = std::env::var_os("CANTRIP_SPLIT_DUMP") else { return };
+    let mut text = String::new();
+    let evaluators: [(&str, &dyn Evaluator); 3] =
+        [("even", &Uniform(0.0)), ("leaning", &Peaked { index: 1, logit: 1.0, value: 0.0 }), ("hashed", &Hashed::new())];
+    for (name, evaluator) in evaluators {
+        for seed in 0..4u64 {
+            let (mut game, _) = handed(STRIKE_SHOCK_OPT, "split dump");
+            let mut payments = vec![cantrip_ai::net::Payment::default(); 2];
+            for _ in 0..80 {
+                if game.is_over() || game.state.turn.number > 10 {
+                    break;
+                }
+                let Some(request) = game.pending().cloned() else { break };
+                let p = request.player.index();
+                let kn = Knowledge::of(&game, request.player);
+                let config = Config {
+                    seed: seed * 1000 + request.id as u64,
+                    choice: Choice::Sample { temperature: 1.0, seed: seed * 7 + request.id as u64 },
+                    ..Config::simulations(96)
+                };
+                let d = payments[p]
+                    .decide(&game, &request, &kn, InfoMode::Full, |request, guard| {
+                        search::search(&game, request, &kn, InfoMode::Full, table(), evaluator, &config, prior(), guard, &WallClock)
+                    })
+                    .unwrap();
+                text += &format!("{name} {seed} {} {:?}\n", request.id, d.answer);
+                if let Some(s) = &d.search {
+                    text += &format!("  splits {}\n", s.pay_splits);
+                    for o in &s.root_options {
+                        text += &format!("  option {:?} {:?} {:08x} {}\n", o.path, o.keep, o.prior.to_bits(), o.visits);
+                    }
+                }
+                let board = cantrip_ai::cancel::board_hash(&game.state);
+                payments[p].played(&game, board, &request, &d.answer);
+                game.answer(request.id, request.player, d.answer).expect("the answer is taken");
+            }
+        }
+    }
+    std::fs::write(out, text).unwrap();
+}
+
+/// Both seats with lands and Shocks from their fourth turn: decisions in each other's turns, so a kept tree's root
+/// moves from turn to turn.
+const SHOCKS_BOTH_WAYS: &str = "[Bot1 Deck]
+Mountain x4
+Shock x3
+Shock
+Mountain
+Shock
+Mountain
+Shock x12
+
+[Bot2 Deck]
+Mountain x4
+Shock x3
+Shock
+Mountain
+Shock
+Mountain
+Shock x12
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[Handover Bot1.Pass]
+
+[Expect]
+Turn = 7
+";
+
+/// A kept tree's capped lines (`Config::turn_cap`: valued at the cap, then terminals) are not the tree a fresh search
+/// would grow once the root moves on: a capped node never becomes the root (its request was never expanded), and a line
+/// capped at the old horizon that the new one reaches is played again to it (`Reused::uncapped`; the opening itself is
+/// `search::uncap`'s unit test). The reuse check finds every re-rooted root as a fresh search builds it, over turns of
+/// caps of none and one turn.
+#[test]
+fn a_kept_trees_capped_lines_move_with_the_horizon() {
+    let (mut rerooted, mut uncapped, mut capped) = (0usize, 0usize, 0usize);
+    let mut mismatches = std::collections::BTreeMap::<String, usize>::new();
+    let mut lost = std::collections::BTreeMap::<String, usize>::new();
+    for (seed, turn_cap) in (0..10u64).map(|s| (s, (s % 2) as u32)) {
+        let (mut game, _) = handed(SHOCKS_BOTH_WAYS, "capped lines");
+        let evaluator = Uniform(0.0);
+        let mut ks: Vec<Knowledge> = game.state.seats().map(Knowledge::new).collect();
+        let mut payments = vec![cantrip_ai::net::Payment::default(); 2];
+        let mut kept: Vec<Option<search::Kept>> = vec![None, None];
+        for _ in 0..300 {
+            if game.is_over() || game.state.turn.number > 13 {
+                break;
+            }
+            let Some(request) = game.pending().cloned() else { break };
+            let p = request.player.index();
+            ks[p].update(&game);
+            let config = Config {
+                seed: seed * 1000 + request.id as u64,
+                turn_cap,
+                reuse: search::Reuse::Add,
+                reuse_follow: search::Follow::All,
+                reuse_check: true,
+                choice: Choice::Sample { temperature: 1.0, seed: seed * 7 + request.id as u64 },
+                ..Config::simulations(160)
+            };
+            let kn = &ks[p];
+            let keep = &mut kept[p];
+            let d = payments[p]
+                .decide(&game, &request, kn, InfoMode::Full, |request, guard| {
+                    search::search_keeping(&game, request, kn, InfoMode::Full, table(), &evaluator, &config, prior(), guard, &WallClock, keep)
+                })
+                .unwrap();
+            if let Some(s) = d.search.as_ref() {
+                capped += s.capped_valued;
+                if let Some(r) = s.reused.as_ref() {
+                    rerooted += 1;
+                    uncapped += r.uncapped;
+                    for (what, n) in &r.lost {
+                        *lost.entry(what.clone()).or_default() += n;
+                    }
+                    for (what, n) in &r.check.as_ref().expect("the check ran").mismatches {
+                        *mismatches.entry(what.clone()).or_default() += n;
+                    }
+                }
+            }
+            let board = cantrip_ai::cancel::board_hash(&game.state);
+            payments[p].played(&game, board, &request, &d.answer);
+            game.answer(request.id, request.player, d.answer).expect("the answer is taken");
+        }
+    }
+    println!("{rerooted} re-rooted searches, {capped} lines capped, {uncapped} played again past the old cap; lost {lost:?}");
+    assert!(rerooted > 8 && capped > 0, "too little to check: {rerooted} searches, {capped} capped");
+    assert!(mismatches.is_empty(), "re-rooted roots differ from fresh ones: {mismatches:?}");
 }

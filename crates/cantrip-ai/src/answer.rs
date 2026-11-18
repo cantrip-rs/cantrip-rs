@@ -559,6 +559,26 @@ impl Answering {
 }
 
 /// The factored answer a name answer is, given the card names: `Answer::Name` carries a card id.
+/// The most steps the AI takes over one decision. A request whose factoring would take more - a total the factoring counts
+/// out a unit at a time, that play has made enormous - is refused before any of it is walked, with an error that starts
+/// with `RUNAWAY`, rather than answered a unit at a time for as long as that takes. The largest a decision takes in play
+/// is a few hundred steps.
+pub const MAX_STEPS: usize = 4096;
+
+/// What a refused decision's error starts with (`refuse_runaway`).
+pub const RUNAWAY: &str = "runaway decision";
+
+/// `Err` for an ask whose factoring is bounded past `MAX_STEPS` (`factor::bound`).
+pub fn refuse_runaway(ask: &Ask) -> Result<(), crate::EvalError> {
+    let steps = factor::bound(ask);
+    if steps > MAX_STEPS {
+        let kind = format!("{:?}", ask.kind);
+        let kind = kind.split([' ', '{', '(']).next().unwrap_or("");
+        return Err(crate::EvalError(format!("{RUNAWAY}: {kind} would take up to {steps} steps (most {MAX_STEPS})")));
+    }
+    Ok(())
+}
+
 pub fn factored_name(game: &Game, answer: &Answer) -> Option<FactoredAnswer> {
     match answer {
         Answer::Name(n) => Some(FactoredAnswer::Name(
