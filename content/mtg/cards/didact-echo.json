@@ -1,0 +1,8 @@
+{
+  "name": "Didact Echo",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Spirit Cleric",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters, draw a card.\nDescend 4 — This creature has flying as long as there are four or more permanent cards in your graveyard."
+}

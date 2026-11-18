@@ -1,0 +1,72 @@
+# Didact Echo {4}{U} (3/2): "When this creature enters, draw a card" and "Descend 4 - This creature has flying as long as there are four or
+# more permanent cards in your graveyard" (CR 207.2c, 110.4a, 604.1, 613.1f). Five Moxen pay it on turn 1 and it draws Thought Scour. On
+# turn 3: Thought Scour on Bot1 mills two Plains (two permanent cards: no flying), Black Lotus is sacrificed for mana (three: no flying), a
+# second Thought Scour on Bot2 puts two Ornithopters (plus the one Bot2 discarded to hand size on turn 2) into Bot2's graveyard (six
+# permanent cards there, but only Bot1's count: no flying), and Mind Stone, sacrificed for its "{1}, {T}, Sacrifice this artifact: Draw
+# a card", makes four: exactly the limit, flying. (The Scours, instants, are no permanent cards.)
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Didact Echo
+Thought Scour
+Thought Scour
+Black Lotus
+Plains
+Plains
+Mind Stone
+Plains x16
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Didact Echo.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+? Bot1.Battlefield.Didact Echo.Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 3
+? Bot1.Battlefield.Didact Echo.Keywords = (absent)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+? Bot1.Battlefield.Didact Echo.Keywords = (absent)
+Bot1.Hand.Thought Scour.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 3
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Didact Echo.Keywords = (absent)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mind Stone.Activate(Ability: Draw a card)
+? Bot1.Battlefield.Didact Echo.Keywords = Flying
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Didact Echo.Keywords = Flying
+Bot1.Graveyard.Count = 6
+Bot2.Graveyard.Count = 3
