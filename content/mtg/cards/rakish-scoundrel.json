@@ -1,0 +1,11 @@
+{
+  "name": "Rakish Scoundrel",
+  "manaCost": "{2}{B}{G}",
+  "type": "Creature — Elf Rogue",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Deathtouch\nWhen this creature enters or is turned face up, target creature gains indestructible until end of turn.\nDisguise {4}{B/G}{B/G} (You may cast this card face down for {3} as a 2/2 creature with ward {2}. Turn it face up any time for its disguise cost.)",
+  "keywords": [
+    "Deathtouch"
+  ]
+}
