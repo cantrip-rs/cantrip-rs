@@ -3039,7 +3039,8 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
     let mut way_attacking = None;
     let mut spent = ManaPool::default();
     let mut restrictions = 0;
-    let mut taken = Vec::new();
+    // The objects "exile it" takes with the source are no other part's to take (CR 118.3).
+    let mut taken = helpers.exiled_with_source.to_vec();
     let mut variable_paid = None;
     let mut beheld_type = None;
     let mut chosen_object_members: Vec<(usize, ObjectId)> = Vec::new();
@@ -3153,7 +3154,8 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 let object = match action { MoveSelf::ExileGranter(id) => *id, _ => spell };
                 let payable = live(cx.s(), object) && match action {
                     MoveSelf::Return => source_usable(),
-                    MoveSelf::Exile => !cx.s().obj(spell).zone.is(ZoneKind::PhasedOut),
+                    MoveSelf::Exile => !cx.s().obj(spell).zone.is(ZoneKind::PhasedOut)
+                        && helpers.exiled_with_source.iter().all(|&o| live(cx.s(), o) && !cx.s().obj(o).zone.is(ZoneKind::PhasedOut)),
                     MoveSelf::ExileGranter(id) => cx.s().obj(*id).zone.is(ZoneKind::Battlefield),
                     MoveSelf::Discard => cx.s().obj(spell).zone == Zone::hand(player),
                     MoveSelf::Library(_) => !cx.s().obj(spell).zone.is(ZoneKind::PhasedOut),
@@ -3494,7 +3496,11 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             SpellPayment::MoveSelf { origin, component, action, .. } => {
                 let part = match action {
                     MoveSelf::Return => { ops::return_to_hand(cx, &[spell]); CostPart::ReturnSelf }
-                    MoveSelf::Exile => { ops::exile_all(cx, &[spell]); CostPart::ExileSelf }
+                    MoveSelf::Exile => {
+                        let it: Vec<ObjectId> = std::iter::once(spell).chain(helpers.exiled_with_source.iter().copied()).collect();
+                        ops::exile_all(cx, &it);
+                        CostPart::ExileSelf
+                    }
                     MoveSelf::ExileGranter(object) => {
                         ops::move_to_for(cx, object, Zone::exile(cx.s().obj(object).owner), ZoneReason::Exile);
                         scope.record(cx, spell, object, origin, component, CostPart::Granter);
@@ -11302,6 +11308,7 @@ fn cast(
         abilities_closed: assisted.is_some(),
         assist: if assisted.is_some() { AssistStep::CasterPays } else { AssistStep::None },
         mana_ability: false,
+        exiled_with_source: &[],
     };
     // Mana abilities precede payment (CR 601.2g-h); the reducer's tap is an operation after this window.
     if !helpers.abilities_closed && !owed.is_zero() {
@@ -15321,6 +15328,9 @@ pub(crate) struct Helpers<'a> {
     /// A mana ability's payment of its own mana cost (CR 605.3a): what it does is recorded, step by step, for a take-back
     /// that keeps the ability to pay it again as it was (`takeback::Step`).
     pub mana_ability: bool,
+    /// The other objects a resolution's "exile it" (`Cost::exile_self`) exiles with its source: every object a merged
+    /// permanent became (CR 730.3c). They are exiled together with it, and none of them pays another part (CR 118.3).
+    pub exiled_with_source: &'a [ObjectId],
 }
 
 impl Helpers<'_> {
@@ -15333,7 +15343,7 @@ impl Helpers<'_> {
 
 impl Helpers<'static> {
     pub const NONE: Helpers<'static> =
-        Helpers { with: PayWith::NONE, waterbend: 0, creatures: false, no_mana: false, purpose: Paying::Other, attackers: &[], blockers: &[], life: 0, any: AnyMana::No, abilities_closed: false, assist: AssistStep::None, mana_ability: false };
+        Helpers { with: PayWith::NONE, waterbend: 0, creatures: false, no_mana: false, purpose: Paying::Other, attackers: &[], blockers: &[], life: 0, any: AnyMana::No, abilities_closed: false, assist: AssistStep::None, mana_ability: false, exiled_with_source: &[] };
 }
 
 /// What a mana payment is for, as far as restricted mana is concerned (CR 106.6): see `payment_for`.
@@ -16012,6 +16022,16 @@ pub fn may_pay(cx: &mut Cx, payer: PlayerId, source: ObjectId, subject: ObjectId
     Ok(pay_during_resolution(cx, payer, source, subject, cost, question, x, None, Paying::Other)?.is_some())
 }
 
+/// `may_pay` whose "exile it" (`Cost::exile_self`) exiles `with` together with `source`: every object a merged permanent
+/// became (CR 730.3c). None of them pays another part of the cost (CR 118.3), and paying is offered only while each can be
+/// exiled. Whether it was paid.
+pub fn may_pay_exiling(cx: &mut Cx, payer: PlayerId, source: ObjectId, with: &[ObjectId], cost: &Cost, question: &'static Question) -> R<bool> {
+    let x = (cost.mana.x > 0).then_some(0);
+    let result = pay_during_resolution_inner(cx, payer, source, source, with, cost, question, x, None, Paying::Other);
+    if result.is_ok() { cx.judge_if_due(); }
+    Ok(result?.is_some())
+}
+
 /// The cumulative upkeep keyword's payment (CR 702.24a), distinguishable for restricted mana (CR 106.6).
 pub fn may_pay_cumulative_upkeep(cx: &mut Cx, payer: PlayerId, source: ObjectId, subject: ObjectId, cost: &Cost, question: &'static Question) -> R<bool> {
     let x = (cost.mana.x > 0).then_some(0);
@@ -16073,7 +16093,7 @@ fn pay_during_resolution(
     times: Option<u32>,
     purpose: Paying,
 ) -> R<Option<u32>> {
-    let result = pay_during_resolution_inner(cx, payer, source, subject, cost, question, x, times, purpose);
+    let result = pay_during_resolution_inner(cx, payer, source, subject, &[], cost, question, x, times, purpose);
     // A completed payment procedure, including declining it, is a rules instruction boundary. Any non-event state
     // changes made while paying must be judged before the resolving effect continues (CR 603.8, 601.2g-h, 118.12).
     if result.is_ok() { cx.judge_if_due(); }
@@ -16085,6 +16105,7 @@ fn pay_during_resolution_inner(
     payer: PlayerId,
     source: ObjectId,
     subject: ObjectId,
+    with: &[ObjectId],
     cost: &Cost,
     question: &'static Question,
     mut x: Option<u32>,
@@ -16171,8 +16192,8 @@ fn pay_during_resolution_inner(
         let mana_asked = total != ManaCost::ZERO || cost.mana.x > 0;
         // A counter count the fixed removals already exceed offers no X (and `resolution_rest_payable` refuses it).
         let counter_limit = source_counter_x_cost(cx, source, cost);
-        let payable = life_payable && resolution_rest_payable(cx, payer, source, cost, x.unwrap_or(0), false);
-        let may_become = payable || mana_asked && life_payable && resolution_rest_payable(cx, payer, source, cost, x.unwrap_or(0), true);
+        let payable = life_payable && resolution_rest_payable(cx, payer, source, with, cost, x.unwrap_or(0), false);
+        let may_become = payable || mana_asked && life_payable && resolution_rest_payable(cx, payer, source, with, cost, x.unwrap_or(0), true);
         // CR 118.3: a payer who can't pay the cost - too few permanents to sacrifice, cards to discard, counters to remove,
         // even with what their mana abilities could feed it - is not asked at all, as one without the life is not (above).
         // Once asked, a payment a mana ability has since made unpayable is left to declining.
@@ -16247,7 +16268,7 @@ fn pay_during_resolution_inner(
             }
             ActionKind::PayCost => {
                 let (mark, log_mark, asked, since) = (cx.s().mark(), cx.g.log.len(), cx.cursor, crate::takeback::since(cx.g));
-                match pay_announced(cx, payer, source, cost, total, life, x.unwrap_or(0), purpose) {
+                match pay_announced(cx, payer, source, with, cost, total, life, x.unwrap_or(0), purpose) {
                     // Without an X, what was paid is how many the variable part took (`may_pay_counted`), if it has one.
                     Ok(taken) => return Ok(Some(x.unwrap_or(taken))),
                     // A choice given up: nothing was paid, and the payer is asked again. A payment the engine refused
@@ -16305,23 +16326,24 @@ fn pool_announcements_pay(owed: &ManaCost, life_room: i32, any_color: bool, pays
 /// Pays a resolution's cost with `total` its mana and `life` its life: its Phyrexian symbols are announced first, each
 /// paid with its color or 2 life, immediately before the cost is paid (CR 118.13b, 107.4f), and the life they take is paid
 /// with the rest. A choice of more life than the payer can pay gives the payment up, to be asked again.
-fn pay_announced(cx: &mut Cx, payer: PlayerId, source: ObjectId, cost: &Cost, mut total: ManaCost, mut life: u32, x: u32, purpose: Paying) -> R<u32> {
+fn pay_announced(cx: &mut Cx, payer: PlayerId, source: ObjectId, with: &[ObjectId], cost: &Cost, mut total: ManaCost, mut life: u32, x: u32, purpose: Paying) -> R<u32> {
     if total.phyrexian != [0; 5] {
         life += announce_life_for(cx, payer, source, &mut total, AnyMana::No, None, Some(purpose))?;
         if !rest_payable(cx, payer, 0, life, None) {
             return Err(Stop::Cancel);
         }
     }
-    pay_resolution_cost(cx, payer, source, cost, total, life, x, purpose)
+    pay_resolution_cost(cx, payer, source, with, cost, total, life, x, purpose)
 }
 
 /// Chooses what the parts of a resolution's cost other than mana and life take, then pays the whole (CR 118.3, 601.2h):
 /// the mana from the pool, the life, and each other part as an activated ability's cost pays it (`activate`). `x` is the
-/// X paid, for a "sacrifice X" part. How many the variable part took ("discard one or more"), 0 for none.
-fn pay_resolution_cost(cx: &mut Cx, payer: PlayerId, source: ObjectId, cost: &Cost, total: ManaCost, life: u32, x: u32, purpose: Paying) -> R<u32> {
+/// X paid, for a "sacrifice X" part. `with`: the other objects its "exile it" exiles with the source (`may_pay_exiling`). How
+/// many the variable part took ("discard one or more"), 0 for none.
+fn pay_resolution_cost(cx: &mut Cx, payer: PlayerId, source: ObjectId, with: &[ObjectId], cost: &Cost, total: ManaCost, life: u32, x: u32, purpose: Paying) -> R<u32> {
     // The payer has already had the 605.3a mana-ability window in UnlessPays. All remaining operations, including
     // individual mana units, may be paid in any order; a failed payment is reversed by the enclosing payment journal.
-    let helpers = Helpers { waterbend: cost.waterbend.generic, abilities_closed: true, purpose, ..Helpers::NONE };
+    let helpers = Helpers { waterbend: cost.waterbend.generic, abilities_closed: true, purpose, exiled_with_source: with, ..Helpers::NONE };
     let extra_life = life - cost.life.min(life);
     let payment = cx.g.log.len() as u32;
     let resolving = if cx.g.mana_interval.is_none() {
@@ -16406,11 +16428,12 @@ fn resolution_parts(cost: &Cost) -> bool {
 /// Whether the parts of a resolution's cost other than mana and life could be paid now (CR 118.3), `x` the X chosen: the
 /// parts that name the source ("tap this", "sacrifice this", "discard this card") only while it is where they need it and
 /// its payer's, and the rest as an activated ability's cost is judged (`can_pay_activation`). {T} here is no activated
-/// ability's, so summoning sickness (CR 302.6) has no say.
+/// ability's, so summoning sickness (CR 302.6) has no say. "Exile it" takes a card from any graveyard: a creature the payer
+/// controlled dies into its owner's (CR 404.1, 400.3), and the payer exiles it there.
 ///
 /// `feeds`: whether what the mana abilities could feed the cost counts (`can_pay_other_fed`) - only while the payer may still
-/// activate them for its mana.
-fn resolution_rest_payable(cx: &Cx, payer: PlayerId, source: ObjectId, cost: &Cost, x: u32, feeds: bool) -> bool {
+/// activate them for its mana. `with`: the other objects "exile it" exiles with the source (`may_pay_exiling`).
+fn resolution_rest_payable(cx: &Cx, payer: PlayerId, source: ObjectId, with: &[ObjectId], cost: &Cost, x: u32, feeds: bool) -> bool {
     let obj = cx.s().obj(source);
     let live = live(cx.s(), source);
     let yours_on_battlefield = live && obj.zone.is(ZoneKind::Battlefield) && obj.controller == payer;
@@ -16418,7 +16441,7 @@ fn resolution_rest_payable(cx: &Cx, payer: PlayerId, source: ObjectId, cost: &Co
     if (cost.tap && !(yours_on_battlefield && !obj.tapped))
         || ((cost.sacrifice_self || cost.return_self || cost.unattach_self) && !yours_on_battlefield)
         || (cost.discard_self && !in_your(Zone::hand(payer)))
-        || (cost.exile_self && !(yours_on_battlefield || in_your(Zone::hand(payer)) || in_your(Zone::graveyard(payer))))
+        || (cost.exile_self && !(yours_on_battlefield || in_your(Zone::hand(payer)) || (live && obj.zone.is(ZoneKind::Graveyard))))
         || ((cost.remove_counters.is_some() || cost.remove_any_counter || cost.put_counters.is_some()) && !live)
     {
         return false;
@@ -16442,7 +16465,23 @@ fn resolution_rest_payable(cx: &Cx, payer: PlayerId, source: ObjectId, cost: &Co
     if source_counter_x_cost(cx, source, cost).is_some_and(|limit| limit.is_none_or(|limit| x > limit)) {
         return false;
     }
-    can_pay_other_fed(cx, source, payer, &Cost { tap: false, mana: ManaCost::ZERO, ..*cost }, Judged::Activation, None, None, feeds) || cost.tap
+    let rest = Cost { tap: false, mana: ManaCost::ZERO, ..*cost };
+    if with.is_empty() {
+        return can_pay_other_fed(cx, source, payer, &rest, Judged::Activation, None, None, feeds) || cost.tap;
+    }
+    // "Exile it" takes every object it is (CR 730.3c), and an object pays only one part of a cost (CR 118.3): each must be
+    // there to exile, and the rest is judged as though they were already gone from their zones, so that no part counts them.
+    if !cost.exile_self || !with.iter().all(|&o| is_live(cx, o) && !cx.s().obj(o).zone.is(ZoneKind::PhasedOut)) {
+        return false;
+    }
+    let mut copy = cx.g.hypothetical();
+    for &o in with {
+        let zone = copy.state.obj(o).zone;
+        copy.state.zone_remove(zone, o);
+    }
+    let sim = Cx { g: &mut copy, frame: cx.frame, cursor: cx.cursor, mana_source: cx.mana_source, entering: cx.entering,
+        lineage: Vec::new(), damage: None, asked_at: cx.asked_at, doer: cx.doer, producing: None, reached: None };
+    can_pay_other_fed(&sim, source, payer, &rest, Judged::Activation, None, None, feeds) || cost.tap
 }
 
 /// Whether an object is somewhere it can be found by its id: still the same object.

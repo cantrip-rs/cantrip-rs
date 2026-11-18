@@ -1944,6 +1944,12 @@ pub trait Game: Query {
     /// the cost and the subject's name go), its verb what the bots read it by. Whether it was paid: "if they do" (CR
     /// 118.12) asks exactly that, not what the paid-for effect did.
     fn may_pay(&mut self, payer: PlayerId, source: ObjectId, subject: ObjectId, cost: crate::card::Cost, question: &'static Question) -> Result<bool, Suspend>;
+    /// `may_pay` whose "exile it" (`Cost::exile_self`) is more than one object: `source` and `with`, every object a merged
+    /// permanent became as it left the battlefield (CR 730.3c: the same action is taken on each). They are exiled together
+    /// as that part is paid, and none of them pays another part of the cost (CR 118.3): collect evidence never exiles one
+    /// of them. Paying is offered only while each of them can be exiled. Lamplight Phoenix's "you may exile it and collect
+    /// evidence 4".
+    fn may_pay_exiling(&mut self, payer: PlayerId, source: ObjectId, with: &[ObjectId], cost: crate::card::Cost, question: &'static Question) -> Result<bool, Suspend>;
     /// Pay the cumulative upkeep cost while its keyword ability resolves (CR 702.24a, 106.6).
     fn may_pay_cumulative_upkeep(&mut self, payer: PlayerId, source: ObjectId, subject: ObjectId, cost: crate::card::Cost, question: &'static Question) -> Result<bool, Suspend>;
     /// "You may pay {X}" (CR 118.12, 608.2d) where the text leaves X to the payer (CR 107.3f): X chosen as it is paid, in one

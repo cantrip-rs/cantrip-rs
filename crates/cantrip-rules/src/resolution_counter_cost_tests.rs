@@ -109,9 +109,9 @@ fn the_payable_limit_counts_every_fixed_component_and_refuses_an_x_above_it() {
     let (mut g,source)=position(3,vec![]);
     let c=cx(&mut g);
     assert_eq!(source_counter_x_limit(&c,source,CounterKind::Charge,&SPLIT),Some(1),"X is removed once beside the two fixed parts");
-    assert!(resolution_rest_payable(&c,YOU,source,&COUNTERS,3,false));
-    assert!(!resolution_rest_payable(&c,YOU,source,&COUNTERS,4,false),"four counters are not there to remove");
+    assert!(resolution_rest_payable(&c,YOU,source,&[],&COUNTERS,3,false));
+    assert!(!resolution_rest_payable(&c,YOU,source,&[],&COUNTERS,4,false),"four counters are not there to remove");
     let (mut g,source)=position(1,vec![]);
     let c=cx(&mut g);
-    assert!(!resolution_rest_payable(&c,YOU,source,&SPLIT,0,false),"the two fixed parts take more than the one counter");
+    assert!(!resolution_rest_payable(&c,YOU,source,&[],&SPLIT,0,false),"the two fixed parts take more than the one counter");
 }

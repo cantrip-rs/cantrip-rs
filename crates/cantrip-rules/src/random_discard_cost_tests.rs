@@ -20,7 +20,7 @@ fn cx(g:&mut RulesGame)->Cx<'_>{Cx {g,frame:0,cursor:0,mana_source:None,entering
 fn random_discard_is_after_life_and_gives_no_card_choice() {
     let (mut g,source,hand)=board(3);let cost=Cost {life:2,discard_at_random:1,..Cost::NONE};
     assert!(can_pay_other(&cx(&mut g),source,YOU,&cost));
-    pay_resolution_cost(&mut cx(&mut g),YOU,source,&cost,ManaCost::ZERO,0,0,Paying::Other).unwrap();
+    pay_resolution_cost(&mut cx(&mut g),YOU,source,&[],&cost,ManaCost::ZERO,0,0,Paying::Other).unwrap();
     assert_eq!(g.state.player(YOU).life,18);assert_eq!(g.state.zone(Zone::hand(YOU)).len(),2);
     let life=g.log.iter().position(|r|matches!(r.event,Event::LifeChange {..})).unwrap();
     let random=g.log.iter().position(|r|matches!(r.event,Event::ChosenAtRandom {..})).unwrap();assert!(life<random);
@@ -32,7 +32,7 @@ fn random_discard_is_after_life_and_gives_no_card_choice() {
 fn a_random_discard_printed_first_waits_for_the_life_printed_after_it() {
     let (mut g, source, _) = board(3);
     let cost = Cost::sequence(&[Cost { discard_at_random: 1, ..Cost::NONE }, Cost { life: 2, ..Cost::NONE }]);
-    pay_resolution_cost(&mut cx(&mut g), YOU, source, &cost, ManaCost::ZERO, 0, 0, Paying::Other).unwrap();
+    pay_resolution_cost(&mut cx(&mut g), YOU, source, &[], &cost, ManaCost::ZERO, 0, 0, Paying::Other).unwrap();
     assert_eq!(g.state.player(YOU).life, 18);
     assert_eq!(g.state.zone(Zone::hand(YOU)).len(), 2);
     let life = g.log.iter().position(|r| matches!(r.event, Event::LifeChange { .. })).unwrap();

@@ -3418,6 +3418,10 @@ impl cantrip_api::Game for Cx<'_> {
         actions::may_pay(self, payer, source, subject, &cost, question).map_err(|_| Suspend)
     }
 
+    fn may_pay_exiling(&mut self, payer: PlayerId, source: ObjectId, with: &[ObjectId], cost: Cost, question: &'static Question) -> Result<bool, Suspend> {
+        actions::may_pay_exiling(self, payer, source, with, &cost, question).map_err(|_| Suspend)
+    }
+
     fn may_pay_cumulative_upkeep(&mut self, payer: PlayerId, source: ObjectId, subject: ObjectId, cost: Cost, question: &'static Question) -> Result<bool, Suspend> {
         actions::may_pay_cumulative_upkeep(self, payer, source, subject, &cost, question).map_err(|_| Suspend)
     }
