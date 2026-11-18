@@ -1,0 +1,56 @@
+# Volatile Fault: ruling 2023-11-10 - the search and the Treasure do not depend on the land being destroyed. In response Bot2
+# animates Creeping Tar Pit and gives it indestructible (Revitalizing Repast); the target is still legal, so Bot2 may still
+# search (Forest) and Bot1 still creates a Treasure. Also shows {T}: Add {C} (the Fault taps for it before it is spent).
+
+[Bot1 Deck]
+Island
+Island
+Volatile Fault
+Island x16
+Plains
+
+[Bot2 Deck]
+Creeping Tar Pit
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Revitalizing Repast
+Island x14
+Island
+Forest
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Creeping Tar Pit.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Volatile Fault.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Volatile Fault.Activate(Ability: Destroy; Bot2.Battlefield.Creeping Tar Pit)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Creeping Tar Pit.Activate(Ability: Until end of turn)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Creeping Tar Pit.Activate(Ability: {T}: Add {U} or {B}; Color: Black)
+Bot2.Hand.Revitalizing Repast.Cast(Creeping Tar Pit)
+Bot2.Pass
+Bot1.Pass
+Bot2.Accept
+Bot2.Search(Forest)
+
+[Expect]
+Bot1.Graveyard = Volatile Fault
+Bot1.Battlefield = Island; Island; Treasure Token
+Bot2.Graveyard = Revitalizing Repast
+Bot2.Battlefield.Creeping Tar Pit.Tapped = true
+Bot2.Battlefield.Forest.Tapped = false

@@ -1,0 +1,36 @@
+# Volatile Fault: "That player may search" - Bot2 declines, nothing is fetched, and "You create a Treasure token" still
+# happens. The neighbouring scenario is the control where Bot2 accepts.
+
+[Bot1 Deck]
+Island
+Island
+Volatile Fault
+Island x16
+Plains
+
+[Bot2 Deck]
+Island
+Bazaar of Baghdad
+Island x16
+Island
+Forest
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Bazaar of Baghdad.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Volatile Fault.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Volatile Fault.Activate(Ability: Destroy; Bot2.Battlefield.Bazaar of Baghdad)
+Bot2.Decline
+
+[Expect]
+Bot1.Graveyard = Volatile Fault
+Bot1.Battlefield = Island; Island; Treasure Token
+Bot2.Graveyard = Bazaar of Baghdad
+Bot2.Battlefield = Island

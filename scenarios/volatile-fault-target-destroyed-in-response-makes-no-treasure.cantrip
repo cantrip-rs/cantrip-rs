@@ -1,0 +1,38 @@
+# Volatile Fault: its only target, Bazaar of Baghdad, is destroyed in response (Bot2's Wasteland), so the ability does not
+# resolve (CR 608.2b): no search for Bot2 and no Treasure for Bot1. The Fault is already sacrificed as a cost.
+
+[Bot1 Deck]
+Island
+Island
+Volatile Fault
+Island x16
+Plains
+
+[Bot2 Deck]
+Wasteland
+Bazaar of Baghdad
+Island x16
+Island
+Forest
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Wasteland.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Bazaar of Baghdad.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Volatile Fault.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Volatile Fault.Activate(Ability: Destroy; Bot2.Battlefield.Bazaar of Baghdad)
+Bot2.Battlefield.Wasteland.Activate(Ability: Destroy; Bazaar of Baghdad)
+! Bot2.Accept
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Volatile Fault
+Bot1.Battlefield = Island; Island
+Bot2.Graveyard = Bazaar of Baghdad; Wasteland
+Bot2.Battlefield.Count = 0

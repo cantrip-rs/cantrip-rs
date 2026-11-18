@@ -1,0 +1,16 @@
+# Volatile Fault: "{T}: Add {C}." - tapped for mana, the pool holds exactly one colorless.
+
+[Bot1 Deck]
+Volatile Fault
+Island x16
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Volatile Fault.Play
+Bot1.Battlefield.Volatile Fault.Activate(Ability: {T}: Add {C})
+? Bot1.Mana = {C}
+
+[Expect]
+Bot1.Battlefield.Volatile Fault.Tapped = true

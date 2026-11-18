@@ -1,0 +1,5 @@
+{
+  "name": "Volatile Fault",
+  "type": "Land — Cave",
+  "oracleText": "{T}: Add {C}.\n{1}, {T}, Sacrifice this land: Destroy target nonbasic land an opponent controls. That player may search their library for a basic land card, put it onto the battlefield, then shuffle. You create a Treasure token."
+}

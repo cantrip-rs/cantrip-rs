@@ -1,0 +1,44 @@
+# Volatile Fault: "{1}, {T}, Sacrifice this land: Destroy target nonbasic land an opponent controls." Bot2's basic Island and
+# Bot1's own nonbasic Tundra are refused; Bot2's Bazaar of Baghdad is destroyed. Then Bot2 may search for a basic land
+# (Forest, untapped) and Bot1 creates a Treasure; Bot1 gets no search. Bot1's only other source is the Tundra, so {1} is paid exactly: the pool is empty after.
+
+[Bot1 Deck]
+Tundra
+Island
+Volatile Fault
+Island x14
+Tundra
+Island
+Plains
+
+[Bot2 Deck]
+Island
+Bazaar of Baghdad
+Island x16
+Island
+Island
+Forest
+
+[Actions]
+Bot1.Hand.Tundra.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Bazaar of Baghdad.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Volatile Fault.Play
+Bot1.Battlefield.Tundra.Activate(Ability: {W})
+! Bot1.Battlefield.Volatile Fault.Activate(Ability: Destroy; Bot2.Battlefield.Island)
+! Bot1.Battlefield.Volatile Fault.Activate(Ability: Destroy; Bot1.Battlefield.Tundra)
+Bot1.Battlefield.Volatile Fault.Activate(Ability: Destroy; Bot2.Battlefield.Bazaar of Baghdad)
+? Bot1.Mana = 
+Bot2.Accept
+Bot2.Search(Forest)
+! Bot1.Accept
+
+[Expect]
+Bot1.Graveyard = Volatile Fault
+Bot1.Battlefield = Tundra; Treasure Token
+Bot2.Graveyard = Bazaar of Baghdad
+Bot2.Battlefield = Island; Forest
+Bot2.Battlefield.Forest.Tapped = false
