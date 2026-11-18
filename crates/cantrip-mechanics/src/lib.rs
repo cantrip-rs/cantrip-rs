@@ -214,11 +214,24 @@ pub fn creature_types_among_non_borg(q: &dyn Query, source: ObjectId, player: Pl
 /// controls, attacking or not, added up. Negative powers subtract from the total (CR 107.1b), so it can be below zero.
 /// Ghalta, Primal Hunger reduces its cost by it; `creatures_have_total_power_at_least` compares it.
 pub fn total_power_of_creatures_you_control(q: &dyn Query, player: PlayerId) -> i64 {
+    total_of_creatures_you_control(q, player, |c| c.power)
+}
+
+/// "The total toughness of creatures you control" (CR 208.1, 613.4): the current, modified toughness of every creature `player`
+/// controls, attacking or not, added up. Negative toughness subtracts from the total (CR 107.1b), so it can be below zero.
+/// Orysa, Tide Choreographer and The Pride of Hull Clade reduce their cost by it.
+pub fn total_toughness_of_creatures_you_control(q: &dyn Query, player: PlayerId) -> i64 {
+    total_of_creatures_you_control(q, player, |c| c.toughness)
+}
+
+/// One characteristic of every creature `player` controls, added up: the body of `total_power_of_creatures_you_control` and
+/// `total_toughness_of_creatures_you_control`.
+fn total_of_creatures_you_control(q: &dyn Query, player: PlayerId, stat: fn(&Chars) -> Option<i32>) -> i64 {
     q.permanents_of(player)
         .into_iter()
         .map(|id| q.chars(id))
         .filter(|c| c.is(CardType::Creature))
-        .map(|c| i64::from(c.power.unwrap_or(0)))
+        .map(|c| i64::from(stat(&c).unwrap_or(0)))
         .sum()
 }
 
