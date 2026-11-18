@@ -1,0 +1,49 @@
+# Presumed Dead ({1}{B}): until end of turn the target creature gets +2/+0 and gains "When this creature dies, return it to the battlefield under its owner's control and suspect it" (CR 611.2a, 701.60a). Bot1's Grizzly Bears is 4/2 and attacks (so it is tapped, and Bot2 takes exactly 4); when Lightning Bolt kills it afterwards it comes back untapped (not tapped, as Fake Your Own Death returns it) as a new 2/2 object, suspected: menace and unable to block, and without the granted ability.
+
+[Bot1 Deck]
+Grizzly Bears
+Mox Jet
+Mox Emerald
+Mox Ruby
+Presumed Dead
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Presumed Dead.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 4
+? Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Attack(Grizzly Bears > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Battlefield.Grizzly Bears.Keywords = CantBlock; Menace
+Bot1.Graveyard = Lightning Bolt; Presumed Dead
