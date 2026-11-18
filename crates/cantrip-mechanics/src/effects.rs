@@ -778,6 +778,14 @@ pub fn plus_one_counter_on_this(g: &mut dyn Game, item: &StackItem) -> Result<()
     Ok(())
 }
 
+/// "Suspect it", where "it" is the creature the ability is of (CR 701.60a): it becomes suspected, which gives it menace and "can't
+/// block" until it leaves the battlefield (CR 701.60c). A creature that has left the battlefield is a new object (CR 400.7), so
+/// nothing happens to it, and one already suspected is unchanged (CR 701.60d). Person of Interest and Rubblebelt Braggart print it.
+pub fn suspect_this(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.suspect(item.object);
+    Ok(())
+}
+
 /// "You may put a +1/+1 counter on [this creature]" (CR 122.1, 608.2d): asked of the ability's controller as it resolves, and only
 /// while the source is still the permanent that triggered; once it has left the battlefield it is a new object (CR 400.7), so
 /// nothing is asked and nothing is put. Mold Adder and Taurean Mauler print it.
