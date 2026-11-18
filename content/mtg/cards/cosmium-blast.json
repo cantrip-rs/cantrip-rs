@@ -1,0 +1,6 @@
+{
+  "name": "Cosmium Blast",
+  "manaCost": "{1}{W}",
+  "type": "Instant",
+  "oracleText": "Cosmium Blast deals 4 damage to target attacking or blocking creature."
+}

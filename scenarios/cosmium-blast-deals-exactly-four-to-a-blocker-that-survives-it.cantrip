@@ -1,0 +1,49 @@
+# Cosmium Blast {1}{W} on a blocking creature: Bot1 attacks on turn 3 with its Savannah Lions (2/1) and Bot2 blocks with Barkweave Crusher (2/5).
+# The Blast deals exactly 4: the Crusher is still on the battlefield with 4 damage marked when the Blast has resolved (a fifth point would kill it).
+# The Lions' 2 combat damage then finishes it (4 + 2 >= 5); Bot1's Lions (2/1) takes 2 and dies too.
+
+[Bot1 Deck]
+Plains
+Plains
+Savannah Lions
+Cosmium Blast
+Plains x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Barkweave Crusher
+Plains x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Barkweave Crusher.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Savannah Lions > Bot2)
+Bot2.Block(Barkweave Crusher > Savannah Lions)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Cosmium Blast.Cast(Bot2.Battlefield.Barkweave Crusher)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Barkweave Crusher.Damage = 4
+? Stack.Count = 0
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot2.Battlefield = Mox Emerald
+Bot2.Life = 20
+Bot1.Battlefield = Plains; Plains

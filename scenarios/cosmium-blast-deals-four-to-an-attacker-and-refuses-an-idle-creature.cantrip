@@ -1,0 +1,45 @@
+# Cosmium Blast {1}{W}: "deals 4 damage to target attacking or blocking creature." Bot2's Ageless Guardian (1/4) attacks on turn 4 and
+# dies to exactly 4 damage; Bot2's Ornithopter stays home, a creature that is neither attacking nor blocking, and is refused as a target.
+
+[Bot1 Deck]
+Plains
+Plains
+Cosmium Blast
+Plains x17
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Ageless Guardian
+Ornithopter
+Plains x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Ageless Guardian.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ageless Guardian > Bot1)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+! Bot1.Hand.Cosmium Blast.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Cosmium Blast.Cast(Bot2.Battlefield.Ageless Guardian)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Turn = 4
+Bot1.Life = 20
+Bot2.Battlefield.Ageless Guardian = (absent)
+Bot2.Graveyard = Ageless Guardian; Black Lotus
+Bot2.Battlefield.Ornithopter.Damage = 0
