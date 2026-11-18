@@ -1,0 +1,40 @@
+# Staunch Crewmate: the top four are Ornithopter (an artifact), Staunch Crewmate (a Pirate), Lightning Bolt and Island. "An artifact or
+# Pirate card" - either qualifies, but only one may be taken (the other two combinations are refused). Bot1 takes the Ornithopter; the
+# Pirate, the Bolt and the Island go to the bottom.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Staunch Crewmate
+Plains
+Plains
+Plains
+Plains
+Ornithopter
+Staunch Crewmate
+Lightning Bolt
+Island
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Staunch Crewmate.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+! Bot1.Arrange(Ornithopter; Staunch Crewmate | Lightning Bolt; Island)
+Bot1.Arrange(Ornithopter | Staunch Crewmate; Lightning Bolt; Island)
+? Bot1.Revealed = Ornithopter
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains; Ornithopter
+Bot1.Library.Count = 12

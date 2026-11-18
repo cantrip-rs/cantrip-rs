@@ -1,0 +1,38 @@
+# Staunch Crewmate: "You may reveal" - the top four hold an Ornithopter and a second Staunch Crewmate, both qualifying, but Bot1 takes
+# neither (no minimum of one): all four go to the bottom, the hand is unchanged and nothing is revealed.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Staunch Crewmate
+Plains
+Plains
+Plains
+Plains
+Ornithopter
+Staunch Crewmate
+Island
+Island
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Staunch Crewmate.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Arrange( | Ornithopter; Staunch Crewmate; Island; Island)
+? Bot1.Revealed = (absent)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains
+Bot1.Library.Count = 13

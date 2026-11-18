@@ -1,0 +1,49 @@
+# Staunch Crewmate, a 2/1 Human Pirate: "When this creature enters, look at the top four cards of your library. You may reveal an
+# artifact or Pirate card from among them and put it into your hand. Put the rest on the bottom of your library in a random order."
+# The top four are Lightning Bolt, a second Staunch Crewmate (a Pirate, not an artifact), Island and Island; the fifth, an Ornithopter,
+# is not looked at (CR 701.20a: exactly four). Bot1 may not take the Bolt or an Island (neither is an artifact or a Pirate card), takes
+# the Pirate revealing it, and the other three go to the bottom with the Ornithopter the new top card.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Staunch Crewmate
+Plains
+Plains
+Plains
+Plains
+Lightning Bolt
+Staunch Crewmate
+Island
+Island
+Ornithopter
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Staunch Crewmate.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+! Bot1.Arrange(Lightning Bolt | Staunch Crewmate; Island; Island)
+! Bot1.Arrange(Island | Lightning Bolt; Staunch Crewmate; Island)
+! Bot1.Arrange(Staunch Crewmate; Island | Lightning Bolt; Island)
+Bot1.Arrange(Staunch Crewmate | Lightning Bolt; Island; Island)
+? Bot1.Revealed = Staunch Crewmate
+? Bot1.Hand = Plains; Plains; Plains; Plains; Staunch Crewmate
+? Bot1.Library.Count = 12
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains; Staunch Crewmate
+Bot1.Library.Count = 12
+Bot1.Battlefield.Staunch Crewmate.Power = 2
+Bot1.Battlefield.Staunch Crewmate.Toughness = 1

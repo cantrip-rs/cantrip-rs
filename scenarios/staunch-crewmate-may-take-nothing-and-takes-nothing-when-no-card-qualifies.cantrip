@@ -1,0 +1,40 @@
+# Staunch Crewmate: "You may reveal" - the top four are Lightning Bolt and three Islands, none an artifact or a Pirate card, so nothing may be
+# taken (the Bolt cannot be) and all four go to the bottom; the hand is unchanged and nothing is revealed.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Staunch Crewmate
+Plains
+Plains
+Plains
+Plains
+Lightning Bolt
+Island
+Island
+Island
+Ornithopter
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Staunch Crewmate.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+! Bot1.Arrange(Lightning Bolt | Island; Island; Island)
+Bot1.Arrange( | Lightning Bolt; Island; Island; Island)
+? Bot1.Revealed = (absent)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains
+Bot1.Library.Count = 13
