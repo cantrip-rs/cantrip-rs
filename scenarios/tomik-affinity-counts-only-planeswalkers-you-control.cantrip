@@ -1,0 +1,41 @@
+# Tomik, Wielder of Law: "Affinity for planeswalkers" counts the planeswalkers its caster controls. Bot2 controls Wrenn and Six and
+# Bot1 none, so Tomik ({1}{W}{B}) still costs three: two Moxen cannot pay for him (`Mana: short`), a
+# third can. With his own Wrenn and Six Tomik costs only two (the other scenarios).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Tomik, Wielder of Law
+Plains x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Wrenn and Six
+Swamp x15
+
+[Actions]
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Wrenn and Six.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Tomik, Wielder of Law.Cast(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tomik, Wielder of Law.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Tomik, Wielder of Law

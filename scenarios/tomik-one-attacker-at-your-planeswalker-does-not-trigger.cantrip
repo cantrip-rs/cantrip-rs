@@ -1,0 +1,54 @@
+# Tomik, Wielder of Law: one creature attacking a planeswalker you control is still only one: nothing triggers.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Wrenn and Six
+Mox Pearl
+Mox Jet
+Tomik, Wielder of Law
+Plains
+Plains x12
+
+[Bot2 Deck]
+Black Lotus
+Young Wolf
+Llanowar Elves
+Fyndhorn Elves
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wrenn and Six.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Young Wolf.Cast
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Fyndhorn Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tomik, Wielder of Law.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Young Wolf > Bot1.Battlefield.Wrenn and Six)
+? Stack.Count = 0
+[T4 Bot2.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Hand.Count = 2
+Bot1.Life = 20
+Bot1.Battlefield.Wrenn and Six.Counters.Loyalty = 2

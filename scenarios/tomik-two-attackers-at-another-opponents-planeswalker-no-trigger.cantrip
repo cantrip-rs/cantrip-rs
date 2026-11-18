@@ -1,0 +1,53 @@
+# Tomik, Wielder of Law counts only planeswalkers *you* control (CR 603.4, 508.1): in a three-player game Bot2 attacks Bot3's
+# Wrenn and Six with two creatures, which attack neither Bot1 nor a planeswalker Bot1 controls, so Tomik doesn't trigger.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Tomik, Wielder of Law
+Plains x30
+
+[Bot2 Deck]
+Black Lotus
+Young Wolf
+Llanowar Elves
+Swamp x30
+
+[Bot3 Deck]
+Mox Ruby
+Mox Emerald
+Wrenn and Six
+Forest x30
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tomik, Wielder of Law.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Young Wolf.Cast
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot3.Main1]
+Bot3.Hand.Mox Ruby.Cast
+Bot3.Hand.Mox Emerald.Cast
+Bot3.Battlefield.Mox Ruby.Activate
+Bot3.Battlefield.Mox Emerald.Activate
+Bot3.Hand.Wrenn and Six.Cast
+[T5 Bot2.Main1]
+Bot2.Attack(Young Wolf > Bot3.Battlefield.Wrenn and Six; Llanowar Elves > Bot3.Battlefield.Wrenn and Six)
+? Stack.Count = 0
+[T5 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Tomik, Wielder of Law.Tapped = false
+Bot2.Life = 20
+Bot1.Life = 20
+Bot3.Life = 20
+Bot3.Battlefield.Wrenn and Six.Counters.Loyalty = 1
+Stack.Count = 0

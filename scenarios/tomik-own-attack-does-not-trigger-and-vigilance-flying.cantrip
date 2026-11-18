@@ -1,0 +1,54 @@
+# Tomik, Wielder of Law: "Whenever an opponent attacks": his controller attacking does not trigger him. Tomik (flying, vigilance) and
+# Young Wolf attack Bot2, two creatures attacking Bot2: the stack stays empty, nobody loses extra life, nobody draws. Vigilance:
+# Tomik is still untapped after attacking while Young Wolf is tapped. Flying: Bot2's Llanowar Elves (no flying or reach) cannot block
+# him; Bot2 does not block, so it takes 2 + 1 = 3 damage.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Wrenn and Six
+Mox Pearl
+Mox Jet
+Tomik, Wielder of Law
+Young Wolf
+Plains x13
+
+[Bot2 Deck]
+Black Lotus
+Llanowar Elves
+Swamp x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wrenn and Six.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tomik, Wielder of Law.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Young Wolf.Cast
+[T5 Bot1.Main1]
+Bot1.Attack(Tomik, Wielder of Law > Bot2; Young Wolf > Bot2)
+? Stack.Count = 0
+! Bot2.Block(Llanowar Elves > Tomik, Wielder of Law)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Tomik, Wielder of Law.Tapped = false
+Bot1.Battlefield.Young Wolf.Tapped = true
+Bot2.Graveyard = Black Lotus
+Bot1.Hand.Count = 2
