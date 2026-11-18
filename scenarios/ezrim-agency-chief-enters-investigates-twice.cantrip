@@ -1,0 +1,37 @@
+# Ezrim, Agency Chief {1}{W}{W}{U}{U} (5/5 flying): "When Ezrim enters, investigate twice." Black Lotus (white), Mox Sapphire and
+# an Island pay for it; the trigger makes exactly two Clue artifact tokens under Ezrim's controller (CR 701.16a, 111.10f) and
+# Bot2 gets none. Ezrim has flying and no other keyword until the ability is used.
+
+[Bot1 Deck]
+Ezrim, Agency Chief
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Ezrim, Agency Chief.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ezrim, Agency Chief.Keywords = Flying
+
+[Expect]
+Bot1.Battlefield = Clue Token; Clue Token; Ezrim, Agency Chief; Island; Mox Pearl; Mox Sapphire
+Bot1.Battlefield.Clue Token#1.Token = true
+Bot1.Battlefield.Clue Token#2.Token = true
+Bot1.Battlefield.Ezrim, Agency Chief.Power = 5
+Bot2.Battlefield.Count = 0

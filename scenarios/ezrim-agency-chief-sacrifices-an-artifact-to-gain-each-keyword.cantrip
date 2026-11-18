@@ -1,0 +1,81 @@
+# Ezrim's "{1}, Sacrifice an artifact: Ezrim gains your choice of vigilance, lifelink, or hexproof until end of turn."
+# After the investigations Bot1 has two Clues, Mox Pearl and Mox Sapphire. Turn 3: a Clue is sacrificed for lifelink (Flying
+# and Lifelink), turn 5: the second Clue for vigilance, turn 7: Mox Sapphire for hexproof, turn 9: Mox Pearl for vigilance; each choice expires at cleanup
+# (CR 514.2, 611.2a) before the next one. Ezrim is no artifact: with none left (turn 11) the ability is not offered, though
+# he is untapped and {1} is available (so he cannot sacrifice himself).
+
+[Bot1 Deck]
+Ezrim, Agency Chief
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Ezrim, Agency Chief.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Ezrim, Agency Chief.Activate
+Bot1.Choose(Clue Token#1)
+Bot1.Pass
+Bot1.Modes(Lifelink)
+? Bot1.Battlefield.Ezrim, Agency Chief.Keywords = Flying; Lifelink
+? Bot1.Battlefield = Clue Token; Ezrim, Agency Chief; Island; Mox Pearl; Mox Sapphire
+[T3 Bot1.End]
+Bot1.Pass
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ezrim, Agency Chief.Keywords = Flying
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Ezrim, Agency Chief.Activate
+Bot1.Choose(Clue Token#1)
+Bot1.Pass
+Bot1.Modes(Vigilance)
+? Bot1.Battlefield.Ezrim, Agency Chief.Keywords = Flying; Vigilance
+[T5 Bot1.End]
+Bot1.Pass
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Ezrim, Agency Chief.Keywords = Flying
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#3.Activate
+Bot1.Battlefield.Ezrim, Agency Chief.Activate
+Bot1.Choose(Mox Sapphire)
+Bot1.Pass
+Bot1.Modes(Hexproof)
+? Bot1.Battlefield.Ezrim, Agency Chief.Keywords = Flying; Hexproof
+[T7 Bot1.End]
+Bot1.Pass
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#4.Activate
+Bot1.Battlefield.Ezrim, Agency Chief.Activate
+Bot1.Choose(Mox Pearl)
+Bot1.Pass
+Bot1.Modes(Vigilance)
+[T9 Bot1.End]
+Bot1.Pass
+[T11 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#5.Activate
+! Bot1.Battlefield.Ezrim, Agency Chief.Activate
+
+[Expect]
+Bot1.Battlefield.Ezrim, Agency Chief.Keywords = Flying
+Bot1.Battlefield = Ezrim, Agency Chief; Island; Island; Island; Island; Island

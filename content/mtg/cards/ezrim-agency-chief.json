@@ -1,0 +1,11 @@
+{
+  "name": "Ezrim, Agency Chief",
+  "manaCost": "{1}{W}{W}{U}{U}",
+  "type": "Legendary Creature — Archon Detective",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Flying\nWhen Ezrim enters, investigate twice. (To investigate, create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")\n{1}, Sacrifice an artifact: Ezrim gains your choice of vigilance, lifelink, or hexproof until end of turn.",
+  "keywords": [
+    "Flying"
+  ]
+}
