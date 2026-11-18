@@ -1,0 +1,61 @@
+# Oltec Archaeologists, first mode: "Return target artifact card from your graveyard to your hand." (CR 700.2, 400.7.) Bot1's own Lightning Bolt
+# kills its Memnite on turn 1, and Bot2 bolts its own Ornithopter on turn 2, so Bot1's graveyard holds an artifact card (Memnite) and a
+# non-artifact card (Lightning Bolt), Bot2's one artifact card (Ornithopter). Five mana on turn 3 (four Moxen and a Plains) cast the
+# Archaeologists: the only legal target is Bot1's Memnite (Bot2's Ornithopter and Bot1's own Lightning Bolt do not qualify, so it is chosen
+# without a question) and returns to Bot1's hand; the Ornithopter stays in Bot2's graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Emerald
+Memnite
+Lightning Bolt
+Oltec Archaeologists
+Plains
+Island
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Mountain
+Lightning Bolt
+Island x4
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Oltec Archaeologists.Cast
+Bot1.Pass
+Bot1.Modes(Return target artifact card from your graveyard to your hand)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Memnite
+Bot1.Graveyard = Lightning Bolt
+Bot2.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Battlefield.Oltec Archaeologists.Power = 4
+Stack.Count = 0

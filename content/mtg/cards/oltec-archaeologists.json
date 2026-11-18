@@ -1,0 +1,8 @@
+{
+  "name": "Oltec Archaeologists",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Human Artificer Scout",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When this creature enters, choose one —\n• Return target artifact card from your graveyard to your hand.\n• Scry 3. (Look at the top three cards of your library, then put any number of them on the bottom and the rest on top in any order.)"
+}

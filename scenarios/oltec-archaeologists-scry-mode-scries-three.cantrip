@@ -1,0 +1,48 @@
+# Oltec Archaeologists, second mode: "Scry 3." (CR 701.22.) Bot1 casts it with four Moxen and a Plains, chooses the scry mode and looks at the
+# top three cards (Lightning Bolt, Black Lotus, Counterspell): the Lotus stays on top and the other two go to the bottom, so the library is
+# Lotus, Mountain, Lightning Bolt, Counterspell. Nothing is returned (the modes are alternatives, CR 700.2): the Memnite stays in the graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Emerald
+Memnite
+Lightning Bolt
+Oltec Archaeologists
+Plains
+Lightning Bolt
+Black Lotus
+Counterspell
+Mountain
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Oltec Archaeologists.Cast
+Bot1.Pass
+Bot1.Modes(Scry 3)
+Bot1.Arrange(Black Lotus | Lightning Bolt; Counterspell)
+
+[Expect]
+Bot1.Library = Black Lotus; Mountain; Lightning Bolt; Counterspell
+Bot1.Hand.Count = 0
+Bot1.Graveyard = Memnite; Lightning Bolt
+Stack.Count = 0
