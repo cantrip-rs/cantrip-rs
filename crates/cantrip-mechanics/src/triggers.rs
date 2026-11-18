@@ -601,8 +601,14 @@ pub const YOU_ARE_DEALT_DAMAGE: Trigger = when_asked(EventMask::DAMAGE, you_are_
 /// battlefield, for the card to judge the quality it names. The ability is `.on_sacrifice()`, and looks back as any ability
 /// that triggers on a sacrifice does (CR 603.10a). Tireless Tracker (a Clue) and Biotech Specialist (an artifact) print it.
 pub fn sacrificed_by(q: &dyn Query, player: PlayerId, event: &Event) -> Option<ObjectId> {
+    sacrificed(event).filter(|&old| q.controller(old) == player)
+}
+
+/// The permanent a sacrifice (CR 701.21a) moved from the battlefield, whoever controlled it: what `sacrificed_by` and
+/// `history::sacrificed_this_turn` (which asks the controller of the last-known row, for a static's condition) build on.
+pub fn sacrificed(event: &Event) -> Option<ObjectId> {
     match event {
-        Event::ZoneChange { old, from, reason: ZoneReason::Sacrifice, .. } if from.is(ZoneKind::Battlefield) && q.controller(*old) == player => Some(*old),
+        Event::ZoneChange { old, from, reason: ZoneReason::Sacrifice, .. } if from.is(ZoneKind::Battlefield) => Some(*old),
         _ => None,
     }
 }

@@ -258,14 +258,22 @@ pub fn permanents_sacrificed_this_turn(q: &dyn Query, player: PlayerId) -> usize
         .count()
 }
 
-/// "You've sacrificed a Food this turn" (CR 701.21a, 111.10b): a Food, token or card, left the battlefield as a sacrifice under
-/// `player`'s control this turn, judged as it last was on the battlefield (CR 603.10a). Bonecache Overseer and Elanor Gardner
-/// ("if you sacrificed a Food this turn") print it.
-pub fn sacrificed_a_food_this_turn(q: &dyn Query, player: PlayerId) -> bool {
-    q.history()
+/// "You've sacrificed a [quality] this turn" (CR 701.21a): a permanent, token or card, left the battlefield as a sacrifice under
+/// `player`'s control this turn with the quality `matching` names, both judged as it last was on the battlefield (CR 603.10a,
+/// 608.2h), so one that has since stopped existing or changed still counts. It takes the state and the history rather than a
+/// `Query` so that a static ability's condition asks it too (`LayerQuery`; CR 611.3a). Bonecache Overseer (a Food) and Furtive
+/// Courier (an artifact) print it.
+pub fn sacrificed_this_turn(state: &GameState, history: History<'_>, player: PlayerId, matching: impl Fn(&LastKnown) -> bool) -> bool {
+    history
         .select(EventQuery::kind(EventMask::ZONE_CHANGE).from(ZoneKind::Battlefield).this_turn())
-        .filter_map(|r| crate::triggers::sacrificed_by(q, player, &r.event))
-        .any(|old| q.state().last_known(old).is_some_and(|l| l.subtypes.has(Subtype::Food)))
+        .filter_map(|r| crate::triggers::sacrificed(&r.event))
+        .any(|old| state.last_known(old).is_some_and(|l| l.controller == player && matching(l)))
+}
+
+/// "You've sacrificed a Food this turn" (CR 701.21a, 111.10b): `sacrificed_this_turn` of a Food. Bonecache Overseer and Elanor
+/// Gardner ("if you sacrificed a Food this turn") print it.
+pub fn sacrificed_a_food_this_turn(q: &dyn Query, player: PlayerId) -> bool {
+    sacrificed_this_turn(q.state(), q.history(), player, |l| l.subtypes.has(Subtype::Food))
 }
 
 /// "If you sacrificed one or more permanents this turn" (CR 603.4, 701.21a): the ability's controller sacrificed a permanent this turn,
