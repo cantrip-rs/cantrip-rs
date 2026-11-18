@@ -1,0 +1,38 @@
+# "As an additional cost to cast this spell, sacrifice an artifact or discard a card. Draw two cards" (CR 601.2b, 118.8, 121.1):
+# with artifacts and other cards both available the caster chooses; Bot1 sacrifices the Ornithopter, keeping its Islands in hand,
+# and draws the Plains and Swamp on top of its library. Two Moxen pay {1}{R}; the Ornithopter is the one sacrificed, not a Mox.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Ornithopter
+Demand Answers
+Island
+Island
+Island
+Plains
+Swamp
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Demand Answers.Cast
+Bot1.Modes(Sacrifice an artifact)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Demand Answers; Ornithopter
+Bot1.Battlefield = Mox Ruby; Mox Emerald
+Bot1.Hand = Island; Island; Island; Plains; Swamp
+Bot1.Library.Count = 10

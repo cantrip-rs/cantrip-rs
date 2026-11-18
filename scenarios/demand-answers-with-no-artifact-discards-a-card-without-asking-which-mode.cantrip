@@ -1,0 +1,33 @@
+# With no artifact in play the discard is the only additional cost payable (CR 601.2b, 118.3), so no mode is asked, only which card
+# (Bot1 discards the Plains, keeping an Island). Cast on turn 3 off two Mountains; two cards are drawn.
+
+[Bot1 Deck]
+Mountain
+Mountain
+Demand Answers
+Plains
+Island
+Island
+Island
+Swamp
+Swamp
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Demand Answers.Cast
+Bot1.Choose(Plains)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Demand Answers; Plains
+Bot1.Battlefield = Mountain; Mountain
+Bot1.Hand.Count = 6
