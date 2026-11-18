@@ -32,7 +32,7 @@ pub fn manifest_dread_object(g: &mut dyn Game, player: PlayerId, source: ObjectI
         cards: looked.clone(),
         destinations: vec![
             Destination { kind: DestinationKind::BattlefieldFaceDown, min: 1, max: 1, eligible: looked.clone() },
-            Destination { kind: DestinationKind::Graveyard, min: 0, max: u8::MAX, eligible: looked.clone() },
+            Destination { kind: DestinationKind::Graveyard, min: 0, max: u32::MAX, eligible: looked.clone() },
         ],
         may_shuffle: false,
     };

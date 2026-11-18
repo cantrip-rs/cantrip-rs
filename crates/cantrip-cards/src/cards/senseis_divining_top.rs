@@ -13,7 +13,7 @@ fn look(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let ask = RequestKind::DistributeCards {
         source: item.object,
         cards: looked.clone(),
-        destinations: vec![Destination { kind: DestinationKind::LibraryTop, min: 0, max: u8::MAX, eligible: looked }],
+        destinations: vec![Destination { kind: DestinationKind::LibraryTop, min: 0, max: u32::MAX, eligible: looked }],
         may_shuffle: false,
     };
     if let Answer::Placements { placements, .. } = g.ask(player, ask)? {

@@ -1541,9 +1541,10 @@ impl Selection {
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Destination {
     pub kind: DestinationKind,
-    pub min: u8,
-    /// `u8::MAX` for "the rest".
-    pub max: u8,
+    /// Counts of cards, 32-bit (CR 107.1): a distribution may take more than 255 cards (Stargaze with X of 128).
+    pub min: u32,
+    /// `u32::MAX` for "the rest".
+    pub max: u32,
     /// The cards it may take; every card looked at, when it takes any.
     pub eligible: Vec<ObjectId>,
 }

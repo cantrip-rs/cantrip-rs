@@ -16,7 +16,7 @@ fn look_and_win(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
             cards: looked.clone(),
             destinations: vec![
                 Destination { kind: DestinationKind::LibraryTop, min: 0, max: 1, eligible: looked.clone() },
-                Destination { kind: DestinationKind::LibraryBottom, min: 0, max: u8::MAX, eligible: looked },
+                Destination { kind: DestinationKind::LibraryBottom, min: 0, max: u32::MAX, eligible: looked },
             ],
             may_shuffle: false,
         };

@@ -59,7 +59,7 @@ pub fn distribution_problem(cards: &[ObjectId], destinations: &[Destination], pl
     let mut placed: Vec<ObjectId> = Vec::new();
     for (i, (d, p)) in destinations.iter().zip(placements).enumerate() {
         let n = p.len();
-        if n < d.min as usize || (d.max != u8::MAX && n > d.max as usize) {
+        if n < d.min as usize || (d.max != u32::MAX && n > d.max as usize) {
             return Some(format!("destination {i} takes from {} to {}, not {n}", d.min, d.max));
         }
         for card in p {

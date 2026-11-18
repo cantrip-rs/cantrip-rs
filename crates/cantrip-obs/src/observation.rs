@@ -345,9 +345,10 @@ pub struct DivisionObs {
 pub struct DestinationObs {
     /// 0 library top, 1 library bottom, 2 graveyard, 3 hand, 4 exile, 5 battlefield face down.
     pub kind: u8,
-    pub min: u8,
-    /// `u8::MAX` for "the rest".
-    pub max: u8,
+    /// Counts of cards, 32-bit as the engine's `Destination` has them (CR 107.1).
+    pub min: u32,
+    /// `u32::MAX` for "the rest".
+    pub max: u32,
     /// Whether it may take each card, index for index with the cards.
     pub eligible: Vec<bool>,
 }

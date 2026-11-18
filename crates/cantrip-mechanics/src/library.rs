@@ -582,7 +582,7 @@ pub fn look_at_top(
     player: PlayerId,
     source: ObjectId,
     count: usize,
-    (min, max): (u8, u8),
+    (min, max): (u32, u32),
     reveal: bool,
     wanted: impl Fn(&Chars) -> bool,
     rest: Rest,
@@ -593,8 +593,8 @@ pub fn look_at_top(
     }
     g.look_at(player, &looked);
     let takeable: Vec<ObjectId> = looked.iter().copied().filter(|&c| wanted(&g.chars(c))).collect();
-    // At most the cards that qualify, saturating: past 255 of them a bound of 255 (`u8::MAX`, "any number") stays one.
-    let qualifying = u8::try_from(takeable.len()).unwrap_or(u8::MAX);
+    // At most the cards that qualify.
+    let qualifying = takeable.len() as u32;
     let min = min.min(qualifying);
     let max = max.min(qualifying);
     let ask = RequestKind::DistributeCards {
@@ -602,7 +602,7 @@ pub fn look_at_top(
         cards: looked.clone(),
         destinations: vec![
             Destination { kind: DestinationKind::Hand, min, max, eligible: takeable },
-            Destination { kind: DestinationKind::LibraryBottom, min: 0, max: u8::MAX, eligible: looked.clone() },
+            Destination { kind: DestinationKind::LibraryBottom, min: 0, max: u32::MAX, eligible: looked.clone() },
         ],
         may_shuffle: false,
     };
@@ -972,7 +972,7 @@ pub fn look_at_top_take_one_rest_to_graveyard(g: &mut dyn Game, player: PlayerId
 /// `take` cards or more shows the player what it has and exactly `take` are taken (a shorter one gives all it has, CR 609.3);
 /// the rest go together, in the order their owner arranges them (CR 404.3). Rakshasa's Bargain (two of four) and Underrealm
 /// Lich (one of three, in place of a draw) print it.
-pub fn look_at_top_take_some_rest_to_graveyard(g: &mut dyn Game, player: PlayerId, source: ObjectId, count: usize, take: u8) -> Result<(), Suspend> {
+pub fn look_at_top_take_some_rest_to_graveyard(g: &mut dyn Game, player: PlayerId, source: ObjectId, count: usize, take: u32) -> Result<(), Suspend> {
     top_take_one_rest_to_graveyard(g, player, source, count, false, (take, take), |_| true)
 }
 
@@ -992,7 +992,7 @@ pub fn look_at_top_may_put_one_back_rest_to_graveyard<const N: usize>(g: &mut dy
         cards: looked.clone(),
         destinations: vec![
             Destination { kind: DestinationKind::LibraryTop, min: 0, max: 1, eligible: looked.clone() },
-            Destination { kind: DestinationKind::Graveyard, min: 0, max: u8::MAX, eligible: looked.clone() },
+            Destination { kind: DestinationKind::Graveyard, min: 0, max: u32::MAX, eligible: looked.clone() },
         ],
         may_shuffle: false,
     };
@@ -1011,7 +1011,7 @@ fn top_take_one_rest_to_graveyard(
     source: ObjectId,
     count: usize,
     reveal: bool,
-    (min, max): (u8, u8),
+    (min, max): (u32, u32),
     wanted: fn(&Chars) -> bool,
 ) -> Result<(), Suspend> {
     let revealed = top_of_library(g, player, count);
@@ -1025,7 +1025,7 @@ fn top_take_one_rest_to_graveyard(
     }
     let takeable: Vec<ObjectId> = revealed.iter().copied().filter(|&c| wanted(&g.chars(c))).collect();
     // A short library gives all it has (CR 609.3).
-    let (min, max) = (min.min(takeable.len() as u8), max.min(takeable.len() as u8));
+    let (min, max) = (min.min(takeable.len() as u32), max.min(takeable.len() as u32));
     let mut taken = Vec::new();
     if !takeable.is_empty() {
         let ask = RequestKind::DistributeCards {
@@ -1033,7 +1033,7 @@ fn top_take_one_rest_to_graveyard(
             cards: revealed.clone(),
             destinations: vec![
                 Destination { kind: DestinationKind::Hand, min, max, eligible: takeable },
-                Destination { kind: DestinationKind::Graveyard, min: 0, max: u8::MAX, eligible: revealed.clone() },
+                Destination { kind: DestinationKind::Graveyard, min: 0, max: u32::MAX, eligible: revealed.clone() },
             ],
             may_shuffle: false,
         };
@@ -1131,7 +1131,7 @@ pub fn ask_library_order(
     let ask = RequestKind::DistributeCards {
         source,
         cards: cards.to_vec(),
-        destinations: vec![Destination { kind: end, min: 0, max: u8::MAX, eligible: cards.to_vec() }],
+        destinations: vec![Destination { kind: end, min: 0, max: u32::MAX, eligible: cards.to_vec() }],
         may_shuffle: false,
     };
     Ok(match g.ask(player, ask)? {

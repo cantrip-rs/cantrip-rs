@@ -18,7 +18,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
             let ask = RequestKind::DistributeCards {
                 source: item.object,
                 cards: cards.clone(),
-                destinations: vec![Destination { kind: DestinationKind::LibraryTop, min: 0, max: u8::MAX, eligible: cards.clone() }],
+                destinations: vec![Destination { kind: DestinationKind::LibraryTop, min: 0, max: u32::MAX, eligible: cards.clone() }],
                 may_shuffle: false,
             };
             if let Answer::Placements { placements, .. } = g.ask(player, ask)?

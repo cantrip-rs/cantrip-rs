@@ -1014,7 +1014,7 @@ fn arrange_graveyards(cx: &mut Cx, binned: &[(PlayerId, ObjectId)]) {
         let ask = RequestKind::DistributeCards {
             source,
             cards: listed.clone(),
-            destinations: vec![Destination { kind: DestinationKind::GraveyardOrder, min: 0, max: u8::MAX, eligible: listed.clone() }],
+            destinations: vec![Destination { kind: DestinationKind::GraveyardOrder, min: 0, max: u32::MAX, eligible: listed.clone() }],
             may_shuffle: false,
         };
         // Unanswered yet, the run goes on with the order they arrived in and is replayed with the answer (`Cx::ask_core`).

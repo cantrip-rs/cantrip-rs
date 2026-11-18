@@ -19,7 +19,7 @@ pub fn greedy_distribution(cards: &[ObjectId], destinations: &[Destination]) -> 
     let mut placements: Vec<Vec<ObjectId>> = vec![Vec::new(); destinations.len()];
     for pass in 0..2 {
         for (i, d) in destinations.iter().enumerate() {
-            let up_to = if pass == 0 { d.min as usize } else if d.max == u8::MAX { usize::MAX } else { d.max as usize };
+            let up_to = if pass == 0 { d.min as usize } else if d.max == u32::MAX { usize::MAX } else { d.max as usize };
             let mut j = 0;
             while j < left.len() && placements[i].len() < up_to {
                 if d.eligible.contains(&left[j]) {

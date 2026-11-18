@@ -1661,8 +1661,8 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                             DestinationKind::BattlefieldFaceDown => CardDestinationKindView::BattlefieldFaceDown,
                         },
                         owner: player,
-                        min: i32::from(d.min),
-                        max: if d.max == u8::MAX { i32::MAX } else { i32::from(d.max) },
+                        min: d.min as i32,
+                        max: if d.max == u32::MAX { i32::MAX } else { d.max as i32 },
                         eligible: handles_of(handles, &d.eligible),
                         // A graveyard's order, the first on top (CR 404.3), as a library top's is.
                         ordered: matches!(d.kind, DestinationKind::LibraryTop | DestinationKind::LibraryBottom | DestinationKind::GraveyardOrder),

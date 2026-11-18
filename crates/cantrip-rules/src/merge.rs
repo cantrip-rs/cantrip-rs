@@ -244,7 +244,7 @@ pub(crate) fn arrange_in_library(cx: &mut Cx, owner: PlayerId, group: &[ObjectId
     let ask = RequestKind::DistributeCards {
         source,
         cards: listed.clone(),
-        destinations: vec![Destination { kind: DestinationKind::LibraryTop, min: listed.len() as u8, max: listed.len() as u8, eligible: listed.clone() }],
+        destinations: vec![Destination { kind: DestinationKind::LibraryTop, min: listed.len() as u32, max: listed.len() as u32, eligible: listed.clone() }],
         may_shuffle: false,
     };
     let order = match cx.ask_rule(owner, ask) {

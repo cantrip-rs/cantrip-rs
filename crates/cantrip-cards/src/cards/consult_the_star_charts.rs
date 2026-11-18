@@ -8,7 +8,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let player = item.controller;
     let lands = cantrip_mechanics::lands_you_control(g, player);
     let taken: usize = if g.obj(item.object).kicked > 0 { 2 } else { 1 };
-    let taken = top_of_library(g, player, lands).len().min(taken) as u8;
+    let taken = top_of_library(g, player, lands).len().min(taken) as u32;
     look_at_top(g, player, item.object, lands, (taken, taken), false, |_| true, Rest::BottomRandom)?;
     Ok(())
 }

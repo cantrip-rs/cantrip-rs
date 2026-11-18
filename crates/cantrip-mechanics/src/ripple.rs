@@ -47,7 +47,7 @@ fn ripple<const N: usize>(g: &mut dyn Game, item: &StackItem) -> Result<(), Susp
         let ask = RequestKind::DistributeCards {
             source: spell,
             cards: rest.clone(),
-            destinations: vec![Destination { kind: DestinationKind::LibraryBottom, min: 0, max: u8::MAX, eligible: rest.clone() }],
+            destinations: vec![Destination { kind: DestinationKind::LibraryBottom, min: 0, max: u32::MAX, eligible: rest.clone() }],
             may_shuffle: false,
         };
         if let Answer::Placements { placements, .. } = g.ask(you, ask)?

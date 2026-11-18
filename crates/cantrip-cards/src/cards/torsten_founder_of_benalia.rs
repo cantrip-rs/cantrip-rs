@@ -28,8 +28,8 @@ fn reveal_seven(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
             source: item.object,
             cards: revealed.clone(),
             destinations: vec![
-                Destination { kind: DestinationKind::Hand, min: 0, max: eligible.len() as u8, eligible },
-                Destination { kind: DestinationKind::LibraryBottom, min: 0, max: u8::MAX, eligible: revealed.clone() },
+                Destination { kind: DestinationKind::Hand, min: 0, max: eligible.len() as u32, eligible },
+                Destination { kind: DestinationKind::LibraryBottom, min: 0, max: u32::MAX, eligible: revealed.clone() },
             ],
             may_shuffle: false,
         };

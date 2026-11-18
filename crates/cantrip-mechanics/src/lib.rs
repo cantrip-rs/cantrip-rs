@@ -1142,8 +1142,8 @@ pub fn scry(g: &mut dyn Game, player: PlayerId, source: ObjectId, count: usize) 
             source,
             cards: looked.clone(),
             destinations: vec![
-                Destination { kind: DestinationKind::LibraryTop, min: 0, max: u8::MAX, eligible: looked.clone() },
-                Destination { kind: DestinationKind::LibraryBottom, min: 0, max: u8::MAX, eligible: looked.clone() },
+                Destination { kind: DestinationKind::LibraryTop, min: 0, max: u32::MAX, eligible: looked.clone() },
+                Destination { kind: DestinationKind::LibraryBottom, min: 0, max: u32::MAX, eligible: looked.clone() },
             ],
             may_shuffle: false,
         };
@@ -1185,8 +1185,8 @@ pub fn surveil_into_graveyard(
             source,
             cards: looked.clone(),
             destinations: vec![
-                Destination { kind: DestinationKind::LibraryTop, min: 0, max: u8::MAX, eligible: looked.clone() },
-                Destination { kind: DestinationKind::Graveyard, min: 0, max: u8::MAX, eligible: looked.clone() },
+                Destination { kind: DestinationKind::LibraryTop, min: 0, max: u32::MAX, eligible: looked.clone() },
+                Destination { kind: DestinationKind::Graveyard, min: 0, max: u32::MAX, eligible: looked.clone() },
             ],
             may_shuffle: false,
         };
@@ -1352,7 +1352,7 @@ pub fn hideaway(g: &mut dyn Game, item: &StackItem, count: usize) -> Result<(), 
         cards: looked.clone(),
         destinations: vec![
             Destination { kind: DestinationKind::Exile, min: 1, max: 1, eligible: looked.clone() },
-            Destination { kind: DestinationKind::LibraryBottom, min: 0, max: u8::MAX, eligible: looked.clone() },
+            Destination { kind: DestinationKind::LibraryBottom, min: 0, max: u32::MAX, eligible: looked.clone() },
         ],
         may_shuffle: false,
     };

@@ -11,9 +11,9 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if looked.is_empty() {
         return Ok(());
     }
-    let hand = looked.len().min(1) as u8;
-    let bottom = (looked.len() - hand as usize).min(1) as u8;
-    let exile = (looked.len() - hand as usize - bottom as usize).min(1) as u8;
+    let hand = looked.len().min(1) as u32;
+    let bottom = (looked.len() - hand as usize).min(1) as u32;
+    let exile = (looked.len() - hand as usize - bottom as usize).min(1) as u32;
     let ask = RequestKind::DistributeCards {
         source: item.object,
         cards: looked.clone(),

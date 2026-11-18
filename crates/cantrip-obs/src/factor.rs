@@ -1216,7 +1216,7 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
                 for (k, &c) in cards.iter().enumerate() {
                     for (i, d) in destinations.iter().enumerate() {
                         let n = placements[i].len();
-                        let room = d.max == u8::MAX || n < d.max as usize;
+                        let room = d.max == u32::MAX || n < d.max as usize;
                         let fills = n < d.min as usize;
                         let legal = !placed[k]
                             && d.eligible.get(k).copied().unwrap_or(false)
@@ -2291,13 +2291,13 @@ mod tests {
                 DestinationObs {
                     kind: 0,
                     min: 0,
-                    max: 255,
+                    max: u32::MAX,
                     eligible: vec![true, true],
                 },
                 DestinationObs {
                     kind: 1,
                     min: 0,
-                    max: 255,
+                    max: u32::MAX,
                     eligible: vec![true, true],
                 },
             ],
@@ -2325,7 +2325,7 @@ mod tests {
                 DestinationObs {
                     kind: 2,
                     min: 0,
-                    max: 255,
+                    max: u32::MAX,
                     eligible: vec![true, true, true],
                 },
             ],
