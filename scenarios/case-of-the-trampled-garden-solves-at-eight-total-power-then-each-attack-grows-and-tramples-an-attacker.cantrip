@@ -1,0 +1,98 @@
+# Case of the Trampled Garden. Turn 1: Bot1 casts Grizzly Bears (Forest and Mox Jet), Llanowar Elves (Mox Emerald) and the
+# Case (Black Lotus); the Case's enters trigger distributes its two +1/+1 counters one each to the Bears and the Elves (two
+# targets, CR 601.2d: the Bears 3/3, the Elves 2/2), five power in all, so "To solve - Creatures you control have total power
+# 8 or greater" does not happen at the end step. Turn 2: Bot2's Hill Giant (3 power) is on the battlefield. Turn 3: a second
+# Grizzly Bears makes seven power for Bot1: one short, not solved - and Bot2's Giant, which would make ten, is not counted.
+# The Bears attack with the Case unsolved: no trigger (Stack stays empty). Turn 5: a second Llanowar Elves makes exactly
+# eight: the Case becomes solved at the end step. Turn 7: Bot1 attacks with the first Bears and the first Elves; the Elves
+# that stays home is refused as the target, the attacking Elves are chosen: a +1/+1 counter (now 3/3) and trample until end
+# of turn. Turn 8: Bot2's Giant attacks and the Case, Bot1's, does not trigger. Turn 9: the Elves have lost trample.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Jet
+Black Lotus
+Case of the Trampled Garden
+Grizzly Bears
+Llanowar Elves
+Grizzly Bears
+Llanowar Elves
+Forest x12
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Emerald
+Hill Giant
+Mountain x15
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Case of the Trampled Garden.Cast
+Bot1.Divide(Grizzly Bears: 1; Llanowar Elves: 1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = 1
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Case of the Trampled Garden.Solved = (absent)
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears#1 > Bot2)
+? Stack.Count = 0
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Case of the Trampled Garden.Solved = (absent)
+[T5 Bot1.Main1]
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+[T6 Bot2.Upkeep]
+? Bot1.Battlefield.Case of the Trampled Garden.Solved = true
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears#1 > Bot2; Llanowar Elves#1 > Bot2)
+! Bot1.Target(Llanowar Elves#2)
+Bot1.Target(Llanowar Elves#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves#1.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Llanowar Elves#1.Keywords = Trample
+? Bot1.Battlefield.Grizzly Bears#1.Keywords = (absent)
+[T8 Bot2.DeclareAttackers]
+Bot2.Attack(Hill Giant > Bot1)
+? Stack.Count = 0
+[T9 Bot1.Upkeep]
+? Bot1.Battlefield.Llanowar Elves#1.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.Case of the Trampled Garden.Solved = true
+Bot1.Battlefield.Llanowar Elves#1.Power = 3
+Bot1.Battlefield.Llanowar Elves#1.Toughness = 3
+Bot1.Battlefield.Grizzly Bears#1.Power = 3
+Bot1.Battlefield.Grizzly Bears#2.Counters.PlusOnePlusOne = (absent)
