@@ -99,8 +99,23 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-169](#ki-169-raging-rivers-piles-and-labels-dont-show-which-resolution-they-belong-to) | Raging River's piles and labels don't show which resolution they belong to | Pri-2 | Open |
 | [KI-170](#ki-170-a-top-of-library-permission-tries-an-x-only-up-to-a-mana-value-of-64) | A top-of-library permission tries an X only up to a mana value of 64 | Pri-3 | Won't fix: beyond practical scale |
 | [KI-171](#ki-171-a-resolution-cost-that-exiles-a-merged-permanent-is-labelled-with-the-source-alone) | A resolution cost that exiles a merged permanent is labelled with the source alone | Pri-2 | Open |
+| [KI-172](#ki-172-a-resolutions-unless-pays-question-for-a-tap-cost-reads-pay-0) | A resolution's "unless pays" question for a tap cost reads "pay {0}?" | Pri-2 | Open |
 
 ## Issues
+
+### KI-172: A resolution's "unless pays" question for a tap cost reads "pay {0}?"
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-2 | Open | client | 2026-11-18, review of PR #3193 |
+
+**Notes.** `effects::sacrifice_this_unless_pay` asks "pay {cost}?", and the client's `CostText` renders a cost with no mana
+part (such as Hecatomb's "tap an untapped Swamp you control") as "{0}", so the question reads "pay {0}?". The engine
+pays the right cost; the caption should name the tap. Public Thoroughfare asks its own question for this reason. Related:
+KI-116.
+
+**Scenarios.**
+- none checks the caption; Hecatomb's scenarios cover the engine side.
 
 ### KI-171: A resolution cost that exiles a merged permanent is labelled with the source alone
 
