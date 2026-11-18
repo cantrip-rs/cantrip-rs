@@ -139,6 +139,16 @@ pub fn target_creature_gets<const P: i32, const T: i32>(g: &mut dyn Game, item: 
     Ok(())
 }
 
+/// "Target creature blocks this turn if able" (CR 509.1c, 611.2a): the creature, the ability's first target, must block if it can until the
+/// turn ends; nothing if it is no longer a legal target as the spell or ability resolves (CR 608.2b). Academic Dispute (before its other
+/// sentences) and Culvert Ambusher print it.
+pub fn target_creature_blocks_this_turn_if_able(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        g.add_effect(item.object, creature, EffectKind::MustBlock, Duration::EndOfTurn);
+    }
+    Ok(())
+}
+
 /// "Target creature gets +`P`/+`T` until end of turn. You gain `LIFE` life" (CR 611.2a, 119.3, 608.2b): both are lost if the target is no
 /// longer legal as the spell resolves, since a spell with only illegal targets does not resolve. Which creatures may be targeted is the
 /// card's own. Moment of Triumph (+2/+2, 2 life), Syphon Fuel (-6/-6, 2) and Locthwain Scorn (-3/-3, 2) print it.
