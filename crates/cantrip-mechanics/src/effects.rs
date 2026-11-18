@@ -1657,6 +1657,18 @@ pub fn damage_each_opponent(g: &mut dyn Game, item: &StackItem, n: u32) {
     g.damage_together(&hits);
 }
 
+/// "[The triggering creature] deals damage equal to its power to each opponent" (CR 120.3, 102.2, 603.6a): the creature the trigger is
+/// about (`StackItem::subject`) is the source, at the power it last had on the battlefield if it has left (CR 608.2h, 113.7a); one with
+/// no power (it is no longer a creature) or a negative one deals none. The damage is dealt to every opponent together (CR 120.2).
+/// Champion of the Path and Pyrotechnic Performer print it.
+pub fn subject_deals_damage_equal_to_its_power_to_each_opponent(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = item.subject.object() else { return Ok(()) };
+    let power = crate::targets::power_or_last_known(g, creature).max(0) as u32;
+    let hits: Vec<(ObjectId, Target, u32)> = g.state().opponents(item.controller).map(|p| (creature, Target::Player(p), power)).collect();
+    g.damage_together(&hits);
+    Ok(())
+}
+
 /// "[This source] deals `N` damage to each opponent" as the whole effect of an ability or spell (CR 120.3, 102.2):
 /// `damage_each_opponent` with the amount printed. Black Waltz No. 3, Boltwave, Quark's Bar, Sabotender and Spitfire Lagac print it.
 pub fn damage_each_opponent_n<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
