@@ -1,0 +1,68 @@
+# Magnetic Snuffler: its enters trigger takes an Equipment card only from *your* graveyard, and it grows only when *you* sacrifice an artifact. Bot2's
+# Thinking Cap is destroyed (Bot2's own Shatter) and sits in Bot2's graveyard: on turn 3 the Snuffler, entering, has no legal target and Bot2's Cap stays
+# there. Bot2 then sacrifices its Black Lotus for mana (an artifact sacrificed, not by Bot1): the Snuffler stays a 4/4 with no counter.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Mox Emerald
+Magnetic Snuffler
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Black Lotus
+Thinking Cap
+Shatter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Thinking Cap.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Shatter.Cast(Bot2.Battlefield.Thinking Cap)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Shatter; Thinking Cap
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Magnetic Snuffler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Magnetic Snuffler.Power = 4
+Bot1.Battlefield.Magnetic Snuffler.Toughness = 4
+Bot1.Battlefield.Magnetic Snuffler.Counters.PlusOnePlusOne = (absent)
+Bot2.Graveyard = Black Lotus; Shatter; Thinking Cap

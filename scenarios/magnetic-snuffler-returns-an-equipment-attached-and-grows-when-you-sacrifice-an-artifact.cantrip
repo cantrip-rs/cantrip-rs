@@ -1,0 +1,70 @@
+# Magnetic Snuffler: "When this creature enters, return target Equipment card from your graveyard to the battlefield attached to this creature.
+# Whenever you sacrifice an artifact, put a +1/+1 counter on this creature." Bot2 destroys Bot1's Thinking Cap (Equipment, +1/+2) on turn 2. On turn 3
+# Bot1 casts the 4/4 off five Moxen: the Cap comes back attached (5/6, in no graveyard) and a Black Lotus sacrificed for its mana adds a counter (6/7).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Mox Emerald
+Thinking Cap
+Magnetic Snuffler
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Shatter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Thinking Cap.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Thinking Cap)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Thinking Cap
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Magnetic Snuffler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thinking Cap.AttachedTo = Magnetic Snuffler
+? Bot1.Battlefield.Magnetic Snuffler.Power = 5
+? Bot1.Battlefield.Magnetic Snuffler.Toughness = 6
+? Bot1.Graveyard.Count = 0
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Magnetic Snuffler.Power = 6
+Bot1.Battlefield.Magnetic Snuffler.Toughness = 7
+Bot1.Battlefield.Magnetic Snuffler.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = Black Lotus

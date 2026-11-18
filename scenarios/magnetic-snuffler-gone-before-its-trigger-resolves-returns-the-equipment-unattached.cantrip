@@ -1,0 +1,72 @@
+# Magnetic Snuffler: "return target Equipment card from your graveyard to the battlefield attached to this creature". Bot2 destroys Bot1's Thinking Cap
+# on turn 2. On turn 3 the Snuffler enters and its trigger targets the Cap; in response Bot2 exiles the Snuffler with Swords to Plowshares. The trigger
+# still resolves (its target is legal): the Cap returns to the battlefield, but with no creature to equip it enters unattached (CR 301.5e), and the
+# Snuffler, gone, gets nothing.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Mox Emerald
+Thinking Cap
+Magnetic Snuffler
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Shatter
+Swords to Plowshares
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Thinking Cap.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Thinking Cap)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Thinking Cap
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Magnetic Snuffler.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Magnetic Snuffler)
+Bot2.Pass
+Bot1.Pass
+? Exile = Magnetic Snuffler
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Thinking Cap.AttachedTo = (absent)
+Bot1.Graveyard.Count = 0
+Bot1.Life = 24
+Stack.Count = 0

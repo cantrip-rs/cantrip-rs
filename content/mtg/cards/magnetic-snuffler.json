@@ -1,0 +1,8 @@
+{
+  "name": "Magnetic Snuffler",
+  "manaCost": "{5}",
+  "type": "Artifact Creature — Construct",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When this creature enters, return target Equipment card from your graveyard to the battlefield attached to this creature.\nWhenever you sacrifice an artifact, put a +1/+1 counter on this creature."
+}

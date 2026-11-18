@@ -1,0 +1,46 @@
+# Magnetic Snuffler: "Whenever you sacrifice an artifact, put a +1/+1 counter on this creature." Only an artifact counts: on turn 3 Bot1 sacrifices
+# Strip Mine (a land, no artifact) for its own cost to destroy Bot2's Island, and the Snuffler stays a 4/4 with no counter.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Mox Emerald
+Magnetic Snuffler
+Strip Mine
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Magnetic Snuffler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Strip Mine.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Strip Mine.Activate(Bot2.Battlefield.Island; Ability: Destroy)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Strip Mine
+Bot2.Graveyard = Island
+Bot1.Battlefield.Magnetic Snuffler.Power = 4
+Bot1.Battlefield.Magnetic Snuffler.Counters.PlusOnePlusOne = (absent)
+Stack.Count = 0
