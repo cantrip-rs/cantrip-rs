@@ -1,0 +1,51 @@
+# Foggy Swamp Visions cast on Bot2's turn, as Valley Floodcaller lets a noncreature spell be: its token is sacrificed at the
+# beginning of Bot1's next end step (CR 603.7), on Bot1's following turn - not at Bot2's end step that same turn, which is the
+# next end step but not Bot1's. Waterbend {X}, X = 1, is paid by tapping Valley Floodcaller (CR 701.67a).
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Sapphire
+Memnite
+Valley Floodcaller
+Fatal Push
+Swamp
+Foggy Swamp Visions
+Swamp x20
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Valley Floodcaller.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fatal Push.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Foggy Swamp Visions.Cast(X: 1; Convoke: Valley Floodcaller)
+Bot1.Target(Bot1.Graveyard.Memnite)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Token = true
+[T5 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Memnite = (absent)
+Exile = Memnite

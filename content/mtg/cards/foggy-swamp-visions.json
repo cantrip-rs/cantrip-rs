@@ -1,0 +1,6 @@
+{
+  "name": "Foggy Swamp Visions",
+  "manaCost": "{1}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, waterbend {X}. (While paying a waterbend cost, you can tap your artifacts and creatures to help. Each one pays for {1}.)\nExile X target creature cards from graveyards. For each creature card exiled this way, create a token that's a copy of it. At the beginning of your next end step, sacrifice those tokens."
+}

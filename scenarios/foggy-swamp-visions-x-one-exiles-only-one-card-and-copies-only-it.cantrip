@@ -1,0 +1,74 @@
+# Foggy Swamp Visions: waterbend {X} is paid with exactly X generic mana or taps (CR 701.67a), so X = 1, paid by tapping Memnite, targets
+# exactly one creature card (Fatal Push, in Bot1's graveyard too, is no creature card and no target, CR 115.1): Bot2's Grizzly
+# Bears is exiled and copied, Bot1's own stays in its graveyard. The pool is empty right
+# after the cast, so the {1}{B}{B} took exactly the Swamps and Mox Jet.
+
+[Bot1 Deck]
+Swamp
+Swamp
+Mox Jet
+Mox Emerald
+Memnite
+Grizzly Bears
+Fatal Push
+Fatal Push
+Foggy Swamp Visions
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Forest x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fatal Push.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Fatal Push.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Foggy Swamp Visions.Cast(X: 1; Convoke: Memnite)
+! Bot1.Target(Bot1.Graveyard.Fatal Push)
+Bot1.Target(Bot2.Graveyard.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Count = 6
+? Bot1.Battlefield.Grizzly Bears.Token = true
+[T5 Bot1.End]
+
+[Expect]
+Exile.Count = 1
+Bot1.Battlefield.Grizzly Bears = (absent)
+Bot1.Battlefield.Count = 5
+Bot1.Graveyard.Count = 4
+Bot1.Graveyard.Grizzly Bears.Colors = Green
+Bot2.Graveyard.Grizzly Bears = (absent)
