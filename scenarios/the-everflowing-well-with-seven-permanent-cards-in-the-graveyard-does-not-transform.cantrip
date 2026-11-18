@@ -1,0 +1,57 @@
+# The Everflowing Well's "Descend 8" needs eight permanent cards in your graveyard (CR 207.2c, 110.4a): seven are not enough, however
+# many cards are there. Turn 1 mills an Island and a Lightning Bolt, and Breaking on turn 3 six Islands and two Lightning Bolts: with
+# the Island that is seven permanent cards among twelve cards (the Bolts and the Breaking // Entering card are not permanent cards).
+# The ability does not trigger at the beginning of turn 5's upkeep (CR 603.4): nothing goes on the stack, and the Well is still an
+# artifact, not The Myriad Pools. At turn 5's main phase the Well draws no card and cannot tap for mana.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+The Everflowing Well
+Breaking // Entering
+Island
+Island
+Lightning Bolt
+Island
+Island
+Island
+Island x6
+Lightning Bolt x2
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Everflowing Well.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+? Bot1.Library.Count = 19
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Breaking // Entering.Cast(Bot1; Ability: Breaking)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 11
+[T5 Bot1.Upkeep]
+? Stack.Count = 0
+[T5 Bot1.Main1]
+? Bot1.Battlefield.The Everflowing Well.Types = Artifact
+? Bot1.Battlefield.The Everflowing Well.Transformed = (absent)
+
+[Expect]
+Bot1.Battlefield = Island; Mox Jet; Mox Ruby; Mox Sapphire; The Everflowing Well
+Bot1.Graveyard.Count = 11

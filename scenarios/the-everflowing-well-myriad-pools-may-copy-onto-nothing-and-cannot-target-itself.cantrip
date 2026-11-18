@@ -1,0 +1,66 @@
+# "Up to one other target permanent you control" (CR 115.1, 601.2c): The Myriad Pools itself is not a legal target (refused), and no
+# target at all is allowed - the trigger is put on the stack without one and nothing becomes a copy of the Faerie Miscreant, which then
+# enters and finds no other Faerie Miscreant to draw for. Bot2's Ornithopter is not Bot1's permanent either, and is refused.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+The Everflowing Well
+Breaking // Entering
+Faerie Miscreant
+Island
+Lightning Bolt
+Island
+Island
+Island
+Island x7
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Everflowing Well.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Breaking // Entering.Cast(Bot1; Ability: Breaking)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.The Myriad Pools.Activate
+Bot1.Hand.Faerie Miscreant.Cast
+! Bot1.Target(The Myriad Pools)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target()
+? Stack = The Myriad Pools; Faerie Miscreant
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Faerie Miscreant; Island; Mox Jet; Mox Ruby; Mox Sapphire; The Myriad Pools
+Bot2.Battlefield = Ornithopter
+Bot1.Hand.Count = 4

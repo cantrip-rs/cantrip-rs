@@ -1,0 +1,82 @@
+# The Myriad Pools: "Whenever you cast a permanent spell using mana produced by The Myriad Pools" (CR 601.2h, 106.3, 110.4a). On
+# turn 5 its {U} and Mox Sapphire's {U} are both in the pool: Faerie Miscreant is paid with the Moxen's (`Spend: U`), so no mana the
+# Pools produced was spent and nothing triggers; Unsummon is then paid with the Pools' {U} but is no permanent spell. On turn 7 a
+# Vodalian Mage, paid {2}{U} with the Pools' {U} and Mox Jet's and Mox Ruby's mana together, is a permanent spell cast with some of
+# its mana, however little (the Pools' mana is only a third of the cost): Island becomes a copy of it until end of turn.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+The Everflowing Well
+Breaking // Entering
+Faerie Miscreant
+Island
+Lightning Bolt
+Unsummon
+Vodalian Mage
+Island
+Island x7
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Everflowing Well.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Breaking // Entering.Cast(Bot1; Ability: Breaking)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 11
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.The Myriad Pools.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.ManaFrom = {U} Mox Sapphire; {U} The Myriad Pools
+Bot1.Hand.Faerie Miscreant.Cast(Spend: U)
+? Stack = Faerie Miscreant
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Unsummon.Cast(Bot2.Battlefield.Ornithopter)
+? Stack = Unsummon
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Count = 0
+[T7 Bot1.Main1]
+Bot1.Battlefield.The Myriad Pools.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vodalian Mage.Cast
+Bot1.Target(Island)
+? Stack = The Myriad Pools; Vodalian Mage
+Bot1.Pass
+Bot2.Pass
+? Stack = Vodalian Mage
+? Bot1.Battlefield.Vodalian Mage.Types = Creature
+? Bot1.Battlefield.Vodalian Mage.Power = 1
+? Bot1.Battlefield.Vodalian Mage.Subtypes = Merfolk; Wizard
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Faerie Miscreant; Mox Jet; Mox Ruby; Mox Sapphire; The Myriad Pools; Vodalian Mage; Vodalian Mage

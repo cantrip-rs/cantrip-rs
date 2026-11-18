@@ -1,0 +1,78 @@
+# The Everflowing Well: "When The Everflowing Well enters, mill two cards, then draw two cards" (CR 701.17a, 121.1) - turn 1 mills an
+# Island and a Lightning Bolt and draws two Islands. Breaking mills eight more on turn 3, seven Islands and a Lightning Bolt: with the
+# first Island that is eight permanent cards in the graveyard (CR 110.4a; the Bolts and the Breaking // Entering card are not permanent
+# cards), so "Descend 8" transforms it at the beginning of turn 5's upkeep (CR 701.27a) into The Myriad Pools, untapped and still
+# the same object. Its {T}: Add {U} casts a Faerie Miscreant: a permanent spell cast with mana The Myriad Pools produced (CR 106.3),
+# so Mox Ruby becomes a copy of that spell until end of turn (CR 707.2): a Faerie Miscreant, a 1/1 flier, that is already a
+# creature when the spell resolves, so the Miscreant's own "another creature named Faerie Miscreant" is true and it draws.
+# At the end of turn the Mox Ruby is itself again (CR 514.2).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+The Everflowing Well
+Breaking // Entering
+Faerie Miscreant
+Island
+Lightning Bolt
+Island
+Island
+Island
+Island x7
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Everflowing Well.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt; Island
+? Bot1.Library.Count = 19
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Breaking // Entering.Cast(Bot1; Ability: Breaking)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 11
+[T5 Bot1.Upkeep]
+? Stack = The Everflowing Well
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+? Bot1.Battlefield.The Myriad Pools.Tapped = false
+Bot1.Battlefield.The Myriad Pools.Activate
+Bot1.Hand.Faerie Miscreant.Cast
+Bot1.Target(Mox Ruby)
+? Stack = The Myriad Pools; Faerie Miscreant
+Bot1.Pass
+Bot2.Pass
+? Stack = Faerie Miscreant
+? Bot1.Battlefield.Faerie Miscreant.Power = 1
+? Bot1.Battlefield.Faerie Miscreant.Types = Creature
+? Bot1.Battlefield.Faerie Miscreant.Keywords = Flying
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+? Bot1.Battlefield = Faerie Miscreant; Faerie Miscreant; Island; Mox Jet; Mox Sapphire; The Myriad Pools
+[T6 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield = Faerie Miscreant; Island; Mox Jet; Mox Ruby; Mox Sapphire; The Myriad Pools
+Bot1.Battlefield.Mox Ruby.Types = Artifact
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 8

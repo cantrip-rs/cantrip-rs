@@ -1,0 +1,11 @@
+{
+  "name": "The Everflowing Well",
+  "manaCost": "{2}{U}",
+  "type": "Legendary Artifact",
+  "oracleText": "When The Everflowing Well enters, mill two cards, then draw two cards.\nDescend 8 — At the beginning of your upkeep, if there are eight or more permanent cards in your graveyard, transform The Everflowing Well.",
+  "backFace": {
+    "name": "The Myriad Pools",
+    "type": "Legendary Artifact Land",
+    "oracleText": "(Transforms from The Everflowing Well.)\n{T}: Add {U}.\nWhenever you cast a permanent spell using mana produced by The Myriad Pools, up to one other target permanent you control becomes a copy of that spell until end of turn."
+  }
+}
