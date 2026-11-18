@@ -1,0 +1,49 @@
+# Dog Walker (3/1 vigilance, Disguise {R/W}{R/W}): "When this creature is turned face up, create two tapped 1/1 white Dog creature tokens." (CR 702.168d). Bot1 casts it face down for {3} (Black Lotus) on turn 1. On turn 3 it is turned face up for exactly {R/W}{R/W}, paid with a red Mox and a white Mox (a
+# hybrid symbol takes either color), a special action (CR 116.2b) after which the pool is empty. The trigger makes exactly two Dogs, 1/1 white, and they enter tapped.
+# Dog Walker attacks the same turn: vigilance keeps it untapped, a 3/1 face up. The face-down permanent had no vigilance.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Dog Walker
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Dog Walker.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield.Dog Token = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; Spend: R, W)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+? Bot1.Battlefield.Dog Token#1.Tapped = true
+? Bot1.Battlefield.Dog Token#2.Tapped = true
+Bot1.Attack(Dog Walker > Bot2)
+[T3 Bot1.CombatDamage]
+
+[Expect]
+Bot1.Battlefield.Dog Walker.Power = 3
+Bot1.Battlefield.Dog Walker.Toughness = 1
+Bot1.Battlefield.Dog Walker.Tapped = false
+Bot1.Battlefield.Dog Token#1.Power = 1
+Bot1.Battlefield.Dog Token#1.Toughness = 1
+Bot1.Battlefield.Dog Token#1.Colors = White
+Bot1.Battlefield.Dog Token#1.Subtypes = Dog
+Bot1.Battlefield.Dog Token#1.Tapped = true
+Bot1.Battlefield.Dog Token#2.Tapped = true
+Bot1.Battlefield.Dog Token#3 = (absent)
+Bot2.Life = 17

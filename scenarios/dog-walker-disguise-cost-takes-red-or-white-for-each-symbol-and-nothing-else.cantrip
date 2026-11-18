@@ -1,0 +1,41 @@
+# Dog Walker's Disguise {R/W}{R/W} (CR 702.168d, 107.4e): each hybrid symbol is paid with red or with white, so two red mana turn it face up as two white would, but a black
+# mana pays neither: with a Mox Jet and a Mox Ruby the cost is refused (it is offered again once mana to spare is added, so the refusal is for want of the right colors), and with
+# two Mox Rubies it is paid and Dog Walker is turned face up, which makes its two Dogs.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Ruby
+Dog Walker
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Dog Walker.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; Spend: R, R)
+Bot1.Pass
+? Bot1.Mana = {B}
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Dog Walker.Power = 3
+Bot1.Battlefield.Dog Token#1.Tapped = true
+Bot1.Battlefield.Dog Token#2.Tapped = true
+Bot1.Battlefield.Dog Token#3 = (absent)

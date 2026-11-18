@@ -1,0 +1,11 @@
+{
+  "name": "Dog Walker",
+  "manaCost": "{R}{W}",
+  "type": "Creature — Human Citizen",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Vigilance\nDisguise {R/W}{R/W} (You may cast this card face down for {3} as a 2/2 creature with ward {2}. Turn it face up any time for its disguise cost.)\nWhen this creature is turned face up, create two tapped 1/1 white Dog creature tokens.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
