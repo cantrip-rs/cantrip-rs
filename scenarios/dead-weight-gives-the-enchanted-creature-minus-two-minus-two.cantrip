@@ -1,0 +1,34 @@
+# Dead Weight ({B} Aura, "Enchant creature. Enchanted creature gets -2/-2."): Bot2's Giant Spider (2/4) enchanted by Bot1 is exactly 0/2 - both halves of the -2/-2 are pinned, since
+# the creature survives it - while Bot1's own Memnite, not enchanted, keeps its 1/1 (CR 303.4, 613.4c). The Aura cannot enchant a noncreature (Mox Jet, CR 303.4a), and its {B}
+# is all it costs (the pool is empty right after).
+[Bot1 Deck]
+Mox Jet
+Memnite
+Dead Weight
+Swamp x20
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Giant Spider
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Giant Spider.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Dead Weight.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Dead Weight.Cast(Bot2.Battlefield.Giant Spider)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Dead Weight.AttachedTo = Giant Spider
+Bot2.Battlefield.Giant Spider.Power = 0
+Bot2.Battlefield.Giant Spider.Toughness = 2
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
