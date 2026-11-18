@@ -1,0 +1,51 @@
+# Subterranean Schooner: the Elves crew it and are its only target. Bot2 answers the attack trigger with Lightning Bolt on the Elves: they die, the target is illegal as the
+# ability resolves (CR 608.2b), and nothing explores: the Forest stays on top of Bot1's library (nothing is revealed). The Schooner, crewed and attacking, still hits for 3.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Subterranean Schooner
+Llanowar Elves
+Island
+Island
+Island
+Forest
+Island x11
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Subterranean Schooner.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Subterranean Schooner.Activate(Ability: Crew)
+Bot1.Choose(Llanowar Elves)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Subterranean Schooner > Bot2)
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Llanowar Elves
+Bot1.Library.Count = 12
+Bot1.Revealed = (absent)
+Stack.Count = 0

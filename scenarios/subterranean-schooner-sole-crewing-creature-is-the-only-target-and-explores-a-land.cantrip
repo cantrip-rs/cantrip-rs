@@ -1,0 +1,47 @@
+# Subterranean Schooner (3/4, crew 1: total power 1 or more, so the 0-power Ornithopter cannot crew alone): "Whenever this Vehicle attacks, target creature that crewed it this turn explores." (CR 701.44a, 702.122c.) Turn 3 the Llanowar
+# Elves crew it (the Ornithopter, power 0, is left out). The Schooner is a creature but crewed nothing, and the Ornithopter did not crew: the Elves are the one legal
+# target, so the trigger needs no choice. They explore: the Forest on top of Bot1's library is a land and goes to its hand, and the Elves get no counter, staying a 1/1. The Schooner hits for 3.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Subterranean Schooner
+Llanowar Elves
+Ornithopter
+Island
+Island
+Forest
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Subterranean Schooner.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Subterranean Schooner.Activate(Ability: Crew)
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Llanowar Elves)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Subterranean Schooner > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Llanowar Elves.Toughness = 1
+Bot1.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand = Island; Island; Forest
+Bot1.Library.Count = 11
+Stack.Count = 0

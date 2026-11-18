@@ -1,0 +1,54 @@
+# Subterranean Schooner: two creatures crew it on turn 3, the Llanowar Elves and an Elvish Mystic cast that turn (crewing is no {T} ability, so summoning sickness does
+# not matter, CR 702.122c). Both are targets; Bot1 picks the Mystic, which explores (CR 701.44a): the Lightning Bolt on top is a nonland, so the Mystic gets a +1/+1
+# counter (a 2/2) and Bot1 puts the Bolt into the graveyard. The Elves are untouched: still a 1/1 with no counter.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Subterranean Schooner
+Llanowar Elves
+Elvish Mystic
+Mox Emerald
+Island
+Lightning Bolt
+Mountain
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Subterranean Schooner.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Subterranean Schooner.Activate(Ability: Crew)
+Bot1.Choose(Llanowar Elves; Elvish Mystic)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Subterranean Schooner > Bot2)
+Bot1.Target(Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Elvish Mystic.Power = 2
+Bot1.Battlefield.Elvish Mystic.Toughness = 2
+Bot1.Battlefield.Elvish Mystic.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = (absent)
+Bot1.Graveyard = Lightning Bolt
+Bot1.Library.Count = 12
+Stack.Count = 0
