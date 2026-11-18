@@ -1,0 +1,68 @@
+# Suspicious Detonation ({4}{R}): "This spell costs {3} less to cast if you've sacrificed an artifact this turn." On turn 3 Bot1
+# sacrifices a Memnite to Krenko (declining the Goblin), then pays {1}{R} with the Mox Ruby and the Mox Jet and the pool is empty;
+# the Mountain and Mox Pearl stay untapped. The 4 damage kills Bot2's Fire Elemental (a 5/4).
+
+[Bot1 Deck]
+Mountain
+Mox Jet
+Mox Pearl
+Krenko, Baron of Tin Street
+Memnite
+Mox Ruby
+Island
+Suspicious Detonation
+Island x12
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Fire Elemental
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Krenko, Baron of Tin Street.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Fire Elemental.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Krenko, Baron of Tin Street.Activate
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Suspicious Detonation.Cast(Bot2.Battlefield.Fire Elemental)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Fire Elemental
+Bot1.Graveyard = Suspicious Detonation; Memnite
+Bot1.Battlefield.Mountain.Tapped = false
+Bot1.Battlefield.Mox Pearl.Tapped = false

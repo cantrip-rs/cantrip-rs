@@ -1,0 +1,68 @@
+# Suspicious Detonation ({4}{R}): "if you've sacrificed an artifact this turn" counts only an artifact, and only one you sacrificed.
+# In Bot1's turn-3 upkeep Bot1 sacrifices its Goblin Grappler (not an artifact) to its Goblin Bombardment, and in response Bot2
+# sacrifices its Memnite (an artifact, but Bot2's) to its Ashnod's Altar. Neither reduces the cost: in the main phase Bot1 floats
+# five mana (Mountain, Mox Ruby, Mox Jet, Sol Ring) and the spell takes all of it, {4}{R} - at {1}{R} three would be left.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Goblin Bombardment
+Goblin Grappler
+Mox Ruby
+Sol Ring
+Suspicious Detonation
+Mox Jet
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Ashnod's Altar
+Memnite
+Ornithopter
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Bombardment.Cast
+Bot1.Hand.Goblin Grappler.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Ashnod's Altar.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Goblin Bombardment.Activate(Bot2; Sacrifice: Goblin Grappler)
+Bot1.Pass
+Bot2.Battlefield.Ashnod's Altar.Activate(Sacrifice: Memnite)
+Bot2.Pass
+? Bot1.Graveyard = Goblin Grappler; Black Lotus
+? Bot2.Graveyard = Memnite
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Suspicious Detonation.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Suspicious Detonation; Goblin Grappler; Black Lotus
+Bot2.Graveyard = Ornithopter; Memnite
+Bot2.Life = 19
