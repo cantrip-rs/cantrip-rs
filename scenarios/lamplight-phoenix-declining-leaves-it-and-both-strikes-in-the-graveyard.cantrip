@@ -1,0 +1,48 @@
+# Lamplight Phoenix dies to the second Lightning Strike with cards worth 4 in the graveyard besides it, and Bot1 declines "you may exile it and
+# collect evidence 4": the Phoenix stays in the graveyard with both Strikes and the Black Lotus, and nothing is exiled.
+
+[Bot1 Deck]
+Lamplight Phoenix
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Lightning Strike
+Lightning Strike
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lamplight Phoenix.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Strike.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Strike.Cast(Bot1.Battlefield.Lamplight Phoenix)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Lamplight Phoenix; Lightning Strike; Lightning Strike; Black Lotus
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Lamplight Phoenix = (absent)
+Bot1.Graveyard = Lamplight Phoenix; Lightning Strike; Lightning Strike; Black Lotus
+Exile.Count = 0

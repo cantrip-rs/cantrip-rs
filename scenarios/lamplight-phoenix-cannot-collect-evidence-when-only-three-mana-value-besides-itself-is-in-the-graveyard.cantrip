@@ -1,0 +1,45 @@
+# Lamplight Phoenix dies to a Lightning Strike on turn 1 with only a Shock (mana value 1), that Strike (2) and the Black Lotus (0)
+# besides it in the graveyard: 3 in all. Its own mana value, 3, would reach 4 but it is exiled by the same payment and so cannot pay
+# for itself (CR 701.59a, 701.59b): collecting evidence 4 is not possible and nothing is asked (the trigger is gone from the stack with no
+# question outstanding), so the Phoenix stays in the graveyard.
+
+[Bot1 Deck]
+Lamplight Phoenix
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Shock
+Lightning Strike
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lamplight Phoenix.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Lightning Strike.Cast(Bot1.Battlefield.Lamplight Phoenix)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Lamplight Phoenix = (absent)
+Bot1.Graveyard = Lamplight Phoenix; Lightning Strike; Shock; Black Lotus
+Exile.Count = 0
