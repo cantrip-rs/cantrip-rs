@@ -1,0 +1,11 @@
+{
+  "name": "Waterwind Scout",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Merfolk Scout",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nWhen this creature enters, create a Map token. (It's an artifact with \"{1}, {T}, Sacrifice this token: Target creature you control explores. Activate only as a sorcery.\")",
+  "keywords": [
+    "Flying"
+  ]
+}

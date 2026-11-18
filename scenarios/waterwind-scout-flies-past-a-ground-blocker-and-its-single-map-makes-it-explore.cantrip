@@ -1,0 +1,54 @@
+# Waterwind Scout: a 2/2 flyer that creates one Map token when it enters (CR 111.10s), and only then (attacking makes no second
+# Map). On turn 3 it attacks past Bot2's Llanowar Elves (a creature without flying or reach cannot block a flyer, CR 702.9b), so
+# the attack deals 2; in main 2 the Map ({1}, {T}, sacrifice, sorcery speed) makes the Scout explore (CR 701.44): the revealed
+# Lightning Bolt is not a land, so the Scout gets a +1/+1 counter and Bot1 puts the Bolt into the graveyard.
+
+[Bot1 Deck]
+Waterwind Scout
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Island x3
+Island
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Llanowar Elves
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest x13
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Waterwind Scout.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Forest.Activate
+[T3 Bot1.Main1]
+? Bot1.Battlefield = Waterwind Scout; Map Token; Mox Jet; Mox Emerald; Mox Sapphire
+Bot1.Attack(Waterwind Scout > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield = Waterwind Scout; Map Token; Mox Jet; Mox Emerald; Mox Sapphire
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Map Token.Activate(Bot1.Battlefield.Waterwind Scout)
+Bot1.Accept
+
+[Expect]
+Turn = 3
+Bot2.Life = 18
+Bot1.Battlefield = Waterwind Scout; Mox Jet; Mox Emerald; Mox Sapphire
+Bot1.Battlefield.Waterwind Scout.Power = 3
+Bot1.Battlefield.Waterwind Scout.Toughness = 3
+Bot1.Battlefield.Waterwind Scout.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = Lightning Bolt
