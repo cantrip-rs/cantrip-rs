@@ -1,0 +1,56 @@
+# Melek, Reforged Researcher: when the characteristic-defining ability goes, power and toughness are 0 (CR 208.5, 613.1f, 613.1g). Turn 1
+# Bot1 bolts Bot2 and casts Melek (2/2). Turn 5 Giant Growth (the first instant, green only: it costs {G}) makes Melek 7/7 for the
+# turn (the Growth is a second instant in the graveyard: 4/4 + 3/3), then Fresh Start ({1}{U}, an instant with flash, not
+# discounted) gives -5/-0 and removes all abilities: base 0/0 + 3/3 - 5/0 = -2/3, and Melek lives.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Lightning Bolt
+Melek, Reforged Researcher
+Giant Growth
+Fresh Start
+Island x10
+
+[Bot2 Deck]
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Melek, Reforged Researcher.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Melek, Reforged Researcher.Power = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Melek, Reforged Researcher)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Melek, Reforged Researcher.Power = 7
+? Bot1.Battlefield.Melek, Reforged Researcher.Toughness = 7
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fresh Start.Cast(Melek, Reforged Researcher)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Melek, Reforged Researcher.Power = -2
+Bot1.Battlefield.Melek, Reforged Researcher.Toughness = 3
+Bot1.Graveyard = Giant Growth; Lightning Bolt; Black Lotus

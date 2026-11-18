@@ -1,0 +1,73 @@
+# Melek, Reforged Researcher (*/*): "Melek's power and toughness are each equal to twice the number of instant and sorcery cards in
+# your graveyard" - a characteristic-defining ability (CR 604.3, layer 7a). Turn 1: Bot1 pays a Black Lotus for a Lightning Bolt at
+# Bot2 and casts Melek with the rest; the graveyard holds the Lotus (an artifact, not counted) and the Bolt, so Melek is 2/2. Turn 2:
+# Bot2 bolts Bot1's face; that Bolt goes to Bot2's graveyard, which is not Bot1's, so Melek stays 2/2. Turn 3: Bot1 bolts Bot2 again
+# (4/4), and on turn 5 casts Think Twice (a third instant, 6/6).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Lightning Bolt
+Melek, Reforged Researcher
+Lightning Bolt
+Think Twice
+Island x10
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Melek, Reforged Researcher.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt; Black Lotus
+? Bot1.Battlefield.Melek, Reforged Researcher.Power = 2
+? Bot1.Battlefield.Melek, Reforged Researcher.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Lightning Bolt
+? Bot1.Battlefield.Melek, Reforged Researcher.Power = 2
+? Bot1.Battlefield.Melek, Reforged Researcher.Toughness = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Melek, Reforged Researcher.Power = 4
+? Bot1.Battlefield.Melek, Reforged Researcher.Toughness = 4
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Think Twice.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 14
+Bot1.Battlefield.Melek, Reforged Researcher.Power = 6
+Bot1.Battlefield.Melek, Reforged Researcher.Toughness = 6
+Bot1.Graveyard = Think Twice; Lightning Bolt; Lightning Bolt; Black Lotus
+Bot2.Graveyard = Lightning Bolt

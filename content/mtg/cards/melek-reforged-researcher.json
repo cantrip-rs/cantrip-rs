@@ -1,0 +1,8 @@
+{
+  "name": "Melek, Reforged Researcher",
+  "manaCost": "{3}{U}{R}",
+  "type": "Legendary Creature — Weird Detective",
+  "power": "*",
+  "toughness": "*",
+  "oracleText": "Melek's power and toughness are each equal to twice the number of instant and sorcery cards in your graveyard.\nThe first instant or sorcery spell you cast each turn costs {3} less to cast."
+}

@@ -1,0 +1,76 @@
+# Melek, Reforged Researcher: "The first instant or sorcery spell you cast each turn costs {3} less to cast" (CR 601.2f, 118.7): up to
+# {3} of generic mana, never a colored symbol, for Bot1's spells only. Turn 1: Bot1 bolts Bot2 (Melek is a 2/2) and casts Melek. Turn
+# 2: Bot2 cannot cast Feed the Flames ({3}{R}) with its one Mountain: the discount is not Bot2's. Turn 3: Think Twice ({1}{U}) is the
+# first spell of the turn, an instant, and costs {U}: Sapphire's mana pays it and leaves the pool empty (the {U} is no generic mana
+# to take off). Armageddon ({3}{W}, a sorcery) is the second and costs full price: refused with Pearl, Ruby and Jet's three mana.
+# Turn 5: a new turn, a new first spell: Angelic Edict ({4}{W}) costs {1}{W} exactly (3 less, not 4): Pearl and Jet's mana pays it
+# and leaves the pool empty, exiling Bot2's Memnite.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Lightning Bolt
+Melek, Reforged Researcher
+Think Twice
+Armageddon
+Angelic Edict
+Island x10
+
+[Bot2 Deck]
+Mountain
+Memnite
+Feed the Flames
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Melek, Reforged Researcher.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+! Bot2.Hand.Feed the Flames.Cast(Bot1.Battlefield.Melek, Reforged Researcher; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Think Twice.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Armageddon.Cast(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Angelic Edict.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot2.Battlefield = Mountain
+Exile = Memnite
+Bot1.Hand = Armageddon
+Bot1.Battlefield.Melek, Reforged Researcher.Power = 6
