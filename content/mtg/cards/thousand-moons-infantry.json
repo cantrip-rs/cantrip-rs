@@ -1,0 +1,8 @@
+{
+  "name": "Thousand Moons Infantry",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Untap this creature during each other player's untap step."
+}

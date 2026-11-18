@@ -1,0 +1,48 @@
+# Thousand Moons Infantry {2}{W} 2/4: "Untap this creature during each other player's untap step" (CR 502.3, 611.3a). Bot1 casts it and an Ornithopter on turn 1
+# (Mox Pearl, Mox Ruby and Mox Jet pay exactly {2}{W}); on turn 3 both attack and stay tapped. In Bot2's untap step on turn 4 the Infantry untaps while
+# Bot1's Ornithopter, which has no such rule, stays tapped. Bot2's own Ornithopter attacks on turn 4 and is still tapped in Bot1's turn 5 main phase:
+# the rule lets the Infantry untap, not other creatures, and does not touch Bot2's permanents. On turn 5 both attack again, with the same result on turn 6.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Thousand Moons Infantry
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Thousand Moons Infantry.Cast
+? Bot1.Mana =
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Thousand Moons Infantry > Bot2; Ornithopter > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Thousand Moons Infantry.Tapped = true
+? Bot1.Battlefield.Ornithopter.Tapped = true
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Thousand Moons Infantry.Tapped = false
+? Bot1.Battlefield.Ornithopter.Tapped = true
+Bot2.Attack(Ornithopter > Bot1)
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Attack(Thousand Moons Infantry > Bot2; Ornithopter > Bot2)
+[T6 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Thousand Moons Infantry.Tapped = false
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Ornithopter.Tapped = false
