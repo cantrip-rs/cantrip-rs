@@ -1,0 +1,6 @@
+{
+  "name": "Slime Against Humanity",
+  "manaCost": "{2}{G}",
+  "type": "Sorcery",
+  "oracleText": "Create a 0/0 green Ooze creature token with trample. Put X +1/+1 counters on it, where X is two plus the total number of cards you own in exile and in your graveyard that are Oozes or are named Slime Against Humanity.\nA deck can have any number of cards named Slime Against Humanity."
+}

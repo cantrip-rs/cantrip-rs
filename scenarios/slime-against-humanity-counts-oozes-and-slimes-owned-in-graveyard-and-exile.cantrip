@@ -1,0 +1,52 @@
+# Slime Against Humanity counts the cards its controller owns in their graveyard and in exile that are Oozes or are named Slime Against Humanity.
+# Bot1 exiles its own Primordial Ooze (Swords to Plowshares, 1), discards Necrotic Ooze (an Ooze, 1) and a second Slime Against Humanity (named, 1) to Faithless Looting; the Looting
+# itself and the Swords in the graveyard (neither an Ooze) count nothing. X = 2 + 3 = 5: a 5/5 Ooze token.
+
+[Bot1 Deck]
+Primordial Ooze
+Swords to Plowshares
+Faithless Looting
+Slime Against Humanity
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Jet
+Slime Against Humanity
+Necrotic Ooze
+Forest x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Primordial Ooze.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Primordial Ooze)
+Bot1.Pass
+Bot2.Pass
+? Exile = Primordial Ooze
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Slime Against Humanity; Necrotic Ooze)
+? Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Slime Against Humanity.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ooze Token.Power = 5
+Bot1.Battlefield.Ooze Token.Toughness = 5
+Bot1.Battlefield.Ooze Token.Counters.PlusOnePlusOne = 5
