@@ -1,0 +1,38 @@
+# Person of Interest's trigger is on the stack when Bot1 Lightning Bolts it with a fifth Mox Ruby. It dies, so there is nothing
+# to suspect (CR 400.7), but the Detective token is still made (its ruling: the two sentences are separate instructions).
+
+[Bot1 Deck]
+Mox Ruby x5
+Person of Interest
+Lightning Bolt
+Mountain x13
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Person of Interest.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Ruby#5.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Person of Interest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Person of Interest; Lightning Bolt
+Bot1.Battlefield.Detective Token.Power = 2
+Bot1.Battlefield.Detective Token.Keywords = (absent)
+Stack.Count = 0

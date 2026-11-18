@@ -1,0 +1,8 @@
+{
+  "name": "Person of Interest",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Human Rogue",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, suspect it. Create a 2/2 white and blue Detective creature token. (A suspected creature has menace and can't block.)"
+}
