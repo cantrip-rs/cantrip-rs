@@ -1,0 +1,48 @@
+# Miner's Guidewing: "When this creature dies, target creature you control explores." (CR 701.44a) Bot1's Guidewing is killed by its own
+# Lightning Bolt in Bot2's end step. The trigger's target must be a creature Bot1 controls: Bot2's Ornithopter and Bot1's Mox Pearl are
+# refused, Bot1's Memnite is chosen (not its Ornithopter). The nonland card on top (a second Memnite) is revealed: only the chosen Memnite gets
+# the +1/+1 counter (a 2/2), and Bot1, offered the card, puts it into the graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Miner's Guidewing
+Memnite
+Ornithopter
+Lightning Bolt
+Island
+Memnite
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Miner's Guidewing.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Miner's Guidewing.Keywords = Flying; Vigilance
+Bot2.Hand.Ornithopter.Cast
+[T2 Bot2.End]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Miner's Guidewing)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+! Bot1.Target(Bot1.Battlefield.Mox Pearl)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Accept
+
+[Expect]
+Bot1.Graveyard = Memnite; Miner's Guidewing; Lightning Bolt
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Power = 0
+Stack.Count = 0

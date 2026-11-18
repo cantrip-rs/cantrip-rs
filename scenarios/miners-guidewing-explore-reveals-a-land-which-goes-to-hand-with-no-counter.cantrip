@@ -1,0 +1,35 @@
+# Miner's Guidewing dies (Bolt, in Bot2's end step) and its trigger makes Bot1's Memnite explore (CR 701.44a): the top card is a land (Plains),
+# so it goes into Bot1's hand and the Memnite gets no counter, staying a 1/1. The Guidewing's controller is the one exploring, not Bot2.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Miner's Guidewing
+Memnite
+Lightning Bolt
+Island
+Island
+Plains
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Miner's Guidewing.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.End]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Miner's Guidewing)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Miner's Guidewing; Lightning Bolt
+Bot1.Hand = Island; Island; Plains
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Memnite.Power = 1
+Stack.Count = 0
