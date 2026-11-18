@@ -1,0 +1,63 @@
+# Loxodon Eavesdropper's "Whenever you draw your second card each turn" (CR 121.1, 603.2): on turn 1 (no draw step) Bot1 casts it, then Ancestral
+# Recall: its first card is Bot1's first this turn, its second is the second - one trigger, a 4/4 with vigilance - and its third gives nothing more.
+# On turn 2 Bot2 draws its own second card with Ancestral Recall off a Mox Sapphire: only Bot1's draws count for Bot1's Eavesdropper, which is not
+# pumped again. On turn 3 Bot1's single draw-step card gives nothing: a 3/3 with no vigilance that is tapped by attacking.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Sapphire
+Loxodon Eavesdropper
+Ancestral Recall
+Forest
+Forest
+Forest x13
+
+[Bot2 Deck]
+Mox Sapphire
+Ancestral Recall
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Loxodon Eavesdropper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Loxodon Eavesdropper.Power = 4
+? Bot1.Battlefield.Loxodon Eavesdropper.Toughness = 4
+? Bot1.Battlefield.Loxodon Eavesdropper.Keywords = Vigilance
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Loxodon Eavesdropper.Power = 3
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ancestral Recall.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Hand.Count = 9
+? Stack.Count = 0
+? Bot1.Battlefield.Loxodon Eavesdropper.Power = 3
+? Bot1.Battlefield.Loxodon Eavesdropper.Keywords = (absent)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Loxodon Eavesdropper.Power = 3
+Bot1.Attack(Loxodon Eavesdropper > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Loxodon Eavesdropper.Tapped = true
+Bot2.Life = 17
