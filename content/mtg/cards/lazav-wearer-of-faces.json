@@ -1,0 +1,8 @@
+{
+  "name": "Lazav, Wearer of Faces",
+  "manaCost": "{U}{B}",
+  "type": "Legendary Creature — Shapeshifter Detective",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever Lazav attacks, exile target card from a graveyard, then investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")\nWhenever you sacrifice a Clue, you may have Lazav become a copy of a creature card exiled with it until end of turn."
+}

@@ -1,0 +1,32 @@
+# Lazav, Wearer of Faces: "exile target card from a graveyard" needs a target. With both graveyards empty the attack trigger
+# is not put on the stack, so there is no Clue either (CR 603.3d); Bot2 takes 2.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Lazav, Wearer of Faces
+Island x12
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lazav, Wearer of Faces.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lazav, Wearer of Faces > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Exile.Count = 0
+Bot1.Battlefield.Count = 3

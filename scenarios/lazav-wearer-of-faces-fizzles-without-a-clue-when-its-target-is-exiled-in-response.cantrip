@@ -1,0 +1,53 @@
+# Lazav, Wearer of Faces: "exile target card from a graveyard, then investigate". With its one target gone the ability does
+# nothing (CR 608.2b), so no Clue is made. Bot1 targets its Ornithopter; in response Bot2's Tormod's Crypt exiles Bot1's graveyard.
+# Nothing is exiled with Lazav and Bot1 has no Clue. (The positive control is the scenario where the Ornithopter is exiled.)
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Lazav, Wearer of Faces
+Ornithopter
+Lightning Bolt
+Island
+Island x10
+
+[Bot2 Deck]
+Tormod's Crypt
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lazav, Wearer of Faces.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lazav, Wearer of Faces > Bot2)
+Bot1.Target(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Exile.Count = 2
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Lightning Bolt; Ornithopter
+Bot1.Battlefield.Clue Token = (absent)
+Bot1.Battlefield.Lazav, Wearer of Faces.Power = 2
+Bot2.Life = 18

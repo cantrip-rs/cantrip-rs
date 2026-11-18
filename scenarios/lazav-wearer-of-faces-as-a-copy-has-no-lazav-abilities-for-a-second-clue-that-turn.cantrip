@@ -1,0 +1,77 @@
+# Lazav, Wearer of Faces: it exiles Bot2's Ornithopter from Bot2's graveyard ("target card from a graveyard", any graveyard) and
+# investigates; Thraben Inspector makes a second Clue. Sacrificing the first Clue puts the Lazav trigger on the stack with the
+# Clue's draw (2 items); Lazav becomes the Ornithopter (CR 707.2), the first draw still waiting (1 item). A copy has only the
+# copied card's text, so sacrificing the second Clue the same turn adds only its draw (2 items, not 3): nothing is asked.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Black Lotus
+Lazav, Wearer of Faces
+Thraben Inspector
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lazav, Wearer of Faces.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Ornithopter; Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Thraben Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clue Token.Subtypes = Clue
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lazav, Wearer of Faces > Bot2)
+Bot1.Target(Bot2.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+[T3 Bot1.Main2]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Clue Token#1.Activate
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter)
+? Bot1.Battlefield.Lazav, Wearer of Faces = (absent)
+? Stack.Count = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Clue Token.Activate
+? Stack.Count = 2
+
+[Expect]
+Exile = Ornithopter

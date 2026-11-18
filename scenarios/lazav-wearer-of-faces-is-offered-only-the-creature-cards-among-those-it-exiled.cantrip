@@ -1,0 +1,58 @@
+# Lazav, Wearer of Faces: "a creature card exiled with it". Over two attacks it exiles the Ornithopter (turn 3) and then the
+# Lightning Bolt card (turn 5). Sacrificing a Clue offers only the creature card: the Bolt cannot be chosen (a refusal), the
+# Ornithopter can, and Lazav becomes a 0/2 Ornithopter. (Both cards stay exiled with it.)
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Lazav, Wearer of Faces
+Ornithopter
+Lightning Bolt
+Island
+Island x10
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lazav, Wearer of Faces.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lazav, Wearer of Faces > Bot2)
+Bot1.Target(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Lazav, Wearer of Faces > Bot2)
+Bot1.Target(Bot1.Graveyard.Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt; Ornithopter
+[T5 Bot1.Main2]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Clue Token.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Ornithopter)
+
+[Expect]
+Exile = Lightning Bolt; Ornithopter
+Bot1.Battlefield.Lazav, Wearer of Faces = (absent)
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Life = 16

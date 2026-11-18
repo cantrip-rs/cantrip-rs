@@ -1,0 +1,61 @@
+# Lazav, Wearer of Faces (turn 3): attacking, it exiles the Ornithopter from Bot1's graveyard (a creature card, a 0/2 flyer) and
+# investigates (CR 701.16a). In the second main phase Bot1 sacrifices that Clue, and Lazav's second ability lets it become a copy
+# of the exiled Ornithopter (CR 707.2): Lazav's name and 2/3 are replaced by the Ornithopter's 0/2 with flying, and the Clue's
+# draw still happens. Lazav stays the same object (CR 707.4), so the Ornithopter stays in exile with it.
+# At the end of the turn the copy effect ends (CR 514.2) and it is Lazav, Wearer of Faces again, 2/3 and damaged by nothing.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Lazav, Wearer of Faces
+Ornithopter
+Lightning Bolt
+Island
+Island x10
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lazav, Wearer of Faces.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lazav, Wearer of Faces > Bot2)
+Bot1.Target(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+? Bot1.Battlefield.Clue Token.Subtypes = Clue
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Clue Token.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter)
+? Bot1.Battlefield.Lazav, Wearer of Faces = (absent)
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Exile = Ornithopter
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Lazav, Wearer of Faces.Power = 2
+
+[Expect]
+Bot2.Life = 18
+Exile = Ornithopter
+Bot1.Battlefield.Lazav, Wearer of Faces.Toughness = 3

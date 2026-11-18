@@ -1,0 +1,67 @@
+# Lazav, Wearer of Faces: "a creature card exiled with it" is one card. It exiles Bot1's Memnite (turn 3) and Bot2's Ornithopter
+# (turn 5, from Bot2's graveyard). Sacrificing a Clue, Bot1 cannot choose both (a refusal); choosing the Memnite makes Lazav a 1/1
+# Memnite, and both cards stay exiled.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Lazav, Wearer of Faces
+Memnite
+Lightning Bolt
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lazav, Wearer of Faces.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lazav, Wearer of Faces > Bot2)
+Bot1.Target(Bot1.Graveyard.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Exile = Memnite
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Lazav, Wearer of Faces > Bot2)
+Bot1.Target(Bot2.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Memnite; Ornithopter
+[T5 Bot1.Main2]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Clue Token#1.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Memnite; Ornithopter)
+Bot1.Choose(Memnite)
+
+[Expect]
+Exile = Memnite; Ornithopter
+Bot1.Battlefield.Lazav, Wearer of Faces = (absent)
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1

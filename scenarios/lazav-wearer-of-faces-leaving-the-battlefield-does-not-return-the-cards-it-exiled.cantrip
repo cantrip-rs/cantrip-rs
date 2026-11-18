@@ -1,0 +1,50 @@
+# Lazav, Wearer of Faces: its attack trigger exiles for good, not "until Lazav leaves the battlefield" (CR 610.3 does not apply).
+# It exiles the Ornithopter on turn 3; on turn 4 Bot2 kills Lazav with a Lightning Bolt (3 damage to a 2/3). The Ornithopter stays in
+# exile and does not come back to the graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Lazav, Wearer of Faces
+Ornithopter
+Lightning Bolt
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lazav, Wearer of Faces.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lazav, Wearer of Faces > Bot2)
+Bot1.Target(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Lazav, Wearer of Faces)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Lazav, Wearer of Faces = (absent)
+Bot1.Graveyard = Lazav, Wearer of Faces; Lightning Bolt
+Exile = Ornithopter

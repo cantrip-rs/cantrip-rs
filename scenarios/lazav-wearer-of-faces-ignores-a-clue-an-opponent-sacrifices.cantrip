@@ -1,0 +1,72 @@
+# Lazav, Wearer of Faces: "Whenever you sacrifice a Clue" is about Bot1's Clues. With the Ornithopter exiled with Lazav on
+# turn 3, Bot2 sacrifices its own Clue (from Thraben Inspector) during the second main phase: no trigger of Lazav's goes on the
+# stack (only the Clue's own draw ability is there) and Lazav stays Lazav. (The positive control is
+# the scenario where Bot1 sacrifices its Clue.)
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Lazav, Wearer of Faces
+Ornithopter
+Lightning Bolt
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Thraben Inspector
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lazav, Wearer of Faces.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Thraben Inspector.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Clue Token.Subtypes = Clue
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lazav, Wearer of Faces > Bot2)
+Bot1.Target(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+[T3 Bot1.Main2]
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Clue Token.Activate
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Clue Token = (absent)
+
+[Expect]
+Exile = Ornithopter
+Bot1.Battlefield.Lazav, Wearer of Faces.Power = 2
+Bot1.Battlefield.Clue Token.Subtypes = Clue
