@@ -1,0 +1,40 @@
+# Alquist Proft, Master Sleuth: the ability has {T} in its cost, so it is refused while Alquist is summoning sick (CR 302.6, 602.5a). Turn 1 Bot1 casts it with Mox Pearl, Mox Sapphire and
+# Mox Jet, then plays a Plains and Black Lotus and holds {W}{U}{U}{U} in the pool with a Clue in play: X = 0 would cost {W}{U}{U} and every other part of the cost could be paid, but not the {T}.
+# The positive case, on the next turn, is in the sibling scenario.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Alquist Proft, Master Sleuth
+Black Lotus
+Plains
+Island
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Alquist Proft, Master Sleuth.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clue Token.Subtypes = Clue
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+? Bot1.Mana = {W}{U}{U}{U}
+! Bot1.Battlefield.Alquist Proft, Master Sleuth.Activate(X: 0)
+
+[Expect]
+Bot1.Battlefield.Clue Token.Subtypes = Clue
+Bot1.Battlefield.Alquist Proft, Master Sleuth.Tapped = false

@@ -1,0 +1,60 @@
+# Alquist Proft, Master Sleuth: "{X}{W}{U}{U}" pays for the announced X and no more. Turn 2 Bot2's two Disenchants destroy the Mox Sapphire and Mox Jet on a Black Lotus and a Plains, so on turn 3 Bot1 has only Mox Pearl and its own
+# Black Lotus: {U}{U}{U} and {W}, four mana. X = 1 costs {1}{W}{U}{U}, exactly the pool (empty after, so the cost is no less), and the Clue is sacrificed: one card drawn and one life gained (a 21), not two.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Alquist Proft, Master Sleuth
+Black Lotus
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Plains
+Disenchant
+Disenchant
+Plains x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Alquist Proft, Master Sleuth.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Mox Sapphire)
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Mox Jet)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana = {W}{U}{U}{U}
+Bot1.Battlefield.Alquist Proft, Master Sleuth.Activate(X: 1)
+Bot1.Choose(Clue Token)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 21
+Bot1.Hand.Count = 4
+Bot1.Battlefield.Clue Token = (absent)

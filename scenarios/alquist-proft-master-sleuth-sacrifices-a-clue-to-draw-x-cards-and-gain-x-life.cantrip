@@ -1,0 +1,47 @@
+# Alquist Proft, Master Sleuth {1}{W}{U} 3/3: "When Alquist Proft enters, investigate." and "{X}{W}{U}{U}, {T}, Sacrifice a Clue: You draw X cards and gain X life." Turn 1 Bot1's Moxen
+# cast it and the Clue arrives. Turn 3 Black Lotus (three blue), Mox Pearl (white) and Mox Sapphire (blue) pay X = 2 exactly - {2}{W}{U}{U}, five mana, the pool empty after - and the
+# Clue is sacrificed: Bot1 draws two cards and gains two life (CR 107.3, 121.1, 119.1). X is the announced value: one more or fewer would draw and gain a different amount.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Alquist Proft, Master Sleuth
+Black Lotus
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Alquist Proft, Master Sleuth.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clue Token.Subtypes = Clue
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Alquist Proft, Master Sleuth.Activate(X: 2)
+Bot1.Choose(Clue Token)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot1.Hand.Count = 5
+Bot1.Battlefield.Clue Token = (absent)
+Bot1.Battlefield.Alquist Proft, Master Sleuth.Tapped = true

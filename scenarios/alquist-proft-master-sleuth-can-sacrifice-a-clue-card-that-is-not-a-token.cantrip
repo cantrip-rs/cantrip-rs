@@ -1,0 +1,55 @@
+# Alquist Proft, Master Sleuth: "Sacrifice a Clue" is any Clue artifact, a token or not (CR 701.21a, 111.10f; the ruling: "you can sacrifice Wrench to pay for ..."). Bot1 has the Clue token from Alquist's enters
+# trigger and, on turn 3, Candy Trail, a Food Clue artifact card; Mox Jet pays Candy Trail's {1}, its scry 2 keeps both Islands on top, and Black Lotus (UUU) and Mox Pearl (W) pay X = 1 for {1}{W}{U}{U}.
+# Bot1 chooses to sacrifice Candy Trail: it goes to the graveyard and the Clue token stays, one card drawn and one life gained.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Alquist Proft, Master Sleuth
+Black Lotus
+Candy Trail
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Alquist Proft, Master Sleuth.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Candy Trail.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island; Island | )
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana = {W}{U}{U}{U}
+Bot1.Battlefield.Alquist Proft, Master Sleuth.Activate(X: 1)
+Bot1.Choose(Candy Trail)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 21
+Bot1.Battlefield.Clue Token.Subtypes = Clue
+Bot1.Graveyard = Candy Trail; Black Lotus
+Bot1.Battlefield.Candy Trail = (absent)

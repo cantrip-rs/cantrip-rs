@@ -1,0 +1,56 @@
+# Alquist Proft, Master Sleuth: "{X}{W}{U}{U}" needs a white. Turn 2 Bot2's Disenchant destroys Bot1's Mox Pearl, its only white source (Bot2 pays with Black Lotus and a Plains). On turn 3 Bot1 taps Black Lotus
+# for blue (UUU), Mox Sapphire and Mox Jet: five mana with {U}{U} among it, but no {W}: X = 1 and X = 0 are refused, the Clue and Alquist untouched.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Alquist Proft, Master Sleuth
+Black Lotus
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Plains
+Disenchant
+Disenchant
+Plains x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Alquist Proft, Master Sleuth.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Mox Pearl)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana = {U}{U}{U}{U}{B}
+! Bot1.Battlefield.Alquist Proft, Master Sleuth.Activate(X: 1; Mana: short)
+! Bot1.Battlefield.Alquist Proft, Master Sleuth.Activate(X: 0; Mana: short)
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Clue Token.Subtypes = Clue
+Bot1.Battlefield.Alquist Proft, Master Sleuth.Tapped = false
+Bot1.Graveyard = Black Lotus; Mox Pearl

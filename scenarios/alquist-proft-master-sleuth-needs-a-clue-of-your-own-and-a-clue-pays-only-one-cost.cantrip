@@ -1,0 +1,57 @@
+# Alquist Proft, Master Sleuth: "Sacrifice a Clue" is a cost paid from the Clues Bot1 controls (CR 701.21a, 602.2b), and a Clue sacrificed once cannot pay a second cost (the ruling). Bot2's Thraben Inspector makes a Clue on turn 2. On
+# turn 3 Bot1, holding Alquist untapped, Black Lotus (UUU) and Mox Pearl (W) with plenty of mana, sacrifices its own Clue to the Clue's own ability ({2} from Mox Sapphire and Mox Jet: it draws): Alquist is then refused
+# although the pool could pay X = 0 ({W}{U}{U}), because the only Clue left is Bot2's.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Alquist Proft, Master Sleuth
+Black Lotus
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Plains
+Thraben Inspector
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Alquist Proft, Master Sleuth.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Thraben Inspector.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Clue Token.Subtypes = Clue
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Clue Token.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clue Token = (absent)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana = {W}{U}{U}{U}
+! Bot1.Battlefield.Alquist Proft, Master Sleuth.Activate(X: 0)
+
+[Expect]
+Bot1.Battlefield.Alquist Proft, Master Sleuth.Tapped = false
+Bot2.Battlefield.Clue Token.Subtypes = Clue

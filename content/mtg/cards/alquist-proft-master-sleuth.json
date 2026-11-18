@@ -1,0 +1,11 @@
+{
+  "name": "Alquist Proft, Master Sleuth",
+  "manaCost": "{1}{W}{U}",
+  "type": "Legendary Creature — Human Detective",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Vigilance\nWhen Alquist Proft enters, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")\n{X}{W}{U}{U}, {T}, Sacrifice a Clue: You draw X cards and gain X life.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
