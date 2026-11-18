@@ -1,0 +1,6 @@
+{
+  "name": "Join the Dead",
+  "manaCost": "{1}{B}{B}",
+  "type": "Instant",
+  "oracleText": "Target creature gets -5/-5 until end of turn.\nDescend 4 — That creature gets -10/-10 until end of turn instead if there are four or more permanent cards in your graveyard."
+}

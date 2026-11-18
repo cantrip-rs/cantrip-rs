@@ -1,0 +1,24 @@
+# Join the Dead ({1}{B}{B} instant): "Target creature gets -5/-5 until end of turn." Any creature is a legal target (CR 115.1), your own Memnite included, which dies (CR 704.5f) and goes to
+# Bot1's graveyard; a noncreature permanent (Mox Jet) and a player are not. With nothing in the graveyard but the spell itself, the -5/-5 is the one that applies.
+[Bot1 Deck]
+Black Lotus
+Join the Dead
+Memnite
+Mox Jet
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Hand.Join the Dead.Cast(Bot1.Battlefield.Mox Jet)
+! Bot1.Hand.Join the Dead.Cast(Bot2)
+Bot1.Hand.Join the Dead.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Memnite; Join the Dead; Black Lotus
+Bot1.Battlefield = Mox Jet

@@ -1,0 +1,65 @@
+# Join the Dead ({1}{B}{B} instant): "Target creature gets -5/-5 until end of turn. Descend 4 - That creature gets -10/-10 until end of turn instead if there are four or more permanent
+# cards in your graveyard" (CR 207.2c, 700.11, 614.1a). Bot1's graveyard on turn 3: a Black Lotus sacrificed on turn 1 for {R} to cast Faithless Looting, the Looting (not a permanent card)
+# and the two Islands it discarded, then a second Black Lotus sacrificed for {B}{B}{B}: exactly four permanent cards. Two Giant Growths make Bot2's Elder Gargaroth a 12/12, so the
+# result pins the amount exactly: -10/-10 leaves a 2/2 (-5/-5 would leave 7/7, -9/-9 a 3/3, -11/-11 a 1/1), and only one of the two effects is applied ("instead").
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Black Lotus
+Black Lotus
+Faithless Looting
+Join the Dead
+Giant Growth
+Island
+Island
+Giant Growth
+Island x15
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Elder Gargaroth
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Island; Island)
+? Bot1.Graveyard.Count = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Elder Gargaroth.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot2.Battlefield.Elder Gargaroth)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Giant Growth.Cast(Bot2.Battlefield.Elder Gargaroth)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Elder Gargaroth.Power = 12
+? Bot2.Battlefield.Elder Gargaroth.Toughness = 12
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Join the Dead.Cast(Bot2.Battlefield.Elder Gargaroth)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Elder Gargaroth.Power = 2
+? Bot2.Battlefield.Elder Gargaroth.Toughness = 2
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Elder Gargaroth.Power = 6
+? Bot2.Battlefield.Elder Gargaroth.Toughness = 6
+[Expect]
+Bot1.Graveyard.Count = 8
