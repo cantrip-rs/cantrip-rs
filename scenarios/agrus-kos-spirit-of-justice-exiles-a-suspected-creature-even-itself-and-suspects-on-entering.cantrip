@@ -1,0 +1,43 @@
+# Agrus Kos's enter trigger can target Agrus Kos himself (any creature): Bot1 suspects him on turn 1 (menace, can't block). On turn 3 his attack trigger targets him again; he is suspected, so he is exiled
+# (the choice is checked as the ability resolves) before combat damage, and Bot2 takes none.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Agrus Kos, Spirit of Justice
+Island x15
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Agrus Kos, Spirit of Justice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Agrus Kos, Spirit of Justice)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Agrus Kos, Spirit of Justice.Suspected = true
+? Bot1.Battlefield.Agrus Kos, Spirit of Justice.Keywords = CantBlock; DoubleStrike; Menace; Vigilance
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Agrus Kos, Spirit of Justice > Bot2)
+Bot1.Target(Agrus Kos, Spirit of Justice)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Agrus Kos, Spirit of Justice
+Bot2.Life = 20
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby

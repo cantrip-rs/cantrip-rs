@@ -1,0 +1,57 @@
+# Agrus Kos, "Whenever Agrus Kos enters or attacks, choose up to one target creature. If it's suspected, exile it. Otherwise, suspect it." Turn 1: Agrus Kos enters and Bot1 chooses no target (up to one): nothing happens.
+# Turn 3: it attacks (double strike, vigilance: 2 damage twice, and it stays untapped) and its trigger suspects Bot2's Memnite (menace, can't block). Turn 5: it attacks again, Memnite is already suspected, so it is exiled.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Agrus Kos, Spirit of Justice
+Island x15
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Agrus Kos, Spirit of Justice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Agrus Kos, Spirit of Justice.Suspected = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Agrus Kos, Spirit of Justice > Bot2)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Suspected = true
+? Bot2.Battlefield.Memnite.Keywords = CantBlock; Menace
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+? Bot1.Battlefield.Agrus Kos, Spirit of Justice.Tapped = false
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Agrus Kos, Spirit of Justice > Bot2)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Exile = Memnite
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 12
+Bot2.Battlefield.Count = 0
+Exile = Memnite
