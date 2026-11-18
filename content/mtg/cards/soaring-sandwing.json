@@ -1,0 +1,11 @@
+{
+  "name": "Soaring Sandwing",
+  "manaCost": "{4}{W}{W}",
+  "type": "Creature — Dinosaur",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Flying\nWhen this creature enters, you gain 3 life.\nPlainscycling {2} ({2}, Discard this card: Search your library for a Plains card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Flying"
+  ]
+}

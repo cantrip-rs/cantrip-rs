@@ -1,0 +1,44 @@
+# Soaring Sandwing, {4}{W}{W} 3/5 flying (two Black Lotuses paying the six white): "When this creature enters, you gain 3 life" makes Bot1's life 23
+# (CR 603.6a). On turn 3 it attacks (3 damage) and Bot2, at 20, is at 17; Balduvian Bears cannot block a creature with flying (CR 702.9b), and the
+# Sandwing's own toughness 5 and flying are in the dump.
+
+[Bot1 Deck]
+Black Lotus x2
+Soaring Sandwing
+Plains x20
+
+[Bot2 Deck]
+Balduvian Bears
+Mox Emerald
+Mox Ruby
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Soaring Sandwing.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Balduvian Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Soaring Sandwing > Bot2)
+! Bot2.Block(Balduvian Bears > Soaring Sandwing)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 23
+Bot2.Battlefield.Balduvian Bears.Damage = 0
+Bot1.Battlefield.Soaring Sandwing.Power = 3
+Bot1.Battlefield.Soaring Sandwing.Toughness = 5
+Bot1.Battlefield.Soaring Sandwing.Keywords = Flying
