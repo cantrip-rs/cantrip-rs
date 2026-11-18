@@ -1,0 +1,57 @@
+# Sharp-Eyed Rookie: the intervening "if" (CR 603.4) is checked again as the trigger resolves, with the Rookie gone by then (Bot2's Lightning Bolt kills it in
+# response): its power and toughness are as it last existed (CR 608.2h), so the 4/1 Lightning Elemental is still greater and the ability resolves. There is no
+# Rookie to put the counter on, but Bot1 still investigates: a Clue.
+
+[Bot1 Deck]
+Sharp-Eyed Rookie
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Lightning Elemental
+Giant Growth
+Forest x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sharp-Eyed Rookie.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lightning Elemental.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Sharp-Eyed Rookie)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Sharp-Eyed Rookie
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Clue Token.Token = true
+Bot1.Graveyard = Sharp-Eyed Rookie

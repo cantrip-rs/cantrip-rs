@@ -1,0 +1,51 @@
+# Sharp-Eyed Rookie: the intervening "if" is checked again as the ability resolves (CR 603.4). Lightning Elemental (4/1) enters and triggers it; in response Giant Growth makes the Rookie 5/5, so the Elemental (4/1) is no longer greater in either: no counter and no Clue.
+
+[Bot1 Deck]
+Sharp-Eyed Rookie
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Lightning Elemental
+Giant Growth
+Forest x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sharp-Eyed Rookie.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lightning Elemental.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Sharp-Eyed Rookie)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sharp-Eyed Rookie.Power = 5
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Sharp-Eyed Rookie.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Sharp-Eyed Rookie.Power = 5
+Bot1.Battlefield.Count = 7

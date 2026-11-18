@@ -1,0 +1,60 @@
+# Sharp-Eyed Rookie (2/2) does nothing when the creature entering is not greater in power or toughness than it (CR 603.4): itself (equal to itself), Grizzly Bears (2/2, equal), Savannah Lions (2/1, less), or is greater but not under its controller's control (the opponent's Hill Giant 3/3). No counter, no Clue.
+
+[Bot1 Deck]
+Sharp-Eyed Rookie
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Grizzly Bears
+Savannah Lions
+Forest x12
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Hill Giant
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sharp-Eyed Rookie.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Hill Giant.Power = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Sharp-Eyed Rookie.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Sharp-Eyed Rookie.Power = 2
+Bot1.Battlefield.Count = 8
