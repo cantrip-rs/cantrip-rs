@@ -1,0 +1,54 @@
+# Case of the Burning Masks: "To solve - Three or more sources you controlled dealt damage this turn" (CR 719.3a, 120.2) counts sources, not damage events (the rulings): on turn 3 Bot1's Twinscroll Shaman
+# (double strike) deals combat damage twice, and after combat the Case's enters trigger deals 3 to Bot2's Memnite. That is three damage events from only two sources, so the Case is not solved at the end step
+# (scenario with three different sources: case-of-the-burning-masks-solves-with-three-sources-then-sacrifices-to-play-one-of-three-exiled-cards).
+
+[Bot1 Deck]
+Black Lotus
+Twinscroll Shaman
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Case of the Burning Masks
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Memnite
+Mountain x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Twinscroll Shaman.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Twinscroll Shaman > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Case of the Burning Masks.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite
+[T3 Bot1.End]
+[T4 Bot2.Upkeep]
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Case of the Burning Masks.Solved = (absent)
