@@ -1,0 +1,55 @@
+# Dauntless Dismantler with X = 0: "{X}{X}{W}" is just {W} (CR 107.3a), and "each artifact with mana value 0" is the Moxen and
+# Bot2's Ornithopter (an artifact creature), from both sides of the table. Bot1's Sol Ring (mana value 1), the Plains and
+# Bot2's Island, which are not artifacts, stay. Bot2's two artifacts entered tapped; they are destroyed all the same.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Sol Ring
+Dauntless Dismantler
+Plains
+Plains
+Plains x14
+
+[Bot2 Deck]
+Mox Pearl
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dauntless Dismantler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 6
+? Bot2.Battlefield.Count = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Dauntless Dismantler.Activate(X: 0)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 2
+Bot1.Battlefield.Sol Ring.ManaValue = 1
+Bot2.Battlefield = Island

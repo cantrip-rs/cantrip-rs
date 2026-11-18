@@ -1,0 +1,72 @@
+# Dauntless Dismantler: "{X}{X}{W}, Sacrifice this creature: Destroy each artifact with mana value X." (CR 701.8a, 202.3, 107.3)
+# Bot1 casts it in turn 1 with Mox Pearl and Mox Jet and its own Sol Ring (mana value 1) with Mox Ruby; Bot2 has a Mox Pearl
+# (0, tapped), a Sol Ring (1, enters tapped) and, by turn 4, a Mind Stone (2). With X = 1 ({1}{1}{W}: all three Moxen, nothing left in the pool)
+# both Sol Rings are destroyed, from both sides of the table, and the Moxen (one below) and the Mind Stone (one above) stay,
+# as does the Island. Once the Dismantler is gone (it was sacrificed as a cost) Bot2's next artifact enters untapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Sol Ring
+Dauntless Dismantler
+Plains x2
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl
+Sol Ring
+Mind Stone
+Mox Jet
+Island x3
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dauntless Dismantler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Sol Ring.Tapped = true
+[T4 Bot2.Main1]
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Hand.Mind Stone.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Count = 5
+? Bot2.Battlefield.Count = 4
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Dauntless Dismantler.Activate(X: 1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Count = 3
+? Bot2.Battlefield.Count = 3
+[T6 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Mox Jet.Tapped = false

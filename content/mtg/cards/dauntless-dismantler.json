@@ -1,0 +1,8 @@
+{
+  "name": "Dauntless Dismantler",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Artificer",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Artifacts your opponents control enter tapped.\n{X}{X}{W}, Sacrifice this creature: Destroy each artifact with mana value X."
+}
