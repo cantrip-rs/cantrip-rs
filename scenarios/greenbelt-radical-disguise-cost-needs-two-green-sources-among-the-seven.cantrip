@@ -1,0 +1,62 @@
+# Greenbelt Radical (Disguise {5}{G}{G}): turned face up only with two green sources among the seven. On turn 3 Bot1 has seven
+# sources (six Mox Jets and one Mox Emerald), enough in all but one green short: the disguise cost is refused (CR 702.168d,
+# 116.2b) and the Radical stays face down, a 2/2. A Forest played on turn 5 is the second green: it is then turned face up
+# with exactly seven of the nine sources, and is a 5/5 with its own counter.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Emerald
+Greenbelt Radical
+Mox Jet
+Forest
+Forest x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Greenbelt Radical.Cast(Ability: Disguise)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Greenbelt Radical.Power = 5
+Bot1.Battlefield.Greenbelt Radical.Counters.PlusOnePlusOne = 1

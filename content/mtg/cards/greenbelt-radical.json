@@ -1,0 +1,8 @@
+{
+  "name": "Greenbelt Radical",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Centaur Citizen",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Disguise {5}{G}{G} (You may cast this card face down for {3} as a 2/2 creature with ward {2}. Turn it face up any time for its disguise cost.)\nWhen this creature is turned face up, put a +1/+1 counter on each creature you control. Creatures you control gain trample until end of turn."
+}

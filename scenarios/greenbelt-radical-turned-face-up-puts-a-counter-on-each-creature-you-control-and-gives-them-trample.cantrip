@@ -1,0 +1,80 @@
+# Greenbelt Radical (Disguise {5}{G}{G}): cast face down on turn 1 (a Black Lotus pays the {3}) beside Bot1's Llanowar Elves, and
+# turned face up on turn 5 for exactly {5}{G}{G} (seven sources: the pool is empty right after, and with six of them on turn 3
+# it is refused). "When this creature is turned face up, put a +1/+1 counter on each creature you control. Creatures you
+# control gain trample until end of turn": the Radical itself (5/5) and the Elves (2/2) each get a counter and trample, while
+# Bot2's Llanowar Elves get neither. On turn 7 the trample is gone and the counters stay.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Jet
+Black Lotus
+Llanowar Elves
+Greenbelt Radical
+Mox Jet
+Mox Jet
+Mox Jet
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Greenbelt Radical.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Greenbelt Radical.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Greenbelt Radical.Keywords = Disguise; Trample
+? Bot1.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Llanowar Elves.Keywords = Trample
+? Bot2.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = (absent)
+? Bot2.Battlefield.Llanowar Elves.Keywords = (absent)
+[T7 Bot1.Upkeep]
+? Bot1.Battlefield.Llanowar Elves.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.Greenbelt Radical.Power = 5
+Bot1.Battlefield.Greenbelt Radical.Toughness = 5
+Bot1.Battlefield.Greenbelt Radical.Keywords = Disguise
+Bot1.Battlefield.Llanowar Elves.Power = 2
+Bot1.Battlefield.Llanowar Elves.Toughness = 2
+Bot2.Battlefield.Llanowar Elves.Power = 1
