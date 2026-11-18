@@ -1,0 +1,35 @@
+# Knife: "{2}, Sacrifice this Equipment: Draw a card." With only the Mox Jet to pay it the ability is refused (one mana short, and
+# the Knife stays). On turn 3 the Jet and a Mountain pay it exactly, the Knife is sacrificed as a cost, and the top card of the
+# library, the Mountain, is drawn: the hand goes from four Mountains to five.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Knife
+Mountain x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Knife.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Knife.Activate(Ability: Draw; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+? Bot1.Hand = Mountain; Mountain; Mountain; Mountain
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Knife.Activate(Ability: Draw)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Knife
+Bot1.Hand = Mountain; Mountain; Mountain; Mountain; Mountain

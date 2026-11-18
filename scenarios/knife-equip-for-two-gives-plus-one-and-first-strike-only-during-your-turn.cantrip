@@ -1,0 +1,52 @@
+# Knife {R}, Equip {2}: "During your turn, equipped creature gets +1/+0 and has first strike." Cast with the Mox Ruby, only the Mox Jet is
+# left, so equip is refused (one mana short). On turn 3 the Jet and a Mountain pay it exactly: the equipped Memnite is 2/1 with first
+# strike in its controller's turn (and hits Bot2 for 2), the unequipped Ornithopter stays 0/2, and in Bot2's turn 4 the Memnite is
+# 1/1 with no keyword again.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Memnite
+Ornithopter
+Knife
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Knife.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Knife.Activate(Ability: Equip {2}; Memnite; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Knife.Activate(Ability: Equip {2}; Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Memnite.Keywords = FirstStrike
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Knife.AttachedTo = Memnite
+Bot1.Battlefield.Memnite.Power = 1
