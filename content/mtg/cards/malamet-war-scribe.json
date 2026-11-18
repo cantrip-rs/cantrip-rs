@@ -1,0 +1,8 @@
+{
+  "name": "Malamet War Scribe",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Cat Warrior",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "When this creature enters, creatures you control get +2/+1 until end of turn."
+}
