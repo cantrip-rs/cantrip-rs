@@ -1788,11 +1788,16 @@ pub struct ActivatedDef {
     /// other ability of a card in hand. Set by the keyword's shared mechanics (`ninjutsu::ninjutsu`), never by a card, and
     /// held to the words by `cantrip-cards/tests/ninjutsu_matches_oracle.rs`.
     pub ninjutsu: bool,
-    /// "Sacrifice an artifact or discard a nonland card" (CR 601.2b, 602.2b, 118.3): the part of the cost that names a choice
-    /// between ways of paying, one of which the player chooses as the ability is announced, before X and its targets; it is
-    /// paid with `cost`, the two together. A way that can't be paid is not offered, and a lone one is taken without asking. None
-    /// has mana (`cantrip-engine`'s tests refuse one), since the cost is judged for being afforded before a way is chosen.
-    /// Empty when the cost names no choice. A spell's is `CardDef::additional_choice`.
+    /// "Sacrifice an artifact or discard a nonland card", "Pay {3} or discard a card" (CR 601.2b, 602.2b, 118.3): the part of
+    /// the cost that names a choice between ways of paying, one of which the player chooses as the ability is announced,
+    /// before X and its targets; it is paid with `cost`, the two together. A way may be or include mana: that mana is part
+    /// of the activation cost, so of the total determined once the targets are announced, with what increases or reduces
+    /// it (CR 601.2f), paid with the rest after mana abilities (CR 601.2g-h). The ability is offered only where some way
+    /// could be paid, its mana included; a way whose parts other than mana can't be paid is not offered, and a lone one is
+    /// taken without asking. An alternative cost (`CardDef::ability_alternatives`, CR 118.9) is paid rather than the whole
+    /// cost, so no way is chosen. A way has no {X} and no X life (`cantrip-engine`'s tests refuse one), and a mana ability
+    /// or special action names no choice (`cantrip-cards/tests/no_cost_choice_on_mana_abilities.rs`). Empty when the cost
+    /// names no choice. A spell's is `CardDef::additional_choice`.
     pub cost_choice: &'static [ExtraCost],
     /// "X can't be 0" (CR 107.3a, 601.2b by way of 602.2b): the X of its activation cost is announced as 1 or more, and it is
     /// offered only where it could be paid with X as 1 (Lair of the Hydra, Helm of Obedience, Aladdin's Lamp).

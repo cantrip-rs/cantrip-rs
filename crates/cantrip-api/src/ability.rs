@@ -736,8 +736,9 @@ impl AbilityDef {
         }
     }
 
-    /// "{3}, {T}, Sacrifice an artifact or discard a nonland card" (CR 601.2b, 602.2b): the ways of paying the part of its cost
-    /// that names a choice (`ActivatedDef::cost_choice`), beside the `cost` already given.
+    /// "{3}, {T}, Sacrifice an artifact or discard a nonland card", "Pay {3} or discard a card" (CR 601.2b, 602.2b): the ways
+    /// of paying the part of its cost that names a choice (`ActivatedDef::cost_choice`), beside the `cost` already given. A
+    /// way may be mana (`cost("{3}")`).
     pub const fn pay_one_of(self, ways: &'static [ExtraCost]) -> AbilityDef {
         match self {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { cost_choice: ways, ..d }),

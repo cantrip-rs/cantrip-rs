@@ -1,7 +1,8 @@
 //! A mana ability is activated by `activate_mana_as` (CR 605.3a), which pays the ability's `cost` and never asks which of its
 //! `cost_choice` ways is used: that is `choose_cost_way`, run only for an activated ability that uses the stack. A mana ability
 //! written with `pay_one_of` ("{T}, Sacrifice a Food or exile three cards from your graveyard: Add ...") would therefore be
-//! activated with that part of its cost unpaid. Until the core offers the choice there, no card may declare one.
+//! activated with that part of its cost unpaid. So would a special action (CR 116.2), taken by `special_action`, which asks
+//! no way either. Until the core offers the choice there, no card may declare one.
 
 use cantrip_api::*;
 
@@ -17,11 +18,11 @@ fn no_mana_ability_has_a_choice_of_cost() {
                 continue;
             }
             choices += 1;
-            if a.is_mana_ability() {
+            if a.is_mana_ability() || a.special_action {
                 wrong.push(format!("{}: \"{}\"", card.name, a.text));
             }
         }
     }
-    assert!(wrong.is_empty(), "mana abilities whose choice of cost activate_mana_as would never ask for, so never pay: {wrong:?}");
+    assert!(wrong.is_empty(), "mana abilities and special actions whose choice of cost would never be asked for, so never paid: {wrong:?}");
     assert!(choices > 0, "no activated ability with a choice of cost was found: the test reads nothing");
 }

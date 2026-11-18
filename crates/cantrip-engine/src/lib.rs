@@ -365,14 +365,16 @@ mod tests {
     }
 
     /// The ways of an activated ability's cost that names a choice (`ActivatedDef::cost_choice`) are chosen as it is
-    /// announced, after the mana of the whole cost is judged: none carries mana, which the choice would otherwise skip.
+    /// announced (CR 601.2b by way of 602.2b), and a way's mana joins the total then (CR 601.2f) - but no way announces an X:
+    /// whether the activation could be paid is judged with X at its least for the ability's own {X} only, and a way's
+    /// X life is not asked for. None carries an {X} or "pay X life" until a printed card needs one and the core judges it.
     #[test]
-    fn a_way_of_paying_an_ability_cost_has_no_mana() {
+    fn a_way_of_paying_an_ability_cost_announces_no_x() {
         for def in &cards().cards {
             for ability in def.abilities.iter().chain(def.delayed.iter()) {
                 if let AbilityDef::Activated(a) = ability {
                     for way in a.cost_choice {
-                        assert!(way.cost.mana.is_zero() && !way.cost.pay_x_life, "{}: a way of paying an ability's cost carries mana or X", def.name);
+                        assert!(way.cost.mana.x == 0 && !way.cost.pay_x_life, "{}: a way of paying an ability's cost carries an X", def.name);
                     }
                 }
             }

@@ -5026,8 +5026,13 @@ pub fn activation_costs(game: &crate::Game, player: PlayerId, source: ObjectId, 
     let changers = game.state.battlefield().iter().any(|&id| {
         game.cards.texts(&game.state, game.state.obj(id)).any(|c| game.cards.cost_changes[c.0 as usize]) && !game.lost_all_abilities(id)
     });
-    // An {X} its controller announces is not known here; one the text defines (CR 107.3c) is, and may read the target.
-    if def.special_action || (def.cost.mana.x > 0 && def.x_defined.is_none()) || !(changers || def.cost_change.is_some() || def.x_defined.is_some()) {
+    // An {X} its controller announces is not known here; one the text defines (CR 107.3c) is, and may read the target. Nor is
+    // the mana of a way of paying it the player chooses as it is announced (CR 601.2b by way of 602.2b).
+    if def.special_action
+        || (def.cost.mana.x > 0 && def.x_defined.is_none())
+        || !(changers || def.cost_change.is_some() || def.x_defined.is_some())
+        || def.cost_choice.iter().any(|way| !way.cost.mana.is_zero())
+    {
         return Vec::new();
     }
     // The rules read the game through a frame's view; a copy of the position (no tree) is enough to ask it.
@@ -7851,7 +7856,13 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             // An alternative cost is paid rather than the whole activation cost (CR 118.9, 602.2b), so it may be offered
             // where the ability's own cost can't be paid: Forge Anew's free equip of Dissection Tools with no creature to
             // sacrifice. A special action is no activation, and takes none (`activation_alternatives` below).
-            let own_payable = ability_cost_payable(cx, id, player, &whole, def, by);
+            // Its own cost's parts other than mana could be paid (CR 602.2b, 118.3): where the cost names a choice among ways of
+            // paying it (`ActivatedDef::cost_choice`), with one of them beside the rest of it - each way judged on its own
+            // (`payable_ways`), as its mana is below.
+            let payable_ways: Vec<bool> =
+                def.cost_choice.iter().map(|way| can_pay_activation_parts(cx, id, player, &whole, &way.cost, activating(def), by)).collect();
+            let own_payable =
+                if def.cost_choice.is_empty() { can_pay_activation(cx, id, player, &whole, activating(def), by) } else { payable_ways.contains(&true) };
             if !own_payable && (alternative_sources.is_empty() || def.special_action) {
                 continue;
             }
@@ -7872,8 +7883,10 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             // defines, at what it is for the targets announced (CR 107.3c, `with_defined_x`). A printed
             // cost of no mana is judged too wherever something may add mana to it as the total cost is determined (CR 601.2f by
             // way of 602.2b): the ability's own cost change (Merseine's "Pay enchanted creature's mana cost"), or a permanent
-            // that changes costs (Skyseer's Chariot's tax on a crew ability, Anointed Peacekeeper's).
+            // that changes costs (Skyseer's Chariot's tax on a crew ability, Anointed Peacekeeper's). So is one with a way of
+            // paying it in mana (Bloodthorn Flail's "Equip—Pay {3} or discard a card").
             let judged = (at_least_x(owed, def.x_cant_be_zero).mana_value() > 0
+                || def.cost_choice.iter().any(|way| !way.cost.mana.is_zero())
                 || def.x_defined.is_some()
                 || def.cost_change.is_some()
                 || *changing.get_or_init(|| !cost_change_sources(cx).is_empty()))
@@ -7937,9 +7950,8 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             let judged = |a: &Available, cost: ManaCost, life: u32| {
                 if announced { some_activation(cx, a, &asker, def, ability, cost, &|c, t| covered(a, c, life, t)) } else { covered(a, cost, life, &[]) }
             };
-            // The ability for its own cost, and for each cost a static ability lets the player pay rather than its mana cost
-            // (CR 118.9, 602.2b: Forge Anew's, Kili's {0} equip), each an option of its own, made by that permanent
-            // (`ActionOption::paid_by`).
+            // Each cost a static ability lets the player pay rather than its activation cost (CR 118.9, 602.2b: Forge Anew's,
+            // Kili's {0} equip), made by that permanent (`ActionOption::paid_by`).
             let alternatives: Vec<(Grant, ManaCost)> = if alternative_sources.is_empty() || def.special_action {
                 Vec::new()
             } else {
@@ -7962,16 +7974,20 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
                         !def.cost.sacrifice_granter
                             || cx.s().obj(g.object).controller == player && may_sacrifice_for(cx, player, g.object, activating(def))
                     }));
-            // The ability for its own cost (with what its Phyrexian symbols are judged beside: the life the cost pays), and
-            // for each alternative cost, which pays no life but what it may add (CR 118.9).
-            let ways = || {
-                own_payable
-                    .then_some((None, owed, whole.life))
-                    .into_iter()
-                    .chain(alternatives.iter().map(|&(g, c)| (Some(g), c, 0)))
-                    .filter(|&(_, cost, life)| a.is_none_or(|a| each_target || judged(a, cost, life)))
+            // Its own cost, each way of paying it that could be paid but for its mana, as the mana and the life it comes to
+            // (what its Phyrexian symbols are judged beside): the way is chosen as the ability is announced (CR 601.2b by way
+            // of 602.2b), and its mana is part of the total that is then determined, what increases or reduces the cost
+            // applied to it (CR 601.2f), and paid with the rest (CR 601.2g-h). Offered if some way could be paid.
+            let own_costs = || {
+                (0..def.cost_choice.len().max(1)).filter_map(|i| match def.cost_choice.get(i) {
+                    None => own_payable.then_some((owed, whole.life)),
+                    Some(way) => (own_payable && payable_ways[i]).then(|| (owed.plus(&way.cost.mana), whole.life + way.cost.life)),
+                })
             };
-            if ways().next().is_none() {
+            let own_offered = own_costs().any(|(cost, life)| a.is_none_or(|a| each_target || judged(a, cost, life)));
+            // Each alternative cost, which pays no life but what it may add (CR 118.9).
+            let alternatives_offered = || alternatives.iter().filter(|&&(_, cost)| a.is_none_or(|a| each_target || judged(a, cost, 0)));
+            if !own_offered && alternatives_offered().next().is_none() {
                 continue;
             }
             let mut option = ActionOption { granted_by: granted_by(cx, id, Some(&chars), index, ability, &givers), ..ActionOption::on(ActionKind::ActivateAbility, id, index as u8) };
@@ -7986,12 +8002,19 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             if !possible {
                 continue;
             }
-            for (paid_by, cost, life) in ways() {
+            // The ability for its own cost, and for each alternative cost, each an option of its own.
+            let offered = own_offered.then_some((None, None)).into_iter().chain(alternatives_offered().map(|&(g, cost)| (Some(g), Some(cost))));
+            for (paid_by, alternative) in offered {
                 let mut option = ActionOption { paid_by, ..option.clone() };
                 if let Some(a) = a.filter(|_| each_target) {
-                    let kept: Vec<Target> = option.target_candidates.iter().copied().filter(|&t| covered(a, cost, life, &[t])).collect();
+                    // With this target, the alternative cost, or some way of paying its own, could be paid.
+                    let fits = |targets: &[Target]| match alternative {
+                        Some(cost) => covered(a, cost, 0, targets),
+                        None => own_costs().any(|(cost, life)| covered(a, cost, life, targets)),
+                    };
+                    let kept: Vec<Target> = option.target_candidates.iter().copied().filter(|&t| fits(&[t])).collect();
                     if kept.len() != option.target_candidates.len() {
-                        if kept.is_empty() && !(option.targets_optional && covered(a, cost, life, &[])) {
+                        if kept.is_empty() && !(option.targets_optional && fits(&[])) {
                             continue;
                         }
                         option.target_candidates = kept;
@@ -12595,16 +12618,6 @@ fn ask_optional(cx: &mut Cx, player: PlayerId, spell: ObjectId, face: CardId, la
     }
 }
 
-/// Whether the non-mana cost of an activation could be paid (CR 602.2b, 118.3): `whole`, and if the cost names a choice
-/// (`ActivatedDef::cost_choice`) some one of its ways beside it.
-fn ability_cost_payable(cx: &Cx, source: ObjectId, controller: PlayerId, whole: &Cost, def: &ActivatedDef, by: Option<Linked>) -> bool {
-    let paid = activating(def);
-    if def.cost_choice.is_empty() {
-        return can_pay_activation(cx, source, controller, whole, paid, by);
-    }
-    def.cost_choice.iter().any(|way| can_pay_activation_parts(cx, source, controller, whole, &way.cost, paid, by))
-}
-
 /// Whether two independent parts of one cost could both be paid (CR 601.2h, 118.3): what they ask together
 /// (`add_extra_totals`: the cards, life and the like they take between them, a discard of one feeding a graveyard exile of
 /// the other), and their permanents by distinct objects, each by its own filter.
@@ -12627,9 +12640,14 @@ fn can_pay_cast_parts(cx: &Cx, source: ObjectId, player: PlayerId, way: &Cost, p
 }
 
 /// Chooses which way of paying an activated ability's cost that names a choice is used (CR 601.2b by way of 602.2b), as
-/// `choose_additional` does for a spell's additional cost: only the ways that can be paid are offered, and a lone one is
-/// taken without asking. The whole cost with it; the ability's own cost alone when it names no choice.
-fn choose_cost_way(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: AbilityRef, def: &'static ActivatedDef, paid: Option<CostFor>, by: Option<Linked>) -> R<Option<Cost>> {
+/// `choose_additional` does for a spell's additional cost: only the ways whose parts other than mana can be paid are
+/// offered, and a lone one is taken without asking. The way's mana is not judged here, as a mode's is not
+/// (`choose_modes`): it joins the total only once that is determined, after the targets, with what increases or reduces
+/// it (CR 601.2f), and the payment refuses mana the player cannot pay, taking the activation back (CR 601.2h, 733.1). The
+/// ways whose mana could be paid beside `base` - the mana owed so far - are the advice. The whole cost with it; the
+/// ability's own cost alone when it names no choice.
+#[allow(clippy::too_many_arguments)]
+fn choose_cost_way(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: AbilityRef, def: &'static ActivatedDef, base: ManaCost, paid: Option<CostFor>, by: Option<Linked>) -> R<Option<Cost>> {
     if def.cost_choice.is_empty() {
         return Ok(None);
     }
@@ -12639,13 +12657,18 @@ fn choose_cost_way(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abi
     let Some(&first) = payable.first() else { return Err(Stop::Cancel) };
     let mut picked = first;
     if payable.len() > 1 {
+        let affordable = if def.cost_choice.iter().any(|way| !way.cost.mana.is_zero()) {
+            payable.iter().copied().filter(|&i| can_afford(cx, player, source, &base.plus(&def.cost_choice[i as usize].cost.mana))).collect()
+        } else {
+            Vec::new()
+        };
         let ask = RequestKind::ChooseModes {
             source,
             modes: (0..def.cost_choice.len() as u8).map(|i| Label::AbilityExtra(ability, i)).collect(),
             eligible: payable,
             count: 1,
             at_most: 0,
-            affordable: Vec::new(),
+            affordable,
             additional_cost: true,
             repeat: false,
         };
@@ -12872,7 +12895,9 @@ fn activate(
     }
     // CR 601.2b by way of 602.2b: the way of paying a cost that names a choice is chosen before X and the targets - none
     // where an alternative cost is paid rather than that cost (CR 118.9).
-    let chosen_cost = if paid_by.is_some() { None } else { choose_cost_way(cx, player, source, ability, def, paid, by)? };
+    // Its mana is part of the activation cost (CR 602.2b), so of the total determined below, which the cost changes and the
+    // announcements of how its symbols are paid meet (CR 601.2f).
+    let chosen_cost = if paid_by.is_some() { None } else { choose_cost_way(cx, player, source, ability, def, mana, paid, by)? };
     let whole = chosen_cost.map_or(base, |part| add_extra_totals(base, part));
     if let Some(part) = chosen_cost { mana = mana.plus(&part.mana); }
     let granter = if whole.sacrifice_granter || whole.exile_granter {

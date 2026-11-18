@@ -2047,9 +2047,10 @@ where another did. The layers know the giving card of an ability (its `AbilityRe
 `layers::ability_givers` works the object's characteristics out again watching each entry of layer 6 that puts an ability on
 it (not the dependency system's trial copies) - asked only for an ability whose card is not the object's own, so nothing is
 paid for it the rest of the time; two Chromatic Lanterns give a land two abilities, each its own option made by its
-Lantern. Each cost a static ability lets a player pay rather than an ability's mana cost (`CardDef::ability_alternatives`)
-is an activation of its own (`paid_by`), offered beside the ability for its own cost where that can be paid, described with
-the cost and the permanent ("Equip {2} - paying {0} rather than its mana cost (Forge Anew)"), and paid as offered: nothing
+Lantern. Each cost a static ability lets a player pay rather than an ability's activation cost - all of it, its parts other
+than mana and any choice among ways of paying it included (CR 118.9, 602.2b; `CardDef::ability_alternatives`) - is an
+activation of its own (`paid_by`), offered beside the ability for its own cost, whether or not that could be paid, described with
+the cost and the permanent ("Equip {2} - paying {0} rather than its cost (Forge Anew)"), and paid as offered: nothing
 is asked as it is announced.
 
 **Cost changes are one list** matched against what is costed (`Costed`: a spell, an ability, a special action, CR 116.1),
