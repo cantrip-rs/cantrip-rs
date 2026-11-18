@@ -1,0 +1,38 @@
+# Feed the Cycle (CR 601.2b, 118.3): with an empty graveyard and no Food the only way is paying {B} as well, {1}{B}{B}. Bot1 has Mox Jet and
+# Mox Pearl, enough for {1}{B} but one black short: refused (Mana: short, the rest of the cost there). With Black Lotus's three black as well
+# it is cast at Bot1's own Ornithopter, which is destroyed (a creature of the caster's own is a legal target); the pool then holds the two
+# mana left over from the five, so exactly {1}{B}{B} was paid.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Black Lotus
+Ornithopter
+Feed the Cycle
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Feed the Cycle.Cast(Bot1.Battlefield.Ornithopter; Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Feed the Cycle.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+? Bot1.Mana = {B}{B}
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl
+Bot1.Graveyard = Feed the Cycle; Ornithopter; Black Lotus

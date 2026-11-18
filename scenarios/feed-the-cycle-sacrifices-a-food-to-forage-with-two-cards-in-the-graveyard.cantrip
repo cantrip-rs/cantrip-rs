@@ -1,0 +1,55 @@
+# Feed the Cycle (CR 701.61a, 601.2b): Bot1's graveyard holds only two cards (a Lightning Bolt and the City Pigeon Bot2's Bolt killed), one
+# short of exiling three, so it forages by sacrificing the Food the Pigeon left, and pays only {1}{B} (Mox Jet, Mox Pearl): its pool is
+# empty after the cast. Bot2's Ornithopter is destroyed; nothing is exiled.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+City Pigeon
+Lightning Bolt
+Feed the Cycle
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.City Pigeon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.City Pigeon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard = City Pigeon; Lightning Bolt
+? Bot1.Battlefield.Food Token.Token = true
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Feed the Cycle.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Ruby
+Bot1.Battlefield.Food Token = (absent)
+Bot1.Graveyard = Feed the Cycle; City Pigeon; Lightning Bolt
+Exile.Count = 0

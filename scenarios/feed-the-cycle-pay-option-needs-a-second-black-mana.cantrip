@@ -1,0 +1,31 @@
+# Feed the Cycle (CR 601.2f, 118.3): with an empty graveyard and no Food it cannot forage, so the additional cost is {B} and
+# the whole is {1}{B}{B}: two black mana among three. Bot1 has three mana but only one black (Mox Jet, Mox Pearl, Mox Ruby),
+# so the spell is refused at Bot2's Ornithopter for want of the second {B} (a {1} or another color in its place would be
+# paid), and the Ornithopter stays.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Feed the Cycle
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Feed the Cycle.Cast(Bot2.Battlefield.Ornithopter; Mana: short)
+
+[Expect]
+Bot1.Mana = {W}{B}{R}
+Bot2.Battlefield = Ornithopter

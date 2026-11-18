@@ -1,0 +1,53 @@
+# Feed the Cycle (CR 701.61a, 601.2b): Bot1's graveyard holds exactly three cards (Black Lotus and two Lightning Bolts cast with its mana),
+# so it forages by exiling them and pays only {1}{B}. It destroys Bot2's Wrenn and Six, a planeswalker; a Mox Emerald is not a legal target.
+# The three exiled cards are Bot1's own, and Feed the Cycle itself goes to the graveyard after.
+
+[Bot1 Deck]
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Mox Jet
+Mox Pearl
+Feed the Cycle
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Wrenn and Six
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Wrenn and Six.Cast
+[T3 Bot1.Main1]
+? Bot1.Graveyard.Count = 3
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Feed the Cycle.Cast(Bot2.Battlefield.Mox Emerald)
+Bot1.Hand.Feed the Cycle.Cast(Bot2.Battlefield.Wrenn and Six)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Emerald; Mox Ruby
+Bot2.Graveyard = Wrenn and Six
+Bot1.Graveyard = Feed the Cycle
+Exile.Count = 3
