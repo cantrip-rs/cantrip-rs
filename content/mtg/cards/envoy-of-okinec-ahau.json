@@ -1,0 +1,8 @@
+{
+  "name": "Envoy of Okinec Ahau",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Cat Advisor",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "{4}{W}: Create a 1/1 colorless Gnome artifact creature token."
+}

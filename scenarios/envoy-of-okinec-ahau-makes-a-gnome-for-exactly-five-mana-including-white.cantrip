@@ -1,0 +1,62 @@
+# Envoy of Okinec Ahau: "{4}{W}: Create a 1/1 colorless Gnome artifact creature token." On turn 1 Bot1 casts the Envoy with
+# Mox Pearl, Mox Ruby and Mox Jet. On turn 3 its four moxen make four mana, one short, so the activation is refused until
+# Mox Emerald is cast and tapped: five mana pay exactly and leave the pool empty. Each activation makes one Gnome, a 1/1
+# colorless artifact creature under Bot1's control (CR 111.1), and Bot2 gets nothing. On turn 5 Mox Pearl pays for a second
+# Envoy, and the five mana that remain (Sapphire, Emerald and three red from Black Lotus) cannot pay {W}: no white (CR 107.4).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Envoy of Okinec Ahau x2
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Envoy of Okinec Ahau#1.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Envoy of Okinec Ahau.Activate(Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Envoy of Okinec Ahau.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gnome Token.Power = 1
+? Bot1.Battlefield.Gnome Token.Toughness = 1
+? Bot1.Battlefield.Gnome Token.Types = Artifact; Creature
+? Bot1.Battlefield.Gnome Token.Colors = (absent)
+? Bot2.Battlefield =
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Envoy of Okinec Ahau.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Envoy of Okinec Ahau#1.Activate(Mana: short)
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Ruby; Mox Jet; Mox Sapphire; Mox Emerald; Envoy of Okinec Ahau; Envoy of Okinec Ahau; Gnome Token
+Bot2.Battlefield =
