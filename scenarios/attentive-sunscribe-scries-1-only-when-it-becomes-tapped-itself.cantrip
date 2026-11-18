@@ -1,0 +1,42 @@
+# Attentive Sunscribe {1}{W}: "Whenever this creature becomes tapped, scry 1." (CR 701.22) Tapping Bot1's Mox Pearl on turn 3 is another permanent
+# becoming tapped and scries nothing (no question is asked). Attacking taps the Sunscribe, so Bot1 scries the Mountain on top of its library
+# (the Island was drawn on turn 3) and puts it on the bottom: the card drawn on turn 5 is the Forest below it, and the Mountain never reaches the hand.
+
+[Bot1 Deck]
+Black Lotus
+Attentive Sunscribe
+Mox Pearl
+Plains
+Plains
+Plains
+Plains
+Island
+Mountain
+Forest
+Plains x12
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Attentive Sunscribe.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange
+? Bot1.Library.Top = Mountain
+Bot1.Attack(Attentive Sunscribe > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Mountain)
+[T5 Bot1.Main1]
+
+[Expect]
+Turn = 5
+Bot1.Hand = Plains; Plains; Plains; Plains; Island; Forest
+Bot2.Life = 18
