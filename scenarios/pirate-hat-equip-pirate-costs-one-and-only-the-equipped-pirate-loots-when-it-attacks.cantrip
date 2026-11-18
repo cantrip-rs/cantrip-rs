@@ -1,0 +1,64 @@
+# Pirate Hat: "Equipped creature gets +1/+1 and has 'Whenever this creature attacks, draw a card, then discard a card.' Equip Pirate {1}. Equip {2}."
+# Bot1 casts a Kitesail Corsair (a Human Pirate, 2/1), an Ornithopter and the Hat on turn 1. On turn 3 Equip Pirate {1} refuses the Ornithopter (not a Pirate) and takes
+# the Corsair for the single mana of Mox Sapphire (CR 702.6a): a 3/2. Both attack: only the equipped Corsair has the ability, so Bot1 draws one card (a Forest) and
+# discards it, and the Ornithopter's attack draws nothing. The Corsair deals 3 and the Ornithopter 0.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Kitesail Corsair
+Pirate Hat
+Ornithopter
+Island
+Forest
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kitesail Corsair.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pirate Hat.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Pirate Hat.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip Pirate)
+Bot1.Battlefield.Pirate Hat.Activate(Bot1.Battlefield.Kitesail Corsair; Ability: Equip Pirate)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pirate Hat.AttachedTo = Kitesail Corsair
+? Bot1.Battlefield.Kitesail Corsair.Power = 3
+? Bot1.Battlefield.Kitesail Corsair.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Hand.Count = 1
+Bot1.Attack(Kitesail Corsair > Bot2; Ornithopter > Bot2)
+Bot1.Pass
+Bot1.Choose(Forest)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island
+Bot1.Graveyard = Forest
+Bot1.Library.Count = 11
+Bot2.Life = 17

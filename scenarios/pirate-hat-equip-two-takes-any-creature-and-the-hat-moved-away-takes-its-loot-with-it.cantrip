@@ -1,0 +1,72 @@
+# Pirate Hat's Equip {2} takes any creature you control: Bot1 equips the Ornithopter (a 0/2, a 1/3 with the Hat) for two mana. It attacks and loots: Bot1 draws
+# a Forest and discards it. Then Equip Pirate {1} moves the Hat to the Kitesail Corsair on turn 5: the Ornithopter goes back to 0/2 and attacks without looting,
+# and the Corsair attacks and loots (a Mountain drawn and discarded).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Kitesail Corsair
+Pirate Hat
+Ornithopter
+Island
+Forest
+Mountain
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kitesail Corsair.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pirate Hat.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Pirate Hat.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip {2})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot1.Choose(Forest)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Pirate Hat.Activate(Bot1.Battlefield.Kitesail Corsair; Ability: Equip Pirate)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Kitesail Corsair.Power = 3
+? Bot1.Hand.Count = 2
+Bot1.Attack(Kitesail Corsair > Bot2; Ornithopter > Bot2)
+Bot1.Pass
+Bot1.Choose(Mountain)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Pirate Hat.AttachedTo = Kitesail Corsair
+Bot1.Graveyard = Mountain; Forest
+Bot2.Life = 16
