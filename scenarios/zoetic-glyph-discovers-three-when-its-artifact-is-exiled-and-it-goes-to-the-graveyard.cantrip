@@ -1,0 +1,53 @@
+# Zoetic Glyph: "When this Aura is put into a graveyard from the battlefield, discover 3." (CR 603.6c, 701.57a.) Bot1 enchants its Mox Ruby, a 5/4 Golem. On turn 2 Bot2 exiles
+# the Mox with Swords to Plowshares (Bot1 gains 5 life): the Aura, enchanting nothing, goes to the graveyard as a state-based action and Bot1 discovers 3. The Mountain (a land)
+# and Panharmonicon (mana value 4, over 3) go to the bottom of the library; Corsair Captain (mana value 3, inclusive) is cast for free and its enters trigger makes a Treasure.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Zoetic Glyph
+Island
+Island
+Mountain
+Panharmonicon
+Corsair Captain
+Island x11
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Zoetic Glyph.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 25
+Bot1.Graveyard = Zoetic Glyph
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield = Corsair Captain; Mox Jet; Mox Pearl; Mox Sapphire; Treasure Token
+Exile.Count = 1
+Bot1.Library.Count = 13
+Stack.Count = 0

@@ -1,0 +1,43 @@
+# Zoetic Glyph: "Enchant artifact. Enchanted artifact is a Golem creature with base power and toughness 5/4 in addition to its other types." Bot1 casts Mox Ruby and plays
+# an Island on turn 1 and enchants the Mox with the Glyph ({2}{U}, paid by three other Moxen); the Island, no artifact, cannot be enchanted (CR 303.4a). The Mox is an
+# Artifact Creature with the Golem type: a 5/4 that attacks on turn 3 (it has been under Bot1's control since turn 1) and deals 5.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Zoetic Glyph
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Zoetic Glyph.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Zoetic Glyph.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Ruby.Types = Artifact; Creature
+? Bot1.Battlefield.Mox Ruby.Subtypes = Golem
+? Bot1.Battlefield.Mox Ruby.Power = 5
+? Bot1.Battlefield.Mox Ruby.Toughness = 4
+[T3 Bot1.Main1]
+Bot1.Attack(Mox Ruby > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Mox Ruby.Tapped = true
+Bot1.Battlefield.Zoetic Glyph.AttachedTo = Mox Ruby
+Stack.Count = 0

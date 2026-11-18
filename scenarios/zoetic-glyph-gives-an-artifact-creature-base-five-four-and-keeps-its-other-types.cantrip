@@ -1,0 +1,49 @@
+# Zoetic Glyph on an artifact that is already a creature: the Ornithopter (an Artifact Creature, Thopter, 0/2 with flying) gets the Golem type as well and base power and
+# toughness 5/4 (CR 613.4b), keeping its creature type and its ability. A Lightning Bolt for 3 leaves the 5/4 alive (damage 3 is less than 4), so the Glyph stays on the
+# battlefield and discovers nothing.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Zoetic Glyph
+Ornithopter
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Zoetic Glyph.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot1.Battlefield.Ornithopter.Subtypes = Golem; Thopter
+Bot1.Battlefield.Ornithopter.Power = 5
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Ornithopter.Damage = 3
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard = Lightning Bolt
+Stack.Count = 0
