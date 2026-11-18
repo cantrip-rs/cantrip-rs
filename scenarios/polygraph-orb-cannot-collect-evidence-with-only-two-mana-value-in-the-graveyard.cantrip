@@ -1,0 +1,46 @@
+# Polygraph Orb: "Collect evidence 3" needs cards worth 3 or more in the graveyard (CR 701.59a). Here the top four are
+# Grizzly Bears (2), Swamp (0), Swamp and Island: Bot1 takes the Swamps and the graveyard holds Grizzly Bears and
+# Island, worth 2, one short of 3. The activation is refused with all the mana in play, and Bot2 loses no life. The positive control, exactly 3, is the
+# sibling scenarios.
+
+[Bot1 Deck]
+Polygraph Orb
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Swamp
+Grizzly Bears
+Swamp
+Swamp
+Island
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Polygraph Orb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Swamp; Swamp | Grizzly Bears; Island)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Polygraph Orb.Activate
+
+[Expect]
+Bot2.Life = 20
+Exile.Count = 0
+Bot1.Graveyard = Island; Grizzly Bears

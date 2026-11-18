@@ -1,0 +1,6 @@
+{
+  "name": "Polygraph Orb",
+  "manaCost": "{4}{B}",
+  "type": "Artifact",
+  "oracleText": "When this artifact enters, look at the top four cards of your library. Put two of them into your hand and the rest into your graveyard. You lose 2 life.\n{2}, {T}, Collect evidence 3: Each opponent loses 3 life unless they discard a card or sacrifice a creature. (To collect evidence 3, exile cards with total mana value 3 or greater from your graveyard.)"
+}

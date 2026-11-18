@@ -1,0 +1,47 @@
+# Polygraph Orb ({4}{B}): "When this artifact enters, look at the top four cards of your library. Put two of them into your
+# hand and the rest into your graveyard. You lose 2 life." The top four are Grizzly Bears, Lightning Bolt, Swamp and Island:
+# Bot1 takes the Swamp and the Island (one of the Moxen's five mana paid the Orb), the Bears and the Bolt go to the
+# graveyard, and Bot1 loses exactly 2 life (CR 701.20e, 400.3, 119.3).
+# Taking only one card, or three, is refused.
+
+[Bot1 Deck]
+Polygraph Orb
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Swamp
+Grizzly Bears
+Lightning Bolt
+Swamp
+Island
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Polygraph Orb.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Swamp | Grizzly Bears; Lightning Bolt; Island)
+! Bot1.Arrange(Swamp; Island; Grizzly Bears | Lightning Bolt)
+Bot1.Arrange(Swamp; Island | Grizzly Bears; Lightning Bolt)
+
+[Expect]
+Bot1.Life = 18
+Bot1.Hand = Swamp; Swamp; Island
+Bot1.Graveyard = Lightning Bolt; Grizzly Bears
+Bot1.Library.Count = 14
+Bot2.Life = 20

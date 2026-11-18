@@ -1,0 +1,57 @@
+# Polygraph Orb: "each opponent loses 3 life unless they discard a card or sacrifice a creature". Bot2 controls Ornithopter and
+# Memnite (creatures) and Mox Pearl (an artifact, not a creature): the Mox is refused as the sacrifice, Bot2 sacrifices
+# the Memnite and keeps its hand and its life.
+
+[Bot1 Deck]
+Polygraph Orb
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Swamp
+Grizzly Bears
+Lightning Bolt
+Swamp
+Island
+Swamp x14
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Mox Pearl
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Polygraph Orb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Swamp; Island | Grizzly Bears; Lightning Bolt)
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Polygraph Orb.Activate
+Bot1.Choose(Grizzly Bears; Lightning Bolt)
+Bot1.Pass
+Bot2.Modes(Sacrifice a creature)
+! Bot2.Choose(Mox Pearl)
+Bot2.Choose(Memnite)
+
+[Expect]
+Bot2.Life = 20
+Bot2.Hand.Count = 5
+Bot2.Battlefield = Mox Pearl; Ornithopter
+Bot2.Graveyard = Memnite
