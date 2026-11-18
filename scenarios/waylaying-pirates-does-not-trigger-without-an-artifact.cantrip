@@ -1,0 +1,35 @@
+# "If you control an artifact" (CR 603.4): Bot1's Black Lotus is sacrificed for the mana, so Bot1 controls no artifact as the Pirates
+# enters (it is a creature, not an artifact) and the ability does not trigger: nothing goes on the stack and no target is asked, though Bot2's
+# Ornithopter would be a legal target. The Ornithopter is left untapped with no counter.
+
+[Bot1 Deck]
+Island
+Black Lotus
+Waylaying Pirates
+Island x4
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Waylaying Pirates.Cast
+Bot1.Pass
+! Bot1.Target
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Island; Waylaying Pirates
+Bot2.Battlefield.Ornithopter.Tapped = false
+Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)

@@ -1,0 +1,8 @@
+{
+  "name": "Waylaying Pirates",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Human Pirate",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When this creature enters, if you control an artifact, tap target artifact or creature an opponent controls and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)"
+}
