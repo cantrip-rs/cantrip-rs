@@ -1,0 +1,35 @@
+# Torch the Witness {X}{R}: "deals twice X damage to target creature" (CR 107.3a). With X = 1 it deals exactly 2 to Bot1's own
+# Ornithopter (0/2): that is lethal but not more than lethal, so there is no excess damage and no Clue (CR 120.10). Dealing
+# only X would leave the Ornithopter alive. Its target must be a creature, so a Mox Ruby and a player are refused (an X
+# spell is paid after it is announced, so the refusal is the target alone); Bot1's own creature is a legal target.
+
+[Bot1 Deck]
+Mox Ruby x4
+Ornithopter
+Torch the Witness
+Mountain x14
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Torch the Witness.Cast(Bot1.Battlefield.Mox Ruby#3; X: 1)
+! Bot1.Hand.Torch the Witness.Cast(Bot2; X: 1)
+Bot1.Hand.Torch the Witness.Cast(Bot1.Battlefield.Ornithopter; X: 1)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Ornithopter; Torch the Witness
+Bot1.Battlefield = Mox Ruby; Mox Ruby; Mox Ruby; Mox Ruby
+Stack.Count = 0

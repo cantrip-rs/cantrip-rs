@@ -1,0 +1,6 @@
+{
+  "name": "Torch the Witness",
+  "manaCost": "{X}{R}",
+  "type": "Sorcery",
+  "oracleText": "Torch the Witness deals twice X damage to target creature. If excess damage was dealt to that creature this way, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")"
+}

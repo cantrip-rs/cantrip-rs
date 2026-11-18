@@ -1,0 +1,27 @@
+# Torch the Witness {X}{R} with X = 0 deals twice 0 = 0 damage to Bot1's own Ornithopter (0/2): zero damage is not dealt at all
+# (CR 120.8), so nothing is excess and there is no Clue; the Ornithopter is unharmed. The spell still resolves (its target is legal).
+
+[Bot1 Deck]
+Mox Ruby
+Ornithopter
+Torch the Witness
+Mountain x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Torch the Witness.Cast(Bot1.Battlefield.Ornithopter; X: 0)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Torch the Witness
+Bot1.Battlefield.Ornithopter.Damage = 0
+Bot1.Battlefield = Mox Ruby; Ornithopter
+Stack.Count = 0
