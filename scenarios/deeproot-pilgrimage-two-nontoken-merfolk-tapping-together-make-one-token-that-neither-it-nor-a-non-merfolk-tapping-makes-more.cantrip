@@ -1,0 +1,58 @@
+# Deeproot Pilgrimage {1}{U}: "Whenever one or more nontoken Merfolk you control become tapped, create a 1/1 blue Merfolk creature
+# token with hexproof" (CR 603.2c, 111.7). Two Merfolk of the Pearl Trident and a Memnite (not a Merfolk) attack together on turn 3:
+# the two Merfolk tap at once, so ONE token is made (not two), and the tapping Memnite adds nothing. The token is a 1/1 blue Merfolk
+# with hexproof. On turn 5 the token (a Merfolk, but a token) and the Memnite attack together: nothing happens, the token is not a
+# nontoken Merfolk, so there is still exactly one token.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Deeproot Pilgrimage
+Merfolk of the Pearl Trident
+Merfolk of the Pearl Trident
+Memnite
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Deeproot Pilgrimage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Merfolk of the Pearl Trident#1 > Bot2; Merfolk of the Pearl Trident#2 > Bot2; Memnite > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Count = 6
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Merfolk Token > Bot2; Memnite > Bot2)
+? Stack.Count = 0
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Deeproot Pilgrimage; Memnite; Merfolk Token; Merfolk of the Pearl Trident; Merfolk of the Pearl Trident; Mox Sapphire
+Bot1.Battlefield.Merfolk Token.Power = 1
+Bot1.Battlefield.Merfolk Token.Toughness = 1
+Bot1.Battlefield.Merfolk Token.Colors = Blue
+Bot1.Battlefield.Merfolk Token.Subtypes = Merfolk
+Bot1.Battlefield.Merfolk Token.Keywords = Hexproof

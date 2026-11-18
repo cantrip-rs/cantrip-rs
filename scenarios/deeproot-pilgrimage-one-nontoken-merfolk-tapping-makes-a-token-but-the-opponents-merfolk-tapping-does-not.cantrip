@@ -1,0 +1,62 @@
+# Deeproot Pilgrimage {1}{U}: "Whenever one or more nontoken Merfolk you control become tapped, create a 1/1 blue Merfolk creature
+# token with hexproof." Bot2's own Merfolk of the Pearl Trident attacks on turn 2 (it taps, but it is not a Merfolk Bot1 controls):
+# nothing. Bot1's single Merfolk attacks on turn 3 (it taps): one token. Each tapping of that nontoken Merfolk makes one more: it
+# attacks again on turn 5 (two tokens in all), where the first token, also attacking, adds nothing of its own.
+
+[Bot1 Deck]
+Black Lotus
+Deeproot Pilgrimage
+Merfolk of the Pearl Trident
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Merfolk of the Pearl Trident
+Island
+Island
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Deeproot Pilgrimage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Merfolk of the Pearl Trident.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Merfolk of the Pearl Trident > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 3
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Merfolk of the Pearl Trident > Bot1)
+? Stack.Count = 0
+? Bot1.Battlefield.Count = 3
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Merfolk of the Pearl Trident > Bot2; Merfolk Token > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Deeproot Pilgrimage; Merfolk Token; Merfolk Token; Merfolk of the Pearl Trident
+Bot2.Battlefield = Island; Merfolk of the Pearl Trident
