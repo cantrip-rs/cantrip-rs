@@ -702,7 +702,7 @@ fn move_together_entering_moves(
         }
     }
     let mut rebounds: Vec<(ObjectId, PlayerId, CardId)> = Vec::new();
-    let mut plots: Vec<(ObjectId, PlayerId)> = Vec::new();
+    let mut plots: Vec<ObjectId> = Vec::new();
     // A card from a hand, a library or outside the game that all players can see as it is put into a hand or a library is
     // looked back on too (CR 603.10a), which the moves' planned destinations and reveals say.
     let then = if !then.taken() && plans.iter().any(|p| p.seen_by_all) {
@@ -864,7 +864,7 @@ fn move_together_entering_moves(
         }
         // Lilah's exile put it there (CR 702.170a), if no later effect sent it elsewhere: it becomes plotted, for its owner.
         if change.plotted && to.is(ZoneKind::Exile) {
-            plots.push((new_id, old.owner));
+            plots.push(new_id);
         }
         if madness {
             // "When you do" (CR 702.35a, 603.12): a reflexive trigger of the exiled card, its owner's.
@@ -982,9 +982,10 @@ fn move_together_entering_moves(
             unless: None,
         });
     }
-    // "It becomes plotted" (CR 702.170a, 702.170d): its owner may cast it without paying its mana cost, as a sorcery, on a later turn.
-    for (card, owner) in plots {
-        cantrip_api::Game::allow_play(cx, card, owner, PlayGrant::PLOT);
+    // "It becomes plotted" (CR 702.170a, 702.170d): its owner may cast it without paying its mana cost, as a sorcery, on a later
+    // turn. It is plotted the one way every card is (`Game::become_plotted`), so it is a plotted event too.
+    for card in plots {
+        cantrip_api::Game::become_plotted(cx, card);
     }
     // A permanent left the battlefield: what was exiled or phased out until it left comes back now (CR 610.3, 610.4).
     if left_battlefield {

@@ -70,6 +70,12 @@ fn counter_by_way(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(),
     Ok(())
 }
 
+/// The first card of its controller's graveyard cast for nothing, left to resolve, with "exile that spell instead of putting it into
+/// your graveyard as it resolves. If you do, it becomes plotted" (Lilah, Undefeated Slickshot's).
+fn cast_and_plot(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), Suspend> {
+    cast_then(g, item, ExileInstead::Plot, None, false)
+}
+
 macro_rules! stager {
     ($name:literal, $effect:ident) => {
         CardDef { name: $name, cost: ManaCost::ZERO, spell: Some(SpellDef { targets: &[], effect: $effect }), ..INSTANT }
@@ -77,6 +83,7 @@ macro_rules! stager {
 }
 
 static COUNTER_ANY: CardDef = stager!("Leave Counter Any", counter_any);
+static CAST_AND_PLOT: CardDef = stager!("Leave Cast And Plot", cast_and_plot);
 static COUNTER_INSTANT_OR_SORCERY: CardDef = stager!("Leave Counter Instant Or Sorcery", counter_instant_or_sorcery);
 static BOUNCE_ANY: CardDef = stager!("Leave Bounce Any", bounce_any);
 static BOTTOM_ANY: CardDef = stager!("Leave Bottom Any", bottom_any);
@@ -157,6 +164,7 @@ fn table() -> &'static CardTable {
             &CREATURE_BACK,
             &MODAL,
             &FLASHBACK_GIVER,
+            &CAST_AND_PLOT,
         ])
     })
 }
@@ -353,4 +361,17 @@ fn granted_flashback_casts_only_an_instant_or_sorcery_face() {
     let offered = casts(&mut given, card);
     assert!(offered.contains(&(0, Some(giver))), "{offered:?}");
     assert!(!offered.iter().any(|&(way, _)| way == WAY_BACK_FACE), "{offered:?}");
+}
+
+/// A spell Lilah has exiled as it resolves becomes plotted the one way every card does (`Game::become_plotted`, CR 702.170a): its
+/// owner may cast it for free on a later turn, and it is a plotted event, naming the card in exile, that "when this card becomes
+/// plotted" sees.
+#[test]
+fn a_spell_exiled_and_plotted_as_it_resolves_is_a_plotted_event_for_its_owner() {
+    let (mut game, stager, _) = setup("Leave Cast And Plot", "Leave Instant", false);
+    play(&mut game, stager, |_| 0);
+    assert_eq!(where_is(&game, "Leave Instant"), ZoneKind::Exile);
+    let exiled = game.state.zone(Zone::exile(ME))[0];
+    let plotted: Vec<_> = game.log.iter().filter_map(|r| if let Event::Plotted { card, player } = r.event { Some((card, player)) } else { None }).collect();
+    assert_eq!(plotted, vec![(exiled, ME)]);
 }

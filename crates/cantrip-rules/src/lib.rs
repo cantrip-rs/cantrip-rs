@@ -3485,8 +3485,7 @@ impl cantrip_api::Game for Cx<'_> {
             return;
         }
         let owner = self.g.state.obj(card).owner;
-        let grant = PlayGrant { instead: Some(ManaCost::ZERO), later_turns: true, sorcery_speed: true, ..PlayGrant::CAST };
-        self.permit(Playable::Card(card), card, owner, grant);
+        self.permit(Playable::Card(card), card, owner, PlayGrant::PLOT);
         self.emit(Event::Plotted { card, player: owner });
     }
 
