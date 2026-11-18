@@ -17,13 +17,6 @@ fn this_case_while_solved(view: &dyn LayerQuery, source: ObjectId, affected: Obj
     source == affected && solved::solved_in_layers(view, source)
 }
 
-/// "This Case is a 4/4 Gorgon creature ... in addition to its other types" (CR 205.1b, 613.1d): the type and the subtype, one layer-4 effect
-/// (the later ones continue it, CR 613.6). "Gorgon" is a word of the Case's text (CR 612).
-fn is_a_gorgon_creature_too(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
-    statics::creature_too(view, source, chars);
-    statics::also_a::<{ sub(Subtype::Gorgon) }>(view, source, chars);
-}
-
 const SOLVED: &str = "Solved \u{2014} This Case is a 4/4 Gorgon creature with deathtouch and lifelink in addition to its other types.";
 
 pub static CARD: CardDef = CardDef {
@@ -36,7 +29,7 @@ pub static CARD: CardDef = CardDef {
         ),
     ],
     statics: &[
-        static_ability(Layer::Type, this_case_while_solved, is_a_gorgon_creature_too, SOLVED),
+        static_ability(Layer::Type, this_case_while_solved, statics::also_a_creature_and_a::<{ sub(Subtype::Gorgon) }>, SOLVED),
         static_ability(Layer::Ability, this_case_while_solved, statics::have_deathtouch_and_lifelink, SOLVED).continues(),
         static_ability(Layer::PtSet, this_case_while_solved, statics::base_pt::<4, 4>, SOLVED).continues(),
     ],

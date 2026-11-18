@@ -320,6 +320,16 @@ pub fn also_a<const SUBTYPE: u16>(view: &dyn LayerQuery, source: ObjectId, chars
     }
 }
 
+/// "... is a [subtype] creature in addition to its other types" (CR 205.1b, 613.1d, layer 4) as a static ability's `apply`, `SUBTYPE` a
+/// `Subtype` as `u16` (`lands::sub`): `creature_too` and `also_a` in one, for the one effect's layer-4 part (a continuing part can only
+/// follow in a later layer, CR 613.6). Every type and subtype it had is kept; the subtype is a word of the source's text (CR 612.2).
+/// Puppet Crafting (Construct), Zoetic Glyph (Golem) and the solved Case of the Gorgon's Kiss (Gorgon) print it with their base power
+/// and toughness.
+pub fn also_a_creature_and_a<const SUBTYPE: u16>(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
+    creature_too(view, source, chars);
+    also_a::<SUBTYPE>(view, source, chars);
+}
+
 /// "... is a [subtype]" with no "in addition" (CR 205.1a, 613.1d, layer 4) as a static ability's `StaticDef::apply`, `SUBTYPE` a
 /// `Subtype` as `u16` (`lands::sub`): its creature types become that one alone (a changeling's every creature type is
 /// overwritten); its card types, supertypes, colors and other subtypes stay. The subtype is a word of the source's text (CR 612.2).

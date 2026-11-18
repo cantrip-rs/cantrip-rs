@@ -1,7 +1,7 @@
 use cantrip_api::*;
-use cantrip_mechanics::statics::base_pt;
+use cantrip_mechanics::statics::{also_a_creature_and_a, base_pt};
 use cantrip_mechanics::attach::attached_object;
-use cantrip_mechanics::{effects, targets};
+use cantrip_mechanics::{effects, lands, targets};
 use cantrip_oracle as oracle;
 
 /// "Enchant artifact or non-Aura enchantment" (CR 303.4a, 115.1): a permanent that is an artifact, or an enchantment that is not an
@@ -14,13 +14,6 @@ fn artifact_or_non_aura_enchantment(q: &dyn Query, _: &Asker, t: Target) -> bool
     })
 }
 
-/// Layer 4 (CR 613.1d): "is a Construct creature ... in addition to its other types" - it keeps every type and subtype it had, and
-/// gains the creature type and the creature type Construct, read through the words of this card's text (CR 612.2).
-fn construct_creature_too(q: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
-    chars.types = chars.types.with(CardType::Creature);
-    chars.subtypes = chars.subtypes.with(q.words(source).subtype(Subtype::Construct));
-}
-
 pub static CARD: CardDef = CardDef {
     enchant: Some(target(artifact_or_non_aura_enchantment)),
     abilities: &[ability(cost("{4}{G}"), effects::return_this_to_hand, "{4}{G}: Return this card from your graveyard to your hand.").from(ZoneKind::Graveyard)],
@@ -28,7 +21,7 @@ pub static CARD: CardDef = CardDef {
         static_ability(
             Layer::Type,
             attached_object,
-            construct_creature_too,
+            also_a_creature_and_a::<{ lands::sub(Subtype::Construct) }>,
             "Enchanted permanent is a Construct creature with base power and toughness 5/5 in addition to its other types.",
         ),
         static_ability(
