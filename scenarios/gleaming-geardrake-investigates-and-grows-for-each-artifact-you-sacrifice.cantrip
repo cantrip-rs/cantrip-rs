@@ -1,0 +1,44 @@
+# Gleaming Geardrake (1/1 flying): "When this creature enters, investigate" makes one Clue. "Whenever you sacrifice an artifact" puts
+# a +1/+1 counter on it for each artifact (CR 701.21a, 603.2): Black Lotus sacrificed for its own mana ability, then the Clue it paid
+# for sacrificed to draw (the Clue is an artifact, and the sacrifice is a cost). Two sacrifices, two counters: a 3/3.
+
+[Bot1 Deck]
+Gleaming Geardrake
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gleaming Geardrake.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Black Lotus; Clue Token; Gleaming Geardrake; Mox Ruby; Mox Sapphire
+? Bot1.Battlefield.Gleaming Geardrake.Power = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gleaming Geardrake.Power = 2
+Bot1.Battlefield.Clue Token.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gleaming Geardrake.Power = 3
+
+[Expect]
+Bot1.Battlefield.Gleaming Geardrake.Power = 3
+Bot1.Battlefield.Gleaming Geardrake.Toughness = 3
+Bot1.Battlefield.Gleaming Geardrake.Keywords = Flying
+Bot1.Battlefield = Mox Sapphire; Mox Ruby; Gleaming Geardrake
+Bot1.Hand.Count = 4

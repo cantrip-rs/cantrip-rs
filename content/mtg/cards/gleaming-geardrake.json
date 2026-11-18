@@ -1,0 +1,11 @@
+{
+  "name": "Gleaming Geardrake",
+  "manaCost": "{U}{R}",
+  "type": "Artifact Creature — Drake",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying\nWhen this creature enters, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")\nWhenever you sacrifice an artifact, put a +1/+1 counter on this creature.",
+  "keywords": [
+    "Flying"
+  ]
+}

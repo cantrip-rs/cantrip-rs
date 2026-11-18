@@ -1,0 +1,35 @@
+# "Whenever you sacrifice an artifact": Bot1 sacrificing a land (Prismatic Vista, which is no artifact) puts no counter on Gleaming
+# Geardrake, and neither does Bot2 sacrificing its own Black Lotus (Bot2 is not "you"). It stays a 1/1. The positive control (Black
+# Lotus and a Clue of the controller's own) is the sibling scenario.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Gleaming Geardrake
+Prismatic Vista
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gleaming Geardrake.Cast
+Bot1.Hand.Prismatic Vista.Play
+Bot1.Battlefield.Prismatic Vista.Activate
+Bot1.Search()
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Gleaming Geardrake.Power = 1
+Bot1.Battlefield.Gleaming Geardrake.Toughness = 1
+Bot1.Graveyard = Prismatic Vista
+Bot2.Graveyard = Black Lotus
+Bot1.Battlefield.Clue Token.Types = Artifact
