@@ -1,0 +1,52 @@
+# Coerced to Kill: "You control enchanted creature. Enchanted creature has base power and toughness 1/1, has deathtouch, and is an Assassin in addition to its other types." Turn 2: Bot2 casts Serra Angel
+# (4/4 flying, vigilance). Turn 3: Bot1 enchants it ({3}{U}{B}: Black Lotus for blue, Mox Jet, Mox Sapphire); the Aura can only enchant a creature. Bot1 now controls a 1/1 Angel Assassin that keeps
+# flying and vigilance and has deathtouch.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Coerced to Kill
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Serra Angel
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Serra Angel.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Serra Angel.Power = 4
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Coerced to Kill.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Coerced to Kill.Cast(Bot2.Battlefield.Serra Angel)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Coerced to Kill.AttachedTo = Serra Angel
+Bot2.Battlefield.Serra Angel = (absent)
+Bot1.Battlefield.Serra Angel.Power = 1
+Bot1.Battlefield.Serra Angel.Toughness = 1
+Bot1.Battlefield.Serra Angel.Keywords = Deathtouch; Flying; Vigilance
+Bot1.Battlefield.Serra Angel.Subtypes = Angel; Assassin

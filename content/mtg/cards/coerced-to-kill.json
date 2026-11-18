@@ -1,0 +1,6 @@
+{
+  "name": "Coerced to Kill",
+  "manaCost": "{3}{U}{B}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nYou control enchanted creature.\nEnchanted creature has base power and toughness 1/1, has deathtouch, and is an Assassin in addition to its other types."
+}

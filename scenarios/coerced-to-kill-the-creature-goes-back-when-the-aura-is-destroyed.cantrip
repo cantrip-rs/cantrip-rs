@@ -1,0 +1,56 @@
+# When Coerced to Kill leaves the battlefield the effects end (CR 613.1b, 400.7): Bot2's Disenchant destroys the Aura on turn 4, and Serra Angel is back under Bot2's control as a 4/4 flier without
+# deathtouch and without the Assassin type.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Coerced to Kill
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Serra Angel
+Disenchant
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Serra Angel.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Coerced to Kill.Cast(Bot2.Battlefield.Serra Angel)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Serra Angel.Power = 1
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Coerced to Kill)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Coerced to Kill; Black Lotus
+Bot1.Battlefield.Serra Angel = (absent)
+Bot2.Battlefield.Serra Angel.Power = 4
+Bot2.Battlefield.Serra Angel.Toughness = 4
+Bot2.Battlefield.Serra Angel.Keywords = Flying; Vigilance
+Bot2.Battlefield.Serra Angel.Subtypes = Angel
