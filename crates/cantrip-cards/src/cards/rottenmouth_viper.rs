@@ -11,7 +11,7 @@ use cantrip_oracle as oracle;
 fn blight_and_punish(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.add_counters(item.object, CounterKind::Blight, 1);
     let counters = g.obj(item.object).counters(CounterKind::Blight).max(0);
-    players::each_opponent_loses_life_unless_sacrifices_or_discards(g, item, &CARD, counters as u32, 4)
+    players::each_opponent_loses_life_unless_sacrifices_or_discards(g, item, &CARD, nonland, counters as u32, 4)
 }
 
 pub static CARD: CardDef = CardDef {

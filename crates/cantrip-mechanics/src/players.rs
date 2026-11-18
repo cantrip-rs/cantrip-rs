@@ -5,6 +5,7 @@
 //! player, such as "target opponent chooses".)
 
 use cantrip_api::*;
+use crate::targets::filters::nonland;
 
 /// Whether an "each player" step that has come to `player` goes on with them: true while they are still in the game.
 pub fn reached(g: &mut dyn Game, player: PlayerId) -> bool {
@@ -17,16 +18,18 @@ const SACRIFICE: u8 = 0;
 const DISCARD: u8 = 1;
 const LOSE: u8 = 2;
 
-/// "Each opponent loses `life` life unless that player sacrifices a nonland permanent of their choice or discards a card", done
-/// `times` over (Rottenmouth Viper's "for each blight counter on it"; Perforating Artist's once). `card` is the card whose
-/// `labels` are "Sacrifice a nonland permanent", "Discard a card" and "Lose N life", in that order.
+/// "Each opponent loses `life` life unless that player sacrifices a nonland permanent of their choice or discards a card" (or
+/// "unless they discard a card or sacrifice a creature"), done `times` over (Rottenmouth Viper's "for each blight counter on
+/// it"; Perforating Artist's and Polygraph Orb's once). `sacrifice` is the permanents the sacrifice may be of
+/// (`targets::filters::nonland`, `targets::filters::creature`). `card` is the card whose `labels` are the sacrifice, "Discard a
+/// card" and "Lose N life", in that order.
 ///
-/// Each opponent in turn order (CR 101.4) makes all of their choices - one for each time: to sacrifice a nonland permanent,
+/// Each opponent in turn order (CR 101.4) makes all of their choices - one for each time: to sacrifice a permanent,
 /// to discard a card, or to lose the life, a permanent or card already chosen not chosen again, and losing the life the one
 /// choice left to a player with neither - and then all the actions happen together (the Viper's rulings, CR 101.4): every
 /// sacrifice, every discard and every loss of life at once, a player losing life "the appropriate number of times" - one
 /// loss for each time it was chosen, each its own occurrence (`Game::together`).
-pub fn each_opponent_loses_life_unless_sacrifices_or_discards(g: &mut dyn Game, item: &StackItem, card: &'static CardDef, times: u32, life: i32) -> Result<(), Suspend> {
+pub fn each_opponent_loses_life_unless_sacrifices_or_discards(g: &mut dyn Game, item: &StackItem, card: &'static CardDef, sacrifice: ObjectFilter, times: u32, life: i32) -> Result<(), Suspend> {
     let card = g.card_id(card);
     let mut chosen = Chosen::default();
     let opponents: Vec<PlayerId> = g.state().apnap().filter(|&p| g.state().opponents(item.controller).any(|o| o == p)).collect();
@@ -35,7 +38,7 @@ pub fn each_opponent_loses_life_unless_sacrifices_or_discards(g: &mut dyn Game, 
             if !reached(g, opponent) {
                 break;
             }
-            loses_life_unless_sacrifices_or_discards(g, item, card, opponent, life, &mut chosen)?;
+            loses_life_unless_sacrifices_or_discards(g, item, card, opponent, sacrifice, life, &mut chosen)?;
         }
     }
     chosen.happen(g);
@@ -51,7 +54,7 @@ pub fn each_opponent_loses_life_unless_sacrifices_or_discards(g: &mut dyn Game, 
 pub fn target_player_loses_life_unless_sacrifices_or_discards<const LIFE: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(player) = item.target(0).player() else { return Ok(()) };
     let mut chosen = Chosen::default();
-    loses_life_unless_sacrifices_or_discards(g, item, item.ability.card, player, LIFE, &mut chosen)?;
+    loses_life_unless_sacrifices_or_discards(g, item, item.ability.card, player, nonland, LIFE, &mut chosen)?;
     chosen.happen(g);
     Ok(())
 }
@@ -70,15 +73,15 @@ impl Chosen {
     }
 }
 
-/// One choice of `player` for "loses `life` life unless they sacrifice a nonland permanent of their choice or discard a card", asked
-/// with `card`'s labels: to sacrifice a nonland permanent, to discard a card, or to lose the life, a permanent or card already in
+/// One choice of `player` for "loses `life` life unless they sacrifice a permanent (`sacrifice`) of their choice or discard a card", asked
+/// with `card`'s labels: to sacrifice a permanent `sacrifice` allows, to discard a card, or to lose the life, a permanent or card already in
 /// `chosen` not offered again, and losing the life the one choice left (asked nothing) to a player with neither.
-fn loses_life_unless_sacrifices_or_discards(g: &mut dyn Game, item: &StackItem, card: CardId, player: PlayerId, life: i32, chosen: &mut Chosen) -> Result<(), Suspend> {
+fn loses_life_unless_sacrifices_or_discards(g: &mut dyn Game, item: &StackItem, card: CardId, player: PlayerId, sacrifice: ObjectFilter, life: i32, chosen: &mut Chosen) -> Result<(), Suspend> {
     let asker = g.item_asker(item, player);
     let permanents: Vec<ObjectId> = g
         .permanents_of(player)
         .into_iter()
-        .filter(|&id| crate::targets::filters::nonland(g, &asker, id) && !chosen.sacrificed.iter().any(|&(_, s)| s == id) && g.can_sacrifice(player, id))
+        .filter(|&id| sacrifice(g, &asker, id) && !chosen.sacrificed.iter().any(|&(_, s)| s == id) && g.can_sacrifice(player, id))
         .collect();
     let hand = g.state().zone(Zone::hand(player)).to_vec();
     let cards: Vec<ObjectId> = hand.iter().copied().filter(|c| !chosen.discarded.contains(c)).collect();
