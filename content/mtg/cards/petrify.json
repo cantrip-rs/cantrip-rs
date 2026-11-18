@@ -1,0 +1,6 @@
+{
+  "name": "Petrify",
+  "manaCost": "{1}{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant artifact or creature\nEnchanted permanent can't attack or block, and its activated abilities can't be activated."
+}

@@ -1,0 +1,56 @@
+# Petrify {1}{W} (Enchant artifact or creature): "Enchanted permanent can't attack or block, and its activated abilities can't be activated."
+# (CR 508.1c, 509.1b, 602.5, 605.1a.) Bot2 has Birds of Paradise and Ornithopter (both fliers, so both can block Bot1's Ornithopter); a land is no legal target. Bot1 enchants the
+# Birds: in turn 3 blocking with the Birds is refused and the Ornithopter blocks; in turn 4 the Birds cannot attack nor tap for mana (a mana
+# ability is an activated ability) while the Ornithopter attacks.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Ornithopter
+Petrify
+Plains x16
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Birds of Paradise
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Birds of Paradise.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Petrify.Cast(Bot2.Battlefield.Forest)
+Bot1.Hand.Petrify.Cast(Bot2.Battlefield.Birds of Paradise)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+! Bot2.Block(Birds of Paradise > Ornithopter)
+Bot2.Block(Ornithopter > Ornithopter)
+[T3 Bot1.Main2]
+[T4 Bot2.Main1]
+! Bot2.Battlefield.Birds of Paradise.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+? Bot2.Mana = {G}
+[T4 Bot2.DeclareAttackers]
+! Bot2.Attack(Birds of Paradise > Bot1)
+Bot2.Attack(Ornithopter > Bot1)
+[T4 Bot2.Main2]
+? Bot2.Battlefield.Birds of Paradise.Tapped = false
+? Bot2.Battlefield.Ornithopter.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Petrify.AttachedTo = Birds of Paradise
+Bot1.Life = 20
