@@ -1,0 +1,8 @@
+{
+  "name": "Harried Dronesmith",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Human Artificer",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "At the beginning of combat on your turn, create a 1/1 colorless Thopter artifact creature token with flying. It gains haste until end of turn. Sacrifice it at the beginning of your next end step."
+}

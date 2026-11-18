@@ -1,0 +1,41 @@
+# Harried Dronesmith: the trigger is "at the beginning of combat on your turn". Turn 1 Bot1 casts it (Black Lotus and a
+# Mountain) and makes the first Thopter, which is gone by turn 2. On Bot2's turn 2 there is no Thopter (the combat's
+# beginning is not Bot1's turn), and at the beginning of combat on Bot1's turn 3 a new Thopter is made, and sacrificed
+# again at that turn's end step.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Harried Dronesmith
+Mountain x10
+
+[Bot2 Deck]
+Swamp x15
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Harried Dronesmith.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Count = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Count = 4
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Count = 3
+
+[Expect]
+Bot1.Battlefield = Harried Dronesmith; Mountain; Mountain
