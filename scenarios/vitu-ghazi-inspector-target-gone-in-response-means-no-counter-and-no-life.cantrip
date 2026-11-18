@@ -1,0 +1,54 @@
+# Vitu-Ghazi Inspector: "put a +1/+1 counter on target creature and you gain 2 life" is one ability with one target, so with that target illegal as it
+# resolves (Bot2 Lightning Bolts its own Ornithopter in response) the whole ability is removed (CR 608.2b): no counter, no life gained, though the evidence stays exiled.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Faithless Looting
+Vitu-Ghazi Inspector
+Hero of Bladehold
+Thieving Skydiver
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Hero of Bladehold; Thieving Skydiver)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vitu-Ghazi Inspector.Cast
+Bot1.Modes(Collect evidence)
+Bot1.Choose(Hero of Bladehold; Thieving Skydiver)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot1.Battlefield.Vitu-Ghazi Inspector.Counters.PlusOnePlusOne = (absent)
+Exile = Hero of Bladehold; Thieving Skydiver
