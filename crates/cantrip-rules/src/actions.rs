@@ -7848,7 +7848,11 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             // A special action's whole cost: turning a face-down permanent up for a morph cost that is not mana alone
             // ("Morph—Pay 5 life") is offered only where that could be paid (CR 702.37e, 118.3).
             let whole = if def.special_action { special_action_whole_cost(cx, id, ability, def) } else { def.cost };
-            if !ability_cost_payable(cx, id, player, &whole, def, by) {
+            // An alternative cost is paid rather than the whole activation cost (CR 118.9, 602.2b), so it may be offered
+            // where the ability's own cost can't be paid: Forge Anew's free equip of Dissection Tools with no creature to
+            // sacrifice. A special action is no activation, and takes none (`activation_alternatives` below).
+            let own_payable = ability_cost_payable(cx, id, player, &whole, def, by);
+            if !own_payable && (alternative_sources.is_empty() || def.special_action) {
                 continue;
             }
             // The additional costs static abilities apply to it (CR 118.8, 602.2b); a special action is no ability (CR 116.1).
@@ -7884,7 +7888,8 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             let a = judged.then(|| own.as_ref().unwrap_or_else(|| available.get_or_init(|| self::available(cx, player))));
             // A special action is no ability, so mana limited to activating abilities can't pay for it (CR 116.2, 106.6).
             let payment = if def.special_action { ManaPayment::Other } else { ability_payment(cx, id, chars.types, chars.subtypes, def.equip) };
-            let covered = |a: &Available, owed: ManaCost, targets: &[Target]| {
+            // `life`: what the cost pays in life beside its mana, which its Phyrexian symbols paid with life are judged with.
+            let covered = |a: &Available, owed: ManaCost, life: u32, targets: &[Target]| {
                 let owed = at_least_x(with_defined_x(cx, &asker, def, owed, targets), def.x_cant_be_zero);
                 // A special action is no activated ability (CR 116.2): what changes the cost of activating abilities does not
                 // touch it; what changes its own cost is already in `owed` (`special_action_cost`), which `special_action`
@@ -7901,7 +7906,7 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
                     // Its own cost changes, each way a reduction by hybrid mana could be split (CR 118.7e) and the hybrid
                     // symbols it meets announced (CR 601.2b), as `special_action` asks them.
                     let printed = at_least_x(special_action_printed_cost(cx, id, ability, def), def.x_cant_be_zero);
-                    change_any(cx, &a.changers, player, Costed::SpecialAction(id, ability), printed, None, &[], None, &mut |c, least| judge(at_least(c, least), whole.life))
+                    change_any(cx, &a.changers, player, Costed::SpecialAction(id, ability), printed, None, &[], None, &mut |c, least| judge(at_least(c, least), life))
                 } else {
                     // How its Phyrexian symbols are paid is announced as it is proposed, before the total is determined (CR
                     // 118.13a, 601.2b, 601.2f) - those printed and those its own cost change makes part of its activation cost
@@ -7910,9 +7915,9 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
                     // announced. Each way the hybrid symbols a reduction meets could be announced (CR 601.2b): covered if any is.
                     let own = own_ways_of_paying(cx, player, id, ability, by, def, targets);
                     let proposed = owed.plus(&own);
-                    let announced = phyrexian_with_life(cx, player, proposed, whole.life, activating(def));
+                    let announced = phyrexian_with_life(cx, player, proposed, life, activating(def));
                     let with_color = announced.symbols.iter().sum::<u32>() - proposed.symbols.iter().sum::<u32>();
-                    let life = whole.life + 2 * (proposed.phyrexian.iter().sum::<u32>() - with_color);
+                    let life = life + 2 * (proposed.phyrexian.iter().sum::<u32>() - with_color);
                     change_any_announced(cx, &a.changers, player, Costed::Ability(id, ability, by), announced, None, targets, None, &own, &mut |c, least| judge(at_least(c, least), life))
                 }
             };
@@ -7929,8 +7934,8 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             let announced = a.is_some_and(|a| {
                 !def.special_action && (def.modal.is_some() || !def.targets.is_empty()) && !(targets_with_activation(def) && def.modal.is_none()) && changes(a)
             });
-            let judged = |a: &Available, cost: ManaCost| {
-                if announced { some_activation(cx, a, &asker, def, ability, cost, &|c, t| covered(a, c, t)) } else { covered(a, cost, &[]) }
+            let judged = |a: &Available, cost: ManaCost, life: u32| {
+                if announced { some_activation(cx, a, &asker, def, ability, cost, &|c, t| covered(a, c, life, t)) } else { covered(a, cost, life, &[]) }
             };
             // The ability for its own cost, and for each cost a static ability lets the player pay rather than its mana cost
             // (CR 118.9, 602.2b: Forge Anew's, Kili's {0} equip), each an option of its own, made by that permanent
@@ -7939,32 +7944,37 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
                 Vec::new()
             } else {
                 // An alternative cost with no {X} for an ability whose X can't be 0 leaves no X to announce (CR 107.3a, 118.9).
+                // One that is the very cost the ability's own is - mana alone, the same mana - is that activation again.
+                let same = own_payable && def.cost_choice.is_empty() && whole.is_mana_only();
                 static_rules::activation_alternatives(cx, &alternative_sources, player, id, def)
                     .into_iter()
-                    .filter(|&(_, c)| c != owed && !x_only_zero(def.x_cant_be_zero, def.cost.mana.x, c.x))
+                    .filter(|&(_, c)| !(same && c == owed) && !x_only_zero(def.x_cant_be_zero, def.cost.mana.x, c.x))
                     .collect()
             };
+            // "Sacrifice [the card that gives this ability]" (CR 201.5a, 701.21a): only with that permanent the player's, and
+            // one a static ability lets them sacrifice for it (CR 101.2, `may_sacrifice_for`). "Exile [it]" needs only that
+            // permanent, whoever controls it: no rule limits exiling to permanents the payer controls, as CR 701.21a does
+            // sacrificing (a Threatened creature's granted ability exiles its owner's Equipment). Part of its own cost, which
+            // an alternative cost is paid rather than (CR 118.9).
+            let own_payable = own_payable
+                && (!(def.cost.sacrifice_granter || def.cost.exile_granter)
+                    || granted_by(cx, id, Some(&chars), index, ability, &givers).is_some_and(|g| {
+                        !def.cost.sacrifice_granter
+                            || cx.s().obj(g.object).controller == player && may_sacrifice_for(cx, player, g.object, activating(def))
+                    }));
+            // The ability for its own cost (with what its Phyrexian symbols are judged beside: the life the cost pays), and
+            // for each alternative cost, which pays no life but what it may add (CR 118.9).
             let ways = || {
-                std::iter::once((None, owed))
-                    .chain(alternatives.iter().map(|&(g, c)| (Some(g), c)))
-                    .filter(|&(_, cost)| a.is_none_or(|a| each_target || judged(a, cost)))
+                own_payable
+                    .then_some((None, owed, whole.life))
+                    .into_iter()
+                    .chain(alternatives.iter().map(|&(g, c)| (Some(g), c, 0)))
+                    .filter(|&(_, cost, life)| a.is_none_or(|a| each_target || judged(a, cost, life)))
             };
             if ways().next().is_none() {
                 continue;
             }
             let mut option = ActionOption { granted_by: granted_by(cx, id, Some(&chars), index, ability, &givers), ..ActionOption::on(ActionKind::ActivateAbility, id, index as u8) };
-            // "Sacrifice [the card that gives this ability]" (CR 201.5a, 701.21a): only with that permanent the player's, and
-            // one a static ability lets them sacrifice for it (CR 101.2, `may_sacrifice_for`). "Exile [it]" needs only that
-            // permanent, whoever controls it: no rule limits exiling to permanents the payer controls, as CR 701.21a does
-            // sacrificing (a Threatened creature's granted ability exiles its owner's Equipment).
-            if (def.cost.sacrifice_granter || def.cost.exile_granter)
-                && !option.granted_by.is_some_and(|g| {
-                    !def.cost.sacrifice_granter
-                        || cx.s().obj(g.object).controller == player && may_sacrifice_for(cx, player, g.object, activating(def))
-                })
-            {
-                continue;
-            }
             let possible = match def.modal {
                 Some(modal) => modes_possible(cx, &asker, modal),
                 None if def.late_targets => slots_satisfiable(cx, &asker, def.targets),
@@ -7976,12 +7986,12 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             if !possible {
                 continue;
             }
-            for (paid_by, cost) in ways() {
+            for (paid_by, cost, life) in ways() {
                 let mut option = ActionOption { paid_by, ..option.clone() };
                 if let Some(a) = a.filter(|_| each_target) {
-                    let kept: Vec<Target> = option.target_candidates.iter().copied().filter(|&t| covered(a, cost, &[t])).collect();
+                    let kept: Vec<Target> = option.target_candidates.iter().copied().filter(|&t| covered(a, cost, life, &[t])).collect();
                     if kept.len() != option.target_candidates.len() {
-                        if kept.is_empty() && !(option.targets_optional && covered(a, cost, &[])) {
+                        if kept.is_empty() && !(option.targets_optional && covered(a, cost, life, &[])) {
                             continue;
                         }
                         option.target_candidates = kept;
@@ -10018,8 +10028,9 @@ pub fn describe(cards: &'static CardTable, state: &GameState, log: &[Record], op
                 _ => printed.into(),
             }
         }
-        // An ability activated for a cost another permanent lets be paid rather than its mana cost (CR 118.9, 602.2b): the
-        // ability's text, the cost and the permanent, so it reads apart from the ability for its own cost.
+        // An ability activated for a cost another permanent lets be paid rather than its activation cost - all of it, what
+        // is not mana too (CR 118.9, 602.2b) - so "rather than its cost": the ability's text, the cost and the permanent, so
+        // it reads apart from the ability for its own cost.
         ActionKind::ActivateAbility if let Some(g) = option.paid_by => {
             let printed = describe_way(cards, state, log, option, source);
             let reader = crate::resolve::Reader { cards, state, events: log };
@@ -10029,7 +10040,7 @@ pub fn describe(cards: &'static CardTable, state: &GameState, log: &[Record], op
                 _ => None,
             });
             match cost {
-                Some(cost) => format!("{printed} - paying {cost} rather than its mana cost ({})", permission_name(cards, state, g)).into(),
+                Some(cost) => format!("{printed} - paying {cost} rather than its cost ({})", permission_name(cards, state, g)).into(),
                 None => format!("{printed} ({})", permission_name(cards, state, g)).into(),
             }
         }
@@ -12833,11 +12844,18 @@ fn activate(
     let slot = chars.abilities.iter().enumerate().filter(|(_, a)| a.is_some()).nth(index as usize).map_or(0, |(slot, _)| slot);
     item.words = layers::granted_words_at(cx.cards(), cx.s(), &cx.g.log, source, &chars, slot).unwrap_or_else(|| cantrip_api::words(cx.s(), source));
     let mut mana = def.cost.mana;
-    // CR 118.9, 602.2b: a static ability may let the player pay another cost rather than the ability's mana cost: the
+    // The activation cost paid beside its mana: the ability's own.
+    let mut base = def.cost;
+    // CR 118.9, 602.2b: a static ability may let the player pay another cost rather than the ability's activation cost - an
+    // activated ability's analog of a mana cost (CR 602.2b) - so rather than all of it, its parts other than mana and any
+    // choice among ways of paying it with them: Forge Anew's {0} rather than Dissection Tools' "Sacrifice a creature". The
     // option it was offered as names which (`ActionOption::paid_by`), and it is paid if it still applies.
     if let Some(g) = paid_by {
         match static_rules::named_activation_alternative(&*cx, g, player, source, def) {
-            Some(alternative) => mana = alternative,
+            Some(alternative) => {
+                mana = alternative;
+                base = Cost::NONE;
+            }
             None => return Err(Stop::Cancel),
         }
         // An alternative cost with no {X} leaves an X that can't be 0 nothing to be (CR 107.3a, 118.9).
@@ -12852,10 +12870,10 @@ fn activate(
         mask = choose_modes(cx, player, source, false, ability, modal, (modal.min, modal.max), mana, by, AnyMana::No)?;
         item.modes = mask;
     }
-    // CR 601.2b by way of 602.2b: the way of paying a cost that names a choice is chosen before X and the targets.
-
-    let chosen_cost = choose_cost_way(cx, player, source, ability, def, paid, by)?;
-    let whole = chosen_cost.map_or(def.cost, |part| add_extra_totals(def.cost, part));
+    // CR 601.2b by way of 602.2b: the way of paying a cost that names a choice is chosen before X and the targets - none
+    // where an alternative cost is paid rather than that cost (CR 118.9).
+    let chosen_cost = if paid_by.is_some() { None } else { choose_cost_way(cx, player, source, ability, def, paid, by)? };
+    let whole = chosen_cost.map_or(base, |part| add_extra_totals(base, part));
     if let Some(part) = chosen_cost { mana = mana.plus(&part.mana); }
     let granter = if whole.sacrifice_granter || whole.exile_granter {
         match granted.map(|g| g.object).filter(|&g| granter_pays(cx, &whole, player, g)) {
@@ -12993,7 +13011,8 @@ fn activate(
     // CR 601.2g: mana abilities precede every payment operation. Other source-specific operations still need to
     // join the same scheduler; the common object, mana, life, energy, counter, reveal and zone costs use it now.
     let mut helpers = Helpers {
-        waterbend: if def.waterbend { def.cost.mana.generic + u32::from(item.x) * u32::from(def.cost.mana.x) } else { 0 },
+        // An alternative cost is paid rather than the waterbend cost (CR 118.9, 701.67a).
+        waterbend: if def.waterbend && paid_by.is_none() { def.cost.mana.generic + u32::from(item.x) * u32::from(def.cost.mana.x) } else { 0 },
         creatures: def.tap_creatures_for_mana,
         purpose: Paying::Activating(paying),
         ..Helpers::NONE
@@ -13007,7 +13026,7 @@ fn activate(
     let mut extra: Vec<_> = chosen_cost.into_iter().map(|part| (CostOrigin::CastingWay, part)).collect();
     extra.extend(imposed);
     let extra_chosen = vec![Vec::new(); extra.len()];
-    let (chosen, symbol_exiles, attacking, _, _, _, _, _, _) = pay_scheduled_costs(cx, player, source, scope, &def.cost, &[], &extra, &extra_chosen, &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(item.x), 0, false, None, &[])?;
+    let (chosen, symbol_exiles, attacking, _, _, _, _, _, _) = pay_scheduled_costs(cx, player, source, scope, &base, &[], &extra, &extra_chosen, &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(item.x), 0, false, None, &[])?;
 
     let at = cx.s().stack.len() - 1;
     let mut with = cx.s().stack[at];

@@ -1,0 +1,52 @@
+# Forge Anew (CR 118.9, 602.2b): "You may pay {0} rather than pay the equip cost of the first equip ability you activate
+# during each of your turns." The equip cost is the whole activation cost (CR 702.6a), so Dark Knight's Greatsword's
+# "Equip—Pay 3 life" paid for {0} costs no life: Bot1 equips it from the Hero token to Ragavan for {0} and stays at 20.
+
+[Bot1 Deck]
+Plains
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Dark Knight's Greatsword
+Forge Anew
+Ragavan, Nimble Pilferer
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dark Knight's Greatsword.Cast
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Forge Anew.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ragavan, Nimble Pilferer.Cast
+Bot1.Pass
+Bot1.Battlefield.Dark Knight's Greatsword.Activate(Ragavan, Nimble Pilferer; Ability: rather than its cost (Forge Anew))
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot1.Battlefield.Dark Knight's Greatsword.AttachedTo = Ragavan, Nimble Pilferer
+Bot1.Battlefield.Ragavan, Nimble Pilferer.Power = 5

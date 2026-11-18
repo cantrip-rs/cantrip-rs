@@ -43,12 +43,12 @@ Bot1.Pass
 Bot1.Pass
 ? Bot1.EnduringStory = true
 ? Bot1.Hand.Count = 2
-Bot1.Battlefield.Shadowspear.Activate(Kíli the Resourceful; Ability: rather than its mana cost (Kíli the Resourceful))
+Bot1.Battlefield.Shadowspear.Activate(Kíli the Resourceful; Ability: rather than its cost (Kíli the Resourceful))
 Bot1.Pass
 ! Bot1.Battlefield.Bloodforged Battle-Axe.Activate(Ability: Equip; Mana: short)
 [T5 Bot1.Main1]
 Bot1.Hand.Plains.Play
-Bot1.Battlefield.Bloodforged Battle-Axe.Activate(Thraben Inspector; Ability: rather than its mana cost (Kíli the Resourceful))
+Bot1.Battlefield.Bloodforged Battle-Axe.Activate(Thraben Inspector; Ability: rather than its cost (Kíli the Resourceful))
 Bot1.Pass
 [T5 Bot1.Main2]
 

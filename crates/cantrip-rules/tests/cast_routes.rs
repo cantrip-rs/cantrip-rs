@@ -961,8 +961,8 @@ fn an_energy_cost_is_judged_again_after_the_mana_abilities() {
     }
 }
 
-/// CR 118.9, 602.2b: each cost a permanent lets a player pay rather than an ability's mana cost is an activation of its own,
-/// made by that permanent (`paid_by`), beside the ability for its own cost where that can be paid; the one chosen is paid.
+/// CR 118.9, 602.2b: each cost a permanent lets a player pay rather than an ability's activation cost is an activation of its
+/// own, made by that permanent (`paid_by`), beside the ability for its own cost where that can be paid; the one chosen is paid.
 #[test]
 fn each_alternative_cost_of_an_ability_is_an_activation_of_its_own() {
     for pool in [0u8, 2] {
@@ -976,7 +976,7 @@ fn each_alternative_cost_of_an_ability_is_an_activation_of_its_own() {
         let own = if pool == 0 { vec![] } else { vec![None] };
         assert_eq!(payers, [own, vec![Some(first), Some(second)]].concat(), "the opponent's gives nothing to this player");
         let texts: Vec<String> = options.iter().map(|o| describe(&game, o)).collect();
-        assert!(texts.iter().filter(|t| t.contains("paying {0} rather than its mana cost (Route Ability Free)")).count() == 2, "{texts:?}");
+        assert!(texts.iter().filter(|t| t.contains("paying {0} rather than its cost (Route Ability Free)")).count() == 2, "{texts:?}");
         let chosen = options.iter().find(|o| o.paid_by.is_some_and(|g| g.object == second)).unwrap().clone();
         let request = game.pending().unwrap().clone();
         game.answer(request.id, request.player, Answer::Act(Action::of(&chosen))).unwrap();

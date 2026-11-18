@@ -329,7 +329,9 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
             let ability_ref = game.chars(src).abilities().nth(o.index as usize);
             let ability = ability_ref.map(|a| game.cards.ability(a));
             if let Some(AbilityDef::Activated(d)) = ability {
-                m.life_cost = i32::try_from(turn_up_way.map_or(d.cost.life, |w| w.turn_up.life)).unwrap_or(i32::MAX);
+                // An alternative cost is paid rather than the whole activation cost, its life too (CR 118.9, 602.2b).
+                let life = if o.paid_by.is_some() { 0 } else { turn_up_way.map_or(d.cost.life, |w| w.turn_up.life) };
+                m.life_cost = i32::try_from(life).unwrap_or(i32::MAX);
                 // A cost that returns tapped permanents, chosen once the mana is paid (CR 602.2b, 601.2g-h: Urban Retreat).
                 m.tapped_after_mana = !d.is_mana_ability() && d.cost.permanents.is_some_and(|p| p.tapped);
                 // A special action whose cost a static ability changes (CR 116.2k, 118.7: "plotting cards from your hand costs

@@ -712,13 +712,13 @@ pub fn grants_flash(q: &dyn Query, granters: &[(ObjectId, PlayerId, &'static Car
 }
 
 /// The permanents on the battlefield with a static ability that lets a player pay another cost rather than an activated
-/// ability's mana cost (`CardDef::ability_alternatives`, CR 118.9, 602.2b), with their controllers: empty, so unallocated,
+/// ability's activation cost (`CardDef::ability_alternatives`, CR 118.9, 602.2b), with their controllers: empty, so unallocated,
 /// in nearly every game.
 pub fn activation_alternative_sources(cx: &Cx) -> Vec<(ObjectId, PlayerId, &'static CardDef, Option<Linked>)> {
     sources(cx, |d| !d.ability_alternatives.is_empty()).collect()
 }
 
-/// Each cost one of `alternative_sources` lets `player` pay rather than the mana cost of this ability of `permanent`
+/// Each cost one of `alternative_sources` lets `player` pay rather than the activation cost of this ability of `permanent`
 /// (CR 118.9, 602.2b), with the `Grant` that names it (the permanent and `AbilityRef::ability_alternative`): each a way of
 /// activating it of its own.
 pub fn activation_alternatives(

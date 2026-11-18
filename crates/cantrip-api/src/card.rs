@@ -604,10 +604,13 @@ pub struct LastingCostChange {
 /// those of the face it would be cast as.
 pub type PayWithGrant = fn(&dyn Query, ObjectId, PlayerId, ObjectId) -> PayWith;
 
-/// A static ability that lets a player pay a different mana cost rather than an activated ability's (CR 118.9, 602.2b),
-/// by the permanent `source` that has it: the cost they may pay instead for `activator` activating the ability `def` of
-/// `permanent`, or none. "You may pay {0} rather than pay the equip cost of the first equip ability you activate during
-/// each of your turns": Forge Anew. Each one that applies is an activation of its own (`ActionOption::paid_by`).
+/// A static ability that lets a player pay a cost of mana rather than an activated ability's activation cost (CR 118.9,
+/// 602.2b: the activation cost is an ability's analog of a spell's mana cost), by the permanent `source` that has it: the
+/// cost they may pay instead for `activator` activating the ability `def` of `permanent`, or none. It is paid rather than
+/// the whole activation cost, its parts other than mana and any choice among ways of paying it (`ActivatedDef::cost_choice`)
+/// included: "You may pay {0} rather than pay the equip cost of the first equip ability you activate during each of your
+/// turns" (Forge Anew) leaves Dissection Tools' "Equip—Sacrifice a creature" unpaid. Each one that applies is an
+/// activation of its own (`ActionOption::paid_by`).
 pub type AbilityAlternative = fn(&dyn Query, &Asker, PlayerId, ObjectId, &ActivatedDef) -> Option<ManaCost>;
 
 /// A mana ability's effect: it resolves at once, never on the stack (CR 605.3). The color is the one chosen for an
@@ -1212,6 +1215,11 @@ impl Cost {
     pub fn is_mana_and_permanents_only(&self) -> bool {
         Cost { components: &[], mana: ManaCost::ZERO, tap: true, permanents: None, tap_permanents: false, ..*self }.is_tap_only()
             && self.components.iter().all(Cost::is_mana_and_permanents_only)
+    }
+
+    /// Whether the cost is mana and nothing else (CR 118.1, 202.1): judged by `is_tap_only`, which names every part of a cost.
+    pub fn is_mana_only(&self) -> bool {
+        Cost { mana: ManaCost::ZERO, tap: true, ..*self }.is_tap_only()
     }
 
     /// Whether the cost is {T} and nothing else (CR 107.5): what a basic land's mana ability costs. Every part is named, so
@@ -3949,8 +3957,8 @@ pub struct CardDef {
     /// Its static abilities that give the spells a player casts convoke, delve or improvise (CR 601.2f-h), while it is on the
     /// battlefield.
     pub grants_pay_with: &'static [PayWithGrant],
-    /// Its static abilities that let a player pay another mana cost rather than an activated ability's (CR 118.9), while
-    /// it is on the battlefield.
+    /// Its static abilities that let a player pay a cost of mana rather than an activated ability's activation cost (CR
+    /// 118.9, 602.2b), while it is on the battlefield.
     pub ability_alternatives: &'static [AbilityAlternative],
     /// Ways it gives cards in graveyards to be cast, while it is on the battlefield (CR 604, 118.9).
     pub granted_ways: &'static [GrantedWay],

@@ -39,7 +39,7 @@ Bot1.Battlefield.Island.Activate
 Bot1.Hand.Forge Anew.Cast
 Bot1.Pass
 Bot1.Hand.Mox Emerald.Cast
-Bot1.Battlefield.Wrecking Ball Arm.Activate(Ragavan, Nimble Pilferer; Ability: Equip legendary creature {3} - paying {0} rather than its mana cost (Forge Anew))
+Bot1.Battlefield.Wrecking Ball Arm.Activate(Ragavan, Nimble Pilferer; Ability: Equip legendary creature {3} - paying {0} rather than its cost (Forge Anew))
 Bot1.Pass
 Bot1.Pass
 [Bot1.Main1]
