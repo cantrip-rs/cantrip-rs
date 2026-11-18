@@ -1,0 +1,43 @@
+# Relic's Roar: "Until end of turn, target artifact or creature becomes a Dinosaur artifact creature with base power and toughness 4/3 in
+# addition to its other types." Bot1's Island (a land, neither) is refused as a target; its Mox Jet, an artifact that is no creature, is chosen:
+# it becomes a 4/3 Artifact Creature with the Dinosaur subtype (CR 205.1b, 613.1d, 613.4b). Bot1's Mox Sapphire pays for the spell. At the next turn
+# the effect has ended (CR 514.2): it is a plain artifact again with no power or toughness.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Relic's Roar
+Island
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Relic's Roar.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Relic's Roar.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Mox Jet.Types = Artifact; Creature
+? Bot1.Battlefield.Mox Jet.Subtypes = Dinosaur
+? Bot1.Battlefield.Mox Jet.Power = 4
+? Bot1.Battlefield.Mox Jet.Toughness = 3
+? Bot1.Battlefield.Island.Power = (absent)
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Mox Jet.Types = Artifact
+Bot1.Battlefield.Mox Jet.Subtypes = (absent)
+Bot1.Battlefield.Mox Jet.Power = (absent)
+Bot1.Battlefield.Mox Jet.Toughness = (absent)
+Bot1.Graveyard = Relic's Roar

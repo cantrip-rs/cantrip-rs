@@ -1,0 +1,6 @@
+{
+  "name": "Relic's Roar",
+  "manaCost": "{U}",
+  "type": "Instant",
+  "oracleText": "Until end of turn, target artifact or creature becomes a Dinosaur artifact creature with base power and toughness 4/3 in addition to its other types."
+}

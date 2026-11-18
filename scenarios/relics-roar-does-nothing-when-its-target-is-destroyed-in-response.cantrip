@@ -1,0 +1,40 @@
+# Relic's Roar targets Bot2's Ornithopter; Bot2 destroys its own Ornithopter with Disenchant in response, so the spell's only target is illegal and
+# it does not resolve (CR 608.2b): nothing becomes a Dinosaur and the Ornithopter ends in Bot2's graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Relic's Roar
+Island x18
+
+[Bot2 Deck]
+Mox Pearl
+Plains
+Disenchant
+Ornithopter
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Relic's Roar.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Disenchant.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Relic's Roar
+Bot2.Graveyard = Disenchant; Ornithopter

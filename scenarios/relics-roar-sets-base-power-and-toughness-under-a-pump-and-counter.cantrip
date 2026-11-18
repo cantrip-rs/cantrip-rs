@@ -1,0 +1,44 @@
+# Relic's Roar sets the BASE power and toughness (CR 613.4b), so a pump on top still counts: Bot1's Ornithopter (an 0/2 artifact creature) gets Giant Growth
+# (+3/+3, 3/5) and then Relic's Roar: base 4/3 plus 3/3 is 7/6 even though the pump came first (layer 7b before 7c). When Giant Growth wears off at the
+# end of the turn so does the Roar.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Ornithopter
+Giant Growth
+Relic's Roar
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 3
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Relic's Roar.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 7
+? Bot1.Battlefield.Ornithopter.Toughness = 6
+? Bot1.Battlefield.Ornithopter.Subtypes = Dinosaur; Thopter
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ornithopter.Subtypes = Thopter

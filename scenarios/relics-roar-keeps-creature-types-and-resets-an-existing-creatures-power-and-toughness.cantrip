@@ -1,0 +1,38 @@
+# Relic's Roar on Bot2's Llanowar Elves, a 1/1 Elf Druid creature that is no artifact: it becomes an Artifact Creature and keeps its Elf and Druid
+# subtypes beside Dinosaur ("in addition to its other types", CR 205.1b), and its base power and toughness become 4/3 rather than staying 1/1
+# (CR 613.4b). Bot1 casts it at instant speed during Bot2's turn 2, and it is a 1/1 again on turn 3.
+
+[Bot1 Deck]
+Mox Sapphire
+Relic's Roar
+Island x18
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Relic's Roar.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Types = Creature; Artifact
+? Bot2.Battlefield.Llanowar Elves.Subtypes = Dinosaur; Druid; Elf
+? Bot2.Battlefield.Llanowar Elves.Power = 4
+? Bot2.Battlefield.Llanowar Elves.Toughness = 3
+[T3 Bot1.Main1]
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Types = Creature
+Bot2.Battlefield.Llanowar Elves.Subtypes = Druid; Elf
+Bot2.Battlefield.Llanowar Elves.Power = 1
+Bot2.Battlefield.Llanowar Elves.Toughness = 1
