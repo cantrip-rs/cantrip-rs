@@ -1,0 +1,63 @@
+# Soul Enervation {3}{B}'s "When this enchantment enters, target creature gets -4/-4 until end of turn." Bot1 (four free Moxen and a
+# Memnite) casts it on turn 3 against Bot2's Mox Sapphire and Aegis Turtle (a 0/5, so -4/-4 leaves exactly -4/1: -3/-3 would leave
+# 2 and -5/-5 would kill it). Targets are creatures only: Bot2's Mox Sapphire is refused, and Bot1's own Memnite is a legal target.
+# The enters ability drains nobody (the second ability needs a creature card to leave a graveyard), and on turn 4 the Turtle is a 0/5
+# again (CR 514.2).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Soul Enervation
+Memnite
+Plains x14
+
+[Bot2 Deck]
+Mox Sapphire
+Aegis Turtle
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Soul Enervation.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Mox Sapphire)
+Bot1.Target(Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Aegis Turtle.Power = -4
+? Bot2.Battlefield.Aegis Turtle.Toughness = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Life = 20
+? Bot2.Life = 20
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Aegis Turtle.Power = 0
+Bot2.Battlefield.Aegis Turtle.Toughness = 5
+Bot1.Battlefield.Soul Enervation.Keywords = Flash

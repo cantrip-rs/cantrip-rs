@@ -1,0 +1,76 @@
+# Soul Enervation's second ability needs a creature card to leave your graveyard. Bot1's graveyard holds only Faithless Looting and
+# two Plains when Bot2's Tormod's Crypt exiles it on turn 2: no creature card, no drain. Bot2 then casts its own Faithless Looting,
+# discarding its Memnite and Ornithopter, and exiles that graveyard too: the creature cards leave an opponent's graveyard, so the
+# Enervation does not trigger. Both players stay at 20. (The positive control, the same exile with creature cards in Bot1's graveyard,
+# is soul-enervation-drains-once-when-several-creature-cards-leave-your-graveyard-together.)
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Soul Enervation
+Faithless Looting
+Plains x13
+
+[Bot2 Deck]
+Tormod's Crypt
+Tormod's Crypt
+Mox Ruby
+Faithless Looting
+Memnite
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Soul Enervation.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains; Plains)
+? Bot1.Graveyard = Faithless Looting; Plains; Plains
+[T2 Bot2.Main1]
+Bot2.Hand.Tormod's Crypt.Cast
+Bot1.Pass
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Pass
+? Bot1.Graveyard.Count = 0
+? Bot2.Life = 20
+? Bot1.Life = 20
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Memnite; Ornithopter)
+? Bot2.Graveyard = Faithless Looting; Ornithopter; Memnite; Tormod's Crypt
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot2)
+Bot1.Pass
+
+[Expect]
+Bot2.Graveyard.Count = 0
+Bot2.Life = 20
+Bot1.Life = 20

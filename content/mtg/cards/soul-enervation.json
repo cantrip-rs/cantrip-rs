@@ -1,0 +1,9 @@
+{
+  "name": "Soul Enervation",
+  "manaCost": "{3}{B}",
+  "type": "Enchantment",
+  "oracleText": "Flash\nWhen this enchantment enters, target creature gets -4/-4 until end of turn.\nWhenever one or more creature cards leave your graveyard, each opponent loses 1 life and you gain 1 life.",
+  "keywords": [
+    "Flash"
+  ]
+}

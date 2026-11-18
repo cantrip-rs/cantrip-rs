@@ -1,0 +1,58 @@
+# Soul Enervation's "Whenever one or more creature cards leave your graveyard, each opponent loses 1 life and you gain 1 life." Bot1
+# casts the Enervation on turn 1 (no creature on the battlefield, so its enters ability has no target) and then Faithless Looting,
+# which discards its Memnite and Ornithopter. On turn 2 Bot2's Tormod's Crypt exiles Bot1's whole graveyard at once - the two creature
+# cards and the Looting - which is one batch (CR 603.2c: "one or more"): the drain happens exactly once, Bot2 at 19 and Bot1 at 21
+# (a trigger for each card would leave 18 and 22).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Soul Enervation
+Faithless Looting
+Memnite
+Ornithopter
+Plains x11
+
+[Bot2 Deck]
+Tormod's Crypt
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Soul Enervation.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite; Ornithopter)
+? Bot1.Graveyard = Faithless Looting; Ornithopter; Memnite
+? Bot1.Life = 20
+? Bot2.Life = 20
+[T2 Bot2.Main1]
+Bot2.Hand.Tormod's Crypt.Cast
+Bot1.Pass
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot2.Life = 19
+Bot1.Life = 21
