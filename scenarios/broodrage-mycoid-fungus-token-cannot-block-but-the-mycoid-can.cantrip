@@ -1,0 +1,30 @@
+# Broodrage Mycoid's Fungus token has "This token can't block" (CR 509.1b): when Bot2's Memnite attacks on turn 4, Bot1 may not block it with the Fungus token, while the Mycoid itself (no such text) may and kills it.
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Broodrage Mycoid
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Broodrage Mycoid.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Pass
+! Bot1.Block(Fungus Token > Memnite)
+Bot1.Block(Broodrage Mycoid > Memnite)
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Memnite
+Bot1.Battlefield.Broodrage Mycoid.Damage = 1
+Bot1.Battlefield.Fungus Token.Damage = 0

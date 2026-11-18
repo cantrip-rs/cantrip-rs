@@ -1,0 +1,51 @@
+# Broodrage Mycoid ({3}{B}, 4/3): "At the beginning of your end step, if you descended this turn, create a 1/1 black Fungus creature token with 'This token can't block.'" (CR 603.4, 700.11, 111.1).
+# Turn 1 Bot1 sacrifices a Black Lotus (a permanent card put into the graveyard: it descended) for {B}{B}{B}, which with Mox Jet pays for the Mycoid: one Fungus token at the end step, black 1/1 that can't block.
+# On turn 3 only Ancestral Recall (an instant, no permanent card) goes to the graveyard: the earlier descent does not carry over and no second token is made. On turn 5 a second Lotus descends again: a second token.
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Jet
+Broodrage Mycoid
+Mox Sapphire
+Ancestral Recall
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Broodrage Mycoid.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Broodrage Mycoid.Power = 4
+? Bot1.Battlefield.Broodrage Mycoid.Toughness = 3
+? Bot1.Battlefield.Count = 3
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Fungus Token.Power = 1
+? Bot1.Battlefield.Fungus Token.Toughness = 1
+? Bot1.Battlefield.Fungus Token.Colors = Black
+? Bot1.Battlefield.Fungus Token.Keywords = CantBlock
+? Bot1.Battlefield.Count = 4
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 2
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Count = 4
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Graveyard.Count = 3
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Fungus Token#1.Power = 1
+Bot1.Battlefield.Fungus Token#2.Power = 1
+Bot1.Battlefield.Fungus Token#2.Keywords = CantBlock
