@@ -1,0 +1,60 @@
+# Anzrag, the Quake-Mole: "Whenever Anzrag becomes blocked, untap each creature you control. After this phase, there is an
+# additional combat phase." Turn 1: Bot1 casts Anzrag with the four Moxes and Elvish Mystic with a Forest. Turn 2: Bot2 casts two
+# Ornithopters ({0}, 0/2). Turn 3: Bot1 taps Elvish Mystic for mana, and attacks with Anzrag (8/4). Ornithopter#1 blocks: the
+# trigger untaps Elvish Mystic and Anzrag itself (the attacker, tapped by attacking), and the extra combat phase follows this
+# one. Ornithopter#1 dies in the first combat; in the second Anzrag attacks again, Ornithopter#2 blocks and dies, which triggers
+# a third combat phase, in which nothing is left to block: Bot2 takes 8.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Anzrag, the Quake-Mole
+Elvish Mystic
+Forest
+Forest x13
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Anzrag, the Quake-Mole.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Elvish Mystic.Activate
+? Bot1.Battlefield.Elvish Mystic.Tapped = true
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Anzrag, the Quake-Mole > Bot2)
+Bot2.Block(Ornithopter#1 > Anzrag, the Quake-Mole)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Mystic.Tapped = false
+? Bot1.Battlefield.Anzrag, the Quake-Mole.Tapped = false
+Bot1.Attack(Anzrag, the Quake-Mole > Bot2)
+? Bot2.Graveyard = Ornithopter
+Bot2.Block(Ornithopter > Anzrag, the Quake-Mole)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Anzrag, the Quake-Mole > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 12
+Bot2.Graveyard = Ornithopter; Ornithopter
+Bot1.Battlefield.Anzrag, the Quake-Mole.Tapped = true

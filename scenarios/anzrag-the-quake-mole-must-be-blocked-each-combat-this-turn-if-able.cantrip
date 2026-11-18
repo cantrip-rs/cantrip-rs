@@ -1,0 +1,80 @@
+# Anzrag, the Quake-Mole: "{3}{R}{R}{G}{G}: Anzrag must be blocked each combat this turn if able" (CR 509.1c, 611.2c). Turn 1: four
+# of Bot1's five Moxes cast Anzrag, and an Ornithopter costs {0}. Turn 2: Bot2 casts two Ornithopters. Turn 5: Bot1 pays
+# {3}{R}{R}{G}{G} with the five Moxes and two Forests, then attacks with Anzrag and its Ornithopter. Bot2 may not declare no
+# block, nor block only the Ornithopter: it blocks Anzrag with its Ornithopter#1. The trigger gives an additional combat phase, and the
+# requirement is still there in it ("each combat this turn"): Bot2 may not decline to block again, Ornithopter#2 must block
+# Anzrag, and dies as well; the third combat phase has no blocker left and Anzrag deals 8 to Bot2. In Bot1's next turn the
+# ability is gone (CR 514.2): Bot2 declares no block with a third Ornithopter and takes 8 again.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Anzrag, the Quake-Mole
+Ornithopter
+Forest
+Forest
+Forest x10
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Anzrag, the Quake-Mole.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Anzrag, the Quake-Mole.Activate
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Anzrag, the Quake-Mole > Bot2; Ornithopter > Bot2)
+! Bot2.Block(Count: 0)
+! Bot2.Block(Ornithopter#1 > Ornithopter)
+Bot2.Block(Ornithopter#1 > Anzrag, the Quake-Mole)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Anzrag, the Quake-Mole > Bot2)
+! Bot2.Block(Count: 0)
+Bot2.Block(Ornithopter > Anzrag, the Quake-Mole)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Anzrag, the Quake-Mole > Bot2)
+[T5 Bot1.Main2]
+? Bot2.Life = 12
+[T6 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Anzrag, the Quake-Mole > Bot2)
+Bot2.Block(Count: 0)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 4
+Bot2.Graveyard = Ornithopter; Ornithopter

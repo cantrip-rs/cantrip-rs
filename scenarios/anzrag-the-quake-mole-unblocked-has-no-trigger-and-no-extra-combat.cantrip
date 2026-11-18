@@ -1,0 +1,45 @@
+# Anzrag only triggers when it becomes blocked (CR 509.3c, 603.2): Bot2 has an Ornithopter and declares no block, so Elvish Mystic,
+# tapped for mana before combat, stays tapped, and there is just the one combat phase: Bot2 takes 8, and the turn goes on
+# to the second main phase.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Anzrag, the Quake-Mole
+Elvish Mystic
+Forest
+Forest x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Anzrag, the Quake-Mole.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Elvish Mystic.Activate
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Anzrag, the Quake-Mole > Bot2)
+Bot2.Block(Count: 0)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Elvish Mystic.Tapped = true
+
+[Expect]
+Bot2.Life = 12
+Bot1.Battlefield.Elvish Mystic.Tapped = true
+Bot1.Battlefield.Anzrag, the Quake-Mole.Tapped = true

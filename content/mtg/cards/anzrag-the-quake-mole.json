@@ -1,0 +1,8 @@
+{
+  "name": "Anzrag, the Quake-Mole",
+  "manaCost": "{2}{R}{G}",
+  "type": "Legendary Creature — Mole God",
+  "power": 8,
+  "toughness": 4,
+  "oracleText": "Whenever Anzrag becomes blocked, untap each creature you control. After this phase, there is an additional combat phase.\n{3}{R}{R}{G}{G}: Anzrag must be blocked each combat this turn if able."
+}
