@@ -1,0 +1,67 @@
+# Undercity Eliminator: "When this creature enters, you may sacrifice an artifact or creature. When you do, exile target creature an opponent controls." Bot1 (five free Moxen, a Memnite and an Island) casts it on turn 3 against Bot2's Mox Sapphire, Ornithopter and Phyrexian Walker. The sacrifice is up to one permanent of Bot1's (two are refused, so is a land, so is Bot2's Ornithopter); Bot1 sacrifices the Memnite. The exile then targets a creature an opponent controls: Bot1's own Undercity Eliminator and Bot2's Mox Sapphire (an artifact, not a creature) are refused, and the Ornithopter is exiled.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Undercity Eliminator
+Memnite
+Island x13
+
+[Bot2 Deck]
+Mox Sapphire
+Ornithopter
+Phyrexian Walker
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Undercity Eliminator.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Island)
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Memnite; Undercity Eliminator)
+Bot1.Choose(Memnite)
+! Bot1.Target(Undercity Eliminator)
+! Bot1.Target(Mox Sapphire)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Sapphire; Phyrexian Walker
+Exile = Ornithopter
+Bot2.Graveyard.Count = 0
+Bot1.Graveyard = Memnite
+Bot1.Battlefield.Undercity Eliminator.Power = 3

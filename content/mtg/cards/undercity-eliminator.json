@@ -1,0 +1,8 @@
+{
+  "name": "Undercity Eliminator",
+  "manaCost": "{3}{B}{B}",
+  "type": "Creature — Gorgon Assassin",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When this creature enters, you may sacrifice an artifact or creature. When you do, exile target creature an opponent controls."
+}

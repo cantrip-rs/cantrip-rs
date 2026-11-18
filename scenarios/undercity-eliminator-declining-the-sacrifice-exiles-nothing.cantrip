@@ -1,0 +1,61 @@
+# Undercity Eliminator: the sacrifice is optional (CR 608.2d), and without it the reflexive ability never triggers (CR 603.12): Bot1 declines, so nothing is sacrificed and Bot2's Ornithopter stays.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Undercity Eliminator
+Memnite
+Island x13
+
+[Bot2 Deck]
+Mox Sapphire
+Ornithopter
+Phyrexian Walker
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Undercity Eliminator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Stack.Count = 0
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Sapphire; Ornithopter; Phyrexian Walker
+Exile.Count = 0
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Undercity Eliminator.Power = 3
