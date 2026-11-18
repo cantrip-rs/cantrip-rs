@@ -1,0 +1,39 @@
+# Sinuous Benthisaur with no Cave anywhere: X is 0 (CR 107.1b), so no card is looked at and no question is asked. Bot1 controls an Island (a land, not a Cave) and nothing is in
+# its graveyard; the cast Black Lotus is in the graveyard but is not a Cave card. Nothing goes to the hand or the library bottom.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Black Lotus
+Sinuous Benthisaur
+Island
+Lightning Bolt
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sinuous Benthisaur.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Sinuous Benthisaur.Power = 4
+Bot1.Hand = Island
+Bot1.Library.Count = 14
+Bot1.Graveyard = Black Lotus
+Stack.Count = 0

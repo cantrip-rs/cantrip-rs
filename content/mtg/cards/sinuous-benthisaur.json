@@ -1,0 +1,8 @@
+{
+  "name": "Sinuous Benthisaur",
+  "manaCost": "{5}{U}",
+  "type": "Creature — Dinosaur",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When this creature enters, look at the top X cards of your library, where X is the number of Caves you control plus the number of Cave cards in your graveyard. Put two of those cards into your hand and the rest on the bottom of your library in a random order."
+}

@@ -1,0 +1,44 @@
+# Sinuous Benthisaur counts "Caves you control": Bot1's Promising Vein counts, Bot2's does not, so X is 1 (CR 109.4, 205.3i). Bot1 looks at the top card only - Lightning Bolt, with the
+# Mountain under it not seen - and, though it should put two of the cards into its hand, takes the one there is (CR 609.3): it goes to the hand, and nothing goes to the bottom.
+
+[Bot1 Deck]
+Promising Vein
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Black Lotus
+Island
+Island
+Sinuous Benthisaur
+Lightning Bolt
+Mountain
+Island x11
+
+[Bot2 Deck]
+Promising Vein
+Island x19
+
+[Actions]
+Bot1.Hand.Promising Vein.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Promising Vein.Play
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sinuous Benthisaur.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt | )
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Island; Island; Lightning Bolt
+Bot1.Library.Count = 12
+Stack.Count = 0

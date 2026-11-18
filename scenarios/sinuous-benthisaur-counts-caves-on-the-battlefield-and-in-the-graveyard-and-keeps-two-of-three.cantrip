@@ -1,0 +1,80 @@
+# Sinuous Benthisaur: "look at the top X cards of your library, where X is the number of Caves you control plus the number of Cave cards in your graveyard. Put two of those
+# cards into your hand and the rest on the bottom of your library in a random order." Bot2 destroys Bot1's Promising Vein on turns 2 and 4 (Stone Rain), so two Cave cards
+# are in Bot1's graveyard, and a third Vein is on the battlefield on turn 5: X is 3. Bot1 looks at Lightning Bolt, Mountain and Forest (Giant Growth,
+# under them, is not seen), takes the Bolt and the Forest, and the Mountain goes to the bottom.
+
+[Bot1 Deck]
+Promising Vein
+Promising Vein
+Promising Vein
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Island
+Sinuous Benthisaur
+Lightning Bolt
+Mountain
+Forest
+Giant Growth
+Island x7
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Stone Rain
+Stone Rain
+Island x15
+
+[Actions]
+Bot1.Hand.Promising Vein.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Stone Rain.Cast(Bot1.Battlefield.Promising Vein)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Promising Vein.Play
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Stone Rain.Cast(Bot1.Battlefield.Promising Vein)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Promising Vein.Play
+? Bot1.Graveyard = Promising Vein; Promising Vein
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sinuous Benthisaur.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Lightning Bolt; Mountain; Forest | )
+! Bot1.Arrange( | Lightning Bolt; Mountain; Forest)
+! Bot1.Arrange(Lightning Bolt | Mountain; Forest)
+Bot1.Arrange(Lightning Bolt; Forest | Mountain)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Sinuous Benthisaur.Power = 4
+Bot1.Hand = Forest; Island; Lightning Bolt
+Bot1.Library.Count = 9
+Bot1.Revealed = (absent)
+Stack.Count = 0
