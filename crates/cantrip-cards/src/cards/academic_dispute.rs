@@ -9,8 +9,8 @@ const ASK: Question = Question::new("GainReach", "have the creature gain reach u
 /// if able (CR 509.1c); the reach is chosen as the spell resolves (ruling 2021-04-16). Its one target illegal, the spell does
 /// not resolve at all (CR 608.2b), so there is always a creature here.
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    effects::target_creature_blocks_this_turn_if_able(g, item)?;
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
-    g.add_effect(item.object, creature, EffectKind::MustBlock, Duration::EndOfTurn);
     g.end_sentence();
     if ask_may(g, item.controller, item.object, Purpose::Ask(&ASK))? {
         effects::gain_until_end_of_turn(g, item.object, creature, Keyword::Reach);
