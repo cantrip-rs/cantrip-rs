@@ -1,0 +1,11 @@
+{
+  "name": "Meddling Youths",
+  "manaCost": "{3}{R}{W}",
+  "type": "Creature — Human Detective",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Haste\nWhenever you attack with three or more creatures, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")",
+  "keywords": [
+    "Haste"
+  ]
+}

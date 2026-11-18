@@ -1,0 +1,38 @@
+# Meddling Youths: "Whenever you attack with three or more creatures, investigate" (CR 508.1, 603.2, 701.16a). Turn 1 Bot1 casts the
+# Youths (haste), Memnite and Ornithopter with Black Lotus and two Moxen; turn 3 all three attack: one trigger, one Clue (not one per
+# attacker), and the Youths are among the attackers. Combat damage 4 + 1 + 0, Bot2 20 to 15.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Meddling Youths
+Memnite
+Ornithopter
+Plains x10
+
+[Bot2 Deck]
+Island x10
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Meddling Youths.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Meddling Youths > Bot2; Memnite > Bot2; Ornithopter > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield = Clue Token; Meddling Youths; Memnite; Mox Pearl; Mox Ruby; Ornithopter

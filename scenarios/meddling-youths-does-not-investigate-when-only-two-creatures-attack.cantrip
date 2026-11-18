@@ -1,0 +1,37 @@
+# Meddling Youths: the trigger needs three attacking creatures (CR 603.2). Turn 3 Bot1 attacks with the Youths and Memnite, two
+# creatures with a third (Ornithopter) at home: the stack stays empty and no Clue appears; Bot2 takes 4 + 1 and goes from 20 to 15.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Meddling Youths
+Memnite
+Ornithopter
+Plains x10
+
+[Bot2 Deck]
+Island x10
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Meddling Youths.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Meddling Youths > Bot2; Memnite > Bot2)
+? Stack.Count = 0
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield = Meddling Youths; Memnite; Mox Pearl; Mox Ruby; Ornithopter
