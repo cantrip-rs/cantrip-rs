@@ -1,0 +1,41 @@
+# Kylox, Visionary Inventor: "any number" includes none. Bot1 has a Memnite it could sacrifice and chooses nothing: X = 0, the
+# Lightning Bolt on top of the library is not exiled, Memnite stays, and Kylox connects for 4.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Kylox, Visionary Inventor
+Memnite
+Plains x2
+Lightning Bolt
+Plains x5
+
+[Bot2 Deck]
+Island x10
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kylox, Visionary Inventor.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Kylox, Visionary Inventor > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Exile.Count = 0
+Bot1.Library.Count = 6
+Bot1.Battlefield.Count = 3
+Bot1.Battlefield.Memnite.Power = 1

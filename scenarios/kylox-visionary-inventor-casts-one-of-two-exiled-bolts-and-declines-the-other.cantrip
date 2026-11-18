@@ -1,0 +1,49 @@
+# Kylox, Visionary Inventor: "any number" of spells, so fewer than all. Two Memnites are sacrificed (X = 2) and two Lightning
+# Bolts exiled; Bot1 casts one for nothing at Bot2 (3 damage) and declines the second, which stays in exile. Bot2: 20 - 3 - 4 = 13.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Kylox, Visionary Inventor
+Memnite
+Memnite
+Plains
+Lightning Bolt
+Lightning Bolt
+Plains x5
+
+[Bot2 Deck]
+Island x10
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kylox, Visionary Inventor.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Kylox, Visionary Inventor > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite; Memnite)
+? Exile.Count = 2
+Bot1.Choose(Lightning Bolt)
+Bot1.Target(Bot2)
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Exile = Lightning Bolt
+Exile.Count = 1
+Bot1.Graveyard = Lightning Bolt; Memnite; Memnite; Black Lotus; Black Lotus

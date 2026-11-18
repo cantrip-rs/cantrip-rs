@@ -1,0 +1,49 @@
+# Kylox, Visionary Inventor: printed characteristics - a 4/4 blue-red legendary Lizard Artificer with menace and haste - and its
+# attack trigger with no other creature. Turn 1 Bot1 casts Kylox with two Black Lotus and a Mox Ruby and attacks at once (haste).
+# There is no other creature to sacrifice, so nothing is asked, X = 0 and nothing is exiled: the Lightning Bolt on top of
+# Bot1's library stays there, and Kylox hits for 4.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Kylox, Visionary Inventor
+Plains x3
+Lightning Bolt
+Plains x5
+
+[Bot2 Deck]
+Island x10
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kylox, Visionary Inventor.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kylox, Visionary Inventor.Power = 4
+? Bot1.Battlefield.Kylox, Visionary Inventor.Toughness = 4
+? Bot1.Battlefield.Kylox, Visionary Inventor.Keywords = Haste; Menace
+? Bot1.Battlefield.Kylox, Visionary Inventor.Colors = Blue; Red
+? Bot1.Battlefield.Kylox, Visionary Inventor.Types = Creature
+? Bot1.Battlefield.Kylox, Visionary Inventor.Subtypes = Artificer; Lizard
+? Bot1.Battlefield.Kylox, Visionary Inventor.Supertypes = Legendary
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Kylox, Visionary Inventor > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Exile.Count = 0
+Bot1.Library.Count = 6
+Bot1.Graveyard.Count = 2
+Bot1.Battlefield.Count = 2
+Bot1.Hand.Count = 3

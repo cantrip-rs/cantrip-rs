@@ -1,0 +1,41 @@
+# Kylox, Visionary Inventor: "You may cast ... from among the exiled cards". Sacrificing Memnite exiles the top card, a Lightning
+# Bolt; Bot1 declines to cast it. The Bolt stays in exile for good (nothing returns it), Bot2 takes only Kylox's 4.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Kylox, Visionary Inventor
+Memnite
+Plains x2
+Lightning Bolt
+Plains x5
+
+[Bot2 Deck]
+Island x10
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kylox, Visionary Inventor.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Kylox, Visionary Inventor > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite)
+Bot1.Choose()
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Exile = Lightning Bolt
+Exile.Count = 1
+Bot1.Graveyard = Memnite; Black Lotus; Black Lotus

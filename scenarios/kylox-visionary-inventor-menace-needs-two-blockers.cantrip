@@ -1,0 +1,42 @@
+# Kylox, Visionary Inventor has menace: it can't be blocked except by two or more creatures (CR 702.111b). Bot2's Memnite alone
+# may not block it; Memnite and Ornithopter together may (the positive control) - Kylox kills Memnite and takes 0 + 1 damage.
+# Kylox is the only creature Bot1 has, so its attack trigger asks for no sacrifice.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Kylox, Visionary Inventor
+Plains x3
+Island x6
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x10
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kylox, Visionary Inventor.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Kylox, Visionary Inventor > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot2.Block(Memnite > Kylox, Visionary Inventor)
+Bot2.Block(Memnite > Kylox, Visionary Inventor; Ornithopter > Kylox, Visionary Inventor)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Kylox, Visionary Inventor.Damage = 1

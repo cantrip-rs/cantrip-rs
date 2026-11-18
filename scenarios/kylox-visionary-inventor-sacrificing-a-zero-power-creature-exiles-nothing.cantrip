@@ -1,0 +1,41 @@
+# Kylox, Visionary Inventor: X is the sacrificed creatures' total power, so sacrificing a 0-power Ornithopter is allowed but
+# exiles nothing (X = 0): the Lightning Bolt on top of Bot1's library stays there, nothing is cast, and the Ornithopter is gone.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Kylox, Visionary Inventor
+Ornithopter
+Plains x2
+Lightning Bolt
+Plains x5
+
+[Bot2 Deck]
+Island x10
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kylox, Visionary Inventor.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Kylox, Visionary Inventor > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Exile.Count = 0
+Bot1.Library.Count = 6
+Bot1.Graveyard = Ornithopter; Black Lotus; Black Lotus
+Bot1.Battlefield.Count = 2

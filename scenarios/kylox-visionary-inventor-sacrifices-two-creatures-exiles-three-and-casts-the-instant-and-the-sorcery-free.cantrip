@@ -1,0 +1,69 @@
+# Kylox, Visionary Inventor: "Whenever Kylox attacks, sacrifice any number of other creatures, then exile the top X cards of your
+# library, where X is their total power. You may cast any number of instant and/or sorcery spells from among the exiled cards
+# without paying their mana costs." Turn 1 Bot1 casts four Moxen, Grizzly Bears (2) and Memnite (1); turn 3 it casts Kylox with
+# Black Lotus and the Moxen, attacks, and sacrifices both: X = 2 + 1 = 3. The top three cards are Lightning Bolt, Sinkhole and an
+# Island: the Bolt (instant) and the Sinkhole (sorcery) are both cast for nothing - 3 damage to Bot2 and Bot2's Island destroyed -
+# while the Island, which is no spell, stays in exile. Kylox then connects: Bot2 20 - 3 - 4 = 13.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Memnite
+Kylox, Visionary Inventor
+Lightning Bolt
+Sinkhole
+Island
+Plains x6
+
+[Bot2 Deck]
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kylox, Visionary Inventor.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Kylox, Visionary Inventor > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Memnite)
+? Exile.Count = 3
+Bot1.Choose(Lightning Bolt)
+Bot1.Target(Bot2)
+Bot1.Choose(Sinkhole)
+Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Exile = Island
+Exile.Count = 1
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Island
+Bot1.Graveyard = Lightning Bolt; Sinkhole; Memnite; Grizzly Bears; Black Lotus
+Bot1.Library.Count = 6
+Bot1.Battlefield.Count = 5
