@@ -1,0 +1,44 @@
+# Evidence Examiner: "total mana value 4 or greater" from several cards (CR 701.59a). The graveyard holds Entomb (1) and Act of Treason (3), exactly 4; Bot1 is asked, exiles
+# both, and investigates.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Jet
+Evidence Examiner
+Entomb
+Island
+Island
+Act of Treason
+Island x11
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Search(Act of Treason)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Evidence Examiner.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Entomb; Act of Treason)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard =
+Exile = Entomb; Act of Treason
+Bot1.Battlefield.Clue Token.Subtypes = Clue

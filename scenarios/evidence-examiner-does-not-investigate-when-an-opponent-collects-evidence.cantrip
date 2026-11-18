@@ -1,0 +1,69 @@
+# Evidence Examiner: both abilities are "you": the beginning-of-combat trigger is "on your turn" and the Clue is for "you collect evidence" (CR 701.59a, 603.2). Turn 1 Bot1 casts the Examiner and, after
+# combat, Entomb for Wrath of God, so its graveyard holds 5 mana value of evidence. On turn 2 Bot2 collects evidence 8 for Analyze the Pollen (exiling two Heroes of Bladehold from its own graveyard);
+# Bot1 gets no Clue, and when Bot2's combat begins Bot1 is not asked to collect evidence - its graveyard is untouched.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Jet
+Evidence Examiner
+Entomb
+Island
+Island
+Wrath of God
+Island x11
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Faithless Looting
+Analyze the Pollen
+Hero of Bladehold
+Hero of Bladehold
+Swamp
+Island
+Island
+Island
+Llanowar Elves
+Forest
+Island x8
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Evidence Examiner.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Search(Wrath of God)
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Hero of Bladehold; Hero of Bladehold)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Analyze the Pollen.Cast
+Bot2.Modes(Collect evidence)
+Bot2.Choose(Hero of Bladehold; Hero of Bladehold)
+Bot2.Pass
+Bot1.Pass
+Bot2.Search(Llanowar Elves)
+[T2 Bot2.BeginCombat]
+Bot2.Pass
+Bot1.Pass
+! Bot1.Accept
+
+[Expect]
+Bot1.Battlefield.Clue Token = (absent)
+Bot1.Graveyard = Entomb; Wrath of God
+Exile = Hero of Bladehold; Hero of Bladehold

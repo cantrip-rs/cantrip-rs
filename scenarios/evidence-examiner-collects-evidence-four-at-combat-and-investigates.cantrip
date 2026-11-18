@@ -1,0 +1,48 @@
+# Evidence Examiner (2/2): "At the beginning of combat on your turn, you may collect evidence 4." and "Whenever you collect evidence, investigate." (CR 701.59a). Turn 1 Bot1 casts
+# Mox Sapphire, Mox Emerald and Mox Jet, then Entomb (for Wrath of God, mana value 4), on turn 1, and the Examiner for {G}{U} on turn 3. At the beginning of combat the graveyard holds Entomb (1) and
+# Wrath of God (4): Bot1 accepts and exiles only Wrath of God, whose 4 is enough by itself, leaving Entomb. Collecting evidence makes a Clue.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Jet
+Evidence Examiner
+Entomb
+Island
+Island
+Wrath of God
+Island x11
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Search(Wrath of God)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Evidence Examiner.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clue Token = (absent)
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Entomb; Wrath of God
+Bot1.Accept
+Bot1.Choose(Wrath of God)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Entomb
+Exile = Wrath of God
+Bot1.Battlefield.Clue Token.Subtypes = Clue
+Bot1.Battlefield.Evidence Examiner.Power = 2

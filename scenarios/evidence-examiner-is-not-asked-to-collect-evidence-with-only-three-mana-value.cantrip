@@ -1,0 +1,42 @@
+# Evidence Examiner with Entomb (1) and Grizzly Bears (2) in the graveyard, 3 in all: one short of 4, so Bot1 cannot choose to collect evidence at all (CR 701.59b) and is not asked
+# (`! Bot1.Accept` holds, beside the 4-mana-value scenarios where it is asked); no Clue.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Jet
+Evidence Examiner
+Entomb
+Island
+Island
+Grizzly Bears
+Island x11
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Search(Grizzly Bears)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Evidence Examiner.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Entomb; Grizzly Bears
+Exile =
+Bot1.Battlefield.Clue Token = (absent)

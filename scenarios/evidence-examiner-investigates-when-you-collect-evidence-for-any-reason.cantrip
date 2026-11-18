@@ -1,0 +1,51 @@
+# Evidence Examiner: "Whenever you collect evidence, investigate." is not tied to its own combat trigger (CR 701.59a, 603.2): it fires whenever its controller collects evidence. Turn 1 Bot1
+# casts the Examiner. Turn 3 it casts Faithless Looting (discarding two Heroes of Bladehold, 4 + 4) and then Analyze the Pollen, collecting evidence 8 by exiling the two Heroes as a cost, which makes a
+# Clue before the Pollen resolves.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Mox Jet
+Evidence Examiner
+Faithless Looting
+Analyze the Pollen
+Hero of Bladehold
+Hero of Bladehold
+Forest
+Llanowar Elves
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Evidence Examiner.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hero of Bladehold; Hero of Bladehold)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Analyze the Pollen.Cast
+Bot1.Modes(Collect evidence)
+Bot1.Choose(Hero of Bladehold; Hero of Bladehold)
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Llanowar Elves)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Clue Token.Subtypes = Clue
+Exile = Hero of Bladehold; Hero of Bladehold
+Bot1.Hand.Llanowar Elves.Colors = Green

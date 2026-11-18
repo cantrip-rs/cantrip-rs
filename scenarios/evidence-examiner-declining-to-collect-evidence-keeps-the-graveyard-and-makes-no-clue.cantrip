@@ -1,0 +1,43 @@
+# Evidence Examiner's "you may collect evidence 4": Bot1 has Entomb and Wrath of God (5 mana value) in the graveyard at the beginning of combat and declines. Nothing is exiled, and
+# with no evidence collected there is no Clue (CR 701.59a).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Jet
+Evidence Examiner
+Entomb
+Island
+Island
+Wrath of God
+Island x11
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Search(Wrath of God)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Evidence Examiner.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Entomb; Wrath of God
+Exile =
+Bot1.Battlefield.Clue Token = (absent)
