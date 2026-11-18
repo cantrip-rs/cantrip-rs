@@ -1,0 +1,43 @@
+# Gargantuan Leech ({7}{B}, 5/5 lifelink): "This spell costs {1} less to cast for each Cave you control and each Cave card in your graveyard." Bot1 sacrifices its Promising Vein on turn 3 (one Cave card
+# in the graveyard) and has played the Veins on turns 3 and 5 (two Caves on the battlefield): three in all, so the Leech costs {4}{B}, five mana. Four sources are not enough (the refusal; nothing else is
+# offerable then) and the fifth, a Mox Ruby, pays exactly: the pool is empty right after the cast (CR 601.2f, 118.7a). Two counted for the battlefield alone, or one for the graveyard alone, would leave mana over.
+[Bot1 Deck]
+Promising Vein
+Promising Vein
+Promising Vein
+Mox Jet
+Mox Ruby
+Gargantuan Leech
+Swamp
+Swamp x22
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Promising Vein.Play
+Bot1.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Promising Vein.Activate(Ability: Search)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Search(Swamp)
+Bot1.Hand.Promising Vein.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Promising Vein.Play
+Bot1.Battlefield.Promising Vein.Activate(Ability: {T}: Add)
+Bot1.Battlefield.Promising Vein#2.Activate(Ability: {T}: Add)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Gargantuan Leech.Cast (Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gargantuan Leech.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Gargantuan Leech.Power = 5
+Bot1.Battlefield.Gargantuan Leech.ManaValue = 8
+Bot1.Graveyard = Promising Vein

@@ -1,0 +1,38 @@
+# Gargantuan Leech ({7}{B}, 5/5 lifelink): with no Cave anywhere the cost reduction is zero, so the full {7}{B} is due. Seven mana (a Black Lotus and four Moxen) is one short (the refusal; nothing else is
+# offerable then); the fifth Mox makes eight and pays exactly, leaving the pool empty (CR 601.2f, 118.7a). The 5/5 body has lifelink (CR 702.15a).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Gargantuan Leech
+Swamp x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Gargantuan Leech.Cast (Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gargantuan Leech.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Gargantuan Leech.Power = 5
+Bot1.Battlefield.Gargantuan Leech.Toughness = 5
+Bot1.Battlefield.Gargantuan Leech.Keywords = Lifelink

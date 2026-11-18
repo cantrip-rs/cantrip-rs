@@ -1,0 +1,50 @@
+# Gargantuan Leech: only Caves you control and Cave cards in YOUR graveyard count. Bot2 has a Promising Vein on the battlefield (played on turn 4) and one in its own graveyard (sacrificed to its own
+# search on turn 4), and Bot1 has none, so the Leech still costs the full {7}{B}: seven mana is short, the eighth pays exactly (CR 601.2f).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Gargantuan Leech
+Swamp x18
+
+[Bot2 Deck]
+Promising Vein
+Promising Vein
+Mox Jet
+Swamp x22
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Promising Vein.Play
+Bot2.Hand.Mox Jet.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Promising Vein.Activate(Ability: Search)
+Bot2.Search(Swamp)
+Bot2.Hand.Promising Vein.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Gargantuan Leech.Cast (Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gargantuan Leech.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Promising Vein.Subtypes = Cave
+Bot2.Graveyard = Promising Vein
+Bot1.Battlefield.Gargantuan Leech.Power = 5

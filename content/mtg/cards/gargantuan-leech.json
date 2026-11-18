@@ -1,0 +1,11 @@
+{
+  "name": "Gargantuan Leech",
+  "manaCost": "{7}{B}",
+  "type": "Creature — Leech",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "This spell costs {1} less to cast for each Cave you control and each Cave card in your graveyard.\nLifelink",
+  "keywords": [
+    "Lifelink"
+  ]
+}
