@@ -1,0 +1,8 @@
+{
+  "name": "Rot Farm Mortipede",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Insect",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Whenever one or more creature cards leave your graveyard, this creature gets +1/+0 and gains menace and lifelink until end of turn."
+}
