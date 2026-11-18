@@ -1598,11 +1598,20 @@ def main(argv=None):
             return
         if not results.exists():
             raise SystemExit(f"no gate results to mine ({results})")
-        for d in (p.selected, p.replay, p.recorded, p.judge, p.keep, p.targets, p.heldout):
+        # A stage run again keeps its replays when they were made and verified against these gate results: the replay is
+        # this stage's longest step, and the same games again would be the same recordings.
+        verified_file = p.replay / "verify.json"
+        resumed = (verified_file.exists() and (p.selected / "selection.json").exists()
+                   and verified_file.stat().st_mtime > results.stat().st_mtime)
+        for d in ((p.judge, p.keep, p.targets, p.heldout) if resumed
+                  else (p.selected, p.replay, p.recorded, p.judge, p.keep, p.targets, p.heldout)):
             mining.clear(d)
         p.root.mkdir(parents=True, exist_ok=True)
-        run([*py, "select", "--results", results, "--out", p.selected, "--control", s.control, "--seed", s.seed],
-            logs / "mine-select.log", False, env=pyenv)
+        if resumed:
+            log(f"  the replays verified before are kept ({verified_file})")
+        else:
+            run([*py, "select", "--results", results, "--out", p.selected, "--control", s.control, "--seed", s.seed],
+                logs / "mine-select.log", False, env=pyenv)
         # The gate's games again, exactly: the gate's seats, networks, decks, pairings, seed and server.
         name = seat_name(args.mode, args.gate_simulations or args.simulations) + args.seat_settings
         if decks_dir is not None and args.gate_pairings != "mirrors":
@@ -1613,12 +1622,15 @@ def main(argv=None):
                "CANTRIP_AI_TRACES": "1"}
         p.replay.mkdir(parents=True, exist_ok=True)
         replayed = []
-        with server_for([model_dir, champ], "mine-replay") as gpu:
+        with server_for([model_dir, champ], "mine-replay") if not resumed else contextlib.nullcontext(None) as gpu:
             for half in ("first", "second"):
                 games = p.selected / f"{half}.txt"
                 if not games.read_text(encoding="utf-8").strip():
                     continue
                 out = p.replay / f"{half}-results.tsv"
+                replayed.append(out)
+                if resumed:
+                    continue
                 cmd = [*dotnet(), BOTLAB, "duel", "--a", name, "--b", name, "--model", model_dir, "--model-b", champ, *decks,
                        "--games", args.gate_games, "--parallel", args.gate_parallel, "--seed", seed + 5_000_000,
                        "--only-games", games, "--results", out, "--ai-record", p.recorded / half,
@@ -1626,16 +1638,17 @@ def main(argv=None):
                 if gpu is not None:
                     cmd += ["--ai-server", gpu.address]
                 run(cmd, logs / f"mine-replay-{half}.log", False, env=env, stream=show_progress)
-                replayed.append(out)
-        run([*py, "verify", "--gate", results, "--replayed", *replayed, "--out", p.replay / "verify.json"],
-            logs / "mine-verify.log", False, env=pyenv)
+        if not resumed:
+            run([*py, "verify", "--gate", results, "--replayed", *replayed, "--out", verified_file],
+                logs / "mine-verify.log", False, env=pyenv)
         verified = json.loads((p.replay / "verify.json").read_text(encoding="utf-8"))
         dropped = mining.prune_selection(p, verified)
         log(f"  replayed {verified['games']} games, {verified['same']} the gate's"
             + (f"; {dropped} pair(s) whose games differ left out" if dropped else ""))
         run([EXPLORE, "mine-forks", "--first", p.recorded / "first", "--second", p.recorded / "second", "--out", p.forks,
              "--lanes", 32], logs / "mine-forks.log", False)
-        run([*py, "losers", "--selected", p.selected, "--a-model", model_dir.name, "--b-model", champ.name],
+        # The models as directories: mine-values loads each loser's network from its decision's `model`.
+        run([*py, "losers", "--selected", p.selected, "--a-model", model_dir, "--b-model", champ],
             logs / "mine-losers.log", False, env=pyenv)
         values = []
         with server_for([model_dir, champ], "mine-values") as gpu:
