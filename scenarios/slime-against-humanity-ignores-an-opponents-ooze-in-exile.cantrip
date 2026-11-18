@@ -1,0 +1,47 @@
+# Slime Against Humanity counts cards you OWN (CR 108.3): Bot1 exiles Bot2's Primordial Ooze with Swords to Plowshares, which is an Ooze in exile that Bot2 owns,
+# and Bot1's own Swords to Plowshares sits in Bot1's graveyard (not an Ooze): X stays 2 and the Ooze token is 2/2.
+
+[Bot1 Deck]
+Swords to Plowshares
+Slime Against Humanity
+Mox Pearl
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Forest x14
+
+[Bot2 Deck]
+Mox Ruby
+Primordial Ooze
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Primordial Ooze.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Primordial Ooze)
+Bot1.Pass
+Bot2.Pass
+? Exile = Primordial Ooze
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Slime Against Humanity.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ooze Token.Power = 2
+Bot1.Battlefield.Ooze Token.Counters.PlusOnePlusOne = 2
+Exile = Primordial Ooze

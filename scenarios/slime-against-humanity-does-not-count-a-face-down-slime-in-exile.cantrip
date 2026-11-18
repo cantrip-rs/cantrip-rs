@@ -1,0 +1,36 @@
+# Slime Against Humanity does not count a card of its controller's exiled face down (the ruling; a face-down card has no name or subtypes, CR 708.2a): Mosswort
+# Bridge's hideaway exiles Bot1's second Slime Against Humanity face down on turn 1, and on turn 3 the first makes an Ooze with X = 2, two +1/+1 counters, not three.
+
+[Bot1 Deck]
+Mosswort Bridge
+Mox Emerald
+Mox Ruby
+Mox Jet
+Slime Against Humanity
+Forest
+Forest
+Slime Against Humanity
+Island x3
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mosswort Bridge.Play
+Bot1.Arrange(Slime Against Humanity | Island; Island; Island)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+? Exile.Count = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Slime Against Humanity.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 1
+Bot1.Battlefield.Ooze Token.Counters.PlusOnePlusOne = 2
