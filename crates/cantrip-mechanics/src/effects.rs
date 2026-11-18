@@ -2066,6 +2066,14 @@ pub fn you_mill<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), 
     Ok(())
 }
 
+/// "Mill M cards, then draw D cards" (CR 701.17a, 121.1): the controller mills, then draws, whatever the mill found (an empty
+/// library included). Inverted Iceberg (one, one), The Everflowing Well (two, two) and Theorix Charm (three, one) print it.
+pub fn you_mill_then_draw<const MILL: u32, const DRAW: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.mill(item.controller, MILL);
+    g.draw(item.controller, DRAW);
+    Ok(())
+}
+
 /// "Each opponent mills N cards" (CR 701.17a, 101.4): every opponent of the controller mills together, as one instruction.
 /// Aether Syphon and Psychic Corrosion print it (two).
 pub fn each_opponent_mills<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {

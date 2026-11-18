@@ -1,14 +1,7 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::{THIS_ATTACKS, THIS_ENTERS};
-use cantrip_mechanics::{choose, craft, targets};
+use cantrip_mechanics::{choose, craft, effects, targets};
 use cantrip_oracle as oracle;
-
-/// "When this artifact enters, mill a card, then draw a card." (CR 701.17, 121.1)
-fn mill_then_draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.mill(item.controller, 1);
-    g.draw(item.controller, 1);
-    Ok(())
-}
 
 /// "Whenever this creature attacks, you may tap or untap target artifact or creature."
 fn tap_or_untap(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -25,7 +18,7 @@ pub static BACK: CardDef = CardDef {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(THIS_ENTERS, mill_then_draw, "When this artifact enters, mill a card, then draw a card."),
+        triggered(THIS_ENTERS, effects::you_mill_then_draw::<1, 1>, "When this artifact enters, mill a card, then draw a card."),
         craft::ability(mana("{4}{U}{U}"), &craft::ARTIFACT, "Craft with artifact {4}{U}{U}"),
     ],
     back: Some(&BACK),
