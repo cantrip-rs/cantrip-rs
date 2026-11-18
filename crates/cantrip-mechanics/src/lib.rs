@@ -116,6 +116,7 @@ pub mod outlaw;
 pub mod outside;
 pub mod persist;
 pub mod riot;
+pub mod rooms;
 pub mod undaunted;
 pub mod unleash;
 pub mod embalm;
