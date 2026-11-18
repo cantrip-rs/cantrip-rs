@@ -933,6 +933,13 @@ pub fn this_gets_and_gains_flying<const P: i32, const T: i32>(g: &mut dyn Game, 
     this_gets_and_gains(g, item, P, T, Keyword::Flying)
 }
 
+/// "[This creature] gets +`P`/+`T` and gains vigilance until end of turn" (CR 611.2a, 613.4c, 702.20): one instruction of two
+/// continuous effects from the ability's source, both of which do nothing once it has left the battlefield (CR 400.7).
+/// Kulrath Mystic (+2/+0) and Loxodon Eavesdropper (+1/+1) print it.
+pub fn this_gets_and_gains_vigilance<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    this_gets_and_gains(g, item, P, T, Keyword::Vigilance)
+}
+
 /// Every creature on the battlefield right now, whoever controls it, in battlefield order: what "all creatures" means as a
 /// spell resolves (CR 608.2c). Day of Judgment, Wrath of God and Starfall Invocation destroy them.
 pub fn creatures_on_the_battlefield(g: &dyn Game) -> Vec<ObjectId> {
