@@ -1,0 +1,39 @@
+# "When that creature dies this turn, create a 2/2 white and blue Detective creature token." The Memnite, 3/1 under the Rage,
+# dies to Bot1's own Lightning Bolt the same turn: Bot1 gets a Detective (CR 603.7b), 2/2, white and blue.
+
+[Bot1 Deck]
+Mox Ruby
+Mountain
+Memnite
+Felonious Rage
+Lightning Bolt
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Felonious Rage.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Memnite; Lightning Bolt; Felonious Rage
+? Bot1.Battlefield.Detective Token.Power = 2
+? Bot1.Battlefield.Detective Token.Toughness = 2
+? Bot1.Battlefield.Detective Token.Colors = Blue; White
+? Bot1.Battlefield.Detective Token.Subtypes = Detective
+
+[Expect]
+Bot1.Battlefield.Count = 3

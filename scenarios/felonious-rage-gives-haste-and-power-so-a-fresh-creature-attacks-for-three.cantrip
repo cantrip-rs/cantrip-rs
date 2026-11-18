@@ -1,0 +1,33 @@
+# Felonious Rage: "Target creature you control gets +2/+0 and gains haste until end of turn." The Memnite (1/1) cast this very
+# turn is 3/1 with haste, so it attacks on turn 1 and Bot2 takes 3 (CR 702.10). Nothing died, so no Detective is made.
+
+[Bot1 Deck]
+Mountain
+Memnite
+Felonious Rage
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Felonious Rage.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Memnite.Keywords = Haste
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 17
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Count = 2

@@ -1,0 +1,6 @@
+{
+  "name": "Felonious Rage",
+  "manaCost": "{R}",
+  "type": "Instant",
+  "oracleText": "Target creature you control gets +2/+0 and gains haste until end of turn. When that creature dies this turn, create a 2/2 white and blue Detective creature token."
+}
