@@ -164,15 +164,15 @@ pub fn search_zone_and_or_library(
     Ok((found, false))
 }
 
-/// "Search your [`zones`] and/or library for [`rule`] and put it onto the battlefield. If you search your library this way,
-/// shuffle." (CR 701.23, 701.24): `search_zone_and_or_library` for the card, the one card found (if any) put onto the
-/// battlefield under the player's control, and the library shuffled afterwards if it was searched, found or not. Last Light of
-/// Durin's Day (a Dragon card from the hand) and Say Its Name print it, as do Dark Supplicant, Gate to the Afterlife and
-/// Mishra, Artificer Prodigy.
+/// "Search your [`zones`] and/or library for [`rule`] and put it/them onto the battlefield. If you search your library this way,
+/// shuffle." (CR 701.23, 701.24): `search_zone_and_or_library` for the cards, those found (if any) put onto the battlefield
+/// together (CR 110.2a) under the player's control, and the library shuffled afterwards if it was searched, found or not. Last Light of
+/// Durin's Day (a Dragon card from the hand) and Say Its Name print it for one card, as do Dark Supplicant, Gate to the Afterlife and
+/// Mishra, Artificer Prodigy; Agency Outfitter (a card named Magnifying Glass and/or a card named Thinking Cap) for up to two.
 pub fn search_zone_and_or_library_onto_battlefield(g: &mut dyn Game, player: PlayerId, source: ObjectId, zones: &[Zone], ask: &'static Question, rule: Selection) -> Result<(), Suspend> {
     let (found, searched_library) = search_zone_and_or_library(g, player, source, zones, SearchDestination::Battlefield, Purpose::PutOntoBattlefield, ask, rule)?;
-    if let Some(&card) = found.first() {
-        g.put_onto_battlefield(card, player, false)?;
+    if !found.is_empty() {
+        g.put_all_onto_battlefield(&found.iter().map(|&card| (card, player)).collect::<Vec<_>>())?;
     }
     g.end_sentence();
     if searched_library {
