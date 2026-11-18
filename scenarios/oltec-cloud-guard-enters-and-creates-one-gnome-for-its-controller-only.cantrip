@@ -1,0 +1,36 @@
+# Oltec Cloud Guard: "Flying. When this creature enters, create a 1/1 colorless Gnome artifact creature token." (CR 111.1). Bot1 pays exactly {3}{W} with four Moxen: the Guard is a 3/2 with Flying, and exactly one 1/1
+# colorless Gnome artifact creature token is on Bot1's battlefield; Bot2, the opponent, gets none.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Emerald
+Oltec Cloud Guard
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Oltec Cloud Guard.Cast
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Oltec Cloud Guard.Power = 3
+Bot1.Battlefield.Oltec Cloud Guard.Toughness = 2
+Bot1.Battlefield.Oltec Cloud Guard.Keywords = Flying
+Bot1.Battlefield.Gnome Token.Power = 1
+Bot1.Battlefield.Gnome Token.Toughness = 1
+Bot1.Battlefield.Gnome Token.Types = Artifact; Creature
+Bot1.Battlefield.Count = 6
+Bot2.Battlefield.Count = 0
+Stack.Count = 0

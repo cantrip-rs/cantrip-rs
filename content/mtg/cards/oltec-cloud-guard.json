@@ -1,0 +1,11 @@
+{
+  "name": "Oltec Cloud Guard",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying\nWhen this creature enters, create a 1/1 colorless Gnome artifact creature token.",
+  "keywords": [
+    "Flying"
+  ]
+}
