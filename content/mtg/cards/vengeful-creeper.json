@@ -1,0 +1,8 @@
+{
+  "name": "Vengeful Creeper",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Plant Elemental",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Disguise {5}{G} (You may cast this card face down for {3} as a 2/2 creature with ward {2}. Turn it face up any time for its disguise cost.)\nWhen this creature is turned face up, destroy target artifact or enchantment an opponent controls."
+}

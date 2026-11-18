@@ -1,0 +1,76 @@
+# Vengeful Creeper: "destroy target artifact or enchantment an opponent controls" (CR 701.8a, 115.2). Bot2 controls three Moxen
+# (artifacts) and a Ghostly Prison (an enchantment): all are legal targets, but nothing Bot1 controls is (its own Moxen, Lotus, the
+# face-down creature) and neither is anything that is neither type. Bot1 picks the Prison and only it is destroyed.
+
+[Bot1 Deck]
+Vengeful Creeper
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Black Lotus
+Island
+Island x12
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Ghostly Prison
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Vengeful Creeper.Cast(Ability: Disguise)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ghostly Prison.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ghostly Prison.Types = Enchantment
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+! Bot1.Target(Bot1.Battlefield.Mox Jet)
+! Bot1.Target(Bot1.Battlefield.Vengeful Creeper)
+Bot1.Target(Bot2.Battlefield.Ghostly Prison)
+? Stack.Count = 1
+Bot1.Pass
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Vengeful Creeper.FaceDown = (absent)
+Bot1.Battlefield.Mox Jet.Types = Artifact
+Bot2.Battlefield.Mox Pearl.Types = Artifact
+Bot2.Battlefield.Mox Jet.Types = Artifact
+Bot2.Battlefield.Mox Ruby.Types = Artifact
+Bot2.Battlefield.Count = 3
+Bot2.Graveyard = Ghostly Prison

@@ -1,0 +1,61 @@
+# Vengeful Creeper (Disguise {5}{G}): "When this creature is turned face up, destroy target artifact or enchantment an opponent controls." (CR 708.8, 701.8a, 603.3d)
+# Turn 1: Mox Jet, Mox Ruby and Mox Pearl pay {3} to cast it face down (a 2/2 with ward {2}, no abilities, so nothing triggers on entering).
+# Turn 2 Bot2 casts a Mox Sapphire. Turn 3 Bot1 turns the Creeper face up for {5}{G} (three Moxen and a Black Lotus; exactly six mana): Bot2's Mox Sapphire is the only
+# legal target, so it is chosen; Bot1's own Moxen are artifacts but not an opponent's, and stay.
+
+[Bot1 Deck]
+Vengeful Creeper
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Black Lotus
+Island
+Island x12
+
+[Bot2 Deck]
+Mox Sapphire
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Vengeful Creeper.Cast(Ability: Disguise)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Mox Sapphire.Types = Artifact
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Stack.Count = 1
+Bot1.Pass
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Vengeful Creeper.FaceDown = (absent)
+Bot1.Battlefield.Vengeful Creeper.Power = 5
+Bot1.Battlefield.Vengeful Creeper.Toughness = 5
+Bot1.Battlefield.Mox Jet.Types = Artifact
+Bot1.Battlefield.Mox Ruby.Types = Artifact
+Bot1.Battlefield.Mox Pearl.Types = Artifact
+Bot1.Battlefield.Mox Emerald.Types = Artifact
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Mox Sapphire
