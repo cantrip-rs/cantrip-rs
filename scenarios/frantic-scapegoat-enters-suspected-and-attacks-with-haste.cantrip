@@ -1,0 +1,30 @@
+# Frantic Scapegoat: "Haste. When this creature enters, suspect it" (CR 701.60a, 702.10a). Bot1's Scapegoat enters, its trigger
+# suspects it (it has menace and can't block, CR 701.60c) and, with haste, it attacks the turn it came: Bot2 takes 1.
+
+[Bot1 Deck]
+Mox Ruby
+Frantic Scapegoat
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Frantic Scapegoat.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Frantic Scapegoat.Suspected = (absent)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Frantic Scapegoat.Suspected = true
+? Bot1.Battlefield.Frantic Scapegoat.Keywords = CantBlock; Haste; Menace
+Bot1.Attack(Frantic Scapegoat > Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Frantic Scapegoat.Suspected = true

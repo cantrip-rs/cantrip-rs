@@ -1,0 +1,42 @@
+# Frantic Scapegoat: "you may suspect one of the other creatures. If you do, this creature is no longer suspected" (CR 701.60d, 608.2c).
+# A second Scapegoat enters while the first is suspected, and Bot1 orders its own "suspect it" trigger to resolve first: by the time
+# the first Scapegoat's trigger resolves the newcomer is already suspected, and a suspected permanent can't become suspected again,
+# so nothing can be suspected and the first Scapegoat stays suspected, with no question asked.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Frantic Scapegoat
+Frantic Scapegoat
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Frantic Scapegoat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Frantic Scapegoat.Suspected = true
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Frantic Scapegoat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Triggers(one or more other; When this creature enters)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Frantic Scapegoat#2.Suspected = true
+Bot1.Pass
+Bot2.Pass
+
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Frantic Scapegoat#1.Suspected = true
+Bot1.Battlefield.Frantic Scapegoat#2.Suspected = true

@@ -1,0 +1,11 @@
+{
+  "name": "Frantic Scapegoat",
+  "manaCost": "{R}",
+  "type": "Creature — Goat",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Haste\nWhen this creature enters, suspect it. (It has menace and can't block.)\nWhenever one or more other creatures you control enter, if this creature is suspected, you may suspect one of the other creatures. If you do, this creature is no longer suspected.",
+  "keywords": [
+    "Haste"
+  ]
+}
