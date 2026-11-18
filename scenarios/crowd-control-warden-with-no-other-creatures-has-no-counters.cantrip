@@ -1,0 +1,36 @@
+# Crowd-Control Warden counts only the OTHER creatures you control: the Warden itself is not counted, and an opponent's creatures are not either. Bot2 casts an Ornithopter on turn 2; on turn 3 Bot1 casts the Warden face up
+# with no other creature, so X = 0 and it is a 4/4 with no +1/+1 counters.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Crowd-Control Warden
+Forest x16
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Crowd-Control Warden.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Crowd-Control Warden.Power = 4
+Bot1.Battlefield.Crowd-Control Warden.Toughness = 4
+Bot1.Battlefield.Crowd-Control Warden.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Ornithopter.Power = 0

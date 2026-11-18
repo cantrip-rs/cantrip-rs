@@ -1,0 +1,48 @@
+# Crowd-Control Warden, Disguise {3}{G/W}{G/W}: cast face down for {3} (Mox Ruby, Mox Emerald, Mox Pearl) it is a 2/2 with ward {2} and has no abilities, so the "as this creature enters" replacement does not apply (CR 708.2, 708.4): no counters, though
+# Bot1 controls an Ornithopter. On turn 3 Bot1 casts a second Ornithopter and turns it face up for its disguise cost (Black Lotus, Mox Emerald, Mox Pearl: a special action, CR 116.2b, 702.168d). "Turned face up"
+# counts the creatures at that moment: X = 2 (the face-up Warden is not counted), so it becomes a 4/4 with two counters = 6/6.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Ornithopter
+Ornithopter
+Crowd-Control Warden
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Crowd-Control Warden.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Crowd-Control Warden = (absent)
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Crowd-Control Warden.Power = 6
+Bot1.Battlefield.Crowd-Control Warden.Toughness = 6
+Bot1.Battlefield.Crowd-Control Warden.Counters.PlusOnePlusOne = 2

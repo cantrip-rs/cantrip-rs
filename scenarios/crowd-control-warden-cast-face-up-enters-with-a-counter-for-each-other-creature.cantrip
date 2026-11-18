@@ -1,0 +1,35 @@
+# Crowd-Control Warden ({3}{G}{W} 4/4): "As this creature enters or is turned face up, put X +1/+1 counters on it, where X is the number of other creatures you control." (CR 614.1c, 614.12: the counters are part of how it enters.)
+# Bot1 controls two Ornithopters (0/2) when it casts the Warden face up for its mana cost: Mox Emerald (G), Mox Pearl (W) and Black Lotus (three more). X = 2, so it is a 6/6 with two +1/+1 counters, and the Ornithopters are not changed.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Ornithopter
+Ornithopter
+Crowd-Control Warden
+Forest x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Crowd-Control Warden.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Crowd-Control Warden.Power = 6
+Bot1.Battlefield.Crowd-Control Warden.Toughness = 6
+Bot1.Battlefield.Crowd-Control Warden.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Ornithopter#1.Power = 0
+Bot1.Battlefield.Ornithopter#1.Toughness = 2
+Bot1.Battlefield.Ornithopter#2.Power = 0
