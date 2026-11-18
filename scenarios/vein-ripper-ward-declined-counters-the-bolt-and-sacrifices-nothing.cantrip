@@ -1,0 +1,61 @@
+# Vein Ripper's "Ward—Sacrifice a creature." declined: Bot2, with a Memnite it could sacrifice, Lightning Bolts the Ripper and
+# does not pay, so the Bolt is countered (CR 702.21a). Nothing dies: the Memnite stays, the Ripper is undamaged and neither
+# player's life changes.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Vein Ripper
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vein Ripper.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Vein Ripper)
+Bot2.Decline
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 20
+Bot2.Graveyard = Lightning Bolt
+Bot2.Battlefield = Mox Ruby; Memnite
+Bot1.Battlefield.Vein Ripper.Damage = 0

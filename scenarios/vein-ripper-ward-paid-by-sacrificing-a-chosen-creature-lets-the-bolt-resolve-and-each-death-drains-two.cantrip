@@ -1,0 +1,72 @@
+# Vein Ripper {3}{B}{B}{B} (6/5, flying) has "Ward—Sacrifice a creature." (CR 702.21a, 118.12). Bot1 pays it exactly with six Moxen on
+# turn 1. On turn 2 Bot2, with a Mox Ruby, a Memnite and an Ornithopter, Lightning Bolts the Ripper and pays: the Mox Ruby is no
+# creature and is refused, the Ornithopter is chosen over the Memnite. It dies, which triggers the Ripper (CR 700.4: "a creature"
+# is any creature): Bot2 loses exactly 2 life and Bot1 gains 2 (20 to 18, 20 to 22), and the Bolt then deals only 3 to a 6/5.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Vein Ripper
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Ornithopter
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vein Ripper.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Vein Ripper)
+Bot2.Accept
+! Bot2.Choose(Mox Ruby)
+Bot2.Choose(Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Bot2.Graveyard = Lightning Bolt; Ornithopter
+Bot2.Battlefield = Mox Ruby; Memnite
+Bot1.Battlefield.Vein Ripper.Damage = 3

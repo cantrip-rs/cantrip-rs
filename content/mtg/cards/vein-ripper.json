@@ -1,0 +1,11 @@
+{
+  "name": "Vein Ripper",
+  "manaCost": "{3}{B}{B}{B}",
+  "type": "Creature — Vampire Assassin",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": "Flying\nWard—Sacrifice a creature.\nWhenever a creature dies, target opponent loses 2 life and you gain 2 life.",
+  "keywords": [
+    "Flying"
+  ]
+}

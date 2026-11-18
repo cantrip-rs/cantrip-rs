@@ -1,0 +1,76 @@
+# Vein Ripper's "Whenever a creature dies, target opponent loses 2 life and you gain 2 life." Bot1 pays the Ripper with three Mox Jets, Mana Crypt and Mox Pearl, and controls a
+# Memnite; Bot2 a Memnite of its own and two Lightning Bolts (two Mox Rubies). Bot2 Bolts Bot1's Memnite: the Ripper's controller's
+# creature dying drains Bot2 to 18 and Bot1 to 22. Then Bot2 Bolts its own Memnite, which drains it again, to 16 and 24: any
+# creature, not only the Ripper's controller's or an opponent's, and exactly 2 each time.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mana Crypt
+Mox Pearl
+Vein Ripper
+Memnite
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Memnite
+Lightning Bolt
+Lightning Bolt
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Vein Ripper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot2.Life = 18
+? Bot1.Life = 22
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 16
+Bot1.Life = 24
+Bot1.Battlefield.Vein Ripper.Damage = 0
+Bot1.Battlefield.Vein Ripper.Keywords = Flying

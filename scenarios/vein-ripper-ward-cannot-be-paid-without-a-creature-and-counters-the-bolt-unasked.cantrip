@@ -1,0 +1,59 @@
+# Vein Ripper's "Ward—Sacrifice a creature." with nothing to pay it (CR 118.3): Bot2 controls a Mox Ruby, an artifact but no
+# creature, when it Lightning Bolts the Ripper. It is not asked whether to pay (the refused Accept), the Bolt is countered and the
+# Mox stays. (The positive control, with creatures to sacrifice, is
+# vein-ripper-ward-paid-by-sacrificing-a-chosen-creature-lets-the-bolt-resolve-and-each-death-drains-two.)
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Vein Ripper
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vein Ripper.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Vein Ripper)
+Bot2.Pass
+! Bot2.Accept
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 20
+Bot1.Life = 20
+Bot2.Graveyard = Lightning Bolt
+Bot2.Battlefield = Mox Ruby
+Bot1.Battlefield.Vein Ripper.Damage = 0
