@@ -1,0 +1,47 @@
+# Deep Goblin Skulltaker ({2}{B}, 2/2 menace): "At the beginning of your end step, if you descended this turn, put a +1/+1 counter on this creature" (CR 603.4, 700.11). Turn 1 Bot1
+# sacrifices a Black Lotus for {B}{B}{B} to cast it: a permanent card put into the graveyard, so it descended, and at the end step it gets one counter (3/3, menace). On turn 3 Bot1 only casts
+# Ancestral Recall (an instant, not a permanent card, so it did not descend): still 3/3 at turn 4. On turn 5 a second sacrificed Lotus descends again: 4/4 with two counters.
+# (Turn 2 and turn 4 are Bot2's, and its end step is not Bot1's, so nothing happens there.)
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Deep Goblin Skulltaker
+Mox Sapphire
+Ancestral Recall
+Island
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Deep Goblin Skulltaker.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Deep Goblin Skulltaker.Keywords = Menace
+? Bot1.Battlefield.Deep Goblin Skulltaker.Power = 2
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Deep Goblin Skulltaker.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Deep Goblin Skulltaker.Power = 3
+? Bot1.Battlefield.Deep Goblin Skulltaker.Toughness = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 2
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Deep Goblin Skulltaker.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Deep Goblin Skulltaker.Power = 3
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Graveyard.Count = 3
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Deep Goblin Skulltaker.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Deep Goblin Skulltaker.Power = 4
+Bot1.Battlefield.Deep Goblin Skulltaker.Toughness = 4
