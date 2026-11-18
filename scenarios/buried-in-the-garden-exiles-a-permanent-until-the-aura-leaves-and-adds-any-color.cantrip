@@ -1,0 +1,67 @@
+# Buried in the Garden: "Enchant land". Turn 3: Bot1 casts it ({2}{G}{W}: Forest, Mox Pearl, Mox Emerald, Island) on its own
+# Forest; a creature is no legal thing to enchant. "When this Aura enters, exile target nonland permanent you don't control":
+# Bot2's Grizzly Bears is the only legal target (Bot1's own Mox Pearl and Bot2's Forest, a land, are not). "Whenever
+# enchanted land is tapped for mana, its controller adds an additional one mana of any color": a triggered mana ability that
+# resolves at once (CR 605.1b, 605.4a), the color chosen as it resolves. Turn 5: Bot1 taps the Forest and chooses white, so
+# the Forest's {G} and the white pay for Disenchant ({1}{W}), cast on the Aura. The Aura leaves, the Bears come back (CR
+# 610.3a) under Bot2's control; the Island, not enchanted, taps for {U} alone.
+
+[Bot1 Deck]
+Forest
+Mox Pearl
+Mox Emerald
+Buried in the Garden
+Island
+Disenchant
+Mountain
+Island x13
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Buried in the Garden.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Hand.Buried in the Garden.Cast(Bot1.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Mox Pearl)
+! Bot1.Target(Bot2.Battlefield.Forest)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Exile = Grizzly Bears
+? Bot1.Battlefield.Buried in the Garden.AttachedTo = Forest
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Colors(White)
+? Bot1.Mana = {W}{G}
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana = {W}{U}{G}
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Buried in the Garden)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 5
+Bot1.Graveyard = Disenchant; Buried in the Garden
+Bot2.Battlefield.Grizzly Bears.Tapped = false

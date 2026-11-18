@@ -1,0 +1,46 @@
+# Buried in the Garden on an opponent's land: "its controller adds an additional one mana of any color", and its controller is
+# the enchanted land's, whoever controls the Aura. Turn 3: Bot1 enchants Bot2's Forest (the Aura's controller has no legal
+# exile target: Bot2 controls only lands, so the enters trigger is removed). Turn 4: Bot2 taps the Forest and chooses red
+# itself: Bot2 has {G}{R} and Bot1, the Aura's controller, has no mana. Bot2's other land is not enchanted and taps for one mana.
+
+[Bot1 Deck]
+Forest
+Mox Pearl
+Mox Emerald
+Buried in the Garden
+Island
+Island x15
+
+[Bot2 Deck]
+Forest
+Mountain
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Buried in the Garden.Cast(Bot2.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Buried in the Garden.AttachedTo = Forest
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+? Bot2.Mana = {R}
+Bot2.Battlefield.Forest.Activate
+Bot2.Colors(Red)
+? Bot1.Mana =
+
+[Expect]
+Turn = 4
+Bot2.Mana = {R}{R}{G}
+Bot1.Mana =
