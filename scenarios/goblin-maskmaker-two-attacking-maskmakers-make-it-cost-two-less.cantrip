@@ -1,0 +1,40 @@
+# Each Maskmaker's trigger makes its own effect, and the two add up (CR 118.7): both attack, the face-down Hellion costs {1}, and
+# one Mox pays for it and the other two sources stay untapped.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Goblin Maskmaker
+Goblin Maskmaker
+Mox Jet
+Riftburst Hellion
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goblin Maskmaker.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Maskmaker.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Maskmaker#1 > Bot2; Goblin Maskmaker#2 > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Riftburst Hellion.Cast(Ability: Disguise)
+? Bot1.Mana =
+? Bot1.Battlefield.Mox Jet.Tapped = false
+? Bot1.Battlefield.Mountain.Tapped = false
+
+[Expect]
+Bot2.Life = 18

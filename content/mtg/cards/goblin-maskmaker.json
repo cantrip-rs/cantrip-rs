@@ -1,0 +1,8 @@
+{
+  "name": "Goblin Maskmaker",
+  "manaCost": "{R}",
+  "type": "Creature — Goblin Citizen",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Whenever this creature attacks, face-down spells you cast this turn cost {1} less to cast."
+}
