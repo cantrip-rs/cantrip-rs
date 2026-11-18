@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::combat::EXCEPT_BY_HASTE;
-use cantrip_mechanics::{targets, triggers};
+use cantrip_mechanics::{effects, targets, triggers};
 use cantrip_oracle as oracle;
 
 /// What the payment asks: paying {1} is what makes the reflexive ability trigger (CR 603.12).
@@ -11,17 +11,6 @@ const ASK: Question = Question::new(
     "Pay {cost}",
     "Don't pay",
 );
-
-/// "Whenever you cast a noncreature spell, you may pay {1}. When you do, ..." (CR 118.12, 603.12): paying is doing it, and the
-/// reflexive ability triggers then, its target chosen as it is put on the stack; with no creature with haste it is simply
-/// removed (CR 603.3d), the {1} staying spent. Declining pays nothing and triggers nothing.
-fn pay(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if g.may_pay(item.controller, item.object, item.object, cost("{1}"), &ASK)? {
-        let this = g.card_id(&CARD);
-        g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(this, 0), Target::None);
-    }
-    Ok(())
-}
 
 /// "Target creature with haste" (CR 115.1, 702.10), read from its computed characteristics as it is targeted.
 fn creature_with_haste(q: &dyn Query, _: &Asker, t: Target) -> bool {
@@ -41,7 +30,7 @@ fn cant_be_blocked_except_by_haste(g: &mut dyn Game, item: &StackItem) -> Result
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         triggers::NONCREATURE_SPELL_YOU_CAST,
-        pay,
+        |g, item| effects::may_pay_then_when_you_do(g, item, &CARD, cost("{1}"), &ASK),
         "Whenever you cast a noncreature spell, you may pay {1}. When you do, target creature with haste can't be blocked this turn except by creatures with haste.",
     )],
     delayed: &[delayed_trigger(

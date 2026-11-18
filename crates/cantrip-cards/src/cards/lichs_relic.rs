@@ -1,7 +1,7 @@
 use cantrip_api::*;
 use cantrip_mechanics::attach::{attached_object, equip};
 use cantrip_mechanics::triggers::THIS_ENTERS;
-use cantrip_mechanics::{statics::plus_pt, targets};
+use cantrip_mechanics::{effects, statics::plus_pt, targets};
 use cantrip_oracle as oracle;
 
 /// What the payment asks: paying {2} is what makes the destroying ability happen (CR 603.12); the targets are chosen once it is
@@ -13,17 +13,6 @@ const ASK: Question = Question::new(
     "Pay {cost}",
     "Don't pay",
 );
-
-/// "When this Equipment enters, you may pay {2}. When you do, ..." (CR 118.12, 603.12): paying is doing it, and the reflexive
-/// ability triggers then, its targets chosen as it is put on the stack; with none to choose it is simply removed (CR 603.3d),
-/// the {2} staying spent. Declining pays nothing and triggers nothing.
-fn pay(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if g.may_pay(item.controller, item.object, item.object, cost("{2}"), &ASK)? {
-        let this = g.card_id(&CARD);
-        g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(this, 0), Target::None);
-    }
-    Ok(())
-}
 
 /// The slot for one opponent of "for each opponent, destroy up to one target creature or planeswalker that player controls"
 /// (CR 601.2c, 115.1): a creature or planeswalker that opponent controls. The core makes a slot of its own for each
@@ -47,7 +36,7 @@ fn destroy(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(THIS_ENTERS, pay, "When this Equipment enters, you may pay {2}. When you do, for each opponent, destroy up to one target creature or planeswalker that player controls."),
+        triggered(THIS_ENTERS, |g, item| effects::may_pay_then_when_you_do(g, item, &CARD, cost("{2}"), &ASK), "When this Equipment enters, you may pay {2}. When you do, for each opponent, destroy up to one target creature or planeswalker that player controls."),
         equip(mana("{2}"), "Equip {2}"),
     ],
     delayed: &[delayed_trigger(destroy, "When you do, for each opponent, destroy up to one target creature or planeswalker that player controls.")

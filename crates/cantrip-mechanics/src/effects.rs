@@ -2305,6 +2305,19 @@ pub fn may_pay_x_then_when_you_do(g: &mut dyn Game, item: &StackItem, card: &'st
     Ok(())
 }
 
+/// "You may pay [cost]. When you do, ..." (CR 118.12, 603.12): paying is doing it, and the reflexive ability (the card's first
+/// `delayed` one) triggers then, its targets chosen as it goes on the stack; with none to choose it is simply removed (CR 603.3d),
+/// the payment staying paid. Declining pays nothing and triggers nothing. Ant-Man, Colony Commander, Ty Lee, Artful Acrobat,
+/// Passenger Ferry, Zoraline, Cosmos Caller, Speed, Young Avenger, Weapons Vendor, Lich's Relic and Sylvia Tilly, Joy of
+/// Discovery print it; `question` is the card's own wording of the payment.
+pub fn may_pay_then_when_you_do(g: &mut dyn Game, item: &StackItem, card: &'static CardDef, payment: Cost, question: &'static Question) -> Result<(), Suspend> {
+    if g.may_pay(item.controller, item.object, item.object, payment, question)? {
+        let this = g.card_id(card);
+        g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(this, 0), Target::None);
+    }
+    Ok(())
+}
+
 /// "Untap this [permanent]" (CR 701.26): the ability's source. Basalt Monolith and Grim Monolith print it.
 pub fn untap_self(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.untap(item.object);

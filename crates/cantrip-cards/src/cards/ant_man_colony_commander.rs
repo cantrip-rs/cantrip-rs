@@ -1,19 +1,9 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::THIS_ATTACKS;
-use cantrip_mechanics::{targets, tokens};
+use cantrip_mechanics::{effects, targets, tokens};
 use cantrip_oracle as oracle;
 
 const PAY: Question = Question::new("Pay", "pay {cost} to put a +1/+1 counter on target creature?", "", "Pay {cost}", "Don't pay");
-
-/// "Whenever Ant-Man attacks, you may pay {1}. When you do, put a +1/+1 counter on target creature." (CR 603.12): the target is
-/// chosen only if the payment is made, as the reflexive ability goes on the stack.
-fn pay_for_a_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if g.may_pay(item.controller, item.object, item.object, cost("{1}"), &PAY)? {
-        let this = g.card_id(&CARD);
-        g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(this, 0), Target::None);
-    }
-    Ok(())
-}
 
 /// The reflexive ability's counter, put by Ant-Man's controller (CR 122.6) on the target if it is still a legal target
 /// (CR 608.2b).
@@ -43,7 +33,7 @@ fn create_an_insect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(THIS_ATTACKS, pay_for_a_counter, "Whenever Ant-Man attacks, you may pay {1}. When you do, put a +1/+1 counter on target creature."),
+        triggered(THIS_ATTACKS, |g, item| effects::may_pay_then_when_you_do(g, item, &CARD, cost("{1}"), &PAY), "Whenever Ant-Man attacks, you may pay {1}. When you do, put a +1/+1 counter on target creature."),
         triggered(
             when(EventMask::COUNTERS, you_put_a_counter_on_a_creature),
             create_an_insect,
