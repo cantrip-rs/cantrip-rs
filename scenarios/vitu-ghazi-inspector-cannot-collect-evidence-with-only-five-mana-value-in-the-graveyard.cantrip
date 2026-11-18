@@ -1,0 +1,42 @@
+# Vitu-Ghazi Inspector: evidence 6 needs cards with total mana value 6 or greater (CR 701.59a). Bot1's graveyard is Hero of Bladehold (4), an Island (0) and
+# the Faithless Looting (1), total 5, so "you can't choose to collect evidence at all": the option is refused and the Inspector is cast without it, with no trigger and no life.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Faithless Looting
+Vitu-Ghazi Inspector
+Hero of Bladehold
+Thieving Skydiver
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Hero of Bladehold; Island)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vitu-Ghazi Inspector.Cast
+! Bot1.Modes(Collect evidence)
+Bot1.Modes(Cast without)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot1.Graveyard.Count = 3
+Exile.Count = 0

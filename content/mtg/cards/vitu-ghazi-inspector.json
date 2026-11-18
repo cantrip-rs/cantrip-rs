@@ -1,0 +1,11 @@
+{
+  "name": "Vitu-Ghazi Inspector",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Elf Detective",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "As an additional cost to cast this spell, you may collect evidence 6. (Exile cards with total mana value 6 or greater from your graveyard.)\nReach\nWhen this creature enters, if evidence was collected, put a +1/+1 counter on target creature and you gain 2 life.",
+  "keywords": [
+    "Reach"
+  ]
+}

@@ -1,0 +1,53 @@
+# Vitu-Ghazi Inspector: "As an additional cost to cast this spell, you may collect evidence 6" and "When this creature enters, if evidence was collected,
+# put a +1/+1 counter on target creature and you gain 2 life" (CR 701.59a, 603.4). Bot1's graveyard holds Hero of Bladehold (4), Thieving Skydiver (2)
+# and the Faithless Looting just cast (1): the two discards make exactly 6 and are exiled as the evidence; the Looting stays. The trigger may target any
+# creature: Bot1 picks Bot2's Ornithopter, which becomes 1/3, and gains 2 life.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Faithless Looting
+Vitu-Ghazi Inspector
+Hero of Bladehold
+Thieving Skydiver
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Hero of Bladehold; Thieving Skydiver)
+? Bot1.Graveyard = Faithless Looting; Thieving Skydiver; Hero of Bladehold
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vitu-Ghazi Inspector.Cast
+Bot1.Modes(Collect evidence)
+Bot1.Choose(Hero of Bladehold; Thieving Skydiver)
+Bot1.Pass
+Bot2.Pass
+? Exile = Hero of Bladehold; Thieving Skydiver
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Stack.Count = 0
+Bot1.Life = 22
+Bot2.Life = 20
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Vitu-Ghazi Inspector.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Vitu-Ghazi Inspector.Power = 1
+Bot1.Graveyard = Faithless Looting
+Exile = Hero of Bladehold; Thieving Skydiver

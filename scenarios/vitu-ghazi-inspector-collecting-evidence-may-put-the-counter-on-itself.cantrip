@@ -1,0 +1,48 @@
+# Vitu-Ghazi Inspector: the target is any creature, including the Inspector that just entered (CR 603.3d): with evidence collected Bot1 picks it (2/4),
+# gains 2 life, and Bot2's Ornithopter gets nothing. Bot1's Mox Jet is not a creature and is refused.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Faithless Looting
+Vitu-Ghazi Inspector
+Hero of Bladehold
+Thieving Skydiver
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Hero of Bladehold; Thieving Skydiver)
+? Bot1.Graveyard = Faithless Looting; Thieving Skydiver; Hero of Bladehold
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vitu-Ghazi Inspector.Cast
+Bot1.Modes(Collect evidence)
+Bot1.Choose(Hero of Bladehold; Thieving Skydiver)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Mox Jet)
+Bot1.Target(Bot1.Battlefield.Vitu-Ghazi Inspector)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Stack.Count = 0
+Bot1.Life = 22
+Bot1.Battlefield.Vitu-Ghazi Inspector.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Vitu-Ghazi Inspector.Power = 2
+Bot1.Battlefield.Vitu-Ghazi Inspector.Toughness = 4
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)

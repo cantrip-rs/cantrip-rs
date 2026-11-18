@@ -1,0 +1,54 @@
+# Vitu-Ghazi Inspector: "if evidence was collected" (CR 603.4) is checked again as the trigger resolves, and the Inspector has left the battlefield by then
+# (Bot2 Lightning Bolts it in response): how it was cast is read from it as it last existed (CR 608.2h), so the condition still holds. Bot2's Ornithopter gets
+# the +1/+1 counter and Bot1 gains 2 life.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Faithless Looting
+Vitu-Ghazi Inspector
+Hero of Bladehold
+Thieving Skydiver
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Hero of Bladehold; Thieving Skydiver)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vitu-Ghazi Inspector.Cast
+Bot1.Modes(Collect evidence)
+Bot1.Choose(Hero of Bladehold; Thieving Skydiver)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Vitu-Ghazi Inspector)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Vitu-Ghazi Inspector; Faithless Looting
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Stack.Count = 0
+Bot1.Life = 22
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
