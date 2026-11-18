@@ -1,0 +1,43 @@
+# Massacre Girl, Known Killer: "Whenever a creature an opponent controls dies, if its toughness was less than 1, draw a
+# card" (CR 700.4, 603.4, 603.10a). Turn 1: Black Lotus and a Mox Jet pay {2}{B}{B}. Turn 3: Last Gasp (-3/-3) makes Bot2's
+# Elvish Mystic (1/1) a -2/-2 that dies as a state-based action (CR 704.5f), toughness -2 as it last was on the
+# battlefield, and Bot1 draws exactly one card.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Massacre Girl, Known Killer
+Last Gasp
+Lightning Bolt
+Mox Ruby
+Swamp x16
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Elvish Mystic
+Forest x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Massacre Girl, Known Killer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Last Gasp.Cast(Bot2.Battlefield.Elvish Mystic)
+
+[Expect]
+Bot2.Graveyard = Elvish Mystic
+Bot1.Hand.Count = 3

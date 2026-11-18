@@ -1,0 +1,40 @@
+# Massacre Girl, Known Killer: "if its toughness was less than 1" includes exactly 0 (the boundary between the sibling
+# scenarios' toughness -2, which draws, and toughness 1, which does not). Bot1's Memnite (1/1) has wither from Girl and
+# attacks; Bot2's Elvish Mystic (1/1) blocks, receives one -1/-1 counter (CR 702.80a), is a 0/0 and dies (CR 704.5f)
+# with toughness 0, so Bot1 draws one card. Memnite takes ordinary damage (the Mystic has no wither) and dies, which
+# draws nothing since it is not an opponent's creature.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Massacre Girl, Known Killer
+Memnite
+Swamp x16
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Massacre Girl, Known Killer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 4
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Elvish Mystic > Memnite)
+[T3 Bot1.End]
+
+[Expect]
+Bot2.Graveyard = Elvish Mystic
+Bot1.Graveyard = Memnite; Black Lotus
+Bot1.Hand.Count = 5

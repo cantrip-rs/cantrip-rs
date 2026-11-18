@@ -1,0 +1,39 @@
+# Massacre Girl, Known Killer: "Creatures you control have wither" (CR 702.80a: damage dealt to a creature by a source with
+# wither is dealt as -1/-1 counters). Bot2's Grizzly Bears (2/2) attack and Girl (4/4) blocks: Girl's 4 damage puts four
+# -1/-1 counters on the Bears (toughness -2, dies, and Girl's controller draws), while the Bears' 2 damage is ordinary damage
+# on Girl: she has Damage 2 and no counters (the opponent's creatures have no wither).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Massacre Girl, Known Killer
+Swamp x17
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Massacre Girl, Known Killer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Massacre Girl, Known Killer > Grizzly Bears)
+[T4 Bot2.End]
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Massacre Girl, Known Killer.Damage = 2
+Bot1.Battlefield.Massacre Girl, Known Killer.Counters.MinusOneMinusOne = (absent)
+Bot1.Battlefield.Massacre Girl, Known Killer.Keywords = Menace; Wither

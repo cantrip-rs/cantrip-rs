@@ -1,0 +1,48 @@
+# Massacre Girl, Known Killer: "if its toughness was less than 1" is read as the creature last was on the battlefield
+# (CR 603.10a). Bot2's Fanatic of Rhonas (1/4) is shrunk by Last Gasp to -2/1: still alive, and then Lightning Bolt kills it
+# with toughness exactly 1, which is not less than 1, so no card is drawn. (Positive control: the sibling scenario with
+# toughness -2.)
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Massacre Girl, Known Killer
+Last Gasp
+Lightning Bolt
+Mox Ruby
+Swamp x16
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Fanatic of Rhonas
+Forest x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Massacre Girl, Known Killer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Fanatic of Rhonas.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Last Gasp.Cast(Bot2.Battlefield.Fanatic of Rhonas)
+Bot2.Pass
+? Bot2.Battlefield.Fanatic of Rhonas.Toughness = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Fanatic of Rhonas)
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Fanatic of Rhonas
+Bot1.Hand.Count = 1

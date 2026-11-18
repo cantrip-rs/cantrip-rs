@@ -1,0 +1,11 @@
+{
+  "name": "Massacre Girl, Known Killer",
+  "manaCost": "{2}{B}{B}",
+  "type": "Legendary Creature — Human Assassin",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Menace\nCreatures you control have wither. (They deal damage to creatures in the form of -1/-1 counters.)\nWhenever a creature an opponent controls dies, if its toughness was less than 1, draw a card.",
+  "keywords": [
+    "Menace"
+  ]
+}
