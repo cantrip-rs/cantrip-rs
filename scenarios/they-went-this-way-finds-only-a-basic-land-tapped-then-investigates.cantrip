@@ -1,0 +1,46 @@
+# They Went This Way {2}{G}: "Search your library for a basic land card, put it onto the battlefield tapped, then shuffle. Investigate." (CR 701.23, 701.16a). Bot1's library holds a
+# Tropical Island (not basic) and a Lightning Bolt, both refused; the basic Island enters tapped, the library is shuffled once, and Bot1 then investigates: one Clue token. Clue
+# ({2}, sacrifice it: draw a card) is paid at once with Mox Ruby and Mox Jet for a card.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+They Went This Way
+Island
+Island
+Island
+Tropical Island
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.They Went This Way.Cast
+? Bot1.Mana =
+! Bot1.Search(Tropical Island)
+! Bot1.Search(Lightning Bolt)
+Bot1.Search(Island)
+? Bot1.Battlefield.Island.Tapped = true
+? Bot1.Battlefield.Clue Token.Token = true
+? Bot1.Shuffles = 1
+? Bot1.Hand.Count = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Clue Token.Activate
+? Bot1.Battlefield.Count = 4
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Graveyard = They Went This Way
