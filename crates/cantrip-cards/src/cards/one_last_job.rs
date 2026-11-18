@@ -2,20 +2,12 @@ use cantrip_api::*;
 use cantrip_mechanics::{choose, effects, select, spree, targets};
 use cantrip_oracle as oracle;
 
-/// A card in your graveyard with one of these subtypes (CR 205.3, 115.1), read through the words of this spell's own text
-/// (CR 612.2): "target Mount or Vehicle card", "target Aura or Equipment card" (the subtype of an Aura is a card's own, CR 303.4).
-fn subtype_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target, subtypes: &[Subtype]) -> bool {
-    let words = q.words(asker.source);
-    targets::card_in_your_graveyard(q, asker, t, &[])
-        && matches!(t, Target::Object(id) if subtypes.iter().any(|&s| q.chars(id).has_subtype(words.subtype(s))))
-}
-
 fn mount_or_vehicle_card(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    subtype_card_in_your_graveyard(q, asker, t, &[Subtype::Mount, Subtype::Vehicle])
+    targets::subtype_card_in_your_graveyard(q, asker, t, &[Subtype::Mount, Subtype::Vehicle])
 }
 
 fn aura_or_equipment_card(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    subtype_card_in_your_graveyard(q, asker, t, &[Subtype::Aura, Subtype::Equipment])
+    targets::subtype_card_in_your_graveyard(q, asker, t, &[Subtype::Aura, Subtype::Equipment])
 }
 
 /// "Return target Aura or Equipment card from your graveyard to the battlefield attached to a creature you control" (CR 303.4f,

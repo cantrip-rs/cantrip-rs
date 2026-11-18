@@ -1598,6 +1598,15 @@ pub fn creature_card_or_subtype_card_in_your_graveyard(q: &dyn Query, asker: &As
     card_in_your_graveyard(q, asker, t, &[]) && matches!(t, Target::Object(id) if q.chars(id).is(CardType::Creature) || q.chars(id).has_subtype(subtype))
 }
 
+/// "Target [subtype] card from your graveyard" (CR 115.1, 205.3): a card in the asker's own graveyard with any of these subtypes,
+/// read through the words of the asker's own text (CR 612.2). One Last Job prints "Mount or Vehicle" and "Aura or Equipment",
+/// Magnetic Snuffler "Equipment".
+pub fn subtype_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target, subtypes: &[Subtype]) -> bool {
+    let words = q.words(asker.source);
+    card_in_your_graveyard(q, asker, t, &[])
+        && matches!(t, Target::Object(id) if subtypes.iter().any(|&s| q.chars(id).has_subtype(words.subtype(s))))
+}
+
 fn creature_card_with_mana_value_3_or_less_in_your_graveyard_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     card_in_your_graveyard_with_mana_value_at_most(q, asker, t, &[CardType::Creature], 3)
 }
