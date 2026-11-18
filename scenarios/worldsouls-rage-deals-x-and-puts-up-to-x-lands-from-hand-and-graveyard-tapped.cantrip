@@ -1,0 +1,44 @@
+# Worldsoul's Rage ({X}{R}{G}): "deals X damage to any target. Put up to X land cards from your hand and/or graveyard onto the battlefield tapped." Bot1 casts
+# Faithless Looting on turn 1 (Black Lotus red), draws an Island and a Swamp and discards the Forest and the Swamp, so a Forest and a Swamp are in the graveyard and a Mountain and an Island in
+# hand. Worldsoul's Rage for X = 2 deals 2 to Bot2; of the four land cards only two may be chosen (a third is refused): the Mountain from the hand and the Forest from the
+# graveyard enter tapped. The Island and the Swamp stay where they are.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Faithless Looting
+Worldsoul's Rage
+Forest
+Mountain
+Island
+Swamp
+Plains x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Dice]
+1
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Forest; Swamp)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Worldsoul's Rage.Cast(Bot2; X: 2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Mountain; Forest; Island)
+Bot1.Choose(Mountain; Forest)
+? Bot2.Life = 18
+? Bot1.Battlefield.Mountain.Tapped = true
+? Bot1.Battlefield.Forest.Tapped = true
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mountain; Forest
+Bot1.Hand = Island
+Bot1.Graveyard = Worldsoul's Rage; Faithless Looting; Swamp; Black Lotus

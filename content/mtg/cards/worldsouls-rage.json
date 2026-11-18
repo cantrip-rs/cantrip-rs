@@ -1,0 +1,6 @@
+{
+  "name": "Worldsoul's Rage",
+  "manaCost": "{X}{R}{G}",
+  "type": "Sorcery",
+  "oracleText": "Worldsoul's Rage deals X damage to any target. Put up to X land cards from your hand and/or graveyard onto the battlefield tapped."
+}

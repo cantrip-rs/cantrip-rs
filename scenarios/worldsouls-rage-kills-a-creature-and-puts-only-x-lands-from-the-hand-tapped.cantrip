@@ -1,0 +1,47 @@
+# Worldsoul's Rage ({X}{R}{G}) on a creature: Bot1 casts it on turn 3 for X = 1 at Bot2's Memnite (1/1), which dies. "Up to X land cards" is one land card here: of the Mountain and
+# the Forest in Bot1's hand only one may be chosen (choosing both is refused); the Forest enters tapped and the Mountain stays in hand. The graveyard holds no land card.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Worldsoul's Rage
+Mountain
+Forest
+Plains
+Plains x20
+
+[Bot2 Deck]
+Memnite
+Swamp x20
+
+[Dice]
+1
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Memnite.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Worldsoul's Rage.Cast(Bot2.Battlefield.Memnite; X: 1)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Mountain; Forest)
+Bot1.Choose(Forest)
+? Bot2.Battlefield.Count = 0
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Memnite
+Bot2.Life = 20
+Bot1.Battlefield = Mox Ruby; Mox Emerald; Mox Jet; Forest
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Hand = Mountain; Plains; Plains
+Bot1.Graveyard = Worldsoul's Rage

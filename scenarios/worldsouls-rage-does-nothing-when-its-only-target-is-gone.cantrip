@@ -1,0 +1,50 @@
+# Worldsoul's Rage with a single target that is no longer legal as it resolves (CR 608.2b): the spell doesn't resolve, so it deals no damage and no land cards are put onto the
+# battlefield. Bot1 casts it on turn 3 for X = 1 at Bot2's Memnite; Bot2 Lightning Bolts its own Memnite in response (Mox Ruby, untapped on Bot2's turn 2 and still untapped).
+# Bot1's Mountain stays in hand, and Bot1 is asked nothing.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Worldsoul's Rage
+Mountain
+Forest
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Lightning Bolt
+Swamp x20
+
+[Dice]
+1
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Worldsoul's Rage.Cast(Bot2.Battlefield.Memnite; X: 1)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Ruby
+Bot2.Graveyard = Memnite; Lightning Bolt
+Bot1.Battlefield = Mox Ruby; Mox Emerald; Mox Jet
+Bot1.Hand = Mountain; Forest; Plains; Plains
+Bot1.Graveyard = Worldsoul's Rage
