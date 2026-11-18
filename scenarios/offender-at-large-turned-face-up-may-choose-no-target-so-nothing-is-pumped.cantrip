@@ -1,0 +1,46 @@
+# "Up to one target creature": turning Offender at Large face up with Bot2's Ornithopter in play, Bot1 chooses no target, so the
+# Ornithopter stays 0/2 and Offender at Large a 5/4 (CR 601.2c).
+
+[Bot1 Deck]
+Offender at Large
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Offender at Large.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Offender at Large.FaceDown = (absent)
+Bot1.Battlefield.Offender at Large.Power = 5
+Bot2.Battlefield.Ornithopter.Power = 0
