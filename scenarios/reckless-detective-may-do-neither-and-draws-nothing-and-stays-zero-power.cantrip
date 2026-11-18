@@ -1,0 +1,36 @@
+# Reckless Detective: "If you do" - Bot1 declines both on turn 3, so nothing is sacrificed or discarded, no card is drawn (the hand is
+# the three Islands from before plus the turn-3 draw) and the Detective deals no damage.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Reckless Detective
+Island
+Island
+Island
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reckless Detective.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Reckless Detective)
+Bot1.Pass
+Bot1.Modes(Neither)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Mox Jet; Reckless Detective
+Bot1.Battlefield.Reckless Detective.Power = 0
+Bot1.Graveyard.Count = 0
+Bot1.Hand.Count = 5
+Bot2.Life = 20
