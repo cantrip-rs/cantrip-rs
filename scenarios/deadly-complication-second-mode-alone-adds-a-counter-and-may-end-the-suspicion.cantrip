@@ -1,0 +1,55 @@
+# Deadly Complication, second mode alone: "Put a +1/+1 counter on target suspected creature you control. You may have it become no longer suspected." The counter goes on J. Jonah Jameson (2/2 to
+# 3/3) first; Bot1 accepts, so it is no longer suspected (CR 701.60a) and loses its menace and "can't block". Bot2's Memnite is not destroyed.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+J. Jonah Jameson
+Deadly Complication
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.J. Jonah Jameson.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(J. Jonah Jameson)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.J. Jonah Jameson.Suspected = true
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Deadly Complication.Cast
+Bot1.Modes(2)
+Bot1.Target(J. Jonah Jameson)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.J. Jonah Jameson.Power = 3
+Bot1.Accept
+
+[Expect]
+Bot1.Battlefield.J. Jonah Jameson.Power = 3
+Bot1.Battlefield.J. Jonah Jameson.Toughness = 3
+Bot1.Battlefield.J. Jonah Jameson.Suspected = (absent)
+Bot1.Battlefield.J. Jonah Jameson.Keywords = (absent)
+Bot2.Battlefield = Memnite

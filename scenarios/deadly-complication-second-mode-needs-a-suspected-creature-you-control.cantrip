@@ -1,0 +1,54 @@
+# Deadly Complication's second mode needs a suspected creature YOU control. Turn 2: Bot2's Memnite enters. Turn 3: J. Jonah Jameson suspects Bot2's Memnite: it is suspected but not Bot1's, and Bot1's own
+# Jameson is not suspected, so neither is a legal target of the second mode on turn 5. The first mode alone destroys the suspected Memnite.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+J. Jonah Jameson
+Deadly Complication
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.J. Jonah Jameson.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Suspected = true
+? Bot1.Battlefield.J. Jonah Jameson.Suspected = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Deadly Complication.Cast
+! Bot1.Modes(2)
+Bot1.Modes(1)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Memnite; Island
+Bot1.Battlefield.J. Jonah Jameson.Power = 2

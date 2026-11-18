@@ -1,0 +1,54 @@
+# Deadly Complication, first mode alone (CR 700.2): "Destroy target creature." Bot1's suspected J. Jonah Jameson (turn 1) stays suspected and gets no counter; Bot2's Memnite is destroyed. The second
+# mode is not chosen, so no counter and no question about the suspected designation.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+J. Jonah Jameson
+Deadly Complication
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.J. Jonah Jameson.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(J. Jonah Jameson)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.J. Jonah Jameson.Suspected = true
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Deadly Complication.Cast
+! Bot1.Modes(Count: 0)
+Bot1.Modes(1)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Memnite
+Bot1.Graveyard = Deadly Complication
+Bot1.Battlefield.J. Jonah Jameson.Suspected = true
+Bot1.Battlefield.J. Jonah Jameson.Power = 2

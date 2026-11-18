@@ -1,0 +1,53 @@
+# Deadly Complication, both modes on the same creature (CR 700.2c): J. Jonah Jameson is destroyed by the first mode, so the second mode's target is no longer legal as it resolves (CR 608.2b) and
+# nothing is asked about the suspected designation. Memnite, not suspected, is not a legal target of the second mode.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+J. Jonah Jameson
+Deadly Complication
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.J. Jonah Jameson.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(J. Jonah Jameson)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.J. Jonah Jameson.Suspected = true
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Deadly Complication.Cast
+Bot1.Modes(1; 2)
+Bot1.Target(J. Jonah Jameson)
+! Bot1.Target(Memnite)
+Bot1.Target(J. Jonah Jameson)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.J. Jonah Jameson = (absent)
+Bot1.Graveyard = Deadly Complication; J. Jonah Jameson
+Bot2.Battlefield = Memnite
