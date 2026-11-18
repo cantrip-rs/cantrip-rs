@@ -1,0 +1,49 @@
+# Orazca Puzzle-Door {U}: "{1}, {T}, Sacrifice this artifact: Look at the top two cards of your library. Put one of those cards into your
+# hand and the other into your graveyard" (CR 701.20e, 400.3). Cast with Mox Sapphire, it cannot be activated with no mana (refused: the
+# {1} is short). With Mox Ruby paying the {1} the sacrifice is a cost (CR 118.3): Orazca is already in the graveyard while the ability is
+# on the stack, and the ability resolves anyway. The top two are Ancestral Recall and Lightning Bolt: Bot1 takes the Recall, the Bolt goes
+# to the graveyard. The rest of the library is untouched, and so is the other player's.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Orazca Puzzle-Door
+Island
+Island
+Island
+Island
+Ancestral Recall
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Orazca Puzzle-Door.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Orazca Puzzle-Door.Activate(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Orazca Puzzle-Door.Activate
+? Bot1.Mana =
+? Bot1.Graveyard = Orazca Puzzle-Door
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Ancestral Recall | Lightning Bolt)
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Lightning Bolt; Orazca Puzzle-Door
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 10
+Bot2.Library.Count = 13
