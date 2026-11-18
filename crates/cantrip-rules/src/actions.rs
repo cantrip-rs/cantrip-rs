@@ -4790,9 +4790,14 @@ fn added_life_payable(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, 
 }
 
 /// The face `def` is of the card `card`, where it is one of its faces rather than the card itself (an Adventure, an Omen, a
-/// back face, a bestowed Aura, a half): what the cost changes judge it as (CR 715.4, 720.3a, 709.3, 712.8a).
+/// back face, a bestowed Aura, a half): what the cost changes judge it as (CR 715.4, 720.3a, 709.3, 712.8a); and the face-down
+/// values (CR 708.2) of a card cast face down (CR 702.37c, 702.168b, 708.4), a colorless 2/2 creature spell as it is costed.
 fn face_of(cx: &Cx, card: ObjectId, def: &CardDef) -> Option<CardId> {
     let whole = cx.card(cx.s().obj(card).card);
+    let face_down = [&cantrip_api::intrinsic::MORPHED, &cantrip_api::intrinsic::DISGUISED];
+    if let Some(f) = face_down.into_iter().find(|&f| std::ptr::eq(f, def)) {
+        return Some(cx.card_id(f));
+    }
     let faces = [whole.adventure, whole.omen, whole.back, whole.bestow, whole.split.map(|s| s.0), whole.split.map(|s| s.1), cantrip_api::prototyped_face(whole)];
     faces.into_iter().flatten().find(|&f| std::ptr::eq(f, def)).map(|f| cx.card_id(f))
 }
