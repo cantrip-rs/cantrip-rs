@@ -226,6 +226,21 @@ pub const fn basic_land_of_types<const A: u16, const B2: u16, const C: u16>() ->
     part(&(basic_land_of_types_rule::<A, B2, C> as SelectFn), 0, "")
 }
 
+const BASIC_LAND_TYPES: [Subtype; 5] = [Subtype::Plains, Subtype::Island, Subtype::Swamp, Subtype::Mountain, Subtype::Forest];
+
+fn land_with_a_basic_land_type_rule(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
+    let types = BASIC_LAND_TYPES.map(|t| crate::lands::word(q, choice.source, crate::lands::sub(t)));
+    Verdict::each(choice, |card| {
+        let chars = q.chars(card);
+        chars.is(CardType::Land) && types.into_iter().any(|t| chars.has_subtype(t))
+    })
+}
+
+/// "A land card with a basic land type" (CR 205.3i, 305.6): a land card with at least one of Plains, Island, Swamp, Mountain
+/// or Forest, basic or not (a Stomping Ground is one; a Command Tower or a Wastes is not), each type read through the words of the
+/// text of the card that asks (CR 612.2) and a card as it is where it is. Boseiju, Who Endures and Nervous Gardener search for it.
+pub const LAND_WITH_A_BASIC_LAND_TYPE: Part = part(&(land_with_a_basic_land_type_rule as SelectFn), 0, "");
+
 /// "A basic land card or Planet card": Final Frontier and Genesis Device search for it.
 pub const BASIC_LAND_OR_PLANET: Part = basic_land_or_subtype(Subtype::Planet);
 
@@ -573,6 +588,9 @@ pub const FOREST_CARD: Selection = forest_cards(up_to(1));
 
 /// "An Equipment card", which may be left unfound (CR 701.23b): Cloud, Midgar Mercenary and Honored Knight-Captain search for it.
 pub const EQUIPMENT_CARD: Selection = Selection::of(up_to(1), &[EQUIPMENT]).called("Equipment");
+
+/// "A land card with a basic land type", which may be left unfound (CR 701.23b): Boseiju, Who Endures and Nervous Gardener search for it.
+pub const LAND_WITH_A_BASIC_LAND_TYPE_CARD: Selection = Selection::of(up_to(1), &[LAND_WITH_A_BASIC_LAND_TYPE]).called("land with a basic land type");
 
 /// `count` land cards: Crop Rotation's and Expedition Map's one (`LAND_CARD`), and Hexhaven Invigorator's "up to that many
 /// land cards".
