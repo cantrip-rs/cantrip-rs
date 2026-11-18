@@ -3475,12 +3475,12 @@ pub fn plus_one_counter_on_target(g: &mut dyn Game, item: &StackItem) -> Result<
     Ok(())
 }
 
-/// "Put a +1/+1 counter on target [creature]. You gain 1 life." (CR 122.1a, 119.3, 608.2b) as one ability: with its one target
+/// "Put a +1/+1 counter on target [creature]. You gain N life." (CR 122.1a, 119.3, 608.2b) as one ability: with its one target
 /// illegal as it resolves, neither instruction happens (the core removes the ability as a whole, CR 608.2b). Emergency Medical
-/// Hologram and Sunshower Druid print it.
-pub fn plus_one_counter_on_target_and_you_gain_1_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+/// Hologram and Sunshower Druid print it with one life, Vitu-Ghazi Inspector with two.
+pub fn plus_one_counter_on_target_and_you_gain_life<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     plus_one_counter_on_target(g, item)?;
-    g.gain_life(item.controller, 1);
+    g.gain_life(item.controller, N);
     Ok(())
 }
 
