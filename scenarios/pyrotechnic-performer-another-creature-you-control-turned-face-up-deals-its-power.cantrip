@@ -1,0 +1,47 @@
+# With Pyrotechnic Performer face up, turning Bolrac-Clan Basher face up on turn 3 triggers it for "another creature you control":
+# the Basher, not the Performer, is the source and deals its own power, 3, to Bot2 (20 to 17). The Basher cast face down on turn 1 with
+# Black Lotus did nothing then; its disguise cost {3}{R}{R} is paid by five Moxen (two Rubies).
+
+[Bot1 Deck]
+Pyrotechnic Performer
+Bolrac-Clan Basher
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pyrotechnic Performer.Cast
+Bot1.Hand.Bolrac-Clan Basher.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 17
+Bot1.Life = 20

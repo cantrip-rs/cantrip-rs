@@ -1,0 +1,50 @@
+# "Another creature you control": with Bot1's Pyrotechnic Performer face up, Bot2 casts Bolrac-Clan Basher face down and turns it face up on
+# turn 2 (Black Lotus and five Moxen). Bot1's Performer does not trigger, so Bot2 stays at 20.
+
+[Bot1 Deck]
+Pyrotechnic Performer
+Mox Ruby
+Mox Jet
+Island x17
+
+[Bot2 Deck]
+Black Lotus
+Bolrac-Clan Basher
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pyrotechnic Performer.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Bolrac-Clan Basher.Cast(Ability: Disguise)
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield..FaceDown = true
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.#1.Activate(Ability: disguise cost)
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Bolrac-Clan Basher.FaceDown = (absent)
+Bot2.Life = 20
+Bot1.Life = 20
