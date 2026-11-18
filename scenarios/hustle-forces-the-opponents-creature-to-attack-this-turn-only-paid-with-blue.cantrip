@@ -1,0 +1,39 @@
+# Hustle {U/R} (CR 107.4e, 508.1d): "Target creature attacks or blocks this turn if able." Cast at Bot2's turn 4 upkeep on Bot2's
+# Ornithopter (cast turn 2, so it can attack), paid with blue for the hybrid symbol (Mox Sapphire). Mox Jet is not a creature, so
+# it is not a legal target. Ornithopter must attack: declaring no attackers is refused on turn 4 and it attacks
+# Bot1 (a 0/2: Bot1 stays at 20). The requirement is for that turn only: on turn 6 Bot2 declares no
+# attackers. Mox Jet, Bot1's other mana, stays untapped.
+
+[Bot1 Deck]
+Hustle // Bustle
+Mox Sapphire
+Mox Jet
+Island x17
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Hustle // Bustle.Cast(Ability: Hustle; Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Hustle // Bustle.Cast(Ability: Hustle; Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+! Bot2.Attack()
+Bot2.Attack(Ornithopter > Bot1)
+[T6 Bot2.Main1]
+Bot2.Attack()
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Mox Jet.Tapped = false
+Stack.Count = 0

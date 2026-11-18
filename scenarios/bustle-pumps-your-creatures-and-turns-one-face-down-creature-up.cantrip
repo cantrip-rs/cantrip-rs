@@ -1,0 +1,96 @@
+# Bustle {4}{R/G}{R/G} (CR 107.4e, 708.8): "Creatures you control get +2/+2 and gain trample until end of turn. You may turn a creature
+# you control face up." Bot1 has two face-down Faerie Snoops (cast for {3} on turns 1 and 3) and an Ornithopter; Bot2 has a face-down
+# Snoop and an Ornithopter. On turn 5 Mox Ruby and Mox Emerald pay the two hybrid symbols and Black Lotus (black) and Mox Pearl the {4}.
+# Only a creature of Bot1's that is face down is offered: its Ornithopter (face up) and Bot2's face-down Snoop (not Bot1's) are refused,
+# and so are two at once ("a creature"). Turning the first Snoop up triggers its "look at the top two cards": Bot1 takes Ancestral
+# Recall and Lightning Bolt goes to the graveyard. Bustle pumped every creature of Bot1's, the turned-up one included (it is the same
+# permanent, CR 708.8): Ornithopter 2/4, Snoop 3/6 face up, the other Snoop a face-down 4/4, all with trample; Bot2's stay 0/2 and 2/2.
+
+[Bot1 Deck]
+Hustle // Bustle
+Faerie Snoop
+Faerie Snoop
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Black Lotus
+Ancestral Recall
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Faerie Snoop
+Ornithopter
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faerie Snoop.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Faerie Snoop.Cast(Ability: Disguise)
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Faerie Snoop.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hustle // Bustle.Cast(Ability: Bustle)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(#1; #2)
+Bot1.Choose(#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Ancestral Recall | Lightning Bolt)
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Trample
+Bot1.Battlefield.Faerie Snoop.Power = 3
+Bot1.Battlefield.Faerie Snoop.Toughness = 6
+Bot1.Battlefield.Faerie Snoop.Keywords = Disguise; Flying; Trample
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..Power = 4
+Bot1.Battlefield..Keywords = Trample
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield..FaceDown = true
+Bot2.Battlefield..Power = 2
+Bot1.Hand = Ancestral Recall
+Bot1.Graveyard = Lightning Bolt; Hustle // Bustle; Black Lotus
+Stack.Count = 0

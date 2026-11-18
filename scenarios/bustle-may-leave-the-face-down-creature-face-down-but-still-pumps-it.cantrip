@@ -1,0 +1,73 @@
+# Bustle: "You may turn a creature you control face up" (CR 708.8), declined (`Bot1.Choose()`): Bot1's Faerie Snoop stays face down
+# (a 2/2 with no name), still pumped by the first sentence to 4/4 with trample (a face-down creature is a creature you control), and
+# since it is never turned up its "look at the top two" does not trigger: Ancestral Recall and Lightning Bolt stay on the library.
+# Same board as the accepting scenario: Bustle paid with Mox Ruby and Mox Emerald (hybrid), Black Lotus and Mox Pearl ({4}).
+
+[Bot1 Deck]
+Hustle // Bustle
+Faerie Snoop
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Black Lotus
+Ancestral Recall
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Faerie Snoop
+Ornithopter
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faerie Snoop.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Faerie Snoop.Cast(Ability: Disguise)
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hustle // Bustle.Cast(Ability: Bustle)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+
+[Expect]
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..Power = 4
+Bot1.Battlefield..Toughness = 4
+Bot1.Battlefield..Keywords = Trample
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Hand.Count = 0
+Bot1.Library.Count = 13
+Bot1.Graveyard = Hustle // Bustle; Black Lotus
+Stack.Count = 0

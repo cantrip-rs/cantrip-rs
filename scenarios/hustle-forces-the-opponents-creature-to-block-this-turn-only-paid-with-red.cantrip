@@ -1,0 +1,42 @@
+# Hustle {U/R} (CR 107.4e, 509.1c): with only Mox Pearl (white) out the hybrid symbol cannot be paid and the cast is refused;
+# Mox Ruby then pays it with red. Hustle on Bot2's Ornithopter (cast turn 2) in Bot1's turn 3 main phase: as Bot1's Memnite attacks,
+# declaring no blockers is refused and the Ornithopter blocks. The requirement is for turn 3 only: on turn 5 the Memnite attacks
+# again and Bot2 declines to block.
+
+[Bot1 Deck]
+Hustle // Bustle
+Mox Pearl
+Mox Ruby
+Memnite
+Island x17
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Hustle // Bustle.Cast(Ability: Hustle; Bot2.Battlefield.Ornithopter; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hustle // Bustle.Cast(Ability: Hustle; Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Attack(Memnite > Bot2)
+! Bot2.Block(Count: 0)
+Bot2.Block(Ornithopter > Memnite)
+[T5 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block()
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield.Ornithopter.Damage = 0
+Stack.Count = 0

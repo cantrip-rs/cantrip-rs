@@ -1,0 +1,56 @@
+# Bustle {4}{R/G}{R/G} (CR 107.4e): each hybrid symbol takes red or green. Turn 3, Bot1 has Sol Ring (two colorless), Mox Pearl, Mox Jet,
+# Mox Sapphire and a Mountain: six mana but a single red, so the cast is refused (`Mana: short`) until Mox Ruby (the turn's draw) is
+# cast; Mountain and Ruby then pay the two hybrid symbols and Sol Ring, Pearl and Sapphire the {4}. Bot1 controls only a face-up
+# Ornithopter, so there is nothing to turn face up and no question is asked: Bustle resolves by itself (Ornithopter 2/4 with trample,
+# Bot2's Ornithopter stays 0/2) and Mox Jet stays untapped.
+
+[Bot1 Deck]
+Hustle // Bustle
+Ornithopter
+Sol Ring
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mountain
+Mox Ruby
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Hustle // Bustle.Cast(Ability: Bustle; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hustle // Bustle.Cast(Ability: Bustle)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Trample
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Graveyard = Hustle // Bustle
+Stack.Count = 0
