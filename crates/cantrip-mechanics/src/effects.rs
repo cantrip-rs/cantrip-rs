@@ -139,6 +139,18 @@ pub fn target_creature_gets<const P: i32, const T: i32>(g: &mut dyn Game, item: 
     Ok(())
 }
 
+/// "Until end of turn, target creature gets +`P`/+`T` and gains 'When this creature dies, …'" (CR 611.2a, 613.1f): both are continuous
+/// effects of the resolving spell or ability on its first target, one instruction (CR 608.2b: nothing if it is no longer a legal
+/// target), the granted ability being the card's delayed ability `N`. Fake Your Own Death, Perigee Beckoner and Presumed Dead print it.
+pub fn target_creature_gets_and_gains_dies_trigger<const P: i32, const T: i32, const N: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    g.one_instruction(&mut |g| {
+        crate::pump(g, item.object, creature, P, T);
+        g.add_effect(item.object, creature, EffectKind::AddAbility(AbilityRef::delayed(item.ability.card, N)), Duration::EndOfTurn);
+        Ok(())
+    })
+}
+
 /// "Target creature gets +`P`/+`T` until end of turn. You gain `LIFE` life" (CR 611.2a, 119.3, 608.2b): both are lost if the target is no
 /// longer legal as the spell resolves, since a spell with only illegal targets does not resolve. Which creatures may be targeted is the
 /// card's own. Moment of Triumph (+2/+2, 2 life), Syphon Fuel (-6/-6, 2) and Locthwain Scorn (-3/-3, 2) print it.
