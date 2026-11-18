@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::statics::{have_haste, plus_pt};
-use cantrip_mechanics::{lands, statics, targets, tokens, triggers};
+use cantrip_mechanics::{history, lands, statics, tokens, triggers};
 use cantrip_oracle as oracle;
 
 /// The 2/2 black Skeleton Pirate creature token.
@@ -18,18 +18,6 @@ const ASK: Question = Question::new("ReturnToHand", "pay {cost} to return {subje
 fn skeleton_pirate(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     tokens::create(g, item.controller, &SKELETON_PIRATE, 1)?;
     Ok(())
-}
-
-/// "If you descended this turn" (CR 700.11): a permanent card was put into the player's graveyard from anywhere this
-/// turn, whether or not it is still there. A token is not a card (CR 111.7): the object that arrived, which for a merged
-/// permanent with a token on top is each of its card components still (CR 730.3).
-fn descended_this_turn(q: &dyn Query, asker: &Asker) -> bool {
-    q.history()
-        .select(EventQuery::kind(EventMask::ZONE_CHANGE).to(ZoneKind::Graveyard).this_turn())
-        .any(|r| {
-            matches!(r.event, Event::ZoneChange { new, to, .. }
-                if to == Zone::graveyard(asker.controller) && !q.obj(new).token && targets::is_permanent_card(&q.chars(new)))
-        })
 }
 
 /// "You may pay 1 life. If you do, return this enchantment to its owner's hand." The life is paid as the ability
@@ -50,7 +38,7 @@ pub static CARD: CardDef = CardDef {
             pay_to_return,
             "At the beginning of your end step, if you descended this turn, you may pay 1 life. If you do, return this enchantment to its owner's hand.",
         )
-        .condition(descended_this_turn),
+        .condition(history::descended_this_turn),
     ],
     statics: &[
         static_ability(Layer::PtModify, statics::your_of_subtype::<{ lands::sub(Subtype::Skeleton) }>, plus_pt::<1, 0>, "Skeletons you control get +1/+0 and have haste."),
