@@ -1,0 +1,42 @@
+# Glorifier of Suffering: "you may sacrifice another creature or artifact." Bot1 casts it with three Plains on turn 5 and controls
+# nothing else that is a creature or artifact: "another" excludes Glorifier itself (CR 701.21a), so no choice is offered
+# (`! Bot1.Choose` is refused), nothing is sacrificed and no reflexive ability goes on the stack. Bot2's Ornithopter is
+# untouched and Glorifier stays 3/2.
+
+[Bot1 Deck]
+Glorifier of Suffering
+Plains x19
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Plains#3.Activate
+Bot1.Hand.Glorifier of Suffering.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+! Bot1.Target
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Count = 4
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Glorifier of Suffering.Power = 3
+Bot2.Battlefield.Ornithopter.Power = 0

@@ -1,0 +1,60 @@
+# Glorifier of Suffering {2}{W}, 3/2: "When this creature enters, you may sacrifice another creature or artifact. When you do,
+# put a +1/+1 counter on each of up to two target creatures." Bot1 sacrifices its Savannah Lions as the ability resolves
+# (CR 701.21a; Glorifier itself is not among the choices) and the reflexive ability (CR 603.12) takes two targets as it goes on
+# the stack: its own Glorifier and Bot2's Ornithopter. A Mox is not a creature and a third creature is one too many (CR 601.2c).
+# Each gets exactly one counter: Glorifier is 4/3, Ornithopter 1/3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Savannah Lions
+Glorifier of Suffering
+Ornithopter
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Glorifier of Suffering.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Glorifier of Suffering)
+Bot1.Choose(Savannah Lions)
+! Bot1.Target(Bot1.Battlefield.Mox Sapphire)
+! Bot1.Target(Bot1.Battlefield.Glorifier of Suffering; Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Glorifier of Suffering; Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Graveyard = Savannah Lions
+Bot1.Battlefield.Glorifier of Suffering.Power = 4
+Bot1.Battlefield.Glorifier of Suffering.Toughness = 3
+Bot2.Battlefield.Ornithopter.Power = 1
+Bot2.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Mox Sapphire.Counters.PlusOnePlusOne = (absent)
