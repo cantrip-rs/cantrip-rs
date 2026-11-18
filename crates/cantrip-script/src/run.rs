@@ -1507,7 +1507,7 @@ impl<'s> Run<'s> {
             }
             RequestKind::ChooseColors { choices, count, .. } => match self.colors.take() {
                 Some(named) if named.len() == *count as usize && named.iter().all(|&c| choices.has(c)) => Answer::Colors(named),
-                _ => Answer::Colors(choices.iter().take(*count as usize).collect()),
+                _ => Answer::Colors(choices.iter().collect::<Vec<_>>().into_iter().cycle().take(*count as usize).collect()),
             },
             RequestKind::ChooseStartingPlayer { .. } => Answer::Player(request.player),
             RequestKind::Mulligan { .. } => Answer::No,

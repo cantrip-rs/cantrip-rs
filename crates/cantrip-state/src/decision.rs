@@ -572,7 +572,7 @@ pub enum RequestKind {
     /// mode be chosen more than once (CR 700.2d).
     ChooseModes { source: ObjectId, modes: Vec<Label>, eligible: Vec<u8>, count: u8, at_most: u8, affordable: Vec<u8>, additional_cost: bool, repeat: bool },
     /// `purpose` says what the colors are for, which a player or a bot choosing them reads (`ColorUse`).
-    ChooseColors { source: ObjectId, choices: ColorSet, count: u8, purpose: ColorUse },
+    ChooseColors { source: ObjectId, choices: ColorSet, count: u32, purpose: ColorUse },
     /// A card name (CR 201.3, 614.12a): any card the game knows. `looked_at` are the cards the player has just been
     /// shown, and `suggestion` the name an unscripted player takes (the costliest nonland card among them).
     /// `kind` is what the name must be the name of (CR 201.4a): any card, a nonland card or a land card. A name must be

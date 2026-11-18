@@ -381,7 +381,7 @@ pub enum AskKind {
     /// Modes by index: `labels` says what each is.
     ChooseModes { labels: Vec<String>, eligible: Vec<u8>, count: u8, at_most: u8, affordable: Vec<u8>, additional_cost: bool, repeat: bool },
     /// `count` colors of `choices` (bits W U B R G); `purpose` the engine's `ColorUse` number.
-    ChooseColors { choices: u8, count: u8, purpose: u8 },
+    ChooseColors { choices: u8, count: u32, purpose: u8 },
     /// A card name: from names supplied by the caller. `looked_at` the cards just seen; `kind` 0 any, 1 nonland, 2 land.
     ChooseName { looked_at: Vec<Ref>, suggestion: Option<String>, kind: u8 },
     /// One of these subtypes (the engine's numbers), sorted.

@@ -1043,7 +1043,7 @@ pub fn choose_one_or_more_colors(g: &mut dyn Game, player: PlayerId, source: Obj
 /// "`count` mana in any combination of [colors]" (CR 106.1b): a color for each mana, among `choices`, repeats allowed,
 /// asked of `player` in one question. Manamorphose, Orcish Lumberjack, Relic of Sauron, Sunken Ruins, Vivi Ornitier,
 /// Coalition Relic, Wizard's Rockets, Desolation of Smaug and Sarkhan, Fireblood ask it.
-pub fn choose_colors(g: &mut dyn Game, player: PlayerId, source: ObjectId, choices: ColorSet, count: u8) -> Result<Vec<Color>, Suspend> {
+pub fn choose_colors(g: &mut dyn Game, player: PlayerId, source: ObjectId, choices: ColorSet, count: u32) -> Result<Vec<Color>, Suspend> {
     // The core holds the answer to the question: `count` colors, each among `choices` (`validate`).
     let Answer::Colors(colors) = g.ask(player, RequestKind::ChooseColors { source, choices, count, purpose: ColorUse::AddMana })? else {
         unreachable!("the core answers a color choice with colors")

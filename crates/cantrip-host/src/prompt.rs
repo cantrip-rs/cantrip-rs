@@ -1412,8 +1412,8 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
             player,
             source: source_handle(game, handles, *source),
             choices: colors_view(*choices),
-            count: i32::from(*count),
-            may_repeat: i32::from(*count) > choices.iter().count() as i32,
+            count: wire(*count),
+            may_repeat: *count as usize > choices.iter().count(),
             verb: match purpose {
                 ColorUse::Any => String::new(),
                 ColorUse::AddMana => "AddMana".into(),

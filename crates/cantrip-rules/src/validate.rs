@@ -248,7 +248,7 @@ pub fn check(game: &Game, request: &Request, answer: &Answer) -> Result<(), Reje
             }
         }
         (RequestKind::ChooseColors { choices, count, .. }, Answer::Colors(colors)) => {
-            if colors.len() == usize::from(*count) && colors.iter().all(|c| choices.has(*c)) {
+            if colors.len() == *count as usize && colors.iter().all(|c| choices.has(*c)) {
                 Ok(())
             } else {
                 no("not a choice of the colors offered")

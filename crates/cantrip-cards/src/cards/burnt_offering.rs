@@ -14,7 +14,7 @@ fn as_additional_cost_cast_spell_2(
             item.controller,
             item.object,
             ColorSet(12),
-            mana_2 as u8,
+            mana_2,
         )?;
         for color in colors {
             g.add_mana(item.controller, color.mana(), 1);

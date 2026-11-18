@@ -13658,20 +13658,18 @@ fn activate_mana_as(
     Ok(())
 }
 
-/// Adds every unit of a color combination (CR 106.4, 608.2d), preserving the full quantity and
-/// the order of the answers across wire-sized requests. Wizard's Rockets and Vivi Ornitier use
-/// this same rules procedure. It executes normally even inside opaque callbacks; only an outer
-/// generated terminal instruction can be summarized by the stack resolver for CR 106.7.
-pub(crate) fn add_in_any_combination(cx: &mut Cx, asker: &Asker, colors: ColorSet, mut count: u32) -> Result<(), Suspend> {
-    while count > 0 {
-        let batch = count.min(u8::MAX as u32) as u8;
-        let Answer::Colors(chosen) = Game::ask(cx, asker.controller, RequestKind::ChooseColors {
-            source: asker.source, choices: colors, count: batch, purpose: ColorUse::AddMana,
-        })? else { unreachable!("the core answers a color choice with colors") };
-        for color in chosen {
-            Game::add_mana(cx, asker.controller, color.mana(), 1);
-        }
-        count -= u32::from(batch);
+/// Adds every unit of a color combination (CR 106.4, 608.2d), its full quantity in one question, in the order of the
+/// answers. Wizard's Rockets and Vivi Ornitier use this same rules procedure. It executes normally even inside opaque
+/// callbacks; only an outer generated terminal instruction can be summarized by the stack resolver for CR 106.7.
+pub(crate) fn add_in_any_combination(cx: &mut Cx, asker: &Asker, colors: ColorSet, count: u32) -> Result<(), Suspend> {
+    if count == 0 {
+        return Ok(());
+    }
+    let Answer::Colors(chosen) = Game::ask(cx, asker.controller, RequestKind::ChooseColors {
+        source: asker.source, choices: colors, count, purpose: ColorUse::AddMana,
+    })? else { unreachable!("the core answers a color choice with colors") };
+    for color in chosen {
+        Game::add_mana(cx, asker.controller, color.mana(), 1);
     }
     Ok(())
 }

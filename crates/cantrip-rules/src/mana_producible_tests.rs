@@ -984,12 +984,10 @@ fn rockets_as_land(g: &mut Game, source: ObjectId) {
 fn activate_rockets(g: &mut Game, source: ObjectId, x: u32) {
     let own_x = g.state.obj(source).x;
     g.state.add_mana(PlayerId(1), Mana::C, x, ObjectId::NONE, None, ManaLasts::Step, false);
+    // One color choice for all X mana (CR 106.1b): the first 255 blue and the rest red.
     let mut answers = vec![Answer::Announce(x)];
-    let mut left = x;
-    while left > 0 {
-        let n = left.min(255);
-        answers.push(Answer::Colors(vec![if left == x { Color::Blue } else { Color::Red }; n as usize]));
-        left -= n;
+    if x > 0 {
+        answers.push(Answer::Colors((0..x).map(|i| if i < 255 { Color::Blue } else { Color::Red }).collect()));
     }
     in_frame(g, cantrip_state::FrameKind::Settle, answers, |cx| {
         cx.acting_as(PlayerId(1), |cx| crate::actions::activate_mana(cx, PlayerId(1), source, 0, None, false, &[]))
@@ -1220,7 +1218,7 @@ fn actual_vivi_full_width_current_power_choices_and_real_activation_limits() {
             let colors: Vec<_> = (0..count).map(|i| match strategy { 0 => Color::Blue, 1 => Color::Red,
                 _ if i % 2 == 0 => Color::Blue, _ => Color::Red }).collect();
             let mut answers = vec![Answer::Act(Action::of(&ActionOption::on(ActionKind::ActivateAbility, source, 0)))];
-            answers.extend(colors.chunks(255).map(|chunk| Answer::Colors(chunk.to_vec())));
+            answers.extend((!colors.is_empty()).then(|| Answer::Colors(colors.clone())));
             in_frame(&mut g, cantrip_state::FrameKind::Settle, answers, |cx| crate::actions::act(cx, PlayerId(1))).unwrap();
             let blue = colors.iter().filter(|&&c| c == Color::Blue).count() as u32;
             let red = count as u32 - blue;
@@ -1288,7 +1286,7 @@ fn actual_coalition_relic_releases_every_charge_counter_above_the_wire_count() {
             cx.acting_as(PlayerId(1), |cx| cantrip_api::Game::add_counters(cx, source, CounterKind::Charge, i32::from(count))));
         assert_eq!(g.state.obj(source).counters(CounterKind::Charge), i32::from(count), "full-width setup");
         let colors: Vec<_> = (0..count).map(|i| if i % 2 == 0 { Color::Blue } else { Color::Red }).collect();
-        let answers = colors.chunks(255).map(|chunk| Answer::Colors(chunk.to_vec())).collect();
+        let answers = (!colors.is_empty()).then(|| Answer::Colors(colors.clone())).into_iter().collect();
         let AbilityDef::Triggered(trigger) = relic.abilities[2] else { unreachable!() };
         let item = crate::actions::stack_item(StackKind::Triggered, source,
             AbilityRef { card: g.cards.id_of(relic), index: 2 }, PlayerId(1), &[]);

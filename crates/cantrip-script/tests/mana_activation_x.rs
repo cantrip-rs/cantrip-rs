@@ -1,4 +1,5 @@
-//! A printed mana ability's X is local to the activation, including source sacrifice and wire-sized color questions.
+//! A printed mana ability's X is local to the activation, including source sacrifice and one color question for all
+//! of its mana (CR 106.1b).
 use cantrip_engine::*;
 use cantrip_state::{Frame, FrameKind};
 
@@ -53,12 +54,11 @@ fn wizards_rockets_produces_all_256_mana_after_sacrifice_without_replacing_its_c
         game.answer(request.id, you, answer).unwrap();
         game.run();
     }
-    for (count, color) in [(255, Color::Green), (1, Color::Red)] {
-        let request = game.pending().cloned().unwrap();
-        assert!(matches!(request.kind, RequestKind::ChooseColors { count: n, .. } if n == count), "{request:?}");
-        game.answer(request.id, you, Answer::Colors(vec![color; count as usize])).unwrap();
-        game.run();
-    }
+    let request = game.pending().cloned().unwrap();
+    assert!(matches!(request.kind, RequestKind::ChooseColors { count: 256, .. }), "{request:?}");
+    let colors = (0..256).map(|i| if i < 255 { Color::Green } else { Color::Red }).collect();
+    game.answer(request.id, you, Answer::Colors(colors)).unwrap();
+    game.run();
     assert_eq!(game.state.player(you).pool.get(Mana::G), 255);
     assert_eq!(game.state.player(you).pool.get(Mana::R), 1);
     assert_eq!(game.state.player(you).pool.get(Mana::C), 0);

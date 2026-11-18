@@ -309,9 +309,8 @@ pub fn bound(ask: &Ask) -> usize {
         | AskKind::ChooseTarget { count, .. }
         | AskKind::SearchLibrary { count, .. } => *count as usize + 1,
         AskKind::ChooseModes { count, at_most, .. } => (*at_most).max(*count) as usize + 1,
-        AskKind::ChooseColors { count, .. } | AskKind::DiscardToHandSize { count, .. } => {
-            *count as usize
-        }
+        AskKind::ChooseColors { count, .. } => *count as usize,
+        AskKind::DiscardToHandSize { count, .. } => *count as usize,
         AskKind::TapForPower { cards, .. } | AskKind::CollectEvidence { cards, .. } => {
             cards.len() + 1
         }

@@ -10,7 +10,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         return Ok(());
     }
     let choices = ColorSet::of(Color::Black).with(Color::Green);
-    for color in cantrip_mechanics::choose_colors(g, item.controller, item.object, choices, destroyed as u8)? {
+    for color in cantrip_mechanics::choose_colors(g, item.controller, item.object, choices, destroyed as u32)? {
         g.add_mana(item.controller, color.mana(), 1);
     }
     Ok(())
