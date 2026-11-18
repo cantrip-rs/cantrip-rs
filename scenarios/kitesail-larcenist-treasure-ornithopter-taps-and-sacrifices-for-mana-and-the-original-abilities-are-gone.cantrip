@@ -1,0 +1,65 @@
+# Kitesail Larcenist: the chosen Ornithopter has "{T}, Sacrifice this artifact: Add one mana of any color" (CR 613.1f, 605.1a): activating it taps and sacrifices it (it goes to Bot1's graveyard) for one blue mana, which a Treasure's ability may produce although the Ornithopter is colorless. Bot2's Llanowar Elves is a Treasure too and is no creature: with its mana ability gone it makes mana only by being sacrificed for any color (CR 111.10a) - red here, not the {G} of its own ability - and goes to Bot2's graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ornithopter
+Kitesail Larcenist
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Llanowar Elves
+Lightning Bolt
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kitesail Larcenist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Ornithopter)
+Bot1.Target(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Battlefield.Ornithopter.Activate(Color: Blue)
+? Bot1.Mana = {U}
+? Bot1.Graveyard = Ornithopter
+Bot1.Pass
+Bot2.Battlefield.Llanowar Elves.Activate(Color: Red)
+? Bot2.Mana = {R}
+
+[Expect]
+Bot1.Graveyard = Ornithopter
+Bot1.Battlefield.Ornithopter = (absent)
+Bot2.Battlefield.Llanowar Elves = (absent)
+Bot2.Graveyard = Llanowar Elves

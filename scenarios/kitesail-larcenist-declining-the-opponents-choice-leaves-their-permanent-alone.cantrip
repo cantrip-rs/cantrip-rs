@@ -1,0 +1,53 @@
+# Kitesail Larcenist: each player's choice is "up to one" (CR 601.2c, 115.1d): Bot1 chooses its own Umezawa's Jitte and then nothing for
+# Bot2, who controls a Mox Emerald. The Jitte becomes a Treasure; the Emerald is untouched and keeps its Mox ability ({T}: Add {G}).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Umezawa's Jitte
+Kitesail Larcenist
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Umezawa's Jitte.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kitesail Larcenist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Umezawa's Jitte)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Umezawa's Jitte.Subtypes = Treasure
+Bot2.Battlefield.Mox Emerald.Subtypes = (absent)
+Bot2.Battlefield.Mox Emerald.Types = Artifact

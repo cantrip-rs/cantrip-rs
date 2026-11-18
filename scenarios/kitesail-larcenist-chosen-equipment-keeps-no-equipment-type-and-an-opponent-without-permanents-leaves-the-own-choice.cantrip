@@ -1,0 +1,50 @@
+# Kitesail Larcenist: a chosen artifact becomes "Treasure artifact" - Treasure as its only artifact type (CR 205.1a, 613.1d): Bot1 chooses
+# its own Umezawa's Jitte, an Equipment, which stops being one and keeps no Jitte ability (its equip is gone). Bot2 controls no artifact
+# or creature, so its slot has nothing to choose and the trigger goes on with just Bot1's choice - the choice for each player is "up to
+# one" (CR 601.2c, 603.3d), a player with no choice does not stop the others.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Umezawa's Jitte
+Kitesail Larcenist
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Umezawa's Jitte.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Umezawa's Jitte.Subtypes = Equipment
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kitesail Larcenist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Umezawa's Jitte)
+? Bot1.Battlefield.Umezawa's Jitte.Subtypes = Equipment
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Umezawa's Jitte.Types = Artifact
+Bot1.Battlefield.Umezawa's Jitte.Subtypes = Treasure

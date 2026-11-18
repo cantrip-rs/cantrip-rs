@@ -1,0 +1,70 @@
+# Kitesail Larcenist, "ward {1}": Bot2 casts the Lightning Bolt with Mox Ruby and, when the ward trigger asks for {1}, declines (its Mox Jet stays untapped but unused), so the trigger counters the Bolt (CR 702.21a) - the Larcenist stays undamaged and the Ornithopter remains a Treasure.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ornithopter
+Kitesail Larcenist
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Llanowar Elves
+Lightning Bolt
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kitesail Larcenist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Ornithopter)
+Bot1.Target(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Kitesail Larcenist)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Kitesail Larcenist.Damage = 0
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield.Ornithopter.Subtypes = Treasure

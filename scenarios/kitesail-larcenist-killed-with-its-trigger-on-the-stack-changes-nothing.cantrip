@@ -1,0 +1,72 @@
+# Kitesail Larcenist: if it has left the battlefield by the time the trigger resolves, the duration "as long as this creature remains on the battlefield" has already ended and nothing happens (CR 611.2b): Bot2 kills it with a Lightning Bolt (paying ward {1}) in response, and the chosen Ornithopter and Llanowar Elves remain artifact creatures with their abilities.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ornithopter
+Kitesail Larcenist
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Llanowar Elves
+Lightning Bolt
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kitesail Larcenist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Ornithopter)
+Bot1.Target(Llanowar Elves)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Kitesail Larcenist)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.PayCost
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Kitesail Larcenist
+Bot1.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Battlefield.Llanowar Elves.Types = Creature
