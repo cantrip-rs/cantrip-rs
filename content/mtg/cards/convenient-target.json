@@ -1,0 +1,6 @@
+{
+  "name": "Convenient Target",
+  "manaCost": "{R}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhen this Aura enters, suspect enchanted creature. (It has menace and can't block.)\nEnchanted creature gets +1/+1.\n{2}{R}: Return this card from your graveyard to your hand."
+}

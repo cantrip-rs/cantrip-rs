@@ -1,0 +1,47 @@
+# Convenient Target: "Enchant creature. When this Aura enters, suspect enchanted creature. Enchanted creature gets +1/+1."
+# Bot1 enchants Bot2's Memnite (an opponent's creature is a legal choice, Bot1's own Mox Jet is not). Resolved, the Memnite is
+# a suspected 2/2 with menace that can't block (CR 701.60a, 701.60c, 613.4c). When Bot1's Memnite attacks, Bot2's Memnite may
+# not block it, while Bot2's Ornithopter (the positive control) may. The ability that returns the Aura from the graveyard is
+# refused while it is on the battlefield (CR 113.6k).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Memnite
+Convenient Target
+Swamp x16
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Convenient Target.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Convenient Target.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Suspected = true
+? Bot2.Battlefield.Memnite.Power = 2
+? Bot2.Battlefield.Memnite.Toughness = 2
+? Bot2.Battlefield.Memnite.Keywords = CantBlock; Menace
+! Bot1.Battlefield.Convenient Target.Activate
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+! Bot2.Block(Memnite > Memnite)
+Bot2.Block(Ornithopter > Memnite)
+
+[Expect]
+Bot1.Battlefield = Convenient Target; Memnite; Mox Jet; Mox Ruby
+Bot2.Battlefield = Memnite; Ornithopter
+Bot2.Battlefield.Ornithopter.Suspected = (absent)
