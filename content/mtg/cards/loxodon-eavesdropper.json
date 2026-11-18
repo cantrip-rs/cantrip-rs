@@ -1,0 +1,8 @@
+{
+  "name": "Loxodon Eavesdropper",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Elephant Detective",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When this creature enters, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")\nWhenever you draw your second card each turn, this creature gets +1/+1 and gains vigilance until end of turn."
+}
