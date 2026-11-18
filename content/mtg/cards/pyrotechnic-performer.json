@@ -1,0 +1,8 @@
+{
+  "name": "Pyrotechnic Performer",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Lizard Assassin",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Disguise {R} (You may cast this card face down for {3} as a 2/2 creature with ward {2}. Turn it face up any time for its disguise cost.)\nWhenever this creature or another creature you control is turned face up, that creature deals damage equal to its power to each opponent."
+}

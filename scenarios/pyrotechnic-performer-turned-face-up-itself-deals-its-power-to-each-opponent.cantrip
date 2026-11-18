@@ -1,0 +1,33 @@
+# Pyrotechnic Performer cast face down ({3} from Black Lotus) is a 2/2 with no abilities, so nothing happens as it enters. Turned face up
+# for {R} (CR 702.168d) it is "this creature ... turned face up" (CR 701.40b) and deals damage equal to its power, 3, to Bot2: 20 to 17,
+# not the 2 it had face down. Bot1 takes none.
+
+[Bot1 Deck]
+Pyrotechnic Performer
+Black Lotus
+Mox Ruby
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Pyrotechnic Performer.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Life = 20
+? Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Pyrotechnic Performer.FaceDown = (absent)
+Bot2.Life = 17
+Bot1.Life = 20
