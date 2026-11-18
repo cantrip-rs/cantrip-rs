@@ -1,0 +1,50 @@
+# Sumala Sentry manifested face down is a 2/2 with no abilities (CR 708.2a), so entering face down triggers nothing; turned face up
+# (CR 701.40b) it is "a face-down permanent you control ... turned face up" and its trigger puts a counter on it and a counter on
+# this creature - the same permanent: two +1/+1 counters, a 3/5 (1/3 plus two).
+#
+# Turn 1: Black Lotus pays for Hauntwoods Shrieker. Turn 3 the Shrieker attacks and manifests the Sentry (Arrange puts it first) with
+# Lightning Bolt into the graveyard; Mox Emerald and Mox Pearl pay {G}{W} to turn it face up.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Pearl
+Hauntwoods Shrieker
+Island x2
+Island
+Sumala Sentry
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hauntwoods Shrieker.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Hauntwoods Shrieker > Bot2)
+Bot1.Arrange(Sumala Sentry | Lightning Bolt)
+? Bot1.Battlefield..FaceDownName = Sumala Sentry
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..Power = 2
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.#1.Activate
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield.Sumala Sentry.FaceDown = (absent)
+Bot1.Battlefield.Sumala Sentry.Power = 3
+Bot1.Battlefield.Sumala Sentry.Toughness = 5
+Bot1.Battlefield.Sumala Sentry.Keywords = Reach

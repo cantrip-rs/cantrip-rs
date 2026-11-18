@@ -1,0 +1,62 @@
+# Sumala Sentry counts only permanents "you control". Bot2's Hauntwoods Shrieker attacks on turn 4 and manifests dread for Bot2:
+# Grizzly Bears enters face down under Bot2's control. Bot1 then turns it face up with its own Shrieker's ability: it is a permanent
+# Bot2 controls, so Bot1's Sentry puts no counter on it or on itself, even though Bot1 turned it up (CR 701.40b, 603.2). The Bears
+# stay a 2/2, the Sentry a 1/3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Pearl
+Sumala Sentry
+Hauntwoods Shrieker
+Mox Sapphire
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Hauntwoods Shrieker
+Island x5
+Island
+Island
+Grizzly Bears
+Lightning Bolt
+Island x8
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sumala Sentry.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hauntwoods Shrieker.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Hauntwoods Shrieker.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Hauntwoods Shrieker > Bot1)
+Bot2.Arrange(Grizzly Bears | Lightning Bolt)
+? Bot2.Battlefield..FaceDownName = Grizzly Bears
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Hauntwoods Shrieker.Activate(Bot2.Battlefield.#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot2.Battlefield.Grizzly Bears.FaceDown = (absent)
+[T4 Bot2.Main2]
+
+[Expect]
+Turn = 4
+Stack.Count = 0
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Battlefield.Sumala Sentry.Power = 1
+Bot1.Battlefield.Sumala Sentry.Toughness = 3

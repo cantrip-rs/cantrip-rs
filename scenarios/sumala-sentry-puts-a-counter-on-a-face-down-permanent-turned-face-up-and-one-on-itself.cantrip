@@ -1,0 +1,58 @@
+# Sumala Sentry: "Whenever a face-down permanent you control is turned face up, put a +1/+1 counter on it and a +1/+1 counter on this
+# creature." A 1/3 with reach (CR 708.2, 701.40b, 603.2). Turn 1: Mox Emerald and Mox Pearl pay {G}{W}, Black Lotus pays for
+# Hauntwoods Shrieker. Turn 3 the Shrieker attacks and manifests dread: Snapcaster Mage enters face down (a 2/2 with no counter and no
+# trigger - nothing is turned up yet). After combat the Shrieker's ability ({1}{G}) turns it face up: the Mage (2/1) gets a counter
+# (3/2) and so does the Sentry (2/4), together.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Pearl
+Sumala Sentry
+Hauntwoods Shrieker
+Mox Sapphire
+Island
+Snapcaster Mage
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sumala Sentry.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hauntwoods Shrieker.Cast
+Bot2.Pass
+? Bot1.Battlefield.Sumala Sentry.Power = 1
+? Bot1.Battlefield.Sumala Sentry.Toughness = 3
+? Bot1.Battlefield.Sumala Sentry.Keywords = Reach
+[T3 Bot1.Main1]
+Bot1.Attack(Hauntwoods Shrieker > Bot2)
+Bot1.Arrange(Snapcaster Mage | Lightning Bolt)
+? Bot1.Battlefield..FaceDownName = Snapcaster Mage
+? Stack.Count = 0
+? Bot1.Battlefield.Sumala Sentry.Power = 1
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Hauntwoods Shrieker.Activate(Bot1.Battlefield.#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield.Snapcaster Mage.FaceDown = (absent)
+Bot1.Battlefield.Snapcaster Mage.Power = 3
+Bot1.Battlefield.Snapcaster Mage.Toughness = 2
+Bot1.Battlefield.Sumala Sentry.Power = 2
+Bot1.Battlefield.Sumala Sentry.Toughness = 4
