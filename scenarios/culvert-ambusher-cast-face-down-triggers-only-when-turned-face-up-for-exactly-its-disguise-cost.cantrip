@@ -1,0 +1,71 @@
+# Culvert Ambusher (Disguise {4}{G}) cast face down on turn 1 ({3} from Black Lotus) is a 2/2 with no abilities, so entering triggers
+# nothing (CR 708.2: the stack is empty after it resolves). Turned face up on turn 5 it triggers once (CR 702.168d, 708.8) and Bot1 targets Bot2's
+# Llanowar Elves, which must block this turn if able (CR 509.1c): Bot2 may not decline to block (refused with `! Bot2.Block(Count: 0)`),
+# and the 4/5 Culvert Ambusher kills it. The disguise cost (CR 702.168d, 116.2b) is refused with four sources (a count short) and with five
+# sources and no green (a color short: Island plus four Moxen), then paid exactly from Mox Emerald and four others: the pool is empty
+# right after, so no more than {4}{G} was taken.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Ruby
+Mox Jet
+Culvert Ambusher
+Mox Emerald
+Island
+Island x12
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Culvert Ambusher.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Island.Play
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Mana =
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Attack(Culvert Ambusher > Bot2)
+! Bot2.Block(Count: 0)
+Bot2.Block(Llanowar Elves > Culvert Ambusher)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Llanowar Elves
+Bot1.Battlefield.Culvert Ambusher.FaceDown = (absent)
+Bot1.Battlefield.Culvert Ambusher.Power = 4
+Bot1.Battlefield.Culvert Ambusher.Toughness = 5
+Bot1.Battlefield.Culvert Ambusher.Damage = 1

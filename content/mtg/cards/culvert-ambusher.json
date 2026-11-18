@@ -1,0 +1,8 @@
+{
+  "name": "Culvert Ambusher",
+  "manaCost": "{3}{G}{G}",
+  "type": "Creature — Wurm Horror",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "When this creature enters or is turned face up, target creature blocks this turn if able.\nDisguise {4}{G} (You may cast this card face down for {3} as a 2/2 creature with ward {2}. Turn it face up any time for its disguise cost.)"
+}
