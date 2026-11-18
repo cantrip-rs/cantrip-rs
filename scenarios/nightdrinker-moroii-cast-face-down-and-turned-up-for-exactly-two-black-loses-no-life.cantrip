@@ -1,0 +1,42 @@
+# Nightdrinker Moroii (Disguise {B}{B}): cast face down for {3} (a Black Lotus) it has no abilities, so its enters ability does nothing (CR 708.2a, 702.168a), and turning it face up for exactly {B}{B} is a special action that does not make it enter (CR 702.168d, 116.2b): Bot1 stays at 20. With one Mox Jet, and then a Mox Jet and a Mox Pearl, the cost is refused (the refusal is judged again with mana to spare); the second Mox Jet makes it affordable and the pool is empty right after. Face up it is the 4/2 Flying creature again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Jet
+Nightdrinker Moroii
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Nightdrinker Moroii.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+? Bot1.Life = 20
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Mana =
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Nightdrinker Moroii.Power = 4
+Bot1.Battlefield.Nightdrinker Moroii.Toughness = 2
+Bot1.Battlefield.Nightdrinker Moroii.Keywords = Disguise; Flying

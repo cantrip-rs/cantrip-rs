@@ -1,0 +1,11 @@
+{
+  "name": "Nightdrinker Moroii",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Vampire",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Flying\nWhen this creature enters, you lose 3 life.\nDisguise {B}{B} (You may cast this card face down for {3} as a 2/2 creature with ward {2}. Turn it face up any time for its disguise cost.)",
+  "keywords": [
+    "Flying"
+  ]
+}

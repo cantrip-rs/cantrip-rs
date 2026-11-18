@@ -1,0 +1,28 @@
+# Nightdrinker Moroii ({3}{B}): "When this creature enters, you lose 3 life." (CR 119.3). Bot1 casts it face up with a Black Lotus and a Mox Jet (exactly {3}{B}) and drops from 20 to 17; it is a 4/2 with Flying and Disguise.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Nightdrinker Moroii
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Nightdrinker Moroii.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Nightdrinker Moroii.Power = 4
+Bot1.Battlefield.Nightdrinker Moroii.Toughness = 2
+Bot1.Battlefield.Nightdrinker Moroii.Keywords = Disguise; Flying
