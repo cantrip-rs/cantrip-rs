@@ -38,7 +38,7 @@ fn resolve(size: usize, count: usize, faces: &[u8]) -> (RulesGame, Vec<ObjectId>
         inline_targets: [Target::None; INLINE_TARGETS], target_count: 0, inline_spec_of: [0; INLINE_TARGETS],
         x: 0, kicked: 0, counted: 0, paid: 0, modes: 0, way: 0, choice: 0,
         subject: Target::None, data: [count as u32, 0], members: Span::default(), serial: 0,
-        gift: None, shares: StackItem::NO_SHARES, opponent_choosing: None, spill: 0, exile_instead: ExileInstead::Never,
+        gift: None, shares: StackItem::NO_SHARES, opponent_choosing: None, spill: 0, exile_instead: ExileInsteads::NONE,
         flashback: false, attacking: false, since: 0, tapped_since: 0, copied: false, cast_known: u32::MAX,
         acquired: Acquired::OWN, words: Words::NONE,
     };

@@ -2006,7 +2006,7 @@ fn printed_metropolis_reformer_gains_life_from_large_damage() {
             target_count: 0, inline_spec_of: [0; cantrip_state::INLINE_TARGETS], x: 0, kicked: 0,
             counted: 0, paid: 0, modes: 0, way: 0, choice: 0, subject: trigger.subject,
             data: trigger.data, members: trigger.members, serial: 0, gift: None, opponent_choosing: None,
-            shares: StackItem::NO_SHARES, spill: 0, exile_instead: ExileInstead::Never,
+            shares: StackItem::NO_SHARES, spill: 0, exile_instead: ExileInsteads::NONE,
             flashback: false, attacking: false, since: 0, tapped_since: 0, copied: false,
             cast_known: u32::MAX, acquired: trigger.acquired, words: Words::NONE,
         };
@@ -2036,7 +2036,7 @@ fn printed_bloodthirsty_conqueror_gains_life_from_opponents_loss() {
             target_count: 0, inline_spec_of: [0; cantrip_state::INLINE_TARGETS], x: 0, kicked: 0,
             counted: 0, paid: 0, modes: 0, way: 0, choice: 0, subject: trigger.subject,
             data: trigger.data, members: trigger.members, serial: 0, gift: None, opponent_choosing: None,
-            shares: StackItem::NO_SHARES, spill: 0, exile_instead: ExileInstead::Never,
+            shares: StackItem::NO_SHARES, spill: 0, exile_instead: ExileInsteads::NONE,
             flashback: false, attacking: false, since: 0, tapped_since: 0, copied: false,
             cast_known: u32::MAX, acquired: trigger.acquired, words: Words::NONE,
         };

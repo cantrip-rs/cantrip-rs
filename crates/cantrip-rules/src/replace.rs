@@ -164,7 +164,7 @@ pub(crate) fn says_how_it_enters(line: &str) -> bool {
 /// Whether some replacement effect could apply to `change`, other than an entering permanent's own (`Entering::own`): the
 /// guard that keeps an entry with nothing to order free of the ordering.
 pub(crate) fn zone_change_possible(cx: &Cx, change: &ZoneChange) -> bool {
-    possible(cx, Some(change.object)) || madness_applies(cx, change) || played_tapped_applies(cx, change) || flashback_applies(change) || exile_instead_applies(cx, change)
+    possible(cx, Some(change.object)) || madness_applies(cx, change) || played_tapped_applies(cx, change) || flashback_applies(change) || change.exile_instead.iter().any(|e| exile_instead_applies(cx, change, e))
         || resolving_applies(change)
         || leaving_applies(cx, change)
 }
@@ -223,11 +223,12 @@ fn flashback_applies(z: &ZoneChange) -> bool {
 /// "If that spell would be put into your graveyard, exile it instead" (CR 614.1a, `ExileInstead`): of the spell leaving the
 /// stack for its owner's graveyard and nowhere else, and for `ExileInstead::InstantOrSorcery` only while it is an instant
 /// or a sorcery spell, as it now is (CR 709.3b, 715.3b: a half, an Adventure or a face cast is judged by its own types).
-fn exile_instead_applies(cx: &Cx, z: &ZoneChange) -> bool {
-    if !z.is_card || !z.from.is(ZoneKind::Stack) || !z.to.is(ZoneKind::Graveyard) {
+/// Each of the spell's is its own effect (`ExileInsteads`).
+fn exile_instead_applies(cx: &Cx, z: &ZoneChange, e: ExileInstead) -> bool {
+    if !z.is_card || !z.from.is(ZoneKind::Stack) || !z.to.is(ZoneKind::Graveyard) || !z.exile_instead.contains(e) {
         return false;
     }
-    match z.exile_instead {
+    match e {
         ExileInstead::Never => false,
         ExileInstead::Spell | ExileInstead::Dream | ExileInstead::Plot => true,
         ExileInstead::InstantOrSorcery => {
@@ -717,8 +718,11 @@ fn candidates_for(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Opti
                 }
             }
         }
-        if !applied.contains(&(z.object, 0, Origin::ExileInstead)) && exile_instead_applies(cx, z) {
-            found.insert(0, Candidate { source: z.object, index: 0, origin: Origin::ExileInstead });
+        // Each "exile it instead" its own (CR 616.1): Goliath Daydreamer's and Lilah's on one spell are both offered.
+        for (index, &e) in ExileInsteads::ALL.iter().enumerate().rev() {
+            if !applied.contains(&(z.object, index as u8, Origin::ExileInstead)) && exile_instead_applies(cx, z, e) {
+                found.insert(0, Candidate { source: z.object, index: index as u8, origin: Origin::ExileInstead });
+            }
         }
         if !applied.contains(&(z.object, 0, Origin::Flashback)) && flashback_applies(z) {
             found.insert(0, Candidate { source: z.object, index: 0, origin: Origin::Flashback });
@@ -816,9 +820,9 @@ fn hint_of(cx: &Cx, proposal: &Proposal, c: &Candidate) -> &'static str {
         Origin::Madness => MADNESS_HINT,
         Origin::Commander => "put this commander into the command zone instead",
         Origin::Flashback => FLASHBACK_HINT,
-        Origin::ExileInstead => match proposal {
-            Proposal::ZoneChange(z) if z.exile_instead == ExileInstead::Dream => DREAM_EXILE_HINT,
-            Proposal::ZoneChange(z) if z.exile_instead == ExileInstead::Plot => PLOT_EXILE_HINT,
+        Origin::ExileInstead => match ExileInsteads::ALL.get(c.index as usize) {
+            Some(ExileInstead::Dream) => DREAM_EXILE_HINT,
+            Some(ExileInstead::Plot) => PLOT_EXILE_HINT,
             _ => EXILE_INSTEAD_HINT,
         },
         Origin::Adventure => ADVENTURE_HINT,
@@ -1197,12 +1201,13 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
                     z.to = Zone::exile(cx.s().obj(z.object).owner);
                     // The dream counter goes on as the card arrives (CR 122.2: counters do not survive a zone change), put by the
                     // spell's controller whose ability had it exiled (CR 609.1).
-                    if matches!(origin, Origin::ExileInstead) && z.exile_instead == ExileInstead::Dream {
+                    let instead = if matches!(origin, Origin::ExileInstead) { ExileInsteads::ALL.get(index as usize).copied() } else { None };
+                    if instead == Some(ExileInstead::Dream) {
                         z.counters[CounterKind::Dream as usize] += 1;
                         z.counters_by = cx.s().obj(z.object).controller;
                     }
                     // "If you do, it becomes plotted" (Lilah): only if this exile is the one that applied (CR 616.1).
-                    if matches!(origin, Origin::ExileInstead) && z.exile_instead == ExileInstead::Plot {
+                    if instead == Some(ExileInstead::Plot) {
                         z.plotted = true;
                     }
                 }
@@ -3882,7 +3887,7 @@ mod tests {
             pays_characteristic: false,
             exiled_with: Some(linked),
             flashback: false,
-            exile_instead: ExileInstead::Never,
+            exile_instead: ExileInsteads::NONE,
             adventure: false,
             commander_components: [ObjectId::NONE; 8],
             omen: false,

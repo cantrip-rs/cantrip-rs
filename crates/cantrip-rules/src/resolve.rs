@@ -541,7 +541,7 @@ pub(crate) fn its_own_exile(cx: &Cx, item: &StackItem, moving: ops::Moving, reas
     let flashback = item.flashback || (item.way > 0 && cx.card(card).ways.get(item.way as usize - 1).is_some_and(|w| w.exile_after));
     // "Instead of putting it into your graveyard as it resolves" (Goliath Daydreamer, Lilah) is of the resolution alone: a spell
     // that is countered does not resolve and goes to the graveyard (CR 701.6a).
-    let exile_instead = if matches!(item.exile_instead, ExileInstead::Dream | ExileInstead::Plot) && reason != ZoneReason::Resolve { ExileInstead::Never } else { item.exile_instead };
+    let exile_instead = if reason == ZoneReason::Resolve { item.exile_instead } else { item.exile_instead.without(ExileInstead::Dream).without(ExileInstead::Plot) };
     ops::Moving { flashback, exile_instead, ..moving }
 }
 

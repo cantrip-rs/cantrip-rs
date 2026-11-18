@@ -10545,7 +10545,7 @@ pub(crate) fn stack_item(kind: StackKind, object: ObjectId, ability: AbilityRef,
         shares: StackItem::NO_SHARES,
         opponent_choosing: None,
         spill: 0,
-        exile_instead: ExileInstead::Never,
+        exile_instead: ExileInsteads::NONE,
         flashback: false,
         attacking: false,
         since: 0,
@@ -10847,7 +10847,7 @@ fn cast(
     }
     let mut item = stack_item(StackKind::Spell, spell, AbilityRef { card: face, index: u8::MAX }, player, targets);
     item.way = way;
-    item.exile_instead = exile_instead;
+    item.exile_instead = ExileInsteads::of(exile_instead);
     item.flashback = flashback;
     // Overload (CR 702.96a): "each" for "target", so nothing is targeted.
     let specs: &[TargetSpec] = if way == WAY_OVERLOAD { &[] } else { cx.cards().spell_targets_of(def) };

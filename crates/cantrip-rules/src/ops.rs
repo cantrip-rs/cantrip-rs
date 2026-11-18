@@ -92,7 +92,7 @@ pub struct Moving {
     /// A spell leaving the stack, its own replacements of that move (`ZoneChange::flashback`, `ZoneChange::exile_instead`):
     /// set by the spell's leaving (`resolve::leave_stack`, `resolve::send_spell`).
     pub flashback: bool,
-    pub exile_instead: ExileInstead,
+    pub exile_instead: ExileInsteads,
     /// A spell resolving, the rules' own "instead of putting it into its owner's graveyard as it resolves" that it is subject
     /// to (`ZoneChange::adventure`, `omen`, `rebound`): set by `resolve::leave_stack`.
     pub adventure: bool,
@@ -107,7 +107,7 @@ pub struct Moving {
 
 impl Moving {
     pub fn to(id: ObjectId, to: Zone) -> Moving {
-        Moving { id, to, entering: None, put_by: PutBy::Current, reason: None, revealed: false, pays_characteristic: false, flashback: false, exile_instead: ExileInstead::Never, adventure: false, omen: false, rebound: false, destroy: false, aura_host_left: None }
+        Moving { id, to, entering: None, put_by: PutBy::Current, reason: None, revealed: false, pays_characteristic: false, flashback: false, exile_instead: ExileInsteads::NONE, adventure: false, omen: false, rebound: false, destroy: false, aura_host_left: None }
     }
 }
 
@@ -3182,7 +3182,7 @@ fn create_tokens_entering(
             pays_characteristic: false,
             exiled_with: None,
             flashback: false,
-            exile_instead: ExileInstead::Never,
+            exile_instead: ExileInsteads::NONE,
             adventure: false,
             commander_components: [ObjectId::NONE; 8],
             omen: false,
@@ -3797,13 +3797,14 @@ pub fn change_spell_controller(cx: &mut Cx, spell: ObjectId, player: PlayerId) {
 }
 
 /// A spell on the stack is exiled instead of put into its owner's graveyard as it leaves the stack (CR 614.1a): the
-/// replacement of that move is set on its stack item (`StackItem::exile_instead`), as when the effect that had it cast set it.
+/// replacement of that move is added on its stack item (`StackItem::exile_instead`) to any it is already subject to - each
+/// is its own effect, and its controller chooses which applies as it leaves (CR 616.1).
 pub fn set_spell_exile_instead(cx: &mut Cx, spell: ObjectId, instead: ExileInstead) {
     let Some(at) = cx.s().stack.iter().position(|i| i.kind == StackKind::Spell && i.object == spell) else {
         return;
     };
     let mut item = cx.s().stack[at];
-    item.exile_instead = instead;
+    item.exile_instead = item.exile_instead.with(instead);
     cx.st().stack_set(at, item);
 }
 

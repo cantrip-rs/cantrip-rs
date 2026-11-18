@@ -866,7 +866,7 @@ pub(crate) fn announce_trigger(cx: &mut Cx, trigger: PendingTrigger, by: Option<
         shares: StackItem::NO_SHARES,
         opponent_choosing: None,
         spill: 0,
-        exile_instead: ExileInstead::Never,
+        exile_instead: ExileInsteads::NONE,
         flashback: false,
         attacking: false,
         // Put on the stack now, or, a delayed triggered ability, created when its `Delayed` was (CR 701.27f).

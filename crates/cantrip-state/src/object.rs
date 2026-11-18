@@ -1485,8 +1485,8 @@ pub struct StackItem {
     pub spill: usize,
     /// The "if that spell would be put into your graveyard, exile it instead" of the effect that had it cast (CR 614.1a):
     /// a replacement of its move to its owner's graveyard only, ordered with the others that would change that move (CR
-    /// 616.1; `ExileInstead`).
-    pub exile_instead: ExileInstead,
+    /// 616.1; `ExileInstead`), and those effects since have made of it (`Game::exile_spell_instead`): each its own.
+    pub exile_instead: ExileInsteads,
     /// For a spell cast with flashback that is not printed in its ways (CR 702.34a): one a permission gave (Snapcaster Mage)
     /// or a permanent's static ability (Iroh, Grand Lotus), or an aftermath half cast from a graveyard (CR 702.127a). It is
     /// exiled instead of put anywhere else any time it would leave the stack.
@@ -2293,6 +2293,57 @@ pub enum ExileInstead {
     /// Undefeated Slickshot): exiled in place of its move to the graveyard, and, once there, plotted (CR 702.170a, `PlayGrant::PLOT`).
     /// As the resolution alone (CR 701.6a), the way `Dream` is.
     Plot,
+}
+
+/// The "exile it instead" replacements a spell is subject to as it leaves the stack (`ExileInstead`), each its own effect:
+/// the one the effect that had it cast made, and those effects since have made of it (Goliath Daydreamer's, Lilah's). Each
+/// is offered as its own replacement of the move to the graveyard, and its controller chooses which applies (CR 616.1); once
+/// one has exiled the card, the others no longer apply.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash)]
+pub struct ExileInsteads(u8);
+
+impl ExileInsteads {
+    /// No such effect.
+    pub const NONE: ExileInsteads = ExileInsteads(0);
+    /// Every effect there is: a replacement's index among a spell's is its place here (`replace`).
+    pub const ALL: [ExileInstead; 4] = [ExileInstead::Spell, ExileInstead::InstantOrSorcery, ExileInstead::Dream, ExileInstead::Plot];
+
+    fn bit(e: ExileInstead) -> u8 {
+        match e {
+            ExileInstead::Never => 0,
+            ExileInstead::Spell => 1,
+            ExileInstead::InstantOrSorcery => 2,
+            ExileInstead::Dream => 4,
+            ExileInstead::Plot => 8,
+        }
+    }
+
+    /// Just this effect (none for `ExileInstead::Never`).
+    pub fn of(e: ExileInstead) -> ExileInsteads {
+        ExileInsteads(Self::bit(e))
+    }
+
+    /// These and this one.
+    pub fn with(self, e: ExileInstead) -> ExileInsteads {
+        ExileInsteads(self.0 | Self::bit(e))
+    }
+
+    /// These without this one.
+    pub fn without(self, e: ExileInstead) -> ExileInsteads {
+        ExileInsteads(self.0 & !Self::bit(e))
+    }
+
+    pub fn contains(self, e: ExileInstead) -> bool {
+        e != ExileInstead::Never && self.0 & Self::bit(e) != 0
+    }
+
+    pub fn is_empty(self) -> bool {
+        self.0 == 0
+    }
+
+    pub fn iter(self) -> impl Iterator<Item = ExileInstead> {
+        Self::ALL.into_iter().filter(move |&e| self.contains(e))
+    }
 }
 
 /// A condition on a standing permission to play a card, worked out whenever the permission is asked.

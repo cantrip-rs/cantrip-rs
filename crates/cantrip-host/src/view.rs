@@ -2640,7 +2640,7 @@ mod tests {
             shares: StackItem::NO_SHARES,
             opponent_choosing: None,
             spill: 0,
-            exile_instead: ExileInstead::Never,
+            exile_instead: ExileInsteads::NONE,
             flashback: false,
             attacking: false,
             since: 0, tapped_since: 0,
