@@ -1,0 +1,11 @@
+{
+  "name": "Krenko, Baron of Tin Street",
+  "manaCost": "{2}{R}",
+  "type": "Legendary Creature — Goblin",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Haste\n{T}, Sacrifice an artifact: Put a +1/+1 counter on each Goblin you control.\nWhenever an artifact is put into a graveyard from the battlefield, you may pay {R}. If you do, create a 1/1 red Goblin creature token. It gains haste until end of turn.",
+  "keywords": [
+    "Haste"
+  ]
+}

@@ -1,0 +1,54 @@
+# Krenko, Baron of Tin Street: only an artifact put into a graveyard from the battlefield triggers it. On turn 3 Bot1 kills Bot2's
+# Goblin Grappler (not an artifact) with a Shock, with {R} still to pay, and nothing is asked or made; on its turn 4 Bot2 exiles
+# Bot1's Memnite (an artifact, but not put into a graveyard) with Swords to Plowshares, and again nothing is made.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Krenko, Baron of Tin Street
+Shock
+Memnite
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Mox Ruby
+Goblin Grappler
+Plains
+Swords to Plowshares
+Island x16
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Krenko, Baron of Tin Street.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Goblin Grappler.Cast
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Goblin Grappler)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Graveyard = Goblin Grappler
+[T4 Bot2.Main1]
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Exile = Memnite
+Bot1.Battlefield = Mountain; Mountain; Mox Jet; Mox Ruby; Krenko, Baron of Tin Street
