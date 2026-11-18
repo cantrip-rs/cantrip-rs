@@ -1,0 +1,37 @@
+# Esper Moonshadow: Jody Keith's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-a-l
+
+2 Bitter Triumph
+4 Concealed Courtyard
+4 Dark Matter Manipulator
+2 Gloomlake Verge
+4 Godless Shrine
+3 Grim Bauble
+1 Guiding Hydra
+4 Hallowed Fountain
+3 Kaito, Bane of Nightmares
+1 Mabel, Bitter Recluse
+4 Mockingbird
+4 Moonshadow
+4 Nurturing Pixie
+3 Overlord of the Balemurk
+1 Plains
+3 Practiced Offense
+1 Restless Anchorage
+3 Starfield Shepherd
+2 Starting Town
+1 Swamp
+2 Voice of Victory
+4 Watery Grave
+
+Sideboard
+4 Clarion Conqueror
+1 Deathmark
+2 Duress
+1 Kaito, Bane of Nightmares
+1 Null Summoner
+1 Requiting Hex
+2 Sheltered by Ghosts
+1 Spell Pierce
+2 Strategic Betrayal

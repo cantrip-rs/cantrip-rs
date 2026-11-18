@@ -1,0 +1,35 @@
+# Boros Pixie: Seth Manfield's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-m-z
+
+1 Abandoned Air Temple
+3 Captain James T. Kirk
+1 Guiding Hydra
+4 Inspiring Vantage
+4 Momo, Friendly Flier
+3 Mountain
+1 Multiversal Passage
+2 Nova Hellkite
+4 Nurturing Pixie
+3 Plains
+3 Practiced Offense
+4 Sacred Foundry
+4 Sage of the Skies
+3 Seam Rip
+1 Stadium Headliner
+4 Starfield Shepherd
+2 Starting Town
+4 Sunbillow Verge
+4 The Naked Time
+3 Torch the Tower
+2 Voice of Victory
+
+Sideboard
+3 Clarion Conqueror
+2 Erode
+3 Giant Cindermaw
+2 Rest in Peace
+2 Ruinous Rampage
+1 Seam Rip
+1 Torch the Tower
+1 Voice of Victory

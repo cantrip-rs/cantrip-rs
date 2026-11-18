@@ -1,0 +1,36 @@
+# Boros Pixie: Antonín Braniš's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-a-l
+
+1 Abandoned Air Temple
+3 Cosmogrand Zenith
+1 Curious Farm Animals
+1 Erode
+1 Guiding Hydra
+2 Haliya, Guided by Light
+2 Inspiring Vantage
+4 Momo, Friendly Flier
+3 Mountain
+4 Nurturing Pixie
+5 Plains
+2 Practiced Offense
+4 Sacred Foundry
+4 Sage of the Skies
+4 Springleaf Drum
+4 Starfield Shepherd
+1 Starting Town
+4 Sunbillow Verge
+4 The Naked Time
+2 Torch the Tower
+4 Voice of Victory
+
+Sideboard
+1 Authority of the Consuls
+2 Clarion Conqueror
+1 Curious Farm Animals
+2 Elspeth, Storm Slayer
+2 Erode
+1 Pyrrhic Strike
+2 Rest in Peace
+3 Seam Rip
+1 Torch the Tower

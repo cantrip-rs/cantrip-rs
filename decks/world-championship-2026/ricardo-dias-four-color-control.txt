@@ -1,0 +1,47 @@
+# Four-Color Control: Ricardo Dias's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-a-l
+
+1 Avengers Disassembled
+3 Consult the Star Charts
+1 Cori Mountain Monastery
+2 Day of Judgment
+2 Flashback
+1 Get Lost
+4 Great Hall of the Biblioplex
+2 Hallowed Fountain
+3 Inevitable Defeat
+1 Island
+4 Jeskai Revelation
+1 Mistrise Village
+1 Mountain
+1 Multiversal Passage
+2 No More Lies
+2 Pit of Offerings
+1 Riverpyre Verge
+3 Sacred Foundry
+3 Sear
+3 Shattered Sanctum
+2 Spell Snare
+2 Starting Town
+1 Steam Vents
+4 Stock Up
+2 Stormcarved Coast
+1 Strategic Betrayal
+4 Tablet of Discovery
+1 Thor, God of Thunder
+2 Watery Grave
+
+Sideboard
+1 Avengers Disassembled
+1 Day of Judgment
+1 Emeritus of Ideation
+2 Fire Magic
+1 Flashfreeze
+1 Get Lost
+1 Outrageous Robbery
+1 Petrified Hamlet
+1 Spell Snare
+2 Strategic Betrayal
+1 Thor, God of Thunder
+2 Together as One

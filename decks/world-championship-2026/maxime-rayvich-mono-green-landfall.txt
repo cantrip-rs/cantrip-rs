@@ -1,0 +1,35 @@
+# Mono-Green Landfall: Maxime Rayvich's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-m-z
+
+3 Ba Sing Se
+1 Bushwhack
+4 Carnivorous Cultivator
+1 Demolition Field
+4 Earthbender Ascension
+4 Elven Passage
+1 Escape Tunnel
+2 Esper Origins
+4 Fabled Passage
+13 Forest
+4 Icetill Explorer
+4 Llanowar Elves
+1 Lumbering Worldwagon
+3 Mightform Harmonizer
+4 Mossborn Hydra
+3 Sapling Nursery
+4 Sazh's Chocobo
+
+Sideboard
+2 Hard-Hitting Question
+2 Karn, Argent Defender
+1 Meltstrider's Resolve
+1 Mightform Harmonizer
+1 Origin of Metalbending
+1 Pick Your Poison
+1 Pit of Offerings
+1 Sandman, Shifting Scoundrel
+1 Sapling Nursery
+2 Surrak, Elusive Hunter
+1 Torpor Orb
+1 Warg Tactics

@@ -1,0 +1,39 @@
+# Dimir Midrange: Zach Aymie's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-a-l
+
+3 Bitter Triumph
+4 Dream Beavers
+4 Enduring Curiosity
+4 Floodpits Drowner
+4 Gloomlake Verge
+1 Hidden Lair
+5 Island
+4 Kaito, Bane of Nightmares
+3 Requiting Hex
+1 Restless Reef
+2 Shipwreck Marsh
+1 Shoot the Sheriff
+2 Soulstone Sanctuary
+2 Spell Snare
+4 Spyglass Siren
+4 Swamp
+2 The Wondrous Wasp
+2 Tishana's Tidebinder
+1 Wan Shi Tong, Librarian
+4 Watery Grave
+3 We Say Thee Nay!
+
+Sideboard
+1 Annul
+2 Day of Black Sun
+1 Disdainful Stroke
+2 Duress
+1 Faebloom Trick
+2 Flashfreeze
+1 M.O.D.O.K.
+1 Negate
+1 Spell Snare
+1 Strategic Betrayal
+1 Tishana's Tidebinder
+1 Wan Shi Tong, Librarian

@@ -1,0 +1,37 @@
+# Dimir Midrange: Mattia Oneto's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-m-z
+
+2 Bitter Triumph
+4 Dream Beavers
+4 Enduring Curiosity
+4 Floodpits Drowner
+4 Gloomlake Verge
+3 Island
+4 Kaito, Bane of Nightmares
+3 Multiversal Passage
+3 Requiting Hex
+1 Restless Reef
+2 Shoot the Sheriff
+2 Soulstone Sanctuary
+1 Spell Pierce
+2 Spell Snare
+4 Spyglass Siren
+3 Starting Town
+4 Swamp
+2 The Wondrous Wasp
+1 Wan Shi Tong, Librarian
+4 Watery Grave
+3 We Say Thee Nay!
+
+Sideboard
+1 Deathmark
+3 Disdainful Stroke
+1 Flashfreeze
+1 Requiting Hex
+1 Shoot the Sheriff
+2 Spell Pierce
+2 Spell Snare
+1 Stab
+2 Strategic Betrayal
+1 Wan Shi Tong, Librarian

@@ -1,0 +1,43 @@
+# Five-Color Sacrifice: Andrea Fortunati's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-a-l
+
+4 Biotech Specialist
+2 Blazemire Verge
+1 Bleachbone Verge
+2 Blood Crypt
+4 Blooming Marsh
+1 Brightglass Gearhulk
+1 Dusk Rose Reliquary
+1 Forest
+4 Gene Pollinator
+1 Godless Shrine
+4 Greedy Freebooter
+1 Hushwood Verge
+4 Lively Dirge
+1 Meltstrider's Resolve
+1 Mockingbird
+4 Obsessive Pursuit
+1 Overgrown Tomb
+1 Seam Rip
+1 Springleaf Drum
+4 Starting Town
+1 Stir Up Trouble
+3 Stomping Ground
+1 Swamp
+2 Temple Garden
+4 The Sackville-Bagginses
+3 Torch the Tower
+3 Umbral Collar Zealot
+
+Sideboard
+1 Chandra, Spark Hunter
+1 Deathmark
+4 Duress
+1 Erode
+1 Fire Magic
+1 Ghost Vacuum
+2 Nova Hellkite
+1 Professor Dellian Fel
+2 Test of Courage
+1 Torch the Tower

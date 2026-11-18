@@ -1,0 +1,36 @@
+# Jeskai Artifacts: Ondřej Stráský's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-m-z
+
+4 Castle Doom
+2 Chainsaw
+2 Clay-Fired Bricks
+4 Cryogen Relic
+1 Erode
+3 Floodfarm Verge
+4 Hallowed Fountain
+4 Malfunctioning Holodeck
+3 Pinnacle Starcage
+3 Plains
+4 Repurposing Bay
+2 Sacred Foundry
+3 Seam Rip
+4 Simulacrum Synthesizer
+1 Steam Vents
+3 Sunbillow Verge
+1 The Fire Crystal
+3 The Mind Stone
+3 Thundering Falls
+4 United Battlefront
+1 Warmaker Gunship
+1 White Auracite
+
+Sideboard
+2 Authority of the Consuls
+2 Day of Judgment
+2 Does Machines
+2 Erode
+1 Memorial Vault
+2 Rest in Peace
+1 Spell Pierce
+3 Voice of Victory

@@ -1,0 +1,38 @@
+# Bant Airbending: Daniel Weiss's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-m-z
+
+4 Aang, Swift Savior
+2 Aang, at the Crossroads
+1 Airbender Ascension
+4 Appa, Steadfast Guardian
+4 Bramble Familiar
+4 Breeding Pool
+3 Cavern of Souls
+4 Doc Aurlock, Grizzled Genius
+1 Erode
+2 Floodfarm Verge
+1 Forest
+1 Great Divide Guide
+3 Hallowed Fountain
+3 Hushwood Verge
+4 Interdimensional Web Watch
+4 Llanowar Elves
+2 Nature's Rhythm
+1 Plains
+2 Seam Rip
+4 Starting Town
+1 Stock Up
+4 Temple Garden
+1 The Mind Stone
+
+Sideboard
+1 Authority of the Consuls
+2 Avatar's Wrath
+2 Bovine Intervention
+2 Crystal Barricade
+1 Erode
+2 Jennifer Walters
+2 Rest in Peace
+2 Seam Rip
+1 Spider-Sense

@@ -1,0 +1,30 @@
+# Boros Dragons: Elijah Herr's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-a-l
+
+4 Burst Lightning
+4 Cavern of Souls
+4 Clarion Conqueror
+2 Dragonhawk, Fate's Tempest
+4 Inspiring Vantage
+1 Maelstrom of the Spirit Dragon
+4 Magmatic Hellkite
+4 Momo, Friendly Flier
+4 Mountain
+3 Multiversal Passage
+4 Nova Hellkite
+2 Plains
+4 Sacred Foundry
+4 Sarkhan, Dragon Ascendant
+4 Smaug the Magnificent
+2 Sunbillow Verge
+4 The Naked Time
+2 Twinmaw Stormbrood
+
+Sideboard
+3 Doorkeeper Thrull
+2 Erode
+2 Rest in Peace
+2 Seam Rip
+2 Sheltered by Ghosts
+4 Sunspine Lynx

@@ -1,0 +1,43 @@
+# Dimir Control: January Adams's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-a-l
+
+1 Bitter Triumph
+1 Break Under Pressure
+4 Consult the Star Charts
+4 Countersculpt
+4 Deadly Cover-Up
+1 Emeritus of Ideation
+1 Feed the Cycle
+1 Georgiou, Terran Emperor
+4 Gloomlake Verge
+1 Great Hall of the Biblioplex
+1 Island
+2 Jace's Machinations
+2 Ni'Var Science Academy
+1 Nowhere to Run
+3 Petrified Hamlet
+4 Requiting Hex
+1 Restless Reef
+4 Shipwreck Marsh
+1 Shoot the Sheriff
+3 Spell Snare
+3 Swamp
+4 The Theorist, Jace Beleren
+2 Theorist's Sanctum
+2 Three Steps Ahead
+1 Undercity Sewers
+4 Watery Grave
+
+Sideboard
+1 Annul
+1 Bitter Triumph
+2 Duress
+1 Emeritus of Ideation
+2 Engineered Explosives
+1 Georgiou, Terran Emperor
+2 Ghost Vacuum
+1 Spell Snare
+1 Terminal Criticism
+2 Torpor Orb
+1 Wan Shi Tong, Librarian

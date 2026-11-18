@@ -1,0 +1,35 @@
+# Rakdos Phoenix: Zevin Faust's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-a-l
+
+4 Blazemire Verge
+4 Blood Crypt
+4 Bloodghast
+3 Bloodthorn Flail
+4 Carnage, Crimson Chaos
+4 Cool but Rude
+4 Dark Matter Manipulator
+4 Darklight Phoenix
+1 Eddie Brock
+3 Fanatical Firebrand
+1 Iron-Shield Elf
+4 Masked Meower
+4 Moonshadow
+2 Mountain
+4 Multiversal Passage
+2 Quag Feast
+1 Requiting Hex
+4 Starting Town
+3 Swamp
+
+Sideboard
+1 Chandra, Spark Hunter
+2 Deathmark
+2 Duress
+1 Eddie Brock
+1 Feed the Swarm
+2 Ghost Vacuum
+1 Karn, Argent Defender
+2 Molten Collapse
+2 Pinecone Strike
+1 Requiting Hex

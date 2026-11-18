@@ -1,0 +1,40 @@
+# Jund Sacrifice: Se̍k-un Khó͘'s deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-a-l
+
+4 Biotech Specialist
+1 Blazemire Verge
+4 Blood Crypt
+4 Blooming Marsh
+1 Forest
+4 Gene Pollinator
+4 Greedy Freebooter
+4 Lively Dirge
+2 Magda, the Hoardmaster
+1 Mountain
+4 Obsessive Pursuit
+3 Overgrown Tomb
+1 Requiting Hex
+1 Smaug the Magnificent
+4 Starting Town
+3 Stomping Ground
+1 Swamp
+2 The Misty Mountains Cold
+4 The Sackville-Bagginses
+3 Torch the Tower
+3 Umbral Collar Zealot
+1 Witherbloom Charm
+1 Wolverine, Fierce Fighter
+
+Sideboard
+1 Bitter Triumph
+3 Duress
+2 Fire Magic
+1 Guerrilla Gorilla
+1 Leatherhead, Swamp Stalker
+1 Maelstrom Pulse
+1 Professor Dellian Fel
+1 Requiting Hex
+2 Strategic Betrayal
+1 The Ooze
+1 Vicious Rivalry

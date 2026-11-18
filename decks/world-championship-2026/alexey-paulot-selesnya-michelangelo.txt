@@ -1,0 +1,34 @@
+# Selesnya Michelangelo: Alexey Paulot's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-m-z
+
+2 Abandoned Air Temple
+4 Bejeweled Warg
+2 Brightglass Gearhulk
+6 Forest
+4 Gene Pollinator
+2 Guiding Hydra
+4 Hushwood Verge
+4 Llanowar Elves
+2 Meltstrider's Resolve
+4 Michelangelo, Weirdness to 11
+1 Multiversal Passage
+4 Ouroboroid
+1 Overgrown Farmland
+4 Pawpatch Recruit
+2 Plains
+4 Practiced Offense
+2 Seam Rip
+3 Starting Town
+1 Surrak, Elusive Hunter
+4 Temple Garden
+
+Sideboard
+1 Brightglass Gearhulk
+2 Clarion Conqueror
+4 Doorkeeper Thrull
+1 Erode
+2 Leatherhead, Swamp Stalker
+2 Sheltered by Ghosts
+1 Skateboard
+2 Surrak, Elusive Hunter

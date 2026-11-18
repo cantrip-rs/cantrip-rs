@@ -1,0 +1,42 @@
+# Jund Sacrifice: Satoshi Nakayama's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-m-z
+
+1 Aerid Konstrari
+4 Biotech Specialist
+3 Blazemire Verge
+4 Blooming Marsh
+2 Deadly Precision
+1 Engineered Explosives
+1 Foggy Swamp Visions
+1 Forest
+4 Gene Pollinator
+4 Greedy Freebooter
+4 Lively Dirge
+2 Llanowar Elves
+1 Mountain
+4 Obsessive Pursuit
+3 Overgrown Tomb
+4 Starting Town
+4 Stomping Ground
+1 Swamp
+1 The Ooze
+4 The Sackville-Bagginses
+1 The Unicomplex
+3 Torch the Tower
+3 Umbral Collar Zealot
+
+Sideboard
+1 Abigale, Eloquent First-Year
+1 D'Ghor Bloodletter
+1 Duress
+1 Engineered Explosives
+1 Fire Magic
+1 Foggy Swamp Visions
+1 Georgiou, Terran Emperor
+1 Guerrilla Gorilla
+2 Molten Collapse
+1 Requiting Hex
+2 Salt Vampire
+1 Test of Courage
+1 The Ooze

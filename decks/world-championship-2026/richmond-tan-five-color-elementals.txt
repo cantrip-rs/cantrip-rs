@@ -1,0 +1,39 @@
+# Five-Color Elementals: Richmond Tan's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-m-z
+
+4 Ashling, Rekindled
+2 Bounce Off
+3 Breeding Pool
+3 Burst Lightning
+4 Cavern of Souls
+1 Cori Mountain Monastery
+4 Deceit
+1 Eirdu, Carrier of Dawn
+4 Flamebraider
+2 Ill-Timed Explosion
+1 Island
+1 Pit of Offerings
+1 Quantum Riddler
+1 Restless Vinestalk
+3 Roaming Throne
+4 Secluded Courtyard
+3 Spirebluff Canal
+2 Starting Town
+4 Steam Vents
+2 Sunderflock
+4 Vibrance
+2 Winternight Stories
+4 Wistfulness
+
+Sideboard
+1 Abrade
+2 Annul
+2 Beza, the Bounding Spring
+2 Disdainful Stroke
+2 Fire Magic
+1 Flashfreeze
+1 Negate
+1 Petrified Hamlet
+2 Soul-Guide Lantern
+1 Ygra, Eater of All

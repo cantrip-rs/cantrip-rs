@@ -1,0 +1,41 @@
+# Sultai Omniscience: Pierre Liebsch's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-a-l
+
+2 Breeding Pool
+3 Cavern of Souls
+2 Consult the Star Charts
+4 Evendo, Waking Haven
+4 Extrapolate the Impossible
+3 Formidable Speaker
+1 Island
+3 Jadzia Dax, Living Legacy
+4 Kona, Rescue Beastie
+3 Marang River Regent
+4 Multiversal Passage
+1 North Wind Avatar
+3 Omniscience
+4 Spell Snare
+2 Starting Town
+4 Stock Up
+3 Susur Secundi, Void Altar
+1 Uthros, Titanic Godcore
+4 Watery Grave
+2 Willowrush Verge
+3 Winternight Stories
+
+Sideboard
+1 Dina's Guidance
+1 Dracogenesis
+1 Formidable Speaker
+1 Infinite Diversity
+1 Jennifer Walters
+1 Maelstrom Pulse
+1 Marang River Regent
+1 North Wind Avatar
+1 Omni-Changeling
+1 Omniscience
+1 Pia, Aether Ascetic
+1 Terror of the Peaks
+1 Vicious Rivalry
+2 Voice of Victory

@@ -1,0 +1,35 @@
+# Boros Dragons: Joao Quege's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-m-z
+
+4 Burst Lightning
+2 Cavern of Souls
+4 Clarion Conqueror
+2 Erode
+1 Get Lost
+4 Inspiring Vantage
+3 Maelstrom of the Spirit Dragon
+1 Magda, the Hoardmaster
+4 Magmatic Hellkite
+4 Momo, Friendly Flier
+2 Mountain
+4 Multiversal Passage
+4 Nova Hellkite
+4 Sacred Foundry
+4 Sarkhan, Dragon Ascendant
+4 Smaug the Magnificent
+4 Sunbillow Verge
+1 Twinmaw Stormbrood
+4 Voice of Victory
+
+Sideboard
+2 Boros Charm
+1 Dragonhawk, Fate's Tempest
+1 Erode
+1 Fire Magic
+1 Get Lost
+2 Giant Cindermaw
+2 Rest in Peace
+3 Seam Rip
+1 Sheltered by Ghosts
+1 Sunspine Lynx

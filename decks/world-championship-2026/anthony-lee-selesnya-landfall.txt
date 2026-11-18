@@ -1,0 +1,33 @@
+# Selesnya Landfall: Anthony Lee's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-a-l
+
+2 Ba Sing Se
+4 Carnivorous Cultivator
+1 Cryptic Caves
+4 Earthbender Ascension
+4 Elven Passage
+4 Erode
+1 Escape Tunnel
+4 Fabled Passage
+11 Forest
+1 Hushwood Verge
+4 Icetill Explorer
+3 Jadzia Dax, Living Legacy
+4 Llanowar Elves
+4 Mightform Harmonizer
+4 Mossborn Hydra
+2 Plains
+1 Practiced Offense
+1 Sandman, Shifting Scoundrel
+1 Vigorbloom Charm
+
+Sideboard
+3 Clarion Conqueror
+1 Glorious Decay
+1 Hard-Hitting Question
+3 Karn, Argent Defender
+3 Sapling Nursery
+2 Snakeskin Veil
+1 Surrak, Elusive Hunter
+1 The Ooze

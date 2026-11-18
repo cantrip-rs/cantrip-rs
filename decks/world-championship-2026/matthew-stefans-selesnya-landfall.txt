@@ -1,0 +1,31 @@
+# Selesnya Landfall: Matthew Stefans's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-m-z
+
+3 Ba Sing Se
+1 Bushwhack
+4 Carnivorous Cultivator
+1 Cavern of Souls
+1 Demolition Field
+4 Earthbender Ascension
+3 Elven Passage
+2 Erode
+1 Escape Tunnel
+4 Esper Origins
+4 Fabled Passage
+9 Forest
+2 Hushwood Verge
+4 Icetill Explorer
+4 Llanowar Elves
+3 Mightform Harmonizer
+4 Mossborn Hydra
+2 Plains
+4 Sazh's Chocobo
+
+Sideboard
+4 Clarion Conqueror
+3 Doorkeeper Thrull
+2 Erode
+1 Mightform Harmonizer
+2 Sheltered by Ghosts
+3 Surrak, Elusive Hunter

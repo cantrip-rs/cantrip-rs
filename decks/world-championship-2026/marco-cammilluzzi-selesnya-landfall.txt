@@ -1,0 +1,33 @@
+# Selesnya Landfall: Marco Cammilluzzi's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-a-l
+
+3 Ba Sing Se
+2 Carnivorous Cultivator
+4 Doorkeeper Thrull
+4 Earthbender Ascension
+2 Elven Passage
+2 Erode
+1 Escape Tunnel
+4 Fabled Passage
+9 Forest
+1 Hushwood Verge
+4 Icetill Explorer
+4 Llanowar Elves
+3 Mightform Harmonizer
+4 Mossborn Hydra
+2 Plains
+2 Practiced Offense
+2 Sapling Nursery
+4 Sazh's Chocobo
+4 Temple Garden
+
+Sideboard
+3 Clarion Conqueror
+2 Engineered Explosives
+1 Erode
+2 Leatherhead, Swamp Stalker
+2 Restoration Magic
+1 Sapling Nursery
+2 Sheltered by Ghosts
+2 Surrak, Elusive Hunter

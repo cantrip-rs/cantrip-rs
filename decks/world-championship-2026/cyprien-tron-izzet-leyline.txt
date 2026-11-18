@@ -1,0 +1,33 @@
+# Izzet Leyline: Cyprien Tron's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-m-z
+
+4 Ancestral Anger
+2 Balmor, Battlemage Captain
+3 Bulk Up
+1 Dreadmaw's Ire
+4 Elusive Otter
+3 Emberheart Challenger
+2 Full Bore
+4 Leyline of Resonance
+2 Mountain
+2 Multiversal Passage
+4 Pompous Battlemage
+3 Pym Particles
+4 Riverpyre Verge
+2 Secret Identity
+4 Slickshot Show-Off
+4 Spirebluff Canal
+4 Starting Town
+4 Steam Vents
+4 Wild Ride
+
+Sideboard
+1 Balmor, Battlemage Captain
+4 Colorstorm Stallion
+2 Fire Magic
+1 Giant Cindermaw
+2 Into the Flood Maw
+1 Island
+3 Quantum Riddler
+1 Spell Pierce

@@ -1,0 +1,33 @@
+# Orzhov Lifegain: Francisco Avila's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-a-l
+
+4 Amalia Benavides Aguirre
+1 Aunt May
+4 Case of the Uneaten Feast
+4 Concealed Courtyard
+2 Deep-Cavern Bat
+4 Enlightened Confidant
+3 Erode
+4 Godless Shrine
+2 Great Arashin City
+4 Haliya, Guided by Light
+4 Hinterland Sanctifier
+2 Liliana the Faultless
+4 Lunar Convocation
+3 Moseo, Vein's New Dean
+4 Multiversal Passage
+4 Plains
+3 Starscape Cleric
+4 Starting Town
+
+Sideboard
+3 Duress
+1 Ghost Vacuum
+1 Professor Dellian Fel
+2 Pyrrhic Strike
+3 Seam Rip
+2 Shattered Acolyte
+1 Space-Time Anomaly
+1 Strategic Betrayal
+1 Vicious Rivalry

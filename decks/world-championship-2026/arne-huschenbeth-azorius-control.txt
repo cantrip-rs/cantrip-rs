@@ -1,0 +1,39 @@
+# Azorius Control: Arne Huschenbeth's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-a-l
+
+1 Captain Marvel, Earth's Protector
+4 Consult the Star Charts
+4 Countersculpt
+3 Day of Judgment
+4 Deserted Beach
+4 Floodfarm Verge
+4 Get Lost
+4 Hallowed Fountain
+3 Island
+3 Jace's Machinations
+2 Meticulous Archive
+1 Multiversal Passage
+3 No More Lies
+3 Petrified Hamlet
+2 Pinnacle Starcage
+2 Plains
+1 Restless Anchorage
+4 Seam Rip
+2 Spell Snare
+4 The Theorist, Jace Beleren
+2 Theorist's Sanctum
+
+Sideboard
+1 Annul
+1 Captain Marvel, Earth's Protector
+1 Cavern of Souls
+2 Doorkeeper Thrull
+1 Emeritus of Ideation
+1 Erode
+1 Flashfreeze
+2 Rest in Peace
+2 Spell Snare
+1 Sphinx of False Conclusions
+1 Voice of Victory
+1 Wan Shi Tong, Librarian

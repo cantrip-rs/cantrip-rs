@@ -1,0 +1,32 @@
+# Jeskai Affinity: Jorge Lopez's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-a-l
+
+4 Castle Doom
+4 Chrome Dome
+3 Dusk Rose Reliquary
+4 Engineered Explosives
+3 Giant's Boulder
+2 Hallowed Fountain
+2 Inspiring Vantage
+4 Krang, Master Mind
+1 Mountain
+4 Pinnacle Emissary
+4 Ravenous Robots
+2 Sacred Foundry
+2 Spirebluff Canal
+4 Springleaf Drum
+3 Starting Town
+2 Steam Vents
+4 Uthros, Titanic Godcore
+4 Voyage Home
+4 Weapons Manufacturing
+
+Sideboard
+2 Abrade
+2 Arabella, Abandoned Doll
+2 Mazemind Tome
+1 Requisition Raid
+2 Soul-Guide Lantern
+3 Spell Pierce
+3 Torch the Tower

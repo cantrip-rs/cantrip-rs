@@ -1,0 +1,42 @@
+# Dimir Uldaros: Julio Bejarano Espejo's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-a-l
+
+1 Armus, Skin of Evil
+3 Bitter Triumph
+2 Cavern of Souls
+1 Deadly Cover-Up
+4 Deceit
+2 Duress
+4 Gloomlake Verge
+1 Intimidation Tactics
+1 Island
+1 Multiversal Passage
+2 Overlord of the Balemurk
+3 Requiting Hex
+3 Restless Reef
+3 Seasoned Cryomancer
+4 Shipwreck Marsh
+1 Strategic Betrayal
+4 Superior Spider-Man
+4 Swamp
+3 The Theorist, Jace Beleren
+2 Theorix Charm
+2 Uldaros Theorix
+2 Undercity Sewers
+1 Vraska's Final Mercy
+4 Watery Grave
+2 Winternight Stories
+
+Sideboard
+2 Day of Black Sun
+1 Disdainful Stroke
+2 Doomsday Excruciator
+1 Duress
+1 Emeritus of Ideation
+2 Engineered Explosives
+2 Flashfreeze
+1 Garruk, Veiled Butcher
+1 M.O.D.O.K.
+1 Qarsi Revenant
+1 Strategic Betrayal

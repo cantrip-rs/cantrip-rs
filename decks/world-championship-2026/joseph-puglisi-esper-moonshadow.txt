@@ -1,0 +1,37 @@
+# Esper Moonshadow: Joseph Puglisi's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-m-z
+
+3 Abhorrent Oculus
+3 Bitter Triumph
+3 Bleachbone Verge
+2 Concealed Courtyard
+4 Dark Matter Manipulator
+1 Duress
+2 Faerie Dreamthief
+1 Floodpits Drowner
+4 Gloomlake Verge
+1 Godless Shrine
+3 Kaito, Bane of Nightmares
+3 Likeness Looter
+4 Mockingbird
+4 Moonshadow
+2 Multiversal Passage
+4 Practiced Offense
+1 Requiting Hex
+4 Starting Town
+2 Swamp
+2 Sygg, Wanderwine Wisdom
+2 Theorix Charm
+1 Undercity Sewers
+4 Watery Grave
+
+Sideboard
+1 Annul
+2 Clarion Conqueror
+2 Deathmark
+2 Duress
+2 Quantum Riddler
+3 Sheltered by Ghosts
+1 Spell Pierce
+2 Spell Snare

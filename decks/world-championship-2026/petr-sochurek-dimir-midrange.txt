@@ -1,0 +1,40 @@
+# Dimir Midrange: Petr Sochůrek's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-m-z
+
+2 Bitter Triumph
+1 Cecil, Dark Knight
+4 Dream Beavers
+3 Enduring Curiosity
+4 Floodpits Drowner
+4 Gloomlake Verge
+1 Hidden Lair
+4 Island
+4 Kaito, Bane of Nightmares
+1 Loch Mare
+4 Multiversal Passage
+3 Requiting Hex
+1 Shoot the Sheriff
+2 Soulstone Sanctuary
+4 Spyglass Siren
+5 Swamp
+1 The Theorist, Jace Beleren
+1 The Wondrous Wasp
+1 Theorix Charm
+3 Tishana's Tidebinder
+1 Wan Shi Tong, Librarian
+4 Watery Grave
+2 We Say Thee Nay!
+
+Sideboard
+3 Day of Black Sun
+1 Disdainful Stroke
+1 Duress
+1 M.O.D.O.K.
+1 Negate
+1 Raven Eagle
+1 Requiting Hex
+2 Shoot the Sheriff
+2 Spell Snare
+1 Strategic Betrayal
+1 The Ooze

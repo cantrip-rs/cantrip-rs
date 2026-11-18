@@ -1,0 +1,38 @@
+# Dimir Midrange: Neilson Zhang's deck at Magic World Championship 32 (Standard, November 2026).
+#
+# The decklist as Wizards of the Coast published it: https://magic.gg/decklists/magic-world-championship-32-standard-decklists-m-z
+
+2 Bitter Triumph
+4 Dream Beavers
+3 Enduring Curiosity
+4 Floodpits Drowner
+4 Gloomlake Verge
+5 Island
+4 Kaito, Bane of Nightmares
+4 Multiversal Passage
+1 Realm of Koh
+3 Requiting Hex
+2 Restless Reef
+2 Shoot the Sheriff
+2 Soulstone Sanctuary
+1 Spell Snare
+4 Spyglass Siren
+1 Strategic Betrayal
+2 Swamp
+2 The Wondrous Wasp
+3 Tishana's Tidebinder
+1 Wan Shi Tong, Librarian
+4 Watery Grave
+2 We Say Thee Nay!
+
+Sideboard
+1 Day of Black Sun
+3 Duress
+2 Engineered Explosives
+1 Flashfreeze
+1 Spell Snare
+2 Strategic Betrayal
+1 The Theorist, Jace Beleren
+1 The Unagi of Kyoshi Island
+2 Torpor Orb
+1 Vren, the Relentless
