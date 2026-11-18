@@ -1736,8 +1736,10 @@ def main(argv=None):
                         logs / f"mine-filter-{split}-{run_dir.name}.log", False)
         settings = mine_settings()
         (p.root / "settings.json").write_text(json.dumps(dict(
-            forks=f"{settings.fork_simulations} simulations x {settings.fork_worlds} worlds, two seeds pooled",
-            losers=f"{settings.loser_simulations} simulations x {settings.loser_worlds} worlds", kl_min=settings.kl_min)),
+            # The keys `mine report` reads.
+            fork=f"{settings.fork_simulations} simulations x {settings.fork_worlds} worlds, two seeds pooled",
+            target=f"{settings.fork_simulations} x {settings.fork_worlds}, the first seed's",
+            loser=f"{settings.loser_simulations} simulations x {settings.loser_worlds} worlds", kl_min=settings.kl_min)),
             encoding="utf-8")
         run([*py, "report", "--selected", p.selected, "--forks", p.forks, "--runs", *runs, "--losers",
              p.judge / mining.LOSERS_RUN, "--settings", p.root / "settings.json", "--a-name", f"gen{gen}", "--b-name",

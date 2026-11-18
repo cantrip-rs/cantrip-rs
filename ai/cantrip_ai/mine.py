@@ -370,18 +370,24 @@ def report(sel: dict, rows: list[dict], losers: list[dict], names: dict[str, str
     out: list[str] = []
     w = out.append
     nm = lambda who: names[who]  # noqa: E731
-    w("# Pair miner: generation 5's gate (gen5 against gen4)\n")
-    w("Local planning data, not for GitHub. Made by `ai/cantrip_ai/mine.py` and `cantrip-explore mine-*` (branch "
-      "`ai-mine`). A pair is one deal played twice with the players exchanged (decks stay with seats); a pair one side "
-      "won both is decisive. Outcomes only choose the pairs; every verdict here is the deep search's.\n")
+    w(f"# Pair miner: {A}'s gate ({A} against {B})\n")
+    w("Made by `ai/cantrip_ai/mine.py` and `cantrip-explore mine-*`. A pair is one deal played twice with the players "
+      "exchanged (decks stay with seats); a pair one side won both is decisive. Outcomes only choose the pairs; every "
+      "verdict here is the deep search's.\n")
     c = sel["counts"]
     w("## Pairs and replays\n")
-    w(f"- {c['pairs']} pairs in the gate, {c['decisive_all']} decisive. A gate game's search seed is made from its "
-      f"lane's game count, which the range rule recovers for {c['known']} pairs (games that finished before the first "
-      f"of BotLab's {sel['ranges']} ranges was played out, at place {sel['first_range_done']} of 6,000).")
+    if sel["ranges"] > 0:
+        w(f"- {c['pairs']} pairs in the gate, {c['decisive_all']} decisive. A gate game's search seed is made from its "
+          f"lane's game count, which the range rule recovers for {c['known']} pairs (games that finished before the first "
+          f"of BotLab's {sel['ranges']} ranges was played out, at place {sel['first_range_done']}).")
+    else:
+        w(f"- {c['pairs']} pairs in the gate ({c['known']} played to the end), {c['decisive_all']} decisive; every game "
+          "replays from its number (its searches are seeded by it).")
+    left = len(sel.get("left_out", []))
     w(f"- Mined: {len(sel['decisive'])} decisive pairs ({c['a_lost_both']} where {A} lost both, {c['a_won_both']} where "
-      f"{A} won both) and {len(sel['control'])} split pairs as a control; {len(sel['decisive_unknown_ids'])} decisive "
-      "pairs left out for an unknown game id.")
+      f"{A} won both) and {len(sel['control'])} split pairs as a control"
+      + (f"; {len(sel['decisive_unknown_ids'])} decisive pairs left out for an unknown game id" if sel["ranges"] > 0 else "")
+      + (f"; {left} pair(s) left out whose replay was not the gate's" if left else "") + ".")
     if replay:
         w(f"- Replays: {replay['same']} of {replay['games']} games the same as the gate (winner, points, starter, turns, "
           f"decks, seats, shuffle); {len(replay['differ'])} differ.")
