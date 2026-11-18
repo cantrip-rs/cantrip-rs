@@ -1,0 +1,9 @@
+{
+  "name": "Caught Red-Handed",
+  "manaCost": "{4}{R}",
+  "type": "Instant",
+  "oracleText": "This spell can't be countered. (This includes by the ward ability.)\nGain control of target creature until end of turn. Untap that creature. It gains haste until end of turn. Suspect it. (It has menace and can't block.)",
+  "keywords": [
+    "CantBeCountered"
+  ]
+}
