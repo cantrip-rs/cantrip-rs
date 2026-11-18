@@ -3002,6 +3002,10 @@ pub enum LastingRuleKind {
     /// (`static_rules::lasting_rules_barring_attacks`). Chronomantic Escape's "until your next turn, creatures can't attack
     /// you".
     CantAttackYou,
+    /// "Can't attack you or planeswalkers you control" (CR 508.1c): `CantAttackYou` and the planeswalkers that player controls
+    /// too, read under their current controller and types as attackers are declared. Battles stay attackable. Sandswirl
+    /// Wanderglyph's "they can't attack you or planeswalkers you control this turn".
+    CantAttackYouOrPlaneswalkers,
     /// "[That player] can't play [that card]" (CR 101.2, 601.3, 305.1, 701.18b): the player the rule's words named (its `about`,
     /// `Target::Player`) may not cast a card the set takes in as a spell or play it as a land, from wherever it is and by
     /// whatever lets them - a restriction takes precedence over every permission (CR 101.2). Another player an effect lets play

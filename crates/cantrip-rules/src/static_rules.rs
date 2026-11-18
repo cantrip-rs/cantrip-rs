@@ -932,8 +932,11 @@ pub fn lasting_rules_barring_attacks(q: &dyn Query, cards: &CardTable, creatures
     for e in &q.state().effects {
         let (player, planeswalkers) = match e.kind {
             EffectKind::CantAttackPlayer { player, planeswalkers } => (player, planeswalkers),
-            EffectKind::LastingRule { card, index, about: Target::Player(player) }
-                if cards.get(card).lasting_rules.get(index as usize).is_some_and(|r| r.rule == LastingRuleKind::CantAttackYou) => (player, false),
+            EffectKind::LastingRule { card, index, about: Target::Player(player) } => match cards.get(card).lasting_rules.get(index as usize).map(|r| r.rule) {
+                Some(LastingRuleKind::CantAttackYou) => (player, false),
+                Some(LastingRuleKind::CantAttackYouOrPlaneswalkers) => (player, true),
+                _ => continue,
+            },
             _ => continue,
         };
         for &creature in creatures {

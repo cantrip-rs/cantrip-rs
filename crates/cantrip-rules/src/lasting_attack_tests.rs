@@ -23,8 +23,19 @@ static OPEN: CardDef = CardDef {
     }],
     ..CardDef::BLANK
 };
+// Sandswirl Wanderglyph's rule: the player and the planeswalkers they control.
+static OPEN_WALKERS: CardDef = CardDef {
+    name: "Lasting Attack Open Set Walkers",
+    types: TypeSet::of(&[CardType::Sorcery]),
+    lasting_rules: &[LastingRule {
+        text: "Creatures can't attack you or planeswalkers you control.",
+        rule: LastingRuleKind::CantAttackYouOrPlaneswalkers,
+        applies: every_creature,
+    }],
+    ..CardDef::BLANK
+};
 fn game() -> Game {
-    let cards = Box::leak(Box::new(CardTable::new([&BEAR, &WALKER, &BATTLE, &OPEN])));
+    let cards = Box::leak(Box::new(CardTable::new([&BEAR, &WALKER, &BATTLE, &OPEN, &OPEN_WALKERS])));
     let mut g = Game::new(cards, &Setup { decks: vec![Vec::new(); 3], ..Default::default() });
     while !g.state.agenda.is_empty() {
         g.state.frame_remove(0);
@@ -163,4 +174,30 @@ fn canonical_open_set_reaches_new_creatures_and_only_the_player() {
     assert_eq!(barred(&g, &[first, second], &targets), vec![(first, targets[0]), (second, targets[0])]);
     assert!(!crate::static_rules::attack_rules_allow_any(&g, g.cards, first, || vec![targets[0]]));
     assert!(crate::static_rules::attack_rules_allow_any(&g, g.cards, first, || vec![targets[2]]));
+}
+
+#[test]
+fn open_set_with_planeswalkers_bars_the_player_and_their_current_planeswalkers_only() {
+    let mut g = game();
+    let source = put(&mut g, &OPEN_WALKERS, P0);
+    let bear = put(&mut g, &BEAR, P1);
+    let mine = put(&mut g, &WALKER, P0);
+    let theirs = put(&mut g, &WALKER, P2);
+    let battle = put(&mut g, &BATTLE, P0);
+    let timestamp = g.state.timestamp();
+    let card = g.cards.id_of(&OPEN_WALKERS);
+    g.state.effect_push(ContinuousEffect {
+        source,
+        controller: P0,
+        timestamp,
+        affected: source,
+        kind: EffectKind::LastingRule { card, index: 0, about: Target::Player(P0) },
+        duration: Duration::UntilNextTurnOf(P0),
+        words: Words::NONE,
+    });
+    let targets = [Target::Player(P0), Target::Player(P2), Target::Object(mine), Target::Object(theirs), Target::Object(battle)];
+    assert_eq!(barred(&g, &[bear], &targets), vec![(bear, targets[0]), (bear, targets[2])]);
+    assert!(!crate::static_rules::attack_rules_allow_any(&g, g.cards, bear, || vec![targets[2]]));
+    assert!(crate::static_rules::attack_rules_allow_any(&g, g.cards, bear, || vec![targets[3]]));
+    assert!(crate::static_rules::attack_rules_allow_any(&g, g.cards, bear, || vec![targets[4]]));
 }
