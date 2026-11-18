@@ -1,0 +1,60 @@
+# Airtight Alibi on a suspected, tapped creature. J. Jonah Jameson (2/2) suspects himself on turn 3 and attacks on turn 5 (tapped, still suspected).
+# In Main 2 Bot1 casts the Alibi on him: the enters trigger untaps him, he gains hexproof until end of turn and is no longer suspected (CR 701.60),
+# and the Aura gives +2/+2 (4/4). On Bot2's turn 6 the hexproof is gone but the +2/+2 stays. CR 702.11b, 611.2b.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+J. Jonah Jameson
+Airtight Alibi
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.J. Jonah Jameson.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(J. Jonah Jameson)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.J. Jonah Jameson.Suspected = true
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(J. Jonah Jameson > Bot2)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.J. Jonah Jameson.Tapped = true
+? Bot1.Battlefield.J. Jonah Jameson.Suspected = true
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Airtight Alibi.Cast(Bot1.Battlefield.J. Jonah Jameson)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.J. Jonah Jameson.Tapped = false
+? Bot1.Battlefield.J. Jonah Jameson.Suspected = (absent)
+? Bot1.Battlefield.J. Jonah Jameson.Keywords = Hexproof
+? Bot1.Battlefield.J. Jonah Jameson.Power = 4
+[T6 Bot2.Main1]
+? Bot1.Battlefield.J. Jonah Jameson.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.J. Jonah Jameson.Power = 4
+Bot1.Battlefield.J. Jonah Jameson.Toughness = 4
+Bot1.Battlefield.J. Jonah Jameson.Suspected = (absent)
+Bot1.Battlefield.Airtight Alibi.AttachedTo = J. Jonah Jameson
