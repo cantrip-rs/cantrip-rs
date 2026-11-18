@@ -1,0 +1,52 @@
+# Bot2's face-down Nervous Gardener cannot block Pompous Gadabout (CR 708.2a, 509.1b), but Bot2 turns it face up for its disguise cost {G} (CR 702.168d, 116.2b) after attackers are declared and
+# before blockers: it has its name again (CR 708.8) and can block (the restriction is checked as blockers are declared, CR 509.1b). Gadabout (4/2) and the 2/2 Nervous Gardener kill each other.
+
+[Bot1 Deck]
+Pompous Gadabout
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Island x16
+
+[Bot2 Deck]
+Nervous Gardener
+Mox Jet
+Mox Jet
+Mox Pearl
+Mox Emerald
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pompous Gadabout.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Nervous Gardener.Cast(Ability: Disguise)
+[T3 Bot1.Main1]
+Bot1.Attack(Pompous Gadabout > Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.#1.Activate(Ability: disguise cost)
+Bot2.Pass
+Bot1.Pass
+Bot2.Search()
+Bot1.Pass
+Bot2.Pass
+Bot2.Block(Nervous Gardener > Pompous Gadabout)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Pompous Gadabout
+Bot2.Graveyard = Nervous Gardener
