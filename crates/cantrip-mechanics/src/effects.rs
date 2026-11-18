@@ -221,7 +221,7 @@ pub fn target_creature_gets_and_gains_haste<const P: i32, const T: i32>(g: &mut 
 
 /// "Target creature gets +`P`/+`T` and gains trample until end of turn" (CR 611.2a, 702.19): one instruction, the creature
 /// being the ability's first target; nothing if it is no longer a legal target as the spell resolves (CR 608.2b). Blitzball
-/// Shot (+3/+3), Fanatical Fever (+3/+0) and Run Amok (+3/+3) print it.
+/// Shot (+3/+3), Fanatical Fever (+3/+0), Fanatical Strength (+3/+3) and Run Amok (+3/+3) print it.
 pub fn target_creature_gets_and_gains_trample<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(creature) = crate::targets::object(g, item, 0) {
         instruction(g, |g| {

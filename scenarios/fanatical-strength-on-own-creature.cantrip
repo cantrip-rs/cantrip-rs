@@ -1,0 +1,40 @@
+# Fanatical Strength, {1}{G} instant: "Target creature gets +3/+3 and gains trample until end of turn" (CR 611.2a, 702.19). Bot1 targets
+# its own Llanowar Elves (a creature you control is a legal target) on turn 3, paying exactly with Mox Emerald and Mox Pearl. The
+# Elves, cast on turn 1 with the Emerald, are a 4/4 with trample after it resolves, and a 1/1 without it on turn 5.
+
+[Bot1 Deck]
+Fanatical Strength
+Mox Emerald
+Mox Pearl
+Llanowar Elves
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fanatical Strength.Cast(Bot1.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Llanowar Elves.Power = 4
+? Bot1.Battlefield.Llanowar Elves.Toughness = 4
+? Bot1.Battlefield.Llanowar Elves.Keywords = Trample
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Llanowar Elves.Toughness = 1
+Bot1.Battlefield.Llanowar Elves.Keywords = (absent)

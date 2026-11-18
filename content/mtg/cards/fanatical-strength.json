@@ -1,0 +1,6 @@
+{
+  "name": "Fanatical Strength",
+  "manaCost": "{1}{G}",
+  "type": "Instant",
+  "oracleText": "Target creature gets +3/+3 and gains trample until end of turn."
+}
