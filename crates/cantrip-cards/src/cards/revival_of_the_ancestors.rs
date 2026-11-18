@@ -1,11 +1,11 @@
 use cantrip_api::*;
-use cantrip_mechanics::{counters_divided, effects, endure, targets};
+use cantrip_mechanics::{counters_divided, effects, endure, targets, tokens};
 use cantrip_oracle as oracle;
 
 /// "I — Create three 1/1 white Spirit creature tokens" (CR 111.1, 714.2): the white Spirit endure makes, sized 1/1 as it is
 /// made, as Great Arashin City makes it; the three are created together, by one instruction.
 fn create_three_spirits(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.create_token_copies_of(Copiable::of(g.card_id(&endure::SPIRIT)).sized(1, 1), item.controller, 3)?;
+    tokens::create_sized(g, item.object, item.controller, &endure::SPIRIT, (1, 1), 3)?;
     Ok(())
 }
 

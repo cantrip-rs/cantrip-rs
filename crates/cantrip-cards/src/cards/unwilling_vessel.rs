@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, triggers};
+use cantrip_mechanics::{effects, tokens, triggers};
 use cantrip_oracle as oracle;
 
 /// The X/X blue Spirit creature token with flying, its size given as it is created (CR 111.4, 707.2).
@@ -16,9 +16,7 @@ pub static SPIRIT: CardDef = CardDef {
 /// card's text, so a text change reaches its type (CR 612.2a).
 fn create_a_spirit_x_x_for_the_counters_on_this(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let x = effects::counters_on(g, item.object) as i32;
-    let mut values = Copiable::of(g.card_id(&SPIRIT)).sized(x, x);
-    values.words = g.words(item.object);
-    g.create_token_copies_of(values, item.controller, 1)?;
+    tokens::create_sized(g, item.object, item.controller, &SPIRIT, (x, x), 1)?;
     Ok(())
 }
 

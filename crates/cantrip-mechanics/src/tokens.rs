@@ -662,6 +662,26 @@ pub fn create_mutagen(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
     Ok(())
 }
 
+/// "Create `count` [`power`/`toughness`] [token]" for `controller`, the size given as they are made (CR 111.4, 707.2): never
+/// a 0/0 for a moment, so what triggers on them entering sees their size; a size of 0 makes a 0/0 that state-based actions
+/// then put into the graveyard (CR 704.5f). The tokens are what the text of `source` that makes them says (CR 612.4,
+/// 612.2a, `Query::token_copy`): a text change of it changes their color words, creature types and the name they take from
+/// those types. Created together (CR 101.4). The tokens made. Misty Salon, Unwilling Vessel, Shark Typhoon, Abzan
+/// Monument, Skyclave Apparition, Severance Priest (X/X), Urabrask's Forge (X/1), Great Arashin City and Revival of the
+/// Ancestors (1/1) print it.
+pub fn create_sized(
+    g: &mut dyn Game,
+    source: ObjectId,
+    controller: PlayerId,
+    def: &'static CardDef,
+    (power, toughness): (i32, i32),
+    count: u32,
+) -> Result<Vec<ObjectId>, Suspend> {
+    let card = g.card_id(def);
+    let values = g.token_copy(card, source).unwrap_or(Copiable::of(card)).sized(power, toughness);
+    g.create_token_copies_of(values, controller, count)
+}
+
 /// Creates `count` tokens of `def` under `controller`, a token whose characteristics a rule defines and no printed text:
 /// a predefined token (CR 111.10: a Treasure, a Clue, a Heartwood), a keyword's own (job select's Hero, recruit's Human
 /// Soldier, a gift's Fish), or one created by name, whose characteristics are the Oracle card's of that name (CR 111.11:

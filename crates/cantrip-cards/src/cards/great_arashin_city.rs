@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::endure;
+use cantrip_mechanics::{endure, tokens};
 use cantrip_mechanics::lands::{enters_tapped_unless_you_control_either, sub};
 use cantrip_mechanics::targets::filters;
 use cantrip_oracle as oracle;
@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 /// part of the cost (CR 602.2b, 601.2h): with no creature card in the graveyard the cost can't be paid, so the ability can't be
 /// activated at all (CR 118.3). The token is endure's white Spirit, made 1/1 (CR 111.3).
 fn create_a_spirit(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.create_token_copies_of(Copiable::of(g.card_id(&endure::SPIRIT)).sized(1, 1), item.controller, 1)?;
+    tokens::create_sized(g, item.object, item.controller, &endure::SPIRIT, (1, 1), 1)?;
     Ok(())
 }
 

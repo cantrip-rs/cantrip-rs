@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::triggers;
+use cantrip_mechanics::{tokens, triggers};
 use cantrip_oracle as oracle;
 
 /// A blue Shark creature token with flying: the generic definition, its size X/X given as it is made (`shark`).
@@ -14,11 +14,11 @@ pub static SHARK: CardDef = CardDef {
 
 /// "Create an X/X blue Shark creature token with flying" for `controller`, X being `size`. The token is X/X as it is made
 /// (CR 111.4, 707.2), never a 0/0 for a moment; an X of 0 makes a 0/0 that state-based actions then put into the graveyard
-/// (CR 704.5f). A size past what power and toughness hold (RX-5) is made at that limit, never wrapped.
-fn shark(g: &mut dyn Game, controller: PlayerId, size: u32) -> Result<(), Suspend> {
+/// (CR 704.5f). A size past what power and toughness hold (RX-5) is made at that limit, never wrapped. The token is what
+/// this card's text says, a text change of it included (CR 612.4).
+fn shark(g: &mut dyn Game, item: &StackItem, size: u32) -> Result<(), Suspend> {
     let size = size as i32;
-    let values = Copiable::of(g.card_id(&SHARK)).sized(size, size);
-    g.create_token_copies_of(values, controller, 1)?;
+    tokens::create_sized(g, item.object, item.controller, &SHARK, (size, size), 1)?;
     Ok(())
 }
 
@@ -27,13 +27,13 @@ fn shark(g: &mut dyn Game, controller: PlayerId, size: u32) -> Result<(), Suspen
 fn shark_of_spell(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Target::Object(spell) = item.subject else { return Ok(()) };
     let size = g.mana_value(spell);
-    shark(g, item.controller, size)
+    shark(g, item, size)
 }
 
 /// "When you cycle this card, create an X/X ...": X is the X of the cycling cost paid (CR 107.3a), `data[0]`
 /// (`triggers::YOU_CYCLE_THIS_CARD`).
 fn shark_of_cycling(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    shark(g, item.controller, item.data[0])
+    shark(g, item, item.data[0])
 }
 
 pub static CARD: CardDef = CardDef {

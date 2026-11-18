@@ -1,7 +1,7 @@
 use cantrip_api::*;
 use cantrip_mechanics::lands::sub;
 use cantrip_mechanics::select::{basic_land_of_types, up_to, Selection};
-use cantrip_mechanics::{endure, greatest_toughness, library, triggers};
+use cantrip_mechanics::{endure, greatest_toughness, library, tokens, triggers};
 use cantrip_oracle as oracle;
 
 /// "A basic Plains, Swamp, or Forest card", which may be left unfound (CR 701.23b).
@@ -23,8 +23,7 @@ fn search(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 fn create_a_spirit(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
     let greatest = greatest_toughness::among_creatures_you_control(g, you) as i32;
-    let values = Copiable::of(g.card_id(&endure::SPIRIT)).sized(greatest, greatest);
-    g.create_token_copies_of(values, you, 1)?;
+    tokens::create_sized(g, item.object, you, &endure::SPIRIT, (greatest, greatest), 1)?;
     Ok(())
 }
 
