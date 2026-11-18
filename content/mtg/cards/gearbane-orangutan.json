@@ -1,0 +1,11 @@
+{
+  "name": "Gearbane Orangutan",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Ape",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Reach\nWhen this creature enters, choose one —\n• Destroy up to one target artifact.\n• Sacrifice an artifact. If you do, put two +1/+1 counters on this creature.",
+  "keywords": [
+    "Reach"
+  ]
+}

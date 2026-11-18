@@ -1,0 +1,36 @@
+# "If you do": with no artifact to sacrifice (the Orangutan is not one) nothing is sacrificed and no counters are put on it, the
+# opponent's Ornithopter being no artifact of Bot1's to sacrifice.
+
+[Bot1 Deck]
+Gearbane Orangutan
+Mountain x19
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mountain#3.Activate
+Bot1.Hand.Gearbane Orangutan.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Sacrifice an artifact)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 0
+? Bot1.Battlefield.Gearbane Orangutan.Power = 2
+? Bot1.Battlefield.Gearbane Orangutan.Power = 2
+? Bot2.Battlefield.Ornithopter.Power = 0
+
+[Expect]
+Bot1.Battlefield.Count = 4
