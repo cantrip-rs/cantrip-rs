@@ -1,0 +1,52 @@
+# Cogwork Wrestler {U}: "Flash. When this creature enters, target creature an opponent controls gets -2/-0 until end of turn." Bot1 has
+# Memnite and Mox Sapphire out; on Bot2's turn 2 (Bot2 has Ornithopter, Memnite and Mox Pearl) Bot1 flashes the Wrestler in for exactly {U}
+# (the pool is empty after). The trigger refuses Bot1's own Memnite, the Wrestler itself and Bot2's Mox Pearl
+# (not a creature) and takes Bot2's Ornithopter (Memnite stays 1/1): 0 - 2 = -2 power, toughness unchanged (CR 107.1b, 613.4c: not floored). The effect
+# ends with the turn (CR 514.2): on turn 4 the Ornithopter is a 0/2 again.
+
+[Bot1 Deck]
+Mox Sapphire
+Memnite
+Cogwork Wrestler
+Island x30
+
+[Bot2 Deck]
+Mox Pearl
+Memnite
+Ornithopter
+Plains x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Cogwork Wrestler.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Memnite)
+! Bot1.Target(Bot1.Battlefield.Cogwork Wrestler)
+! Bot1.Target(Bot2.Battlefield.Mox Pearl)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = -2
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+? Bot2.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Cogwork Wrestler.Power = 1
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Power = 0
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Cogwork Wrestler; Memnite; Mox Sapphire
+Bot2.Battlefield = Memnite; Mox Pearl; Ornithopter
