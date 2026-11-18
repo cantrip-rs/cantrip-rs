@@ -1,0 +1,43 @@
+# Quicksand Whirlpool: "This spell costs {3} less to cast if it targets a tapped creature. Exile target creature." The total cost is determined once
+# the target is announced (CR 601.2c, 601.2f). Bot2's first Ornithopter attacked on turn 4 and is still tapped on Bot1's turn 5; the second is untapped.
+# With only {W}{R}{B} in Bot1's pool, the cast at the untapped Ornithopter ({5}{W}) is not offered; the cast at the tapped one costs {2}{W}, empties
+# the pool and exiles it (not into the graveyard); the other Ornithopter stays.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Quicksand Whirlpool
+Island x16
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter#1 > Bot1)
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Ornithopter#1.Tapped = true
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana = {W}{B}{R}
+! Bot1.Hand.Quicksand Whirlpool.Cast(Bot2.Battlefield.Ornithopter#2; Mana: short)
+Bot1.Hand.Quicksand Whirlpool.Cast(Bot2.Battlefield.Ornithopter#1)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Turn = 5
+Bot1.Graveyard = Quicksand Whirlpool
+Bot2.Exile.Ornithopter.Toughness = 2
+Bot2.Graveyard.Count = 0
+Bot2.Battlefield.Ornithopter.Tapped = false

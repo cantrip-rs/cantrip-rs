@@ -1,0 +1,6 @@
+{
+  "name": "Quicksand Whirlpool",
+  "manaCost": "{5}{W}",
+  "type": "Instant",
+  "oracleText": "This spell costs {3} less to cast if it targets a tapped creature.\nExile target creature."
+}
