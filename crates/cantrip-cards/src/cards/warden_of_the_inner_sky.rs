@@ -1,13 +1,6 @@
 use cantrip_api::*;
+use cantrip_mechanics::{card_types, untapped_you_control};
 use cantrip_oracle as oracle;
-
-/// "Tap three untapped artifacts and/or creatures you control" (CR 602.2b, 118.3): any untapped artifact or creature its
-/// controller controls, this creature and one that came under their control this turn included (CR 302.6 limits only a
-/// creature's own {T} abilities, and this is not {T} but the tapping of permanents as a cost).
-fn untapped_artifact_or_creature_you_control(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
-    let chars = q.chars(id);
-    q.controller(id) == asker.controller && !q.obj(id).tapped && (chars.is(CardType::Artifact) || chars.is(CardType::Creature))
-}
 
 /// "As long as this creature has three or more counters on it" (CR 122.1): counters of any kind, added up.
 fn has_three_or_more_counters(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Chars) -> bool {
@@ -23,7 +16,7 @@ fn grow_and_scry(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[ability(
-        tap_untapped(3, untapped_artifact_or_creature_you_control),
+        tap_untapped(3, untapped_you_control::<{ card_types(&[CardType::Artifact, CardType::Creature]) }>),
         grow_and_scry,
         "Tap three untapped artifacts and/or creatures you control: Put a +1/+1 counter on this creature. Scry 1. Activate only as a sorcery.",
     )

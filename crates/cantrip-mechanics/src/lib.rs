@@ -559,14 +559,29 @@ pub fn half_chosen_to_sacrifice(g: &mut dyn Game, player: PlayerId, source: Obje
 /// "An untapped creature you control" as the permanents a cost taps (CR 118.3): `TAP_AN_UNTAPPED_CREATURE` taps one, Group Project's
 /// flashback (`tap_untapped(3, ..)`) three. A creature that came under your control this turn counts (CR 302.6 limits only {T}).
 pub fn untapped_creature_you_control(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
-    q.controller(id) == asker.controller && !q.obj(id).tapped && q.chars(id).is(CardType::Creature)
+    untapped_you_control::<{ card_types(&[CardType::Creature]) }>(q, asker, id)
 }
 
 /// "An untapped artifact you control" as the permanents a cost taps (CR 118.3): Urza, Lord High Artificer's mana ability taps
 /// one, Tenured Tethermage's two, Secluded Starforge's X (`tap_x_untapped`). An artifact creature that came under your control
 /// this turn counts (CR 302.6 limits only {T}).
 pub fn untapped_artifact_you_control(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
-    q.controller(id) == asker.controller && !q.obj(id).tapped && q.chars(id).is(CardType::Artifact)
+    untapped_you_control::<{ card_types(&[CardType::Artifact]) }>(q, asker, id)
+}
+
+/// The card types a `untapped_you_control` filter reads, as a bitset: `card_types(&[CardType::Artifact, CardType::Creature])`.
+pub const fn card_types(types: &[CardType]) -> u16 {
+    TypeSet::of(types).0
+}
+
+/// "Tap [N] untapped artifacts, creatures, and/or lands you control" as the permanents a cost taps (CR 602.2b, 118.3): any untapped
+/// permanent of the asker's controller with at least one of the card types `TYPES` (`card_types`), the source itself and one that came
+/// under their control this turn included (CR 302.6 limits only a creature's own {T} ability, and this taps permanents as a cost). A
+/// permanent with several of the types is one choice, tapped once. Worf, Honor-Bound Warrior, Adaptive Gemguard and Warden of the Inner
+/// Sky (artifacts and/or creatures), Fear of Exposure (creatures and/or lands) and Guardian of the Great Door
+/// (artifacts, creatures and/or lands) print it.
+pub fn untapped_you_control<const TYPES: u16>(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
+    q.controller(id) == asker.controller && !q.obj(id).tapped && q.chars(id).types.0 & TYPES != 0
 }
 
 /// "Tap three untapped [creature type]s you control" as the permanents a cost taps (CR 602.2b, 118.3): any untapped permanent of its
