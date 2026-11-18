@@ -1,0 +1,44 @@
+# Rubblebelt Braggart's "you may suspect it": Bot1 attacks on turn 3 and declines. It is not suspected and has no keyword. It
+# attacks again on turn 5, so the ability triggers again (it is still not suspected) and this time Bot1 accepts.
+
+[Bot1 Deck]
+Mox Ruby x5
+Rubblebelt Braggart
+Mountain x14
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Battlefield.Mox Ruby#5.Activate
+Bot1.Hand.Rubblebelt Braggart.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Rubblebelt Braggart > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Battlefield.Rubblebelt Braggart.Suspected = (absent)
+? Bot1.Battlefield.Rubblebelt Braggart.Keywords = (absent)
+[T3 Bot1.Main2]
+[T5 Bot1.Main1]
+Bot1.Attack(Rubblebelt Braggart > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Rubblebelt Braggart.Suspected = true
+Bot2.Life = 10
