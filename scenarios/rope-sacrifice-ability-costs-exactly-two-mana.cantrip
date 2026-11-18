@@ -1,0 +1,39 @@
+# Rope's "{2}, Sacrifice this Equipment: Draw a card" costs exactly {2} (CR 602.2, 701.21) and Equip {3} exactly {3} (CR 702.6a). With Mox Emerald spent on Rope itself, Mox Ruby is Bot1's only
+# source on turn 1: the ability is refused with one mana. On turn 3 it has two sources (Emerald and Ruby): Equip {3} is refused, the sacrifice ability is paid with exactly both, Rope is sacrificed as a cost
+# (it is in the graveyard while the ability is on the stack), and the draw is one card.
+
+[Bot1 Deck]
+Rope
+Mox Emerald
+Mox Ruby
+Memnite
+Memnite
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rope.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Rope.Activate(Ability: Sacrifice this Equipment; Mana: short)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Rope.Activate(Ability: Equip {3}; Memnite; Mana: short)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Rope.Activate(Ability: Sacrifice this Equipment)
+? Bot1.Graveyard = Rope
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 5

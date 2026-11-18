@@ -1,0 +1,60 @@
+# Rope's effects follow the Equipment (CR 301.5c, 613.4c, 509.1b): equipped to Memnite on turn 1 it makes it a 2/3 with reach that two creatures cannot block; moved on turn 3 for Equip {3} to
+# the other Memnite, the first is a plain 1/1 again that two creatures may block, and the second is the one limited to a single blocker. Bot1's four Moxen pay {G} and Equip {3} each turn.
+
+[Bot1 Deck]
+Rope
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Jet
+Memnite
+Memnite
+Island x13
+
+[Bot2 Deck]
+Memnite
+Memnite
+Memnite
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rope.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Rope.Activate(Ability: Equip {3}; Memnite#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rope.AttachedTo = Memnite
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Rope.Activate(Ability: Equip {3}; Memnite#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rope.AttachedTo = Memnite
+? Bot1.Battlefield.Memnite#1.Power = 1
+? Bot1.Battlefield.Memnite#2.Power = 2
+? Bot1.Battlefield.Memnite#2.Keywords = Reach
+Bot1.Attack(Memnite#1 > Bot2; Memnite#2 > Bot2)
+! Bot2.Block(Memnite#1 > Memnite#2; Memnite#2 > Memnite#2)
+Bot2.Block(Memnite#1 > Memnite#1; Memnite#2 > Memnite#1; Memnite#3 > Memnite#2)
+Bot1.AssignDamage(Memnite#1 > Memnite#1: 1)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Memnite
+Bot2.Graveyard = Memnite; Memnite
+Bot1.Battlefield.Memnite.Damage = 1
