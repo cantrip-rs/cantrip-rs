@@ -1,0 +1,35 @@
+# Flotsam {1}{G/U}: an instant (CR 304.1), cast with blue for the hybrid symbol (Mox Sapphire) and the Island for the generic part during
+# Bot2's turn 2 upkeep, while Bot2 holds priority first. Bot1 mills its own top three (Forest, Lightning Bolt, Grizzly Bears: library 13
+# to 10) and creates a Clue; Bot2's library is untouched (13: it has not drawn for turn 2 yet).
+
+[Bot1 Deck]
+Flotsam // Jetsam
+Mox Sapphire
+Island
+Island x4
+Forest
+Lightning Bolt
+Grizzly Bears
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Pass
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Flotsam // Jetsam.Cast(Ability: Flotsam)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Library.Count = 10
+Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Count = 3
+Bot2.Library.Count = 13
+Stack.Count = 0

@@ -1,0 +1,49 @@
+# Jetsam: "you may cast a spell" -- optional. Bot2 mills Lightning Bolt and two Islands; Bot1 declines: the Bolt stays in Bot2's
+# graveyard, Bot2 takes no damage and nothing is exiled. (jetsam-mills-the-opponent-then-casts-their-milled-bolt-free-and-exiles-it
+# is the positive control.)
+
+[Bot1 Deck]
+Flotsam // Jetsam
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Island
+Island x14
+
+[Bot2 Deck]
+Island x7
+Lightning Bolt
+Island x12
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Flotsam // Jetsam.Cast(Ability: Jetsam)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard.Count = 3
+Bot2.Life = 20
+Exile.Count = 0
+Stack.Count = 0

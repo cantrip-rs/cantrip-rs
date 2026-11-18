@@ -1,0 +1,43 @@
+# Jetsam: a land card in a graveyard is not a spell that can be cast, so when Bot2 mills three Islands there is nothing to offer
+# and nothing is asked (CR 305.1, 601.1): the spell finishes at once, with the three Islands in Bot2's graveyard.
+
+[Bot1 Deck]
+Flotsam // Jetsam
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Flotsam // Jetsam.Cast(Ability: Jetsam)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard.Count = 3
+Exile.Count = 0
+Bot1.Graveyard = Flotsam // Jetsam
+Stack.Count = 0

@@ -1,0 +1,56 @@
+# Jetsam {4}{U/B}{U/B} (CR 107.4e, 118.9, 608.2g, 614.1a): "Each opponent mills three cards, then you may cast a spell from each
+# opponent's graveyard without paying its mana cost. If a spell cast this way would be put into a graveyard, exile it instead."
+# Bot1 taps Mox Pearl, Mox Ruby, Mox Emerald, the Island and Mox Sapphire: that leaves one blue-or-black symbol unpaid, so the
+# cast is refused (each hybrid symbol needs its own blue or black). Mox Jet pays the second. Bot2 mills Lightning Bolt, Grizzly Bears
+# and a Mountain; Bot1 takes the Bolt, aims it at Bot2 and it is exiled as it resolves; the Bears and the Mountain stay.
+
+[Bot1 Deck]
+Flotsam // Jetsam
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Island
+Island x14
+
+[Bot2 Deck]
+Island x7
+Mountain
+Grizzly Bears
+Lightning Bolt
+Island x10
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Flotsam // Jetsam.Cast(Ability: Jetsam; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Flotsam // Jetsam.Cast(Ability: Jetsam)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Exile = Lightning Bolt
+Bot2.Graveyard.Count = 2
+Bot1.Graveyard = Flotsam // Jetsam
+Stack.Count = 0

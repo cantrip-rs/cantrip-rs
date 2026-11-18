@@ -1,0 +1,18 @@
+{
+  "name": "Flotsam // Jetsam",
+  "oracleText": "",
+  "halves": [
+    {
+      "name": "Flotsam",
+      "manaCost": "{1}{G/U}",
+      "type": "Instant",
+      "oracleText": "Mill three cards. Investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")"
+    },
+    {
+      "name": "Jetsam",
+      "manaCost": "{4}{U/B}{U/B}",
+      "type": "Sorcery",
+      "oracleText": "Each opponent mills three cards, then you may cast a spell from each opponent's graveyard without paying its mana cost. If a spell cast this way would be put into a graveyard, exile it instead."
+    }
+  ]
+}
