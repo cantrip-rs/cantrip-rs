@@ -263,12 +263,13 @@ pub fn exile_enchanted_creature(g: &mut dyn Game, item: &StackItem) -> Result<()
 }
 
 /// "Enchanted creature" / "equipped creature" as a rule of the source's own that is no ability of the creature (CR 113.1a,
-/// 301.5, 303.4): the `CardDef::untap_bans`, `cant_become_untapped`, `sacrifice_bans`, `face_up_bans` and
+/// 301.5, 303.4): the `CardDef::untap_bans`, `cant_become_untapped`, `sacrifice_bans`, `face_up_bans`, `suspect_bans` and
 /// `attacks_despite_defender` of an Aura or Equipment, true of exactly the permanent the source is attached to. It is no
 /// ability of that permanent, so the permanent
 /// losing all its abilities leaves the rule in force (CR 613.1f). Infinite Coursework's and Enchanted River's Grasp's
 /// "doesn't untap" (CR 502.3), Frozen in Ice's "can't become untapped" and Unable to Scream's "can't be turned face up"
-/// (CR 708.7), and Animate Wall's "enchanted Wall can attack as though it didn't have defender" (CR 702.3b), print it.
+/// (CR 708.7), Animate Wall's "enchanted Wall can attack as though it didn't have defender" (CR 702.3b), and Airtight Alibi's
+/// "can't become suspected" (CR 701.60), print it.
 pub fn attached_to_it(q: &dyn Query, asker: &Asker, affected: ObjectId) -> bool {
     q.obj(asker.source).attached_to == Some(affected)
 }

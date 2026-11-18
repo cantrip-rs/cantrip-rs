@@ -262,6 +262,8 @@ mod replacement_instruction_tests;
 #[cfg(test)]
 mod unsuspect_tests;
 #[cfg(test)]
+mod cant_become_suspected_tests;
+#[cfg(test)]
 mod damage_expansion_tests;
 #[cfg(test)]
 mod entry_order_tests;
