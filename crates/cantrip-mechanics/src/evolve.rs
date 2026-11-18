@@ -3,7 +3,8 @@
 //! Each instance triggers separately (CR 702.100d). Adaptive Snapjaw, Battering Krasis, Clinging Anemones, Cloudfin Raptor,
 //! Crocanura, Gluttonous Slug and Shambleshark print it.
 //!
-//! A card with evolve lists `EVOLVE` among its `abilities`.
+//! A card with evolve lists `EVOLVE` among its `abilities`. A card that prints the same trigger and condition in words with another
+//! effect (Sharp-Eyed Rookie) builds on `greater_creature_you_control_enters` and `is_greater`.
 //!
 //! The intervening "if" (CR 603.4) is about the creature that entered, which a `TriggerCondition` is not told of, so it is
 //! asked in both places by the same function: as the creature enters, by the trigger (compared with its power and toughness
@@ -34,7 +35,7 @@ fn stats(q: &dyn Query, id: ObjectId) -> Stats {
 /// creature's toughness" (CR 702.100a): power against power and toughness against toughness (the rulings). A creature can't
 /// have a greater power or toughness than a noncreature permanent (CR 702.100c), so a source that is not a creature has none
 /// to be greater than, and a permanent that is not a creature has none greater than anything's.
-fn is_greater(q: &dyn Query, this: ObjectId, entered: ObjectId) -> bool {
+pub fn is_greater(q: &dyn Query, this: ObjectId, entered: ObjectId) -> bool {
     let (this, entered) = (stats(q, this), stats(q, entered));
     if !this.creature || !entered.creature {
         return false;
@@ -45,7 +46,7 @@ fn is_greater(q: &dyn Query, this: ObjectId, entered: ObjectId) -> bool {
 
 /// "Whenever a creature you control enters, if that creature's power is greater ... " (CR 603.6a, 603.4): the creature that
 /// entered is the ability's subject.
-fn greater_creature_you_control_enters(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+pub fn greater_creature_you_control_enters(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
         Event::ZoneChange { new, to, .. }
             if to.is(ZoneKind::Battlefield) && q.controller(*new) == me.controller && is_greater(q, me.source, *new) =>
