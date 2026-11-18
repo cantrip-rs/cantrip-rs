@@ -1,0 +1,22 @@
+# Acolyte of Aclazotz: "{T}, Sacrifice another creature or artifact" (CR 118.3, 701.21): with nothing else it could sacrifice, the ability is refused (it can't sacrifice itself, CR 118.3),
+# and it needs a second permanent that is a creature or an artifact: a Forest, a land that is neither, does not do. Nothing happens and the Acolyte stays untapped.
+[Bot1 Deck]
+Black Lotus
+Acolyte of Aclazotz
+Forest
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Acolyte of Aclazotz.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+! Bot1.Battlefield.Acolyte of Aclazotz.Activate
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Battlefield.Acolyte of Aclazotz.Tapped = false

@@ -1,0 +1,8 @@
+{
+  "name": "Acolyte of Aclazotz",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Vampire Cleric",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "{T}, Sacrifice another creature or artifact: Each opponent loses 1 life and you gain 1 life."
+}

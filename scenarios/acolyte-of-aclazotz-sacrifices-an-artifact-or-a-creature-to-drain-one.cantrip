@@ -1,0 +1,47 @@
+# Acolyte of Aclazotz ({2}{B}, 1/4): "{T}, Sacrifice another creature or artifact: Each opponent loses 1 life and you gain 1 life" (CR 118.3, 701.21, 119.3). Cast on turn 1 with a Black
+# Lotus' {B}{B}{B} (the {2}{B} is paid exactly: the pool is empty). On turn 3 Bot1 casts a Walking Corpse (a creature that is not an artifact) with Mox Jet and Mox Ruby; the Acolyte is not
+# offered itself to sacrifice, and sacrifices Mox Ruby, an artifact that is not a creature: Bot2 is at 19 and Bot1 at 21, with no mana needed. Turn 5 it sacrifices the Walking Corpse: Bot2 18,
+# Bot1 22. It never sacrifices itself: it is still on the battlefield after both.
+[Bot1 Deck]
+Black Lotus
+Acolyte of Aclazotz
+Walking Corpse
+Mox Jet
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Acolyte of Aclazotz.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Walking Corpse.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Acolyte of Aclazotz.Activate
+! Bot1.Choose(Acolyte of Aclazotz)
+Bot1.Choose(Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Life = 21
+? Bot1.Battlefield.Acolyte of Aclazotz.Tapped = true
+? Bot1.Battlefield.Count = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Acolyte of Aclazotz.Activate
+Bot1.Choose(Walking Corpse)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Bot1.Battlefield.Count = 2
+Bot1.Graveyard = Walking Corpse; Mox Ruby; Black Lotus
