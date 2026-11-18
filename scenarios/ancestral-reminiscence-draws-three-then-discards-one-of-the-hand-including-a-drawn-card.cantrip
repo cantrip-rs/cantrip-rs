@@ -1,0 +1,35 @@
+# Ancestral Reminiscence {3}{U} (CR 121.1, 701.9): "Draw three cards, then discard a card." Mox Sapphire and Black Lotus pay {3}{U} exactly.
+# The hand before the cast is four Islands; the library holds only Plains, so the Plains that goes to the graveyard can only have
+# been drawn first: the discard is chosen after the draw, from the whole hand. Hand 4 + 3 - 1 = 6 and the library lost exactly three.
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Ancestral Reminiscence
+Island x4
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Ancestral Reminiscence.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains)
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 6
+Bot1.Hand = Island; Island; Island; Island; Plains; Plains
+Bot1.Library.Count = 10
+Bot1.Graveyard = Ancestral Reminiscence; Plains; Black Lotus

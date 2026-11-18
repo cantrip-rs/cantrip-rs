@@ -1,0 +1,6 @@
+{
+  "name": "Ancestral Reminiscence",
+  "manaCost": "{3}{U}",
+  "type": "Sorcery",
+  "oracleText": "Draw three cards, then discard a card."
+}
