@@ -1,0 +1,35 @@
+# Red Herring {1}{R}, Haste, "This creature attacks each combat if able." Cast on turn 1 with a Mountain and a Mox Ruby, it can
+# attack at once (haste, CR 702.10) and must: an empty attack is refused (CR 508.1d), and attacking takes Bot2 to 18. On turn 3,
+# its controller's next combat, it must attack again (Bot2 to 16).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Red Herring
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Red Herring.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Red Herring.Keywords = Haste
+! Bot1.Attack()
+Bot1.Attack(Red Herring > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 18
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack()
+Bot1.Attack(Red Herring > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Red Herring.Tapped = true

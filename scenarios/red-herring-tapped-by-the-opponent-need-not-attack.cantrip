@@ -1,0 +1,39 @@
+# Red Herring: "This creature attacks each combat if able." It attacks on turn 1 (Bot2 to 18). On turn 3 Bot2 taps it in
+# Bot1's upkeep with Twiddle, so it is unable to attack and Bot1 is never asked to declare attackers: the requirement does not force a tapped
+# creature (CR 508.1d, its ruling). Bot2 stays at 18.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Red Herring
+Mountain x14
+
+[Bot2 Deck]
+Mox Sapphire
+Twiddle
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Red Herring.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Red Herring > Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Twiddle.Cast(Bot1.Battlefield.Red Herring)
+Bot2.Pass
+Bot1.Pass
+Bot2.Modes(Tap)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Red Herring.Tapped = true
+
+[Expect]
+Bot2.Life = 18

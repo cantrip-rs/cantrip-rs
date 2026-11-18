@@ -1,0 +1,38 @@
+# Red Herring: "{2}, Sacrifice this creature: Draw a card." Cast on turn 1 with both Moxen (and forced to attack, Bot2 to 18).
+# With no mana to pay it the ability is refused (two short, the Herring stays). Paid exactly with the Mox Jet and a Mountain on
+# turn 3, the Herring is sacrificed as a cost and the top card of the library, a Mountain, is drawn.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Red Herring
+Mountain x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Red Herring.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Red Herring.Activate(Mana: short)
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Red Herring > Bot2)
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Red Herring.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Red Herring
+Bot1.Hand = Mountain; Mountain; Mountain; Mountain; Mountain
+Bot2.Life = 18
