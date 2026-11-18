@@ -1,0 +1,61 @@
+# Nervous Gardener (Disguise {G}): cast face down for {3} (CR 702.168a) it is a nameless 2/2; turned face up for exactly {G} (CR 702.168d) as a special action - the pool is empty
+# right after - its "When this creature is turned face up" ability (CR 603.2) searches Bot1's library for "a land card with a basic land type" (CR 205.3i, 701.23): Bot1's
+# Command Tower (no land type) and Strip Mine (none) are refused, Bot2's Savannah (a land with types) is in the other library and untouched, and Tundra (Plains
+# Island, not basic) is found and revealed. The library is shuffled once, and Bot1 does not search when the creature is cast face down.
+
+[Bot1 Deck]
+Nervous Gardener
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Island
+Island
+Command Tower
+Strip Mine
+Tundra
+Island x9
+
+[Bot2 Deck]
+Island x7
+Savannah
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Nervous Gardener.Cast(Ability: Disguise)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+? Bot1.Library.Count = 12
+? Bot1.Shuffles = 0
+? Stack.Count = 0
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Mana =
+? Bot1.Battlefield.Nervous Gardener.Toughness = 2
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Command Tower)
+! Bot1.Search(Strip Mine)
+Bot1.Search(Tundra)
+? Bot1.Hand = Island; Island; Tundra
+? Bot1.Revealed = Tundra
+? Bot2.Revealed = (absent)
+? Bot1.Shuffles = 1
+? Bot1.Library.Count = 11
+
+[Expect]
+Bot1.Hand = Island; Island; Tundra
+Bot1.Battlefield.Nervous Gardener.Power = 2
+Bot2.Library.Count = 13
+Bot2.Shuffles = 0
