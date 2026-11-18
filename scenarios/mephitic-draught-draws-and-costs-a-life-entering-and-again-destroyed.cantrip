@@ -1,0 +1,41 @@
+# Mephitic Draught ({1}{B} artifact): "When this artifact enters or is put into a graveyard from the battlefield, you draw a card and you lose 1 life" (CR 603.6a, 603.10a, 700.4).
+# Turn 1 it enters: Bot1 draws one card (hand 7, two cards cast, one drawn: 6) and loses 1 life (19), with {B} left of the Lotus' three, so the cost is exactly {1}{B}.
+# Turn 2 Bot2 destroys it with Shatter: the same ability triggers again, a card more (not two) and one life more (18).
+[Bot1 Deck]
+Black Lotus
+Mephitic Draught
+Island
+Island
+Island
+Island
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Shatter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mephitic Draught.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {B}
+? Bot1.Life = 19
+? Bot1.Hand.Count = 6
+? Bot1.Battlefield = Mephitic Draught
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Mephitic Draught)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 18
+Bot1.Hand.Count = 7
+Bot1.Graveyard = Mephitic Draught; Black Lotus
+Bot2.Life = 20
