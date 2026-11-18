@@ -1,0 +1,52 @@
+# "When this creature enters, you may sacrifice an artifact. When you do, this creature deals 3 damage to any target" (CR 701.21a,
+# 603.12, 120.2b). Bot1 sacrifices Mox Jet (a noncreature artifact) as the enter trigger resolves, and the reflexive trigger that
+# follows deals exactly 3 to Bot2. The Crook itself is not an artifact and may not be chosen, and only one artifact may be
+# sacrificed ("an artifact"): the two Ornithopters together are refused.
+
+[Bot1 Deck]
+Cornered Crook
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Ornithopter
+Ornithopter
+Mountain x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Cornered Crook.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+! Bot1.Choose(Cornered Crook)
+! Bot1.Choose(Ornithopter; Ornithopter)
+Bot1.Choose(Mox Jet)
+Bot1.Target(Bot2)
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 20
+Bot1.Graveyard = Mox Jet
+Bot2.Battlefield = Ornithopter
+Bot1.Battlefield.Cornered Crook.Power = 5
+Bot1.Battlefield.Cornered Crook.Toughness = 4

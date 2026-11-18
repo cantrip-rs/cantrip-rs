@@ -1,0 +1,47 @@
+# "Any target" (CR 115.1, 120.2b) includes creatures, and an artifact creature is an artifact (CR 301.1, 205.2): Bot1 sacrifices one
+# of its two Ornithopters and the 3 damage kills Bot2's Ornithopter (toughness 2) while Bot2's life is untouched.
+
+[Bot1 Deck]
+Cornered Crook
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Ornithopter
+Ornithopter
+Mountain x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Cornered Crook.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+Bot1.Choose(Ornithopter)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield =
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = Ornithopter
+Bot1.Battlefield = Cornered Crook; Mox Ruby; Mox Pearl; Mox Sapphire; Mox Jet; Ornithopter; Mountain
