@@ -1188,3 +1188,12 @@ pub fn subtype_spell<const SUBTYPE: u16>(q: &dyn Query, asker: &Asker, card: Obj
 pub fn creature_you_control(q: &dyn Query, asker: &Asker, creature: ObjectId) -> bool {
     q.controller(creature) == asker.controller && q.chars(creature).is(CardType::Creature)
 }
+
+/// "As long as an artifact entered the battlefield under your control this turn, this creature can attack as though it didn't have
+/// defender" (CR 702.3b, 609.4, 603.6a) as an `attacks_despite_defender` rule: only the source itself, and only for an artifact that
+/// entered under its controller's control this turn - the history keeps each permanent as it entered, so one that has since died or
+/// been stolen still counts and one an opponent controlled as it entered does not. It keeps defender for everything else. Mechan
+/// Shieldmate and Shipwreck Sentry print it.
+pub fn itself_attacks_despite_defender_after_an_artifact_entered(q: &dyn Query, asker: &Asker, creature: ObjectId) -> bool {
+    creature == asker.source && crate::history::artifact_entered_under_control_this_turn(q.history(), asker.controller)
+}
