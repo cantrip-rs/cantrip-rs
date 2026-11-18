@@ -1,0 +1,43 @@
+# Private Eye: "Whenever you draw your second card each turn" (CR 121.1) -- the draw step's card on turn 3 is only Bot1's first card,
+# so nothing triggers: Bot2's Memnite blocks Bot1's attacking Novice Inspector (2/3 with the Eye out) and the Inspector's 2 damage
+# goes to the Memnite, none to Bot2. The positive control for the trigger is the sibling scenario where Opt draws the second card.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Private Eye
+Novice Inspector
+Memnite
+Plains
+Opt
+Island
+Plains x11
+
+[Bot2 Deck]
+Memnite
+Mountain x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Private Eye.Cast
+Bot1.Hand.Novice Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Novice Inspector > Bot2)
+Bot2.Block(Memnite > Novice Inspector)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Memnite

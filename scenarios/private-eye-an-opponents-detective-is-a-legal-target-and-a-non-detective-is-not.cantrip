@@ -1,0 +1,50 @@
+# Private Eye: "target Detective can't be blocked this turn" (CR 115.1, 205.3m) names any Detective on the battlefield, not only the ones
+# Bot1 controls. On turn 3 Opt is Bot1's second card: Bot2's Memnite is refused as a target (not a Detective), Bot2's own Novice Inspector is
+# accepted (positive control) and the trigger resolves with the Inspector as its target.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Private Eye
+Memnite
+Plains
+Opt
+Island
+Plains x11
+
+[Bot2 Deck]
+Mox Pearl
+Novice Inspector
+Memnite
+Mountain x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Private Eye.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Novice Inspector.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Arrange(Island |)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot2.Battlefield.Novice Inspector)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand.Count = 4

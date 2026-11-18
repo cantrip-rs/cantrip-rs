@@ -1,0 +1,60 @@
+# Private Eye {1}{W}{U}, 3/3 Homunculus Detective: "Other Detectives you control get +1/+1" (CR 613.4c) and "Whenever you draw your second
+# card each turn, target Detective can't be blocked this turn" (CR 121.1, 509.1b). Bot1 casts the Eye, Novice Inspector (a 1/2 Human Detective,
+# 2/3 with the Eye out; the Eye itself and the non-Detective Memnite are unchanged) and Memnite on turn 1. On turn 3 the draw step gives the
+# first card and Opt the second: the trigger needs a Detective, so the Memnite is refused and Bot1 picks the Inspector. Bot2's Memnite may not
+# block the Inspector, but blocks Memnite (the positive control), so only the Inspector's 2 damage reaches Bot2.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Private Eye
+Novice Inspector
+Memnite
+Opt
+Island
+Plains x12
+
+[Bot2 Deck]
+Memnite
+Memnite
+Mountain x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Private Eye.Cast
+Bot1.Hand.Novice Inspector.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Private Eye.Power = 3
+? Bot1.Battlefield.Novice Inspector.Power = 2
+? Bot1.Battlefield.Novice Inspector.Toughness = 3
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Arrange(Island |)
+! Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Novice Inspector)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Novice Inspector > Bot2; Memnite > Bot2)
+! Bot2.Block(Memnite#1 > Novice Inspector)
+Bot2.Block(Memnite#1 > Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Novice Inspector.Power = 2

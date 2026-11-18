@@ -1,0 +1,8 @@
+{
+  "name": "Private Eye",
+  "manaCost": "{1}{W}{U}",
+  "type": "Creature — Homunculus Detective",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Other Detectives you control get +1/+1.\nWhenever you draw your second card each turn, target Detective can't be blocked this turn."
+}
