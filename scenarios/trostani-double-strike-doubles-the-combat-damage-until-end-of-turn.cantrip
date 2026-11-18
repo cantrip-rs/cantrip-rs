@@ -1,0 +1,50 @@
+# Trostani, Three Whispers: "{2}{W}: Target creature gains double strike until end of turn." All three Moxen pay it, and Trostani attacks
+# Bot2, who has only a Grizzly Bears that does not block: she deals first-strike and regular combat damage, 4 and 4, so Bot2 is at 12.
+# The keyword is gone on Bot2's turn.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Pearl
+Trostani, Three Whispers
+Plains x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Trostani, Three Whispers.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Trostani, Three Whispers.Activate(Ability: double strike; Bot1.Battlefield.Trostani, Three Whispers)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Trostani, Three Whispers.Keywords = DoubleStrike
+Bot1.Attack(Trostani, Three Whispers > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 12
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Trostani, Three Whispers.Keywords = (absent)

@@ -1,0 +1,58 @@
+# Trostani, Three Whispers: "{1}{G}: Target creature gains deathtouch until end of turn." and "{G/W}: Target creature gains vigilance until
+# end of turn." Either may target any creature: the deathtouch goes onto Bot2's Grizzly Bears, the vigilance (paid with the white hybrid
+# half) onto Trostani herself, who attacks and stays untapped. Both are gone by the next turn.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Pearl
+Trostani, Three Whispers
+Plains x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Trostani, Three Whispers.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Trostani, Three Whispers.Activate(Ability: deathtouch; Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Keywords = Deathtouch
+? Bot1.Battlefield.Trostani, Three Whispers.Keywords = (absent)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Trostani, Three Whispers.Activate(Ability: vigilance; Bot1.Battlefield.Trostani, Three Whispers)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Trostani, Three Whispers.Keywords = Vigilance
+? Bot2.Battlefield.Grizzly Bears.Keywords = Deathtouch
+Bot1.Attack(Trostani, Three Whispers > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Trostani, Three Whispers.Tapped = false
+? Bot2.Life = 16
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Grizzly Bears.Keywords = (absent)
+? Bot1.Battlefield.Trostani, Three Whispers.Keywords = (absent)

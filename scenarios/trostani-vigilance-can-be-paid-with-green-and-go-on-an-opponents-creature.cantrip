@@ -1,0 +1,43 @@
+# Trostani, Three Whispers: "{G/W}: Target creature gains vigilance until end of turn." The hybrid cost is paid with green here (the other
+# scenario pays it with white), and an opponent's creature may be the target: Bot2's Grizzly Bears gains vigilance, and loses it again
+# when Bot1's turn ends, so it has none on Bot2's turn 4.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Pearl
+Trostani, Three Whispers
+Plains x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Trostani, Three Whispers.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Trostani, Three Whispers.Activate(Ability: vigilance; Spend: G; Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Keywords = Vigilance
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Grizzly Bears.Keywords = (absent)
