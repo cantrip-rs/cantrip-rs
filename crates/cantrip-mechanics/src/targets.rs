@@ -1727,6 +1727,15 @@ fn creature_card_in_your_graveyard_filter(q: &dyn Query, asker: &Asker, t: Targe
 /// "Target creature card in your graveyard". Recurring Nightmare and Metamorphosis Fanatic print it.
 pub const CREATURE_CARD_IN_YOUR_GRAVEYARD: TargetSpec = target(creature_card_in_your_graveyard_filter);
 
+fn another_creature_card_in_your_graveyard_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_card_in_your_graveyard_filter(q, asker, t) && t != Target::Object(asker.source)
+}
+
+/// "Another target creature card from your graveyard" (CR 115.1, 601.2c): a creature card in your graveyard other than the
+/// source, which is still there as an ability it activates from the graveyard chooses its targets (exiling it is a cost, paid
+/// after the targets are chosen, CR 601.2h). Theoretical Necromancer and Bonebind Orator print it.
+pub const ANOTHER_CREATURE_CARD_IN_YOUR_GRAVEYARD: TargetSpec = target(another_creature_card_in_your_graveyard_filter);
+
 fn zombie_creature_card_in_your_graveyard_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     creature_card_in_your_graveyard_filter(q, asker, t)
         && matches!(t, Target::Object(id) if q.chars(id).has_subtype(q.words(asker.source).subtype(Subtype::Zombie)))
