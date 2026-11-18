@@ -1,0 +1,40 @@
+# Harried Dronesmith: "At the beginning of combat on your turn, create a 1/1 colorless Thopter artifact creature token with
+# flying. It gains haste until end of turn. Sacrifice it at the beginning of your next end step." Turn 1 Bot1 casts it off a
+# Mountain and a Black Lotus; at the beginning of combat the trigger makes one Thopter, which has haste, so it attacks at
+# once (Bot2 20 -> 19), is still there in the second main phase (so it is not sacrificed at the combat's end), and is gone
+# at the end step (CR 603.7c).
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Harried Dronesmith
+Mountain x10
+
+[Bot2 Deck]
+Swamp x15
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Harried Dronesmith.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Attackers]
+? Bot1.Battlefield.Count = 3
+Bot1.Attack(Thopter Token > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 19
+? Bot1.Battlefield.Count = 3
+[T2 Bot2.Upkeep]
+? Bot1.Battlefield.Count = 2
+
+[Expect]
+Bot1.Battlefield = Harried Dronesmith; Mountain
+Bot2.Life = 19
