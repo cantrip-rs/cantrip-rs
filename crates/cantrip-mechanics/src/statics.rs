@@ -226,6 +226,23 @@ pub fn source_has_threshold(q: &dyn LayerQuery, source: ObjectId) -> bool {
     state.zone(Zone::graveyard(state.obj(source).controller)).len() >= 7
 }
 
+/// "Descend N - This creature has/gets ... as long as there are N or more permanent cards in your graveyard" (CR 207.2c, 604.1,
+/// 611.3a) as a static ability's `StaticDef::affects`: only the source itself, and only while its controller's graveyard holds N or
+/// more permanent cards (CR 110.4a; never tokens), each judged as the layers make it, asked again whenever characteristics are
+/// computed. Waterlogged Hulk's back face (8), Frilled Cave-Wurm and Didact Echo (4) print it; a spell or an ability asked at a
+/// `Query` uses `targets::you_have_permanent_cards_in_graveyard`.
+pub fn itself_with_permanent_cards_in_your_graveyard<const N: usize>(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Chars) -> bool {
+    source == affected && permanent_cards_in_your_graveyard(q, source) >= N
+}
+
+/// The number of permanent cards (CR 110.4a; never tokens) in the graveyard of `source`'s controller, each judged as the layers make
+/// it: the layers variant of `targets::permanent_cards_in_graveyard`, for the statics that count them. Neo Exdeath's power and Song of
+/// Stupefaction's -X/-0 use it, as do the descend statics.
+pub fn permanent_cards_in_your_graveyard(q: &dyn LayerQuery, source: ObjectId) -> usize {
+    let state = q.state();
+    state.zone(Zone::graveyard(state.obj(source).controller)).iter().filter(|&&card| crate::targets::is_permanent_card(&q.chars(card))).count()
+}
+
 /// The number of cards of a card type in the graveyard of `source`'s controller (never tokens, CR 111.7), each judged as the layers
 /// make it, for the statics that count "<type> cards in your graveyard". Elvish Reclaimer, Fiend Artisan, Killmonger, Scourge of
 /// Wakanda, Knight of the Reliquary and Undercover Skrull use it.

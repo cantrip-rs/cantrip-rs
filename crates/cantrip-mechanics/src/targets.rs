@@ -1674,6 +1674,13 @@ pub fn permanent_cards_in_graveyard(q: &dyn Query, player: PlayerId) -> usize {
     q.state().zone(Zone::graveyard(player)).iter().filter(|&&id| is_permanent_card(&q.chars(id))).count()
 }
 
+/// "If there are N or more permanent cards in your graveyard" (descend N, CR 207.2c; CR 110.4a) as an ability's condition: asked
+/// of the ability's controller as it triggers or is offered, and again as a trigger resolves (CR 603.4). Council of Echoes (descend
+/// 4) and Neo Exdeath's end step (six) print it.
+pub fn you_have_permanent_cards_in_graveyard<const N: usize>(q: &dyn Query, asker: &Asker) -> bool {
+    permanent_cards_in_graveyard(q, asker.controller) >= N
+}
+
 /// Whether these are the characteristics of a nonland permanent card (CR 110.4a): an artifact land is a land. Six,
 /// Guardian Scalelord and Loamcrafter Faun ask it.
 pub fn is_nonland_permanent_card(c: &Chars) -> bool {
