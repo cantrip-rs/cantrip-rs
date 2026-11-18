@@ -1,0 +1,60 @@
+# The Pride of Hull Clade's ability has a single target (CR 608.2b). With the ability on the stack targeting Wall of Wood, Bot2 kills the Wall with Lightning Bolt: the ability
+# does nothing. No creature gains anything: the delayed draw and the pump are not given to the Steel Wall, which stays a 0/4.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Steel Wall
+Steel Wall
+Wall of Wood
+The Pride of Hull Clade
+Black Lotus
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Steel Wall.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Steel Wall.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wall of Wood.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Pride of Hull Clade.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.The Pride of Hull Clade.Activate(Ability: Until end of turn; Bot1.Battlefield.Wall of Wood)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Wall of Wood)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Wall of Wood; Black Lotus
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Steel Wall#1.Power = 0
+
+[Expect]
+Bot2.Life = 20
+Bot1.Hand.Count = 1

@@ -1,0 +1,65 @@
+# "Draw cards equal to its toughness" with a toughness of 0 or less draws nothing (CR 107.1b). The Wall of Wood (0/3, with the ability from The Pride of Hull Clade) is unblocked on
+# turn 5 and deals 1 combat damage; with the trigger on the stack Bot2 casts Dismember on it (-5/-5, paid with Black Lotus): the Wall dies as a -2 toughness creature and the
+# trigger resolves with that last-known toughness, so Bot1 draws no cards.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Steel Wall
+Steel Wall
+Wall of Wood
+The Pride of Hull Clade
+Black Lotus
+Island x15
+
+[Bot2 Deck]
+Black Lotus
+Dismember
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Steel Wall.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Steel Wall.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wall of Wood.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Pride of Hull Clade.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.The Pride of Hull Clade.Activate(Ability: Until end of turn; Bot1.Battlefield.Wall of Wood)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Wall of Wood > Bot2)
+[T5 Bot1.CombatDamage]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Dismember.Cast(Bot1.Battlefield.Wall of Wood)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Wall of Wood; Black Lotus
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot1.Hand.Count = 1

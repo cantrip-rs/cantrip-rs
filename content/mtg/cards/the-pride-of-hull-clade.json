@@ -1,0 +1,11 @@
+{
+  "name": "The Pride of Hull Clade",
+  "manaCost": "{10}{G}",
+  "type": "Legendary Creature — Crocodile Elk Turtle",
+  "power": 2,
+  "toughness": 15,
+  "oracleText": "This spell costs {X} less to cast, where X is the total toughness of creatures you control.\nDefender\n{2}{U}{U}: Until end of turn, target creature you control gets +1/+0, gains \"Whenever this creature deals combat damage to a player, draw cards equal to its toughness,\" and can attack as though it didn't have defender.",
+  "keywords": [
+    "Defender"
+  ]
+}

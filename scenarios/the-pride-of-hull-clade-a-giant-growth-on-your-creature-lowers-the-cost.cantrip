@@ -1,0 +1,44 @@
+# The cost reduction uses toughness as the total cost is determined (CR 601.2f), effects included. Bot1's only creature is Wall of Wood (0/3): The Pride of Hull Clade would cost
+# {7}{G} (eight) against the six mana Bot1 has (Emerald, Pearl, Gleemox and three from Black Lotus). After Giant Growth, paid with Gleemox, resolves (Wall of Wood 3/6 until end of
+# turn) it costs {4}{G}: the five mana left, exactly.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Gleemox
+Black Lotus
+Wall of Wood
+Giant Growth
+The Pride of Hull Clade
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wall of Wood.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Hand.The Pride of Hull Clade.Cast(Mana: short)
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Wall of Wood)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wall of Wood.Toughness = 6
+Bot1.Hand.The Pride of Hull Clade.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.The Pride of Hull Clade.Toughness = 15
+Bot1.Battlefield.Count = 5
