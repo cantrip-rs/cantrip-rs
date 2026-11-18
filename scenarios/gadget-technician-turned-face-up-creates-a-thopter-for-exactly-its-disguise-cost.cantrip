@@ -1,0 +1,48 @@
+# Gadget Technician (Disguise {U/R}{U/R}): cast face down for {3} from a Black Lotus (entering face down is no turning up: no Thopter),
+# then turned face up for exactly two hybrid mana (CR 702.168d, 116.2b). A lone Island (one mana) is refused; Island and Mox Ruby pay one
+# blue and one red hybrid symbol, leaving the Mox Pearl's white (exactly two mana taken). Turning it face up triggers once (CR 603.6a) and
+# makes one Thopter; face up it is a 3/2.
+
+[Bot1 Deck]
+Gadget Technician
+Black Lotus
+Mox Ruby
+Mox Pearl
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Gadget Technician.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; Spend: U, R)
+! Bot1.Battlefield.Gadget Technician.Activate(Ability: disguise cost)
+? Bot1.Mana = {W}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Gadget Technician.Power = 3
+Bot1.Battlefield.Gadget Technician.Toughness = 2
+Bot1.Battlefield.Thopter Token.Power = 1
+Bot1.Battlefield.Thopter Token.Keywords = Flying
+Bot1.Battlefield = Gadget Technician; Island; Mox Ruby; Mox Pearl; Thopter Token

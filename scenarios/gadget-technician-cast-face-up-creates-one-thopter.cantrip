@@ -1,0 +1,41 @@
+# Gadget Technician cast face up for its mana cost {2}{U}{R} (Mox Sapphire, Mox Ruby, Mox Pearl, Mox Jet): "When this creature enters" creates
+# one 1/1 colorless Thopter artifact creature token with flying (CR 603.6a, 701.40). Nothing is turned face up, so no second Thopter.
+
+[Bot1 Deck]
+Gadget Technician
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gadget Technician.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Mox Ruby; Mox Pearl; Mox Jet; Gadget Technician; Thopter Token
+Bot1.Battlefield.Thopter Token.Power = 1
+Bot1.Battlefield.Thopter Token.Toughness = 1
+Bot1.Battlefield.Thopter Token.Keywords = Flying
+Bot1.Battlefield.Gadget Technician.Power = 3
+Bot1.Battlefield.Gadget Technician.Toughness = 2

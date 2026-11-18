@@ -1,0 +1,36 @@
+# Gadget Technician (Disguise {U/R}{U/R}): each hybrid symbol is paid with blue or red alike (CR 107.4e, 702.168d), so two blue mana
+# (two Mox Sapphires) turn it face up, leaving the Mox Jet's black untouched. It makes one Thopter; casting it face down made none.
+
+[Bot1 Deck]
+Gadget Technician
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Gadget Technician.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; Spend: U, U)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Gadget Technician; Mox Sapphire; Mox Sapphire; Thopter Token
