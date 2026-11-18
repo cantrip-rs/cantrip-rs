@@ -597,6 +597,16 @@ pub fn you_are_dealt_damage(_: &dyn Query, asker: &Asker, event: &Event) -> Opti
 
 pub const YOU_ARE_DEALT_DAMAGE: Trigger = when_asked(EventMask::DAMAGE, you_are_dealt_damage);
 
+/// "Whenever you sacrifice an artifact" (CR 701.21a, 603.10a): an artifact of yours that a sacrifice moved from the battlefield,
+/// read as it was when it left, so a Lander or a Treasure sacrificed as a cost counts. The ability is `.on_sacrifice()`. Biotech
+/// Specialist and Gleaming Geardrake print it.
+pub fn you_sacrifice_an_artifact(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    let sacrificed = sacrificed_by(q, me.controller, event)?;
+    if q.chars(sacrificed).is(CardType::Artifact) { Fired::PLAIN } else { None }
+}
+
+pub const YOU_SACRIFICE_AN_ARTIFACT: Trigger = when_asked(EventMask::ZONE_CHANGE, you_sacrifice_an_artifact);
+
 /// "Whenever you sacrifice [a permanent]" (CR 701.21a): the permanent `player` sacrificed, as it last was on the
 /// battlefield, for the card to judge the quality it names. The ability is `.on_sacrifice()`, and looks back as any ability
 /// that triggers on a sacrifice does (CR 603.10a). Tireless Tracker (a Clue) and Biotech Specialist (an artifact) print it.
