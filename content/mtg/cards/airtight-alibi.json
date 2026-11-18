@@ -1,0 +1,9 @@
+{
+  "name": "Airtight Alibi",
+  "manaCost": "{2}{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature\nWhen this Aura enters, untap enchanted creature. It gains hexproof until end of turn. If it's suspected, it's no longer suspected.\nEnchanted creature gets +2/+2 and can't become suspected.",
+  "keywords": [
+    "Flash"
+  ]
+}

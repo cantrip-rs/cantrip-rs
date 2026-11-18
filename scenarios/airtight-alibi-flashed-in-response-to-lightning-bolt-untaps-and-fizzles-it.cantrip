@@ -1,0 +1,52 @@
+# Airtight Alibi's flash and hexproof. Bot1's Memnite (1/1) attacks on turn 3 and is tapped on Bot2's turn 4. Bot2 casts Lightning Bolt at it; in response Bot1 flashes in the Alibi:
+# the enters trigger untaps Memnite (it was not suspected, nothing else changes) and gives it hexproof, so the Bolt's only target is illegal on resolution and it
+# does nothing (CR 608.2b, 702.11b). Memnite is 3/3 with no damage - without hexproof the Bolt's 3 damage would have killed it even so.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Memnite
+Airtight Alibi
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Tapped = true
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Airtight Alibi.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Tapped = false
+? Bot1.Battlefield.Memnite.Keywords = Hexproof
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 3
+Bot1.Battlefield.Memnite.Damage = 0
+Bot1.Battlefield.Memnite.Tapped = false
+Bot2.Graveyard.Count = 1
