@@ -1378,6 +1378,27 @@ pub const fn ward_sacrifice_a_food(text: &'static str) -> AbilityDef {
         .ward()
 }
 
+/// What ward's "sacrifice a creature" asks the player whose spell or ability targeted, the question on that spell or ability.
+const WARD_SACRIFICE_CREATURE: Question = Question::new(
+    "SacrificeCreatureUnlessCountered",
+    "Sacrifice a creature, or {source} is countered?",
+    "Ward: what it targeted can't be targeted for free",
+    "Sacrifice a creature",
+    "Let it be countered",
+)
+.no_default();
+
+fn ward_sacrifice_a_creature_effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    ward_sacrifice_among(g, item, 1, crate::targets::filters::creature, &WARD_SACRIFICE_CREATURE)
+}
+
+/// Ward--Sacrifice a creature (CR 702.21a, 118.12): "Whenever this becomes the target of a spell or ability an opponent controls,
+/// counter it unless that player sacrifices a creature." Vein Ripper prints it.
+pub const fn ward_sacrifice_a_creature(text: &'static str) -> AbilityDef {
+    triggered(when(EventMask::BECAME_TARGET, ward_matches), ward_sacrifice_a_creature_effect, text)
+        .ward()
+}
+
 /// "Whenever you cast a spell" (CR 601.2i, 603.2): Paradox Engine, Showdown of the Skalds' chapter III, the emblems of Chandra, Torch of Defiance, Chandra, Chill
 /// of Compliance and Jace, Vryn's Prodigy print it.
 pub fn you_cast_a_spell(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
