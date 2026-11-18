@@ -1381,6 +1381,26 @@ pub static RAT_CANT_BLOCK: CardDef = CardDef {
     ..token!(Rat)
 };
 
+/// "Create [COUNT] 1/1 black Fungus creature tokens with 'This token can't block.'" (CR 701.7, 111.1, 509.1b) as an ability's or
+/// spell's whole effect: every token is made at once under the controller of the resolving object, the card file listing
+/// `FUNGUS_CANT_BLOCK` in its `EXTRA`. Broodrage Mycoid makes one; Synapse Necromage two.
+pub fn create_fungi_that_cant_block<const COUNT: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &FUNGUS_CANT_BLOCK, COUNT)?;
+    Ok(())
+}
+
+/// The 1/1 black Fungus creature token with "This token can't block." (CR 111.1, 509.1b). Broodrage Mycoid and Synapse Necromage
+/// make it; the card file lists it in its `EXTRA`.
+pub static FUNGUS_CANT_BLOCK: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Black)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    keywords: Keywords::of(&[Keyword::CantBlock]),
+    text: "This token can't block.",
+    ..token!(Fungus)
+};
+
 /// The 1/1 colorless Phyrexian Mite artifact creature token with toxic 1 and "This token can't block." (CR 111.1, 702.164a,
 /// 509.1b). Mirrex, Mite Overseer, Skrelv's Hive, Infested Fleshcutter, Crawling Chorus, Stinging Hivemaster and
 /// Indoctrination Attendant make it; the card file lists it in its `EXTRA`.
