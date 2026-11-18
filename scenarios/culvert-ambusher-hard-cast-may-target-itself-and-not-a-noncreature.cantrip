@@ -1,0 +1,41 @@
+# Culvert Ambusher cast face up for {3}{G}{G} (Black Lotus for GGG and two Mox Jets) beside Bot1's own Monastery Swiftspear (cast from a
+# Mox Ruby): the trigger fires once from entering (CR 603.6a) and any creature may be its target, this one included, so there is a real
+# choice (a lone legal target would be chosen for the player); a Mox Ruby is not a creature, so it is refused. Culvert Ambusher stays a 4/5.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Jet
+Monastery Swiftspear
+Culvert Ambusher
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Monastery Swiftspear.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Culvert Ambusher.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Target(Bot1.Battlefield.Mox Ruby)
+Bot1.Target(Bot1.Battlefield.Culvert Ambusher)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Culvert Ambusher.Power = 4
+Bot1.Battlefield.Culvert Ambusher.Toughness = 5
+Bot1.Battlefield.Monastery Swiftspear.Power = 1
