@@ -1,0 +1,65 @@
+# Ojer Taq, Deepest Foundation, a 6/6 with vigilance: "If one or more creature tokens would be created under your control, three times that many of those tokens are
+# created instead." Bot1 casts it on turn 1 (Black Lotus and three Moxen). Bot2's Assembly Specialist, cast on turn 2, makes its one Borg token: tokens under an
+# opponent's control are not tripled. On turn 3 Bot1's Assembly Specialist makes three Borg tokens, not one and not six; its Thraben Inspector's Clue, a token that is
+# not a creature, is made once. Bot1 then attacks with Ojer Taq and, with vigilance (CR 702.20b), it stays untapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Ojer Taq, Deepest Foundation
+Assembly Specialist
+Plains
+Thraben Inspector
+Plains x12
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Assembly Specialist
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Ojer Taq, Deepest Foundation.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Assembly Specialist.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot2.Battlefield = Assembly Specialist; Borg Token; Mox Jet; Mox Pearl
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Assembly Specialist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Thraben Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Ojer Taq, Deepest Foundation > Bot2)
+? Bot1.Battlefield.Ojer Taq, Deepest Foundation.Tapped = false
+
+[Expect]
+Bot1.Battlefield = Assembly Specialist; Borg Token; Borg Token; Borg Token; Clue Token; Mox Jet; Mox Pearl; Mox Sapphire; Ojer Taq, Deepest Foundation; Plains; Thraben Inspector
+Bot2.Battlefield = Assembly Specialist; Borg Token; Mox Jet; Mox Pearl

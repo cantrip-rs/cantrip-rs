@@ -1,0 +1,16 @@
+{
+  "name": "Ojer Taq, Deepest Foundation",
+  "manaCost": "{4}{W}{W}",
+  "type": "Legendary Creature — God",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Vigilance\nIf one or more creature tokens would be created under your control, three times that many of those tokens are created instead.\nWhen Ojer Taq dies, return it to the battlefield tapped and transformed under its owner's control.",
+  "keywords": [
+    "Vigilance"
+  ],
+  "backFace": {
+    "name": "Temple of Civilization",
+    "type": "Land",
+    "oracleText": "(Transforms from Ojer Taq, Deepest Foundation.)\n{T}: Add {W}.\n{2}{W}, {T}: Transform this land. Activate only if you attacked with three or more creatures this turn and only as a sorcery."
+  }
+}

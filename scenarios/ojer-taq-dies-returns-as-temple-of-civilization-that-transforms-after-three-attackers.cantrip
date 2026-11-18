@@ -1,0 +1,89 @@
+# Ojer Taq, Deepest Foundation: "When Ojer Taq dies, return it to the battlefield tapped and transformed under its owner's control." Bot2 kills it on turn 2 with two
+# Lightning Bolts (3 + 3 on a 6/6): it returns as Temple of Civilization, a tapped land (CR 701.27, 400.7). The Temple taps for {W}. "{2}{W}, {T}: Transform this land.
+# Activate only if you attacked with three or more creatures this turn and only as a sorcery": on turn 5 only two Ornithopters attack, so it is refused even with the
+# mana ready; on turn 7 three do, but Mox Pearl was tapped in the main phase, so no {W} is left and it is refused; on turn 9 it is refused before any attack and in the
+# declare attackers step (a sorcery), and allowed in the second main phase, paid exactly ({2}{W} from Mox Pearl, Mox Sapphire and Mox Jet, with Mox Ruby left untapped).
+# Ojer Taq comes back tapped (it was tapped by the cost).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ojer Taq, Deepest Foundation
+Mox Pearl
+Ornithopter
+Ornithopter
+Ornithopter
+Plains x11
+
+[Bot2 Deck]
+Lightning Bolt
+Lightning Bolt
+Mountain
+Mox Ruby
+Plains x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ojer Taq, Deepest Foundation.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Lightning Bolt.Cast(Ojer Taq, Deepest Foundation)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Pass
+Bot2.Hand.Lightning Bolt.Cast(Ojer Taq, Deepest Foundation)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Temple of Civilization.Tapped = true
+? Bot1.Battlefield.Temple of Civilization.Types = Land
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Temple of Civilization.Activate
+? Bot1.Mana = {W}
+[T5 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Attack(Ornithopter#1 > Bot2; Ornithopter#2 > Bot2)
+[T5 Bot1.Main2]
+! Bot1.Battlefield.Temple of Civilization.Activate(Ability: Transform)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Attack(Ornithopter#1 > Bot2; Ornithopter#2 > Bot2; Ornithopter#3 > Bot2)
+[T7 Bot1.Main2]
+! Bot1.Battlefield.Temple of Civilization.Activate(Ability: Transform; Mana: short)
+[T9 Bot1.Main1]
+! Bot1.Battlefield.Temple of Civilization.Activate(Ability: Transform)
+Bot1.Attack(Ornithopter#1 > Bot2; Ornithopter#2 > Bot2; Ornithopter#3 > Bot2)
+! Bot1.Battlefield.Temple of Civilization.Activate(Ability: Transform)
+[T9 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Temple of Civilization.Activate(Ability: Transform)
+? Bot1.Mana = 
+
+[Expect]
+Bot1.Battlefield.Ojer Taq, Deepest Foundation.Tapped = true
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt
