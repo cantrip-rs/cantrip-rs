@@ -1,0 +1,57 @@
+# Repeat Offender's "{2}{B}: If this creature is suspected, put a +1/+1 counter on it. Otherwise, suspect it." is judged as it resolves
+# (CR 701.60a): Bot1 activates it on turn 3 and Bot2 answers with Lightning Bolt, killing the 2/1 first. The ability then resolves
+# with its source gone (CR 400.7): nothing is suspected and nothing is put anywhere, and the Offender is in the graveyard.
+# (The control, the ability resolving with the Offender still there, is
+# repeat-offender-suspects-itself-first-and-then-grows-a-counter-each-time-for-exactly-two-and-black.)
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Repeat Offender
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Repeat Offender.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Repeat Offender.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Repeat Offender)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Repeat Offender = (absent)
+Bot1.Graveyard = Repeat Offender
+Stack.Count = 0

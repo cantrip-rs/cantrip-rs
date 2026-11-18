@@ -1,0 +1,67 @@
+# Repeat Offender ({2}{B}): "If this creature is suspected, put a +1/+1 counter on it. Otherwise, suspect it." (CR 701.60a). Bot1 casts the 2/1 with Mox Jet and Mox Pearl, and with only Mox Emerald, Mox Ruby and Mox Sapphire to pay the ability has no black source and is refused; a second Mox Jet makes it affordable and the pool is empty right after, so exactly {2}{B} was taken. The first resolution suspects it (menace, can't block, still 2/1, no counter); on turn 3 two more activations each put one counter on it, 4/3 and still suspected.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Repeat Offender
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Repeat Offender.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+! Bot1.Battlefield.Repeat Offender.Activate(Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+! Bot1.Battlefield.Repeat Offender.Activate(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Repeat Offender.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Repeat Offender.Keywords = CantBlock; Menace
+? Bot1.Battlefield.Repeat Offender.Power = 2
+? Bot1.Battlefield.Repeat Offender.Toughness = 1
+? Bot1.Battlefield.Repeat Offender.Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Repeat Offender.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Repeat Offender.Power = 3
+Bot1.Battlefield.Repeat Offender.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Repeat Offender.Power = 4
+Bot1.Battlefield.Repeat Offender.Toughness = 3
+Bot1.Battlefield.Repeat Offender.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Repeat Offender.Keywords = CantBlock; Menace
