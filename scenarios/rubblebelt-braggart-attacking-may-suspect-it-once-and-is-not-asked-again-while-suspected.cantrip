@@ -1,0 +1,46 @@
+# Rubblebelt Braggart ({4}{R} 5/5): "Whenever this creature attacks, if it's not suspected, you may suspect it." Bot1 attacks on
+# turn 3 and accepts: it is suspected (menace and can't block, CR 701.60c). On turn 5 it attacks again; it is suspected, so the
+# intervening "if" fails (CR 603.4) and the ability does not trigger: with the stack empty there is nothing to accept.
+
+[Bot1 Deck]
+Mox Ruby x5
+Rubblebelt Braggart
+Mountain x14
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Battlefield.Mox Ruby#5.Activate
+Bot1.Hand.Rubblebelt Braggart.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Rubblebelt Braggart > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Battlefield.Rubblebelt Braggart.Suspected = true
+? Bot1.Battlefield.Rubblebelt Braggart.Keywords = CantBlock; Menace
+[T3 Bot1.Main2]
+[T5 Bot1.Main1]
+Bot1.Attack(Rubblebelt Braggart > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+? Stack.Count = 0
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Rubblebelt Braggart.Suspected = true
+Bot2.Life = 10
