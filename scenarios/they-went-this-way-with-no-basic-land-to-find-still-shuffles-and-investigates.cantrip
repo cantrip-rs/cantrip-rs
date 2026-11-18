@@ -1,0 +1,34 @@
+# "Search your library for a basic land card ... then shuffle. Investigate." (CR 701.23b, 701.24, 701.16a): the library has no basic land card (Tropical Island is not basic), so
+# nothing is found, but the library is still shuffled and Bot1 still investigates: the second sentence does not depend on the first.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+They Went This Way
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Tropical Island
+Lightning Bolt x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.They Went This Way.Cast
+Bot1.Search()
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Clue Token.Token = true
+Bot1.Shuffles = 1
+Bot1.Library.Count = 13
+Bot1.Graveyard = They Went This Way

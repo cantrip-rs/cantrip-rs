@@ -1,0 +1,34 @@
+# A search may find fewer cards than it could, even when the library holds a legal one: Bot1 finds nothing though Islands are in the library
+# (CR 701.23b, hidden zone). The Island stays in the library (shuffled), no land enters, and Bot1 still investigates.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+They Went This Way
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.They Went This Way.Cast
+Bot1.Search()
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Clue Token.Token = true
+Bot1.Shuffles = 1
+Bot1.Library.Count = 13
+Bot2.Battlefield.Count = 0
+Bot2.Library.Count = 13
