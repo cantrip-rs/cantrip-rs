@@ -1,0 +1,64 @@
+# Expose the Culprit, mode 1: "Turn target face-down creature face up" (CR 708.8, 701.3, 115.1). Bot2 casts a Riftburst Hellion face
+# down (Black Lotus pays the {3}), a 2/2 with ward {2}; Bot1 casts Expose the Culprit with Mox Ruby and Mox Jet ({1}{R}) choosing that mode
+# alone. A face-up Memnite is not a face-down creature, so it is refused; Bot2's face-down creature is, and it is turned face up free:
+# the Hellion is a 6/7 with Reach again. The face-down creature has ward {2} (CR 702.21a): Mox Pearl and Mox Emerald pay it, the pool is empty after.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Memnite
+Expose the Culprit
+Plains x14
+
+[Bot2 Deck]
+Black Lotus
+Riftburst Hellion
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Riftburst Hellion.Cast(Ability: Disguise)
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield..FaceDown = true
+? Bot2.Battlefield..Power = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Expose the Culprit.Cast
+Bot1.Modes(1)
+! Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot2.Battlefield.#1)
+Bot1.PayCost
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Riftburst Hellion.Power = 6
+Bot2.Battlefield.Riftburst Hellion.Toughness = 7
+Bot2.Battlefield.Riftburst Hellion.Keywords = Disguise; Reach
+Bot1.Graveyard = Expose the Culprit
