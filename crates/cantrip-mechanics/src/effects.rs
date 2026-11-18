@@ -218,6 +218,15 @@ pub fn target_creature_gets_and_gains_indestructible<const P: i32, const T: i32>
     Ok(())
 }
 
+/// "Target creature explores" (CR 701.44a): the creature being the ability's first target; nothing if it is no longer a legal
+/// target as the ability resolves (CR 608.2b). The Map token, Lodestone Needle's back face and Miner's Guidewing print it.
+pub fn target_creature_explores(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        crate::explore(g, creature)?;
+    }
+    Ok(())
+}
+
 /// "Target creature gets +`P`/+`T` and gains haste until end of turn" (CR 611.2a, 702.10): one instruction, the creature
 /// being the ability's first target; nothing if it is no longer a legal target as the spell resolves (CR 608.2b). Wild Ride
 /// (+3/+0), Fame (+2/+0) and Kavaron Turbodrone (+1/+1) print it.

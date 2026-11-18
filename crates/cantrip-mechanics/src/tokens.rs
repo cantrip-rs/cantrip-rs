@@ -230,15 +230,6 @@ pub static MUTAGEN: CardDef = CardDef {
     ..token!(Mutagen)
 };
 
-fn explore_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if g.target_legal(item, 0)
-        && let Target::Object(creature) = item.target(0)
-    {
-        crate::explore(g, creature)?;
-    }
-    Ok(())
-}
-
 /// A colorless 1/1 Robot artifact creature token. Ravenous Robots, Mouser Attack! and Mouser Foundry create it. It shares its
 /// name with the 2/2 Robot, a definition of its own.
 pub static ROBOT_1_1: CardDef = CardDef {
@@ -267,7 +258,7 @@ pub static ROBOT_2_2: CardDef = CardDef {
 /// Activate only as a sorcery." (CR 111.10s). Fanatical Offering and Seasoned Dungeoneer make it.
 pub static MAP: CardDef = CardDef {
     types: TypeSet::of(&[CardType::Artifact]),
-    abilities: &[ability(cost("{1}, {T}").and(SACRIFICE_THIS), explore_target, "{1}, {T}, Sacrifice this token: Target creature you control explores. Activate only as a sorcery.")
+    abilities: &[ability(cost("{1}, {T}").and(SACRIFICE_THIS), crate::effects::target_creature_explores, "{1}, {T}, Sacrifice this token: Target creature you control explores. Activate only as a sorcery.")
         .sorcery_speed()
         .targets(&[crate::targets::CREATURE_YOU_CONTROL])],
     text: "{1}, {T}, Sacrifice this token: Target creature you control explores. Activate only as a sorcery.",
