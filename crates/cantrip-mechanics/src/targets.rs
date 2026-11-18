@@ -111,6 +111,13 @@ fn any_target_other_than_those_chosen_filter(q: &dyn Query, asker: &Asker, t: Ta
 pub const ANY_TARGET_OTHER_THAN_THOSE_CHOSEN: TargetSpec = target(any_target_other_than_those_chosen_filter);
 pub const CREATURE: TargetSpec = target(creature_filter);
 
+/// "Target creature that crewed it this turn" (CR 115.1, 702.122c): a creature on the battlefield that was tapped to pay the cost of
+/// this Vehicle's crew ability this turn, asked of the history. Subterranean Schooner and Turtle Van print it.
+pub fn creature_that_crewed_it_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_filter(q, asker, t) && matches!(t, Target::Object(id) if q.history().crewed(asker.source).any(|c| c == id))
+}
+pub const CREATURE_THAT_CREWED_IT: TargetSpec = target(creature_that_crewed_it_filter);
+
 /// "Target creature token" as a filter (CR 115.1, 111.1): a creature permanent on the battlefield that is a token, any controller's.
 /// Hivespine Wolverine and Conduct Electricity print it.
 pub fn creature_token_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {

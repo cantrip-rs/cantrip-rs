@@ -2,12 +2,6 @@ use cantrip_api::*;
 use cantrip_mechanics::{crew::crew, double, targets, triggers::THIS_ATTACKS};
 use cantrip_oracle as oracle;
 
-/// "Target creature that crewed it this turn" (CR 115.1, 702.122c): a creature on the battlefield that was tapped to pay the cost
-/// of this Vehicle's crew ability this turn, asked of the history.
-fn creature_that_crewed_it(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    (targets::CREATURE.filter)(q, asker, t) && matches!(t, Target::Object(id) if q.history().crewed(asker.source).any(|c| c == id))
-}
-
 /// "Put a +1/+1 counter on target creature that crewed it this turn. Then if that creature is a Mutant, Ninja, or Turtle,
 /// double the number of +1/+1 counters on it." (CR 122.1, 701.10e.) The subtypes are read through the Vehicle's words
 /// (CR 612).
@@ -29,7 +23,7 @@ pub static CARD: CardDef = CardDef {
             counter_then_double,
             "Whenever this Vehicle attacks, put a +1/+1 counter on target creature that crewed it this turn. Then if that creature is a Mutant, Ninja, or Turtle, double the number of +1/+1 counters on it.",
         )
-        .targets(&[target(creature_that_crewed_it)]),
+        .targets(&[targets::CREATURE_THAT_CREWED_IT]),
         crew(1, "Crew 1 (Tap any number of creatures you control with total power 1 or more: This Vehicle becomes an artifact creature until end of turn.)"),
     ],
     ..oracle::TURTLE_VAN
