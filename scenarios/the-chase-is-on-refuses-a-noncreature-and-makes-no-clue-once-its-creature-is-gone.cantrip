@@ -1,0 +1,40 @@
+# The Chase Is On targets a creature only (CR 115.1): a Mox Ruby and a player are refused. Bot1 then targets its own Ornithopter
+# and, holding priority, Lightning Bolts it. With its only target gone, the spell does not resolve (CR 608.2b): it goes to the
+# graveyard, nothing gets +3/+0 or first strike, and no Clue is made (its ruling).
+
+[Bot1 Deck]
+Mox Ruby x4
+Ornithopter
+The Chase Is On
+Lightning Bolt
+Mountain x14
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+! Bot1.Hand.The Chase Is On.Cast(Bot1.Battlefield.Mox Ruby#4)
+! Bot1.Hand.The Chase Is On.Cast(Bot2)
+Bot1.Hand.The Chase Is On.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = The Chase Is On; Ornithopter; Lightning Bolt
+Bot1.Battlefield = Mox Ruby; Mox Ruby; Mox Ruby; Mox Ruby
+Stack.Count = 0

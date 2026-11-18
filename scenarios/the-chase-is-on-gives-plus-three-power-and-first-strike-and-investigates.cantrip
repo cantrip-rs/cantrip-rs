@@ -1,0 +1,57 @@
+# The Chase Is On ({2}{R} instant): target creature gets +3/+0 and gains first strike until end of turn. Investigate. Turn 1: on
+# Bot1's own Ornithopter (0/2 flying), the toughness untouched, the pool empty after paying exactly {2}{R}, and a Clue made. Turn 3:
+# on Bot2's creature too, and Bot1 gets a second Clue. The turn after, each Ornithopter is a 0/2 again (CR 514.2).
+
+[Bot1 Deck]
+Mox Ruby x4
+Ornithopter
+The Chase Is On x2
+Mountain x14
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.The Chase Is On.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 3
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = FirstStrike; Flying
+? Bot1.Battlefield.Clue Token.Subtypes = Clue
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.The Chase Is On.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 3
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+? Bot2.Battlefield.Ornithopter.Keywords = FirstStrike; Flying
+? Bot1.Battlefield.Clue Token#2.Subtypes = Clue
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Graveyard.Count = 2
