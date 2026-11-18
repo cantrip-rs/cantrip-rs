@@ -1,0 +1,62 @@
+# Faerie Snoop (Disguise {1}{U/B}{U/B}): cast face down for {3} from a Black Lotus (entering face down is no turning up: the library is
+# untouched), turned face up for exactly {1}{U/B}{U/B} (CR 702.168d, 116.2b): a lone Island (1 mana), an Island and Mox Ruby (2 mana, short
+# one), and Island, Ruby and Mox Pearl (blue, red, white: only one hybrid symbol met) are each refused, then Mox Jet pays the
+# black: blue and black pay the hybrid symbols and the white of the Pearl the generic, so only the Ruby's red stays in the pool (exactly three mana taken). Turning it face up triggers "look at the top
+# two cards": Bot1 takes Ancestral Recall and Lightning Bolt goes to the graveyard (CR 701.20a). Face up it is a 1/4 with flying and the disguise keyword.
+
+[Bot1 Deck]
+Faerie Snoop
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Island
+Island
+Island
+Ancestral Recall
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Faerie Snoop.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+? Bot1.Library.Count = 13
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; Spend: U, B)
+! Bot1.Battlefield.Faerie Snoop.Activate(Ability: disguise cost)
+? Bot1.Mana = {R}
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Ancestral Recall | Lightning Bolt)
+
+[Expect]
+Bot1.Battlefield.Faerie Snoop.Power = 1
+Bot1.Battlefield.Faerie Snoop.Toughness = 4
+Bot1.Battlefield.Faerie Snoop.Keywords = Disguise; Flying
+Bot1.Hand = Island; Island; Ancestral Recall
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Library.Count = 10

@@ -1,0 +1,38 @@
+# Faerie Snoop cast face up for its mana cost {1}{U}{B} (paid with Mox Pearl, Mox Sapphire and Mox Jet): it enters, it is not
+# turned face up, so the ability does not trigger and the library, hand and graveyard are untouched (CR 702.168, 701.20a).
+
+[Bot1 Deck]
+Faerie Snoop
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Island
+Island
+Island
+Ancestral Recall
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Faerie Snoop.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Sapphire; Mox Pearl; Faerie Snoop
+Bot1.Hand = Island; Island; Island
+Bot1.Graveyard.Count = 0
+Bot1.Library.Count = 13

@@ -1,0 +1,11 @@
+{
+  "name": "Faerie Snoop",
+  "manaCost": "{1}{U}{B}",
+  "type": "Creature — Faerie Detective",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Flying\nDisguise {1}{U/B}{U/B} (You may cast this card face down for {3} as a 2/2 creature with ward {2}. Turn it face up any time for its disguise cost.)\nWhen this creature is turned face up, look at the top two cards of your library. Put one into your hand and the other into your graveyard.",
+  "keywords": [
+    "Flying"
+  ]
+}

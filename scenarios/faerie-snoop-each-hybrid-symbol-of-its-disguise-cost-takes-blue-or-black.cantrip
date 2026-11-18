@@ -1,0 +1,71 @@
+# Faerie Snoop (Disguise {1}{U/B}{U/B}): each hybrid symbol is paid with either blue or black (CR 107.4e, 702.168d). One face-down Snoop
+# is turned face up with two blue mana (two Mox Sapphires) and a red generic, the other with two black mana (two Mox Jets) and a red generic.
+# The pool is empty right after each (exactly {1}{U/B}{U/B} taken); a cost with a plain {U} and {B} in place of the hybrid symbols would
+# be refused one of the two times.
+
+[Bot1 Deck]
+Faerie Snoop
+Faerie Snoop
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Ruby
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Faerie Snoop.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; Spend: U, U, R)
+! Bot1.Battlefield.Faerie Snoop.Activate(Ability: disguise cost)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Mox Ruby | Island)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Faerie Snoop.Cast(Ability: Disguise)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; Spend: B, B, R)
+! Bot1.Battlefield.Faerie Snoop.Activate(Ability: disguise cost)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | Island)
+
+[Expect]
+Bot1.Battlefield.Faerie Snoop#1.Power = 1
+Bot1.Battlefield.Faerie Snoop#2.Power = 1
+Bot1.Battlefield.Faerie Snoop#2.Toughness = 4
