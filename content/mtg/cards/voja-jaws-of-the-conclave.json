@@ -1,0 +1,12 @@
+{
+  "name": "Voja, Jaws of the Conclave",
+  "manaCost": "{2}{R}{G}{W}",
+  "type": "Legendary Creature — Wolf",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Vigilance, trample, ward {3}\nWhenever Voja attacks, put X +1/+1 counters on each creature you control, where X is the number of Elves you control. Draw a card for each Wolf you control.",
+  "keywords": [
+    "Vigilance",
+    "Trample"
+  ]
+}

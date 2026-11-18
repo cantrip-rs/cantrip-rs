@@ -1,0 +1,68 @@
+# Voja, Jaws of the Conclave: X is the number of Elves (two Llanowar Elves here, so two counters on each creature) and a single card is drawn - Voja herself is the
+# only Wolf. Trample: Bot2's Ornithopter (0/2) blocks the 7/7 and the other five points of damage go to Bot2.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Emerald
+Mox Jet
+Voja, Jaws of the Conclave
+Llanowar Elves
+Llanowar Elves
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Swamp x20
+
+[Dice]
+1
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Voja, Jaws of the Conclave.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Voja, Jaws of the Conclave.Keywords = Trample; Vigilance
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 0
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Voja, Jaws of the Conclave)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 1
+? Bot1.Battlefield.Voja, Jaws of the Conclave.Power = 7
+? Bot1.Battlefield.Voja, Jaws of the Conclave.Toughness = 7
+? Bot1.Battlefield.Llanowar Elves#1.Power = 3
+? Bot1.Battlefield.Llanowar Elves#2.Power = 3
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Ornithopter > Voja, Jaws of the Conclave)
+[T3 Bot1.Main2]
+? Bot2.Life = 15
+? Bot2.Battlefield.Ornithopter = (absent)
+
+[Expect]
+Bot1.Hand.Count = 1
+Bot2.Life = 15

@@ -1,0 +1,48 @@
+# Voja, Jaws of the Conclave: "Ward {3}". Bot2's Black Lotus makes three red mana: the Lightning Bolt takes one and only two are left for the ward cost, so
+# paying is refused and the Bolt is countered; Voja takes no damage.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Voja, Jaws of the Conclave
+Plains
+Plains x20
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Swamp x20
+
+[Dice]
+1
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Voja, Jaws of the Conclave.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Voja, Jaws of the Conclave)
+Bot2.Pass
+Bot1.Pass
+! Bot2.PayCost
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Battlefield.Voja, Jaws of the Conclave.Damage = 0
