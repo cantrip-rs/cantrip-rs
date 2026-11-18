@@ -1,0 +1,6 @@
+{
+  "name": "Case of the Shattered Pact",
+  "manaCost": "{2}",
+  "type": "Enchantment — Case",
+  "oracleText": "When this Case enters, search your library for a basic land card, reveal it, put it into your hand, then shuffle.\nTo solve — There are five colors among permanents you control. (If unsolved, solve at the beginning of your end step.)\nSolved — At the beginning of combat on your turn, target creature you control gains flying, double strike, and vigilance until end of turn."
+}

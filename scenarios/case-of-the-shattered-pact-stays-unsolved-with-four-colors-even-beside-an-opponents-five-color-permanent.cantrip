@@ -1,0 +1,65 @@
+# Case of the Shattered Pact: "To solve - There are five colors among permanents you control". Bot1 controls a Botanical Brawler (green-white) and a Dimir
+# Spybug (blue-black): four colors, the Case itself colorless. Bot2 controls Q, Your Illustrious Host, all five colors, but those are not permanents Bot1
+# controls. At the beginning of Bot1's end step (turn 3) there are four colors among its permanents: the Case does not trigger, stays unsolved, and so
+# does nothing at the beginning of combat on turn 5.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Case of the Shattered Pact
+Botanical Brawler
+Dimir Spybug
+Island x19
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Q, Your Illustrious Host
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Case of the Shattered Pact.Cast
+Bot1.Search(Island)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Botanical Brawler.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Q, Your Illustrious Host.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dimir Spybug.Cast
+[T3 Bot1.End]
+? Stack.Count = 0
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Case of the Shattered Pact.Solved = (absent)
+[T5 Bot1.BeginCombat]
+? Stack.Count = 0
+? Bot1.Battlefield.Botanical Brawler.Keywords = Trample
+? Bot1.Battlefield.Dimir Spybug.Keywords = Flying; Menace
+[T5 Bot1.End]
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Case of the Shattered Pact.Solved = (absent)

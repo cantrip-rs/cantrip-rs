@@ -1,0 +1,65 @@
+# Case of the Shattered Pact {2}. Enters: "search your library for a basic land card, reveal it, put it into your hand, then shuffle" - Bot1 finds
+# the Forest (not the Ornithopter) and it is revealed. "To solve - There are five colors among permanents you control": Q, Your Illustrious
+# Host ({W}{U}{B}{R}{G}) is all five colors; the Case is colorless. On turn 1 only Q is out, no Case, nothing to solve. On turn 3 the Case enters, and
+# at the end step Q makes five colors: the Case becomes solved (CR 719.3a) with Bot2's Ornithopter beside it counting for nothing. Solved: "At the
+# beginning of combat on your turn, target creature you control gains flying, double strike, and vigilance until end of turn": on turn 4 (Bot2's
+# combat) nothing happens; on turn 5 the trigger targets Q alone (Bot2's Ornithopter is no legal target, so none is asked) and Q has the three keywords at combat and none once the turn is over.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Q, Your Illustrious Host
+Case of the Shattered Pact
+Island
+Forest
+Ornithopter
+Island x9
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Q, Your Illustrious Host.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Case of the Shattered Pact.Cast
+! Bot1.Search(Ornithopter)
+Bot1.Search(Forest)
+? Bot1.Revealed = Forest
+? Bot1.Hand.Count = 2
+[T3 Bot1.End]
+? Bot1.Battlefield.Case of the Shattered Pact.Solved = (absent)
+? Stack.Count = 1
+[T4 Bot2.BeginCombat]
+? Bot1.Battlefield.Case of the Shattered Pact.Solved = true
+? Stack.Count = 0
+? Bot1.Battlefield.Q, Your Illustrious Host.Keywords = (absent)
+[T5 Bot1.BeginCombat]
+? Stack.Count = 1
+[T5 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Q, Your Illustrious Host.Keywords = DoubleStrike; Flying; Vigilance
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+[T5 Bot1.End]
+? Bot1.Battlefield.Q, Your Illustrious Host.Keywords = DoubleStrike; Flying; Vigilance
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Q, Your Illustrious Host.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.Case of the Shattered Pact.Solved = true
