@@ -1,0 +1,61 @@
+# Case of the Trampled Garden: "When this Case enters, distribute two +1/+1 counters among one or two target creatures you
+# control." Turn 1: Bot1 casts one Case (Black Lotus) while it controls no creature: the trigger has no target to choose and is
+# not put on the stack (CR 603.3d). Turn 3: Grizzly Bears. Turn 5: a second Case is cast with Bot2's Llanowar Elves in play too:
+# the Elves are refused as the target, and a share of one is refused for the two counters that must be divided; the two go to
+# the Bears alone, one target being enough (CR 601.2d): 4/4. The first Case put its counters on nothing.
+
+[Bot1 Deck]
+Black Lotus
+Case of the Trampled Garden
+Case of the Trampled Garden
+Grizzly Bears
+Mox Emerald
+Forest
+Forest
+Forest x12
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Case of the Trampled Garden.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Case of the Trampled Garden.Cast
+! Bot1.Divide(Bot2.Battlefield.Llanowar Elves: 2)
+! Bot1.Divide(Grizzly Bears: 1)
+Bot1.Divide(Grizzly Bears: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 2
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot1.Battlefield.Grizzly Bears.Toughness = 4
+Bot2.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = (absent)

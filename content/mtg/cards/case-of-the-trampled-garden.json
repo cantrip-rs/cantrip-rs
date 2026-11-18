@@ -1,0 +1,6 @@
+{
+  "name": "Case of the Trampled Garden",
+  "manaCost": "{2}{G}",
+  "type": "Enchantment — Case",
+  "oracleText": "When this Case enters, distribute two +1/+1 counters among one or two target creatures you control.\nTo solve — Creatures you control have total power 8 or greater. (If unsolved, solve at the beginning of your end step.)\nSolved — Whenever you attack, put a +1/+1 counter on target attacking creature. It gains trample until end of turn."
+}
