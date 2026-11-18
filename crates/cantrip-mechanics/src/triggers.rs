@@ -3186,6 +3186,16 @@ fn this_turned_face_up(_: &dyn Query, source: ObjectId, event: &Event) -> Option
 }
 pub const THIS_TURNED_FACE_UP: Trigger = when(EventMask::TURNED_FACE_UP, this_turned_face_up);
 
+/// "When this creature enters or is turned face up" (CR 603.6a, 116.2b, 708.8): one ability with two events, the source's own zone
+/// change onto the battlefield or its own turning face up, so a creature that enters face up and is never turned up triggers once,
+/// and one cast face down triggers when it is turned up, not when it enters (it has no abilities then, CR 708.2). Culvert Ambusher
+/// and Offender at Large print it. The `listens` mask is `ZONE_CHANGE | TURNED_FACE_UP`.
+fn this_enters_or_turned_face_up(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    this_turned_face_up(q, source, event).or_else(|| this_enters(q, source, event))
+}
+pub const THIS_ENTERS_OR_TURNED_FACE_UP: Trigger =
+    when(EventMask(EventMask::ZONE_CHANGE.0 | EventMask::TURNED_FACE_UP.0), this_enters_or_turned_face_up);
+
 /// "Whenever this creature deals combat damage to a player or planeswalker": one triggering for each player or
 /// planeswalker it dealt damage to (CR 603.2c), judged as the damage is dealt (CR 510.2). Psychic Frog prints it, and Sygg,
 /// Wanderwine Wisdom grants it.
