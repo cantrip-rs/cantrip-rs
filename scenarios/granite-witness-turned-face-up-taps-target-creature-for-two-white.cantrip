@@ -1,0 +1,53 @@
+# Granite Witness (Disguise {W/U}{W/U}), cast face down turn 1 from a Black Lotus. Turn 3: turned face up with two white mana (Mox
+# Pearl and a Plains; a hybrid symbol is paid with either colour, CR 107.4e, 702.168d, and the pool is empty afterwards), "When this
+# creature is turned face up, you may tap or untap target creature" (CR 701.26). Its target is chosen as it goes on the stack: Mox Pearl
+# is no creature and is refused; Grizzly Bears is untapped and chosen, and Tap taps it. Entering face down made no trigger (no target
+# was asked before the turning up).
+
+[Bot1 Deck]
+Granite Witness
+Black Lotus
+Plains
+Mox Pearl
+Mox Emerald
+Grizzly Bears
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Granite Witness.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; Spend: W, W)
+? Bot1.Mana =
+! Bot1.Target(Mox Pearl)
+Bot1.Target(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Tap)
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Tapped = true
+Bot1.Battlefield.Granite Witness.Power = 3
+Bot1.Battlefield.Granite Witness.Toughness = 2
+Bot1.Battlefield.Granite Witness.Keywords = Disguise; Flying; Vigilance

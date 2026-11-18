@@ -1,0 +1,38 @@
+# Granite Witness cast face up for its mana cost {2}{W}{U} (Mox Pearl, Mox Sapphire, Mox Ruby, Mox Emerald): nothing is turned face up,
+# so "When this creature is turned face up" does not trigger. No target is asked (with itself the only creature, a trigger would take it
+# and ask Tap, Untap or Do nothing, leaving a question outstanding). It is a 3/2 with flying and vigilance.
+
+[Bot1 Deck]
+Granite Witness
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Granite Witness.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Sapphire; Mox Ruby; Mox Emerald; Granite Witness
+Bot1.Battlefield.Granite Witness.Tapped = false
+Bot1.Battlefield.Granite Witness.Power = 3
+Bot1.Battlefield.Granite Witness.Keywords = Disguise; Flying; Vigilance

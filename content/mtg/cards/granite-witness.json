@@ -1,0 +1,12 @@
+{
+  "name": "Granite Witness",
+  "manaCost": "{2}{W}{U}",
+  "type": "Artifact Creature — Gargoyle Detective",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying, vigilance\nDisguise {W/U}{W/U} (You may cast this card face down for {3} as a 2/2 creature with ward {2}. Turn it face up any time for its disguise cost.)\nWhen this creature is turned face up, you may tap or untap target creature.",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

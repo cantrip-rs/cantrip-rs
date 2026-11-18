@@ -1,0 +1,43 @@
+# Granite Witness, cast face down turn 1 from a Black Lotus. Turn 3 it attacks face down (a 2/2 without vigilance, so it taps), then
+# after combat is turned face up with two blue mana (Mox Sapphire and an Island pay both hybrid symbols, CR 702.168d). It is the only
+# creature, so "target creature" is itself, chosen as the ability goes on the stack, and Untap untaps it (CR 701.26b). Face up it
+# is a 3/2 flier with vigilance; Bot2 takes the face-down 2 damage.
+
+[Bot1 Deck]
+Granite Witness
+Black Lotus
+Mox Sapphire
+Island
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Granite Witness.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Attack(#1 > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Bot1.Battlefield..Tapped = true
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; Spend: U, U)
+! Bot1.Battlefield.Granite Witness.Activate(Ability: disguise cost)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Untap)
+
+[Expect]
+Bot1.Battlefield.Granite Witness.Tapped = false
+Bot1.Battlefield.Granite Witness.Keywords = Disguise; Flying; Vigilance
+Bot2.Life = 18

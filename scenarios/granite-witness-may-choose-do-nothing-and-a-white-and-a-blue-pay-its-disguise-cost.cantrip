@@ -1,0 +1,38 @@
+# Granite Witness, cast face down turn 1 from a Black Lotus; turned face up turn 3 with one white and one blue mana (Mox Pearl and Mox
+# Sapphire pay one hybrid symbol each, CR 702.168d). It is the only creature, so it targets itself, and "you may" (CR 608.2d) lets the
+# controller pick Do nothing: it stays untapped (Tap would have tapped it, as in the sibling scenario with another creature).
+
+[Bot1 Deck]
+Granite Witness
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Granite Witness.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; Spend: W, U)
+! Bot1.Battlefield.Granite Witness.Activate(Ability: disguise cost)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Do nothing)
+
+[Expect]
+Bot1.Battlefield.Granite Witness.Tapped = false
+Bot1.Battlefield.Granite Witness.Keywords = Disguise; Flying; Vigilance
