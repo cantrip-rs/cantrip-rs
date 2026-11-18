@@ -1,0 +1,63 @@
+# Rune-Brand Juggler: "up to one target creature you control" may be the Juggler itself (CR 701.60a), and "Sacrifice a suspected creature" may then
+# sacrifice it (CR 118.3, 701.21) with the Memnite left alone, as the cost of giving Bot2's Gigantosaurus exactly -5/-5 (CR 611.2a, 613.4c):
+# the 10/10 becomes 5/5 until end of turn and survives. The other scenarios kill an Ornithopter, which can't show the amounts.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Memnite
+Rune-Brand Juggler
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Forest
+Gigantosaurus
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rune-Brand Juggler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Rune-Brand Juggler)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Gigantosaurus.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Rune-Brand Juggler.Activate(Target: Bot2.Battlefield.Gigantosaurus)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield = Memnite; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Rune-Brand Juggler
+Bot2.Battlefield.Gigantosaurus.Power = 5
+Bot2.Battlefield.Gigantosaurus.Toughness = 5

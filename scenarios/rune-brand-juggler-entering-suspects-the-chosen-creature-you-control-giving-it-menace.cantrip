@@ -1,0 +1,30 @@
+# Rune-Brand Juggler: "When this creature enters, suspect up to one target creature you control" (CR 701.60a, 701.60c). Bot1 casts a Memnite
+# and the Juggler ({B}{R}: Mox Jet and Mox Ruby) on turn 1 and chooses the Memnite: it is suspected, so it has menace (and can't block); the
+# Juggler, not chosen, is not suspected.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Memnite
+Rune-Brand Juggler
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rune-Brand Juggler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Suspected = true
+Bot1.Battlefield.Memnite.Keywords = CantBlock; Menace

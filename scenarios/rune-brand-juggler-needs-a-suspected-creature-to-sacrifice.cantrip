@@ -1,0 +1,48 @@
+# Rune-Brand Juggler: the cost is "Sacrifice a suspected creature" (CR 118.3): with the Juggler declining to suspect anything, no creature Bot1
+# controls is suspected, so the ability is refused even with {3}{B}{R} available and Bot2's Ornithopter a legal target; nothing is sacrificed.
+# The sibling scenario, with the Memnite suspected, is the positive control.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Memnite
+Rune-Brand Juggler
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rune-Brand Juggler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Rune-Brand Juggler.Activate(Target: Bot2.Battlefield.Ornithopter)
+
+[Expect]
+Bot1.Battlefield = Memnite; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Rune-Brand Juggler
+Bot2.Battlefield = Ornithopter

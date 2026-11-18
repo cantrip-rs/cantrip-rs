@@ -1,0 +1,8 @@
+{
+  "name": "Rune-Brand Juggler",
+  "manaCost": "{B}{R}",
+  "type": "Creature — Human Shaman",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, suspect up to one target creature you control. (A suspected creature has menace and can't block.)\n{3}{B}{R}, Sacrifice a suspected creature: Target creature gets -5/-5 until end of turn."
+}
