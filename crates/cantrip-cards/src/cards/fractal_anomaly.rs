@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 /// moment and the state-based actions put it into the graveyard (CR 704.5f).
 fn fractal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let x = history::drawn_this_turn(g, item.controller) as i32;
-    tokens::create_fractal_with_counters(g, item.controller, x)?;
+    tokens::create_with_counters(g, item.controller, &tokens::FRACTAL, x)?;
     Ok(())
 }
 

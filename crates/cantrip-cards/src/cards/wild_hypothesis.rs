@@ -6,7 +6,7 @@ use cantrip_oracle as oracle;
 /// token is made, so with X of 0 it is a 0/0 for a moment and the state-based actions put it into the graveyard (CR 704.5f); surveil
 /// is a separate instruction (CR 608.2c).
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create_fractal_with_counters(g, item.controller, item.x as i32)?;
+    tokens::create_with_counters(g, item.controller, &tokens::FRACTAL, item.x as i32)?;
     g.end_sentence();
     effects::surveil(g, item, 2)
 }

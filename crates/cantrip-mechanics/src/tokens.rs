@@ -639,13 +639,14 @@ pub fn create_equal_to_last_known_power(g: &mut dyn Game, item: &StackItem, def:
     Ok(())
 }
 
-/// "Create a 0/0 green and blue Fractal creature token. Put `n` +1/+1 counters on it" (CR 111.1, 122.1, 608.2c): two
-/// instructions, the counters put on every token that was made (a token doubler makes two) all together as one event. With
-/// `n` of 0 nothing is put, and the 0/0 token goes to the graveyard as a state-based action (CR 704.5f). The card file lists
-/// `tokens::FRACTAL` in its `EXTRA`. The tokens made. Additive Evolution, Berta, Wise Extrapolator, Emil, Vastlands Roamer,
-/// Fractal Anomaly, Fractal Tender and Wild Hypothesis print it.
-pub fn create_fractal_with_counters(g: &mut dyn Game, controller: PlayerId, n: i32) -> Result<Vec<ObjectId>, Suspend> {
-    let made = create(g, controller, &FRACTAL, 1)?;
+/// "Create a [0/0 token]. Put `n` +1/+1 counters on it" or "create a [0/0 token], then put `n` +1/+1 counters on it" (CR
+/// 111.1, 122.1, 608.2c): two instructions, the counters put on every token that was made (a token doubler makes two) all
+/// together as one event (CR 101.4). With `n` of 0 nothing is put, and the 0/0 token goes to the graveyard as a state-based
+/// action (CR 704.5f). The card file lists `def` in its `EXTRA`. The tokens made. Additive Evolution, Berta, Wise
+/// Extrapolator, Emil, Vastlands Roamer, Fractal Anomaly, Fractal Tender and Wild Hypothesis print it with
+/// `tokens::FRACTAL`, and Zimone, All-Questioning with Primo, the Indivisible.
+pub fn create_with_counters(g: &mut dyn Game, controller: PlayerId, def: &'static CardDef, n: i32) -> Result<Vec<ObjectId>, Suspend> {
+    let made = create(g, controller, def, 1)?;
     g.end_sentence();
     if n > 0 {
         let puts: Vec<(ObjectId, CounterKind, i32)> = made.iter().map(|&token| (token, CounterKind::PlusOne, n)).collect();

@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 /// lands you control": counted as the ability resolves, the largest set of lands with no name in common (CR 201.2a-b, ruling).
 fn fractal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let x = lands::differently_named_lands(g, item.controller) as i32;
-    tokens::create_fractal_with_counters(g, item.controller, x)?;
+    tokens::create_with_counters(g, item.controller, &tokens::FRACTAL, x)?;
     Ok(())
 }
 

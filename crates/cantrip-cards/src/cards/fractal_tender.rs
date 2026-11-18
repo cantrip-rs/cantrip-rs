@@ -11,7 +11,7 @@ fn you_put_a_counter_on_this_turn(q: &dyn Query, asker: &Asker) -> bool {
 
 /// "Create a 0/0 green and blue Fractal creature token and put three +1/+1 counters on it." (CR 111.1, 122.1)
 fn fractal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create_fractal_with_counters(g, item.controller, 3)?;
+    tokens::create_with_counters(g, item.controller, &tokens::FRACTAL, 3)?;
     Ok(())
 }
 
