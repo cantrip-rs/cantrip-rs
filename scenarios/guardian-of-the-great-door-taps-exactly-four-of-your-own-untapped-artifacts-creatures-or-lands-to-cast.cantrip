@@ -1,0 +1,63 @@
+# Guardian of the Great Door {W}{W}, 4/4 flying: "As an additional cost to cast this spell, tap four untapped artifacts,
+# creatures, and/or lands you control." (CR 601.2b, 118.3) The {W}{W} comes from Mox Pearl and Black Lotus, with plenty to
+# spare, so only the taps matter. Bot1 has an untapped Deafening Silence too, an enchantment, which is none of the three
+# types and so is never among the four. With Mox Jet, Mox Ruby and Mox Sapphire untapped but nothing else tappable of
+# Bot1's (Bot2's Ornithopter and Mox Pearl, already tapped, don't count) the cast is refused: three are one short. Once
+# Bot1 has its own Ornithopter (an artifact creature, summoning sick: tapping it is a cost, not its {T}, CR 302.6) the
+# four may not be an already tapped Mox Pearl or the Deafening Silence, and are the Moxen and the Ornithopter; Bot2's stays
+# untapped. Exactly four are tapped: a Forest played too, which could have been one of them, stays untapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Ornithopter
+Forest
+Deafening Silence
+Guardian of the Great Door
+Plains x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Deafening Silence.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+! Bot1.Hand.Guardian of the Great Door.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Forest.Play
+Bot1.Hand.Guardian of the Great Door.Cast
+! Bot1.Choose(Mox Pearl)
+! Bot1.Choose(Deafening Silence)
+Bot1.Choose(Mox Jet; Mox Ruby; Mox Sapphire; Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Guardian of the Great Door.Power = 4
+Bot1.Battlefield.Guardian of the Great Door.Toughness = 4
+Bot1.Battlefield.Guardian of the Great Door.Keywords = Flying
+Bot1.Battlefield.Forest.Tapped = false
+Bot1.Battlefield.Deafening Silence.Tapped = false
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Mox Sapphire.Tapped = true
+Bot2.Battlefield.Ornithopter.Tapped = false

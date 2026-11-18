@@ -1,0 +1,11 @@
+{
+  "name": "Guardian of the Great Door",
+  "manaCost": "{W}{W}",
+  "type": "Creature — Angel",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "As an additional cost to cast this spell, tap four untapped artifacts, creatures, and/or lands you control.\nFlying",
+  "keywords": [
+    "Flying"
+  ]
+}
