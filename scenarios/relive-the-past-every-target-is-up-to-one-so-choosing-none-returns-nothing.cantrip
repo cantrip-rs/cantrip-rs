@@ -1,0 +1,40 @@
+# Relive the Past: every target is "up to one" (CR 601.2c, 115.1b): with Bot1's sacrificed Black Lotus a legal artifact target, Bot1 chooses none, so the spell resolves and returns nothing
+# (the Lotus stays in the graveyard). The sibling scenarios, which choose it, are the positive controls.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Relive the Past
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Relive the Past.Cast
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 4
+Bot1.Graveyard = Relive the Past; Black Lotus

@@ -1,0 +1,64 @@
+# Relive the Past: "Return up to one target artifact card, up to one target land card, and up to one target non-Aura enchantment card from your graveyard to the
+# battlefield. They are 5/5 Elemental creatures in addition to their other types." (CR 614.12, 205.1b, 613.4b). Bot1's graveyard holds a sacrificed Black Lotus, and a Forest and a
+# Propaganda that Bot2's Chain of Smog made it discard; paying with that Lotus's mana and four Moxen, it returns all three: each is a 5/5 creature and an Elemental, still the
+# artifact, land and enchantment it was (the Forest keeps its Forest type), from the moment it enters. Relive the Past ends in Bot1's graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Forest
+Propaganda
+Relive the Past
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Chain of Smog
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Chain of Smog.Cast(Target: Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Forest; Propaganda)
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Relive the Past.Cast
+Bot1.Target(Bot1.Graveyard.Black Lotus)
+Bot1.Target(Bot1.Graveyard.Forest)
+Bot1.Target(Bot1.Graveyard.Propaganda)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Black Lotus.Types = Artifact; Creature
+Bot1.Battlefield.Black Lotus.Subtypes = Elemental
+Bot1.Battlefield.Black Lotus.Power = 5
+Bot1.Battlefield.Black Lotus.Toughness = 5
+Bot1.Battlefield.Forest.Types = Land; Creature
+Bot1.Battlefield.Forest.Subtypes = Elemental; Forest
+Bot1.Battlefield.Forest.Power = 5
+Bot1.Battlefield.Forest.Toughness = 5
+Bot1.Battlefield.Propaganda.Types = Enchantment; Creature
+Bot1.Battlefield.Propaganda.Subtypes = Elemental
+Bot1.Battlefield.Propaganda.Power = 5
+Bot1.Battlefield.Propaganda.Toughness = 5
+Bot1.Graveyard = Relive the Past

@@ -1,0 +1,60 @@
+# Relive the Past: a card may be chosen for two of the targets and returns once (CR 115.3, 608.2c): Bot1's Darksteel Citadel, an artifact land discarded to Bot2's Chain of Smog, is the
+# artifact card and the land card at once, alongside a Propaganda for the enchantment. The Citadel returns a single time as a 5/5 Elemental creature that is still an artifact and a land
+# (it is not made a second permanent), and so does the Propaganda.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Propaganda
+Darksteel Citadel
+Relive the Past
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Chain of Smog
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Chain of Smog.Cast(Target: Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Darksteel Citadel; Propaganda)
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Relive the Past.Cast
+Bot1.Target(Bot1.Graveyard.Darksteel Citadel)
+Bot1.Target(Bot1.Graveyard.Darksteel Citadel)
+Bot1.Target(Bot1.Graveyard.Propaganda)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Propaganda.Types = Enchantment; Creature
+Bot1.Battlefield.Propaganda.Subtypes = Elemental
+Bot1.Battlefield.Propaganda.Power = 5
+Bot1.Battlefield.Propaganda.Toughness = 5
+Bot1.Battlefield.Darksteel Citadel.Types = Artifact; Land; Creature
+Bot1.Battlefield.Darksteel Citadel.Subtypes = Elemental
+Bot1.Battlefield.Darksteel Citadel.Power = 5
+Bot1.Battlefield.Darksteel Citadel.Toughness = 5
+Bot1.Battlefield.Count = 6
+Bot1.Graveyard = Relive the Past; Black Lotus

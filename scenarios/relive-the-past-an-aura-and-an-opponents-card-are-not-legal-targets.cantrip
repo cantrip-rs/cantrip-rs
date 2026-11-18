@@ -1,0 +1,60 @@
+# Relive the Past: "up to one target non-Aura enchantment card" (CR 115.1, 205.3) from "your graveyard" (CR 404.1). Bot1's graveyard holds a sacrificed Black Lotus, and a Pacifism (an Aura) and a
+# Propaganda that Bot2's Chain of Smog made it discard; Bot2's own graveyard holds its own Black Lotus. Bot2's Lotus is refused as the artifact target and the Pacifism as the enchantment target, in
+# the same prompts that accept Bot1's Lotus and the Propaganda. It has no land card, so that target is not asked; the Lotus and the Propaganda return as 5/5 Elemental creatures, the Pacifism stays.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Propaganda
+Pacifism
+Relive the Past
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Chain of Smog
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Chain of Smog.Cast(Target: Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Pacifism; Propaganda)
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Relive the Past.Cast
+! Bot1.Target(Bot2.Graveyard.Black Lotus)
+Bot1.Target(Bot1.Graveyard.Black Lotus)
+! Bot1.Target(Bot1.Graveyard.Pacifism)
+Bot1.Target(Bot1.Graveyard.Propaganda)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Black Lotus.Types = Artifact; Creature
+Bot1.Battlefield.Black Lotus.Subtypes = Elemental
+Bot1.Battlefield.Black Lotus.Power = 5
+Bot1.Battlefield.Black Lotus.Toughness = 5
+Bot1.Battlefield.Propaganda.Types = Enchantment; Creature
+Bot1.Battlefield.Propaganda.Subtypes = Elemental
+Bot1.Battlefield.Propaganda.Power = 5
+Bot1.Battlefield.Propaganda.Toughness = 5
+Bot1.Graveyard = Relive the Past; Pacifism
