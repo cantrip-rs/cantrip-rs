@@ -1,0 +1,56 @@
+# Undercover Crocodelf (Disguise {3}{G/U}{G/U}): cast face down for {3} it is a 2/2 with none of its abilities, so its 2 damage to Bot2 on turn 3
+# investigates nothing. It is then turned face up for its disguise cost, the two hybrid symbols paid with one green and one blue mana, and
+# on turn 5 it deals 5 combat damage to a player as itself and Bot1 gets a Clue.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Jet
+Mox Jet
+Undercover Crocodelf
+Plains x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Undercover Crocodelf.Cast(Ability: Disguise)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T3 Bot1.Main1]
+? Bot1.Battlefield..Power = 2
+Bot1.Attack(#1 > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; Spend: G, U)
+! Bot1.Battlefield.Undercover Crocodelf.Activate(Ability: disguise cost)
+? Bot1.Mana =
+? Bot1.Battlefield.Undercover Crocodelf.Power = 5
+[T5 Bot1.Main1]
+Bot1.Attack(Undercover Crocodelf > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+? Bot2.Life = 13
+? Bot1.Battlefield.Count = 7
+
+[Expect]
+Bot1.Battlefield.Clue Token.Token = true
