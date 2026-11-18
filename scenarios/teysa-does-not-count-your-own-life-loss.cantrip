@@ -1,0 +1,39 @@
+# "Each opponent who lost life": Bot1's own life loss does not count. Bot1 bolts itself (to 17) with Mox Ruby's mana before its
+# end step; no opponent lost life, so there is no Clue. Bot2's end step is not Bot1's: when Bot2 bolts itself on turn 2 Teysa
+# still makes nothing.
+
+[Bot1 Deck]
+Teysa, Opulent Oligarch
+Mox Pearl
+Mox Jet
+Mox Ruby
+Lightning Bolt
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Teysa, Opulent Oligarch.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+[T2 Bot2.Main1]
+? Bot1.Life = 17
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2)
+[T3 Bot1.Upkeep]
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 17
+Bot1.Battlefield = Plains; Mox Pearl; Mox Jet; Mox Ruby; Teysa, Opulent Oligarch

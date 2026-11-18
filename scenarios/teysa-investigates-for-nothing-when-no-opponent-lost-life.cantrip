@@ -1,0 +1,25 @@
+# Teysa's end-step investigation counts "each opponent who lost life this turn": with no life lost by anyone as Bot1's end step
+# begins there is nothing to investigate for, and no Clue is created.
+
+[Bot1 Deck]
+Teysa, Opulent Oligarch
+Mox Pearl
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Teysa, Opulent Oligarch.Cast
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Battlefield = Plains; Mox Pearl; Mox Jet; Teysa, Opulent Oligarch
+Bot2.Life = 20

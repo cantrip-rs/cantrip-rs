@@ -1,0 +1,37 @@
+# In a three-player game Bot1 bolts Bot2 twice (to 14) and Bot3 not at all: one opponent lost life, so one Clue, however often
+# that opponent lost it (CR 119.3). Black Lotus's red mana pays both Bolts, Plains + Mox Pearl + Mox Jet pay Teysa.
+
+[Bot1 Deck]
+Teysa, Opulent Oligarch
+Mox Pearl
+Mox Jet
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Plains
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Teysa, Opulent Oligarch.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot2.Life = 14
+Bot3.Life = 20
+Bot1.Battlefield = Plains; Mox Pearl; Mox Jet; Teysa, Opulent Oligarch; Clue Token

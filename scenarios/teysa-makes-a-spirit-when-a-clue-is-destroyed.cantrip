@@ -1,0 +1,38 @@
+# A Clue destroyed on the battlefield (Disenchant, turn 2) is put into its controller's graveyard from the battlefield just as a sacrificed one is: Teysa makes the Spirit.
+
+[Bot1 Deck]
+Teysa, Opulent Oligarch
+Mox Pearl
+Mox Jet
+Mox Ruby
+Lightning Bolt
+Plains
+Plains x19
+
+[Bot2 Deck]
+Disenchant
+Mox Pearl
+Plains
+Plains x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Teysa, Opulent Oligarch.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Clue Token)
+[T3 Bot1.Upkeep]
+
+[Expect]
+Bot1.Battlefield = Plains; Mox Pearl; Mox Jet; Mox Ruby; Teysa, Opulent Oligarch; Spirit Token

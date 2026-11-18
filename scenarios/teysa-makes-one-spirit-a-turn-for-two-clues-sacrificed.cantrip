@@ -1,0 +1,44 @@
+# "This ability triggers only once each turn." Three players: Bot1 bolts Bot2 and Bot3 and ends turn 1 with two Clues. On its next
+# turn (turn 4) Bot1 sacrifices both, each for {2}: two Clues are put into a graveyard from the battlefield, but the ability
+# triggers for the first only, so one Spirit.
+
+[Bot1 Deck]
+Teysa, Opulent Oligarch
+Mox Pearl
+Mox Jet
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Plains
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Teysa, Opulent Oligarch.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Lightning Bolt.Cast(Bot3)
+[T4 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Clue Token.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Clue Token.Activate
+[T4 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Plains; Plains; Mox Pearl; Mox Jet; Teysa, Opulent Oligarch; Spirit Token

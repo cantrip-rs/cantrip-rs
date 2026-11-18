@@ -1,0 +1,45 @@
+# "A Clue you control": Bot2's Clue (from Thraben Inspector) sacrificed on turn 2 is not Bot1's, so Bot1's Teysa makes nothing,
+# and Bot2 has no Teysa either. Bot1's own Clue (turn 1) is still there afterwards.
+
+[Bot1 Deck]
+Teysa, Opulent Oligarch
+Mox Pearl
+Mox Jet
+Mox Ruby
+Lightning Bolt
+Plains
+Plains x19
+
+[Bot2 Deck]
+Thraben Inspector
+Mox Pearl
+Mox Jet
+Plains
+Plains x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Teysa, Opulent Oligarch.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Thraben Inspector.Cast
+[T2 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Clue Token.Activate
+[T3 Bot1.Upkeep]
+
+[Expect]
+Bot1.Battlefield = Plains; Mox Pearl; Mox Jet; Mox Ruby; Teysa, Opulent Oligarch; Clue Token
+Bot2.Battlefield = Plains; Mox Pearl; Mox Jet; Thraben Inspector

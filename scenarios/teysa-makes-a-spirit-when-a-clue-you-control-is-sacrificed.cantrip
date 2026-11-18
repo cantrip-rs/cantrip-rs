@@ -1,0 +1,43 @@
+# "Whenever a Clue you control is put into a graveyard from the battlefield, create a 1/1 white and black Spirit creature token
+# with flying." Turn 1 ends with Bot1's Clue (an opponent lost life to the Bolt). On turn 3 Bot1 pays {2} and sacrifices it to draw
+# a card: it goes to the graveyard from the battlefield and Teysa's trigger makes the Spirit, a 1/1 white and black flier.
+
+[Bot1 Deck]
+Teysa, Opulent Oligarch
+Mox Pearl
+Mox Jet
+Mox Ruby
+Lightning Bolt
+Plains
+Plains
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Teysa, Opulent Oligarch.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Clue Token.Types = Artifact
+? Bot1.Battlefield.Spirit Token = (absent)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Clue Token.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Clue Token = (absent)
+Bot1.Battlefield.Spirit Token.Power = 1
+Bot1.Battlefield.Spirit Token.Toughness = 1
+Bot1.Battlefield.Spirit Token.Colors = Black; White
+Bot1.Battlefield.Spirit Token.Keywords = Flying
