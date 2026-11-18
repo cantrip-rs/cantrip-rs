@@ -1,0 +1,49 @@
+# Get a Leg Up, {G} instant: "Until end of turn, target creature gets +1/+1 for each creature you control and gains reach" (CR 611.2a,
+# 608.2h, 702.17). Bot1 controls two creatures (Llanowar Elves and Fyndhorn Elves) and targets Bot2's Llanowar Elves, the only creature
+# Bot2 controls: the count is Bot1's creatures, not the target's controller's, so it is a 3/3 with reach (+2/+2), and a plain 1/1 on turn 5.
+# Bot2's creature is untouched by the count (it would be a 2/2 if only its controller's creatures were counted).
+
+[Bot1 Deck]
+Get a Leg Up
+Mox Emerald
+Llanowar Elves
+Fyndhorn Elves
+Forest x22
+
+[Bot2 Deck]
+Llanowar Elves
+Forest x3
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Fyndhorn Elves.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Get a Leg Up.Cast(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Llanowar Elves.Power = 3
+? Bot2.Battlefield.Llanowar Elves.Toughness = 3
+? Bot2.Battlefield.Llanowar Elves.Keywords = Reach
+? Bot1.Battlefield.Llanowar Elves.Power = 1
+? Bot1.Battlefield.Llanowar Elves.Keywords = (absent)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Power = 1
+Bot2.Battlefield.Llanowar Elves.Toughness = 1
+Bot2.Battlefield.Llanowar Elves.Keywords = (absent)
