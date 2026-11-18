@@ -1,0 +1,52 @@
+# Disguise {2}{R}: cast face down for {3} (a Black Lotus pays) it is a 2/2 creature, and turned face up for {2}{R} (Mox Ruby, Mox
+# Jet, Mox Pearl) it is an Equipment, no longer a creature. "When this Equipment is turned face up, attach it to target creature
+# you control" (CR 708.8, 701.3): the Memnite is chosen over the Ornithopter, Bot2's Ornithopter and the Equipment itself (no
+# creature any more) are refused, and the Memnite is 4/1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Concealed Weapon
+Memnite
+Ornithopter
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Concealed Weapon.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield.Memnite.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+! Bot1.Target(Bot1.Battlefield.Concealed Weapon)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 4
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Concealed Weapon.Types = Artifact
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 4
