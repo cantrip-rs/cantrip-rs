@@ -1,0 +1,38 @@
+# Kaya, Spirits' Justice's +2: "Surveil 2, then exile a card from a graveyard." (CR 701.25, 608.2c) The surveil finishes first: it looks at
+# Mox Sapphire and Mox Ruby (the top two), puts Mox Sapphire into the graveyard and keeps Mox Ruby on top, and only then does Bot1 choose which
+# card in any graveyard to exile: the Mox Sapphire that was just put there (Black Lotus, in the graveyard too, stays). Loyalty 3 -> 5.
+
+[Bot1 Deck]
+Kaya, Spirits' Justice
+Black Lotus
+Mox Pearl
+Island x4
+Mox Sapphire
+Mox Ruby
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kaya, Spirits' Justice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Kaya, Spirits' Justice.Activate(Ability: +2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Mox Ruby | Mox Sapphire)
+Bot1.Choose(Mox Sapphire)
+
+[Expect]
+Bot1.Battlefield.Kaya, Spirits' Justice.Counters.Loyalty = 5
+Bot1.Graveyard = Black Lotus
+Exile = Mox Sapphire
+Bot1.Library.Count = 13
+Stack.Count = 0

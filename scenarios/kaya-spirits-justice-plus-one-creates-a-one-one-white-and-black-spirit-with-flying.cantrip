@@ -1,0 +1,37 @@
+# Kaya, Spirits' Justice's +1: "Create a 1/1 white and black Spirit creature token with flying." (CR 111.1, 111.4, 606.4) Black Lotus (black)
+# and Mox Pearl (white) pay for Kaya's {2}{W}{B}; the +1 raises her loyalty from 3 to 4 and makes one token.
+
+[Bot1 Deck]
+Kaya, Spirits' Justice
+Black Lotus
+Mox Pearl
+Island x4
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kaya, Spirits' Justice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Kaya, Spirits' Justice.Activate(Ability: +1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Kaya, Spirits' Justice.Counters.Loyalty = 4
+Bot1.Battlefield.Spirit Token.Token = true
+Bot1.Battlefield.Spirit Token.Colors = Black; White
+Bot1.Battlefield.Spirit Token.Subtypes = Spirit
+Bot1.Battlefield.Spirit Token.Keywords = Flying
+Bot1.Battlefield.Spirit Token.Power = 1
+Bot1.Battlefield.Spirit Token.Toughness = 1
+Bot1.Battlefield.Count = 3
+Stack.Count = 0

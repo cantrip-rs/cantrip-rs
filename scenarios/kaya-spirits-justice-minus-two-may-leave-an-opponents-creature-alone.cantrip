@@ -1,0 +1,44 @@
+# Kaya, Spirits' Justice's -2 exiles "up to one target creature that player controls" for each other player (CR 601.2c, 115.1d): none may be
+# chosen. Bot1 exiles its own Memnite and chooses no creature of Bot2 (Target() with nothing named), so Bot2's Ornithopter stays.
+
+[Bot1 Deck]
+Kaya, Spirits' Justice
+Black Lotus
+Mox Pearl
+Memnite
+Island x3
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kaya, Spirits' Justice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Kaya, Spirits' Justice.Activate(Ability: Exile target creature you control)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Memnite
+Bot2.Battlefield = Ornithopter
+Bot1.Battlefield.Kaya, Spirits' Justice.Counters.Loyalty = 1
+Stack.Count = 0

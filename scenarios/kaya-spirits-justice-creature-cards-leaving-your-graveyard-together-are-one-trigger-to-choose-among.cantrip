@@ -1,0 +1,57 @@
+# Kaya, Spirits' Justice's first ability is "one or more" (CR 603.2c): the creature cards exiled together are one batch and one trigger, and
+# the choice "from among them" is made among all of them. On turn 3 the +2 surveils Hill Giant and Memnite into the graveyard and exiles Black
+# Lotus (not a creature card: no trigger). Tormod's Crypt then exiles the whole graveyard (it sacrificed itself to do it: it is exiled too),
+# Hill Giant and Memnite together: one trigger, Bot1 picks Hill Giant out of the two, and the Spirit token becomes a flying Hill Giant.
+
+[Bot1 Deck]
+Kaya, Spirits' Justice
+Black Lotus
+Mox Pearl
+Tormod's Crypt
+Island x3
+Island
+Hill Giant
+Memnite
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kaya, Spirits' Justice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Kaya, Spirits' Justice.Activate(Ability: +1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Kaya, Spirits' Justice.Activate(Ability: +2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Hill Giant; Memnite)
+Bot1.Choose(Black Lotus)
+! Bot1.Choose
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Black Lotus)
+! Bot1.Choose(Hill Giant; Memnite)
+Bot1.Choose(Hill Giant)
+
+[Expect]
+Exile = Black Lotus; Hill Giant; Memnite; Tormod's Crypt
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Hill Giant.Token = true
+Bot1.Battlefield.Hill Giant.Keywords = Flying
+Bot1.Battlefield.Hill Giant.Power = 3
+Stack.Count = 0

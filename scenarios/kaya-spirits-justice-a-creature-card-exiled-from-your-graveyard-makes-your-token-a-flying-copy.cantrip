@@ -1,0 +1,51 @@
+# Kaya, Spirits' Justice's first ability (CR 603.2, 707.2, 707.9a, 611.2): a creature card in Bot1's graveyard put into exile triggers it.
+# Turn 1 the +1 makes a Spirit token; on turn 3 the +2 surveils Hill Giant into the graveyard (Mox Ruby kept on top) and exiles it from there,
+# so Bot1 may choose Hill Giant from among the exiled cards and the Spirit token becomes a copy of it, 3/3 red with flying though Hill Giant has
+# none, until end of turn (the copy is of the card, not of its name only: its characteristics are the printed ones). At the end step it is a
+# 1/1 white and black Spirit again.
+
+[Bot1 Deck]
+Kaya, Spirits' Justice
+Black Lotus
+Mox Pearl
+Island x4
+Island
+Hill Giant
+Mox Ruby
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kaya, Spirits' Justice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Kaya, Spirits' Justice.Activate(Ability: +1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Kaya, Spirits' Justice.Activate(Ability: +2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Mox Ruby | Hill Giant)
+Bot1.Choose(Hill Giant)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hill Giant)
+
+[Expect]
+Exile = Hill Giant
+Bot1.Battlefield.Hill Giant.Token = true
+Bot1.Battlefield.Hill Giant.Power = 3
+Bot1.Battlefield.Hill Giant.Toughness = 3
+Bot1.Battlefield.Hill Giant.Colors = Red
+Bot1.Battlefield.Hill Giant.Keywords = Flying
+Bot1.Battlefield.Hill Giant.Subtypes = Giant
+Stack.Count = 0

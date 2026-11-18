@@ -1,0 +1,55 @@
+# Kaya, Spirits' Justice's first ability has a single target, the token (CR 608.2b): if it is no longer a legal target as the ability resolves,
+# the ability does not resolve at all, so Bot1 is never asked to choose a card. Memnite is exiled by the -2 on turn 3 and the ability targets the
+# Spirit token; in response Bot2's Lightning Bolt kills the Spirit token. No Memnite appears.
+
+[Bot1 Deck]
+Kaya, Spirits' Justice
+Black Lotus
+Mox Pearl
+Memnite
+Island x3
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kaya, Spirits' Justice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Kaya, Spirits' Justice.Activate(Ability: +1)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Kaya, Spirits' Justice.Activate(Ability: Exile target creature you control)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Spirit Token)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Memnite
+Bot1.Battlefield.Count = 2
+Bot1.Battlefield.Kaya, Spirits' Justice.Counters.Loyalty = 2
+Stack.Count = 0

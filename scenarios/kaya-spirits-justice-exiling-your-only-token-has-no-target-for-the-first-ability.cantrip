@@ -1,0 +1,37 @@
+# Kaya, Spirits' Justice's first ability needs "target token you control" (CR 603.3d): exiling the Spirit token, the only token Bot1 has, with
+# the -2 leaves it no target, so the ability is removed from the stack (nothing is chosen, nothing asked). Loyalty 4 -> 2.
+
+[Bot1 Deck]
+Kaya, Spirits' Justice
+Black Lotus
+Mox Pearl
+Island x4
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kaya, Spirits' Justice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Kaya, Spirits' Justice.Activate(Ability: +1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Kaya, Spirits' Justice.Activate(Ability: Exile target creature you control)
+Bot1.Target(Bot1.Battlefield.Spirit Token)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Stack.Count = 0
+Bot1.Battlefield.Kaya, Spirits' Justice.Counters.Loyalty = 2
+Bot1.Battlefield.Count = 2

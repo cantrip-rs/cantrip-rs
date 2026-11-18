@@ -1,0 +1,49 @@
+# Kaya, Spirits' Justice's first ability triggers for any creature you control put into exile, a token too (CR 603.2, 700.4), but "a creature
+# card from among them" is a card (CR 108.2, 111.1): a token that went to exile is none, so there is nothing to choose and nothing to copy. Dragon
+# Fodder makes two Goblin tokens on turn 3; the -2 exiles one; the ability triggers with the other as its target, Bot1 is asked for no card, and
+# the remaining Goblin token is unchanged, the exiled one having ceased to exist (CR 111.7).
+
+[Bot1 Deck]
+Kaya, Spirits' Justice
+Black Lotus
+Mox Pearl
+Mox Ruby
+Dragon Fodder
+Island x2
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kaya, Spirits' Justice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Kaya, Spirits' Justice.Activate(Ability: Exile target creature you control)
+Bot1.Target(Bot1.Battlefield.Goblin Token#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Goblin Token.Token = true
+Bot1.Battlefield.Goblin Token.Power = 1
+Bot1.Battlefield.Goblin Token.Colors = Red
+Bot1.Battlefield.Kaya, Spirits' Justice.Counters.Loyalty = 1
+Stack.Count = 0

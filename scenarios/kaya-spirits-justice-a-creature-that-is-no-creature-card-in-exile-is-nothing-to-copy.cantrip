@@ -1,0 +1,48 @@
+# Kaya, Spirits' Justice's first ability lets you choose "a creature card from among them" (CR 700.4, 108.2): a card is a creature card by what
+# it is in exile, not by what it was on the battlefield. Mutavault, animated by Mox Pearl's mana, is a creature you control when the -2 exiles
+# it, so the ability triggers and targets the Spirit token, but Mutavault is a land card in exile: no creature card is among them, nothing
+# is asked, and the token stays a Spirit.
+
+[Bot1 Deck]
+Kaya, Spirits' Justice
+Black Lotus
+Mox Pearl
+Mutavault
+Island x3
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mutavault.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kaya, Spirits' Justice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Kaya, Spirits' Justice.Activate(Ability: +1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mutavault.Activate(Ability: This land becomes)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Kaya, Spirits' Justice.Activate(Ability: Exile target creature you control)
+Bot1.Target(Bot1.Battlefield.Mutavault)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Mutavault
+Bot1.Battlefield.Spirit Token.Colors = Black; White
+Bot1.Battlefield.Spirit Token.Subtypes = Spirit
+Bot1.Battlefield.Kaya, Spirits' Justice.Counters.Loyalty = 2
+Stack.Count = 0

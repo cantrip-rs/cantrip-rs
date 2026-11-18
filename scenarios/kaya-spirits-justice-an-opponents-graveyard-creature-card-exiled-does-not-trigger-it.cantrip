@@ -1,0 +1,57 @@
+# Kaya, Spirits' Justice's first ability is about creature cards in YOUR graveyard (CR 603.2): Bot2's Memnite, killed by its own Lightning Bolt on
+# turn 2, is exiled from Bot2's graveyard by Kaya's +2 on turn 3 and nothing triggers: the Spirit token stays a Spirit with nothing on the stack.
+
+[Bot1 Deck]
+Kaya, Spirits' Justice
+Black Lotus
+Mox Pearl
+Island x4
+Island
+Mox Sapphire
+Mox Ruby
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Lightning Bolt
+Island x4
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kaya, Spirits' Justice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Kaya, Spirits' Justice.Activate(Ability: +1)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Kaya, Spirits' Justice.Activate(Ability: +2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Mox Sapphire; Mox Ruby | )
+Bot1.Choose(Memnite)
+
+[Expect]
+Exile = Memnite
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield.Spirit Token.Subtypes = Spirit
+Bot1.Battlefield.Spirit Token.Colors = Black; White
+Stack.Count = 0

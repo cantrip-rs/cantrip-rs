@@ -1,0 +1,7 @@
+{
+  "name": "Kaya, Spirits' Justice",
+  "manaCost": "{2}{W}{B}",
+  "type": "Legendary Planeswalker — Kaya",
+  "loyalty": 3,
+  "oracleText": "Whenever one or more creatures you control and/or creature cards in your graveyard are put into exile, you may choose a creature card from among them. Until end of turn, target token you control becomes a copy of it, except it has flying.\n+2: Surveil 2, then exile a card from a graveyard.\n+1: Create a 1/1 white and black Spirit creature token with flying.\n−2: Exile target creature you control. For each other player, exile up to one target creature that player controls."
+}
