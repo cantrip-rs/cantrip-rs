@@ -1,0 +1,52 @@
+# Vannifar, Evolved Enigma: "At the beginning of combat on your turn, choose one - Cloak a card from your hand." On turn 3 Bot1 has Grizzly Bears and a Plains
+# in hand (and the Plains drawn that turn) and chooses the Bears: they enter the battlefield face down as a 2/2 creature (CR 701.58a), the Plains stays in hand.
+# Turned face up for their mana cost {1}{G} (CR 701.58c) they are Grizzly Bears again.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Jet
+Vannifar, Evolved Enigma
+Grizzly Bears
+Plains
+Plains x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Dice]
+1
+[Actions]
+? Bot1.Hand.Count = 7
+? Bot1.Hand.Grizzly Bears.Power = 2
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vannifar, Evolved Enigma.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Modes(Cloak a card from your hand.)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears)
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Tapped = false
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Hand.Count = 1
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.#1.Activate(Ability: mana cost)
+! Bot1.Battlefield.Grizzly Bears.Activate(Ability: mana cost)
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2

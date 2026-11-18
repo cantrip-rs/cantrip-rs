@@ -1,0 +1,51 @@
+# Vannifar, Evolved Enigma: a cloaked card is a colorless face-down 2/2 creature (CR 701.58a, 708.2), so the counter mode puts a +1/+1 counter on it.
+# Turn 1: the Grizzly Bears are cloaked from Bot1's hand. Bot2's beginning of combat on turn 2 triggers nothing ("on your turn"). Turn 3: the counter
+# mode makes the face-down creature 3/3, and Vannifar (green and blue) gets no counter.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Jet
+Vannifar, Evolved Enigma
+Grizzly Bears
+Plains
+Plains x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Dice]
+1
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vannifar, Evolved Enigma.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Modes(Cloak a card from your hand.)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears)
+? Bot1.Battlefield..Power = 2
+[T2 Bot2.BeginCombat]
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield.Count = 6
+[T3 Bot1.BeginCombat]
+Bot1.Modes(Put a +1/+1 counter on each colorless creature you control.)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..Power = 3
+? Bot1.Battlefield..Toughness = 3
+? Bot1.Battlefield.Vannifar, Evolved Enigma.Power = 3
+
+[Expect]
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..Power = 3

@@ -1,0 +1,71 @@
+# Vannifar, Evolved Enigma: "Put a +1/+1 counter on each colorless creature you control." Turn 1: Vannifar (green and blue) enters and the mode is
+# chosen with only her in play - she is not colorless, so nothing gets a counter. Turn 3: Bot1 has Memnite and Ornithopter (colorless) and Grizzly Bears
+# (green) in play, and Bot2 an Ornithopter of their own: at the beginning of Bot1's combat only Bot1's two colorless creatures get a counter.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Jet
+Vannifar, Evolved Enigma
+Memnite
+Ornithopter
+Grizzly Bears
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Swamp x20
+
+[Dice]
+1
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vannifar, Evolved Enigma.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Modes(Put a +1/+1 counter on each colorless creature you control.)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vannifar, Evolved Enigma.Power = 3
+? Bot1.Battlefield.Vannifar, Evolved Enigma.Toughness = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+[T3 Bot1.BeginCombat]
+Bot1.Modes(Put a +1/+1 counter on each colorless creature you control.)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Battlefield.Vannifar, Evolved Enigma.Power = 3
+Bot2.Battlefield.Ornithopter.Power = 0
