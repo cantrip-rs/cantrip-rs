@@ -1,0 +1,51 @@
+# Confounding Riddle {2}{U}, first mode: "Look at the top four cards of your library. Put one of them into your hand and the rest into
+# your graveyard" (CR 700.2, 701.20e, 400.3). Exactly one mode is chosen (two, and a third that does not exist, are refused). The top
+# four are Ancestral Recall, Lightning Bolt, Black Lotus and Mox Pearl: two to the hand is refused; Bot1 takes the Lotus and the other
+# three go to the graveyard. The rest of the library is untouched, and so is the other player's.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Confounding Riddle
+Island
+Island
+Island
+Ancestral Recall
+Lightning Bolt
+Black Lotus
+Mox Pearl
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Confounding Riddle.Cast
+! Bot1.Modes(1; 2)
+! Bot1.Modes(2)
+Bot1.Modes(1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Ancestral Recall; Lightning Bolt | Black Lotus; Mox Pearl)
+Bot1.Arrange(Black Lotus | Ancestral Recall; Lightning Bolt; Mox Pearl)
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Black Lotus; Island; Island; Island
+Bot1.Graveyard = Confounding Riddle; Mox Pearl; Lightning Bolt; Ancestral Recall
+Bot1.Library.Count = 10
+Bot2.Library.Count = 13
