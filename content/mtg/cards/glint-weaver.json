@@ -1,0 +1,11 @@
+{
+  "name": "Glint Weaver",
+  "manaCost": "{5}{G}{G}",
+  "type": "Creature — Spider",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Reach\nWhen this creature enters, distribute three +1/+1 counters among one, two, or three target creatures, then you gain life equal to the greatest toughness among creatures you control.",
+  "keywords": [
+    "Reach"
+  ]
+}

@@ -1,0 +1,73 @@
+# Glint Weaver ({5}{G}{G}, reach): "distribute three +1/+1 counters among one, two, or three target creatures" - any creatures, either
+# side's (CR 601.2d). Bot1 puts two on Bot2's Grizzly Bears (a 4/4) and one on its own (a 3/3): a noncreature (Mox Ruby) is refused as a
+# target, and shares that do not add to three (one and one) are refused. "Then you gain life equal to the greatest toughness among
+# creatures you control": Bot1's own greatest is 3 (the Glint Weaver and the Bears), not the opponent's 4, so Bot1 gains 3 (20 to 23).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Glint Weaver
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Glint Weaver.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Divide(Bot1.Battlefield.Mox Ruby: 3)
+! Bot1.Divide(Bot2.Battlefield.Grizzly Bears: 1; Bot1.Battlefield.Grizzly Bears: 1)
+Bot1.Divide(Bot2.Battlefield.Grizzly Bears: 2; Bot1.Battlefield.Grizzly Bears: 1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 23
+Bot2.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 2
+Bot2.Battlefield.Grizzly Bears.Toughness = 4
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Grizzly Bears.Toughness = 3
+Bot1.Battlefield.Glint Weaver.Power = 3
+Bot1.Battlefield.Glint Weaver.Toughness = 3
+Bot1.Battlefield.Glint Weaver.Keywords = Reach
