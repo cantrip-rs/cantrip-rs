@@ -1,0 +1,38 @@
+# Molten Collapse's first mode: "target creature or planeswalker" takes Bot2's Ajani Resolute, a planeswalker, and refuses
+# its Mox Pearl, a noncreature artifact (CR 115.1). Bot1 has not descended, so it chooses that one mode (CR 700.2).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Molten Collapse
+Mountain x4
+Mountain x20
+
+[Bot2 Deck]
+Mox Pearl
+Ajani Resolute
+Plains x5
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Ajani Resolute.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Molten Collapse.Cast
+Bot1.Modes(Destroy target creature)
+! Bot1.Target(Bot2.Battlefield.Mox Pearl)
+Bot1.Target(Bot2.Battlefield.Ajani Resolute)
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Molten Collapse
+Bot2.Graveyard = Ajani Resolute
+Bot2.Battlefield = Mox Pearl; Plains

@@ -1,0 +1,6 @@
+{
+  "name": "Molten Collapse",
+  "manaCost": "{B}{R}",
+  "type": "Sorcery",
+  "oracleText": "Choose one. If you descended this turn, you may choose both instead. (You descended if a permanent card was put into your graveyard from anywhere.)\n• Destroy target creature or planeswalker.\n• Destroy target noncreature, nonland permanent with mana value 1 or less."
+}

@@ -1,0 +1,47 @@
+# Molten Collapse cast the turn Bot1 descended (its Black Lotus, sacrificed for mana, is a permanent card put into its
+# graveyard): it may choose both modes (CR 700.2, 700.11), each with its own target (CR 700.2c). Mode one destroys
+# Bot2's Ornithopter (a creature) and mode two Bot1's own Mox Jet (mana value 0, an own permanent is a legal target).
+# The pool is checked as the cast finishes: Lotus's three black and Mox Ruby's red paid {B}{R}, leaving two black.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Black Lotus
+Molten Collapse
+Ornithopter
+Mountain x2
+Mountain x20
+
+[Bot2 Deck]
+Mox Pearl
+Sol Ring
+Mind Stone
+Ornithopter
+Island x3
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Sol Ring.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Mind Stone.Cast
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Molten Collapse.Cast
+Bot1.Modes(1; 2)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Mox Jet)
+? Bot1.Mana = {B}{B}
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Molten Collapse; Mox Jet; Black Lotus
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield = Mox Pearl; Sol Ring; Mind Stone

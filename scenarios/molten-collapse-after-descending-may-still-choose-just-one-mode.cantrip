@@ -1,0 +1,43 @@
+# Molten Collapse cast the turn Bot1 descended: choosing both is a "may", so choosing only the first mode is allowed
+# (CR 700.2): Bot2's Ornithopter is destroyed and Sol Ring, which the other mode could have destroyed, stays.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Black Lotus
+Molten Collapse
+Ornithopter
+Mountain x2
+Mountain x20
+
+[Bot2 Deck]
+Mox Pearl
+Sol Ring
+Mind Stone
+Ornithopter
+Island x3
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Sol Ring.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Mind Stone.Cast
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Molten Collapse.Cast
+Bot1.Modes(Destroy target creature)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Molten Collapse; Black Lotus
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield = Mox Pearl; Sol Ring; Mind Stone
