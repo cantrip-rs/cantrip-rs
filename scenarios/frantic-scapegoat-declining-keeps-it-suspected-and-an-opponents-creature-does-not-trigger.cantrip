@@ -1,0 +1,46 @@
+# Frantic Scapegoat's second ability is a "may" (CR 603.5) about creatures Bot1 controls. Bot2's Memnite entering is not "other
+# creatures you control": nothing triggers, nothing is asked. Bot1's Memnite does, Bot1 declines, and the Scapegoat is still
+# suspected while the Memnite is not.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Frantic Scapegoat
+Memnite
+Plains x16
+
+[Bot2 Deck]
+Memnite
+Mox Pearl
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Frantic Scapegoat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Frantic Scapegoat.Suspected = true
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot1.Battlefield.Memnite.Suspected = (absent)
+
+[Expect]
+Bot1.Battlefield.Frantic Scapegoat.Suspected = true
+Bot1.Battlefield.Memnite.Suspected = (absent)
