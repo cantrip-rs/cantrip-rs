@@ -1,0 +1,75 @@
+# Audience with Trostani, {2}{G} sorcery: "Create a 0/1 green Plant creature token, then draw cards equal to the number of differently named
+# creature tokens you control" (CR 111.1, 201.2a, 608.2c). Bot1 casts it on turn 1 with three Moxen: the new Plant counts itself, so one name
+# and one card. On turn 3 Bot1 has made a Borg token (Assembly Specialist, itself not a token and not counted) and Bot2 a Knight token (not
+# Bot1's, not counted, Battle Menu), then casts it again: two Plants and a Borg are two names, so two cards (not three tokens' worth).
+
+[Bot1 Deck]
+Audience with Trostani
+Audience with Trostani
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Assembly Specialist
+Forest x25
+
+[Bot2 Deck]
+Battle Menu
+Mox Pearl
+Mox Ruby
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Audience with Trostani.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Plant Token.Power = 0
+? Bot1.Battlefield.Plant Token.Toughness = 1
+? Bot1.Hand.Count = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Battle Menu.Cast
+Bot2.Modes(Attack)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Assembly Specialist.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Audience with Trostani.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Hand.Count = 3
+
+[Expect]
+Bot1.Battlefield.Plant Token#1.Power = 0
+Bot1.Battlefield.Borg Token.Power = 1
+Bot2.Battlefield.Knight Token.Power = 2
+Bot1.Hand.Count = 3

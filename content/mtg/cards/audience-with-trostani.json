@@ -1,0 +1,6 @@
+{
+  "name": "Audience with Trostani",
+  "manaCost": "{2}{G}",
+  "type": "Sorcery",
+  "oracleText": "Create a 0/1 green Plant creature token, then draw cards equal to the number of differently named creature tokens you control."
+}
