@@ -1,0 +1,60 @@
+# Kraul Whipcracker {B}{G} (3/2, reach): "When this creature enters, destroy target token an opponent controls." Each player's
+# Academy Instructor turns each noncreature spell (a free Mox) into an Officer token. The trigger has exactly one legal target, Bot2's Officer token, so it is chosen without a prompt and destroyed; Bot1's two
+# Officer tokens and Bot2's nontoken Academy Instructor are not legal targets and survive (widening the filter would make a
+# target prompt the script does not answer). The Whipcracker stays.
+
+[Bot1 Deck]
+Island
+Black Lotus
+Academy Instructor
+Mox Jet
+Mox Emerald
+Kraul Whipcracker
+Island x14
+
+[Bot2 Deck]
+Island
+Black Lotus
+Academy Instructor
+Mox Jet
+Island x16
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Academy Instructor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Academy Instructor.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Kraul Whipcracker.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Island; Academy Instructor; Mox Jet; Mox Emerald; Kraul Whipcracker; Officer Token; Officer Token
+Bot2.Battlefield = Island; Academy Instructor; Mox Jet
+Bot1.Battlefield.Kraul Whipcracker.Power = 3

@@ -1,0 +1,11 @@
+{
+  "name": "Kraul Whipcracker",
+  "manaCost": "{B}{G}",
+  "type": "Creature — Insect Assassin",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Reach\nWhen this creature enters, destroy target token an opponent controls.",
+  "keywords": [
+    "Reach"
+  ]
+}
