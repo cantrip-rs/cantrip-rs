@@ -1,0 +1,41 @@
+# Wispdrinker Vampire: "power 2 or less" includes exactly 2. Bot1's Grizzly Bears (2/2) entering on turn 3 drains Bot2 for 1 and gains Bot1 1 life.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Wispdrinker Vampire
+Grizzly Bears
+Plains
+Plains x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Dice]
+1
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wispdrinker Vampire.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19

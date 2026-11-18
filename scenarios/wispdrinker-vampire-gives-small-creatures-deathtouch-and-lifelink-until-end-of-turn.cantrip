@@ -1,0 +1,82 @@
+# Wispdrinker Vampire: "{5}{W}{B}: Creatures you control with power 2 or less gain deathtouch and lifelink until end of turn." On turn 5 Bot1 has Wispdrinker (power 2), Hill Giant
+# (power 3) and, after the ability resolves, a Memnite. Wispdrinker gets both abilities, the Hill Giant does not (power 3), a creature of Bot2's does not, and the
+# Memnite that enters afterwards does not. Wispdrinker's lifelink shows in combat (Bot1 gains 2). The effect is gone on turn 6.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Wispdrinker Vampire
+Sol Ring
+Hill Giant
+Memnite
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Swamp x20
+
+[Dice]
+1
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wispdrinker Vampire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Wispdrinker Vampire.Keywords = Flying
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Wispdrinker Vampire.Activate(Ability: {5}{W}{B})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Wispdrinker Vampire.Keywords = Deathtouch; Flying; Lifelink
+? Bot1.Battlefield.Hill Giant.Keywords = (absent)
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Wispdrinker Vampire)
+[T5 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Life = 23
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Wispdrinker Vampire.Keywords = Flying
+
+[Expect]
+Bot1.Battlefield.Hill Giant.Keywords = (absent)

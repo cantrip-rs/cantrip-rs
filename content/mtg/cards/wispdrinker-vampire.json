@@ -1,0 +1,11 @@
+{
+  "name": "Wispdrinker Vampire",
+  "manaCost": "{2}{W}{B}",
+  "type": "Creature — Vampire Rogue",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Flying\nWhenever another creature you control with power 2 or less enters, each opponent loses 1 life and you gain 1 life.\n{5}{W}{B}: Creatures you control with power 2 or less gain deathtouch and lifelink until end of turn.",
+  "keywords": [
+    "Flying"
+  ]
+}
