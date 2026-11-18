@@ -5576,9 +5576,13 @@ pub fn solve(cx: &mut Cx, id: ObjectId) {
 
 /// Suspect a creature (CR 701.60a): a permanent on the battlefield becomes suspected until it leaves the battlefield, an
 /// effect whose layer-6 grant is menace and "This creature can't block" (CR 701.60c). A suspected permanent can't become
-/// suspected again (CR 701.60d), and nothing triggers then.
+/// suspected again (CR 701.60d), and nothing triggers then; nor does one a static ability says can't become suspected (CR
+/// 101.2, `CardDef::suspect_bans`).
 pub fn suspect(cx: &mut Cx, id: ObjectId) {
     if !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield) || Query::is_suspected(cx, id) {
+        return;
+    }
+    if crate::static_rules::cant_become_suspected(cx, cx.cards(), id) {
         return;
     }
     Game::add_effect(cx, id, id, EffectKind::Suspected, Duration::Indefinite);

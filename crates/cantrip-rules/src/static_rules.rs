@@ -1188,6 +1188,13 @@ pub fn cant_be_turned_face_up(q: &dyn Query, cards: &'static CardTable, id: Obje
     any_static(q, cards, |d| d.face_up_bans, |rule, asker| rule(q, asker, id))
 }
 
+/// Whether the permanent `id` can't become suspected (CR 701.60, 101.2): a static ability of a permanent or of an emblem
+/// says so (`CardDef::suspect_bans`: Airtight Alibi's enchanted creature). No ability of `id`'s, so it holds whatever
+/// abilities `id` has lost (CR 613.1f). Asked where a permanent would be suspected (`ops::suspect`).
+pub fn cant_become_suspected(q: &dyn Query, cards: &'static CardTable, id: ObjectId) -> bool {
+    any_static(q, cards, |d| d.suspect_bans, |rule, asker| rule(q, asker, id))
+}
+
 /// Whether the permanent `id` can't be sacrificed (CR 101.2, 701.21a), for any reason and by anyone: it has "this permanent
 /// can't be sacrificed" (`Keyword::CantBeSacrificed`, printed or granted, so losing its abilities ends it), a resolved effect
 /// says so (`EffectKind::CantBeSacrificed`, which it keeps whatever abilities it loses), or a static ability of a permanent or

@@ -3517,6 +3517,14 @@ pub type RegenerationBan = fn(&dyn Query, &Asker, ObjectId) -> bool;
 /// would be turned face up.
 pub type FaceUpBan = fn(&dyn Query, &Asker, ObjectId) -> bool;
 
+/// A static ability that says permanents can't become suspected (CR 701.60, 101.2): true for a permanent that can't be,
+/// judged as it is now. "Can't" beats the instruction to suspect it, so a spell or ability that suspects it does nothing to
+/// it. It is the source's effect, no ability of the permanent, so one that loses its abilities is still under it (CR 613.1f):
+/// Airtight Alibi's "enchanted creature ... can't become suspected" (`cantrip_mechanics::attach::attached_to_it`). A
+/// permanent that is already suspected stays so (`Game::unsuspect` ends that). The core reads it wherever a permanent
+/// would be suspected.
+pub type SuspectBan = fn(&dyn Query, &Asker, ObjectId) -> bool;
+
 /// A static ability that says permanents don't untap during their controllers' untap steps (CR 502.3): true for a permanent
 /// of the active player, judged as it is now, before anything untaps. It is the source's effect, no ability of the
 /// permanent - "doesn't untap" has no "has" (CR 113.1a) - so one that loses its abilities is still under it (CR 613.1f), and
@@ -4214,6 +4222,9 @@ pub struct CardDef {
     /// battlefield with its abilities: Karlov Watchdog's "permanents your opponents control can't be turned face up during
     /// your turn". See `FaceUpBan`.
     pub face_up_bans: &'static [FaceUpBan],
+    /// Its static abilities that say permanents can't become suspected (CR 701.60, 101.2), while it is on the battlefield
+    /// with its abilities: Airtight Alibi's "enchanted creature ... can't become suspected". See `SuspectBan`.
+    pub suspect_bans: &'static [SuspectBan],
     /// Its static abilities that say permanents don't untap during their controllers' untap steps (CR 502.3), while it is on
     /// the battlefield with its abilities. See `UntapBan`.
     pub untap_bans: &'static [UntapBan],
@@ -4476,6 +4487,7 @@ impl CardDef {
         sacrifice_bans: &[],
         regeneration_bans: &[],
         face_up_bans: &[],
+        suspect_bans: &[],
         untap_bans: &[],
         untap_limits: &[],
         skip_steps: &[],

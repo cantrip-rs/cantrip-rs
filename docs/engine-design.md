@@ -641,7 +641,8 @@ searches only the values those players have. An activated ability's defined X is
   (`CardDef::face_up_bans`: Unable to Scream, Karlov Watchdog), read by `static_rules::cant_be_turned_face_up` where the
   special actions are offered (`activated_options`, so the ones `layers::turn_face_up_actions` gives back are vetoed too)
   and in `ops::turn_face_up_as`, which every turning up - special action or instruction - goes through: a banned permanent
-  stays face down, unrevealed.
+  stays face down, unrevealed. "Can't become suspected" (CR 701.60, 101.2) is the same kind of rule
+  (`CardDef::suspect_bans`: Airtight Alibi), read by `static_rules::cant_become_suspected` in `ops::suspect`.
 - **A prototype card cast prototyped (702.160a, 718)** is cast as its prototyped face (`WAY_PROTOTYPE`): the card with only
   the inset frame's mana cost, power and toughness, and the color that mana cost gives (718.3b). The values are the card's
   content (`"prototype": {"manaCost", "power", "toughness"}`, `CardDef::prototype`); the face is made from the card by
