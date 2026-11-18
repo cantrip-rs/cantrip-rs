@@ -1,5 +1,7 @@
 use cantrip_api::*;
-use cantrip_mechanics::{channel, targets, library::{ask_may_search, search_to_battlefield, Find}};
+use cantrip_mechanics::library::{ask_may_search, find_to_battlefield};
+use cantrip_mechanics::select::LAND_WITH_A_BASIC_LAND_TYPE_CARD;
+use cantrip_mechanics::{channel, targets};
 use cantrip_oracle as oracle;
 
 const ASK: Question = Question::new("SearchLibrary", "search your library for a land card with a basic land type?", "It goes onto the battlefield, then you shuffle", "Search", "Don't search");
@@ -23,13 +25,7 @@ fn destroy_and_search(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
     if !ask_may_search(g, player, item.object, &ASK)? {
         return Ok(());
     }
-    search_to_battlefield(g, player, item.object, Find::ONE, false, |q, c| {
-        let chars = q.chars(c);
-        chars.is(CardType::Land)
-            && [Subtype::Plains, Subtype::Island, Subtype::Swamp, Subtype::Mountain, Subtype::Forest]
-                .into_iter()
-                .any(|t| chars.has_subtype(t))
-    })?;
+    find_to_battlefield(g, player, item.object, LAND_WITH_A_BASIC_LAND_TYPE_CARD, false)?;
     Ok(())
 }
 
