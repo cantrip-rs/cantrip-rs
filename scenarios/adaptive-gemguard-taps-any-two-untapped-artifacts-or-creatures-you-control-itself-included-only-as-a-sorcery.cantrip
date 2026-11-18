@@ -1,0 +1,72 @@
+# Adaptive Gemguard {3}{W}, 3/3 artifact creature: "Tap two untapped artifacts and/or creatures you control: Put a +1/+1
+# counter on this creature. Activate only as a sorcery." (CR 602.5d, 118.3) On turn 4, Bot2's turn, it can't be activated
+# although Bot1 has three untapped permanents. On turn 5 three activations tap Mox Pearl and Mox Jet, Mox Ruby and Mox
+# Sapphire (artifacts), then Gemguard itself and a Savannah Lions (a creature that is no artifact): Gemguard is 6/6. Naming
+# three is refused. Only Bot1's Ornithopter and a Plains (a land, neither artifact nor creature) are left untapped, and that is
+# not two, though Bot2's untapped Ornithopter exists:
+# "you control" (CR 118.3).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Savannah Lions
+Ornithopter
+Adaptive Gemguard
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Adaptive Gemguard.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+! Bot1.Battlefield.Adaptive Gemguard.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Adaptive Gemguard.Activate
+! Bot1.Choose(Mox Pearl; Mox Jet; Mox Ruby)
+Bot1.Choose(Mox Pearl; Mox Jet)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Adaptive Gemguard.Activate
+Bot1.Choose(Mox Ruby; Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Adaptive Gemguard.Activate
+Bot1.Choose(Adaptive Gemguard; Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Plains.Play
+! Bot1.Battlefield.Adaptive Gemguard.Activate
+
+[Expect]
+Bot1.Battlefield.Adaptive Gemguard.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Adaptive Gemguard.Power = 6
+Bot1.Battlefield.Adaptive Gemguard.Toughness = 6
+Bot1.Battlefield.Adaptive Gemguard.Tapped = true
+Bot1.Battlefield.Savannah Lions.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot2.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Plains.Tapped = false

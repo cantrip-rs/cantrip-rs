@@ -1,0 +1,8 @@
+{
+  "name": "Adaptive Gemguard",
+  "manaCost": "{3}{W}",
+  "type": "Artifact Creature — Gnome",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Tap two untapped artifacts and/or creatures you control: Put a +1/+1 counter on this creature. Activate only as a sorcery."
+}
