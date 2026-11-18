@@ -1,0 +1,49 @@
+# Expedited Inheritance: Bolt on Bot1's own Aegis Turtle (0/5) deals 3, which the Turtle survives. "Its controller may exile that many
+# cards from the top of their library": Bot1 accepts and the top three (Forest, Island, Island) are exiled, and "they may play those
+# cards": the Forest is played as the turn's land drop from exile (CR 305.1). The remaining two Islands stay exiled, playable
+# until the end of Bot1's next turn.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Expedited Inheritance
+Lightning Bolt
+Mox Sapphire
+Aegis Turtle
+Forest
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aegis Turtle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Expedited Inheritance.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Exile.Count = 3
+? Bot1.Library.Count = 10
+Bot1.Exile.Forest.Play
+
+[Expect]
+Bot1.Battlefield.Count = 7
+Exile.Count = 2

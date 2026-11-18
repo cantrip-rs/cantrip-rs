@@ -1,0 +1,33 @@
+# "Whenever a creature is dealt damage": damage to a player is not damage to a creature, so a Bolt at Bot2's face asks nothing and
+# exiles nothing (a question would leave the scenario's last check unreached).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Expedited Inheritance
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Expedited Inheritance.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Stack.Count = 0
+
+[Expect]
+Exile.Count = 0
+Bot1.Library.Count = 13
