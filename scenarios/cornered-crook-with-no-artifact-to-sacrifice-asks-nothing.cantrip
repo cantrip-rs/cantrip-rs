@@ -1,0 +1,36 @@
+# "You may sacrifice an artifact" (CR 701.21a): the Crook is not an artifact, so with only lands in play there is nothing to
+# sacrifice, no choice is offered and no reflexive trigger is created (CR 603.12). Bot1 casts it from five Mountains on turn 9.
+
+[Bot1 Deck]
+Cornered Crook
+Mountain x26
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Cornered Crook.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 20
+Bot1.Battlefield.Cornered Crook.Damage = 0
