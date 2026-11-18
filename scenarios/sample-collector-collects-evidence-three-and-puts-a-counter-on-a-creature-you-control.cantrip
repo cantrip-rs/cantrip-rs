@@ -1,0 +1,66 @@
+# Sample Collector: "Whenever this creature attacks, you may collect evidence 3. When you do, put a +1/+1 counter on target creature you control." (CR 701.59a, 603.12)
+# Bot1's graveyard is Ancestral Recall, Lightning Bolt (turn 1) and Giant Growth (turn 3): total mana value exactly 3. Two of them (2) are refused, all three are exiled (the evidence),
+# and only then is the reflexive ability's target chosen: Bot2's Ornithopter is refused (it is not Bot1's), Bot1's Memnite is accepted and gets the counter (2/2); the Collector (2/3, +3/+3 from the Growth) is untouched.
+
+[Bot1 Deck]
+Sample Collector
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Ancestral Recall
+Lightning Bolt
+Giant Growth
+Memnite
+Forest x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sample Collector.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Sample Collector)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Giant Growth; Lightning Bolt; Ancestral Recall
+Bot1.Attack(Sample Collector > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Choose(Ancestral Recall; Lightning Bolt)
+Bot1.Choose(Ancestral Recall; Lightning Bolt; Giant Growth)
+! Bot1.Target(Ornithopter)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Ancestral Recall; Lightning Bolt; Giant Growth
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Sample Collector.Power = 5
