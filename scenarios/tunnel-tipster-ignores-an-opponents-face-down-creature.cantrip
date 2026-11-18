@@ -1,0 +1,54 @@
+# Tunnel Tipster: "entered the battlefield under your control" (CR 603.4). On Bot1's turn 3 Bot2 manifests dread at instant speed -
+# Turn Inside Out on its own Llanowar Elves, then Lightning Bolt on them, off Black Lotus - so a face-down creature entered this
+# turn, but under Bot2's control: Bot1's Tipster stays a 1/1 at its end step.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Tunnel Tipster
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Forest
+Black Lotus
+Llanowar Elves
+Turn Inside Out
+Lightning Bolt
+Swamp x2
+Swamp
+Snapcaster Mage
+Swamp x11
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tunnel Tipster.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Turn Inside Out.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+Bot2.Arrange(Snapcaster Mage | Swamp)
+? Bot2.Battlefield..FaceDown = true
+[T3 Bot1.End]
+? Stack.Count = 0
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield.Tunnel Tipster.Power = 1
+Bot1.Battlefield.Tunnel Tipster.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield..FaceDownName = Snapcaster Mage

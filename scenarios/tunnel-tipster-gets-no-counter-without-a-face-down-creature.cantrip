@@ -1,0 +1,34 @@
+# Tunnel Tipster: the end-step trigger needs a face-down creature that entered under your control this turn (CR 603.4). Nothing
+# entered face down on Bot1's turn 3 - only a face-up Hauntwoods Shrieker attacked and Bot1 played no manifest - so the Tipster
+# stays a 1/1 and nothing is put on the stack at the end step. (The Shrieker's own attack trigger is left out: it does not attack.)
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Tunnel Tipster
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tunnel Tipster.Cast
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Tunnel Tipster.Power = 1
+[T3 Bot1.End]
+? Stack.Count = 0
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield.Tunnel Tipster.Power = 1
+Bot1.Battlefield.Tunnel Tipster.Toughness = 1
+Bot1.Battlefield.Tunnel Tipster.Counters.PlusOnePlusOne = (absent)

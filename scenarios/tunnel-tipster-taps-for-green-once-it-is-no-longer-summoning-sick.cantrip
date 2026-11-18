@@ -1,0 +1,33 @@
+# Tunnel Tipster: "{T}: Add {G}." (CR 605.1a, 302.6). Cast on turn 1, the Tipster cannot tap for mana until Bot1 has controlled it
+# continuously since the start of its next turn. On turn 3 it taps for {G} to cast Llanowar Elves, and cannot tap a second time.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Tunnel Tipster
+Llanowar Elves
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tunnel Tipster.Cast
+! Bot1.Battlefield.Tunnel Tipster.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Tunnel Tipster.Activate
+? Bot1.Battlefield.Tunnel Tipster.Tapped = true
+! Bot1.Battlefield.Tunnel Tipster.Activate
+[Expect]
+Turn = 3
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Tunnel Tipster.Tapped = true

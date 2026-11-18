@@ -1,0 +1,54 @@
+# Tunnel Tipster: "At the beginning of your end step, if a face-down creature entered the battlefield under your control this turn,
+# put a +1/+1 counter on this creature." (CR 603.4, 708.2, 708.3). A 1/1 with "{T}: Add {G}".
+#
+# Turn 1: Mox Emerald and Mox Sapphire pay for the Tipster, Black Lotus for Hauntwoods Shrieker. Turn 3 the Shrieker attacks and
+# manifests dread: Snapcaster Mage enters face down under Bot1's control (Lightning Bolt goes to the graveyard). At Bot1's end step
+# the Tipster's condition holds and it becomes a 2/2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Tunnel Tipster
+Hauntwoods Shrieker
+Island
+Island
+Island
+Snapcaster Mage
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tunnel Tipster.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hauntwoods Shrieker.Cast
+Bot2.Pass
+? Bot1.Battlefield.Tunnel Tipster.Power = 1
+? Bot1.Battlefield.Tunnel Tipster.Toughness = 1
+[T3 Bot1.Main1]
+Bot1.Attack(Hauntwoods Shrieker > Bot2)
+Bot1.Arrange(Snapcaster Mage | Lightning Bolt)
+? Bot1.Battlefield..FaceDownName = Snapcaster Mage
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tunnel Tipster.Power = 1
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield.Tunnel Tipster.Power = 2
+Bot1.Battlefield.Tunnel Tipster.Toughness = 2
+Bot1.Battlefield.Tunnel Tipster.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield..FaceDownName = Snapcaster Mage
+Bot1.Graveyard = Lightning Bolt; Black Lotus
