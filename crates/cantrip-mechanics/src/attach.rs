@@ -52,6 +52,13 @@ pub const fn equip_cost(cost: Cost, text: &'static str) -> AbilityDef {
     ability(cost, attach_to_target, text).sorcery_speed().targets(&[targets::CREATURE_YOU_CONTROL]).equip()
 }
 
+/// Equip whose cost is a choice between ways of paying it (CR 702.6a; 601.2b by way of 602.2b): "Equip—Pay {3} or discard a
+/// card" (Bloodthorn Flail) is one equip ability whose [cost] is one of `ways`, chosen as it is activated
+/// (`ActivatedDef::cost_choice`). A way may be mana (`cost("{3}")`), which is part of the total the cost changes meet.
+pub const fn equip_one_of(ways: &'static [ExtraCost], text: &'static str) -> AbilityDef {
+    equip_cost(Cost::NONE, text).pay_one_of(ways)
+}
+
 /// Equip [quality] [cost] (CR 702.6a): "[cost]: Attach this to target [quality] creature you control. Equip only as a sorcery."
 /// `creature` is the one target slot: the creature, its quality and "you control" included. Wrecking Ball Arm's "Equip legendary creature {3}" and
 /// Mjölnir's "Equip worthy {1}" print it.
