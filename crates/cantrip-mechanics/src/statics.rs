@@ -567,6 +567,12 @@ pub fn have_deathtouch(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
     chars.keywords = chars.keywords.with(Keyword::Deathtouch);
 }
 
+/// "... have wither" (CR 702.80a, 613.1f) as a static ability's `StaticDef::apply`: damage the creature deals to a creature
+/// is dealt as -1/-1 counters (CR 120.3d). Massacre Girl, Known Killer prints it.
+pub fn have_wither(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
+    chars.keywords = chars.keywords.with(Keyword::Wither);
+}
+
 /// "... has lifelink" (CR 702.15, layer 6) as a static ability's `StaticDef::apply`. Dáin's Company's Dwarf, Sheltered by Ghosts's
 /// enchanted creature, Lo and Li's Noble creatures and Lesson spells, and Regal Caracal's Cats and Lyra Dawnbringer's Angels (beside their +1/+1) have it.
 pub fn have_lifelink(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
