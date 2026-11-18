@@ -1,0 +1,6 @@
+{
+  "name": "Bloodthorn Flail",
+  "manaCost": "{B}",
+  "type": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +2/+1.\nEquip—Pay {3} or discard a card."
+}

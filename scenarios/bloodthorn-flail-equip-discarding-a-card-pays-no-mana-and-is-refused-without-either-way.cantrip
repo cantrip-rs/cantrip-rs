@@ -1,0 +1,58 @@
+# Bloodthorn Flail: the equip cost is one of two ways, chosen as it is activated (CR 702.6a, 601.2b by way of 602.2b). On
+# turn 1 Bot1 has an empty hand and only two mana floating (Pearl and a Swamp), so neither way can be paid and the equip is
+# not offered. On turn 3 Bot1's drawn Swamp - a land, so any card will do - is a card to discard: with its untapped Moxen
+# and Swamp it could pay {3} instead, but it equips by discarding the Swamp, pays no mana (its pool stays empty and no
+# payment is asked), and the Trader (1/1) becomes 3/2 - only the equipped creature: Bot1's Ornithopter stays 0/2.
+
+[Bot1 Deck]
+Bloodthorn Flail
+Dwarven Trader
+Mox Jet
+Mox Ruby
+Mox Pearl
+Swamp
+Ornithopter
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bloodthorn Flail.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dwarven Trader.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+! Bot1.Battlefield.Bloodthorn Flail.Activate(Mana: short)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Bloodthorn Flail.Activate(Dwarven Trader)
+Bot1.Modes(Discard a card)
+Bot1.Choose(Swamp)
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 0
+Bot1.Graveyard.Count = 1
+Bot1.Graveyard = Swamp
+Bot1.Battlefield.Bloodthorn Flail.AttachedTo = Dwarven Trader
+Bot1.Battlefield.Dwarven Trader.Power = 3
+Bot1.Battlefield.Dwarven Trader.Toughness = 2
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
