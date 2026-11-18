@@ -1,0 +1,6 @@
+{
+  "name": "Might of the Ancestors",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of combat on your turn, target creature you control gets +2/+0 and gains vigilance until end of turn."
+}

@@ -1,0 +1,70 @@
+# Might of the Ancestors: "At the beginning of combat on your turn, target creature you control gets +2/+0 and gains vigilance until end of turn."
+# Turn 1: Bot1 pays exactly {2}{W} with three Moxen and targets its Ornithopter (0/2 flying), not its Memnite (1/1): 2/2 with Flying and Vigilance for the
+# combat (the toughness is the unchanged half), the Memnite unchanged, and the Ornithopter 0/2 flying only again on Bot2's turn (until end of turn).
+# Turn 2's beginning of combat is Bot2's, so nothing triggers. Turn 3: Bot2's Ornithopter is not a legal target ("you control"); Bot1's Memnite is.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Might of the Ancestors
+Ornithopter
+Memnite
+Plains
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Might of the Ancestors.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Vigilance
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.BeginCombat]
+? Stack.Count = 0
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Memnite.Power = 1
+[T3 Bot1.BeginCombat]
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Memnite.Keywords = Vigilance
+? Bot1.Battlefield.Ornithopter.Power = 0
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Keywords = Vigilance
+Bot2.Battlefield.Ornithopter.Power = 0
