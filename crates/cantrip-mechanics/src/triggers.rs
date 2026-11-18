@@ -1838,12 +1838,6 @@ pub fn attached_creature_dies_about_it(q: &dyn Query, source: ObjectId, event: &
     attached_creature_that_died(q, source, event).and_then(|(old, _)| Fired::about(Target::Object(old)))
 }
 
-/// `attached_creature_dies` for an ability about the card now in the graveyard, a new object (CR 400.7): "return that card
-/// to the battlefield". Ferocity of the Hunt prints it.
-pub fn attached_creature_dies_about_the_card(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
-    attached_creature_that_died(q, source, event).and_then(|(_, new)| Fired::about(Target::Object(new)))
-}
-
 /// "When this leaves the battlefield" (CR 603.6c, 603.10a), looked back on whichever zone it goes to. Animate Dead and
 /// Cryogen Relic print it.
 pub fn this_leaves(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
@@ -3015,7 +3009,6 @@ pub const CREATURE_DEALT_DAMAGE_BY_THIS_DIES: Trigger = when_asked(EventMask::ZO
 pub const THIS_ENTERS_OR_DIES: Trigger = when(EventMask::ZONE_CHANGE, this_enters_or_dies);
 pub const ATTACHED_CREATURE_DIES: Trigger = when(EventMask::ZONE_CHANGE, attached_creature_dies);
 pub const ATTACHED_CREATURE_DIES_ABOUT_IT: Trigger = when(EventMask::ZONE_CHANGE, attached_creature_dies_about_it);
-pub const ATTACHED_CREATURE_DIES_ABOUT_THE_CARD: Trigger = when(EventMask::ZONE_CHANGE, attached_creature_dies_about_the_card);
 pub const THIS_LEAVES: Trigger = when(EventMask::ZONE_CHANGE, this_leaves);
 pub const YOU_LOSE_CONTROL_OF_THIS: Trigger =
     when_asked(EventMask(EventMask::CONTROL_CHANGED.0 | EventMask::ZONE_CHANGE.0), you_lose_control_of_this);
