@@ -1,0 +1,91 @@
+# Unstable Glyphbridge ({3}{W}{W}, Craft with artifact {3}{W}{W}) and Sandswirl Wanderglyph, a 5/3 flier: "Whenever an opponent casts a spell during
+# their turn, they can't attack you or planeswalkers you control this turn. Each opponent who attacked you or a planeswalker you control this turn can't
+# cast spells." Turn one: five mana with a single white source is refused (one {W} short, CR 601.2f), then Black Lotus makes the cast possible and is
+# sacrificed. Turn three: the same five mana is refused for the craft, then a Plains pays it, and the Black Lotus in the graveyard is the material.
+# Turn four: Bot2's Lightning Bolt (cast when nothing is barred) lays the rule on its Savannah Lions, which then cannot attack Bot1: it carries the rule
+# and Bot1 is untouched by any attack. Turn six: nothing was cast, so the Lions attack (the bar ended with turn four), and having attacked Bot1, Bot2
+# cannot cast its second Lightning Bolt (a spell it could otherwise cast: the Mox Ruby is untapped and pays).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Black Lotus
+Unstable Glyphbridge
+Plains x14
+
+[Bot2 Deck]
+Plains
+Mox Ruby
+Savannah Lions
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mountain
+Plains x13
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Unstable Glyphbridge.Cast(Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Unstable Glyphbridge.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Unstable Glyphbridge.Activate(Ability: Craft; Mana: short)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Unstable Glyphbridge.Activate(Ability: Craft)
+Bot1.Choose(Black Lotus)
+? Bot1.Graveyard = 
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Savannah Lions.LastingRules = They can't attack you or planeswalkers you control this turn.
+[T4 Bot2.Main2]
+? Bot1.Life = 17
+? Bot2.Battlefield.Savannah Lions.Tapped = false
+[T5 Bot1.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+Bot2.Attack(Savannah Lions > Bot1)
+[T6 Bot2.Main2]
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1)
+
+[Expect]
+Bot1.Life = 12
+Bot1.Battlefield.Sandswirl Wanderglyph.Tapped = false
+Bot1.Battlefield.Sandswirl Wanderglyph.Keywords = Flying
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt

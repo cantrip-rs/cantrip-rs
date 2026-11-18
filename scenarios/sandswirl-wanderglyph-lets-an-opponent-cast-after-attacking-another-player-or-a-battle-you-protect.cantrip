@@ -1,0 +1,77 @@
+# Sandswirl Wanderglyph: "Each opponent who attacked you or a planeswalker you control this turn can't cast spells." With three
+# players, only an attack whose defending player is the Wanderglyph's controller counts (CR 506.2, 508.1b): Bot2's Ornithopter
+# attacks Bot3, and its Savannah Lions attack Invasion of Gobakhan, a battle Bot1 protects - Bot1 is that attack's defending
+# player, but a battle is neither "you" nor a planeswalker, so it is no attack on Bot1 (the card's text names only those two).
+# Bot2 then casts Lightning Bolt at Bot3. Turn two: Bot2 casts the Lions, the Ornithopter and the Siege, choosing Bot1 to
+# protect it; turn four Bot1 crafts the Glyphbridge with its Black Lotus.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Black Lotus
+Unstable Glyphbridge
+Plains x13
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Mox Ruby
+Savannah Lions
+Ornithopter
+Invasion of Gobakhan
+Lightning Bolt
+Mountain
+Plains x12
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Unstable Glyphbridge.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Invasion of Gobakhan.Cast
+Bot2.ChoosePlayer(Bot1)
+[T4 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Unstable Glyphbridge.Activate(Ability: Craft)
+Bot1.Choose(Black Lotus)
+[T5 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Attack(Savannah Lions > Bot2.Battlefield.Invasion of Gobakhan; Ornithopter > Bot3)
+[T5 Bot2.Main2]
+? Bot2.Battlefield.Invasion of Gobakhan.Counters.Defense = 1
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot3)
+
+[Expect]
+Bot3.Life = 17
+Bot1.Life = 20
+Bot2.Graveyard = Lightning Bolt

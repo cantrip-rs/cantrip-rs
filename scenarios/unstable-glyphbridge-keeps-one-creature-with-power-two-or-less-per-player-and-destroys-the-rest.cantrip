@@ -1,0 +1,61 @@
+# Unstable Glyphbridge ({3}{W}{W}): "When this artifact enters, if you cast it, for each player, choose a creature with power 2 or less
+# that player controls. Then destroy all creatures except creatures chosen this way." (CR 701.8a, 608.2d.) The controller makes every
+# choice. Bot1 controls Savannah Lions (power 2, exactly at the limit) and Ornithopter; Bot2 controls Memnite, Phyrexian Walker and
+# Hill Giant (power 3, just past it, so it may not be chosen). Bot1 keeps the Lions and Bot2's Memnite; everything else dies, Bot1's
+# own Ornithopter included.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Black Lotus
+Savannah Lions
+Ornithopter
+Unstable Glyphbridge
+Plains x13
+
+[Bot2 Deck]
+Plains
+Black Lotus
+Mox Ruby
+Hill Giant
+Memnite
+Phyrexian Walker
+Plains
+Plains x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Unstable Glyphbridge.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Mana = 
+Bot2.Pass
+Bot1.Choose(Savannah Lions)
+! Bot1.Choose(Hill Giant)
+Bot1.Choose(Memnite)
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Plains; Savannah Lions; Unstable Glyphbridge
+Bot1.Graveyard = Ornithopter; Black Lotus
+Bot2.Battlefield = Memnite; Mox Ruby; Plains
+Bot2.Graveyard = Hill Giant; Phyrexian Walker; Black Lotus

@@ -1,0 +1,91 @@
+# Sandswirl Wanderglyph: "Whenever an opponent casts a spell during their turn, they can't attack you or planeswalkers you
+# control this turn. Each opponent who attacked you or a planeswalker you control this turn can't cast spells." The planeswalker
+# half of both sentences, with three players so the barred creature still has a player to attack (Bot3) and is asked to declare.
+# Turn one: Bot1 casts Wrenn and Six and Unstable Glyphbridge; turn four it crafts the Glyphbridge with the Black Lotus in its
+# graveyard. Turn five: Bot2's Lightning Bolt lays the rule on its Savannah Lions, which can attack neither Bot1 nor Wrenn and Six
+# (CR 508.1c) but may attack Bot3. Turn eight: nothing was cast, so the Lions attack Wrenn and Six (its defending player is Bot1,
+# CR 506.2), and Bot2, having attacked a planeswalker Bot1 controls, cannot cast its second Lightning Bolt.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Black Lotus
+Wrenn and Six
+Unstable Glyphbridge
+Plains x13
+
+[Bot2 Deck]
+Plains
+Mox Ruby
+Savannah Lions
+Lightning Bolt
+Lightning Bolt
+Mountain
+Plains x14
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wrenn and Six.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Unstable Glyphbridge.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T4 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Unstable Glyphbridge.Activate(Ability: Craft)
+Bot1.Choose(Black Lotus)
+[T5 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot2.Battlefield.Savannah Lions.LastingRules = They can't attack you or planeswalkers you control this turn.
+! Bot2.Attack(Savannah Lions > Bot1.Battlefield.Wrenn and Six)
+! Bot2.Attack(Savannah Lions > Bot1)
+Bot2.Attack(Savannah Lions > Bot3)
+[T5 Bot2.Main2]
+? Bot1.Battlefield.Wrenn and Six.Counters.Loyalty = 3
+? Bot3.Life = 18
+[T8 Bot2.Main1]
+Bot2.Attack(Savannah Lions > Bot1.Battlefield.Wrenn and Six)
+[T8 Bot2.Main2]
+? Bot1.Battlefield.Wrenn and Six.Counters.Loyalty = 1
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1)
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Wrenn and Six.Counters.Loyalty = 1
+Bot2.Graveyard = Lightning Bolt

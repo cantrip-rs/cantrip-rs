@@ -1,0 +1,19 @@
+{
+  "name": "Unstable Glyphbridge",
+  "manaCost": "{3}{W}{W}",
+  "type": "Artifact",
+  "oracleText": "When this artifact enters, if you cast it, for each player, choose a creature with power 2 or less that player controls. Then destroy all creatures except creatures chosen this way.\nCraft with artifact {3}{W}{W} ({3}{W}{W}, Exile this artifact, Exile another artifact you control or an artifact card from your graveyard: Return this card transformed under its owner's control. Craft only as a sorcery.)",
+  "backFace": {
+    "name": "Sandswirl Wanderglyph",
+    "colorIndicator": [
+      "White"
+    ],
+    "type": "Artifact Creature — Golem",
+    "power": 5,
+    "toughness": 3,
+    "oracleText": "Flying\nWhenever an opponent casts a spell during their turn, they can't attack you or planeswalkers you control this turn.\nEach opponent who attacked you or a planeswalker you control this turn can't cast spells.",
+    "keywords": [
+      "Flying"
+    ]
+  }
+}
