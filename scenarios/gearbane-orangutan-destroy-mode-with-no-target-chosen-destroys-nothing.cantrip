@@ -1,0 +1,30 @@
+# "Up to one" target: Bot1 chooses the first mode and declines to choose a target, so no artifact is destroyed.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Gearbane Orangutan
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gearbane Orangutan.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Destroy up to one target artifact)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 0
+
+[Expect]
+Bot1.Battlefield.Count = 4
