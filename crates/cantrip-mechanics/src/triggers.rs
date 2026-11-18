@@ -2052,6 +2052,22 @@ pub fn of_subtype_you_control_enters<const SUBTYPE: u16>(q: &dyn Query, me: &Ask
     }
 }
 
+/// "Whenever a [subtype] you control is turned face up" (CR 708.8, 603.6a), `SUBTYPE` a `Subtype` as `u16` (`lands::sub`): a
+/// permanent its source's controller controls as it is turned up, whoever turns it, that has that subtype once face up (a
+/// face-down permanent has no subtypes, CR 708.2), the type read through the words of the source's text (CR 612). The trigger
+/// is about that permanent (`StackItem::subject`). Case of the Pilfered Proof and Perimeter Enforcer print it, for Detectives,
+/// each beside an "enters" trigger (`when_asked` with `EventMask::TURNED_FACE_UP`).
+pub fn of_subtype_you_control_turned_face_up<const SUBTYPE: u16>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::TurnedFaceUp { permanent, .. }
+            if q.controller(*permanent) == me.controller && q.chars(*permanent).has_subtype(crate::lands::word(q, me.source, SUBTYPE)) =>
+        {
+            Fired::about(Target::Object(*permanent))
+        }
+        _ => None,
+    }
+}
+
 /// "Whenever [this permanent] or another [subtype] you control enters" (CR 603.6a, 201.5): this permanent, whatever it is as it
 /// enters (the name is the object, not its types), or another permanent under your control as it entered that has that subtype,
 /// a token too, the type read through the words of the source's text (CR 612). `SUBTYPE` is a `Subtype` as `u16`
