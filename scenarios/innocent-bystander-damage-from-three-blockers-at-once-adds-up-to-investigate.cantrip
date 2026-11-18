@@ -1,0 +1,46 @@
+# Innocent Bystander: "Whenever this creature is dealt 3 or more damage, investigate." Attacking on turn 3, it is blocked by
+# three Memnites that each deal it 1 at once (CR 510.2): no single source reaches 3 but the combat damage dealt together
+# does, so it triggers, once (CR 603.2c). The Bystander kills two Memnites and dies; Bot1 keeps the Clue.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Innocent Bystander
+Mountain x12
+
+[Bot2 Deck]
+Memnite x3
+Mountain x12
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Innocent Bystander.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite#1.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite#1.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Attack(Innocent Bystander > Bot2)
+Bot2.Block(Memnite#1 > Innocent Bystander; Memnite#2 > Innocent Bystander; Memnite#3 > Innocent Bystander)
+Bot1.AssignDamage(Innocent Bystander > Memnite#1: 1; Innocent Bystander > Memnite#2: 1)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mountain; Mox Ruby; Clue Token
+Bot1.Graveyard = Innocent Bystander
+Bot2.Battlefield = Memnite
+Stack.Count = 0

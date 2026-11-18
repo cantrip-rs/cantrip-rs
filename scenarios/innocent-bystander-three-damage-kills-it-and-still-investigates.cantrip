@@ -1,0 +1,40 @@
+# Innocent Bystander: "Whenever this creature is dealt 3 or more damage, investigate." Bot1 casts the 2/1 off a Mountain and a
+# Mox Ruby. On Bot2's turn a Lightning Bolt deals it exactly 3 (the limit: "3 or more" qualifies, CR 603.2c). The Bystander
+# dies to it, but the ability still triggers for the damage and Bot1 gets a Clue token (CR 701.16a).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Innocent Bystander
+Mountain x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x12
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Innocent Bystander.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Innocent Bystander)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Mountain; Mox Ruby; Clue Token
+Bot1.Graveyard = Innocent Bystander
+Bot2.Graveyard = Lightning Bolt
+Stack.Count = 0
