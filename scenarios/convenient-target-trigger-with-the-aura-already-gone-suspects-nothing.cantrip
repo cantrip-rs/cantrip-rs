@@ -1,0 +1,43 @@
+# With Convenient Target's enters trigger on the stack Bot1 Bolts the enchanted 2/2 Memnite: it dies, the Aura goes to
+# the graveyard (CR 704.5m), and the trigger finds no enchanted creature and does nothing (CR 608.2h, 400.7): Bot2's
+# Ornithopter is not suspected either.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Convenient Target
+Swamp x16
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Convenient Target.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite
+? Bot1.Graveyard = Convenient Target; Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Convenient Target; Lightning Bolt
+Bot2.Graveyard = Memnite
+Bot2.Battlefield = Ornithopter
+Bot2.Battlefield.Ornithopter.Suspected = (absent)

@@ -1,0 +1,54 @@
+# Convenient Target on Bot1's own Memnite: it is suspected and 2/2. Bot2 Disenchants the Aura (it goes to Bot1's graveyard):
+# the Memnite is a 1/1 again but is still suspected (CR 701.60c: until it leaves the battlefield, the designation is not
+# the Aura's) and still has menace and can't block. Bot1 then pays {2}{R} with Black Lotus to return the Aura to its hand
+# (CR 113.6m).
+
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Memnite
+Convenient Target
+Swamp x16
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Disenchant
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Convenient Target.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Suspected = true
+? Bot1.Battlefield.Memnite.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Convenient Target)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Convenient Target
+? Bot1.Battlefield.Memnite.Suspected = true
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Keywords = CantBlock; Menace
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Graveyard.Convenient Target.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Convenient Target.Colors = Red
+Bot1.Graveyard = Black Lotus
+Bot1.Battlefield = Memnite; Mox Ruby
+Bot1.Battlefield.Memnite.Suspected = true

@@ -1,0 +1,41 @@
+# With Convenient Target's enters trigger on the stack Bot2 Disenchants the Aura: "suspect enchanted creature" uses the
+# Aura's last known information (CR 608.2h), so the Memnite it enchanted as it left is suspected all the same, as the
+# ruling says the suspicion outlasts the Aura.
+
+[Bot1 Deck]
+Mox Ruby
+Convenient Target
+Swamp x18
+
+[Bot2 Deck]
+Memnite
+Mox Pearl
+Mox Pearl
+Disenchant
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Convenient Target.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Convenient Target)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Convenient Target
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Memnite.Suspected = true
