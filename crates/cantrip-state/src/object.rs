@@ -1095,6 +1095,9 @@ impl Copiable {
     /// "Except it doesn't copy that creature's color" (`uncopied_color`): the copy effect leaves color alone, so its colors
     /// are those the values it was applied over give (CR 707.9c, 613.2a).
     pub const STATED_UNCOPIED_COLOR: u16 = 1 << 9;
+    /// "Except it's [color] in addition to its other colors" (`with_color`): `colors` are added to the colors of the copied
+    /// card's mana cost (CR 707.9d), not its colors.
+    pub const STATED_ADDED_COLOR: u16 = 1 << 10;
     /// The bits that are no exception.
     const STATED_FACES: u16 = Copiable::STATED_BACK_UP | Copiable::STATED_OWN_FACES | Copiable::STATED_FACES_OF;
 
@@ -1288,8 +1291,31 @@ impl Copiable {
     /// "Except it's [color]."
     pub fn colored(mut self, colors: ColorSet) -> Copiable {
         self.colors = Some(colors);
-        self.stated &= !Copiable::STATED_UNCOPIED_COLOR;
+        self.stated &= !(Copiable::STATED_UNCOPIED_COLOR | Copiable::STATED_ADDED_COLOR);
         self.exclude_cdas(CdaExclusions::COLOR)
+    }
+
+    /// "Except it's [color] in addition to its other colors" (CR 707.9b, 707.9d). The exception provides a value for color,
+    /// and 707.9d's "in addition" carve-out covers only types, so a characteristic-defining ability of the copied card that
+    /// defines its color is not copied, and neither is its color indicator: its other colors are those of its mana cost
+    /// (CR 105.2, 202.2) - a devoid card's too - or, for a token, those the text that made it gave it (CR 111.4, 707.2),
+    /// which the layers add `color` to (`colors_added`). Over values whose colors an earlier exception already states (a copy
+    /// of such a copy, CR 707.9b), `color` joins those. The Jolly Balloon Man ("a 1/1 red Balloon creature in addition to
+    /// its other colors and types"); Ratadrabik of Urborg and Invasion of Amonkhet print the same.
+    pub fn with_color(mut self, color: Color) -> Copiable {
+        match self.colors {
+            Some(colors) => self.colors = Some(colors.with(color)),
+            None => {
+                self.colors = Some(ColorSet::of(color));
+                self.stated = (self.stated | Copiable::STATED_ADDED_COLOR) & !Copiable::STATED_UNCOPIED_COLOR;
+            }
+        }
+        self.exclude_cdas(CdaExclusions::COLOR)
+    }
+
+    /// Whether `colors` are added to those of the copied card's mana cost (`with_color`) rather than being its colors.
+    pub fn colors_added(&self) -> bool {
+        self.stated & Copiable::STATED_ADDED_COLOR != 0
     }
 
     /// "Except it doesn't copy that creature's color" (CR 707.9c): color is left out of the copying, so the copy's colors are
@@ -1300,7 +1326,7 @@ impl Copiable {
     /// ruling: "will copy Vesuvan Doppelganger's color"), fixed (`Query::copiable_values`).
     pub fn uncopied_color(mut self) -> Copiable {
         self.colors = None;
-        self.stated |= Copiable::STATED_UNCOPIED_COLOR;
+        self.stated = (self.stated | Copiable::STATED_UNCOPIED_COLOR) & !Copiable::STATED_ADDED_COLOR;
         self.exclude_cdas(CdaExclusions::COLOR)
     }
 

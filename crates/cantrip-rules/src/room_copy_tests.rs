@@ -11,9 +11,10 @@ static LEFT_DOOR: CardDef = CardDef {
     name: "Copied Left Door",
     types: TypeSet::of(&[CardType::Enchantment]),
     subtypes: SubtypeSet::of(&[Subtype::Room]),
+    cost: ManaCost { symbols: [0, 1, 0, 0, 0, 0], ..ManaCost::ZERO },
     ..CardDef::BLANK
 };
-static RIGHT_DOOR: CardDef = CardDef { name: "Copied Right Door", ..LEFT_DOOR };
+static RIGHT_DOOR: CardDef = CardDef { name: "Copied Right Door", cost: ManaCost { symbols: [0, 0, 0, 0, 1, 0], ..ManaCost::ZERO }, ..LEFT_DOOR };
 static ROOM: CardDef = CardDef { name: "Copied Left Door // Copied Right Door", split: Some((&LEFT_DOOR, &RIGHT_DOOR)), ..LEFT_DOOR };
 
 fn game() -> (Game, &'static CardTable) {
@@ -75,4 +76,21 @@ fn a_copy_of_a_room_spell_keeps_its_exceptions_as_it_becomes_a_token() {
     assert_eq!(cx.s().obj(token).marks.doors, DOOR_LEFT);
     assert_eq!(cx.chars(token).card, table.id_of(&ROOM));
     assert_eq!(cx.chars(token).name, "Renamed Room");
+}
+
+/// A copy of a Room "except it's red in addition to its other colors" (CR 707.9d) is red and the colors of its unlocked
+/// doors' mana costs (CR 709.5): none of a locked door's.
+#[test]
+fn a_room_copied_with_an_added_color_has_its_unlocked_doors_colors_and_the_added_one() {
+    let (mut game, table) = game();
+    let room = put(&mut game, table.id_of(&ROOM), Zone::BATTLEFIELD);
+    game.state.update_obj(room, |o| o.copy = Some(Copiable::of(table.id_of(&ROOM)).with_color(Color::Red)));
+    let blue = ColorSet::of(Color::Blue);
+    let green = ColorSet::of(Color::Green);
+    let red = ColorSet::of(Color::Red);
+    for (doors, others) in [(DOOR_LEFT, blue.0), (DOOR_RIGHT, green.0), (DOOR_LEFT | DOOR_RIGHT, blue.0 | green.0)] {
+        game.state.update_obj(room, |o| o.marks.doors = doors);
+        let cx = cx(&mut game);
+        assert_eq!(cx.chars(room).colors, ColorSet(others | red.0), "doors {doors}");
+    }
 }

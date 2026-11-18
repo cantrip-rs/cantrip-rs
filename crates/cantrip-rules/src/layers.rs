@@ -1397,6 +1397,16 @@ fn initial(cards: &CardTable, card: CardId, copy: Option<&Copiable>) -> Chars {
     };
     // "Except it's legendary" or "except it isn't legendary" (CR 707.9b).
     let legendary = copy.and_then(|c| c.legendary_stated()).unwrap_or(def.supertypes.legendary);
+    // "Except it's red in addition to its other colors" (CR 707.9d, `Copiable::with_color`): a card's other colors are its mana
+    // cost's, its color indicator and color-defining abilities left behind; a token's are what the text that made it gave it
+    // (CR 111.4, 707.2), no indicator.
+    let colors = match copy {
+        Some(c) if c.colors_added() => {
+            let others = if !def.oracle { words.colors(def.colors()) } else if no_cost { ColorSet::NONE } else { def.cost.colors() };
+            c.colors.map(|added| ColorSet(others.0 | added.0))
+        }
+        _ => colors,
+    };
     // "Except it's a 5/5 black Demon" (CR 707.9b, 205.1a): the types and subtypes the exception states, instead of the
     // card's; an instant or sorcery stays one, with its spell types. Changeling, which defines the subtypes it replaced,
     // is not copied (CR 707.9d), though an exception may give it again.
@@ -1514,8 +1524,11 @@ fn doors(cards: &CardTable, card: CardId, unlocked: u8, copy: Option<&Copiable>,
             _ => def.name,
         };
     }
-    if copy.is_none_or(|c| c.colors.is_none()) {
-        chars.colors = def.room_cost(unlocked).colors();
+    match copy.and_then(|c| c.colors.map(|colors| (colors, c.colors_added()))) {
+        None => chars.colors = def.room_cost(unlocked).colors(),
+        // A Room's mana cost is its unlocked doors' (CR 709.5): the colors an "in addition" exception adds join those.
+        Some((added, true)) => chars.colors = ColorSet(def.room_cost(unlocked).colors().0 | added.0),
+        Some((_, false)) => {}
     }
     let mut abilities = [None; MAX_ABILITIES];
     let mut n = 0;
