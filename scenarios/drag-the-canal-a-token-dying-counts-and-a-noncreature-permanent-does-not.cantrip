@@ -1,0 +1,48 @@
+# Any creature's death counts, a token's too (CR 700.4), and a noncreature permanent's does not. On turn 1 Bot1 sacrifices Black Lotus (an artifact, not
+# a creature) for {B}{B}{B} and casts Drag the Canal with the Sapphire's {U} and one {B}: only the Detective, life stays 20. Then in the same main phase
+# it spends the other two {B} on Terror for that Detective token (a creature that ceases to exist) and casts a second Drag the Canal: now it gains 2,
+# surveils 2 and investigates.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Terror
+Drag the Canal
+Drag the Canal
+Forest
+Swamp
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Drag the Canal.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Bot1.Battlefield.Clue Token = (absent)
+Bot1.Hand.Terror.Cast(Detective Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Drag the Canal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Forest; Swamp | )
+
+[Expect]
+Bot1.Life = 22
+Bot1.Battlefield.Clue Token.Subtypes = Clue
+Bot1.Battlefield.Detective Token.Power = 2

@@ -1,0 +1,45 @@
+# Drag the Canal after a creature died this turn: Bot1 bolts its own Ornithopter first, then casts Drag the Canal. The Detective is created, and
+# "you gain 2 life, surveil 2, then investigate" all happen: 22 life, the top two cards looked at (the Forest kept on top, the Swamp put into the
+# graveyard) and one Clue.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Ornithopter
+Lightning Bolt
+Drag the Canal
+Island
+Forest
+Swamp
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Drag the Canal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Forest | Swamp)
+
+[Expect]
+Bot1.Battlefield.Detective Token.Power = 2
+Bot1.Battlefield.Clue Token.Subtypes = Clue
+Bot1.Life = 22
+Bot1.Surveilled = 2 requested, 2 looked
+Bot1.Graveyard = Drag the Canal; Swamp; Ornithopter; Lightning Bolt
+Bot1.Library.Count = 12
+Bot1.Library = Forest; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island

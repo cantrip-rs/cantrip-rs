@@ -1,0 +1,38 @@
+# Drag the Canal with no creature having died this turn: "Create a 2/2 white and blue Detective creature token" happens and nothing else does - no life,
+# no surveil, no Clue. Bot1 pays {U}{B} from two Moxen on turn 1; the Ornithopter is cast but never dies.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Ornithopter
+Drag the Canal
+Island x3
+Forest
+Swamp
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Drag the Canal.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Detective Token.Power = 2
+Bot1.Battlefield.Detective Token.Toughness = 2
+Bot1.Battlefield.Detective Token.Colors = Blue; White
+Bot1.Battlefield.Detective Token.Subtypes = Detective
+Bot1.Battlefield.Clue Token = (absent)
+Bot1.Life = 20
+Bot1.Surveilled = (absent)
+Bot1.Library.Count = 12
+Bot1.Graveyard = Drag the Canal

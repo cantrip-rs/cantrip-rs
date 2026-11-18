@@ -1,0 +1,43 @@
+# Drag the Canal reads "if a creature died this turn" as it resolves (CR 608.2c), not as it is cast: Bot1 casts it with no creature having died, then in
+# response bolts its own Ornithopter. The Bolt resolves first, so by the time Drag the Canal resolves a creature has died and Bot1 gains 2 life,
+# surveils 2 (both cards left where they are) and investigates.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Ornithopter
+Lightning Bolt
+Drag the Canal
+Island
+Forest
+Swamp
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Drag the Canal.Cast
+? Bot1.Life = 20
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Forest; Swamp | )
+
+[Expect]
+Bot1.Life = 22
+Bot1.Battlefield.Clue Token.Subtypes = Clue
+Bot1.Battlefield.Detective Token.Power = 2
+Bot1.Library.Count = 13
