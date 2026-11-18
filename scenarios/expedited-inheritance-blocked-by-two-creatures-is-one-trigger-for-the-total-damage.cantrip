@@ -1,0 +1,40 @@
+# Two blockers' damage to one creature in a combat is dealt at once (CR 510.2): one trigger for the total of 2, so Bot2 is asked
+# once and exiles two cards, not one trigger of 1 apiece. Bot2's Aegis Turtle (0/5) attacks and both Bot1 Memnites block it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Expedited Inheritance
+Memnite
+Memnite
+Island x15
+
+[Bot2 Deck]
+Mox Sapphire
+Aegis Turtle
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Expedited Inheritance.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Aegis Turtle > Bot1)
+Bot1.Block(Memnite#1 > Aegis Turtle; Memnite#2 > Aegis Turtle)
+Bot2.Accept
+? Exile.Count = 2
+? Bot2.Library.Count = 9
+
+[Expect]
+Bot1.Life = 20

@@ -1,0 +1,6 @@
+{
+  "name": "Expedited Inheritance",
+  "manaCost": "{R}{R}",
+  "type": "Enchantment",
+  "oracleText": "Whenever a creature is dealt damage, its controller may exile that many cards from the top of their library. They may play those cards until the end of their next turn."
+}

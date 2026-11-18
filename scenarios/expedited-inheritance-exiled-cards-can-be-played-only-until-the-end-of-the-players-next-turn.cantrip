@@ -1,0 +1,49 @@
+# Exiled on turn 1 by Bot1's creature being hurt, the cards are playable on Bot1's next turn (turn 3: an Island is played from
+# exile) and no longer on turn 5, "until the end of their next turn" (CR 514.2): the second Island stays exiled.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Expedited Inheritance
+Lightning Bolt
+Mox Sapphire
+Aegis Turtle
+Forest
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aegis Turtle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Expedited Inheritance.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T3 Bot1.Main1]
+? Exile.Count = 3
+Bot1.Exile.Island.Play
+[T5 Bot1.Main1]
+! Bot1.Exile.Island.Play
+! Bot1.Exile.Forest.Play
+
+[Expect]
+Exile.Count = 2
