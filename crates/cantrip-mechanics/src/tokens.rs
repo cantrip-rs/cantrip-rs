@@ -1352,6 +1352,18 @@ pub static WHITE_FLYING_SPIRIT: CardDef = CardDef {
     ..token!(Spirit)
 };
 
+/// The X/X blue Spirit creature token with flying, its size given as it is made (`create_sized`). Unwilling Vessel and Misty
+/// Salon make it.
+pub static BLUE_FLYING_SPIRIT: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Blue)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(0),
+    toughness: Some(0),
+    keywords: Keywords::of(&[Keyword::Flying]),
+    text: "Flying",
+    ..token!(Spirit)
+};
+
 /// "Create a 1/1 white Spirit creature token with flying" (CR 111.1) for the ability's controller, as the body of a spell or
 /// ability, the controller being the one it has as it resolves (a leaves-the-battlefield trigger: as the creature left, CR 603.10a):
 /// the card file lists `tokens::WHITE_FLYING_SPIRIT` in its `EXTRA`. Bishop of Wings, Doomed Traveler, Kykar, Zephyr
