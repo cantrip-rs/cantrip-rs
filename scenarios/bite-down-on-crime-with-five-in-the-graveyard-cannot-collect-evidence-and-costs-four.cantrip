@@ -1,0 +1,65 @@
+# Bite Down on Crime with only five mana value in the graveyard (Faithless Looting 1, Hero of Bladehold 4, a discarded Swamp 0)
+# cannot collect evidence 6 (CR 701.59a: it can't be chosen at all), so it is cast without, for the full {3}{G}: all four
+# sources are spent and nothing is left over. Grizzly Bears, 2/2, gets +2/+0 and deals its 4 power to Wall of Stone (0/8);
+# the pump is over at the end of the turn, so on Bot2's turn 4 the Bears are 2/2 again. CR 601.2f, 701.59a, 514.2.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Faithless Looting
+Bite Down on Crime
+Grizzly Bears
+Island
+Island
+Hero of Bladehold
+Swamp
+Island x11
+
+[Bot2 Deck]
+Black Lotus
+Wall of Stone
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Hero of Bladehold; Swamp)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Wall of Stone.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bite Down on Crime.Cast
+! Bot1.Modes(Collect evidence)
+Bot1.Modes(Cast without)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Wall of Stone)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 4
+? Bot2.Battlefield.Wall of Stone.Damage = 4
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Graveyard = Bite Down on Crime; Faithless Looting; Swamp; Hero of Bladehold
+Exile.Count = 0

@@ -1,0 +1,66 @@
+# Bite Down on Crime ({3}{G}): "you may collect evidence 6. This spell costs {2} less to cast if evidence was collected."
+# Bot1's graveyard holds exactly six mana value after Faithless Looting (1) discards Hero of Bladehold (4) and Llanowar Elves (1):
+# all three are needed (CR 701.59a), and are exiled. The pool holds {G}{G} from Mox Emerald and an Island, and it is {1}{G}, so
+# nothing is left in it (`? Bot1.Mana =`): {2} less, not more or less. Grizzly Bears (2/2) gets +2/+0, a 4/2 until end of turn
+# (the toughness is unchanged), then deals damage equal to that power - 4, not 2 - to Wall of Stone (0/8) of Bot2 (damage 4,
+# alive). Bot1's other creature, an Ornithopter, is refused as the second target (it is not "you don't control"), and the Wall as
+# the first (it is not "you control"). CR 601.2f, 118.7a, 608.2c, 120.3.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Faithless Looting
+Bite Down on Crime
+Grizzly Bears
+Island
+Ornithopter
+Hero of Bladehold
+Llanowar Elves
+Island x11
+
+[Bot2 Deck]
+Black Lotus
+Wall of Stone
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Hero of Bladehold; Llanowar Elves)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Wall of Stone.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Bite Down on Crime.Cast
+Bot1.Modes(Collect evidence)
+! Bot1.Target(Bot2.Battlefield.Wall of Stone)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Wall of Stone)
+Bot1.Choose(Hero of Bladehold; Llanowar Elves; Faithless Looting)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Wall of Stone.Damage = 4
+Bot1.Graveyard = Bite Down on Crime
+Exile = Hero of Bladehold; Llanowar Elves; Faithless Looting
