@@ -1,0 +1,36 @@
+# Branch of Vitu-Ghazi (Disguise {3}): cast face down it is a creature spell, not a land play (CR 702.168a, 305.9), so the turn's land drop is still there: an Island is
+# played after it. The face-down 2/2 is a creature only (CR 708.2): it is no land, and has no "{T}: Add {C}".
+# A land card is never cast face up (CR 305.9): with no mana its ordinary cast, which would cost nothing, is refused.
+
+[Bot1 Deck]
+Branch of Vitu-Ghazi
+Mox Jet
+Mox Ruby
+Mox Pearl
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+! Bot1.Hand.Branch of Vitu-Ghazi.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Branch of Vitu-Ghazi.Cast(Ability: Disguise)
+Bot1.Pass
+Bot1.Hand.Island.Play
+? Bot1.Battlefield..Types = Creature
+? Bot1.Battlefield..FaceDown = true
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Bot1.Hand.Count = 2

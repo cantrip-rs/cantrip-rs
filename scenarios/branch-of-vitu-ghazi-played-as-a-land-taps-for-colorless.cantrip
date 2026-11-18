@@ -1,0 +1,21 @@
+# Branch of Vitu-Ghazi: a land card in hand is played as a land (CR 305.1) like any other, using the land drop, and face up it taps for {C} ("{T}: Add {C}."). It was not
+# turned face up, so its turned-face-up trigger adds nothing. A second land drop is refused.
+
+[Bot1 Deck]
+Branch of Vitu-Ghazi
+Island
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Branch of Vitu-Ghazi.Play
+! Bot1.Hand.Island.Play
+Bot1.Battlefield.Branch of Vitu-Ghazi.Activate
+? Bot1.Mana = {C}
+
+[Expect]
+Bot1.Battlefield = Branch of Vitu-Ghazi
+Bot1.Battlefield.Branch of Vitu-Ghazi.Tapped = true
+Bot1.Battlefield.Branch of Vitu-Ghazi.Types = Land
