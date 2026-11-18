@@ -208,11 +208,18 @@ class RemoteJudge:
     def job_dir(self, nonce: str) -> str:
         return f"{self.host.root}/gens/{self.host.tag}/gen{self.host.gen}/{self.name}/mine-{nonce}"
 
-    def start(self, data: Path, model_name: str, s: Settings, server_args: list[str], nonce: str) -> str:
+    def start(self, data: Path, model_name: str, s: Settings, server_args: list[str], nonce: str,
+              runs: list[dict] | None = None) -> str:
+        """The job started; `runs` (each `name` and its `mine-judge` arguments, the model and prior as `{model}` and
+        `{prior}`) in place of the miner's own (`judge_runs`), for an experiment over the same plans."""
         self.host.push()
         d = self.job_dir(nonce)
         b = self.host.bundle_dir()
-        runs = judge_runs(Paths(Path(".")), s, f"{b}/model/{model_name}", f"{b}/decks", Path("."), "judge")
+        if runs is None:
+            runs = judge_runs(Paths(Path(".")), s, f"{b}/model/{model_name}", f"{b}/decks", Path("."), "judge")
+        else:
+            runs = [dict(r, args=[a.replace("{model}", f"{b}/model/{model_name}").replace("{prior}", f"{b}/decks")
+                                  for a in r["args"]]) for r in runs]
         for r in runs:  # the plans and recordings as the job's own directory holds them
             r["args"] = [a.replace("\\", "/") for a in r["args"]]
         job = dict(explore=f"{b}/bin/cantrip-explore.exe", infer=f"{b}/bin/cantrip-infer.exe",
