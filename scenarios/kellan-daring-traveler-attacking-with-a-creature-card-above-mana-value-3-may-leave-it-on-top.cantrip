@@ -1,0 +1,35 @@
+# The same Hill Giant left on top when the "may" is declined; it is drawn on the next turn. 
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Kellan, Daring Traveler
+Island x5
+Hill Giant
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kellan, Daring Traveler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Kellan, Daring Traveler > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Revealed = Hill Giant
+Bot1.Decline
+? Bot1.Graveyard =
+? Bot1.Library.Count = 11
+[T5 Bot1.Main1]
+? Bot1.Hand.Hill Giant.Power = 3
+[Expect]
+Bot1.Graveyard =

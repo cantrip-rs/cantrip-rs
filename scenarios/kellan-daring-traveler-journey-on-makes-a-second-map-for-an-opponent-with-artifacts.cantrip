@@ -1,0 +1,30 @@
+# An opponent counts once however many artifacts they control: Bot2 controls an Ornithopter and a Mox Ruby, so X = 1 + 1 = 2.
+
+[Bot1 Deck]
+Mox Emerald
+Kellan, Daring Traveler
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Kellan, Daring Traveler.Cast(Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Map Token; Map Token; Mox Emerald

@@ -1,0 +1,33 @@
+# Kellan's attack trigger reveals the top card of the library: a creature card with mana value 3 or less (Hypnotic Specter, mana value exactly 3) goes to hand (CR 701.20a, 400.3).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Kellan, Daring Traveler
+Island x5
+Hypnotic Specter
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kellan, Daring Traveler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Kellan, Daring Traveler > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Revealed = Hypnotic Specter
+? Bot1.Hand.Hypnotic Specter.Power = 2
+? Bot1.Library.Count = 10
+[Expect]
+Bot1.Hand.Count = 6
+Bot1.Graveyard =

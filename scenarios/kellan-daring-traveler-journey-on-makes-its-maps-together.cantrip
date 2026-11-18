@@ -1,0 +1,54 @@
+# Journey On's X Map tokens are created together (CR 101.4): Mister Fantastic's "whenever one or more tokens you control enter"
+# (CR 603.2c) triggers once for the two Maps (Bot2 controls an artifact, so X = 2), so Bot1 is asked once and a second question is
+# refused; the Maps enter untapped. Mister Fantastic is cast on turn 1 for {3}{U} exactly with four Moxen.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mister Fantastic, Reed Richards
+Mox Emerald
+Kellan, Daring Traveler
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mister Fantastic, Reed Richards.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Kellan, Daring Traveler.Cast(Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Accept
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Map Token#1.Types = Artifact
+Bot1.Battlefield.Map Token#2.Types = Artifact
+Bot1.Battlefield.Map Token#1.Tapped = false
+Bot1.Battlefield.Map Token#2.Tapped = false
+Bot1.Hand.Count = 2

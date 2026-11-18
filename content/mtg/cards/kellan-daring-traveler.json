@@ -1,0 +1,14 @@
+{
+  "name": "Kellan, Daring Traveler",
+  "manaCost": "{1}{W}",
+  "type": "Legendary Creature — Human Faerie Scout",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever Kellan attacks, reveal the top card of your library. If it's a creature card with mana value 3 or less, put it into your hand. Otherwise, you may put it into your graveyard.",
+  "adventure": {
+    "name": "Journey On",
+    "manaCost": "{G}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Create X Map tokens, where X is one plus the number of opponents who control an artifact. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}
