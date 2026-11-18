@@ -1,0 +1,8 @@
+{
+  "name": "Arabella, Abandoned Doll",
+  "manaCost": "{R}{W}",
+  "type": "Legendary Artifact Creature — Toy",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Whenever Arabella attacks, it deals X damage to each opponent and you gain X life, where X is the number of creatures you control with power 2 or less."
+}
