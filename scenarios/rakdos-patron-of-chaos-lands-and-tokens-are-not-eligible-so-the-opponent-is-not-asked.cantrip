@@ -1,0 +1,59 @@
+# Rakdos, Patron of Chaos: only nonland, nontoken permanents count toward the two to sacrifice. On turn 3 Bot2 controls Plains, a Thraben
+# Inspector and the Clue token it made: two nonland permanents but only one nontoken, so Bot2 cannot pay and is not asked; Bot1 draws two
+# cards (5 in hand at turn 3's main phase, 7 after) and Bot2 keeps everything. The sibling scenario with two Memnites is the positive control.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Black Lotus
+Rakdos, Patron of Chaos
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Thraben Inspector
+Plains x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Rakdos, Patron of Chaos.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Thraben Inspector.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 5
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Clue Token; Plains; Thraben Inspector
+? Bot2.Graveyard.Count = 0
+? Bot1.Hand.Count = 7

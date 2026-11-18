@@ -1,0 +1,38 @@
+# Rakdos, Patron of Chaos: "At the beginning of your end step, target opponent may sacrifice two nonland, nontoken permanents of their choice.
+# If they don't, you draw two cards." (CR 603.2, 701.21, 608.2d). Bot1 casts it on turn 1 with Black Lotus, Mox Jet, Mox Ruby and a Swamp
+# ({4}{B}{R}). Bot2 controls nothing, so it cannot pay the sacrifice and is not asked: Bot1 draws two cards at its end step.
+# The sibling scenarios give Bot2 permanents to sacrifice (it does, or declines).
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Black Lotus
+Rakdos, Patron of Chaos
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Rakdos, Patron of Chaos.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Hand.Count = 4
+
+[Expect]
+Bot1.Hand.Count = 4

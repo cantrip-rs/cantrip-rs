@@ -1,0 +1,54 @@
+# Rakdos, Patron of Chaos: the sacrifice is optional (CR 608.2d): "If they don't, you draw two cards." On turn 3 Bot2 controls two Memnites and
+# can pay but declines, so it keeps both and Bot1 draws two cards at its end step (hand 5 at turn 3's main phase, 7 after).
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Black Lotus
+Rakdos, Patron of Chaos
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Memnite
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Rakdos, Patron of Chaos.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 5
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Decline
+? Bot2.Battlefield = Island; Memnite; Memnite
+? Bot2.Graveyard.Count = 0
+? Bot1.Hand.Count = 7
