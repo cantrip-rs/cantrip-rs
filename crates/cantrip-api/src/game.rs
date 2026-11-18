@@ -2006,6 +2006,10 @@ pub trait Game: Query {
     /// `player` may play or cast `card` from where it is (CR 601.3, 305.1) under `grant`: a card in exile or a
     /// graveyard, a new object after a move (CR 400.7), so the permission is for this object only.
     fn allow_play(&mut self, card: ObjectId, player: PlayerId, grant: PlayGrant);
+    /// `card`, in exile, becomes a plotted card (CR 702.170a): its owner may cast it without paying its mana cost, as a sorcery, on a
+    /// later turn (CR 702.170d), and `Event::Plotted` says so (a trigger "when this card becomes plotted" watches it). Nothing happens
+    /// to a card that is not in exile.
+    fn become_plotted(&mut self, card: ObjectId);
     /// "Until end of turn, you may play [a card | cards] exiled with [this]" (CR 607.2a, 611.2c): `player` may play or
     /// cast, under `grant`, the cards in exile linked to `by` (`exiled_with`) - those there now and those its linked
     /// ability exiles later, for as long as `grant.expiry` lasts, whatever becomes of `by` (CR 611.2a). With `one` ("a
