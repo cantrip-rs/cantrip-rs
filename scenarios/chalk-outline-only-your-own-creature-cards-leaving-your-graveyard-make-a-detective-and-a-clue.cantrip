@@ -1,0 +1,74 @@
+# Chalk Outline ({3}{G}): "Whenever one or more creature cards leave your graveyard". Turn 1: Black Lotus (RRR) and Mox Emerald pay it,
+# Mox Ruby pays a Ghost Vacuum. Turn 2: Bot2's Faithless Looting discards a Wall of Stone and an Island; in Bot2's second main the
+# Vacuum exiles the Wall of Stone from BOT2's graveyard - a creature card, but not leaving Bot1's: no Detective. Turn 3: Bot1's own
+# Looting discards Hero of Bladehold and Llanowar Elves; the Vacuum exiles Faithless Looting from Bot1's graveyard - a card leaving
+# Bot1's graveyard, but not a creature card: no Detective. Turn 5: it exiles Hero of Bladehold - a creature card leaving Bot1's
+# graveyard: a 2/2 white and blue Detective, then a Clue. CR 603.10a, 111.1, 701.16a.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Chalk Outline
+Ghost Vacuum
+Faithless Looting
+Grizzly Bears
+Hero of Bladehold
+Llanowar Elves
+Island x12
+
+[Bot2 Deck]
+Mountain
+Faithless Looting
+Island
+Island
+Island
+Island
+Island
+Wall of Stone
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Chalk Outline.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ghost Vacuum.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Choose(Wall of Stone; Island)
+[T2 Bot2.Main2]
+? Bot2.Graveyard.Count = 3
+Bot1.Battlefield.Ghost Vacuum.Activate(Bot2.Graveyard.Wall of Stone)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 4
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Hero of Bladehold; Llanowar Elves)
+Bot1.Battlefield.Ghost Vacuum.Activate(Bot1.Graveyard.Faithless Looting)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 4
+[T5 Bot1.Main1]
+Bot1.Battlefield.Ghost Vacuum.Activate(Bot1.Graveyard.Hero of Bladehold)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Detective Token.Power = 2
+Bot1.Battlefield.Detective Token.Toughness = 2
+Bot1.Battlefield.Detective Token.Colors = Blue; White
+Bot1.Battlefield.Detective Token.Subtypes = Detective
+Bot1.Battlefield.Clue Token.Types = Artifact
+Exile.Count = 3
