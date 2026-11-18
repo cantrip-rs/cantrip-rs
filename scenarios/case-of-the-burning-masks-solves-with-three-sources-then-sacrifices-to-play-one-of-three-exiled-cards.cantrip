@@ -1,0 +1,72 @@
+# Case of the Burning Masks: "To solve - Three or more sources you controlled dealt damage this turn" and "Solved - Sacrifice this Case: Exile the top three cards of your library. Choose one of them.
+# You may play that card this turn." (CR 719.3a, 702.169d, 406, 305.1) On turn 3 Bot1 casts the Case (its enters trigger is the first source, killing Bot2's Memnite) and Lightning Bolts Bot2 twice
+# (the second and third): three sources, so the Case is solved at the beginning of the end step, and until then its sacrifice ability cannot be activated. On turn 5 the sacrifice exiles Bot1's top three
+# cards - Bot2's library is untouched - and the Island chosen is played as the land drop; the Memnite and Lightning Bolt left in exile cannot be played.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Case of the Burning Masks
+Lightning Bolt
+Lightning Bolt
+Island
+Island
+Island
+Island
+Memnite
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Memnite
+Mountain x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Case of the Burning Masks.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 14
+? Bot1.Battlefield.Case of the Burning Masks.Solved = (absent)
+! Bot1.Battlefield.Case of the Burning Masks.Activate
+[T4 Bot2.Upkeep]
+? Stack.Count = 0
+? Bot1.Battlefield.Case of the Burning Masks.Solved = true
+[T5 Bot1.Main1]
+Bot1.Battlefield.Case of the Burning Masks.Activate
+Bot1.Choose(Island)
+? Exile.Count = 3
+? Bot2.Library.Count = 11
+! Bot1.Exile.Memnite.Cast
+! Bot1.Exile.Lightning Bolt.Cast
+Bot1.Exile.Island.Play
+[T5 Bot1.Main2]
+? Bot1.Battlefield = Island; Mox Ruby; Mox Ruby
+
+[Expect]
+Exile.Count = 2
+Bot1.Battlefield.Case of the Burning Masks = (absent)
+Bot1.Graveyard = Case of the Burning Masks; Lightning Bolt; Lightning Bolt; Black Lotus
+Bot2.Library.Count = 11

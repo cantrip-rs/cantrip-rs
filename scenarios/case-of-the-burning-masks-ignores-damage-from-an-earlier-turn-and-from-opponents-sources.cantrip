@@ -1,0 +1,62 @@
+# Case of the Burning Masks: "To solve - Three or more sources you controlled dealt damage this turn" (CR 719.3a, 120.2) counts only this turn and only the Case controller's sources. Bot1 Bolts Bot2 on
+# turn 1 (an earlier turn); on turn 3 the Case's enters trigger (killing Bot2's Memnite) and a second Bolt are two sources of Bot1's, and Bot2 Bolts Bot1 in response, a third source that Bot2 controls.
+# Four sources dealt damage across the game and three this turn, but only two this turn were Bot1's, so the Case is not solved at the end step.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Case of the Burning Masks
+Lightning Bolt
+Lightning Bolt
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Case of the Burning Masks.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+? Bot2.Life = 14
+[T3 Bot1.End]
+[T4 Bot2.Upkeep]
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Case of the Burning Masks.Solved = (absent)

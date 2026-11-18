@@ -1,0 +1,6 @@
+{
+  "name": "Case of the Burning Masks",
+  "manaCost": "{1}{R}{R}",
+  "type": "Enchantment — Case",
+  "oracleText": "When this Case enters, it deals 3 damage to target creature an opponent controls.\nTo solve — Three or more sources you controlled dealt damage this turn. (If unsolved, solve at the beginning of your end step.)\nSolved — Sacrifice this Case: Exile the top three cards of your library. Choose one of them. You may play that card this turn."
+}
