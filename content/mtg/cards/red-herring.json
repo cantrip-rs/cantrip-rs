@@ -1,0 +1,11 @@
+{
+  "name": "Red Herring",
+  "manaCost": "{1}{R}",
+  "type": "Artifact Creature — Clue Fish",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Haste\nThis creature attacks each combat if able.\n{2}, Sacrifice this creature: Draw a card.",
+  "keywords": [
+    "Haste"
+  ]
+}
