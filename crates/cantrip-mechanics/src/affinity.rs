@@ -1,6 +1,6 @@
 //! Affinity (CR 702.41a): affinity for artifacts (Emry, Lurker of the Loch and Thoughtcast, and Sami, Wildcat Captain's spells you cast) and for a basic land type
 //! (Sapling Nursery's Forests), a creature type (Scales of Shale's Lizards), creatures (Witherbloom, the Balancer) and
-//! artifact creatures (Borg Cube, Urza, Chief Artificer).
+//! artifact creatures (Borg Cube, Urza, Chief Artificer) and outlaws (Hellspur Brute).
 
 use cantrip_api::*;
 
@@ -72,4 +72,11 @@ pub fn instants_and_sorceries_you_cast_have_affinity_for_creatures(q: &dyn Query
         return CostDelta::NONE;
     }
     for_creatures(q, source, player, costed, &[])
+}
+
+/// "Affinity for outlaws" (CR 702.41a, 700.12): this spell costs {1} less to cast for each outlaw its caster controls, as it is
+/// cast (the generic part only, CR 118.7c). Outlaws are permanents of the five types the term names, as the layers made them.
+/// Hellspur Brute prints it.
+pub fn for_outlaws(q: &dyn Query, _: ObjectId, player: PlayerId, _: Costed, _: &[Target]) -> CostDelta {
+    CostDelta::less(crate::outlaw::outlaws_controlled_by(q, player) as u32)
 }
