@@ -1,0 +1,47 @@
+# Krenko, Baron of Tin Street: "Whenever an artifact is put into a graveyard from the battlefield" is any artifact, not only yours. On
+# turn 3 Bot1 destroys Bot2's Mox Ruby with a Shatter, pays {R} with a Mountain and gets a 1/1 Goblin; Krenko stays untapped and
+# the Goblin has no counter.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Krenko, Baron of Tin Street
+Shatter
+Mountain
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Mox Ruby
+Island x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Krenko, Baron of Tin Street.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Shatter.Cast(Bot2.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.PayCost
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Graveyard = Mox Ruby
+Bot1.Battlefield = Mountain; Mountain; Mox Jet; Mox Ruby; Goblin Token; Krenko, Baron of Tin Street
+Bot1.Battlefield.Goblin Token.Power = 1
+Bot1.Battlefield.Krenko, Baron of Tin Street.Tapped = false

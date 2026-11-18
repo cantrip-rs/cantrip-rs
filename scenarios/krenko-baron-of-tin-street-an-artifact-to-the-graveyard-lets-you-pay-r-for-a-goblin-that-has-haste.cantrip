@@ -1,0 +1,48 @@
+# Krenko, Baron of Tin Street: "Whenever an artifact is put into a graveyard from the battlefield, you may pay {R}. If you do, create a
+# 1/1 red Goblin creature token. It gains haste until end of turn." On turn 3 Bot1 sacrifices a Mox Emerald to Krenko's own ability,
+# pays {R} with the Mountain, and the new Goblin attacks the turn it is made (it has haste), a 2/2 once Krenko's ability, which was
+# below the trigger, puts a counter on it too: Bot2 takes 2. The Goblin is no artifact, so nothing is asked a second time.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Emerald
+Krenko, Baron of Tin Street
+Mountain
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Krenko, Baron of Tin Street.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Krenko, Baron of Tin Street.Activate
+Bot1.Choose(Mox Emerald)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.PayCost
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Goblin Token.Power = 2
+? Bot1.Battlefield.Goblin Token.Keywords = Haste
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Token > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Goblin Token.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = Mox Emerald
+Bot2.Life = 18
