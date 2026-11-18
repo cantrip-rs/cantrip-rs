@@ -1,0 +1,43 @@
+# Shady Informant: "When this creature dies, it deals 2 damage to any target" (CR 700.4, 120.3). Bot1 casts it face up on turn 1
+# ({3}{B}{R}: Black Lotus, Mox Jet, Mox Ruby); Bot2 bolts it on turn 2 (4/2) and Bot1 points the trigger at Bot2: 20 - 2 = 18.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Shady Informant
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shady Informant.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Shady Informant)
+Bot2.Pass
+Bot1.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 20
+Bot1.Graveyard = Shady Informant; Black Lotus
+Bot2.Graveyard = Lightning Bolt

@@ -1,0 +1,49 @@
+# Shady Informant (Disguise {2}{B/R}{B/R}): cast face down on turn 1 (Mox Pearl, Mox Sapphire, Mox Jet) and turned face up on turn 3 for
+# {2}{B/R}{B/R} (CR 702.168d: Jet, Ruby, Pearl, Sapphire), it has its dies trigger again: Bot1 bolts it with the second Ruby, targets
+# Bot2, and 2 damage is dealt (20 -> 18).  The Bolt is Bot1's own, so no ward trigger; the pool is empty at the target prompt, so the turning up took exactly {2}{B/R}{B/R}.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Ruby
+Shady Informant
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Shady Informant.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Shady Informant)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 20
+Bot1.Graveyard = Shady Informant; Lightning Bolt

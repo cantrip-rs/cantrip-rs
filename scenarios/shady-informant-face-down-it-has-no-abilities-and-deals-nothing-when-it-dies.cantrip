@@ -1,0 +1,37 @@
+# Shady Informant (Disguise {2}{B/R}{B/R}): face down it is a nameless 2/2 with no abilities (CR 708.2), so when Bot1 bolts its own
+# face-down creature (no ward trigger for its own spell) it dies and deals nothing, with no target asked: Bot2 stays at 20 and the stack is
+# empty. The sibling scenarios, with the Informant face up or turned face up, are the positive controls.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Shady Informant
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Shady Informant.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.#1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 20
+Bot1.Graveyard = Shady Informant; Lightning Bolt
