@@ -1,0 +1,29 @@
+# "This turn" (CR 611.2c): the Maskmaker attacks on turn 3 and the effect is gone on turn 5, when the two Moxen can't pay for the
+# face-down Hellion again ("Mana: short").
+
+[Bot1 Deck]
+Mox Ruby
+Goblin Maskmaker
+Mox Jet
+Riftburst Hellion
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Maskmaker.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Maskmaker > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+! Bot1.Hand.Riftburst Hellion.Cast(Ability: Disguise; Mana: short)
+
+[Expect]
+Bot2.Life = 19

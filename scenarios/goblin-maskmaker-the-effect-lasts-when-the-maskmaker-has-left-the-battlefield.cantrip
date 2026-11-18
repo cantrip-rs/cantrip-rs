@@ -1,0 +1,46 @@
+# The effect is the resolved ability's, not the Maskmaker's (CR 611.2c): Bot2 Bolts the Maskmaker with the trigger on the stack,
+# it dies, the trigger resolves anyway and the face-down Hellion still costs {2}: two Moxen pay and the Mountain stays untapped.
+
+[Bot1 Deck]
+Mountain
+Goblin Maskmaker
+Mox Jet
+Mox Pearl
+Riftburst Hellion
+Island x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goblin Maskmaker.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Maskmaker > Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Goblin Maskmaker)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Maskmaker = (absent)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Riftburst Hellion.Cast(Ability: Disguise)
+? Bot1.Mana =
+? Bot1.Battlefield.Mountain.Tapped = false
+
+[Expect]
+Bot2.Life = 20
