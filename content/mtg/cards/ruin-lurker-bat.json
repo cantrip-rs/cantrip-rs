@@ -1,0 +1,12 @@
+{
+  "name": "Ruin-Lurker Bat",
+  "manaCost": "{W}",
+  "type": "Creature — Bat",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying, lifelink\nAt the beginning of your end step, if you descended this turn, scry 1. (You descended if a permanent card was put into your graveyard from anywhere.)",
+  "keywords": [
+    "Flying",
+    "Lifelink"
+  ]
+}

@@ -1,0 +1,44 @@
+# Ruin-Lurker Bat: "At the beginning of your end step, if you descended this turn, scry 1." Turn 1 Bot1 casts the Bat (Mox Pearl), then Faithless Looting
+# (a Mountain, with Mox Ruby and Mox Jet's mana) draws two Plains and discards an Ornithopter and a Plains: permanent cards put into Bot1's graveyard,
+# so it descended (CR 700.11). At its end step the Bat's trigger scries exactly one card (CR 701.22): the top card, an Island,
+# goes to the bottom, so the turn 3 draw is the Swamp under it (the scry is one card). The Bat is a 1/1 flying lifelink creature.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Ruin-Lurker Bat
+Faithless Looting
+Ornithopter
+Mountain
+Plains
+Plains
+Island
+Swamp
+Forest x7
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ruin-Lurker Bat.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Ornithopter; Plains)
+[T1 Bot1.End]
+Bot1.Arrange( | Island)
+! Bot1.Arrange
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Plains; Swamp
+Bot1.Battlefield.Ruin-Lurker Bat.Power = 1
+Bot1.Battlefield.Ruin-Lurker Bat.Toughness = 1
+Bot1.Battlefield.Ruin-Lurker Bat.Keywords = Flying; Lifelink
+Bot1.Graveyard = Faithless Looting; Plains; Ornithopter

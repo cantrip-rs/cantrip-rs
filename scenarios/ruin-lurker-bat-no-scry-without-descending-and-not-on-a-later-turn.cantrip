@@ -1,0 +1,42 @@
+# Ruin-Lurker Bat: the scry needs "you descended this turn" (CR 700.11). Turn 1 Bot1 casts the Bat (Mox Pearl) and nothing goes to its graveyard: at its end
+# step the trigger is never put on the stack (the refusal: nothing to arrange). Turn 3 Faithless Looting discards an Ornithopter and a Plains from Bot1's
+# hand, so it did descend that turn and the Bat scries one card (the positive control for the refusal): the Mountain goes to the bottom, so the draw on
+# turn 5 is the Forest under it.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Ruin-Lurker Bat
+Faithless Looting
+Mountain
+Plains
+Ornithopter
+Plains
+Island
+Swamp
+Mountain
+Forest
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ruin-Lurker Bat.Cast
+[T1 Bot1.End]
+Bot1.Pass
+! Bot1.Arrange
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Ornithopter; Plains)
+[T3 Bot1.End]
+Bot1.Arrange( | Mountain)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Faithless Looting; Plains; Ornithopter
+Bot1.Hand = Forest; Island; Mox Ruby; Plains; Swamp
