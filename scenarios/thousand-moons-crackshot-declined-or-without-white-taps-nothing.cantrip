@@ -1,0 +1,42 @@
+# Thousand Moons Crackshot: the payment {2}{W} needs the white. On turn 3 Bot1 has Mox Ruby, Mox Jet and Mox Emerald ready (three mana, none white), so
+# paying is refused; it then declines (the other answer to "you may") and nothing is tapped: Bot2's Ornithopter stays untapped (CR 603.12, no reflexive trigger).
+# The Crackshot connects for 2 only because Bot2 did not block.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Emerald
+Thousand Moons Crackshot
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Thousand Moons Crackshot.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Thousand Moons Crackshot > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.PayCost
+Bot1.Decline
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Mox Pearl.Tapped = false
+Bot1.Battlefield.Mox Ruby.Tapped = true
+Bot2.Life = 18

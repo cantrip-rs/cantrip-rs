@@ -1,0 +1,45 @@
+# Thousand Moons Crackshot {1}{W} 2/2: "Whenever this creature attacks, you may pay {2}{W}. When you do, tap target creature." On turn 3 it attacks.
+# Mox Pearl and Mox Ruby alone (two mana, one of them white) are not enough; with Mox Jet the {2}{W} is paid exactly and the pool is empty. The target is
+# chosen once it is paid (CR 603.12): Bot1's own Crackshot and Bot2's Ornithopter are both legal, a noncreature artifact (Mox Jet) is refused, and the
+# Ornithopter is chosen: it is tapped, so it cannot block and the Crackshot connects (Bot2 at 18).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Thousand Moons Crackshot
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Thousand Moons Crackshot.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Thousand Moons Crackshot > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+? Bot1.Mana = 
+! Bot1.Target(Mox Jet)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield.Ornithopter.Tapped = true

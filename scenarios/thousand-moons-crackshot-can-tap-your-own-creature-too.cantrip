@@ -1,0 +1,41 @@
+# Thousand Moons Crackshot: "tap target creature" is not limited to opponents' creatures (CR 115.1). Bot1 pays {2}{W} (Mox Pearl, Mox Ruby, Mox Jet) on
+# turn 3 and chooses its own untapped Ornithopter (Bot2 also has one, left alone and untapped): Bot1's Ornithopter ends tapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Thousand Moons Crackshot
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Thousand Moons Crackshot.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Thousand Moons Crackshot > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Ornithopter.Tapped = false

@@ -1,0 +1,8 @@
+{
+  "name": "Thousand Moons Crackshot",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature attacks, you may pay {2}{W}. When you do, tap target creature."
+}
