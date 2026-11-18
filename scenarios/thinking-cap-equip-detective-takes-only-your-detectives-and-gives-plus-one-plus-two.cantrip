@@ -1,0 +1,78 @@
+# Thinking Cap: "Equipped creature gets +1/+2. Equip Detective {1}. Equip {3}." Bot1 casts the Cap, Rubblebelt Maverick (a Human Detective, 1/1) and
+# an Ornithopter (0/2, not a Detective). Equip Detective {1} refuses the Ornithopter and takes the Maverick, who becomes a 2/3; on turn 3 it also
+# refuses Bot2's own Maverick (not a creature Bot1 controls) and Bot1's Firdoch Core (a Detective by changeling, but no
+# creature), and Equip {3} moves the Cap to the Ornithopter (1/4), the Maverick a 1/1 again.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Thinking Cap
+Rubblebelt Maverick
+Ornithopter
+Black Lotus
+Firdoch Core
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Rubblebelt Maverick
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Thinking Cap.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rubblebelt Maverick.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Thinking Cap.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip Detective)
+Bot1.Battlefield.Thinking Cap.Activate(Bot1.Battlefield.Rubblebelt Maverick; Ability: Equip Detective)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rubblebelt Maverick.Power = 2
+? Bot1.Battlefield.Rubblebelt Maverick.Toughness = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Rubblebelt Maverick.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Firdoch Core.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Thinking Cap.Activate(Bot2.Battlefield.Rubblebelt Maverick; Ability: Equip Detective)
+! Bot1.Battlefield.Thinking Cap.Activate(Bot1.Battlefield.Firdoch Core; Ability: Equip Detective)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Thinking Cap.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip {3})
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Thinking Cap.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Rubblebelt Maverick.Power = 1
+Bot1.Battlefield.Rubblebelt Maverick.Toughness = 1
+Bot2.Battlefield.Rubblebelt Maverick.Power = 1
