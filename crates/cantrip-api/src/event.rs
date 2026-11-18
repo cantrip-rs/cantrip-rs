@@ -793,7 +793,7 @@ impl EventMask {
     /// An optional cost to attack was paid (CR 508.1g, 508.1j).
     pub const PAID_TO_ATTACK: EventMask = EventMask(1 << 57);
     /// A permanent was exerted (CR 701.43a-b), a distinct event from becoming tapped.
-    pub const EXERTED: EventMask = EventMask(1 << 64);
+    pub const EXERTED: EventMask = EventMask(1 << 69);
     /// A creature convoked a spell (CR 702.51c): recorded only, for the history.
     pub const CONVOKED: EventMask = EventMask(1 << 58);
     /// The player controlling a player changed (CR 723.1): recorded only, for what each player saw.
@@ -812,7 +812,7 @@ impl EventMask {
     /// A player foraged (CR 701.61a).
     pub const FORAGED: EventMask = EventMask(1 << 68);
     /// A spell merged with a permanent (CR 702.140d), a distinct event from transforming.
-    pub const MUTATED: EventMask = EventMask(1 << 65);
+    pub const MUTATED: EventMask = EventMask(1 << 70);
     /// A player manifested dread (CR 701.62b).
     pub const MANIFESTED_DREAD: EventMask = EventMask(1 << 67);
     /// A player collected evidence (CR 701.59a).
@@ -961,5 +961,27 @@ mod tests {
     #[test]
     fn an_event_stays_small() {
         assert!(std::mem::size_of::<Event>() <= 28, "Event is {} bytes", std::mem::size_of::<Event>());
+    }
+
+    /// Every event kind has its own bit: two kinds sharing one would make a history query for one count the other's
+    /// records and a trigger listening for one be asked about the other. The constants are read from this file, so a kind
+    /// added later is checked too; a constant named after another (`BECAME_BLOCKED`, `MELDED`) is a deliberate alias.
+    #[test]
+    fn every_event_kind_has_its_own_bit() {
+        let source = include_str!("event.rs");
+        let mut seen: Vec<(u32, &str)> = Vec::new();
+        for line in source.lines() {
+            let line = line.trim();
+            let Some(rest) = line.strip_prefix("pub const ") else { continue };
+            let Some((name, value)) = rest.split_once(": EventMask = EventMask(1 << ") else { continue };
+            let bit: u32 = value.trim_end_matches(");").parse().unwrap_or_else(|_| panic!("{name} is not one bit: {line}"));
+            assert!(bit < 128, "{name} is bit {bit}, past the mask");
+            if let Some((_, other)) = seen.iter().find(|(b, _)| *b == bit) {
+                panic!("{name} and {other} share bit {bit}");
+            }
+            seen.push((bit, name));
+        }
+        assert!(seen.len() > 60, "only {} event kinds found", seen.len());
+        assert!(seen.iter().any(|&(b, n)| n == "EXERTED" && EventMask::EXERTED.0 == 1u128 << b));
     }
 }
