@@ -1,0 +1,40 @@
+# Agency Outfitter: the search is a "may". Bot1 casts the Outfitter with a Magnifying Glass and a Thinking Cap in the library and declines: nothing is searched for or put onto
+# the battlefield, the library keeps all its cards and is not shuffled.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Black Lotus
+Agency Outfitter
+Magnifying Glass
+Thinking Cap
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: U)
+Bot1.Hand.Agency Outfitter.Cast
+Bot1.Pass
+Bot1.Decline
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Agency Outfitter; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Library.Count = 12
+Bot1.Shuffles = 0

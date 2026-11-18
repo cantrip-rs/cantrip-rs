@@ -1,0 +1,49 @@
+# Agency Outfitter {4}{U}{U}: "When this creature enters, you may search your graveyard, hand, and/or library for a card named Magnifying Glass and/or a card named
+# Thinking Cap and put them onto the battlefield. If you search your library this way, shuffle." Bot1 accepts and searches the library too, which holds two
+# Magnifying Glasses, a Thinking Cap, an Ornithopter and Islands: an Ornithopter is no such card, and two Magnifying Glasses are not "a card named Magnifying Glass"
+# twice (one of each name), both refused. Taking one Glass and the Cap, both enter together; the library is shuffled once; the other Glass stays in it.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Black Lotus
+Agency Outfitter
+Magnifying Glass
+Magnifying Glass
+Thinking Cap
+Ornithopter
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: U)
+Bot1.Hand.Agency Outfitter.Cast
+Bot1.Pass
+Bot1.Accept
+Bot1.Accept
+! Bot1.Search(Ornithopter)
+! Bot1.Search(Magnifying Glass#1; Magnifying Glass#2)
+Bot1.Search(Magnifying Glass#1; Thinking Cap)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Agency Outfitter; Magnifying Glass; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Thinking Cap
+Bot1.Battlefield.Agency Outfitter.Keywords = Flying
+Bot1.Library.Count = 10
+Bot1.Shuffles = 1

@@ -1,0 +1,60 @@
+# Agency Outfitter: Bot1 casts a Magnifying Glass on turn 1, and Bot2 destroys it with Shatter on turn 2 (it is in Bot1's graveyard); the Thinking Cap stays in hand. On turn 5 the
+# Outfitter enters, Bot1 accepts the search but declines to search the library (which holds a second Thinking Cap and a Magnifying Glass): the graveyard's Glass and the hand's Cap,
+# the only cards of those names there, enter together (so nothing is left to choose), the library is left alone and nothing is shuffled.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Magnifying Glass
+Thinking Cap
+Island
+Agency Outfitter
+Island x4
+Thinking Cap
+Magnifying Glass
+Island x6
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Shatter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Magnifying Glass.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Magnifying Glass)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Agency Outfitter.Cast
+Bot1.Pass
+Bot1.Accept
+Bot1.Decline
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Agency Outfitter; Island; Magnifying Glass; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Thinking Cap
+Bot1.Graveyard.Count = 0
+Bot1.Shuffles = 0
