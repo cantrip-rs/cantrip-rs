@@ -1,0 +1,9 @@
+{
+  "name": "Suspicious Detonation",
+  "manaCost": "{4}{R}",
+  "type": "Sorcery",
+  "oracleText": "This spell costs {3} less to cast if you've sacrificed an artifact this turn.\nThis spell can't be countered. (This includes by the ward ability.)\nSuspicious Detonation deals 4 damage to target creature.",
+  "keywords": [
+    "CantBeCountered"
+  ]
+}
