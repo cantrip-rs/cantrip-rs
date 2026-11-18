@@ -1,0 +1,49 @@
+# Torch the Witness on Bot2's Centaur Courser (3/3). The first, X = 1, deals 2: below lethal, so no Clue and the Courser has 2
+# damage marked. The second, X = 1, deals 2 more: only 1 was needed to be lethal, so there is excess damage (the ruling: damage
+# already marked counts) and Bot1 investigates as the Courser dies (CR 120.10).
+
+[Bot1 Deck]
+Mox Ruby x4
+Torch the Witness x2
+Mountain x14
+
+[Bot2 Deck]
+Mox Emerald x3
+Centaur Courser
+Mountain x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Battlefield.Mox Emerald#3.Activate
+Bot2.Hand.Centaur Courser.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Torch the Witness.Cast(Bot2.Battlefield.Centaur Courser; X: 1)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Centaur Courser.Damage = 2
+? Bot1.Battlefield.Clue Token = (absent)
+Bot1.Hand.Torch the Witness.Cast(Bot2.Battlefield.Centaur Courser; X: 1)
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Centaur Courser
+Bot1.Battlefield.Clue Token.Subtypes = Clue
+Stack.Count = 0

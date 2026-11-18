@@ -1,0 +1,32 @@
+# Torch the Witness with X = 2 deals 4 damage to Bot1's own Ornithopter (0/2): 2 more than lethal, so there is excess damage
+# and Bot1 investigates (CR 120.10, 701.16a). Three Moxen pay {2}{R} exactly, so a spell dealing 2 for X = 2 would make no Clue.
+
+[Bot1 Deck]
+Mox Ruby x4
+Ornithopter
+Torch the Witness
+Mountain x14
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Torch the Witness.Cast(Bot1.Battlefield.Ornithopter; X: 2)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Ornithopter; Torch the Witness
+Bot1.Battlefield.Clue Token.Subtypes = Clue
+Stack.Count = 0
