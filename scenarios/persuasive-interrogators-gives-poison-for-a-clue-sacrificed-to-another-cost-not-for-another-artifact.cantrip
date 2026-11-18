@@ -1,0 +1,55 @@
+# "Whenever you sacrifice a Clue" is any Clue sacrificed for any reason (CR 701.21), not only to its own ability: Krark-Clan
+# Ironworks sacrificing the Clue gives Bot2 two poison counters. Sacrificing Mox Ruby, an artifact that is not a Clue, to the
+# same cost gives none: Bot2 still has two.
+# Turn 1 casts the Interrogators with Black Lotus and three Moxen (and investigates); turn 3 casts Krark-Clan Ironworks with
+# all five Moxen, then sacrifices the Clue and Mox Ruby to it.
+
+[Bot1 Deck]
+Black Lotus
+Persuasive Interrogators
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Krark-Clan Ironworks
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Persuasive Interrogators.Cast
+Bot2.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Krark-Clan Ironworks.Cast
+Bot2.Pass
+Bot1.Battlefield.Krark-Clan Ironworks.Activate(Sacrifice: Clue Token)
+Bot2.Pass
+Bot2.Pass
+? Bot2.Poison = 2
+Bot1.Battlefield.Krark-Clan Ironworks.Activate(Sacrifice: Mox Ruby)
+Bot2.Pass
+
+[Expect]
+Bot2.Poison = 2
+Bot1.Poison = 0
+Bot1.Graveyard = Mox Ruby; Black Lotus
+Bot1.Battlefield = Krark-Clan Ironworks; Mox Emerald; Mox Jet; Mox Pearl; Mox Sapphire; Persuasive Interrogators

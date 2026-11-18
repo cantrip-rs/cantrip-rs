@@ -1,0 +1,8 @@
+{
+  "name": "Persuasive Interrogators",
+  "manaCost": "{4}{B}{B}",
+  "type": "Creature — Gorgon Detective",
+  "power": 5,
+  "toughness": 6,
+  "oracleText": "When this creature enters, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")\nWhenever you sacrifice a Clue, target opponent gets two poison counters. (A player with ten or more poison counters loses the game.)"
+}

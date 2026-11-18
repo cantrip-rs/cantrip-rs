@@ -1,0 +1,48 @@
+# Persuasive Interrogators ({4}{B}{B}, 5/6): "When this creature enters, investigate" gives Bot1 a Clue, and "Whenever you
+# sacrifice a Clue, target opponent gets two poison counters" (CR 701.21, 122.1f): the Clue sacrificed to its own {2} ability
+# gives Bot2 exactly two poison counters, and Bot1 gets none. Black Lotus and three Moxen pay the six mana on turn 1, the
+# last two Moxen the Clue's {2}.
+# Before the sacrifice the Clue is on the battlefield and no poison counter has been given.
+
+[Bot1 Deck]
+Black Lotus
+Persuasive Interrogators
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Swamp x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Persuasive Interrogators.Cast
+Bot2.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+? Bot1.Battlefield.Clue Token.Subtypes = Clue
+? Bot2.Poison = 0
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Clue Token.Activate
+Bot2.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Poison = 2
+Bot1.Poison = 0
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Persuasive Interrogators
+Bot1.Hand.Count = 1
+Bot1.Graveyard = Black Lotus
