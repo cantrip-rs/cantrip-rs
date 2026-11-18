@@ -1,0 +1,58 @@
+# Doppelgang (X = 2) targets Bot2's Isamaru, Hound of Konda (legendary) and an Ornithopter. The two Isamaru tokens are copies, so they are legendary too (CR 707.2) and Bot1 controls both: the legend rule
+# (CR 704.5j) makes Bot1 keep one and put the other into the graveyard, where a token ceases to exist (CR 704.5d, 111.7). Bot2's own Isamaru is a different controller's and is not affected (it is only about
+# permanents one player controls). Two Ornithopter tokens and one Isamaru token remain for Bot1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Doppelgang
+Forest x14
+
+[Bot2 Deck]
+Mox Pearl
+Isamaru, Hound of Konda
+Ornithopter
+Plains x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Isamaru, Hound of Konda.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Doppelgang.Cast(X: 2)
+Bot1.Target(Bot2.Battlefield.Isamaru, Hound of Konda; Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Isamaru, Hound of Konda#1)
+
+[Expect]
+Bot1.Battlefield.Isamaru, Hound of Konda.Supertypes = Legendary
+Bot1.Battlefield.Isamaru, Hound of Konda#2 = (absent)
+Bot1.Battlefield.Ornithopter#2.Power = 0
+Bot1.Battlefield.Ornithopter#3 = (absent)
+Bot1.Battlefield.Count = 8
+Bot1.Graveyard = Doppelgang; Black Lotus
+Bot2.Battlefield.Isamaru, Hound of Konda.Supertypes = Legendary
+Bot2.Battlefield.Count = 3

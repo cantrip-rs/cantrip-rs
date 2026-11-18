@@ -1,0 +1,55 @@
+# Doppelgang ({X}{X}{X}{G}{U}): "For each of X target permanents, create X tokens that are copies of that permanent." (CR 107.3, 608.2b, 707.2, 111.1). Bot1 pays for X = 2 with eight mana
+# (three {X} = 6, {G}, {U}): Black Lotus (3) and five Moxen. The two targets are an opponent's Ornithopter and Bot1's own Mox Pearl, which is tapped for mana already: its copies are tokens that are
+# copies, untapped. Each target gets exactly X = 2 tokens: two Ornithopters (for Bot1, who controls the tokens) and two Mox Pearls, so three Pearls in all. The opponent's Ornithopter stays where it was.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Doppelgang
+Forest x14
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Doppelgang.Cast(X: 2)
+Bot1.Target(Bot2.Battlefield.Ornithopter; Bot1.Battlefield.Mox Pearl)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter#1.Power = 0
+Bot1.Battlefield.Ornithopter#1.Toughness = 2
+Bot1.Battlefield.Ornithopter#2.Power = 0
+Bot1.Battlefield.Ornithopter#3 = (absent)
+Bot1.Battlefield.Mox Pearl#1.Tapped = true
+Bot1.Battlefield.Mox Pearl#2.Tapped = false
+Bot1.Battlefield.Mox Pearl#3.Tapped = false
+Bot1.Battlefield.Mox Pearl#4 = (absent)
+Bot1.Battlefield.Count = 9
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Count = 1

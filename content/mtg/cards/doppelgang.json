@@ -1,0 +1,6 @@
+{
+  "name": "Doppelgang",
+  "manaCost": "{X}{X}{X}{G}{U}",
+  "type": "Sorcery",
+  "oracleText": "For each of X target permanents, create X tokens that are copies of that permanent."
+}

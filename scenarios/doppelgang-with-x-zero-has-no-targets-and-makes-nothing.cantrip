@@ -1,0 +1,33 @@
+# Doppelgang with X = 0 costs just {G}{U} and has no targets (X = 0 targets, CR 107.3a, 601.2c): it resolves and does nothing, even with permanents to copy on the battlefield. Bot2's Ornithopter and Bot1's Mox are all that is there afterwards.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Doppelgang
+Forest x17
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Doppelgang.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Count = 2
+Bot1.Graveyard = Doppelgang
+Bot2.Battlefield.Count = 1
