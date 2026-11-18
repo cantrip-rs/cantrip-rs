@@ -1,0 +1,18 @@
+{
+  "name": "Fuss // Bother",
+  "oracleText": "",
+  "halves": [
+    {
+      "name": "Fuss",
+      "manaCost": "{2}{R/W}",
+      "type": "Instant",
+      "oracleText": "Put a +1/+1 counter on each attacking creature you control."
+    },
+    {
+      "name": "Bother",
+      "manaCost": "{4}{W/U}{W/U}",
+      "type": "Sorcery",
+      "oracleText": "Create three 1/1 colorless Thopter artifact creature tokens with flying. Surveil 2."
+    }
+  ]
+}

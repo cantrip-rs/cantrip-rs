@@ -1,0 +1,52 @@
+# Bother {4}{W/U}{W/U} (CR 107.4e): "Create three 1/1 colorless Thopter artifact creature tokens with flying. Surveil 2." Mox Ruby, Mox Emerald,
+# Mox Jet, the Island and Mox Pearl pay only one white-or-blue symbol, so the cast is refused until Mox Sapphire pays the other (one white
+# and one blue). The surveil looks at the top TWO cards: Lightning Bolt stays on top and Counterspell goes to the graveyard (a surveil 1
+# could not reach it); the Thopters are created before it.
+
+[Bot1 Deck]
+Fuss // Bother
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Island
+Lightning Bolt
+Counterspell
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Fuss // Bother.Cast(Ability: Bother; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fuss // Bother.Cast(Ability: Bother)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt | Counterspell)
+
+[Expect]
+Bot1.Battlefield.Count = 9
+Bot1.Graveyard = Fuss // Bother; Counterspell
+Bot1.Library.Count = 13
+Bot1.Battlefield.Thopter Token#3.Keywords = Flying
+Bot1.Battlefield.Thopter Token#3.Power = 1
+Bot1.Battlefield.Thopter Token#3.Toughness = 1
+Stack.Count = 0

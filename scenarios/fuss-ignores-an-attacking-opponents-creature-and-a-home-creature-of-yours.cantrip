@@ -1,0 +1,44 @@
+# Fuss {2}{R/W}: "each attacking creature you control" -- on Bot2's turn 4 Bot2's Memnite attacks and Bot1's Ornithopter stays untapped
+# at home (it is not attacking). Bot1 casts Fuss (Mox Pearl pays the hybrid white-or-red symbol; Mox Emerald and Mox Jet the generic) in Bot2's declare attackers step: no creature of Bot1's is
+# attacking and Bot2's attacker is not Bot1's, so nothing gets a counter: Memnite is still 1/1, Ornithopter 0/2.
+
+[Bot1 Deck]
+Fuss // Bother
+Ornithopter
+Mox Emerald
+Mox Pearl
+Mox Jet
+Island x15
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fuss // Bother.Cast(Ability: Fuss)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Graveyard = Fuss // Bother
+Stack.Count = 0
