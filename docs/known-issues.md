@@ -98,8 +98,23 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-168](#ki-168-card-mutate-hangs-on-a-mutant-that-loops-forever) | card-mutate hangs on a mutant that loops forever | Pri-3 | Open |
 | [KI-169](#ki-169-raging-rivers-piles-and-labels-dont-show-which-resolution-they-belong-to) | Raging River's piles and labels don't show which resolution they belong to | Pri-2 | Open |
 | [KI-170](#ki-170-a-top-of-library-permission-tries-an-x-only-up-to-a-mana-value-of-64) | A top-of-library permission tries an X only up to a mana value of 64 | Pri-3 | Won't fix: beyond practical scale |
+| [KI-171](#ki-171-a-resolution-cost-that-exiles-a-merged-permanent-is-labelled-with-the-source-alone) | A resolution cost that exiles a merged permanent is labelled with the source alone | Pri-2 | Open |
 
 ## Issues
+
+### KI-171: A resolution cost that exiles a merged permanent is labelled with the source alone
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-2 | Open | client | 2026-11-18, review of PR #3184 |
+
+**Notes.** Lamplight Phoenix's "you may exile it and collect evidence 4" exiles every card a merged permanent became (CR 730.3c,
+`Game::may_pay_exiling`), but the cost step is still captioned "Exile <source name>", naming only the card the ability belongs
+to. The engine is right; the caption should name every card the exile takes.
+
+**Scenarios.**
+- [`scenarios/lamplight-phoenix-mutated-with-cubwarden-exiles-and-returns-both-cards.cantrip`](../scenarios/lamplight-phoenix-mutated-with-cubwarden-exiles-and-returns-both-cards.cantrip)
+  - the engine side; the caption is not checked.
 
 ### KI-170: A top-of-library permission tries an X only up to a mana value of 64
 
