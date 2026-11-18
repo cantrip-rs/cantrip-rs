@@ -1,0 +1,43 @@
+# Gloom makes white spells cost {3} more. Daru Lancer, a white card, cast face down by its morph is a colorless 2/2 creature
+# spell as its cost is determined (CR 702.37c, 708.4, 708.2, 601.2f): Gloom doesn't apply, so three Moxen pay the {3}
+# exactly and the pool is empty right after.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Daru Lancer
+Island x16
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mox Jet
+Gloom
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet#1.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Hand.Gloom.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Daru Lancer.Cast(Ability: Morph)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield..FaceDown = true

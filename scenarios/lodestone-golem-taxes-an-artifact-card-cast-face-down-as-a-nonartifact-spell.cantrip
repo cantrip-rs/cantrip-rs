@@ -1,0 +1,50 @@
+# Lodestone Golem makes nonartifact spells cost {1} more. Concealed Weapon, an artifact card, cast face down by its disguise is
+# a colorless 2/2 creature spell, no artifact, as its cost is determined (CR 702.168a, 708.4, 708.2, 601.2f): the Golem
+# applies, so three Moxen are short of the {4} and four pay it exactly.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Concealed Weapon
+Mox Sapphire
+Island x15
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Lodestone Golem
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.Battlefield.Mox Pearl#4.Activate
+Bot2.Hand.Lodestone Golem.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Hand.Concealed Weapon.Cast(Ability: Disguise; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Concealed Weapon.Cast(Ability: Disguise)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield..FaceDown = true

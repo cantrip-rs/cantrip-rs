@@ -1,0 +1,41 @@
+# Thalia, Guardian of Thraben makes noncreature spells cost {1} more. Concealed Weapon, an Equipment, cast face down by its
+# disguise is a colorless 2/2 creature spell with no name and mana value 0 as its cost is determined (CR 702.168a, 708.4,
+# 708.2, 601.2f): Thalia doesn't apply, so three Moxen pay the {3} exactly and the pool is empty right after.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Concealed Weapon
+Island x16
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Thalia, Guardian of Thraben
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Thalia, Guardian of Thraben.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Concealed Weapon.Cast(Ability: Disguise)
+? Bot1.Mana =
+? Stack..FaceDown = true
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield..FaceDown = true
