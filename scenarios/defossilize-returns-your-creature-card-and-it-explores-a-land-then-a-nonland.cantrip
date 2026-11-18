@@ -1,0 +1,45 @@
+# Defossilize ({4}{B} sorcery): "Return target creature card from your graveyard to the battlefield. That creature explores, then it explores again." Dead Weight kills Bot1's Memnite on turn 1; on
+# turn 3 Defossilize brings it back and it explores twice (CR 701.44a): the first reveals Forest, a land, which goes to the hand and puts no counter on it; the second reveals Lightning Bolt, a nonland,
+# so the Memnite gets a +1/+1 counter (2/2, so the second explore did happen after the first, on the returned object) and Bot1 puts the Bolt into the graveyard.
+[Bot1 Deck]
+Memnite
+Mox Jet
+Dead Weight
+Black Lotus
+Mox Ruby
+Mox Pearl
+Defossilize
+Swamp
+Forest
+Lightning Bolt
+Island
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dead Weight.Cast(Bot1.Battlefield.Memnite)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Defossilize.Cast(Bot1.Graveyard.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Hand = Forest; Swamp
+Bot1.Library.Top = Island

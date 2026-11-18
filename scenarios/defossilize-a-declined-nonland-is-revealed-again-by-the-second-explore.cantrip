@@ -1,0 +1,45 @@
+# Defossilize: the Memnite explores, then explores again (CR 701.44a). The top card is Lightning Bolt, a nonland: the first explore gives the Memnite a +1/+1 counter and Bot1 declines to put the Bolt into
+# the graveyard, so it stays on top; the second explore reveals the same Bolt (ruling 2023-11-10), gives a second counter (3/3) and this time Bot1 puts it into the graveyard. Island is revealed by nothing.
+[Bot1 Deck]
+Memnite
+Mox Jet
+Dead Weight
+Black Lotus
+Mox Ruby
+Mox Pearl
+Defossilize
+Swamp
+Lightning Bolt
+Island
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dead Weight.Cast(Bot1.Battlefield.Memnite)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Defossilize.Cast(Bot1.Graveyard.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Library.Top = Lightning Bolt
+? Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 2
+Bot1.Accept
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 3
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 2
+Bot1.Library.Top = Island
+Bot1.Hand = Swamp

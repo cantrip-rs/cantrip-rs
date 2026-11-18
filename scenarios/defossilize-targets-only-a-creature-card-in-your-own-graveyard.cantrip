@@ -1,0 +1,55 @@
+# Defossilize: "target creature card from your graveyard". Bot2's Ornithopter, a creature card in Bot2's graveyard (its own Lightning Bolt killed it on turn 2), is no target, nor is the Black Lotus or the
+# Dead Weight in Bot1's graveyard, which are no creature cards; the pool holds enough mana for the spell throughout, so each refusal is the target's. The Memnite in Bot1's own graveyard is. The Ornithopter stays
+# in Bot2's graveyard. The two explores reveal two Forests, which go to the hand and put no counter on the Memnite (1/1).
+[Bot1 Deck]
+Memnite
+Mox Jet
+Dead Weight
+Black Lotus
+Mox Ruby
+Mox Pearl
+Defossilize
+Swamp
+Forest
+Forest
+Island
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dead Weight.Cast(Bot1.Battlefield.Memnite)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Defossilize.Cast(Bot2.Graveyard.Ornithopter)
+! Bot1.Hand.Defossilize.Cast(Bot1.Graveyard.Black Lotus)
+! Bot1.Hand.Defossilize.Cast(Bot1.Graveyard.Dead Weight)
+Bot1.Hand.Defossilize.Cast(Bot1.Graveyard.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Hand = Forest; Forest; Swamp
+Bot2.Graveyard = Ornithopter; Lightning Bolt
+Bot2.Battlefield = Mox Ruby
