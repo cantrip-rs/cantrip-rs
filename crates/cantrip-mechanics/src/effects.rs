@@ -139,6 +139,16 @@ pub fn target_creature_gets<const P: i32, const T: i32>(g: &mut dyn Game, item: 
     Ok(())
 }
 
+/// "Target creature gets -X/-X until end of turn, where X is the number of permanent cards in your graveyard" (CR 110.4a, 608.2h):
+/// X is counted once, as the ability resolves, in its controller's graveyard (CR 109.5: "your"), and is a fixed amount from then on
+/// (CR 611.2a). With the target illegal the core does not resolve the ability (CR 608.2b). Chupacabra Echo and Cloud of Darkness print it.
+pub fn target_creature_gets_minus_x_x_for_permanent_cards_in_your_graveyard(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    let x = crate::targets::permanent_cards_in_graveyard(g, item.controller) as i32;
+    crate::pump(g, item.object, creature, -x, -x);
+    Ok(())
+}
+
 /// "Until end of turn, target creature gets +`P`/+`T` and gains 'When this creature dies, …'" (CR 611.2a, 613.1f): both are continuous
 /// effects of the resolving spell or ability on its first target, one instruction (CR 608.2b: nothing if it is no longer a legal
 /// target), the granted ability being the card's delayed ability `N`. Fake Your Own Death, Perigee Beckoner and Presumed Dead print it.
