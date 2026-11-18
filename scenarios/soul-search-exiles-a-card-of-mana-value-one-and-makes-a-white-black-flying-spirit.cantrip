@@ -1,0 +1,41 @@
+# Soul Search: "Target opponent reveals their hand. You choose a nonland card from it. Exile that card. If the card's mana value
+# is 1 or less, create a 1/1 white and black Spirit creature token with flying." Bot2 holds Duress (mana value 1, exactly at the
+# limit), Grizzly Bears and an Island: the Island is not offered (nonland only), Bot1 itself is not a legal target, Duress is
+# exiled and Bot1 gets the Spirit, which is a 1/1 white and black flier. The whole hand was revealed.
+
+[Bot1 Deck]
+Soul Search
+Mox Pearl
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Duress
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Soul Search.Cast(Bot1)
+Bot1.Hand.Soul Search.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Choose(Island)
+Bot1.Choose(Duress)
+
+[Expect]
+Stack.Count = 0
+Exile = Duress
+Bot2.Hand.Count = 6
+Bot2.Hand.Grizzly Bears.Power = 2
+Bot2.Revealed = Duress; Grizzly Bears; Island; Island; Island; Island; Island
+Bot1.Battlefield.Spirit Token.Power = 1
+Bot1.Battlefield.Spirit Token.Toughness = 1
+Bot1.Battlefield.Spirit Token.Colors = Black; White
+Bot1.Battlefield.Spirit Token.Keywords = Flying
+Bot2.Battlefield.Spirit Token = (absent)

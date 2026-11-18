@@ -1,0 +1,28 @@
+# Soul Search: with only lands in the target's hand the hand is revealed, no nonland card can be chosen (nothing is asked, CR
+# 608.2d), nothing is exiled, so there is no card whose mana value is 1 or less and no Spirit is made.
+
+[Bot1 Deck]
+Soul Search
+Mox Pearl
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Soul Search.Cast(Bot2)
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot2.Hand.Count = 7
+Bot2.Revealed = Island; Island; Island; Island; Island; Island; Island
+Bot1.Battlefield.Spirit Token = (absent)

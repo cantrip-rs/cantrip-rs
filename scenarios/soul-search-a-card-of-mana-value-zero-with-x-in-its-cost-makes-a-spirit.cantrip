@@ -1,0 +1,30 @@
+# Soul Search: Walking Ballista {X}{X} has mana value 0 once it is in exile (X is 0 outside the stack, CR 202.3e), which is 1 or
+# less, so the Spirit is made. Bot2's other nonland card is Grizzly Bears (mana value 2) to show that it is the exiled card that
+# counts.
+
+[Bot1 Deck]
+Soul Search
+Mox Pearl
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Walking Ballista
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Soul Search.Cast(Bot2)
+Bot1.Pass
+Bot1.Choose(Walking Ballista)
+
+[Expect]
+Stack.Count = 0
+Exile = Walking Ballista
+Bot1.Battlefield.Spirit Token.Keywords = Flying

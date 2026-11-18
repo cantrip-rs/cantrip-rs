@@ -1,0 +1,32 @@
+# Soul Search: the limit is "1 or less", so a card of mana value 2 (Grizzly Bears, one past the limit) is exiled with no Spirit.
+# The same hand holds Duress (mana value 1), which stays in hand: only the chosen card is exiled.
+
+[Bot1 Deck]
+Soul Search
+Mox Pearl
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Duress
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Soul Search.Cast(Bot2)
+Bot1.Pass
+Bot1.Choose(Grizzly Bears)
+
+[Expect]
+Stack.Count = 0
+Exile = Grizzly Bears
+Bot2.Hand.Count = 6
+Bot2.Hand.Duress.Colors = Black
+Bot1.Battlefield.Spirit Token = (absent)
+Bot2.Battlefield.Spirit Token = (absent)
