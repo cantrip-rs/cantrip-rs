@@ -1,0 +1,54 @@
+# Hide in Plain Sight ({3}{G}): look at the top five cards of your library, cloak two of them, put the rest on the bottom in a
+# random order. The top five are Grizzly Bears, Llanowar Elves, Island, Forest and Mox Pearl; Ornithopter is the sixth card and
+# is never looked at, so it cannot be chosen, and a third card cannot be chosen either ("two"). Bot1 cloaks the first and the
+# fifth card, Grizzly Bears and Mox Pearl, having looked at all five: two face-down 2/2 creatures with ward {2}, neither face up. The other three go
+# to the bottom without Bot1 being asked for an order, leaving the sixth card on top, and Bot2's library is not touched
+# (13 cards, as dealt). Paid with Black Lotus (GGG) and Mox Emerald. CR 701.58a, 701.20a, 401.4, 701.58e.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Hide in Plain Sight
+Island
+Island
+Island
+Island
+Grizzly Bears
+Llanowar Elves
+Island
+Forest
+Mox Pearl
+Ornithopter
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hide in Plain Sight.Cast
+Bot1.Pass
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Grizzly Bears; Llanowar Elves; Mox Pearl)
+! Bot1.Arrange
+Bot1.Choose(Grizzly Bears; Mox Pearl)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.#1.FaceDown = true
+Bot1.Battlefield.#1.FaceDownName = Grizzly Bears
+Bot1.Battlefield.#1.Tapped = false
+Bot1.Battlefield.#1.Power = 2
+Bot1.Battlefield.#1.Toughness = 2
+Bot1.Battlefield.#2.FaceDown = true
+Bot1.Battlefield.#2.Tapped = false
+Bot1.Battlefield.#2.FaceDownName = Mox Pearl
+Bot1.Battlefield.Count = 3
+Bot1.Library.Count = 11
+Bot1.Hand = Island; Island; Island; Island; Ornithopter
+Bot2.Library.Count = 12
+Bot1.Looked.Count = 5
+Bot1.Graveyard = Hide in Plain Sight; Black Lotus

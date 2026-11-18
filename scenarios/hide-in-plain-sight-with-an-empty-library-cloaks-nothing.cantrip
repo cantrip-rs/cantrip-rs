@@ -1,0 +1,28 @@
+# Hide in Plain Sight with an empty library looks at nothing and cloaks nothing: it resolves, nothing enters and nothing is
+# asked. Paid with Black Lotus (GGG) and Mox Emerald.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Hide in Plain Sight
+Island
+Island
+Island
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hide in Plain Sight.Cast
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 1
+Bot1.Library.Count = 0
+Bot1.Graveyard = Hide in Plain Sight; Black Lotus
