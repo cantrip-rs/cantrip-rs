@@ -1,0 +1,12 @@
+{
+  "name": "Oaken Siren",
+  "manaCost": "{1}{U}",
+  "type": "Artifact Creature — Siren Pirate",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying, vigilance\n{T}: Add {U}. Spend this mana only to cast an artifact spell or activate an ability of an artifact source.",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

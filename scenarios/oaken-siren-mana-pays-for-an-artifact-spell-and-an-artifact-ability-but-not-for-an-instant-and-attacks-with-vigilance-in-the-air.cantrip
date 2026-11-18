@@ -1,0 +1,57 @@
+# Oaken Siren {1}{U} (artifact creature 1/2, flying, vigilance): "{T}: Add {U}. Spend this mana only to cast an artifact spell or
+# activate an ability of an artifact source" (CR 106.6, 302.6). Black Lotus (the only blue source Bot1 ever uses; the Island in hand
+# is never played) pays the Siren on turn 1; a summoning-sick Siren cannot tap (refused). On turn 3 it attacks (vigilance: still
+# untapped after, flying) and in the second main phase its {U} shows as restricted; Brainstorm, an instant, is refused with that
+# mana alone (nothing else makes blue), Sol Ring, an artifact spell, takes it ({1}) and the pool is empty. Sol Ring's {C}{C}
+# casts Mind Stone. On turn 5 the {U} pays Mind Stone's "{1}, {T}, Sacrifice this artifact: Draw a card", an ability of an artifact
+# source; Brainstorm is refused again.
+
+[Bot1 Deck]
+Black Lotus
+Oaken Siren
+Sol Ring
+Mind Stone
+Brainstorm
+Island
+Island
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Oaken Siren.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Oaken Siren.Keywords = Flying; Vigilance
+! Bot1.Battlefield.Oaken Siren.Activate
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Oaken Siren > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Oaken Siren.Tapped = false
+Bot1.Battlefield.Oaken Siren.Activate
+? Bot1.Mana = {U} (ArtifactSpellsOrAbilities)
+! Bot1.Hand.Brainstorm.Cast(Mana: short)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Oaken Siren.Activate
+? Bot1.Mana = {U} (ArtifactSpellsOrAbilities)
+! Bot1.Hand.Brainstorm.Cast(Mana: short)
+Bot1.Battlefield.Mind Stone.Activate(Ability: Draw a card)
+Bot1.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield = Oaken Siren; Sol Ring
+Bot1.Graveyard = Mind Stone; Black Lotus
+Bot1.Battlefield.Oaken Siren.Tapped = true
