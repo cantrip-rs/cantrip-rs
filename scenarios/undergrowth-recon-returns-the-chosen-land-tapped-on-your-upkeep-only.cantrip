@@ -1,0 +1,46 @@
+# Undergrowth Recon: "At the beginning of your upkeep, return target land card from your graveyard to the battlefield tapped."
+# (CR 503.1a, 603.3d, 110.5b). Turn 1: Black Lotus pays for the Recon. Turn 3: Thought Scour (Mox Sapphire) mills Forest and Plains
+# into Bot1's graveyard, so Bot1 has two land cards there. Bot2's upkeep (turn 4) is not Bot1's: nothing triggers. Bot1's upkeep on
+# turn 5 triggers once and Bot1 chooses Plains: it comes back tapped, and the Forest stays in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Undergrowth Recon
+Mox Sapphire
+Thought Scour
+Island
+Island
+Island
+Mountain
+Forest
+Plains
+Swamp
+Island x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Undergrowth Recon.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+[T3 Bot1.Main1]
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Thought Scour; Plains; Forest; Black Lotus
+[T4 Bot2.Upkeep]
+? Stack.Count = 0
+? Bot1.Battlefield.Plains = (absent)
+[T5 Bot1.Upkeep]
+Bot1.Target(Graveyard.Plains)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[Expect]
+Turn = 5
+Bot1.Battlefield.Plains.Tapped = true
+Bot1.Graveyard = Thought Scour; Forest; Black Lotus
