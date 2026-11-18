@@ -1,0 +1,21 @@
+# Scene of the Crime: "This land enters tapped. {T}: Add {C}." Played on turn 1 it is tapped and offers no mana ability; on turn 3 it has
+# untapped and taps for {C}.
+
+[Bot1 Deck]
+Scene of the Crime
+Island x25
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Scene of the Crime.Play
+? Bot1.Battlefield.Scene of the Crime.Tapped = true
+! Bot1.Battlefield.Scene of the Crime.Activate(Ability: {T}: Add {C})
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Scene of the Crime.Tapped = false
+Bot1.Battlefield.Scene of the Crime.Activate(Ability: {T}: Add {C})
+? Bot1.Mana = {C}
+
+[Expect]
+Bot1.Battlefield.Scene of the Crime.Tapped = true

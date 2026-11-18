@@ -1,0 +1,31 @@
+# Scene of the Crime: "{T}, Tap an untapped creature you control: Add one mana of any color." On turn 3 Bot1 controls no creature (Bot2's Ornithopter is not
+# Bot1's) so the ability is refused; once Bot1 casts its own Ornithopter (summoning sick, tapping it is the cost not its {T} ability, CR 302.6) it taps it
+# for red mana, which casts a Lightning Bolt at Bot2. The Scene and the Ornithopter are then both tapped.
+
+[Bot1 Deck]
+Scene of the Crime
+Ornithopter
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Scene of the Crime.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Scene of the Crime.Activate(Ability: Tap an untapped creature)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Scene of the Crime.Activate(Ability: Tap an untapped creature; Tap: Ornithopter; Color: Red)
+? Bot1.Mana = {R}
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[Bot1.Main2]
+! Bot1.Battlefield.Scene of the Crime.Activate(Ability: Tap an untapped creature)
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Scene of the Crime.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = true

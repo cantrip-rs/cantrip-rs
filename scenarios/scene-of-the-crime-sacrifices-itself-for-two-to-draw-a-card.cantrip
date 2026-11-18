@@ -1,0 +1,25 @@
+# Scene of the Crime: "{2}, Sacrifice this land: Draw a card." It enters tapped, which does not matter: the sacrifice is a cost, not a {T}. Bot1 pays {2}
+# with two Moxen, the Scene goes to the graveyard and Bot1 has drawn exactly one card (7 in hand, minus three cast or played, plus one: 5).
+
+[Bot1 Deck]
+Scene of the Crime
+Mox Jet
+Mox Ruby
+Island x25
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Scene of the Crime.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Scene of the Crime.Activate(Ability: Sacrifice this land)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Scene of the Crime
+Bot1.Hand.Count = 5
