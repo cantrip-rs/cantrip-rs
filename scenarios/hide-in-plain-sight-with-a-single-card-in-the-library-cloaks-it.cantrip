@@ -1,0 +1,33 @@
+# Hide in Plain Sight looks at what the library has (CR 609.3): with one card, Bot1 looks at it, cloaks it ("two of them" is as
+# many as there are) and puts nothing on the bottom. The Grizzly Bears becomes a face-down 2/2 and the library is empty.
+# Paid with Black Lotus (GGG) and Mox Emerald.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Hide in Plain Sight
+Island
+Island
+Island
+Island
+Grizzly Bears
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hide in Plain Sight.Cast
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..Tapped = false
+Bot1.Battlefield..FaceDownName = Grizzly Bears
+Bot1.Battlefield.Count = 2
+Bot1.Library.Count = 0
+Bot1.Graveyard = Hide in Plain Sight; Black Lotus
