@@ -1,0 +1,63 @@
+# Hermitic Nautilus {1}{U} (artifact creature 1/4, vigilance): "{1}{U}: This creature gets +3/-3 until end of turn." On turn 1 the
+# Pearl and Jet (white and black, two mana) cannot pay the {U}: the cast is refused; with the Sapphire it is paid. On turn 3 the
+# activation takes the Sapphire's {U} and the Pearl's {W} and the pool is empty after (the Jet is untouched): the 1/4 becomes 4/1
+# (CR 613.4c). It attacks as a 4/1 with vigilance (still untapped after) for 4. On turn 4 it is a 1/4 again (CR 514.2). On turn 5 Black
+# Lotus and the Sapphire pay two activations ({1}{U} each) and the second makes it 7/-2: it dies (CR 704.5f).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Hermitic Nautilus
+Black Lotus
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Hermitic Nautilus.Cast(Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hermitic Nautilus.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hermitic Nautilus.Keywords = Vigilance
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Hermitic Nautilus.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hermitic Nautilus.Power = 4
+? Bot1.Battlefield.Hermitic Nautilus.Toughness = 1
+? Bot1.Battlefield.Mox Jet.Tapped = false
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Hermitic Nautilus > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Hermitic Nautilus.Tapped = false
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Hermitic Nautilus.Power = 1
+? Bot1.Battlefield.Hermitic Nautilus.Toughness = 4
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Hermitic Nautilus.Activate
+Bot1.Battlefield.Hermitic Nautilus.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hermitic Nautilus.Power = 4
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire
+Bot1.Graveyard = Hermitic Nautilus; Black Lotus

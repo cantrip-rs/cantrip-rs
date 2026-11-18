@@ -1,0 +1,11 @@
+{
+  "name": "Hermitic Nautilus",
+  "manaCost": "{1}{U}",
+  "type": "Artifact Creature — Nautilus",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Vigilance\n{1}{U}: This creature gets +3/-3 until end of turn.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
