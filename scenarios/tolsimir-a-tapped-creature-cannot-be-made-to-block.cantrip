@@ -1,0 +1,64 @@
+# Tolsimir, Midnight's Light: "blocks that Wolf this combat if able" asks of the creature only what it can do (CR 509.1c, 509.1b). Bot2's
+# Barbary Apes attacked on turn 4 and are still tapped on turn 5, so Tolsimir's trigger may target them but they block nothing; Bot2's
+# Cylian Elf, untapped and not targeted, is under no requirement and blocks Tolsimir (not Voja) as it pleases. Voja is unblocked: 5 damage.
+# The Elf (1/2) dies to Tolsimir (3), who survives its 1 damage and gains 3 from lifelink.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Emerald
+Mox Jet
+Sol Ring
+Tolsimir, Midnight's Light
+Plains
+Plains x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Barbary Apes
+Swamp
+Swamp
+Cylian Elf
+Swamp x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Tolsimir, Midnight's Light.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Barbary Apes.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Cylian Elf.Cast
+Bot2.Attack(Barbary Apes > Bot1)
+[T5 Bot1.Main1]
+Bot1.Attack(Tolsimir, Midnight's Light > Bot2; Voja Fenstalker > Bot2)
+Bot1.Target(Bot2.Battlefield.Barbary Apes)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Barbary Apes.Tapped = true
+Bot2.Block(Cylian Elf > Tolsimir, Midnight's Light)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Life = 21
+Bot2.Graveyard = Cylian Elf

@@ -1,0 +1,69 @@
+# Tolsimir, Midnight's Light: when it enters it makes Voja Fenstalker, a legendary 5/5 green and white Wolf with trample (the token has
+# summoning sickness, as Tolsimir does). On turn 3 both attack, Voja listed first: "Whenever a Wolf you control attacks, if Tolsimir
+# attacked this combat" holds although they are declared together (CR 508.1k), so the Wolf's trigger targets the one creature an
+# opponent controls, Bot2's Barbary Apes, which must block Voja (CR 509.1c): not Tolsimir, and not nothing. The Apes (2/2) die to the 5/5,
+# which tramples 3 over (CR 702.19b); Tolsimir is unblocked and gains 3 life.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Emerald
+Mox Jet
+Sol Ring
+Tolsimir, Midnight's Light
+Plains
+Plains x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Barbary Apes
+Swamp
+Swamp x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Tolsimir, Midnight's Light.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Voja Fenstalker.Power = 5
+? Bot1.Battlefield.Voja Fenstalker.Toughness = 5
+? Bot1.Battlefield.Voja Fenstalker.Token = true
+? Bot1.Battlefield.Voja Fenstalker.Supertypes = Legendary
+? Bot1.Battlefield.Voja Fenstalker.Subtypes = Wolf
+? Bot1.Battlefield.Voja Fenstalker.Colors = Green; White
+? Bot1.Battlefield.Voja Fenstalker.Keywords = Trample
+? Bot1.Battlefield.Voja Fenstalker.ManaValue = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Barbary Apes.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Voja Fenstalker > Bot2; Tolsimir, Midnight's Light > Bot2)
+? Stack.Count = 1
+? Stack = Tolsimir, Midnight's Light
+Bot1.Pass
+Bot2.Pass
+! Bot2.Block(Count: 0)
+! Bot2.Block(Barbary Apes > Tolsimir, Midnight's Light)
+Bot2.Block(Barbary Apes > Voja Fenstalker)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Life = 23
+Bot2.Graveyard = Barbary Apes
+Bot1.Battlefield.Voja Fenstalker.Damage = 2

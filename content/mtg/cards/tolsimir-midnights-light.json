@@ -1,0 +1,11 @@
+{
+  "name": "Tolsimir, Midnight's Light",
+  "manaCost": "{2}{G}{W}{W}",
+  "type": "Legendary Creature — Elf Scout",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Lifelink\nWhen Tolsimir enters, create Voja Fenstalker, a legendary 5/5 green and white Wolf creature token with trample.\nWhenever a Wolf you control attacks, if Tolsimir attacked this combat, target creature an opponent controls blocks that Wolf this combat if able.",
+  "keywords": [
+    "Lifelink"
+  ]
+}

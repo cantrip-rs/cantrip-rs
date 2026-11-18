@@ -1,0 +1,48 @@
+# Tolsimir, Midnight's Light: Voja Fenstalker is a legendary Wolf token, not a World one (CR 205.4a). With Bot2's Concordant
+# Crossroads, a World enchantment, already on the battlefield, Voja entering leaves it there: the world rule puts all but the
+# newest World permanent into the graveyard only when two or more are on the battlefield (CR 704.5k).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Emerald
+Mox Jet
+Sol Ring
+Tolsimir, Midnight's Light
+Plains
+Plains x12
+
+[Bot2 Deck]
+Concordant Crossroads
+Mox Emerald
+Swamp x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Concordant Crossroads.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Tolsimir, Midnight's Light.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Voja Fenstalker.Supertypes = Legendary
+
+[Expect]
+Bot2.Battlefield.Concordant Crossroads.Tapped = false
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield.Voja Fenstalker.Token = true

@@ -1,0 +1,72 @@
+# Tolsimir, Midnight's Light: "Whenever a Wolf you control attacks" is a trigger for each Wolf: Voja Fenstalker and Young Wolf attack with
+# Tolsimir (an Elf Scout, which is no Wolf and has no trigger of his own) on turn 5, so there are two triggers, each with its own target.
+# A target must be a creature an opponent controls: Bot2's Mox Emerald (not a creature) and Bot1's own Tolsimir are refused. The first trigger (Young Wolf's)
+# targets the Barbary Apes, the second (Voja's) the Cylian Elf, and each must block its own Wolf (CR 509.1c): not nothing, and not the other
+# way round, both refused. The Apes (2/2) kill the 1/1 Young Wolf, which returns with a +1/+1 counter (undying); the Elf (1/2) dies to the
+# 5/5 Voja, 3 tramples over (CR 702.19b), and Tolsimir (3, unblocked) gains 3: Bot2 is at 14.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Black Lotus
+Sol Ring
+Young Wolf
+Tolsimir, Midnight's Light
+Plains
+Plains x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Barbary Apes
+Swamp
+Swamp
+Cylian Elf
+Swamp x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Young Wolf.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Tolsimir, Midnight's Light.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Barbary Apes.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Cylian Elf.Cast
+[T5 Bot1.Main1]
+Bot1.Attack(Tolsimir, Midnight's Light > Bot2; Young Wolf > Bot2; Voja Fenstalker > Bot2)
+! Bot1.Target(Bot2.Battlefield.Mox Emerald)
+! Bot1.Target(Bot1.Battlefield.Tolsimir, Midnight's Light)
+Bot1.Target(Bot2.Battlefield.Barbary Apes)
+Bot1.Target(Bot2.Battlefield.Cylian Elf)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot2.Block(Count: 0)
+! Bot2.Block(Barbary Apes > Voja Fenstalker; Cylian Elf > Young Wolf)
+Bot2.Block(Barbary Apes > Young Wolf; Cylian Elf > Voja Fenstalker)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot2.Battlefield = Mox Emerald; Mox Ruby; Barbary Apes
+Bot2.Graveyard = Cylian Elf
+Bot1.Battlefield.Young Wolf.Power = 2

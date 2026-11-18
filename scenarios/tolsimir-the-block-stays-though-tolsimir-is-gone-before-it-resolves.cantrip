@@ -1,0 +1,63 @@
+# Tolsimir, Midnight's Light: "if Tolsimir attacked this combat" is asked again as the trigger resolves (CR 603.4) and is about what happened,
+# not what is on the battlefield: Tolsimir attacked with Voja Fenstalker on turn 3, and Bot2 answers the trigger by Bolting him (2 toughness),
+# so he has left combat and the battlefield by the time it resolves. He did attack this combat, so Bot2's Young Wolf still must block Voja
+# (CR 509.1c): it dies to the 5/5, which tramples 4 over (CR 702.19b), and returns with a +1/+1 counter (undying).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Emerald
+Mox Jet
+Sol Ring
+Tolsimir, Midnight's Light
+Plains
+Plains x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Young Wolf
+Lightning Bolt
+Mountain
+Mountain
+Mountain
+Mountain x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Tolsimir, Midnight's Light.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Young Wolf.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Tolsimir, Midnight's Light > Bot2; Voja Fenstalker > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Tolsimir, Midnight's Light)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Tolsimir, Midnight's Light
+! Bot2.Block(Count: 0)
+Bot2.Block(Young Wolf > Voja Fenstalker)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot2.Graveyard = Lightning Bolt
+Bot2.Battlefield.Young Wolf.Power = 2
