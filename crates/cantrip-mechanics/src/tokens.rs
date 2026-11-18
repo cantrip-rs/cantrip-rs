@@ -1436,6 +1436,18 @@ pub static WHITE_FLYING_SPIRIT: CardDef = CardDef {
     ..token!(Spirit)
 };
 
+/// The 1/1 white and black Spirit creature token with flying. Soul Search, Teysa, Opulent Oligarch and Kaya, Spirits' Justice make
+/// it. It shares its name with the white [`WHITE_FLYING_SPIRIT`].
+pub static WHITE_BLACK_FLYING_SPIRIT: CardDef = CardDef {
+    colors: Some(ColorSet(ColorSet::of(Color::White).0 | ColorSet::of(Color::Black).0)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    keywords: Keywords::of(&[Keyword::Flying]),
+    text: "Flying",
+    ..token!(Spirit)
+};
+
 /// The X/X blue Spirit creature token with flying, its size given as it is made (`create_sized`). Unwilling Vessel and Misty
 /// Salon make it.
 pub static BLUE_FLYING_SPIRIT: CardDef = CardDef {
