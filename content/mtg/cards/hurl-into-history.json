@@ -1,0 +1,6 @@
+{
+  "name": "Hurl into History",
+  "manaCost": "{3}{U}{U}",
+  "type": "Instant",
+  "oracleText": "Counter target artifact or creature spell. Discover X, where X is that spell's mana value. (Exile cards from the top of your library until you exile a nonland card with that mana value or less. Cast it without paying its mana cost or put it into your hand. Put the rest on the bottom in a random order.)"
+}

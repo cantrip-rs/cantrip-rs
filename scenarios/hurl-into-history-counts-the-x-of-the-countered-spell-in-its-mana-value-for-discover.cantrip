@@ -1,0 +1,68 @@
+# Hurl into History {3}{U}{U}: "Discover X, where X is that spell's mana value" - on the stack a spell's X counts (CR 202.3e). Bot2's
+# Walking Ballista, cast for X = 2 with four Moxen (mana value 4 on the stack), is countered, and discover 4 exiles the top card of
+# Bot1's library: Confounding Riddle, mana value 3, found at once (an X taken as 0 would skip every card there, as each costs more).
+# Bot1 declines to cast it, so it goes into its hand.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Black Lotus
+Hurl into History
+Island
+Island
+Island
+Confounding Riddle
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Walking Ballista
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Walking Ballista.Cast(X: 2)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hurl into History.Cast(Stack.Walking Ballista)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard = Walking Ballista
+Bot1.Graveyard = Hurl into History; Black Lotus
+Bot1.Hand = Confounding Riddle; Island; Island; Island
+Bot1.Library.Count = 12

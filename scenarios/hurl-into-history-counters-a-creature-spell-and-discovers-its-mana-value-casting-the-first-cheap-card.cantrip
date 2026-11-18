@@ -1,0 +1,66 @@
+# Hurl into History {3}{U}{U}: "Counter target artifact or creature spell. Discover X, where X is that spell's mana value" (CR 701.6a,
+# 701.57a). Bot2's Grizzly Bears ({1}{G}, mana value 2) is countered into its graveyard. Discover 2 exiles from the top of Bot1's
+# library: Confounding Riddle (mana value 3, too high), an Island (a land) and Lightning Bolt (mana value 1): the Bolt can be cast
+# for free, and Bot1 does, at Bot2 (20 - 3 = 17). Riddle and Island go to the bottom of the library; the library held 13 cards.
+# Black Lotus gives {U}{U}{U} and Mox Sapphire and Mox Jet make up the other two of {3}{U}{U}.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Black Lotus
+Hurl into History
+Island
+Island
+Island
+Confounding Riddle
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hurl into History.Cast(Stack.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot2)
+? Bot2.Life = 20
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 17
+Bot2.Battlefield = Mox Emerald; Mox Jet
+Bot2.Graveyard = Grizzly Bears
+Bot1.Graveyard = Lightning Bolt; Hurl into History; Black Lotus
+Bot1.Library.Count = 12
+Exile.Count = 0

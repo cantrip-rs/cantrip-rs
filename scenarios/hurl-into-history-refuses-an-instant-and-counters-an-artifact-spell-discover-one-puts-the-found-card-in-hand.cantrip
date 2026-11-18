@@ -1,0 +1,69 @@
+# Hurl into History {3}{U}{U}: "Counter target artifact or creature spell" - an instant is not one (CR 114.1, 601.2c). Bot2's Lightning
+# Bolt on turn 2 cannot be targeted even though Bot1 has the five mana ready (refused); it resolves (20 - 3 = 17). Bot2's Sol Ring (an
+# artifact spell, mana value 1) can: it is countered. Discover 1 exiles Confounding Riddle (mana value 3, too high), an Island and
+# Lightning Bolt (1): Bot1 declines to cast it, so the Bolt goes into Bot1's hand (CR 701.57a); Riddle and Island go to the bottom.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Black Lotus
+Hurl into History
+Island
+Island
+Island
+Confounding Riddle
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Sol Ring
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Hurl into History.Cast(Stack.Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot1.Hand.Hurl into History.Cast(Stack.Sol Ring)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 17
+Bot2.Graveyard = Sol Ring; Lightning Bolt
+Bot2.Battlefield = Mox Jet; Mox Ruby
+Bot1.Graveyard = Hurl into History; Black Lotus
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 12
