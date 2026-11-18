@@ -1,0 +1,47 @@
+# Family Reunion {1}{W}, "Creatures you control get +1/+1 until end of turn": on turn 3 Bot1's Savannah Lions (2/1) and Ornithopter (0/2) become a 3/2 and a 1/3
+# and Bot2's Ornithopter stays a 0/2 (CR 611.2). The bonus wears off at the end of the turn (CR 514.2): on turn 4 they are back to 2/1 and 0/2.
+
+[Bot1 Deck]
+Plains
+Plains
+Savannah Lions
+Ornithopter
+Family Reunion
+Plains x15
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Family Reunion.Cast
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.Power = 3
+? Bot1.Battlefield.Savannah Lions.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Savannah Lions.Keywords = (absent)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Savannah Lions.Power = 2
+Bot1.Battlefield.Savannah Lions.Toughness = 1
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
