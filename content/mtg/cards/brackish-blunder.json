@@ -1,0 +1,6 @@
+{
+  "name": "Brackish Blunder",
+  "manaCost": "{1}{U}",
+  "type": "Instant",
+  "oracleText": "Return target creature to its owner's hand. If it was tapped, create a Map token. (It's an artifact with \"{1}, {T}, Sacrifice this token: Target creature you control explores. Activate only as a sorcery.\")"
+}

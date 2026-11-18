@@ -1,0 +1,52 @@
+# Brackish Blunder {1}{U}: "Return target creature to its owner's hand. If it was tapped, create a Map token." Bot1's Memnite attacks
+# on turn 3 (an attacker taps, so it is tapped as the spell resolves) while Bot2's Ornithopter stays home untapped: Blunder targeting
+# the Memnite is a choice between the two creatures (it can target either). The tapped Memnite returns to its owner's hand and Bot1
+# creates a Map token (CR 400.3, 608.2c); Bot2's untapped Ornithopter is untouched and Bot2 gets nothing.
+
+[Bot1 Deck]
+Memnite
+Mox Sapphire
+Mox Jet
+Brackish Blunder
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+? Bot1.Battlefield.Memnite.Tapped = true
+? Bot2.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Brackish Blunder.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Map Token; Mox Jet; Mox Sapphire
+Bot1.Hand.Count = 5
+Bot1.Hand = Island; Island; Island; Island; Memnite
+Bot1.Graveyard = Brackish Blunder
+Bot2.Battlefield = Ornithopter
+Bot2.Hand.Count = 7
+Bot2.Graveyard.Count = 0

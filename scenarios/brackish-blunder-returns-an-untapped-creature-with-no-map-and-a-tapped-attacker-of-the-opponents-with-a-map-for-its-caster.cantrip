@@ -1,0 +1,62 @@
+# Brackish Blunder {1}{U} (x2): "Return target creature to its owner's hand. If it was tapped, create a Map token." On Bot2's turn 2
+# Bot1 returns Bot2's untapped Ornithopter (a creature Bot1 does not control): no Map (it was not tapped). Bot2 casts it again for {0}
+# and, on turn 4, attacks with it (tapping it). The second Blunder, cast during the declare attackers step, returns the tapped
+# Ornithopter and Bot1, the spell's controller, creates the Map token (CR 400.3, 608.2c) - Bot2 gets nothing.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Brackish Blunder
+Brackish Blunder
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Brackish Blunder.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield =
+? Bot2.Hand.Count = 8
+? Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+? Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Brackish Blunder.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Island; Map Token; Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Brackish Blunder; Brackish Blunder
+Bot2.Battlefield =
+Bot2.Hand.Count = 9
+Bot2.Graveyard.Count = 0
