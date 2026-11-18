@@ -1,0 +1,48 @@
+# Homesickness's "Tap up to two target creatures" is one instruction (CR 701.26a), so the two Ornithopters Bot1 controls become
+# tapped at once and Rewrite History's "whenever one or more creatures you control become tapped" triggers once (CR 603.2c): one
+# plan counter, where tapping them one at a time would give two. Bot1 draws two first, then each Ornithopter gets a stun counter.
+# Homesickness's {4}{U}{U} is paid by Black Lotus and three Moxen on turn 3.
+
+[Bot1 Deck]
+Black Lotus
+Rewrite History
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ornithopter
+Ornithopter
+Homesickness
+Island x16
+
+[Bot2 Deck]
+Forest x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rewrite History.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Homesickness.Cast
+Bot1.Target(Bot1)
+Bot1.Target(Bot1.Battlefield.Ornithopter#1; Bot1.Battlefield.Ornithopter#2)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter#1.Tapped = true
+Bot1.Battlefield.Ornithopter#2.Tapped = true
+Bot1.Battlefield.Ornithopter#1.Counters.Stun = 1
+Bot1.Battlefield.Ornithopter#2.Counters.Stun = 1
+Bot1.Battlefield.Rewrite History.Counters.Plan = 1
