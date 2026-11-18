@@ -1,0 +1,6 @@
+{
+  "name": "Chalk Outline",
+  "manaCost": "{3}{G}",
+  "type": "Enchantment",
+  "oracleText": "Whenever one or more creature cards leave your graveyard, create a 2/2 white and blue Detective creature token, then investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")"
+}
