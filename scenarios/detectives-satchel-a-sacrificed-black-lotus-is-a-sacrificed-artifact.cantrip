@@ -1,0 +1,44 @@
+# Detective's Satchel: "Activate only if you've sacrificed an artifact this turn" - any artifact, a card as well as a token. Turn 1 Mox Sapphire, Mox Ruby, Mox Jet and Mox Pearl cast it (the two Clues
+# it makes are never touched). Turn 3 it is refused until Black Lotus is cast and sacrificed for its mana, an artifact card sacrificed as the cost of a mana ability (CR 701.21a, 605.1a): then it
+# makes a Thopter. The Lotus's three blue mana are left unspent, so the sacrifice alone is what opens the ability.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Detective's Satchel
+Black Lotus
+Island
+Island x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Detective's Satchel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+! Bot1.Battlefield.Detective's Satchel.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Detective's Satchel.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Black Lotus
+Bot1.Battlefield = Clue Token; Clue Token; Detective's Satchel; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Thopter Token
+Bot1.Mana = {U}{U}{U}

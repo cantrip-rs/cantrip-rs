@@ -1,0 +1,66 @@
+# Detective's Satchel: "if you've sacrificed an artifact this turn" counts only the Satchel's controller's sacrifices. Turn 1 Bot1 casts it with Black Lotus and Mox Ruby (the Lotus's sacrifice is
+# turn 1's, long over) and leaves Mox Jet and Mox Pearl untapped. Turn 2 Bot2 sacrifices its own Clue (the Thraben Inspector's, {2} from Mox Jet and Plains): the Satchel is refused. Bot1 then sacrifices
+# its own Clue ({2} from its two Moxen, with Bot2's ability still on the stack) and the Satchel, which is no creature and is untapped, makes a Thopter on its opponent's turn (CR 602.5b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Detective's Satchel
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Thraben Inspector
+Plains
+Plains
+Plains
+Plains
+Plains x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Detective's Satchel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Thraben Inspector.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Clue Token.Subtypes = Clue
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Clue Token.Activate
+Bot2.Pass
+! Bot1.Battlefield.Detective's Satchel.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Clue Token.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Clue Token; Detective's Satchel; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Battlefield.Detective's Satchel.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Thopter Token.Power = 1
+Bot1.Battlefield.Detective's Satchel.Tapped = true

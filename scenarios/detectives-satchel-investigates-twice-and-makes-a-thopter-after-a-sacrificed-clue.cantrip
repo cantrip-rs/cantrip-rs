@@ -1,0 +1,53 @@
+# Detective's Satchel {2}{U}{R}: "When this artifact enters, investigate twice." and "{T}: Create a 1/1 colorless Thopter artifact creature token with flying. Activate only if you've
+# sacrificed an artifact this turn." Turn 1 four Moxen cast it and two Clue tokens arrive; with nothing sacrificed this turn its ability is refused. Turn 3 a Clue is sacrificed to its own
+# ability ({2} from Mox Sapphire and Mox Jet), a Clue being an artifact (CR 111.10f), and now the Satchel taps for a Thopter. It is no creature, so it has no summoning sickness (CR 302.6).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Detective's Satchel
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Detective's Satchel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Clue Token; Clue Token; Detective's Satchel; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+! Bot1.Battlefield.Detective's Satchel.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Detective's Satchel.Activate
+Bot1.Battlefield.Clue Token.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clue Token.Subtypes = Clue
+? Bot1.Hand.Count = 4
+Bot1.Battlefield.Detective's Satchel.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Thopter Token.Power = 1
+Bot1.Battlefield.Thopter Token.Toughness = 1
+Bot1.Battlefield.Thopter Token.Keywords = Flying
+Bot1.Battlefield.Thopter Token.Types = Artifact; Creature
+Bot1.Battlefield.Detective's Satchel.Tapped = true
+Bot1.Battlefield = Clue Token; Detective's Satchel; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Thopter Token

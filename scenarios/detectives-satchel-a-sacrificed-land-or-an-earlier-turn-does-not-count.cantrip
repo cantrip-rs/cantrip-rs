@@ -1,0 +1,55 @@
+# Detective's Satchel: only an artifact counts, and only one sacrificed this turn. Turn 3 Bot1 sacrifices Evolving Wilds (a land, no artifact): the Satchel is still refused. It then sacrifices a Clue
+# ({2} from Mox Sapphire and Mox Jet) and the Satchel makes a Thopter. Turn 5 the Satchel is untapped again but the Clue went with turn 3: it is refused (CR 602.5b, 701.21a).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Detective's Satchel
+Evolving Wilds
+Island
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Detective's Satchel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Evolving Wilds.Play
+Bot1.Battlefield.Evolving Wilds.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Island)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Evolving Wilds
+! Bot1.Battlefield.Detective's Satchel.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Clue Token.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Detective's Satchel.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thopter Token.Keywords = Flying
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Detective's Satchel.Activate
+
+[Expect]
+Bot1.Battlefield.Detective's Satchel.Tapped = false
+Bot1.Battlefield.Thopter Token.Power = 1

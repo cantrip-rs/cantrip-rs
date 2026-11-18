@@ -1,0 +1,6 @@
+{
+  "name": "Detective's Satchel",
+  "manaCost": "{2}{U}{R}",
+  "type": "Artifact",
+  "oracleText": "When this artifact enters, investigate twice. (To investigate, create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")\n{T}: Create a 1/1 colorless Thopter artifact creature token with flying. Activate only if you've sacrificed an artifact this turn."
+}
