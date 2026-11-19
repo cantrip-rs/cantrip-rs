@@ -1,0 +1,44 @@
+# Skullcap Snail cast by Bot2 on turn 2 targets Bot1, "target opponent" read from its controller: Bot1 chooses the Mountain of its own
+# hand of Mountain, Forest and Swamps to exile, and Bot2's own hand is untouched (seven, less two Moxen and the Snail, plus its
+# draw for the turn). Bot2 casts it off Mox Jet and Mox Ruby; Bot1 has 7 cards in hand and has not drawn.
+
+[Bot1 Deck]
+Mountain
+Forest
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Skullcap Snail
+Plains
+Plains
+Swamp
+Swamp
+Swamp x10
+
+[Actions]
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Skullcap Snail.Cast(Bot2)
+Bot2.Hand.Skullcap Snail.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Mountain)
+
+[Expect]
+Exile = Mountain
+Bot1.Hand.Count = 6
+Bot2.Hand.Count = 5
+Bot2.Battlefield.Skullcap Snail.Power = 1

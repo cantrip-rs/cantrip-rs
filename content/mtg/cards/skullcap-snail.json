@@ -1,0 +1,8 @@
+{
+  "name": "Skullcap Snail",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Fungus Snail",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature enters, target opponent exiles a card from their hand."
+}
