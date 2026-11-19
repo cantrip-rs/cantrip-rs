@@ -1,0 +1,38 @@
+# Old Flitterfang: "Sacrifice another creature or artifact" takes a noncreature artifact too. Bot1 sacrifices Mox Jet: Flitterfang
+# is a 5/6 until end of turn, and with no creature dead this turn its end step makes no Food.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+Old Flitterfang
+Black Lotus
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Old Flitterfang.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Old Flitterfang.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Choose(Mox Jet)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Old Flitterfang.Power = 5
+? Bot1.Battlefield.Old Flitterfang.Toughness = 6
+[T4 Bot2.Upkeep]
+
+[Expect]
+Bot1.Graveyard = Mox Jet; Black Lotus; Black Lotus
+Bot1.Battlefield = Swamp; Swamp; Old Flitterfang
+Bot1.Battlefield.Old Flitterfang.Power = 3

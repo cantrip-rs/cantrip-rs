@@ -1,0 +1,25 @@
+# Old Flitterfang: with no creature having died this turn, neither player's end step makes a Food (CR 603.4: the
+# intervening "if" is checked as the step begins, and no trigger is put on the stack).
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+Old Flitterfang
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Old Flitterfang.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+[T3 Bot1.Upkeep]
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Swamp; Old Flitterfang

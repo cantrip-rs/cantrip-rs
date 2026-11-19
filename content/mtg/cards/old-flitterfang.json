@@ -1,0 +1,11 @@
+{
+  "name": "Old Flitterfang",
+  "manaCost": "{4}{B}",
+  "type": "Legendary Creature — Rat Faerie",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying\nAt the beginning of each end step, if a creature died this turn, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\n{2}{B}, Sacrifice another creature or artifact: Old Flitterfang gets +2/+2 until end of turn.",
+  "keywords": [
+    "Flying"
+  ]
+}

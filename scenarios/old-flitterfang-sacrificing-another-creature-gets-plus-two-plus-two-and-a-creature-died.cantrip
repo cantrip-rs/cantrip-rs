@@ -1,0 +1,45 @@
+# Old Flitterfang: "{2}{B}, Sacrifice another creature or artifact: Old Flitterfang gets +2/+2 until end of turn."
+# Sacrificing Mintstrosity pays the cost and makes Flitterfang a 5/6 until end of turn; Mintstrosity's own dies trigger
+# makes a Food, and the creature that died this turn makes Flitterfang's end step make a second one.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+Old Flitterfang
+Black Lotus
+Mintstrosity
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Old Flitterfang.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mintstrosity.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+? Bot1.Battlefield.Old Flitterfang.Power = 3
+Bot1.Pass
+Bot1.Battlefield.Old Flitterfang.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Choose(Mintstrosity)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Old Flitterfang.Power = 5
+? Bot1.Battlefield.Old Flitterfang.Toughness = 6
+[T4 Bot2.Upkeep]
+
+[Expect]
+Bot1.Graveyard = Mintstrosity; Black Lotus; Black Lotus
+Bot1.Battlefield = Mox Jet; Swamp; Swamp; Old Flitterfang; Food Token; Food Token
+Bot1.Battlefield.Old Flitterfang.Power = 3
+Bot1.Battlefield.Old Flitterfang.Toughness = 4

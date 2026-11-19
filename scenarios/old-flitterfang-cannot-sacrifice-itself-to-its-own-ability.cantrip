@@ -1,0 +1,24 @@
+# Old Flitterfang: its ability sacrifices "another creature or artifact", so with nothing else on the battlefield it
+# is not offered (CR 602.2b), though mana is plentiful.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Old Flitterfang
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Old Flitterfang.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Old Flitterfang.Activate
+
+[Expect]
+Bot1.Battlefield = Old Flitterfang
+Bot1.Battlefield.Old Flitterfang.Power = 3
