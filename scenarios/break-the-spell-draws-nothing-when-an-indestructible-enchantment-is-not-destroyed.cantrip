@@ -1,0 +1,44 @@
+# Break the Spell {W}: the card is drawn only if the permanent "was destroyed this way" (CR 701.8a, 608.2c). Bot1 aims it at its
+# own Dryad of the Ilysian Grove (an enchantment creature) and, in response, casts Boros Charm for indestructible. The Dryad stays
+# in play and Bot1 draws nothing, although it controlled the target.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Pearl
+Dryad of the Ilysian Grove
+Break the Spell
+Boros Charm
+Plains x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Dryad of the Ilysian Grove.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Break the Spell.Cast(Bot1.Battlefield.Dryad of the Ilysian Grove)
+? Bot1.Hand.Count = 2
+Bot1.Hand.Boros Charm.Cast
+Bot1.Modes(Permanents you control gain indestructible)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 1
+Bot1.Graveyard = Break the Spell; Boros Charm
+Bot1.Battlefield.Dryad of the Ilysian Grove.Keywords = Indestructible

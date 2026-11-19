@@ -1,0 +1,37 @@
+# Break the Spell {W}: "... or a token was destroyed this way, draw a card." Bot2 puts a Monster Role token on its own
+# Ornithopter with Monstrous Rage; Bot1 destroys that Role with Break the Spell. The Role is an enchantment token Bot1 does not
+# control, and Bot1 still draws a card (CR 701.8a, 111.10m). The Ornithopter loses the Role's +1/+1.
+
+[Bot1 Deck]
+Mox Pearl
+Break the Spell
+Plains x14
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Monstrous Rage
+Plains x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Monstrous Rage.Cast(Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+? Bot2.Battlefield.Ornithopter.Toughness = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Hand.Count = 7
+Bot1.Hand.Break the Spell.Cast(Bot2.Battlefield.Monster)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 7
+Bot1.Graveyard = Break the Spell
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot2.Graveyard = Monstrous Rage

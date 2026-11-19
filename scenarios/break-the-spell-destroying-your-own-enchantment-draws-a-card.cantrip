@@ -1,0 +1,38 @@
+# Break the Spell {W}: "If a permanent you controlled ... was destroyed this way, draw a card." Bot1 puts its own Pacifism on
+# Bot2's Ornithopter and then destroys it with Break the Spell: the enchantment was a permanent Bot1 controlled (the Ornithopter
+# is Bot2's), so Bot1 draws a card (CR 701.8a, 608.2c). Its Pacifism is gone, so the Ornithopter is free again.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Pacifism
+Break the Spell
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Plains x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Pacifism.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Break the Spell.Cast(Bot1.Battlefield.Pacifism)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Graveyard = Break the Spell; Pacifism

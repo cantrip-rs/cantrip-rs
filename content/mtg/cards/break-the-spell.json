@@ -1,0 +1,6 @@
+{
+  "name": "Break the Spell",
+  "manaCost": "{W}",
+  "type": "Instant",
+  "oracleText": "Destroy target enchantment. If a permanent you controlled or a token was destroyed this way, draw a card."
+}

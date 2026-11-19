@@ -1,0 +1,42 @@
+# Break the Spell {W}: "Destroy target enchantment. If a permanent you controlled or a token was destroyed this way, draw a
+# card." Bot2's Pacifism (a nontoken enchantment Bot1 does not control) is destroyed and Bot1 draws nothing (CR 701.8a). The
+# spell targets only enchantments: Bot2's Ornithopter (an artifact creature) and Plains are refused, as is Bot1's own Mox Pearl.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Break the Spell
+Plains x10
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Pacifism
+Ornithopter
+Plains x11
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Pacifism.Cast(Ornithopter)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+? Bot1.Hand.Count = 6
+! Bot1.Hand.Break the Spell.Cast(Bot2.Battlefield.Ornithopter)
+! Bot1.Hand.Break the Spell.Cast(Bot2.Battlefield.Plains)
+! Bot1.Hand.Break the Spell.Cast(Bot1.Battlefield.Mox Pearl#2)
+Bot1.Hand.Break the Spell.Cast(Bot2.Battlefield.Pacifism)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Graveyard = Break the Spell
+Bot2.Graveyard = Pacifism
+Bot2.Battlefield = Mox Pearl; Mox Pearl; Ornithopter; Plains
