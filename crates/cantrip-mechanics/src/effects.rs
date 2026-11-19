@@ -3308,6 +3308,20 @@ pub fn gain_until_end_of_turn(g: &mut dyn Game, source: ObjectId, target: Object
     g.add_effect(source, target, EffectKind::AddKeywords(Keywords::of(&[keyword])), Duration::EndOfTurn);
 }
 
+/// "Target creature you control gains vigilance and gets +X/+X until end of turn, where X is the number of creatures you control"
+/// (CR 611.2a, 608.2h): X is counted once, as the ability resolves, the source included if it is still a creature you control,
+/// and does not change later in the turn; nothing happens if the first target is no longer legal (CR 608.2b). Treeguard Duo
+/// and Pollen-Shield Hare's Hare Raising print it.
+pub fn first_target_gains_vigilance_and_gets_plus_x_creatures_you_control(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    let x = crate::creatures_you_control(g, item.controller) as i32;
+    instruction(g, |g| {
+        gain_until_end_of_turn(g, item.object, creature, Keyword::Vigilance);
+        crate::pump(g, item.object, creature, x, x);
+    });
+    Ok(())
+}
+
 /// "Target creature gains [keywords] until end of turn" (CR 611.2a, 608.2b): the ability's first target, a layer 6 keyword
 /// grant for the rest of the turn from its source; nothing for a target no longer legal as the spell or ability resolves.
 /// `KEYWORDS` is a `Keywords` as `u128` (`Keywords::of(&[Keyword::Trample]).0`); the named `target_..._gains_...` effects here
