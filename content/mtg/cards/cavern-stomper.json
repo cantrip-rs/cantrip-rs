@@ -1,0 +1,8 @@
+{
+  "name": "Cavern Stomper",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "When this creature enters, scry 2. (Look at the top two cards of your library, then put any number of them on the bottom and the rest on top in any order.)\n{3}{G}: This creature can't be blocked by creatures with power 2 or less this turn."
+}

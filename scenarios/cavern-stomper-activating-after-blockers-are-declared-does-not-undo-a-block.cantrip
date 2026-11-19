@@ -1,0 +1,54 @@
+# Cavern Stomper: "{3}{G}: This creature can't be blocked by creatures with power 2 or less this turn." The effect restricts which
+# creatures can be declared as blockers (CR 509.1b), so paying after Bot2's Ornithopter (power 0) already blocks changes nothing:
+# the block stands, and Stomper deals its 7 damage to Ornithopter instead of Bot2 (no trample).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Cavern Stomper
+Forest
+Plains x22
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cavern Stomper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Plains | )
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Cavern Stomper > Bot2)
+Bot2.Block(Ornithopter > Cavern Stomper)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Cavern Stomper.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter

@@ -1,0 +1,38 @@
+# Cavern Stomper: "When this creature enters, scry 2." Bot1 casts it on turn 1 (Black Lotus and three Moxen pay exactly). The scry
+# sees Forest and Mountain on top of the library, keeps Mountain on top and bottoms Forest, so the turn 3 draw is Mountain (not
+# Forest, which was first) and the library is one card shorter for it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Cavern Stomper
+Plains x2
+Forest
+Mountain
+Plains x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cavern Stomper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Mountain | Forest)
+? Bot1.Hand = Plains; Plains
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Mountain

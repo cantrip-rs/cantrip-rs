@@ -1,0 +1,85 @@
+# Cavern Stomper {4}{G}{G} (7/7): "{3}{G}: This creature can't be blocked by creatures with power 2 or less this turn" (CR 509.1b,
+# 611.2). Bot1 casts it on turn 1 (Black Lotus and three Moxen pay exactly) and pays the ability on turn 3 with Forest and the same
+# three Moxen, the pool empty after. Bot2's Ornithopter (power 0) and Ballyrush Banneret (power 2, exactly the limit) can't block
+# it; Hired Blade (power 3, one past it) can, and dies. On turn 5, the effect over, Ornithopter blocks it and dies.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Cavern Stomper
+Forest
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Ballyrush Banneret
+Hired Blade
+Ornithopter x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cavern Stomper.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Plains | )
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Ballyrush Banneret.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Hired Blade.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Cavern Stomper.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Cavern Stomper > Bot2)
+! Bot2.Block(Ornithopter > Cavern Stomper)
+! Bot2.Block(Ballyrush Banneret > Cavern Stomper)
+Bot2.Block(Hired Blade > Cavern Stomper)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+? Bot1.Battlefield.Cavern Stomper.Damage = 3
+? Bot2.Graveyard = Hired Blade
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Cavern Stomper > Bot2)
+Bot2.Block(Ornithopter > Cavern Stomper)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Cavern Stomper.Damage = 0
+Bot2.Graveyard = Ornithopter; Hired Blade
