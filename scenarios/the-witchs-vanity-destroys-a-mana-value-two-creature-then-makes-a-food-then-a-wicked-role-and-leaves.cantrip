@@ -1,0 +1,88 @@
+# The Witch's Vanity ({1}{B} Saga). I: "Destroy target creature an opponent controls with mana value 2 or less." Bot2 has Grizzly Bears (MV 2),
+# Memnite (MV 0) and Bonecrusher Giant (MV 3); Bot1 has its own Ornithopter. The Giant (MV 3) and Bot1's own Ornithopter are refused as targets,
+# the Bears (MV exactly 2) are destroyed. II (turn 5): Bot1 gets a Food token. III (turn 7): a Wicked Role on Bot1's Ornithopter (0/2 -> 1/3),
+# and the Saga is sacrificed after III (CR 714.4), going to the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Ornithopter
+The Witch's Vanity
+Swamp
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Grizzly Bears
+Bonecrusher Giant
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Bonecrusher Giant.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Witch's Vanity.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Bonecrusher Giant)
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Grizzly Bears
+? Bot2.Battlefield.Count = 7
+? Bot1.Battlefield.The Witch's Vanity.Counters.Lore = 1
+[T5 Bot1.Main1]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Witch's Vanity.Counters.Lore = 2
+? Bot1.Battlefield.Food Token.Subtypes = Food
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = The Witch's Vanity
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Wicked.Subtypes = Aura; Role
+Bot2.Battlefield.Count = 7
