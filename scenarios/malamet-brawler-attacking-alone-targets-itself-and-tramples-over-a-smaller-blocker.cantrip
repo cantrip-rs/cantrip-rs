@@ -1,0 +1,45 @@
+# Malamet Brawler: "Whenever this creature attacks, target attacking creature gains trample until end of turn." Attacking alone, the Brawler
+# is the only attacking creature, so it is the target and gains trample (CR 702.19b): blocked by Bot2's Elvish Mystic (1/1), it assigns 1 to the
+# Mystic and the other 1 to Bot2, who goes to 19 (no target is asked, there being one legal). At the end of turn
+# the trample wears off. The cost is exactly {1}{G}: Forest and Mox Ruby.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Malamet Brawler
+Elvish Mystic
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+! Bot1.Hand.Malamet Brawler.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Malamet Brawler.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Malamet Brawler)
+Bot2.Block(Elvish Mystic > Malamet Brawler)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Graveyard = Elvish Mystic
+Bot2.Life = 19
+Bot1.Battlefield.Malamet Brawler.Keywords = (absent)

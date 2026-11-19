@@ -1,0 +1,54 @@
+# Malamet Brawler: "target attacking creature gains trample until end of turn." Attacking with Grizzly Bears too, Bot1 targets the Bears (the
+# Brawler itself and the Bears are both legal; Bot1's Elvish Mystic, not attacking, and Bot2's Elvish Mystic, not attacking for Bot2, are
+# refused). Bot2 blocks each attacker with a 1/1 Elvish Mystic: the Bears (2/2, trample) assign 1 to theirs and 1 to Bot2, who goes to 19,
+# but the Brawler has no trample and its excess damage is not assigned to the player, so Bot2 stays at 19, not 18.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Emerald
+Malamet Brawler
+Grizzly Bears
+Elvish Mystic
+Island
+Island x13
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Fyndhorn Elves
+Elvish Mystic
+Island x16
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Malamet Brawler.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Fyndhorn Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T4 Bot2.Main1]
+[T5 Bot1.Main1]
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Malamet Brawler > Bot2; Grizzly Bears > Bot2)
+! Bot1.Target(Bot1.Battlefield.Elvish Mystic)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot2.Block(Elvish Mystic > Malamet Brawler; Fyndhorn Elves > Grizzly Bears)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Graveyard = Fyndhorn Elves; Elvish Mystic

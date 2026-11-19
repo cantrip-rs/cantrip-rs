@@ -1,0 +1,8 @@
+{
+  "name": "Malamet Brawler",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Cat Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature attacks, target attacking creature gains trample until end of turn."
+}
