@@ -1,0 +1,40 @@
+# Bubble Up needs "target instant or sorcery card from your graveyard" (CR 115.2, 601.2c): Bot2's Lightning Bolt (in Bot2's
+# graveyard) and Bot1's own Memnite (a creature card in its graveyard) are not legal targets, so both casts are refused.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Ruby
+Aquatic Alchemist
+Memnite
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+? Bot1.Graveyard = Memnite
+? Bot2.Graveyard = Lightning Bolt
+! Bot1.Hand.Aquatic Alchemist.Cast(Bot2.Graveyard.Lightning Bolt; Ability: Bubble Up)
+! Bot1.Hand.Aquatic Alchemist.Cast(Bot1.Graveyard.Memnite; Ability: Bubble Up)
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Aquatic Alchemist; Island; Lightning Bolt

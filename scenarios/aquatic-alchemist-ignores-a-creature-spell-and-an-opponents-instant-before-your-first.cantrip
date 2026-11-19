@@ -1,0 +1,47 @@
+# Aquatic Alchemist: only instant and sorcery spells *you* cast count. Turn 3: Bot1 casts Memnite (a creature spell, not
+# counted) and Bot2 answers with Lightning Bolt at Bot1 (an opponent's instant: no pump, and it does not use up Bot1's "first"),
+# so Bot1's Shock afterwards is still the first instant or sorcery spell it cast this turn and pumps the Alchemist to 3/3.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Aquatic Alchemist
+Memnite
+Shock
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Aquatic Alchemist.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+? Bot1.Battlefield.Aquatic Alchemist.Power = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Aquatic Alchemist.Power = 3
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Aquatic Alchemist.Power = 3

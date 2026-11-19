@@ -1,0 +1,14 @@
+{
+  "name": "Aquatic Alchemist",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Elemental",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Whenever you cast your first instant or sorcery spell each turn, this creature gets +2/+0 until end of turn.",
+  "adventure": {
+    "name": "Bubble Up",
+    "manaCost": "{2}{U}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Put target instant or sorcery card from your graveyard on top of your library. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

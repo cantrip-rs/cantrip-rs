@@ -1,0 +1,58 @@
+# Aquatic Alchemist // Bubble Up (CR 715): Bubble Up {2}{U}, a sorcery, puts target instant or sorcery card from your graveyard on
+# top of your library. Turn 1: Bot1 Lightning Bolts Bot2, then casts Bubble Up (Mox Sapphire, Mox Jet, Mox Emerald) on the Bolt:
+# it is the top card of the library (not in the graveyard or hand), and the Alchemist card is exiled. Turn 3: Bot1 draws the Bolt,
+# casts the Alchemist from exile and Bolts again - the first instant or sorcery of the turn - for a 3/3.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Lightning Bolt
+Aquatic Alchemist
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Bot1.Graveyard = Lightning Bolt
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Aquatic Alchemist.Cast(Bot1.Graveyard.Lightning Bolt; Ability: Bubble Up)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Top = Lightning Bolt
+? Bot1.Graveyard.Count = 0
+? Exile = Aquatic Alchemist
+[T3 Bot1.Main1]
+? Bot1.Hand = Island; Lightning Bolt
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Exile.Aquatic Alchemist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Aquatic Alchemist.Power = 3
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Exile.Count = 0
+Bot1.Battlefield.Aquatic Alchemist.Power = 3
+Bot1.Graveyard = Lightning Bolt

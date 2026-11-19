@@ -1,0 +1,44 @@
+# Aquatic Alchemist counts sorceries as well as instants: Bot1 casts the Alchemist (Mox Sapphire + Mox Jet), then Preordain
+# ({U}, a sorcery; the second Mox Sapphire) - the first instant or sorcery this turn, so the Alchemist becomes 3/3 - and then
+# Shock at Bot2, the second, which leaves it at 3/3 (not 5/3).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Aquatic Alchemist
+Preordain
+Shock
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Aquatic Alchemist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Preordain.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island; Island | )
+? Bot1.Battlefield.Aquatic Alchemist.Power = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Aquatic Alchemist.Power = 3
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Aquatic Alchemist.Power = 3
