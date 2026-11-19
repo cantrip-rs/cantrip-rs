@@ -1,0 +1,49 @@
+# Archon's Glory {W} ("Target creature gets +2/+2 until end of turn. If this spell was bargained, that creature also gains flying
+# and lifelink until end of turn."). On turn three Bot1 bargains it (CR 702.166a: a Plains is no artifact, enchantment or token and
+# is refused, Ornithopter is sacrificed), so Memnite is 3/3 with flying and lifelink and its attack gains Bot1 3 life while Bot2
+# loses 3. On turn five the pump and the lifelink are gone (CR 514.2, 611.2a): Memnite is a plain 1/1 whose hit costs Bot2 1 life
+# and gains Bot1 nothing.
+
+[Bot1 Deck]
+Mox Pearl
+Memnite
+Ornithopter
+Archon's Glory
+Plains
+Plains
+Plains x17
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Archon's Glory.Cast(Bot1.Battlefield.Memnite)
+Bot1.Modes(Bargain:)
+Bot1.Battlefield.Plains.Activate
+! Bot1.Choose(Plains)
+Bot1.Choose(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 3
+? Bot1.Battlefield.Memnite.Keywords = Flying; Lifelink
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Life = 23
+? Bot2.Life = 17
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Attack(Memnite > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 16
+Bot1.Graveyard = Archon's Glory; Ornithopter

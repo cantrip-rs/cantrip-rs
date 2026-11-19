@@ -1,0 +1,33 @@
+# Archon's Glory, cast without bargain, targets any creature (CR 115.1a: not only one its controller controls) and gives only
+# +2/+2: Bot1 aims it at Bot2's Ornithopter, a 2/4 with no flying or lifelink, and nothing is sacrificed.
+
+[Bot1 Deck]
+Mox Pearl
+Memnite
+Archon's Glory
+Plains x17
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Archon's Glory.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 2
+? Bot2.Battlefield.Ornithopter.Toughness = 4
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+? Bot1.Battlefield.Count = 4
+
+[Expect]
+Bot1.Graveyard = Archon's Glory

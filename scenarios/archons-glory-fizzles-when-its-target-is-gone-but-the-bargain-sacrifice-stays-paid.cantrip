@@ -1,0 +1,50 @@
+# Archon's Glory, bargained (Ornithopter sacrificed as the additional cost, CR 601.2h), on Bot1's Memnite. In response Bot2 casts
+# Swords to Plowshares on Memnite, exiling it, so the spell's one target is illegal and it does nothing as it resolves
+# (CR 608.2b): Bot1's other creature, the second Memnite, is not pumped and has no keywords, and the sacrifice is not undone. Bot1 gains
+# 1 life from Swords (Memnite's power).
+
+[Bot1 Deck]
+Mox Pearl
+Memnite
+Memnite
+Ornithopter
+Archon's Glory
+Plains
+Plains
+Plains x17
+
+[Bot2 Deck]
+Swords to Plowshares
+Plains x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Archon's Glory.Cast(Bot1.Battlefield.Memnite)
+Bot1.Modes(Bargain:)
+Bot1.Battlefield.Plains.Activate
+Bot1.Choose(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Memnite)
+Bot2.Battlefield.Plains.Activate
+Bot2.Pass
+Bot1.Pass
+? Exile = Memnite
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 21
+Exile = Memnite
+Stack.Count = 0
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Graveyard = Archon's Glory; Ornithopter
