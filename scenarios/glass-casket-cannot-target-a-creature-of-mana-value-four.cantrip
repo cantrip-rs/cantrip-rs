@@ -1,0 +1,47 @@
+# "Exile target creature an opponent controls with mana value 3 or less" (CR 115.1, 202.3): Bot2's She-Hulk, Jade Defender is
+# {3}{G}, mana value 4, one above the limit, so it is refused as a target; Bot2's Elvish Mystic (mana value 1) is the positive
+# control and is exiled. She-Hulk stays on the battlefield.
+
+[Bot1 Deck]
+Plains
+Plains
+Glass Casket
+Plains x15
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Black Lotus
+She-Hulk, Jade Defender
+Elvish Mystic
+Ornithopter
+Forest x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.She-Hulk, Jade Defender.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Glass Casket.Cast
+Bot1.Pass
+! Bot1.Target(She-Hulk, Jade Defender)
+Bot1.Target(Elvish Mystic)
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Exile = Elvish Mystic
+Bot2.Battlefield.She-Hulk, Jade Defender.Power = 4

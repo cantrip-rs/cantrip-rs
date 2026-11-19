@@ -1,0 +1,6 @@
+{
+  "name": "Glass Casket",
+  "manaCost": "{1}{W}",
+  "type": "Artifact",
+  "oracleText": "When this artifact enters, exile target creature an opponent controls with mana value 3 or less until this artifact leaves the battlefield."
+}
