@@ -1,0 +1,56 @@
+# Triumphant Chomp counts Dinosaurs you control only. Bot1 controls Prehistoric Pet (Dinosaur, power 1) and a Hill Giant (not a
+# Dinosaur, power 3); Bot2 controls Raptor Companion (a Dinosaur, power 3, but Bot2's). Chomp at Bot1's own Hill Giant deals 2, not
+# 3: it has 2 damage marked and lives.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Hill Giant
+Prehistoric Pet
+Triumphant Chomp
+Island x15
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Raptor Companion
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Prehistoric Pet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Raptor Companion.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Triumphant Chomp.Cast(Hill Giant)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Hill Giant.Damage = 2
+Bot2.Battlefield.Raptor Companion.Damage = 0

@@ -1,0 +1,47 @@
+# Triumphant Chomp with no Dinosaur under Bot1's control (it controls no creature): "2 or the greatest power among Dinosaurs you
+# control" is 2, so Bot2's Hill Giant (3/3) has exactly 2 damage marked on turn 3.
+[Bot1 Deck]
+Mox Ruby
+Triumphant Chomp
+Island x18
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Hill Giant
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Triumphant Chomp.Cast(Hill Giant)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Hill Giant.Damage = 2

@@ -1,0 +1,57 @@
+# Triumphant Chomp: the greatest power among Dinosaurs you control (CR 208.1), as it resolves. Bot1 has Raptor Companion (3/1) and
+# Nest Robber (2/1), both Dinosaurs, so Chomp deals 3 (the greater, not the 2 floor, not their sum 5 - a 3/3 Hill Giant of Bot2
+# dies to 3 either way, so the damage is checked on an 0/8 Wall of Stone: it takes exactly 3).
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Raptor Companion
+Nest Robber
+Triumphant Chomp
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mountain
+Wall of Stone
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Raptor Companion.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nest Robber.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Wall of Stone.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Triumphant Chomp.Cast(Wall of Stone)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Wall of Stone.Damage = 3
