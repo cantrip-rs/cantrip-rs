@@ -1,0 +1,6 @@
+{
+  "name": "Tectonic Hazard",
+  "manaCost": "{R}",
+  "type": "Sorcery",
+  "oracleText": "Tectonic Hazard deals 1 damage to each opponent and each creature they control."
+}

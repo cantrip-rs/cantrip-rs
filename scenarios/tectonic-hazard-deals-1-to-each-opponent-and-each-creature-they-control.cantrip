@@ -1,0 +1,37 @@
+# Tectonic Hazard {R} (sorcery): "deals 1 damage to each opponent and each creature they control." On turn 3 Bot2 has a Memnite
+# (1/1, dies) and an Ornithopter (0/2, takes 1 and lives); Bot2 itself goes to 19. Bot1's own Ornithopter and Bot1 are not hit.
+[Bot1 Deck]
+Mox Ruby
+Tectonic Hazard
+Ornithopter
+Island x17
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tectonic Hazard.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20
+Bot2.Graveyard = Memnite
+Bot2.Battlefield.Ornithopter.Damage = 1
+Bot1.Battlefield.Ornithopter.Damage = 0
+Bot1.Graveyard = Tectonic Hazard
