@@ -1,0 +1,6 @@
+{
+  "name": "The Princess Takes Flight",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Exile up to one target creature.\nII — Target creature you control gets +2/+2 and gains flying until end of turn.\nIII — Return the exiled card to the battlefield under its owner's control."
+}

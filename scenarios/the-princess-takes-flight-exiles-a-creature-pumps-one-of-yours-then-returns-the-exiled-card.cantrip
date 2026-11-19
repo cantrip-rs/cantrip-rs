@@ -1,0 +1,67 @@
+# The Princess Takes Flight. Turn 3 Bot1 casts it (lore 1): chapter I exiles Bot2's Ornithopter (up to one target creature, any
+# controller). Turn 4 Bot2 casts a second Ornithopter. Turn 5, chapter II: Bot2's Ornithopter is no legal target ("target creature
+# you control"), so Bot1's Memnite becomes a 3/3 flyer until end of turn (a 1/1 again on turn 7). Turn 7, chapter III returns the
+# exiled Ornithopter under its owner's control (Bot2 has two again) and the Saga is sacrificed after III.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Memnite
+Memnite
+The Princess Takes Flight
+Plains x15
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Princess Takes Flight.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Count = 0
+? Exile.Count = 1
+? Bot1.Battlefield.The Princess Takes Flight.Counters.Lore = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#1.Power = 3
+? Bot1.Battlefield.Memnite#1.Toughness = 3
+? Bot1.Battlefield.Memnite#1.Keywords = Flying
+? Bot1.Battlefield.Memnite#2.Power = 1
+? Exile.Count = 1
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Memnite#1.Power = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 2
+Exile.Count = 0
+Bot1.Graveyard.The Princess Takes Flight.Colors.Count = 1
+Bot1.Battlefield.Count = 5

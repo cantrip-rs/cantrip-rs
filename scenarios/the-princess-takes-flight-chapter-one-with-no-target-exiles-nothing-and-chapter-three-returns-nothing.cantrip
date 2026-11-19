@@ -1,0 +1,47 @@
+# The Princess Takes Flight. Chapter I is "up to one": Bot1 chooses no target, so nothing is exiled. Chapter II has one legal
+# target (Bot1's only creature), which gets +2/+2 and flying until end of turn. Chapter III has no exiled card to return and the
+# Saga is sacrificed.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Memnite
+The Princess Takes Flight
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Princess Takes Flight.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.The Princess Takes Flight.Counters.Lore = 1
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Keywords = Flying
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard.The Princess Takes Flight.Colors.Count = 1
+Bot1.Battlefield.Memnite.Power = 1
