@@ -1,0 +1,45 @@
+# Seeker of Sunlight's ability is "Activate only as a sorcery" (CR 602.5d): in Bot1's main phase with Mox Pearl still on the stack the activation
+# is refused (the stack is not empty), and so it is once Bot1 attacks (not a main phase). Forest and three Moxen are untapped each time,
+# so only the timing refuses. In the second main phase, with the stack empty, it is allowed.
+
+[Bot1 Deck]
+Forest
+Seeker of Sunlight
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Island
+Island
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Seeker of Sunlight.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+? Stack.Count = 1
+! Bot1.Battlefield.Seeker of Sunlight.Activate
+Bot1.Pass
+Bot1.Attack(Seeker of Sunlight)
+! Bot1.Battlefield.Seeker of Sunlight.Activate
+[T3 Bot1.Main2]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Seeker of Sunlight.Activate
+! Bot1.Accept
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield.Seeker of Sunlight.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand = Island; Island; Mountain

@@ -1,0 +1,45 @@
+# Seeker of Sunlight: "{2}{G}: This creature explores. Activate only as a sorcery." On turn 3 (after the Island it draws) Forest, Mox Ruby
+# and Mox Emerald pay exactly {2}{G}, so nothing is left in the pool. The Mountain revealed is a land, so it goes into
+# the hand and the Seeker stays a 1/1.
+
+[Bot1 Deck]
+Forest
+Seeker of Sunlight
+Mox Ruby
+Mox Jet
+Mox Emerald
+Island
+Island
+Island
+Mountain
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Seeker of Sunlight.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Seeker of Sunlight.Activate
+! Bot1.Accept
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Turn = 3
+Bot1.Mana =
+Bot1.Battlefield.Seeker of Sunlight.Power = 1
+Bot1.Battlefield.Seeker of Sunlight.Toughness = 1
+Bot1.Battlefield.Seeker of Sunlight.Counters.PlusOnePlusOne = (absent)
+Bot1.Revealed = Mountain
+Bot1.Hand = Island; Island; Island; Mountain
+Bot1.Library.Count = 11
+Bot1.Graveyard.Count = 0
