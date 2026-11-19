@@ -51,17 +51,30 @@ class Mining(unittest.TestCase):
             self.assertEqual(mining.split_plan(p), dict(forks=1, losers=1))
             self.assertIn('"candidates"', p.plan_forks.read_text(encoding="utf-8"))
 
-    def test_the_window_takes_the_last_generations_targets_each_older_at_half(self):
+    def test_mined_targets_are_weighted_by_effort_and_scaled_to_the_floor(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            for g in (3, 5, 6):
-                d = root / f"gen{g}" / "mine" / "targets" / "forks-a"
+            fake = {}
+            for g, name, sims in ((6, "forks-deep", 32768), (6, "losers", 8192), (5, "losers", 8192), (3, "losers", 8192)):
+                d = root / f"gen{g}" / "mine" / "targets" / name
                 d.mkdir(parents=True)
                 (d / "x.shard.zst").write_bytes(b"")
-            got = mining.window_dirs(root, 7, 2, 8.0)
-            self.assertEqual([Path(x.rsplit(":", 1)[0]).parts[-4] for x in got], ["gen6", "gen5"])
-            self.assertEqual([x.rsplit(":", 1)[1] for x in got], ["8", "4"])
-            self.assertEqual(mining.window_dirs(root, 7, 0, 8.0), [])
+                mining.write_effort(d, sims, 16)
+                fake[str(d)] = 100
+            real = mining.target_samples
+            mining.target_samples = lambda d: fake[str(d)]
+            try:
+                # Effort alone: deep forks 8x, losers 2x, a generation older at half; gen3 is out of the window.
+                got = mining.weighted_dirs(root, 7, 2, 4096, 0.0, 1_000_000, log=lambda *_: None)
+                weights = {Path(x.rsplit(":", 1)[0]).parts[-4] + "/" + Path(x.rsplit(":", 1)[0]).name: float(x.rsplit(":", 1)[1]) for x in got}
+                self.assertEqual(weights, {"gen6/forks-deep": 8.0, "gen6/losers": 2.0, "gen5/losers": 1.0})
+                # A floor of 10%: mined weight 100 x (8 + 2 + 1) = 1,100 against 1,000,000 is scaled to 1/9 of it.
+                got = mining.weighted_dirs(root, 7, 2, 4096, 0.10, 1_000_000, log=lambda *_: None)
+                mined = sum(float(x.rsplit(":", 1)[1]) * 100 for x in got)
+                self.assertAlmostEqual(mined / (mined + 1_000_000), 0.10, places=6)
+                self.assertAlmostEqual(float(got[0].rsplit(":", 1)[1]) / float(got[1].rsplit(":", 1)[1]), 4.0)
+            finally:
+                mining.target_samples = real
 
     def test_judge_runs_are_the_forks_twice_and_the_losers_once(self):
         runs = mining.judge_runs(mining.Paths(Path("g")), mining.Settings(), "model", "decks", Path("here"), "judge")

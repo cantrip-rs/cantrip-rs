@@ -20,8 +20,9 @@ decisions whose deep target is far from the network's prior (`mine keep`), write
 (`mine-filter`): `genN/mine/targets/` for training and `genN/mine/heldout/` for measuring, and the report
 (`genN/mine/REPORT.md`). Outcomes only choose which games are looked at; every target is the deep search's.
 
-`window_dirs` gives the training window the targets of the last generations (`--mine-window`), each at `--mine-weight`
-halved per generation of age."""
+`weighted_dirs` gives the training window the targets of the last generations (`--mine-window`), each weighted by the
+effort of the search that made it over self-play's full search (`effort.json`), halved per generation of age, and all of
+them scaled up, if need be, to at least `--mine-floor` of the policy-target weight."""
 
 from __future__ import annotations
 
@@ -300,18 +301,51 @@ def check_judged(judge_dir: Path, names) -> dict:
     return counts
 
 
-def window_dirs(root: Path, gen: int, window: int, weight: float) -> list[str]:
-    """The mined targets the training of generation `gen` takes: those of the `window` generations before it that have
-    them, the newest at `weight`, each older one at half the one after it."""
-    out = []
-    w = weight
-    for g in range(gen - 1, max(gen - 1 - window, -1), -1):
+EFFORT_FILE = "effort.json"
+
+
+def write_effort(directory: Path, simulations: int, worlds: int):
+    """The search that made a target directory's targets, beside its shards: what `weighted_dirs` weights them by."""
+    (directory / EFFORT_FILE).write_text(json.dumps(dict(simulations=simulations, worlds=worlds)), encoding="utf-8")
+
+
+def target_samples(directory: Path) -> int:
+    """How many positions a target directory's shards hold."""
+    import sys  # noqa: PLC0415
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    import shards  # noqa: PLC0415
+
+    return sum(len(game.samples) for path in shards.shards(directory) for game in shards.read(path)[1])
+
+
+def weighted_dirs(root: Path, gen: int, window: int, full_simulations: int, floor: float, policy_targets: float,
+                  log=print) -> list[str]:
+    """The mined targets the training of generation `gen` takes, weighted by the effort behind them (owner,
+    2026-11-18: a network should hold what a deep search finds, so a deeper search's targets count for more): those of
+    the `window` generations before it that have them, each directory at its search's simulations over self-play's
+    full search's (`effort.json`), halved per generation of age; then all of them scaled up together, if need be, so
+    they make at least `floor` of the policy-target weight beside self-play's (`policy_targets`: its directories' policy
+    targets times their weights). A directory with no `effort.json` counts as a full search's."""
+    dirs = []
+    for age, g in enumerate(range(gen - 1, max(gen - 1 - window, -1), -1)):
         targets = root / f"gen{g}" / "mine" / "targets"
-        if targets.is_dir():
-            for d in sorted(x for x in targets.iterdir() if x.is_dir() and any(x.glob("*.shard.zst"))):
-                out.append(f"{d}:{w:g}")
-        w /= 2
-    return out
+        if not targets.is_dir():
+            continue
+        for d in sorted(x for x in targets.iterdir() if x.is_dir() and any(x.glob("*.shard.zst"))):
+            effort = json.loads((d / EFFORT_FILE).read_text(encoding="utf-8")) if (d / EFFORT_FILE).exists() else {}
+            w = effort.get("simulations", full_simulations) / max(full_simulations, 1) * 0.5 ** age
+            dirs.append((d, w, target_samples(d)))
+    mined = sum(w * n for _, w, n in dirs)
+    scale = 1.0
+    if mined > 0 and floor > 0 and mined < floor / (1 - floor) * policy_targets:
+        scale = floor / (1 - floor) * policy_targets / mined
+    for d, w, n in dirs:
+        log(f"  mined: {d} - {n} positions at {w * scale:.3g} (effort {w:.3g} x {scale:.3g})")
+    if dirs:
+        share = mined * scale / (mined * scale + policy_targets) if policy_targets else 1.0
+        log(f"  mined targets: {share:.1%} of the policy-target weight ({policy_targets:.0f} self-play targets weighted)")
+    return [f"{d}:{w * scale:.10g}" for d, w, _ in dirs]
 
 
 def wait(judge: RemoteJudge, nonce: str, poll_seconds: float, timeout_hours: float, log=print) -> dict:

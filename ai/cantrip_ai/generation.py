@@ -1019,8 +1019,9 @@ def main(argv=None):
                    help="no pair mining (`mining.py`): the gate's pairs are not judged, and no targets are made from them")
     a.add_argument("--mine-window", type=int, default=2,
                    help="the generations whose mined targets a generation trains on (the last ones that have them)")
-    a.add_argument("--mine-weight", type=float, default=8.0,
-                   help="the newest mined targets' weight in the training window, halved per generation of age")
+    a.add_argument("--mine-floor", type=float, default=0.10,
+                   help="the least share of the policy-target weight the mined targets make (they are scaled up to it); "
+                        "each mined directory is weighted by its search's simulations over self-play's full search's")
     a.add_argument("--mine-lanes", type=int, default=24, help="lanes of each deep judgement run (on a worker: all at once)")
     a.add_argument("--mine-local-lanes", type=int, default=8,
                    help="lanes of each judgement run here, with no worker (one run at a time, each search up to 2 GB)")
@@ -1459,8 +1460,17 @@ def main(argv=None):
         length = ["--steps", steps] if uses is None else ["--target-uses", f"{uses:.4g}"]
         extra = [str(e) for e in args.extra_data]
         if not args.no_mine:
-            # The pair miner's targets of the generations before (`mining.window_dirs`).
-            extra += mining.window_dirs(root, gen, args.mine_window, args.mine_weight)
+            # The pair miner's targets of the generations before, weighted by the effort behind them, at least
+            # --mine-floor of the policy targets (`mining.weighted_dirs`). Self-play's policy targets: each window
+            # directory's recorded visit targets (its self-play stage's), times its weight; this generation's, its own.
+            targets = 0.0
+            for d, weight in w:
+                stage = d.parent / "generation.json"
+                if d.name == "selfplay" and stage.exists():
+                    sp = json.loads(stage.read_text(encoding="utf-8")).get("stages", {}).get("selfplay", {})
+                    targets += weight * sp.get("visit_samples", 0)
+            extra += mining.weighted_dirs(root, gen, args.mine_window, args.full_simulations or args.simulations,
+                                          args.mine_floor, targets, log)
         for e in extra:
             log(f"  extra: {e}")
         cmd = [sys.executable, "-m", "cantrip_ai.train", "--data", *[f"{d}:{weight:g}" for d, weight in w], *extra, "--out", out,
@@ -1737,6 +1747,11 @@ def main(argv=None):
                     run([EXPLORE, "mine-filter", "--from", run_dir / split, "--keep", p.keep / f"keep-{split}.jsonl",
                          "--out", dest / run_dir.name, "--producer", producer],
                         logs / f"mine-filter-{split}-{run_dir.name}.log", False)
+                    st = mine_settings()
+                    deep = run_dir.name == mining.DEEP_RUN
+                    if (dest / run_dir.name).is_dir():
+                        mining.write_effort(dest / run_dir.name, st.deep_simulations if deep else st.loser_simulations,
+                                            st.deep_worlds if deep else st.loser_worlds)
         settings = mine_settings()
         (p.root / "settings.json").write_text(json.dumps(dict(
             # The keys `mine report` reads.
