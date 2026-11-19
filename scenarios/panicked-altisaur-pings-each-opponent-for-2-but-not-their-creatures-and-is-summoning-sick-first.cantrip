@@ -1,0 +1,45 @@
+# Panicked Altisaur {4}{R} 4/5: "{T}: This creature deals 2 damage to each opponent." Cast on turn 1 off five Moxen it is summoning
+# sick, so the ability is refused (CR 302.6); on turn 3 it taps and deals exactly 2 to Bot2 (20 -> 18) and nothing to Bot2's
+# Memnite or to Bot1 itself - only "each opponent" is dealt damage.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Panicked Altisaur
+Island x15
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Panicked Altisaur.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Panicked Altisaur.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Panicked Altisaur.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 20
+Bot2.Battlefield.Memnite.Damage = 0
+Bot1.Battlefield.Panicked Altisaur.Tapped = true

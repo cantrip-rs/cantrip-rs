@@ -1,0 +1,11 @@
+{
+  "name": "Panicked Altisaur",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Dinosaur",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Reach\n{T}: This creature deals 2 damage to each opponent.",
+  "keywords": [
+    "Reach"
+  ]
+}

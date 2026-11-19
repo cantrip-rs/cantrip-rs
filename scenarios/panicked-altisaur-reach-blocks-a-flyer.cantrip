@@ -1,0 +1,43 @@
+# Panicked Altisaur has reach (CR 702.17b): on turn 4 Bot2's Ornithopter (a 0/2 flyer) attacks and the Altisaur, which was never
+# tapped, blocks it and kills it (4 damage); Bot1 takes nothing.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Panicked Altisaur
+Island x15
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Panicked Altisaur.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter > Bot1)
+Bot1.Block(Panicked Altisaur > Ornithopter)
+[Bot2.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot1.Life = 20
