@@ -1,0 +1,134 @@
+# Huatli, Poet of Unity // Roar of the Fifth People, the whole cycle. Turn 1: Huatli ({2}{G}, three Moxen) enters and her trigger
+# fetches the Forest (revealed, the library shuffled); the Grizzly Bears is not a basic land card. Turn 3: {3}{R/W}{R/W} is paid exactly with Black Lotus (RRR),
+# Mox Jet and Mox Sapphire; she is exiled and returns as the Saga (CR 712.14a) with one lore counter, her front ETB not firing again
+# (the hand gains no second land), and chapter I makes two 3/3 green Dinosaur tokens. Turn 5, chapter II: every creature Bot1 controls
+# - a token, the Ornithopter - taps for R, G or W (never U), the Saga itself, not a creature, has no mana ability, and Bot2's
+# Thrashing Brontodon (cast turn 6, usable turn 8) has none. Turn 7, chapter III: the Dinosaur search finds Thrashing Brontodon, not
+# the Grizzly Bears or an Island, the tokens' mana helps cast it. Turn 9, chapter IV: Bot1's Dinosaurs - tokens and Brontodon - gain double strike
+# and trample until end of turn; Ornithopter and Bot2's Brontodon do not; the Saga is then sacrificed and the mana ability goes, and a second Brontodon cast after IV resolved gets nothing (only the Dinosaurs there as it resolved).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Huatli, Poet of Unity
+Black Lotus
+Thrashing Brontodon
+Ornithopter
+Island x6
+Forest
+Thrashing Brontodon
+Grizzly Bears
+Island x10
+
+[Bot2 Deck]
+Thrashing Brontodon
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Huatli, Poet of Unity.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Grizzly Bears)
+Bot1.Search(Forest)
+? Bot1.Revealed = Forest
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Huatli, Poet of Unity.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Huatli, Poet of Unity = (absent)
+? Bot1.Battlefield.Roar of the Fifth People.Counters.Lore = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dinosaur Token#1.Power = 3
+? Bot1.Battlefield.Dinosaur Token#1.Toughness = 3
+? Bot1.Battlefield.Dinosaur Token#1.Colors = Green
+? Bot1.Battlefield.Dinosaur Token#1.Subtypes = Dinosaur
+? Bot1.Battlefield.Dinosaur Token#2.Power = 3
+? Bot1.Battlefield.Dinosaur Token#3 = (absent)
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Roar of the Fifth People.Counters.Lore = 2
+! Bot1.Battlefield.Roar of the Fifth People.Activate
+! Bot1.Battlefield.Dinosaur Token#1.Activate(Color: Blue)
+Bot1.Battlefield.Dinosaur Token#1.Activate(Color: Red)
+? Bot1.Mana = {R}
+Bot1.Battlefield.Dinosaur Token#2.Activate(Color: White)
+? Bot1.Mana = {W}{R}
+Bot1.Battlefield.Ornithopter.Activate(Color: Green)
+? Bot1.Mana = {W}{R}{G}
+[T6 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Battlefield.Forest#2.Activate
+Bot2.Battlefield.Forest#3.Activate
+Bot2.Hand.Thrashing Brontodon.Cast
+Bot2.Pass
+Bot1.Pass
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Roar of the Fifth People.Counters.Lore = 3
+! Bot1.Search(Grizzly Bears; Island)
+Bot1.Search(Thrashing Brontodon)
+? Bot1.Revealed = Forest; Thrashing Brontodon
+Bot1.Battlefield.Dinosaur Token#1.Activate(Color: Green)
+Bot1.Battlefield.Dinosaur Token#2.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Thrashing Brontodon.Cast
+Bot1.Pass
+Bot2.Pass
+[T8 Bot2.Main1]
+! Bot2.Battlefield.Thrashing Brontodon.Activate(Color: Green)
+[T9 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dinosaur Token#1.Keywords = DoubleStrike; Trample
+? Bot1.Battlefield.Dinosaur Token#2.Keywords = DoubleStrike; Trample
+? Bot1.Battlefield.Thrashing Brontodon.Keywords = DoubleStrike; Trample
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+? Bot2.Battlefield.Thrashing Brontodon.Keywords = (absent)
+? Bot1.Battlefield.Roar of the Fifth People = (absent)
+? Bot1.Graveyard = Huatli, Poet of Unity; Black Lotus
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Thrashing Brontodon.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thrashing Brontodon#1.Keywords = DoubleStrike; Trample
+? Bot1.Battlefield.Thrashing Brontodon#2.Keywords = (absent)
+! Bot1.Battlefield.Dinosaur Token#1.Activate(Color: Green)
+[T10 Bot2.Main1]
+? Bot1.Battlefield.Dinosaur Token#1.Keywords = (absent)
+? Bot1.Battlefield.Thrashing Brontodon#1.Keywords = (absent)
+
+[Expect]
+Turn = 10

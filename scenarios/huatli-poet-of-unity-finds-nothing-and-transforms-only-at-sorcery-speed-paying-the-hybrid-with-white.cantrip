@@ -1,0 +1,63 @@
+# Huatli, Poet of Unity: "When Huatli enters, search your library for a basic land card ..." - a library with no basic land holds nothing
+# to find, and the search still ends (CR 701.23b); the hand stays as it was. "{3}{R/W}{R/W}: ... Activate only as a sorcery." On turn 3
+# Bot1 has the five mana (one of each colour, from five Moxen) but casts an Ornithopter first: with it on the stack the
+# ability is refused (CR 307.5); once it resolves, the two hybrid symbols are paid with Mox Ruby's red and Mox Pearl's white (CR 107.4e; each
+# is {R/W}, so no other pairing leaves the generic {3} payable by green, blue and black alone). The Saga comes back with one lore counter and the hand holds only the Grizzly Bears drawn on turn 3 (the front trigger does not fire again).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Huatli, Poet of Unity
+Mox Ruby
+Mox Pearl
+Ornithopter
+Grizzly Bears x20
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Huatli, Poet of Unity.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Search()
+? Bot1.Hand = Ornithopter
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Battlefield.Huatli, Poet of Unity.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Huatli, Poet of Unity.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Huatli, Poet of Unity = (absent)
+? Bot1.Battlefield.Roar of the Fifth People.Counters.Lore = 1
+
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Dinosaur Token; Dinosaur Token; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter; Roar of the Fifth People
+Bot1.Hand = Grizzly Bears
+Bot1.Mana =
