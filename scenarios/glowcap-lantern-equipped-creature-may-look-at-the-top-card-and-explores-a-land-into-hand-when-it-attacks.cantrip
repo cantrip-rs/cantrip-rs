@@ -1,0 +1,49 @@
+# Glowcap Lantern: "Equipped creature has 'You may look at the top card of your library any time' and 'Whenever this
+# creature attacks, it explores.'" (CR 113.6, 613.1f, 701.44a). Turn 1 Mox Emerald casts the Lantern; it grants nothing
+# while unattached (the look check below is absent), and Mox Jet and Mox Pearl pay Equip {2} onto the Ornithopter: Bot1 may
+# look, Bot2 may not (it has no Lantern). Turn 3 the Ornithopter attacks and explores: the Forest on top is a land card, so
+# it goes to the hand and the Ornithopter gets no counter.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Ornithopter
+Glowcap Lantern
+Island
+Island
+Island
+Forest
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Glowcap Lantern.Cast
+? Bot1.MayLookAtLibraryTop = (absent)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Glowcap Lantern.Activate(Ornithopter)
+? Bot1.MayLookAtLibraryTop = (absent)
+Bot1.Pass
+Bot2.Pass
+? Bot1.MayLookAtLibraryTop = true
+? Bot2.MayLookAtLibraryTop = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Forest; Island; Island; Island
+Bot1.Revealed = Forest
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Library.Count = 11
+Stack.Count = 0

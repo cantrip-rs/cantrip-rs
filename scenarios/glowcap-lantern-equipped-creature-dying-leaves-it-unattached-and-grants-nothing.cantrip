@@ -1,0 +1,54 @@
+# Glowcap Lantern: it grants its abilities only to the creature it is attached to (CR 301.5, 613.1f; its ruling: "If Glowcap
+# Lantern isn't attached to a creature you control, you can't look at the top card of your library"). Turn 1 the Lantern is
+# equipped to the Ornithopter. Turn 2 Bot2's Shock kills the Ornithopter: the Lantern stays on the battlefield unattached,
+# Bot1 may no longer look, and on turn 3 the Memnite that attacks explores nothing - the Lightning Bolt stays unrevealed.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Ornithopter
+Memnite
+Glowcap Lantern
+Island
+Island
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Mountain
+Shock
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Glowcap Lantern.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Glowcap Lantern.Activate(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.MayLookAtLibraryTop = true
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Ornithopter
+? Bot1.MayLookAtLibraryTop = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Glowcap Lantern; Memnite; Mox Emerald; Mox Jet; Mox Pearl
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand = Island; Island
+Bot1.Library.Count = 12

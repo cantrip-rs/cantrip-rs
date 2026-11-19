@@ -1,0 +1,47 @@
+# Glowcap Lantern: the equipped Ornithopter explores a nonland card (CR 701.44a) and Bot1 accepts the graveyard: the Lightning
+# Bolt goes to the graveyard, the Ornithopter is a 1/3 with its counter, and the Island below it is the next top card (never
+# revealed, not in the hand).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Ornithopter
+Glowcap Lantern
+Island
+Island
+Island
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Glowcap Lantern.Cast
+? Bot1.MayLookAtLibraryTop = (absent)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Glowcap Lantern.Activate(Ornithopter)
+? Bot1.MayLookAtLibraryTop = (absent)
+Bot1.Pass
+Bot2.Pass
+? Bot1.MayLookAtLibraryTop = true
+? Bot2.MayLookAtLibraryTop = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Hand = Island; Island; Island
+Bot1.Graveyard = Lightning Bolt
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Library.Count = 11
+Stack.Count = 0
