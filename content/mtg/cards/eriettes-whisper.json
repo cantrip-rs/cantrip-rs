@@ -1,0 +1,6 @@
+{
+  "name": "Eriette's Whisper",
+  "manaCost": "{3}{B}",
+  "type": "Sorcery",
+  "oracleText": "Target opponent discards two cards. Create a Wicked Role token attached to up to one target creature you control. (If you control another Role on it, put that one into the graveyard. Enchanted creature gets +1/+1. When this token is put into a graveyard, each opponent loses 1 life.)"
+}

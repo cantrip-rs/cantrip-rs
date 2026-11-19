@@ -1,0 +1,38 @@
+# The creature target is "up to one" (CR 115.1): Bot1 chooses none, so no Role is created and Memnite stays 1/1, but Bot2 still discards two cards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Memnite
+Eriette's Whisper
+Swamp x3
+Swamp x10
+
+[Bot2 Deck]
+Plains
+Mountain
+Ornithopter
+Island x4
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Eriette's Whisper.Cast
+Bot1.Target(Bot2)
+Bot1.Target()
+Bot1.Pass
+Bot2.Choose(Plains; Mountain)
+
+[Expect]
+Stack.Count = 0
+Bot2.Hand.Count = 5
+Bot2.Graveyard = Mountain; Plains
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1

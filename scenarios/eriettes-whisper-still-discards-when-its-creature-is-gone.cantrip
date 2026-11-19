@@ -1,0 +1,45 @@
+# CR 608.2b: Bot2 answers Eriette's Whisper by killing the targeted Memnite with Lightning Bolt. The creature is an illegal target as the spell
+# resolves, so no Role is created, but the opponent is still a legal target and discards two cards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Memnite
+Eriette's Whisper
+Swamp x3
+Swamp x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Plains
+Mountain
+Island x3
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Eriette's Whisper.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Plains; Mountain)
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard = Mountain; Plains; Lightning Bolt
+Bot1.Graveyard = Eriette's Whisper; Memnite; Black Lotus
+Bot1.Battlefield.Count = 1
