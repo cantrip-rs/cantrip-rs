@@ -1719,6 +1719,8 @@ def main(argv=None):
                 raise SystemExit(f"the judgements on {job['worker']} failed: {exit_}")
             mining.clear(p.judge)
             judge.fetch(job["nonce"], p.judge)
+        judged = mining.check_judged(p.judge, [name for name, _, _ in mining.FORK_RUNS] + [mining.LOSERS_RUN])
+        log(f"  judged: {json.dumps(judged)}")
         py = [sys.executable, "-m", "cantrip_ai.mine"]
         pyenv = dict(PYTHONPATH=str(REPO / "ai"))
         logs = gen_dir / "logs"

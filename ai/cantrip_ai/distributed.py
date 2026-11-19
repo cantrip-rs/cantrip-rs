@@ -1380,7 +1380,8 @@ $root = {ps_quote(self.root)}
 $keep = @({", ".join(ps_quote(k.replace("/", "\\").lower()) for k in keep) or ""})
 $gens = Join-Path $root {ps_quote("gens/" + self.tag)}
 if (Test-Path $gens) {{
-  Get-ChildItem -Path $gens -Recurse -Filter pids.json -File | Where-Object {{ (Split-Path (Split-Path $_.DirectoryName) -Leaf) -eq {ps_quote(self.name)} }} | ForEach-Object {{
+  # Self-play attempts only: a pair-mining job (`mining.RemoteJudge`, a `mine-` directory) is no attempt's orphan.
+  Get-ChildItem -Path $gens -Recurse -Filter pids.json -File | Where-Object {{ (Split-Path (Split-Path $_.DirectoryName) -Leaf) -eq {ps_quote(self.name)} -and (Split-Path $_.DirectoryName -Leaf) -notlike 'mine-*' }} | ForEach-Object {{
     $dir = $_.DirectoryName
     if ($keep -notcontains $dir.ToLower()) {{
       try {{ $p = Get-Content -Raw $_.FullName | ConvertFrom-Json }} catch {{ return }}

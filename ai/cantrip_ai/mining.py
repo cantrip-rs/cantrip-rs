@@ -272,6 +272,20 @@ def bundle(explore: Path, infer: Path, ort_dir: Path, cuda_dir: Path, model: Pat
     return files
 
 
+def check_judged(judge_dir: Path, names) -> dict:
+    """Each run's verdicts (`judged.jsonl`); a run that judged none of its positions (its server gone, say: every one
+    comes back unjudged) is a failure, not an empty result."""
+    counts = {}
+    for name in names:
+        lines = [json.loads(x) for x in (judge_dir / name / "judged.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
+        verdicts = [((x.get("judgement") or {}).get("verdict") or ("target" if x.get("target") else "unjudged")) for x in lines]
+        judged = sum(v != "unjudged" for v in verdicts)
+        counts[name] = dict(positions=len(lines), judged=judged)
+        if lines and judged == 0:
+            raise SystemExit(f"the judge run {name} judged none of its {len(lines)} positions (its log: {judge_dir / name})")
+    return counts
+
+
 def window_dirs(root: Path, gen: int, window: int, weight: float) -> list[str]:
     """The mined targets the training of generation `gen` takes: those of the `window` generations before it that have
     them, the newest at `weight`, each older one at half the one after it."""
