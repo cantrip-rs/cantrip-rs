@@ -1,0 +1,8 @@
+{
+  "name": "Basking Capybara",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Capybara",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Descend 4 — This creature gets +3/+0 as long as there are four or more permanent cards in your graveyard."
+}
