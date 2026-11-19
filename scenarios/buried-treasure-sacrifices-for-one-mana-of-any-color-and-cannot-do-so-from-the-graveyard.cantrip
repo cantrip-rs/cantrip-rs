@@ -1,0 +1,35 @@
+# Buried Treasure: "{T}, Sacrifice this artifact: Add one mana of any color." Two Mox Sapphires pay its {2}; it is then sacrificed for
+# {R} (the color is chosen as it is activated), which casts Lightning Bolt. The sacrifice is a cost (CR 602.2, 605.3), so the Treasure
+# is in the graveyard before the mana is spent, and from there it makes no mana: its mana ability works only on the battlefield (CR 602.2).
+
+[Bot1 Deck]
+Buried Treasure
+Mox Sapphire
+Mox Sapphire
+Lightning Bolt
+Island x3
+Island x12
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Buried Treasure.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Pass
+Bot1.Battlefield.Buried Treasure.Activate(Color: Red)
+? Bot1.Graveyard = Buried Treasure
+? Bot1.Mana = {R}
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+! Bot1.Graveyard.Buried Treasure.Activate(Ability: Add)
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt; Buried Treasure
+Bot1.Battlefield.Count = 2

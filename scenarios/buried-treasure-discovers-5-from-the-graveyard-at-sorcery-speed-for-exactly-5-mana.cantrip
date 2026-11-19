@@ -1,0 +1,61 @@
+# Buried Treasure: "{5}, Exile this card from your graveyard: Discover 5. Activate only as a sorcery." It does nothing from the
+# battlefield. Sacrificed for mana (one {U} floats and pays part of the {5}) it goes to the graveyard; there the discover is refused with a
+# spell on the stack (CR 602.5d) and paid only with exactly {5}. Exiling the card is a cost (CR 602.2), so the Treasure is in exile
+# when it resolves. Discover 5 (CR 701.57a) exiles Island (a land) and Arachnoid (mana value 6, over the limit), then
+# casts Ancient Carp (mana value 5, exactly the limit) for free; the two cards skipped go to the bottom of the library.
+
+[Bot1 Deck]
+Buried Treasure
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Ornithopter
+Island
+Arachnoid
+Ancient Carp
+Island x10
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Buried Treasure.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Buried Treasure.Activate(Ability: Discover)
+Bot1.Battlefield.Buried Treasure.Activate(Color: Blue)
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Graveyard.Buried Treasure.Activate(Ability: Discover)
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Mox Sapphire#4.Activate
+Bot1.Graveyard.Buried Treasure.Activate(Ability: Discover)
+? Bot1.Mana =
+? Exile.Count = 1
+Bot1.Accept
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Exile = Buried Treasure
+Bot1.Battlefield.Ancient Carp.Power = 2
+Bot1.Library.Count = 12
