@@ -4662,6 +4662,10 @@ fn some_cast(
         (0, 0)
     } else if open { (least, most) } else { (least, least) };
     for &paid in paid {
+        // CR 601.2b, 118.3: the optional cost's other parts (a sacrifice) can be paid only if there is something to pay them with.
+        if paid && def.optional_cost.is_some_and(|o| !can_pay_other(cx, card, player, &o.cost)) {
+            continue;
+        }
         for kicks in kicks.clone() {
             for x in crate::x_rules::values(cx, asker, def.x_rule, prefix.unwrap_or(&[]), x_least, x_most) {
                 // A kicker with {X} announces X and is kicked when it is not 0 (CR 702.33a, 107.3).
