@@ -1,0 +1,60 @@
+# Voracious Vermin: only "another creature you control" dying counts. Bot1 Lightning Bolts Bot2's Grizzly Bears on turn 3 (it dies) and
+# the Vermin stays 2/1 with no counter. On turn 5 a second Bolt kills the Vermin itself, with its Rat still around: nothing triggers.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Voracious Vermin
+Lightning Bolt
+Lightning Bolt
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Grizzly Bears
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Voracious Vermin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Grizzly Bears
+? Bot1.Battlefield.Voracious Vermin.Counters.PlusOnePlusOne = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Voracious Vermin)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Voracious Vermin; Lightning Bolt; Lightning Bolt
+Bot1.Battlefield.Rat Token.Power = 1
+Bot1.Battlefield.Rat Token.Counters.PlusOnePlusOne = (absent)

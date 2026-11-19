@@ -1,0 +1,52 @@
+# Voracious Vermin (2/1): "When this creature enters, create a 1/1 black Rat creature token with 'This token can't block.' Whenever
+# another creature you control dies, put a +1/+1 counter on this creature." On turn 3 Bot1 casts it and gets exactly one Rat, then
+# Lightning Bolts that Rat: the token dies and the Vermin gets exactly one +1/+1 counter (3/2).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Voracious Vermin
+Lightning Bolt
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Voracious Vermin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rat Token.Power = 1
+? Bot1.Battlefield.Rat Token.Toughness = 1
+? Bot1.Battlefield.Rat Token.Colors = Black
+? Bot1.Battlefield.Voracious Vermin.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Rat Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Voracious Vermin.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Voracious Vermin.Power = 3
+Bot1.Battlefield.Voracious Vermin.Toughness = 2
+Bot1.Battlefield.Rat Token = (absent)

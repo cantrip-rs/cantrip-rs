@@ -1,0 +1,8 @@
+{
+  "name": "Voracious Vermin",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Rat",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "When this creature enters, create a 1/1 black Rat creature token with \"This token can't block.\"\nWhenever another creature you control dies, put a +1/+1 counter on this creature."
+}
