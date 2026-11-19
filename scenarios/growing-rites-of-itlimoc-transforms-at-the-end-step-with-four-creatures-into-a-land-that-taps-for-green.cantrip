@@ -1,0 +1,53 @@
+# Growing Rites of Itlimoc: "At the beginning of your end step, if you control four or more creatures, transform it." Turn 1: Bot1 casts Memnite and two
+# Ornithopters, then Rites, whose enters trigger takes the Ornithopter on top of the library, and casts it: four creatures. At the beginning of the end step the
+# trigger goes on the stack and transforms it (CR 701.27a) into Itlimoc, Cradle of the Sun, a land that is no longer an enchantment (CR 712.8e).
+# Itlimoc taps for {G} (turn 3) or for {G} for each creature, counted as the ability is activated (turn 5, four creatures: {G}{G}{G}{G}).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Growing Rites of Itlimoc
+Memnite
+Ornithopter
+Ornithopter
+Ornithopter
+Forest
+Swamp
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Growing Rites of Itlimoc.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Ornithopter | Forest; Swamp; Island)
+Bot1.Hand.Ornithopter.Cast
+[T1 Bot1.End]
+? Stack.Count = 1
+? Bot1.Battlefield.Growing Rites of Itlimoc.Types = Enchantment
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Itlimoc, Cradle of the Sun.Types = Land
+[T3 Bot1.Main1]
+Bot1.Battlefield.Itlimoc, Cradle of the Sun.Activate(Ability: Add {G}.)
+? Bot1.Mana = {G}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Itlimoc, Cradle of the Sun.Activate(Ability: for each creature)
+
+[Expect]
+Bot1.Mana = {G}{G}{G}{G}
+Bot1.Battlefield.Itlimoc, Cradle of the Sun.Tapped = true
+Bot1.Battlefield.Itlimoc, Cradle of the Sun.Types = Land

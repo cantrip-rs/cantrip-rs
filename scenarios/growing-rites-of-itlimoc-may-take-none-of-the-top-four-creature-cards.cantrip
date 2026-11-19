@@ -1,0 +1,37 @@
+# Growing Rites of Itlimoc: "You may reveal a creature card": the top four hold a Memnite, but Bot1 leaves it. Nothing is revealed, the hand stays
+# as it was and all four cards go to the bottom in the order chosen (CR 701.20a, 401.4); the Island below them is now on top.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Growing Rites of Itlimoc
+Island x3
+Forest
+Memnite
+Swamp
+Plains
+Island
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Growing Rites of Itlimoc.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Plains; Memnite; Swamp; Forest)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Island; Island
+Bot1.Revealed = (absent)
+Bot1.Library = Island; Island; Plains; Memnite; Swamp; Forest
+Stack.Count = 0

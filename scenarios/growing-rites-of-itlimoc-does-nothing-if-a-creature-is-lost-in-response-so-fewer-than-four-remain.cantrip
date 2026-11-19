@@ -1,0 +1,55 @@
+# Growing Rites of Itlimoc: the "if" is intervening (CR 603.4), checked again as the trigger resolves (the ruling). Turn 3: Bot1 has Memnite and three
+# Ornithopters, four creatures, and the end step trigger goes on the stack; Bot2 responds with Lightning Bolt on the Memnite, and with three creatures
+# left the trigger does nothing: the enchantment stays.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Growing Rites of Itlimoc
+Memnite
+Ornithopter
+Ornithopter
+Island x4
+Ornithopter
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Growing Rites of Itlimoc.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Island; Island; Island; Island)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Memnite = (absent)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Growing Rites of Itlimoc.Types = Enchantment
+Bot1.Graveyard = Memnite

@@ -1,0 +1,11 @@
+{
+  "name": "Growing Rites of Itlimoc",
+  "manaCost": "{2}{G}",
+  "type": "Legendary Enchantment",
+  "oracleText": "When Growing Rites of Itlimoc enters, look at the top four cards of your library. You may reveal a creature card from among them and put it into your hand. Put the rest on the bottom of your library in any order.\nAt the beginning of your end step, if you control four or more creatures, transform Growing Rites of Itlimoc.",
+  "backFace": {
+    "name": "Itlimoc, Cradle of the Sun",
+    "type": "Legendary Land",
+    "oracleText": "(Transforms from Growing Rites of Itlimoc.)\n{T}: Add {G}.\n{T}: Add {G} for each creature you control."
+  }
+}

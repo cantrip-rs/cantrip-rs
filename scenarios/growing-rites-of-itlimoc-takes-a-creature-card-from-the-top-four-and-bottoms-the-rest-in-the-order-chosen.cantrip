@@ -1,0 +1,43 @@
+# Growing Rites of Itlimoc: "When it enters, look at the top four cards of your library. You may reveal a creature card from among them and put it into
+# your hand. Put the rest on the bottom of your library in any order" (CR 701.20a, 401.4). The top four are Forest, Memnite, Ornithopter and Swamp: either
+# creature card may be taken, a land may not (refused here, with Memnite taken on the next line as the positive control), and the other three go to the
+# bottom in the order chosen. The Island below the four stays on top. Bot2's library is untouched.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Growing Rites of Itlimoc
+Island x3
+Forest
+Memnite
+Ornithopter
+Swamp
+Island x2
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Growing Rites of Itlimoc.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Forest | Swamp; Memnite; Ornithopter)
+! Bot1.Arrange(Memnite; Ornithopter | Swamp; Forest)
+Bot1.Arrange(Memnite | Swamp; Forest; Ornithopter)
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Hand = Island; Island; Island; Memnite
+Bot1.Revealed = Memnite
+Bot1.Library = Island; Island; Swamp; Forest; Ornithopter
+Bot1.Battlefield = Growing Rites of Itlimoc; Mox Emerald; Mox Jet; Mox Pearl
+Bot2.Library.Count = 13
+Stack.Count = 0

@@ -1,0 +1,52 @@
+# Growing Rites of Itlimoc: the transform trigger needs four creatures YOU control (CR 603.4). Turn 1: Memnite and two Ornithopters make three, Bot1
+# leaves the top of the library: no trigger at the end step. Bot2 puts two Ornithopters of its own onto the battlefield on turn 2 - they are not counted -
+# and on turn 3 Bot1 casts the Ornithopter it drew, a fourth creature of its own: now the end step transforms it.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Growing Rites of Itlimoc
+Memnite
+Ornithopter
+Ornithopter
+Island x4
+Ornithopter
+Island x10
+
+[Bot2 Deck]
+Ornithopter x2
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Growing Rites of Itlimoc.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Island; Island; Island; Island)
+[T1 Bot1.End]
+? Stack.Count = 0
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Growing Rites of Itlimoc.Types = Enchantment
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Itlimoc, Cradle of the Sun.Types = Land
+Bot1.Battlefield = Itlimoc, Cradle of the Sun; Memnite; Mox Emerald; Mox Jet; Mox Pearl; Ornithopter; Ornithopter; Ornithopter
