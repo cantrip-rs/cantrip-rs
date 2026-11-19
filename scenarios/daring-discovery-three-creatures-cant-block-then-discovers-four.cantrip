@@ -1,0 +1,64 @@
+# Daring Discovery: "Up to three target creatures can't block this turn. Discover 4."
+# Turn 1 Bot1 casts a Memnite; turn 2 Bot2 casts a Memnite, an Ornithopter and a Phyrexian Walker. On turn 3 Bot1 casts Daring
+# Discovery (Black Lotus and two Moxen) at all three, and may not add its own Memnite as a fourth target: none of them may block (CR 509.1b), so Bot1's Memnite deals 1. Discover 4
+# (CR 701.57a) skips a Serra Angel (mana value 5), finds a Hill Giant (mana value exactly 4) and casts it free; the Lightning Bolt
+# below it is never reached.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Black Lotus
+Daring Discovery
+Memnite
+Plains
+Plains
+Plains
+Serra Angel
+Hill Giant
+Lightning Bolt
+Plains x9
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Phyrexian Walker
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Daring Discovery.Cast
+! Bot1.Target(Bot2.Battlefield.Memnite; Bot2.Battlefield.Ornithopter; Bot2.Battlefield.Phyrexian Walker; Bot1.Battlefield.Memnite)
+Bot1.Target(Bot2.Battlefield.Memnite; Bot2.Battlefield.Ornithopter; Bot2.Battlefield.Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Memnite > Bot2)
+! Bot2.Block(Memnite > Memnite)
+! Bot2.Block(Ornithopter > Memnite)
+! Bot2.Block(Phyrexian Walker > Memnite)
+[T3 Bot1.Main2]
+? Exile.Count = 0
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Hill Giant.Power = 3
+Bot1.Library.Count = 11

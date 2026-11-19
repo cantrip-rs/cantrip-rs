@@ -1,0 +1,6 @@
+{
+  "name": "Daring Discovery",
+  "manaCost": "{4}{R}",
+  "type": "Sorcery",
+  "oracleText": "Up to three target creatures can't block this turn.\nDiscover 4. (Exile cards from the top of your library until you exile a nonland card with mana value 4 or less. Cast it without paying its mana cost or put it into your hand. Put the rest on the bottom in a random order.)"
+}
