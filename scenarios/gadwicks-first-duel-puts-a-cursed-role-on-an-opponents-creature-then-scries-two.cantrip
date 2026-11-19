@@ -1,0 +1,59 @@
+# Gadwick's First Duel {1}{U} Saga: "I — Create a Cursed Role token attached to up to one target creature. II — Scry 2." Turn 2:
+# Bot2 casts Grizzly Bears (2/2). Turn 3: Bot1 casts the Saga (Mox Sapphire + Mox Jet); chapter I puts a Cursed Role, controlled by Bot1,
+# on Bot2's Bears, so they are 1/1 (CR 303.7, 111.10j). Turn 5: after the draw, chapter II (a lore counter, two in all) scries 2:
+# Bot1 keeps Lightning Bolt on top and puts Black Lotus on the bottom, so the next draw is the Bolt.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Gadwick's First Duel
+Island
+Island
+Island
+Island
+Island
+Island
+Lightning Bolt
+Black Lotus
+Island x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gadwick's First Duel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Power = 1
+? Bot2.Battlefield.Grizzly Bears.Toughness = 1
+? Bot1.Battlefield.Gadwick's First Duel.Counters.Lore = 1
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt | Black Lotus)
+
+[Expect]
+Bot1.Battlefield.Gadwick's First Duel.Counters.Lore = 2
+Bot1.Battlefield.Cursed.AttachedTo = Grizzly Bears
+Bot2.Battlefield.Grizzly Bears.Power = 1
+Bot2.Battlefield.Grizzly Bears.Toughness = 1
+Bot1.Library.Top = Lightning Bolt

@@ -1,0 +1,32 @@
+# Gadwick's First Duel chapter I is "up to one": Bot1 chooses none (`Bot1.Target()`) with an Ornithopter on the battlefield, so no
+# Cursed Role is created, and the Ornithopter stays a 0/2. The chapter still gives the Saga its lore counter and resolves.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Ornithopter
+Gadwick's First Duel
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gadwick's First Duel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Cursed = (absent)
+Bot1.Battlefield.Gadwick's First Duel.Counters.Lore = 1
+Stack.Count = 0

@@ -1,0 +1,56 @@
+# Gadwick's First Duel chapter III is about instant and sorcery spells only: on turn 5 Bot1 casts Ornithopter (mana value 0, a
+# creature) with nothing on the stack but it, and the delayed ability is still waiting (Delayed.Count = 1). Bot1's Lightning Bolt
+# at Bot2 is then copied, and Bot1 aims the copy at itself: Bot2 20 - 3 = 17 and Bot1 17.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Gadwick's First Duel
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Island
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gadwick's First Duel.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island; Island |)
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+? Stack.Count = 1
+? Delayed.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Target(Bot1)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 17
+Delayed.Count = 0
+Bot1.Battlefield.Ornithopter.Power = 0

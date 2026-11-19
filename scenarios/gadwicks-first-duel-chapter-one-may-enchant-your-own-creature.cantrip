@@ -1,0 +1,30 @@
+# Gadwick's First Duel chapter I: "up to one target creature" may be your own. Turn 1: Bot1 casts Ornithopter (0/2) and the Saga
+# (Mox Sapphire + Mox Jet) and targets the Ornithopter: the Cursed Role makes it a 1/1 (CR 303.7), one more power and one less toughness.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Ornithopter
+Gadwick's First Duel
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gadwick's First Duel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 1
+Bot1.Battlefield.Cursed.AttachedTo = Ornithopter

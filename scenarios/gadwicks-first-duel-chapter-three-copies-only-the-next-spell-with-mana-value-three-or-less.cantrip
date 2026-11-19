@@ -1,0 +1,80 @@
+# Gadwick's First Duel chapter III: "When you next cast an instant or sorcery spell with mana value 3 or less this turn, copy that
+# spell. You may choose new targets for the copy." Cast turn 1, chapter II scries on turn 3, chapter III on turn 5. Then Bot1 casts
+# Fireball with X = 3 (mana value 4, one past the limit): no trigger, though a Lightning Bolt of Bot2's in response is no match for it
+# either (an opponent's, mana value 1). The delayed ability is still waiting (Delayed.Count = 1), so Bot1's Lightning Bolt (mana value
+# 1) at Bot2 is copied, and Bot1 aims the copy at itself. Life: Bot2 20 - 3 (Fireball) - 3 (Bolt) = 14; Bot1 20 - 3 (Bot2's Bolt)
+# - 3 (the copy) = 14.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Gadwick's First Duel
+Mox Ruby
+Mox Ruby
+Mox Emerald
+Fireball
+Lightning Bolt
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gadwick's First Duel.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island; Island |)
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Delayed.Count = 1
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fireball.Cast(X: 3)
+Bot1.Target(Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+? Stack.Count = 2
+? Delayed.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Delayed.Count = 1
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Target(Bot1)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Delayed.Count = 0
+
+[Expect]
+Bot1.Life = 14
+Bot2.Life = 14
+Stack.Count = 0
