@@ -1,0 +1,61 @@
+# Caparocti Sunborn attacks on turn 3 and its trigger asks whether to tap two untapped artifacts and/or creatures. Bot1 has
+# three Ornithopters, two of which came in this turn: a permanent that came under your control this turn can be tapped for a
+# cost that is not a {T} symbol (CR 302.6, 118.3), so Bot1 chooses one old and one new, leaving the third untapped. Caparocti
+# itself is tapped (attacking) and can't be chosen. Then discover 3 (CR 701.57a): Hero of Bladehold (mana value 4) is exiled and
+# passed over (discover 4 would cast it), Fiery Temper (mana value 3, so discover 2 would pass it too) is cast for free at
+# Bot2 (3 damage), and the Hero goes to the bottom. Caparocti deals its 4 unblocked: Bot2 20 - 3 - 4 = 13.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Caparocti Sunborn
+Ornithopter
+Ornithopter
+Ornithopter
+Hero of Bladehold
+Fiery Temper
+Island x10
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Caparocti Sunborn.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Attack(Caparocti Sunborn > Bot2)
+Bot1.Accept
+Bot1.Choose(Ornithopter#1; Ornithopter#2)
+Bot1.Accept
+Bot1.Target(Bot2)
+? Bot1.Battlefield.Ornithopter#1.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Exile.Count = 0
+Bot2.Life = 13
+Bot1.Life = 20
+Bot1.Battlefield.Caparocti Sunborn.Tapped = true
+Bot1.Battlefield.Ornithopter#1.Tapped = true
+Bot1.Battlefield.Ornithopter#2.Tapped = true
+Bot1.Battlefield.Ornithopter#3.Tapped = false
+Bot1.Graveyard = Fiery Temper
+Bot1.Hand.Count = 0
+Bot1.Library.Count = 11
+Bot1.Library = Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Hero of Bladehold

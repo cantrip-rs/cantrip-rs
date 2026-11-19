@@ -1,0 +1,8 @@
+{
+  "name": "Caparocti Sunborn",
+  "manaCost": "{2}{R}{W}",
+  "type": "Legendary Creature — Human Soldier",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Whenever Caparocti Sunborn attacks, you may tap two untapped artifacts and/or creatures you control. If you do, discover 3. (Exile cards from the top of your library until you exile a nonland card with mana value 3 or less. Cast it without paying its mana cost or put it into your hand. Put the rest on the bottom in a random order.)"
+}

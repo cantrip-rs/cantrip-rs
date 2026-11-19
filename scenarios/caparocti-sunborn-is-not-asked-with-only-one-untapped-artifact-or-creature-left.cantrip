@@ -1,0 +1,59 @@
+# Caparocti attacks with Ornithopter#1 and the four Moxen are tapped for mana, so Ornithopter#2 is the only untapped artifact or
+# creature Bot1 controls: a player can't tap two when only one can be (CR 609.3), so the trigger asks nothing, discovers
+# nothing and leaves the library alone. What does not count: the tapped Ornithopter and Moxen, Bot1's untapped Island (not an
+# artifact or creature) and Bot2's untapped Ornithopter (not controlled by Bot1).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Caparocti Sunborn
+Ornithopter
+Ornithopter
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Caparocti Sunborn.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Attack(Caparocti Sunborn > Bot2; Ornithopter#1 > Bot2)
+? Stack = Caparocti Sunborn
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+! Bot1.Accept
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Exile.Count = 0
+Bot2.Life = 16
+Bot1.Battlefield.Ornithopter#1.Tapped = true
+Bot1.Battlefield.Ornithopter#2.Tapped = false
+Bot1.Hand.Count = 0
+Bot1.Library.Count = 11
+Bot1.Library = Lightning Bolt; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island

@@ -1,0 +1,46 @@
+# Exactly two untapped artifacts and/or creatures (the Ornithopters; Caparocti is tapped as an attacker) is enough to be asked
+# (CR 118.3). Bot1 declines: "if you do" (CR 608.2c) is not met, so neither Ornithopter is tapped, nothing is exiled and
+# discover 3 never looks at the library (Lightning Bolt stays on top).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Caparocti Sunborn
+Ornithopter
+Ornithopter
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Caparocti Sunborn.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Caparocti Sunborn > Bot2)
+Bot1.Decline
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Exile.Count = 0
+Bot2.Life = 16
+Bot1.Battlefield.Ornithopter#1.Tapped = false
+Bot1.Battlefield.Ornithopter#2.Tapped = false
+Bot1.Hand.Count = 1
+Bot1.Library.Count = 11
+Bot1.Library = Lightning Bolt; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island

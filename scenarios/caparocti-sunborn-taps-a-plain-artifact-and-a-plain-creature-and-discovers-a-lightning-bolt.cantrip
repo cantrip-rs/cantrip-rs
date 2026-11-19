@@ -1,0 +1,54 @@
+# What may be tapped is "artifacts and/or creatures", each on its own: Bot1 chooses Mox Ruby (an artifact that is not a
+# creature) and Savannah Lions (a creature that is not an artifact, cast this turn) with Mox Jet and Mox Sapphire left
+# untapped. Caparocti tapped for attacking is not among them. Discover 3 finds Lightning Bolt, cast for free at Bot2: 20 - 3
+# for the Bolt - 4 for Caparocti's unblocked 4 = 13.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Caparocti Sunborn
+Savannah Lions
+Island
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Caparocti Sunborn.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Attack(Caparocti Sunborn > Bot2)
+Bot1.Accept
+Bot1.Choose(Mox Ruby; Savannah Lions)
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Exile.Count = 0
+Bot2.Life = 13
+Bot1.Battlefield.Mox Ruby.Tapped = true
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield.Mox Sapphire.Tapped = false
+Bot1.Battlefield.Savannah Lions.Tapped = true
+Bot1.Battlefield.Caparocti Sunborn.Tapped = true
+Bot1.Graveyard = Lightning Bolt
+Bot1.Library.Count = 10
