@@ -1,0 +1,86 @@
+# Akawalli, the Seething Tower {1}{B}{G} (3/3): "Descend 4 - As long as there are four or more permanent cards in your graveyard,
+# Akawalli gets +2/+2 and has trample. Descend 8 - As long as there are eight or more permanent cards in your graveyard, Akawalli gets
+# an additional +2/+2 and can't be blocked by more than one creature" (CR 207.2c, 604.1, 613.4c). Thought Scour (an instant, never a
+# permanent card) mills the top two of the library, set up so the permanent cards in Bot1's graveyard go: Black Lotus sacrificed (1),
+# then two Ornithopters (3: still 3/3, no trample), an Ornithopter and a Shock (4: exactly four, 5/5 with trample), two Ornithopters
+# (6), an Ornithopter and a Shock (7: still 5/5, no restriction), and on the next turn an Ornithopter and a Shock (8: exactly eight,
+# 7/7 with trample and can't be blocked by more than one creature).
+
+[Bot1 Deck]
+Akawalli, the Seething Tower
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Thought Scour
+Ornithopter
+Ornithopter
+Thought Scour
+Ornithopter
+Shock
+Thought Scour
+Ornithopter
+Ornithopter
+Thought Scour
+Ornithopter
+Shock
+Thought Scour
+Ornithopter
+Ornithopter
+Shock
+Ornithopter x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Akawalli, the Seething Tower.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Akawalli, the Seething Tower.Power = 3
+? Bot1.Battlefield.Akawalli, the Seething Tower.Toughness = 3
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Akawalli, the Seething Tower.Power = 3
+? Bot1.Battlefield.Akawalli, the Seething Tower.Toughness = 3
+? Bot1.Battlefield.Akawalli, the Seething Tower.Keywords = (absent)
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Akawalli, the Seething Tower.Power = 5
+? Bot1.Battlefield.Akawalli, the Seething Tower.Toughness = 5
+? Bot1.Battlefield.Akawalli, the Seething Tower.Keywords = Trample
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Akawalli, the Seething Tower.Power = 5
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Akawalli, the Seething Tower.Power = 5
+? Bot1.Battlefield.Akawalli, the Seething Tower.Toughness = 5
+? Bot1.Battlefield.Akawalli, the Seething Tower.Keywords = Trample
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Akawalli, the Seething Tower.Power = 7
+? Bot1.Battlefield.Akawalli, the Seething Tower.Toughness = 7
+? Bot1.Battlefield.Akawalli, the Seething Tower.Keywords = CantBeBlockedByMoreThanOne; Trample
+
+[Expect]
+Bot1.Battlefield.Akawalli, the Seething Tower.Power = 7
+Bot1.Battlefield.Akawalli, the Seething Tower.Toughness = 7

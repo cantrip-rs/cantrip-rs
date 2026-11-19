@@ -1,0 +1,8 @@
+{
+  "name": "Akawalli, the Seething Tower",
+  "manaCost": "{1}{B}{G}",
+  "type": "Legendary Creature — Fungus",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Descend 4 — As long as there are four or more permanent cards in your graveyard, Akawalli gets +2/+2 and has trample.\nDescend 8 — As long as there are eight or more permanent cards in your graveyard, Akawalli gets an additional +2/+2 and can't be blocked by more than one creature."
+}

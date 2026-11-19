@@ -1,0 +1,63 @@
+# Akawalli, the Seething Tower {1}{B}{G} (3/3): Descend counts only permanent cards in "your graveyard" (CR 207.2c, 404.1): Bot2's four
+# milled Ornithopters (from two Thought Scours) and Bot1's own instants (Shock, Thought Scour) change nothing: 3/3 with no trample
+# while Bot1's graveyard holds Black Lotus and one Ornithopter. A last Scour on Bot1 mills two more Ornithopters: four permanent
+# cards, 5/5 with trample.
+
+[Bot1 Deck]
+Akawalli, the Seething Tower
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Thought Scour
+Ornithopter
+Shock
+Thought Scour
+Thought Scour
+Thought Scour
+Ornithopter
+Ornithopter
+Ornithopter x10
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Akawalli, the Seething Tower.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Akawalli, the Seething Tower.Power = 3
+Bot1.Hand.Thought Scour.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Thought Scour.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 4
+? Bot1.Battlefield.Akawalli, the Seething Tower.Power = 3
+? Bot1.Battlefield.Akawalli, the Seething Tower.Toughness = 3
+? Bot1.Battlefield.Akawalli, the Seething Tower.Keywords = (absent)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Akawalli, the Seething Tower.Power = 5
+? Bot1.Battlefield.Akawalli, the Seething Tower.Toughness = 5
+? Bot1.Battlefield.Akawalli, the Seething Tower.Keywords = Trample
+
+[Expect]
+Bot1.Battlefield.Akawalli, the Seething Tower.Power = 5
+Bot2.Graveyard.Count = 4
