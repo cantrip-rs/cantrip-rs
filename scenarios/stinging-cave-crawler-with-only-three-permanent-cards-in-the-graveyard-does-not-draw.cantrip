@@ -1,0 +1,46 @@
+# Stinging Cave Crawler: Descend 4 needs four permanent cards (CR 207.2c, 110.4a). Bot1 takes the Swamp milled by the Ainok Wayfarer into its
+# hand, so its graveyard holds only the Black Lotus and two Ornithopters (three). The Crawler attacks on turn 3 and the unblocked
+# attack deals 1 damage, but Bot1 draws nothing and loses no life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Ainok Wayfarer
+Stinging Cave Crawler
+Island
+Island
+Ornithopter
+Ornithopter
+Swamp
+Island x17
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ainok Wayfarer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Swamp)
+? Bot1.Graveyard.Count = 3
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stinging Cave Crawler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+? Bot1.Hand.Count = 4
+Bot1.Attack(Stinging Cave Crawler > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Life = 20
+Bot2.Life = 19

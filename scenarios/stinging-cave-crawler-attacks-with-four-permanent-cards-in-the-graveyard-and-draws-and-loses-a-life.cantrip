@@ -1,0 +1,53 @@
+# Stinging Cave Crawler: deathtouch, and "Descend 4 - Whenever this creature attacks, if there are four or more permanent cards in your
+# graveyard, you draw a card and you lose 1 life" (CR 207.2c, 110.4a). A Black Lotus and the three Ornithopters an Ainok Wayfarer mills are four
+# permanent cards in Bot1's graveyard. On turn 3 the Crawler attacks: Bot1 draws and goes to 19, and the 0/2 Ornithopter that blocks is
+# destroyed by one damage from the deathtouch Crawler.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Ainok Wayfarer
+Stinging Cave Crawler
+Swamp
+Swamp
+Ornithopter x3
+Island x17
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ainok Wayfarer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stinging Cave Crawler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+? Bot1.Hand.Count = 3
+Bot1.Attack(Stinging Cave Crawler > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Block(Ornithopter > Stinging Cave Crawler)
+[T3 Bot1.Main2]
+? Bot1.Hand.Count = 4
+? Bot1.Life = 19
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Life = 19
+Bot2.Battlefield.Count = 0
+Bot2.Battlefield.Ornithopter = (absent)

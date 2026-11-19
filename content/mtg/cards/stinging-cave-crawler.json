@@ -1,0 +1,11 @@
+{
+  "name": "Stinging Cave Crawler",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Insect Horror",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Deathtouch\nDescend 4 — Whenever this creature attacks, if there are four or more permanent cards in your graveyard, you draw a card and you lose 1 life.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}
