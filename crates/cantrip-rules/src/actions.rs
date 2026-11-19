@@ -15707,7 +15707,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
             if helpers.any() { pay_candidates(cx, player, source, helpers, &cost, &left, &convoking, &delved, bent) } else { Vec::new() };
         let mut decided = ways(&pool, &due);
         // Ordinary mana a rule tells apart by its source (CR 106.3), by the source that produced it.
-        let told = if helpers.no_mana { Vec::new() } else { static_rules::mana_told_apart(cx, cx.cards(), player) };
+        let told = if helpers.no_mana { Vec::new() } else { static_rules::mana_told_apart(cx, cx.cards(), player, source) };
         let told_mana = told_pools(cx, player, &told);
         let qualified = due.snow > 0 || cx.s().mana_from_of(player).any(|m| m.snow);
         let groups = if qualified && !helpers.no_mana { Some(quality_groups(cx, player, source, helpers.purpose, &told)) } else { None };

@@ -68,7 +68,7 @@ pub fn this_permanents_mana_is_told_apart(_: &dyn Query, me: &Asker, source: Obj
 
 /// Mana a Treasure produced is told apart from other mana (CR 106.3): its payer chooses whether to spend it, where a permanent asks
 /// of the mana spent whether it came from a Treasure (a `CardDef::mana_told_apart` entry). Smaug, Wicked Worm and Mastermind Plum
-/// print the question.
-pub fn treasure_mana_is_told_apart(q: &dyn Query, _: &Asker, source: ObjectId) -> bool {
-    q.chars(source).has_subtype(Subtype::Treasure)
+/// print the question, of other spells while on the battlefield: not of the payment for the spell itself (`Asker::spell`).
+pub fn treasure_mana_is_told_apart(q: &dyn Query, me: &Asker, source: ObjectId) -> bool {
+    !me.spell && q.chars(source).has_subtype(Subtype::Treasure)
 }

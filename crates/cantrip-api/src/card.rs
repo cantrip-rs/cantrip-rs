@@ -4262,8 +4262,10 @@ pub struct CardDef {
     /// Its static abilities that keep damage on permanents during cleanup steps (CR 514.2), while it is on the battlefield
     /// with its abilities. An effect that removes all damage (regeneration, CR 701.19a) still removes it.
     pub damage_stays: &'static [DamageStaysRule],
-    /// Its abilities that ask where the mana spent came from (CR 106.3), while it is on the battlefield with its abilities:
-    /// mana a rule tells apart is spent only as its payer chooses (CR 601.2h), never where other mana of its kind would do.
+    /// Its abilities that ask where the mana spent came from (CR 106.3), while it is on the battlefield with its abilities,
+    /// and as what is paid for wherever it is - a spell asked as one (`Asker::spell`) of the payment for itself, "for each
+    /// mana from a Cave spent to cast it": mana a rule tells apart is spent only as its payer chooses (CR 601.2h), never
+    /// where other mana of its kind would do.
     pub mana_told_apart: &'static [ManaSourceRule],
     /// Its static abilities that keep planeswalkers with 0 loyalty on the battlefield (CR 704.5i), while it is on the
     /// battlefield with its abilities.

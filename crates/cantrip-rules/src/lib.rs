@@ -1326,9 +1326,14 @@ impl Game {
 
     /// The parts of the ordinary mana in `player`'s pool that a rule tells apart from other mana (CR 106.3; a source, and
     /// the "when that mana is spent" ability that rides its mana, 0 for none): mana the player spends only by choosing it,
-    /// which the pool shows as that source's.
+    /// which the pool shows as that source's. While the player is asked to pay for something (`RequestKind::PayCosts`), the
+    /// rules of what they pay for are asked too, as the payment asks them: the parts it offers are the parts shown.
     pub fn mana_told_apart(&self, player: PlayerId) -> Vec<cantrip_state::ManaPart> {
-        static_rules::mana_told_apart(self, self.cards, player)
+        let paying = match self.pending() {
+            Some(Request { player: p, kind: RequestKind::PayCosts { source, .. }, .. }) if *p == player => *source,
+            _ => ObjectId::NONE,
+        };
+        static_rules::mana_told_apart(self, self.cards, player, paying)
     }
 
     /// Continuous public hand visibility, independent of a one-time reveal action.

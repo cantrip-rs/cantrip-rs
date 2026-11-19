@@ -90,14 +90,18 @@ pub fn mana_kept(cx: &Cx) -> Vec<(PlayerId, [bool; 6])> {
 
 /// The parts of the ordinary mana in `player`'s pool told apart for its payer (CR 106.3): mana its payer chooses to spend
 /// or keep (CR 601.2h, 118.3a). Each is a source with the delayed ability that rides its mana, 0 for none (`ManaPart`). A
-/// source's mana is told apart where an ability of a permanent on the battlefield says so (`CardDef::mana_told_apart`);
+/// source's mana is told apart where an ability of a permanent on the battlefield says so (`CardDef::mana_told_apart`), or
+/// one of `paying`, the spell or the source of the ability being paid for (`ObjectId::NONE` for none), wherever it is: "for
+/// each mana from a Cave spent to cast it" (Bat Colony) and "if mana from a Treasure was spent to cast this spell" (Devour
+/// Intellect, Spoils of the Hunt, Hired Hexblade) ask it of the spell's own payment, which its payer makes by choosing the
+/// mana to spend (CR 601.2h);
 /// mana a "when that mana is spent" delayed ability rides (`ManaFrom::rider`, CR 603.7a) is told apart by the rules
 /// themselves, wherever its source has gone, from every other mana - its own source's other mana and every other rider's,
 /// the same source's included: whether it is spent decides whether that ability triggers, and two riders are two abilities,
 /// each with its own words (CR 603.7, 612). Asked only while the pool holds more than one part, since one part's mana is
 /// all alike: a pool of one land's mana searches nothing. Restricted mana is told apart by its restriction alone (CR
 /// 106.6); none in content is told apart by source too.
-pub fn mana_told_apart(q: &dyn Query, cards: &'static CardTable, player: PlayerId) -> Vec<ManaPart> {
+pub fn mana_told_apart(q: &dyn Query, cards: &'static CardTable, player: PlayerId, paying: ObjectId) -> Vec<ManaPart> {
     let s = q.state();
     let mut parts: Vec<ManaPart> = Vec::new();
     for e in s.mana_from_of(player) {
@@ -110,9 +114,12 @@ pub fn mana_told_apart(q: &dyn Query, cards: &'static CardTable, player: PlayerI
         return Vec::new();
     }
     let riding = parts.iter().any(|&(_, rider)| rider != 0);
+    // The object paid for, where the battlefield's walk does not already ask it: a spell asks as a spell (`Asker::spell`).
+    let paid_for = (paying != ObjectId::NONE && !s.obj(paying).zone.is(ZoneKind::Battlefield)).then_some(paying);
     let rules: Vec<(ObjectId, PlayerId, &'static CardDef, Option<Linked>)> = s
         .battlefield()
         .iter()
+        .chain(paid_for.iter())
         .flat_map(|&id| {
             let obj = s.obj(id);
             // A permanent that has lost all its abilities has none of these rules (CR 613.1f); a merged permanent has its
@@ -128,7 +135,7 @@ pub fn mana_told_apart(q: &dyn Query, cards: &'static CardTable, player: PlayerI
         return Vec::new();
     }
     parts.retain(|&(source, rider)| {
-        rider != 0 || rules.iter().any(|&(id, controller, def, by)| def.mana_told_apart.iter().any(|rule| rule(q, &Asker { instance: None, source: id, controller, by, spell: false }, source)))
+        rider != 0 || rules.iter().any(|&(id, controller, def, by)| def.mana_told_apart.iter().any(|rule| rule(q, &Asker { instance: None, source: id, controller, by, spell: Some(id) == paid_for && s.obj(id).zone.is(ZoneKind::Stack) }, source)))
     });
     parts
 }
