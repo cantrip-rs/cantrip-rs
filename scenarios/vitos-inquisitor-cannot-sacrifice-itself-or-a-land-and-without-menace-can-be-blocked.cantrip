@@ -1,0 +1,37 @@
+# Vito's Inquisitor: "{B}, Sacrifice another creature or artifact" (CR 118.8, 701.21a): the Inquisitor can't sacrifice itself
+# ("another"), nor a land (neither creature nor artifact). With no sacrifice it has no counter and no menace, so Bot2's Ornithopter
+# can block it (and dies to the 3/3).
+
+[Bot1 Deck]
+Black Lotus
+Swamp
+Vito's Inquisitor
+Swamp x2
+Swamp x17
+
+[Bot2 Deck]
+Ornithopter
+Island x6
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Vito's Inquisitor.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+! Bot1.Battlefield.Vito's Inquisitor.Activate
+? Bot1.Battlefield.Vito's Inquisitor.Power = 3
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Vito's Inquisitor > Bot2)
+Bot2.Block(Ornithopter > Vito's Inquisitor)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter

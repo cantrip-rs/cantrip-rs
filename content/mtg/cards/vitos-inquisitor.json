@@ -1,0 +1,8 @@
+{
+  "name": "Vito's Inquisitor",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Vampire Knight",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "{B}, Sacrifice another creature or artifact: Put a +1/+1 counter on this creature. It gains menace until end of turn."
+}

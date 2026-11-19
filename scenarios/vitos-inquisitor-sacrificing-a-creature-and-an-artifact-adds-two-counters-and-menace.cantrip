@@ -1,0 +1,58 @@
+# Vito's Inquisitor: "{B}, Sacrifice another creature or artifact: Put a +1/+1 counter on this creature. It gains menace until end of
+# turn." (CR 122.1, 702.111). On turn 1 Bot1 casts the Inquisitor with Black Lotus and a Mox Jet, then on turn 3 sacrifices a Memnite
+# (a creature) and a Sol Ring (an artifact), {B} each: it gets two +1/+1 counters and becomes 5/5 with menace, so Bot2's lone
+# Ornithopter can't block it, and 5 damage goes through.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Vito's Inquisitor
+Memnite
+Sol Ring
+Swamp
+Swamp
+Swamp x18
+
+[Bot2 Deck]
+Ornithopter
+Island x6
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vito's Inquisitor.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Sol Ring.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Vito's Inquisitor.Activate
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vito's Inquisitor.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Vito's Inquisitor.Activate
+Bot1.Choose(Sol Ring)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vito's Inquisitor.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Vito's Inquisitor.Power = 5
+? Bot1.Battlefield.Vito's Inquisitor.Keywords = Menace
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Vito's Inquisitor > Bot2)
+! Bot2.Block(Ornithopter > Vito's Inquisitor)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Graveyard = Sol Ring; Memnite; Black Lotus
