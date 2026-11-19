@@ -1,0 +1,56 @@
+# Starving Revenant: Descend 8 needs eight permanent cards (CR 110.4a). Bot1 takes the milled Swamp into its hand with the first Ainok
+# Wayfarer, so only seven permanent cards are in the graveyard (two Black Lotuses, five Ornithopters). Keeping both surveiled cards it
+# draws two and loses 6 life (14), and neither draw drains Bot2 (20).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Jet
+Ainok Wayfarer
+Ainok Wayfarer
+Starving Revenant
+Ornithopter
+Ornithopter
+Swamp
+Ornithopter x3
+Lightning Bolt
+Counterspell
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ainok Wayfarer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Swamp)
+Bot1.Hand.Ainok Wayfarer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 6
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Starving Revenant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt; Counterspell | )
+
+[Expect]
+Bot1.Hand = Counterspell; Lightning Bolt; Swamp
+Bot1.Graveyard.Count = 7
+Bot1.Life = 14
+Bot2.Life = 20

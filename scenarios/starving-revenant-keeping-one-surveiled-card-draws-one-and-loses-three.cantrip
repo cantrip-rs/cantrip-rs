@@ -1,0 +1,52 @@
+# Starving Revenant: Bot1 keeps Lightning Bolt on top and puts Counterspell into the graveyard: one card put on top, so it draws one
+# card (Lightning Bolt) and loses 3 life (17). There are eight permanent cards in the graveyard (the Counterspell is not one), so that
+# draw drains Bot2 for 1 and Bot1 gains 1: 18 and 19.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Jet
+Ainok Wayfarer
+Ainok Wayfarer
+Starving Revenant
+Ornithopter x6
+Lightning Bolt
+Counterspell
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ainok Wayfarer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ainok Wayfarer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 7
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Starving Revenant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt | Counterspell)
+
+[Expect]
+Bot1.Hand = Lightning Bolt
+Bot1.Graveyard.Count = 9
+Bot1.Life = 18
+Bot2.Life = 19

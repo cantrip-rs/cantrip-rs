@@ -1,0 +1,41 @@
+# Probe: Starving Revenant keeping both surveiled cards loses 6 life in one event, so Wax-Wane Witness triggers once (+1/+0, a 3/4).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Mox Jet
+Wax-Wane Witness
+Starving Revenant
+Plains
+Lightning Bolt
+Counterspell
+Swamp x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wax-Wane Witness.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Starving Revenant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt; Counterspell | )
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 14
+Bot1.Battlefield.Wax-Wane Witness.Power = 3

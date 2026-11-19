@@ -1,0 +1,57 @@
+# Starving Revenant: binning both surveiled cards puts nothing on top, so it draws nothing and loses no life (20): "for each card you
+# put on top of your library". Lightning Bolt and Counterspell go to the graveyard (ten cards there, eight of them permanents). The
+# Descend 8 ability only triggers on Bot1's own draws: Bot2's turn-2 draw drains nothing (both at 20), Bot1's turn-3 draw does (Bot2
+# at 19, Bot1 at 21).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Jet
+Ainok Wayfarer
+Ainok Wayfarer
+Starving Revenant
+Ornithopter x6
+Lightning Bolt
+Counterspell
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ainok Wayfarer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ainok Wayfarer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 7
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Starving Revenant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt; Counterspell)
+[T2 Bot2.Main1]
+? Bot1.Life = 20
+? Bot2.Life = 20
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Swamp
+Bot1.Graveyard.Count = 10
+Bot1.Life = 21
+Bot2.Life = 19
