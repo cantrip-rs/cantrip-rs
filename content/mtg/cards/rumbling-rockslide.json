@@ -1,0 +1,6 @@
+{
+  "name": "Rumbling Rockslide",
+  "manaCost": "{3}{R}",
+  "type": "Sorcery",
+  "oracleText": "Rumbling Rockslide deals damage to target creature equal to the number of lands you control."
+}
