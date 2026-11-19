@@ -1,0 +1,30 @@
+# Scream Puff: "Whenever this creature deals combat damage to a player, create a Food token." Unblocked, its 4 damage
+# makes exactly one Food for its controller.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+Scream Puff
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Scream Puff.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+[T3 Bot1.Main1]
+Bot1.Attack(Scream Puff > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield = Mox Jet; Swamp; Scream Puff; Food Token
+Bot1.Battlefield.Food Token.Types = Artifact
+Bot2.Battlefield.Food Token = (absent)
