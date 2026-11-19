@@ -1,0 +1,6 @@
+{
+  "name": "Zoyowa's Justice",
+  "manaCost": "{1}{R}",
+  "type": "Instant",
+  "oracleText": "The owner of target artifact or creature with mana value 1 or greater shuffles it into their library. Then that player discovers X, where X is its mana value. (They exile cards from the top of their library until they exile a nonland card with that mana value or less. They cast it without paying its mana cost or put it into their hand. They put the rest on the bottom in a random order.)"
+}

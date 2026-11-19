@@ -1,0 +1,49 @@
+# Bot1 targets Bot2's Grizzly Bears (Bot2's Moxen are mana value 0, so the Bears are the one legal target). The owner, Bot2, shuffles
+# it into their own library and discovers 2 ("that player", not the spell's controller); Bot1's library is untouched.
+# Bot2 accepts, so the Bears return under Bot2's control.
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Zoyowa's Justice
+Island x17
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Zoyowa's Justice.Cast(Grizzly Bears)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot2.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Emerald; Mox Jet; Grizzly Bears
+Bot1.Graveyard = Zoyowa's Justice
+Bot1.Library.Count = 12
+Bot2.Library.Count = 12

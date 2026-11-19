@@ -1,0 +1,47 @@
+# Zoyowa's Justice shuffles Bot1's Grizzly Bears (mana value 2) into a library that also holds five Darksteel Colossi (mana value 11).
+# It discovers 2, not more: every Colossus is skipped to the bottom (CR 701.57a) and only the Bears are found, wherever the shuffle
+# put them.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Grizzly Bears
+Zoyowa's Justice
+Island
+Darksteel Colossus x5
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Zoyowa's Justice.Cast(Grizzly Bears)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Pearl; Mox Emerald; Grizzly Bears
+Bot1.Library.Count = 13

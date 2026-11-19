@@ -1,0 +1,48 @@
+# Zoyowa's Justice {1}{R} on Bot1's own Grizzly Bears (mana value 2): the Moxen on the battlefield are mana value 0, so the Bears are
+# the one legal target (CR 115.1, 202.3), chosen for Bot1. Its owner (Bot1) shuffles it into their library, then discovers 2
+# (CR 701.57a): the only nonland card in a library of Islands is the Bears themselves, which Bot1 casts for free, so they are back.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Grizzly Bears
+Zoyowa's Justice
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Zoyowa's Justice.Cast(Grizzly Bears)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Pearl; Mox Emerald; Grizzly Bears
+Bot1.Graveyard = Zoyowa's Justice
+Bot1.Hand = Island
+Bot1.Library.Count = 13

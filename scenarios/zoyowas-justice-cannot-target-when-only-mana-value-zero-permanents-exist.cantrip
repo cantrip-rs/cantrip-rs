@@ -1,0 +1,25 @@
+# Bot1's Moxen and Ornithopter all have mana value 0, so Zoyowa's Justice has no legal target (CR 601.2c): it cannot be cast.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Ornithopter
+Zoyowa's Justice
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Zoyowa's Justice.Cast(Ornithopter)
+
+[Expect]
+Bot1.Hand.Count = 4

@@ -1,0 +1,41 @@
+# "Target artifact or creature with mana value 1 or greater": Bot2's Sol Ring (an artifact, mana value exactly 1) is legal where its
+# Mox (mana value 0) is not. Bot2 shuffles it into their library and discovers 1: the library's only nonland card is the Sol Ring,
+# which Bot2 declines to cast, so it goes to their hand.
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Zoyowa's Justice
+Island x17
+
+[Bot2 Deck]
+Mox Jet
+Sol Ring
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Sol Ring.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Zoyowa's Justice.Cast(Sol Ring)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot2.Decline
+
+[Expect]
+Bot2.Battlefield = Mox Jet
+Bot2.Hand.Count = 7
+Bot1.Graveyard = Zoyowa's Justice

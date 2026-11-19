@@ -1,0 +1,70 @@
+# Bot1 takes Bot2's Grizzly Bears with Act of Treason, then casts Zoyowa's Justice on them: "the owner of target ... shuffles it
+# into their library. Then that player discovers X" names the owner, Bot2, not the Bears' controller (Bot1). The Bears go into
+# Bot2's library and Bot2 discovers 2 there, finds them and casts them, so they return under Bot2's control; Bot1's library is
+# untouched.
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Act of Treason
+Zoyowa's Justice
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Act of Treason.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Mox Emerald; Mox Jet
+Bot1.Hand.Zoyowa's Justice.Cast(Grizzly Bears)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot2.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Emerald; Mox Jet; Grizzly Bears
+Bot1.Graveyard = Zoyowa's Justice; Act of Treason
+Bot1.Library.Count = 12
+Bot2.Library.Count = 12
