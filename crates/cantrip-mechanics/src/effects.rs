@@ -3649,6 +3649,15 @@ pub fn plus_one_counter_on_target(g: &mut dyn Game, item: &StackItem) -> Result<
     Ok(())
 }
 
+/// "Move a +1/+1 counter from this [permanent] onto target [creature]" (CR 122.1: the counter comes off this one and goes onto
+/// the target): nothing moves if the target is no longer legal as it resolves (CR 608.2b), and no counter moves if this has
+/// none left (CR 400.7). Costume Closet and Explorer's Cache print it.
+pub fn move_a_plus_one_counter_from_this_onto_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    g.move_counters(item.object, creature, CounterKind::PlusOne, 1);
+    Ok(())
+}
+
 /// "Put a +1/+1 counter on target [creature]. You gain N life." (CR 122.1a, 119.3, 608.2b) as one ability: with its one target
 /// illegal as it resolves, neither instruction happens (the core removes the ability as a whole, CR 608.2b). Emergency Medical
 /// Hologram and Sunshower Druid print it with one life, Vitu-Ghazi Inspector with two.
