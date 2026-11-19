@@ -1,0 +1,44 @@
+# Captain Storm is Bot1's only Pirate, so it is the trigger's only possible target when Bot1's Ornithopter enters on turn 3. Bot2
+# answers the trigger with Lightning Bolt on Storm: the target is gone as the ability resolves (CR 608.2b), so it does nothing -
+# the Ornithopter and the rest of the board get no counter - and Bot1's only Pirate is in the graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Captain Storm, Cosmium Raider
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Captain Storm, Cosmium Raider.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Captain Storm, Cosmium Raider)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+
+[Expect]
+Turn = 4
+Stack.Count = 0
+Bot1.Graveyard = Captain Storm, Cosmium Raider
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Ornithopter.Power = 0

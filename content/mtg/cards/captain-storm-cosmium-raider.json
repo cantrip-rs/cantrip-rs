@@ -1,0 +1,8 @@
+{
+  "name": "Captain Storm, Cosmium Raider",
+  "manaCost": "{U}{R}",
+  "type": "Legendary Creature — Human Pirate",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever an artifact you control enters, put a +1/+1 counter on target Pirate you control."
+}
