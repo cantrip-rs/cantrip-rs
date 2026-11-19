@@ -1,0 +1,11 @@
+{
+  "name": "Snaremaster Sprite",
+  "manaCost": "{U}",
+  "type": "Creature — Faerie Wizard",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying\nWhen this creature enters, you may pay {2}. When you do, tap target creature an opponent controls and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+  "keywords": [
+    "Flying"
+  ]
+}
