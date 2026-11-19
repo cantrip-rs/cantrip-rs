@@ -3158,6 +3158,14 @@ pub fn damage_that_player(g: &mut dyn Game, item: &StackItem, n: u32) -> Result<
     Ok(())
 }
 
+/// "Target player loses `N` life" and "target opponent loses `N` life" (CR 119.3): the first target, which loses nothing if it is no longer
+/// a legal target (CR 608.2b). Which players may be chosen is the card's own target. Sweettooth Witch (2) and Dubious Delicacy (3) print it.
+pub fn target_player_loses_life<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(player) = crate::targets::player(g, item, 0) else { return Ok(()) };
+    g.lose_life(player, N);
+    Ok(())
+}
+
 /// "That player loses `N` life" (CR 119.3): the player a trigger fired about (`Fired::about(Target::Player(..))`, its subject). Kai
 /// Winn, Faithless Leader (3) and Massacre Wurm (2) print it.
 pub fn that_player_loses_life<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
