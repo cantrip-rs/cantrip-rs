@@ -1,0 +1,63 @@
+# Sovereign Okinec Ahau's trigger counts creatures you control only. Turn 3: Bot1 crews Smuggler's Copter (3/3, base power 3) with Memnite
+# and gives it Giant Growth; Okinec attacks and the crewed Copter, a creature at power 6 over base 3, gets three +1/+1 counters. Turn 5: the
+# Copter is no longer crewed - an artifact that is not a creature, and so with no power or toughness at all though it has three +1/+1
+# counters (CR 208.3, 301.7a): Okinec's next attack puts no counters on it, so it stays at three (a Vehicle is a creature only while
+# crewed). Okinec itself is at its base power both times.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Black Lotus
+Sovereign Okinec Ahau
+Memnite
+Smuggler's Copter
+Giant Growth
+Forest x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Sovereign Okinec Ahau.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Power = 6
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Sovereign Okinec Ahau > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Counters.PlusOnePlusOne = 3
+? Bot1.Battlefield.Sovereign Okinec Ahau.Counters.PlusOnePlusOne = (absent)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Smuggler's Copter.Counters.PlusOnePlusOne = 3
+? Bot1.Battlefield.Smuggler's Copter.Types = Artifact
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Sovereign Okinec Ahau > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Counters.PlusOnePlusOne = 3
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Smuggler's Copter.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Sovereign Okinec Ahau.Counters.PlusOnePlusOne = (absent)

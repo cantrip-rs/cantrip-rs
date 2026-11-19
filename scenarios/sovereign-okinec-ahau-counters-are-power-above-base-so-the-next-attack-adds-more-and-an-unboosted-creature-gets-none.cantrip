@@ -1,0 +1,60 @@
+# Sovereign Okinec Ahau (3/4). A +1/+1 counter makes power greater than base power (CR 613.4c: base power is set in 7a/7b, counters
+# apply in 7c), so Okinec's own counters count the next time it attacks. Turn 3: Giant Growth takes Okinec to 6 power over base 3 and
+# the attack trigger puts three counters on it (9/10 until end of turn, 6/7 after). The Ornithopter (0/2) stays at base and gets none:
+# power equal to base power is not "greater" (CR 208.1). Turn 5: no pump, Okinec is 6/7 with power 6 over base 3, so the trigger
+# puts three more (9/10) and the attack deals 9.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Forest
+Sovereign Okinec Ahau
+Ornithopter
+Giant Growth
+Forest x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Forest.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sovereign Okinec Ahau.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Sovereign Okinec Ahau)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sovereign Okinec Ahau.Power = 6
+Bot1.Attack(Sovereign Okinec Ahau > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sovereign Okinec Ahau.Counters.PlusOnePlusOne = 3
+? Bot1.Battlefield.Sovereign Okinec Ahau.Power = 9
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Sovereign Okinec Ahau.Power = 6
+? Bot2.Life = 11
+[T5 Bot1.BeginCombat]
+Bot1.Attack(Sovereign Okinec Ahau > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sovereign Okinec Ahau.Counters.PlusOnePlusOne = 6
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 2
+Bot1.Battlefield.Sovereign Okinec Ahau.Power = 9
+Bot1.Battlefield.Sovereign Okinec Ahau.Toughness = 10
+Bot1.Battlefield.Ornithopter.Power = 0

@@ -1,0 +1,50 @@
+# Sovereign Okinec Ahau has Ward {2} (CR 702.21a): Bot2's Terror ({1}{B}) at it with only three Moxen cannot also pay {2}; the ward trigger counters it
+# (paying is refused: the one mana left in its pool is less than {2}), so Okinec stays. (The scenario where Bot2 has the fourth Mox is the control.)
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Forest
+Sovereign Okinec Ahau
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Terror
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sovereign Okinec Ahau.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+
+Bot2.Hand.Terror.Cast(Sovereign Okinec Ahau)
+Bot2.Pass
+Bot1.Pass
+! Bot2.PayCost
+Bot2.Pass
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Sovereign Okinec Ahau.Power = 3
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard = Terror

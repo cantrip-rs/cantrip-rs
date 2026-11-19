@@ -1,0 +1,54 @@
+# Sovereign Okinec Ahau has Ward {2} (CR 702.21a): Bot2 has four Moxen, so the Terror ({1}{B}) at it and the ward cost {2} are both paid (paying is accepted),
+# and the Terror resolves: Okinec is destroyed. The control for the scenario where Bot2 has only three Moxen.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Forest
+Sovereign Okinec Ahau
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Terror
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sovereign Okinec Ahau.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Terror.Cast(Sovereign Okinec Ahau)
+Bot2.Pass
+Bot1.Pass
+Bot2.PayCost
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Sovereign Okinec Ahau = (absent)
+Bot1.Graveyard = Sovereign Okinec Ahau
+Bot2.Graveyard = Terror

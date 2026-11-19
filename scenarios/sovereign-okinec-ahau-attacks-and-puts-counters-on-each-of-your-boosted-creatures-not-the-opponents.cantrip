@@ -1,0 +1,80 @@
+# Sovereign Okinec Ahau (3/4, Ward {2}; "whenever it attacks, for each creature you control with power greater than that creature's
+# base power, put a number of +1/+1 counters on that creature equal to the difference"). Turn 1: Okinec is cast for {2}{W}{G} (Mox Pearl,
+# Mox Emerald, the Forest and Mox Jet, the pool empty after) with an Ornithopter (0/2) beside it. Turn 3, in the beginning of combat: Bot1
+# gives Okinec and the Ornithopter Giant Growth (+3/+3 until end of turn), and Bot2 gives its own Ornithopter Giant Growth (power 3, base 0).
+# Okinec attacks alone: the Ornithopter is not attacking, but the trigger reads every creature Bot1 controls. Okinec (power 6, base 3) and
+# Bot1's Ornithopter (power 3, base 0) each get three +1/+1 counters; Bot2's boosted Ornithopter gets none ("you control").
+# CR 122.1, 208.1, 613.4c, 603.2.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Forest
+Sovereign Okinec Ahau
+Ornithopter
+Giant Growth
+Giant Growth
+Forest x15
+
+[Bot2 Deck]
+Mox Emerald
+Ornithopter
+Giant Growth
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Forest.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sovereign Okinec Ahau.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Sovereign Okinec Ahau)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Giant Growth.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 3
+? Bot1.Battlefield.Sovereign Okinec Ahau.Power = 6
+? Bot1.Battlefield.Sovereign Okinec Ahau.Counters.PlusOnePlusOne = (absent)
+? Step = Attackers
+Bot1.Attack(Sovereign Okinec Ahau > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sovereign Okinec Ahau.Counters.PlusOnePlusOne = 3
+? Bot1.Battlefield.Sovereign Okinec Ahau.Power = 9
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 3
+? Bot1.Battlefield.Ornithopter.Power = 6
+? Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+? Bot2.Battlefield.Ornithopter.Power = 3
+[T3 Bot1.Main2]
+? Bot2.Life = 11
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 11
+Bot1.Battlefield.Sovereign Okinec Ahau.Power = 6
+Bot1.Battlefield.Sovereign Okinec Ahau.Toughness = 7
+Bot1.Battlefield.Ornithopter.Power = 3
+Bot1.Battlefield.Ornithopter.Toughness = 5
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
