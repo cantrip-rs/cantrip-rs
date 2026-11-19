@@ -1,0 +1,60 @@
+# Threadbind Clique // Rip the Seams: "Destroy target tapped creature." (an Adventure instant, CR 715) The target must be tapped (CR 115.1, 701.8):
+# Bot2's attacking Ornithopter is tapped and can be destroyed, its untapped twin cannot be targeted. The Clique is exiled on an
+# adventure (CR 715.4) and Bot1 then casts it from exile on its turn as a 3/3 flier.
+
+[Bot1 Deck]
+Threadbind Clique
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter#1 > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Threadbind Clique.Cast(Bot2.Battlefield.Ornithopter#2; Ability: Rip the Seams)
+Bot1.Hand.Threadbind Clique.Cast(Bot2.Battlefield.Ornithopter#1; Ability: Rip the Seams)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Ornithopter
+? Exile = Threadbind Clique
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Threadbind Clique.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield = Ornithopter
+Bot1.Battlefield.Threadbind Clique.Power = 3
+Bot1.Battlefield.Threadbind Clique.Toughness = 3
+Bot1.Battlefield.Threadbind Clique.Keywords = Flying

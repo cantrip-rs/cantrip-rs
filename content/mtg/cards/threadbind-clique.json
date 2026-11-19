@@ -1,0 +1,17 @@
+{
+  "name": "Threadbind Clique",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Faerie",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ],
+  "adventure": {
+    "name": "Rip the Seams",
+    "manaCost": "{2}{W}",
+    "type": "Instant — Adventure",
+    "oracleText": "Destroy target tapped creature. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}
