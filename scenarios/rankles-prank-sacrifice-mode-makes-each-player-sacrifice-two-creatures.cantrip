@@ -1,0 +1,43 @@
+# Rankle's Prank, third mode: "Each player sacrifices two creatures of their choice." Bot1 has three creatures and
+# keeps the one it chooses (Memnite); Bot2 has only one creature, so it sacrifices just that one.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Rankle's Prank
+Ornithopter
+Memnite
+Phyrexian Walker
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Ornithopter
+Swamp x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rankle's Prank.Cast
+Bot1.Modes(Each player sacrifices)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter; Phyrexian Walker)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Memnite; Mox Jet
+Bot2.Battlefield =
+Bot1.Life = 20
+Bot2.Life = 20

@@ -1,0 +1,33 @@
+# Rankle's Prank, second mode: "Each player loses 4 life." Both Bot1 (the caster) and Bot2 go from 20 to 16, and no
+# one discards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Rankle's Prank
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rankle's Prank.Cast
+Bot1.Modes(Each player loses)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Life = 16
+Bot2.Life = 16
+Bot1.Hand.Count = 4
+Bot2.Hand.Count = 7

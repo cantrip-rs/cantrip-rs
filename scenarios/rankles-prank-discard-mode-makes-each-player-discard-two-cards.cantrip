@@ -1,0 +1,35 @@
+# Rankle's Prank, first mode: "Each player discards two cards." Bot1 (after casting, four Swamps left) and Bot2 (seven
+# Swamps) each discard two, so Bot1 has 2 cards in hand and Bot2 has 5. Neither loses life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Rankle's Prank
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rankle's Prank.Cast
+Bot1.Modes(Each player discards)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot2.Hand.Count = 5
+Bot1.Graveyard.Count = 4
+Bot2.Graveyard.Count = 2
+Bot1.Life = 20
+Bot2.Life = 20

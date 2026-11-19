@@ -1,0 +1,6 @@
+{
+  "name": "Rankle's Prank",
+  "manaCost": "{2}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Choose one or more —\n• Each player discards two cards.\n• Each player loses 4 life.\n• Each player sacrifices two creatures of their choice."
+}

@@ -1,0 +1,40 @@
+# Rankle's Prank: "Choose one or more" - all three modes. Bot1 has one card in hand, so "discards two cards" takes
+# just that one; each player also loses 4 life, and Bot1 sacrifices two of its three creatures while Bot2 has none.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Rankle's Prank
+Ornithopter
+Memnite
+Phyrexian Walker
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rankle's Prank.Cast
+! Bot1.Modes(Count: 0)
+Bot1.Modes(1; 2; 3)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Swamp)
+Bot1.Choose(Ornithopter; Phyrexian Walker)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot2.Hand.Count = 5
+Bot1.Life = 16
+Bot2.Life = 16
+Bot1.Battlefield = Memnite; Mox Jet
