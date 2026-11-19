@@ -1,0 +1,57 @@
+# Moonshaker Cavalry: "When this creature enters, creatures you control gain flying and get +X/+X until end of turn, where X is
+# the number of creatures you control." Turn 1 Bot1 casts a Memnite, five Moxen and a Black Lotus; turn 3 it draws and casts the
+# Cavalry ({5}{W}{W}{W}: the Lotus's three white and the five Moxen, pool empty). Bot1 controls two creatures, the Memnite and the
+# Cavalry, so X is 2 - Bot2's Ornithopter is no creature "you control" and neither counts nor is pumped: the Memnite is a 3/3
+# flyer and the Cavalry an 8/8 flyer. On Bot2's turn both are back to 1/1 and 6/6.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Memnite
+Moonshaker Cavalry
+Plains x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Moonshaker Cavalry.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 3
+? Bot1.Battlefield.Memnite.Keywords = Flying
+? Bot1.Battlefield.Moonshaker Cavalry.Power = 8
+? Bot1.Battlefield.Moonshaker Cavalry.Toughness = 8
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Moonshaker Cavalry.Power = 6
+
+[Expect]
+Bot1.Battlefield.Moonshaker Cavalry.Keywords = Flying
+Stack.Count = 0

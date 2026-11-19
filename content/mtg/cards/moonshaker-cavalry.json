@@ -1,0 +1,11 @@
+{
+  "name": "Moonshaker Cavalry",
+  "manaCost": "{5}{W}{W}{W}",
+  "type": "Creature — Spirit Knight",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Flying\nWhen this creature enters, creatures you control gain flying and get +X/+X until end of turn, where X is the number of creatures you control.",
+  "keywords": [
+    "Flying"
+  ]
+}
