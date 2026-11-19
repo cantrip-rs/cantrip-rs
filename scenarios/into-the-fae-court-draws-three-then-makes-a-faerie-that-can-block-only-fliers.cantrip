@@ -1,0 +1,52 @@
+# Into the Fae Court {3}{U}{U} (CR 121.1, 111.1, 608.2c): Bot1 casts it turn 1 with a Black Lotus's three blue and two Moxen and draws three
+# cards, then creates a 1/1 blue Faerie token with flying and "This token can block only creatures with flying." (CR 702.9, 509.1b).
+# Turn 4 Bot2 attacks with its Memnite and its Ornithopter (a flier): the Faerie cannot block the Memnite, but blocks the Ornithopter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Into the Fae Court
+Island x3
+Island x14
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Into the Fae Court.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 6
+? Bot1.Battlefield.Faerie Token.Power = 1
+? Bot1.Battlefield.Faerie Token.Toughness = 1
+? Bot1.Battlefield.Faerie Token.Colors = Blue
+? Bot1.Battlefield.Faerie Token.Subtypes = Faerie
+? Bot1.Battlefield.Faerie Token.Keywords = CanBlockOnlyCreaturesWithFlying; Flying
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite; Ornithopter > Bot1)
+[T4 Bot2.DeclareBlockers]
+! Bot1.Block(Faerie Token > Memnite)
+Bot1.Block(Faerie Token > Ornithopter)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Faerie Token.Damage = 0
