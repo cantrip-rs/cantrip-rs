@@ -1,0 +1,6 @@
+{
+  "name": "Calamitous Cave-In",
+  "manaCost": "{3}{R}",
+  "type": "Sorcery",
+  "oracleText": "Calamitous Cave-In deals X damage to each creature and each planeswalker, where X is the number of Caves you control plus the number of Cave cards in your graveyard."
+}

@@ -1,0 +1,47 @@
+# Calamitous Cave-In: X counts only the Caves you control and the Cave cards in your graveyard.
+# Turn 1 Bot1 casts a Phyrexian Walker (0/3) and a Mox Ruby. On turn 2 Bot2 plays a Promising Vein, a Cave, and discards a Pit of
+# Offerings (another Cave) to Faithless Looting. On turn 3 Bot1 casts Cave-In
+# (Black Lotus and the Mox): it controls no Cave and has none in its graveyard - Bot2's Cave on the battlefield and Cave card
+# in its graveyard are not counted - so X = 0 (CR 205.3i) and the Walker stays undamaged
+# (CR 120.8: dealing 0 damage deals no damage at all).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Calamitous Cave-In
+Phyrexian Walker
+Plains x16
+
+[Bot2 Deck]
+Promising Vein
+Black Lotus
+Faithless Looting
+Pit of Offerings
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Promising Vein.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Choose(Pit of Offerings; Island)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard.Count = 4
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Calamitous Cave-In.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Phyrexian Walker.Damage = 0
+
+[Expect]
+Bot1.Graveyard = Calamitous Cave-In; Black Lotus
+Bot2.Battlefield.Count = 1
