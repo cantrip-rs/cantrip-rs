@@ -1,0 +1,49 @@
+# Saheeli, the Sun's Brilliance's target dies in response (CR 608.2b): Bot1 Lightning Bolts its own Grizzly Bears with the ability on the stack, the
+# only target becomes illegal, so the ability does nothing and no token is made (and nothing is sacrificed at the end step).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mountain
+Saheeli, the Sun's Brilliance
+Grizzly Bears
+Lightning Bolt
+Mox Emerald
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Saheeli, the Sun's Brilliance.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Saheeli, the Sun's Brilliance.Activate(Bot1.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Grizzly Bears.Power = 2
+[T3 Bot1.End]
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears = (absent)
+Bot1.Battlefield.Saheeli, the Sun's Brilliance.Tapped = True

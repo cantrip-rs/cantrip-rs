@@ -1,0 +1,50 @@
+# Saheeli, the Sun's Brilliance copying an artifact that is not a creature (CR 707.2): the token is a Mox Emerald, an artifact already, so the
+# exception adds nothing; it gains haste, though no artifact needs it (its {T} mana ability has no summoning sickness), and it taps for {G} the
+# turn it arrives, paying Grizzly Bears (cast from the pool that same main phase). It is sacrificed at the beginning of the end step, leaving the
+# original Mox (CR 603.7c).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Jet
+Saheeli, the Sun's Brilliance
+Grizzly Bears
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Saheeli, the Sun's Brilliance.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Saheeli, the Sun's Brilliance.Activate(Bot1.Battlefield.Mox Emerald)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Emerald#2.Token = true
+? Bot1.Battlefield.Mox Emerald#2.Types = Artifact
+? Bot1.Battlefield.Mox Emerald#2.Keywords = Haste
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+[T3 Bot1.End]
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Mox Emerald#2 = (absent)
+Bot1.Battlefield.Mox Emerald.Types = Artifact
+Bot1.Battlefield.Grizzly Bears.Power = 2
