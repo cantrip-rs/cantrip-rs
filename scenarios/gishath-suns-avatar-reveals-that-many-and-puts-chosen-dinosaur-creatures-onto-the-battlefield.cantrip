@@ -1,0 +1,64 @@
+# Gishath, Sun's Avatar (7/6 vigilance, trample, haste): "Whenever Gishath deals combat damage to a player, reveal that many cards
+# from the top of your library. Put any number of Dinosaur creature cards from among them onto the battlefield and the rest on the
+# bottom of your library in a random order." Turn 1: Bot1 casts it off five Moxen and Black Lotus and attacks at once (haste) for 7,
+# unblocked: Bot2 is at 13 and Bot1 reveals the next seven cards: Prehistoric Pet (a Dinosaur), Ornithopter, Imposing Vantasaur (a
+# Dinosaur), Avian Changeling (changeling: every creature type, so a Dinosaur), an Island, a Plains and a Nameless Inversion (a Kindred
+# instant with changeling: it is every creature type too, a Dinosaur, but not a creature). Only the Dinosaur creature cards can be chosen:
+# the Ornithopter (a creature, but no Dinosaur), the Nameless Inversion (a Dinosaur, but no creature) and the lands are refused. Bot1
+# takes the Pet and the Changeling and leaves the Vantasaur (a Dinosaur it declined) with the rest, five cards, on the bottom: 6 cards
+# remain on top and the library holds 11. The revealed cards are shown to Bot2. Vigilance: Gishath stays untapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Gishath, Sun's Avatar
+Prehistoric Pet
+Ornithopter
+Imposing Vantasaur
+Avian Changeling
+Island
+Plains
+Nameless Inversion
+Island x6
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Gishath, Sun's Avatar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Gishath, Sun's Avatar > Bot2)
+[T1 Bot1.CombatDamage]
+? Bot2.Life = 13
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Island)
+! Bot1.Choose(Nameless Inversion)
+Bot1.Choose(Prehistoric Pet; Avian Changeling)
+? Bot1.Revealed.Count = 7
+? Bot1.Battlefield.Gishath, Sun's Avatar.Tapped = false
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Avian Changeling; Gishath, Sun's Avatar; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Prehistoric Pet
+Bot1.Hand.Count = 0
+Bot1.Library.Count = 11
+Bot2.Life = 13

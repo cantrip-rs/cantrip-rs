@@ -1,0 +1,47 @@
+# Gishath, Sun's Avatar: Bot1's library holds only 3 cards when Gishath deals 7 combat damage, so it reveals all 3 (the Prehistoric Pet,
+# the Ornithopter and the Imposing Vantasaur). Bot1 takes
+# both Dinosaur creature cards (any number includes all of them); the Ornithopter goes to the bottom of the now one-card library.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Gishath, Sun's Avatar
+Prehistoric Pet
+Ornithopter
+Imposing Vantasaur
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Gishath, Sun's Avatar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Gishath, Sun's Avatar > Bot2)
+[T1 Bot1.CombatDamage]
+? Bot2.Life = 13
+Bot1.Pass
+Bot2.Pass
+? Bot1.Revealed.Count = 3
+Bot1.Choose(Prehistoric Pet; Imposing Vantasaur)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Gishath, Sun's Avatar; Imposing Vantasaur; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Prehistoric Pet
+Bot1.Library.Count = 1

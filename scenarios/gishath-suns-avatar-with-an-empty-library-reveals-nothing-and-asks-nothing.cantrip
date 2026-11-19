@@ -1,0 +1,43 @@
+# Gishath, Sun's Avatar: with an empty library its trigger reveals no cards (7 damage, but there is nothing to reveal), puts nothing onto
+# the battlefield and asks Bot1 nothing: the trigger resolves and the stack empties without a question.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Gishath, Sun's Avatar
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Gishath, Sun's Avatar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Gishath, Sun's Avatar > Bot2)
+[T1 Bot1.CombatDamage]
+? Bot2.Life = 13
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+! Bot1.Choose
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Gishath, Sun's Avatar; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Library.Count = 0

@@ -1,0 +1,63 @@
+# Gishath, Sun's Avatar (7/6 trample, haste): "that many" is the combat damage dealt to the player, not Gishath's power. Turn 3: Bot2's
+# Ornithopter (0/2) blocks the attacking Gishath; trampling over it Gishath assigns 2 to the blocker and 5 to Bot2 (20 -> 15), so Bot1
+# reveals only 5 cards, not 7: the Imposing Vantasaur, Avian Changeling, two Islands and a Swamp (Prehistoric Pet was drawn for the
+# turn). Bot1 takes just the Vantasaur; the other four go to the bottom, and the 12 cards left in the library keep their order, an Island on top.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Gishath, Sun's Avatar
+Prehistoric Pet
+Imposing Vantasaur
+Avian Changeling
+Island
+Island
+Swamp
+Island x8
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Gishath, Sun's Avatar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Gishath, Sun's Avatar > Bot2)
+Bot2.Block(Ornithopter > Gishath, Sun's Avatar)
+Bot1.AssignDamage(Gishath, Sun's Avatar > Ornithopter: 2; Gishath, Sun's Avatar > Bot2: 5)
+[T3 Bot1.CombatDamage]
+? Bot2.Life = 15
+Bot1.Pass
+Bot2.Pass
+? Bot1.Revealed.Count = 5
+Bot1.Choose(Imposing Vantasaur)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Gishath, Sun's Avatar; Imposing Vantasaur; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot2.Life = 15
+Bot1.Hand = Prehistoric Pet
+Bot1.Library.Count = 12
+Bot1.Library.Top = Island
