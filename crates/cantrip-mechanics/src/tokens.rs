@@ -1620,6 +1620,18 @@ pub fn create_a_faerie(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
     Ok(())
 }
 
+/// The 1/1 blue Faerie creature token with flying and "This token can block only creatures with flying." (CR 111, 702.9). Faerie
+/// Slumber Party and Into the Fae Court create this exact token.
+pub static FAERIE_THAT_BLOCKS_ONLY_FLIERS: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Blue)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    keywords: Keywords::of(&[Keyword::Flying, Keyword::CanBlockOnlyCreaturesWithFlying]),
+    text: "Flying\nThis token can block only creatures with flying.",
+    ..token!(Faerie)
+};
+
 /// The 1/1 blue and black Faerie creature token with flying. Pestered Wellguard and Glen Elendra's Answer make it.
 pub static FAERIE_BLUE_BLACK: CardDef = CardDef {
     colors: Some(ColorSet(ColorSet::of(Color::Blue).0 | ColorSet::of(Color::Black).0)),
