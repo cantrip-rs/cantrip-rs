@@ -1,0 +1,6 @@
+{
+  "name": "A Tale for the Ages",
+  "manaCost": "{1}{W}",
+  "type": "Enchantment",
+  "oracleText": "Enchanted creatures you control get +2/+2."
+}

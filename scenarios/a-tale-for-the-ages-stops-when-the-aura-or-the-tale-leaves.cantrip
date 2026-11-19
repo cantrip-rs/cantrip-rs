@@ -1,0 +1,62 @@
+# A Tale for the Ages: the bonus follows the Aura and the enchantment itself (CR 613.4c, 611.3). Bot1's Memnite wears Bot1's
+# Pacifism and is 3/3 under the Tale. Bot2 destroys the Pacifism with Disenchant: the Memnite is 1/1 again. Bot1 then casts a
+# second Pacifism on it (3/3 again) and Bot2 destroys the Tale: 1/1 again, the Pacifism still on it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Memnite
+A Tale for the Ages
+Pacifism
+Pacifism
+Plains x9
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Disenchant
+Disenchant
+Plains x11
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.A Tale for the Ages.Cast
+Bot1.Hand.Pacifism#1.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Disenchant#1.Cast(Pacifism)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Pacifism.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Disenchant.Cast(A Tale for the Ages)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Graveyard = A Tale for the Ages; Pacifism; Black Lotus

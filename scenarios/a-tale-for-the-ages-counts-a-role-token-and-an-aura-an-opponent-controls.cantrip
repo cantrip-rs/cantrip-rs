@@ -1,0 +1,55 @@
+# A Tale for the Ages: "Enchanted" means any Aura is attached (CR 303.4), whoever controls it and token or not. Bot1 casts the
+# Tale and Monstrous Rage on its Memnite: the Monster Role token (+1/+1, a token Aura) and the Tale make it 1+2+1+2 = 6/4 that
+# turn (Rage's +2/+0 lasts until end of turn) and 4/4 afterwards. On turn two Bot2's Pacifism goes on Bot1's Ornithopter: an Aura
+# Bot2 controls, but the creature is Bot1's, so the Tale makes it 2/4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Memnite
+Ornithopter
+A Tale for the Ages
+Monstrous Rage
+Plains x9
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Pacifism
+Plains x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.A Tale for the Ages.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Monstrous Rage.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 6
+? Bot1.Battlefield.Memnite.Toughness = 4
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Pacifism.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+? Bot1.Battlefield.Memnite.Power = 4
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Memnite.Power = 4
+Bot1.Battlefield.Memnite.Toughness = 4

@@ -1,0 +1,54 @@
+# A Tale for the Ages {1}{W}: "Enchanted creatures you control get +2/+2." Bot1's Memnite wears Bot1's own Pacifism and becomes
+# 3/3 once the Tale is in play; its unenchanted Ornithopter stays 0/2. On turn three Bot1 puts a second Pacifism on Bot2's
+# Ornithopter: an enchanted creature, but not one Bot1 controls, so it stays 0/2 (CR 303.4, 613.4c). The Tale is no Aura, so it
+# enchants nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Memnite
+Ornithopter
+Pacifism
+A Tale for the Ages
+Pacifism
+Plains x8
+
+[Bot2 Deck]
+Ornithopter
+Plains x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pacifism#1.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Hand.A Tale for the Ages.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 3
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Pacifism.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 3
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.A Tale for the Ages.Types = Enchantment

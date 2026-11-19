@@ -1,0 +1,40 @@
+# A Tale for the Ages: only an Aura makes a creature "enchanted" (CR 303.4); an Equipment attached to it does not (CR 301.5).
+# Bot1's Memnite carries Bark of Doran (+0/+1) with the Tale in play and is 1/2, not 3/4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Memnite
+A Tale for the Ages
+Bark of Doran
+Plains
+Plains x9
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.A Tale for the Ages.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bark of Doran.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Bark of Doran.Activate(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bark of Doran.AttachedTo = Memnite
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 2
