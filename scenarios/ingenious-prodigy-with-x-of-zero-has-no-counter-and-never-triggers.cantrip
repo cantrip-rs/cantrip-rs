@@ -1,0 +1,30 @@
+# Ingenious Prodigy cast for X = 0 ({U}) enters with no counters, a 0/1 (CR 107.3, 614.1c), so its upkeep ability's intervening "if"
+# (CR 603.4) is false: nothing goes on the stack at the beginning of Bot1's upkeep, so Bot1 draws only its turn's card.
+# The positive control is ingenious-prodigy-enters-with-x-counters-and-draws-for-each-one-removed-at-upkeep.
+
+[Bot1 Deck]
+Mox Sapphire
+Ingenious Prodigy
+Island x4
+Island x14
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ingenious Prodigy.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ingenious Prodigy.Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.Upkeep]
+? Stack.Count = 0
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand.Count = 6
+Bot1.Battlefield.Ingenious Prodigy.Power = 0
+Bot1.Battlefield.Ingenious Prodigy.Toughness = 1

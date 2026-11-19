@@ -1,0 +1,56 @@
+# Ingenious Prodigy {X}{U} (CR 614.1c, 107.3): cast for X = 2 with a Black Lotus's three blue, it enters with two +1/+1 counters, a 2/3 Skulk
+# creature. "At the beginning of your upkeep, if this creature has one or more +1/+1 counters on it, you may remove a +1/+1 counter
+# from it. If you do, draw a card." Turn 3 Bot1 accepts: one counter off, one card more. Turn 5 it declines and keeps the counter and the
+# card it would have drawn (the hand is cut to seven at each cleanup, CR 514.1). Turn 7 it accepts the last counter, a 0/1, and turn 9 has nothing to ask: with no counter the ability
+# does not trigger (the intervening "if", CR 603.4).
+
+[Bot1 Deck]
+Black Lotus
+Ingenious Prodigy
+Island x4
+Island x14
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Ingenious Prodigy.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ingenious Prodigy.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Ingenious Prodigy.Power = 2
+? Bot1.Battlefield.Ingenious Prodigy.Toughness = 3
+? Bot1.Battlefield.Ingenious Prodigy.Keywords = Skulk
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ingenious Prodigy.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Ingenious Prodigy.Power = 1
+? Bot1.Hand.Count = 7
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ingenious Prodigy.Counters.PlusOnePlusOne = 1
+? Bot1.Hand.Count = 8
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Ingenious Prodigy.Counters.PlusOnePlusOne = (absent)
+? Bot1.Battlefield.Ingenious Prodigy.Power = 0
+? Bot1.Battlefield.Ingenious Prodigy.Toughness = 1
+? Bot1.Hand.Count = 9
+[T9 Bot1.Main1]
+
+[Expect]
+Bot1.Hand.Count = 8
+Bot1.Battlefield.Ingenious Prodigy.Toughness = 1

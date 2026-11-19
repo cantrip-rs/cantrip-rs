@@ -1,0 +1,77 @@
+# Skulk (CR 702.118b): "This creature can't be blocked by creatures with greater power", judged as blockers are declared (CR 509.1b).
+# Ingenious Prodigy enters with one counter, a 1/2, and Bot1 declines to remove it in its upkeep: attacking on turn 3, it cannot be blocked by
+# Bot2's Grizzly Bears (power 2) but can be by its Memnite (power 1, not greater). Memnite blocks and is killed (1 damage), and the Prodigy
+# takes 1 and lives. Turn 5 Bot1 accepts and removes the counter: a 0/1, which the second Memnite cannot block either, its power 1 now greater
+# (the attack is unblocked and deals 0 damage).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Ingenious Prodigy
+Island x4
+Island x14
+
+[Bot2 Deck]
+Grizzly Bears
+Memnite
+Memnite
+Mox Emerald
+Black Lotus
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ingenious Prodigy.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Attack(Ingenious Prodigy > Bot2)
+[T3 Bot1.DeclareBlockers]
+! Bot2.Block(Grizzly Bears > Ingenious Prodigy)
+Bot2.Block(Memnite > Ingenious Prodigy)
+[T3 Bot1.Main2]
+? Bot2.Graveyard = Memnite; Black Lotus
+? Bot1.Battlefield.Ingenious Prodigy.Damage = 1
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T5 Bot1.Main1]
+Bot1.Attack(Ingenious Prodigy > Bot2)
+[T5 Bot1.DeclareBlockers]
+! Bot2.Block(Grizzly Bears > Ingenious Prodigy)
+! Bot2.Block(Memnite > Ingenious Prodigy)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ingenious Prodigy.Power = 0
+Bot2.Life = 20
+Bot1.Battlefield.Ingenious Prodigy.Tapped = true
