@@ -1,0 +1,36 @@
+# Betroth the Beast on Memnite on turn three. Bot2 answers with Lightning Bolt on Memnite, its only target, so the Adventure spell
+# does not resolve (CR 608.2b): no Royal Role is created, and the card goes to the graveyard instead of exile (CR 715.3d, 608.2n),
+# so Bot1 has no Besotted Knight to cast from exile.
+
+[Bot1 Deck]
+Mox Pearl
+Memnite
+Besotted Knight
+Plains x17
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Besotted Knight.Cast(Bot1.Battlefield.Memnite; Ability: Adventure)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Memnite
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Pearl
+Bot1.Graveyard = Besotted Knight; Memnite
+Bot2.Graveyard = Lightning Bolt

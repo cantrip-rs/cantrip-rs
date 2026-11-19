@@ -1,0 +1,14 @@
+{
+  "name": "Besotted Knight",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Human Knight",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "",
+  "adventure": {
+    "name": "Betroth the Beast",
+    "manaCost": "{W}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Create a Royal Role token attached to target creature you control. (Enchanted creature gets +1/+1 and has ward {1}.)"
+  }
+}

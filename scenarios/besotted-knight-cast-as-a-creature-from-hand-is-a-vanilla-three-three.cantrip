@@ -1,0 +1,29 @@
+# Besotted Knight {3}{W}: a 3/3 Human Knight with no abilities. Cast from hand on turn three with Black Lotus and Mox Pearl, it
+# enters as a plain 3/3 and no Role is created: the Role belongs to the Adventure half.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Besotted Knight
+Plains x17
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Besotted Knight.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Besotted Knight
+Bot1.Graveyard = Black Lotus
+Bot1.Battlefield.Besotted Knight.Power = 3
+Bot1.Battlefield.Besotted Knight.Toughness = 3
+Bot1.Battlefield.Besotted Knight.Subtypes = Human; Knight

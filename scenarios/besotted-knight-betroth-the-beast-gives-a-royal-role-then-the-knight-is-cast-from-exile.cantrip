@@ -1,0 +1,44 @@
+# Betroth the Beast {W} (the Adventure half of Besotted Knight): "Create a Royal Role token attached to target creature you
+# control." On turn one Bot1 casts it at Memnite with Mox Pearl: the Role makes Memnite a 2/2 (CR 111.10m, 303.4) and, resolved,
+# the card goes on an Adventure in exile (CR 715.3d). On turn three Bot1 casts the Besotted Knight from exile for {3}{W} (Black
+# Lotus and the Pearl): a plain 3/3 Human Knight (CR 715.3d), with no Role of its own.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Memnite
+Besotted Knight
+Plains x17
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Besotted Knight.Cast(Bot1.Battlefield.Memnite; Ability: Adventure)
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Royal.AttachedTo = Memnite
+? Bot1.Battlefield.Royal.Token = true
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Exile = Besotted Knight
+? Bot1.Graveyard.Count = 0
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Exile.Besotted Knight.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Memnite; Royal; Besotted Knight
+Bot1.Graveyard = Black Lotus
+Bot1.Battlefield.Besotted Knight.Power = 3
+Bot1.Battlefield.Besotted Knight.Toughness = 3
+Bot1.Battlefield.Besotted Knight.Subtypes = Human; Knight
