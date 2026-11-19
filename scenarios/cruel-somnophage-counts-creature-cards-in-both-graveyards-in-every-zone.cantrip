@@ -1,0 +1,56 @@
+# Power and toughness are each the number of creature cards in all graveyards (CR 604.3, 208.2a): a characteristic-defining ability, so it
+# works in hand too (0/0 with empty graveyards). Bot1's own Ornithopter (Shocked) makes the Somnophage a 1/1 as it enters; Bot2's Ornithopter
+# Shocked makes it 2/2; the second Ornithopter in Bot1's hand and the Black Lotus (a noncreature card in the graveyard) do not count. When
+# Bolted, the Somnophage is itself a creature card in the graveyard; with the Ornithopter Bot2 discarded at its hand-size cleanup that is four, so it is a 4/4 there.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Cruel Somnophage
+Ornithopter x2
+Shock
+Shock
+Lightning Bolt
+Swamp x20
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter#1.Cast
+? Bot1.Hand.Cruel Somnophage.Power = 0
+? Bot1.Hand.Cruel Somnophage.Toughness = 0
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 2
+? Bot1.Hand.Cruel Somnophage.Power = 1
+? Bot1.Hand.Cruel Somnophage.Toughness = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cruel Somnophage.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cruel Somnophage.Power = 1
+? Bot1.Battlefield.Cruel Somnophage.Toughness = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cruel Somnophage.Power = 2
+? Bot1.Battlefield.Cruel Somnophage.Toughness = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Cruel Somnophage)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Cruel Somnophage.Power = 4
+Bot1.Graveyard.Cruel Somnophage.Toughness = 4
+Bot1.Hand.Ornithopter.Power = 0

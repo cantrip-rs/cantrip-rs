@@ -1,0 +1,36 @@
+# Can't Wake Up (CR 715, 701.17a): "Target player mills four cards." Bot1 casts it for {1}{U} at Bot2, whose library is all creature cards,
+# so four creature cards reach Bot2's graveyard; the card goes to exile on an adventure (CR 715.3d). Bot1 then casts the creature from
+# exile for {1}{B} and it is 4/4 (four creature cards in graveyards). x.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Cruel Somnophage
+Swamp x20
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cruel Somnophage.Cast(Bot2; Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 4
+? Bot2.Library.Count = 9
+? Exile = Cruel Somnophage
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Exile.Cruel Somnophage.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Cruel Somnophage.Power = 4
+Bot1.Battlefield.Cruel Somnophage.Toughness = 4
+Bot1.Library.Count = 17

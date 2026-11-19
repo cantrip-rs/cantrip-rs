@@ -1,0 +1,55 @@
+# Once the characteristic-defining ability is gone, the printed */* is 0/0 (CR 604.3, 208.2a) and later layers still apply:
+# Giant Growth's +3/+3 leaves it a 3/3, not something with a power of its own.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Cruel Somnophage
+Ornithopter
+Shock
+Mox Emerald
+Giant Growth
+Swamp x20
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Mox Jet
+The Wondrous Wasp
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cruel Somnophage.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.The Wondrous Wasp.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Target(Cruel Somnophage)
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Cruel Somnophage)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cruel Somnophage.Power = 4
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Cruel Somnophage.Power = 3
+Bot1.Battlefield.Cruel Somnophage.Toughness = 3

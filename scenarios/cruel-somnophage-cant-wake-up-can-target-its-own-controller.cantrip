@@ -1,0 +1,24 @@
+# "Target player" includes the caster (CR 115.1, 701.17a): Bot1 mills itself four and keeps the Swamps out of hand; Bot2 is untouched.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Cruel Somnophage
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cruel Somnophage.Cast(Bot1; Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 4
+Bot2.Graveyard.Count = 0
+Exile = Cruel Somnophage
