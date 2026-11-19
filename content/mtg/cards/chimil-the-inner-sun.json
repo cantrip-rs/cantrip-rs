@@ -1,0 +1,6 @@
+{
+  "name": "Chimil, the Inner Sun",
+  "manaCost": "{6}",
+  "type": "Legendary Artifact",
+  "oracleText": "Spells you control can't be countered.\nAt the beginning of your end step, discover 5. (Exile cards from the top of your library until you exile a nonland card with mana value 5 or less. Cast it without paying its mana cost or put it into your hand. Put the rest on the bottom in a random order.)"
+}

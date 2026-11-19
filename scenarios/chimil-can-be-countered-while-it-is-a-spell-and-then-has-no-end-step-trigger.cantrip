@@ -1,0 +1,63 @@
+# Chimil, the Inner Sun: "Spells you control can't be countered" works only while Chimil is on the battlefield (ruling
+# 2023-11-10: "While it's a spell, it can be countered"). Bot2 readies two Mox Sapphires on turn 2; on turn 3 Bot1 casts Chimil
+# with all six Moxes and Bot2's Counterspell counters it. Chimil goes to the graveyard, so there is no end step trigger: the
+# library keeps its cards and nothing is exiled.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Chimil, the Inner Sun
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Counterspell
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Mox Sapphire#4.Activate
+Bot1.Battlefield.Mox Sapphire#5.Activate
+Bot1.Hand.Chimil, the Inner Sun.Cast
+? Stack = Chimil, the Inner Sun
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Hand.Counterspell.Cast(Chimil, the Inner Sun)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Graveyard = Chimil, the Inner Sun
+Bot2.Graveyard = Counterspell
+Bot1.Battlefield.Count = 6
+Bot1.Library.Count = 12
+Exile.Count = 0

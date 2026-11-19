@@ -1,0 +1,65 @@
+# Chimil, the Inner Sun: "At the beginning of your end step, discover 5" (CR 701.57a). Turn 1: Bot1 casts all six Moxes, then
+# Chimil. At Bot1's end step Chimil's discover exiles Island (a land) and Arachnoid (mana value 6, over the limit), then
+# Ancient Carp (mana value 5, exactly the limit), which Bot1 casts for free; the two skipped cards go to the bottom. On turn 2
+# it is Bot2's end step, not "your" end step: nothing more is exiled, so Ornithopter, the next nonland card, is still in the
+# library at the start of turn 3.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Chimil, the Inner Sun
+Island
+Arachnoid
+Ancient Carp
+Ornithopter
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Mox Sapphire#4.Activate
+Bot1.Battlefield.Mox Sapphire#5.Activate
+Bot1.Hand.Chimil, the Inner Sun.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 7
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 3
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ancient Carp.Power = 2
+? Bot1.Library.Count = 12
+[T2 Bot2.End]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+
+[Expect]
+Exile.Count = 0
+Bot1.Library.Count = 12
+Bot1.Battlefield.Count = 8
+Bot1.Hand.Count = 0
