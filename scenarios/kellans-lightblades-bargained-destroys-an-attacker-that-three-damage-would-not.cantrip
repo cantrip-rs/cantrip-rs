@@ -1,0 +1,51 @@
+# Kellan's Lightblades, bargained (CR 702.166a): sacrificing Mox Sapphire - a Mountain is no artifact, enchantment or token - makes
+# it destroy the creature instead of dealing damage. Bot2's Crystal Barricade (0/4) blocks Bot1's Memnite and is destroyed
+# although 3 damage would not have killed it.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Memnite
+Mox Sapphire
+Kellan's Lightblades
+Plains
+Mountain
+Plains x13
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Crystal Barricade
+Plains x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Crystal Barricade.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Crystal Barricade > Memnite)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kellan's Lightblades.Cast(Crystal Barricade)
+Bot1.Modes(Bargain:)
+! Bot1.Choose(Mountain)
+Bot1.Choose(Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Crystal Barricade
+Bot1.Graveyard = Kellan's Lightblades; Mox Sapphire

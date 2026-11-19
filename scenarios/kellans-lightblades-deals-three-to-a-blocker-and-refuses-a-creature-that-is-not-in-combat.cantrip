@@ -1,0 +1,54 @@
+# Kellan's Lightblades, not bargained: 3 damage to target attacking or blocking creature. Bot1 attacks with its Memnite and Bot2
+# blocks with Crystal Barricade (0/4). Bot1's own Ornithopter, which stays home, is never declared an attacker and is refused as a
+# target (CR 115.1, 508.1a); the blocking Barricade is chosen and is still there with exactly 3 damage marked - a destroy would have
+# removed it - before combat damage (the Memnite's 1) finishes it.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Memnite
+Ornithopter
+Kellan's Lightblades
+Plains
+Mox Sapphire
+Plains x13
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Crystal Barricade
+Plains x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Crystal Barricade.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Crystal Barricade > Memnite)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Kellan's Lightblades.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Hand.Kellan's Lightblades.Cast(Crystal Barricade)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Crystal Barricade.Damage = 3
+? Bot1.Mana =
+? Bot2.Battlefield = Plains; Mox Pearl; Crystal Barricade
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Kellan's Lightblades
+Bot2.Graveyard = Crystal Barricade
+Bot1.Battlefield.Count = 5
