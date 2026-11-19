@@ -1,0 +1,43 @@
+# Farsight Ritual {2}{U}{U}: "Look at the top four cards of your library. If this spell was bargained, look at the top eight cards
+# of your library instead. Put two of them into your hand and the rest on the bottom of your library in a random order." Bot1 casts it
+# unbargained with Black Lotus and Mox Ruby: the top four are Grizzly Bears, Hill Giant, Wind Drake and Serra Angel (Shock, the fifth,
+# is not among them), and one card or three cannot be taken. Two are taken (Grizzly Bears and Serra Angel),
+# and the other two go to the bottom, so the library has two fewer cards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Farsight Ritual
+Island
+Island
+Island
+Island
+Grizzly Bears
+Hill Giant
+Wind Drake
+Serra Angel
+Shock
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Farsight Ritual.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Arrange(Grizzly Bears | Hill Giant; Wind Drake; Serra Angel)
+! Bot1.Arrange(Grizzly Bears; Hill Giant; Wind Drake | Serra Angel)
+Bot1.Arrange(Grizzly Bears; Serra Angel | Hill Giant; Wind Drake)
+? Bot1.Revealed = (absent)
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Island; Island; Island; Island; Grizzly Bears; Serra Angel
+Bot1.Graveyard = Farsight Ritual; Black Lotus
+Bot1.Library.Count = 18
+Bot1.Battlefield = Mox Ruby

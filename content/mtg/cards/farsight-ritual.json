@@ -1,0 +1,6 @@
+{
+  "name": "Farsight Ritual",
+  "manaCost": "{2}{U}{U}",
+  "type": "Instant",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nLook at the top four cards of your library. If this spell was bargained, look at the top eight cards of your library instead. Put two of them into your hand and the rest on the bottom of your library in a random order."
+}

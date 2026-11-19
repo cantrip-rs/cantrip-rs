@@ -1,0 +1,46 @@
+# Farsight Ritual bargained (CR 702.166b): Bot1 sacrifices Mox Ruby, tapped for its mana, as the additional cost, so the spell looks
+# at the top EIGHT cards (Shock, the ninth, is not among them): Lightning Bolt and Giant Growth, the seventh and eighth, can be
+# taken (Bot1 takes those two). The other six go to the bottom, so the library has two fewer cards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Farsight Ritual
+Island
+Island
+Island
+Island
+Grizzly Bears
+Hill Giant
+Wind Drake
+Serra Angel
+Memnite
+Ornithopter
+Lightning Bolt
+Giant Growth
+Shock
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Farsight Ritual.Cast
+Bot1.Modes(Bargain:)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose(Mox Ruby)
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Arrange(Lightning Bolt | Grizzly Bears; Hill Giant; Wind Drake; Serra Angel; Memnite; Ornithopter; Giant Growth)
+Bot1.Arrange(Lightning Bolt; Giant Growth | Grizzly Bears; Hill Giant; Wind Drake; Serra Angel; Memnite; Ornithopter)
+? Bot1.Revealed = (absent)
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Island; Island; Island; Island; Lightning Bolt; Giant Growth
+Bot1.Graveyard = Farsight Ritual; Mox Ruby; Black Lotus
+Bot1.Library.Count = 19
+Bot1.Battlefield.Count = 0
