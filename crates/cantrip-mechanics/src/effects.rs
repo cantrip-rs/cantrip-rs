@@ -2141,6 +2141,18 @@ pub fn destroy_each_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Sus
     Ok(())
 }
 
+/// "Up to N target creatures can't block this turn" (CR 509.1b, 611.2a, 608.2b): each target still legal as the spell resolves
+/// can't block until end of turn - an effect on the creature, not an ability it gains - all as one instruction; one that is gone
+/// is left out. Untimely Malfunction's mode (one or two) and Daring Discovery (up to three, then discover) print it.
+pub fn each_target_cant_block_this_turn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    instruction(g, |g| {
+        for creature in crate::targets::legal_objects(g, item) {
+            g.add_effect(item.object, creature, EffectKind::CantBlock, Duration::EndOfTurn);
+        }
+    });
+    Ok(())
+}
+
 /// "Destroy it" (CR 701.8a) for a trigger about an object: the trigger's subject, if it is an object, destroyed even if the source has
 /// left the battlefield by now (CR 603.7c, 400.7). Cryoshatter and Cracked Skull ("When enchanted creature is dealt damage, destroy it")
 /// print it, and so does a delayed trigger (Rocket Launcher, Cockatrice's "destroy that creature at end of combat").
