@@ -1,0 +1,41 @@
+# With no card in hand the "you may discard a card" asks nothing and there is no discard, so no draw (CR 608.2c, 701.9b): on turn 3
+# Bot1 draws the Forest, plays it, attacks with an empty hand and the trigger resolves unasked; the Savannah stays on top of the library.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Volatile Wanderglyph
+Island
+Forest
+Savannah
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Volatile Wanderglyph.Cast
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+? Bot1.Hand.Count = 0
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Volatile Wanderglyph > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot1.Graveyard.Count = 0
+Bot1.Library.Count = 12
+Bot2.Life = 18

@@ -1,0 +1,8 @@
+{
+  "name": "Volatile Wanderglyph",
+  "manaCost": "{1}{R}",
+  "type": "Artifact Creature — Golem",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature becomes tapped, you may discard a card. If you do, draw a card."
+}

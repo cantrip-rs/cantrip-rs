@@ -1,0 +1,35 @@
+# Volatile Wanderglyph (2/2): "Whenever this creature becomes tapped, you may discard a card. If you do, draw a card." Attacking
+# taps it (CR 508.1f): on turn 3 Bot1 draws the Mountain, attacks, discards the Island and draws the Savannah from the top of the
+# library (hand 5 -> 4 -> 5). The Wanderglyph's 2 damage reaches Bot2.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Volatile Wanderglyph
+Island
+Swamp
+Forest
+Plains
+Mountain
+Savannah
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Volatile Wanderglyph.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Volatile Wanderglyph > Bot2)
+Bot1.Choose(Island)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Island
+Bot1.Hand = Forest; Mountain; Plains; Savannah; Swamp
+Bot2.Life = 18
