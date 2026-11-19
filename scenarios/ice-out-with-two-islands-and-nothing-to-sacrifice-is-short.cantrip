@@ -1,0 +1,35 @@
+# Two Islands and nothing to sacrifice: bargain is not offered (CR 601.2b, 118.3), so Ice Out costs the full {1}{U}{U} and is short
+# (CR 601.2f). The positive controls are ice-out-bargained-costs-one-less-so-two-mana-counters-a-bolt-and-the-mox-is-sacrificed and
+# ice-out-unbargained-costs-all-three-and-keeps-the-mox. The Bolt hits Bot1 (a Swamp was discarded to Bot2's hand size in turn two).
+
+[Bot1 Deck]
+Island
+Island
+Ice Out
+Island x4
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Swamp x18
+
+[Actions]
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island#2.Activate
+! Bot1.Hand.Ice Out.Cast(Stack.Lightning Bolt; Mana: short)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Graveyard = Lightning Bolt; Black Lotus; Swamp

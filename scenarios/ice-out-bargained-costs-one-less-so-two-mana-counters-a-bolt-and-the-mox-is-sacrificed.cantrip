@@ -1,0 +1,44 @@
+# Ice Out is {1}{U}{U}, and costs {1} less if it is bargained (CR 702.166a, 601.2f). Bot1 has an Island, a Mox Sapphire and a
+# Mox Ruby and taps only the Island and the Sapphire, {U}{U}: it sacrifices the Mox Ruby (an artifact) for bargain, and the
+# spell costs just {U}{U}. Bot2's Lightning Bolt is countered (CR 701.6), so Bot1 stays at 20 and the Bolt is in Bot2's graveyard.
+# A target that is not a spell, Bot2's Swamp, is refused.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Ice Out
+Island x3
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Swamp x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana = {U}{U}
+! Bot1.Hand.Ice Out.Cast(Bot2.Battlefield.Swamp)
+Bot1.Hand.Ice Out.Cast(Stack.Lightning Bolt)
+Bot1.Modes(Bargain:)
+Bot1.Choose(Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Ice Out; Mox Ruby
+Bot2.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Battlefield = Island; Mox Sapphire

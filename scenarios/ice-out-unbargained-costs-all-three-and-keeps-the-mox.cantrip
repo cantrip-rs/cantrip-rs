@@ -1,0 +1,39 @@
+# Unbargained, Ice Out costs the full {1}{U}{U} (CR 702.166a): Bot1 declines bargain, taps the Island, the Sapphire and the Mox
+# Ruby (the {1}), and keeps the Mox Ruby. It counters Bot2's Lightning Bolt.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Ice Out
+Island x3
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Swamp x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {U}{U}{R}
+Bot1.Hand.Ice Out.Cast(Stack.Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Ice Out
+Bot2.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Battlefield = Island; Mox Sapphire; Mox Ruby

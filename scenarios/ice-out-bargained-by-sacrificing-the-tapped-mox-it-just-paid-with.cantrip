@@ -1,0 +1,38 @@
+# Bargain's sacrifice is a cost paid beside the mana (CR 702.166a, 601.2b, 601.2h), and a tapped permanent can still be sacrificed: Bot1
+# taps its Island and Mox Sapphire for {U}{U}, which is short of {1}{U}{U}, but Ice Out is offered because sacrificing the tapped Mox
+# makes it a {U}{U} spell (CR 601.2f). It counters Bot2's Lightning Bolt.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Ice Out
+Island x4
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Swamp x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ice Out.Cast(Stack.Lightning Bolt)
+Bot1.Modes(Bargain:)
+Bot1.Choose(Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Ice Out; Mox Sapphire
+Bot2.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Battlefield = Island

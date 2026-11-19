@@ -1,0 +1,56 @@
+# Ice Out {1}{U}{U} "costs {1} less to cast if it's bargained" (CR 702.166a, 601.2f, 118.7): the reduction is exactly {1}. Under
+# Bot2's Thalia, Guardian of Thraben (noncreature spells cost {1} more) the bargained total is {1}{U}{U} + {1} - {1} = {1}{U}{U}, so
+# all three of Bot1's {U} are spent; a reduction of {2} would have left one floating. Bot2's Lightning Bolt ({1}{R} under Thalia
+# too) is countered and Bot1 stays at 20.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Ice Out
+Island x3
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Thalia, Guardian of Thraben
+Lightning Bolt
+Plains
+Mountain
+Swamp x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Thalia, Guardian of Thraben.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana = {U}{U}{U}
+Bot1.Hand.Ice Out.Cast(Stack.Lightning Bolt)
+Bot1.Modes(Bargain:)
+Bot1.Choose(Mox Ruby)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Ice Out; Mox Ruby
+Bot2.Graveyard = Lightning Bolt; Black Lotus

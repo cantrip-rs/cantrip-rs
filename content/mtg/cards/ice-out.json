@@ -1,0 +1,6 @@
+{
+  "name": "Ice Out",
+  "manaCost": "{1}{U}{U}",
+  "type": "Instant",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nThis spell costs {1} less to cast if it's bargained.\nCounter target spell."
+}
