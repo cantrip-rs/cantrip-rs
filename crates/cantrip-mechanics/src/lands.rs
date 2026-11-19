@@ -554,6 +554,22 @@ pub const fn sacrifice_for_two_counters(cost_text: &'static str, target: &'stati
 /// triome. Raffine's Tower and Savai Triome print it.
 pub const TRIOME_CYCLING: AbilityDef = triggers::cycling(mana("{3}"), "Cycling {3} ({3}, Discard this card: Draw a card.)");
 
+fn discover_4(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    crate::discover::discover(g, item.controller, 4)?;
+    Ok(())
+}
+
+/// A Hidden land's two abilities, mana ability first (CR 605.1a, 602.5d, 701.57a): "{T}: Add {A}." (`mana_text` is its full
+/// text) and "{4}{A}, {T}, Sacrifice this land: Discover 4. Activate only as a sorcery." (`text` is its full text, `cost_text` "{4}{A}, {T}"
+/// with its mana and the tap, the sacrifice added here). With `enters: Some(mana::enters_tapped)` it is Hidden Cataract, Hidden Courtyard, Hidden Necropolis, Hidden
+/// Nursery and Hidden Volcano.
+pub const fn discover_land(a: Mana, mana_text: &'static str, cost_text: &'static str, text: &'static str) -> [AbilityDef; 2] {
+    [
+        mana_ability(TAP, add(a), mana_text),
+        ability(cost(cost_text).and(SACRIFICE_THIS), discover_4, text).sorcery_speed(),
+    ]
+}
+
 /// The surveil lands' "When this land enters, surveil 1" (CR 701.25): with `enters: Some(mana::enters_tapped)`, Meticulous
 /// Archive and Undercity Sewers.
 pub const SURVEIL_LAND: AbilityDef = triggered(triggers::THIS_ENTERS, |g, item| effects::surveil(g, item, 1), "When this land enters, surveil 1.");
