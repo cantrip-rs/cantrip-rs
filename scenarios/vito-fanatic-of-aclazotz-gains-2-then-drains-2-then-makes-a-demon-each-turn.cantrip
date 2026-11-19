@@ -1,0 +1,108 @@
+# Vito, Fanatic of Aclazotz: "Whenever you sacrifice another permanent, you gain 2 life if this is the first time this ability has resolved
+# this turn. If it's the second time, each opponent loses 2 life. If it's the third time, create a 4/3 white and black Vampire Demon
+# creature token with flying." Turn 3: Bankrupt in Blood's cost sacrifices two Ornithopters at once, two triggers: the first resolution
+# gains 2 life (22), the second makes Bot2 lose 2 (18); it draws three more Ornithopters. Turn 5 (the count starts over): Ashnod's
+# Altar sacrifices Ornithopters one at a time: the first resolution of the turn gains 2 (24), the second drains 2 (Bot2 16), the third makes
+# the 4/3 flying Demon, and the fourth, sacrificing that Demon, does nothing (CR 608.2m). Turn 7: Bot1's Diabolic Edict makes Bot2 sacrifice its Ornithopter, which does not trigger Vito (only a sacrifice
+# "you" make). CR 701.21a.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Vito, Fanatic of Aclazotz
+Ornithopter
+Ornithopter
+Bankrupt in Blood
+Ornithopter
+Ornithopter
+Ornithopter
+Ashnod's Altar
+Diabolic Edict
+Swamp x10
+
+[Bot2 Deck]
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Vito, Fanatic of Aclazotz.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+? Bot1.Battlefield.Vito, Fanatic of Aclazotz.Keywords = Flying
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bankrupt in Blood.Cast
+Bot1.Choose(Ornithopter; Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+? Bot2.Life = 20
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+? Bot1.Battlefield.Vampire Demon Token = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ashnod's Altar.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 24
+? Bot2.Life = 18
+Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+? Bot1.Battlefield.Vampire Demon Token = (absent)
+Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vampire Demon Token.Power = 4
+? Bot1.Battlefield.Vampire Demon Token.Toughness = 3
+? Bot1.Battlefield.Vampire Demon Token.Keywords = Flying
+? Bot1.Battlefield.Vampire Demon Token.Colors = Black; White
+Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Vampire Demon Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 24
+? Bot2.Life = 16
+? Bot1.Battlefield.Vampire Demon Token = (absent)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Diabolic Edict.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 16
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Graveyard.Ornithopter.Power = 0
+Bot1.Battlefield.Vito, Fanatic of Aclazotz.Power = 4

@@ -1,0 +1,50 @@
+# Vito, Fanatic of Aclazotz sacrificed together with an Ornithopter as Bankrupt in Blood's additional cost (CR 701.21a, 601.2h): it leaves the
+# battlefield at the same time as the Ornithopter and so sees it sacrificed (CR 603.10a), and its trigger, for "another permanent", is
+# one for the Ornithopter only: the first resolution of the turn, +2 life (22), never +4 for Vito itself. Nothing else changes: Bot2's
+# life is still 20, no Demon is made, and Bankrupt in Blood draws its three cards.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Vito, Fanatic of Aclazotz
+Ornithopter
+Bankrupt in Blood
+Swamp x13
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Vito, Fanatic of Aclazotz.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bankrupt in Blood.Cast
+Bot1.Choose(Vito, Fanatic of Aclazotz; Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 3
+? Bot1.Hand.Count = 4
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 20
+Bot1.Graveyard = Bankrupt in Blood; Ornithopter; Vito, Fanatic of Aclazotz
+Bot1.Battlefield.Vampire Demon Token = (absent)
