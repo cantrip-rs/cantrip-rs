@@ -1,0 +1,58 @@
+# Disruptor Wanderglyph: "Whenever this creature attacks, exile target card from an opponent's graveyard." Bot1's own spent
+# Dark Ritual is no legal target (`! Bot1.Target(Bot1.Graveyard.Dark Ritual)`, CR 115.1); of Bot2's two graveyard cards (a
+# instant and a sorcery, cards of different types) only the chosen Lightning Bolt is exiled and the
+# Dark Ritual stays where it was (CR 404.1).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Disruptor Wanderglyph
+Dark Ritual
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Dark Ritual
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Disruptor Wanderglyph.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dark Ritual.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Disruptor Wanderglyph > Bot2)
+! Bot1.Target(Bot1.Graveyard.Dark Ritual)
+Bot1.Target(Bot2.Graveyard.Lightning Bolt)
+
+[Expect]
+Exile = Lightning Bolt
+Bot2.Graveyard = Dark Ritual
+Bot1.Graveyard = Dark Ritual

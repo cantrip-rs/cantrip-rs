@@ -1,0 +1,8 @@
+{
+  "name": "Disruptor Wanderglyph",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Golem",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Whenever this creature attacks, exile target card from an opponent's graveyard."
+}
