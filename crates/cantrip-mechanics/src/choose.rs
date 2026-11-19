@@ -202,7 +202,20 @@ pub fn player(g: &mut dyn Game, chooser: PlayerId, source: ObjectId, candidates:
     if candidates.is_empty() {
         return Ok(None);
     }
-    match g.ask(chooser, RequestKind::ChoosePlayer { source, candidates, verb, amount, subject: None })? {
+    ask_player(g, chooser, RequestKind::ChoosePlayer { source, candidates, verb, amount, subject: None })
+}
+
+/// `player`, for a choice about one object: the question names `subject` ("gains control of {subject}"), so the chooser sees
+/// what the chosen player gets. Dack Fayden, Helping Hand and Discerning Financier print it (verb "GainControlOf").
+pub fn player_about(g: &mut dyn Game, chooser: PlayerId, source: ObjectId, candidates: Vec<PlayerId>, verb: &'static str, subject: ObjectId) -> Result<Option<PlayerId>, Suspend> {
+    if candidates.is_empty() {
+        return Ok(None);
+    }
+    ask_player(g, chooser, RequestKind::ChoosePlayer { source, candidates, verb, amount: 0, subject: Some(subject) })
+}
+
+fn ask_player(g: &mut dyn Game, chooser: PlayerId, ask: RequestKind) -> Result<Option<PlayerId>, Suspend> {
+    match g.ask(chooser, ask)? {
         Answer::Player(p) => Ok(Some(p)),
         _ => Ok(None),
     }

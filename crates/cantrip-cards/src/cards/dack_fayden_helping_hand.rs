@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::goad;
+use cantrip_mechanics::{choose, goad};
 use cantrip_mechanics::library;
 use cantrip_mechanics::triggers::THIS_ENTERS;
 use cantrip_oracle as oracle;
@@ -45,8 +45,7 @@ fn enters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
             1 => unchosen[0],
             _ => {
                 // The question names the permanent it is for, so each opponent is chosen knowing what they will get.
-                let ask = RequestKind::ChoosePlayer { source: item.object, candidates: unchosen.clone(), verb: "GainControlOf", amount: 0, subject: Some(permanent) };
-                let Answer::Player(opponent) = g.ask(you, ask)? else { break };
+                let Some(opponent) = choose::player_about(g, you, item.object, unchosen.clone(), "GainControlOf", permanent)? else { break };
                 opponent
             }
         };
