@@ -1,0 +1,11 @@
+{
+  "name": "Sleep-Cursed Faerie",
+  "manaCost": "{U}",
+  "type": "Creature — Faerie Wizard",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying, ward {2}\nThis creature enters tapped with three stun counters on it. (If it would become untapped, remove a stun counter from it instead.)\n{1}{U}: Untap this creature.",
+  "keywords": [
+    "Flying"
+  ]
+}

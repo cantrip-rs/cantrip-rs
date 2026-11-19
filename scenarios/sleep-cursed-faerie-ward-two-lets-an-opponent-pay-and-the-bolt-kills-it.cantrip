@@ -1,0 +1,33 @@
+# Sleep-Cursed Faerie, "ward {2}" (CR 702.21a): the positive control. Bot2's Black Lotus makes three red, so after the Bolt it can pay {2}, the ward
+# trigger's counter is paid off and the Bolt deals 3 damage to the 3/3 Faerie, which dies.
+
+[Bot1 Deck]
+Mox Sapphire
+Sleep-Cursed Faerie
+Island x30
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleep-Cursed Faerie.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Sleep-Cursed Faerie)
+Bot2.PayCost
+? Bot2.Mana =
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Sleep-Cursed Faerie = (absent)
+Bot1.Graveyard = Sleep-Cursed Faerie
+Bot2.Graveyard = Lightning Bolt; Black Lotus

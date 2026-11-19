@@ -1,0 +1,32 @@
+# Sleep-Cursed Faerie, "ward {2}" (CR 702.21a): Bot2's only mana is a Mox Ruby, which pays for the Lightning Bolt, so the ward trigger counters it
+# unless Bot2 pays {2} and the 3/3 Faerie takes no damage. It entered tapped with its stun counters on turn 1, and being tapped does not stop it
+# being a legal target.
+
+[Bot1 Deck]
+Mox Sapphire
+Sleep-Cursed Faerie
+Island x30
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleep-Cursed Faerie.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Sleep-Cursed Faerie)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Sleep-Cursed Faerie.Damage = 0
+Bot1.Battlefield.Sleep-Cursed Faerie.Tapped = true
+Bot2.Graveyard = Lightning Bolt

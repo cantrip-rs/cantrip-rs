@@ -1,0 +1,70 @@
+# Sleep-Cursed Faerie {U}, 3/3 (CR 614.1c-d, 122.1d, 701.26b): "Flying, ward {2}. This creature enters tapped with three stun counters on it. {1}{U}: Untap
+# this creature." Bot1 casts it with Mox Sapphire: it is tapped with three stun counters. Each {1}{U} activation that would untap it removes
+# a stun counter instead, so the first three leave it tapped (the first two together: one counter left; then none) and only the fourth untaps it.
+# Every activation costs exactly {1}{U}: Black Lotus's three blue mana pay one and leave {U}, which Mox Jet's {B} completes for the second
+# (the pool is empty right after).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Jet
+Sleep-Cursed Faerie
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleep-Cursed Faerie.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sleep-Cursed Faerie.Tapped = true
+? Bot1.Battlefield.Sleep-Cursed Faerie.Counters.Stun = 3
+? Bot1.Battlefield.Sleep-Cursed Faerie.Power = 3
+? Bot1.Battlefield.Sleep-Cursed Faerie.Toughness = 3
+? Bot1.Battlefield.Sleep-Cursed Faerie.Keywords = Flying
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Sleep-Cursed Faerie.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sleep-Cursed Faerie.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sleep-Cursed Faerie.Tapped = true
+? Bot1.Battlefield.Sleep-Cursed Faerie.Counters.Stun = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Sleep-Cursed Faerie.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sleep-Cursed Faerie.Tapped = true
+? Bot1.Battlefield.Sleep-Cursed Faerie.Counters.Stun = (absent)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Sleep-Cursed Faerie.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Sleep-Cursed Faerie.Tapped = false
+Bot1.Battlefield.Sleep-Cursed Faerie.Counters.Stun = (absent)
