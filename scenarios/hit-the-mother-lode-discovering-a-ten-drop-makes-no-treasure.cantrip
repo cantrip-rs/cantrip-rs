@@ -1,0 +1,48 @@
+# Hit the Mother Lode discovers 10 and finds Progenitus, mana value exactly 10 (WWUUBBRRGG): it is cast free (10 is not above 10), and the
+# difference is 0 -- "less than 10" is false at 10 -- so no Treasure is created (CR 701.57c).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Hit the Mother Lode
+Island
+Progenitus
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hit the Mother Lode.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Hit the Mother Lode; Black Lotus
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Mox Emerald; Progenitus
+Bot1.Hand = Island

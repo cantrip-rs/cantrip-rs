@@ -1,0 +1,6 @@
+{
+  "name": "Hit the Mother Lode",
+  "manaCost": "{4}{R}{R}{R}",
+  "type": "Sorcery",
+  "oracleText": "Discover 10. If the discovered card's mana value is less than 10, create a number of tapped Treasure tokens equal to the difference. (To discover 10, exile cards from the top of your library until you exile a nonland card with mana value 10 or less. Cast it without paying its mana cost or put it into your hand. Put the rest on the bottom in a random order.)"
+}

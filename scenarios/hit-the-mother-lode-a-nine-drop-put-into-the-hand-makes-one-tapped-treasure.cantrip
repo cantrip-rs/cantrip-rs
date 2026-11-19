@@ -1,0 +1,49 @@
+# Hit the Mother Lode discovers 10 and finds Blessed Wind (mana value 9): the player declines to cast it, so it goes to the hand, but it is
+# still the discovered card (CR 701.57c) and the difference, 1, becomes one tapped Treasure.
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Hit the Mother Lode
+Island
+Blessed Wind
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hit the Mother Lode.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Hit the Mother Lode; Black Lotus
+Bot1.Hand = Island; Blessed Wind
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Treasure Token.Tapped = true

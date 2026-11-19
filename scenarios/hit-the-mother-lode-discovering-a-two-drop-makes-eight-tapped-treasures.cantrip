@@ -1,0 +1,51 @@
+# Hit the Mother Lode discovers 10 and finds Grizzly Bears (mana value 2), the first nonland card of the library (CR 701.57a): it is cast
+# free, and since its mana value is less than 10 the difference, 8, becomes eight Treasure tokens that enter tapped (CR 701.57c).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Hit the Mother Lode
+Island
+Grizzly Bears
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hit the Mother Lode.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Hit the Mother Lode; Black Lotus
+Bot1.Battlefield.Grizzly Bears.ManaValue = 2
+Bot1.Battlefield.Count = 13
+Bot1.Battlefield.Treasure Token#1.Tapped = true
+Bot1.Battlefield.Treasure Token#8.Tapped = true
+Bot1.Hand = Island
