@@ -1,0 +1,80 @@
+# Malamet Veteran: "Descend 4 - Whenever this creature attacks, if there are four or more permanent cards in your graveyard, put a
+# +1/+1 counter on target creature." The "if" is an intervening-if (CR 603.4): asked as it attacks and again as the trigger resolves (the
+# ruling: "if you don't have the required number ... at that time, the ability won't resolve"). Two Thought Scours mill four Forests into
+# Bot1's graveyard, so the Veteran's attack on turn 5 triggers; with the trigger on the stack Bot2's Intrepid Paleontologist exiles one of
+# the Forests, leaving three. The trigger does nothing: the Veteran stays a 5/4 and tramples in for 5, Bot2 at 15.
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Jet
+Thought Scour
+Thought Scour
+Forest
+Forest
+Malamet Veteran
+Forest
+Forest
+Island
+Island x10
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Intrepid Paleontologist
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 6
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Intrepid Paleontologist.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Malamet Veteran.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Malamet Veteran > Bot2)
+Bot1.Target(Bot1.Battlefield.Malamet Veteran)
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Intrepid Paleontologist.Activate(Ability: Exile target; Bot1.Graveyard.Forest)
+Bot2.Pass
+Bot1.Pass
+? Exile = Forest
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Malamet Veteran.Power = 5
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Malamet Veteran.Power = 5
+Bot1.Battlefield.Malamet Veteran.Toughness = 4

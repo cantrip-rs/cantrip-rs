@@ -1,0 +1,11 @@
+{
+  "name": "Malamet Veteran",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Cat Warrior",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Trample\nDescend 4 — Whenever this creature attacks, if there are four or more permanent cards in your graveyard, put a +1/+1 counter on target creature.",
+  "keywords": [
+    "Trample"
+  ]
+}

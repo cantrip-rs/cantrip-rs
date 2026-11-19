@@ -1,0 +1,58 @@
+# Malamet Veteran: "Descend 4 - Whenever this creature attacks, if there are four or more permanent cards in your graveyard,
+# put a +1/+1 counter on target creature." Bot1 has exactly three there (CR 603.4, 110.4a): two Forests milled by Thought Scour
+# and the Black Lotus sacrificed to cast the Veteran ({4}{G}: the Lotus's GGG, Mox Ruby and Mox Jet); Thought Scour itself is not
+# a permanent card. The trigger is not put on the stack (a target would have been asked among Veteran and Elvish Mystic), and the
+# 5/4 stays 5/4. Trample (CR 702.19b): blocked by Bot2's Elvish Mystic it assigns 1 to it and 4 to Bot2, who goes to 16.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Black Lotus
+Thought Scour
+Malamet Veteran
+Mox Emerald
+Forest
+Forest
+Forest
+Island x14
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 3
+? Bot1.Graveyard = Thought Scour; Forest; Forest
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Malamet Veteran.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Malamet Veteran > Bot2)
+? Stack.Count = 0
+Bot2.Block(Elvish Mystic > Malamet Veteran)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+
+[Expect]
+Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Malamet Veteran.Power = 5
+Bot1.Battlefield.Malamet Veteran.Toughness = 4
+Bot2.Life = 16
+Bot2.Graveyard = Elvish Mystic

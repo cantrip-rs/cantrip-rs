@@ -1,0 +1,63 @@
+# Malamet Veteran: "Descend 4 - Whenever this creature attacks, if there are four or more permanent cards in your graveyard, put a
+# +1/+1 counter on target creature." Two Thought Scours (themselves not permanent cards) mill four Forests into Bot1's graveyard, so on
+# turn 5 the Veteran attacks with exactly four permanent cards there (CR 603.4, 110.4a) and the trigger asks for a target among all
+# creatures (the Veteran and Bot2's Elvish Mystic). The counter goes on the Veteran itself (it is a 6/5), which tramples in unblocked for 6: Bot2 is at 14.
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Jet
+Thought Scour
+Thought Scour
+Forest
+Forest
+Malamet Veteran
+Forest
+Forest
+Island
+Island x10
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 6
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Malamet Veteran.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Malamet Veteran > Bot2)
+Bot1.Target(Bot1.Battlefield.Malamet Veteran)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Malamet Veteran.Power = 6
+Bot1.Battlefield.Malamet Veteran.Toughness = 5
+Bot2.Battlefield.Elvish Mystic.Power = 1
