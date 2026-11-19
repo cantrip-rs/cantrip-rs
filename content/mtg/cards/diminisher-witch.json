@@ -1,0 +1,8 @@
+{
+  "name": "Diminisher Witch",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Human Warlock",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nWhen this creature enters, if it was bargained, create a Cursed Role token attached to target creature an opponent controls. (If you control another Role on it, put that one into the graveyard. Enchanted creature is 1/1.)"
+}

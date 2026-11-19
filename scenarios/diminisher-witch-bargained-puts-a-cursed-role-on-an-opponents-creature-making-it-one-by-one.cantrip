@@ -1,0 +1,58 @@
+# Diminisher Witch (CR 702.166b, 603.4, 303.7): Bot1 bargains, sacrificing Memnite as the additional cost, so the intervening
+# "if it was bargained" holds as it enters and the trigger goes on the stack. Its only legal target is Bot2's Grizzly Bears (Bot1's
+# own Ornithopter and Witch fail "an opponent controls", so nothing is asked), and the Cursed Role, which Bot1 controls, makes the
+# 2/2 a 1/1. The Witch itself stays a 3/2.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Memnite
+Ornithopter
+Diminisher Witch
+Island
+Island x13
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Forest x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Diminisher Witch.Cast
+Bot1.Modes(Bargain:)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite = (absent)
+? Stack.Count = 1
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield = Forest; Mox Emerald; Grizzly Bears
+Bot1.Battlefield.Cursed.AttachedTo = Grizzly Bears
+Bot2.Battlefield.Grizzly Bears.Power = 1
+Bot2.Battlefield.Grizzly Bears.Toughness = 1
+Bot1.Battlefield.Diminisher Witch.Power = 3
+Bot1.Battlefield.Diminisher Witch.Toughness = 2
+Bot1.Battlefield = Cursed; Diminisher Witch; Mox Jet; Mox Ruby; Mox Sapphire; Ornithopter
+Bot1.Graveyard = Memnite
