@@ -1,0 +1,55 @@
+# The equipped creature has "{2}, {T}: Tap target artifact or creature." The equipped Memnite taps Bot2's Ornithopter (an artifact
+# creature) for exactly {2}, the pool left empty, and is itself tapped as the cost, so it cannot do it again. Bot2's Plains, a land that
+# is neither, is refused as a target. Bot2's Memnite is a second legal target, so the choice is asked.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Mox Pearl
+Mox Ruby
+Swashbuckler's Whip
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Plains x18
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Swashbuckler's Whip.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swashbuckler's Whip.Activate(Ability: Equip; Memnite)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Memnite.Activate(Ability: Tap target; Bot2.Battlefield.Plains)
+Bot1.Battlefield.Memnite.Activate(Ability: Tap target; Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot1.Battlefield.Memnite.Tapped = true
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Battlefield.Memnite.Tapped = true
+! Bot1.Battlefield.Memnite.Activate(Ability: Tap target; Bot2.Battlefield.Memnite)
+
+[Expect]
+Bot2.Battlefield.Memnite.Tapped = false
+Bot2.Battlefield.Ornithopter.Tapped = true

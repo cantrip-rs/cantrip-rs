@@ -1,0 +1,41 @@
+# Swashbuckler's Whip {1}, Equip {1}: "Equipped creature has reach, ...". Cast, then equipped to Memnite in turn 1 with one Mox, the pool left
+# empty. In Bot2's turn 4 the equipped Memnite blocks Bot2's attacking Ornithopter (a 0/2 flyer) because it has reach, and deals it 1 damage.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Mox Pearl
+Swashbuckler's Whip
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Swashbuckler's Whip.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swashbuckler's Whip.Activate(Ability: Equip; Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Reach
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter > Bot1)
+Bot1.Block(Memnite > Bot2.Battlefield.Ornithopter)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Battlefield.Ornithopter.Damage = 1
+Bot1.Battlefield.Swashbuckler's Whip.AttachedTo = Memnite

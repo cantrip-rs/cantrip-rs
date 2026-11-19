@@ -1,0 +1,59 @@
+# Swashbuckler's Whip: the equipped creature has "{8}, {T}: Discover 10." The Memnite, equipped with the Whip in turn 1, pays {8} from five
+# Moxen and a Black Lotus in turn 3 (Lotus not yet cast when the activation is tried with only the five Moxen's mana, which is refused as
+# short). The discover exiles from the top of the library past a Forest (a land) and Darksteel Colossus (mana value 11, one more than
+# discover 10) and casts Aladdin's Lamp (mana value 10, exactly the limit) for free; the two skipped cards go to the bottom of the library
+# (CR 701.57a). The Memnite is tapped as the cost.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Mox Pearl
+Swashbuckler's Whip
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Forest
+Darksteel Colossus
+Aladdin's Lamp
+Plains x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Swashbuckler's Whip.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swashbuckler's Whip.Activate(Ability: Equip; Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Memnite.Activate(Ability: Discover; Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Memnite.Activate(Ability: Discover)
+? Bot1.Mana =
+? Bot1.Battlefield.Memnite.Tapped = true
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Aladdin's Lamp.Types = Artifact
+Bot1.Graveyard = Black Lotus
+Exile.Count = 0
+Bot1.Library.Count = 12
