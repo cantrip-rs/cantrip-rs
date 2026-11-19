@@ -1,0 +1,58 @@
+# Seismic Monstrosaur {4}{R}{R} 6/5 trample: "{2}{R}, Sacrifice a land: Draw a card." Cast on turn 1 off Black Lotus (RRR) and
+# three Moxen. On turn 3 Bot1 plays a Mountain and pays {2}{R} (Mountain for the R, Mox Jet and Mox Pearl for the rest, the pool
+# empty after); only a land may be sacrificed (Mox Sapphire and the Monstrosaur are refused), and the Mountain is, one card drawn
+# (hand 1, the Island, plus the turn's draw, becomes 3). It attacks and tramples over Bot2's Ornithopter (0/2): 4 reaches Bot2.
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Seismic Monstrosaur
+Mountain
+Island
+Island x16
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Seismic Monstrosaur.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Hand.Count = 2
+! Bot1.Battlefield.Seismic Monstrosaur.Activate(Sacrifice: Mox Sapphire)
+! Bot1.Battlefield.Seismic Monstrosaur.Activate(Sacrifice: Seismic Monstrosaur)
+Bot1.Battlefield.Seismic Monstrosaur.Activate(Sacrifice: Mountain)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = 
+? Bot1.Graveyard = Mountain; Black Lotus
+? Bot1.Hand.Count = 3
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Seismic Monstrosaur > Bot2)
+Bot2.Block(Ornithopter > Seismic Monstrosaur)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot2.Graveyard = Ornithopter

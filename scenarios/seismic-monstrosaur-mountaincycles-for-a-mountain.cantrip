@@ -1,0 +1,26 @@
+# Seismic Monstrosaur's mountaincycling {2} (CR 702.29e): paid with two Moxen (pool empty after) and the card discarded from the
+# hand, it finds the Mountain in the library and puts it into the hand; the Monstrosaur goes to the graveyard.
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Seismic Monstrosaur
+Plains x4
+Mountain
+Plains x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Seismic Monstrosaur.Activate(Ability: Mountaincycling)
+Bot1.Pass
+? Bot1.Mana = 
+Bot1.Search(Mountain)
+
+[Expect]
+Bot1.Graveyard = Seismic Monstrosaur
+Bot1.Hand = Mountain; Plains; Plains; Plains; Plains

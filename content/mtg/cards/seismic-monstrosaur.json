@@ -1,0 +1,11 @@
+{
+  "name": "Seismic Monstrosaur",
+  "manaCost": "{4}{R}{R}",
+  "type": "Creature — Dinosaur",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": "Trample\n{2}{R}, Sacrifice a land: Draw a card.\nMountaincycling {2} ({2}, Discard this card: Search your library for a Mountain card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Trample"
+  ]
+}
