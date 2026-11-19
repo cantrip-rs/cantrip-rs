@@ -1,0 +1,11 @@
+{
+  "name": "Werefox Bodyguard",
+  "manaCost": "{1}{W}{W}",
+  "type": "Creature — Elf Fox Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flash\nWhen this creature enters, exile up to one other target non-Fox creature until this creature leaves the battlefield.\n{1}{W}, Sacrifice this creature: You gain 2 life.",
+  "keywords": [
+    "Flash"
+  ]
+}

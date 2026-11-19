@@ -1,0 +1,47 @@
+# Werefox Bodyguard: "...exile up to one other target non-Fox creature until this creature leaves the battlefield." On turn 5 Bot1
+# casts it targeting Bot2's Ornithopter and, with the enters ability on the stack, pays {1}{W} and sacrifices it (gain 2 life, 20 to
+# 22). The Bodyguard has already left the battlefield, so the ability exiles nothing and the Ornithopter stays (CR 610.3b).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Werefox Bodyguard
+Plains x15
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Werefox Bodyguard.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains#3.Activate
+Bot1.Battlefield.Werefox Bodyguard.Activate(Ability: {1}{W}, Sacrifice this creature: You gain 2 life.)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot2.Battlefield.Count = 1
+Exile.Count = 0
+Bot1.Battlefield.Count = 5
