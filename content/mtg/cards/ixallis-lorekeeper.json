@@ -1,0 +1,8 @@
+{
+  "name": "Ixalli's Lorekeeper",
+  "manaCost": "{G}",
+  "type": "Creature — Human Druid",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: Add one mana of any color. Spend this mana only to cast a Dinosaur spell or activate an ability of a Dinosaur source."
+}

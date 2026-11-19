@@ -1,0 +1,42 @@
+# Ixalli's Lorekeeper: "{T}: Add one mana of any color. Spend this mana only to cast a Dinosaur spell or activate an ability
+# of a Dinosaur source" (CR 106.6). Turn 1 Black Lotus makes {R}{R}{R} for Blazing Rootwalla and Mox Emerald's {G} casts the
+# Lorekeeper, which is summoning sick, so its {T} ability is refused (CR 302.6). Turn 3 the Lorekeeper's {R} is the only red
+# mana: it is one mana (the second activation is refused, the Lorekeeper is tapped) and it can neither cast Lightning Bolt
+# (not a Dinosaur spell) nor pay the Rootwalla's "{R}: +2/+0" (a Lizard source) - the refusals. The Dinosaur controls are in
+# the sibling scenarios.
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Ixalli's Lorekeeper
+Blazing Rootwalla
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Blazing Rootwalla.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ixalli's Lorekeeper.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Ixalli's Lorekeeper.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ixalli's Lorekeeper.Activate(Color: Red)
+? Bot1.Mana = {R} (DinosaurSpellsOrAbilities)
+? Bot1.Battlefield.Ixalli's Lorekeeper.Tapped = true
+! Bot1.Battlefield.Ixalli's Lorekeeper.Activate
+! Bot1.Hand.Lightning Bolt.Cast(Mana: short)
+! Bot1.Battlefield.Blazing Rootwalla.Activate(Mana: short)
+
+[Expect]
+Bot1.Mana = {R} (DinosaurSpellsOrAbilities)
+Bot1.Hand = Island; Island; Island; Lightning Bolt
+Bot1.Battlefield.Blazing Rootwalla.Power = 1

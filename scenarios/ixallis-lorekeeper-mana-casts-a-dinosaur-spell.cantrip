@@ -1,0 +1,36 @@
+# Ixalli's Lorekeeper: "{T}: Add one mana of any color. Spend this mana only to cast a Dinosaur spell" (CR 106.6). Turn 1 Mox
+# Emerald casts the Lorekeeper. Turn 3 its {G} (any color: green here) pays part of Hulking Raptor ({2}{G}{G}), a Dinosaur
+# spell, with the three Moxen paying the rest: the Lorekeeper's mana is spent on it and nothing is left in the pool.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Ixalli's Lorekeeper
+Hulking Raptor
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ixalli's Lorekeeper.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ixalli's Lorekeeper.Activate(Color: Green)
+? Bot1.Mana = {G} (DinosaurSpellsOrAbilities)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hulking Raptor.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Mana =
+Bot1.Battlefield = Hulking Raptor; Ixalli's Lorekeeper; Mox Emerald; Mox Jet; Mox Pearl

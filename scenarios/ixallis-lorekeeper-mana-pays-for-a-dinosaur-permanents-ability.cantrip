@@ -1,0 +1,50 @@
+# Ixalli's Lorekeeper: "Spend this mana only to cast a Dinosaur spell or activate an ability of a Dinosaur source"
+# (CR 106.6). Turn 3 the Lorekeeper's {G} and Mox Emerald's {G} and Mox Jet's {B} cast Thrashing Brontodon ({1}{G}{G}), a
+# Dinosaur spell. Bot2's turn 2 Mox Pearl is the artifact to destroy. Turn 5 the Lorekeeper's {G} pays the {1} of the
+# Brontodon's "{1}, Sacrifice this creature: Destroy target artifact or enchantment", an ability of a Dinosaur permanent:
+# the Moxen stay untapped, the Brontodon is sacrificed and the Mox Pearl is destroyed.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Ixalli's Lorekeeper
+Thrashing Brontodon
+Island x16
+
+[Bot2 Deck]
+Mox Pearl
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ixalli's Lorekeeper.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ixalli's Lorekeeper.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Thrashing Brontodon.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Ixalli's Lorekeeper.Activate(Color: Green)
+? Bot1.Mana = {G} (DinosaurSpellsOrAbilities)
+Bot1.Battlefield.Thrashing Brontodon.Activate(Mox Pearl; Spend: G DinosaurSpellsOrAbilities)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Mana =
+Bot1.Battlefield = Ixalli's Lorekeeper; Mox Emerald; Mox Jet
+Bot1.Battlefield.Mox Emerald.Tapped = false
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Graveyard = Thrashing Brontodon
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Mox Pearl; Island
