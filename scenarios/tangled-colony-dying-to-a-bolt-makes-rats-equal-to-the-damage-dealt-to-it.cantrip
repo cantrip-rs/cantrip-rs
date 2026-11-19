@@ -1,0 +1,46 @@
+# Tangled Colony (3/2): "When this creature dies, create X 1/1 black Rat creature tokens with 'This token can't block,' where X is the
+# amount of damage dealt to it this turn." Bot1's own Lightning Bolt deals 3 damage to its 3/2 Colony (more than its toughness 2): the
+# Colony dies and X = 3, so exactly three Rats enter, all 1/1 black Rat tokens, together with the three Moxen and nothing else.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Tangled Colony
+Lightning Bolt
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tangled Colony.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Tangled Colony)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Tangled Colony; Lightning Bolt
+? Bot1.Battlefield.Count = 6
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Rat Token#1.Power = 1
+Bot1.Battlefield.Rat Token#1.Toughness = 1
+Bot1.Battlefield.Rat Token#1.Colors = Black
+Bot1.Battlefield.Rat Token#1.Token = true
+Bot1.Battlefield.Rat Token#3.Power = 1

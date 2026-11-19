@@ -1,0 +1,46 @@
+# Tangled Colony (3/2): "This creature can't block." On turn 4 Bot2's Grizzly Bears attacks Bot1, who controls the Colony and an
+# Ornithopter: blocking with the Colony is refused, and the Ornithopter may block (the positive control).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Tangled Colony
+Ornithopter
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Grizzly Bears
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tangled Colony.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tangled Colony.Keywords = CantBlock
+[T4 Bot2.Attackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+[T4 Bot2.Blockers]
+! Bot1.Block(Tangled Colony > Grizzly Bears)
+Bot1.Block(Ornithopter > Grizzly Bears)
+
+[Expect]
+Combat.Blocks = Ornithopter > Grizzly Bears

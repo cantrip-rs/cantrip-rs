@@ -1,0 +1,60 @@
+# Tangled Colony: only damage dealt "this turn" counts. On turn 3 Bot1 Lightning Bolts its own Colony, saving it with Giant Growth (6/5 until
+# end of turn, 3 damage marked); the damage is gone by turn 5, when Dead Weight (-2/-2) kills the 3/2 Colony with no damage on it:
+# X = 0 and no Rat is made.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Tangled Colony
+Lightning Bolt
+Giant Growth
+Swamp
+Dead Weight
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tangled Colony.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Tangled Colony)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Tangled Colony)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tangled Colony.Damage = 0
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tangled Colony.Damage = 3
+? Bot1.Battlefield.Tangled Colony.Power = 6
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Tangled Colony.Damage = 0
+? Bot1.Battlefield.Tangled Colony.Power = 3
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dead Weight.Cast(Bot1.Battlefield.Tangled Colony)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Dead Weight; Tangled Colony; Lightning Bolt; Giant Growth
+Bot1.Battlefield.Rat Token = (absent)
+Bot1.Battlefield.Count = 4

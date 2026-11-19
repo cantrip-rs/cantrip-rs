@@ -1,0 +1,8 @@
+{
+  "name": "Tangled Colony",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Rat",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "This creature can't block.\nWhen this creature dies, create X 1/1 black Rat creature tokens with \"This token can't block,\" where X is the amount of damage dealt to it this turn."
+}
