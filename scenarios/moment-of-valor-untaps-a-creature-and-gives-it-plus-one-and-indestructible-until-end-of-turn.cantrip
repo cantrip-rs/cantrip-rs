@@ -1,0 +1,45 @@
+# Moment of Valor, first mode: "Untap target creature. It gets +1/+0 and gains indestructible until end of turn." Bot1's Llanowar
+# Elves is tapped for the green that pays for the spell ({2}{W}: Plains, Mox Pearl, the Elves' G, pool empty), so it is cast on
+# a tapped creature: afterwards the Elves is untapped, 2/1 (power +1, toughness unchanged) and indestructible (CR 702.12b). On
+# Bot2's turn the bonus is gone again (CR 514.2).
+
+[Bot1 Deck]
+Forest
+Llanowar Elves
+Plains
+Mox Pearl
+Moment of Valor
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Hand.Moment of Valor.Cast
+Bot1.Modes(Untap target creature)
+Bot1.Target(Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Tapped = false
+? Bot1.Battlefield.Llanowar Elves.Power = 2
+? Bot1.Battlefield.Llanowar Elves.Toughness = 1
+? Bot1.Battlefield.Llanowar Elves.Keywords = Indestructible
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Llanowar Elves.Power = 1
+
+[Expect]
+Bot1.Graveyard = Moment of Valor
+Stack.Count = 0

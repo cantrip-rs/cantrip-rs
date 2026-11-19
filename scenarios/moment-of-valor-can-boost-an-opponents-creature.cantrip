@@ -1,0 +1,39 @@
+# Moment of Valor, first mode, on a creature an opponent controls: any creature is a legal target (CR 115.1). Bot2's untapped
+# Ornithopter (0/2) becomes 1/2 and indestructible; nothing is untapped that was not tapped, and Bot1 stays at 20 life.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Moment of Valor
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Moment of Valor.Cast
+Bot1.Modes(Untap target creature)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 1
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Ornithopter.Keywords = Flying; Indestructible
+Bot1.Graveyard = Moment of Valor

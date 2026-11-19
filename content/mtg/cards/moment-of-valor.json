@@ -1,0 +1,6 @@
+{
+  "name": "Moment of Valor",
+  "manaCost": "{2}{W}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Untap target creature. It gets +1/+0 and gains indestructible until end of turn.\n• Destroy target creature with power 4 or greater."
+}
