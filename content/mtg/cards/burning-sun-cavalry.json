@@ -1,0 +1,8 @@
+{
+  "name": "Burning Sun Cavalry",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature attacks or blocks while you control a Dinosaur, this creature gets +1/+1 until end of turn."
+}

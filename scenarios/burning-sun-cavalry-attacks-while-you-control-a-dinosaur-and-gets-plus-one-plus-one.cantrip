@@ -1,0 +1,35 @@
+# Burning Sun Cavalry: "Whenever this creature attacks or blocks while you control a Dinosaur, this creature gets +1/+1 until end of turn."
+# Turn 1 Bot1 casts an Orazca Raptor (a Dinosaur, 3/4) and the Cavalry (2/2) with Black Lotus, two Moxen and a Mountain. On turn 3 only
+# the Cavalry attacks: Bot1 controls a Dinosaur, so it becomes a 3/3 (CR 611.2a) and deals 3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mountain
+Burning Sun Cavalry
+Orazca Raptor
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Orazca Raptor.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Burning Sun Cavalry.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Burning Sun Cavalry > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Burning Sun Cavalry.Power = 3
+? Bot1.Battlefield.Burning Sun Cavalry.Toughness = 3
+
+[Expect]
+Bot2.Life = 17

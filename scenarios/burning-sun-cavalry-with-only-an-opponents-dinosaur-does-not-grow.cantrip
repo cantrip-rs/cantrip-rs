@@ -1,0 +1,35 @@
+# Burning Sun Cavalry: the Dinosaur must be one "you control" (CR 109.4). Bot2 controls an Orazca Raptor and Bot1 none, so Bot1's
+# attacking Cavalry stays a 2/2 and deals 2.
+
+[Bot1 Deck]
+Mox Ruby
+Mountain
+Burning Sun Cavalry
+Plains x12
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Orazca Raptor
+Island x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Burning Sun Cavalry.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Orazca Raptor.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Burning Sun Cavalry > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Burning Sun Cavalry.Power = 2
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Burning Sun Cavalry.Toughness = 2

@@ -1,0 +1,37 @@
+# Burning Sun Cavalry: "while you control a Dinosaur" is checked as the creature attacks, as part of the trigger event, not as the ability resolves
+# (it is no intervening "if", CR 603.4). Bot1 attacks with the Cavalry while it controls a Nest Robber (a 2/1 Dinosaur); Bot2 responds with a
+# Lightning Bolt on the Nest Robber, leaving Bot1 no Dinosaur, yet the Cavalry still becomes a 3/3 and deals 3.
+
+[Bot1 Deck]
+Black Lotus
+Mountain
+Burning Sun Cavalry
+Nest Robber
+Plains x16
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Burning Sun Cavalry.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Nest Robber.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Attack(Burning Sun Cavalry > Bot2)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nest Robber)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Burning Sun Cavalry.Power = 3
+? Bot1.Battlefield.Burning Sun Cavalry.Toughness = 3
+
+[Expect]
+Bot1.Battlefield.Nest Robber = (absent)
+Bot1.Graveyard.Count = 2
+Bot2.Life = 17

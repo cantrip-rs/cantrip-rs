@@ -1,0 +1,46 @@
+# Burning Sun Cavalry: the same ability when it blocks (CR 509.1). Bot2's Grizzly Bears (2/2) attack on turn 4. Bot1 controls an Orazca
+# Raptor, so the blocking Cavalry becomes a 3/3: it kills the Bears and survives their 2 damage (CR 704.5g); as a plain 2/2 it would die.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mountain
+Burning Sun Cavalry
+Orazca Raptor
+Plains x12
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Orazca Raptor.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Burning Sun Cavalry.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+[T4 Bot2.DeclareBlockers]
+Bot1.Block(Burning Sun Cavalry > Grizzly Bears)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Burning Sun Cavalry.Damage = 2
+Bot1.Battlefield.Burning Sun Cavalry.Power = 3
+Bot1.Life = 20
