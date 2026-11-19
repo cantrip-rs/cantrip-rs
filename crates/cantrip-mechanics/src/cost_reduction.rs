@@ -30,6 +30,14 @@ pub fn less_if_you_control_subtype<const N: u8, const TYPE: u16>(q: &dyn Query, 
     if q.permanents_of(player).into_iter().any(|id| q.chars(id).has_subtype(wanted)) { CostDelta::less(N as u32) } else { CostDelta::NONE }
 }
 
+/// "This spell costs {N} less to cast if [its optional additional cost was paid]": "if it's bargained" (CR 702.166), "if evidence
+/// was collected" (CR 701.59) - judged as the total cost is determined, after the optional cost is announced (CR 601.2b, 601.2f,
+/// 118.7a), and generic mana only; the spell reads whether the cost was paid as it will on the stack. It changes no mana cost, so
+/// no mana value (CR 202.3). Ice Out ({1}), Johann's Stopgap ({2}) and Bite Down on Crime ({2}) print it.
+pub fn less_if_optional_cost_paid<const N: u32>(q: &dyn Query, source: ObjectId, _: PlayerId, _: Costed, _: &[Target]) -> CostDelta {
+    if q.obj(source).paid > 0 { CostDelta::less(N) } else { CostDelta::NONE }
+}
+
 /// "[Type] spells you cast cost {N} less to cast" (CR 601.2f, 118.7): Planar Gate
 /// reduces its controller's creature spells by {2}; Shuri, Wakandan Inventor reduces artifact spells by {1}.
 pub fn spells_you_cast(q: &dyn Query, source: ObjectId, player: PlayerId, costed: Costed, card_type: CardType, amount: u32) -> CostDelta {
