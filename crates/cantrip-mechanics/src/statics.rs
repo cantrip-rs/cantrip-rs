@@ -11,6 +11,12 @@ pub fn your_creatures(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, 
     so_far.is(CardType::Creature) && q.controller(affected) == q.controller(source)
 }
 
+/// "During your turn, creatures you control ..." (CR 604.1, 613.1f): `your_creatures`, only while it is their controller's turn. Vibrating
+/// Sphere (+2/+0) and Bedrock Tortoise (hexproof) print it, as `StaticDef::affects`.
+pub fn your_creatures_during_your_turn(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
+    q.controller(source) == q.state().turn.active && your_creatures(q, source, affected, so_far)
+}
+
 /// "[Color] legendary creatures you control" (CR 604.1, 613.1f, layer 6): `your_creatures` that are legendary and `COLOR`
 /// (`Color::Green as u8` and so on), all as the earlier layers made them, the color word read through the source's text
 /// (CR 612). Adventurers' Guildhouse (green), Cathedral of Serra (white), Seafarer's Quay (blue), Mountain Stronghold (red)
