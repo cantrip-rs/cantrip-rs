@@ -1,0 +1,27 @@
+# "Whenever you sacrifice a Food": Black Lotus is an artifact but not a Food (CR 205.3g), so sacrificing it for mana to cast the Confectioner
+# makes no Rat. Only the Food the Confectioner itself made is on the battlefield with it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Experimental Confectioner
+Swamp x4
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Experimental Confectioner.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Experimental Confectioner; Food Token; Mox Jet
+Bot1.Graveyard = Black Lotus

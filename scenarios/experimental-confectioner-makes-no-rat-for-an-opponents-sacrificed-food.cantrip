@@ -1,0 +1,46 @@
+# "Whenever you sacrifice a Food" is only for its controller's sacrifices (CR 603.2): Bot2 sacrifices the Food its Gilded Goose made, to gain 3 life,
+# and Bot1's Confectioner makes no Rat for it.
+
+[Bot1 Deck]
+Black Lotus
+Experimental Confectioner
+Swamp x5
+Swamp x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Gilded Goose
+Island x4
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Experimental Confectioner.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Gilded Goose.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Food Token; Gilded Goose; Mox Emerald; Mox Jet; Mox Ruby
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Food Token.Activate
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 23
+Bot1.Battlefield = Experimental Confectioner; Food Token

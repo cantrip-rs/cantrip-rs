@@ -1,0 +1,47 @@
+# Experimental Confectioner (CR 111.10b, 701.21a, 509.1b): it makes a Food when it enters. On turn 3 Bot1 pays {2} and sacrifices that Food for
+# 3 life, which triggers "whenever you sacrifice a Food": a 1/1 black Rat that can't block (the refused Block) joins the battlefield.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Experimental Confectioner
+Swamp x3
+Swamp x10
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Experimental Confectioner.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Experimental Confectioner; Food Token; Mox Jet; Mox Pearl; Mox Ruby
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Food Token.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Bot1.Battlefield = Experimental Confectioner; Mox Jet; Mox Pearl; Mox Ruby; Rat Token
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+! Bot1.Block(Rat Token > Memnite)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 22
