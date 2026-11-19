@@ -1,0 +1,79 @@
+# Queen's Bay Paladin (5/4): "Whenever this creature enters or attacks, return up to one target Vampire card from your graveyard to the
+# battlefield with a finality counter on it. You lose life equal to its mana value." Turn 1 Bot1 casts Barony Vampire (3/2, mana value 3)
+# off a Black Lotus; on turn 2 Bot2 casts Vampire Hexmage (mana value 2) off its own Black Lotus and Bolts both: the Barony in Bot1's
+# graveyard and the Hexmage in Bot2's. On turn 3 Bot1 casts the Paladin off two Black Lotuses. The trigger refuses a Black Lotus (no
+# Vampire), and Bot2's Hexmage (not in Bot1's graveyard); it returns the Barony Vampire with a finality counter and Bot1 loses 3, not 2.
+# On turn 4 Bot2's third Bolt kills the Barony and the finality counter exiles it instead (CR 122.1h).
+
+[Bot1 Deck]
+Black Lotus x3
+Barony Vampire
+Queen's Bay Paladin
+Swamp x2
+Swamp x16
+
+[Bot2 Deck]
+Black Lotus
+Vampire Hexmage
+Mox Ruby
+Mountain x2
+Lightning Bolt x2
+Lightning Bolt
+Mountain x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Barony Vampire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Vampire Hexmage.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Barony Vampire)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Vampire Hexmage)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Barony Vampire; Black Lotus
+? Bot2.Graveyard = Vampire Hexmage; Lightning Bolt; Lightning Bolt; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Queen's Bay Paladin.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Graveyard.Black Lotus)
+! Bot1.Target(Bot2.Graveyard.Vampire Hexmage)
+Bot1.Target(Bot1.Graveyard.Barony Vampire)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+? Bot1.Battlefield.Barony Vampire.Counters.Finality = 1
+? Bot1.Battlefield.Queen's Bay Paladin.Counters.Finality = (absent)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Barony Vampire)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot1.Graveyard.Count = 3
+Bot1.Exile.Barony Vampire.Power = 3

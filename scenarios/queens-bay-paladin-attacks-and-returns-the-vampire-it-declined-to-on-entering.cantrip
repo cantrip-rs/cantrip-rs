@@ -1,0 +1,77 @@
+# Queen's Bay Paladin: "Whenever this creature enters or attacks ..., return up to one target Vampire card from your graveyard". Turn 1
+# Bot1 casts Vampire Hexmage and Vampire Interloper (each mana value 2) off two Black Lotuses; both are Bolted on turn 2. On turn 3 the
+# Paladin enters and Bot1 chooses no target ("up to one": both Vampires stay in the graveyard and no life is lost, CR 601.2c). On turn 5
+# the Paladin attacks: the trigger refuses a Black Lotus (no Vampire) and a second target (only one), returns the Interloper with a
+# finality counter, and Bot1 loses 2 life, leaving the Hexmage in the graveyard; Bot2 takes 5 combat damage from the unblocked Paladin.
+
+[Bot1 Deck]
+Black Lotus x4
+Vampire Hexmage
+Vampire Interloper
+Queen's Bay Paladin
+Swamp x2
+Swamp x16
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Hand.Vampire Hexmage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Vampire Interloper.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Vampire Hexmage)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Vampire Interloper)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Queen's Bay Paladin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Bot1.Graveyard.Count = 6
+[T5 Bot1.Attackers]
+Bot1.Attack(Queen's Bay Paladin > Bot2)
+! Bot1.Target(Bot1.Graveyard.Black Lotus)
+! Bot1.Target(Bot1.Graveyard.Vampire Hexmage; Bot1.Graveyard.Vampire Interloper)
+Bot1.Target(Bot1.Graveyard.Vampire Interloper)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+? Bot1.Battlefield.Vampire Interloper.Counters.Finality = 1
+? Bot1.Battlefield.Vampire Interloper.Tapped = false
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 15
+Bot1.Battlefield.Queen's Bay Paladin.Tapped = true
+Bot1.Graveyard.Vampire Hexmage.Power = 2
