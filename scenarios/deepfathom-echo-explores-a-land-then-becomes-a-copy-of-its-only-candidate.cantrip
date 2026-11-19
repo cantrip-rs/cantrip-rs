@@ -1,0 +1,52 @@
+# Deepfathom Echo: "At the beginning of combat on your turn, this creature explores. Then you may have it become a copy of another
+# creature you control until end of turn." The card revealed is an Island, a land (CR 701.44a): it goes to Bot1's hand and the
+# Echo gets no +1/+1 counter. Bot1's only other creature is an Ornithopter, and Bot1 is still asked, because the copy is a "may":
+# the Echo is an Ornithopter for the turn (both Ornithopters, no Echo on the battlefield) and a 4/4 Echo again on turn 3, with no
+# counter ever put on it (turn 3: it explores another Island and Bot1 chooses none). Bot2's own beginning of combat on turn 4 is not "on your turn": nothing triggers and the library is untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Deepfathom Echo
+Ornithopter
+Island
+Island
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Deepfathom Echo.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter)
+? Bot1.Battlefield = Mox Sapphire; Ornithopter; Ornithopter
+? Bot1.Hand = Island; Island; Island; Island
+[T3 Bot1.Main1]
+? Bot1.Battlefield = Deepfathom Echo; Mox Sapphire; Ornithopter
+? Bot1.Battlefield.Deepfathom Echo.Power = 4
+? Bot1.Battlefield.Deepfathom Echo.Counters.PlusOnePlusOne = (absent)
+
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot1.Library.Count = 10
+[T4 Bot2.BeginCombat]
+? Stack.Count = 0
+? Bot1.Library.Count = 10
+? Bot1.Battlefield.Deepfathom Echo.Power = 4
+
+[Expect]
+Bot1.Library.Count = 10

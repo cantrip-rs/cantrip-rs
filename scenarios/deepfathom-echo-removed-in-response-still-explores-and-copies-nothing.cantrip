@@ -1,0 +1,60 @@
+# Deepfathom Echo: "At the beginning of combat on your turn, this creature explores. Then you may have it become a copy of another
+# creature you control until end of turn." Turn 1: it explores a Mox Emerald (a +1/+1 counter), which Bot1 puts into the graveyard
+# this time (CR 701.44a), and Bot1 declines to copy the Ornithopter. Turn 3: with the beginning-of-combat trigger on the stack Bot2
+# exiles the 5/5 Echo with Swords to Plowshares (Bot1 gains 5, its power as it last was). The trigger still resolves and explores
+# without it (CR 701.44c: the Plains goes to Bot1's hand, no counter can be put anywhere), but there is nothing to become a copy:
+# Bot1 is not asked which creature, though it has an Ornithopter (a wrong implementation would still ask).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Deepfathom Echo
+Ornithopter
+Island
+Island
+Island
+Mox Emerald
+Island
+Plains
+Island x10
+
+[Bot2 Deck]
+Island
+Plains
+Swords to Plowshares
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Deepfathom Echo.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose()
+? Bot1.Graveyard = Mox Emerald; Black Lotus
+? Bot1.Battlefield.Deepfathom Echo.Counters.PlusOnePlusOne = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Deepfathom Echo)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 25
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+! Bot1.Choose
+? Bot1.Hand = Island; Island; Island; Island; Plains
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Ornithopter
+Exile = Deepfathom Echo
