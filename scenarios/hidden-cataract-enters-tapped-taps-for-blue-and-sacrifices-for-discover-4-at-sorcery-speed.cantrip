@@ -1,0 +1,68 @@
+# Hidden Cataract: "This land enters tapped", "{T}: Add {U}" and "{4}{U}, {T}, Sacrifice this land: Discover 4. Activate only as a
+# sorcery." It enters tapped and untaps with the next turn; it taps for {U} alone (Undo takes it back). The discover is refused with only
+# four other sources ({4}{U} needs five besides the land itself), with a spell on the stack, and outside a main phase (all with the five
+# sources otherwise available); then on a later turn it exiles from the top of the library past an Island (a land) and Ancient Carp (mana
+# value 5, one more than discover 4) and casts Amphin Cutthroat (mana value 4, exactly the limit) for free. The land is sacrificed as a
+# cost, so it is in the graveyard when the discover happens, and the two cards skipped go to the bottom of the library
+# (CR 701.57a, 602.5d, 118.12).
+
+[Bot1 Deck]
+Hidden Cataract
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Island
+Island
+Island
+Ancient Carp
+Amphin Cutthroat
+Island x10
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Hidden Cataract.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+? Bot1.Battlefield.Hidden Cataract.Tapped = true
+! Bot1.Battlefield.Hidden Cataract.Activate(Ability: Add)
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Hidden Cataract.Tapped = false
+! Bot1.Battlefield.Hidden Cataract.Activate(Color: Red)
+Bot1.Battlefield.Hidden Cataract.Activate(Ability: Add {U})
+? Bot1.Mana = {U}
+Bot1.Undo
+! Bot1.Battlefield.Hidden Cataract.Activate(Ability: Discover)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Hidden Cataract.Activate(Ability: Discover; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+! Bot1.Battlefield.Hidden Cataract.Activate(Ability: Discover)
+Bot1.Pass
+[T3 Bot1.End]
+! Bot1.Battlefield.Hidden Cataract.Activate(Ability: Discover)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Mox Sapphire#4.Activate
+Bot1.Battlefield.Mox Sapphire#5.Activate
+Bot1.Battlefield.Hidden Cataract.Activate(Ability: Discover)
+? Bot1.Mana =
+Bot1.Accept
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Hidden Cataract
+Bot1.Battlefield.Amphin Cutthroat.Power = 2
+Bot1.Hand = Island; Island; Island
+Exile.Count = 0
+Bot1.Library.Count = 11
