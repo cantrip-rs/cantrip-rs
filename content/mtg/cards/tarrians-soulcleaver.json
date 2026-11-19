@@ -1,0 +1,6 @@
+{
+  "name": "Tarrian's Soulcleaver",
+  "manaCost": "{1}",
+  "type": "Legendary Artifact — Equipment",
+  "oracleText": "Equipped creature has vigilance.\nWhenever another artifact or creature is put into a graveyard from the battlefield, put a +1/+1 counter on equipped creature.\nEquip {2}"
+}

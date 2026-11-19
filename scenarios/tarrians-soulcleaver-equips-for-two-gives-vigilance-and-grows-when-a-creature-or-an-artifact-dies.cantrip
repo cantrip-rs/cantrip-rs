@@ -1,0 +1,70 @@
+# Tarrian's Soulcleaver: "Equipped creature has vigilance." "Whenever another artifact or creature is put into a graveyard from the
+# battlefield, put a +1/+1 counter on equipped creature." "Equip {2}". The Equipment is cast and equipped to Memnite in turn 1; the equip
+# is refused with one source short of {2} and takes exactly {2} (the pool is empty after). Memnite attacks in turn 3 without tapping
+# (vigilance); Lightning Bolt kills Bot2's Memnite (a creature) and Shatter in turn 5 destroys Bot2's Mox Sapphire (an artifact that is
+# not a creature): a counter each, so the equipped Memnite is 1/1, then 2/2, then 3/3.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Mox Pearl
+Mox Ruby
+Tarrian's Soulcleaver
+Lightning Bolt
+Shatter
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Mox Sapphire
+Plains x18
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tarrian's Soulcleaver.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Tarrian's Soulcleaver.Activate(Ability: Equip; Memnite; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tarrian's Soulcleaver.Activate(Ability: Equip; Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Vigilance
+? Bot1.Battlefield.Memnite.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+? Bot1.Battlefield.Memnite.Tapped = false
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite
+? Bot1.Battlefield.Memnite.Power = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Shatter.Cast(Bot2.Battlefield.Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Mox Sapphire; Memnite
+Bot2.Life = 19
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 3
