@@ -179,43 +179,52 @@ pub fn target_creature_gets_then_draw_a_card<const P: i32, const T: i32>(g: &mut
     draw(g, item, 1)
 }
 
+/// "Target creature gets +`P`/+`T` and gains `keyword` until end of turn" (CR 611.2a): one instruction of two continuous effects,
+/// the creature being the ability's first target; nothing if it is no longer a legal target as the spell or ability resolves
+/// (CR 608.2b). The body of the `target_creature_gets_and_gains_*` effects.
+fn target_creature_gets_and_gains(g: &mut dyn Game, item: &StackItem, power: i32, toughness: i32, keyword: Keyword) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        instruction(g, |g| {
+            crate::pump(g, item.object, creature, power, toughness);
+            gain_until_end_of_turn(g, item.object, creature, keyword);
+        });
+    }
+    Ok(())
+}
+
 /// "Target creature gets +`P`/+`T` and gains first strike until end of turn" (CR 611.2a, 702.7): one instruction, the creature
 /// being the ability's first target; nothing if it is no longer a legal target as the spell resolves (CR 608.2b). Interjection
 /// (+2/+2), Molecular Modifier (+1/+0), Charge the Sanctum's single-target mode (+2/+0) and Riverguard's Reflexes (+2/+2) print it.
 pub fn target_creature_gets_and_gains_first_strike<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = crate::targets::object(g, item, 0) {
-        instruction(g, |g| {
-            crate::pump(g, item.object, creature, P, T);
-            gain_until_end_of_turn(g, item.object, creature, Keyword::FirstStrike);
-        });
-    }
-    Ok(())
+    target_creature_gets_and_gains(g, item, P, T, Keyword::FirstStrike)
 }
 
 /// "Target creature gets +`P`/+`T` and gains deathtouch until end of turn" (CR 611.2a, 702.2): one instruction, the creature
 /// being the ability's first target; nothing if it is no longer a legal target as the spell or ability resolves (CR 608.2b).
 /// Rampart Hunter (+2/+2), Scathing Shadelock's prepare spell (+2/+0) and Haunted Hellride (+1/+0) print it.
 pub fn target_creature_gets_and_gains_deathtouch<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = crate::targets::object(g, item, 0) {
-        instruction(g, |g| {
-            crate::pump(g, item.object, creature, P, T);
-            gain_until_end_of_turn(g, item.object, creature, Keyword::Deathtouch);
-        });
-    }
-    Ok(())
+    target_creature_gets_and_gains(g, item, P, T, Keyword::Deathtouch)
+}
+
+/// "Target creature gets +`P`/+`T` and gains flying until end of turn" (CR 611.2a, 702.9): one instruction, the creature being the
+/// ability's first target; nothing if it is no longer a legal target as the spell resolves (CR 608.2b). Hamato Guardian Stance
+/// (+1/+3, then scry 1) and Acrobatic Leap (+1/+3, then untap it) print it, each followed by a sentence of its own.
+pub fn target_creature_gets_and_gains_flying<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    target_creature_gets_and_gains(g, item, P, T, Keyword::Flying)
+}
+
+/// "Target creature gets +`P`/+`T` and gains vigilance until end of turn" (CR 611.2a, 702.20): one instruction, the creature
+/// being the ability's first target; nothing if it is no longer a legal target as the spell or ability resolves (CR 608.2b).
+/// Q Continuum's mode and Surly Farrier's ability (+1/+1) and Might of the Ancestors (+2/+0) print it.
+pub fn target_creature_gets_and_gains_vigilance<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    target_creature_gets_and_gains(g, item, P, T, Keyword::Vigilance)
 }
 
 /// "Target creature gets +`P`/+`T` and gains indestructible until end of turn" (CR 611.2a, 702.12b): one instruction, the creature
 /// being the ability's first target; nothing if it is no longer a legal target as the spell or ability resolves (CR 608.2b).
 /// Dark Endurance (+2/+0), Masterful Flourish, Reigning Victor and Foot Elite (+1/+0) print it, and Adamant Will (+2/+2).
 pub fn target_creature_gets_and_gains_indestructible<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = crate::targets::object(g, item, 0) {
-        instruction(g, |g| {
-            crate::pump(g, item.object, creature, P, T);
-            gain_indestructible_until_end_of_turn(g, item.object, creature);
-        });
-    }
-    Ok(())
+    target_creature_gets_and_gains(g, item, P, T, Keyword::Indestructible)
 }
 
 /// "Target creature explores" (CR 701.44a): the creature being the ability's first target; nothing if it is no longer a legal
@@ -244,39 +253,21 @@ pub fn target_creature_gets_and_gains_haste<const P: i32, const T: i32>(g: &mut 
 /// being the ability's first target; nothing if it is no longer a legal target as the spell resolves (CR 608.2b). Blitzball
 /// Shot (+3/+3), Fanatical Fever (+3/+0), Fanatical Strength (+3/+3) and Run Amok (+3/+3) print it.
 pub fn target_creature_gets_and_gains_trample<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = crate::targets::object(g, item, 0) {
-        instruction(g, |g| {
-            crate::pump(g, item.object, creature, P, T);
-            crate::trample_until_end_of_turn(g, item.object, creature);
-        });
-    }
-    Ok(())
+    target_creature_gets_and_gains(g, item, P, T, Keyword::Trample)
 }
 
 /// "Target creature gets +`P`/+`T` and gains hexproof until end of turn" (CR 611.2a, 702.11b): one instruction, the creature
 /// being the ability's first target; nothing if it is no longer a legal target as the spell resolves (CR 608.2b). Blossoming
 /// Defense (+2/+2), Chase Inspiration (+0/+3), Dive Down (+0/+3) and Patriot Shield Wielder's ability (+2/+0) print it.
 pub fn target_creature_gets_and_gains_hexproof<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = crate::targets::object(g, item, 0) {
-        instruction(g, |g| {
-            crate::pump(g, item.object, creature, P, T);
-            gain_hexproof_until_end_of_turn(g, item.object, creature);
-        });
-    }
-    Ok(())
+    target_creature_gets_and_gains(g, item, P, T, Keyword::Hexproof)
 }
 
 /// "Target creature gets +`P`/+`T` and gains lifelink until end of turn" (CR 611.2a, 702.15): one instruction, the creature
 /// being the ability's first target; nothing if it is no longer a legal target as the spell or ability resolves (CR 608.2b).
 /// Give In to Violence (+2/+2) and Reverent Howl's second mode (+2/+2) print it.
 pub fn target_creature_gets_and_gains_lifelink<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = crate::targets::object(g, item, 0) {
-        instruction(g, |g| {
-            crate::pump(g, item.object, creature, P, T);
-            gain_lifelink_until_end_of_turn(g, item.object, creature);
-        });
-    }
-    Ok(())
+    target_creature_gets_and_gains(g, item, P, T, Keyword::Lifelink)
 }
 
 /// "One or two target creatures each get +`P`/+`T` until end of turn" (CR 611.2a): every target still legal as the spell
