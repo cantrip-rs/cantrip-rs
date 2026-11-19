@@ -1,0 +1,36 @@
+# Geological Appraiser: "When this creature enters, if you cast it, discover 3."
+# Turn 1 Bot1 casts the Appraiser with Black Lotus (RRR) and a Mox Jet. Discover 3 (CR 701.57a) exiles a Hill Giant (mana value 4, skipped)
+# and finds a Hypnotic Specter (mana value exactly 3), which Bot1 casts free: it enters, and the Hill Giant goes to the bottom of the
+# library with the Lightning Bolt (mana value 1, never reached) still on top.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Geological Appraiser
+Plains x4
+Hill Giant
+Hypnotic Specter
+Lightning Bolt
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Geological Appraiser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T2 Bot2.Main1]
+? Exile.Count = 0
+
+[Expect]
+Bot1.Battlefield.Hypnotic Specter.Power = 2
+Bot1.Battlefield.Geological Appraiser.Power = 3
+Bot2.Life = 20
+Bot1.Graveyard = Black Lotus
+Bot1.Library.Count = 12

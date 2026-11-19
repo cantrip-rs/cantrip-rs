@@ -1,0 +1,34 @@
+# Geological Appraiser: "When this creature enters, if you cast it, discover 3."
+# Turn 1 Bot1 discards the Appraiser to its own Thoughtseize and returns it with Reanimate: it was not cast (CR 603.4), so nothing
+# is discovered and the Lightning Bolt on top of the library stays there, with the opponent still at 20.
+
+[Bot1 Deck]
+Swamp
+Thoughtseize
+Mox Jet
+Reanimate
+Geological Appraiser
+Plains
+Plains
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Thoughtseize.Cast(Bot1)
+Bot1.Choose(Geological Appraiser)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reanimate.Cast(Bot1.Graveyard.Geological Appraiser)
+[T1 Bot1.Main2]
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Geological Appraiser.Power = 3
+Bot2.Life = 20
+Bot1.Library.Count = 13
