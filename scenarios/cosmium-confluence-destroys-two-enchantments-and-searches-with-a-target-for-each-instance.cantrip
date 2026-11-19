@@ -1,0 +1,60 @@
+# Cosmium Confluence: "Destroy target enchantment", chosen twice with the search once (CR 700.2d), each instance with its own target:
+# Bot2's Propaganda and Ghostly Prison are destroyed, Bot2's Ornithopter (an artifact creature, no enchantment) is refused. The
+# search fetches Promising Vein tapped. The modes carry out in printed order: the search, then the two destroys.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Cosmium Confluence
+Plains x4
+Promising Vein
+Plains x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Emerald
+Propaganda
+Ghostly Prison
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Propaganda.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Ghostly Prison.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cosmium Confluence.Cast
+Bot1.Modes(1; 3; 3)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Propaganda)
+Bot1.Target(Bot2.Battlefield.Ghostly Prison)
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Promising Vein)
+? Bot1.Battlefield.Promising Vein.Tapped = true
+
+[Expect]
+Bot2.Battlefield.Count = 4
+Bot2.Graveyard = Ghostly Prison; Propaganda; Black Lotus

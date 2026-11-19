@@ -1,0 +1,48 @@
+# Cosmium Confluence: the second mode chosen three times (CR 700.2d) with a single Cave, Volatile Fault, which Bot1 played this turn:
+# each choice puts three +1/+1 counters on it (nine in all, the only Cave there is) and makes it a 0/0 Elemental creature with haste
+# again (Elemental once, still a Cave), so it is a 9/9 land creature that can attack at once despite coming under control this turn, and hits Bot2 for 9.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Cosmium Confluence
+Volatile Fault
+Plains x2
+Plains x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Volatile Fault.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cosmium Confluence.Cast
+! Bot1.Modes(2; 2)
+! Bot1.Modes(2; 2; 2; 2)
+Bot1.Modes(2; 2; 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Volatile Fault)
+Bot1.Choose(Volatile Fault)
+Bot1.Choose(Volatile Fault)
+? Bot1.Battlefield.Volatile Fault.Power = 9
+? Bot1.Battlefield.Volatile Fault.Types = Land; Creature
+? Bot1.Battlefield.Volatile Fault.Subtypes = Cave; Elemental
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Volatile Fault > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 11
+Bot1.Battlefield.Volatile Fault.Counters.PlusOnePlusOne = 9
