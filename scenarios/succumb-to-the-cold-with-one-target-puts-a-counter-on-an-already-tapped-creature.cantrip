@@ -1,0 +1,52 @@
+# Succumb to the Cold with one target ("one or two" allows one): the lone Ornithopter an opponent controls is tapped and stunned; a
+# second Succumb on the same, already tapped, creature still puts its counter on (CR 701.26a: tapping an already tapped permanent
+# does nothing, but the counter is put on all the same), so it holds two stun counters. With no creature an opponent controls the
+# spell is not offered (its minimum is one target).
+
+[Bot1 Deck]
+Succumb to the Cold
+Succumb to the Cold
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+! Bot1.Hand.Succumb to the Cold.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Succumb to the Cold.Cast
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Succumb to the Cold.Cast
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Ornithopter.Counters.Stun = 2

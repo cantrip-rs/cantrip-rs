@@ -1,0 +1,6 @@
+{
+  "name": "Succumb to the Cold",
+  "manaCost": "{2}{U}",
+  "type": "Instant",
+  "oracleText": "Tap one or two target creatures an opponent controls. Put a stun counter on each of them. (If a permanent with a stun counter would become untapped, remove one from it instead.)"
+}
