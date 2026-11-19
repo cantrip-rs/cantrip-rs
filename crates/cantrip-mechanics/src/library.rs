@@ -1602,6 +1602,16 @@ pub fn put_first_target_on_the_bottom(g: &mut dyn Game, item: &StackItem) -> Res
     Ok(())
 }
 
+/// "When this dies, put it on the bottom of its owner's library" (CR 401.4, 400.7): the card the trigger is about (its subject,
+/// the new object in the graveyard, `triggers::this_dies_about_the_card`), only if it is still that card, into the library of its
+/// owner. Chaos, the Endless and Fell Horseman print it.
+pub fn put_subject_on_the_bottom(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Target::Object(card) = item.subject {
+        g.put_into_library(&[card], LibraryPlace::Bottom);
+    }
+    Ok(())
+}
+
 const TOP_OR_BOTTOM: Question = Question::new("PutOnTop", "put it on top of its owner's library?", "If you don't, it goes on the bottom", "Top", "Bottom");
 
 /// "Its owner puts it on their choice of the top or bottom of their library": the owner of `object` (CR 108.3), not its

@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::{this_dies_about_the_card, NONCREATURE_SPELL_YOU_CAST};
-use cantrip_mechanics::effects;
+use cantrip_mechanics::{effects, library};
 use cantrip_oracle as oracle;
 
 /// "Return this card from your graveyard to the battlefield transformed" (CR 712.14a, 400.7): the ability's own source, put
@@ -11,18 +11,10 @@ fn return_this_card_transformed(g: &mut dyn Game, item: &StackItem) -> Result<()
     Ok(())
 }
 
-/// "Put it on the bottom of its owner's library" (CR 401.4, 400.7): the card that died, only if it is still that card (`put_into_library`
-/// skips an object that has gone), into the library of its owner.
-fn put_on_the_bottom(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Target::Object(card) = item.subject {
-        g.put_into_library(&[card], LibraryPlace::Bottom);
-    }
-    Ok(())
-}
 
 /// Flying is a core keyword read from its characteristics.
 pub static BACK: CardDef = CardDef {
-    abilities: &[triggered(when(EventMask::ZONE_CHANGE, this_dies_about_the_card), put_on_the_bottom, "When Chaos dies, put it on the bottom of its owner's library.")],
+    abilities: &[triggered(when(EventMask::ZONE_CHANGE, this_dies_about_the_card), library::put_subject_on_the_bottom, "When Chaos dies, put it on the bottom of its owner's library.")],
     ..oracle::CHAOS_THE_ENDLESS
 };
 
