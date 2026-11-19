@@ -1,0 +1,90 @@
+# Galvanic Giant // Storm Reading (CR 715): the Adventure is {5}{U}{U}, an instant, "Draw four cards, then discard two cards." Bot1 has a
+# Galvanic Giant on the battlefield, and casts a second Giant's Adventure with a Black Lotus's three blue, an Island, and three Moxen:
+# exactly seven. Its mana value on the stack is 7 (CR 202.3e), so the first Giant triggers and Bot1 chooses Memnite, not the Ornithopter,
+# to be tapped and stunned. The Adventure draws four and discards two (the cards drawn are in the hand to choose from, CR 701.9), and
+# the card is exiled, not put into the graveyard (CR 715.4). On turn 5 Bot1 casts the Giant from exile for {3}{U}: its mana value 4
+# does not trigger the first Giant, so the Ornithopter takes no counter.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Galvanic Giant
+Galvanic Giant
+Mox Ruby
+Mox Jet
+Island
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Galvanic Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Galvanic Giant.Cast(Ability: Adventure)
+? Bot1.Mana =
+Bot1.Target(Bot2.Battlefield.Memnite)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Tapped = true
+? Bot2.Battlefield.Memnite.Counters.Stun = 1
+? Bot2.Battlefield.Ornithopter.Tapped = false
+? Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island; Island)
+? Exile = Galvanic Giant
+? Bot1.Hand.Count = 2
+? Bot1.Graveyard = Island; Island; Black Lotus; Black Lotus
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Galvanic Giant.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield = Galvanic Giant; Galvanic Giant; Island; Island; Mox Jet; Mox Ruby; Mox Sapphire
+Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)
+Bot2.Battlefield.Ornithopter.Tapped = false

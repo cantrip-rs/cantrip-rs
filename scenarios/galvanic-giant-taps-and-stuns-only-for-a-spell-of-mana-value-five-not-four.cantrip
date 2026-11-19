@@ -1,0 +1,80 @@
+# Galvanic Giant (CR 603.2, 701.26a, 122.1d): "Whenever you cast a spell with mana value 5 or greater, tap target creature an opponent
+# controls and put a stun counter on it." Turn 1: Bot1 casts the Giant with a Black Lotus and a Mox Sapphire (exactly {3}{U}). Turn 3:
+# Johann's Stopgap, mana value 4, is cast and the Giant does not trigger: Bot2's Ornithopter stays untapped with no counter.
+# Turn 5: Obyra's Attendants, mana value 5, is cast with all five of Bot1's sources and the trigger taps and stuns the Ornithopter
+#. On Bot2's turn 6 its untap step removes the stun counter instead of
+# untapping it (CR 122.1d), so it stays tapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Galvanic Giant
+Mox Ruby
+Mox Jet
+Johann's Stopgap
+Obyra's Attendants
+Island x3
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Galvanic Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Johann's Stopgap.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = false
+? Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Obyra's Attendants.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = 1
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)
+Bot1.Battlefield.Obyra's Attendants.Power = 3
