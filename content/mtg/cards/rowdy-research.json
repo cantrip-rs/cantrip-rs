@@ -1,0 +1,6 @@
+{
+  "name": "Rowdy Research",
+  "manaCost": "{6}{U}",
+  "type": "Instant",
+  "oracleText": "This spell costs {1} less to cast for each creature that attacked this turn.\nDraw three cards."
+}

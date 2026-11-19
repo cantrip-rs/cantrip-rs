@@ -1,0 +1,43 @@
+# Rowdy Research (CR 601.2f, 508.1): it costs the full {6}{U} when no creature has attacked this turn, and an attack on an earlier turn does not
+# count. Bot1's six sources (Black Lotus's three blue, Mox Sapphire, Mox Jet, Mox Ruby) cannot pay seven: the cast is refused on turn 2 (nothing
+# attacked) and on turn 4 (Bot1's Memnite attacked on turn 3, not this turn).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Memnite
+Rowdy Research
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+! Bot1.Hand.Rowdy Research.Cast(Mana: short)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T4 Bot2.Main1]
+! Bot1.Hand.Rowdy Research.Cast(Mana: short)
+
+[Expect]
+Turn = 4
+Bot1.Hand.Count = 3

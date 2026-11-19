@@ -1,0 +1,55 @@
+# Rowdy Research {6}{U}, instant (CR 601.2f, 118.7a): one creature attacked this turn, so it costs {5}{U}, not {4}{U} (that would leave a mana in the pool).
+# Bot2 has two Memnites but attacks with only one of them (a creature that did not attack does not count). Bot1's six mana - Black Lotus's three blue,
+# Mox Sapphire, Mox Jet and Mox Ruby - pay it exactly, the pool checked empty right after.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Rowdy Research
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Memnite
+Memnite
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite#1 > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rowdy Research.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 6
+Bot1.Graveyard = Rowdy Research; Black Lotus
