@@ -403,8 +403,10 @@ pub fn may_cast_from_hand_free(
 /// "You may cast `card` without paying its mana cost if the resulting spell's mana value is `most` or less" (CR 608.2g, 118.9,
 /// 601.2b), as an effect resolves: asked only when a face of the card can be cast at that mana value, the face picked when it has
 /// several, and cast for {0}; `source` is what the question names it by and `purpose` how it words the answer. Whether it was cast;
-/// a cast given up (CR 733.1) leaves the card where it was. Discover ("cast or put into hand", `CastFoundOrHand`) and Commander
-/// Spock ("cast ... if that card is still on top of your library, draw", `CastFree`) print it.
+/// a cast given up (CR 733.1) leaves the card where it was. `player` casts it, who need not be the effect's controller ("that
+/// player discovers", Zoyowa's Justice): they announce it, choose its targets and control it, and its ways are judged for them
+/// (CR 608.2g, 601.2, `CastTerms::caster`). Discover ("cast or put into hand", `CastFoundOrHand`) and Commander Spock ("cast ...
+/// if that card is still on top of your library, draw", `CastFree`) print it.
 pub fn may_cast_free_card(
     g: &mut dyn Game,
     player: PlayerId,
@@ -413,11 +415,11 @@ pub fn may_cast_free_card(
     most: u32,
     purpose: Purpose,
 ) -> Result<bool, Suspend> {
-    let ways: Vec<CastWay> = g.cast_ways_during_resolution(card).into_iter().filter(|w| u32::from(w.mana_value) <= most).collect();
+    let ways: Vec<CastWay> = g.cast_ways_during_resolution_by(card, player).into_iter().filter(|w| u32::from(w.mana_value) <= most).collect();
     if !ways.is_empty() && crate::effects::ask_may(g, player, source, purpose)?
         && let Some(way) = cast_way(g, player, card, ways)?
     {
-        return g.cast_during_resolution_as(card, CastTerms { instead: Some(ManaCost::ZERO), way: Some(way.way), ..CastTerms::default() });
+        return g.cast_during_resolution_as(card, CastTerms { instead: Some(ManaCost::ZERO), way: Some(way.way), caster: Some(player), ..CastTerms::default() });
     }
     Ok(false)
 }
