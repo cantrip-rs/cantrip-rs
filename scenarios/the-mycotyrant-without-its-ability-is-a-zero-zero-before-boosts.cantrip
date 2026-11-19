@@ -1,0 +1,53 @@
+# The Mycotyrant: its power and toughness come from a characteristic-defining ability (CR 604.3), which Dress Down's "Creatures
+# lose all abilities" removes in layer 6 (CR 613.1f), so layer 7a has nothing to apply and its printed */* is read with each star
+# as 0 (CR 208.2a): a 0/0. With a Giant Growth already on it (1/1 + 3/3 = 4/4) Dress Down leaves
+# a 3/3 (0/0 plus the +3/+3), which neither dies nor still counts itself. Turn 1: a 1/1 itself; turn 3: Giant Growth makes it 4/4,
+# Dress Down 3/3, and at the beginning of the end step Dress Down is sacrificed.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+The Mycotyrant
+Forest
+Giant Growth
+Dress Down
+Forest x13
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Mycotyrant.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Mycotyrant.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Giant Growth.Cast(The Mycotyrant)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Mycotyrant.Power = 4
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dress Down.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Mycotyrant.Power = 3
+? Bot1.Battlefield.The Mycotyrant.Toughness = 3
+? Bot1.Battlefield.The Mycotyrant.Keywords = (absent)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.The Mycotyrant.Power = 1
+Bot1.Battlefield.The Mycotyrant.Toughness = 1
+Bot1.Battlefield.The Mycotyrant.Keywords = Trample

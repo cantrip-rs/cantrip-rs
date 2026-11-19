@@ -1,0 +1,96 @@
+# The Mycotyrant: "At the beginning of your end step, create X 1/1 black Fungus creature tokens with 'This token can't block,' where X
+# is the number of times you descended this turn" (CR 700.11: one for each permanent card put into your graveyard from anywhere), and its
+# power and toughness are the number of creatures you control that are Fungi and/or Saprolings. Turn 1: no descent, no Fungus, the
+# Mycotyrant a 1/1 (itself a Fungus). Turn 3 (Bot1): two Thought Scours mill Plains, Lightning Bolt and Grizzly Bears, Plains from Bot1's
+# own library: three permanent cards, the Bolt, an instant, and the Scours are not, and a third Scour that mills two permanent
+# cards of Bot2's library is Bot2's descent, none of Bot1's. Three Fungi arrive at the end step (the Mycotyrant a 4/4) and on turn 4,
+# as Bot2's Grizzly Bears attacks, a Fungus token cannot block it (CR 509.1b) while the Mycotyrant can, and kills it.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Ruby
+The Mycotyrant
+Thought Scour
+Island
+Plains
+Lightning Bolt
+Thought Scour
+Grizzly Bears
+Plains
+Thought Scour
+Plains
+Plains x10
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Grizzly Bears
+Forest
+Forest
+Forest
+Forest
+Forest
+Hill Giant
+Plains
+Forest x10
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Mycotyrant.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Mycotyrant.Power = 1
+? Bot1.Battlefield.The Mycotyrant.Toughness = 1
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Count = 6
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Thought Scour.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 7
+? Bot2.Graveyard.Count = 2
+? Bot1.Battlefield.Fungus Token = (absent)
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Count = 10
+? Bot1.Battlefield.The Mycotyrant.Power = 4
+[T4 Bot2.Main1]
+Bot2.Attack(Grizzly Bears > Bot1)
+[T4 Bot2.DeclareBlockers]
+! Bot1.Block(Fungus Token#1 > Grizzly Bears)
+Bot1.Block(The Mycotyrant > Grizzly Bears)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.The Mycotyrant.Power = 4
+Bot1.Battlefield.The Mycotyrant.Toughness = 4
+Bot1.Battlefield.Fungus Token#1.Power = 1
+Bot1.Battlefield.Fungus Token#1.Colors = Black
+Bot1.Battlefield.Fungus Token#3.Toughness = 1
+Bot1.Battlefield.Fungus Token#4 = (absent)
+Bot2.Graveyard.Count = 3
+Bot1.Life = 20

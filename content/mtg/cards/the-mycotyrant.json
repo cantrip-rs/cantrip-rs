@@ -1,0 +1,11 @@
+{
+  "name": "The Mycotyrant",
+  "manaCost": "{1}{B}{G}",
+  "type": "Legendary Creature — Elder Fungus",
+  "power": "*",
+  "toughness": "*",
+  "oracleText": "Trample\nThe Mycotyrant's power and toughness are each equal to the number of creatures you control that are Fungi and/or Saprolings.\nAt the beginning of your end step, create X 1/1 black Fungus creature tokens with \"This token can't block,\" where X is the number of times you descended this turn. (You descend each time a permanent card is put into your graveyard from anywhere.)",
+  "keywords": [
+    "Trample"
+  ]
+}

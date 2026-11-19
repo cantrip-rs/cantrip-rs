@@ -1,0 +1,89 @@
+# The Mycotyrant: "power and toughness are each equal to the number of creatures you control that are Fungi and/or Saprolings"
+# (a characteristic-defining ability, CR 604.3, counting itself, an Elder Fungus). Turn 1: the Mycotyrant and a Thallid (Fungus)
+# make it a 2/2. Turn 2: Bot2's own Thallid, a Fungus under the opponent's control, does not count. Turn 5: a Grizzly Bears (a
+# creature, neither Fungus nor Saproling) does not count; a Thought Scour that mills two Bears puts two permanent cards in the
+# graveyard, and Night Soil exiles them for a Saproling (+1, a 3/3). At the end step the two descents make two Fungus tokens, and the
+# Mycotyrant is a 5/5: itself, the Thallid, the Saproling and both Fungus tokens, not the Bears.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+The Mycotyrant
+Thallid
+Forest
+Grizzly Bears
+Night Soil
+Thought Scour
+Grizzly Bears
+Grizzly Bears
+Forest x10
+
+[Bot2 Deck]
+Forest
+Thallid
+Forest x15
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Mycotyrant.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Mycotyrant.Power = 1
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Thallid.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Mycotyrant.Power = 2
+? Bot1.Battlefield.The Mycotyrant.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Thallid.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Thallid.Power = 1
+? Bot1.Battlefield.The Mycotyrant.Power = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Night Soil.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+? Bot1.Battlefield.The Mycotyrant.Power = 2
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 3
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Night Soil.Activate
+Bot1.Choose(Grizzly Bears; Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Saproling Token.Power = 1
+? Bot1.Battlefield.The Mycotyrant.Power = 3
+? Bot1.Battlefield.Fungus Token = (absent)
+[T6 Bot2.Upkeep]
+? Bot1.Battlefield.Fungus Token#2.Power = 1
+? Bot1.Battlefield.Fungus Token#3 = (absent)
+
+[Expect]
+Bot1.Battlefield.The Mycotyrant.Power = 5
+Bot1.Battlefield.The Mycotyrant.Toughness = 5
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Thallid.Power = 1
+Bot1.Graveyard.Count = 1
