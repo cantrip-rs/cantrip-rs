@@ -1,0 +1,48 @@
+# Merfolk Coralsmith {2}{U}, 2/3: "{1}: This creature gets +1/-1 until end of turn." (CR 611.2a, 613.4c). Bot1 casts it with Black Lotus
+# and pays two activations with a Mox each: each costs exactly {1} (the pool is empty right after), and two of them make it 4/1, still alive.
+# The effect lasts only that turn: on Bot2's turn 2 it is a 2/3 again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Merfolk Coralsmith
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Merfolk Coralsmith.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Merfolk Coralsmith.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Merfolk Coralsmith.Power = 3
+? Bot1.Battlefield.Merfolk Coralsmith.Toughness = 2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Merfolk Coralsmith.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Merfolk Coralsmith.Power = 4
+? Bot1.Battlefield.Merfolk Coralsmith.Toughness = 1
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Merfolk Coralsmith.Power = 2
+Bot1.Battlefield.Merfolk Coralsmith.Toughness = 3
+Bot1.Graveyard = Black Lotus

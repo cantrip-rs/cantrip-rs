@@ -1,0 +1,68 @@
+# Merfolk Coralsmith (CR 704.5f, 700.4, 701.22): "{1}: This creature gets +1/-1 until end of turn. When this creature dies, scry 2." It enters on
+# turn 1 with Plains and Forest on top of Bot1's library and nothing is scried then. On turn 3 the draw takes the Plains, and three activations make
+# it 5/0, so it is put into the graveyard as a state-based action and its trigger scries 2: the two top cards now are Forest and Swamp, not
+# the Plains and Forest of turn 1. Swamp stays on top and Forest goes to the bottom (an answer that does not fit the turn-1 cards would be refused).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Merfolk Coralsmith
+Island
+Plains
+Forest
+Swamp
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Merfolk Coralsmith.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Top = Plains
+? Bot1.Library.Count = 16
+[T3 Bot1.Main1]
+? Bot1.Library.Top = Forest
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Merfolk Coralsmith.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Merfolk Coralsmith.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Merfolk Coralsmith.Toughness = 1
+? Bot1.Library.Top = Forest
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Merfolk Coralsmith.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Swamp | Forest)
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Merfolk Coralsmith = (absent)
+Bot1.Graveyard = Merfolk Coralsmith; Black Lotus
+Bot1.Library.Top = Swamp
+Bot1.Library.Count = 15
