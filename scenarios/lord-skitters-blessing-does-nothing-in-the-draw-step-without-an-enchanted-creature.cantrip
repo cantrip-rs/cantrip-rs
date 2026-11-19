@@ -1,0 +1,31 @@
+# Lord Skitter's Blessing: with no creature of Bot1's to enchant the enters trigger has no target and makes no Role,
+# so at the beginning of Bot1's draw step it controls no enchanted creature: it draws only its normal card and keeps
+# its life.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Lord Skitter's Blessing
+Island
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Lord Skitter's Blessing.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Hand.Count = 5
+Bot1.Battlefield = Swamp; Mox Jet; Lord Skitter's Blessing

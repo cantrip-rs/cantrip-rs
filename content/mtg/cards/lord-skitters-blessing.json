@@ -1,0 +1,6 @@
+{
+  "name": "Lord Skitter's Blessing",
+  "manaCost": "{1}{B}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, create a Wicked Role token attached to target creature you control. (Enchanted creature gets +1/+1. When this token is put into a graveyard, each opponent loses 1 life.)\nAt the beginning of your draw step, if you control an enchanted creature, you lose 1 life and you draw an additional card."
+}

@@ -1,0 +1,38 @@
+# Lord Skitter's Blessing: "When this enchantment enters, create a Wicked Role token attached to target creature you
+# control. At the beginning of your draw step, if you control an enchanted creature, you lose 1 life and you draw an
+# additional card." Bot1's Ornithopter gets the Role (1/3); on turn 3 the draw step makes Bot1 lose 1 and draw two cards.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Ornithopter
+Lord Skitter's Blessing
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Lord Skitter's Blessing.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wicked.AttachedTo = Ornithopter
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot1.Life = 20
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Hand.Count = 5
+Bot1.Battlefield = Swamp; Mox Jet; Ornithopter; Wicked; Lord Skitter's Blessing
