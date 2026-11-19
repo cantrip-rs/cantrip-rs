@@ -1,0 +1,90 @@
+# Digsite Conservator: "Sacrifice this creature: Exile up to four target cards from a single graveyard. Activate only as a
+# sorcery." and "When this creature dies, you may pay {4}. If you do, discover 4." Bot2's graveyard holds five Dark Rituals and
+# Bot1's one. On turn 3 the sacrifice may not take one card of each graveyard, nor a fifth card of Bot2's (CR 115.1c, 601.2c);
+# four of Bot2's are taken and the fifth stays. Sacrificing is dying, so the trigger goes first: Bot1 pays exactly {4} with its
+# four Moxes, and discover 4 (CR 701.57a) exiles Island (a land) and Ancient Carp (mana value 5, over the limit), then casts
+# Anaconda (mana value 4, exactly the limit) for free; the two skipped cards go to the bottom.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Digsite Conservator
+Dark Ritual
+Island
+Island
+Island
+Ancient Carp
+Anaconda
+Island x9
+
+[Bot2 Deck]
+Mox Jet
+Dark Ritual
+Dark Ritual
+Dark Ritual
+Dark Ritual
+Dark Ritual
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Digsite Conservator.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Dark Ritual.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Dark Ritual.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Dark Ritual.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Dark Ritual.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Dark Ritual.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard.Count = 5
+[T3 Bot1.Main1]
+Bot1.Battlefield.Digsite Conservator.Activate(Ability: Exile up to four)
+! Bot1.Target(Bot1.Graveyard.Dark Ritual; Bot2.Graveyard.Dark Ritual#1)
+! Bot1.Target(Bot2.Graveyard.Dark Ritual#1; Bot2.Graveyard.Dark Ritual#2; Bot2.Graveyard.Dark Ritual#3; Bot2.Graveyard.Dark Ritual#4; Bot2.Graveyard.Dark Ritual#5)
+Bot1.Target(Bot2.Graveyard.Dark Ritual#1; Bot2.Graveyard.Dark Ritual#2; Bot2.Graveyard.Dark Ritual#3; Bot2.Graveyard.Dark Ritual#4)
+? Stack = Digsite Conservator; Digsite Conservator
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 12
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.PayCost
+Bot1.Accept
+? Stack = Anaconda; Digsite Conservator
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Anaconda.Power = 3
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 4
+
+[Expect]
+Bot2.Graveyard.Count = 1
+Bot1.Graveyard.Count = 2
+Bot1.Battlefield.Anaconda.Power = 3

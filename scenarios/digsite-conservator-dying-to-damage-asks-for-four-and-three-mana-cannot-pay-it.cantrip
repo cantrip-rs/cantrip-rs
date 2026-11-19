@@ -1,0 +1,49 @@
+# Digsite Conservator: "When this creature dies, you may pay {4}. If you do, discover 4" triggers on any death (CR 700.4), not
+# only when it is sacrificed. Bot2's Lightning Bolt kills it on turn 2, when Bot1 has Moxes Pearl, Ruby and Sapphire untapped:
+# three mana is not {4} (the payment is refused), so Bot1 declines and nothing is discovered: the Anaconda stays in the library.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Digsite Conservator
+Dark Ritual
+Island
+Anaconda
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Digsite Conservator.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Digsite Conservator)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.PayCost
+Bot1.Decline
+[T3 Bot1.Main1]
+
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard = Digsite Conservator; Dark Ritual
+Bot1.Library.Count = 12

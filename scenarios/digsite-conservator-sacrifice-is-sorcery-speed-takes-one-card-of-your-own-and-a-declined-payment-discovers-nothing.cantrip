@@ -1,0 +1,59 @@
+# Digsite Conservator: "Activate only as a sorcery" (CR 602.5d, 307.1): on turn 2, with Bot2's Lightning Bolt on the stack, the sacrifice
+# is refused although it costs no mana. On turn 3 it takes just one card, Bot1's own Dark Ritual ("up to four", a card of your
+# own graveyard is a legal target), and the card is exiled. Sacrificing it is dying, so the trigger asks for {4}: declined, so
+# nothing is paid and nothing is discovered (the Island on top of the library is turn 3's draw, nothing exiled besides the
+# Ritual).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Digsite Conservator
+Dark Ritual
+Island
+Island
+Island
+Anaconda
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Digsite Conservator.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2)
+! Bot1.Battlefield.Digsite Conservator.Activate(Ability: Exile up to four)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Digsite Conservator.Activate(Ability: Exile up to four)
+Bot1.Target(Bot1.Graveyard.Dark Ritual)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+? Exile = Dark Ritual
+? Bot1.Library.Count = 12
+
+[Expect]
+Exile.Count = 1
+Bot1.Graveyard = Digsite Conservator
+Bot1.Hand.Count = 2
+Bot1.Battlefield.Count = 4
