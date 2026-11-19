@@ -1,0 +1,42 @@
+# Diamond Pick-Axe: the Treasure comes only from the equipped creature, and moving the equipment moves the bonus and the granted ability
+# with it (CR 301.5c, 613.4c). Turn 1 Bot1 equips the first Ornithopter. Turn 3 Bot1 re-equips to the second Ornithopter ({2} from two
+# Moxen) and attacks with both: the first is back to 0/2 and adds no Treasure, the second is a 1/3 and adds exactly one. Bot2 takes 1.
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Ornithopter
+Diamond Pick-Axe
+Mox Ruby
+Mox Jet
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Diamond Pick-Axe.Cast
+Bot1.Battlefield.Diamond Pick-Axe.Activate(Bot1.Battlefield.Ornithopter#1; Ability: Equip {2})
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Diamond Pick-Axe.Activate(Bot1.Battlefield.Ornithopter#2; Ability: Equip {2})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 0
+? Bot1.Battlefield.Ornithopter#2.Power = 1
+Bot1.Attack(Ornithopter#1 > Bot2; Ornithopter#2 > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Treasure Token.Token = true
+Bot1.Battlefield.Count = 6

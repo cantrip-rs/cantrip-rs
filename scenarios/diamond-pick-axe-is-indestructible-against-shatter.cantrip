@@ -1,0 +1,38 @@
+# Diamond Pick-Axe has indestructible (CR 702.12b): Bot2's Shatter on it destroys nothing and the Equipment stays attached to Bot1's
+# Ornithopter, which keeps its +1/+1.
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Diamond Pick-Axe
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Shatter
+Island x17
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Diamond Pick-Axe.Cast
+Bot1.Battlefield.Diamond Pick-Axe.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip {2})
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Diamond Pick-Axe)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+? Bot2.Graveyard = Shatter
+
+[Expect]
+Bot1.Battlefield.Diamond Pick-Axe.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Graveyard = Black Lotus
