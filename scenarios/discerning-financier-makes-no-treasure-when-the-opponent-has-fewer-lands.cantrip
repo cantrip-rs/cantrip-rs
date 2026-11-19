@@ -1,0 +1,25 @@
+# Bot1 plays a Plains on turn one and Bot2 plays no land at all, so in Bot1's turn-three upkeep the opponent controls fewer
+# lands than Bot1 (CR 603.4): no Treasure.
+
+[Bot1 Deck]
+Black Lotus
+Discerning Financier
+Plains x18
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Discerning Financier.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Plains; Discerning Financier

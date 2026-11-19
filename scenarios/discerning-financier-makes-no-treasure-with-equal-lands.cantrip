@@ -1,0 +1,27 @@
+# The upkeep trigger's intervening "if" (CR 603.4): Bot1 plays a Plains on turn one and Bot2 a Plains on turn two, so in Bot1's
+# turn-three upkeep the opponent controls the same number of lands, not more, and the trigger does not go on the stack.
+
+[Bot1 Deck]
+Black Lotus
+Discerning Financier
+Plains x18
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Discerning Financier.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Plains; Discerning Financier

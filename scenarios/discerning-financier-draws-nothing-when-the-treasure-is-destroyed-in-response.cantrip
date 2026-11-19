@@ -1,0 +1,48 @@
+# The ability's one target is the Treasure. Bot2 casts Disenchant on it in response, so on resolution the target is illegal and
+# the ability does not resolve (CR 608.2b): nobody gains control of anything, no player is chosen and Bot1 draws no card.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Discerning Financier
+Plains x17
+
+[Bot2 Deck]
+Mox Pearl
+Plains
+Disenchant
+Plains x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Discerning Financier.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Discerning Financier.Activate(Bot1.Battlefield.Treasure Token)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Treasure Token)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Battlefield = Mox Pearl; Mox Jet; Plains; Discerning Financier
+Bot2.Battlefield = Mox Pearl; Plains
+Bot2.Graveyard = Disenchant

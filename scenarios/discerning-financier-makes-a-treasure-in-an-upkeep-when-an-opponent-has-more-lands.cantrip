@@ -1,0 +1,28 @@
+# Discerning Financier {2}{W}: "At the beginning of your upkeep, if an opponent controls more lands than you, create a Treasure
+# token." Bot1 casts it on turn one with Black Lotus and plays no land; Bot2 plays a Plains on turn two. In Bot1's turn-three
+# upkeep Bot2 controls one land to Bot1's none (CR 603.4), so Bot1 gets a Treasure.
+
+[Bot1 Deck]
+Black Lotus
+Discerning Financier
+Plains x18
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Discerning Financier.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Discerning Financier; Treasure Token
+Bot1.Battlefield.Treasure Token.Token = true

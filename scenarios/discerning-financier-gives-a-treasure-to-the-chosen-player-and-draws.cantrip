@@ -1,0 +1,41 @@
+# Discerning Financier's {2}{W} ability: "Choose another player. That player gains control of target Treasure you control. You
+# draw a card." In turn three's upkeep Bot1 makes a Treasure (Bot2 has more lands), then pays {2}{W} with the Moxen and a Plains
+# and targets it; Bot1 chooses Bot2, who gains control of the Treasure (CR 613.1b, 611.2a), and Bot1 draws a card.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Discerning Financier
+Plains x17
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Discerning Financier.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Treasure Token.Token = true
+? Bot1.Hand.Count = 4
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Discerning Financier.Activate(Bot1.Battlefield.Treasure Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.ChoosePlayer(Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Battlefield = Mox Pearl; Mox Jet; Plains; Discerning Financier
+Bot2.Battlefield = Plains; Treasure Token

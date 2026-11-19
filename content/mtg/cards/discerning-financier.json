@@ -1,0 +1,8 @@
+{
+  "name": "Discerning Financier",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Noble",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "At the beginning of your upkeep, if an opponent controls more lands than you, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")\n{2}{W}: Choose another player. That player gains control of target Treasure you control. You draw a card."
+}
