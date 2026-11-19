@@ -1,0 +1,45 @@
+# Soulcoil Viper: "Activate only as a sorcery" (CR 307.5, 602.5d): only during its controller's main phase with the stack empty. The Viper
+# came in on turn 1, so it can use its {T} on turn 3. With a Black Lotus on the stack in the main phase, and in the end step, Bot1 cannot
+# activate it targeting the Memnite Bot2 Bolted on turn 2 (the Swamp is untapped and could pay {B}); the Viper stays.
+
+[Bot1 Deck]
+Memnite
+Black Lotus
+Black Lotus
+Soulcoil Viper
+Swamp x3
+Swamp x17
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Soulcoil Viper.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+! Bot1.Battlefield.Soulcoil Viper.Activate(Bot1.Graveyard.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+! Bot1.Battlefield.Soulcoil Viper.Activate(Bot1.Graveyard.Memnite)
+
+[Expect]
+Bot1.Battlefield.Soulcoil Viper.Tapped = false
+Bot1.Graveyard = Memnite; Black Lotus
+Bot1.Battlefield.Swamp.Tapped = false

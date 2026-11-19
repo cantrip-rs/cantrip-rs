@@ -1,0 +1,54 @@
+# Soulcoil Viper (2/3): "{B}, {T}, Sacrifice this creature: Return target creature card from your graveyard to the battlefield with a
+# finality counter on it. Activate only as a sorcery." Turn 1 Bot1 casts Memnite and the Viper (off a Black Lotus) and plays a Swamp.
+# Bot2 Bolts the Memnite on turn 2. On turn 3 the Viper has been under Bot1's control since the start of the turn and the Black Lotus (in
+# the graveyard) is refused as a target; the Memnite returns with a finality counter, the Viper is sacrificed as a cost, so it is in the
+# graveyard. On turn 4 Bot2's second Bolt kills the Memnite and the counter exiles it instead (CR 122.1h).
+
+[Bot1 Deck]
+Black Lotus
+Memnite
+Soulcoil Viper
+Swamp x3
+Swamp x17
+
+[Bot2 Deck]
+Mountain x2
+Lightning Bolt x2
+Mountain x18
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Soulcoil Viper.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Memnite; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+! Bot1.Battlefield.Soulcoil Viper.Activate(Bot1.Graveyard.Black Lotus)
+Bot1.Battlefield.Soulcoil Viper.Activate(Bot1.Graveyard.Memnite)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Counters.Finality = 1
+? Bot1.Graveyard = Soulcoil Viper; Black Lotus
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Exile.Memnite.Power = 1
+Bot1.Graveyard = Soulcoil Viper; Black Lotus

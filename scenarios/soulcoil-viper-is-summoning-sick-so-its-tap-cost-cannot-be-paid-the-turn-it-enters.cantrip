@@ -1,0 +1,45 @@
+# Soulcoil Viper: "{B}, {T}, Sacrifice this creature: ..." The {T} in the cost cannot be paid by a creature that has not been under its
+# controller's control continuously since the start of the turn (CR 302.6, 602.5b). Bot2 Bolts Bot1's Memnite on turn 2, so a legal
+# target waits in Bot1's graveyard. On turn 3 Bot1 casts the Viper off a Black Lotus with a Swamp untapped to pay {B}, and cannot
+# activate it the turn it enters; on turn 5 it can, and the Memnite returns.
+
+[Bot1 Deck]
+Memnite
+Black Lotus
+Soulcoil Viper
+Swamp x4
+Swamp x17
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Soulcoil Viper.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Soulcoil Viper.Activate(Bot1.Graveyard.Memnite)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Soulcoil Viper.Activate(Bot1.Graveyard.Memnite)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Counters.Finality = 1
+Bot1.Graveyard = Soulcoil Viper; Black Lotus
