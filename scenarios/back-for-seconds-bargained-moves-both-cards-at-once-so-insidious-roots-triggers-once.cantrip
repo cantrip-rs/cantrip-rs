@@ -1,0 +1,53 @@
+# Back for Seconds, bargained, returns Memnite and Ornithopter and puts Memnite onto the battlefield instead of into the hand:
+# one instruction, so both cards leave Bot1's graveyard in one move (CR 101.4, 608.2c) and Insidious Roots' "one or more
+# creature cards leave your graveyard" triggers once (CR 603.2c): a single Plant token with its counter, a 1/2. Two moves would
+# trigger it twice, two Plants, one of them 2/3.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Black Lotus
+Insidious Roots
+Faithless Looting
+Back for Seconds
+Memnite
+Ornithopter
+Swamp x15
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Insidious Roots.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite; Ornithopter)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Back for Seconds.Cast
+Bot1.Modes(Bargain:)
+Bot1.Target(Bot1.Graveyard.Memnite; Bot1.Graveyard.Ornithopter)
+Bot1.Choose(Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Hand = Ornithopter
+Bot1.Battlefield.Plant Token.Power = 1
+Bot1.Battlefield.Plant Token.Toughness = 2
+Bot1.Battlefield.Count = 5
+Stack.Count = 0

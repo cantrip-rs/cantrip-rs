@@ -1,0 +1,44 @@
+# Bargain (CR 702.166) and the second sentence: Entomb buries Memnite (mana value 0) and Serra Angel (5). Back for Seconds, bargained
+# by sacrificing Mox Emerald, targets both; only Memnite may go onto the battlefield (Serra Angel is refused), so it does and Serra
+# Angel goes to the hand.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Black Lotus
+Entomb
+Entomb
+Back for Seconds
+Memnite
+Serra Angel
+Swamp x17
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Serra Angel)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Back for Seconds.Cast
+Bot1.Modes(Bargain:)
+Bot1.Target(Bot1.Graveyard.Memnite; Bot1.Graveyard.Serra Angel)
+Bot1.Choose(Mox Emerald)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Serra Angel)
+Bot1.Choose(Memnite)
+
+[Expect]
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Hand = Serra Angel
+Bot1.Graveyard = Back for Seconds; Mox Emerald; Entomb; Black Lotus; Entomb

@@ -1,0 +1,39 @@
+# Without bargain (CR 608.2b) the spell only returns: Memnite (mana value 0) and Serra Angel both go to the hand, and nothing is asked
+# about the battlefield.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Black Lotus
+Entomb
+Entomb
+Back for Seconds
+Memnite
+Serra Angel
+Swamp x17
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Serra Angel)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Back for Seconds.Cast
+
+Bot1.Target(Bot1.Graveyard.Memnite; Bot1.Graveyard.Serra Angel)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Memnite; Serra Angel
+Bot1.Graveyard = Back for Seconds; Entomb; Black Lotus; Entomb

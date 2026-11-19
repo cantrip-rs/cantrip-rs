@@ -1,0 +1,41 @@
+# Bargained, but Serra Angel (5) and Craw Wurm (6) are over mana value 4, so there is nothing to put onto the battlefield and no
+# question: both go to the hand.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Black Lotus
+Entomb
+Entomb
+Back for Seconds
+Serra Angel
+Craw Wurm
+Swamp x17
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Serra Angel)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Craw Wurm)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Back for Seconds.Cast
+Bot1.Modes(Bargain:)
+Bot1.Target(Bot1.Graveyard.Serra Angel; Bot1.Graveyard.Craw Wurm)
+Bot1.Choose(Mox Emerald)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Serra Angel; Craw Wurm
+Bot1.Graveyard = Back for Seconds; Mox Emerald; Entomb; Black Lotus; Entomb
+Bot1.Battlefield.Count = 2

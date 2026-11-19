@@ -1,0 +1,42 @@
+# "Mana value 4 or less": Cogwork Librarian (4) is eligible and goes onto the battlefield, while Serra Angel (5) stays an
+# ineligible choice and returns to the hand.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Black Lotus
+Entomb
+Entomb
+Back for Seconds
+Cogwork Librarian
+Serra Angel
+Swamp x17
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Cogwork Librarian)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Serra Angel)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Back for Seconds.Cast
+Bot1.Modes(Bargain:)
+Bot1.Target(Bot1.Graveyard.Cogwork Librarian; Bot1.Graveyard.Serra Angel)
+Bot1.Choose(Mox Emerald)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Serra Angel)
+Bot1.Choose(Cogwork Librarian)
+
+[Expect]
+Bot1.Battlefield.Cogwork Librarian.Tapped = false
+Bot1.Hand = Serra Angel

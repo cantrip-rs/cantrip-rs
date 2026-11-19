@@ -1,0 +1,48 @@
+# CR 601.2c, 115.1: "up to two target creature cards" is no more than two. Three Entombs bury Memnite, Ornithopter and Llanowar
+# Elves on turn 1; on turn 3 Back for Seconds refuses all three, and choosing just Ornithopter returns that one while Memnite and
+# Llanowar Elves stay in the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Black Lotus
+Entomb
+Entomb
+Entomb
+Back for Seconds
+Swamp
+Swamp
+Memnite
+Ornithopter
+Llanowar Elves
+Swamp x17
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Ornithopter)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Llanowar Elves)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Back for Seconds.Cast
+! Bot1.Target(Bot1.Graveyard.Memnite; Bot1.Graveyard.Ornithopter; Bot1.Graveyard.Llanowar Elves)
+Bot1.Target(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Ornithopter.Power = 0
+Bot1.Graveyard.Count = 7

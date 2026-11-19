@@ -1,0 +1,6 @@
+{
+  "name": "Back for Seconds",
+  "manaCost": "{2}{B}",
+  "type": "Sorcery",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nReturn up to two target creature cards from your graveyard to your hand. If this spell was bargained, you may put one of those cards with mana value 4 or less onto the battlefield instead of putting it into your hand."
+}

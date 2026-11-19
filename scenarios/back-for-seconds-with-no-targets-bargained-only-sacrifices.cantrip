@@ -1,0 +1,31 @@
+# "Up to two" (CR 601.2c): Back for Seconds may be cast with no targets, bargained or not; Bot1 sacrifices Mox Emerald for the
+# bargain, the spell does nothing else, and no question about the battlefield is asked because no card was targeted.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Black Lotus
+Back for Seconds
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Back for Seconds.Cast
+Bot1.Modes(Bargain:)
+Bot1.Choose(Mox Emerald)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 2
+Bot1.Hand.Count = 2
+Bot1.Graveyard = Back for Seconds; Mox Emerald; Black Lotus
