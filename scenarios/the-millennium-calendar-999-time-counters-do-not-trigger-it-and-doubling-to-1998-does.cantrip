@@ -1,0 +1,119 @@
+# The Millennium Calendar: "When there are 1,000 or more time counters on The Millennium Calendar, sacrifice it and each opponent loses 1,000 life."
+# Eight of Bot1's untap steps (each puts a counter for each permanent untapped: one trigger, CR 603.2c) with a doubling in between reach 999 counters
+# at turn 17 (one short of 1,000: nothing happens, then one more doubling reaches 1,998 and the state trigger fires).
+# Bot1 taps its Sol Ring, Mox and Calendar so that the right number of permanents untap each turn: 2, 6, 7, 2, 7, 7, 7, then 5.
+
+[Bot1 Deck]
+The Millennium Calendar
+Sol Ring
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Plains x20
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Millennium Calendar.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 2
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.The Millennium Calendar.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 4
+[T5 Bot1.Main1]
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 10
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.The Millennium Calendar.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 20
+[T7 Bot1.Main1]
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 27
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.The Millennium Calendar.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 54
+[T9 Bot1.Main1]
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 56
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.The Millennium Calendar.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 112
+[T11 Bot1.Main1]
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 119
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.The Millennium Calendar.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 238
+[T13 Bot1.Main1]
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 245
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.The Millennium Calendar.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 490
+[T15 Bot1.Main1]
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 497
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.The Millennium Calendar.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 994
+[T17 Bot1.Main1]
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 999
+? Bot2.Life = 20
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.The Millennium Calendar.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = -980
+Bot1.Battlefield.Count = 6

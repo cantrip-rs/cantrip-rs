@@ -1,0 +1,52 @@
+# The Millennium Calendar: "Whenever you untap one or more permanents during your untap step, put that many time counters on The Millennium
+# Calendar." Turn 1: Voltaic Key untaps Mox Pearl in Bot1's main phase, an untap by an effect that counts for nothing, and ends the turn with
+# Mox Jet, Mox Ruby and the Key tapped. Bot2's untap step on turn 4 untaps its own tapped Mox Sapphire, which is not Bot1's untap step: no
+# counter. Bot1's untap step on turn 3 untaps the three (Calendar and Pearl were untapped): three time counters, one for each, from the one
+# trigger (CR 603.2c).
+
+[Bot1 Deck]
+The Millennium Calendar
+Voltaic Key
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Plains x10
+
+[Bot2 Deck]
+Mox Sapphire
+Ornithopter
+Plains x10
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Millennium Calendar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Voltaic Key.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Voltaic Key.Activate(Bot1.Battlefield.Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Pearl.Tapped = false
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 3
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Mox Sapphire.Tapped = false
+? Bot1.Battlefield.The Millennium Calendar.Counters.Time = 3
+
+[Expect]
+Bot1.Battlefield.The Millennium Calendar.Counters.Time = 3
+Bot1.Battlefield.The Millennium Calendar.Tapped = false
