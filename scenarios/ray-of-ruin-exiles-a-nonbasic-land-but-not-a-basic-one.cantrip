@@ -1,0 +1,36 @@
+# Ray of Ruin: "Exile target creature, Vehicle, or nonbasic land." Bot2's Blasted Landscape is a land without the basic supertype, so it
+# is a legal target and is exiled (CR 205.4a); the basic Swamps Bot1 controls are refused. Bot1 casts it on its own turn 3.
+
+[Bot1 Deck]
+Black Lotus x2
+Ray of Ruin
+Swamp x4
+Island
+Lightning Bolt
+Swamp x15
+
+[Bot2 Deck]
+Blasted Landscape
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Blasted Landscape.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Hand.Ray of Ruin.Cast(Bot1.Battlefield.Swamp)
+Bot1.Hand.Ray of Ruin.Cast(Bot2.Battlefield.Blasted Landscape)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt)
+
+[Expect]
+Bot2.Exile.Blasted Landscape.Colors.Count = 0
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard.Count = 0

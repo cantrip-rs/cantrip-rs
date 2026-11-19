@@ -1,0 +1,51 @@
+# Ray of Ruin ({4}{B} sorcery): "Exile target creature, Vehicle, or nonbasic land. Scry 1." Bot2 has an Island (basic land), a Sol Ring
+# (an artifact that is neither a Vehicle nor a creature) and a Memnite. On turn 3 Bot1 pays {4}{B} with two Black Lotuses: the Island, the
+# Sol Ring and Bot1's own Swamp (basic) are refused, the Memnite is exiled (not destroyed), and Bot1 scries the top card, Lightning
+# Bolt, to the bottom (CR 701.22).
+
+[Bot1 Deck]
+Black Lotus x2
+Ray of Ruin
+Swamp x4
+Island
+Lightning Bolt
+Swamp x15
+
+[Bot2 Deck]
+Island
+Sol Ring
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Hand.Ray of Ruin.Cast(Bot2.Battlefield.Island)
+! Bot1.Hand.Ray of Ruin.Cast(Bot2.Battlefield.Sol Ring)
+! Bot1.Hand.Ray of Ruin.Cast(Bot1.Battlefield.Swamp)
+Bot1.Hand.Ray of Ruin.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt)
+
+[Expect]
+Bot2.Exile.Memnite.Power = 1
+Bot2.Graveyard.Count = 0
+Bot1.Graveyard = Ray of Ruin; Black Lotus; Black Lotus
+Bot2.Battlefield.Sol Ring.Power = (absent)
+Bot1.Library = Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Lightning Bolt
