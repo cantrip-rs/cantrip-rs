@@ -1,0 +1,6 @@
+{
+  "name": "Three Blind Mice",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after IV.)\nI — Create a 1/1 white Mouse creature token.\nII, III — Create a token that's a copy of target token you control.\nIV — Creatures you control get +1/+1 and gain vigilance until end of turn."
+}

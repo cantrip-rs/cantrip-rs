@@ -1,0 +1,58 @@
+# Three Blind Mice: "II, III — Create a token that's a copy of target token you control." Turn 2 Bot2 bolts the Mouse token
+# from chapter I, leaving Bot1 no token (Memnite is not a token). Chapters II (turn 3) and III (turn 5) have no legal target, so
+# each is removed from the stack and does nothing (CR 603.3d): no copy is ever made and Bot1's permanents stay the same.
+# Chapter IV (turn 7) still pumps Memnite, and the Saga is then sacrificed (CR 714.4).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Memnite
+Three Blind Mice
+Island x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Three Blind Mice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Memnite; Mouse Token; Mox Jet; Mox Pearl; Plains; Three Blind Mice
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mouse Token)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 5
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Stack.Count = 0
+? Bot1.Battlefield = Memnite; Mox Jet; Mox Pearl; Plains; Three Blind Mice
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+? Stack.Count = 0
+? Bot1.Battlefield = Memnite; Mox Jet; Mox Pearl; Plains; Three Blind Mice
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+
+[Expect]
+Bot1.Battlefield = Memnite; Mox Jet; Mox Pearl; Plains

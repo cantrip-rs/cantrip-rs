@@ -1,0 +1,62 @@
+# Three Blind Mice. Turn 3 Bot1 casts it: chapter I makes a 1/1 white Mouse. Turn 5, chapter II copies the only token Bot1 controls
+# (two Mice). Turn 7, chapter III targets a token: Bot1's Memnite is not a token, so it is no legal target, and a Mouse is copied
+# (three Mice). Turn 9, chapter IV gives every creature Bot1 controls +1/+1 and vigilance until end of turn, then the Saga is
+# sacrificed. On turn 11 the bonus is gone.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Memnite
+Three Blind Mice
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Three Blind Mice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mouse Token.Power = 1
+? Bot1.Battlefield.Mouse Token.Toughness = 1
+? Bot1.Battlefield.Mouse Token.Colors = White
+? Bot1.Battlefield.Count = 6
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 7
+[T7 Bot1.Main1]
+! Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Mouse Token#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 8
+[T9 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mouse Token#1.Power = 2
+? Bot1.Battlefield.Mouse Token#3.Toughness = 2
+? Bot1.Battlefield.Mouse Token#1.Keywords = Vigilance
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Keywords = Vigilance
+[T11 Bot1.Main1]
+? Bot1.Battlefield.Mouse Token#1.Power = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Graveyard.Three Blind Mice.Colors.Count = 1
