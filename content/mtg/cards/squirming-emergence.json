@@ -1,0 +1,6 @@
+{
+  "name": "Squirming Emergence",
+  "manaCost": "{1}{B}{G}",
+  "type": "Sorcery",
+  "oracleText": "Fathomless descent — Return to the battlefield target nonland permanent card in your graveyard with mana value less than or equal to the number of permanent cards in your graveyard."
+}

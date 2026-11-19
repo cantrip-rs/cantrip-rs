@@ -1,0 +1,77 @@
+# Squirming Emergence ({1}{B}{G} sorcery, fathomless descent): "Return to the battlefield target nonland permanent card in your graveyard
+# with mana value less than or equal to the number of permanent cards in your graveyard." Turn 1: Bot1 mills Plains, Serra Angel, Hill Giant and Grizzly
+# Bears with two Thought Scours (the Scours, instants, are no permanent cards): four permanent cards. Turn 2: Bot2, who draws an Island first, mills its own Hill Giant and
+# Grizzly Bears (its graveyard is not Bot1's: it neither raises the count nor holds a target). Turn 3: Serra Angel (value 5) is one over the
+# four and refused, Plains is a land, Bot2's Hill Giant is in the wrong graveyard, and Bot1's Hill Giant, its value exactly four, returns
+# (CR 115.1, 110.4a, 202.3, 207.2c, 400.3). The cost is paid exactly.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Ruby
+Island
+Thought Scour
+Thought Scour
+Plains
+Serra Angel
+Squirming Emergence
+Hill Giant
+Grizzly Bears
+Plains
+Forest x14
+
+[Bot2 Deck]
+Island
+Thought Scour
+Island
+Island
+Island
+Island
+Island
+Island
+Hill Giant
+Grizzly Bears
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 6
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Thought Scour.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard.Count = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Squirming Emergence.Cast(Bot1.Graveyard.Serra Angel)
+! Bot1.Hand.Squirming Emergence.Cast(Bot1.Graveyard.Plains)
+! Bot1.Hand.Squirming Emergence.Cast(Bot2.Graveyard.Hill Giant)
+Bot1.Hand.Squirming Emergence.Cast(Bot1.Graveyard.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Hill Giant.Power = 3
+Bot1.Graveyard.Count = 6
+Bot1.Graveyard.Serra Angel.Power = 4
+Bot1.Graveyard.Grizzly Bears.Power = 2
+Bot2.Graveyard.Hill Giant.Power = 3
+Bot2.Graveyard.Count = 3

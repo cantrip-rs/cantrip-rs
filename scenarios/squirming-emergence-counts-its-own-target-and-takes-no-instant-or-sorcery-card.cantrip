@@ -1,0 +1,43 @@
+# Squirming Emergence with one permanent card in the graveyard (CR 110.4a, 202.3): a Thought Scour mills Sol Ring and Lightning Bolt; the Bolt, an
+# instant, is no permanent card and no target, while Sol Ring is the one card counted, itself, its value of one at most that count. Cost paid exactly.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Ruby
+Island
+Thought Scour
+Squirming Emergence
+Sol Ring
+Lightning Bolt
+Plains
+Forest x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 3
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Squirming Emergence.Cast(Bot1.Graveyard.Lightning Bolt)
+! Bot1.Hand.Squirming Emergence.Cast(Bot1.Graveyard.Thought Scour)
+Bot1.Hand.Squirming Emergence.Cast(Bot1.Graveyard.Sol Ring)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Sol Ring.Power = (absent)
+Bot1.Graveyard.Lightning Bolt.Power = (absent)
+Bot1.Graveyard.Count = 3

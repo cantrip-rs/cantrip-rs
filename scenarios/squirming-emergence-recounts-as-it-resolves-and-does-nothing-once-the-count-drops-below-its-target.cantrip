@@ -1,0 +1,59 @@
+# Squirming Emergence judges its target again as it resolves, against the number of permanent cards in the graveyard then (CR 608.2b,
+# the ruling). Turn 1: Thought Scour mills Grizzly Bears and Plains, two permanent cards. Turn 3: Squirming Emergence targets the Bears (mana
+# value 2, at most the two counted), and Bot2's Scavenging Ooze exiles the Plains in response: one permanent card is left, fewer than the
+# Bears' value, so the target is illegal and the spell does nothing. The Bears stay in the graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Ruby
+Island
+Thought Scour
+Squirming Emergence
+Grizzly Bears
+Plains
+Island x20
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Gleemox
+Scavenging Ooze
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Thought Scour; Plains; Grizzly Bears
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Gleemox.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Scavenging Ooze.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Squirming Emergence.Cast(Bot1.Graveyard.Grizzly Bears)
+Bot2.Battlefield.Gleemox.Activate(Color: Green)
+Bot2.Battlefield.Scavenging Ooze.Activate(Bot1.Graveyard.Plains)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Plains
+Bot1.Battlefield.Grizzly Bears = (absent)
+Bot1.Graveyard = Squirming Emergence; Thought Scour; Grizzly Bears
