@@ -1,0 +1,55 @@
+# Hare Raising (CR 715, sorcery Adventure, {G}): "Target creature you control gains vigilance and gets +X/+X until end of turn, where X
+# is the number of creatures you control." Bot1 controls a Memnite and an Ornithopter (X = 2); Bot2's Ornithopter is not counted and,
+# like Mox Jet (not a creature), is refused as a target. Bot1's Ornithopter (0/2) becomes a 2/4 with vigilance. The card goes to
+# exile; casting the Hare from exile afterwards does not change X, which was counted as the spell resolved. On Bot1's next turn the
+# pump and the vigilance are gone.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Memnite
+Ornithopter
+Pollen-Shield Hare
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Pollen-Shield Hare.Cast(Bot2.Battlefield.Ornithopter; Ability: Adventure)
+! Bot1.Hand.Pollen-Shield Hare.Cast(Mox Jet; Ability: Adventure)
+Bot1.Hand.Pollen-Shield Hare.Cast(Ornithopter; Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Vigilance
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Exile = Pollen-Shield Hare
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Exile.Pollen-Shield Hare.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Pollen-Shield Hare.Power = 2
+Bot1.Battlefield.Memnite.Power = 1
+Exile.Count = 0

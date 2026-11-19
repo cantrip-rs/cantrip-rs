@@ -1,0 +1,14 @@
+{
+  "name": "Pollen-Shield Hare",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Rabbit",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Creature tokens you control get +1/+1.",
+  "adventure": {
+    "name": "Hare Raising",
+    "manaCost": "{G}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Target creature you control gains vigilance and gets +X/+X until end of turn, where X is the number of creatures you control."
+  }
+}

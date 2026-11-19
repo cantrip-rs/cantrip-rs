@@ -1,0 +1,71 @@
+# Pollen-Shield Hare: "Creature tokens you control get +1/+1" (CR 111.1, 613.4c). Turn 1: Bot1's two Goblin tokens are 2/2, while
+# its Memnite (a creature, not a token) and the Hare itself stay 1/1 and 2/2. Turn 2: Bot2's own Goblin tokens are not "you control"
+# and stay 1/1; Bot2's Lightning Bolt kills the Hare and Bot1's tokens shrink back to 1/1.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Memnite
+Pollen-Shield Hare
+Dragon Fodder
+Island x13
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Ruby
+Dragon Fodder
+Lightning Bolt
+Island x15
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pollen-Shield Hare.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Token#1.Power = 2
+? Bot1.Battlefield.Goblin Token#1.Toughness = 2
+? Bot1.Battlefield.Goblin Token#2.Power = 2
+? Bot1.Battlefield.Goblin Token#2.Toughness = 2
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Pollen-Shield Hare.Power = 2
+? Bot1.Battlefield.Pollen-Shield Hare.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Dragon Fodder.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Goblin Token#1.Power = 1
+? Bot2.Battlefield.Goblin Token#1.Toughness = 1
+? Bot2.Battlefield.Goblin Token#2.Power = 1
+? Bot1.Battlefield.Goblin Token#1.Power = 2
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Pollen-Shield Hare)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Goblin Token#1.Power = 1
+Bot1.Battlefield.Goblin Token#1.Toughness = 1
+Bot1.Battlefield.Goblin Token#2.Power = 1
+Bot1.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Goblin Token#1.Power = 1
+Bot1.Graveyard = Pollen-Shield Hare; Dragon Fodder
