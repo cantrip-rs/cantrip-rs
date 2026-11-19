@@ -1,0 +1,49 @@
+# An Aura that goes to the graveyard as a state-based action (CR 704.5m) is "put into a graveyard from the battlefield": Bot1's
+# Pacifism on Bot2's Ornithopter falls off when Lightning Bolt kills it, and the Reaper draws once. The Ornithopter (an
+# artifact creature, not an enchantment) dying draws nothing: one card in hand after the casts, two with the single draw.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Black Lotus
+Ashiok's Reaper
+Pacifism
+Lightning Bolt
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Ornithopter
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ashiok's Reaper.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pacifism.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = Pacifism; Lightning Bolt; Black Lotus

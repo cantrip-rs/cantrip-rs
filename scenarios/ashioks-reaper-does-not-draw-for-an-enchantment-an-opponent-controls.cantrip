@@ -1,0 +1,45 @@
+# "An enchantment you control" (CR 603.10a): Bot2's Pacifism on Bot1's Ashiok's Reaper is put into the graveyard by Bot1's
+# own Disenchant, but Bot2 controls it, so the Reaper does not draw. Bot1's hand is the Disenchant-less 3 cards (two Swamps
+# and one drawn on turn 3); a draw by the Reaper would make it 4.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Black Lotus
+Ashiok's Reaper
+Disenchant
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Pacifism
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ashiok's Reaper.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Pacifism.Cast(Bot1.Battlefield.Ashiok's Reaper)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Disenchant.Cast(Bot2.Battlefield.Pacifism)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot2.Graveyard = Pacifism
+Bot1.Battlefield.Ashiok's Reaper.Tapped = false

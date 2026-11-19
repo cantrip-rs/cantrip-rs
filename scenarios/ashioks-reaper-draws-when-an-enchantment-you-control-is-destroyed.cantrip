@@ -1,0 +1,50 @@
+# Whenever an enchantment you control is put into a graveyard from the battlefield, Ashiok's Reaper draws a card (CR 603.10a):
+# Bot1 puts Pacifism on its own Reaper, and Bot2's Disenchant destroys it, so Bot1 draws once (a hand of 2 cards: the seventh
+# card and the drawn one). The cast Pacifism and the Reaper's own presence do not draw.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Black Lotus
+Ashiok's Reaper
+Pacifism
+Island
+Swamp x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Disenchant
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ashiok's Reaper.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pacifism.Cast(Bot1.Battlefield.Ashiok's Reaper)
+? Bot1.Hand.Count = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Pacifism)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot1.Battlefield.Ashiok's Reaper.Tapped = false
+Bot1.Graveyard = Pacifism; Black Lotus
+Bot2.Graveyard = Disenchant

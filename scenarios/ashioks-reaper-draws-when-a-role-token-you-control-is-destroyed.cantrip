@@ -1,0 +1,47 @@
+# An enchantment token counts (CR 111.7, the 2023-09-01 ruling): the Royal Role that Royal Treatment makes on Bot1's Reaper is
+# put into the graveyard before it ceases to exist when Bot2's Disenchant destroys it, so Bot1 draws: two cards left in hand
+# after the casts, three with the draw.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Ashiok's Reaper
+Royal Treatment
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Disenchant
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ashiok's Reaper.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Royal Treatment.Cast(Bot1.Battlefield.Ashiok's Reaper)
+? Bot1.Hand.Count = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Royal)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand.Count = 3
+LeftBattlefield = Black Lotus (tapped); Royal
+Bot1.Battlefield.Ashiok's Reaper.Tapped = false

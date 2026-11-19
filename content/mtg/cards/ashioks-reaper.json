@@ -1,0 +1,8 @@
+{
+  "name": "Ashiok's Reaper",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Nightmare",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever an enchantment you control is put into a graveyard from the battlefield, draw a card."
+}
