@@ -1,0 +1,43 @@
+# Cartographer's Companion, a 2/1 artifact creature for {3}: "When this creature enters, create a Map token." (CR 111.10s, 603.6a).
+# Two Moxen are not enough for its {3}; with a third it resolves and its trigger makes exactly one Map, under its controller, and the
+# Map ({1}, {T}, sacrifice, sorcery speed) makes it explore (CR 701.44): the revealed Island goes to hand and no counter is put on it.
+
+[Bot1 Deck]
+Cartographer's Companion
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Island
+Island
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+! Bot1.Hand.Cartographer's Companion.Cast(Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Cartographer's Companion.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield = Cartographer's Companion; Mox Emerald; Mox Jet; Mox Sapphire; Map Token
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Map Token.Activate(Bot1.Battlefield.Cartographer's Companion)
+
+[Expect]
+Bot1.Battlefield = Cartographer's Companion; Mox Emerald; Mox Jet; Mox Sapphire
+Bot1.Battlefield.Cartographer's Companion.Power = 2
+Bot1.Battlefield.Cartographer's Companion.Toughness = 1
+Bot1.Hand.Count = 5

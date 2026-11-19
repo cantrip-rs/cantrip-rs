@@ -1,0 +1,8 @@
+{
+  "name": "Cartographer's Companion",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Gnome",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "When this creature enters, create a Map token. (It's an artifact with \"{1}, {T}, Sacrifice this token: Target creature you control explores. Activate only as a sorcery.\")"
+}
