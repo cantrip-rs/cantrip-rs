@@ -2420,12 +2420,20 @@ pub fn sacrifice_this_when_you_do(g: &mut dyn Game, item: &StackItem) -> Result<
     Ok(())
 }
 
-/// "You may sacrifice a creature. When you do, ..." (CR 701.21a, 603.12): the creature is chosen as the ability resolves, not
-/// targeted, and may be the source itself; the card's `delayed` ability number 0 triggers as a reflexive ability only if one was
-/// sacrificed, whether or not the source is still on the battlefield. Grist, the Hunger Tide (-2) and Unscrupulous Contractor
-/// print it, as do Cabal Therapist, Fireblade Artist, Kardur's Vicious Return and Shrapnel Slinger.
+/// "You may sacrifice a creature. When you do, ..." (CR 701.21a, 603.12): `may_sacrifice_when_you_do` with any creature, which
+/// may be the source itself. Grist, the Hunger Tide (-2) and Unscrupulous Contractor print it, as do Cabal Therapist, Fireblade
+/// Artist, Kardur's Vicious Return and Shrapnel Slinger.
 pub fn may_sacrifice_a_creature_when_you_do(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if may_sacrifice(g, item.controller, item.object, crate::select::creature_cards(crate::select::up_to(1)))?.is_empty() {
+    may_sacrifice_when_you_do(g, item, crate::select::creature_cards(crate::select::up_to(1)))
+}
+
+/// "You may sacrifice a [quality]. When you do, ..." (CR 701.21a, 603.12): the permanent `rule` allows is chosen as the ability
+/// resolves, not targeted; the card's `delayed` ability number 0 triggers as a reflexive ability, its targets chosen as it goes
+/// on the stack, only if one was sacrificed, whether or not the source is still on the battlefield. Boilerbilges Ripper, Dahar
+/// Master, Gastal Blockbuster, General Traag, Killmonger, Lithobraking, Selfcraft Mechan and Winter, Tormented Loner (migrated)
+/// and Glorifier of Suffering print it.
+pub fn may_sacrifice_when_you_do(g: &mut dyn Game, item: &StackItem, rule: Selection) -> Result<(), Suspend> {
+    if may_sacrifice(g, item.controller, item.object, rule)?.is_empty() {
         return Ok(());
     }
     g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(item.ability.card, 0), Target::None);

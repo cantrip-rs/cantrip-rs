@@ -15,11 +15,7 @@ fn sacrifice_for_edict(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
     let rule = Selection::new(select::up_to(1))
         .with(select::part(&(creature_or_planeswalker as SelectFn), 0, ""))
         .called("creature or planeswalker");
-    if !effects::may_sacrifice(g, item.controller, item.object, rule)?.is_empty() {
-        let this = g.card_id(&CARD);
-        g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(this, 0), Target::None);
-    }
-    Ok(())
+    effects::may_sacrifice_when_you_do(g, item, rule)
 }
 
 /// "Each opponent sacrifices a creature of their choice" (CR 701.21a, 101.4).

@@ -13,11 +13,7 @@ fn sacrifice_to_destroy(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
     let rule = Selection::new(select::up_to(1))
         .with(select::part(&(creature_or_vehicle as SelectFn), 0, ""))
         .called("creature or Vehicle");
-    if !effects::may_sacrifice(g, item.controller, item.object, rule)?.is_empty() {
-        let this = g.card_id(&CARD);
-        g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(this, 0), Target::None);
-    }
-    Ok(())
+    effects::may_sacrifice_when_you_do(g, item, rule)
 }
 
 pub static CARD: CardDef = CardDef {

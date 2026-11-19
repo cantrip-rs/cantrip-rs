@@ -7,11 +7,7 @@ use cantrip_oracle as oracle;
 /// spell resolves (CR 608.2d, 701.21a), and the reflexive ability (CR 603.12) exists only if an artifact was sacrificed.
 fn lander_then_sacrifice(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     tokens::create_lander(g, item.controller)?;
-    if !effects::may_sacrifice(g, item.controller, item.object, select::artifact_cards(select::up_to(1)))?.is_empty() {
-        let this = g.card_id(&CARD);
-        g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(this, 0), Target::None);
-    }
-    Ok(())
+    effects::may_sacrifice_when_you_do(g, item, select::artifact_cards(select::up_to(1)))
 }
 
 /// "Lithobraking deals 2 damage to each creature": the spell as it last existed (CR 608.2h), every creature at once.

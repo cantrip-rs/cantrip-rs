@@ -12,11 +12,7 @@ const ANOTHER_ARTIFACT: Selection = Selection::of(select::up_to(1), &[select::pa
 /// "When General Traag enters, you may sacrifice another artifact. When you do, ..." (CR 701.21a, 603.12): the sacrifice is
 /// chosen as the ability resolves, and the reflexive ability, with its target, exists only if an artifact was sacrificed.
 fn sacrifice_for_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if !effects::may_sacrifice(g, item.controller, item.object, ANOTHER_ARTIFACT)?.is_empty() {
-        let this = g.card_id(&CARD);
-        g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(this, 0), Target::None);
-    }
-    Ok(())
+    effects::may_sacrifice_when_you_do(g, item, ANOTHER_ARTIFACT)
 }
 
 pub static CARD: CardDef = CardDef {

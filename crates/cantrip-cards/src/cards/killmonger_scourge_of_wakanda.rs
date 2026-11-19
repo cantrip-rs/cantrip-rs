@@ -8,14 +8,7 @@ use cantrip_oracle as oracle;
 /// the creature is chosen as the ability resolves, not targeted, and declining is the empty answer to an up-to-one choice. The
 /// reflexive ability exists only for a creature actually sacrificed, whether or not Killmonger is still on the battlefield.
 fn sacrifice_another_to_destroy(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let you = item.controller;
-    let rule = select::another_creature_permanents(select::up_to(1));
-    if effects::may_sacrifice(g, you, item.object, rule)?.is_empty() {
-        return Ok(());
-    }
-    let this = g.card_id(&CARD);
-    g.reflexive_trigger(item.object, you, AbilityRef::delayed(this, 0), Target::None);
-    Ok(())
+    effects::may_sacrifice_when_you_do(g, item, select::another_creature_permanents(select::up_to(1)))
 }
 
 fn destroy_the_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {

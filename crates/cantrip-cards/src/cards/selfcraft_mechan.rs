@@ -6,11 +6,7 @@ use cantrip_oracle as oracle;
 /// is one) is chosen as the ability resolves, and the reflexive ability, with its target chosen as it goes on the stack, exists
 /// only if one was sacrificed.
 fn sacrifice_for_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if !effects::may_sacrifice(g, item.controller, item.object, select::artifact_cards(select::up_to(1)))?.is_empty() {
-        let this = g.card_id(&CARD);
-        g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(this, 0), Target::None);
-    }
-    Ok(())
+    effects::may_sacrifice_when_you_do(g, item, select::artifact_cards(select::up_to(1)))
 }
 
 /// "Put a +1/+1 counter on target creature and draw a card." If the target is illegal on resolution the ability does not
