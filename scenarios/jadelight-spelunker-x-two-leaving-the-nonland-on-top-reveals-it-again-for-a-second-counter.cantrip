@@ -1,0 +1,42 @@
+# Jadelight Spelunker cast with X = 2: the first explore reveals the Lightning Bolt (a counter) and Bot1 declines to put it into the
+# graveyard, so it is still on top and the second explore reveals it again (a second counter): a 3/3, the Bolt still on top, nothing in the
+# graveyard, and the Mountain below it never revealed.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Jet
+Jadelight Spelunker
+Island
+Island
+Island
+Lightning Bolt
+Mountain
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Jadelight Spelunker.Cast(X: 2)
+Bot1.Decline
+Bot1.Decline
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Mana =
+Stack.Count = 0
+Bot1.Battlefield.Jadelight Spelunker.Power = 3
+Bot1.Battlefield.Jadelight Spelunker.Toughness = 3
+Bot1.Battlefield.Jadelight Spelunker.Counters.PlusOnePlusOne = 2
+Bot1.Graveyard.Count = 0
+Bot1.Hand = Island; Island; Island
+Bot1.Library.Count = 13

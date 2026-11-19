@@ -1,0 +1,48 @@
+# Jadelight Spelunker cast with X = 2 is killed by Bot1's own Lightning Bolt with its enters trigger on the stack. X is still the 2 it was cast
+# with (CR 107.3m) and a creature that has left the battlefield still explores (the ruling), twice: the Lightning Bolt revealed first goes to
+# the graveyard (no counter on anything), then the Mountain goes to the hand.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Jadelight Spelunker
+Lightning Bolt
+Island
+Lightning Bolt
+Mountain
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Jadelight Spelunker.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Jadelight Spelunker)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Graveyard = Lightning Bolt; Jadelight Spelunker; Lightning Bolt
+Bot1.Hand = Island; Mountain
+Bot1.Library.Count = 11

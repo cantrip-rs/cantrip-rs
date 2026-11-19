@@ -1,0 +1,42 @@
+# Jadelight Spelunker cast with X = 2 ({2}{G}) explores twice, one after the other (CR 107.3m, 701.44a): the first reveals the Lightning Bolt
+# (a counter, and Bot1 puts it into the graveyard), the second reveals the Mountain beneath it (a land, into the hand). The Spelunker
+# is a 2/2 with one counter, not two.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Jet
+Jadelight Spelunker
+Island
+Island
+Island
+Lightning Bolt
+Mountain
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Jadelight Spelunker.Cast(X: 2)
+Bot1.Accept
+! Bot1.Accept
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Mana =
+Stack.Count = 0
+Bot1.Battlefield.Jadelight Spelunker.Power = 2
+Bot1.Battlefield.Jadelight Spelunker.Toughness = 2
+Bot1.Battlefield.Jadelight Spelunker.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = Lightning Bolt
+Bot1.Hand = Island; Island; Island; Mountain
+Bot1.Library.Count = 11
