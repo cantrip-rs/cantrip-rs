@@ -1,0 +1,102 @@
+# Wail of the Forgotten (Descend 8): "Choose one. If there are eight or more permanent cards in your graveyard as you cast this spell,
+# choose one or more instead" (CR 700.2, 207.2c, 110.4a). Turn 1: two Thought Scours mill four Grizzly Bears into Bot1's graveyard. Turn 3: Bot2's
+# graveyard holds a Forest (discarded to hand size), which is not Bot1's: Black Lotus sacrificed for mana makes five permanent cards and a third
+# Scour mills two Hill Giants, seven in all. With seven, two modes (and three) are refused as Wail is cast, one is chosen: it returns Bot1's own
+# Mox Jet to hand (a land is no target, CR 115.1; Wail the sorcery is no permanent card). Turn 5: a fourth Scour mills a Hill Giant and a
+# Lightning Bolt, so eight permanent cards (Bot1's Wail the sorcery is not one, nor the Scours, nor the Bolt): all three modes are chosen. The opponent's
+# Ornithopter goes to its hand (mode 1, an opponent's permanent), Bot2 (a player who is not Bot1) discards (mode 2), and Bot1 looks at its
+# top three cards, takes the Lightning Bolt and puts the Ornithopter and the Grizzly Bears into its graveyard (mode 3).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Black Lotus
+Thought Scour
+Thought Scour
+Island
+Grizzly Bears
+Grizzly Bears
+Thought Scour
+Grizzly Bears
+Grizzly Bears
+Wail of the Forgotten
+Island
+Hill Giant
+Hill Giant
+Thought Scour
+Wail of the Forgotten
+Hill Giant
+Lightning Bolt
+Island
+Ornithopter
+Lightning Bolt
+Grizzly Bears
+Plains x20
+
+[Bot2 Deck]
+Forest x8
+Ornithopter
+Forest x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 6
+[T3 Bot1.Main1]
+? Bot2.Graveyard.Count = 1
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 10
+Bot1.Hand.Wail of the Forgotten.Cast
+! Bot1.Modes(1; 2)
+! Bot1.Modes(1; 2; 3)
+Bot1.Modes(1)
+! Bot1.Target(Island)
+Bot1.Target(Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Jet = (absent)
+? Bot1.Hand = Island; Mox Jet; Thought Scour
+[T4 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 14
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wail of the Forgotten.Cast
+Bot1.Modes(1; 2; 3)
+Bot1.Target(Ornithopter)
+! Bot1.Target(Bot1)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt | Ornithopter; Grizzly Bears)
+
+[Expect]
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Hand.Count = 7
+Bot2.Graveyard.Count = 2
+Bot1.Hand = Island; Lightning Bolt
+Bot1.Graveyard.Count = 17
+Bot1.Library.Count = 20
