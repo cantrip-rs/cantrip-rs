@@ -1,0 +1,48 @@
+# Trait Doctoring replaces the color word black with white in Restless Vents's text until end of turn (CR 612.1), and the Vents,
+# animated that turn, becomes a white and red Insect creature, not black and red (CR 612.2). The mana symbols in its abilities are
+# not words and cost what they did.
+
+[Bot1 Deck]
+Restless Vents
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Trait Doctoring
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Restless Vents.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Trait Doctoring.Cast(Restless Vents)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Replace a color word)
+Bot1.Colors(Black)
+Bot1.Colors(White)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Restless Vents.Activate(Ability: Until end of turn)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Restless Vents.Types = Land; Creature
+? Bot1.Battlefield.Restless Vents.Subtypes = Insect
+
+[Expect]
+Bot1.Battlefield.Restless Vents.Colors = Red; White
+Bot1.Battlefield.Restless Vents.Power = 2

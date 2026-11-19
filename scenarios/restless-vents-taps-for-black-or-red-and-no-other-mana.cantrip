@@ -1,0 +1,29 @@
+# "{T}: Add {B} or {R}": on turn 3 black and red are offered (black taken) while white, blue, green and colorless are
+# refused beside them as the positive control; it entered tapped on turn 1 (CR 614.12), so there was no mana before
+# then. It is not a creature here, so its attack trigger does nothing.
+
+[Bot1 Deck]
+Restless Vents
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Restless Vents.Play
+? Bot1.Battlefield.Restless Vents.Tapped = true
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Restless Vents.Activate(Ability: Add; Color: White)
+! Bot1.Battlefield.Restless Vents.Activate(Ability: Add; Color: Blue)
+! Bot1.Battlefield.Restless Vents.Activate(Ability: Add; Color: Green)
+! Bot1.Battlefield.Restless Vents.Activate(Ability: Add; Color: Colorless)
+Bot1.Battlefield.Restless Vents.Activate(Color: Black)
+? Bot1.Mana = {B}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Restless Vents.Activate(Color: Red)
+? Bot1.Mana = {R}
+
+[Expect]
+Turn = 5
+Bot1.Mana = {R}
+Bot1.Battlefield = Restless Vents

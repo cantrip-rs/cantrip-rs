@@ -1,0 +1,64 @@
+# Restless Vents enters tapped on turn 1 and is a plain land. On turn 3 Bot1 pays {1}{B}{R} with three Moxen and animates it: until end
+# of turn it is a 2/3 black and red Insect land creature with menace (CR 613.1d, 613.4b). It attacks beside an Elvish Mystic. Bot2's lone
+# Llanowar Elves may block the ground attacker but not the Vents, which has menace (the refusal beside its control: the same Elves do block
+# the Mystic). Attacking triggers the loot: Bot1 discards a Plains and draws a card (one Plains in hand either side of it), and the Vents deals 2
+# unblocked while the Mystic trades with the Elves. On turn 4 the effect is gone: it is only a Land again.
+
+[Bot1 Deck]
+Restless Vents
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Elvish Mystic
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x14
+
+[Actions]
+Bot1.Hand.Restless Vents.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+? Bot1.Battlefield.Restless Vents.Tapped = true
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Restless Vents.Activate(Ability: Until end of turn)
+Bot1.Attack(Restless Vents > Bot2; Elvish Mystic > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains)
+? Bot1.Battlefield.Restless Vents.Types = Land; Creature
+? Bot1.Battlefield.Restless Vents.Subtypes = Insect
+? Bot1.Battlefield.Restless Vents.Colors = Black; Red
+? Bot1.Battlefield.Restless Vents.Keywords = Menace
+? Bot1.Battlefield.Restless Vents.Power = 2
+? Bot1.Battlefield.Restless Vents.Toughness = 3
+! Bot2.Block(Llanowar Elves > Restless Vents)
+Bot2.Block(Llanowar Elves > Elvish Mystic)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T4 Bot2.Main1]
+
+[Expect]
+Turn = 4
+Bot2.Life = 18
+Bot1.Graveyard = Elvish Mystic; Plains
+Bot1.Hand.Count = 2
+Bot1.Battlefield.Restless Vents.Types = Land
+Bot1.Battlefield.Restless Vents.Colors = (absent)

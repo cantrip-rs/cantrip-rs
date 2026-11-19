@@ -1,0 +1,37 @@
+# Restless Vents: "Whenever this land attacks, you may discard a card. If you do, draw a card." Declining the discard when the animated
+# Vents attacks on turn 3 keeps the hand at its two Plains (one drawn on turn 3), puts nothing in the graveyard and draws nothing; the Vents
+# still deals 2.
+
+[Bot1 Deck]
+Restless Vents
+Mox Jet
+Mox Ruby
+Mox Pearl
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Restless Vents.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Restless Vents.Activate(Ability: Until end of turn)
+Bot1.Attack(Restless Vents > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Graveyard.Count = 0
+Bot2.Life = 18

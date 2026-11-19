@@ -1,0 +1,46 @@
+# {1}{B}{R}: with {R}{W}{G} in the pool (Vents itself tapped for the red) there is no black and the ability is refused;
+# casting Mox Jet and tapping it for {B} makes the same ability payable and it animates (the positive control). On turn 5
+# the same with the colors swapped: {B}{W}{G} has no red and is refused until Mox Ruby is cast and tapped.
+
+[Bot1 Deck]
+Restless Vents
+Mox Pearl
+Mox Emerald
+Mox Jet
+Mox Ruby
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Restless Vents.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Restless Vents.Activate(Ability: Add; Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Restless Vents.Activate(Ability: Until end of turn; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Restless Vents.Activate(Ability: Until end of turn)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Restless Vents.Types = Land; Creature
+[T5 Bot1.Main1]
+Bot1.Battlefield.Restless Vents.Activate(Ability: Add; Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Restless Vents.Activate(Ability: Until end of turn; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Restless Vents.Activate(Ability: Until end of turn)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Restless Vents.Power = 2
+
+[Expect]
+Bot1.Battlefield.Restless Vents.Types = Land; Creature

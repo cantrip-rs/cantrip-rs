@@ -1,0 +1,44 @@
+# Artificial Evolution replaces the creature type Insect with Elf in Restless Vents's text for good (CR 612.1, 612.2). Animated on turn 3 it
+# becomes a black and red Elf creature with menace and 2/3, not an Insect (CR 612.2): the word is read through the words of its own text. Its
+# mana symbols and numbers are not words and cost and give what they did.
+
+[Bot1 Deck]
+Restless Vents
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Artificial Evolution
+Plains
+Plains x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Restless Vents.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artificial Evolution.Cast(Restless Vents)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Insect)
+Bot1.Modes(Elf)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Restless Vents.Activate(Ability: Until end of turn)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Restless Vents.Types = Land; Creature
+
+[Expect]
+Bot1.Battlefield.Restless Vents.Subtypes = Elf
+Bot1.Battlefield.Restless Vents.Colors = Black; Red
+Bot1.Battlefield.Restless Vents.Keywords = Menace
+Bot1.Battlefield.Restless Vents.Power = 2
+Bot1.Battlefield.Restless Vents.Toughness = 3

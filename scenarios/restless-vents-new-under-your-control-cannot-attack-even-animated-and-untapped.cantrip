@@ -1,0 +1,60 @@
+# Restless Vents played on turn 3 enters tapped, and Frantic Search untaps it. Bot1 then animates it with three sources, so it is an
+# untapped creature, but it has not been under Bot1's control continuously since the turn began, so it cannot attack (CR 302.6, 508.1a):
+# the attack is refused beside the Elvish Mystic, which attacks. On turn 5 the same animation lets the same land attack (the positive
+# control) and Bot1's hand is empty, so there is no loot to answer; it deals 2 to Bot2 after the Mystic's 1 (20 - 1 - 2 = 17).
+
+[Bot1 Deck]
+Island
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Elvish Mystic
+Frantic Search
+Restless Vents
+Plains x3
+Plains x10
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Restless Vents.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Frantic Search.Cast
+Bot1.Choose(Plains; Plains)
+Bot1.Choose(Restless Vents; Island)
+Bot1.Pass
+? Bot1.Battlefield.Restless Vents.Tapped = false
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Restless Vents.Activate(Ability: Until end of turn)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Restless Vents.Types = Land; Creature
+? Bot1.Battlefield.Restless Vents.Tapped = false
+! Bot1.Attack(Restless Vents > Bot2)
+Bot1.Attack(Elvish Mystic > Bot2)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Restless Vents.Activate(Ability: Until end of turn)
+Bot1.Attack(Restless Vents > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+? Bot2.Life = 17
+
+[Expect]
+Bot2.Life = 17
