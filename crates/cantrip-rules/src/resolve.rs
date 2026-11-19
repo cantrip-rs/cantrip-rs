@@ -285,6 +285,10 @@ impl Query for Given<'_> {
         self.q.enchanting_forbidden(host, aura)
     }
 
+    fn ability_giver(&self, asker: &Asker) -> Option<ObjectId> {
+        self.q.ability_giver(asker)
+    }
+
     fn can_untap(&self, permanent: ObjectId) -> bool {
         self.q.can_untap(permanent)
     }
@@ -412,6 +416,10 @@ impl Query for Reader<'_> {
 
     fn enchanting_forbidden(&self, host: ObjectId, aura: ObjectId) -> bool {
         layers::enchanting_forbidden(self.cards, self.state, self.events, host, aura)
+    }
+
+    fn ability_giver(&self, asker: &Asker) -> Option<ObjectId> {
+        layers::ability_giver(self.cards, self.state, self.events, asker.by?)
     }
 
     fn can_untap(&self, permanent: ObjectId) -> bool {

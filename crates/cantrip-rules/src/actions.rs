@@ -241,6 +241,10 @@ impl Query for AsSpell<'_> {
         self.q.enchanting_forbidden(host, aura)
     }
 
+    fn ability_giver(&self, asker: &Asker) -> Option<ObjectId> {
+        self.q.ability_giver(asker)
+    }
+
     fn can_untap(&self, permanent: ObjectId) -> bool {
         self.q.can_untap(permanent)
     }
@@ -360,6 +364,10 @@ impl Query for WithWords<'_> {
 
     fn enchanting_forbidden(&self, host: ObjectId, aura: ObjectId) -> bool {
         self.q.enchanting_forbidden(host, aura)
+    }
+
+    fn ability_giver(&self, asker: &Asker) -> Option<ObjectId> {
+        self.q.ability_giver(asker)
     }
 
     fn can_untap(&self, permanent: ObjectId) -> bool {
@@ -4070,6 +4078,10 @@ impl Query for Announcing<'_> {
         self.q.enchanting_forbidden(host, aura)
     }
 
+    fn ability_giver(&self, asker: &Asker) -> Option<ObjectId> {
+        self.q.ability_giver(asker)
+    }
+
     fn can_untap(&self, permanent: ObjectId) -> bool {
         self.q.can_untap(permanent)
     }
@@ -4188,6 +4200,15 @@ impl Query for Watch<'_> {
     fn enchanting_forbidden(&self, host: ObjectId, aura: ObjectId) -> bool {
         self.note(host);
         self.q.enchanting_forbidden(host, aura)
+    }
+
+    fn ability_giver(&self, asker: &Asker) -> Option<ObjectId> {
+        self.note(asker.source);
+        let giver = self.q.ability_giver(asker);
+        if let Some(giver) = giver {
+            self.note(giver);
+        }
+        giver
     }
 
     fn can_untap(&self, permanent: ObjectId) -> bool {
@@ -4963,6 +4984,10 @@ impl Query for AsFace<'_> {
 
     fn enchanting_forbidden(&self, host: ObjectId, aura: ObjectId) -> bool {
         self.cx.enchanting_forbidden(host, aura)
+    }
+
+    fn ability_giver(&self, asker: &Asker) -> Option<ObjectId> {
+        self.cx.ability_giver(asker)
     }
 
     fn can_untap(&self, permanent: ObjectId) -> bool {
@@ -8947,6 +8972,10 @@ impl Query for QueryAsFace<'_> {
         self.q.enchanting_forbidden(host, aura)
     }
 
+    fn ability_giver(&self, asker: &Asker) -> Option<ObjectId> {
+        self.q.ability_giver(asker)
+    }
+
     fn can_untap(&self, permanent: ObjectId) -> bool {
         self.q.can_untap(permanent)
     }
@@ -9144,6 +9173,10 @@ impl Query for WithX<'_> {
 
     fn enchanting_forbidden(&self, host: ObjectId, aura: ObjectId) -> bool {
         self.q.enchanting_forbidden(host, aura)
+    }
+
+    fn ability_giver(&self, asker: &Asker) -> Option<ObjectId> {
+        self.q.ability_giver(asker)
     }
 
     fn can_untap(&self, permanent: ObjectId) -> bool {

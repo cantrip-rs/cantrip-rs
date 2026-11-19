@@ -59,6 +59,7 @@ mod tests {
     impl Query for QueryWithRoomLands {
         fn can_attach_to(&self, _: ObjectId, _: ObjectId) -> bool { unreachable!() }
         fn enchanting_forbidden(&self, _: ObjectId, _: ObjectId) -> bool { unreachable!() }
+        fn ability_giver(&self, _: &Asker) -> Option<ObjectId> { unreachable!() }
         fn can_untap(&self, _: ObjectId) -> bool { unreachable!() }
         fn goaders(&self, _: ObjectId) -> Vec<PlayerId> { unreachable!() }
         fn has_granted_way(&self, _: ObjectId) -> bool { unreachable!() }

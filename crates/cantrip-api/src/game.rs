@@ -875,6 +875,13 @@ pub trait Query {
     /// enchanted by other Auras"), as the layers leave that permanent's abilities.
     fn enchanting_forbidden(&self, host: ObjectId, aura: ObjectId) -> bool;
 
+    /// The object whose effect gave `asker`'s source the ability `asker` asks as (CR 113.2c, 613.1f, 607.5; `Asker::by`), as
+    /// the layers have it now: the Equipment or Aura whose static ability gives it, or the source of the resolved spell or
+    /// ability that granted it. What a granted ability that names the object giving it reads for that name - each of two
+    /// Sunfire Torches (or Spare Daggers, or Dire Blunderbusses) on one creature gives an attack ability naming itself. None for
+    /// an ability of the source's own text, or one it no longer has.
+    fn ability_giver(&self, asker: &Asker) -> Option<ObjectId>;
+
     /// Whether untapping this permanent is a payable action (CR 118.3, 701.26b): it is live, tapped and on the
     /// battlefield, and no rule prohibits it from becoming untapped (CR 101.2). A stun counter does not make the cost
     /// unpayable: removing one replaces the untap and still pays it (CR 118.11, 122.1d). Restrictions on the untap step

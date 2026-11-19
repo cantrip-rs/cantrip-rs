@@ -109,6 +109,23 @@ pub fn ability_givers(cards: &CardTable, state: &GameState, log: &[Record], id: 
     GIVERS.with(|g| g.get())
 }
 
+/// The other object whose effect gave `by.object` the ability `by` names (CR 113.2c, 613.1f, 607.5): of its abilities now,
+/// the one of `by`'s text acquired as `by` was (`given_ability`), and its giver (`ability_givers`) - an Equipment for the
+/// ability it gives the creature, the source of the resolved spell or ability that granted it. None for an ability of the
+/// object's own text or of its own effect, or one it no longer has. Worked out only when asked (`Query::ability_giver`).
+pub fn ability_giver(cards: &CardTable, state: &GameState, log: &[Record], by: Linked) -> Option<ObjectId> {
+    let holder = by.object;
+    let chars = chars(cards, state, log, holder);
+    let givers = ability_givers(cards, state, log, holder);
+    chars
+        .abilities
+        .iter()
+        .zip(givers)
+        .find(|(a, giver)| a.is_some_and(|a| cards.linked_card(a.card) == by.text) && giver.acquired == by.acquired)
+        .map(|(_, giver)| giver.object)
+        .filter(|&giver| giver != ObjectId::NONE && giver != holder)
+}
+
 /// Whether an object could now have an ability by anything but its own text (CR 607.5): a copy effect applied to a permanent
 /// after it entered (`EffectKind::RestoreCopy`), a resolved effect that gives an ability, or a static ability that gives
 /// other objects abilities. With none, every ability is of its object's own text, and nothing is worked out.

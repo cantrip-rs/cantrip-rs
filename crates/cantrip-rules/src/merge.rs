@@ -310,6 +310,10 @@ impl Query for AsText<'_> {
         self.q.enchanting_forbidden(host, aura)
     }
 
+    fn ability_giver(&self, asker: &Asker) -> Option<ObjectId> {
+        self.q.ability_giver(asker)
+    }
+
     fn can_untap(&self, permanent: ObjectId) -> bool {
         self.q.can_untap(permanent)
     }

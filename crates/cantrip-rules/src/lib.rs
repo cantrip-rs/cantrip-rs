@@ -2052,6 +2052,10 @@ impl Query for Game {
         layers::enchanting_forbidden(self.cards, &self.state, &self.log, host, aura)
     }
 
+    fn ability_giver(&self, asker: &Asker) -> Option<ObjectId> {
+        layers::ability_giver(self.cards, &self.state, &self.log, asker.by?)
+    }
+
     fn can_untap(&self, permanent: ObjectId) -> bool {
         ops::can_untap(self, self.cards, permanent)
     }
@@ -2129,6 +2133,10 @@ impl Query for Cx<'_> {
 
     fn enchanting_forbidden(&self, host: ObjectId, aura: ObjectId) -> bool {
         layers::enchanting_forbidden(self.g.cards, &self.g.state, &self.g.log, host, aura)
+    }
+
+    fn ability_giver(&self, asker: &Asker) -> Option<ObjectId> {
+        layers::ability_giver(self.g.cards, &self.g.state, &self.g.log, asker.by?)
     }
     fn mana_ability_cost_objects(&self, component: usize, part: cantrip_api::CostPart) -> Vec<ObjectId> {
         self.g.mana_interval.as_ref().into_iter().flat_map(|i| &i.cost_objects)
