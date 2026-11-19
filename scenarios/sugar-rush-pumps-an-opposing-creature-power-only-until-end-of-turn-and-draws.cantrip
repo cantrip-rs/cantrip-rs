@@ -1,0 +1,38 @@
+# Sugar Rush: "Target creature gets +3/+0 until end of turn. Draw a card." Bot1 casts it on turn 3 at Bot2's Ornithopter (0/2, so
+# an opponent's creature is a legal target and a Mox Pearl, not a creature, is refused): it becomes 3/2 (power only), Bot1 draws exactly one
+# card (the opening seven, minus two Moxen and the Sugar Rush, plus the turn-3 draw and the one it gives, is 6), and the pump is gone on Bot2's next turn.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Sugar Rush
+Swamp x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Sugar Rush.Cast(Mox Pearl)
+Bot1.Hand.Sugar Rush.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 6
+? Bot2.Battlefield.Ornithopter.Power = 3
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+
+[Expect]
+Bot1.Graveyard = Sugar Rush

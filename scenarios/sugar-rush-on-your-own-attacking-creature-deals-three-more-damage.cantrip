@@ -1,0 +1,38 @@
+# Sugar Rush on Bot1's own Ornithopter (0/2 flier) before attacks on turn 3: it becomes 3/2, attacks, and deals exactly 3 combat damage
+# (20 -> 17); Bot1 draws exactly one card from the Rush (7 in hand - 3 cast + turn-3 draw = 5, - Rush + its draw = 5).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Ornithopter
+Sugar Rush
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sugar Rush.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 3
+? Bot1.Hand.Count = 5
+[T3 Bot1.Attackers]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Sugar Rush
+Bot1.Battlefield.Ornithopter.Power = 3

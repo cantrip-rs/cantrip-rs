@@ -1,0 +1,6 @@
+{
+  "name": "Sugar Rush",
+  "manaCost": "{1}{B}",
+  "type": "Instant",
+  "oracleText": "Target creature gets +3/+0 until end of turn.\nDraw a card."
+}
