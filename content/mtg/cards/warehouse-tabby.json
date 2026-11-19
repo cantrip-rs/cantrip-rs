@@ -1,0 +1,8 @@
+{
+  "name": "Warehouse Tabby",
+  "manaCost": "{B}",
+  "type": "Creature — Cat",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Whenever an enchantment you control is put into a graveyard from the battlefield, create a 1/1 black Rat creature token with \"This token can't block.\"\n{1}{B}: This creature gains deathtouch until end of turn."
+}

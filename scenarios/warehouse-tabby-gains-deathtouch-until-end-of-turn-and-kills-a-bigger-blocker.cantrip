@@ -1,0 +1,53 @@
+# Warehouse Tabby: "{1}{B}: This creature gains deathtouch until end of turn." On turn 5 the 1/1 Tabby attacks into Bot2's Yoked Ox
+# (0/4): the pool is exactly {1}{B} for the ability, and after the block the Ox dies to 1 deathtouch damage while the Tabby takes none.
+# On Bot2's turn 6 the deathtouch is gone.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Warehouse Tabby
+Swamp x20
+
+[Bot2 Deck]
+Mox Pearl
+Yoked Ox
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Yoked Ox.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Warehouse Tabby.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Warehouse Tabby.Keywords = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Warehouse Tabby.Activate(Ability: deathtouch)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Warehouse Tabby.Keywords = Deathtouch
+[T5 Bot1.Attackers]
+Bot1.Attack(Warehouse Tabby > Bot2)
+[T5 Bot1.Blockers]
+Bot2.Block(Yoked Ox > Warehouse Tabby)
+[T5 Bot1.Main2]
+? Bot2.Graveyard = Yoked Ox
+? Bot1.Battlefield.Warehouse Tabby.Damage = 0
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Warehouse Tabby.Keywords = (absent)
+
+[Expect]
+Bot2.Graveyard = Yoked Ox
+Bot2.Life = 20
+Bot1.Battlefield.Warehouse Tabby.Keywords = (absent)
