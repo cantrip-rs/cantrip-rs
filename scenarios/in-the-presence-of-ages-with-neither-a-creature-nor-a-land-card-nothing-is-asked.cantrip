@@ -1,0 +1,36 @@
+# In the Presence of Ages: the top four are Lightning Bolt, Giant Growth, Brainstorm and Ancestral Recall, no creature card and no land card, so Bot1 is asked nothing and they all go to the graveyard
+# (the Plains below them is not revealed and stays on top).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+In the Presence of Ages
+Swamp x3
+Lightning Bolt
+Giant Growth
+Brainstorm
+Ancestral Recall
+Plains
+Swamp
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.In the Presence of Ages.Cast
+
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Swamp; Swamp; Swamp
+Bot1.Graveyard = In the Presence of Ages; Ancestral Recall; Brainstorm; Giant Growth; Lightning Bolt
+Bot1.Library = Plains; Swamp
+Stack.Count = 0

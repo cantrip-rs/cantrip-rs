@@ -1,0 +1,6 @@
+{
+  "name": "In the Presence of Ages",
+  "manaCost": "{2}{G}",
+  "type": "Instant",
+  "oracleText": "Reveal the top four cards of your library. You may put a creature card and/or a land card from among them into your hand. Put the rest into your graveyard."
+}

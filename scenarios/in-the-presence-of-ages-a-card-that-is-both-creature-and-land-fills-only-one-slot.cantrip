@@ -1,0 +1,39 @@
+# In the Presence of Ages: Dryad Arbor is a creature card and a land card, but it is one card and fills only one of the two choices. The top four are Dryad Arbor, Forest, Island and Memnite.
+# Bot1 takes the Dryad Arbor as the creature card; it can't be chosen again as the land (the refusal), so the land is the Forest (Island, the other land card, is not wanted too); the Memnite and
+# the Island go to the graveyard.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+In the Presence of Ages
+Swamp x3
+Dryad Arbor
+Forest
+Island
+Memnite
+Plains
+Swamp
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.In the Presence of Ages.Cast
+Bot1.Choose(Dryad Arbor)
+! Bot1.Choose(Dryad Arbor)
+Bot1.Choose(Forest)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Dryad Arbor; Forest; Swamp; Swamp; Swamp
+Bot1.Graveyard = In the Presence of Ages; Memnite; Island
+Bot1.Library = Plains; Swamp
+Stack.Count = 0

@@ -1,0 +1,45 @@
+# In the Presence of Ages: "Reveal the top four cards of your library. You may put a creature card and/or a land card from among them into your hand. Put the rest into your
+# graveyard." (CR 701.20a, 608.2d). The top four are Plains, Memnite, Ornithopter and Island: the creature is chosen first (a land is refused there, Memnite taken as the positive
+# control; two creature cards are refused too), then the land from the rest (a creature is refused there, and so are two lands). Memnite and Plains go to the hand, Ornithopter and Island to the graveyard with the spell, and the Forest
+# below the four stays on top. Bot2's library is untouched.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+In the Presence of Ages
+Swamp x3
+Plains
+Memnite
+Ornithopter
+Island
+Forest
+Swamp
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.In the Presence of Ages.Cast
+! Bot1.Choose(Plains)
+! Bot1.Choose(Memnite; Ornithopter)
+Bot1.Choose(Memnite)
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Plains; Island)
+Bot1.Choose(Plains)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Memnite; Plains; Swamp; Swamp; Swamp
+Bot1.Revealed = Island; Memnite; Ornithopter; Plains
+Bot1.Graveyard = In the Presence of Ages; Island; Ornithopter
+Bot1.Library = Forest; Swamp
+Bot2.Library.Count = 13
+Stack.Count = 0
