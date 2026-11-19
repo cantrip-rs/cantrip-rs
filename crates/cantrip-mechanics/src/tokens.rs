@@ -459,6 +459,16 @@ pub static DINOSAUR: CardDef = CardDef {
     ..token!(Dinosaur)
 };
 
+/// A 3/3 green Dinosaur creature token with no abilities (CR 111.1, 111.4). Nurturing Bristleback and Huatli, Poet of Unity (chapter
+/// I) and Palani's Hatcher make it. (The ones that also have trample are another token.)
+pub static GREEN_DINOSAUR: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Green)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(3),
+    toughness: Some(3),
+    ..token!(Dinosaur)
+};
+
 /// The 3/2 colorless Vehicle artifact token with crew 1 (CR 111, 301.7, 702.122). Chandra, Spark Hunter and Mu Yanling, Wind Rider
 /// make it.
 pub static VEHICLE_CREW_1: CardDef = CardDef {
