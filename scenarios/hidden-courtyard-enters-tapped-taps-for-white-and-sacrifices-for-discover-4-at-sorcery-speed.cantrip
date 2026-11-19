@@ -1,0 +1,69 @@
+# Hidden Courtyard: "This land enters tapped", "{T}: Add {W}" and "{4}{W}, {T}, Sacrifice this land: Discover 4. Activate only as a
+# sorcery." It enters tapped and untaps with the next turn; it taps for {W} alone (Undo takes it back). The discover is refused when
+# five other sources are available but none makes {W} (only blue Mox Sapphires), with a spell on the stack, and outside a main phase;
+# once Mox Pearl is in play it is paid with exactly {4}{W}. It then exiles from the top of the library past an Island (a land) and Ancient
+# Carp (mana value 5, one more than discover 4) and casts Amphin Cutthroat (mana value 4, exactly the limit) for free. The land is
+# sacrificed as a cost, so it is in the graveyard when the discover happens, and the two cards skipped go to the bottom of the library
+# (CR 701.57a, 602.5d, 118.12).
+
+[Bot1 Deck]
+Hidden Courtyard
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Island
+Mox Pearl
+Island
+Ancient Carp
+Amphin Cutthroat
+Island x10
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Hidden Courtyard.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+? Bot1.Battlefield.Hidden Courtyard.Tapped = true
+! Bot1.Battlefield.Hidden Courtyard.Activate(Ability: Add)
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Hidden Courtyard.Tapped = false
+! Bot1.Battlefield.Hidden Courtyard.Activate(Color: Red)
+Bot1.Battlefield.Hidden Courtyard.Activate(Ability: Add {W})
+? Bot1.Mana = {W}
+Bot1.Undo
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+! Bot1.Battlefield.Hidden Courtyard.Activate(Ability: Discover; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+! Bot1.Battlefield.Hidden Courtyard.Activate(Ability: Discover)
+Bot1.Pass
+[T3 Bot1.End]
+! Bot1.Battlefield.Hidden Courtyard.Activate(Ability: Discover)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Mox Sapphire#4.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Hidden Courtyard.Activate(Ability: Discover)
+? Bot1.Mana =
+Bot1.Accept
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Hidden Courtyard
+Bot1.Battlefield.Amphin Cutthroat.Power = 2
+Bot1.Hand = Island; Island
+Exile.Count = 0
+Bot1.Library.Count = 11
