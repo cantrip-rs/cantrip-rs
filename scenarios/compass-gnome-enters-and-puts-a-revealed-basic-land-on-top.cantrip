@@ -1,0 +1,35 @@
+# Compass Gnome: the other half of "a basic land card or Cave card". With a Cave card in the library as well, Bot1 asks for the
+# basic Forest instead: it is found, revealed and put on top, so it is turn 3's draw (CR 701.23, 701.20), and the Cave stays in
+# the library.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Compass Gnome
+Island x4
+Captivating Cave
+Lightning Bolt
+Forest
+Island x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Compass Gnome.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Search(Forest)
+? Bot1.Revealed = Forest
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island; Forest
+Bot1.Library.Count = 12

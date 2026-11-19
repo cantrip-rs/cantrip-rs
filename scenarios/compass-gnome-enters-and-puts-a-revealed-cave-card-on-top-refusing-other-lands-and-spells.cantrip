@@ -1,0 +1,42 @@
+# Compass Gnome: "When this creature enters, you may search your library for a basic land card or Cave card, reveal it, then
+# shuffle and put that card on top." Bot1 accepts and may find only a basic land card or a Cave card: Bloodstained Mire (a
+# nonbasic land that is no Cave) and Lightning Bolt are refused; Captivating Cave (a nonbasic Cave) is found, revealed and ends
+# on top, so it is turn 3's draw (CR 701.23, 701.20, 205.3i). Bot2's library is not searched: its own Captivating Cave stays in it (twelve cards after its turn 2 draw).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Compass Gnome
+Island x4
+Bloodstained Mire
+Lightning Bolt
+Captivating Cave
+Island x10
+
+[Bot2 Deck]
+Captivating Cave
+Swamp x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Compass Gnome.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Search(Bloodstained Mire)
+! Bot1.Search(Lightning Bolt)
+Bot1.Search(Captivating Cave)
+? Bot1.Revealed = Captivating Cave
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island; Captivating Cave
+Bot1.Battlefield.Compass Gnome.Power = 2
+Bot1.Battlefield.Compass Gnome.Toughness = 1
+Bot2.Library.Count = 12
