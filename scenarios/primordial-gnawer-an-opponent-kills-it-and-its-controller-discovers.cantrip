@@ -1,0 +1,54 @@
+# Primordial Gnawer: "When this creature dies, discover 3" goes to the controller of the ability, whoever killed the creature (CR 603.2,
+# 701.57a). Bot2 casts it on turn 2 off Black Lotus, Mox Pearl and Mox Emerald; Bot1 kills it with Lightning Bolt (Mox Ruby). Bot2, not
+# Bot1, discovers: Bot2's Alaborn Trooper (mana value 3) is declined into its hand, and Bot1's own library is untouched.
+
+[Bot1 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Alaborn Trooper
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Primordial Gnawer
+Island x4
+Alaborn Trooper
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Primordial Gnawer.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Primordial Gnawer)
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Graveyard = Primordial Gnawer; Black Lotus
+Bot2.Hand.Alaborn Trooper.Power = 2
+Bot2.Battlefield.Alaborn Trooper = (absent)
+Exile.Count = 0
+Bot1.Library.Count = 21
+Bot1.Hand.Count = 5

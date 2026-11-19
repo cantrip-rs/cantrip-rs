@@ -1,0 +1,50 @@
+# Primordial Gnawer (5/2): "When this creature dies, discover 3" (CR 701.57a). Bot1 casts it off Black Lotus, Mox Pearl and Mox Emerald
+# ({4}{B}) and kills it with its own Lightning Bolt (Mox Ruby). Discover 3 exiles cards from the top of the library until a nonland card
+# with mana value 3 or less: the two Barbarian Hordes (mana value 4, one past the limit) are passed, Alaborn Trooper (mana value 3, exactly
+# the limit) is cast from exile for free, and the Hordes go to the bottom of the library (the same card twice, so their random order
+# cannot matter).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Primordial Gnawer
+Lightning Bolt
+Island
+Barbarian Horde
+Barbarian Horde
+Alaborn Trooper
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Primordial Gnawer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Primordial Gnawer)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Primordial Gnawer; Lightning Bolt; Black Lotus
+Bot1.Battlefield.Alaborn Trooper.Power = 2
+Bot1.Battlefield.Alaborn Trooper.Toughness = 3
+Bot1.Hand.Count = 1
+Exile.Count = 0
+Bot1.Library.Count = 22

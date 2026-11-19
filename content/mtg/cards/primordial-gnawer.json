@@ -1,0 +1,8 @@
+{
+  "name": "Primordial Gnawer",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Insect Horror",
+  "power": 5,
+  "toughness": 2,
+  "oracleText": "When this creature dies, discover 3. (Exile cards from the top of your library until you exile a nonland card with mana value 3 or less. Cast it without paying its mana cost or put it into your hand. Put the rest on the bottom in a random order.)"
+}
