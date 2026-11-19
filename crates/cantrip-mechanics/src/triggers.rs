@@ -1446,6 +1446,18 @@ pub fn an_opponent_casts_a_spell(q: &dyn Query, me: &Asker, event: &Event) -> Op
     }
 }
 
+/// "Whenever a player casts a spell, if it's not their turn" (CR 601.2i, 603.2, 603.4): any player's spell cast (not a copy,
+/// CR 707.10), the ability's controller included, judged by whose turn it is as it is cast. The condition is the intervening
+/// "if" (CR 603.4); a turn cannot change while the ability waits on the stack, so the check as it resolves (CR 603.4) holds
+/// whenever the check as it triggers does. The ability is about the player who cast it (`StackItem::subject`, "them"). Adrenaline
+/// Jockey and Scytheclaw Raptor print it.
+pub fn a_player_casts_a_spell_on_a_turn_not_theirs(q: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::SpellCast { player, .. } if q.state().turn.active != *player => Fired::about(Target::Player(*player)),
+        _ => None,
+    }
+}
+
 /// "For each of that spell's colors", for an ability `you_cast_a_spell_about_it` put on the stack: the colors the
 /// spell has as the ability resolves, or as it last was on the stack if it has left (CR 608.2h), so a spell made another color
 /// in the meantime is counted as it now is, and one countered first as it was. Ramos, Dragon Engine and Ancient Cornucopia
