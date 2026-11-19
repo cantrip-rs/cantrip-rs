@@ -1,0 +1,48 @@
+# Pugnacious Hammerskull: Bot1 controls a second Pugnacious Hammerskull (cast on turn 3 with Black Lotus, so it stays home: it is summoning sick), a
+# Dinosaur other than the attacker. The first one attacks on turn 3, deals 6 and gets no stun counter: the condition is not met. It stays untapped for
+# turn 5 and can attack again (with both Hammerskulls, 12 more: Bot2 at 2) and neither gets a counter.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Pugnacious Hammerskull
+Pugnacious Hammerskull
+Black Lotus
+Forest
+Forest x30
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pugnacious Hammerskull.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Pugnacious Hammerskull.Cast
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Pugnacious Hammerskull#1 > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 14
+? Bot1.Battlefield.Pugnacious Hammerskull#1.Counters.Stun = (absent)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Pugnacious Hammerskull#1 > Bot2; Pugnacious Hammerskull#2 > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 2
+Bot1.Battlefield.Pugnacious Hammerskull#1.Counters.Stun = (absent)
+Bot1.Battlefield.Pugnacious Hammerskull#2.Counters.Stun = (absent)

@@ -1,0 +1,8 @@
+{
+  "name": "Pugnacious Hammerskull",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Whenever this creature attacks while you don't control another Dinosaur, put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)"
+}
