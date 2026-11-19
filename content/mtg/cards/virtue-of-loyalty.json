@@ -1,0 +1,12 @@
+{
+  "name": "Virtue of Loyalty",
+  "manaCost": "{3}{W}{W}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of your end step, put a +1/+1 counter on each creature you control. Untap those creatures.",
+  "adventure": {
+    "name": "Ardenvale Fealty",
+    "manaCost": "{1}{W}",
+    "type": "Instant — Adventure",
+    "oracleText": "Create a 2/2 white Knight creature token with vigilance. (Then exile this card. You may cast the enchantment later from exile.)"
+  }
+}

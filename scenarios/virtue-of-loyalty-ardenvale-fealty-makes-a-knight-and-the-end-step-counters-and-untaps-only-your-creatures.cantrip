@@ -1,0 +1,69 @@
+# Virtue of Loyalty // Ardenvale Fealty. Turn 1: Ardenvale Fealty ({1}{W}, an instant) creates a 2/2 Knight with vigilance and the
+# card goes on an adventure (exile). No Virtue yet, so the end step does nothing (Memnite stays a 1/1). Turn 3: Virtue of
+# Loyalty is cast from exile ({3}{W}{W}); Bot1 attacks with Memnite and the Knight (the vigilant Knight stays untapped).
+# At the beginning of Bot1's end step each creature it controls gets a +1/+1 counter and untaps: Memnite 2/2 untapped, Knight
+# 3/3; the tapped Moxen and Plains (not creatures) stay tapped and Bot2's Ornithopter gets nothing.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Black Lotus
+Memnite
+Virtue of Loyalty
+Mox Jet
+Mox Sapphire
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Virtue of Loyalty.Cast(Ability: Ardenvale Fealty)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Knight Token.Power = 2
+? Bot1.Battlefield.Knight Token.Keywords = Vigilance
+? Exile.Count = 1
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Virtue of Loyalty.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Memnite; Knight Token > Bot2)
+[T3 Bot1.End]
+? Bot1.Battlefield.Memnite.Tapped = True
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Tapped = False
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Knight Token.Power = 3
+? Bot1.Battlefield.Knight Token.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Mox Jet.Tapped = True
+? Bot1.Battlefield.Plains#1.Tapped = True
+? Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+
+[Expect]
+Bot1.Battlefield.Knight Token.Tapped = False
