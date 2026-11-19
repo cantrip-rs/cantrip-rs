@@ -34,20 +34,25 @@ from pathlib import Path
 
 from . import distributed
 
-# The judgements, as the pair miner made gen5's: each fork by two independent seeds (pooled), the first also writing
-# the targets; the losers' decisions once, with targets.
+# The judgements. Deciding apart from teaching (2026-11-18): each fork's verdict from two independent seeds at the
+# fork budget (pooled), which decides which forks are kept; the targets from one deeper run (`DEEP_RUN`); the losers'
+# decisions once, with targets. The first verdict run also searches the position unfloored (the report's agreement).
 FORK_RUNS = (("forks-a", 1, True), ("forks-b", 2, False))
+DEEP_RUN = "forks-deep"
 LOSERS_RUN = "losers"
 
 
 @dataclass
 class Settings:
-    # The forks at 32768 simulations x 16 worlds a seed, two seeds pooled (32 paired worlds, as one 8192 x 32 run had):
-    # on gen8's 397 decided forks a search picked the pooled verdict's better move 69.5% of the time at 64
-    # simulations, 75.8% at 512, 79.1% at 4096 x 8 and 82.9% at 32768 x 8 (2026-11-18), still rising; judging selected
-    # positions that deep costs little beside playing at it. The losers' decisions at 8192 x 16.
-    fork_simulations: int = 32768
-    fork_worlds: int = 16
+    # The verdicts at 8192 x 32 a seed, two seeds pooled (64 paired worlds: about two thirds of gen8's forks decided,
+    # in 23 minutes on a worker); at 32768 x 16 a seed gen9's were decided at 45% and took about two hours.
+    fork_simulations: int = 8192
+    fork_worlds: int = 32
+    # The targets deeper: on gen8's 397 decided forks a search picked the pooled verdict's better move 69.5% of the
+    # time at 64 simulations, 75.8% at 512, 79.1% at 4096 x 8 and 82.9% at 32768 x 8, still rising (2026-11-18).
+    deep_simulations: int = 32768
+    deep_worlds: int = 8
+    # The losers' decisions at 8192 x 16.
     loser_simulations: int = 8192
     loser_worlds: int = 16
     batch: int = 32
@@ -91,6 +96,9 @@ def judge_runs(p: Paths, s: Settings, model: str, prior: str, here: Path, judge_
         runs.append(dict(name=name, args=["mine-judge", "--plan", str(here / "plan-forks.jsonl"), *dirs, "--out",
                                           f"{judge_dir}/{name}", "--simulations", str(s.fork_simulations), "--worlds",
                                           str(s.fork_worlds), "--seed", str(seed), "--targets", str(targets).lower(), *common]))
+    runs.append(dict(name=DEEP_RUN, args=["mine-judge", "--plan", str(here / "plan-forks.jsonl"), *dirs, "--out",
+                                          f"{judge_dir}/{DEEP_RUN}", "--simulations", str(s.deep_simulations), "--worlds",
+                                          str(s.deep_worlds), "--seed", "3", "--targets", "true", *common]))
     runs.append(dict(name=LOSERS_RUN, args=["mine-judge", "--plan", str(here / "plan-losers.jsonl"), *dirs, "--out",
                                             f"{judge_dir}/{LOSERS_RUN}", "--simulations", str(s.loser_simulations),
                                             "--worlds", str(s.loser_worlds), "--seed", "1", "--targets", "true", *common]))

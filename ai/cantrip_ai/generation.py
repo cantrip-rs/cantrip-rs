@@ -1719,7 +1719,7 @@ def main(argv=None):
                 raise SystemExit(f"the judgements on {job['worker']} failed: {exit_}")
             mining.clear(p.judge)
             judge.fetch(job["nonce"], p.judge)
-        judged = mining.check_judged(p.judge, [name for name, _, _ in mining.FORK_RUNS] + [mining.LOSERS_RUN])
+        judged = mining.check_judged(p.judge, [name for name, _, _ in mining.FORK_RUNS] + [mining.DEEP_RUN, mining.LOSERS_RUN])
         log(f"  judged: {json.dumps(judged)}")
         py = [sys.executable, "-m", "cantrip_ai.mine"]
         pyenv = dict(PYTHONPATH=str(REPO / "ai"))
@@ -1731,7 +1731,8 @@ def main(argv=None):
         kept = json.loads(text.strip().splitlines()[-1])
         producer = f"mine:{job['model']}@gen{gen}"
         for split, dest in (("train", p.targets), ("heldout", p.heldout)):
-            for run_dir in (runs[0], p.judge / mining.LOSERS_RUN):
+            # The forks' targets from the deeper run, of the forks the verdict runs decided (the keep lists).
+            for run_dir in (p.judge / mining.DEEP_RUN, p.judge / mining.LOSERS_RUN):
                 if (run_dir / split).is_dir():
                     run([EXPLORE, "mine-filter", "--from", run_dir / split, "--keep", p.keep / f"keep-{split}.jsonl",
                          "--out", dest / run_dir.name, "--producer", producer],
@@ -1740,7 +1741,8 @@ def main(argv=None):
         (p.root / "settings.json").write_text(json.dumps(dict(
             # The keys `mine report` reads.
             fork=f"{settings.fork_simulations} simulations x {settings.fork_worlds} worlds, two seeds pooled",
-            target=f"{settings.fork_simulations} x {settings.fork_worlds}, the first seed's",
+            target=f"{settings.fork_simulations} x {settings.fork_worlds}, the first seed's (training's targets: "
+                   f"{settings.deep_simulations} x {settings.deep_worlds})",
             loser=f"{settings.loser_simulations} simulations x {settings.loser_worlds} worlds", kl_min=settings.kl_min)),
             encoding="utf-8")
         run([*py, "report", "--selected", p.selected, "--forks", p.forks, "--runs", *runs, "--losers",
@@ -1790,7 +1792,7 @@ def main(argv=None):
             # The rule's stop line and the pairing mode must be this run's as well: a log of another rule or pairing is
             # another gate.
             text = gate_log.read_text(encoding="utf-8", errors="replace")
-            lines = gate_stop_lines(args.accept, args.gate_early_stop, args.gate_stop_z, args.gate_stop_min_pairs,
+            lines = gate_stop_lines(args.accept, args.gate_early_stop and args.no_mine, args.gate_stop_z, args.gate_stop_min_pairs,
                                     args.gate_stop_min_decisive)
             if gate_reusable(text, champ.name, name, lines, dealt_marker()):
                 try:
@@ -1807,7 +1809,9 @@ def main(argv=None):
             extra = ["--sprt", *tested]
         elif args.accept == "sprt-paired":
             extra = ["--sprt-paired", *tested]
-        elif args.accept == "above-half" and args.gate_early_stop:
+        elif args.accept == "above-half" and args.gate_early_stop and args.no_mine:
+            # With pair mining the gate plays all its pairs: they are the miner's material (gen9's gate stopped at 294
+            # pairs and left 58 decisive ones).
             extra = ["--interval-stop", "--interval-z", args.gate_stop_z, "--interval-min-pairs", args.gate_stop_min_pairs,
                      "--interval-min-decisive", args.gate_stop_min_decisive]
         result = duel("gate", name, name, [model_dir, champ], args.gate_games, seed + 5_000_000, extra, champ)

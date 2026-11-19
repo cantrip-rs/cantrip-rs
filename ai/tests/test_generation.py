@@ -209,9 +209,16 @@ class GenerationTest(unittest.TestCase):
             out = io.StringIO()
             with contextlib.redirect_stdout(out):
                 generation.main(["--root", str(root), "--dry-run", "--decks-dir", str(decks), "--accept", "above-half",
-                                 "--gate-early-stop", "--gate-stop-min-pairs", "200"])
+                                 "--gate-early-stop", "--gate-stop-min-pairs", "200", "--no-mine"])
             self.assertRegex(out.getvalue(), r"duel --a neural@64 .*--pairings .* --interval-stop --interval-z 2.58 --interval-min-pairs 200 "
                                              r"--interval-min-decisive 30")
+            # With pair mining (the default) the gate plays all its pairs, the miner's material: no early stop.
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                generation.main(["--root", str(root), "--dry-run", "--decks-dir", str(decks), "--accept", "above-half",
+                                 "--gate-early-stop"])
+            gate = next(line for line in out.getvalue().splitlines() if " duel --a " in line)
+            self.assertNotIn("--interval-stop", gate)
             self.assertNotIn("value_eval", out.getvalue(), "no held-out set, no evaluate stage")
             out = io.StringIO()
             with contextlib.redirect_stdout(out):

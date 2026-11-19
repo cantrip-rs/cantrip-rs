@@ -65,7 +65,9 @@ class Mining(unittest.TestCase):
 
     def test_judge_runs_are_the_forks_twice_and_the_losers_once(self):
         runs = mining.judge_runs(mining.Paths(Path("g")), mining.Settings(), "model", "decks", Path("here"), "judge")
-        self.assertEqual([r["name"] for r in runs], ["forks-a", "forks-b", "losers"])
+        self.assertEqual([r["name"] for r in runs], ["forks-a", "forks-b", "forks-deep", "losers"])
+        deep = runs[2]["args"]
+        self.assertEqual((deep[deep.index("--simulations") + 1], deep[deep.index("--targets") + 1]), ("32768", "true"))
         self.assertIn("--targets", runs[0]["args"])
         self.assertEqual(runs[0]["args"][runs[0]["args"].index("--targets") + 1], "true")
         self.assertEqual(runs[1]["args"][runs[1]["args"].index("--targets") + 1], "false")
