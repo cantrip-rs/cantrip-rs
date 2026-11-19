@@ -1,0 +1,6 @@
+{
+  "name": "Poetic Ingenuity",
+  "manaCost": "{2}{R}",
+  "type": "Enchantment",
+  "oracleText": "Whenever one or more Dinosaurs you control attack, create that many Treasure tokens.\nWhenever you cast an artifact spell, create a 3/1 red Dinosaur creature token. This ability triggers only once each turn."
+}

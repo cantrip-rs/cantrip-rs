@@ -1,0 +1,60 @@
+# Poetic Ingenuity: casting Memnite (an artifact spell) after it is out makes a 3/1 red Dinosaur; casting Ornithopter the same turn makes no
+# second one ("only once each turn", CR 603.2h). Bot2's own artifact cast on turn 2 is not "you cast". On turn 3 the Dinosaur attacks beside
+# the non-Dinosaur Memnite: one Dinosaur, one Treasure (Bot2: 20 - 3 - 1 = 16).
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Poetic Ingenuity
+Memnite
+Ornithopter
+Island
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Poetic Ingenuity.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Pearl; Poetic Ingenuity; Memnite; Dinosaur Token
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Pearl; Poetic Ingenuity; Memnite; Dinosaur Token; Ornithopter
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 7
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Dinosaur Token > Bot2; Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Pearl; Poetic Ingenuity; Memnite; Dinosaur Token; Ornithopter; Treasure Token
+Bot1.Battlefield.Treasure Token.Tapped = false

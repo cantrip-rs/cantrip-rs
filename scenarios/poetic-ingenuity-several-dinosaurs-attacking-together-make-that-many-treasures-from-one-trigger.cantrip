@@ -1,0 +1,56 @@
+# Two Dinosaur tokens (one made on turn 1, one on turn 3: the once-each-turn limit resets) attack together on turn 5: one "one or more" trigger
+# (CR 603.2c) counts both, so after a single resolution there are two Treasures (not one for a Dinosaur-and-the-rest, not three), and the
+# 3/1s hit for 6 (Bot2: 14).
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Poetic Ingenuity
+Memnite
+Ornithopter
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Poetic Ingenuity.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 8
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Dinosaur Token#1 > Bot2; Dinosaur Token#2 > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 10
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Count = 10
