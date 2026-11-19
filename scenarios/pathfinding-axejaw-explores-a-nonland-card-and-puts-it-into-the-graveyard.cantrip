@@ -1,0 +1,43 @@
+# Pathfinding Axejaw explores a nonland card (CR 701.44a): the Lightning Bolt revealed on top gives the Axejaw a +1/+1 counter
+# (a 5/4) and Bot1, offered the card, puts it into the graveyard; the Mountain below it is now the top of the library and not in
+# the hand, since it was never revealed.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Jet
+Mox Pearl
+Pathfinding Axejaw
+Island
+Island
+Lightning Bolt
+Mountain
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pathfinding Axejaw.Cast
+Bot1.Accept
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Battlefield.Pathfinding Axejaw.Power = 5
+Bot1.Battlefield.Pathfinding Axejaw.Toughness = 4
+Bot1.Battlefield.Pathfinding Axejaw.Counters.PlusOnePlusOne = 1
+Bot1.Hand = Island; Island
+Bot1.Graveyard = Lightning Bolt
+Bot1.Library.Count = 12
+Bot1.Library = Mountain; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island
+Stack.Count = 0
