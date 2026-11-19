@@ -1,0 +1,41 @@
+# Belligerent Yearling: "that creature's power" is read as the ability resolves (CR 608.2h), not as the Dinosaur entered - Bot1 casts the Yearling and a Giant
+# Cindermaw (a 4/3 Dinosaur), and with the trigger on the stack casts Giant Growth on the Cindermaw. Bot1 accepts and the Yearling's base power becomes 7, not 4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Belligerent Yearling
+Giant Cindermaw
+Giant Growth
+Mountain
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Belligerent Yearling.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Giant Cindermaw.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Giant Cindermaw)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Giant Cindermaw.Power = 7
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Battlefield.Belligerent Yearling.Power = 7
+Bot1.Battlefield.Belligerent Yearling.Toughness = 2

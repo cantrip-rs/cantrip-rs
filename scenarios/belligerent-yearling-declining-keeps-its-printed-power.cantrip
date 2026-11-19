@@ -1,0 +1,31 @@
+# Belligerent Yearling: "you may have this creature's base power become equal to that creature's power" - Bot1 declines when Giant Cindermaw (a 4/3 Dinosaur) enters, so the Yearling
+# stays a 3/2 (CR 603.5).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Belligerent Yearling
+Giant Cindermaw
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Belligerent Yearling.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Giant Cindermaw.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Battlefield.Belligerent Yearling.Power = 3
+
+[Expect]
+Bot1.Battlefield.Belligerent Yearling.Power = 3
+Bot1.Battlefield.Giant Cindermaw.Power = 4

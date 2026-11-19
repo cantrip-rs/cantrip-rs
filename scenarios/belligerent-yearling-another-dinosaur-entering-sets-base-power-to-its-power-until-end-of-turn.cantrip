@@ -1,0 +1,34 @@
+# Belligerent Yearling: "Whenever another Dinosaur you control enters, you may have this creature's base power become equal to that creature's power until end of turn." (CR 613.4b, 611.2a)
+# Turn 1 Bot1 casts the Yearling (3/2) and then a Giant Cindermaw (a 4/3 Dinosaur) with Black Lotus and two Moxen. Bot1 accepts: the Yearling's base power becomes 4 and its toughness is
+# untouched, a 4/2; the effect ends with the turn and it is a 3/2 again on turn 2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Belligerent Yearling
+Giant Cindermaw
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Belligerent Yearling.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Giant Cindermaw.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Battlefield.Belligerent Yearling.Power = 4
+? Bot1.Battlefield.Belligerent Yearling.Toughness = 2
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Belligerent Yearling.Power = 3
+Bot1.Battlefield.Belligerent Yearling.Toughness = 2

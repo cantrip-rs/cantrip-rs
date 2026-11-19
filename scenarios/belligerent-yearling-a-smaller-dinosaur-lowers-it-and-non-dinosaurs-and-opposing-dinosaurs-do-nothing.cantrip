@@ -1,0 +1,47 @@
+# Belligerent Yearling: only "another Dinosaur you control" triggers it (CR 603.2c) - Bot1's own Ornithopter (not a Dinosaur) and Bot2's Giant Cindermaw (not under Bot1's control) enter
+# without any question. The base power is set to the entering creature's power, not raised to it: on turn 3 Bot1 casts a Nest Robber (a 2/1 Dinosaur), accepts, and the Yearling is a 2/2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Belligerent Yearling
+Ornithopter
+Nest Robber
+Plains x14
+
+[Bot2 Deck]
+Black Lotus
+Giant Cindermaw
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Belligerent Yearling.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Belligerent Yearling.Power = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Giant Cindermaw.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Belligerent Yearling.Power = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nest Robber.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Battlefield.Belligerent Yearling.Power = 2
+
+[Expect]
+Bot1.Battlefield.Belligerent Yearling.Toughness = 2
