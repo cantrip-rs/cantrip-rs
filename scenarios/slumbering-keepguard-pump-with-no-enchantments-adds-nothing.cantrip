@@ -1,0 +1,38 @@
+# Slumbering Keepguard: the pump counts the enchantments you control as it resolves. With none, {2}{W} gives +0/+0: the 1/1
+# stays a 1/1. (With Disenchant destroying Flood in response to the activation there are none either, though one was
+# there when it was activated: Flood goes first, then the activation resolves.)
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Slumbering Keepguard
+Flood
+Disenchant
+Island x10
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Slumbering Keepguard.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Slumbering Keepguard.Power = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Slumbering Keepguard.Activate(Ability: {2}{W})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Slumbering Keepguard.Power = 1
+? Bot1.Battlefield.Slumbering Keepguard.Toughness = 1
+
+[Expect]
+Bot1.Battlefield.Slumbering Keepguard.Toughness = 1

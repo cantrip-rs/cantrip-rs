@@ -1,0 +1,67 @@
+# Slumbering Keepguard: "Whenever an enchantment you control enters, scry 1." and "{2}{W}: This creature gets +1/+1 until
+# end of turn for each enchantment you control." Turn 1: Keepguard, then Flood (scry 1: the Mox Ruby on top goes to the
+# bottom) and Holy Strength on the Keepguard (scry 1: the Island on top stays), so Bot1 draws that Island on turn 3. Turn 2:
+# Bot2's own Flood enters: no scry for Bot1 (`! Bot1.Arrange`). Turn 3: {2}{W} with two enchantments of Bot1's and one of
+# Bot2's on the battlefield: +2/+2 only, so the Keepguard (1/1, +1/+2 from Holy Strength) is 4/5 until end of turn and a
+# 2/3 again on turn 5.
+
+[Bot1 Deck]
+Plains
+Mox Sapphire
+Mox Pearl
+Slumbering Keepguard
+Flood
+Holy Strength
+Mox Jet
+Mox Ruby
+Island
+Island x10
+
+[Bot2 Deck]
+Island
+Flood
+Island x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Slumbering Keepguard.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flood.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Mox Ruby)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Holy Strength.Cast(Bot1.Battlefield.Slumbering Keepguard)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Flood.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot1.Arrange
+[T3 Bot1.Main1]
+? Bot1.Hand = Island
+? Bot1.Battlefield.Slumbering Keepguard.Power = 2
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Slumbering Keepguard.Activate(Ability: {2}{W})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Slumbering Keepguard.Power = 4
+? Bot1.Battlefield.Slumbering Keepguard.Toughness = 5
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Slumbering Keepguard.Power = 2
+? Bot1.Battlefield.Slumbering Keepguard.Toughness = 3
+
+[Expect]
+Bot2.Battlefield.Flood.Tapped = False
