@@ -1,0 +1,30 @@
+# Brazen Blademaster: the artifacts must be ones "you control" and there must be two or more (CR 109.4). Bot1 pays with Black Lotus and
+# keeps a single Mox Ruby; Bot2 controls two Moxen. Bot1's attacking Blademaster controls only one artifact, so it stays a 2/3 and deals 2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Brazen Blademaster
+Plains x12
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Brazen Blademaster.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Brazen Blademaster > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Brazen Blademaster.Power = 2
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Brazen Blademaster.Toughness = 3

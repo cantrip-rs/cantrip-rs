@@ -1,0 +1,31 @@
+# Brazen Blademaster: "Whenever this creature attacks while you control two or more artifacts, it gets +2/+1 until end of turn."
+# Bot1 pays for it with Mox Ruby, Mox Jet and a Mountain, so it attacks on turn 3 controlling exactly two artifacts (the boundary): it
+# becomes a 4/4 until end of turn (CR 611.2a) and deals 4. The pump lasts until end of turn.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mountain
+Brazen Blademaster
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Brazen Blademaster.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Brazen Blademaster > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Brazen Blademaster.Power = 4
+? Bot1.Battlefield.Brazen Blademaster.Toughness = 4
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Brazen Blademaster.Power = 4

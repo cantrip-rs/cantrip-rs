@@ -1,0 +1,8 @@
+{
+  "name": "Brazen Blademaster",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Orc Pirate",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever this creature attacks while you control two or more artifacts, it gets +2/+1 until end of turn."
+}

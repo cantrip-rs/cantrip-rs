@@ -1,0 +1,39 @@
+# Brazen Blademaster: the "while you control two or more artifacts" is checked as the attack is declared, not when the trigger resolves
+# (it is not an intervening if, CR 603.4). Bot1 attacks with Mox Ruby and Mox Jet in play; Bot2 responds with Shatter on Mox Jet, leaving
+# Bot1 one artifact, yet the Blademaster still resolves to a 4/4 and deals 4.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mountain
+Brazen Blademaster
+Plains x12
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Shatter
+Island x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Brazen Blademaster.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Brazen Blademaster > Bot2)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Mox Jet)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Mox Jet = (absent)
+Bot1.Battlefield.Brazen Blademaster.Power = 4
+Bot2.Life = 16
