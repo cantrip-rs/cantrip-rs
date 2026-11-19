@@ -1,0 +1,53 @@
+# The Belligerent's permission is "until end of turn" (CR 611.2a): it attacks on turn 3 and Bot1 uses none of it, then on turn 5 it neither
+# lets Bot1 look at the top card nor play the Forest on top as the turn's land (the land drop is unused, so the refusal is real), while the
+# Treasure from the trigger stays. The Belligerent stays home on turn 5, so nothing is granted again.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+The Belligerent
+Memnite
+Memnite
+Memnite
+Island
+Forest
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Belligerent.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.The Belligerent.Activate(Ability: Crew)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(The Belligerent > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.MayLookAtLibraryTop = true
+[T5 Bot1.Main1]
+? Bot1.MayLookAtLibraryTop = (absent)
+? Bot1.Library.Top = Forest
+! Bot1.Library.Forest.Play
+Bot1.Hand.Island.Play
+
+[Expect]
+Turn = 5
+Bot2.Life = 15
+Bot1.Battlefield.Treasure Token.Subtypes = Treasure
+Bot1.Library.Top = Forest

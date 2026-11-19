@@ -1,0 +1,8 @@
+{
+  "name": "The Belligerent",
+  "manaCost": "{2}{U}{R}",
+  "type": "Legendary Artifact — Vehicle",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Whenever The Belligerent attacks, create a Treasure token. Until end of turn, you may look at the top card of your library any time, and you may play lands and cast spells from the top of your library.\nCrew 3"
+}

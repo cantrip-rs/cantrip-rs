@@ -1,0 +1,74 @@
+# The Belligerent (5/5 Vehicle, Crew 3; "whenever it attacks, create a Treasure token. Until end of turn, you may look at the top card of your
+# library any time, and you may play lands and cast spells from the top of your library"). Turn 1: four Moxen pay {2}{U}{R}; the three Memnites
+# are cast for free. Turn 3: the Memnites crew it (total power 3) and it attacks. With the trigger on the stack Bot1 may neither look at the top
+# card nor cast the Lightning Bolt on it. Once it resolves Bot1 has a Treasure, may look (CR 401.2), and casts the Bolt off the top for its
+# mana cost - Mox Ruby's {R} - but not the Shock on top of Bot2's library ("your library"). In the second main phase it plays the
+# Forest that is now on top as its land for the turn, casts the Ornithopter under it, and may not play the Island beneath as a second land
+# (CR 305.2). On turn 5 the effect has ended ("until end of turn"), covered by the next scenario.
+# CR 111.10a, 611.2a, 305.1, 601.3.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+The Belligerent
+Memnite
+Memnite
+Memnite
+Lightning Bolt
+Forest
+Ornithopter
+Island
+Forest x15
+
+[Bot2 Deck]
+Shock
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Belligerent.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.The Belligerent.Activate(Ability: Crew)
+[T3 Bot1.DeclareAttackers]
+? Bot1.MayLookAtLibraryTop = (absent)
+Bot1.Attack(The Belligerent > Bot2)
+? Stack.Count = 1
+? Bot1.MayLookAtLibraryTop = (absent)
+! Bot1.Library.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.MayLookAtLibraryTop = true
+? Bot2.MayLookAtLibraryTop = (absent)
+? Bot1.Battlefield.Treasure Token.Subtypes = Treasure
+! Bot1.Library.Shock.Cast(Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Library.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T3 Bot1.Main2]
+? Bot2.Life = 12
+Bot1.Library.Forest.Play
+! Bot1.Library.Island.Play
+Bot1.Library.Ornithopter.Cast
+! Bot1.Library.Island.Play
+
+[Expect]
+Turn = 3
+Bot1.Graveyard = Lightning Bolt
+Bot1.Library.Top = Island
