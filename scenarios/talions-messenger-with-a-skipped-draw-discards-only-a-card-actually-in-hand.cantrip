@@ -1,0 +1,75 @@
+# Talion's Messenger: "draw a card, then discard a card. When you discard a card this way, put a +1/+1 counter ..." The counter
+# needs a card actually discarded (CR 603.12, 701.9): with nothing in hand there is nothing to discard. Bot2's Notion Thief makes
+# each of Bot1's draws but the first in its draw step go to Bot2 instead (CR 614.11), so on turn 3 Bot1 attacks with an empty hand
+# (all of it cast), the loot's draw is skipped, nothing is discarded and the Messenger stays a 1/3; Bot2 draws. On turn 5 Bot1 has kept
+# the Island it drew for the turn: the loot's draw is skipped again, but it discards the Island and the Messenger gets its counter, a 2/4.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Talion's Messenger
+Mox Sapphire
+Island
+Island x12
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Notion Thief
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Hand.Talion's Messenger.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Battlefield.Mox Sapphire#3.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Notion Thief.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Attack(Talion's Messenger)
+? Bot1.Hand.Count = 0
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 0
+? Bot1.Graveyard.Count = 0
+? Bot1.Battlefield.Talion's Messenger.Power = 1
+? Bot1.Battlefield.Talion's Messenger.Toughness = 3
+? Bot2.Hand.Count = 4
+[T5 Bot1.Main1]
+Bot1.Attack(Talion's Messenger)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Hand.Count = 0
+Bot1.Graveyard = Island
+Bot1.Battlefield.Talion's Messenger.Power = 2
+Bot1.Battlefield.Talion's Messenger.Toughness = 4

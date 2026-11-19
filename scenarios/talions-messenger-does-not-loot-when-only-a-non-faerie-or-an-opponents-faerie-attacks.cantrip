@@ -1,0 +1,52 @@
+# Talion's Messenger only triggers when you attack with a Faerie. On turn 3 Bot1 attacks with just its Ornithopter (a Thopter) and
+# keeps the Messenger home: no loot, hand still the two Islands and the Forest drawn for the turn. On turn 4 Bot2's Faerie Miscreant attacks - not a Faerie
+# Bot1 controls, no loot either; Bot1 only drew for its turns (library 12 after turn 5).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Talion's Messenger
+Ornithopter
+Island
+Island
+Forest
+Island x13
+
+[Bot2 Deck]
+Mox Sapphire
+Faerie Miscreant
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Hand.Talion's Messenger.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Faerie Miscreant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter)
+? Stack.Count = 0
+? Bot1.Hand.Count = 3
+[T4 Bot2.Main1]
+Bot2.Attack(Faerie Miscreant)
+? Stack.Count = 0
+[T5 Bot1.Main1]
+
+[Expect]
+Turn = 5
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 12

@@ -1,0 +1,11 @@
+{
+  "name": "Talion's Messenger",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Faerie Noble",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Flying\nWhenever you attack with one or more Faeries, draw a card, then discard a card. When you discard a card this way, put a +1/+1 counter on target Faerie you control.",
+  "keywords": [
+    "Flying"
+  ]
+}

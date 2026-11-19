@@ -1,0 +1,57 @@
+# Talion's Messenger: "Whenever you attack with one or more Faeries, draw a card, then discard a card. When you discard a card this
+# way, put a +1/+1 counter on target Faerie you control." Talion's Messenger, Faerie Miscreant (both Faeries) and an Ornithopter
+# (a Thopter) attack together on turn 3: the two Faeries are one batch (CR 603.2c) so the ability triggers once. Bot1 draws the Forest,
+# discards the Island (the hand was Island from the turn's draw step), and then picks the Faerie Miscreant for the counter - it is
+# a 2/2 and the Messenger is still a 1/3, the Ornithopter (not a Faerie) was not a legal target (refused).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Talion's Messenger
+Faerie Miscreant
+Ornithopter
+Island
+Forest
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Hand.Talion's Messenger.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#4.Activate
+Bot1.Hand.Faerie Miscreant.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Talion's Messenger; Faerie Miscreant; Ornithopter)
+Bot1.Choose(Island)
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Faerie Miscreant)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Hand = Forest
+Bot1.Graveyard = Island
+Bot1.Battlefield.Faerie Miscreant.Power = 2
+Bot1.Battlefield.Faerie Miscreant.Toughness = 2
+Bot1.Battlefield.Talion's Messenger.Power = 1
+Bot1.Battlefield.Talion's Messenger.Toughness = 3
+Bot1.Battlefield.Ornithopter.Power = 0

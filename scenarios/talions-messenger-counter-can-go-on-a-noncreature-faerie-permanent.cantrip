@@ -1,0 +1,53 @@
+# Talion's Messenger's "target Faerie you control" (CR 109.2, 205.3m) is any Faerie permanent, not only a creature: Firdoch Core, a
+# noncreature Kindred artifact with changeling, takes the counter. Bot2's Faerie Miscreant is not one Bot1 controls, so it is refused.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Talion's Messenger
+Firdoch Core
+Island
+Forest
+Island x12
+
+[Bot2 Deck]
+Mox Sapphire
+Faerie Miscreant
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Talion's Messenger.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Faerie Miscreant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Hand.Firdoch Core.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Talion's Messenger)
+Bot1.Choose(Island)
+! Bot1.Target(Bot2.Battlefield.Faerie Miscreant)
+Bot1.Target(Bot1.Battlefield.Firdoch Core)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Firdoch Core.Counters.PlusOnePlusOne = 1
