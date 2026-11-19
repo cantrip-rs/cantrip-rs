@@ -1,0 +1,45 @@
+# Hoverstone Pilgrim's ward {2} (CR 702.21a): Bot2 has a Mox Ruby for the Lightning Bolt and a Mox Jet, one mana short of the {2} the ward
+# trigger asks, so the Bolt is countered and the Pilgrim (toughness 5, so it would survive the Bolt's 3 damage anyway) has no damage marked.
+
+[Bot1 Deck]
+Hoverstone Pilgrim
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hoverstone Pilgrim.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Hoverstone Pilgrim)
+[T2 Bot2.Main2]
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield.Hoverstone Pilgrim.Damage = 0

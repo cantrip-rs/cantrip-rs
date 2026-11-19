@@ -1,0 +1,77 @@
+# Hoverstone Pilgrim: "{2}: Put target card from a graveyard on the bottom of its owner's library." (CR 400.3). It is a 2/5 flier
+# (cast on turn 1 off Black Lotus, Mox Pearl and Mox Sapphire). On turn 3 Bot1 pays {2} (the pool is empty after) to put Bot2's Lightning Bolt
+# (cast at Bot1 on turn 2, so in Bot2's graveyard) on the bottom of Bot2's library, not Bot1's; on turn 5 it puts Bot1's own Bolt (cast on
+# turn 3) on the bottom of Bot1's library. Mox Jet is left untapped in between, so the {2} is exactly what was paid.
+
+[Bot1 Deck]
+Hoverstone Pilgrim
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Island x4
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x9
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hoverstone Pilgrim.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hoverstone Pilgrim.Power = 2
+? Bot1.Battlefield.Hoverstone Pilgrim.Toughness = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Hoverstone Pilgrim.Activate(Ability: {2}; Bot2.Graveyard.Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 0
+? Bot1.Graveyard.Count = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hoverstone Pilgrim.Activate(Ability: {2}; Bot1.Graveyard.Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Black Lotus
+Bot2.Graveyard.Count = 0
+Bot1.Library = Island; Island; Lightning Bolt
+Bot2.Library = Island; Island; Lightning Bolt
+Bot1.Life = 17
+Bot2.Life = 17
+Bot1.Battlefield.Hoverstone Pilgrim.Keywords = Flying
