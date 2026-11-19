@@ -1,0 +1,11 @@
+{
+  "name": "High Fae Negotiator",
+  "manaCost": "{3}{B}{B}",
+  "type": "Creature — Faerie Warlock",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nFlying\nWhen this creature enters, if it was bargained, each opponent loses 3 life and you gain 3 life.",
+  "keywords": [
+    "Flying"
+  ]
+}

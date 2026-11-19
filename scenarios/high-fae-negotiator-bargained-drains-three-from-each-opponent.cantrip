@@ -1,0 +1,36 @@
+# High Fae Negotiator: "When this creature enters, if it was bargained, each opponent loses 3 life and you gain 3
+# life." Bargained by sacrificing a Mox Jet (an artifact, CR 702.166a), it drains 3: Bot2 20 -> 17, Bot1 20 -> 23.
+# It is a 3/5 flyer.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+High Fae Negotiator
+Mox Pearl
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.High Fae Negotiator.Cast
+Bot1.Modes(Bargain:)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Choose(Mox Pearl)
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 17
+Bot1.Graveyard = Mox Pearl; Black Lotus
+Bot1.Battlefield = Mox Jet; Swamp; High Fae Negotiator
+Bot1.Battlefield.High Fae Negotiator.Power = 3
+Bot1.Battlefield.High Fae Negotiator.Toughness = 5
+Bot1.Battlefield.High Fae Negotiator.Keywords = Flying

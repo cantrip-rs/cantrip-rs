@@ -1,0 +1,29 @@
+# High Fae Negotiator: cast without the bargain cost its enters ability does nothing (the trigger's "if it was
+# bargained" is false), so both life totals stay at 20.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+High Fae Negotiator
+Mox Pearl
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.High Fae Negotiator.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Battlefield = Mox Jet; Swamp; Mox Pearl; High Fae Negotiator
