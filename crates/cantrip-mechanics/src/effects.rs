@@ -1108,6 +1108,15 @@ pub fn put_cards_from_hand_on_top(g: &mut dyn Game, player: PlayerId, source: Ob
     Ok(())
 }
 
+/// "Put [up to one] target ... card from your graveyard on top of your library" (CR 401.4): the first target, to the top of its
+/// owner's library; nothing when it is no longer a legal target (CR 608.2b) or none was chosen. Academy Ruins, Volrath's
+/// Stronghold, The Unicomplex, Paramecia Coloniex, Monastery Messenger and Mend the Wilds print it.
+pub fn put_first_target_on_top_of_library(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(card) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    g.put_into_library(&[card], LibraryPlace::Top);
+    Ok(())
+}
+
 /// "Draw a card, then you may put a land card from your hand onto the battlefield tapped" (CR 121.1, 608.2c, 608.2d,
 /// 614.1c): the draw ends the sentence, so the card just drawn is in the hand to choose from and may be the one put; any
 /// land card of the hand may be chosen, or none. Putting a land onto the battlefield is not playing it, so it uses no land
