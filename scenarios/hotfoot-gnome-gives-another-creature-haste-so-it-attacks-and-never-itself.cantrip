@@ -1,0 +1,42 @@
+# Hotfoot Gnome {2}{R} 3/1: "{T}: Another target creature gains haste until end of turn." On turn 1 the Gnome (haste itself) comes
+# in with Memnite beside it. The Gnome cannot be its own target (the ability is refused naming it, "another"), but it can name
+# Memnite: Memnite gains haste, attacks the turn it came, and Bot2 takes 1. The Gnome is tapped by the cost.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Hotfoot Gnome
+Memnite
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hotfoot Gnome.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+! Bot1.Battlefield.Hotfoot Gnome.Activate(Hotfoot Gnome)
+Bot1.Battlefield.Hotfoot Gnome.Activate(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Haste
+? Bot1.Battlefield.Hotfoot Gnome.Tapped = true
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19

@@ -1,0 +1,11 @@
+{
+  "name": "Hotfoot Gnome",
+  "manaCost": "{2}{R}",
+  "type": "Artifact Creature — Gnome",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Haste\n{T}: Another target creature gains haste until end of turn.",
+  "keywords": [
+    "Haste"
+  ]
+}

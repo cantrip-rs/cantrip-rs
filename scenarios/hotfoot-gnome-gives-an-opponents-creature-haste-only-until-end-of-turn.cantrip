@@ -1,0 +1,43 @@
+# "Another target creature" may be any player's: on turn 2 Bot2 casts Memnite and Bot1's Hotfoot Gnome (cast on turn 1) gives it
+# haste, so Memnite attacks the turn it came and Bot1 takes 1. The haste lasts only until end of turn (CR 611.2a): on turn 3
+# Memnite has no haste keyword.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Hotfoot Gnome
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hotfoot Gnome.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Hotfoot Gnome.Activate(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Keywords = Haste
+[T2 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Memnite.Keywords = (absent)
+
+[Expect]
+Bot1.Life = 19

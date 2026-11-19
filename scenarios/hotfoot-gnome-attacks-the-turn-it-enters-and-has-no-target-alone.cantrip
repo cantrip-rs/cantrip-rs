@@ -1,0 +1,31 @@
+# Hotfoot Gnome has haste itself (CR 702.10a): cast on turn 1 off three Moxen, it attacks at once for 3. Alone on the battlefield
+# it has no other creature to name, so its ability is not offered (no legal target, CR 601.2c) before it attacks.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Hotfoot Gnome
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hotfoot Gnome.Cast
+Bot1.Pass
+! Bot1.Battlefield.Hotfoot Gnome.Activate
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Hotfoot Gnome > Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
