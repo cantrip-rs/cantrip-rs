@@ -1,0 +1,11 @@
+{
+  "name": "Ghalta, Stampede Tyrant",
+  "manaCost": "{5}{G}{G}{G}",
+  "type": "Legendary Creature — Elder Dinosaur",
+  "power": 12,
+  "toughness": 12,
+  "oracleText": "Trample\nWhen Ghalta enters, put any number of creature cards from your hand onto the battlefield.",
+  "keywords": [
+    "Trample"
+  ]
+}

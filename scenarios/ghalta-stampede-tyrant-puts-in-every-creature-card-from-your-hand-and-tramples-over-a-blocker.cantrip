@@ -1,0 +1,62 @@
+# Ghalta, Stampede Tyrant {5}{G}{G}{G}, 12/12 Trample: "When Ghalta enters, put any number of creature cards from your hand onto the
+# battlefield." On turn 3 Bot1 casts it with Black Lotus, three Moxen and Sol Ring (8 mana). Its hand holds an Ornithopter and a Memnite, and Bot2's hand
+# an Ornithopter too, which is not Bot1's to put (the Ornithopter Bot2 cast on turn 2 stays on its own battlefield and the one in its hand stays there).
+# Bot1 takes both of its own: they are not cast (CR 608.2d), so the Memnite (a 1/1) and the Ornithopter arrive without mana. On turn 5 Ghalta attacks and
+# Bot2's Ornithopter (0/2) blocks it: with trample (CR 702.19b) 2 damage is assigned to the blocker and the other 10 to Bot2, 20 -> 10.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Sol Ring
+Ornithopter
+Memnite
+Ghalta, Stampede Tyrant
+Plains x17
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Ghalta, Stampede Tyrant.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter; Memnite)
+? Bot1.Hand.Count = 0
+? Bot2.Hand.Count = 7
+? Bot1.Battlefield.Memnite.Power = 1
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ghalta, Stampede Tyrant > Bot2)
+Bot2.Block(Ornithopter > Ghalta, Stampede Tyrant)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 10
+Bot2.Graveyard = Ornithopter; Island
+Bot1.Battlefield.Ghalta, Stampede Tyrant.Damage = 0

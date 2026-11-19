@@ -1,0 +1,42 @@
+# Ghalta, Stampede Tyrant: "any number" includes none (CR 608.2d). Bot1 answers the choice with no card and its Ornithopter stays in its hand with the Plains
+# it drew; Ghalta stays on the battlefield alone.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Sol Ring
+Ornithopter
+Ghalta, Stampede Tyrant
+Plains
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Ghalta, Stampede Tyrant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+
+[Expect]
+Bot1.Hand = Ornithopter; Plains
+Bot1.Battlefield.Ornithopter = (absent)
+Stack.Count = 0
