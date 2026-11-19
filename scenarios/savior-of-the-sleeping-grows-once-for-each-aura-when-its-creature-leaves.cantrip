@@ -1,0 +1,50 @@
+# Savior of the Sleeping: two enchantments put into a graveyard at the same time trigger it twice. Turn 1: Savior of the
+# Sleeping (2/3) and Ornithopter. Turn 3: Holy Strength and Lance enchant Ornithopter, then Swords to Plowshares exiles it
+# (the creature is exiled, not put into a graveyard: no counter for it) and both Auras go to Bot1's graveyard as a
+# state-based action (CR 704.5m): two counters, a 4/5 Savior. Plain Ornithopter dying would add none.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Pearl
+Savior of the Sleeping
+Ornithopter
+Holy Strength
+Lance
+Swords to Plowshares
+Island x10
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Savior of the Sleeping.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Holy Strength.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Lance.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savior of the Sleeping.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Graveyard.Count = 3
+? Bot1.Battlefield.Savior of the Sleeping.Counters.PlusOnePlusOne = 2
+
+[Expect]
+Bot1.Battlefield.Savior of the Sleeping.Power = 4

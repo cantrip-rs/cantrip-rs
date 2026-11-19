@@ -1,0 +1,64 @@
+# Savior of the Sleeping: "Whenever an enchantment you control is put into a graveyard from the battlefield, put a +1/+1
+# counter on this creature." Turn 1: Savior of the Sleeping (2/3), Flood and then Disenchant destroying Flood: one counter
+# (3/4). Turn 2: Bot2's own Flood enters. Turn 3: Disenchant destroys Bot2's Flood, an enchantment an opponent controls:
+# no counter. The 3/4 Savior then attacks and, having vigilance (CR 702.20b), does not tap.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Savior of the Sleeping
+Flood
+Disenchant
+Disenchant
+Island x10
+
+[Bot2 Deck]
+Island
+Flood
+Island x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Savior of the Sleeping.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flood.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Flood)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Bot1.Graveyard.Count = 3
+? Bot1.Battlefield.Savior of the Sleeping.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Savior of the Sleeping.Power = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Flood.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Flood.Tapped = False
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Disenchant.Cast(Bot2.Battlefield.Flood)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Savior of the Sleeping > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Graveyard = Flood
+? Bot1.Battlefield.Savior of the Sleeping.Counters.PlusOnePlusOne = 1
+? Bot2.Life = 17
+? Bot1.Battlefield.Savior of the Sleeping.Tapped = False
+
+[Expect]
+Bot1.Battlefield.Savior of the Sleeping.Toughness = 4

@@ -819,7 +819,7 @@ pub fn distribute_plus_one_counters(g: &mut dyn Game, item: &StackItem) -> Resul
 /// new object it is another (CR 400.7). The whole effect of a trigger or ability of Essence Channeler, Ajani Resolute's
 /// Ajani's Pridemate token, Leonardo, Cutting Edge, Blood Hustler, Cryptic Trilobite, Gau, Feral Youth, Hired Claw, Ivora,
 /// Insatiable Heir, Laelia, the Blade Reforged, Questing Druid, Shang-Chi and the Ten Rings, Battle-Scarred Survivalist,
-/// Tireless Tracker and Youthful Valkyrie.
+/// Tireless Tracker, Youthful Valkyrie and Savior of the Sleeping.
 pub fn plus_one_counter_on_this(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.add_counters(item.object, CounterKind::PlusOne, 1);
     Ok(())
