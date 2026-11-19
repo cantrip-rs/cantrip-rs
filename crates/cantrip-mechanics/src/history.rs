@@ -248,6 +248,16 @@ pub fn land_entered_under_control_this_turn(history: History<'_>, player: Player
     history.entered().any(|e| e.controller == player && e.is(CardType::Land))
 }
 
+/// "Celebration" (CR 207.2c, ability word with no rules meaning of its own): two or more nonland permanents entered the battlefield
+/// under `player`'s control this turn (CR 603.6a), each judged as it entered (the controller and card types `Event::Entered`
+/// holds), tokens included, whatever has happened to it since: one that has since died or been stolen
+/// still counts, a land does not, and one that entered under an opponent's control and was stolen does not. A permanent that
+/// left and came back is another (CR 400.7). Armory Mice asks it from its static ability's layers, a triggered ability from its
+/// condition.
+pub fn celebration(history: History<'_>, player: PlayerId) -> bool {
+    history.entered().filter(|e| e.controller == player && !e.is(CardType::Land)).count() >= 2
+}
+
 /// The number of permanents `player` has sacrificed this turn (CR 701.21a): every permanent that went from the battlefield to a
 /// graveyard as a sacrifice this turn, token or not, under that player's control as it left. Asked of the history (CR 603.10a).
 /// Obsessive Pursuit counts them; Phoenix Fleet Airship asks whether there was one ("if you sacrificed a permanent this turn").
