@@ -1,0 +1,44 @@
+# Protective Parents: "up to one target creature you control" - Bot1 has no other creature, and the dying Parents is in the
+# graveyard, not a legal target; Bot2's Ornithopter is not "you control". The trigger is put on the stack with no target
+# and creates nothing: no Role anywhere.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Ruby
+Protective Parents
+Island x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Ornithopter
+Island x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Protective Parents.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Protective Parents)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Protective Parents
+Bot1.Battlefield = Mox Pearl; Mox Ruby; Plains
+Bot2.Battlefield = Mountain; Ornithopter

@@ -1,0 +1,57 @@
+# Protective Parents: "When this creature dies, create a Young Hero Role token attached to up to one target creature you control."
+# Bot2's Bolt kills the Parents on turn 2. The trigger's target may not be Bot2's own Ornithopter (not "you control"), and is
+# Bot1's Memnite; the Young Hero Role is attached to it. On turn 3 the Memnite (toughness 1, 3 or less) attacks: the Role puts a
+# +1/+1 counter on it (CR 303.7), so it is a 2/2 and Bot2, with no blockers, takes 2.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Ruby
+Memnite
+Protective Parents
+Island x14
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Ornithopter
+Island x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Protective Parents.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Protective Parents)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Young Hero.AttachedTo = Memnite
+? Bot1.Battlefield.Memnite.Power = 1
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Protective Parents
+Bot1.Battlefield = Memnite; Mox Pearl; Mox Ruby; Plains; Young Hero
+Bot2.Life = 18
