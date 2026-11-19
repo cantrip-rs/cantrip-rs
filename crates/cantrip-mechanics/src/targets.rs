@@ -1216,6 +1216,16 @@ pub const CREATURE_OR_PLANESWALKER_AN_OPPONENT_CONTROLS: TargetSpec = target(cre
 /// "Target creature an opponent controls". Palace Jailer and Mawloc print it.
 pub const CREATURE_AN_OPPONENT_CONTROLS: TargetSpec = target(creature_an_opponent_controls_filter);
 
+/// "Target creature an opponent controls with mana value `N` or less" (CR 115.1, 202.3: X in a mana cost is 0 on the battlefield, a
+/// copy has its copiable mana value, a face-down permanent 0): its mana value as it is chosen and again as the ability resolves
+/// (CR 608.2b). Glass Casket, Kobayashi Maru Scenario's Hail mode and Unwind History (3) print it.
+pub fn creature_an_opponent_controls_with_mana_value_at_most<const N: u32>(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_an_opponent_controls_filter(q, asker, t) && matches!(t, Target::Object(id) if q.mana_value(id) <= N)
+}
+/// "Target creature an opponent controls with mana value 3 or less". Glass Casket, Kobayashi Maru Scenario and Unwind History print it.
+pub const CREATURE_AN_OPPONENT_CONTROLS_WITH_MANA_VALUE_3_OR_LESS: TargetSpec =
+    target(creature_an_opponent_controls_with_mana_value_at_most::<3>);
+
 /// "Target creature an opponent controls with power `N` or less" (CR 115.1, 208.1): its power as the layers make it, as it is
 /// chosen and again as the ability resolves. A creature with no power cannot be a creature.
 pub fn creature_an_opponent_controls_with_power_at_most<const N: i32>(q: &dyn Query, asker: &Asker, t: Target) -> bool {

@@ -2,16 +2,9 @@ use cantrip_api::*;
 use cantrip_mechanics::{effects, history, targets, tokens, triggers::YOUR_UPKEEP};
 use cantrip_oracle as oracle;
 
-/// "Target creature an opponent controls with mana value 3 or less" (CR 115.1, 202.3: an {X} in a cost on the battlefield
-/// is 0): its controller is not the ability's controller, and its mana value is read as it is chosen and again as the
-/// mode resolves (CR 608.2b).
-fn creature_an_opponent_controls_with_mana_value_3_or_less(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    targets::creature_with_mana_value_at_most::<3>(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) != asker.controller)
-}
-
 /// "Up to one target creature an opponent controls with mana value 3 or less", for the Hail mode: fewer than one (or none)
 /// is chosen as readily as one.
-static HAIL_TARGET: TargetSpec = target(creature_an_opponent_controls_with_mana_value_3_or_less).optional();
+static HAIL_TARGET: TargetSpec = targets::CREATURE_AN_OPPONENT_CONTROLS_WITH_MANA_VALUE_3_OR_LESS.optional();
 
 /// "Transport — Create two 1/1 red Officer creature tokens": both at once, as one event (CR 101.4, 608.2c).
 fn transport(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
