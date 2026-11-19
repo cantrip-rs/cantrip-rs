@@ -11,7 +11,7 @@ const TEXT: &str = "Enchanted artifact is a Golem creature with base power and t
 /// was destroyed (CR 603.6c, 700.4: "put into a graveyard from the battlefield").
 pub static CARD: CardDef = CardDef {
     enchant: Some(targets::ARTIFACT),
-    abilities: &[triggered(THIS_DIES, |g, item| discover::discover(g, item.controller, 3), "When this Aura is put into a graveyard from the battlefield, discover 3.")],
+    abilities: &[triggered(THIS_DIES, |g, item| discover::discover(g, item.controller, 3).map(drop), "When this Aura is put into a graveyard from the battlefield, discover 3.")],
     statics: &[
         // Layer 4 (CR 613.1d): it is a creature and a Golem (read through the words of this card's text, CR 612.2) beside its other types; layer 7b
         // (CR 613.4b): its base power and toughness are 5/4, which counters and other effects then modify.

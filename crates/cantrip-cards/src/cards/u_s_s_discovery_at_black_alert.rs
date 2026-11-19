@@ -8,7 +8,8 @@ const SIX_PLUS: &str = "6+ | Flying (5/5)";
 /// "Whenever U.S.S. Discovery enters or attacks, discover 5" (CR 701.57a, 603.6a, 508.1m): one ability with two trigger
 /// events, not two abilities.
 fn discover_five(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    discover::discover(g, item.controller, 5)
+    discover::discover(g, item.controller, 5)?;
+    Ok(())
 }
 
 pub static CARD: CardDef = CardDef {

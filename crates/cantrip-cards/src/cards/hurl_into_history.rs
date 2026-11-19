@@ -11,7 +11,8 @@ fn counter_then_discover_its_mana_value(g: &mut dyn Game, item: &StackItem) -> R
     let x = g.mana_value(spell);
     g.counter(spell);
     g.end_sentence();
-    discover::discover(g, item.controller, x)
+    discover::discover(g, item.controller, x)?;
+    Ok(())
 }
 
 pub static CARD: CardDef = CardDef {

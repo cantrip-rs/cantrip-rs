@@ -26,7 +26,8 @@ fn spirit(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// "-3: Discover 4" (CR 701.57a).
 fn discover_four(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    discover::discover(g, item.controller, 4)
+    discover::discover(g, item.controller, 4)?;
+    Ok(())
 }
 
 /// "-6: Exile any number of target cards from your graveyard. Add {R} for each card exiled this way. You may play those

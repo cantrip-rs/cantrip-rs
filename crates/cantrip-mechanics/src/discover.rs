@@ -1,8 +1,7 @@
 //! Discover N (CR 701.57a): "Exile cards from the top of your library until you exile a nonland card with mana value N or
 //! less. You may cast that card without paying its mana cost if the resulting spell's mana value is less than or equal to
 //! N. If you don't cast it, put that card into your hand. Put the remaining exiled cards on the bottom of your library in a
-//! random order." Quintorius Kand's second loyalty ability prints it (Geological Appraiser and Trumpeting Carnosaur, not in
-//! content yet, are the other printed cards).
+//! random order." Quintorius Kand, Trumpeting Carnosaur and Hurl into History are among the many printed cards.
 //!
 //! A keyword action, so this is its one module: a card calls `discover(g, player, n)`.
 
@@ -33,12 +32,16 @@ pub fn may_cast_free(g: &mut dyn Game, player: PlayerId, card: ObjectId, most: u
 /// target for every target it has, and the face it is cast as (a split card's half, an Adventurer's, a modal double-faced
 /// card's) must itself have mana value `n` or less. A card not cast, whether declined, impossible or given up (CR 733.1),
 /// goes into the player's hand; the other exiled cards go to the bottom of the library in a random order. Nothing is cast or
-/// put into hand if the library ran out first (CR 701.57b: it has still been discovered).
-pub fn discover(g: &mut dyn Game, player: PlayerId, n: u32) -> Result<(), Suspend> {
+/// put into hand if the library ran out first (CR 701.57b: it has still been discovered). The mana value of the "discovered card"
+/// (CR 701.57c: the last card exiled, which has mana value `n` or less, whether it was cast or put into a hand), taken as it was
+/// exiled, so that a card that has since left exile (cast, put into a hand) still has it; `None` if the library ran out without
+/// one. Hit the Mother Lode reads it.
+pub fn discover(g: &mut dyn Game, player: PlayerId, n: u32) -> Result<Option<u32>, Suspend> {
     let (exiled, hit) = library::exile_until_nonland(g, player, None, &|q, card| q.mana_value(card) <= n);
+    let discovered = hit.map(|card| g.mana_value(card));
     if let Some(card) = hit {
         cast_free_if_at_most_else_hand(g, player, card, n)?;
     }
     library::rest_of_exiled_to_bottom_in_random_order(g, &exiled);
-    Ok(())
+    Ok(discovered)
 }
