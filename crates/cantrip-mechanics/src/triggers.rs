@@ -2374,6 +2374,16 @@ pub fn creature_you_control_with_counters_dies(q: &dyn Query, me: &Asker, event:
     }
 }
 
+/// "Whenever a creature you control with a +1/+1 counter on it dies" (CR 700.4, 603.10a): `creature_you_control_dies`, narrowed
+/// to a creature that had a +1/+1 counter on it as it last was on the battlefield. Each creature is its own event, so creatures
+/// dying together trigger once each, and this permanent too, if it died with one. Meltstrider Eulogist and Explorer's Cache print it.
+pub fn creature_you_control_with_a_plus_one_counter_dies(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { old, .. } if q.obj(*old).counters(CounterKind::PlusOne) == 0 => None,
+        _ => creature_you_control_dies(q, me, event),
+    }
+}
+
 /// "Whenever a [subtype] you control dies" (CR 700.4, 603.10a), `SUBTYPE` a `Subtype` as `u16` (`lands::sub`), looked back on: a
 /// permanent that had that subtype as it last was on the battlefield (a creature or not, CR 109.2, 205.3), under the controller it
 /// last had, the type read through the words of the source's text (CR 612). This permanent too, if it is one. Bishop of Wings
