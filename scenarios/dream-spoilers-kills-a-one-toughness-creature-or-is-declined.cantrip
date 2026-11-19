@@ -1,0 +1,55 @@
+# The target is "up to one" (CR 115.1): Bot1 casts Shock on Bot2's turn and chooses a Memnite (1/1), which dies to -1/-1; it casts a second Shock and chooses
+# no target, so the Memnites left are untouched and the trigger resolves doing nothing (CR 608.2b). Bot2's own Memnites cast on its turn trigger nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby x2
+Dream Spoilers
+Shock x2
+Swamp x20
+
+[Bot2 Deck]
+Memnite x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dream Spoilers.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+? Bot2.Battlefield.Count = 2
+Bot2.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Target(Bot2.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Count = 1
+? Bot2.Graveyard.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Count = 2
+Bot2.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 3
+Bot2.Graveyard.Count = 1
+Bot2.Life = 16
