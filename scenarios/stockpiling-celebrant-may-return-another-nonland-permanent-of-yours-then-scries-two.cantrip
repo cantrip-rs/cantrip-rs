@@ -1,0 +1,57 @@
+# Stockpiling Celebrant (a 3/2): "When this creature enters, you may return another target nonland permanent you control to its
+# owner's hand. If you do, scry 2." Turn 1 Bot1 casts the Celebrant with Plains and two Moxen: its legal targets are the Moxen
+# only (the Plains is a land, the Celebrant itself is not "another"). Bot1 declines: the Moxen stay and nothing is scried
+# (`! Bot1.Arrange`). Turn 3 Bot2's Ornithopter and the Plains are refused as targets for the second Celebrant, which returns
+# Mox Pearl: it is in hand again and the scry 2 is answered (both to the top).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Stockpiling Celebrant
+Stockpiling Celebrant
+Plains x4
+Island
+Island
+Island x8
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stockpiling Celebrant.Cast
+Bot1.Pass
+! Bot1.Target(Plains)
+! Bot1.Target(Stockpiling Celebrant)
+Bot1.Target(Mox Jet)
+Bot1.Decline
+! Bot1.Arrange
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Mox Jet.Tapped = False
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Stockpiling Celebrant.Cast
+Bot1.Pass
+! Bot1.Target(Plains#1)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Mox Pearl)
+Bot1.Accept
+Bot1.Arrange(Island; Plains | )
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Mox Pearl.Colors.Count = 0
+Bot1.Battlefield.Count = 5

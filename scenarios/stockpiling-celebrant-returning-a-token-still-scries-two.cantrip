@@ -1,0 +1,42 @@
+# Stockpiling Celebrant: "you may return another target nonland permanent you control to its owner's hand. If you do, scry 2."
+# Turn 1 Bot1 makes two Goblin tokens with Dragon Fodder, then the Celebrant returns one of them. The token is put into its
+# owner's hand and then ceases to exist as a state-based action (CR 111.7, 704.5d), so it was returned: "if you do" is true and
+# the scry 2 is asked (Bot1.Arrange). Afterwards one Goblin is left and the hand holds no token.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Dragon Fodder
+Stockpiling Celebrant
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stockpiling Celebrant.Cast
+Bot1.Pass
+Bot1.Target(Goblin Token#1)
+Bot1.Accept
+Bot1.Arrange(Island; Island | )
+[T1 Bot1.Main2]
+? Bot1.Hand.Count = 0
+
+[Expect]
+Bot1.Battlefield = Goblin Token; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Plains; Stockpiling Celebrant
+Bot1.Battlefield.Count = 7

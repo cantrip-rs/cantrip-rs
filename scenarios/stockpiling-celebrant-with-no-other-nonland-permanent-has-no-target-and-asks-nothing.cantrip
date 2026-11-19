@@ -1,0 +1,27 @@
+# Stockpiling Celebrant: its target is mandatory, so with no other nonland permanent you control (the Black Lotus is sacrificed
+# for the mana; the Plains is a land) the ability is removed from the stack: nothing is asked and nothing is scried
+# (`! Bot1.Arrange`, `! Bot1.Accept`), and the Celebrant stays a 3/2.
+
+[Bot1 Deck]
+Black Lotus
+Plains
+Stockpiling Celebrant
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Stockpiling Celebrant.Cast
+Bot1.Pass
+! Bot1.Arrange
+! Bot1.Accept
+[T1 Bot1.Main2]
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Stockpiling Celebrant.Power = 3
+Bot1.Battlefield.Count = 2

@@ -1,0 +1,8 @@
+{
+  "name": "Stockpiling Celebrant",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Dwarf Knight",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters, you may return another target nonland permanent you control to its owner's hand. If you do, scry 2."
+}
