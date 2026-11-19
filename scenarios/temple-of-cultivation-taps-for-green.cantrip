@@ -1,0 +1,54 @@
+# Temple of Cultivation's "{T}: Add {G}." Ojer Kaslem was killed on turn 2 and came back tapped and transformed (CR 712.14a); on turn 3 Bot1 taps the untapped Temple for {G}
+# and the green mana is in the pool.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Forest
+Ojer Kaslem, Deepest Growth
+Island
+Island
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Lightning Bolt
+Lightning Bolt
+Mountain
+Mox Ruby
+Ornithopter
+Plains
+Plains
+Plains x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Ojer Kaslem, Deepest Growth.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Lightning Bolt.Cast(Ojer Kaslem, Deepest Growth)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Pass
+Bot2.Hand.Lightning Bolt.Cast(Ojer Kaslem, Deepest Growth)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Temple of Cultivation.Activate(Ability: Add)
+? Bot1.Mana = {G}
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Temple of Cultivation.Tapped = true
+Bot1.Mana = {G}

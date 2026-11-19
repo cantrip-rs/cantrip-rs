@@ -1,0 +1,48 @@
+# Ojer Kaslem, Deepest Growth's "You may put a creature card and/or a land card": each is optional. Bot1 puts the Memnite onto the battlefield and no land card; the
+# Mountain and the other four revealed cards all go to the bottom (the turn 5 draw is the Grizzly Bears, the seventh card, not any revealed card).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Forest
+Ojer Kaslem, Deepest Growth
+Island
+Island
+Island
+Island
+Memnite
+Ornithopter
+Mountain
+Plains
+Wrath of God
+Lightning Bolt
+Grizzly Bears
+Island x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Ojer Kaslem, Deepest Growth.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ojer Kaslem, Deepest Growth > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot1.Choose(Memnite)
+Bot1.Choose()
+[T5 Bot1.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 14
+Bot1.Battlefield = Forest; Memnite; Mox Emerald; Ojer Kaslem, Deepest Growth
+Bot1.Library.Count = 10
+Bot1.Hand = Grizzly Bears; Island; Island; Island; Island

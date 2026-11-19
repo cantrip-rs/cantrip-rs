@@ -1,0 +1,84 @@
+# Temple of Cultivation: "{2}{G}, {T}: Transform this land. Activate only if you control ten or more permanents and only as a sorcery." Ojer Kaslem was killed on turn 2
+# and came back as the Temple (Bot1 had cast Mox Emerald, Mox Pearl, Mox Jet and Mox Ruby on turn 1, and casts a Mox Sapphire on turn 3). On turn 7 Bot1 has the Temple, the
+# Forest and five Moxen: seven permanents. Secure the Wastes for two makes two Warriors, nine permanents, and the Temple is refused with the mana to pay for it (the
+# Emerald, the Sapphire and the Forest). Casting the Memnite makes ten; the Temple is refused at the beginning of combat (only as a sorcery, CR 602.5d) and in the second
+# main phase it transforms back into Ojer Kaslem, tapped for the cost (CR 712.18: the same permanent).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Forest
+Ojer Kaslem, Deepest Growth
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Secure the Wastes
+Memnite
+Island x10
+
+[Bot2 Deck]
+Lightning Bolt
+Lightning Bolt
+Mountain
+Mox Ruby
+Ornithopter
+Plains
+Plains
+Plains x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Ojer Kaslem, Deepest Growth.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Lightning Bolt.Cast(Ojer Kaslem, Deepest Growth)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Pass
+Bot2.Hand.Lightning Bolt.Cast(Ojer Kaslem, Deepest Growth)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Secure the Wastes.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 9
+! Bot1.Battlefield.Temple of Cultivation.Activate(Ability: Transform)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 10
+[T7 Bot1.BeginCombat]
+! Bot1.Battlefield.Temple of Cultivation.Activate(Ability: Transform)
+[T7 Bot1.Main2]
+Bot1.Battlefield.Temple of Cultivation.Activate(Ability: Transform)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 10
+Bot1.Battlefield.Ojer Kaslem, Deepest Growth.Types = Creature
+Bot1.Battlefield.Ojer Kaslem, Deepest Growth.Tapped = true
+Bot1.Battlefield.Ojer Kaslem, Deepest Growth.Power = 6

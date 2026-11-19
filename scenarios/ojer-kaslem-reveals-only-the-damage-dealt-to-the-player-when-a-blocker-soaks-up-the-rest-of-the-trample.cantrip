@@ -1,0 +1,56 @@
+# Ojer Kaslem, Deepest Growth's "reveal that many cards": the number is the combat damage dealt to the player, not its power. Bot2's Ornithopter (0/2) blocks the 6/5
+# trampler, 2 damage is assigned to it and 4 trample over to Bot2 (CR 702.19b), so four cards are revealed: Memnite, Mountain, Wrath of God and Lightning Bolt. The
+# Ornithopter, fifth in the library, is not revealed and cannot be chosen.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Forest
+Ojer Kaslem, Deepest Growth
+Island
+Island
+Island
+Island
+Memnite
+Mountain
+Wrath of God
+Lightning Bolt
+Ornithopter
+Island x7
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Ojer Kaslem, Deepest Growth.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ojer Kaslem, Deepest Growth > Bot2)
+Bot2.Block(Ornithopter > Ojer Kaslem, Deepest Growth)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Wrath of God)
+Bot1.Choose(Memnite)
+! Bot1.Choose(Wrath of God)
+Bot1.Choose(Mountain)
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 16
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield = Forest; Memnite; Mountain; Mox Emerald; Ojer Kaslem, Deepest Growth
+Bot1.Library.Count = 10
+Bot1.Revealed = Lightning Bolt; Memnite; Mountain; Wrath of God

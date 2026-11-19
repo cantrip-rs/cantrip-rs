@@ -1,0 +1,50 @@
+# Ojer Kaslem, Deepest Growth's "a creature card and/or a land card": Dryad Arbor is both, but it is one card and enters once. Bot1 chooses it as the creature
+# card, so the land card is chosen from the rest of the revealed cards (the Forest, not the Arbor again), and Memnite goes to the bottom.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Forest
+Ojer Kaslem, Deepest Growth
+Island
+Island
+Island
+Island
+Dryad Arbor
+Memnite
+Forest
+Plains
+Wrath of God
+Lightning Bolt
+Grizzly Bears
+Island x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Ojer Kaslem, Deepest Growth.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ojer Kaslem, Deepest Growth > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+! Bot1.Choose(Forest)
+Bot1.Choose(Dryad Arbor)
+! Bot1.Choose(Dryad Arbor)
+! Bot1.Choose(Memnite)
+Bot1.Choose(Forest)
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 14
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Dryad Arbor.Types = Land; Creature
+Bot1.Library.Count = 10

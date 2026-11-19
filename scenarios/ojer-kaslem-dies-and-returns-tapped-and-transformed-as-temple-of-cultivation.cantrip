@@ -1,0 +1,56 @@
+# Ojer Kaslem, Deepest Growth: "When Ojer Kaslem dies, return it to the battlefield tapped and transformed under its owner's control." Bot1 casts it on turn 1 ({3}{G}{G}:
+# Black Lotus, Mox Emerald and a Forest); on turn 2 Bot2 kills it with two Lightning Bolts (3 + 3 on a 6/5). The trigger returns the card as a new object (CR 400.7), its
+# back face Temple of Cultivation: a land, no longer a creature, tapped (CR 712.14a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Forest
+Ojer Kaslem, Deepest Growth
+Island
+Island
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Lightning Bolt
+Lightning Bolt
+Mountain
+Mox Ruby
+Ornithopter
+Plains
+Plains
+Plains x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Ojer Kaslem, Deepest Growth.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Lightning Bolt.Cast(Ojer Kaslem, Deepest Growth)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Pass
+Bot2.Hand.Lightning Bolt.Cast(Ojer Kaslem, Deepest Growth)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Forest; Mox Emerald; Temple of Cultivation
+Bot1.Battlefield.Temple of Cultivation.Tapped = true
+Bot1.Battlefield.Temple of Cultivation.Types = Land
+Bot1.Graveyard = Black Lotus
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt
