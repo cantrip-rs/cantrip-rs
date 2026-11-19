@@ -1,0 +1,45 @@
+# Choosing 10, the top of the range, destroys only a creature with power 10 or more: Bot2's Baloth Prime (10/10) goes, while both players'
+# smaller creatures stay (CR 107.1, 701.8a). The 6 stun counters Baloth Prime enters with change nothing: it is destroyed tapped as well.
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Jet
+Expel the Interlopers
+Savannah Lions
+Plains x14
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Mox Jet
+Baloth Prime
+Forest x15
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Baloth Prime.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: W)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Expel the Interlopers.Cast
+Bot1.Number(10)
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Plains; Savannah Lions
+Bot2.Graveyard = Baloth Prime

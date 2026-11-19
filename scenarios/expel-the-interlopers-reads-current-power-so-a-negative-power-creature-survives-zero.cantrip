@@ -1,0 +1,46 @@
+# Power is read as Expel the Interlopers resolves, not from the card: Humbling Elder (cast with flash in the main phase for U) gives Bot2's
+# first Ornithopter -2/-0 until end of turn, so its power is -2 and it is not "greater than or equal to" 0 and survives choosing 0, while
+# Bot2's other Ornithopter (power 0) and every other creature, Humbling Elder itself included, are destroyed (CR 107.1b, 608.2c).
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Expel the Interlopers
+Humbling Elder
+Plains x13
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Memnite
+Plains x17
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Humbling Elder.Cast
+Bot1.Target(Bot2.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter#1.Power = -2
+Bot1.Battlefield.Black Lotus.Activate(Color: W)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Expel the Interlopers.Cast
+Bot1.Number(0)
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Plains
+Bot2.Battlefield = Ornithopter
+Bot2.Battlefield.Ornithopter.Power = -2
+Bot2.Graveyard = Memnite; Ornithopter

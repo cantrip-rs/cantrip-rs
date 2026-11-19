@@ -1,0 +1,6 @@
+{
+  "name": "Expel the Interlopers",
+  "manaCost": "{3}{W}{W}",
+  "type": "Sorcery",
+  "oracleText": "Choose a number between 0 and 10. Destroy all creatures with power greater than or equal to the chosen number."
+}
