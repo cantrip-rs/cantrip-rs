@@ -1,6 +1,6 @@
 //! Affinity (CR 702.41a): affinity for artifacts (Emry, Lurker of the Loch and Thoughtcast, and Sami, Wildcat Captain's spells you cast) and for a basic land type
 //! (Sapling Nursery's Forests), a creature type (Scales of Shale's Lizards), creatures (Witherbloom, the Balancer) and
-//! artifact creatures (Borg Cube, Urza, Chief Artificer) and outlaws (Hellspur Brute).
+//! artifact creatures (Borg Cube, Urza, Chief Artificer), outlaws (Hellspur Brute) and planeswalkers (Tomik, Wielder of Law).
 
 use cantrip_api::*;
 
@@ -79,4 +79,10 @@ pub fn instants_and_sorceries_you_cast_have_affinity_for_creatures(q: &dyn Query
 /// Hellspur Brute prints it.
 pub fn for_outlaws(q: &dyn Query, _: ObjectId, player: PlayerId, _: Costed, _: &[Target]) -> CostDelta {
     CostDelta::less(crate::outlaw::outlaws_controlled_by(q, player) as u32)
+}
+
+/// "Affinity for planeswalkers" (CR 702.41a): this spell costs {1} less to cast for each planeswalker you control. Tomik, Wielder
+/// of Law prints it.
+pub fn for_planeswalkers(q: &dyn Query, _: ObjectId, player: PlayerId, _: Costed, _: &[Target]) -> CostDelta {
+    less_for_each_permanent(q, player, |id| q.chars(id).is(CardType::Planeswalker))
 }
