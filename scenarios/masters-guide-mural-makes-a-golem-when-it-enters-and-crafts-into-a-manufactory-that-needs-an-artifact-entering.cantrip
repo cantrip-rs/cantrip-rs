@@ -1,0 +1,77 @@
+# Master's Guide-Mural // Master's Manufactory. Turn 1: the Mural enters (cast with Black Lotus for {W}{W}{W}, Mox Sapphire and Mox
+# Ruby) and makes a 4/4 white and blue Golem artifact creature token. Turn 5: Craft with artifact {4}{W}{W}{U} (five Moxen and two
+# Plains), exiling the Golem token as the material (a token is an artifact Bot1 controls); the Mural returns transformed as Master's
+# Manufactory, white and blue by its color indicator. It entered this turn, so its {T} ability may be activated at once and makes
+# another Golem; once tapped it cannot be used again. Turn 7: no artifact has entered yet, so it cannot be activated; after Bot1 casts
+# an Ornithopter (another artifact entering under its control) it can, and makes a second Golem.
+
+[Bot1 Deck]
+Master's Guide-Mural
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Jet
+Plains
+Plains
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Master's Guide-Mural.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Golem Token.Power = 4
+? Bot1.Battlefield.Golem Token.Toughness = 4
+? Bot1.Battlefield.Golem Token.Colors = Blue; White
+? Bot1.Battlefield.Golem Token.Types = Artifact; Creature
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Master's Guide-Mural.Activate(Ability: Craft)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Golem Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Master's Manufactory.Colors = Blue; White
+? Exile.Count = 0
+? Bot1.Battlefield.Count = 8
+Bot1.Battlefield.Master's Manufactory.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Golem Token.Power = 4
+! Bot1.Battlefield.Master's Manufactory.Activate
+[T7 Bot1.Main1]
+! Bot1.Battlefield.Master's Manufactory.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Master's Manufactory.Activate
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Master's Manufactory.Tapped = true

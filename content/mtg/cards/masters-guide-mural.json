@@ -1,0 +1,15 @@
+{
+  "name": "Master's Guide-Mural",
+  "manaCost": "{3}{W}{U}",
+  "type": "Artifact",
+  "oracleText": "When this artifact enters, create a 4/4 white and blue Golem artifact creature token.\nCraft with artifact {4}{W}{W}{U} ({4}{W}{W}{U}, Exile this artifact, Exile another artifact you control or an artifact card from your graveyard: Return this card transformed under its owner's control. Craft only as a sorcery.)",
+  "backFace": {
+    "name": "Master's Manufactory",
+    "colorIndicator": [
+      "Blue",
+      "White"
+    ],
+    "type": "Artifact",
+    "oracleText": "{T}: Create a 4/4 white and blue Golem artifact creature token. Activate only if this artifact or another artifact entered the battlefield under your control this turn."
+  }
+}

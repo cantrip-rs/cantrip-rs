@@ -1,0 +1,61 @@
+# Master's Guide-Mural: Craft with artifact may exile any artifact you control, not just the token. Turn 3: cast the Mural (five Moxen
+# taps) for its Golem. Turn 5: Craft {4}{W}{W}{U} exiling the (already tapped) Mox Jet, a noncreature artifact; the Golem and Ornithopter stay on the battlefield and the Manufactory enters
+# transformed. Turn 7: the Manufactory (no artifact entered this turn) cannot make a Golem.
+
+[Bot1 Deck]
+Master's Guide-Mural
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Jet
+Ornithopter
+Plains
+Plains
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Master's Guide-Mural.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Golem Token.Power = 4
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Master's Guide-Mural.Activate(Ability: Craft)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Exile = Mox Jet
+? Bot1.Battlefield.Master's Manufactory.Colors = Blue; White
+[T7 Bot1.Main1]
+! Bot1.Battlefield.Master's Manufactory.Activate
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Golem Token.Power = 4
+Bot1.Battlefield.Master's Manufactory.Tapped = false
