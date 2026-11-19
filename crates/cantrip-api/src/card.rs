@@ -2763,6 +2763,12 @@ pub struct ExileCast {
     /// `Some(ManaCost::ZERO)` for none. As a play permission's `PlayGrant::instead` does. It is the one alternative cost of the
     /// cast (CR 118.9a); an X in the cost is 0 (CR 107.3b), and additional costs are still paid (CR 118.8). Maralen, Fae Ascendant.
     pub instead: Option<ManaCost>,
+    /// "If you cast a spell this way, [it is replaced]" (CR 614.1a, 614.1c), as `GrantedWay::spell_replacement` is a granted
+    /// way's: the index in the card's `granted_replacements` of a replacement effect about the spell cast by the permission,
+    /// which the core makes as the spell is put on the stack (CR 601.2a), controlled by the permanent's controller then. A rule
+    /// of how the spell was cast, it applies whether or not the permanent is still there as the spell resolves (Intrepid
+    /// Paleontologist's ruling, as Kess's and Lier's): "that creature enters with a finality counter on it". `None` for none.
+    pub spell_replacement: Option<u8>,
 }
 
 /// A static ability of a permanent that gives cards in a hand miracle (CR 702.94a): "each instant and sorcery card in your

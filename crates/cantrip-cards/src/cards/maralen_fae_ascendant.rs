@@ -69,6 +69,7 @@ pub static CARD: CardDef = CardDef {
         lands: false,
         life_for_mana_value: false,
         instead: Some(ManaCost::ZERO),
+        spell_replacement: None,
     }],
     ..oracle::MARALEN_FAE_ASCENDANT
 };

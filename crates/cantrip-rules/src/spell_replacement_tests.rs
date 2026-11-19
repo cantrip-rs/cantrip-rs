@@ -6,7 +6,8 @@
 //! finality counter on it" and Kess, Dissident Mage's "if a spell cast this way would be put into your graveyard, exile it
 //! instead" are the shapes. A top-of-library rule's rider (`PlayRule::LibraryTopSpells`'s second field) is the same effect:
 //! Mikey & Don, Party Planners' "if you cast a creature spell this way, that creature enters with an additional +1/+1
-//! counter on it".
+//! counter on it". A permission to cast cards in exile has the same rider (`ExileCast::spell_replacement`): Intrepid
+//! Paleontologist's "if you cast a spell this way, that creature enters with a finality counter on it".
 
 use crate::{Cx, Game, Setup, ops, resolve};
 use cantrip_api::*;
@@ -107,6 +108,34 @@ static KESS: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+fn exiled_creature(q: &dyn Query, asker: &Asker, card: ObjectId, player: PlayerId) -> bool {
+    player == asker.controller && q.chars(card).is(CardType::Creature)
+}
+
+/// "You may cast creature spells from exile. If you cast a spell this way, that creature enters with a finality counter on
+/// it" (Intrepid Paleontologist's shape, a permanent's permission to cast cards in exile).
+static PALEONTOLOGIST: CardDef = CardDef {
+    name: "Rider Test Paleontologist",
+    cost: mana("{1}"),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    exile_casts: &[ExileCast {
+        text: "Cast a creature spell from exile.",
+        from: ZoneKind::Exile,
+        allows: exiled_creature,
+        additional: Cost::NONE,
+        any_type: false,
+        any_color: false,
+        lands: false,
+        life_for_mana_value: false,
+        instead: None,
+        spell_replacement: Some(0),
+    }],
+    granted_replacements: &[granted_replacement(ReplacementKind::ZoneChange, spell_enters, add_a_finality_counter, "enters with a finality counter")],
+    ..CardDef::BLANK
+};
+
 fn creature_spell(q: &dyn Query, _: &Asker, card: ObjectId) -> bool {
     q.chars(card).is(CardType::Creature)
 }
@@ -153,7 +182,7 @@ fn cx(game: &mut Game) -> Cx<'_> {
 
 /// Your main phase with priority and an empty stack.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &SQUIRREL, &NOTHING, &PLAIN, &LEONARDO, &KESS, &MIKEY, &HORDE])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &SQUIRREL, &NOTHING, &PLAIN, &LEONARDO, &KESS, &MIKEY, &HORDE, &PALEONTOLOGIST])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -294,6 +323,24 @@ fn the_rider_applies_after_the_giver_has_left() {
     assert!(g.state.obj(leonardo).became.is_some_and(|gone| g.state.obj(gone).zone.is(ZoneKind::Graveyard)), "the giver left first");
     let permanent = g.state.obj(spell).became.expect("it resolved");
     assert_eq!(finality(&g, permanent), 1);
+}
+
+/// A permission to cast cards in exile with the rider (Intrepid Paleontologist's ruling): the creature cast from exile by
+/// it enters with the counter though the permanent has left the battlefield before the spell resolves.
+#[test]
+fn an_exile_permissions_rider_applies_after_the_giver_has_left() {
+    let mut g = game();
+    let giver = put(&mut g, &PALEONTOLOGIST, Zone::BATTLEFIELD);
+    let card = put(&mut g, &SQUIRREL, Zone::exile(YOU));
+    add(&mut g, Mana::G, 1);
+    let spell = cast(&mut g, card, true);
+    assert_eq!(riders(&g), 1, "the effect is made as the spell is cast");
+    between(&mut g, |cx| ops::move_to(cx, giver, Zone::graveyard(YOU)));
+    resolve_all(&mut g);
+    let permanent = g.state.obj(spell).became.expect("it resolved");
+    assert!(g.state.obj(permanent).zone.is(ZoneKind::Battlefield));
+    assert_eq!(finality(&g, permanent), 1);
+    assert_eq!(riders(&g), 0, "the effect ended with the spell");
 }
 
 /// The effect names the card whose way it is: the giver becoming a copy of a card with no such effect after the cast

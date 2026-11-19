@@ -25,6 +25,7 @@ pub const PERMISSION: ExileCast = ExileCast {
     lands: false,
     life_for_mana_value: false,
     instead: None,
+    spell_replacement: None,
 };
 
 /// "If you do, it enters with a finality counter on it" (CR 122.1, 614.1c, 601.3): the card's `CardDef::enters`, adding the

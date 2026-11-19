@@ -60,6 +60,7 @@ pub static EMBLEM: CardDef = CardDef {
         lands: true,
         life_for_mana_value: false,
         instead: None,
+        spell_replacement: None,
     }],
     ..CardDef::BLANK
 };

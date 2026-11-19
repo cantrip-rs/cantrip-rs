@@ -192,17 +192,17 @@ static ROUTE_DISCARD_WAY: WayDef = WayDef { text: "Discard a material", cost: Co
 static ROUTE_DISCARD_SPELL: CardDef = CardDef { name: "Route Discard Spell", ways: &[ROUTE_DISCARD_WAY], ..PROBE_SPELL };
 static ROUTE_GRAVEYARD_PERMISSION: CardDef = CardDef {
     name: "Route Graveyard Permission", types: TypeSet::of(&[CardType::Artifact]),
-    exile_casts: &[ExileCast { text: "Cast with graveyard exile", from: ZoneKind::Exile, allows: any_card, additional: Cost { exile_from_graveyard: 1, ..Cost::NONE }, any_type: false, any_color: false, lands: false, life_for_mana_value: false, instead: None }], ..CardDef::BLANK
+    exile_casts: &[ExileCast { text: "Cast with graveyard exile", from: ZoneKind::Exile, allows: any_card, additional: Cost { exile_from_graveyard: 1, ..Cost::NONE }, any_type: false, any_color: false, lands: false, life_for_mana_value: false, instead: None, spell_replacement: None }], ..CardDef::BLANK
 };
 static ROUTE_COMPOSED_PERMISSION: CardDef = CardDef {
     name: "Route Composed Permission", types: TypeSet::of(&[CardType::Artifact]),
-    exile_casts: &[ExileCast { text: "Cast with a return cost", from: ZoneKind::Exile, allows: any_card, additional: Cost::return_to_hand(1, route_return_filter), any_type: false, any_color: false, lands: false, life_for_mana_value: false, instead: None }],
+    exile_casts: &[ExileCast { text: "Cast with a return cost", from: ZoneKind::Exile, allows: any_card, additional: Cost::return_to_hand(1, route_return_filter), any_type: false, any_color: false, lands: false, life_for_mana_value: false, instead: None, spell_replacement: None }],
     ..CardDef::BLANK
 };
 static EXILE_PERMISSION: CardDef = CardDef {
     name: "Route Exile Permission",
     types: TypeSet::of(&[CardType::Artifact]),
-    exile_casts: &[ExileCast { text: "Cast from exile", from: ZoneKind::Exile, allows: any_card, additional: Cost::NONE, any_type: false, any_color: false, lands: false, life_for_mana_value: false, instead: None }],
+    exile_casts: &[ExileCast { text: "Cast from exile", from: ZoneKind::Exile, allows: any_card, additional: Cost::NONE, any_type: false, any_color: false, lands: false, life_for_mana_value: false, instead: None, spell_replacement: None }],
     ..CardDef::BLANK
 };
 
@@ -224,6 +224,7 @@ static SELF_EXILE_PROBE: CardDef = CardDef {
         lands: false,
         life_for_mana_value: false,
         instead: None,
+        spell_replacement: None,
     }],
     ..PROBE_SPELL
 };

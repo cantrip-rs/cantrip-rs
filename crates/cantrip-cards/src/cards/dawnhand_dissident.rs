@@ -46,6 +46,7 @@ pub static CARD: CardDef = CardDef {
         lands: false,
         life_for_mana_value: false,
         instead: None,
+        spell_replacement: None,
     }],
     ..oracle::DAWNHAND_DISSIDENT
 };

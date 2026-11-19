@@ -10642,13 +10642,16 @@ fn apply_next_spell_effects(cx: &mut Cx, player: PlayerId, spell: ObjectId) {
 }
 
 /// The "if you cast a spell this way" replacement effect (CR 614.1a, 614.1c) that what a cast was made by (`g`) makes about
-/// the spell, with the player who controls it: a granted way's (`GrantedWay::spell_replacement`), controlled by the granting
-/// permanent's controller, or a top-of-library rule's (`PlayRule::LibraryTopSpells`), whose permission is only ever its
-/// caster's, controlled by `caster`. Read from the card table, so it is the one the cast was offered by even if the permanent
-/// has left while the spell was paid for.
+/// the spell, with the player who controls it: a granted way's (`GrantedWay::spell_replacement`) or a permission to cast
+/// cards in exile's (`ExileCast::spell_replacement`), controlled by the granting permanent's controller, or a top-of-library
+/// rule's (`PlayRule::LibraryTopSpells`), whose permission is only ever its caster's, controlled by `caster`. Read from the
+/// card table, so it is the one the cast was offered by even if the permanent has left while the spell was paid for.
 fn spell_replacement_by(cx: &Cx, g: Grant, caster: PlayerId) -> Option<(Grant, PlayerId, u8)> {
     if let Some(way) = named_way(cx.s(), cx.cards(), g) {
         return way.what.spell_replacement.map(|index| (g, way.controller, index));
+    }
+    if let Some(cast) = named_exile_cast(cx.s(), cx.cards(), g) {
+        return cast.what.spell_replacement.map(|index| (g, cast.controller, index));
     }
     match play_rule_at(cx.cards(), g.ability)? {
         PlayRule::LibraryTopSpells(_, Some(index)) => Some((g, caster, *index)),
@@ -10869,9 +10872,10 @@ fn cast(
         cx.st().update_obj(spell, |o| o.marks.gains = Some(ability));
     }
     // "If you cast a spell this way, ...": the replacement effect the way's static ability makes about the spell
-    // (`GrantedWay::spell_replacement`, CR 614.1), or the top-of-library rule's (`PlayRule::LibraryTopSpells`, whose
-    // permission is its caster's), named with the card whose way or rule it is, and lasting as long as the spell does (CR
-    // 400.7) - whatever becomes of the permanent that gave it, and of what it is a copy of.
+    // (`GrantedWay::spell_replacement`, CR 614.1) or an exile permission's (`ExileCast::spell_replacement`), or the
+    // top-of-library rule's (`PlayRule::LibraryTopSpells`, whose permission is its caster's), named with the card whose way
+    // or rule it is, and lasting as long as the spell does (CR 400.7) - whatever becomes of the permanent that gave it, and
+    // of what it is a copy of.
     if let Some((g, controller, index)) = by.by.and_then(|g| spell_replacement_by(cx, g, player)) {
         let timestamp = cx.st().timestamp();
         let kind = EffectKind::Replacement { card: g.ability.card, index, to: Target::None, into: Target::None, value: 0 };
@@ -16579,7 +16583,7 @@ mod tests {
     static EXILER: CardDef = CardDef {
         name: "Alternative Test Exiler",
         types: TypeSet::of(&[CardType::Enchantment]),
-        exile_casts: &[ExileCast { text: "Cast from exile", from: ZoneKind::Exile, allows: any_card, additional: Cost::NONE, any_type: false, any_color: false, lands: false, life_for_mana_value: false, instead: None }],
+        exile_casts: &[ExileCast { text: "Cast from exile", from: ZoneKind::Exile, allows: any_card, additional: Cost::NONE, any_type: false, any_color: false, lands: false, life_for_mana_value: false, instead: None, spell_replacement: None }],
         ..CardDef::BLANK
     };
     /// "You may cast spells from the top of your library" (CR 601.3).
