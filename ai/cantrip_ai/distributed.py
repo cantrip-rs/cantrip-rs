@@ -44,7 +44,9 @@ from __future__ import annotations
 
 import base64
 import contextlib
+import gzip
 import hashlib
+import io
 import json
 import math
 import os
@@ -54,6 +56,7 @@ import signal
 import socket
 import subprocess
 import sys
+import tarfile
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -1111,6 +1114,8 @@ def load_workers(path: Path) -> list[dict]:
         for k in ("name", "host", "user", "root"):
             if not w.get(k):
                 raise SystemExit(f"{path}: a worker without {k}: {w}")
+        if w.get("os", "windows") not in ("windows", "linux"):
+            raise SystemExit(f"{path}: a worker's os is windows or linux: {w}")
         w = dict(w)
         w.setdefault("key", d.get("key"))
         out.append(w)
@@ -1168,6 +1173,18 @@ def bundle_files(selfplay: Path, infer: Path, ort_dir: Path, cuda_dir: Path, mod
         files[f"bin/{n}"] = ort_dir / n
     for n in cuda_dlls:
         files[f"bin/{n}"] = cuda_dir / n
+    return _with_data(files, model, decks, prior, pairings)
+
+
+def linux_bundle_files(source: Path, model: Path, decks: Path | None, prior: Path | None,
+                       pairings: Path | None) -> dict[str, Path]:
+    """What a Linux worker needs (`LinuxSshHost`): the engine's source (`source_tar`), which it builds its binaries
+    from, and the same model, decklists and pairings as a Windows worker's bundle; its GPU libraries are its own."""
+    return _with_data({"src.tar.gz": source}, model, decks, prior, pairings)
+
+
+def _with_data(files: dict[str, Path], model: Path, decks: Path | None, prior: Path | None,
+               pairings: Path | None) -> dict[str, Path]:
     for p in sorted(model.rglob("*")):
         rel = p.relative_to(model)
         if p.is_file() and rel.parts[0] != "train" and p.name != "model.pt":
@@ -1182,6 +1199,55 @@ def bundle_files(selfplay: Path, infer: Path, ort_dir: Path, cuda_dir: Path, mod
     if missing:
         raise SystemExit("the worker bundle is missing " + ", ".join(missing))
     return files
+
+
+# What a Linux worker builds from (`source_tar`): the Cargo workspace and what its build scripts read.
+SOURCE_PATHS = ("Cargo.toml", "Cargo.lock", "rust-toolchain.toml", "crates", "content", "scenarios")
+# What it builds (`LINUX_BUILD`), as this machine's driver builds them: cantrip-selfplay and cantrip-explore with
+# onnxruntime (`--features ort`), cantrip-infer with the GPU engine (`--features gpu`).
+LINUX_BINARIES = ("cantrip-selfplay", "cantrip-explore", "cantrip-infer")
+
+
+def source_tar(repo: Path, out_dir: Path, keep: int = 3) -> Path:
+    """The engine's source as this working tree has it - git's tracked files under `SOURCE_PATHS`, with their contents
+    now, which is what this machine's own binaries were built from - as a gzip'd tar made the same way every time
+    (sorted, no times or owners), so the same tree gives the same file: `out_dir/src-<hash>.tar.gz`, the last `keep`
+    kept."""
+    listed = subprocess.run(["git", "ls-files", "-z", "--", *SOURCE_PATHS], cwd=repo, capture_output=True, check=True).stdout
+    present = []
+    for rel in sorted(n for n in listed.decode("utf-8").split("\0") if n):
+        try:
+            st = (repo / rel).stat()
+        except OSError:  # deleted in the working tree
+            continue
+        present.append((rel, st.st_size, st.st_mtime_ns))
+    # Made again only when a file's size or time moved: reading every file takes minutes.
+    key = hashlib.sha256("".join(f"{r} {s} {t}\n" for r, s, t in present).encode()).hexdigest()
+    index = out_dir / "index.json"
+    known = read_json(index) or {}
+    if known.get(key) and (out_dir / known[key]).exists():
+        os.utime(out_dir / known[key])
+        return out_dir / known[key]
+    buf = io.BytesIO()
+    with tarfile.open(fileobj=buf, mode="w", format=tarfile.GNU_FORMAT) as tar:
+        for rel, _, _ in present:
+            p = repo / rel
+            data = p.read_bytes()
+            info = tarfile.TarInfo(rel)
+            info.size, info.mode, info.mtime = len(data), 0o644, 0
+            tar.addfile(info, io.BytesIO(data))
+    raw = gzip.compress(buf.getvalue(), compresslevel=6, mtime=0)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out = out_dir / f"src-{hashlib.sha256(raw).hexdigest()[:16]}.tar.gz"
+    if not out.exists():
+        tmp = out.with_suffix(".tmp")
+        tmp.write_bytes(raw)
+        os.replace(tmp, out)
+    os.utime(out)
+    for old in sorted(out_dir.glob("src-*.tar.gz"), key=lambda p: p.stat().st_mtime, reverse=True)[keep:]:
+        old.unlink(missing_ok=True)
+    write_atomic(index, json.dumps({k: v for k, v in {**known, key: out.name}.items() if (out_dir / v).exists()}))
+    return out
 
 
 def bundle_manifest(files: dict[str, Path], cache: dict) -> tuple[str, dict]:
@@ -1523,43 +1589,7 @@ $o = [ordered]@{{ job = $job; known = $known; status = (Raw "$d/selfplay/{STATUS
 ConvertTo-Json -Compress -InputObject $o
 """)
 
-        def parsed(text):
-            if isinstance(text, dict):  # a string PowerShell decorated with its provider's properties
-                text = text.get("value")
-            try:
-                return json.loads(text) if text else None
-            except ValueError:
-                return None
-
-        shards = r.get("shards") or []
-        if isinstance(shards, str):
-            shards = [shards]
-        ex = parsed(r.get("exit"))
-        runaways = []
-        runaway_text = r.get("runaways")
-        if isinstance(runaway_text, dict):
-            runaway_text = runaway_text.get("value")
-        for line in (runaway_text or "").splitlines():
-            v = parsed(line.strip())
-            if v and "index" in v:
-                runaways.append(int(v["index"]))
-        pids = parsed(r.get("pids")) or {}
-        if pids:
-            a["pids"] = pids
-        grant = r.get("grant")
-        if isinstance(grant, dict):
-            grant = grant.get("value")
-        if not r.get("job"):
-            started = False  # nothing was started: job.json is written just before the process
-        elif r.get("known") or ex is not None:
-            started = True
-        else:
-            # Being launched this moment, or launched by a coordinator that stopped before it recorded the process:
-            # pids.json comes within seconds; until the grace is over it is not given up.
-            started = None
-        return Poll(status=parsed(r.get("status")), exit=None if ex is None else int(ex["code"]),
-                    alive=bool(r.get("alive")), shards=sorted(shards), runaways=runaways, report=parsed(r.get("report")),
-                    started=started, grant=(grant or "").replace("\r\n", "\n") if r.get("job") else None)
+        return poll_from(r, a)
 
     def fetch(self, a: dict, name: str, dest: Path):
         rel = f"{self.attempt_dir(a)[len(self.root) + 1:]}/selfplay/{name}"
@@ -1617,6 +1647,558 @@ $given = @($job.recover_args)
 & $job.selfplay @given *> "$d/recover.log"
 if ($LASTEXITCODE -ne 0) {{ throw "cantrip-selfplay --recover exited $LASTEXITCODE (recover.log)" }}
 """, timeout=1800)
+
+
+# Linux workers.
+
+# A Linux worker's toolchain and GPU libraries, installed once (`bash setup.sh ROOT`, detached; `setup.log`): Rust, a
+# C compiler, and onnxruntime-gpu with the CUDA libraries its provider loads (cuDNN, cuRAND, cuFFT, cuBLAS, cudart) in
+# a venv, an image's own CUDA being whatever it is; `env.json` (ORT_DYLIB_PATH, LD_LIBRARY_PATH) written last, only
+# once the provider's libraries all resolve.
+LINUX_SETUP = r"""#!/bin/bash
+set -u
+R=$1
+echo "[$(date -Is)] setup"
+if [ ! -x "$HOME/.cargo/bin/cargo" ]; then
+  curl -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable || exit 1
+fi
+command -v cc >/dev/null || { apt-get -qq update && apt-get -qq install -y build-essential >/dev/null; } || exit 1
+if [ ! -x "$R/venv/bin/pip" ]; then
+  rm -rf "$R/venv"
+  python3 -m venv "$R/venv" || { rm -rf "$R/venv"; apt-get -qq update && apt-get -qq install -y python3-venv >/dev/null && python3 -m venv "$R/venv"; } || exit 1
+fi
+"$R/venv/bin/pip" -q install --upgrade pip || exit 1
+"$R/venv/bin/pip" -q install onnxruntime-gpu==1.24.4 nvidia-cudnn-cu12 nvidia-curand-cu12 nvidia-cufft-cu12 \
+  nvidia-cublas-cu12 nvidia-cuda-runtime-cu12 || exit 1
+"$R/venv/bin/python" - "$R" <<'PY' || exit 1
+import glob, json, os, subprocess, sys
+r = sys.argv[1]
+sp = glob.glob(f"{r}/venv/lib/python3*/site-packages")[0]
+capi = f"{sp}/onnxruntime/capi"
+libs = ":".join([capi] + sorted(glob.glob(f"{sp}/nvidia/*/lib")))
+missing = [l for l in subprocess.run(["ldd", f"{capi}/libonnxruntime_providers_cuda.so"], env=dict(os.environ, LD_LIBRARY_PATH=libs),
+                                     capture_output=True, text=True).stdout.splitlines() if "not found" in l]
+if missing:
+    sys.exit("onnxruntime's CUDA provider is missing " + "; ".join(m.strip() for m in missing))
+with open(f"{r}/env.json.tmp", "w") as f:
+    json.dump({"ORT_DYLIB_PATH": sorted(glob.glob(f"{capi}/libonnxruntime.so.*"))[0], "LD_LIBRARY_PATH": libs}, f)
+os.replace(f"{r}/env.json.tmp", f"{r}/env.json")
+PY
+echo "[$(date -Is)] done"
+"""
+
+# A Linux worker's binaries from a bundle's source (`bash build.sh ROOT SHA`, detached; `builds/SHA/build.log`):
+# unpacked into `src/SHA`, built with cargo's `target/` shared by every build (a change rebuilds only what it
+# touches), the binaries copied into `builds/SHA/` and `done` written last.
+LINUX_BUILD = r"""#!/bin/bash
+set -eu
+R=$1; S=$2
+source "$HOME/.cargo/env"
+echo "[$(date -Is)] build $S"
+rm -rf "$R/src/$S"; mkdir -p "$R/src/$S"
+tar -xzf "$R/blobs/$S" -C "$R/src/$S"
+cd "$R/src/$S"
+export CARGO_TARGET_DIR="$R/target"
+cargo build --release -p cantrip-ai-host --features ort --bin cantrip-selfplay --bin cantrip-explore
+cp "$R/target/release/cantrip-selfplay" "$R/target/release/cantrip-explore" "$R/builds/$S/"
+cargo build --release -p cantrip-ai-host --features gpu --bin cantrip-infer
+cp "$R/target/release/cantrip-infer" "$R/builds/$S/"
+touch "$R/builds/$S/done"
+echo "[$(date -Is)] done"
+"""
+
+# A Linux attempt's supervisor (`run.py` in its directory, started in a session of its own): job.json's cantrip-infer
+# (until its ready file) and cantrip-selfplay, with job.json's environment and the worker's `env.json`; pids.json as
+# each starts, exit.json when self-play ends; the server stopped with it. What `RUN_PS1` does on Windows.
+RUN_PY = r'''
+import json, os, subprocess, sys, time
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+job = json.load(open("job.json", encoding="utf-8"))
+env = dict(os.environ)
+env.update(job.get("env") or {})
+if job.get("env_file"):
+    e = json.load(open(job["env_file"], encoding="utf-8"))
+    env["ORT_DYLIB_PATH"] = e["ORT_DYLIB_PATH"]
+    env["LD_LIBRARY_PATH"] = e["LD_LIBRARY_PATH"] + (":" + env["LD_LIBRARY_PATH"] if env.get("LD_LIBRARY_PATH") else "")
+
+
+def who(pid):
+    try:
+        s = open(f"/proc/{pid}/stat").read()
+        start = int(s[s.rindex(")") + 2:].split()[19])
+    except (OSError, ValueError, IndexError):
+        start = None
+    try:
+        path = os.readlink(f"/proc/{pid}/exe").removesuffix(" (deleted)")
+    except OSError:
+        path = None
+    return dict(pid=pid, start=start, path=path)
+
+
+def save(name, o):
+    with open(name + ".tmp", "w", encoding="utf-8") as f:
+        json.dump(o, f, indent=1)
+    os.replace(name + ".tmp", name)
+
+
+pids = dict(supervisor=who(os.getpid()))
+infer = sp = None
+code, why = -1, ""
+try:
+    save("pids.json", pids)
+    arguments = list(job["selfplay_args"])
+    if job.get("infer"):
+        if os.path.exists("infer.ready"):
+            os.remove("infer.ready")
+        infer = subprocess.Popen([job["infer"], *job["infer_args"]], stdin=subprocess.DEVNULL, stdout=open("infer.out.log", "wb"),
+                                 stderr=open("infer.log", "wb"), env=env)
+        pids["infer"] = who(infer.pid)
+        save("pids.json", pids)
+        deadline = time.time() + 600
+        while not os.path.exists("infer.ready"):
+            if infer.poll() is not None or time.time() > deadline:
+                code = -2
+                raise RuntimeError("the inference server did not start (infer.log)")
+            time.sleep(0.3)
+        arguments += ["--server", open("infer.ready", encoding="utf-8").read().strip()]
+    sp = subprocess.Popen([job["selfplay"], *arguments], stdin=subprocess.DEVNULL, stdout=open("selfplay.out.log", "wb"),
+                          stderr=open("selfplay.log", "wb"), env=env)
+    pids["selfplay"] = who(sp.pid)
+    save("pids.json", pids)
+    code = sp.wait()
+except Exception as e:
+    why = str(e)
+finally:
+    if sp is not None and sp.poll() is None:
+        sp.kill()
+        sp.wait()
+        why += " (self-play stopped by its supervisor)"
+    save("exit.json", dict(code=code, why=why, at=time.strftime("%Y-%m-%dT%H:%M:%S")))
+    if infer is not None and infer.poll() is None:
+        infer.kill()
+        infer.wait()
+'''
+
+# What every script sent to a Linux worker starts with: its arguments (`A`, from base64'd JSON), and the helpers. A
+# process is recorded by its id, its start (clock ticks since boot, /proc/PID/stat) and its executable, and is the one
+# recorded only while all three still match (a zombie is not running).
+_PY_PRELUDE = r'''
+import base64, glob, hashlib, json, os, shutil, signal, subprocess, sys, time
+A = json.loads(base64.b64decode("@ARGS@"))
+ROOT = A["root"]
+
+
+def read(p):
+    try:
+        with open(p, encoding="utf-8") as f:
+            return f.read()
+    except OSError:
+        return None
+
+
+def put(p, text):
+    os.makedirs(os.path.dirname(p), exist_ok=True)
+    with open(p + ".tmp", "w", encoding="utf-8", newline="\n") as f:
+        f.write(text)
+    os.replace(p + ".tmp", p)
+
+
+def remove(p):
+    try:
+        os.remove(p)
+    except OSError:
+        pass
+
+
+def fields(pid):
+    try:
+        s = open(f"/proc/{int(pid)}/stat").read()
+        return s[s.rindex(")") + 2:].split()
+    except (OSError, ValueError):
+        return None
+
+
+def exe(pid):
+    try:
+        return os.readlink(f"/proc/{int(pid)}/exe").removesuffix(" (deleted)")
+    except OSError:
+        return None
+
+
+def who(pid):
+    f = fields(pid)
+    return dict(pid=pid, start=int(f[19]) if f else None, path=exe(pid))
+
+
+def same(w):
+    if not w or not w.get("pid"):
+        return False
+    f = fields(w["pid"])
+    if not f or f[0] in "ZX":
+        return False
+    if w.get("start") is not None and int(w["start"]) != int(f[19]):
+        return False
+    p = exe(w["pid"])
+    return not (w.get("path") and p and p != w["path"])
+
+
+def kill(w):
+    if same(w):
+        try:
+            os.kill(int(w["pid"]), signal.SIGKILL)
+        except OSError:
+            pass
+
+
+def detached(argv, cwd, log):
+    """A process in a session of its own, which outlives this script and the SSH session."""
+    return subprocess.Popen(argv, cwd=cwd, stdin=subprocess.DEVNULL, stdout=open(log, "ab"), stderr=subprocess.STDOUT,
+                            start_new_session=True)
+
+
+def running(pidfile):
+    try:
+        return same(json.loads(read(pidfile) or "null"))
+    except ValueError:
+        return False
+
+
+def tail(p, n=1):
+    lines = [l for l in (read(p) or "").splitlines() if l.strip()]
+    return " | ".join(lines[-n:])
+
+
+def out(o):
+    print(json.dumps(o))
+'''
+
+# Its orphans stopped (every run of this worker's under this root's tag but `keep`, pair mining's jobs aside), all but
+# the current bundle and the newest other complete one removed, and the blobs, sources and builds nothing kept names.
+_LINUX_PRUNE = r'''
+for pj in glob.glob(f"{ROOT}/gens/{A['tag']}/gen*/{A['name']}/*/pids.json"):
+    d = os.path.dirname(pj)
+    if os.path.basename(d).startswith("mine-") or d in A["keep"]:
+        continue
+    try:
+        p = json.loads(read(pj) or "{}")
+    except ValueError:
+        continue
+    for k in ("selfplay", "supervisor", "infer"):
+        kill(p.get(k))
+done = sorted((b for b in glob.glob(f"{ROOT}/bundle/*") if os.path.exists(f"{b}/MANIFEST.json")),
+              key=lambda b: os.path.getmtime(f"{b}/MANIFEST.json"), reverse=True)
+kept = [b for b in done if os.path.basename(b) == A["hash"]] + [b for b in done if os.path.basename(b) != A["hash"]][:1]
+for b in done:
+    if b not in kept:
+        shutil.rmtree(b, ignore_errors=True)
+named, sources = set(A["want"]), {A["source"]}
+for b in kept:
+    for rel, m in json.loads(read(f"{b}/MANIFEST.json")).items():
+        named.add(m["sha256"])
+        if rel == "src.tar.gz":
+            sources.add(m["sha256"])
+for f in glob.glob(f"{ROOT}/blobs/*"):
+    n = os.path.basename(f)
+    if (n.endswith(".tmp") and time.time() - os.path.getmtime(f) > 86400) or (not n.endswith(".tmp") and n not in named):
+        remove(f)
+for sub in ("builds", "src"):
+    for d in glob.glob(f"{ROOT}/{sub}/*"):
+        if os.path.basename(d) not in sources and not running(f"{ROOT}/builds/{os.path.basename(d)}/pid.json"):
+            shutil.rmtree(d, ignore_errors=True)
+out({})
+'''
+
+_LINUX_HAVE = r'''
+b = f"{ROOT}/bundle/{A['hash']}"
+if os.path.exists(f"{b}/MANIFEST.json"):
+    out(dict(complete=True))
+else:
+    os.makedirs(f"{ROOT}/blobs", exist_ok=True)
+    out(dict(complete=False, blobs=[n for n in os.listdir(f"{ROOT}/blobs") if not n.endswith(".tmp")]))
+'''
+
+# The blobs just sent checked and moved into place, the bundle linked; then the worker made ready in turn - set up
+# (`LINUX_SETUP`), the source built (`LINUX_BUILD`), each started detached and reported until it is done - and the
+# binaries linked into the bundle's `bin/`, its manifest last.
+_LINUX_ASSEMBLE = r'''
+for sha in A["check"]:
+    t = f"{ROOT}/blobs/{sha}.tmp"
+    h = hashlib.sha256()
+    with open(t, "rb") as f:
+        while chunk := f.read(1 << 22):
+            h.update(chunk)
+    if h.hexdigest() != sha:
+        remove(t)
+        sys.exit(f"blob {sha} arrived as {h.hexdigest()}")
+    os.replace(t, f"{ROOT}/blobs/{sha}")
+b = f"{ROOT}/bundle/{A['hash']}"
+for rel, m in A["manifest"].items():
+    dst = f"{b}/{rel}"
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    remove(dst)
+    os.link(f"{ROOT}/blobs/{m['sha256']}", dst)
+
+
+def started(script, argv, pidfile, log):
+    put(script, A[os.path.basename(script).split(".")[0]])
+    p = detached(["bash", script, *argv], ROOT, log)
+    put(pidfile, json.dumps(who(p.pid)))
+
+
+if not os.path.exists(f"{ROOT}/env.json"):
+    if not running(f"{ROOT}/setup.pid.json"):
+        before = tail(f"{ROOT}/setup.log")
+        started(f"{ROOT}/setup.sh", [ROOT], f"{ROOT}/setup.pid.json", f"{ROOT}/setup.log")
+        out(dict(state="setting up", note=f"started (the last setup ended: {before})" if before else "started"))
+    else:
+        out(dict(state="setting up", note=tail(f"{ROOT}/setup.log")))
+    sys.exit(0)
+s = A["source"]
+built = f"{ROOT}/builds/{s}"
+if not os.path.exists(f"{built}/done"):
+    os.makedirs(built, exist_ok=True)
+    if not running(f"{built}/pid.json"):
+        before = tail(f"{built}/build.log", 3)
+        started(f"{ROOT}/build.sh", [ROOT, s], f"{built}/pid.json", f"{built}/build.log")
+        out(dict(state="building", note=f"started (the last build ended: {before})" if before else "started"))
+    else:
+        out(dict(state="building", note=tail(f"{built}/build.log")))
+    sys.exit(0)
+for n in A["binaries"]:
+    remove(f"{b}/bin/{n}")
+    os.makedirs(f"{b}/bin", exist_ok=True)
+    os.link(f"{built}/{n}", f"{b}/bin/{n}")
+    os.chmod(f"{b}/bin/{n}", 0o755)
+put(f"{b}/MANIFEST.json", json.dumps(A["manifest"], indent=1))
+out(dict(state="ready"))
+'''
+
+_LINUX_LAUNCH = r'''
+d = A["d"]
+os.makedirs(f"{d}/selfplay", exist_ok=True)
+put(f"{d}/run.py", A["run"])
+put(f"{d}/grant.txt", A["grant"])
+put(f"{d}/heartbeat", "")
+remove(f"{d}/selfplay/{A['stop_file']}")
+remove(f"{d}/exit.json")
+try:
+    gpu = subprocess.run(["nvidia-smi", "--query-gpu=name,driver_version", "--format=csv,noheader"], capture_output=True,
+                         text=True, timeout=30).stdout.strip().splitlines()[0]
+except (OSError, IndexError, subprocess.SubprocessError):
+    gpu = ""
+# job.json last: an attempt directory with one was launched (or is being launched); one without never started.
+put(f"{d}/job.json", json.dumps(A["job"], indent=1))
+p = detached([sys.executable, f"{d}/run.py"], d, f"{d}/supervisor.log")
+out(dict(supervisor=who(p.pid), gpu=gpu))
+'''
+
+_LINUX_POLL = r'''
+d = A["d"]
+job = os.path.exists(f"{d}/job.json")
+if job:
+    try:
+        os.utime(f"{d}/heartbeat")
+    except OSError:
+        put(f"{d}/heartbeat", "")
+for n in A["deletes"]:
+    remove(f"{d}/selfplay/{n}")
+pids = read(f"{d}/pids.json")
+alive = known = False
+if pids:
+    known = True
+    try:
+        p = json.loads(pids)
+    except ValueError:
+        p = {}
+    alive = same(p.get("supervisor")) or same(p.get("selfplay"))
+elif (A["launched"] or {}).get("pid"):
+    known = True
+    alive = same(A["launched"])
+ex = read(f"{d}/exit.json")
+out(dict(job=job, known=known, status=read(f"{d}/selfplay/{A['status']}"), exit=ex, pids=pids, alive=alive,
+         shards=sorted(os.path.basename(f) for f in glob.glob(f"{d}/selfplay/*.shard.zst")),
+         runaways=read(f"{d}/selfplay/{A['runaways']}"), grant=read(f"{d}/grant.txt"),
+         report=read(f"{d}/selfplay/selfplay-report.json") if ex else None))
+'''
+
+_LINUX_KILL = r'''
+d = A["d"]
+if os.path.isdir(f"{d}/selfplay"):
+    put(f"{d}/selfplay/{A['stop_file']}", "now")
+try:
+    p = json.loads(read(f"{d}/pids.json") or "null")
+except ValueError:
+    p = None
+for w in ([p.get("supervisor"), p.get("selfplay"), p.get("infer")] if p else [A["launched"]]):
+    kill(w)
+out({})
+'''
+
+_LINUX_RECOVER = r'''
+d = A["d"]
+if os.path.exists(f"{d}/job.json"):
+    job = json.loads(read(f"{d}/job.json"))
+    env = dict(os.environ, **(job.get("env") or {}))
+    with open(f"{d}/recover.log", "wb") as log:
+        code = subprocess.run([job["selfplay"], *job["recover_args"]], cwd=d, stdin=subprocess.DEVNULL, stdout=log,
+                              stderr=subprocess.STDOUT, env=env).returncode
+    if code != 0:
+        sys.exit(f"cantrip-selfplay --recover exited {code} (recover.log)")
+out({})
+'''
+
+
+class LinuxSshHost(SshHost):
+    """A Linux worker over SSH (a rented GPU container: bash and root, python3 installed if missing), with the same
+    tree under its `root` as a Windows worker's (`SshHost`) and the same attempt files, its scripts Python piped to
+    `python3 -`. Its bundle carries the engine's source in place of binaries and libraries (`linux_bundle_files`):
+    the worker sets itself up once (`LINUX_SETUP`: Rust, onnxruntime-gpu and CUDA's libraries; `env.json`) and builds
+    each source once (`LINUX_BUILD`: `builds/<sha>/`), both detached, and until they are done `prepare` says it is not
+    ready - so the coordinator's other hosts play on and it asks again later - then the binaries are linked into the
+    bundle's `bin/` and its manifest written."""
+
+    def py(self, script: str, timeout: float = 120, **args) -> str:
+        """Runs a Python script on the worker (after `_PY_PRELUDE`, `args` its `A`); its stdout."""
+        args = dict(args, root=self.root)
+        text = _PY_PRELUDE.replace("@ARGS@", b64(json.dumps(args))) + script
+        cmd = self.ssh_base() + ["command -v python3 >/dev/null || { apt-get -qq update && apt-get -qq install -y python3; } "
+                                 ">/dev/null 2>&1; exec python3 -"]
+        try:
+            r = self._run(cmd, input=text.encode("utf-8"), stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
+        except subprocess.TimeoutExpired as e:
+            raise Unreachable(f"{self.name}: no answer in {timeout:.0f} s") from e
+        except OSError as e:
+            raise Unreachable(f"{self.name}: {e}") from e
+        if r.returncode != 0:
+            raise Unreachable(f"{self.name}: exit {r.returncode}: {r.stderr.decode(errors='replace').strip()[-600:]}")
+        return r.stdout.decode(errors="replace")
+
+    def py_json(self, script: str, timeout: float = 120, **args):
+        # The last line: a login banner may come first.
+        out = self.py(script, timeout, **args).strip()
+        try:
+            return json.loads(out.splitlines()[-1]) if out else None
+        except ValueError as e:
+            raise Unreachable(f"{self.name}: not JSON: {out[-300:]}") from e
+
+    def source(self) -> str:
+        return self.manifest["src.tar.gz"]["sha256"]
+
+    def prepare(self, live: list[dict]):
+        """Its orphans stopped and old bundles, blobs and builds removed first (a worker still building is pruned
+        too), then the bundle pushed and the worker readied (`push`)."""
+        self.py(_LINUX_PRUNE, timeout=600, tag=self.tag, name=self.name, keep=[self.attempt_dir(a) for a in live],
+                hash=self.hash, want=sorted({m["sha256"] for m in self.manifest.values()}), source=self.source())
+        self.push()
+
+    def push(self):
+        if self.pushed:
+            return
+        have = self.py_json(_LINUX_HAVE, hash=self.hash)
+        if not have.get("complete"):
+            blobs = set(have.get("blobs") or [])
+            want = {m["sha256"]: self.files[rel] for rel, m in self.manifest.items() if m["sha256"] not in blobs}
+            if want:
+                size = sum(p.stat().st_size for p in want.values())
+                self.log(f"  [{self.name}] pushing {len(want)} files ({size / 2**20:.0f} MB) of bundle {self.hash}; "
+                         f"{len(self.manifest) - len(want)} there already")
+            for sha, p in want.items():
+                self.scp(str(p), self.remote_path(f"blobs/{sha}.tmp"))
+            r = self.py_json(_LINUX_ASSEMBLE, timeout=1800, hash=self.hash, manifest=self.manifest, check=sorted(want),
+                             source=self.source(), binaries=list(LINUX_BINARIES), setup=LINUX_SETUP, build=LINUX_BUILD)
+            if r.get("state") != "ready":
+                raise Unreachable(f"{self.name}: {r.get('state')}: {r.get('note') or '...'}")
+            self.log(f"  [{self.name}] bundle {self.hash} ready (built from source {self.source()[:16]})")
+        self.pushed = True
+
+    def launch(self, a: dict, grant: str) -> dict:
+        self.push()
+        d = self.attempt_dir(a)
+        job = self.job(self, a, d)
+        job["selfplay_args"] = list(job["selfplay_args"]) + ["--lease", f"{d}/heartbeat", "--lease-seconds", str(self.lease)]
+        job["env_file"] = f"{self.root}/env.json"
+        r = self.py_json(_LINUX_LAUNCH, d=d, job=job, grant=grant, run=RUN_PY, stop_file=STOP_FILE)
+        self.gpu = (r.get("gpu") or "").strip() or None
+        return dict(launched=dict(supervisor=r.get("supervisor")), remote_dir=d, gpu=self.gpu, **(job.get("record") or {}))
+
+    def grant(self, a: dict, text: str):
+        self.py('put(f"{A[\'d\']}/grant.txt", A["text"])\n', d=self.attempt_dir(a), text=text)
+
+    def poll(self, a: dict) -> Poll:
+        r = self.py_json(_LINUX_POLL, d=self.attempt_dir(a), deletes=list(a.get("to_delete") or []),
+                         launched=((a.get("launched") or {}).get("supervisor")) or {}, status=STATUS, runaways=RUNAWAYS)
+        return poll_from(r, a)
+
+    def delete(self, a: dict, names: list[str]):
+        self.py('for n in A["names"]:\n    remove(f"{A[\'d\']}/selfplay/{n}")\n', d=self.attempt_dir(a), names=list(names))
+
+    def stop(self, a: dict, now: bool):
+        self.py('if os.path.isdir(f"{A[\'d\']}/selfplay"):\n    put(f"{A[\'d\']}/selfplay/{A[\'stop_file\']}", A["text"])\n',
+                d=self.attempt_dir(a), stop_file=STOP_FILE, text="now" if now else "")
+
+    def kill(self, a: dict):
+        self.py(_LINUX_KILL, d=self.attempt_dir(a), stop_file=STOP_FILE,
+                launched=((a.get("launched") or {}).get("supervisor")) or {})
+
+    def recover(self, a: dict):
+        self.py(_LINUX_RECOVER, timeout=1800, d=self.attempt_dir(a))
+
+
+def host_class(worker: dict):
+    """A worker's host: `"os": "linux"` a `LinuxSshHost`, a Windows one (the default) an `SshHost`."""
+    return LinuxSshHost if worker.get("os") == "linux" else SshHost
+
+
+def judge_worker(workers: list[dict]) -> dict:
+    """The worker pair mining judges on: the first Windows one (`mining.RemoteJudge` is PowerShell)."""
+    for w in workers:
+        if w.get("os", "windows") == "windows":
+            return w
+    raise SystemExit("pair mining judges on a Windows worker, and the workers file has none: --no-mine, or add one")
+
+
+def poll_from(r: dict, a: dict) -> Poll:
+    """A worker's poll script's answer (`job`, `known`, `alive`, `pids`, `shards`, and the raw texts of its status,
+    exit, runaways, report and grant files), read: the same for a Windows worker's PowerShell and a Linux one's
+    Python."""
+    def parsed(text):
+        if isinstance(text, dict):  # a string PowerShell decorated with its provider's properties
+            text = text.get("value")
+        try:
+            return json.loads(text) if text else None
+        except ValueError:
+            return None
+
+    shards = r.get("shards") or []
+    if isinstance(shards, str):
+        shards = [shards]
+    ex = parsed(r.get("exit"))
+    runaways = []
+    runaway_text = r.get("runaways")
+    if isinstance(runaway_text, dict):
+        runaway_text = runaway_text.get("value")
+    for line in (runaway_text or "").splitlines():
+        v = parsed(line.strip())
+        if v and "index" in v:
+            runaways.append(int(v["index"]))
+    pids = parsed(r.get("pids")) or {}
+    if pids:
+        a["pids"] = pids
+    grant = r.get("grant")
+    if isinstance(grant, dict):
+        grant = grant.get("value")
+    if not r.get("job"):
+        started = False  # nothing was started: job.json is written just before the process
+    elif r.get("known") or ex is not None:
+        started = True
+    else:
+        # Being launched this moment, or launched by a coordinator that stopped before it recorded the process:
+        # pids.json comes within seconds; until the grace is over it is not given up.
+        started = None
+    return Poll(status=parsed(r.get("status")), exit=None if ex is None else int(ex["code"]),
+                alive=bool(r.get("alive")), shards=sorted(shards), runaways=runaways, report=parsed(r.get("report")),
+                started=started, grant=(grant or "").replace("\r\n", "\n") if r.get("job") else None)
 
 
 def root_tag(root: Path) -> str:

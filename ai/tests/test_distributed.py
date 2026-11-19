@@ -491,6 +491,68 @@ class DistributedTest(unittest.TestCase):
         with self.assertRaises(Unreachable):
             h.poll(a)
 
+    def test_a_linux_workers_scripts_compile_and_its_answers_are_read_as_a_windows_ones(self):
+        for script in (dist._LINUX_PRUNE, dist._LINUX_HAVE, dist._LINUX_ASSEMBLE, dist._LINUX_LAUNCH, dist._LINUX_POLL,
+                       dist._LINUX_KILL, dist._LINUX_RECOVER, dist.RUN_PY):
+            compile(dist._PY_PRELUDE + script, "worker", "exec")
+        calls, answers = [], []
+
+        class R:
+            def __init__(self, code, out=b"", err=b""):
+                self.returncode, self.stdout, self.stderr = code, out, err
+
+        def run(cmd, **kw):
+            calls.append((cmd, kw.get("input")))
+            return answers.pop(0)
+
+        w = dict(name="v", host="1.2.3.4", port=2200, user="root", root="/workspace/compute", key="k", os="linux")
+        self.assertIs(dist.host_class(w), dist.LinuxSshHost)
+        manifest = {"src.tar.gz": dict(sha256="ab" * 32, size=1)}
+        h = dist.LinuxSshHost(w, "fp-abc", 6, {}, manifest, "h", None, log=lambda *_: None, run=run)
+        a = dict(id="v-a1", nonce="n", launched=dict(supervisor=dict(pid=9)))
+        printed = dict(job=True, known=True, status=json.dumps(dict(Taken=2)), exit=json.dumps(dict(code=0)), pids=json.dumps(dict(selfplay=7)),
+                       alive=False, shards=["x.shard.zst"], runaways=None, grant="0..4\nend\n", report=json.dumps(dict(Dropped=0)))
+        answers.append(R(0, ("Welcome to vast.ai\n" + json.dumps(printed)).encode()))
+        p = h.poll(a)
+        self.assertEqual((p.exit, p.alive, p.shards, p.status["Taken"], p.started, p.grant), (0, False, ["x.shard.zst"], 2, True, "0..4\nend\n"))
+        cmd, script = calls[-1]
+        self.assertIn("-p", cmd)
+        self.assertIn("root@1.2.3.4", cmd)
+        self.assertTrue(cmd[-1].endswith("exec python3 -"))
+        self.assertIn(b"/workspace/compute/gens/fp-abc/gen6/v/v-a1-n", base64_args(script))
+        # A worker still being set up or built is not ready: the coordinator asks again later.
+        answers.append(R(0, json.dumps(dict(complete=False, blobs=["ab" * 32])).encode()))
+        answers.append(R(0, json.dumps(dict(state="building", note="Compiling cantrip-rules")).encode()))
+        with self.assertRaisesRegex(Unreachable, "building: Compiling"):
+            h.push()
+        self.assertFalse(h.pushed)
+        answers.append(R(0, json.dumps(dict(complete=True)).encode()))
+        h.push()
+        self.assertTrue(h.pushed)
+        answers.append(R(255, err=b"connection refused"))
+        with self.assertRaises(Unreachable):
+            h.poll(a)
+
+    def test_the_source_tarball_is_the_same_for_the_same_tree(self):
+        import tarfile  # noqa: PLC0415
+
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            (repo / "crates/a").mkdir(parents=True)
+            (repo / "Cargo.toml").write_text("[workspace]\n")
+            (repo / "crates/a/lib.rs").write_text("fn a() {}\n")
+            (repo / "notes.txt").write_text("not source\n")
+            for c in (["init", "-q"], ["add", "."], ["-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "x"]):
+                subprocess.run(["git", *c], cwd=repo, check=True)
+            first = dist.source_tar(repo, Path(tmp) / "a")
+            second = dist.source_tar(repo, Path(tmp) / "b")
+            self.assertEqual(first.name, second.name)
+            self.assertEqual(first.read_bytes(), second.read_bytes())
+            with tarfile.open(first) as t:
+                self.assertEqual(t.getnames(), ["Cargo.toml", "crates/a/lib.rs"])
+            (repo / "crates/a/lib.rs").write_text("fn b() {}\n")
+            self.assertNotEqual(dist.source_tar(repo, Path(tmp) / "a").name, first.name)
+
     def test_load_workers_reads_the_file(self):
         with tempfile.TemporaryDirectory() as tmp:
             p = Path(tmp) / "workers.json"
@@ -773,6 +835,14 @@ class DistributedTest(unittest.TestCase):
                 self.assertFalse(fresh.poll(a).alive, "another process with its id")
             finally:
                 host.kill(a)
+
+
+def base64_args(script: bytes) -> bytes:
+    """A Linux worker's script's arguments (`_PY_PRELUDE`'s `A`), decoded."""
+    import base64  # noqa: PLC0415
+    import re  # noqa: PLC0415
+
+    return base64.b64decode(re.search(rb'b64decode\("([A-Za-z0-9+/=]+)"\)', script).group(1))
 
 
 if __name__ == "__main__":

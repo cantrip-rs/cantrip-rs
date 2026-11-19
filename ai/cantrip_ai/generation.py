@@ -1330,8 +1330,10 @@ def main(argv=None):
             return None
         cache_path = root / "dist" / "hashes.json"
         cache = distributed.read_json(cache_path) or {}
-        files = manifest = bundle_hash = None
-        if workers:
+        # A bundle for each kind of worker: a Windows one's carries this machine's binaries and libraries, a Linux one's
+        # the source it builds its own from (`distributed.LinuxSshHost`).
+        bundles: dict[str, tuple] = {}  # its files, manifest and hash, as a host takes them
+        if any(w.get("os", "windows") == "windows" for w in workers):
             cuda = os.environ.get("CANTRIP_CUDA_LIBS")
             if not cuda:
                 import torch  # noqa: PLC0415
@@ -1342,8 +1344,18 @@ def main(argv=None):
             files = distributed.bundle_files(SELFPLAY, INFER, Path(args.ort_dylib).parent, Path(cuda), champ, decks_dir,
                                              decks_dir, listed, [n.strip() for n in args.worker_cuda_dlls.split(",") if n.strip()])
             bundle_hash, manifest = distributed.bundle_manifest(files, cache)
-            log(f"  worker bundle {bundle_hash}: {len(files)} files, "
+            bundles["windows"] = (files, manifest, bundle_hash)
+        if any(w.get("os") == "linux" for w in workers):
+            files = distributed.linux_bundle_files(distributed.source_tar(REPO, root / "dist" / "src"), champ, decks_dir,
+                                                   decks_dir, listed)
+            bundle_hash, manifest = distributed.bundle_manifest(files, cache)
+            bundles["linux"] = (files, manifest, bundle_hash)
+        for kind, (files, manifest, bundle_hash) in bundles.items():
+            log(f"  {kind} worker bundle {bundle_hash}: {len(files)} files, "
                 f"{sum(m['size'] for m in manifest.values()) / 2**30:.2f} GB")
+
+        def bundle_of(w: dict) -> tuple:
+            return bundles[w.get("os", "windows")]
         # What this self-play is (`Ledger.identity`): a ledger made with other settings is refused, and so is a host whose
         # own settings changed.
         model_files = [p for p in champ.iterdir() if p.is_file() and (p.name == "manifest.json" or p.suffix == ".onnx")]
@@ -1355,7 +1367,7 @@ def main(argv=None):
             pairings=distributed.files_hash([listed], cache) if listed is not None else None,
             decks=distributed.files_hash(sorted(decks_dir.glob("*.txt")), cache) if decks_dir is not None else None)
         local_name = distributed.local_name()
-        hosts_identity = {w["name"]: dict(bundle=bundle_hash, backend=w.get("backend", "gpu"),
+        hosts_identity = {w["name"]: dict(bundle=bundle_of(w)[2], backend=w.get("backend", "gpu"),
                                           server_args=" ".join(server_words[w["name"]]),
                                           precision=distributed.precision_of(server_words[w["name"]]))
                           for w in workers}
@@ -1379,7 +1391,8 @@ def main(argv=None):
             w, b = host.w, host.bundle_dir()
             model = f"{b}/model/{champ.name}"
             # Its arguments: the executable is the job's own.
-            remote = [str(c) for c in selfplay_command(f"{b}/bin/cantrip-selfplay.exe", model, f"{d}/selfplay",
+            exe = "" if w.get("os") == "linux" else ".exe"
+            remote = [str(c) for c in selfplay_command(f"{b}/bin/cantrip-selfplay{exe}", model, f"{d}/selfplay",
                                                        w.get("lanes") or args.worker_lanes)[1:]]
             if decks_dir is not None:
                 remote += ["--decks", f"{b}/decks", "--prior", f"{b}/decks", "--pairings", f"{b}/pairings.txt"]
@@ -1387,15 +1400,17 @@ def main(argv=None):
             # The recovery opens no evaluator: a backend that needs no server.
             recover = remote + ["--backend", "tract", "--recover"]
             remote += ["--grant", f"{d}/grant.txt", "--host", host.name]
-            env = {"ORT_DYLIB_PATH": f"{b}/bin/onnxruntime.dll", "CANTRIP_CUDA_LIBS": f"{b}/bin", "CANTRIP_PROGRESS": "0"}
+            # A Linux worker's onnxruntime and CUDA libraries are its own (its `env.json`, which its supervisor reads).
+            env = ({"CANTRIP_PROGRESS": "0"} if exe == "" else
+                   {"ORT_DYLIB_PATH": f"{b}/bin/onnxruntime.dll", "CANTRIP_CUDA_LIBS": f"{b}/bin", "CANTRIP_PROGRESS": "0"})
             mine = hosts_identity[host.name]
-            record = dict(server_args=mine["server_args"], precision=mine["precision"], bundle=bundle_hash)
+            record = dict(server_args=mine["server_args"], precision=mine["precision"], bundle=mine["bundle"])
             if w.get("backend", "gpu") == "gpu":
-                return dict(selfplay=f"{b}/bin/cantrip-selfplay.exe", selfplay_args=remote + ["--backend", "remote"],
-                            recover_args=recover, env=env, infer=f"{b}/bin/cantrip-infer.exe", record=record,
+                return dict(selfplay=f"{b}/bin/cantrip-selfplay{exe}", selfplay_args=remote + ["--backend", "remote"],
+                            recover_args=recover, env=env, infer=f"{b}/bin/cantrip-infer{exe}", record=record,
                             infer_args=["serve", "--model", model, "--port", "0", "--ready-file", f"{d}/infer.ready",
                                         "--device", str(w.get("device", 0)), *server_words[host.name]])
-            return dict(selfplay=f"{b}/bin/cantrip-selfplay.exe", selfplay_args=remote + ["--backend", w["backend"]],
+            return dict(selfplay=f"{b}/bin/cantrip-selfplay{exe}", selfplay_args=remote + ["--backend", w["backend"]],
                         recover_args=recover, env=env, infer=None, infer_args=[], record=dict(record, server_args=None, precision=None))
 
         started = time.time()
@@ -1413,7 +1428,7 @@ def main(argv=None):
                     hosts.append(distributed.LocalHost(local_name, local, out, dist_dir, gen_dir / "logs",
                                                        env=dict(CANTRIP_PROGRESS="0"), cwd=REPO, lease=args.dist_lease,
                                                        identity={k: v for k, v in local_identity.items() if k in ("server_args", "precision") and v}))
-                hosts += [distributed.SshHost(w, tag, gen, files, manifest, bundle_hash, job, log, lease=args.dist_lease)
+                hosts += [distributed.host_class(w)(w, tag, gen, *bundle_of(w), job, log, lease=args.dist_lease)
                           for w in workers]
                 if not hosts:
                     raise SystemExit("--workers with --no-selfplay-local and no worker: no host to play on")
@@ -1604,7 +1619,7 @@ def main(argv=None):
         logs = gen_dir / "logs"
         if args.dry_run:
             log(f"  would mine the gate's pairs in {p.root}, judged by {judge_model.name}"
-                + (f" on {distributed.load_workers(Path(args.workers))[0]['name']}" if args.workers else " here"))
+                + (f" on {distributed.judge_worker(distributed.load_workers(Path(args.workers)))['name']}" if args.workers else " here"))
             return
         if not results.exists():
             raise SystemExit(f"no gate results to mine ({results})")
@@ -1674,7 +1689,7 @@ def main(argv=None):
         log(f"  planned {planned['forks']} forks and {planned['losers']} losers' decisions")
         where = "here"
         if args.workers:
-            worker = distributed.load_workers(Path(args.workers))[0]
+            worker = distributed.judge_worker(distributed.load_workers(Path(args.workers)))
             cuda = os.environ.get("CANTRIP_CUDA_LIBS")
             if not cuda:
                 import torch  # noqa: PLC0415

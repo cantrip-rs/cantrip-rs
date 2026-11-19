@@ -282,8 +282,8 @@ What a generation leaves in `ai-data/`:
 
 ### Distributed self-play
 
-`--workers FILE` plays a generation's self-play on this machine and on other Windows machines over SSH, with nothing
-run by hand on them (`ai/cantrip_ai/distributed.py`). Off by default; with it off, the driver runs self-play as above.
+`--workers FILE` plays a generation's self-play on this machine and on other Windows or Linux machines over SSH, with
+nothing run by hand on them (`ai/cantrip_ai/distributed.py`). Off by default; with it off, the driver runs self-play as above.
 
 **The workers file** (e.g. `ai-data/compute/workers.json`):
 
@@ -302,8 +302,8 @@ run by hand on them (`ai/cantrip_ai/distributed.py`). Off by default; with it of
 CUDA device, 0), `server_args` (its `cantrip-infer`'s; otherwise `--worker-server-args`, which defaults to
 `--server-args` with `--server-impl native` and else to `--precision fp16 --pipelines 1`, the native server's settings
 for self-play; `--shapes` is refused, since smaller batch shapes make a game depend on its batch companions), `backend` (`gpu`, the default:
-`cantrip-infer` on its GPU; or `tract`/`ort`: no server, the CPU), `enabled: false` to leave it out, and anything else
-as notes.
+`cantrip-infer` on its GPU; or `tract`/`ort`: no server, the CPU), `os` (`windows`, the default, or `linux`: "A Linux
+worker" below), `enabled: false` to leave it out, and anything else as notes.
 
 **Setting up a worker, once** (Windows 10/11, as an administrator on it):
 
@@ -349,6 +349,27 @@ it ends (`try`/`finally`), the self-play's exit code in `exit.json`, the server 
 is killed, only when all three match: an id Windows reused is another process. A poll reads liveness first and
 `exit.json` after, so a run that has just exited is never taken for a crash. Its logs are `infer.log` and
 `selfplay.log` there (copied to `genN/dist/logs` when the attempt ends).
+
+**A Linux worker** (`"os": "linux"` in the workers file; `distributed.LinuxSshHost`) is a GPU machine or container
+reached over SSH as a user that can install packages (root on a rented container), with an NVIDIA driver for CUDA 12 and
+nothing else prepared: a fresh Ubuntu image will do. It keeps the same tree under its `root` and the same attempt files
+as a Windows worker; its scripts are Python, piped to `python3 -` (installed if missing). Its bundle carries the
+engine's source in place of binaries and libraries - `ROOT/dist/src/src-<hash>.tar.gz`, git's tracked files under
+`Cargo.toml`, `Cargo.lock`, `crates/`, `content/` and `scenarios/` as this working tree has them (so what this machine
+built), made the same way every time and remade only when a file's size or time moved - and the worker makes itself
+ready in turn: once, its toolchain and libraries (`distributed.LINUX_SETUP`: Rust, a C compiler, onnxruntime-gpu with
+cuDNN, cuRAND, cuFFT, cuBLAS and cudart in a venv under `root`; `ROOT_REMOTE/env.json` written once onnxruntime's CUDA
+provider resolves every library, `setup.log`), then for each new source its build (`LINUX_BUILD`: `cargo build
+--release`, cantrip-selfplay and cantrip-explore with `--features ort`, cantrip-infer with `--features gpu`, into
+`ROOT_REMOTE/builds/<sha>/`, cargo's `target/` shared so a change rebuilds only what it touches; `build.log` there),
+the binaries linked into the bundle's `bin/` before its manifest. Both run detached, and until they are done the worker
+is "not ready" (the reason and the log's last line in the driver's log) and asked again every few minutes, so the other
+hosts play on meanwhile: a first setup and build take ten to twenty minutes. Its attempts' supervisor is `run.py`,
+started in a session of its own (`setsid`), which outlives the SSH session as `Win32_Process.Create`'s does on Windows;
+a process is recorded by its id, its start (`/proc/<pid>/stat`) and its executable. The shards' header names no
+binary, so a Linux build's games are the same as this machine's. A rented machine's effective CPUs are its CPU quota
+(`/sys/fs/cgroup/cpu/cpu.cfs_quota_us` over the period, or `cpu.max`), not `nproc`: self-play scales to the first
+limiter, and on a slice of a large host that is usually the CPU. Pair mining's judge stays on the first Windows worker.
 
 **The lease.** Every self-play the driver starts, local or remote, holds a lease (`cantrip-selfplay --lease`): a
 `heartbeat` file the driver touches at each poll. Once it has not been touched for `--dist-lease` seconds (900), the
