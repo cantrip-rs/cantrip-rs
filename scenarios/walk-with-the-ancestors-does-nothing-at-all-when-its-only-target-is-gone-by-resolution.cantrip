@@ -1,0 +1,66 @@
+# Walk with the Ancestors: when the one target it chose (Black Lotus in Bot1's graveyard) is illegal as the spell resolves, the whole spell is countered
+# on resolution and does nothing (CR 608.2b): nothing returns and nothing is discovered. Bot2 sacrifices Tormod's Crypt (it ends in Bot2's graveyard) in response to exile Bot1's
+# graveyard, Lotus with it. Bot1's library keeps Grizzly Bears on top (discover 4 would have found it), and Walk goes to the graveyard.
+
+[Bot1 Deck]
+Walk with the Ancestors
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Forest
+Grizzly Bears
+Forest x20
+
+[Bot2 Deck]
+Tormod's Crypt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Walk with the Ancestors.Cast(Bot1.Graveyard.Black Lotus)
+Bot1.Pass
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard.Count = 0
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Walk with the Ancestors
+Bot1.Hand = Forest
+Bot1.Library.Count = 21
+Exile = Black Lotus
+Bot2.Graveyard = Tormod's Crypt

@@ -1,0 +1,53 @@
+# Walk with the Ancestors {4}{G}: "Return up to one target permanent card from your graveyard to your hand. Discover 4." Black Lotus (sacrificed for
+# {G}{G}{G}) is in Bot1's graveyard; Walk returns it to hand (the sentence ends first, CR 608.2c), then discovers 4: the top of the library is a Forest
+# (a land) and Nova Hellkite (mana value 5, too high), which are exiled, then Lightning Bolt (mana value 1), which Bot1 casts for free at Bot2 (20 - 3 = 17).
+# The Forest and the Hellkite go to the bottom of the library: 12 cards were left after the opening hand, the Bolt left it and Forest and Hellkite returned to it, so 12.
+
+[Bot1 Deck]
+Walk with the Ancestors
+Black Lotus
+Mox Emerald
+Mox Ruby
+Forest
+Forest
+Forest
+Forest
+Nova Hellkite
+Lightning Bolt
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+? Bot1.Graveyard = Black Lotus
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Walk with the Ancestors.Cast(Bot1.Graveyard.Black Lotus)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot2)
+? Bot2.Life = 20
+? Bot1.Hand = Black Lotus; Forest; Forest; Forest
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt; Walk with the Ancestors
+Bot1.Hand = Black Lotus; Forest; Forest; Forest
+Bot1.Library.Count = 12
+Exile.Count = 0

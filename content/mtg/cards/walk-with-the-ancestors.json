@@ -1,0 +1,6 @@
+{
+  "name": "Walk with the Ancestors",
+  "manaCost": "{4}{G}",
+  "type": "Sorcery",
+  "oracleText": "Return up to one target permanent card from your graveyard to your hand. Discover 4. (Exile cards from the top of your library until you exile a nonland card with mana value 4 or less. Cast it without paying its mana cost or put it into your hand. Put the rest on the bottom in a random order.)"
+}
