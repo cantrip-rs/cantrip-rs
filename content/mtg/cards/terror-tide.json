@@ -1,0 +1,6 @@
+{
+  "name": "Terror Tide",
+  "manaCost": "{2}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Fathomless descent — All creatures get -X/-X until end of turn, where X is the number of permanent cards in your graveyard."
+}

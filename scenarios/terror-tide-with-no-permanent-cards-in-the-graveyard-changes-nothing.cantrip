@@ -1,0 +1,45 @@
+# Terror Tide: "All creatures get -X/-X until end of turn, where X is the number of permanent cards in your graveyard" (CR 110.4a).
+# Bot1's graveyard holds no permanent cards when Terror Tide resolves (X = 0), so nothing shrinks and nothing dies: a Memnite and
+# Bot2's Ornithopter keep their size. Bot2's sacrificed Black Lotus is a permanent card in Bot2's graveyard, not "your graveyard":
+# counted, it would make X 1 and kill the Memnite.
+
+[Bot1 Deck]
+Mox Jet
+Sol Ring
+Terror Tide
+Memnite
+Swamp x3
+Swamp x17
+
+[Bot2 Deck]
+Black Lotus
+Ornithopter
+Island x5
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Terror Tide.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Terror Tide
+Bot2.Graveyard = Black Lotus
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
