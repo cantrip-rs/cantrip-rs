@@ -1,0 +1,56 @@
+# Coati Scavenger {2}{G} (3/2): "Descend 4 - When this creature enters, if there are four or more permanent cards in your graveyard,
+# return target permanent card from your graveyard to your hand" (CR 207.2c, 603.4, 110.4a, 115.1). Bot1 mills four Plains with two
+# Thought Scours (the Scours, instants, sit in the graveyard too but are no permanent cards): exactly four. Coati is paid exactly
+# (Emerald, Jet and Ruby). Bot2's Ornithopter, discarded to hand size, is a permanent card in the wrong graveyard (refused, and it
+# stays there), the Scour an instant card in the right one (refused); a Plains is accepted and returns to Bot1's hand.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Jet
+Mox Ruby
+Thought Scour
+Thought Scour
+Coati Scavenger
+Plains x20
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 6
+? Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {B}{R}{G}
+Bot1.Hand.Coati Scavenger.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Graveyard.Ornithopter)
+! Bot1.Target(Bot1.Graveyard.Thought Scour)
+Bot1.Target(Bot1.Graveyard.Plains#1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Coati Scavenger.Power = 3
+Bot1.Battlefield.Coati Scavenger.Toughness = 2
+Bot1.Graveyard.Count = 5
+Bot1.Hand = Plains; Plains; Plains; Plains
+Bot2.Graveyard = Ornithopter

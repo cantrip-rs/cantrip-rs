@@ -1,0 +1,8 @@
+{
+  "name": "Coati Scavenger",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Raccoon",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Descend 4 — When this creature enters, if there are four or more permanent cards in your graveyard, return target permanent card from your graveyard to your hand."
+}

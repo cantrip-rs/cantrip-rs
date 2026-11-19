@@ -1,0 +1,38 @@
+# Coati Scavenger: the "if there are four or more permanent cards in your graveyard" (CR 603.4, 110.4a) counts Bot1's graveyard only.
+# Bot1 has three there when Coati enters: two Plains milled by Thought Scour and Black Lotus, sacrificed for mana as Coati is cast
+# (Thought Scour is no permanent card). Bot2's Ornithopter, discarded to hand size, makes four permanent cards in the two graveyards,
+# which do not count: the trigger never goes on the stack (with a target to choose it would have stopped for one), so nothing
+# returns. (The scenarios with exactly four are the positive controls.)
+
+[Bot1 Deck]
+Mox Sapphire
+Thought Scour
+Black Lotus
+Coati Scavenger
+Plains x23
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Coati Scavenger.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 4
+? Bot2.Graveyard = Ornithopter
+! Bot1.Target()
+? Stack.Count = 0
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Coati Scavenger; Mox Sapphire
+Bot1.Graveyard.Count = 4
+Bot2.Graveyard = Ornithopter

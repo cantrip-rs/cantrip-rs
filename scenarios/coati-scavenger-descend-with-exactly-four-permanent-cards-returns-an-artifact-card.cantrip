@@ -1,0 +1,57 @@
+# Coati Scavenger (CR 110.4: "permanent card" is any permanent type, not only the lands of the other scenario): Bot1 has two Plains
+# (Thought Scour), Black Lotus (sacrificed for mana) and Mind Stone ("{1}, {T}, Sacrifice this artifact: Draw a card", paid with the
+# last of the Lotus mana) in the graveyard, exactly four permanent cards, and Coati is paid with the three Moxen. The Scour is
+# refused (an instant card), Black Lotus accepted and returned to Bot1's hand.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Jet
+Mox Ruby
+Thought Scour
+Black Lotus
+Coati Scavenger
+Mind Stone
+Plains x20
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mind Stone.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 5
+? Bot1.Mana =
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Coati Scavenger.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Graveyard.Thought Scour)
+Bot1.Target(Bot1.Graveyard.Black Lotus)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard.Count = 4
+Bot1.Hand = Plains; Plains; Black Lotus
+Bot1.Battlefield = Coati Scavenger; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire
