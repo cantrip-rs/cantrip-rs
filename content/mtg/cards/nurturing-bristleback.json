@@ -1,0 +1,8 @@
+{
+  "name": "Nurturing Bristleback",
+  "manaCost": "{5}{G}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "When this creature enters, create a 3/3 green Dinosaur creature token.\nForestcycling {2} ({2}, Discard this card: Search your library for a Forest card, reveal it, put it into your hand, then shuffle.)"
+}

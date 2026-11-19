@@ -1,0 +1,30 @@
+# Nurturing Bristleback's forestcycling {2} (CR 702.29e) from the hand: paid exactly with Mox Ruby and Mox Jet, the pool ends
+# empty, and the Forest is found in the library and put into the hand. The Bristleback goes to the graveyard without ever entering,
+# so its enters trigger does not happen: Bot1 has no token.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Nurturing Bristleback
+Island x4
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Nurturing Bristleback.Activate(Ability: Forestcycling)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+? Bot1.Mana = 
+Bot1.Search(Forest)
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Forest; Island; Island; Island; Island
+Bot1.Graveyard = Nurturing Bristleback
+Bot1.Battlefield = Mox Jet; Mox Ruby

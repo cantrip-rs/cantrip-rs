@@ -1,0 +1,46 @@
+# Nurturing Bristleback: "When this creature enters, create a 3/3 green Dinosaur creature token." Cast for {5}{G}{G} (Black Lotus's
+# GGG and Mox Emerald, Ruby, Jet and Pearl), it is a 5/5 Dinosaur and the trigger makes a 3/3 green Dinosaur token with no
+# abilities (CR 111.1, 111.4) under Bot1's control.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Nurturing Bristleback
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nurturing Bristleback.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Mana = 
+Bot1.Battlefield.Nurturing Bristleback.Power = 5
+Bot1.Battlefield.Nurturing Bristleback.Toughness = 5
+Bot1.Battlefield.Dinosaur Token.Power = 3
+Bot1.Battlefield.Dinosaur Token.Toughness = 3
+Bot1.Battlefield.Dinosaur Token.Colors = Green
+Bot1.Battlefield.Dinosaur Token.Subtypes = Dinosaur
+Bot1.Battlefield.Dinosaur Token.Keywords = (absent)
+Bot2.Battlefield.Count = 0
