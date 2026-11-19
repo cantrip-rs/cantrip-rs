@@ -1,0 +1,92 @@
+# Stormkeld Prowler (2/1) puts two +1/+1 counters on itself whenever its controller casts a spell with mana value 5 or greater (CR 603.2).
+# Amphin Cutthroat (mana value 4, one under the limit) leaves it a 2/1; Ancient Carp (mana value 5, exactly the limit) makes it 4/3; and
+# Bot2's own Ancient Carp, cast in between, is not a spell Bot1 cast, so it stays 4/3 (the trigger asks whose spell it is).
+
+[Bot1 Deck]
+Stormkeld Prowler
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Amphin Cutthroat
+Ancient Carp
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Ancient Carp
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Stormkeld Prowler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Amphin Cutthroat.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stormkeld Prowler.Power = 2
+? Bot1.Battlefield.Stormkeld Prowler.Counters.PlusOnePlusOne = (absent)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Ancient Carp.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Stormkeld Prowler.Power = 2
+? Bot1.Battlefield.Stormkeld Prowler.Counters.PlusOnePlusOne = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ancient Carp.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Stormkeld Prowler.Power = 4
+Bot1.Battlefield.Stormkeld Prowler.Toughness = 3
+Bot1.Battlefield.Stormkeld Prowler.Counters.PlusOnePlusOne = 2
