@@ -1,0 +1,17 @@
+{
+  "name": "Conceited Witch",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Human Warlock",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Menace"
+  ],
+  "adventure": {
+    "name": "Price of Beauty",
+    "manaCost": "{B}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Create a Wicked Role token attached to target creature you control. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

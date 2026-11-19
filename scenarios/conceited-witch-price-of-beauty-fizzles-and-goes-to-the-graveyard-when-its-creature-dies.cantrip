@@ -1,0 +1,37 @@
+# CR 608.2b, 715.3d: Bot1's Price of Beauty targets its Ornithopter; Bot2 answers with Lightning Bolt, which kills it first. The Adventure's
+# only target is gone, so it does not resolve: no Role is created, and as it was not resolved it is put into the graveyard, not exiled on
+# an adventure, so the creature cannot be cast later.
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Conceited Witch
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Conceited Witch.Cast(Bot1.Battlefield.Ornithopter; Ability: Adventure)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard = Conceited Witch; Ornithopter; Black Lotus
+Bot1.Battlefield.Count = 0

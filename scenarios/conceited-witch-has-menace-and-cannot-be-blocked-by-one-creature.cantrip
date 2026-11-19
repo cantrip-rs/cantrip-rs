@@ -1,0 +1,28 @@
+# Conceited Witch cast from the hand is a 2/3 with menace (CR 702.111): Bot2's single Ornithopter cannot block it, and a second
+# blocker would be needed. Bot1 attacks on turn 3 for 2.
+
+[Bot1 Deck]
+Black Lotus
+Conceited Witch
+Swamp x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Conceited Witch.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Conceited Witch > Bot2)
+! Bot2.Block(Ornithopter > Conceited Witch)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Conceited Witch.Keywords = Menace
