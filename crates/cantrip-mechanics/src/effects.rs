@@ -3818,6 +3818,16 @@ pub fn attached_creature_gets<const P: i32, const T: i32>(g: &mut dyn Game, item
     Ok(())
 }
 
+/// "Put a +1/+1 counter on equipped creature" (CR 608.2h): the creature this Equipment is attached to as the ability resolves,
+/// or as it last existed if the Equipment has left the battlefield; nothing if it is not attached to a creature. Lost Jitte and
+/// Tarrian's Soulcleaver print it.
+pub fn plus_one_counter_on_equipped_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = g.obj(item.object).attached_to {
+        g.add_counters(creature, CounterKind::PlusOne, 1);
+    }
+    Ok(())
+}
+
 /// "This creature can attack this turn as though it didn't have defender" (CR 702.3b, 609.4). Krotiq Nestguard, Vodalian War
 /// Machine and Stalked Researcher print it.
 pub fn this_can_attack_as_though_it_didnt_have_defender(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
