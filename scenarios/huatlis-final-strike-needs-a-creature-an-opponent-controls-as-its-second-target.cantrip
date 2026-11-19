@@ -1,0 +1,51 @@
+# Huatli's Final Strike has two targets, both required: a creature you control and a creature an opponent controls (unlike Assert Perfection's "up to one"). Turn 3: Bot2 controls no
+# creature, so the spell can't be cast although Bot1's Alpine Grizzly is there. On turn 5 Bot2's Ornithopter is a legal second target and the Strike is cast: a Mox Jet is no creature (the
+# refusal), and Alpine Grizzly, 5/2 now, kills the Ornithopter (Bot2 also discarded an Island down to seven cards at turn 4's cleanup).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Alpine Grizzly
+Huatli's Final Strike
+Mox Jet
+Island
+Swamp x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Huatli's Final Strike.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Huatli's Final Strike.Cast
+! Bot1.Target(Bot1.Battlefield.Mox Jet)
+Bot1.Target(Bot1.Battlefield.Alpine Grizzly)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Graveyard = Ornithopter; Island
+Bot1.Battlefield.Alpine Grizzly.Power = 5
+Bot1.Battlefield.Alpine Grizzly.Toughness = 2
+Bot1.Battlefield.Alpine Grizzly.Damage = 0

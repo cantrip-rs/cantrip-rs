@@ -1,0 +1,6 @@
+{
+  "name": "Huatli's Final Strike",
+  "manaCost": "{2}{G}",
+  "type": "Instant",
+  "oracleText": "Target creature you control gets +1/+0 until end of turn. It deals damage equal to its power to target creature an opponent controls."
+}
