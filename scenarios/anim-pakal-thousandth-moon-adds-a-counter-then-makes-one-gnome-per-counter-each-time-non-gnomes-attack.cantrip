@@ -1,0 +1,56 @@
+# Anim Pakal, Thousandth Moon {1}{R}{W} (1/2): "Whenever you attack with one or more non-Gnome creatures, put a +1/+1 counter on
+# Anim Pakal, then create X 1/1 colorless Gnome artifact creature tokens that are tapped and attacking, where X is the number of
+# +1/+1 counters on Anim Pakal" (CR 122.1, 508.4, 608.2h). Ornithopter (a 0/2 non-Gnome) attacks alone on turn 3 (Pakal itself stays
+# home - it need not attack): one counter, one Gnome (X = 1, counted after the counter), a 2/3 Pakal; Bot2 takes the Gnome's 1.
+# On turn 5 Ornithopter and the Gnome attack: two counters, X = 2 exactly, two more Gnomes: Bot2 takes the old Gnome's 1 and
+# the two new ones' 2 (16), and all three Gnomes are tapped colorless artifact creatures.
+
+[Bot1 Deck]
+Anim Pakal, Thousandth Moon
+Mox Ruby
+Mox Pearl
+Mox Jet
+Ornithopter
+Plains
+Plains
+Plains x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Anim Pakal, Thousandth Moon.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Anim Pakal, Thousandth Moon.Power = 2
+? Bot1.Battlefield.Anim Pakal, Thousandth Moon.Toughness = 3
+? Bot1.Battlefield.Gnome Token.Power = 1
+? Bot1.Battlefield.Gnome Token.Toughness = 1
+? Bot1.Battlefield.Gnome Token.Colors = (absent)
+? Bot1.Battlefield.Gnome Token.Tapped = true
+? Combat.Attackers.Count = 2
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T5 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2; Gnome Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Anim Pakal, Thousandth Moon.Power = 3
+? Bot1.Battlefield.Anim Pakal, Thousandth Moon.Toughness = 4
+? Combat.Attackers.Count = 4
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Anim Pakal, Thousandth Moon.Power = 3

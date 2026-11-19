@@ -1,0 +1,58 @@
+# Anim Pakal, Thousandth Moon {1}{R}{W} (1/2): the trigger needs a non-Gnome attacker (CR 603.2c). Turn 3: Anim Pakal and Ornithopter
+# attack together, two non-Gnomes declared at once make one batch, so one trigger: one counter, one Gnome (Pakal 2/3, so 2 +
+# 0 + 1 damage: Bot2 at 17). Turn 5: only the Gnome attacks: nothing triggers, no counter (still 2/3), no new Gnome (Bot2 at 16).
+# Turn 7: Ornithopter and the Gnome attack, a non-Gnome among them: the trigger again, two counters, two new Gnomes (Bot2 at
+# 13: the old Gnome's 1 and the two new ones' 2).
+
+[Bot1 Deck]
+Anim Pakal, Thousandth Moon
+Mox Ruby
+Mox Pearl
+Mox Jet
+Ornithopter
+Plains
+Plains
+Plains x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Anim Pakal, Thousandth Moon.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Anim Pakal, Thousandth Moon > Bot2; Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Anim Pakal, Thousandth Moon.Power = 2
+? Bot1.Battlefield.Count = 6
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+[T5 Bot1.Main1]
+Bot1.Attack(Gnome Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Anim Pakal, Thousandth Moon.Power = 2
+? Bot1.Battlefield.Count = 6
+[T5 Bot1.Main2]
+? Bot2.Life = 16
+[T7 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2; Gnome Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Anim Pakal, Thousandth Moon.Power = 3
+? Bot1.Battlefield.Count = 8
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Anim Pakal, Thousandth Moon.Power = 3

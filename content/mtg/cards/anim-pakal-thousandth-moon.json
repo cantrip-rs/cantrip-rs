@@ -1,0 +1,8 @@
+{
+  "name": "Anim Pakal, Thousandth Moon",
+  "manaCost": "{1}{R}{W}",
+  "type": "Legendary Creature — Human Soldier",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Whenever you attack with one or more non-Gnome creatures, put a +1/+1 counter on Anim Pakal, then create X 1/1 colorless Gnome artifact creature tokens that are tapped and attacking, where X is the number of +1/+1 counters on Anim Pakal."
+}
