@@ -1,0 +1,86 @@
+# Return Triumphant: "Return target creature card with mana value 3 or less from your graveyard to the battlefield. Create a Young
+# Hero Role token attached to it." Bot2's Bolts put Bot1's Hired Blade (mana value 3) and Abbey Griffin (4) into Bot1's graveyard,
+# and Bot1's own Bolt puts Bot2's Ornithopter (0) into Bot2's; Bot1's Bolt itself (a noncreature card) is in Bot1's graveyard too.
+# On turn 5 Return Triumphant is refused for the Griffin (4 is over the limit), the Ornithopter (not Bot1's graveyard, though 0 is
+# under it) and the Bolt (not a creature); the Hired Blade, at exactly 3, comes back with a Young Hero Role attached.
+
+[Bot1 Deck]
+Plains
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Hired Blade
+Abbey Griffin
+Lightning Bolt
+Return Triumphant
+Island x11
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hired Blade.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Hired Blade)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Abbey Griffin.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Abbey Griffin)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Graveyard = Abbey Griffin; Lightning Bolt; Hired Blade
+? Bot2.Graveyard = Lightning Bolt; Ornithopter; Lightning Bolt
+! Bot1.Hand.Return Triumphant.Cast(Bot1.Graveyard.Abbey Griffin)
+! Bot1.Hand.Return Triumphant.Cast(Bot2.Graveyard.Ornithopter)
+! Bot1.Hand.Return Triumphant.Cast(Bot1.Graveyard.Lightning Bolt)
+Bot1.Hand.Return Triumphant.Cast(Bot1.Graveyard.Hired Blade)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Young Hero.AttachedTo = Hired Blade
+? Bot1.Battlefield.Hired Blade.Tapped = False
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Battlefield.Hired Blade.Power = 3
+Bot1.Battlefield.Hired Blade.Toughness = 2
+Bot1.Graveyard = Return Triumphant; Abbey Griffin; Lightning Bolt
+Bot2.Graveyard = Lightning Bolt; Ornithopter; Lightning Bolt
