@@ -1,0 +1,76 @@
+# Runaway Boulder deals exactly 6 damage (CR 120.3): the target Looming Altisaur (1/7) survives it with 6 damage marked, one short
+# of lethal, while the other candidate, Bot2's Memnite, is left alone. Bot1 pays {6} with Black Lotus and three Moxen at Bot2's end step.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Black Lotus
+Memnite
+Runaway Boulder
+Plains x11
+
+[Bot2 Deck]
+Looming Altisaur
+Memnite
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Island x10
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Looming Altisaur.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.End]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Runaway Boulder.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Target(Bot2.Battlefield.Looming Altisaur)
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Looming Altisaur.Damage = 6
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield.Runaway Boulder.Types = Artifact

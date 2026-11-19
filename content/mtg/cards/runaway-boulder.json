@@ -1,0 +1,9 @@
+{
+  "name": "Runaway Boulder",
+  "manaCost": "{6}",
+  "type": "Artifact",
+  "oracleText": "Flash\nWhen this artifact enters, it deals 6 damage to target creature an opponent controls.\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Flash"
+  ]
+}

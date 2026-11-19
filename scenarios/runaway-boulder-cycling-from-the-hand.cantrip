@@ -1,0 +1,29 @@
+# Runaway Boulder's cycling {2} (CR 702.29a): paying it and discarding the card from the hand draws a card, the Forest on top. The
+# cost {2} is paid exactly with Mana Crypt's {C}{C}, so it holds no colored pip, and the pool ends empty; with only Blasted
+# Landscape's {C} the ability is not offered. The Boulder is in the graveyard, not on the battlefield, so its enters trigger never runs.
+
+[Bot1 Deck]
+Blasted Landscape
+Mana Crypt
+Runaway Boulder
+Plains x4
+Forest
+Plains x12
+
+[Bot2 Deck]
+Grizzly Bears
+Island x24
+
+[Actions]
+Bot1.Hand.Blasted Landscape.Play
+! Bot1.Hand.Runaway Boulder.Activate(Mana: short)
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Runaway Boulder.Activate
+Bot1.Pass
+? Bot1.Mana = 
+
+[Expect]
+Bot1.Graveyard = Runaway Boulder
+Bot1.Hand = Forest; Plains; Plains; Plains; Plains
