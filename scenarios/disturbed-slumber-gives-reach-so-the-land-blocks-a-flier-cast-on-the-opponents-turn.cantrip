@@ -1,0 +1,41 @@
+# Disturbed Slumber: "reach", checked from the other side. Bot2's Ornithopter (a flier) attacks on turn 2. Without the spell Bot1's
+# Forest isn't a creature and can't block; Bot1 casts Disturbed Slumber (an instant) with Mox Emerald and Mox Jet in the declare
+# attackers step, and the Forest, now a 4/4 Dinosaur with reach, blocks the Ornithopter and it dies. The "must be blocked" part asks
+# nothing of Bot1's own blocks: the Forest isn't attacking.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Jet
+Disturbed Slumber
+Plains x3
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Disturbed Slumber.Cast(Bot1.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Block(Forest > Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot1.Life = 20

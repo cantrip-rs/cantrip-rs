@@ -1,0 +1,36 @@
+# Disturbed Slumber: "must be blocked this turn if able" asks nothing where no block is possible (CR 509.1c), and "haste" lets a land
+# that came under Bot1's control this turn attack. Bot1 plays a Forest on turn 1, makes it a 4/4 Dinosaur and attacks into Bot2's empty
+# board for 4. "Until end of turn": on turn 3 the Forest is a plain land again (not a creature).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Jet
+Disturbed Slumber
+Plains x3
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Disturbed Slumber.Cast(Bot1.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Forest > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Forest.Types = Land
+? Bot1.Battlefield.Forest.Subtypes = Forest
+
+[Expect]
+Bot2.Life = 16

@@ -1,0 +1,53 @@
+# Disturbed Slumber {1}{G}: "Until end of turn, target land you control becomes a 4/4 Dinosaur creature with reach and haste. It's still
+# a land. It must be blocked this turn if able." Bot1's Forest (played turn 1) is the target: Bot2's Forest and Bot1's Mox Emerald (not
+# a land) are refused. On turn 3 the Forest becomes a 4/4 Dinosaur land creature with reach and haste and attacks; Bot2 has an
+# Ornithopter and a Memnite and must block it with at least one (no block is refused, CR 509.1c): it blocks with the Ornithopter,
+# which dies; the Forest takes no damage.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Jet
+Disturbed Slumber
+Plains x3
+Plains x20
+
+[Bot2 Deck]
+Forest
+Ornithopter
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Disturbed Slumber.Cast(Bot2.Battlefield.Forest)
+! Bot1.Hand.Disturbed Slumber.Cast(Bot1.Battlefield.Mox Emerald)
+Bot1.Hand.Disturbed Slumber.Cast(Bot1.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Power = 4
+? Bot1.Battlefield.Forest.Toughness = 4
+? Bot1.Battlefield.Forest.Types = Land; Creature
+? Bot1.Battlefield.Forest.Subtypes = Dinosaur; Forest
+Bot1.Attack(Forest > Bot2)
+! Bot2.Block(Count: 0)
+Bot2.Block(Ornithopter > Forest)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Forest.Damage = 0

@@ -1,0 +1,6 @@
+{
+  "name": "Disturbed Slumber",
+  "manaCost": "{1}{G}",
+  "type": "Instant",
+  "oracleText": "Until end of turn, target land you control becomes a 4/4 Dinosaur creature with reach and haste. It's still a land. It must be blocked this turn if able."
+}

@@ -1,0 +1,34 @@
+# Disturbed Slumber: the text says "It's still a land", so the Land Creature - Forest Dryad it targets keeps all its subtypes (CR 205.1b):
+# the Dinosaur type is added beside Dryad and Forest rather than replacing Dryad. Its 1/1 base becomes 4/4 (layer 7b), and when the turn ends
+# it is the 1/1 Dryad Arbor again.
+
+[Bot1 Deck]
+Dryad Arbor
+Mox Emerald
+Mox Jet
+Disturbed Slumber
+Plains x3
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Disturbed Slumber.Cast(Bot1.Battlefield.Dryad Arbor)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dryad Arbor.Subtypes = Dinosaur; Dryad; Forest
+? Bot1.Battlefield.Dryad Arbor.Power = 4
+? Bot1.Battlefield.Dryad Arbor.Toughness = 4
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Dryad Arbor.Subtypes = Dryad; Forest
+? Bot1.Battlefield.Dryad Arbor.Power = 1
+? Bot1.Battlefield.Dryad Arbor.Toughness = 1
+
+[Expect]
+Bot2.Life = 20
