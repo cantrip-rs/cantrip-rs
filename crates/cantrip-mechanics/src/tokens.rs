@@ -1930,6 +1930,14 @@ pub fn create_zombies<const COUNT: u32>(g: &mut dyn Game, item: &StackItem) -> R
     Ok(())
 }
 
+/// "Create a 1/1 colorless Gnome artifact creature token" / "create `COUNT` 1/1 colorless Gnome artifact creature tokens" (CR 111.1):
+/// `COUNT` of `GNOME` at once under `item`'s controller, the card file listing it in its `EXTRA`. Oltec Matterweaver's mode, Envoy of
+/// Okinec Ahau's ability and Oltec Cloud Guard print one; Tinker's Tote two.
+pub fn create_gnomes<const COUNT: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &GNOME, COUNT)?;
+    Ok(())
+}
+
 /// "Create a 1/1 white Cat creature token." (CR 111.1): one `CAT` under `item`'s controller, the card file listing it in its
 /// `EXTRA`. Arahbo, the First Fang, Cat Collector and Prideful Parent print it.
 pub fn create_a_cat(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
