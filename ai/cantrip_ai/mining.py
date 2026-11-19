@@ -321,8 +321,8 @@ def target_samples(directory: Path) -> int:
 
 def weighted_dirs(root: Path, gen: int, window: int, full_simulations: int, floor: float, policy_targets: float,
                   log=print) -> list[str]:
-    """The mined targets the training of generation `gen` takes, weighted by the effort behind them (owner,
-    2026-11-18: a network should hold what a deep search finds, so a deeper search's targets count for more): those of
+    """The mined targets the training of generation `gen` takes, weighted by the effort behind them (a network should
+    hold what a deep search finds, so a deeper search's targets count for more): those of
     the `window` generations before it that have them, each directory at its search's simulations over self-play's
     full search's (`effort.json`), halved per generation of age; then all of them scaled up together, if need be, so
     they make at least `floor` of the policy-target weight beside self-play's (`policy_targets`: its directories' policy
