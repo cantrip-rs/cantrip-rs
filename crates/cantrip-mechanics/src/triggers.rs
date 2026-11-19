@@ -3335,3 +3335,15 @@ pub fn is_historic_chars(c: &Chars) -> bool {
 pub fn is_historic(q: &dyn Query, id: ObjectId) -> bool {
     is_historic_chars(&q.chars(id))
 }
+
+/// "Whenever you cast an Adventure spell" (CR 603.2, 715.3): the spell is the subject. Only the Adventure half is an Adventure spell
+/// (CR 715.3b); the creature or other permanent half of the same card, cast from exile later, is not. Chancellor of Tales and Storyteller Pixie print it.
+pub fn you_cast_an_adventure_spell(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::SpellCast { spell, player, .. }
+            if *player == me.controller && q.chars(*spell).has_subtype(Subtype::Adventure) => Fired::about(Target::Object(*spell)),
+        _ => None,
+    }
+}
+
+pub const ADVENTURE_SPELL_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, you_cast_an_adventure_spell);
