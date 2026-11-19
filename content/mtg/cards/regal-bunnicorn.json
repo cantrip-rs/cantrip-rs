@@ -1,0 +1,8 @@
+{
+  "name": "Regal Bunnicorn",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Rabbit Unicorn",
+  "power": "*",
+  "toughness": "*",
+  "oracleText": "Regal Bunnicorn's power and toughness are each equal to the number of nonland permanents you control."
+}

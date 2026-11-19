@@ -1,0 +1,53 @@
+# Regal Bunnicorn: "power and toughness are each equal to the number of nonland permanents you control" (CR 604.3). Turn 1: with
+# only a Mox Pearl and itself it is a 2/2; the Plains is not counted. Turn 2: Bot2's Ornithopter is not "you control", so it stays
+# 2/2. Turn 3: a second Plains changes nothing, a Memnite makes it 3/3. Turn 4: Bot2's Bolt kills the Memnite and it is 2/2 again.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Regal Bunnicorn
+Plains
+Memnite
+Island x15
+
+[Bot2 Deck]
+Mountain
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Regal Bunnicorn.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Regal Bunnicorn.Power = 2
+? Bot1.Battlefield.Regal Bunnicorn.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Regal Bunnicorn.Power = 2
+? Bot1.Battlefield.Regal Bunnicorn.Toughness = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+? Bot1.Battlefield.Regal Bunnicorn.Power = 2
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Regal Bunnicorn.Power = 3
+? Bot1.Battlefield.Regal Bunnicorn.Toughness = 3
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Regal Bunnicorn.Power = 2
+Bot1.Battlefield.Regal Bunnicorn.Toughness = 2
+Bot1.Graveyard = Memnite

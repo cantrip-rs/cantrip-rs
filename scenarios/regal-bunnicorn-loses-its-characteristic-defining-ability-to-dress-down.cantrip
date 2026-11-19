@@ -1,0 +1,42 @@
+# Regal Bunnicorn's power and toughness are set by a characteristic-defining ability (CR 604.3), so Dress Down, which makes
+# creatures lose all abilities, takes it away and the star counts as 0 (CR 208.2a): a Giant Growth keeps the 0/0 body alive as 3/3
+# (it was 7/7 with the ability: the Bunnicorn and three Moxen make four nonland permanents, plus three).
+
+[Bot1 Deck]
+Black Lotus
+Regal Bunnicorn
+Mox Sapphire
+Mox Sapphire
+Mox Emerald
+Giant Growth
+Dress Down
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Regal Bunnicorn.Cast(Spend: W, W)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Regal Bunnicorn)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Regal Bunnicorn.Power = 7
+? Bot1.Battlefield.Regal Bunnicorn.Toughness = 7
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Dress Down.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Regal Bunnicorn.Power = 3
+Bot1.Battlefield.Regal Bunnicorn.Toughness = 3
