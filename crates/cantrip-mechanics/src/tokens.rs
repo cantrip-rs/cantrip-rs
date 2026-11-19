@@ -1979,3 +1979,12 @@ pub fn create_a_gremlin(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
     create(g, item.controller, &GREMLIN, 1)?;
     Ok(())
 }
+
+/// The 0/1 green Plant creature token (CR 111.4). Audience with Trostani and Insidious Roots make it.
+pub static PLANT: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Green)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(0),
+    toughness: Some(1),
+    ..token!(Plant)
+};
