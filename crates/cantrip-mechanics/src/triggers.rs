@@ -342,7 +342,7 @@ pub fn you_fully_unlock_a_room(q: &dyn Query, me: &Asker, event: &Event) -> Opti
 }
 
 /// "Whenever an enchantment you control enters" (CR 603.6a): any enchantment, this one included, under your control as it
-/// entered, the Room permanents among them. Eerie prints it.
+/// entered, the Room permanents among them. Eerie, Rimefur Reindeer and Slumbering Keepguard print it.
 pub fn enchantment_you_control_enters(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
         Event::ZoneChange { new, to, .. }
@@ -2916,6 +2916,7 @@ pub const LANDFALL: Trigger = when_asked(EventMask::ZONE_CHANGE, landfall);
 pub const YOU_UNLOCK_THIS_RIGHT_DOOR: Trigger = when(EventMask::DOOR_UNLOCKED, you_unlock_this_right_door);
 pub const YOU_UNLOCK_THIS_LEFT_DOOR: Trigger = when(EventMask::DOOR_UNLOCKED, you_unlock_this_left_door);
 pub const EERIE: Trigger = when_asked(EventMask(EventMask::ZONE_CHANGE.0 | EventMask::DOOR_UNLOCKED.0), eerie);
+pub const ENCHANTMENT_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, enchantment_you_control_enters);
 pub const YOU_SCRY: Trigger = when_asked(EventMask::SCRIED, you_scry);
 pub const YOU_SURVEIL: Trigger = when_asked(EventMask::SURVEILLED, you_surveil);
 pub const YOU_SCRY_OR_SURVEIL: Trigger = when_asked(EventMask(EventMask::SCRIED.0 | EventMask::SURVEILLED.0), you_scry_or_surveil);
