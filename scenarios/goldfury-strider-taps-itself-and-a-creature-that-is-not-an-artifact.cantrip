@@ -1,0 +1,41 @@
+# Goldfury Strider: "Tap two untapped artifacts and/or creatures you control": a creature that is not an artifact pays as well, and so does
+# the Strider itself, an artifact creature (CR 118.3, 602.2b), neither held back by summoning sickness (CR 302.6 limits only {T}).
+# Turn 1 Bot1 casts a Llanowar Elves (1/1, a creature but no artifact) and the Strider, then taps the Elves and the Strider to give the
+# Elves +2/+0: it is a 3/1 until end of turn, and any target creature may be chosen, including one not tapped for the cost.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Emerald
+Goldfury Strider
+Llanowar Elves
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Goldfury Strider.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Goldfury Strider.Activate(Tap: Llanowar Elves; Tap: Goldfury Strider; Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 3
+? Bot1.Battlefield.Llanowar Elves.Tapped = true
+? Bot1.Battlefield.Goldfury Strider.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Toughness = 1

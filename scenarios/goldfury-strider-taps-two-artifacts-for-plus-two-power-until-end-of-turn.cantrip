@@ -1,0 +1,44 @@
+# Goldfury Strider: "Tap two untapped artifacts and/or creatures you control: Target creature gets +2/+0 until end of turn. Activate
+# only as a sorcery."
+# Turn 1 Bot1 casts the Strider (3/5 trample) with Black Lotus and two Moxen, then taps two other untapped Moxen as the cost (CR 118.3,
+# 602.2b): the Strider, summoning sick, is a 5/5 until end of turn (CR 611.2). Only the Strider itself is then untapped, so a second
+# activation cannot pay two. On turn 2 it is a 3/5 again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Goldfury Strider
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Goldfury Strider.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goldfury Strider.Power = 3
+Bot1.Battlefield.Goldfury Strider.Activate(Tap: Mox Sapphire; Tap: Mox Pearl; Goldfury Strider)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goldfury Strider.Power = 5
+? Bot1.Battlefield.Goldfury Strider.Toughness = 5
+? Bot1.Battlefield.Mox Sapphire.Tapped = true
+? Bot1.Battlefield.Mox Pearl.Tapped = true
+! Bot1.Battlefield.Goldfury Strider.Activate(Goldfury Strider)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Goldfury Strider.Power = 3
+
+[Expect]
+Bot1.Battlefield.Goldfury Strider.Toughness = 5

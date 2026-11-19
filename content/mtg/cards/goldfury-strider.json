@@ -1,0 +1,11 @@
+{
+  "name": "Goldfury Strider",
+  "manaCost": "{4}{R}",
+  "type": "Artifact Creature — Golem",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Trample\nTap two untapped artifacts and/or creatures you control: Target creature gets +2/+0 until end of turn. Activate only as a sorcery.",
+  "keywords": [
+    "Trample"
+  ]
+}
