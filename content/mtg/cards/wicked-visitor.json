@@ -1,0 +1,8 @@
+{
+  "name": "Wicked Visitor",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Nightmare",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever an enchantment you control is put into a graveyard from the battlefield, each opponent loses 1 life."
+}

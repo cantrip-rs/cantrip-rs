@@ -1,0 +1,46 @@
+# Wicked Visitor (ruling 2023-09-01): if it leaves the battlefield with an Aura you control attached, its ability does not trigger for
+# that Aura, which goes to the graveyard afterwards as a state-based action (CR 704.5m, 603.10a). Bot1 puts Lord Skitter's Blessing's
+# Wicked Role on its Visitor (3/3) and Bolts it: only the Role's own trigger drains Bot2 (20 -> 19), not the Visitor's.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Wicked Visitor
+Lord Skitter's Blessing
+Lightning Bolt
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Wicked Visitor.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Lord Skitter's Blessing.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wicked.AttachedTo = Wicked Visitor
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Wicked Visitor)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 19

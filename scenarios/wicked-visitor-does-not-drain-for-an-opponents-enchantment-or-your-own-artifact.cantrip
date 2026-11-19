@@ -1,0 +1,64 @@
+# Wicked Visitor: the enchantment must be one "you control". Bot1 Disenchants Bot2's Flood on turn 3 and then, on turn 5, its own Mox
+# Sapphire (an artifact, not an enchantment): Bot2 loses no life either time (20 stays 20).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Wicked Visitor
+Disenchant
+Disenchant
+Swamp x20
+
+[Bot2 Deck]
+Mox Sapphire
+Flood
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Flood.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wicked Visitor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Disenchant.Cast(Bot2.Battlefield.Flood)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Flood
+? Bot2.Life = 20
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Disenchant; Mox Sapphire; Disenchant
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
