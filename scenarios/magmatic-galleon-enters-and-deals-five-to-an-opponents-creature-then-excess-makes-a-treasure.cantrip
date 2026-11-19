@@ -1,0 +1,59 @@
+# Magmatic Galleon {3}{R}{R} (5/5 Vehicle): "When this Vehicle enters, it deals 5 damage to target creature an opponent controls.
+# Whenever one or more creatures your opponents control are dealt excess noncombat damage, create a Treasure token." Cast on
+# turn 3 off five Moxen with Bot2's Ornithopter (0/2) and Bot1's own on the battlefield: the trigger's target must be a
+# creature an opponent controls, so Bot2's is the one legal target, chosen for it; Bot1's own is untouched. The 5 damage is 3 more
+# than lethal to the 0/2: excess noncombat damage, so the Galleon (on the battlefield as it is dealt) makes a Treasure.
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Ornithopter
+Magmatic Galleon
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Magmatic Galleon.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = 
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield = Mox Ruby; Mox Ruby; Mox Jet; Mox Pearl; Mox Emerald; Ornithopter; Magmatic Galleon; Treasure Token
+Bot1.Battlefield.Ornithopter.Damage = 0

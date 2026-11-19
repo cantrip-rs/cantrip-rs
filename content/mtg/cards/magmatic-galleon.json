@@ -1,0 +1,8 @@
+{
+  "name": "Magmatic Galleon",
+  "manaCost": "{3}{R}{R}",
+  "type": "Artifact — Vehicle",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "When this Vehicle enters, it deals 5 damage to target creature an opponent controls.\nWhenever one or more creatures your opponents control are dealt excess noncombat damage, create a Treasure token.\nCrew 2"
+}
