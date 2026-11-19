@@ -1,0 +1,74 @@
+# Specter of Mortality (3/3 flier) enters on turn 7 with two creature cards (two Ornithopters, each Bolted) and two Bolts in Bot1's
+# graveyard: "exile one or more creature cards ... each other creature gets -X/-X, X = the number of cards exiled this way".
+# Both Ornithopters are exiled (X = 2), the Bolts (not creature cards) stay in the graveyard, Bot2's Grizzly Bears (2/2) dies, and the
+# Specter itself is not an "other creature" so it stays 3/3.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Ornithopter
+Ornithopter
+Lightning Bolt
+Specter of Mortality
+Lightning Bolt
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Grizzly Bears
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Ornithopter; Lightning Bolt; Ornithopter; Lightning Bolt
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Specter of Mortality.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter; Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Specter of Mortality.Power = 3
+Bot1.Battlefield.Specter of Mortality.Toughness = 3
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt
+Bot1.Exile.Ornithopter#1.Power = 0
+Bot1.Exile.Ornithopter#2.Power = 0
+Bot2.Graveyard = Grizzly Bears

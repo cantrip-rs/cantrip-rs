@@ -1,0 +1,11 @@
+{
+  "name": "Specter of Mortality",
+  "manaCost": "{3}{B}{B}",
+  "type": "Creature — Specter",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nWhen this creature enters, you may exile one or more creature cards from your graveyard. When you do, each other creature gets -X/-X until end of turn, where X is the number of cards exiled this way.",
+  "keywords": [
+    "Flying"
+  ]
+}

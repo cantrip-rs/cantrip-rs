@@ -1,0 +1,76 @@
+# Specter of Mortality enters on turn 7 with exactly one creature card (a Bolted Ornithopter) in Bot1's graveyard: X = 1, so every OTHER
+# creature gets -1/-1 - Bot1's remaining Ornithopter (0/2 -> -1/1) as well as Bot2's Grizzly Bears (2/2 -> 1/1); both survive, and the
+# Specter stays 3/3. "Until end of turn": on turn 8 the Bears are 2/2 again and the Ornithopter 0/2.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Ornithopter
+Ornithopter
+Lightning Bolt
+Specter of Mortality
+Swamp
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Grizzly Bears
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Specter of Mortality.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = -1
+? Bot1.Battlefield.Ornithopter.Toughness = 1
+? Bot2.Battlefield.Grizzly Bears.Power = 1
+? Bot2.Battlefield.Grizzly Bears.Toughness = 1
+? Bot1.Battlefield.Specter of Mortality.Toughness = 3
+[T8 Bot2.Main1]
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+? Bot2.Battlefield.Grizzly Bears.Toughness = 2
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Specter of Mortality.Power = 3
+Bot1.Graveyard = Lightning Bolt
+Bot1.Exile.Ornithopter.Power = 0
