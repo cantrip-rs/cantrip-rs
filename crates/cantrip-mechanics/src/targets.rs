@@ -1049,6 +1049,12 @@ pub const ENCHANTMENT: TargetSpec = target(enchantment_filter);
 /// "Target artifact or creature you control" (CR 115.1, 205.2a). Concerted Care, Oko, Thief of Crowns (the permanent it exchanges),
 /// Ozolith, the Shattered Spire and Three Steps Ahead print it.
 pub const ARTIFACT_OR_CREATURE_YOU_CONTROL: TargetSpec = target(artifact_or_creature_you_control_filter);
+fn another_artifact_or_creature_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    t != Target::Object(asker.source) && artifact_or_creature_you_control_filter(q, asker, t)
+}
+/// "Another target creature or artifact you control" (CR 115.1, 109.5): `ARTIFACT_OR_CREATURE_YOU_CONTROL` other than the source.
+/// Abuelo, Ancestral Echo, Miles O'Brien, Transporter Ops and Saheeli, the Sun's Brilliance print it.
+pub const ANOTHER_ARTIFACT_OR_CREATURE_YOU_CONTROL: TargetSpec = target(another_artifact_or_creature_you_control_filter);
 /// "Target artifact or creature": a permanent that is either (CR 115.1). Oko, Thief of Crowns, Tezzeret, Cruel Captain, Touch
 /// the Spirit Realm, Iceberg Titan and Lodestone Needle print it.
 pub const ARTIFACT_OR_CREATURE: TargetSpec = target(artifact_or_creature_filter);
