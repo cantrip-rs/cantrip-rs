@@ -1,0 +1,61 @@
+# Not Dead After All on a mutated creature (Cubwarden put under Ornithopter, CR 702.140c): when it dies, both its cards return
+# (CR 730.3c), and a Wicked Role is made for each (the ruling of 2023-09-01), both in one instruction, so one event (CR 101.4,
+# 603.2c). Kambal's "whenever one or more tokens you control enter, each opponent loses 1 life and you gain 1 life" triggers
+# once for Cubwarden's two Cats and once for the two Roles: Bot2 at 18, Bot1 at 22.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Jet
+Mox Pearl
+Ornithopter
+Kambal, Profiteering Mayor
+Not Dead After All
+Cubwarden
+Island x14
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Kambal, Profiteering Mayor.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Cubwarden.Cast(Ornithopter; Ability: Mutate)
+Bot1.Pass
+Bot1.Modes(2)
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T4 Bot2.Main1]
+? Bot2.Life = 19
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Hand.Not Dead After All.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+[Bot2.Main2]
+
+[Expect]
+Attached = Wicked > Ornithopter; Wicked > Cubwarden
+Bot1.Battlefield.Cubwarden.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot2.Life = 18
+Bot1.Life = 22

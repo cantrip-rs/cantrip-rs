@@ -1,0 +1,31 @@
+# Not Dead After All: the granted dies trigger lasts only "until end of turn" (CR 611.2a). Bot1 casts it on its
+# Ornithopter on turn 1; the next turn Bot2 bolts the Ornithopter and it stays dead, with no Role made.
+
+[Bot1 Deck]
+Mox Jet
+Ornithopter
+Not Dead After All
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Not Dead After All.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Battlefield.Mox Ruby.Activate
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Jet
+Bot1.Graveyard = Ornithopter; Not Dead After All
+Bot2.Battlefield = Mox Ruby

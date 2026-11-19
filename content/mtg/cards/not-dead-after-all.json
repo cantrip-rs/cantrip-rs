@@ -1,0 +1,6 @@
+{
+  "name": "Not Dead After All",
+  "manaCost": "{B}",
+  "type": "Instant",
+  "oracleText": "Until end of turn, target creature you control gains \"When this creature dies, return it to the battlefield tapped under its owner's control, then create a Wicked Role token attached to it.\" (Enchanted creature gets +1/+1. When this token is put into a graveyard, each opponent loses 1 life.)"
+}

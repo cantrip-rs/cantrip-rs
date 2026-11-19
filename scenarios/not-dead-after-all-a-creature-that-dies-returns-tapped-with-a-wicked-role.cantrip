@@ -1,0 +1,35 @@
+# Not Dead After All: Bot1 gives its Ornithopter (0/2) the dies trigger, then bolts it. It returns to the battlefield
+# tapped under its owner's control with a Wicked Role attached: 1/3 (CR 603.10a, 400.7, 303.4i). The Role is on the
+# battlefield, not in the graveyard, and no opponent loses life yet.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Ornithopter
+Not Dead After All
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Not Dead After All.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Ornithopter; Wicked
+Bot1.Battlefield.Wicked.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Graveyard = Lightning Bolt; Not Dead After All
+Bot2.Life = 20
