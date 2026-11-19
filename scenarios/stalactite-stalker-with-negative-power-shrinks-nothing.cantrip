@@ -1,0 +1,44 @@
+# Stalactite Stalker: "-X/-X, where X is this creature's power". Bot1's Depower makes the Stalker a -3/1 before it is sacrificed; a
+# negative X counts as 0 (CR 107.1b), so Bot2's 1/1 Memnite gets -0/-0 and survives (not +3/+3, and not -1/-1).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Stalactite Stalker
+Depower
+Swamp x20
+
+[Bot2 Deck]
+Memnite x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stalactite Stalker.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Depower.Cast(Bot1.Battlefield.Stalactite Stalker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stalactite Stalker.Power = -3
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Stalactite Stalker.Activate(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Stalactite Stalker = (absent)
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Toughness = 1

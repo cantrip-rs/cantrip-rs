@@ -1,0 +1,45 @@
+# Stalactite Stalker: "At the beginning of your end step, if you descended this turn, put a +1/+1 counter on this creature" (CR 700.11).
+# On turn 1 Bot1's Faithless Looting discards the permanent card Ornithopter (and a Plains), so Bot1 descended and the Stalker becomes
+# a 2/2 at the end step. "{2}{B}, Sacrifice this creature: Target creature gets -X/-X until end of turn, where X is this creature's
+# power": the sacrifice is a cost, so X is the power it last had (2, counter included, CR 113.7a): Bot2's 0/2 Ornithopter dies, which
+# -1/-1 would not do.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Stalactite Stalker
+Faithless Looting
+Ornithopter
+Plains
+Swamp x20
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stalactite Stalker.Cast
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Ornithopter; Plains)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Stalactite Stalker.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Stalactite Stalker.Power = 2
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Stalactite Stalker.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Stalactite Stalker = (absent)
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard.Count = 1

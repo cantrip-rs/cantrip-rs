@@ -1,0 +1,11 @@
+{
+  "name": "Stalactite Stalker",
+  "manaCost": "{B}",
+  "type": "Creature — Goblin Rogue",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Menace\nAt the beginning of your end step, if you descended this turn, put a +1/+1 counter on this creature. (You descended if a permanent card was put into your graveyard from anywhere.)\n{2}{B}, Sacrifice this creature: Target creature gets -X/-X until end of turn, where X is this creature's power.",
+  "keywords": [
+    "Menace"
+  ]
+}

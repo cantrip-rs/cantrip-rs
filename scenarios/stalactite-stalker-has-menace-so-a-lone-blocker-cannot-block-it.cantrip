@@ -1,0 +1,25 @@
+# Stalactite Stalker: menace (CR 702.111b). Bot1 casts it on turn 1; on turn 3 Bot2's lone Ornithopter may not block it. Unblocked it deals 1 damage.
+
+[Bot1 Deck]
+Mox Jet
+Stalactite Stalker
+Swamp x20
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stalactite Stalker.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Stalactite Stalker > Bot2)
+! Bot2.Block(Ornithopter > Stalactite Stalker)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+
+[Expect]
+Bot2.Life = 19
