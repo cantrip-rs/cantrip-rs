@@ -1,0 +1,26 @@
+# Bot2's hand is seven Islands: there is no nonland card to choose, so Bot1 is asked nothing for the discard (the refused Choose of an Island)
+# and nothing is discarded, but with no Faerie Bot1 still exiles a card from its own hand.
+
+[Bot1 Deck]
+Mox Jet
+Ego Drain
+Swamp x5
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ego Drain.Cast(Bot2)
+! Bot1.Choose(Island)
+Bot1.Choose(Swamp)
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Exile = Swamp
+Bot1.Hand.Count = 4
+Bot2.Graveyard.Count = 0
+Bot2.Hand.Count = 7

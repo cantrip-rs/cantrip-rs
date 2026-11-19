@@ -1,0 +1,6 @@
+{
+  "name": "Ego Drain",
+  "manaCost": "{B}",
+  "type": "Sorcery",
+  "oracleText": "Target opponent reveals their hand. You choose a nonland card from it. That player discards that card. If you don't control a Faerie, exile a card from your hand."
+}

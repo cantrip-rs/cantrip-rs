@@ -1,0 +1,35 @@
+# Bot1 controls Barrow Naughty, a Faerie, when Ego Drain resolves, so it takes Counterspell from Bot2's hand and exiles nothing from its own.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Barrow Naughty
+Ego Drain
+Swamp x3
+Swamp x10
+
+[Bot2 Deck]
+Lightning Bolt
+Counterspell
+Island x5
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Barrow Naughty.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ego Drain.Cast(Bot2)
+Bot1.Choose(Counterspell)
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Graveyard = Ego Drain; Black Lotus
+Exile.Count = 0
+Bot1.Hand.Count = 3
+Bot2.Graveyard = Counterspell
+Bot2.Hand.Count = 6

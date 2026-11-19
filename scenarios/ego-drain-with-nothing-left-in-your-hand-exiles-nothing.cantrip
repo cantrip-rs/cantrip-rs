@@ -1,0 +1,33 @@
+# Bot1 has cast every other card of its hand before Ego Drain, so there is nothing to exile from it and no question is asked; the discard still happens.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Lotus Petal
+Ego Drain
+Swamp x10
+
+[Bot2 Deck]
+Lightning Bolt
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ego Drain.Cast(Bot2)
+Bot1.Choose(Lightning Bolt)
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Hand.Count = 0
+Exile.Count = 0
+Bot2.Graveyard = Lightning Bolt

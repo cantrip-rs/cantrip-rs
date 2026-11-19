@@ -1,0 +1,31 @@
+# Bot1 casts Ego Drain with no Faerie: Bot2's hand is revealed, Bot1 may not take an Island (a land) and takes Lightning Bolt, which is discarded, and
+# then Bot1 must exile a card from its own hand (CR 608.2c): it picks a Swamp, so the other six cards stay.
+
+[Bot1 Deck]
+Mox Jet
+Ego Drain
+Swamp x5
+Swamp x10
+
+[Bot2 Deck]
+Lightning Bolt
+Counterspell
+Island x5
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ego Drain.Cast(Bot2)
+! Bot1.Choose(Island)
+Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Swamp)
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Graveyard = Ego Drain
+Exile = Swamp
+Bot1.Hand.Count = 4
+Bot2.Graveyard = Lightning Bolt
+Bot2.Hand.Count = 6

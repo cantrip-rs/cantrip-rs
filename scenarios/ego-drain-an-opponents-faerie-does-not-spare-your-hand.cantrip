@@ -1,0 +1,32 @@
+# Ego Drain: "If you don't control a Faerie" reads only Bot1's permanents. Bot2 controls Barrow Naughty, a Faerie; Bot1 controls
+# none, so after taking Lightning Bolt from Bot2's hand Bot1 still exiles a card from its own (a Swamp).
+
+[Bot1 Deck]
+Mox Jet
+Ego Drain
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Barrow Naughty
+Lightning Bolt
+Island x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Barrow Naughty.Cast
+[T3 Bot1.Main1]
+? Bot2.Battlefield = Barrow Naughty
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ego Drain.Cast(Bot2)
+Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Swamp)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Lightning Bolt; Black Lotus
+Exile = Swamp
+Bot1.Hand.Count = 5
