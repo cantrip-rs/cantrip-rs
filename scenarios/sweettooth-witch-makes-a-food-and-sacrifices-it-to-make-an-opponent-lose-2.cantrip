@@ -1,0 +1,54 @@
+# Sweettooth Witch: "When this creature enters, create a Food token." and "{2}, Sacrifice a Food: Target player loses 2 life." Bot1
+# casts it on turn 3 and gets exactly one Food. It pays {2} and sacrifices that Food: Bot2 loses exactly 2 (20 -> 18). With no Food left, the
+# ability is not offered on turn 5 though mana is available (the refusal), and Bot2 stays at 18.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Sweettooth Witch
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sweettooth Witch.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Food Token.Types = Artifact
+? Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sweettooth Witch.Activate(Ability: loses 2 life; Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+? Bot1.Battlefield.Count = 6
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Sweettooth Witch.Activate
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 20
+Bot1.Battlefield.Food Token = (absent)
