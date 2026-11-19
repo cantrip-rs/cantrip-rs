@@ -648,6 +648,17 @@ pub fn create(g: &mut dyn Game, controller: PlayerId, def: &'static CardDef, cou
     g.create_tokens(def, controller, count, false)
 }
 
+/// "Create a number of `def` tokens equal to its power" (CR 111.1, 608.2h): the power the source creature has as the ability
+/// resolves, or as it last existed on the battlefield if it has left (CR 113.7a, 608.2h); none if that is 0 or less
+/// (CR 107.1b). The card file lists `def` in its `EXTRA`. Jacked Rabbit and Threefold Thunderhulk print it.
+pub fn create_equal_to_its_power(g: &mut dyn Game, item: &StackItem, def: &'static CardDef) -> Result<(), Suspend> {
+    let power = g.chars(item.object).power.unwrap_or(0).max(0) as u32;
+    if power > 0 {
+        create(g, item.controller, def, power)?;
+    }
+    Ok(())
+}
+
 /// "Each player creates `count` [token]" (CR 111.1, 101.4): `count` tokens of `def` for each player in turn order starting
 /// with the active player, each under their own control, all made together as one event so that a trigger on "one or more
 /// tokens enter" fires once; a player who has left the game is not "each player" (CR 800.4a). Edge Rover (a Lander), Party
