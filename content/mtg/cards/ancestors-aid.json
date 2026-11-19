@@ -1,0 +1,6 @@
+{
+  "name": "Ancestors' Aid",
+  "manaCost": "{1}{R}",
+  "type": "Instant",
+  "oracleText": "Target creature gets +2/+0 and gains first strike until end of turn.\nCreate a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")"
+}

@@ -1,0 +1,39 @@
+# Ancestors' Aid: Bot1's Ornithopter (0/2 flyer) gets +2/+0 and first strike until end of turn (CR 611.2a) - power changes, toughness does
+# not - and Bot1 creates an untapped Treasure token (CR 111.10a). A Mox is no creature, so it is not a legal target. The pump has ended
+# on Bot1's next turn (CR 514.2) while the Treasure stays.
+
+[Bot1 Deck]
+Ancestors' Aid
+Mox Ruby
+Ornithopter
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Hand.Ancestors' Aid.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Hand.Ancestors' Aid.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = FirstStrike; Flying
+? Bot1.Battlefield.Treasure Token.Token = true
+? Bot1.Battlefield.Treasure Token.Tapped = false
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Treasure Token.Token = true
+Bot1.Graveyard = Ancestors' Aid

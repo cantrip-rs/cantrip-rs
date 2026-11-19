@@ -1,0 +1,35 @@
+# Ancestors' Aid may target any creature, an opponent's included (CR 115.1): Bot2's Ornithopter gets +2/+0 and first strike, and the
+# Treasure is created under Bot1's control, the spell's controller (CR 111.2).
+
+[Bot1 Deck]
+Ancestors' Aid
+Mox Ruby
+Mountain x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Ancestors' Aid.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Ornithopter.Power = 2
+? Bot2.Battlefield.Ornithopter.Keywords = FirstStrike; Flying
+
+[Expect]
+Bot2.Battlefield.Treasure Token = (absent)
+Bot1.Battlefield.Treasure Token.Token = true
+Bot2.Battlefield.Ornithopter.Power = 2
