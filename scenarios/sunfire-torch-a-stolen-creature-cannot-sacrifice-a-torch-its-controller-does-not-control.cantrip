@@ -1,0 +1,63 @@
+# Bot2 takes Bot1's Ornithopter, equipped with Bot1's Sunfire Torch, with Act of Treason and attacks with it. The Torch stays
+# attached and the Ornithopter has its ability, which Bot2 controls - but "you may sacrifice Sunfire Torch" is Bot2's, who can't
+# sacrifice a permanent they don't control (CR 701.21a): Bot2 is asked nothing, the Torch stays and no 2 damage is dealt. The
+# Ornithopter (1/2 with the Torch) deals Bot1 1 combat damage.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Ornithopter
+Sunfire Torch
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Act of Treason
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Sunfire Torch.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sunfire Torch.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Act of Treason.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+Bot2.Pass
+Bot1.Pass
+! Bot2.Accept
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield = Mox Ruby; Mox Jet; Sunfire Torch
+Bot1.Battlefield.Sunfire Torch.AttachedTo = Ornithopter

@@ -1,0 +1,65 @@
+# Two Sunfire Torches on one Ornithopter give it two instances of the attack ability (CR 613.1f), each naming the Torch that
+# gives it. The Ornithopter is 2/2. Attacking, both trigger; each accepted, each sacrifices its own Torch (both end in the
+# graveyard: had both named one Torch, the other would stay) and each reflexive ability deals 2, 4 in all. With both gone the
+# Ornithopter is 0/2 as combat damage is dealt, so Bot2 is at 20 - 4 = 16.
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+Ornithopter
+Sunfire Torch
+Sunfire Torch
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Sunfire Torch.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Sunfire Torch.Cast
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sunfire Torch#1.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sunfire Torch#2.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Graveyard = Sunfire Torch; Sunfire Torch

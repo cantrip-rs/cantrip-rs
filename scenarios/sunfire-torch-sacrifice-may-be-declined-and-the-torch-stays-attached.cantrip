@@ -1,0 +1,49 @@
+# Sunfire Torch's granted attack trigger asks "you may sacrifice Sunfire Torch". Declined, the Torch stays attached and
+# the Ornithopter (1/2 with it) deals 1 combat damage: nothing is sacrificed, so no "when you do" ability triggers (CR
+# 603.12) and no target is asked for. On turn 5 it attacks again and accepts: the Torch goes, 2 damage and, with the Torch
+# gone as combat damage is dealt, none from the Ornithopter: 20 - 1 - 2 = 17.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Ornithopter
+Sunfire Torch
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Sunfire Torch.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sunfire Torch.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Decline
+! Bot1.Target
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+? Bot1.Battlefield.Sunfire Torch.AttachedTo = Ornithopter
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Sunfire Torch

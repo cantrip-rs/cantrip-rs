@@ -1,0 +1,52 @@
+# Sunfire Torch {R}, Equip {1}: the equipped creature gets +1/+0 and has "Whenever this creature attacks, you may sacrifice
+# Sunfire Torch. When you do, this creature deals 2 damage to any target." Turn 1: Ornithopter (0/2), the Torch and its equip
+# off two Moxen (equip is sorcery speed, so refused on Bot2's turn: the positive control is the equip on turn 1).
+# Turn 3 the Ornithopter (1/2 with the Torch) attacks and the Torch is sacrificed (accepted): the reflexive
+# ability (CR 603.12) is given its target, Bot2, as it goes on the stack and the Ornithopter deals it 2; the Torch is gone, so
+# the Ornithopter is 0/2 again and deals no combat damage.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Ornithopter
+Sunfire Torch
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Sunfire Torch.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sunfire Torch.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T2 Bot2.Main1]
+! Bot1.Battlefield.Sunfire Torch.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Sunfire Torch
+Bot1.Battlefield = Mox Ruby; Mox Jet; Ornithopter

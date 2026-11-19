@@ -1,0 +1,49 @@
+# Moved by a second Equip {1} (sorcery speed, CR 702.6a), Sunfire Torch gives its +1/+0 and its attack ability to the new
+# creature and takes both from the old one: the first Ornithopter (0/2 again) attacks with no trigger to answer (no
+# prompt: the scenario reaches Main 2 with the Torch attached to the other), the second would have one.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Ornithopter
+Ornithopter
+Sunfire Torch
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Sunfire Torch.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sunfire Torch.Activate(Bot1.Battlefield.Ornithopter#1; Ability: Equip)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sunfire Torch.Activate(Bot1.Battlefield.Ornithopter#2; Ability: Equip)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 0
+? Bot1.Battlefield.Ornithopter#2.Power = 1
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter#1 > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
