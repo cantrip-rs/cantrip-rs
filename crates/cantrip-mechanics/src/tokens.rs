@@ -126,6 +126,71 @@ Enchanted creature gets +1/+1 and has trample.",
     ..CardDef::BLANK
 };
 
+/// A Cursed Role token (CR 111.10j, 303.7): "a colorless Aura Role enchantment token named Cursed with enchant creature and
+/// 'Enchanted creature has base power and toughness 1/1.'" Cursed Courtier creates it, attached to itself (`create_role`).
+pub static CURSED_ROLE: CardDef = CardDef {
+    name: "Cursed",
+    has_cost: false,
+    types: TypeSet::of(&[CardType::Enchantment]),
+    subtypes: SubtypeSet::of(&[Subtype::Aura, Subtype::Role]),
+    enchant: Some(crate::targets::CREATURE),
+    statics: &[static_ability(Layer::PtSet, crate::attach::attached_object, crate::statics::base_pt::<1, 1>, "Enchanted creature has base power and toughness 1/1.")],
+    text: "Enchant creature\nEnchanted creature has base power and toughness 1/1.",
+    ..CardDef::BLANK
+};
+
+/// "Whenever this creature attacks, scry 1." (CR 701.22, 508.1m), the ability a Sorcerer Role gives (`grant_delayed_ability`).
+fn attacks_scry_1(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    crate::effects::scry(g, item, 1)
+}
+
+/// A Sorcerer Role token (CR 111.10n, 303.7): "a colorless Aura Role enchantment token named Sorcerer with enchant creature and
+/// 'Enchanted creature gets +1/+1 and has "Whenever this creature attacks, scry 1."'" Spellbook Vendor creates it, attached to a creature (`create_role`).
+pub static SORCERER_ROLE: CardDef = CardDef {
+    name: "Sorcerer",
+    has_cost: false,
+    types: TypeSet::of(&[CardType::Enchantment]),
+    subtypes: SubtypeSet::of(&[Subtype::Aura, Subtype::Role]),
+    enchant: Some(crate::targets::CREATURE),
+    delayed: &[triggered(crate::triggers::THIS_ATTACKS, attacks_scry_1, "Whenever this creature attacks, scry 1.")],
+    statics: &[
+        static_ability(Layer::PtModify, crate::attach::attached_object, crate::statics::plus_pt::<1, 1>, "Enchanted creature gets +1/+1."),
+        static_ability(Layer::Ability, crate::attach::attached_object, crate::statics::grant_delayed_ability, "Enchanted creature has \"Whenever this creature attacks, scry 1.\""),
+    ],
+    text: "Enchant creature\nEnchanted creature gets +1/+1 and has \"Whenever this creature attacks, scry 1.\"",
+    ..CardDef::BLANK
+};
+
+/// "If its toughness is 3 or less" (CR 603.4): the creature that attacked, as it is now or as it last was.
+fn its_toughness_is_3_or_less(q: &dyn Query, asker: &Asker) -> bool {
+    q.chars(asker.source).toughness.is_some_and(|t| t <= 3)
+}
+
+/// A Young Hero Role token (CR 111.10r, 303.7): "a colorless Aura Role enchantment token named Young Hero with enchant creature
+/// and 'Enchanted creature has "Whenever this creature attacks, if its toughness is 3 or less, put a +1/+1 counter on it."'"
+/// Protective Parents creates it, attached to a creature (`create_role`).
+pub static YOUNG_HERO_ROLE: CardDef = CardDef {
+    name: "Young Hero",
+    has_cost: false,
+    types: TypeSet::of(&[CardType::Enchantment]),
+    subtypes: SubtypeSet::of(&[Subtype::Aura, Subtype::Role]),
+    enchant: Some(crate::targets::CREATURE),
+    delayed: &[triggered(
+        crate::triggers::THIS_ATTACKS,
+        crate::effects::plus_one_counter_on_this,
+        "Whenever this creature attacks, if its toughness is 3 or less, put a +1/+1 counter on it.",
+    )
+    .condition(its_toughness_is_3_or_less)],
+    statics: &[static_ability(
+        Layer::Ability,
+        crate::attach::attached_object,
+        crate::statics::grant_delayed_ability,
+        "Enchanted creature has \"Whenever this creature attacks, if its toughness is 3 or less, put a +1/+1 counter on it.\"",
+    )],
+    text: "Enchant creature\nEnchanted creature has \"Whenever this creature attacks, if its toughness is 3 or less, put a +1/+1 counter on it.\"",
+    ..CardDef::BLANK
+};
+
 /// "Create a [Role] token attached to [a creature]" (CR 111.10j-r, 303.7, 303.4): a Role token `role` under `controller`,
 /// entering attached to `creature`, which the effect names and does not target; not created if the Role could not
 /// enchant it (CR 303.4i). If `controller` already controls a Role on it, the state-based action puts the older one into
