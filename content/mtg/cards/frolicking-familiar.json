@@ -1,0 +1,17 @@
+{
+  "name": "Frolicking Familiar",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Otter Wizard",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nWhenever you cast an instant or sorcery spell, this creature gets +1/+1 until end of turn.",
+  "keywords": [
+    "Flying"
+  ],
+  "adventure": {
+    "name": "Blow Off Steam",
+    "manaCost": "{R}",
+    "type": "Instant — Adventure",
+    "oracleText": "Blow Off Steam deals 1 damage to any target. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

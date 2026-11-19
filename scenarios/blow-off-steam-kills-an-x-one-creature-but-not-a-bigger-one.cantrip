@@ -1,0 +1,32 @@
+# Blow Off Steam deals exactly 1 damage to "any target", creatures included: Bot2's Memnite (1/1) dies to it, and its
+# Ornithopter (0/2) survives a second one. The card goes to exile on resolution each time.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Frolicking Familiar
+Frolicking Familiar
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Frolicking Familiar.Cast(Memnite; Ability: Blow Off Steam)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Frolicking Familiar.Cast(Ornithopter; Ability: Blow Off Steam)
+
+[Expect]
+Bot2.Graveyard = Memnite
+Bot2.Battlefield = Ornithopter
+Bot2.Life = 20
+Exile.Count = 2

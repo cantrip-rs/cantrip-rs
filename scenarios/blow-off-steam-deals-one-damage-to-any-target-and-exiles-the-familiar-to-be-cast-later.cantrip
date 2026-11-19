@@ -1,0 +1,36 @@
+# Frolicking Familiar // Blow Off Steam (CR 715): on turn 1 Bot1 casts Blow Off Steam ({R}, an instant) at Bot2, who takes 1
+# (not 2 or 0). It resolved, so the card is exiled instead of going to the graveyard, and Bot1 then casts the Familiar from exile
+# with Mox Sapphire and two more Moxen.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Frolicking Familiar
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Frolicking Familiar.Cast(Bot2; Ability: Blow Off Steam)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Exile = Frolicking Familiar
+? Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Exile.Frolicking Familiar.Cast
+
+[Expect]
+Bot2.Life = 19
+Exile.Count = 0
+Bot1.Battlefield = Mox Ruby; Mox Sapphire; Mox Jet; Mox Emerald; Frolicking Familiar

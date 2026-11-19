@@ -1,0 +1,56 @@
+# Frolicking Familiar {2}{U}: "Flying. Whenever you cast an instant or sorcery spell, this creature gets +1/+1 until end of turn."
+# Bot1 casts it with Black Lotus (red) and Mox Sapphire, keeping one red; it is a 2/2 flier. A creature spell (Memnite) does not
+# trigger it. Lightning Bolt (instant) and Shock make it 3/3 and then 4/4 - each trigger resolves before its spell - and the
+# pumps wear off at end of turn (2/2 again on turn 3).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Ruby
+Black Lotus
+Frolicking Familiar
+Lightning Bolt
+Shock
+Memnite
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Frolicking Familiar.Cast
+? Bot1.Mana = {R}
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Frolicking Familiar.Power = 2
+? Bot1.Battlefield.Frolicking Familiar.Toughness = 2
+? Bot1.Battlefield.Frolicking Familiar.Keywords = Flying
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Frolicking Familiar.Power = 3
+? Bot1.Battlefield.Frolicking Familiar.Toughness = 3
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Frolicking Familiar.Power = 4
+? Bot1.Battlefield.Frolicking Familiar.Toughness = 4
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 15
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Frolicking Familiar.Power = 2
+Bot1.Battlefield.Frolicking Familiar.Toughness = 2
+Bot2.Life = 15
