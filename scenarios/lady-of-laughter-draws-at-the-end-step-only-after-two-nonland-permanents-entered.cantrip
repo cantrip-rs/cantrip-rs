@@ -1,0 +1,45 @@
+# Lady of Laughter ({3}{W}{W}, 4/5 flying): "Celebration — At the beginning of your end step, if two or more nonland permanents
+# entered the battlefield under your control this turn, draw a card" (CR 207.2c, 603.4). On turn three Bot1 plays a Plains, casts
+# Black Lotus (a nonland permanent that is sacrificed at once, which still counts) and the Lady: exactly two, so the end step
+# draws a card (4 cards in hand after casting, 6 at the start of turn five with the draw step's). On turn five a Plains and a
+# Memnite are only one nonland permanent, so no card is drawn at that end step (4 cards in hand after playing both, 5 at the
+# start of turn seven, the draw step's alone).
+
+[Bot1 Deck]
+Black Lotus
+Plains
+Lady of Laughter
+Plains
+Memnite
+Plains
+Plains
+Plains x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Lady of Laughter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+[T5 Bot1.Main1]
+? Bot1.Hand.Count = 6
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+[T7 Bot1.Main1]
+? Bot1.Hand.Count = 5
+
+[Expect]
+Bot1.Battlefield.Lady of Laughter.Keywords = Flying

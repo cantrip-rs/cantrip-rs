@@ -1,0 +1,11 @@
+{
+  "name": "Lady of Laughter",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Faerie Noble",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Flying\nCelebration — At the beginning of your end step, if two or more nonland permanents entered the battlefield under your control this turn, draw a card.",
+  "keywords": [
+    "Flying"
+  ]
+}
