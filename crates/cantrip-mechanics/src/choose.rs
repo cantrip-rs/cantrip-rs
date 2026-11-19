@@ -97,6 +97,17 @@ pub fn one_of_each_card_type(g: &mut dyn Game, player: PlayerId, source: ObjectI
     Ok(chosen)
 }
 
+/// "A creature card and/or a land card" from among `shown` (CR 205.2a, 608.2d): up to one creature card and up to one land card, both
+/// chosen with every card in view before either moves. A card that is both (Dryad Arbor) can be the creature or the land but not
+/// both, so the land is chosen from the rest. The cards chosen, the creature first; nothing is asked of `shown` without a card.
+/// Michelangelo, Improviser (from the hand), In the Presence of Ages (revealed) and Ojer Kaslem (revealed) print it.
+pub fn a_creature_card_and_or_a_land_card(g: &mut dyn Game, player: PlayerId, source: ObjectId, purpose: Purpose, shown: Vec<ObjectId>) -> Result<Vec<ObjectId>, Suspend> {
+    let mut chosen = select(g, player, source, purpose, shown.clone(), crate::select::creature_cards(crate::select::up_to(1)))?;
+    let rest: Vec<ObjectId> = shown.into_iter().filter(|card| !chosen.contains(card)).collect();
+    chosen.extend(select(g, player, source, purpose, rest, crate::select::land_cards(crate::select::up_to(1)))?);
+    Ok(chosen)
+}
+
 /// "Any number of" `eligible` (CR 608.2d: none, some or all), chosen from among `shown`, every one of which the player sees,
 /// the choice worded as the card words it (`kind`, empty for "card"). Nothing is asked when nothing is eligible. Kept for
 /// existing cards; new cards use `select` with `select::ANY_NUMBER`.

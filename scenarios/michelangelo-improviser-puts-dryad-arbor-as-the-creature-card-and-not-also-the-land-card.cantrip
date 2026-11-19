@@ -1,5 +1,5 @@
 # Michelangelo, Improviser puts "a creature card and/or a land card": Dryad Arbor is both, but it is one card and enters once. Bot1 chooses it as the creature card, so
-# the land card is chosen from the rest of the hand (the Plains), and Bot1 chooses none. The Plains stays in hand.
+# the land card is chosen from the rest of the hand (the Plains): Dryad Arbor is not offered again, and Bot1 chooses none. The Plains stays in hand.
 
 [Bot1 Deck]
 Black Lotus
@@ -26,6 +26,7 @@ Bot1.Attack(Michelangelo, Improviser > Bot2)
 [T3 Bot1.CombatDamage]
 Bot1.Pass
 Bot1.Choose(Dryad Arbor)
+! Bot1.Choose(Dryad Arbor)
 Bot1.Choose()
 
 [Expect]

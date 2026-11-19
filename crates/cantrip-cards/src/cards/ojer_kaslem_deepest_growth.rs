@@ -1,7 +1,7 @@
 use cantrip_api::*;
 use cantrip_mechanics::library::rest_to_bottom_in_random_order;
 use cantrip_mechanics::triggers::{DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT, THIS_DIES};
-use cantrip_mechanics::{choose, effects, select, top_of_library};
+use cantrip_mechanics::{choose, effects, top_of_library};
 use cantrip_oracle as oracle;
 
 /// "Reveal that many cards from the top of your library. You may put a creature card and/or a land card from among them onto the battlefield. Put the rest
@@ -16,9 +16,7 @@ fn reveal_and_put_a_creature_and_or_a_land(g: &mut dyn Game, item: &StackItem) -
         return Ok(());
     }
     g.reveal(you, &revealed);
-    let mut chosen = choose::select(g, you, item.object, Purpose::PutOntoBattlefield, revealed.clone(), select::creature_cards(select::up_to(1)))?;
-    let rest: Vec<ObjectId> = revealed.iter().copied().filter(|card| !chosen.contains(card)).collect();
-    chosen.extend(choose::select(g, you, item.object, Purpose::PutOntoBattlefield, rest, select::land_cards(select::up_to(1)))?);
+    let chosen = choose::a_creature_card_and_or_a_land_card(g, you, item.object, Purpose::PutOntoBattlefield, revealed.clone())?;
     let entering: Vec<(ObjectId, PlayerId)> = chosen.into_iter().map(|card| (card, you)).collect();
     g.put_all_onto_battlefield(&entering)?;
     rest_to_bottom_in_random_order(g, you, &revealed);

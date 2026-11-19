@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{choose, select, top_of_library};
+use cantrip_mechanics::{choose, top_of_library};
 use cantrip_oracle as oracle;
 
 /// "Reveal the top four cards of your library. You may put a creature card and/or a land card from among them into your hand. Put
@@ -10,9 +10,7 @@ fn reveal_four_and_take_a_creature_and_or_a_land(g: &mut dyn Game, item: &StackI
     let you = item.controller;
     let revealed = top_of_library(g, you, 4);
     g.reveal(you, &revealed);
-    let mut taken = choose::select(g, you, item.object, Purpose::PutIntoHand, revealed.clone(), select::creature_cards(select::up_to(1)))?;
-    let rest: Vec<ObjectId> = revealed.iter().copied().filter(|card| !taken.contains(card)).collect();
-    taken.extend(choose::select(g, you, item.object, Purpose::PutIntoHand, rest, select::land_cards(select::up_to(1)))?);
+    let taken = choose::a_creature_card_and_or_a_land_card(g, you, item.object, Purpose::PutIntoHand, revealed.clone())?;
     g.return_to_hand_revealed(&taken);
     let rest: Vec<ObjectId> = revealed.into_iter().filter(|card| !taken.contains(card)).collect();
     g.put_into_graveyard(&rest);

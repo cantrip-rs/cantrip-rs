@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER;
-use cantrip_mechanics::{choose, select, sneak};
+use cantrip_mechanics::{choose, sneak};
 use cantrip_oracle as oracle;
 
 /// "You may put a creature card and/or a land card from your hand onto the battlefield" (CR 608.2d, 110.2a, 101.4): up to one of
@@ -9,9 +9,7 @@ use cantrip_oracle as oracle;
 fn put_a_creature_and_or_a_land_from_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
     let hand = g.state().zone(Zone::hand(you)).to_vec();
-    let mut chosen = choose::select(g, you, item.object, Purpose::PutOntoBattlefield, hand.clone(), select::creature_cards(select::up_to(1)))?;
-    let rest: Vec<ObjectId> = hand.into_iter().filter(|card| !chosen.contains(card)).collect();
-    chosen.extend(choose::select(g, you, item.object, Purpose::PutOntoBattlefield, rest, select::land_cards(select::up_to(1)))?);
+    let chosen = choose::a_creature_card_and_or_a_land_card(g, you, item.object, Purpose::PutOntoBattlefield, hand)?;
     let entering: Vec<(ObjectId, PlayerId)> = chosen.into_iter().map(|card| (card, you)).collect();
     g.put_all_onto_battlefield(&entering)?;
     Ok(())
