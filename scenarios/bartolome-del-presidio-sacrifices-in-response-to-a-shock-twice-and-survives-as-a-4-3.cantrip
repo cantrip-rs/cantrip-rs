@@ -1,0 +1,59 @@
+# Bartolomé del Presidio {W}{B} (2/1): the ability is at instant speed (CR 602.5), its sacrifice a cost paid up front, its counter
+# put on as it resolves. On turn 4 Bot2 Shocks it: in response Bot1 sacrifices an Ornithopter and a Mox Ruby, both counters resolving
+# before the Shock (last in, first out): it is 4/3 when the Shock deals its 2, and survives with 2 damage.
+
+[Bot1 Deck]
+Plains
+Swamp
+Bartolomé del Presidio
+Ornithopter
+Mox Ruby
+Plains
+Plains x15
+
+[Bot2 Deck]
+Mountain
+Mountain
+Shock
+Plains x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Bartolomé del Presidio.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Bartolomé del Presidio)
+Bot2.Pass
+Bot1.Battlefield.Bartolomé del Presidio.Activate
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Bartolomé del Presidio.Activate
+Bot1.Choose(Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bartolomé del Presidio.Power = 3
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bartolomé del Presidio.Power = 4
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bartolomé del Presidio.Damage = 2
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Bartolomé del Presidio.Power = 4
+Bot1.Battlefield.Bartolomé del Presidio.Toughness = 3
+Bot2.Graveyard = Shock

@@ -1,0 +1,43 @@
+# Bartolomé del Presidio {W}{B} (2/1): its ability's cost (the Ornithopter sacrificed) is paid as it is activated, so with Bartolomé
+# gone before the ability resolves (Bot2's Lightning Bolt, cast in response) the Ornithopter is still gone and no counter goes
+# anywhere (CR 400.7, 602.2b, 608.2b); nothing else is changed.
+
+[Bot1 Deck]
+Plains
+Swamp
+Bartolomé del Presidio
+Ornithopter
+Plains
+Plains x16
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Bartolomé del Presidio.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Bartolomé del Presidio.Activate
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Bartolomé del Presidio)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Plains; Swamp
+Bot1.Graveyard = Bartolomé del Presidio; Ornithopter

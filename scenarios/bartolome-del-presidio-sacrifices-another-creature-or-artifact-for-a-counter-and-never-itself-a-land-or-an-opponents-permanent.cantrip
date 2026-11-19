@@ -1,0 +1,51 @@
+# Bartolomé del Presidio {W}{B} (2/1): "Sacrifice another creature or artifact: Put a +1/+1 counter on Bartolomé del Presidio"
+# (CR 602.2b, 701.21, 122.1). On turn 3 it is the only creature or artifact Bot1 has besides two lands, and Bot2 has an Ornithopter
+# (an artifact creature that is not Bot1's to sacrifice): the ability is not offered (`!`). Bot1 casts its own Ornithopter (a
+# creature and an artifact) and sacrifices it: one counter, 3/2. A Mox Ruby (an artifact that is no creature) is sacrificed too:
+# 4/3. Only then, with nothing else to sacrifice, is the ability again not offered.
+
+[Bot1 Deck]
+Plains
+Swamp
+Bartolomé del Presidio
+Ornithopter
+Mox Ruby
+Plains
+Plains x15
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Bartolomé del Presidio.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Bartolomé del Presidio.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Bartolomé del Presidio.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bartolomé del Presidio.Power = 3
+? Bot1.Battlefield.Bartolomé del Presidio.Toughness = 2
+? Bot1.Graveyard = Ornithopter
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Bartolomé del Presidio.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bartolomé del Presidio.Power = 4
+? Bot1.Battlefield.Bartolomé del Presidio.Toughness = 3
+! Bot1.Battlefield.Bartolomé del Presidio.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Plains; Swamp; Bartolomé del Presidio
+Bot1.Graveyard = Mox Ruby; Ornithopter
+Bot2.Battlefield = Ornithopter

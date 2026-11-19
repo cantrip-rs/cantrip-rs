@@ -1,0 +1,8 @@
+{
+  "name": "Bartolomé del Presidio",
+  "manaCost": "{W}{B}",
+  "type": "Legendary Creature — Vampire Knight",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Sacrifice another creature or artifact: Put a +1/+1 counter on Bartolomé del Presidio."
+}
