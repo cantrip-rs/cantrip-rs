@@ -1,0 +1,39 @@
+# Etali's Favor: Bot2 responds by Lightning Bolting Bot1's Ornithopter (0/2) while the Aura spell is on the stack. The Aura's only target is
+# gone, so it does not resolve (CR 608.2b): it never enters the battlefield, so its enters trigger never happens and nothing is discovered
+# (the Mountain stays on top of the library).
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Etali's Favor
+Plains x4
+Mountain
+Plains x9
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Etali's Favor.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Exile.Count = 0
+
+[Expect]
+Bot1.Battlefield.Etali's Favor = (absent)
+Bot1.Graveyard = Etali's Favor; Ornithopter; Black Lotus
+Exile.Count = 0

@@ -1,0 +1,35 @@
+# Etali's Favor: "Enchant creature you control" (CR 303.4a): an opponent's creature is not a legal target when casting it, so the cast is
+# refused; Bot1's own Ornithopter is accepted, and the discover 3 then finds the Lightning Bolt under the drawn Island and casts it.
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Etali's Favor
+Plains x4
+Island
+Lightning Bolt
+Plains x9
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+! Bot1.Hand.Etali's Favor.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Etali's Favor.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Accept
+Bot1.Target(Bot2)
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Etali's Favor.AttachedTo = Ornithopter
+Bot2.Battlefield.Ornithopter.Power = 0

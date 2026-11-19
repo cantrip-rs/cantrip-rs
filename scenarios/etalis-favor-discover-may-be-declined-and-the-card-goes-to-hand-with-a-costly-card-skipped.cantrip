@@ -1,0 +1,34 @@
+# Etali's Favor: discover 3 exiles from the top until a nonland card with mana value 3 or less (CR 701.57a). The top is a Hill Giant
+# (mana value 4, skipped) and then a Hypnotic Specter (mana value exactly 3, the hit; a Lightning Bolt below it stays in the library):
+# Bot1 may cast it free or put it into hand, and declines, so the Specter goes to the hand, Bot2 stays at 20, and the Hill Giant
+# goes on the bottom of the library.
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Etali's Favor
+Plains x4
+Hill Giant
+Hypnotic Specter
+Lightning Bolt
+Plains x7
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Etali's Favor.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Decline
+[T2 Bot2.Main1]
+? Bot2.Life = 20
+? Exile.Count = 0
+
+[Expect]
+Bot2.Life = 20
+Bot1.Hand.Count = 5
+Bot1.Hand.Hypnotic Specter.Power = 2
+Bot1.Graveyard = Black Lotus
+Bot1.Library.Count = 9
