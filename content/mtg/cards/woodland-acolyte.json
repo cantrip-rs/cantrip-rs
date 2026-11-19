@@ -1,0 +1,14 @@
+{
+  "name": "Woodland Acolyte",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Cleric",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, draw a card.",
+  "adventure": {
+    "name": "Mend the Wilds",
+    "manaCost": "{G}",
+    "type": "Instant — Adventure",
+    "oracleText": "Put target permanent card from your graveyard on top of your library. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

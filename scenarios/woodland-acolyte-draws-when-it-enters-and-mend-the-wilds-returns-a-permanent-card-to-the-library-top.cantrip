@@ -1,0 +1,59 @@
+# Woodland Acolyte // Mend the Wilds. Turn 1: Flood is cast and destroyed by Disenchant; Mend the Wilds ({G}, the Adventure)
+# puts Flood on top of Bot1's library (a permanent card; Disenchant, an instant card, is not a legal target) and the
+# Acolyte is exiled on an adventure (CR 715.3d). Turn 3: Bot1 draws Flood, then casts Woodland Acolyte from exile: its
+# enters trigger draws a card, so Bot1 holds Flood and one more card.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Woodland Acolyte
+Flood
+Disenchant
+Island x4
+Mox Jet
+Mox Ruby
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flood.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Flood)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Bot1.Graveyard.Count = 2
+! Bot1.Hand.Woodland Acolyte.Cast(Bot1.Graveyard.Disenchant; Ability: Mend the Wilds)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Woodland Acolyte.Cast(Bot1.Graveyard.Flood; Ability: Mend the Wilds)
+Bot1.Pass
+Bot2.Pass
+? Exile = Woodland Acolyte
+? Bot1.Library.Count = 7
+? Bot1.Graveyard = Disenchant
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 1
+? Bot1.Hand = Flood
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Woodland Acolyte.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Woodland Acolyte.Tapped = False
+? Bot1.Hand.Count = 2
+
+[Expect]
+Exile.Count = 0
