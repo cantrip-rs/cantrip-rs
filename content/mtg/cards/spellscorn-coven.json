@@ -1,0 +1,17 @@
+{
+  "name": "Spellscorn Coven",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Faerie Warlock",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying\nWhen this creature enters, each opponent discards a card.",
+  "keywords": [
+    "Flying"
+  ],
+  "adventure": {
+    "name": "Take It Back",
+    "manaCost": "{2}{U}",
+    "type": "Instant — Adventure",
+    "oracleText": "Return target spell to its owner's hand. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

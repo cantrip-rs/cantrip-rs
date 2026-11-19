@@ -1,0 +1,57 @@
+# Take It Back ({2}{U} Adventure instant): "Return target spell to its owner's hand". Bot2 Bolts Bot1 on turn 2; Bot1 responds, so the Bolt
+# goes back to Bot2's hand (not the graveyard) and Bot1 stays at 20; the Coven goes to exile "on an adventure" (CR 715.3d). On turn 3 Bot1
+# casts Spellscorn Coven (2/3 flier) from exile for {3}{B}; its enters trigger makes Bot2 discard a card of Bot2's choice (the Bolt).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Spellscorn Coven
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+? Stack = Lightning Bolt
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Spellscorn Coven.Cast(Lightning Bolt; Ability: Take It Back)
+? Stack = Take It Back; Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Life = 20
+? Bot2.Graveyard.Count = 0
+? Exile = Spellscorn Coven
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Exile.Spellscorn Coven.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Lightning Bolt)
+
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Lightning Bolt
+Exile.Count = 0
+Bot1.Battlefield.Spellscorn Coven.Power = 2
+Bot1.Battlefield.Spellscorn Coven.Toughness = 3
