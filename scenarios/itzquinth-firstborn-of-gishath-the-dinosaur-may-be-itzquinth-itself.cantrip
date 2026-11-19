@@ -1,0 +1,43 @@
+# Itzquinth, Firstborn of Gishath (2/3): "target Dinosaur you control" may be Itzquinth itself (it is on the battlefield when the reflexive
+# trigger goes on the stack). Bot1 pays {2}, targets Itzquinth (2 power) and its Ornithopter (0/2): Itzquinth deals 2 damage to it and it
+# dies. Itzquinth is not offered as the other creature once chosen as the first target, and is not damaged.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Itzquinth, Firstborn of Gishath
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Itzquinth, Firstborn of Gishath.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+Bot1.Target(Itzquinth, Firstborn of Gishath)
+! Bot1.Target(Itzquinth, Firstborn of Gishath)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Ornithopter
+? Bot1.Battlefield.Itzquinth, Firstborn of Gishath.Damage = 0
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Itzquinth, Firstborn of Gishath; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby

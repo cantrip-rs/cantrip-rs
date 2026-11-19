@@ -1,0 +1,55 @@
+# Itzquinth, Firstborn of Gishath (2/3 haste): "When Itzquinth enters, you may pay {2}. When you do, target Dinosaur you control deals
+# damage equal to its power to another target creature." Turn 3: Bot1 casts Itzquinth beside an Ornithopter (0/2) and a Giant Cindermaw
+# (4/3 Dinosaur, cast on turn 1) and pays {2} as the trigger resolves; the reflexive trigger then asks for its targets, one at a time.
+# The first must be a Dinosaur Bot1 controls (the Ornithopter is refused); the second must be another creature than the first (the
+# Cindermaw is refused again). Bot1 picks the Cindermaw and the Ornithopter: the Cindermaw deals 4 to it and it dies, the Cindermaw
+# is not dealt damage back (one-sided).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Giant Cindermaw
+Itzquinth, Firstborn of Gishath
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Giant Cindermaw.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Itzquinth, Firstborn of Gishath.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+! Bot1.Target(Ornithopter)
+Bot1.Target(Giant Cindermaw)
+! Bot1.Target(Giant Cindermaw)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Ornithopter; Black Lotus
+? Bot1.Battlefield.Giant Cindermaw.Damage = 0
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Giant Cindermaw; Itzquinth, Firstborn of Gishath; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby

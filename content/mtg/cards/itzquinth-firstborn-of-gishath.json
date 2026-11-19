@@ -1,0 +1,11 @@
+{
+  "name": "Itzquinth, Firstborn of Gishath",
+  "manaCost": "{R}{G}",
+  "type": "Legendary Creature — Dinosaur",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Haste\nWhen Itzquinth enters, you may pay {2}. When you do, target Dinosaur you control deals damage equal to its power to another target creature.",
+  "keywords": [
+    "Haste"
+  ]
+}

@@ -1,0 +1,58 @@
+# Itzquinth, Firstborn of Gishath: the reflexive trigger's targets are judged again as it resolves (CR 608.2b). Turn 3: Bot1 pays {2}
+# and targets its Prehistoric Pet (1 power) and its Ornithopter (0/2); in response Bot2 exiles the Pet with Swords to Plowshares (Bot1
+# gains 1). The first target is gone, so there is no source of damage: the Ornithopter, still a legal target, is dealt none.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Prehistoric Pet
+Ornithopter
+Itzquinth, Firstborn of Gishath
+Island x12
+
+[Bot2 Deck]
+Plains
+Swords to Plowshares
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Prehistoric Pet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Itzquinth, Firstborn of Gishath.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+Bot1.Target(Prehistoric Pet)
+Bot1.Target(Ornithopter)
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Prehistoric Pet)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 21
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Ornithopter.Damage = 0
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Prehistoric Pet
+Bot1.Battlefield = Itzquinth, Firstborn of Gishath; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Ornithopter

@@ -1,0 +1,39 @@
+# Itzquinth, Firstborn of Gishath: with no other creature there is no "another target creature": Bot1 pays {2} and chooses Itzquinth as
+# the Dinosaur (the only one), but no second target can be chosen, so the reflexive trigger is removed from the stack (CR 603.3d, 115.1):
+# nothing is damaged, and the two Moxen that paid stay tapped. One mana is not enough to pay {2}.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Itzquinth, Firstborn of Gishath
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Itzquinth, Firstborn of Gishath.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+Bot1.Target(Itzquinth, Firstborn of Gishath)
+? Stack.Count = 0
+? Bot1.Battlefield.Itzquinth, Firstborn of Gishath.Damage = 0
+? Bot1.Battlefield.Mox Jet.Tapped = true
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Itzquinth, Firstborn of Gishath; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
