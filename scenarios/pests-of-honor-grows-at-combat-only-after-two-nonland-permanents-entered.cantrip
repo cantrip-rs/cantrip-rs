@@ -1,0 +1,50 @@
+# Pests of Honor ({2}{W}, 2/2): "Celebration — At the beginning of combat on your turn, if two or more nonland permanents entered
+# the battlefield under your control this turn, put a +1/+1 counter on this creature" (CR 207.2c, 603.4). On turn three the Pests
+# are the only nonland permanent to enter (the Mox Pearl of turn one is another turn's), so no counter: still 2/2 at turn five.
+# On turn five a Memnite and an Ornithopter are exactly two, so one counter: 3/3 at turn seven. On turn seven a Memnite alone is
+# one (and a Plains is no nonland permanent), so no counter: still 3/3 at turn nine.
+
+[Bot1 Deck]
+Mox Pearl
+Plains
+Pests of Honor
+Memnite
+Ornithopter
+Memnite
+Plains
+Plains x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pests of Honor.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Pests of Honor.Power = 2
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Pests of Honor.Power = 3
+? Bot1.Battlefield.Pests of Honor.Counters.PlusOnePlusOne = 1
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+? Bot1.Battlefield.Pests of Honor.Counters.PlusOnePlusOne = 1
+
+[Expect]
+Bot1.Battlefield.Pests of Honor.Power = 3
+Bot1.Battlefield.Pests of Honor.Toughness = 3
