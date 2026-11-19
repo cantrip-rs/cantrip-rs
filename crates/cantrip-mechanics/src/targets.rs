@@ -1845,6 +1845,11 @@ pub mod filters {
     pub fn creature(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
         q.chars(id).is(CardType::Creature)
     }
+    /// An enchantment (CR 701.21a): a permanent with the enchantment type, as a cost's "Sacrifice an enchantment" takes it.
+    /// Arenson's Aura sacrifices one and Dutiful Griffin two.
+    pub fn enchantment(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
+        q.chars(id).is(CardType::Enchantment)
+    }
     /// "A creature or enchantment" (CR 118.8): a permanent that is a creature, an enchantment or both. Final Vengeance sacrifices one; Case of the Locked Hothouse casts them from the top of the library.
     pub fn creature_or_enchantment(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
         q.chars(id).is(CardType::Creature) || q.chars(id).is(CardType::Enchantment)
