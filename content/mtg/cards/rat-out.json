@@ -1,0 +1,6 @@
+{
+  "name": "Rat Out",
+  "manaCost": "{B}",
+  "type": "Instant",
+  "oracleText": "Up to one target creature gets -1/-1 until end of turn. You create a 1/1 black Rat creature token with \"This token can't block.\""
+}

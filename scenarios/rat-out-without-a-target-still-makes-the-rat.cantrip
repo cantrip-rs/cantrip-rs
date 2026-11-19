@@ -1,0 +1,22 @@
+# Rat Out: the target is "up to one", so the spell may be cast with none and still makes the Rat (CR 601.2c).
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Rat Out
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Rat Out.Cast
+Bot1.Battlefield.Mox Jet.Activate
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Graveyard = Rat Out
+Bot1.Battlefield = Mox Jet; Swamp; Rat Token

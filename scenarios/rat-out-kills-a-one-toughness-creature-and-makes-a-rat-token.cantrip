@@ -1,0 +1,36 @@
+# Rat Out: "Up to one target creature gets -1/-1 until end of turn. You create a 1/1 black Rat creature token with
+# 'This token can't block.'" The -1/-1 kills Mons's Goblin Raiders (1/1) and Bot1 gets the Rat.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Rat Out
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Mons's Goblin Raiders
+Mountain x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mons's Goblin Raiders.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Rat Out.Cast(Bot2.Battlefield.Mons's Goblin Raiders)
+Bot1.Battlefield.Mox Jet.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Mons's Goblin Raiders
+Bot2.Battlefield = Mox Ruby
+Bot1.Graveyard = Rat Out
+Bot1.Battlefield = Mox Jet; Swamp; Rat Token
+Bot1.Battlefield.Rat Token.Token = true
+Bot1.Battlefield.Rat Token.Power = 1
+Bot1.Battlefield.Rat Token.Toughness = 1
+Bot1.Battlefield.Rat Token.Colors = Black
+Bot1.Battlefield.Rat Token.Subtypes = Rat

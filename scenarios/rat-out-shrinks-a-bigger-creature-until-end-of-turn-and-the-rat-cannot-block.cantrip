@@ -1,0 +1,41 @@
+# Rat Out: -1/-1 on Grizzly Bears (2/2) leaves a 1/1 until end of turn only (it is 2/2 again on its own turn, where it
+# hits for 2), and the Rat token "can't block": Bot1 may not block the attacking Bears with it.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Rat Out
+Swamp x20
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Forest x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Rat Out.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Mox Jet.Activate
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Grizzly Bears.Power = 1
+? Bot2.Battlefield.Grizzly Bears.Toughness = 1
+? Bot1.Battlefield.Rat Token.Power = 1
+[T4 Bot2.Main1]
+Bot2.Attack(Grizzly Bears > Bot1)
+! Bot1.Block(Rat Token > Grizzly Bears)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Battlefield = Mox Jet; Swamp; Rat Token

@@ -1,0 +1,31 @@
+# Rat Out: its one target is Bot1's own Mons's Goblin Raiders, which Bot1 bolts in response. With every target illegal
+# the spell does not resolve (CR 608.2b), so no Rat is created.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mons's Goblin Raiders
+Rat Out
+Lightning Bolt
+Mountain x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mons's Goblin Raiders.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot1.Hand.Rat Out.Cast(Bot1.Battlefield.Mons's Goblin Raiders)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mons's Goblin Raiders)
+Bot1.Battlefield.Mountain.Activate
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Graveyard = Rat Out; Mons's Goblin Raiders; Lightning Bolt
+Bot1.Battlefield = Mountain; Mox Ruby; Mox Jet
