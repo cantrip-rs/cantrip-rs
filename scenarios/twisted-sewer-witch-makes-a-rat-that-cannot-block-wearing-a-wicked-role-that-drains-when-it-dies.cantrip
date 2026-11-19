@@ -1,0 +1,74 @@
+# Twisted Sewer-Witch (3/4): "create a 1/1 black Rat with 'This creature can't block.' Then for each Rat you control, create a Wicked Role
+# token attached to that Rat." Bot1 casts it on turn 3 with no other Rat: exactly one Rat, one Wicked Role (+1/+1: the Rat is 2/2); the Witch
+# (not a Rat) gets none. On turn 4 Bot2's Grizzly Bears attacks: the Rat can't block (refused), the Witch can. On turn 5 Bot1 Bolts its
+# own Rat: the Wicked Role goes to the graveyard and each opponent loses 1 life (20 -> 19).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Twisted Sewer-Witch
+Swamp
+Lightning Bolt
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Grizzly Bears
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Twisted Sewer-Witch.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 8
+? Bot1.Battlefield.Rat Token.Power = 2
+? Bot1.Battlefield.Rat Token.Toughness = 2
+? Bot1.Battlefield.Rat Token.Colors = Black
+? Bot1.Battlefield.Twisted Sewer-Witch.Power = 3
+? Bot1.Battlefield.Twisted Sewer-Witch.Toughness = 4
+? Bot2.Life = 20
+[T4 Bot2.Attackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+[T4 Bot2.Blockers]
+! Bot1.Block(Rat Token > Grizzly Bears)
+Bot1.Block(Twisted Sewer-Witch > Grizzly Bears)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Rat Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Combat.Blocks =
+Bot1.Battlefield.Count = 6
+Bot1.Graveyard = Lightning Bolt

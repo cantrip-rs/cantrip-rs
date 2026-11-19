@@ -1,0 +1,82 @@
+# "Then for each Rat you control, create a Wicked Role token attached to that Rat" counts every Rat Bot1 controls, whether a token or a
+# card: Bot1's Voracious Vermin (a Rat card, 2/1), the Rat token it made, and the new Rat token = three Roles. The Witch itself is not a
+# Rat and gets none. Bot2's own Voracious Vermin and Rat token (cast on turn 2) are not "Rats you control" and stay unenchanted.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Voracious Vermin
+Twisted Sewer-Witch
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Voracious Vermin
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Voracious Vermin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Voracious Vermin.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 6
+? Bot2.Battlefield.Count = 5
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Twisted Sewer-Witch.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 12
+Bot1.Battlefield.Voracious Vermin.Power = 3
+Bot1.Battlefield.Voracious Vermin.Toughness = 2
+Bot1.Battlefield.Rat Token#1.Power = 2
+Bot1.Battlefield.Rat Token#1.Toughness = 2
+Bot1.Battlefield.Rat Token#2.Power = 2
+Bot1.Battlefield.Rat Token#2.Toughness = 2
+Bot1.Battlefield.Twisted Sewer-Witch.Power = 3
+Bot1.Battlefield.Twisted Sewer-Witch.Toughness = 4
+Bot2.Battlefield.Count = 5
+Bot2.Battlefield.Voracious Vermin.Power = 2
+Bot2.Battlefield.Voracious Vermin.Toughness = 1
+Bot2.Battlefield.Rat Token.Power = 1
+Bot2.Battlefield.Rat Token.Toughness = 1

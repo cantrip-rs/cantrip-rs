@@ -1,0 +1,54 @@
+# "Then for each Rat you control, create a Wicked Role token attached to that Rat" is one instruction (CR 101.4): the Roles on Tangled
+# Colony and on the new Rat token are created together, as one event (CR 603.2c). Kambal's "whenever one or more tokens you control
+# enter, each opponent loses 1 life and you gain 1 life" triggers once for the Rat token and once for the two Roles: Bot2 at 18.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Kambal, Profiteering Mayor
+Tangled Colony
+Swamp
+Black Lotus
+Twisted Sewer-Witch
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kambal, Profiteering Mayor.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tangled Colony.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Twisted Sewer-Witch.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Rat Token.Power = 2
+? Bot1.Battlefield.Tangled Colony.Power = 4
+
+[Expect]
+Attached = Wicked > Tangled Colony; Wicked > Rat Token
+Bot2.Life = 18
+Bot1.Life = 22
