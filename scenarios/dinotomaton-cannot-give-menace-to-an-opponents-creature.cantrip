@@ -1,0 +1,37 @@
+# Dinotomaton: "target creature you control gains menace" - an opponent's creature is not a legal target (CR 115.2, 109.4). Bot2 controls an
+# Ornithopter, and Bot1's attempt to target it is refused; Bot1's own Ornithopter is accepted and gains menace until end of turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Ornithopter
+Dinotomaton
+Plains x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dinotomaton.Cast
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Menace
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Menace
+Bot2.Battlefield.Ornithopter.Keywords = Flying

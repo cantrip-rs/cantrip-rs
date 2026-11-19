@@ -1,0 +1,32 @@
+# Dinotomaton: "Menace. When this creature enters, target creature you control gains menace until end of turn." Turn 1 Bot1 casts an
+# Ornithopter and then Dinotomaton (Black Lotus + Mox Ruby): the trigger targets the Ornithopter, which gains menace (CR 702.110a, 611.2a)
+# while Dinotomaton keeps its own printed menace. On turn 3 the Ornithopter has lost it again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Ornithopter
+Dinotomaton
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dinotomaton.Cast
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Menace
+? Bot1.Battlefield.Dinotomaton.Keywords = Menace
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+
+[Expect]
+Bot1.Battlefield.Dinotomaton.Keywords = Menace
+Bot1.Battlefield.Ornithopter.Keywords = Flying

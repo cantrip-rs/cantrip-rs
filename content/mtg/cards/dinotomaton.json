@@ -1,0 +1,11 @@
+{
+  "name": "Dinotomaton",
+  "manaCost": "{3}{R}",
+  "type": "Artifact Creature — Dinosaur Gnome",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhen this creature enters, target creature you control gains menace until end of turn.",
+  "keywords": [
+    "Menace"
+  ]
+}
