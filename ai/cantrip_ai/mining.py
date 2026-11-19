@@ -288,9 +288,15 @@ def check_judged(judge_dir: Path, names) -> dict:
         lines = [json.loads(x) for x in (judge_dir / name / "judged.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
         verdicts = [((x.get("judgement") or {}).get("verdict") or ("target" if x.get("target") else "unjudged")) for x in lines]
         judged = sum(v != "unjudged" for v in verdicts)
-        counts[name] = dict(positions=len(lines), judged=judged)
+        # A position left unjudged because the inference server failed is lost work, not a position the deep search
+        # cannot stand at (a mulligan after a redraw): any such loss fails the run.
+        served = [x for x in lines if "inference" in str((x.get("judgement") or {}).get("error") or "")]
+        counts[name] = dict(positions=len(lines), judged=judged, server_failures=len(served))
         if lines and judged == 0:
             raise SystemExit(f"the judge run {name} judged none of its {len(lines)} positions (its log: {judge_dir / name})")
+        if served:
+            raise SystemExit(f"the judge run {name} lost {len(served)} of {len(lines)} positions to its inference server: "
+                             f"{(served[0].get('judgement') or {}).get('error')}")
     return counts
 
 
