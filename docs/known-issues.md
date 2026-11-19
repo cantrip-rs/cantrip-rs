@@ -100,8 +100,21 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-170](#ki-170-a-top-of-library-permission-tries-an-x-only-up-to-a-mana-value-of-64) | A top-of-library permission tries an X only up to a mana value of 64 | Pri-3 | Won't fix: beyond practical scale |
 | [KI-171](#ki-171-a-resolution-cost-that-exiles-a-merged-permanent-is-labelled-with-the-source-alone) | A resolution cost that exiles a merged permanent is labelled with the source alone | Pri-2 | Open |
 | [KI-172](#ki-172-a-resolutions-unless-pays-question-for-a-tap-cost-reads-pay-0) | A resolution's "unless pays" question for a tap cost reads "pay {0}?" | Pri-2 | Open |
+| [KI-173](#ki-173-a-scenarios-casttap--key-is-ignored-for-an-additional-tap-cost) | A scenario's `Cast(Tap: ...)` key is ignored for an additional tap cost | Pri-2 | Open |
 
 ## Issues
+
+### KI-173: A scenario's `Cast(Tap: ...)` key is ignored for an additional tap cost
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-2 | Open | harness | 2026-11-19, review of PR #3205 |
+
+**Notes.** For an additional cost such as Guardian of the Great Door's "tap four untapped artifacts, creatures, and/or lands
+you control", the scenario runner ignores the `Tap:` key of a `Cast(...)` line: the engine taps what it chooses, and a
+refusal naming a `Tap:` set passes whatever the set is. Scenarios that name the tapped permanents with `Choose(...)` prove
+the choice; those that use `Cast(Tap: ...)` for such a cost (Fear of Exposure's may) prove less than they say. The engine
+is right; the harness should either honour the key or reject it.
 
 ### KI-172: A resolution's "unless pays" question for a tap cost reads "pay {0}?"
 
