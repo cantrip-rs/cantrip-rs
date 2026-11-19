@@ -1317,6 +1317,19 @@ pub fn sacrifice_any_number_of_lands_for_lands(g: &mut dyn Game, item: &StackIte
     Ok(())
 }
 
+/// "Sacrifice any number of artifacts, enchantments, and/or tokens" (CR 701.21a, 608.2d): the controller chooses, as the effect resolves
+/// and not as a cost, any number of the permanents they control that are an artifact, an enchantment or a token, none included, and they
+/// are sacrificed together. How many were actually sacrificed, a merged permanent once (CR 730.2), for "that many" (CR 608.2c); the
+/// sentence is ended, so what follows sees them gone. Lich-Knights' Conquest and Malevolent Witchkite print it.
+pub fn sacrifice_any_number_of_artifacts_enchantments_and_tokens(g: &mut dyn Game, you: PlayerId, source: ObjectId) -> Result<u32, Suspend> {
+    let permanents = g.permanents_of(you);
+    let rule = Selection::of(crate::select::ANY_NUMBER, &[crate::select::ARTIFACT_ENCHANTMENT_OR_TOKEN]).called("artifact, enchantment, or token");
+    let chosen = crate::choose::select(g, you, source, Purpose::Sacrifice, permanents, rule)?;
+    let sacrificed = g.sacrifice(you, &chosen).count();
+    g.end_sentence();
+    Ok(sacrificed)
+}
+
 /// "You may sacrifice a [quality]" (CR 701.21a): the player chooses, as the effect resolves and not as a cost (CR 608.2d), up to
 /// what `rule` allows of their permanents, or none. The engine offers only what the player controls and can sacrifice (CR 101.2),
 /// and nothing is asked when none qualifies. Returns what was actually sacrificed, so "if you do" and "when you do" (CR 608.2c,

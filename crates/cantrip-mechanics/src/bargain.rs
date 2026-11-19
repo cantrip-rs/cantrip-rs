@@ -7,8 +7,7 @@
 use cantrip_api::*;
 
 fn artifact_enchantment_or_token(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
-    let chars = q.chars(id);
-    chars.is(CardType::Artifact) || chars.is(CardType::Enchantment) || q.obj(id).token
+    crate::select::is_artifact_enchantment_or_token(q, id)
 }
 
 /// The additional cost: sacrifice an artifact, enchantment or token.

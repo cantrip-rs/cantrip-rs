@@ -301,6 +301,20 @@ pub const ANOTHER_CREATURE_OR_ENCHANTMENT: Part = part(&(another_creature_or_enc
 /// Sephiroth, Fabled SOLDIER sacrifice one.
 pub const ANOTHER_CREATURE: Part = part(&(another_creature as SelectFn), 0, "");
 
+/// Whether a permanent is "an artifact, enchantment, or token" (CR 111.1, 205.2a): an artifact or enchantment as its layers make it, or a
+/// token of any kind. Bargain's cost, Lich-Knights' Conquest and Malevolent Witchkite ask it.
+pub fn is_artifact_enchantment_or_token(q: &dyn Query, id: ObjectId) -> bool {
+    let chars = q.chars(id);
+    chars.is(CardType::Artifact) || chars.is(CardType::Enchantment) || q.obj(id).token
+}
+
+fn artifact_enchantment_or_token(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
+    Verdict::each(choice, |id| is_artifact_enchantment_or_token(q, id))
+}
+
+/// "An artifact, enchantment, or token": a permanent that is an artifact, an enchantment, or a token (`is_artifact_enchantment_or_token`).
+pub const ARTIFACT_ENCHANTMENT_OR_TOKEN: Part = part(&(artifact_enchantment_or_token as SelectFn), 0, "");
+
 /// "An instant or sorcery card" (CR 205.2a): a card with either type, as its layers make it. Micromancer searches for it, Inspiration from
 /// Beyond returns it from the graveyard and Most Decrepit Old Bird puts one milled into the hand.
 pub const INSTANT_OR_SORCERY: Part = part(&(instant_or_sorcery as SelectFn), 0, "");
