@@ -1,0 +1,32 @@
+# Hulking Raptor, "ward {2}": Bot2's only mana is a Mox Ruby, which pays for the Lightning Bolt, so the ward trigger counters it and the Raptor (5/3) takes no damage.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Hulking Raptor
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hulking Raptor.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Hulking Raptor)
+[T2 Bot2.Main2]
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Hulking Raptor.Damage = 0
+Bot2.Graveyard = Lightning Bolt

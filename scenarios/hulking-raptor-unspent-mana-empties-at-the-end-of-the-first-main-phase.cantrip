@@ -1,0 +1,29 @@
+# Hulking Raptor: the {G}{G} added at the beginning of the first main phase is an ordinary mana (CR 106.4): unspent, it is gone when the phase ends. On turn 3 the
+# pool holds {G}{G} in the first main phase and nothing in the second.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Hulking Raptor
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hulking Raptor.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {G}{G}
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot1.Mana =

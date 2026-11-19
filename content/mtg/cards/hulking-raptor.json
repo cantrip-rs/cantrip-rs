@@ -1,0 +1,8 @@
+{
+  "name": "Hulking Raptor",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": "Ward {2}\nAt the beginning of your first main phase, add {G}{G}."
+}

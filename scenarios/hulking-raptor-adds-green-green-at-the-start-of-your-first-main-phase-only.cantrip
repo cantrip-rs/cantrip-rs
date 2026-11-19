@@ -1,0 +1,42 @@
+# Hulking Raptor: "At the beginning of your first main phase, add {G}{G}" (CR 106.4, 505.1a). Cast on turn 1 off a Black Lotus and a Mox Emerald, it adds nothing in
+# the opponent's turn 2 first main phase; on Bot1's turn 3 the trigger resolves and the pool holds exactly {G}{G}, which pays for a Grizzly Bears ({1}{G}) with nothing
+# left over.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Hulking Raptor
+Grizzly Bears
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hulking Raptor.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Pass
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {G}{G}
+Bot1.Hand.Grizzly Bears.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Hulking Raptor; Grizzly Bears
+Bot1.Mana =
+Bot1.Battlefield.Hulking Raptor.Power = 5
+Bot1.Battlefield.Hulking Raptor.Toughness = 3
