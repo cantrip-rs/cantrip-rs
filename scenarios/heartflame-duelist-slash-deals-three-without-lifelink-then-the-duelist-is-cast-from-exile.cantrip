@@ -1,0 +1,49 @@
+# Heartflame Duelist // Heartflame Slash (CR 715): Slash is an Adventure instant, {2}{R}, "deals 3 damage to any target". Cast on turn
+# 1 from three Moxen with no Duelist out, it gains nothing and the card goes to exile. On turn 3 the Duelist, a 3/1, is cast from
+# exile for {1}{W}; with it out Bot1's Lightning Bolt gains 3.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Ruby
+Mox Jet
+Heartflame Duelist
+Lightning Bolt
+Mountain
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Heartflame Duelist.Cast(Bot2; Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Bot2.Life = 17
+? Exile = Heartflame Duelist
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Exile.Heartflame Duelist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 14
+Exile.Count = 0
+Bot1.Battlefield.Heartflame Duelist.Power = 3
+Bot1.Battlefield.Heartflame Duelist.Toughness = 1
+Bot1.Graveyard = Lightning Bolt

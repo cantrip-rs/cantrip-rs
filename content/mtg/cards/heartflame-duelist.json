@@ -1,0 +1,14 @@
+{
+  "name": "Heartflame Duelist",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Knight",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Instant and sorcery spells you control have lifelink.",
+  "adventure": {
+    "name": "Heartflame Slash",
+    "manaCost": "{2}{R}",
+    "type": "Instant — Adventure",
+    "oracleText": "Heartflame Slash deals 3 damage to any target. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

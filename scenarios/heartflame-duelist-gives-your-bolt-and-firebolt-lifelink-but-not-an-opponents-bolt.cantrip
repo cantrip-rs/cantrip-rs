@@ -1,0 +1,54 @@
+# Heartflame Duelist: "Instant and sorcery spells you control have lifelink" (CR 702.15). Turn 1: with the Duelist out, Bot1's
+# Lightning Bolt (an instant) at Bot2 gains Bot1 3 life. Turn 2: Bot2's own Lightning Bolt at Bot1 gains Bot2 nothing (not "you
+# control"). Turn 3: Bot1's Firebolt (a sorcery) gains 2.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Ruby
+Heartflame Duelist
+Lightning Bolt
+Firebolt
+Mountain
+Island x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Heartflame Duelist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Bot2.Life = 17
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 20
+? Bot2.Life = 17
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Firebolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 15
+Bot1.Graveyard = Firebolt; Lightning Bolt
+Bot2.Graveyard = Lightning Bolt
