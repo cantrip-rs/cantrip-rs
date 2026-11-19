@@ -1,0 +1,52 @@
+# Child of the Volcano: "At the beginning of YOUR end step, if you descended this turn". Bot1 casts it on turn 1 with four Moxen
+# (no descent, no counter). On turn 2 Bot2 kills Bot1's Ornithopter with Lightning Bolt: Bot1 descends (CR 700.11), but it is Bot2's
+# turn and Bot1's Child has no end-step trigger now. "This turn" ends with turn 2, so on turn 3 Bot1's end step (no descent that turn)
+# gives nothing either: the Child is still a 3/3.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Child of the Volcano
+Ornithopter
+Mountain
+Plains x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Child of the Volcano.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Graveyard = Ornithopter
+? Bot1.Battlefield.Child of the Volcano.Power = 3
+? Stack.Count = 0
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Child of the Volcano.Power = 3
+Bot1.Battlefield.Child of the Volcano.Toughness = 3
+Bot1.Graveyard = Ornithopter

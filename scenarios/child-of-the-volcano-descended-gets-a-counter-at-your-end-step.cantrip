@@ -1,0 +1,32 @@
+# Child of the Volcano: "Trample. At the beginning of your end step, if you descended this turn, put a +1/+1 counter on this creature."
+# Turn 1 Bot1 pays for it with Black Lotus and a Mountain: the sacrificed Lotus is a permanent card put into Bot1's graveyard, so Bot1
+# descended (CR 700.11) and the end-step trigger puts a +1/+1 counter on the 3/3 (CR 122.1a), making it 4/4, still with trample.
+
+[Bot1 Deck]
+Black Lotus
+Mountain
+Child of the Volcano
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Child of the Volcano.Cast
+[T1 Bot1.End]
+? Bot1.Battlefield.Child of the Volcano.Power = 3
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Child of the Volcano.Power = 4
+? Bot1.Battlefield.Child of the Volcano.Toughness = 4
+? Bot1.Battlefield.Child of the Volcano.Keywords = Trample
+
+[Expect]
+Bot1.Battlefield.Child of the Volcano.Power = 4
+Bot1.Battlefield.Child of the Volcano.Toughness = 4
+Bot1.Graveyard = Black Lotus
+Stack.Count = 0
