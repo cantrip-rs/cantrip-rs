@@ -1,0 +1,44 @@
+# Rampaging Ceratops {4}{R} 5/4 "can't be blocked except by three or more creatures" (CR 509.1b). On turn 3 Bot2 has three
+# Ornithopters: one blocker, or two, is refused; all three together may block it, and no damage reaches Bot2.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Rampaging Ceratops
+Island x15
+
+[Bot2 Deck]
+Ornithopter x3
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rampaging Ceratops.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Rampaging Ceratops > Bot2)
+! Bot2.Block(Ornithopter#1 > Rampaging Ceratops)
+! Bot2.Block(Ornithopter#1 > Rampaging Ceratops; Ornithopter#2 > Rampaging Ceratops)
+Bot2.Block(Ornithopter#1 > Rampaging Ceratops; Ornithopter#2 > Rampaging Ceratops; Ornithopter#3 > Rampaging Ceratops)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20

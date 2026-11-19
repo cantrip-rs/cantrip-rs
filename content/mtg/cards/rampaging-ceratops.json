@@ -1,0 +1,8 @@
+{
+  "name": "Rampaging Ceratops",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Dinosaur",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "This creature can't be blocked except by three or more creatures."
+}
