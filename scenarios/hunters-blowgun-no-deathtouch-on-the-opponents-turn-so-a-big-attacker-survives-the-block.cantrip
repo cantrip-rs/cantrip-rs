@@ -1,0 +1,55 @@
+# In Bot2's turn the equipped Memnite (2/2) has reach, not deathtouch: it blocks Bot2's Hill Giant (3/3), deals 2 damage that does
+# not kill it, and dies to the Giant's 3. The Hill Giant stays on the battlefield with 2 damage marked, Memnite goes to the graveyard.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Mox Pearl
+Mox Ruby
+Hunter's Blowgun
+Plains x10
+
+[Bot2 Deck]
+Hill Giant
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Island x10
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hunter's Blowgun.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Hunter's Blowgun.Activate(Ability: Equip; Memnite)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Hill Giant > Bot1)
+Bot1.Block(Memnite > Bot2.Battlefield.Hill Giant)
+[T4 Bot2.Main2]
+? Bot2.Battlefield.Hill Giant.Damage = 2
+
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Memnite
+Bot2.Battlefield.Hill Giant.Damage = 2

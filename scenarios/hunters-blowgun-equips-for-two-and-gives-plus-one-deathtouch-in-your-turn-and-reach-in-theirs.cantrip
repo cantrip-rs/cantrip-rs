@@ -1,0 +1,49 @@
+# Hunter's Blowgun {1}, Equip {2}: "Equipped creature gets +1/+1. Equipped creature has deathtouch during your turn. Otherwise,
+# it has reach." Cast in turn 1; in turn 3, with only Mox Jet's mana, equip is refused (one mana short), and with two
+# it attaches and leaves the pool empty. The equipped Memnite is a 2/2 with deathtouch (and no reach) in its controller's turn 3, and
+# in Bot2's turn 4 it is a 2/2 with reach and no deathtouch. The unequipped Ornithopter stays 0/2 with only its flying in both turns.
+
+[Bot1 Deck]
+Memnite
+Ornithopter
+Mox Jet
+Mox Pearl
+Mox Ruby
+Hunter's Blowgun
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hunter's Blowgun.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Hunter's Blowgun.Activate(Ability: Equip; Memnite; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Hunter's Blowgun.Activate(Ability: Equip; Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hunter's Blowgun.AttachedTo = Memnite
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Memnite.Keywords = Deathtouch
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Memnite.Keywords = Reach
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+
+[Expect]
+Turn = 4
+Bot1.Battlefield.Hunter's Blowgun.AttachedTo = Memnite
