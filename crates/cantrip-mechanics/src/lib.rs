@@ -1167,6 +1167,13 @@ pub fn artifacts_you_control(q: &dyn Query, player: PlayerId) -> usize {
     q.permanents_of(player).into_iter().filter(|&id| q.chars(id).is(CardType::Artifact)).count()
 }
 
+/// "If you control an enchantment": `player` controls at least one enchantment permanent now, its types read through the layers,
+/// whenever the caller asks: as Roadside Reliquary's second draw and Taken by Nightmares's scry resolve (CR 608.2c), and as
+/// Geistlight Snare's total cost is determined (CR 601.2f).
+pub fn you_control_an_enchantment(q: &dyn Query, player: PlayerId) -> bool {
+    q.permanents_of(player).into_iter().any(|id| q.chars(id).is(CardType::Enchantment))
+}
+
 /// Scry N (CR 701.22): look at the top N cards of your library, put any number on the bottom in any order and the
 /// rest back on top in any order. Nothing is asked of an empty library. Undercity's Lost Well prints "scry 2".
 ///

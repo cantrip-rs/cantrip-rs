@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::artifacts_you_control;
+use cantrip_mechanics::{artifacts_you_control, you_control_an_enchantment};
 use cantrip_oracle as oracle;
 
 /// "{2}, {T}, Sacrifice this land: Draw a card if you control an artifact. Draw a card if you control an enchantment."
@@ -9,10 +9,7 @@ fn draw_card_if_control_artifact(g: &mut dyn Game, item: &StackItem) -> Result<(
         g.draw(item.controller, 1);
     }
     g.end_sentence();
-    if {
-        let q: &dyn Query = g;
-        q.permanents_of(item.controller).into_iter().any(|id| q.chars(id).is(CardType::Enchantment))
-    } {
+    if you_control_an_enchantment(&*g, item.controller) {
         g.draw(item.controller, 1);
         g.end_sentence();
     }
