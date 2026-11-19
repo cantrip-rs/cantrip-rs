@@ -1,0 +1,51 @@
+# Feed the Cauldron (CR 202.3, 115.1, 111.10b): Bot2 has Hired Blade (mana value 3) and Keral Keep Disciples (mana value 4). On Bot1's own turn the Cauldron
+# refuses the 4 and destroys the Blade, and since it is Bot1's turn Bot1 creates a Food.
+
+[Bot1 Deck]
+Black Lotus
+Feed the Cauldron
+Swamp x5
+Swamp x10
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Black Lotus
+Hired Blade
+Keral Keep Disciples
+Mountain x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: B)
+Bot2.Hand.Hired Blade.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: R)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Keral Keep Disciples.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+! Bot1.Hand.Feed the Cauldron.Cast(Bot2.Battlefield.Keral Keep Disciples)
+Bot1.Hand.Feed the Cauldron.Cast(Bot2.Battlefield.Hired Blade)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield = Keral Keep Disciples; Mountain
+Bot2.Graveyard = Hired Blade; Black Lotus; Black Lotus
+Bot1.Battlefield = Food Token
+Bot1.Graveyard = Feed the Cauldron; Black Lotus

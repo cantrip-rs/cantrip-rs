@@ -1,0 +1,45 @@
+# CR 608.2b: Bot1's Feed the Cauldron targets the Hired Blade on Bot1's turn; Bot2 answers by Bolting its own Blade. With its only target gone the spell
+# does not resolve, so Bot1 gets no Food even though it is Bot1's turn.
+
+[Bot1 Deck]
+Black Lotus
+Feed the Cauldron
+Swamp x5
+Swamp x10
+
+[Bot2 Deck]
+Mox Ruby
+Black Lotus
+Hired Blade
+Lightning Bolt
+Mountain x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: B)
+Bot2.Hand.Hired Blade.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Feed the Cauldron.Cast(Bot2.Battlefield.Hired Blade)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Hired Blade)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard = Hired Blade; Lightning Bolt; Black Lotus
+Bot1.Battlefield.Count = 0
+Bot1.Graveyard = Feed the Cauldron; Black Lotus
