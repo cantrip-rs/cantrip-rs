@@ -1,0 +1,68 @@
+# Hidden Nursery: "This land enters tapped", "{T}: Add {G}" and "{4}{G}, {T}, Sacrifice this land: Discover 4. Activate only as a
+# sorcery." It enters tapped and untaps with the next turn; it taps for {G} alone (Undo takes it back). The discover is refused with only
+# four other sources ({4}{G} needs five besides the land itself), with a spell on the stack, and outside a main phase (all with the five
+# sources otherwise available); then on a later turn it exiles from the top of the library past a Forest (a land) and Gigantosaurus (mana
+# value 5, one more than discover 4) and casts Giant Spider (mana value 4, exactly the limit) for free. The land is sacrificed as a
+# cost, so it is in the graveyard when the discover happens, and the two cards skipped go to the bottom of the library
+# (CR 701.57a, 602.5d, 118.12).
+
+[Bot1 Deck]
+Hidden Nursery
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Forest
+Forest
+Forest
+Gigantosaurus
+Giant Spider
+Forest x10
+
+[Bot2 Deck]
+Forest x15
+
+[Actions]
+Bot1.Hand.Hidden Nursery.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+? Bot1.Battlefield.Hidden Nursery.Tapped = true
+! Bot1.Battlefield.Hidden Nursery.Activate(Ability: Add)
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Hidden Nursery.Tapped = false
+! Bot1.Battlefield.Hidden Nursery.Activate(Color: Red)
+Bot1.Battlefield.Hidden Nursery.Activate(Ability: Add {G})
+? Bot1.Mana = {G}
+Bot1.Undo
+! Bot1.Battlefield.Hidden Nursery.Activate(Ability: Discover)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Hidden Nursery.Activate(Ability: Discover; Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+! Bot1.Battlefield.Hidden Nursery.Activate(Ability: Discover)
+Bot1.Pass
+[T3 Bot1.End]
+! Bot1.Battlefield.Hidden Nursery.Activate(Ability: Discover)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Battlefield.Mox Emerald#4.Activate
+Bot1.Battlefield.Mox Emerald#5.Activate
+Bot1.Battlefield.Hidden Nursery.Activate(Ability: Discover)
+? Bot1.Mana =
+Bot1.Accept
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Hidden Nursery
+Bot1.Battlefield.Giant Spider.Power = 2
+Bot1.Hand = Forest; Forest; Forest
+Exile.Count = 0
+Bot1.Library.Count = 11
