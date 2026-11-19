@@ -1002,11 +1002,12 @@ pub fn look_at_top_take_some_rest_to_graveyard(g: &mut dyn Game, player: PlayerI
     top_take_one_rest_to_graveyard(g, player, source, count, false, (take, take), |_| true)
 }
 
-/// "Look at the top `N` cards of your library. You may put one of those cards back on top of your library. Put the rest into your
-/// graveyard." (CR 701.20, 401.4, 404.3) as an ability's whole effect: a library of fewer than `N` shows what it has (CR 609.3)
-/// and one of none does nothing. The card kept is left where it is, the top of what remains once the rest have gone; the rest go
-/// to the graveyard together, in the order their owner arranges them. Gurmag Nightwatch and Gutless Plunderer (3) print it.
-pub fn look_at_top_may_put_one_back_rest_to_graveyard<const N: usize>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+/// "Look at the top `N` cards of your library. Put up to `BACK` of them back on top of your library in any order and the rest into
+/// your graveyard." (CR 701.20, 401.4, 404.3) as an ability's whole effect: a library of fewer than `N` shows what it has (CR 609.3)
+/// and one of none does nothing. The rest go to the graveyard together, in the order their owner arranges them; the cards kept go back
+/// on top in the order the player chooses, the first highest (CR 401.4). "You may put one of those cards back" is `BACK` of 1: Gurmag
+/// Nightwatch, Gutless Plunderer and Sage of Days (3 looked at) print it. Rowan's Grim Search is 4 and 2.
+pub fn look_at_top_put_up_to_back_rest_to_graveyard<const N: usize, const BACK: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let player = item.controller;
     let looked = top_of_library(g, player, N);
     if looked.is_empty() {
@@ -1017,7 +1018,7 @@ pub fn look_at_top_may_put_one_back_rest_to_graveyard<const N: usize>(g: &mut dy
         source: item.object,
         cards: looked.clone(),
         destinations: vec![
-            Destination { kind: DestinationKind::LibraryTop, min: 0, max: 1, eligible: looked.clone() },
+            Destination { kind: DestinationKind::LibraryTop, min: 0, max: BACK, eligible: looked.clone() },
             Destination { kind: DestinationKind::Graveyard, min: 0, max: u32::MAX, eligible: looked.clone() },
         ],
         may_shuffle: false,
@@ -1028,6 +1029,7 @@ pub fn look_at_top_may_put_one_back_rest_to_graveyard<const N: usize>(g: &mut dy
     }
     let rest: Vec<ObjectId> = looked.into_iter().filter(|c| !kept.contains(c)).collect();
     g.put_into_graveyard(&rest);
+    g.arrange_library(player, &kept, &[]);
     Ok(())
 }
 
