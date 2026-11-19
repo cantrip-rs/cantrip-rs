@@ -461,6 +461,14 @@ pub fn itself_while_you_control_a<const SUBTYPE: u16>(view: &dyn LayerQuery, sou
     state.battlefield().iter().any(|&id| state.obj(id).controller == you && view.chars(id).has_subtype(word))
 }
 
+/// "As long as you control an artifact, this creature gets ..." (CR 604.1, 613.1f) as `StaticDef::affects`: only the source
+/// itself, and only while its controller controls an artifact (the source counts if it is one), each judged as the earlier
+/// layers made it and asked again whenever characteristics are computed. Cloudsculpt Technician, Gravblade Heavy and Goblin
+/// Tomb Raider print it.
+pub fn itself_while_you_control_an_artifact(view: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Chars) -> bool {
+    affected == source && artifacts_you_control(view, source) > 0
+}
+
 /// "If you control another [subtype]" / "as long as you control another [subtype]" (CR 603.4, 604.1) as a condition asked of the
 /// ability's controller, `SUBTYPE` a `Subtype` as `u16` (`lands::sub`): another permanent than the source, under that player's
 /// control, with that creature type as the layers have it now, read through the words of the source's text (CR 612.2); an
