@@ -1,0 +1,8 @@
+{
+  "name": "Synapse Necromage",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Fungus Wizard",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "When this creature dies, create two 1/1 black Fungus creature tokens with \"This token can't block.\""
+}

@@ -1,0 +1,48 @@
+# Synapse Necromage: "When this creature dies, create two 1/1 black Fungus creature tokens with 'This token can't block.'" Bot2's
+# Lightning Bolt kills the 3/1: Bot1 gets two Fungus tokens (black, 1/1, CantBlock), and neither may block Bot2's attacking Memnite on
+# turn 4 (CR 509.1b), so Bot1 takes the damage.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Synapse Necromage
+Swamp x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Memnite
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Synapse Necromage.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Synapse Necromage)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Synapse Necromage
+? Bot1.Battlefield.Count = 5
+? Bot1.Battlefield.Fungus Token#1.Power = 1
+? Bot1.Battlefield.Fungus Token#1.Toughness = 1
+? Bot1.Battlefield.Fungus Token#1.Colors = Black
+? Bot1.Battlefield.Fungus Token#1.Keywords = CantBlock
+? Bot1.Battlefield.Fungus Token#2.Keywords = CantBlock
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+! Bot1.Block(Fungus Token#1 > Memnite)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
