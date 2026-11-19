@@ -1,0 +1,52 @@
+# Scampering Surveyor's enters trigger searches Bot1's library for a basic land card or Cave card: Hidden Nursery (a Cave) is found and
+# enters tapped, then the library is shuffled once. Bayou (a nonbasic land that is no Cave) is refused as a choice. Bot2's identical
+# library of Caves is outside the search (CR 701.23a), and the Surveyor itself stays a 3/2 Gnome.
+
+[Bot1 Deck]
+Scampering Surveyor
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Forest
+Mountain
+Hidden Nursery
+Bayou
+Forest x18
+
+[Bot2 Deck]
+Hidden Nursery x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Scampering Surveyor.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Bayou)
+Bot1.Search(Hidden Nursery)
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Hidden Nursery.Tapped = true
+Bot1.Battlefield.Scampering Surveyor.Power = 3
+Bot1.Battlefield.Scampering Surveyor.Toughness = 2
+Bot1.Battlefield.Scampering Surveyor.Subtypes = Gnome
+Bot1.Shuffles = 1
+Bot2.Library.Count = 13
+Bot2.Shuffles = 0

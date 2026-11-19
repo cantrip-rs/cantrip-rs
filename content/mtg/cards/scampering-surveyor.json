@@ -1,0 +1,8 @@
+{
+  "name": "Scampering Surveyor",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Gnome",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters, search your library for a basic land card or Cave card, put it onto the battlefield tapped, then shuffle."
+}
