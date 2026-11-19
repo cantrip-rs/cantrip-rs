@@ -1,0 +1,42 @@
+# The trigger's target dies in response: Bot2 bolts Memnite with the trigger on the stack, so on resolution the one target is
+# illegal and the ability does not resolve (CR 608.2b): no Role is created and Bot1's Ornithopter stays 0/2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Memnite
+Charmed Clothier
+Plains x16
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Charmed Clothier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Memnite; Black Lotus
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Plains; Charmed Clothier
+Bot2.Graveyard = Lightning Bolt

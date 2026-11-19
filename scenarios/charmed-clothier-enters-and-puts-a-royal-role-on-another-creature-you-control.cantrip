@@ -1,0 +1,50 @@
+# Charmed Clothier {4}{W}, a 3/3 Faerie Advisor with flying: "When this creature enters, create a Royal Role token attached to
+# another target creature you control." On turn three Bot1 has Memnite and Ornithopter, and Bot2 an Ornithopter. The trigger refuses
+# the Clothier itself (CR 115.1, "another") and Bot2's creature ("you control"); targeting Memnite, the Role makes it 2/2
+# (CR 111.10m, 303.4). Ornithopter and the Clothier (flying 3/3) are unchanged.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Memnite
+Ornithopter
+Charmed Clothier
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Charmed Clothier.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Charmed Clothier)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Royal.AttachedTo = Memnite
+Bot1.Battlefield.Royal.Token = true
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Charmed Clothier.Power = 3
+Bot1.Battlefield.Charmed Clothier.Toughness = 3
+Bot1.Battlefield.Charmed Clothier.Keywords = Flying
+Bot2.Battlefield.Ornithopter.Toughness = 2

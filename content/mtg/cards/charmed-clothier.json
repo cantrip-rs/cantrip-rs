@@ -1,0 +1,11 @@
+{
+  "name": "Charmed Clothier",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Faerie Advisor",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nWhen this creature enters, create a Royal Role token attached to another target creature you control. (If you control another Role on it, put that one into the graveyard. Enchanted creature gets +1/+1 and has ward {1}.)",
+  "keywords": [
+    "Flying"
+  ]
+}
