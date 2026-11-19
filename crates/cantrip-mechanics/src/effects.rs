@@ -2854,6 +2854,13 @@ pub fn exile_first_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Susp
     Ok(())
 }
 
+/// "Exile target [object]. Scry N" (CR 701.13a, 701.22, 608.2c): the exile, then the scry in the same effect. A spell whose only target is
+/// illegal on resolution does neither (CR 608.2b). Devout Decree and Ray of Ruin print it.
+pub fn exile_first_target_then_scry<const N: usize>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    crate::exile_target(g, item, 0);
+    scry(g, item, N)
+}
+
 /// "Exile target [permanent]", remembered as exiled with the ability's source (CR 607.2a), so that its linked ability
 /// ("return the exiled card") finds it; nothing if the target is no longer legal (CR 608.2b). The card stays in exile
 /// whatever happens to the source: it is not "until [this] leaves the battlefield" (CR 610.3). Oblivion Ring, Parallax
