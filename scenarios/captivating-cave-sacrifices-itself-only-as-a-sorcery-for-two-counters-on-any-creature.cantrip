@@ -1,0 +1,51 @@
+# Captivating Cave's "{4}, {T}, Sacrifice this land: Put two +1/+1 counters on target creature. Activate only as a sorcery." (CR 602.2b,
+# 602.5d, 701.21a): it is not offered in the beginning of combat, the Cave is sacrificed as a cost, and exactly two +1/+1 counters go
+# on the chosen creature. Only a creature can be chosen (a Sol Ring is refused), and an opponent's is as legal as one's own. The {4} is
+# paid in full: Sol Ring's {2} and two Moxen make exactly four, so the pool is empty afterwards.
+
+[Bot1 Deck]
+Captivating Cave
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Sol Ring
+Ornithopter
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Captivating Cave.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+! Bot1.Battlefield.Captivating Cave.Activate(Ability: Sacrifice this land; Ornithopter; Mana: short)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.BeginCombat]
+! Bot1.Battlefield.Captivating Cave.Activate(Ability: Sacrifice this land)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.Battlefield.Captivating Cave.Activate(Ability: Sacrifice this land; Sol Ring)
+Bot1.Battlefield.Captivating Cave.Activate(Ability: Sacrifice this land; Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Captivating Cave
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2
+Bot2.Battlefield.Ornithopter.Power = 2
+Bot2.Battlefield.Ornithopter.Toughness = 4

@@ -1,0 +1,5 @@
+{
+  "name": "Captivating Cave",
+  "type": "Land — Cave",
+  "oracleText": "{T}: Add {C}.\n{1}, {T}: Add one mana of any color.\n{4}, {T}, Sacrifice this land: Put two +1/+1 counters on target creature. Activate only as a sorcery."
+}

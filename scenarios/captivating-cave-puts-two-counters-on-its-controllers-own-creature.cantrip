@@ -1,0 +1,45 @@
+# Captivating Cave's "target creature" is not limited to an opponent's: the controller's own Ornithopter gets the two +1/+1 counters
+# and nothing else does (CR 122.1, 601.2c); the activation costs {4} in all (Sol Ring and two Moxen), so the pool is empty afterwards.
+
+[Bot1 Deck]
+Captivating Cave
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Sol Ring
+Ornithopter
+Island
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Captivating Cave.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Captivating Cave.Activate(Ability: Sacrifice this land; Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Captivating Cave
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
