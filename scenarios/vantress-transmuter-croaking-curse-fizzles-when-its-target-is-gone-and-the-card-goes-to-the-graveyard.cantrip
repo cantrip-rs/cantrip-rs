@@ -1,0 +1,39 @@
+# CR 608.2b, 715.4: with its only target gone, Croaking Curse is countered on resolution, so it makes no Role, and because it did not
+# resolve the Adventure card goes to its owner's graveyard instead of exile (it cannot be cast later). Bot2 bolts its own Ornithopter in response.
+
+[Bot1 Deck]
+Vantress Transmuter
+Mox Sapphire
+Mox Sapphire
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Vantress Transmuter.Cast(Bot2.Battlefield.Ornithopter; Ability: Croaking Curse)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Graveyard = Vantress Transmuter
+Bot2.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Battlefield.Count = 2
+Bot2.Battlefield.Count = 1

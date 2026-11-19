@@ -1,0 +1,14 @@
+{
+  "name": "Vantress Transmuter",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Human Wizard",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "",
+  "adventure": {
+    "name": "Croaking Curse",
+    "manaCost": "{1}{U}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Tap target creature. Create a Cursed Role token attached to it. (Enchanted creature is 1/1.)"
+  }
+}

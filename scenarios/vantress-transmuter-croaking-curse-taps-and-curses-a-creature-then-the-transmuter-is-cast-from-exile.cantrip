@@ -1,0 +1,56 @@
+# Vantress Transmuter // Croaking Curse: "Tap target creature. Create a Cursed Role token attached to it." (CR 303.7) Bot1 casts the
+# sorcery on turn 3 at Bot2's Grizzly Bears (2/2): it is tapped, its base power and toughness become 1/1 (CR 111.10j), and the Role is
+# Bot1's token (Bot1 controls it, not the Bears' controller). The card is exiled on an adventure (CR 715.4) and cast from exile on turn 5.
+
+[Bot1 Deck]
+Vantress Transmuter
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island x16
+
+[Bot2 Deck]
+Mox Emerald
+Grizzly Bears
+Mox Jet
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Vantress Transmuter.Cast(Bot2.Battlefield.Grizzly Bears; Ability: Croaking Curse)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Tapped = true
+? Bot2.Battlefield.Grizzly Bears.Power = 1
+? Bot2.Battlefield.Grizzly Bears.Toughness = 1
+? Bot1.Battlefield.Cursed.AttachedTo = Grizzly Bears
+? Exile = Vantress Transmuter
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Vantress Transmuter.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Vantress Transmuter.Power = 3
+Bot1.Battlefield.Vantress Transmuter.Toughness = 4
+Bot2.Battlefield.Grizzly Bears.Power = 1
