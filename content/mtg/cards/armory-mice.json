@@ -1,0 +1,8 @@
+{
+  "name": "Armory Mice",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Mouse",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Celebration — This creature gets +0/+2 as long as two or more nonland permanents entered the battlefield under your control this turn."
+}

@@ -1,0 +1,51 @@
+# Armory Mice {1}{W}, a 3/1: "Celebration — This creature gets +0/+2 as long as two or more nonland permanents entered the
+# battlefield under your control this turn." On turn three Bot1 plays a Plains and casts the Mice: a land and one nonland permanent,
+# so 3/1. A Memnite entering after them is the second nonland permanent, so 3/3. The Mox Pearl of turn one doesn't count on turn
+# three: the Mice are 3/1 again at the start of turn five, where a Plains and a Memnite are still one nonland permanent (3/1)
+# and an Ornithopter is the second (3/3).
+
+[Bot1 Deck]
+Mox Pearl
+Plains
+Armory Mice
+Memnite
+Memnite
+Ornithopter
+Plains
+Plains x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Armory Mice.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Armory Mice.Power = 3
+? Bot1.Battlefield.Armory Mice.Toughness = 1
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Armory Mice.Power = 3
+? Bot1.Battlefield.Armory Mice.Toughness = 3
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Armory Mice.Toughness = 1
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Armory Mice.Toughness = 1
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Armory Mice.Toughness = 3
+
+[Expect]
+Bot1.Battlefield.Armory Mice.Power = 3
+Bot1.Battlefield.Armory Mice.Toughness = 3

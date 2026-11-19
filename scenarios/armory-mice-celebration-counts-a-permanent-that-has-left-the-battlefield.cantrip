@@ -1,0 +1,44 @@
+# Armory Mice's celebration counts each permanent as it entered, whatever has happened since (CR 603.6a): on turn three Bot1 casts
+# the Mice and then Memnite, so they are 3/3, and Bot2 exiles the Memnite with Swords to Plowshares, which leaves the Mice 3/3.
+
+[Bot1 Deck]
+Mox Pearl
+Plains
+Armory Mice
+Memnite
+Plains
+Plains
+Plains
+Plains x14
+
+[Bot2 Deck]
+Swords to Plowshares
+Plains x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Armory Mice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Armory Mice.Toughness = 3
+Bot1.Pass
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Memnite)
+Bot2.Battlefield.Plains.Activate
+Bot2.Pass
+Bot1.Pass
+? Exile = Memnite
+? Bot1.Battlefield.Armory Mice.Toughness = 3
+
+[Expect]
+Bot1.Battlefield.Armory Mice.Toughness = 3
+Bot1.Battlefield.Count = 4
