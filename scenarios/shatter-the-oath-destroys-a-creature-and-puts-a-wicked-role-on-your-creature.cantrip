@@ -1,0 +1,45 @@
+# Shatter the Oath: "Destroy target creature or enchantment. Create a Wicked Role token attached to up to one target
+# creature you control." Bot2's Ornithopter is destroyed; Bot1's Ornithopter gets the Wicked Role (+1/+1: 1/3).
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+Ornithopter
+Shatter the Oath
+Swamp
+Island
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Shatter the Oath.Cast
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield =
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield = Swamp; Swamp; Mox Jet; Ornithopter; Wicked
+Bot1.Battlefield.Wicked.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3

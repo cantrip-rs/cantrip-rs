@@ -1,0 +1,50 @@
+# Shatter the Oath: "target creature or enchantment" - Bot2's Bad Moon is destroyed, and the Role still goes on
+# Bot1's creature.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+Ornithopter
+Shatter the Oath
+Swamp
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Bad Moon
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Bad Moon.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Shatter the Oath.Cast
+Bot1.Target(Bot2.Battlefield.Bad Moon)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield = Mox Jet; Mox Pearl
+Bot2.Graveyard = Bad Moon
+Bot1.Battlefield = Swamp; Swamp; Mox Jet; Ornithopter; Wicked
+Bot1.Battlefield.Wicked.AttachedTo = Ornithopter

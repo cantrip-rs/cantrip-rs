@@ -1,0 +1,37 @@
+# Shatter the Oath: Bot1 targets its own Ornithopter with both. The destruction is done first, so there is no
+# creature left to enchant when the Role would be made (CR 608.2b-c, 400.7): no Wicked Role is created.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+Ornithopter
+Shatter the Oath
+Swamp
+Island
+Island x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Shatter the Oath.Cast
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Swamp; Swamp; Mox Jet
+Bot1.Graveyard = Shatter the Oath; Ornithopter; Black Lotus
