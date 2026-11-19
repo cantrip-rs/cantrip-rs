@@ -1,0 +1,44 @@
+# Chancellor of Tales: "you may copy it" is a choice. Turn 1: Bot1 casts the Chancellor, then Blow Off Steam at Bot2 and declines the
+# copy: Bot2 takes 1 once (not 2), Bot1 takes nothing, and the card is exiled to be cast later.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Ruby
+Frolicking Familiar
+Chancellor of Tales
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Chancellor of Tales.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Frolicking Familiar.Cast(Bot2; Ability: Blow Off Steam)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
+Exile = Frolicking Familiar
+Bot1.Graveyard.Count = 0

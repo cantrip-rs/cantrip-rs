@@ -1,0 +1,53 @@
+# Chancellor of Tales {3}{U} 2/3 flier: "Whenever you cast an Adventure spell, you may copy it. You may choose new targets for the
+# copy." Turn 1: Bot1 casts the Chancellor with four Moxen, then Blow Off Steam ({R}, 1 damage to any target) at Bot2 with a fifth.
+# Bot1 accepts the copy and aims it at itself: the copy resolves first, so Bot1 is at 19, then the original puts Bot2 at 19
+# and the card goes to exile to be cast later - only the original does, the copy ceases to exist (CR 707.10a, 715.4), so exactly
+# one card is in exile and the graveyard is empty.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Ruby
+Frolicking Familiar
+Chancellor of Tales
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Chancellor of Tales.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Frolicking Familiar.Cast(Bot2; Ability: Blow Off Steam)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot1)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+? Bot2.Life = 20
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Exile = Frolicking Familiar
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Chancellor of Tales.Power = 2

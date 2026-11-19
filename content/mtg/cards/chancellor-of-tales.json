@@ -1,0 +1,11 @@
+{
+  "name": "Chancellor of Tales",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Faerie Advisor",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying\nWhenever you cast an Adventure spell, you may copy it. You may choose new targets for the copy.",
+  "keywords": [
+    "Flying"
+  ]
+}
