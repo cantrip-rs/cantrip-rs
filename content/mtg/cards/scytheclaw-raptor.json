@@ -1,0 +1,8 @@
+{
+  "name": "Scytheclaw Raptor",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Dinosaur",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Whenever a player casts a spell, if it's not their turn, this creature deals 4 damage to them."
+}

@@ -1,0 +1,53 @@
+# Scytheclaw Raptor: "a player" includes its controller (CR 603.2). On Bot1's own turn 3 a Lightning Bolt cast at Bot2 is on its
+# controller's turn: no damage to Bot1 (positive control, Bot1 20). On Bot2's turn 4 Bot1 casts a second Bolt at Bot2 on a turn that
+# is not theirs: the Raptor deals 4 to Bot1 (16), and the Bolt then takes Bot2 to 14 (20 - 3 - 3).
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Scytheclaw Raptor
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Scytheclaw Raptor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Bot2.Life = 17
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 16
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 16
+Bot2.Life = 14
