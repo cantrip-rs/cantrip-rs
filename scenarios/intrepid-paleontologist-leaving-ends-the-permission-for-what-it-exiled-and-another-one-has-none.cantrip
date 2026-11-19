@@ -1,0 +1,68 @@
+# Intrepid Paleontologist: the permission is for "cards you own exiled with this creature" (CR 607.2a). Bot1's first Paleontologist exiles
+# the Nest Robber (a Dinosaur Bot1 owns); a second Paleontologist enters. Lightning Bolt kills the first, and the Robber, still exiled,
+# cannot be cast: not with the second Paleontologist, which did not exile it, with mana for it available (Forest and the second
+# Paleontologist's mana, which was not summoning sick, CR 302.6) so the refusal is the permission's (CR 400.7).
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Emerald
+Mox Ruby
+Intrepid Paleontologist
+Nest Robber
+Lightning Bolt
+Intrepid Paleontologist
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Intrepid Paleontologist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Nest Robber.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nest Robber)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Intrepid Paleontologist.Activate(Ability: Exile target; Bot1.Graveyard.Nest Robber)
+Bot1.Pass
+Bot2.Pass
+? Exile = Nest Robber
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Intrepid Paleontologist.Activate(Ability: any color; Color: Green)
+Bot1.Hand.Intrepid Paleontologist.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Intrepid Paleontologist#1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Intrepid Paleontologist.Activate(Ability: any color; Color: Red)
+! Bot1.Exile.Nest Robber.Cast
+
+[Expect]
+Exile = Nest Robber

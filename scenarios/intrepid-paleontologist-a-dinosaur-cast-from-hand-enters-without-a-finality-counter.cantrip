@@ -1,0 +1,48 @@
+# Intrepid Paleontologist: "If you cast a spell this way, that creature enters with a finality counter on it." Only a spell cast with this
+# permission: Bot1 casts the Nest Robber (a Dinosaur) from their hand with the Paleontologist on the battlefield, and it enters with no
+# counter (CR 614.1c), so Lightning Bolt puts it into the graveyard.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Emerald
+Mox Ruby
+Intrepid Paleontologist
+Nest Robber
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Intrepid Paleontologist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Nest Robber.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Nest Robber.Counters.Finality = (absent)
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nest Robber)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Nest Robber = (absent)
+Bot1.Graveyard = Nest Robber; Lightning Bolt; Black Lotus
+Exile = 

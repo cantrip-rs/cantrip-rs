@@ -9,8 +9,8 @@ fn add_a_finality_counter(_: &dyn Query, _: &Asker, _: ObjectId, proposal: &mut 
 }
 
 /// "That creature enters with a finality counter" (CR 614.1c, 122.6): a replacement effect about a spell, applied as it
-/// enters the battlefield from the stack (`next_creature_counter::spell_enters`); Leonardo, Sewer Samurai and Overflow
-/// Submatrix.
+/// enters the battlefield from the stack (`next_creature_counter::spell_enters`); Leonardo, Sewer Samurai, Overflow
+/// Submatrix and Intrepid Paleontologist.
 pub const SPELL_ENTERS_WITH_FINALITY: GrantedReplacementDef = granted_replacement(
     ReplacementKind::ZoneChange,
     crate::next_creature_counter::spell_enters,

@@ -1,0 +1,87 @@
+# Intrepid Paleontologist: "You may cast Dinosaur creature spells from among cards you own exiled with this creature."
+# Bot1's Paleontologist exiles two cards with {2} each, with mana still left over for a cast afterwards, so a refusal is the permission's
+# and not the mana's: their own Grizzly Bears (a creature, not a Dinosaur, CR 205.3m) and Bot2's Nest Robber (a Dinosaur creature, but a
+# card Bot1 does not own, CR 108.3, which Lightning Bolt put in Bot2's graveyard). Neither can be cast from exile.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Emerald
+Mox Ruby
+Intrepid Paleontologist
+Grizzly Bears
+Lightning Bolt
+Lightning Bolt
+Mountain
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Nest Robber
+Island x17
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Intrepid Paleontologist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Grizzly Bears; Lightning Bolt; Black Lotus
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Nest Robber.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Nest Robber.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Nest Robber)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Nest Robber
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Intrepid Paleontologist.Activate(Ability: Exile target; Bot2.Graveyard.Nest Robber)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Intrepid Paleontologist.Activate(Ability: Exile target; Bot1.Graveyard.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Exile = Nest Robber; Grizzly Bears
+! Bot1.Exile.Grizzly Bears.Cast
+! Bot2.Exile.Nest Robber.Cast
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears = (absent)
+Bot2.Battlefield.Nest Robber = (absent)

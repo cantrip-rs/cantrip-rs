@@ -1,0 +1,71 @@
+# Intrepid Paleontologist ({1}{G} 2/2): "{T}: Add one mana of any color." "{2}: Exile target card from a graveyard." "You may cast Dinosaur
+# creature spells from among cards you own exiled with this creature. If you cast a spell this way, that creature enters with a finality
+# counter on it."
+# Turn 1: Bot1 plays the Paleontologist, then casts Nest Robber (a 2/1 Dinosaur) with Black Lotus and Lightning Bolts it, so it is in
+# their graveyard. Turn 3: the Paleontologist's {2} ability exiles the Robber (CR 607.2a); {T} for red pays for casting it from exile.
+# It enters with a finality counter, so Lightning Bolt does not put it into the graveyard but exiles it (CR 122.6).
+
+[Bot1 Deck]
+Intrepid Paleontologist
+Nest Robber
+Lightning Bolt x2
+Black Lotus
+Mox Emerald
+Mox Ruby
+Forest
+Mountain
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Intrepid Paleontologist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Nest Robber.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nest Robber)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Nest Robber; Lightning Bolt; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Intrepid Paleontologist.Activate(Ability: Exile target; Bot1.Graveyard.Nest Robber)
+Bot1.Pass
+Bot2.Pass
+? Exile = Nest Robber
+Bot1.Battlefield.Intrepid Paleontologist.Activate(Ability: any color; Color: Red)
+? Bot1.Mana = {R}
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Nest Robber.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Nest Robber.Counters.Finality = 1
+? Exile = 
+? Bot1.Life = 20
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nest Robber)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Nest Robber = (absent)
+Exile = Nest Robber

@@ -1,0 +1,60 @@
+# Intrepid Paleontologist: the permission only lets Bot1 cast the exiled Dinosaur; it does not change its cost. Nest Robber costs
+# {1}{R}: with only green mana left (two Mox Emeralds) the cast is refused as short, though the mana would be enough for it (any mana type or color is not allowed).
+# Also the cast costs no life (CR 119.4): Bot1 stays at 20.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Emerald
+Intrepid Paleontologist
+Nest Robber
+Lightning Bolt
+Mox Emerald
+Mox Emerald
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Intrepid Paleontologist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Nest Robber.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nest Robber)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Intrepid Paleontologist.Activate(Ability: any color; Color: Green)
+Bot1.Battlefield.Intrepid Paleontologist.Activate(Ability: Exile target; Bot1.Graveyard.Nest Robber)
+Bot1.Pass
+Bot2.Pass
+? Exile = Nest Robber
+! Bot1.Exile.Nest Robber.Cast(Mana: short)
+Bot1.Battlefield.Mox Emerald#1.Activate
+? Bot1.Mana = {G}
+! Bot1.Exile.Nest Robber.Cast(Mana: short)
+? Bot1.Life = 20
+
+[Expect]
+Exile = Nest Robber

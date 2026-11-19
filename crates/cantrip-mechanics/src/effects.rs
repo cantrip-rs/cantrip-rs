@@ -2873,10 +2873,10 @@ pub fn exile_first_target_then_scry<const N: usize>(g: &mut dyn Game, item: &Sta
     scry(g, item, N)
 }
 
-/// "Exile target [permanent]", remembered as exiled with the ability's source (CR 607.2a), so that its linked ability
+/// "Exile target [object]", remembered as exiled with the ability's source (CR 607.2a), so that its linked ability
 /// ("return the exiled card") finds it; nothing if the target is no longer legal (CR 608.2b). The card stays in exile
 /// whatever happens to the source: it is not "until [this] leaves the battlefield" (CR 610.3). Oblivion Ring, Parallax
-/// Wave and Skyclave Apparition print it.
+/// Wave and Skyclave Apparition print it, and Intrepid Paleontologist, which exiles a card from a graveyard.
 pub fn exile_first_target_with_this(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(permanent) = crate::targets::object(g, item, 0) {
         g.exile_with(&[permanent], g.linked(item), false);
