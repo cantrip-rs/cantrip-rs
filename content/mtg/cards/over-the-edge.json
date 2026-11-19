@@ -1,0 +1,6 @@
+{
+  "name": "Over the Edge",
+  "manaCost": "{1}{G}",
+  "type": "Sorcery",
+  "oracleText": "Choose one —\n• Destroy target artifact or enchantment.\n• Target creature you control explores, then it explores again. (Reveal the top card of your library. Put that card into your hand if it's a land. Otherwise, put a +1/+1 counter on that creature, then put the card back or put it into your graveyard. Then repeat this process.)"
+}

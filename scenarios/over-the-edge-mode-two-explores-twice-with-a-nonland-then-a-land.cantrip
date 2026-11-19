@@ -1,0 +1,52 @@
+# Over the Edge, mode 2: "Target creature you control explores, then it explores again." (CR 701.44a) The Elvish Mystic's first explore reveals the
+# Lightning Bolt (a +1/+1 counter, and Bot1 puts the Bolt into the graveyard) and the second the Mountain under it (a land, into the hand).
+# Bot2's Llanowar Elves is refused as the target: the creature has to be one Bot1 controls.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Elvish Mystic
+Over the Edge
+Island
+Island
+Island
+Island
+Lightning Bolt
+Mountain
+Island x10
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Over the Edge.Cast
+Bot1.Modes(2)
+! Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Target(Bot1.Battlefield.Elvish Mystic)
+Bot1.Accept
+! Bot1.Accept
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Mana =
+Bot1.Battlefield.Elvish Mystic.Power = 2
+Bot1.Battlefield.Elvish Mystic.Toughness = 2
+Bot1.Battlefield.Elvish Mystic.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = Over the Edge; Lightning Bolt
+Bot1.Hand = Island; Island; Island; Island; Mountain
+Bot1.Library.Count = 10
+Bot2.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = (absent)

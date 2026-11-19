@@ -1,0 +1,43 @@
+# Over the Edge, mode 1 destroys an enchantment as well (CR 701.8a): Bot2's Exploration (a noncreature, nonartifact permanent) goes to the
+# graveyard, while Bot2's Forest, a land, is refused as a target.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Elvish Mystic
+Over the Edge
+Island
+Island
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Forest
+Exploration
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Exploration.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Over the Edge.Cast
+Bot1.Modes(1)
+! Bot1.Target(Bot2.Battlefield.Forest)
+Bot1.Target(Bot2.Battlefield.Exploration)
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Mana =
+Bot2.Graveyard = Exploration
+Bot2.Battlefield = Forest
+Bot1.Graveyard = Over the Edge
