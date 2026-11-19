@@ -1,0 +1,32 @@
+# Mintstrosity: "When this creature dies, create a Food token." Bolted, it leaves for the graveyard and its controller
+# (not the bolt's) gets exactly one Food.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mintstrosity
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mintstrosity.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mintstrosity)
+Bot2.Battlefield.Mox Ruby.Activate
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Swamp; Food Token
+Bot1.Battlefield.Food Token.Types = Artifact
+Bot1.Graveyard = Mintstrosity
+Bot2.Battlefield = Mox Ruby
+Bot2.Battlefield.Food Token = (absent)

@@ -1,0 +1,8 @@
+{
+  "name": "Mintstrosity",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Horror",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "When this creature dies, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")"
+}
