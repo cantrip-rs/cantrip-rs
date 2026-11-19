@@ -572,6 +572,9 @@ pub const BASIC_LAND_OR_PLANET_CARD: Selection = Selection::of(up_to(1), &[BASIC
 /// "A basic land card or a Desert card", which may be left unfound (CR 701.23b): Spinewoods Armadillo and Silver Deputy.
 pub const BASIC_LAND_OR_DESERT_CARD: Selection = Selection::of(up_to(1), &[basic_land_or_subtype(Subtype::Desert)]).called("basic land or Desert");
 
+/// "A basic land card or Cave card", which may be left unfound (CR 701.23b): Compass Gnome and Scampering Surveyor.
+pub const BASIC_LAND_OR_CAVE_CARD: Selection = Selection::of(up_to(1), &[basic_land_or_subtype(Subtype::Cave)]).called("basic land or Cave");
+
 /// "A basic Plains card", which may be left unfound (CR 701.23b): Clay-Fired Bricks and Oberth-Class Starship.
 pub const BASIC_PLAINS_CARD: Selection = Selection::of(up_to(1), &[basic_land_of_type(Subtype::Plains)]).called("basic Plains");
 
