@@ -1,0 +1,75 @@
+# The Core adds as many mana as there are permanent cards in the graveyard, here exactly one. Matzalantli transforms on turn 3 (four
+# permanent types in the graveyard); on turn 4 Bot2's Tormod's Crypt exiles Bot1's graveyard and then its Mind Twist for X = 1 makes Bot1
+# discard its only card, a Plains. On turn 5 The Core adds a single Red, the instant Mind Twist in Bot2's graveyard counting for nothing.
+
+[Bot1 Deck]
+Black Lotus
+Matzalantli, the Great Door
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Thought Scour
+Pacifism
+Savannah Lions
+Plains
+Mox Ruby
+Plains x16
+
+[Bot2 Deck]
+Tormod's Crypt
+Mox Jet
+Mox Pearl
+Mind Twist
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Matzalantli, the Great Door.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Matzalantli, the Great Door.Activate(Ability: Draw)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Pacifism)
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Matzalantli, the Great Door.Activate(Ability: Transform)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 5
+[T4 Bot2.Main1]
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard.Count = 0
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Mind Twist.Cast(Bot1; X: 1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Plains
+[T5 Bot1.Main1]
+Bot1.Battlefield.The Core.Activate(Color: Red)
+? Bot1.Mana = {R}
+
+[Expect]
+Bot1.Battlefield.The Core.Tapped = true
+Exile.Count = 5

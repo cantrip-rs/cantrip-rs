@@ -1,0 +1,63 @@
+# Matzalantli, the Great Door {3}: "{T}: Draw a card, then discard a card." and "{4}, {T}: Transform Matzalantli. Activate only if there are
+# four or more permanent types among cards in your graveyard." Turn 1: Black Lotus pays for it and is sacrificed (an artifact card), Thought
+# Scour mills Savannah Lions and a Plains (a creature and a land), and its loot draws Mox Ruby and discards Pacifism (an enchantment): four
+# permanent types (the instant Thought Scour is no permanent type) in a graveyard of four permanent cards. On turn 3 four Moxen pay {4}
+# and it transforms (CR 701.27a), staying tapped (the ruling). On turn 5 The Core, a land now, taps for as many mana of one color as
+# there are permanent cards in the graveyard: four Red.
+
+[Bot1 Deck]
+Black Lotus
+Matzalantli, the Great Door
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Thought Scour
+Pacifism
+Savannah Lions
+Plains
+Mox Ruby
+Plains x16
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Thought Scour; Plains; Savannah Lions
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Matzalantli, the Great Door.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Black Lotus; Thought Scour; Plains; Savannah Lions
+Bot1.Battlefield.Matzalantli, the Great Door.Activate(Ability: Draw)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Pacifism)
+? Bot1.Graveyard = Pacifism; Black Lotus; Thought Scour; Plains; Savannah Lions
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Matzalantli, the Great Door.Activate(Ability: Transform)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Core.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Battlefield.The Core.Activate(Color: Red)
+? Bot1.Mana = {R}{R}{R}{R}
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Mox Jet; Mox Pearl; Mox Ruby; The Core
+Bot1.Battlefield.The Core.Types = Land
+Bot1.Battlefield.The Core.Tapped = true

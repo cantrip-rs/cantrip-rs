@@ -1,0 +1,11 @@
+{
+  "name": "Matzalantli, the Great Door",
+  "manaCost": "{3}",
+  "type": "Legendary Artifact",
+  "oracleText": "{T}: Draw a card, then discard a card.\n{4}, {T}: Transform Matzalantli. Activate only if there are four or more permanent types among cards in your graveyard. (Artifact, battle, creature, enchantment, land, and planeswalker are permanent types.)",
+  "backFace": {
+    "name": "The Core",
+    "type": "Legendary Land",
+    "oracleText": "(Transforms from Matzalantli.)\nFathomless descent — {T}: Add X mana of any one color, where X is the number of permanent cards in your graveyard."
+  }
+}

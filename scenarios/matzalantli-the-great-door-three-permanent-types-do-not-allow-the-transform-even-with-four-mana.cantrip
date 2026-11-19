@@ -1,0 +1,50 @@
+# Matzalantli's transform needs four permanent types among the cards in your graveyard (CR 602.5b, 110.4a). With Black Lotus (artifact),
+# Savannah Lions (creature) and two Plains (land) there, five permanent cards but three types, so the ability is refused although all
+# four Moxen are untapped to pay {4}; the instant Thought Scour is no permanent type. Matzalantli still loots on turn 3.
+
+[Bot1 Deck]
+Black Lotus
+Matzalantli, the Great Door
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Thought Scour
+Mox Ruby
+Savannah Lions
+Plains
+Plains
+Plains x16
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Matzalantli, the Great Door.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Matzalantli, the Great Door.Activate(Ability: Draw)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains)
+? Bot1.Graveyard = Plains; Black Lotus; Thought Scour; Plains; Savannah Lions
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {W}{U}{B}{R}
+! Bot1.Battlefield.Matzalantli, the Great Door.Activate(Ability: Transform)
+
+[Expect]
+Bot1.Battlefield = Matzalantli, the Great Door; Mox Sapphire; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Battlefield.Matzalantli, the Great Door.Tapped = false
