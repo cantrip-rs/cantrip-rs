@@ -1,0 +1,6 @@
+{
+  "name": "Hopeful Vigil",
+  "manaCost": "{1}{W}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, create a 2/2 white Knight creature token with vigilance.\nWhen this enchantment is put into a graveyard from the battlefield, scry 2.\n{2}{W}: Sacrifice this enchantment."
+}

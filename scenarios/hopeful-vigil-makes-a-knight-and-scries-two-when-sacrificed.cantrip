@@ -1,0 +1,49 @@
+# Hopeful Vigil: on entering it makes a 2/2 white Knight token with vigilance; "{2}{W}: Sacrifice this enchantment" is paid
+# exactly with a Black Lotus (three white, pool empty right after); put into the graveyard from the battlefield (CR 603.10a) it
+# scries 2: Bot1 sees Lightning Bolt and Counterspell, keeps Counterspell on top and bottoms the Bolt (CR 701.22).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Hopeful Vigil
+Black Lotus
+Island x3
+Lightning Bolt
+Counterspell
+Mountain
+Forest
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana = {W}{W}
+Bot1.Hand.Hopeful Vigil.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Knight Token.Power = 2
+? Bot1.Battlefield.Knight Token.Toughness = 2
+? Bot1.Battlefield.Knight Token.Keywords = Vigilance
+? Bot1.Battlefield.Knight Token.Colors = White
+Bot1.Battlefield.Hopeful Vigil.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+Bot1.Arrange(Counterspell | Lightning Bolt)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Hopeful Vigil; Black Lotus
+Bot1.Battlefield = Knight Token; Mox Pearl; Plains
+Bot1.Library = Counterspell; Mountain; Forest; Island; Island; Island; Island; Island; Island; Island; Island; Island; Lightning Bolt
+Stack.Count = 0
