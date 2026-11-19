@@ -1,0 +1,50 @@
+# Cavernous Maw: "{2}: This land becomes a 3/3 Elemental creature until end of turn. It's still a Cave land." The text says it is
+# still what it was, so the land keeps every type and subtype it had and the Elemental type is added (CR 205.1b, 613.1d): under
+# Prismatic Omen the Maw is a Forest, so Life and Limb has made it a 1/1 Saproling creature, and once animated it is a 3/3
+# Saproling Elemental, its Saproling type not replaced by the Elemental one.
+
+[Bot1 Deck]
+Cavernous Maw
+Mox Emerald
+Prismatic Omen
+Life and Limb
+Captivating Cave
+Captivating Cave
+Captivating Cave
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Cavernous Maw.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Prismatic Omen.Cast
+Bot1.Battlefield.Cavernous Maw.Activate(Ability: {T}: Add {C})
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Captivating Cave.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Captivating Cave.Play
+Bot1.Hand.Life and Limb.Cast
+Bot1.Battlefield.Cavernous Maw.Activate(Ability: {T}: Add {G})
+Bot1.Battlefield.Captivating Cave#1.Activate(Ability: {T}: Add {C})
+Bot1.Battlefield.Captivating Cave#2.Activate(Ability: {T}: Add {C})
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Cavernous Maw.Power = 1
+? Bot1.Battlefield.Cavernous Maw.Subtypes = Cave; Forest; Island; Mountain; Plains; Saproling; Swamp
+Bot1.Hand.Captivating Cave.Play
+Bot1.Battlefield.Cavernous Maw.Activate(Ability: becomes)
+Bot1.Battlefield.Captivating Cave#1.Activate(Ability: {T}: Add {C})
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Cavernous Maw.Power = 3
+Bot1.Battlefield.Cavernous Maw.Toughness = 3
+Bot1.Battlefield.Cavernous Maw.Subtypes = Cave; Elemental; Forest; Island; Mountain; Plains; Saproling; Swamp

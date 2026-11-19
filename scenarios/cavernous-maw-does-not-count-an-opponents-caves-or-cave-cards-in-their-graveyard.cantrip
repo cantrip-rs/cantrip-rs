@@ -1,0 +1,49 @@
+# Cavernous Maw counts only the Caves "you control" and the Cave cards in "your graveyard" (CR 602.5b, 109.4): with one other Cave of
+# Bot1's, Bot2 controls a Captivating Cave and Thought Scour has milled two more into Bot2's graveyard (four Cave objects of theirs, so
+# a count that took either side's would be four), yet the Maw's {2} ability is refused, the two Moxen being free to pay it.
+
+[Bot1 Deck]
+Cavernous Maw
+Captivating Cave
+Thought Scour
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Island
+Island x13
+
+[Bot2 Deck]
+Captivating Cave
+Island
+Island
+Island
+Island
+Island
+Island
+Captivating Cave
+Captivating Cave
+Island x11
+
+[Actions]
+Bot1.Hand.Cavernous Maw.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Thought Scour.Cast(Bot2)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot1.Pass
+? Bot2.Graveyard = Captivating Cave; Captivating Cave
+[T2 Bot2.Main1]
+Bot2.Hand.Captivating Cave.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Captivating Cave.Play
+? Bot2.Battlefield = Captivating Cave
+! Bot1.Battlefield.Cavernous Maw.Activate(Ability: becomes)
+
+[Expect]
+Bot2.Graveyard = Captivating Cave; Captivating Cave
+Bot1.Battlefield.Cavernous Maw.Types = Land

@@ -1,0 +1,48 @@
+# Cavernous Maw counts "the number of Cave cards in your graveyard" with the other Caves you control (CR 602.5b, 205.3i): Thought Scour
+# mills two Captivating Caves into Bot1's graveyard, which with no other Cave in play makes two and the {2} ability is refused (two
+# Moxen could pay it); playing a Captivating Cave makes one other Cave plus two in the graveyard, three exactly, and the Moxen pay
+# exactly its {2}. The Maw is a 3/3 Elemental (and still a Cave land) until end of turn.
+
+[Bot1 Deck]
+Cavernous Maw
+Captivating Cave
+Thought Scour
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Island
+Captivating Cave
+Captivating Cave
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Cavernous Maw.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot1.Pass
+? Bot1.Graveyard = Thought Scour; Captivating Cave; Captivating Cave
+! Bot1.Battlefield.Cavernous Maw.Activate(Ability: becomes)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Cavernous Maw.Activate(Ability: becomes)
+Bot1.Hand.Captivating Cave.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Cavernous Maw.Activate(Ability: becomes)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Cavernous Maw.Power = 3
+Bot1.Battlefield.Cavernous Maw.Toughness = 3
+Bot1.Battlefield.Cavernous Maw.Subtypes = Cave; Elemental

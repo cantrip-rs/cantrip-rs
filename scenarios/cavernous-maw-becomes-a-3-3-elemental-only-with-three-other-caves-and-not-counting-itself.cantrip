@@ -1,0 +1,46 @@
+# Cavernous Maw: "{T}: Add {C}." and "{2}: This land becomes a 3/3 Elemental creature until end of turn. It's still a Cave land. Activate
+# only if the number of other Caves you control plus the number of Cave cards in your graveyard is three or greater." With two other
+# Captivating Caves it is refused (the Maw itself would make three, but it is not "other"); with the third it is offered, and two Caves
+# tapped for {C} pay exactly its {2}. It is then a 3/3 Elemental that is still a Cave land, attacks for 3, and on the next turn is a
+# plain land again (CR 613.1d, 613.4b, 611.2a, 602.5b).
+
+[Bot1 Deck]
+Cavernous Maw
+Captivating Cave
+Captivating Cave
+Captivating Cave
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Cavernous Maw.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Captivating Cave.Play
+! Bot1.Battlefield.Cavernous Maw.Activate(Ability: becomes)
+[T5 Bot1.Main1]
+Bot1.Hand.Captivating Cave.Play
+! Bot1.Battlefield.Cavernous Maw.Activate(Ability: becomes)
+[T7 Bot1.Main1]
+Bot1.Hand.Captivating Cave.Play
+Bot1.Battlefield.Captivating Cave#1.Activate(Ability: {T}: Add {C})
+Bot1.Battlefield.Captivating Cave#2.Activate(Ability: {T}: Add {C})
+Bot1.Battlefield.Cavernous Maw.Activate(Ability: becomes)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Cavernous Maw.Power = 3
+? Bot1.Battlefield.Cavernous Maw.Toughness = 3
+? Bot1.Battlefield.Cavernous Maw.Types = Land; Creature
+? Bot1.Battlefield.Cavernous Maw.Subtypes = Cave; Elemental
+Bot1.Attack(Cavernous Maw > Bot2)
+[T9 Bot1.Main1]
+? Bot1.Battlefield.Cavernous Maw.Types = Land
+? Bot1.Battlefield.Cavernous Maw.Subtypes = Cave
+
+[Expect]
+Bot2.Life = 17
