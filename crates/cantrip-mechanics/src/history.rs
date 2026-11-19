@@ -294,16 +294,24 @@ pub fn void(q: &dyn Query) -> bool {
         || crate::warp::spell_was_warped_this_turn(q)
 }
 
-/// "If you descended this turn" (CR 700.11): a permanent card was put into the asker's graveyard from anywhere this turn,
-/// whether or not it is still there. A token is not a card (CR 111.7): the object that arrived, which for a merged
-/// permanent with a token on top is each of its card components still (CR 730.3) (Corpses of the Lost, Molten Collapse).
-pub fn descended_this_turn(q: &dyn Query, asker: &Asker) -> bool {
+/// "The number of times you descended this turn" (CR 700.11): the permanent cards put into the player's graveyard from anywhere
+/// this turn, one descent for each, whether or not it is still there. A token is not a card (CR 111.7): the object that arrived,
+/// which for a merged permanent with a token on top is each of its card components still (CR 730.3). The Mycotyrant makes that
+/// many Fungi.
+pub fn times_descended_this_turn(q: &dyn Query, player: PlayerId) -> usize {
     q.history()
         .select(EventQuery::kind(EventMask::ZONE_CHANGE).to(ZoneKind::Graveyard).this_turn())
-        .any(|r| {
+        .filter(|r| {
             matches!(r.event, Event::ZoneChange { new, to, .. }
-                if to == Zone::graveyard(asker.controller) && !q.obj(new).token && crate::targets::is_permanent_card(&q.chars(new)))
+                if to == Zone::graveyard(player) && !q.obj(new).token && crate::targets::is_permanent_card(&q.chars(new)))
         })
+        .count()
+}
+
+/// "If you descended this turn" (CR 700.11): a permanent card was put into the asker's graveyard from anywhere this turn, that
+/// is `times_descended_this_turn` is not zero (Corpses of the Lost, Molten Collapse).
+pub fn descended_this_turn(q: &dyn Query, asker: &Asker) -> bool {
+    times_descended_this_turn(q, asker.controller) > 0
 }
 
 /// Cards (not tokens) that left `player`'s graveyard this turn (Gau, Feral Youth; Wilt in the Heat).
