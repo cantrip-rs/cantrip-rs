@@ -1,0 +1,41 @@
+# Mineshaft Spider with a single card left in the library: a player can't choose to mill more cards than their library holds (CR 701.17b), so the
+# "may mill two cards" is not even offered (no question) and nothing is milled; the Lightning Bolt stays alone in the library and Bot1 has not lost.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mineshaft Spider
+Island
+Island
+Lightning Bolt
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Mineshaft Spider.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mineshaft Spider.Cast
+! Bot1.Accept
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Mana =
+Bot1.Battlefield.Mineshaft Spider.Power = 3
+Bot1.Battlefield.Mineshaft Spider.Toughness = 4
+Bot1.Hand = Island; Island
+Bot1.Graveyard.Count = 0
+Bot1.Library = Lightning Bolt
+Result = InProgress

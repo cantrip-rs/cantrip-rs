@@ -1,0 +1,43 @@
+# Mineshaft Spider's mill is a "may" (CR 701.17a): Bot1 declines, so the Lightning Bolt and Mountain stay on top of the library and the graveyard is empty.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mineshaft Spider
+Island
+Island
+Lightning Bolt
+Mountain
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Mineshaft Spider.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mineshaft Spider.Cast
+Bot1.Decline
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Mana =
+Bot1.Battlefield.Mineshaft Spider.Power = 3
+Bot1.Battlefield.Mineshaft Spider.Toughness = 4
+Bot1.Hand = Island; Island
+Bot1.Graveyard.Count = 0
+Bot1.Library.Count = 13
+Bot1.Library = Lightning Bolt; Mountain; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island
