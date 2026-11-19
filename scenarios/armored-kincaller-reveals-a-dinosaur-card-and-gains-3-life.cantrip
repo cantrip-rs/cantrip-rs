@@ -1,0 +1,47 @@
+# Armored Kincaller's ability: Bot1 controls no other Dinosaur, so the life comes only from revealing a Dinosaur card from the hand
+# (CR 701.20a, 608.2c). The Dinosaur (Orazca Frillback) stays in the hand and shows in Revealed; the Dragon in the hand is no choice
+# of the reveal. Cast for exactly {2}{G}.
+
+[Bot1 Deck]
+Armored Kincaller
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Orazca Frillback
+Serra Angel
+Forest
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Armored Kincaller.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Serra Angel)
+Bot1.Choose(Orazca Frillback)
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 23
+Bot1.Revealed = Orazca Frillback
+Bot1.Hand = Forest; Orazca Frillback; Serra Angel
+Bot2.Life = 20

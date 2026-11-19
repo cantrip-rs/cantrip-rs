@@ -1,0 +1,8 @@
+{
+  "name": "Armored Kincaller",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When this creature enters, you may reveal a Dinosaur card from your hand. If you do or if you control another Dinosaur, you gain 3 life."
+}

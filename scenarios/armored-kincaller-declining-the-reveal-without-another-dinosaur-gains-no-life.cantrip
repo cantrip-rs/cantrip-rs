@@ -1,0 +1,55 @@
+# Armored Kincaller's ability: with no other Dinosaur under Bot1's control, choosing no card to reveal (a Dinosaur card is in the hand)
+# gains nothing (CR 608.2c "if you do"). Bot2's Dinosaur does not count as "another Dinosaur" you control.
+
+[Bot1 Deck]
+Armored Kincaller
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Orazca Frillback
+Forest x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Nest Robber
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Nest Robber.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Armored Kincaller.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot1.Revealed = (absent)
+Bot2.Battlefield.Nest Robber.Power = 2

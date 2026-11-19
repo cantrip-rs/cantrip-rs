@@ -1,0 +1,38 @@
+# Armored Kincaller's ability: the Kincaller is a Dinosaur but not "another" one (CR 608.2c), and the hand holds no Dinosaur card (a
+# Serra Angel is no reveal), so nothing is asked and no life is gained.
+
+[Bot1 Deck]
+Armored Kincaller
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Serra Angel
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Armored Kincaller.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot1.Revealed = (absent)

@@ -1,0 +1,46 @@
+# Armored Kincaller's ability: Bot1 already controls a Dinosaur (Orazca Frillback), so "if you control another Dinosaur" gains 3 life
+# although the Dinosaur card in the hand is not revealed (CR 608.2c: the two conditions are alternatives; the reveal is declined).
+
+[Bot1 Deck]
+Orazca Frillback
+Armored Kincaller
+Orazca Frillback
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Orazca Frillback.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Armored Kincaller.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 23
+Bot1.Revealed = (absent)
