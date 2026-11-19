@@ -1,0 +1,44 @@
+# Malevolent Witchkite: a token counts, and only what is chosen is sacrificed. Bot1's Mintstrosity dies to a bolt
+# and leaves a Food token; Witchkite's trigger sacrifices just that Food (not Mox Jet) and draws one card.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mintstrosity
+Black Lotus
+Black Lotus
+Malevolent Witchkite
+Swamp
+Island
+Mountain
+Plains
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mintstrosity.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mintstrosity)
+Bot2.Battlefield.Mox Ruby.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Malevolent Witchkite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Choose(Food Token)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Swamp; Swamp; Malevolent Witchkite
+Bot1.Hand.Count = 2

@@ -1,0 +1,11 @@
+{
+  "name": "Malevolent Witchkite",
+  "manaCost": "{4}{B}{B}",
+  "type": "Creature — Dragon Warlock",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Flying\nWhen this creature enters, sacrifice any number of artifacts, enchantments, and/or tokens, then draw that many cards.",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,38 @@
+# Malevolent Witchkite: "When this creature enters, sacrifice any number of artifacts, enchantments, and/or tokens,
+# then draw that many cards." Bot1 sacrifices Mox Jet and Mox Pearl and draws exactly two (Island, Mountain). It is a
+# 5/4 flyer.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Black Lotus
+Black Lotus
+Malevolent Witchkite
+Swamp
+Swamp
+Island
+Mountain
+Plains
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Malevolent Witchkite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Choose(Mox Jet; Mox Pearl)
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Battlefield = Malevolent Witchkite
+Bot1.Battlefield.Malevolent Witchkite.Power = 5
+Bot1.Battlefield.Malevolent Witchkite.Toughness = 4
+Bot1.Battlefield.Malevolent Witchkite.Keywords = Flying
+Bot1.Hand = Swamp; Swamp; Island; Mountain
+Bot1.Library.Count = 21
