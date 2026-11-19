@@ -1,0 +1,48 @@
+# Cooped Up on Bot2's Savannah Lions: "{2}{W}: Exile enchanted creature." Exactly {2}{W} is needed: two Moxen are refused as short, the third
+# makes it payable and the Lions are exiled (not put into the graveyard), after which the Aura, no longer attached, goes to its owner's graveyard.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Cooped Up
+Plains
+Plains x15
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Cooped Up.Cast(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Cooped Up.Activate(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Cooped Up.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot2.Battlefield = Plains
+Exile = Savannah Lions
+Bot2.Graveyard.Count = 0
+Bot1.Graveyard = Cooped Up

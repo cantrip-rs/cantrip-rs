@@ -1,0 +1,6 @@
+{
+  "name": "Cooped Up",
+  "manaCost": "{1}{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature can't attack or block.\n{2}{W}: Exile enchanted creature."
+}
