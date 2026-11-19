@@ -1,0 +1,32 @@
+# Cursed Courtier {2}{W}, a 3/3 Human Noble with lifelink: "When this creature enters, create a Cursed Role token attached to
+# it." The Cursed Role sets the enchanted creature's base power and toughness to 1/1 (CR 613.4b, 303.4), so the Courtier is a
+# 1/1 that keeps lifelink: attacking on turn three, its 1 damage gains Bot1 1 life and costs Bot2 1.
+
+[Bot1 Deck]
+Black Lotus
+Cursed Courtier
+Plains x18
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Cursed Courtier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cursed.AttachedTo = Cursed Courtier
+? Bot1.Battlefield.Cursed.Token = true
+? Bot1.Battlefield.Cursed Courtier.Power = 1
+? Bot1.Battlefield.Cursed Courtier.Toughness = 1
+? Bot1.Battlefield.Cursed Courtier.Keywords = Lifelink
+[T3 Bot1.Main1]
+Bot1.Attack(Cursed Courtier > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19
