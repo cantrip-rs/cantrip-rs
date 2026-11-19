@@ -1,0 +1,41 @@
+# Lord Skitter's Butcher: second mode, "You may sacrifice another creature. If you do, scry 2, then draw a card."
+# Bot1 sacrifices its Ornithopter (never the Butcher itself, "another"), then scries 2: it sees exactly Island and Forest,
+# bottoms both, and the draw is the Mountain beneath them. Only one creature may be sacrificed: with Memnite also on the
+# battlefield, naming both is refused (the "up to one" limit holds), and Memnite stays.
+
+[Bot1 Deck]
+Black Lotus
+Lord Skitter's Butcher
+Ornithopter
+Memnite
+Swamp
+Swamp
+Swamp
+Island
+Forest
+Mountain
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Lord Skitter's Butcher.Cast
+Bot1.Pass
+Bot1.Modes(You may sacrifice)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Ornithopter; Memnite)
+Bot1.Choose(Ornithopter)
+Bot1.Arrange( | Island; Forest)
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Battlefield = Lord Skitter's Butcher; Memnite
+Bot1.Graveyard.Ornithopter.Colors.Count = 0
+Bot1.Hand = Swamp; Swamp; Swamp; Mountain

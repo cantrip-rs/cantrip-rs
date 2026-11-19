@@ -1,0 +1,35 @@
+# Lord Skitter's Butcher: first mode, "Create a 1/1 black Rat creature token with 'This token can't block.'"
+# Bot1 gets exactly one Rat; no creature is sacrificed and nothing is drawn or scried.
+
+[Bot1 Deck]
+Black Lotus
+Lord Skitter's Butcher
+Ornithopter
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Lord Skitter's Butcher.Cast
+Bot1.Pass
+Bot1.Modes(Create a 1/1)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Battlefield = Lord Skitter's Butcher; Ornithopter; Rat Token
+Bot1.Battlefield.Rat Token.Power = 1
+Bot1.Battlefield.Rat Token.Toughness = 1
+Bot1.Hand.Count = 4
+Bot1.Battlefield.Lord Skitter's Butcher.Power = 2
+Bot1.Battlefield.Lord Skitter's Butcher.Toughness = 3

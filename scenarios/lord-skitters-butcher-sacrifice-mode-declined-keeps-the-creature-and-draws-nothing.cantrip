@@ -1,0 +1,32 @@
+# Lord Skitter's Butcher: "You may sacrifice another creature. If you do, ..." - Bot1 declines, so the Ornithopter stays
+# and Bot1 neither scries nor draws.
+
+[Bot1 Deck]
+Black Lotus
+Lord Skitter's Butcher
+Ornithopter
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Lord Skitter's Butcher.Cast
+Bot1.Pass
+Bot1.Modes(You may sacrifice)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Battlefield = Lord Skitter's Butcher; Ornithopter
+Bot1.Hand.Count = 4

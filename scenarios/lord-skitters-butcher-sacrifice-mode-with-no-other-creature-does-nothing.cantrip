@@ -1,0 +1,29 @@
+# Lord Skitter's Butcher: "another creature" - with only the Butcher itself on the battlefield there is nothing to
+# sacrifice, so it stays, and Bot1 neither scries nor draws.
+
+[Bot1 Deck]
+Black Lotus
+Lord Skitter's Butcher
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Lord Skitter's Butcher.Cast
+Bot1.Pass
+Bot1.Modes(You may sacrifice)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Battlefield = Lord Skitter's Butcher
+Bot1.Hand.Count = 5

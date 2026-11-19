@@ -1,0 +1,39 @@
+# Lord Skitter's Butcher: third mode, "Creatures you control gain menace until end of turn." The Butcher and Bot1's
+# Ornithopter have menace this turn; Bot2's Ornithopter does not; and at the next turn it is gone (CR 514.2).
+
+[Bot1 Deck]
+Black Lotus
+Lord Skitter's Butcher
+Ornithopter
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Ornithopter
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Lord Skitter's Butcher.Cast
+Bot1.Pass
+Bot1.Modes(Creatures you control)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lord Skitter's Butcher.Keywords = Menace
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Menace
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Lord Skitter's Butcher.Keywords = (absent)
+Bot1.Battlefield.Ornithopter.Keywords = Flying

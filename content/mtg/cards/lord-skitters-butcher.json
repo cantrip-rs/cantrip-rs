@@ -1,0 +1,8 @@
+{
+  "name": "Lord Skitter's Butcher",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Rat Peasant",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "When this creature enters, choose one —\n• Create a 1/1 black Rat creature token with \"This token can't block.\"\n• You may sacrifice another creature. If you do, scry 2, then draw a card.\n• Creatures you control gain menace until end of turn."
+}
