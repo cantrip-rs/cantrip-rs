@@ -1,0 +1,58 @@
+# Stingblade Assassin: the damage must have been dealt "this turn". Bot1 Lightning Bolts Bot2's Yoked Ox (0/4, so it lives) on turn 3;
+# on turn 5 the damage has worn off, so Stingblade Assassin's enters trigger has no legal target (nothing is asked) and the Ox stays.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Lightning Bolt
+Swamp
+Swamp
+Swamp
+Stingblade Assassin
+Swamp x20
+
+[Bot2 Deck]
+Mox Pearl
+Yoked Ox
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Yoked Ox.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Yoked Ox)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Yoked Ox.Damage = 3
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Stingblade Assassin.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Yoked Ox.Damage = 0
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield.Stingblade Assassin.Power = 3

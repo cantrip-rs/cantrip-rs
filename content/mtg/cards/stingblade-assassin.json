@@ -1,0 +1,12 @@
+{
+  "name": "Stingblade Assassin",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Faerie Assassin",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Flash\nFlying\nWhen this creature enters, destroy target creature an opponent controls that was dealt damage this turn.",
+  "keywords": [
+    "Flash",
+    "Flying"
+  ]
+}

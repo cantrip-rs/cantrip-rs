@@ -1,0 +1,85 @@
+# Stingblade Assassin: "When this creature enters, destroy target creature an opponent controls that was dealt damage this turn." On
+# turn 5 Bot1 Lightning Bolts two of Bot2's three 0/4 creatures (Yoked Ox and Kraken Hatchling live, with 3 damage) and casts Stingblade
+# Assassin. The undamaged Tasseled Dromedary is refused as a target; the damaged Ox is chosen and destroyed, while the damaged Hatchling,
+# not chosen, lives.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Lightning Bolt
+Lightning Bolt
+Mountain
+Stingblade Assassin
+Swamp x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Yoked Ox
+Kraken Hatchling
+Tasseled Dromedary
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Yoked Ox.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Kraken Hatchling.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Tasseled Dromedary.Cast
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Yoked Ox)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Kraken Hatchling)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Yoked Ox.Damage = 3
+? Bot2.Battlefield.Kraken Hatchling.Damage = 3
+? Bot2.Battlefield.Tasseled Dromedary.Damage = 0
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Stingblade Assassin.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Tasseled Dromedary)
+Bot1.Target(Bot2.Battlefield.Yoked Ox)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Yoked Ox
+
+[Expect]
+Bot1.Battlefield.Stingblade Assassin.Power = 3
+Bot1.Battlefield.Stingblade Assassin.Toughness = 1
+Bot1.Battlefield.Stingblade Assassin.Keywords = Flash; Flying
+Bot2.Battlefield.Kraken Hatchling.Damage = 3
+Bot2.Battlefield.Tasseled Dromedary.Damage = 0
+Bot2.Graveyard = Yoked Ox
