@@ -1,0 +1,69 @@
+# Shrouded Shepherd // Cleave Shadows. Turn 1: Bot1 has a Memnite (1/1). Turn 2: Bot2 casts Memnite and Ornithopter (0/2).
+# Turn 3: Cleave Shadows ({1}{B}, a sorcery Adventure): creatures Bot1's opponent controls get -1/-1 until end of turn, so
+# Bot2's Memnite dies, its Ornithopter is -1/1, and Bot1's own Memnite is untouched. Then Shrouded Shepherd is cast from exile:
+# its enters trigger targets Bot1's Memnite (not Bot2's Ornithopter, which Bot1 may not choose), +2/+2 until end of turn.
+# On turn 4 Bot2's Ornithopter is 0/2 again and Bot1's Memnite is 1/1 again.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Memnite
+Shrouded Shepherd
+Island
+Island x10
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Shrouded Shepherd.Cast(Ability: Cleave Shadows)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Count = 1
+? Bot2.Graveyard = Memnite
+? Bot2.Battlefield.Ornithopter.Power = -1
+? Bot2.Battlefield.Ornithopter.Toughness = 1
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Exile = Shrouded Shepherd
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Shrouded Shepherd.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 3
+? Bot1.Battlefield.Shrouded Shepherd.Power = 2
+? Bot2.Battlefield.Ornithopter.Power = -1
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+
+[Expect]
+Bot1.Battlefield.Shrouded Shepherd.Toughness = 2

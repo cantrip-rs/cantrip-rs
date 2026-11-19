@@ -1,0 +1,14 @@
+{
+  "name": "Shrouded Shepherd",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Spirit Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, target creature you control gets +2/+2 until end of turn.",
+  "adventure": {
+    "name": "Cleave Shadows",
+    "manaCost": "{1}{B}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Creatures your opponents control get -1/-1 until end of turn. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

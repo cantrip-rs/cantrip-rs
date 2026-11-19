@@ -1,0 +1,30 @@
+# Shrouded Shepherd: "When this creature enters, target creature you control gets +2/+2 until end of turn." Cast on turn 1
+# with no other creature, its trigger must target itself (CR 115.1): a 4/4 until end of turn, a 2/2 again on turn 3.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Shrouded Shepherd
+Island x14
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Shrouded Shepherd.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Shrouded Shepherd.Power = 4
+? Bot1.Battlefield.Shrouded Shepherd.Toughness = 4
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Shrouded Shepherd.Power = 2
+
+[Expect]
+Bot1.Battlefield.Shrouded Shepherd.Toughness = 2
