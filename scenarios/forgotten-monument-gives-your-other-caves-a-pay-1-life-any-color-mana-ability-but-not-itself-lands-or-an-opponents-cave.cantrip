@@ -1,0 +1,51 @@
+# Forgotten Monument: "{T}: Add {C}. Other Caves you control have '{T}, Pay 1 life: Add one mana of any color.'" (CR 613.1f).
+# Before it arrives, Bot1's Captivating Cave has no pay-1-life ability (refused on turn 3). Once the
+# Monument is out the Cave makes {U} for exactly 1 life (Bot1 20 -> 19); the Monument itself ("other") has no such ability, only
+# {T}: Add {C}, and the Island Bot1 controls, no Cave, has none; the Cave Bot2 controls (not "you control") has none either.
+
+[Bot1 Deck]
+Island
+Captivating Cave
+Forgotten Monument
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Captivating Cave
+Island
+Island
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Captivating Cave.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Captivating Cave.Play
+! Bot1.Battlefield.Captivating Cave.Activate(Ability: Pay 1 life; Color: Blue)
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forgotten Monument.Play
+! Bot1.Battlefield.Island.Activate(Ability: Pay 1 life; Color: Blue)
+! Bot1.Battlefield.Forgotten Monument.Activate(Ability: Pay 1 life; Color: Blue)
+Bot1.Battlefield.Captivating Cave.Activate(Ability: Pay 1 life; Color: Blue)
+? Bot1.Mana = {U}
+? Bot1.Life = 19
+Bot1.Battlefield.Forgotten Monument.Activate(Ability: Add {C})
+? Bot1.Mana = {U}{C}
+? Bot1.Life = 19
+[T6 Bot2.Main1]
+! Bot2.Battlefield.Captivating Cave.Activate(Ability: Pay 1 life; Color: Blue)
+
+[Expect]
+Turn = 6
+Bot1.Life = 19
+Bot2.Life = 20
