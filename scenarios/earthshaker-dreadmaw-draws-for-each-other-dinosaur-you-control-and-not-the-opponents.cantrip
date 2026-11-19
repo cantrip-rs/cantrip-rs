@@ -1,0 +1,64 @@
+# Earthshaker Dreadmaw: "draw a card for each other Dinosaur you control." Bot1 controls Raptor Companion and Pygmy Allosaurus
+# (Dinosaurs), Sol Ring, a Forest and three Moxen, and Bot2 a Tranquil Frillback. On turn 3 the Dreadmaw enters and Bot1 draws exactly
+# two (library 19 -> 17): the Dreadmaw itself is not "other" (that would be three), the artifacts and the land are not Dinosaurs, and
+# Bot2's Frillback is not Bot1's.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Sol Ring
+Raptor Companion
+Pygmy Allosaurus
+Earthshaker Dreadmaw
+Plains x19
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Tranquil Frillback
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Raptor Companion.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Pygmy Allosaurus.Cast
+Bot1.Pass
+
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Tranquil Frillback.Cast
+Bot2.Pass
+Bot1.Pass
+
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Earthshaker Dreadmaw.Cast
+? Bot1.Library.Count = 19
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Library.Count = 17

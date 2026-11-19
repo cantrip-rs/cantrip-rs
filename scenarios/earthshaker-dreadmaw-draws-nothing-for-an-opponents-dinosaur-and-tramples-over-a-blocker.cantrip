@@ -1,0 +1,71 @@
+# Earthshaker Dreadmaw {4}{G}{G}, 6/6 Trample: "When this creature enters, draw a card for each other Dinosaur you control." On turn 3
+# Bot1 casts it with a Forest and five Moxen. It controls no other Dinosaur: the Dreadmaw is a Dinosaur but not an "other" one, and the
+# Pygmy Allosaurus Bot2 cast on turn 2 is a Dinosaur Bot1 does not control, so nothing is drawn (library 17 before and after).
+# Turn 5: the Dreadmaw attacks and the Allosaurus (2/2) blocks it; with trample (CR 702.19b) it assigns 2 to the blocker and the other 4
+# to Bot2, 20 -> 16, and the Allosaurus dies.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Plains
+Earthshaker Dreadmaw
+Plains x17
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Pygmy Allosaurus
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Pygmy Allosaurus.Cast
+Bot2.Pass
+Bot1.Pass
+
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Earthshaker Dreadmaw.Cast
+? Bot1.Library.Count = 17
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 17
+? Bot1.Battlefield.Earthshaker Dreadmaw.Power = 6
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Earthshaker Dreadmaw > Bot2)
+Bot2.Block(Pygmy Allosaurus > Earthshaker Dreadmaw)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 16
+Bot2.Graveyard = Pygmy Allosaurus
+Bot1.Battlefield.Earthshaker Dreadmaw.Damage = 2

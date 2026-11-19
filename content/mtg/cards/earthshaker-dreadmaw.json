@@ -1,0 +1,11 @@
+{
+  "name": "Earthshaker Dreadmaw",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Trample\nWhen this creature enters, draw a card for each other Dinosaur you control.",
+  "keywords": [
+    "Trample"
+  ]
+}
