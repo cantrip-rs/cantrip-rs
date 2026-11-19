@@ -1,0 +1,64 @@
+# Vantress Visions // Virtue of Knowledge: "Copy target activated or triggered ability you control. You may choose new targets for the
+# copy." (CR 707.10, 715) On turn 1 Bot1 casts Kitchen Finks with five Moxen and, with its "you gain 2 life" enters trigger on the stack, casts
+# Vantress Visions for {1}{U}: the copy and the original each gain 2 (24). The Adventure card is exiled (CR 715.4) and Bot1 casts
+# Virtue of Knowledge from exile on turn 3 for {4}{U}.
+
+[Bot1 Deck]
+Virtue of Knowledge
+Kitchen Finks
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kitchen Finks.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Virtue of Knowledge.Cast(Stack.Kitchen Finks; Ability: Vantress Visions)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 24
+? Exile = Virtue of Knowledge
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Exile.Virtue of Knowledge.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 24
+Exile.Count = 0
+Bot1.Battlefield.Virtue of Knowledge.ManaValue = 5
+Stack.Count = 0

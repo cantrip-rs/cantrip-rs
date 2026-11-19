@@ -1,0 +1,60 @@
+# Virtue of Knowledge doubles a triggered ability of a permanent its controller controls, whoever controls the permanent entering (the
+# rulings of Panharmonicon, Yarok and Virtue: only the permanent that has the triggered ability matters), and only those: Bot2's
+# Baleful Strix entering on turn 4 triggers Bot1's Authority of the Consuls twice (Bot1 gains 2) and Bot2's own "draw a card" once.
+# Bot2's hand: 7 + 1 drawn on turn 2 - 1 discarded to seven + 1 drawn on turn 4 - 3 cast + 1 from the Strix = 6.
+
+[Bot1 Deck]
+Virtue of Knowledge
+Authority of the Consuls
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Island x13
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Baleful Strix
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Virtue of Knowledge.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Authority of the Consuls.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Baleful Strix.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Triggers(Authority of the Consuls; Authority of the Consuls)
+[T4 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 22
+Bot2.Hand.Count = 6

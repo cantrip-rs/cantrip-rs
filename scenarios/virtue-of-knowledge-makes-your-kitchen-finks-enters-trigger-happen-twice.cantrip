@@ -1,0 +1,54 @@
+# Virtue of Knowledge: "If a permanent entering causes a triggered ability of a permanent you control to trigger, that ability triggers an
+# additional time." (CR 603.2d, 603.6a) Bot1 casts it on turn 1 with five Moxen. On turn 3 Kitchen Finks entering triggers its own
+# "you gain 2 life" twice: 20 + 4 = 24.
+
+[Bot1 Deck]
+Virtue of Knowledge
+Kitchen Finks
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Virtue of Knowledge.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kitchen Finks.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Triggers(Kitchen Finks; Kitchen Finks)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 24
+Stack.Count = 0

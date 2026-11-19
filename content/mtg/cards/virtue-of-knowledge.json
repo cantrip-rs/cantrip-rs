@@ -1,0 +1,12 @@
+{
+  "name": "Virtue of Knowledge",
+  "manaCost": "{4}{U}",
+  "type": "Enchantment",
+  "oracleText": "If a permanent entering causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time.",
+  "adventure": {
+    "name": "Vantress Visions",
+    "manaCost": "{1}{U}",
+    "type": "Instant — Adventure",
+    "oracleText": "Copy target activated or triggered ability you control. You may choose new targets for the copy."
+  }
+}

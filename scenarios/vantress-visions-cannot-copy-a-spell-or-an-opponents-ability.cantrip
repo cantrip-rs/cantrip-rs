@@ -1,0 +1,42 @@
+# Vantress Visions targets "activated or triggered ability you control" (CR 115.1, 113.3): not a spell on the stack, and not an
+# ability Bot2 controls. Bot2's Walking Ballista (X = 1) is refused while it is a spell, and its "remove a counter: 1 damage"
+# ability, once on the stack, is refused too; Visions is never cast, so nothing is exiled on an adventure and Bot1 takes 1.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Virtue of Knowledge
+Island x17
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Walking Ballista
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Walking Ballista.Cast(X: 1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Virtue of Knowledge.Cast(Stack.Walking Ballista; Ability: Vantress Visions)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Walking Ballista.Activate(Bot1; Ability: Remove)
+! Bot1.Hand.Virtue of Knowledge.Cast(Stack.Walking Ballista; Ability: Vantress Visions)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 19
+Exile.Count = 0
+Bot1.Graveyard.Count = 0

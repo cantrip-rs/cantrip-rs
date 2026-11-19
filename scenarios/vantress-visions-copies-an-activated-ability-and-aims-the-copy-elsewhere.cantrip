@@ -1,0 +1,46 @@
+# Vantress Visions copies an activated ability too (CR 707.10, 113.3b) and "you may choose new targets for the copy" (CR 707.10c):
+# Bot1's Walking Ballista (X = 1) removes its counter to ping Bot2 and, with that on the stack, Bot1 casts Vantress Visions at the
+# ability. The copy is aimed at Bot1 instead: Bot1 is at 19 from the copy and Bot2 at 19 from the original.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Walking Ballista
+Virtue of Knowledge
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Walking Ballista.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Walking Ballista.Activate(Bot2; Ability: Remove)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Virtue of Knowledge.Cast(Stack.Walking Ballista; Ability: Vantress Visions)
+Bot1.Pass
+Bot1.Target(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Stack.Count = 0
+Exile = Virtue of Knowledge
+Bot1.Graveyard = Walking Ballista
