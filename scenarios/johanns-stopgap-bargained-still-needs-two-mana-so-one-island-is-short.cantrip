@@ -1,0 +1,27 @@
+# Bargain makes Johann's Stopgap cost {2} less, {1}{U}, not less than that (CR 601.2f, 702.166a). Bot1 has one Island and an
+# Ornithopter to sacrifice, so bargaining is possible but one mana is short of the bargained price of two (and the unbargained
+# four). The positive control is johanns-stopgap-bargained-costs-two-less-so-two-mana-bounces-and-draws.
+
+[Bot1 Deck]
+Island
+Ornithopter
+Johann's Stopgap
+Island x4
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Johann's Stopgap.Cast(Bot2.Battlefield.Ornithopter; Mana: short)
+
+[Expect]
+Bot2.Battlefield = Ornithopter
+Bot1.Battlefield = Island; Ornithopter

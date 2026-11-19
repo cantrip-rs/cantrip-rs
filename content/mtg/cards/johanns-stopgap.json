@@ -1,0 +1,6 @@
+{
+  "name": "Johann's Stopgap",
+  "manaCost": "{3}{U}",
+  "type": "Sorcery",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nThis spell costs {2} less to cast if it's bargained.\nReturn target nonland permanent to its owner's hand. Draw a card."
+}

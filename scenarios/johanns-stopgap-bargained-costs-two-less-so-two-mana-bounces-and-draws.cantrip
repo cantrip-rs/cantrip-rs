@@ -1,0 +1,37 @@
+# Johann's Stopgap is {3}{U}, and costs {2} less if it is bargained (CR 702.166a, 601.2f). Bot1 taps its Island and Mox Sapphire for
+# {U}{U}, sacrificing the untapped Mox Ruby for bargain, so the {1}{U} is paid. It returns Bot2's Ornithopter to its hand and
+# draws a card (CR 400.3, 121.1). Mana value stays 4 in the graveyard (CR 202.3).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Johann's Stopgap
+Island x3
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Johann's Stopgap.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Modes(Bargain:)
+Bot1.Choose(Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Hand = Island; Island; Island; Island; Island; Island; Island; Ornithopter
+Bot2.Battlefield.Count = 0
+Bot1.Hand.Count = 5
+Bot1.Graveyard = Johann's Stopgap; Mox Ruby
+Bot1.Battlefield = Island; Mox Sapphire

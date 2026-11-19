@@ -1,0 +1,31 @@
+# Three Islands and nothing to sacrifice: bargain is not offered (CR 601.2b, 118.3), so Johann's Stopgap costs the full {3}{U}, four
+# mana, and is short (CR 601.2f). The positive controls are johanns-stopgap-bargained-costs-two-less-so-two-mana-bounces-and-draws and
+# johanns-stopgap-unbargained-costs-four-and-cannot-target-a-land.
+
+[Bot1 Deck]
+Island
+Island
+Island
+Johann's Stopgap
+Island x4
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Island#3.Activate
+! Bot1.Hand.Johann's Stopgap.Cast(Bot2.Battlefield.Ornithopter; Mana: short)
+
+[Expect]
+Bot2.Battlefield = Ornithopter

@@ -1,0 +1,38 @@
+# Bot1 bargains Johann's Stopgap (sacrificing its Mox Ruby) to return Bot2's Black Lotus, and Bot2 responds by sacrificing the Lotus
+# for mana. With its only target gone the spell does not resolve (CR 608.2b), so Bot1 does not draw: it ends with the hand it
+# had after casting, 4 cards, and the Lotus is in Bot2's graveyard.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Johann's Stopgap
+Island x3
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Island x19
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Johann's Stopgap.Cast(Bot2.Battlefield.Black Lotus)
+Bot1.Modes(Bargain:)
+Bot1.Choose(Mox Ruby)
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Johann's Stopgap; Mox Ruby
+Bot2.Graveyard = Black Lotus
+Bot1.Hand.Count = 4
+Bot2.Hand.Count = 7

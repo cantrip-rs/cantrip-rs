@@ -1,0 +1,37 @@
+# Unbargained, Johann's Stopgap costs its full {3}{U} (CR 702.166a): Bot1 taps two Islands, a Mox Sapphire and a Mox Ruby, and keeps
+# both Moxen. It returns Bot2's Ornithopter to its hand. The spell cannot target a land (Bot2's Island), only a nonland permanent.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Johann's Stopgap
+Island x4
+Island x14
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Johann's Stopgap.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Johann's Stopgap.Cast(Bot2.Battlefield.Ornithopter)
+
+[Expect]
+Bot2.Hand = Island; Island; Island; Island; Island; Island; Ornithopter
+Bot1.Graveyard = Johann's Stopgap
+Bot1.Hand.Count = 4
+Bot1.Battlefield = Island; Island; Mox Sapphire; Mox Ruby
