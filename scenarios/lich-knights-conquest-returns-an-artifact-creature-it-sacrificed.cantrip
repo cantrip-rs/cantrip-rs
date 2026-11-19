@@ -1,0 +1,52 @@
+# Lich-Knights' Conquest (ruling 2023-09-01): "An artifact creature or enchantment creature sacrificed to Lich-Knights' Conquest
+# may be one of the cards chosen to be returned" - the creature cards are chosen once the sacrifice is done (CR 608.2c). Bot1's
+# graveyard is empty; it sacrifices Ornithopter (an artifact) and Propaganda (an enchantment): that many is two, and the one
+# creature card now in the graveyard, Ornithopter, comes back. Propaganda, not a creature card, stays.
+
+[Bot1 Deck]
+Swamp
+Mox Sapphire
+Mox Jet
+Ornithopter
+Propaganda
+Mox Ruby
+Swamp
+Lich-Knights' Conquest
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Propaganda.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 0
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lich-Knights' Conquest.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter; Propaganda)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Lich-Knights' Conquest; Propaganda
+Bot1.Battlefield = Swamp; Swamp; Mox Sapphire; Mox Jet; Mox Ruby; Ornithopter

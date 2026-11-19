@@ -1,0 +1,6 @@
+{
+  "name": "Lich-Knights' Conquest",
+  "manaCost": "{4}{B}",
+  "type": "Sorcery",
+  "oracleText": "Sacrifice any number of artifacts, enchantments, and/or tokens. Return that many creature cards from your graveyard to the battlefield."
+}
