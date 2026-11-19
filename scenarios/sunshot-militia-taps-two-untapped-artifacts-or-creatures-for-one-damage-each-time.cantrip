@@ -1,0 +1,55 @@
+# Sunshot Militia {1}{R} (1/3): "Tap two untapped artifacts and/or creatures you control: This creature deals 1 damage to each
+# opponent. Activate only as a sorcery." The cost has no {T}, so the summoning-sick Militia may be one of the two (CR 302.6).
+# Turn 1: Mox Ruby and Mox Jet pay for the Militia (and so are tapped), Mox Pearl, Mox Sapphire and Mox Emerald are cast untapped.
+# Four untapped artifacts or creatures: two activations (Militia + Pearl, then Sapphire + Emerald) deal 2 in all; a third is refused,
+# nothing but the tapped Ruby and Jet is left to tap (a tapped permanent cannot pay).
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Sunshot Militia
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sunshot Militia.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sunshot Militia.Activate
+Bot1.Choose(Sunshot Militia; Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Battlefield.Sunshot Militia.Tapped = true
+? Bot1.Battlefield.Mox Pearl.Tapped = true
+Bot1.Battlefield.Sunshot Militia.Activate
+Bot1.Choose(Mox Sapphire; Mox Emerald)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Sunshot Militia.Activate
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Mox Sapphire.Tapped = true
+Bot1.Battlefield.Mox Emerald.Tapped = true

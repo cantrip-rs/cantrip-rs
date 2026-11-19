@@ -1,0 +1,8 @@
+{
+  "name": "Sunshot Militia",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Soldier",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Tap two untapped artifacts and/or creatures you control: This creature deals 1 damage to each opponent. Activate only as a sorcery."
+}
