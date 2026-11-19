@@ -1,0 +1,63 @@
+# Abuelo, Ancestral Echo has ward {2} (CR 702.21a): on turn 2 Bot2's Mox Ruby pays for the Lightning Bolt and its Mox Sapphire leaves it
+# one mana short of the ward cost, so the ward trigger counters the Bolt unless Bot2 pays {2} and it cannot; Abuelo takes no damage. On turn 3 Abuelo exiles an artifact (the
+# Mox Jet, already tapped for the activation's {1}) and it returns at the beginning of the end step as a new, untapped object (CR 400.7),
+# while the Moxen that stayed tapped are still tapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Abuelo, Ancestral Echo
+Plains x30
+
+[Bot2 Deck]
+Mox Ruby
+Mox Sapphire
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Abuelo, Ancestral Echo.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Abuelo, Ancestral Echo)
+! Bot2.PayCost
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Abuelo, Ancestral Echo.Damage = 0
+? Bot2.Graveyard = Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Abuelo, Ancestral Echo.Activate(Bot1.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Exile = Mox Jet
+? Bot1.Battlefield.Mox Jet = (absent)
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield.Mox Pearl.Tapped = true
+Bot1.Battlefield.Mox Sapphire.Tapped = true
+Bot1.Battlefield.Abuelo, Ancestral Echo.Damage = 0

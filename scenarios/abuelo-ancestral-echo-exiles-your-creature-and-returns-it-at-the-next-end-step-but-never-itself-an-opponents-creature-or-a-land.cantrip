@@ -1,0 +1,63 @@
+# Abuelo, Ancestral Echo {1}{W}{U} 2/2 flying, ward {2}: "{1}{W}{U}: Exile another target creature or artifact you control. Return it to the
+# battlefield under its owner's control at the beginning of the next end step" (CR 603.7, 400.7). Cast on turn 1 off three Moxen; on turn 3,
+# with {W}{U}{B} paid exactly (the pool empties), it refuses itself, Bot2's Ornithopter and a Plains, and exiles Bot1's Ornithopter,
+# which is back at the beginning of that turn's end step as a new object (summoning sick).
+
+[Bot1 Deck]
+Ornithopter
+Abuelo, Ancestral Echo
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Abuelo, Ancestral Echo.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Abuelo, Ancestral Echo.Keywords = Flying
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana = {W}{U}{B}
+! Bot1.Battlefield.Abuelo, Ancestral Echo.Activate(Bot1.Battlefield.Abuelo, Ancestral Echo)
+! Bot1.Battlefield.Abuelo, Ancestral Echo.Activate(Bot2.Battlefield.Ornithopter)
+! Bot1.Battlefield.Abuelo, Ancestral Echo.Activate(Bot1.Battlefield.Plains)
+Bot1.Battlefield.Abuelo, Ancestral Echo.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Exile = Ornithopter
+? Bot1.Battlefield.Ornithopter = (absent)
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Ornithopter.SummoningSick = true
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Abuelo, Ancestral Echo.Power = 2
+Bot1.Battlefield.Abuelo, Ancestral Echo.Toughness = 2

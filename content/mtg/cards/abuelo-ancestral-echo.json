@@ -1,0 +1,11 @@
+{
+  "name": "Abuelo, Ancestral Echo",
+  "manaCost": "{1}{W}{U}",
+  "type": "Legendary Creature — Spirit",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, ward {2}\n{1}{W}{U}: Exile another target creature or artifact you control. Return it to the battlefield under its owner's control at the beginning of the next end step.",
+  "keywords": [
+    "Flying"
+  ]
+}

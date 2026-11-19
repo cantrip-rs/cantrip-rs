@@ -1,0 +1,43 @@
+# Abuelo, Ancestral Echo, "ward {2}" (CR 702.21a): Bot2's Black Lotus makes three red; after the Bolt it can pay exactly {2}, so the
+# Bolt resolves and kills the 2/2 Abuelo. Three mana would have been too much to ask, and one too little.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Abuelo, Ancestral Echo
+Plains x30
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Abuelo, Ancestral Echo.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Abuelo, Ancestral Echo)
+Bot2.PayCost
+? Bot2.Mana =
+[T2 Bot2.Main2]
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Abuelo, Ancestral Echo = (absent)
+Bot1.Graveyard = Abuelo, Ancestral Echo
+Bot2.Graveyard = Lightning Bolt; Black Lotus
