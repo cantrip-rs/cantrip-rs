@@ -1,0 +1,32 @@
+# Souls of the Lost (*/*+1): "As an additional cost to cast this spell, discard a card or sacrifice a permanent. Fathomless descent -
+# Souls of the Lost's power is equal to the number of permanent cards in your graveyard and its toughness is equal to that number
+# plus 1." Bot1 casts it off a Black Lotus, discarding a Lightning Bolt: the Lotus (sacrificed for mana) is the only permanent card in
+# the graveyard, the instant is not one (CR 110.4a), so the Souls is 1/2. With no permanent on the battlefield (the Lotus is gone)
+# the additional cost can only be the discard, so no mode is asked.
+
+[Bot1 Deck]
+Black Lotus
+Souls of the Lost
+Lightning Bolt
+Memnite
+Swamp x3
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Souls of the Lost.Cast
+Bot1.Choose(Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Souls of the Lost.Power = 1
+? Bot1.Battlefield.Souls of the Lost.Toughness = 2
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Hand.Count = 4

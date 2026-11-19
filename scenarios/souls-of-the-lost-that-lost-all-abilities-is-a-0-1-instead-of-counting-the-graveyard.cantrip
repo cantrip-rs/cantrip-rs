@@ -1,0 +1,48 @@
+# Souls of the Lost: its power and toughness come from its own ability (CR 604.3, 208.2a). Bot1 discards the permanent card Memnite
+# and sacrifices the Black Lotus for mana, so with two permanent cards in the graveyard the Souls is 2/3. When Bot2's Enchanted River's
+# Grasp makes it lose all abilities, the stars are worth 0 and the toughness 0+1: a 0/1, whatever the graveyard holds (CR 208.5).
+
+[Bot1 Deck]
+Black Lotus
+Souls of the Lost
+Memnite
+Swamp x3
+Swamp x17
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Enchanted River's Grasp
+Island x3
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Souls of the Lost.Cast
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Souls of the Lost.Power = 2
+? Bot1.Battlefield.Souls of the Lost.Toughness = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Enchanted River's Grasp.Cast(Bot1.Battlefield.Souls of the Lost)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 2
+Bot1.Battlefield.Souls of the Lost.Power = 0
+Bot1.Battlefield.Souls of the Lost.Toughness = 1

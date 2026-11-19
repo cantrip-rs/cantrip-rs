@@ -1,0 +1,32 @@
+# Souls of the Lost: "or sacrifice a permanent". Bot1 sacrifices the Ornithopter (the Souls itself is not yet on the battlefield, so it
+# is never the permanent) rather than discarding, so the Ornithopter and the Black Lotus are the two permanent cards in the graveyard
+# and the Souls is 2/3.
+
+[Bot1 Deck]
+Black Lotus
+Souls of the Lost
+Ornithopter
+Memnite
+Swamp x3
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Souls of the Lost.Cast
+Bot1.Modes(Sacrifice a permanent)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Souls of the Lost.Power = 2
+? Bot1.Battlefield.Souls of the Lost.Toughness = 3
+
+[Expect]
+Bot1.Graveyard = Ornithopter; Black Lotus
+Bot1.Hand.Count = 4

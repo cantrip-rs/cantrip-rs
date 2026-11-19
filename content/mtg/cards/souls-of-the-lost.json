@@ -1,0 +1,8 @@
+{
+  "name": "Souls of the Lost",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Spirit",
+  "power": "*",
+  "toughness": "*+1",
+  "oracleText": "As an additional cost to cast this spell, discard a card or sacrifice a permanent.\nFathomless descent — Souls of the Lost's power is equal to the number of permanent cards in your graveyard and its toughness is equal to that number plus 1."
+}

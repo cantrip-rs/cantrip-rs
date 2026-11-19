@@ -1,0 +1,53 @@
+# Souls of the Lost: discarding the permanent card Memnite puts it in the graveyard with the sacrificed Black Lotus, so the Souls is
+# 2/3 (CR 110.4a, 604.3). When Bot2's Lightning Bolt kills Bot1's Ornithopter on turn 2 the count grows to 3 (a 3/4), and Bot2's own
+# Memnite dying in Bot2's graveyard (Bot2 Bolts it itself) is not counted: only Bot1's graveyard is.
+
+[Bot1 Deck]
+Black Lotus
+Souls of the Lost
+Memnite
+Ornithopter
+Swamp x3
+Swamp x17
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Memnite
+Lightning Bolt
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Souls of the Lost.Cast
+Bot1.Modes(Discard a card)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Souls of the Lost.Power = 2
+? Bot1.Battlefield.Souls of the Lost.Toughness = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Souls of the Lost.Power = 2
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Souls of the Lost.Power = 3
+
+[Expect]
+Bot1.Battlefield.Souls of the Lost.Toughness = 4
+Bot2.Graveyard.Count = 3
