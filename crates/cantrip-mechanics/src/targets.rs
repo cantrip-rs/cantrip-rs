@@ -1264,6 +1264,13 @@ pub const NONBASIC_LAND_AN_OPPONENT_CONTROLS: TargetSpec = target(nonbasic_land_
 /// "Target land you control". Earthbend (Badgermole Cub) and Sea Drake print it.
 pub const LAND_YOU_CONTROL: TargetSpec = target(land_you_control_filter);
 
+/// "Target noncreature land you control" (CR 115.1, 205.2): a land on the battlefield under the ability's controller's control that is not
+/// a creature as the layers made it, judged as the ability is put on the stack and again as it resolves (CR 608.2b). Nissa, Who Shakes the World
+/// and Tendril of the Mycotyrant print it.
+pub fn noncreature_land_you_control(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    land_you_control_filter(q, asker, t) && matches!(t, Target::Object(id) if !q.chars(id).is(CardType::Creature))
+}
+
 fn basic_land_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     land_you_control_filter(q, asker, t) && matches!(t, Target::Object(id) if q.chars(id).supertypes.basic)
 }

@@ -5,11 +5,6 @@ use cantrip_mechanics::targets;
 use cantrip_mechanics::tokens;
 use cantrip_oracle as oracle;
 
-fn noncreature_land_you_control(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    matches!(t, Target::Object(id) if targets::permanent(q, id)
-        && q.controller(id) == asker.controller && { let c = q.chars(id); c.is(CardType::Land) && !c.is(CardType::Creature) })
-}
-
 /// +1: Put three +1/+1 counters on up to one target noncreature land you control. Untap it. It becomes a 0/0 Elemental creature
 /// with vigilance and haste that's still a land. It states no duration (CR 611.2a), so the land stays a creature: the type added
 /// rather than set (CR 205.1b), and the base 0/0 in layer 7b under the counters of 7c.
@@ -68,7 +63,7 @@ pub static CARD: CardDef = CardDef {
         )
             .mana_ability(TriggeredMana::One(Mana::G)),
         ability(loyalty(1), animate_land, "+1: Put three +1/+1 counters on up to one target noncreature land you control. Untap it. It becomes a 0/0 Elemental creature with vigilance and haste that's still a land.")
-            .targets(&[up_to_one(noncreature_land_you_control)]),
+            .targets(&[up_to_one(targets::noncreature_land_you_control)]),
         ability(loyalty(-8), emblem_and_forests, "\u{2212}8: You get an emblem with \"Lands you control have indestructible.\" Search your library for any number of Forest cards, put them onto the battlefield tapped, then shuffle."),
     ],
     ..oracle::NISSA_WHO_SHAKES_THE_WORLD
