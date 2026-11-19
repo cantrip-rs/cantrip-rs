@@ -1,0 +1,11 @@
+{
+  "name": "Gallant Pie-Wielder",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Dwarf Knight",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "First strike\nCelebration — This creature has double strike as long as two or more nonland permanents entered the battlefield under your control this turn.",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

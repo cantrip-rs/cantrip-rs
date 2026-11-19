@@ -1,0 +1,49 @@
+# Gallant Pie-Wielder ({2}{W}, 2/3 first strike): "Celebration — This creature has double strike as long as two or more nonland
+# permanents entered the battlefield under your control this turn" (CR 207.2c, 611.3a). On turn three Bot1 plays a Plains and
+# casts the Pie-Wielder: one nonland permanent, first strike alone. A Memnite entering after it is the second, so it has double
+# strike as well. The Mox Pearl of turn one doesn't count on turn three: at the start of turn five (Plains and Memnite make only one
+# nonland permanent) it has first strike alone again, and an Ornithopter is the second.
+
+[Bot1 Deck]
+Mox Pearl
+Plains
+Gallant Pie-Wielder
+Memnite
+Memnite
+Ornithopter
+Plains
+Plains x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gallant Pie-Wielder.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gallant Pie-Wielder.Keywords = FirstStrike
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gallant Pie-Wielder.Keywords = DoubleStrike; FirstStrike
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Gallant Pie-Wielder.Keywords = FirstStrike
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gallant Pie-Wielder.Keywords = FirstStrike
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gallant Pie-Wielder.Keywords = DoubleStrike; FirstStrike
+
+[Expect]
+Bot1.Battlefield.Gallant Pie-Wielder.Keywords = DoubleStrike; FirstStrike
