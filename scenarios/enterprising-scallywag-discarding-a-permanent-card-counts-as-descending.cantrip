@@ -1,0 +1,35 @@
+# Enterprising Scallywag: you descended "if a permanent card was put into your graveyard from anywhere" (CR 700.11), a discard included.
+# Turn 1 Bot1 casts it, then Faithless Looting (drawing two Plains) discards an Ornithopter and a Plains: Bot1 descended and the end-step
+# trigger makes a Treasure (CR 111.10a). The Faithless Looting itself, a sorcery, would not count alone.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mountain
+Enterprising Scallywag
+Faithless Looting
+Ornithopter
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Enterprising Scallywag.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Ornithopter; Plains)
+[T1 Bot1.End]
+Bot1.Pass
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Treasure Token.Token = true
+Bot1.Battlefield.Count = 5
+Bot1.Graveyard = Faithless Looting; Plains; Ornithopter

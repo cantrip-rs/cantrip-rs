@@ -1,0 +1,8 @@
+{
+  "name": "Enterprising Scallywag",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin Pirate",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "At the beginning of your end step, if you descended this turn, create a Treasure token. (You descended if a permanent card was put into your graveyard from anywhere.)"
+}

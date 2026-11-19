@@ -1,0 +1,30 @@
+# Enterprising Scallywag: "At the beginning of your end step, if you descended this turn, create a Treasure token." Turn 1 Bot1 casts it
+# with Black Lotus (the sacrificed Lotus is a permanent card put into the graveyard, so Bot1 descended, CR 700.11) and Mox Ruby. The end
+# step trigger creates one untapped Treasure token under Bot1's control (CR 111.10a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Enterprising Scallywag
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Enterprising Scallywag.Cast
+[T1 Bot1.End]
+? Bot1.Battlefield.Treasure Token = (absent)
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Treasure Token.Tapped = false
+
+[Expect]
+Bot1.Battlefield.Treasure Token.Token = true
+Bot1.Battlefield.Treasure Token.Subtypes = Treasure
+Bot1.Battlefield.Count = 3
+Bot2.Battlefield.Treasure Token = (absent)
+Stack.Count = 0
