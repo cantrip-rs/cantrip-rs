@@ -1,0 +1,60 @@
+# Zoyowa Lava-Tongue: "At the beginning of your end step, if you descended this turn, each opponent may discard a card or sacrifice a
+# permanent of their choice. Zoyowa deals 3 damage to each opponent who didn't" (CR 603.4, 700.11). Turn 1: Thought Scour mills two
+# Lightning Bolts, instants and not permanent cards, so Bot1 has not descended and nothing triggers at its end step. Turn 3: a second Scour
+# mills two Grizzly Bears, so it has, and the trigger waits on the stack; Bot2 holds Islands it could discard but takes the damage
+# instead, 3 from Zoyowa to 17 (CR 120.3); the one card in its graveyard is the Island it discarded to hand size, and stays the only one.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Zoyowa Lava-Tongue
+Thought Scour
+Thought Scour
+Plains
+Lightning Bolt
+Lightning Bolt
+Plains
+Plains
+Grizzly Bears
+Grizzly Bears
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Zoyowa Lava-Tongue.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 3
+[T1 Bot1.End]
+? Stack.Count = 0
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+? Stack.Count = 1
+? Bot2.Life = 20
+? Bot2.Graveyard.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot2.Modes(Take 3 damage)
+[T4 Bot2.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 17
+Bot2.Hand.Count = 8
+Bot2.Graveyard.Count = 1

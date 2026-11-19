@@ -1,0 +1,48 @@
+# Zoyowa Lava-Tongue has deathtouch (CR 702.2b): the 2/2 attacking into a blocking Hill Giant (3/3) deals 2 damage and that is lethal, so the
+# Giant dies along with Zoyowa (3 damage).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Zoyowa Lava-Tongue
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Hill Giant
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Zoyowa Lava-Tongue.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Zoyowa Lava-Tongue > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Hill Giant > Zoyowa Lava-Tongue)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Hill Giant = (absent)
+Bot2.Graveyard = Hill Giant
+Bot1.Graveyard = Zoyowa Lava-Tongue
+Bot2.Life = 20

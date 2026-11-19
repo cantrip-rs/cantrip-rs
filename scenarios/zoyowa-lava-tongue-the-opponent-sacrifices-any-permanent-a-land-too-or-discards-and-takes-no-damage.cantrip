@@ -1,0 +1,70 @@
+# Zoyowa Lava-Tongue: the choice is to discard a card or sacrifice "a permanent" (CR 701.9, 701.21a): any permanent, a land too (it is not
+# "nonland"), and doing either spares the opponent the damage. Turn 3: Bot1 descends (Thought Scour mills two Grizzly Bears) and Bot2, with an
+# Island and an Ornithopter, chooses to sacrifice, picking the Island. Turn 5: it descends again and Bot2 chooses to discard a card instead.
+# Neither time does Bot2 lose life.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Zoyowa Lava-Tongue
+Thought Scour
+Thought Scour
+Plains
+Plains
+Grizzly Bears
+Grizzly Bears
+Plains
+Plains
+Grizzly Bears
+Grizzly Bears
+Plains x20
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Zoyowa Lava-Tongue.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot2.Modes(Sacrifice a permanent)
+Bot2.Choose(Island)
+? Bot2.Life = 20
+? Bot2.Battlefield = Ornithopter
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+Bot2.Modes(Discard a card)
+[T6 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield = Ornithopter
+Bot2.Graveyard = Island; Island
+Bot2.Hand.Count = 7
