@@ -1,0 +1,6 @@
+{
+  "name": "Freeze in Place",
+  "manaCost": "{1}{U}",
+  "type": "Sorcery",
+  "oracleText": "Tap target creature an opponent controls and put three stun counters on it. Scry 2. (If a permanent with a stun counter would become untapped, remove one from it instead.)"
+}

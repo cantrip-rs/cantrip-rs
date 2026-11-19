@@ -1,0 +1,46 @@
+# Freeze in Place on an already tapped creature (the ruling, CR 701.26a, 122.1d): Bot2's Ornithopter attacks on turn 4 and is still tapped on turn 5, when
+# Bot1 casts Freeze in Place on it: it stays tapped and still gets three stun counters, and the scry still happens (the Library's top card goes to the bottom).
+
+[Bot1 Deck]
+Freeze in Place
+Mox Sapphire
+Mox Jet
+Island
+Island
+Island
+Island
+Island
+Island
+Lightning Bolt
+Counterspell
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Freeze in Place.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt; Counterspell)
+
+[Expect]
+Bot1.Graveyard = Freeze in Place
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Ornithopter.Counters.Stun = 3
+Bot1.Library.Top = Island
+Stack.Count = 0

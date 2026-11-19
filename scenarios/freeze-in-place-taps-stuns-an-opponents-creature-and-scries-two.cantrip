@@ -1,0 +1,50 @@
+# Freeze in Place: "Tap target creature an opponent controls and put three stun counters on it. Scry 2." On turn 3 Bot1 casts it for {1}{U}
+# (a Mox Sapphire and a Mox Jet: the pool is empty right after paying) on Bot2's Ornithopter: tapped with three stun counters (CR 701.26a, 122.1d),
+# and Bot1 scries 2 (CR 701.22): the Library has Lightning Bolt then Counterspell; the Counterspell goes on top and the Bolt to the bottom.
+# Bot1's own Ornithopter is refused as a target ("an opponent controls") while Bot2's is accepted.
+
+[Bot1 Deck]
+Freeze in Place
+Mox Sapphire
+Mox Jet
+Ornithopter
+Island
+Island
+Island
+Island
+Lightning Bolt
+Counterspell
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Freeze in Place.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Hand.Freeze in Place.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Counterspell | Lightning Bolt)
+
+[Expect]
+Bot1.Graveyard = Freeze in Place
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Ornithopter.Counters.Stun = 3
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Ornithopter.Counters.Stun = (absent)
+Bot1.Library.Top = Counterspell
+Stack.Count = 0
