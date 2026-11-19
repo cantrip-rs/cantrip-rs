@@ -42,9 +42,13 @@ LOSERS_RUN = "losers"
 
 @dataclass
 class Settings:
-    fork_simulations: int = 8192
-    fork_worlds: int = 32
-    loser_simulations: int = 4096
+    # The forks at 32768 simulations x 16 worlds a seed, two seeds pooled (32 paired worlds, as one 8192 x 32 run had):
+    # on gen8's 397 decided forks a search picked the pooled verdict's better move 69.5% of the time at 64
+    # simulations, 75.8% at 512, 79.1% at 4096 x 8 and 82.9% at 32768 x 8 (2026-11-18), still rising; judging selected
+    # positions that deep costs little beside playing at it. The losers' decisions at 8192 x 16.
+    fork_simulations: int = 32768
+    fork_worlds: int = 16
+    loser_simulations: int = 8192
     loser_worlds: int = 16
     batch: int = 32
     lanes: int = 24
