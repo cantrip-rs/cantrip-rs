@@ -1,0 +1,65 @@
+# Faerie Slumber Party (CR 614.1a, 614.6): Bot2's only creature is a Dregscape Zombie that Dreams of the Dead returned from the
+# graveyard after Faithless Looting discarded it, so if it would leave the battlefield it is exiled instead. Returning it to
+# Bot2's hand is replaced by exiling it, so no creature Bot2 controlled was returned this way: the Zombie is exiled and Bot1
+# creates no Faeries.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Faerie Slumber Party
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Faithless Looting
+Dregscape Zombie
+Dreams of the Dead
+Mox Pearl
+Mox Jet
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Dregscape Zombie; Island)
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Dreams of the Dead.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Dreams of the Dead.Activate(Bot2.Graveyard.Dregscape Zombie)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Dregscape Zombie.Power = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Faerie Slumber Party.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile = Dregscape Zombie
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire
+Bot2.Battlefield = Dreams of the Dead; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire

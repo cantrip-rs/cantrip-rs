@@ -1,0 +1,48 @@
+# Faerie Slumber Party (CR 400.3, 608.2c): every creature on the battlefield returns to its owner's hand, Bot1's Memnite and Bot2's
+# Memnite and Ornithopter alike. Bot2 controlled creatures, and counts once however many: Bot1 creates exactly two Faerie tokens
+# (1/1 blue, flying, can block only creatures with flying), not four.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Memnite
+Faerie Slumber Party
+Island x14
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Faerie Slumber Party.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Faerie Token#1.Power = 1
+? Bot1.Battlefield.Faerie Token#1.Toughness = 1
+? Bot1.Battlefield.Faerie Token#1.Colors = Blue
+? Bot1.Battlefield.Faerie Token#1.Keywords = CanBlockOnlyCreaturesWithFlying; Flying
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Faerie Token; Faerie Token; Mox Jet; Mox Pearl; Mox Sapphire
+Bot1.Hand = Island; Island; Memnite
+Bot2.Hand = Island; Island; Island; Island; Island; Island; Memnite; Ornithopter
+Bot2.Battlefield.Count = 0
+Bot1.Graveyard = Faerie Slumber Party; Black Lotus
+LeftBattlefield = Black Lotus (tapped); Memnite; Memnite; Ornithopter
