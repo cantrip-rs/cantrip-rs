@@ -481,12 +481,16 @@ pub fn you_control_another<const SUBTYPE: u16>(q: &dyn Query, asker: &Asker) -> 
     q.permanents_of(asker.controller).into_iter().any(|id| id != asker.source && q.chars(id).has_subtype(word))
 }
 
-/// "You may cast this spell as though it had flash if you control a [subtype]" (CR 307.5, 702.8) as `CardDef::flash_if`,
-/// `SUBTYPE` a `Subtype` as `u16` (`lands::sub`): asked of the player who would cast it as the casting begins, and not again
-/// (the rulings). A [subtype] is a permanent with that creature type, read through the words of the card's text (CR 612); an
-/// opponent's does not count, and neither does one that is not on the battlefield. Bard's Company (Human) and Illusion
-/// Spinners (Faerie) print it.
-pub fn flash_if_you_control_a<const SUBTYPE: u16>(q: &dyn Query, asker: &Asker) -> bool {
+/// "If you control a [subtype]" / "while you control a [subtype]" as a condition asked of `asker.controller`, `SUBTYPE` a
+/// `Subtype` as `u16` (`lands::sub`): a permanent under that player's control with that subtype as the layers have it now (the
+/// source counts), read through the words of the source's text (CR 612.2); an opponent's does not count, and neither does one
+/// that is not on the battlefield. It is asked once, when the caller asks it: as `CardDef::flash_if` ("you may cast this spell as
+/// though it had flash if you control a [subtype]", CR 307.5, 702.8) as the casting begins and not again (the rulings): Bard's
+/// Company (Human), Illusion Spinners (Faerie), Colossal Rattlewurm (Desert); as `ModalDef::up_to_if` ("if you control a
+/// Wizard as you cast this spell", CR 700.2) as modes are chosen: Flame of Anor; as a trigger's `only_if` ("whenever this
+/// creature attacks or blocks while you control a Dinosaur", CR 603.2) as the event happens and not on resolution, since it is
+/// no intervening "if" (CR 603.4): Burning Sun Cavalry.
+pub fn you_control_a<const SUBTYPE: u16>(q: &dyn Query, asker: &Asker) -> bool {
     let Some(word) = Subtype::ALL.into_iter().find(|&s| s as u16 == SUBTYPE).map(|printed| q.words(asker.source).subtype(printed)) else {
         return false;
     };

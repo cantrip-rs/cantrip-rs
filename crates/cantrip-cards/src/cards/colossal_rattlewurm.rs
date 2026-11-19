@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::statics::flash_if_you_control_a;
+use cantrip_mechanics::statics::you_control_a;
 use cantrip_mechanics::{lands, library, select};
 use cantrip_oracle as oracle;
 
@@ -15,7 +15,7 @@ fn search_for_a_desert(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
 pub static CARD: CardDef = CardDef {
     // "You may cast this spell as though it had flash if you control a Desert" (CR 601.3b, 702.8): asked once as casting begins.
     // Trample is a core keyword.
-    flash_if: Some(flash_if_you_control_a::<{ lands::sub(Subtype::Desert) }>),
+    flash_if: Some(you_control_a::<{ lands::sub(Subtype::Desert) }>),
     abilities: &[ability(
         cost("{1}{G}").and(EXILE_THIS),
         search_for_a_desert,
