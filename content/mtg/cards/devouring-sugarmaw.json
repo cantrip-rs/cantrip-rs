@@ -1,0 +1,18 @@
+{
+  "name": "Devouring Sugarmaw",
+  "manaCost": "{2}{B}{B}",
+  "type": "Creature — Horror",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Menace, trample\nAt the beginning of your upkeep, you may sacrifice an artifact, enchantment, or token. If you don't, tap this creature.",
+  "keywords": [
+    "Menace",
+    "Trample"
+  ],
+  "adventure": {
+    "name": "Have for Dinner",
+    "manaCost": "{1}{W}",
+    "type": "Instant — Adventure",
+    "oracleText": "Create a 1/1 white Human creature token and a Food token. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

@@ -1,0 +1,45 @@
+# "At the beginning of your upkeep, you may sacrifice an artifact, enchantment, or token" (CR 701.21a, 603.2): Bot1 casts a Barrow Naughty and
+# the 6/6 with two Black Lotuses and keeps Mox Pearl. At its next upkeep only the artifact is offered (not the Naughty, not the Sugarmaw itself,
+# not another player's Mox Ruby); sacrificing Mox Pearl leaves the Sugarmaw untapped (CR 608.2c). The opponent's upkeep does not trigger it.
+# The Sugarmaw has menace and trample.
+
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+Barrow Naughty
+Devouring Sugarmaw
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Barrow Naughty.Cast
+Bot1.Hand.Devouring Sugarmaw.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Devouring Sugarmaw.Tapped = false
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+? Bot1.Battlefield.Devouring Sugarmaw.Tapped = false
+[T3 Bot1.Upkeep]
+! Bot1.Choose(Barrow Naughty)
+! Bot1.Choose(Devouring Sugarmaw)
+! Bot1.Choose(Mox Ruby)
+Bot1.Choose(Mox Pearl)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Devouring Sugarmaw.Tapped = false
+
+[Expect]
+Bot1.Battlefield.Devouring Sugarmaw.Power = 6
+Bot1.Battlefield.Devouring Sugarmaw.Toughness = 6
+Bot1.Battlefield.Devouring Sugarmaw.Keywords = Menace; Trample
+Bot1.Graveyard = Mox Pearl; Black Lotus; Black Lotus
+Bot2.Battlefield = Mox Ruby

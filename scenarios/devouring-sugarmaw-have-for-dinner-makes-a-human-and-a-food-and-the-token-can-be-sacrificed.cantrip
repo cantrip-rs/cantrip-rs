@@ -1,0 +1,45 @@
+# Have for Dinner (CR 715, 111.10b): "Create a 1/1 white Human creature token and a Food token." Cast for {1}{W} from Mox Pearl and Mox Jet; the card is
+# exiled on an adventure (CR 715.3d) and Bot1 casts the Sugarmaw from exile with two Black Lotuses. At the next upkeep the Human token (a token
+# that is neither artifact nor enchantment) is a legal sacrifice and is sacrificed, so the Sugarmaw stays untapped (CR 111.1); only one permanent may be chosen (a second is refused) and the Food, Pearl and Jet stay.
+
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+Mox Jet
+Devouring Sugarmaw
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Devouring Sugarmaw.Cast(Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Human Token.Power = 1
+? Bot1.Battlefield.Human Token.Toughness = 1
+? Bot1.Battlefield.Human Token.Colors = White
+? Bot1.Battlefield.Food Token.Types = Artifact
+? Bot1.Battlefield.Human Token.Tapped = false
+? Bot1.Battlefield.Food Token.Tapped = false
+? Exile = Devouring Sugarmaw
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Exile.Devouring Sugarmaw.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Upkeep]
+! Bot1.Choose(Human Token; Food Token)
+Bot1.Choose(Human Token)
+[T3 Bot1.Main1]
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Devouring Sugarmaw.Tapped = false
+Bot1.Battlefield = Devouring Sugarmaw; Food Token; Mox Jet; Mox Pearl

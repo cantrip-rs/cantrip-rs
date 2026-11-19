@@ -1,0 +1,26 @@
+# With no artifact, enchantment or token to sacrifice nothing is asked and the Sugarmaw taps (CR 608.2c); the two sacrificed Black Lotuses are gone,
+# and the Sugarmaw is not an artifact, enchantment or token.
+
+[Bot1 Deck]
+Black Lotus x2
+Devouring Sugarmaw
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Devouring Sugarmaw.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Devouring Sugarmaw.Tapped = false
+[T3 Bot1.Upkeep]
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Devouring Sugarmaw.Tapped = true
+Bot1.Battlefield = Devouring Sugarmaw
