@@ -1,0 +1,11 @@
+{
+  "name": "Archive Dragon",
+  "manaCost": "{4}{U}{U}",
+  "type": "Creature — Dragon Wizard",
+  "power": 4,
+  "toughness": 6,
+  "oracleText": "Flying\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nWhen this creature enters, scry 2.",
+  "keywords": [
+    "Flying"
+  ]
+}

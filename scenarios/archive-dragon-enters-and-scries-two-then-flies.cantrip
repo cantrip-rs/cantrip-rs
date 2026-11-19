@@ -1,0 +1,45 @@
+# Archive Dragon: "When this creature enters, scry 2" (CR 701.22) - Bot1 casts it for {4}{U}{U} off Black Lotus (three blue) and
+# three Moxen, which is all the mana there is, so the pool is empty right after paying. The scry looks at the top two cards,
+# Lightning Bolt and Counterspell: the Bolt stays on top and the Counterspell goes to the bottom, so the third card (Island)
+# is not touched. The Dragon is a 4/6 with flying.
+
+[Bot1 Deck]
+Archive Dragon
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island
+Island
+Lightning Bolt
+Counterspell
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Archive Dragon.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+Bot1.Arrange(Lightning Bolt | Counterspell)
+
+[Expect]
+Bot1.Battlefield.Archive Dragon.Power = 4
+Bot1.Battlefield.Archive Dragon.Toughness = 6
+Bot1.Battlefield.Archive Dragon.Keywords = Flying
+Bot1.Library.Count = 22
+Stack.Count = 0
