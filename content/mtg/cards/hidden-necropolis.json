@@ -1,0 +1,5 @@
+{
+  "name": "Hidden Necropolis",
+  "type": "Land — Cave",
+  "oracleText": "This land enters tapped.\n{T}: Add {B}.\n{4}{B}, {T}, Sacrifice this land: Discover 4. Activate only as a sorcery. (Exile cards from the top of your library until you exile a nonland card with mana value 4 or less. Cast it without paying its mana cost or put it into your hand. Put the rest on the bottom in a random order.)"
+}
