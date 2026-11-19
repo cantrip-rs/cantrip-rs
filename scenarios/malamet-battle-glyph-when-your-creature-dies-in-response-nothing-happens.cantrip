@@ -1,0 +1,49 @@
+# Malamet Battle Glyph: Bot2 answers by Bolting Bot1's new Grizzly Bears. As the Glyph resolves its first target is gone: no counter is
+# put on anything and nothing fights (CR 608.2b, 701.14b), so Bot2's Bears is undamaged.
+
+[Bot1 Deck]
+Black Lotus
+Grizzly Bears
+Malamet Battle Glyph
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Grizzly Bears
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Malamet Battle Glyph.Cast
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 0
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Grizzly Bears.Toughness = 2
+Bot2.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Graveyard = Malamet Battle Glyph; Grizzly Bears; Black Lotus

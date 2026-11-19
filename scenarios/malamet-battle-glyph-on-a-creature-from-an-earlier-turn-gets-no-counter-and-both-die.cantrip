@@ -1,0 +1,38 @@
+# Malamet Battle Glyph: Bot1's Grizzly Bears came in on turn 1, so on turn 3 it did not enter this turn (CR 400.7): no counter is put on it,
+# and the two Bears (2/2 and 2/2) each deal 2 to the other and both die (CR 701.14a, 704.5g).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Grizzly Bears
+Malamet Battle Glyph
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Malamet Battle Glyph.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Grizzly Bears; Malamet Battle Glyph; Black Lotus
+Bot2.Graveyard = Grizzly Bears; Black Lotus
+Bot1.Battlefield = Mox Emerald
+Bot2.Battlefield.Count = 0

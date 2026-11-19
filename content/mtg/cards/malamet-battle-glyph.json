@@ -1,0 +1,6 @@
+{
+  "name": "Malamet Battle Glyph",
+  "manaCost": "{G}",
+  "type": "Sorcery",
+  "oracleText": "Choose target creature you control and target creature you don't control. If the creature you control entered this turn, put a +1/+1 counter on it. Then those creatures fight each other."
+}

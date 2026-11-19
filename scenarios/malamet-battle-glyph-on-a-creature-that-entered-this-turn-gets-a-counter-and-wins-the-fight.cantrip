@@ -1,0 +1,45 @@
+# Malamet Battle Glyph: "Choose target creature you control and target creature you don't control. If the creature you control
+# entered this turn, put a +1/+1 counter on it. Then those creatures fight each other." On turn 3 Bot1 casts a Grizzly Bears and
+# then the Glyph, choosing it and Bot2's Grizzly Bears (not Bot2's Memnite). The Bears entered this turn, so it gets the counter
+# first (CR 608.2c) and is a 3/3: it deals 3 to Bot2's Bears, which dies, and takes 2 (CR 701.14a), surviving. Memnite is left alone.
+
+[Bot1 Deck]
+Black Lotus
+Grizzly Bears
+Malamet Battle Glyph
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Memnite
+Island x17
+
+[Actions]
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Malamet Battle Glyph.Cast
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Grizzly Bears.Toughness = 3
+Bot1.Battlefield.Grizzly Bears.Damage = 2
+Bot2.Graveyard = Grizzly Bears; Black Lotus
+Bot2.Battlefield = Memnite
+Bot1.Graveyard = Malamet Battle Glyph; Black Lotus
