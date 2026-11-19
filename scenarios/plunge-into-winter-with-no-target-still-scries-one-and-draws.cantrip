@@ -1,0 +1,31 @@
+# Plunge into Winter: "up to one" target, so it can be cast with none (CR 601.2c): there is no creature on either side, nothing
+# is tapped, and Bot1 still scries 1 and draws. Lightning Bolt stays on top and is drawn.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Plunge into Winter
+Plains x4
+Lightning Bolt
+Counterspell
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Plunge into Winter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt | )
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Graveyard = Plunge into Winter
+Bot1.Hand = Plains; Plains; Plains; Plains; Lightning Bolt
+Bot1.Library = Counterspell; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island

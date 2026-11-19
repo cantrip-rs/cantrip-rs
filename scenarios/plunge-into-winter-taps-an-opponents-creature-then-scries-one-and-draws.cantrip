@@ -1,0 +1,42 @@
+# Plunge into Winter: "Tap up to one target creature. Scry 1, then draw a card." Bot1 taps Bot2's untapped Ornithopter, then
+# scries 1: Lightning Bolt is on top and goes to the bottom, so the card drawn is Counterspell, the one beneath it (CR 701.22).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Plunge into Winter
+Plains x4
+Island
+Lightning Bolt
+Counterspell
+Island x10
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot2.Battlefield.Ornithopter.Tapped = False
+Bot1.Hand.Plunge into Winter.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = True
+Bot1.Arrange( | Lightning Bolt)
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Graveyard = Plunge into Winter
+Bot1.Hand = Plains; Plains; Plains; Island; Counterspell
+Bot1.Library = Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Lightning Bolt

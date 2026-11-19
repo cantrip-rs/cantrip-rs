@@ -1,0 +1,6 @@
+{
+  "name": "Plunge into Winter",
+  "manaCost": "{1}{W}",
+  "type": "Instant",
+  "oracleText": "Tap up to one target creature. Scry 1, then draw a card."
+}
