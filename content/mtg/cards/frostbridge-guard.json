@@ -1,0 +1,8 @@
+{
+  "name": "Frostbridge Guard",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Elemental Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{2}{W}, {T}: Tap target creature."
+}

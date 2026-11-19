@@ -1,0 +1,42 @@
+# Frostbridge Guard {1}{W}: "{2}{W}, {T}: Tap target creature" (CR 602.2, 701.26a, 302.6). Bot1 casts the Guard on turn 1 with two Moxen
+# and still holds an untapped Black Lotus, so only summoning sickness keeps the {T} ability from being offered that turn. On turn 3 the Lotus
+# pays the whole {2}{W} and the ability taps Bot2's untapped Ornithopter; the Guard is tapped as part of the cost and the pool is empty.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Black Lotus
+Frostbridge Guard
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Frostbridge Guard.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Frostbridge Guard.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Frostbridge Guard.Activate(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+? Bot1.Battlefield.Frostbridge Guard.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Frostbridge Guard.Tapped = true
+Bot1.Graveyard = Black Lotus

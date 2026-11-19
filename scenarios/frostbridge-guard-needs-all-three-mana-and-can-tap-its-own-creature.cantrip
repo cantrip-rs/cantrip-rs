@@ -1,0 +1,36 @@
+# Frostbridge Guard: "{2}{W}, {T}: Tap target creature." The ability costs exactly {2}{W} (CR 602.2b): two Moxen alone are refused on turn 3,
+# the Plains played afterwards completes it, and "target creature" is any creature, so Bot1's own Ornithopter is a legal target.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Ornithopter
+Frostbridge Guard
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Frostbridge Guard.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Frostbridge Guard.Activate(Bot1.Battlefield.Ornithopter; Mana: short)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Frostbridge Guard.Activate(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Frostbridge Guard.Tapped = true
