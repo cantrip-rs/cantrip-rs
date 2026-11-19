@@ -1,0 +1,48 @@
+# Eerie Interference after blockers: the damage Bot2's two Savannah Lions would deal is prevented both to Bot1 (unblocked Lions) and to
+# Bot1's blocking Lions, which therefore survives, while its own damage to Bot2's Lions is not prevented (it is not dealt to Bot1 or
+# a creature Bot1 controls): Bot2's blocked Lions dies. (CR 615.1, 120.3)
+[Bot1 Deck]
+Plains
+Mox Pearl
+Savannah Lions
+Eerie Interference
+Plains
+Plains
+Plains x15
+[Bot2 Deck]
+Plains
+Mox Pearl
+Savannah Lions
+Savannah Lions
+Plains x17
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Savannah Lions#1 > Bot1; Savannah Lions#2 > Bot1)
+Bot1.Block(Savannah Lions > Savannah Lions#1)
+[T4 Bot2.Blockers]
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Eerie Interference.Cast
+? Bot1.Mana =
+[T4 Bot2.Main2]
+? Bot1.Life = 20
+? Bot1.Battlefield.Savannah Lions.Damage = 0
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Savannah Lions.Damage = 0
+Bot2.Graveyard = Savannah Lions
+Prevented = 2 Savannah Lions > Savannah Lions by Eerie Interference; 2 Savannah Lions > Bot1 by Eerie Interference

@@ -1,0 +1,39 @@
+# "To you and creatures you control": a planeswalker is neither. With Eerie Interference resolved, Bot2's Savannah Lions still deals its 2 combat
+# damage to Bot1's Karn, which loses 2 loyalty (CR 120.3c, 615.1); nothing is prevented.
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Karn, Scion of Urza
+Eerie Interference
+Plains
+Plains
+Plains x13
+[Bot2 Deck]
+Plains
+Savannah Lions
+Plains x18
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: W)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Karn, Scion of Urza.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Savannah Lions > Bot1.Battlefield.Karn, Scion of Urza)
+[T4 Bot2.Blockers]
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Eerie Interference.Cast
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Karn, Scion of Urza.Counters.Loyalty = 3
+Bot1.Life = 20

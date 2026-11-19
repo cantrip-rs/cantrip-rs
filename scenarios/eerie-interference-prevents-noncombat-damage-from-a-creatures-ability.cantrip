@@ -1,0 +1,34 @@
+# "Damage ... by creatures" is any damage a creature deals, not only combat damage: Bot2's Prodigal Sorcerer pings Bot1, Bot1 responds with
+# Eerie Interference and the 1 damage is prevented. Once the turn has ended the effect is gone and the next ping deals its damage (CR 615.1, 514.2).
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Eerie Interference
+Plains x20
+[Bot2 Deck]
+Black Lotus
+Prodigal Sorcerer
+Island x20
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Prodigal Sorcerer.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Prodigal Sorcerer.Activate(Bot1)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Eerie Interference.Cast
+[T4 Bot2.Main2]
+? Bot1.Life = 20
+[T6 Bot2.Main1]
+Bot2.Battlefield.Prodigal Sorcerer.Activate(Bot1)
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Life = 19
+Prevented = 1 Prodigal Sorcerer > Bot1 by Eerie Interference

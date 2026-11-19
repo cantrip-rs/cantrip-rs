@@ -1,0 +1,53 @@
+# Eerie Interference prevents only damage dealt by creatures this turn: after it resolves Bot2's Lightning Bolt (an instant, not a
+# creature) still deals 3 damage to Bot1, and in Bot2's next turn its Savannah Lions deals its 2 damage to Bot1 normally (CR 615.1, 514.2).
+[Bot1 Deck]
+Plains
+Mox Pearl
+Savannah Lions
+Eerie Interference
+Plains
+Plains
+Plains x15
+[Bot2 Deck]
+Plains
+Mox Pearl
+Mox Ruby
+Savannah Lions
+Savannah Lions
+Lightning Bolt
+Plains x15
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Savannah Lions#1 > Bot1; Savannah Lions#2 > Bot1)
+Bot1.Block(Savannah Lions > Savannah Lions#1)
+[T4 Bot2.Blockers]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Eerie Interference.Cast
+[T4 Bot2.Main2]
+? Bot1.Life = 17
+? Bot1.Battlefield.Savannah Lions.Damage = 0
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Savannah Lions > Bot1)
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Life = 15
+Bot1.Graveyard = Eerie Interference
+Bot2.Graveyard = Savannah Lions; Lightning Bolt

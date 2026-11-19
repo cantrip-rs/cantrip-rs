@@ -1,0 +1,6 @@
+{
+  "name": "Eerie Interference",
+  "manaCost": "{2}{W}",
+  "type": "Instant",
+  "oracleText": "Prevent all damage that would be dealt to you and creatures you control this turn by creatures."
+}
