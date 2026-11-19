@@ -1,0 +1,52 @@
+# Entry Denied's target is "creature you don't control with mana value 3 or less" (CR 115.1, 202.3): Bot2's Hill Giant
+# ({3}{R}, mana value 4) and Bot1's own Memnite are not legal targets, so those casts are refused; Bot2's Wind Drake ({2}{U},
+# mana value exactly 3) is, and goes back to Bot2's hand.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Memnite
+Beluna's Gatekeeper
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Ruby
+Wind Drake
+Hill Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Wind Drake.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Beluna's Gatekeeper.Cast(Bot2.Battlefield.Hill Giant; Ability: Entry Denied)
+! Bot1.Hand.Beluna's Gatekeeper.Cast(Bot1.Battlefield.Memnite; Ability: Entry Denied)
+Bot1.Hand.Beluna's Gatekeeper.Cast(Bot2.Battlefield.Wind Drake; Ability: Entry Denied)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Hand = Island; Wind Drake
+Bot2.Battlefield.Hill Giant.Power = 3
+Bot1.Battlefield.Memnite.Power = 1
+Exile = Beluna's Gatekeeper

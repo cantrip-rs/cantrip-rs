@@ -1,0 +1,57 @@
+# Beluna's Gatekeeper // Entry Denied (CR 715): Entry Denied {1}{U}, a sorcery: "Return target creature you don't control with
+# mana value 3 or less to its owner's hand." Turn 3: Bot1 casts it at Bot2's Grizzly Bears (mana value 2) with Mox Sapphire and
+# Mox Jet: the Bears return to Bot2's hand and the Gatekeeper card is exiled. Bot1 then casts the 6/5 Gatekeeper from exile with
+# Mox Ruby, Mox Emerald, Mox Pearl and Black Lotus (blue).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Black Lotus
+Beluna's Gatekeeper
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Beluna's Gatekeeper.Cast(Bot2.Battlefield.Grizzly Bears; Ability: Entry Denied)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Mox Emerald; Mox Ruby
+? Bot2.Hand = Grizzly Bears; Island; Island; Island; Island; Island
+? Exile = Beluna's Gatekeeper
+? Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Exile.Beluna's Gatekeeper.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Hand = Grizzly Bears; Island; Island; Island; Island; Island
+Bot1.Battlefield.Beluna's Gatekeeper.Power = 6
+Bot1.Battlefield.Beluna's Gatekeeper.Toughness = 5

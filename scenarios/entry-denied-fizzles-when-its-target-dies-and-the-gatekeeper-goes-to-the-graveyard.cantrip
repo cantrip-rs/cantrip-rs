@@ -1,0 +1,43 @@
+# CR 608.2b and 715.4: Bot1 casts Entry Denied at Bot2's Grizzly Bears and then Lightning Bolts them in response. With its only
+# target gone Entry Denied does nothing and, not having resolved, goes to the graveyard instead of exile.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Beluna's Gatekeeper
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Beluna's Gatekeeper.Cast(Bot2.Battlefield.Grizzly Bears; Ability: Entry Denied)
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot2.Hand.Count = 5
+Exile.Count = 0
+Bot1.Graveyard = Beluna's Gatekeeper; Lightning Bolt

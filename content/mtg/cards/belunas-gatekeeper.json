@@ -1,0 +1,14 @@
+{
+  "name": "Beluna's Gatekeeper",
+  "manaCost": "{5}{U}",
+  "type": "Creature — Giant Soldier",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": "",
+  "adventure": {
+    "name": "Entry Denied",
+    "manaCost": "{1}{U}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Return target creature you don't control with mana value 3 or less to its owner's hand. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}
