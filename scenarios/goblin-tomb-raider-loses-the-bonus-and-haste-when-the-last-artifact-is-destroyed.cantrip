@@ -1,0 +1,32 @@
+# Goblin Tomb Raider: "As long as you control an artifact, this creature gets +1/+0 and has haste."
+# Turn 1 Bot1 casts a Mox Ruby and Black Lotus, sacrifices the Lotus for RRR and casts the Raider (R) and a Shatter (1R) on its own Mox:
+# the Raider is a 2/2 with haste while the Mox is there, and a 1/2 without haste once the Mox is destroyed (CR 604.1, 613.1f).
+
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Goblin Tomb Raider
+Shatter
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Tomb Raider.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Tomb Raider.Power = 2
+? Bot1.Battlefield.Goblin Tomb Raider.Keywords = Haste
+? Bot1.Battlefield.Goblin Tomb Raider.SummoningSick = false
+Bot1.Hand.Shatter.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Tomb Raider.Power = 1
+? Bot1.Battlefield.Goblin Tomb Raider.SummoningSick = true
+
+[Expect]
+Bot1.Graveyard = Shatter; Mox Ruby; Black Lotus

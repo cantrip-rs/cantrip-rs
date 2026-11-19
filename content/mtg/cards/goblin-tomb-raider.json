@@ -1,0 +1,8 @@
+{
+  "name": "Goblin Tomb Raider",
+  "manaCost": "{R}",
+  "type": "Creature — Goblin Pirate",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "As long as you control an artifact, this creature gets +1/+0 and has haste."
+}

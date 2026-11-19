@@ -1,0 +1,27 @@
+# Goblin Tomb Raider: "As long as you control an artifact, this creature gets +1/+0 and has haste."
+# Turn 1 Bot1 casts a Mox Ruby (an artifact) and then the 1/2 Raider with it: it is a 2/2 with haste (CR 604.1, 613.4c, 702.10), so
+# it attacks the turn it enters and deals 2.
+
+[Bot1 Deck]
+Mox Ruby
+Goblin Tomb Raider
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Tomb Raider.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Tomb Raider.Power = 2
+? Bot1.Battlefield.Goblin Tomb Raider.Toughness = 2
+? Bot1.Battlefield.Goblin Tomb Raider.Keywords = Haste
+? Bot1.Battlefield.Goblin Tomb Raider.SummoningSick = false
+Bot1.Attack(Goblin Tomb Raider > Bot2)
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 18

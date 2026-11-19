@@ -1,0 +1,32 @@
+# Goblin Tomb Raider: "As long as you control an artifact, this creature gets +1/+0 and has haste."
+# Turn 1 Bot1 casts the Raider with a Mountain and controls no artifact: it is a 1/2 without haste and is still summoning sick (CR 302.6). On turn 2 Bot2 casts a
+# Mox Ruby, but "you control" means only the Raider's controller (CR 109.5), so the Raider stays a 1/2 without haste.
+
+[Bot1 Deck]
+Mountain
+Goblin Tomb Raider
+Plains x18
+
+[Bot2 Deck]
+Mox Ruby
+Island x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goblin Tomb Raider.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Tomb Raider.Power = 1
+? Bot1.Battlefield.Goblin Tomb Raider.SummoningSick = true
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Count = 1
+? Bot1.Battlefield.Goblin Tomb Raider.Power = 1
+
+[Expect]
+Bot1.Battlefield.Goblin Tomb Raider.Toughness = 2
