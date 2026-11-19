@@ -1,0 +1,6 @@
+{
+  "name": "Water Wings",
+  "manaCost": "{1}{U}",
+  "type": "Instant",
+  "oracleText": "Until end of turn, target creature you control has base power and toughness 4/4 and gains flying and hexproof. (It can't be the target of spells or abilities your opponents control.)"
+}

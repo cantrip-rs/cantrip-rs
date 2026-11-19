@@ -1,0 +1,45 @@
+# Water Wings: "Until end of turn, target creature you control has base power and toughness 4/4 and gains flying and hexproof." (CR 611.2a,
+# 613.4b, 702.9, 702.11) Walking Ballista (X = 1) is a 0/0 with one +1/+1 counter, a 1/1: the base 4/4 comes before the counter (CR 613.4b,
+# 613.4c), so it is a 5/5 with flying and hexproof until end of turn. On turn 3 it is a 1/1 again.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Walking Ballista
+Water Wings
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Walking Ballista.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Walking Ballista.Power = 1
+? Bot1.Battlefield.Walking Ballista.Toughness = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Water Wings.Cast(Walking Ballista)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Walking Ballista.Power = 5
+? Bot1.Battlefield.Walking Ballista.Toughness = 5
+? Bot1.Battlefield.Walking Ballista.Keywords = Flying; Hexproof
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Walking Ballista.Power = 1
+Bot1.Battlefield.Walking Ballista.Toughness = 1

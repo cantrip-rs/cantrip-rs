@@ -1,0 +1,58 @@
+# Water Wings gives hexproof until end of turn (CR 702.11b, 611.2a): on turn 3 Bot2 cannot target Bot1's Walking Ballista with Lightning Bolt
+# while it lasts, and Water Wings cannot be cast on Bot2's Ornithopter ("target creature you control", CR 115.1), but on turn 4 the Ballista is a
+# 1/1 with no hexproof again and the Bolt kills it.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Walking Ballista
+Water Wings
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Walking Ballista.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Water Wings.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Water Wings.Cast(Walking Ballista)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Walking Ballista)
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Walking Ballista)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Walking Ballista; Water Wings
+Stack.Count = 0
