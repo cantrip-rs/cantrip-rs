@@ -1,0 +1,28 @@
+# "Create a number of 1/1 white Rabbit creature tokens equal to this creature's power" (tokens::create_equal_to_its_power):
+# Jacked Rabbit cast for X = 0 enters with no +1/+1 counter, so it is a 1/2; when it attacks it makes exactly one 1/1 white
+# Rabbit token, which is not attacking. The script ends with the trigger resolved, before damage.
+
+[Bot1 Deck]
+Plains
+Plains
+Jacked Rabbit
+Plains x10
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Jacked Rabbit.Cast(X: 0)
+Bot1.Attack(Jacked Rabbit)
+
+[Expect]
+Bot1.Battlefield = Plains; Plains; Jacked Rabbit; Rabbit Token
+Bot1.Battlefield.Jacked Rabbit.Power = 1
+Bot1.Battlefield.Jacked Rabbit.Toughness = 2
+Step = Attackers
+Combat.Attackers = Jacked Rabbit > Bot2
+Bot2.Life = 20

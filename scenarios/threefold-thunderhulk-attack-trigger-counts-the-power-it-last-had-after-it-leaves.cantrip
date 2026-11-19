@@ -1,0 +1,57 @@
+# Threefold Thunderhulk: if it leaves the battlefield while its attack trigger is on the stack, the number of Gnomes is its power as it
+# last existed on the battlefield (the 2023-11-10 ruling, CR 603.10a). Bot2 destroys the attacking 3/3 with Disenchant in response and
+# the trigger still makes three Gnomes: six in all with the three it made entering.
+
+[Bot1 Deck]
+Threefold Thunderhulk
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Disenchant
+Plains x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Threefold Thunderhulk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Threefold Thunderhulk > Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Threefold Thunderhulk)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Threefold Thunderhulk; Black Lotus
+Bot2.Graveyard = Disenchant
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Mox Emerald; Gnome Token; Gnome Token; Gnome Token; Gnome Token; Gnome Token; Gnome Token

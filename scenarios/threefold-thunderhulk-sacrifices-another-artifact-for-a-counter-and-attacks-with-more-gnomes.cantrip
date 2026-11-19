@@ -1,0 +1,54 @@
+# Threefold Thunderhulk: "{2}, Sacrifice another artifact: Put a +1/+1 counter on this creature." After its turn-1 cast (three Gnome
+# tokens) it sacrifices the unused Mox Emerald in turn 3 for exactly {2}: it cannot be asked to sacrifice itself, and it grows to 4/4.
+# Attacking, it creates a number of Gnomes equal to its power as the trigger resolves: four more (three of them are not attacking).
+
+[Bot1 Deck]
+Threefold Thunderhulk
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Threefold Thunderhulk.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Threefold Thunderhulk.Activate
+! Bot1.Choose(Threefold Thunderhulk)
+Bot1.Choose(Mox Emerald)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Threefold Thunderhulk.Power = 4
+Bot1.Attack(Threefold Thunderhulk > Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Threefold Thunderhulk; Gnome Token; Gnome Token; Gnome Token; Gnome Token; Gnome Token; Gnome Token; Gnome Token
+Bot1.Battlefield.Threefold Thunderhulk.Power = 4
+Bot1.Battlefield.Threefold Thunderhulk.Counters.PlusOnePlusOne = 4
+Combat.Attackers = Threefold Thunderhulk > Bot2

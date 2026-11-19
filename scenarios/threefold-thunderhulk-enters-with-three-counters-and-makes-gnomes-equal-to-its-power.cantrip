@@ -1,0 +1,44 @@
+# Threefold Thunderhulk costs {7} (a Black Lotus and four Moxen, the pool empty after). It enters with three +1/+1 counters, so it is
+# a 3/3, and its enters trigger creates a number of 1/1 colorless Gnome artifact creature tokens equal to its power: three.
+# Afterwards the {2} ability is refused with one Mox's mana, the only source left, as it is short of {2}.
+
+[Bot1 Deck]
+Threefold Thunderhulk
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Threefold Thunderhulk.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Threefold Thunderhulk.Power = 3
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Threefold Thunderhulk.Activate(Mana: short)
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Mox Emerald; Threefold Thunderhulk; Gnome Token; Gnome Token; Gnome Token
+Bot1.Battlefield.Threefold Thunderhulk.Power = 3
+Bot1.Battlefield.Threefold Thunderhulk.Toughness = 3
+Bot1.Battlefield.Threefold Thunderhulk.Counters.PlusOnePlusOne = 3
