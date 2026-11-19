@@ -1,0 +1,39 @@
+# Tenacious Tomeseeker: "if it was bargained" (CR 603.4, 702.166b) is an intervening if. Cast without bargaining it triggers
+# nothing, so Opt stays in the graveyard and the stack is empty once it has resolved.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Opt
+Tenacious Tomeseeker
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tenacious Tomeseeker.Cast
+Bot1.Modes(Cast without bargain)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Island; Island; Island
+Bot1.Graveyard = Opt
+Bot1.Battlefield = Island; Mox Jet; Mox Ruby; Mox Sapphire; Tenacious Tomeseeker

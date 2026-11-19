@@ -1,0 +1,8 @@
+{
+  "name": "Tenacious Tomeseeker",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Human Knight",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nWhen this creature enters, if it was bargained, return target instant or sorcery card from your graveyard to your hand."
+}

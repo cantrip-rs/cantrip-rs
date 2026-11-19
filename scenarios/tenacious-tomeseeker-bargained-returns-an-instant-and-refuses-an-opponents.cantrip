@@ -1,0 +1,51 @@
+# Tenacious Tomeseeker: the target is an instant or sorcery card "from your graveyard" (CR 115.1). Bot1's Opt is in its graveyard
+# and Bot2's Ancestral Recall (an instant) is in Bot2's: bargaining with Mox Jet, the Tomeseeker returns Bot1's own Opt only, an
+# instant this time, and the opponent's card stays. The opponent's instant is not a legal choice, so Opt is the only candidate.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Opt
+Tenacious Tomeseeker
+Island x15
+
+[Bot2 Deck]
+Ancestral Recall
+Island x19
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Ancestral Recall.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tenacious Tomeseeker.Cast
+Bot1.Modes(Bargain:)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose(Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Island; Island; Island; Opt
+Bot1.Graveyard = Mox Jet
+Bot2.Graveyard = Island; Island; Ancestral Recall
+Bot1.Battlefield = Island; Mox Ruby; Mox Sapphire; Tenacious Tomeseeker

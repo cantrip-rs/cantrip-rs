@@ -1,0 +1,53 @@
+# Tenacious Tomeseeker: "Bargain. When this creature enters, if it was bargained, return target instant or sorcery card from your
+# graveyard to your hand." Bot1 casts Opt (turn 1) and Preordain (turn 3), then the Tomeseeker, bargaining by sacrificing Mox Jet.
+# The sacrifice is paid with the cost (CR 601.2h), so Mox Jet is in the graveyard when the trigger is put on the stack, but an
+# artifact card is not an instant or sorcery card: it is refused as the target. Either the instant or the sorcery is a legal
+# target (CR 115.1); Bot1 chooses the sorcery, and the Opt stays in the graveyard.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Opt
+Preordain
+Tenacious Tomeseeker
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Preordain.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tenacious Tomeseeker.Cast
+Bot1.Modes(Bargain:)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose(Mox Jet)
+? Bot1.Graveyard = Mox Jet; Preordain; Opt
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Graveyard.Mox Jet)
+Bot1.Target(Bot1.Graveyard.Preordain)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Mox Jet; Opt
+Bot1.Battlefield = Island; Island; Mox Ruby; Mox Sapphire; Tenacious Tomeseeker
