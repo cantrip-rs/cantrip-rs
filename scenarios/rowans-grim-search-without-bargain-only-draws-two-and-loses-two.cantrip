@@ -1,0 +1,35 @@
+# Rowan's Grim Search: not bargained, the look-at-four is skipped: Bot1 simply draws the top two cards (Island and
+# Mountain) and loses 2 life; nothing is put into the graveyard from the library.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Black Lotus
+Rowan's Grim Search
+Swamp
+Swamp
+Island
+Mountain
+Plains
+Forest
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Rowan's Grim Search.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Life = 18
+Bot1.Hand = Swamp; Swamp; Island; Mountain
+Bot1.Graveyard = Rowan's Grim Search; Black Lotus
+Bot1.Battlefield = Mox Jet; Mox Pearl; Swamp

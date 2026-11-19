@@ -1,0 +1,41 @@
+# Rowan's Grim Search: "up to two": Bot1 puts back just Island and buries Mountain, Plains and Forest, then draws two,
+# Island and the next card, Swamp.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Black Lotus
+Rowan's Grim Search
+Swamp
+Swamp
+Island
+Mountain
+Plains
+Forest
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Rowan's Grim Search.Cast
+Bot1.Modes(Bargain:)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Choose(Mox Pearl)
+Bot1.Arrange(Island | Mountain; Plains; Forest)
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Life = 18
+Bot1.Hand = Swamp; Swamp; Island; Swamp
+Bot1.Graveyard.Count = 6
+Bot1.Graveyard.Mountain.Colors =
+Bot1.Graveyard.Plains.Colors =
+Bot1.Graveyard.Forest.Colors =
+Bot1.Library.Count = 19
