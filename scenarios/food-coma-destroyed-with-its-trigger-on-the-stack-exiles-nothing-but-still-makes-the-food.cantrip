@@ -1,0 +1,52 @@
+# Food Coma (CR 610.3b): if the enchantment leaves the battlefield before its ability resolves, the target is not exiled at all,
+# but the ability still resolves and creates the Food token, since its target is still legal (CR 608.2b). Bot1 casts it on turn
+# three aiming at Bot2's Ornithopter; with the trigger on the stack Bot2 destroys the enchantment with Disenchant. The
+# Ornithopter stays in play and Bot1 gets the Food.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Food Coma
+Plains
+Plains x10
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Disenchant
+Ornithopter
+Plains x11
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Food Coma.Cast
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Food Coma)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard = Food Coma
+Bot1.Battlefield = Food Token; Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl
+Bot2.Battlefield = Ornithopter; Plains; Mox Pearl

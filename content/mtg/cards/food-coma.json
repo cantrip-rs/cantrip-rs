@@ -1,0 +1,6 @@
+{
+  "name": "Food Coma",
+  "manaCost": "{3}{W}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, exile target creature an opponent controls until this enchantment leaves the battlefield. Create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")"
+}

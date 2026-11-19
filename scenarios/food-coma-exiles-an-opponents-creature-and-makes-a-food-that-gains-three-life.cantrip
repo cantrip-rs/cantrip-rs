@@ -1,0 +1,59 @@
+# Food Coma {3}{W} (CR 610.3, 111.10b): "When this enchantment enters, exile target creature an opponent controls until this
+# enchantment leaves the battlefield. Create a Food token." Bot1 casts it on turn three with four Moxen. The target is a choice
+# between Bot2's Ornithopter and Memnite: Bot1's own Ornithopter and Bot2's Plains are refused. The Ornithopter is exiled and
+# Bot1 gets a Food token; on turn five Bot1 pays {2} and taps and sacrifices the Food to gain 3 life (CR 111.10b).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Ornithopter
+Food Coma
+Plains
+Plains x9
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Ornithopter
+Memnite
+Plains x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Food Coma.Cast
+Bot1.Pass
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Plains)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+? Bot2.Battlefield = Plains; Mox Pearl; Memnite
+? Exile = Ornithopter
+? Bot1.Battlefield = Food Coma; Food Token; Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl; Ornithopter
+? Bot1.Life = 20
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Food Token.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Exile = Ornithopter
+Bot1.Battlefield = Food Coma; Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl; Ornithopter

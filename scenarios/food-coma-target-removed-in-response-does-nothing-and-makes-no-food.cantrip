@@ -1,0 +1,48 @@
+# Food Coma (CR 608.2b): the exile and the Food are one ability, so with its only target illegal on resolution it does nothing at
+# all. Bot1 casts Food Coma aiming at Bot2's Ornithopter; in response Bot2 exiles its own Ornithopter with Swords to Plowshares.
+# The ability is countered on resolution: Bot1 gets no Food token (the Ornithopter has power 0, so Bot2 gains no life).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Food Coma
+Plains
+Plains x10
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Swords to Plowshares
+Ornithopter
+Plains x11
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Food Coma.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Ornithopter
+Bot1.Battlefield = Food Coma; Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl
+Bot2.Life = 20
