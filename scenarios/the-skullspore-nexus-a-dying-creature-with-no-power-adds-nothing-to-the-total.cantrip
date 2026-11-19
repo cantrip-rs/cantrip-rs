@@ -1,0 +1,74 @@
+# The Skullspore Nexus: the token's size is "the total power of those creatures", and a creature with 0 power adds nothing (a negative power takes
+# from it, CR 107.1b). Bot1 controls only Arboreal Grazer (0/3), so the Nexus costs the full {6}{G}{G} on turn 3: four Moxen, Black Lotus (three
+# green) and a Forest pay exactly eight. Bot2's Wrath of God on turn 6 destroys the Grazer, the Nexus triggers and makes a 0/0 Fungus Dinosaur that
+# state-based actions put into the graveyard at once (CR 704.5f), so Bot1 is left with the Forest, four Moxen and the Nexus and nothing else.
+
+[Bot1 Deck]
+Forest
+Arboreal Grazer
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Black Lotus
+The Skullspore Nexus
+Forest x30
+
+[Bot2 Deck]
+Mox Pearl
+Wrath of God
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains x30
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Arboreal Grazer.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.The Skullspore Nexus.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Skullspore Nexus.Types = Artifact
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains#1.Activate
+Bot2.Battlefield.Plains#2.Activate
+Bot2.Battlefield.Plains#3.Activate
+Bot2.Hand.Wrath of God.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 2
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.The Skullspore Nexus.Types = Artifact

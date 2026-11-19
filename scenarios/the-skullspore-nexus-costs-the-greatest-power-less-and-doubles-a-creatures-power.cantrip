@@ -1,0 +1,56 @@
+# The Skullspore Nexus: with a 6/6 Pugnacious Hammerskull the greatest power among Bot1's creatures is 6 and the Nexus costs {6}{G}{G} - {6} =
+# {G}{G} (the reduction takes off generic only): Black Lotus pays it, leaving {G}. Turn 3: "{2}, {T}: Double target creature's power until end of turn":
+# Mox Pearl and Mox Ruby pay the {2} and Bot1 targets the Hammerskull, which becomes 12/6 and deals 12 to Bot2 (the attack is alone: it gets a
+# stun counter, irrelevant here), going to 8. At turn 4 the doubling has worn off. The Nexus, not a creature, cannot be targeted.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Pugnacious Hammerskull
+Black Lotus
+The Skullspore Nexus
+Forest x30
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pugnacious Hammerskull.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.The Skullspore Nexus.Cast
+Bot1.Pass
+? Bot1.Mana = {G}
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.The Skullspore Nexus.Activate(Bot1.Battlefield.The Skullspore Nexus)
+Bot1.Battlefield.The Skullspore Nexus.Activate(Bot1.Battlefield.Pugnacious Hammerskull)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pugnacious Hammerskull.Power = 12
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Pugnacious Hammerskull > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 8
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 8
+Bot1.Battlefield.Pugnacious Hammerskull.Power = 6
+Bot1.Battlefield.The Skullspore Nexus.Tapped = true

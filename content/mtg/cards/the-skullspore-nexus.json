@@ -1,0 +1,6 @@
+{
+  "name": "The Skullspore Nexus",
+  "manaCost": "{6}{G}{G}",
+  "type": "Legendary Artifact",
+  "oracleText": "This spell costs {X} less to cast, where X is the greatest power among creatures you control.\nWhenever one or more nontoken creatures you control die, create a green Fungus Dinosaur creature token with base power and toughness each equal to the total power of those creatures.\n{2}, {T}: Double target creature's power until end of turn."
+}

@@ -1,0 +1,94 @@
+# The Skullspore Nexus: "create a green Fungus Dinosaur creature token with base power and toughness each equal to the total power of those
+# creatures". A calculation that needs a negative value uses it (CR 107.1b), so a creature with negative power takes from the total rather
+# than adding 0. Bot1 controls only Arboreal Grazer (0/3), so the Nexus costs the full {6}{G}{G} on turn 3. On turn 5 Bot1 casts Llanowar Elves;
+# on turn 7 it enchants the Grazer with Weakness (-2/-1), making it -2/2. On turn 10 Bot2 casts Wrath of God; in response Bot1 gives the Elves +3/+3
+# with Giant Growth, so they die as a 4/4 beside the -2/2 Grazer. The token is 2/2 (4 + -2), not 4/4.
+
+[Bot1 Deck]
+Forest
+Arboreal Grazer
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Black Lotus
+The Skullspore Nexus
+Llanowar Elves
+Weakness
+Giant Growth
+Forest x30
+
+[Bot2 Deck]
+Mox Pearl
+Wrath of God
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains x30
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Arboreal Grazer.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.The Skullspore Nexus.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Skullspore Nexus.Types = Artifact
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Weakness.Cast(Bot1.Battlefield.Arboreal Grazer)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Arboreal Grazer.Power = -2
+[T10 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains#1.Activate
+Bot2.Battlefield.Plains#2.Activate
+Bot2.Battlefield.Plains#3.Activate
+Bot2.Hand.Wrath of God.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 4
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Fungus Dinosaur Token.Power = 2
+Bot1.Battlefield.Fungus Dinosaur Token.Toughness = 2

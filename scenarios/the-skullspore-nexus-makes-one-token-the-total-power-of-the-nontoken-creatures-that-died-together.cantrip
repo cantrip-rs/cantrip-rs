@@ -1,0 +1,92 @@
+# The Skullspore Nexus: Bot1 controls Grizzly Bears (2/2) and Elvish Mystic (1/1), so the Nexus costs {6}{G}{G} - {2} = {4}{G}{G} on turn 5 (three
+# Moxen, two Forests and the Mystic pay it exactly). Bot2's Wrath of God on turn 6 destroys both together: "one or more nontoken creatures you control
+# die" triggers once and creates one green Fungus Dinosaur token with base power and toughness each equal to the total power, 3/3. Bot2's second Wrath
+# of God on turn 8 kills that token: it is a token, so it makes no trigger and no second token.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Grizzly Bears
+Elvish Mystic
+Mox Emerald
+Mox Ruby
+Mox Jet
+Forest
+The Skullspore Nexus
+Forest x30
+
+[Bot2 Deck]
+Mox Pearl
+Wrath of God
+Wrath of God
+Plains
+Plains
+Plains
+Plains
+Plains x30
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Elvish Mystic.Activate
+Bot1.Hand.The Skullspore Nexus.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Skullspore Nexus.Types = Artifact
+[T6 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains#1.Activate
+Bot2.Battlefield.Plains#2.Activate
+Bot2.Battlefield.Plains#3.Activate
+Bot2.Hand.Wrath of God.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Fungus Dinosaur Token.Power = 3
+? Bot1.Battlefield.Fungus Dinosaur Token.Toughness = 3
+? Bot1.Battlefield.Fungus Dinosaur Token.Colors = Green
+? Bot1.Battlefield.Fungus Dinosaur Token.Subtypes = Dinosaur; Fungus
+? Bot1.Graveyard.Count = 3
+[T8 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains#1.Activate
+Bot2.Battlefield.Plains#2.Activate
+Bot2.Battlefield.Plains#3.Activate
+Bot2.Hand.Wrath of God.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 3
+Bot1.Battlefield.The Skullspore Nexus.Types = Artifact
