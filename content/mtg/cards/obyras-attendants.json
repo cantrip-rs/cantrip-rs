@@ -1,0 +1,17 @@
+{
+  "name": "Obyra's Attendants",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Faerie Wizard",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ],
+  "adventure": {
+    "name": "Desperate Parry",
+    "manaCost": "{1}{U}",
+    "type": "Instant — Adventure",
+    "oracleText": "Target creature gets -4/-0 until end of turn. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

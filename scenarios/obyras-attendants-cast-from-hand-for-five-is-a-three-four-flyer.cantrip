@@ -1,0 +1,36 @@
+# Obyra's Attendants {4}{U}, 3/4 (CR 702.9): "Flying". Cast from the hand (not as its Adventure) on turn 1 with a Black Lotus's three blue and
+# Mox Sapphire and Mox Jet: exactly five mana (the pool is empty right after), a 3/4 flyer on the battlefield, not exiled.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Obyra's Attendants
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Obyra's Attendants.Cast(Ability: #1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Obyra's Attendants.Power = 3
+Bot1.Battlefield.Obyra's Attendants.Toughness = 4
+Bot1.Battlefield.Obyra's Attendants.Keywords = Flying

@@ -1,0 +1,66 @@
+# Obyra's Attendants // Desperate Parry (CR 715, 611.2a, 613.4c): the Adventure is {1}{U}, an instant, "Target creature gets -4/-0 until end of turn."
+# Turn 2: Bot2 casts a Grizzly Bears (2/2) with a Black Lotus; Bot1 pays exactly {1}{U} with Mox Sapphire and Mox Jet (the pool is empty
+# right after) and casts Desperate Parry on it: its power is -2, not floored, and the Bears are still a 2/2 on turn 3 when the effect has ended.
+# As it resolves the card is exiled, not put into the graveyard, and Bot1 casts Obyra's Attendants itself from exile on turn 3 for {4}{U}
+# (a Black Lotus's three blue, Mox Sapphire and an Island): a 3/4 flyer. A land is no creature, so Bot2's Island is refused as the Parry's target.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Obyra's Attendants
+Island
+Island x15
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Island.Play
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Obyra's Attendants.Cast(Bot2.Battlefield.Island; Ability: Adventure)
+Bot1.Hand.Obyra's Attendants.Cast(Bot2.Battlefield.Grizzly Bears; Ability: Adventure)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Power = -2
+? Bot2.Battlefield.Grizzly Bears.Toughness = 2
+? Exile = Obyra's Attendants
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Exile.Obyra's Attendants.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Obyra's Attendants.Power = 3
+Bot1.Battlefield.Obyra's Attendants.Toughness = 4
+Bot1.Battlefield.Obyra's Attendants.Keywords = Flying
+Bot1.Graveyard = Black Lotus

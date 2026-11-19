@@ -1,0 +1,37 @@
+# Desperate Parry says "target creature", not "an opponent's creature" (CR 115.1): Bot1 casts it on its own Memnite with Mox Sapphire
+# and Mox Jet, so the Memnite (1/1) gets -4/-0 and has power -3 until end of turn, the toughness is not touched, and the Adventure
+# card is exiled on resolution (CR 715.4) rather than put into the graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Memnite
+Obyra's Attendants
+Island x3
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Obyra's Attendants.Cast(Bot1.Battlefield.Memnite; Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Memnite.Power = -3
+Bot1.Battlefield.Memnite.Toughness = 1
+Exile = Obyra's Attendants
+Bot1.Graveyard.Count = 0
