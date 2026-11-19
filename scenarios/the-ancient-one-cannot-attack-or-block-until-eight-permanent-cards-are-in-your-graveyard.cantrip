@@ -1,0 +1,112 @@
+# The Ancient One (descend 8): "can't attack or block unless there are eight or more permanent cards in your graveyard". Bot1 casts it
+# on turn 1 and, with Thought Scours (each mills two cards, the Scours themselves are instants and no permanent cards) fills its
+# graveyard: turn 3 it holds seven permanent cards (a Lightning Bolt milled with them is an instant and no permanent card): it cannot
+# attack (turn 3) nor block Bot2's Grizzly Bears (turn 4). On turn 5 it pays {2}{U}{B} to draw and discard a Hill Giant: an eighth
+# permanent card, and on turn 6 it blocks and kills the Bears (damage 8 to a 2/2), on turn 7 it attacks. The activation's reflexive
+# ability (CR 603.12): Bot2 is the target player and mills four, the Hill Giant's mana value (CR 202.3), Bot2 takes the
+# eight on turn 7. Bot1's Ornithopter keeps the engine asking about attackers and blockers. CR 207.2c, 110.4a, 508.1c, 509.1b.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+The Ancient One
+Thought Scour
+Thought Scour
+Ornithopter
+Hill Giant
+Plains
+Thought Scour
+Island
+Grizzly Bears
+Plains
+Thought Scour
+Plains
+Grizzly Bears
+Plains
+Lightning Bolt
+Plains
+Hill Giant
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Grizzly Bears
+Forest x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Ancient One.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 12
+! Bot1.Attack(The Ancient One > Bot2)
+Bot1.Attack()
+[T4 Bot2.Main1]
+Bot2.Attack(Grizzly Bears > Bot1)
+[T4 Bot2.DeclareBlockers]
+! Bot1.Block(The Ancient One > Grizzly Bears)
+Bot1.Block()
+[T4 Bot2.Main2]
+? Bot1.Life = 18
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.The Ancient One.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hill Giant)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 4
+Bot1.Attack()
+[T6 Bot2.Main1]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(The Ancient One > Grizzly Bears)
+[T6 Bot2.Main2]
+[T7 Bot1.Main1]
+Bot1.Attack(The Ancient One > Bot2)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 12
+Bot2.Graveyard.Count = 5
+Bot2.Graveyard.Grizzly Bears.Power = 2
+Bot1.Life = 18
+Bot1.Battlefield.The Ancient One.Damage = 0

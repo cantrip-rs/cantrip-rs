@@ -1,0 +1,65 @@
+# The Ancient One: "{2}{U}{B}: Draw a card, then discard a card. When you discard a card this way, target player mills cards equal to
+# its mana value." Turn 3: Bot1 discards a Hill Giant (mana value four) and targets itself: four cards go from its own library to its
+# graveyard, five with the Hill Giant. Turn 5: Bot1 discards a Plains (mana value zero) and targets Bot2: the reflexive ability
+# (CR 603.12) still goes on the stack, and Bot2 mills no card (CR 202.3, 701.17a). Bot2 plays a land each turn so never has to discard.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+The Ancient One
+Island
+Hill Giant
+Plains
+Plains x30
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Ancient One.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.The Ancient One.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hill Giant)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 5
+? Bot2.Graveyard.Count = 0
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.The Ancient One.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard.Count = 6
+Bot1.Graveyard.Hill Giant.Power = 3
+Bot2.Graveyard.Count = 0
+Stack.Count = 0

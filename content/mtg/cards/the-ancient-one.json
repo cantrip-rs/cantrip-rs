@@ -1,0 +1,8 @@
+{
+  "name": "The Ancient One",
+  "manaCost": "{U}{B}",
+  "type": "Legendary Creature — Spirit God",
+  "power": 8,
+  "toughness": 8,
+  "oracleText": "Descend 8 — The Ancient One can't attack or block unless there are eight or more permanent cards in your graveyard.\n{2}{U}{B}: Draw a card, then discard a card. When you discard a card this way, target player mills cards equal to its mana value."
+}
