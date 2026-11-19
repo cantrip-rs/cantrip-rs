@@ -1,0 +1,56 @@
+# Tendril of the Mycotyrant: "{5}{G}{G}: Put seven +1/+1 counters on target noncreature land you control. It becomes a 0/0 Fungus creature with
+# haste. It's still a land." Bot1 targets its Mutavault, then in response taps the Mutavault for {C} and makes it a 2/2 creature. As the
+# Tendril's ability resolves its one target is no longer a noncreature land, so the ability does nothing (CR 608.2b): no counters, and on
+# Bot2's turn the Mutavault is a land only again.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mutavault
+Tendril of the Mycotyrant
+Black Lotus
+Forest x30
+
+[Bot2 Deck]
+Forest x30
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mutavault.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tendril of the Mycotyrant.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Tendril of the Mycotyrant.Activate(Bot1.Battlefield.Mutavault)
+Bot1.Battlefield.Mutavault.Activate(Ability: Add)
+Bot1.Battlefield.Mutavault.Activate(Ability: becomes)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mutavault.Types = Land; Creature
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Mutavault.Power = 2
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Mutavault.Types = Land
+Bot1.Battlefield.Mutavault.Counters.PlusOnePlusOne = (absent)

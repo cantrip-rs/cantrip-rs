@@ -1,0 +1,61 @@
+# Tendril of the Mycotyrant: "{5}{G}{G}: Put seven +1/+1 counters on target noncreature land you control. It becomes a 0/0 Fungus creature with haste.
+# It's still a land." Bot1 casts the Tendril on turn 1 (two Moxen of five, one Forest), then on turn 3 plays a second Forest and activates the ability
+# on it, paying with the Moxen, the first Forest and Black Lotus (seven of the eight mana). The new Forest is a 7/7 Fungus land creature with haste
+# (it came this turn and still attacks, CR 702.10) and Bot2 goes to 13. The Tendril is not a land: it was not a legal target. The ability states no
+# duration (the ruling), so on Bot2's turn the Forest is still that creature.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Forest
+Tendril of the Mycotyrant
+Black Lotus
+Forest x30
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tendril of the Mycotyrant.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Tendril of the Mycotyrant.Activate(Bot1.Battlefield.Forest#2)
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Forest#2 > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 13
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Forest#2.Power = 7
+Bot1.Battlefield.Forest#2.Toughness = 7
+Bot1.Battlefield.Forest#2.Counters.PlusOnePlusOne = 7
+Bot1.Battlefield.Forest#2.Types = Land; Creature
+Bot1.Battlefield.Forest#2.Subtypes = Forest; Fungus
+Bot1.Battlefield.Forest#2.Keywords = Haste
+Bot1.Battlefield.Forest#1.Types = Land
+Bot1.Battlefield.Tendril of the Mycotyrant.Power = 2

@@ -1,0 +1,55 @@
+# Tendril of the Mycotyrant: the target is a noncreature land you control. With all seven mana available, Bot1 cannot target the Tendril itself (a
+# creature, not a land), Bot2's Forest (not Bot1's), or - after animating its Forest - that Forest again (now a creature). Only Bot1's own Forest
+# is offered the first time.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Forest
+Tendril of the Mycotyrant
+Black Lotus
+Forest x30
+
+[Bot2 Deck]
+Forest
+Forest x30
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tendril of the Mycotyrant.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+! Bot1.Battlefield.Tendril of the Mycotyrant.Activate(Bot1.Battlefield.Tendril of the Mycotyrant)
+! Bot1.Battlefield.Tendril of the Mycotyrant.Activate(Bot2.Battlefield.Forest)
+Bot1.Battlefield.Tendril of the Mycotyrant.Activate(Bot1.Battlefield.Forest)
+Bot1.Pass
+! Bot1.Battlefield.Tendril of the Mycotyrant.Activate(Bot1.Battlefield.Forest)
+
+[Expect]
+Bot1.Battlefield.Forest.Power = 7
+Bot1.Battlefield.Forest.Types = Land; Creature
+Bot2.Battlefield.Forest.Types = Land
+Bot2.Battlefield.Forest.Counters.PlusOnePlusOne = (absent)
+Bot1.Mana = {G}
