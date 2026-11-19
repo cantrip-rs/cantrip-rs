@@ -1,0 +1,11 @@
+{
+  "name": "Screaming Phantom",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Spirit",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nWhenever this creature attacks, mill a card. (Put the top card of your library into your graveyard.)",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,46 @@
+# Screaming Phantom (2/2 flying): "Whenever this creature attacks, mill a card." Bot1 casts it on turn 1 off three Moxen and nothing is
+# milled by casting or by waiting. On turn 3 it attacks (after the draw, the top card is Lightning Bolt, which is milled, and the library
+# under it is untouched), and Bot2's Memnite, which has no flying or reach, cannot block it (CR 702.9b), so Bot2 takes 2.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Screaming Phantom
+Island x3
+Island
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Screaming Phantom.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+? Bot1.Graveyard.Count = 0
+[T3 Bot1.Attackers]
+Bot1.Attack(Screaming Phantom > Bot2)
+[T3 Bot1.Blockers]
+! Bot2.Block(Memnite > Screaming Phantom)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt
+Bot1.Library.Count = 20
+Bot2.Library.Count = 13
+Bot2.Life = 18

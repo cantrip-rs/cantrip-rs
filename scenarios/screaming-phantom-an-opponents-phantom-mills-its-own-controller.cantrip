@@ -1,0 +1,46 @@
+# Screaming Phantom's "mill a card" is the controller's own library (CR 701.17a), not the defending player's: Bot2 casts it on turn 2
+# off three Moxen and attacks with it on turn 4, and Bot2's top card (Lightning Bolt, after the draw for the turn) goes to Bot2's
+# graveyard while Bot1's library keeps its cards and Bot1's graveyard stays empty. It is not milled when it merely is on the battlefield
+# (Bot2's graveyard is empty at the start of turn 4).
+# Bot1 plays a land on each of its turns so that it never has to discard to its hand size.
+
+[Bot1 Deck]
+Island x30
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Screaming Phantom
+Island x3
+Island x2
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Screaming Phantom.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+? Bot2.Graveyard.Count = 0
+[T4 Bot2.Attackers]
+Bot2.Attack(Screaming Phantom > Bot1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot2.Graveyard = Lightning Bolt
+Bot1.Graveyard.Count = 0
+Bot1.Library.Count = 22
+Bot1.Life = 18
