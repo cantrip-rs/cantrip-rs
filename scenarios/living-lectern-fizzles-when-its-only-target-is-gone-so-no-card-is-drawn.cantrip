@@ -1,0 +1,41 @@
+# The Lectern's {1} and sacrifice are costs, so they are paid when Bot1 activates targeting the Ornithopter. Bot2 responds with
+# Lightning Bolt on the 0/2 Ornithopter (CR 608.2b): the ability's only target is illegal when it would resolve, so it does not
+# resolve at all. Bot1 draws nothing and no Role is created, though the Lectern is already gone.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Living Lectern
+Ornithopter
+Island x3
+Island x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Living Lectern.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Living Lectern.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Ornithopter; Living Lectern
+Bot1.Battlefield = Mox Sapphire; Mox Ruby
+Bot1.Hand.Count = 4

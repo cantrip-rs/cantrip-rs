@@ -1,0 +1,35 @@
+# Living Lectern's Role target is "up to one other target creature you control" (CR 115.1, 601.2c), so with no other creature
+# of Bot1's the ability still has no targets and resolves: it draws a card and creates no Role. Bot2's Memnite is not a candidate
+# (it is not Bot1's), and the Lectern cannot target itself ("other"), so Bot1 may only activate with no target.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Living Lectern
+Island x4
+Island x15
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Living Lectern.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Living Lectern.Activate(Bot1.Battlefield.Living Lectern)
+! Bot1.Battlefield.Living Lectern.Activate(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Living Lectern.Activate()
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Living Lectern
+Bot1.Hand.Count = 6
+Bot1.Battlefield = Mox Sapphire; Mox Ruby

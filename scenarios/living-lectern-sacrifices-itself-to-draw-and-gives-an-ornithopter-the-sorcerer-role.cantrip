@@ -1,0 +1,52 @@
+# Living Lectern {1}{U}, 0/4 (CR 602.2, 701.21a, 111.10p): "{1}, Sacrifice this creature: Draw a card. Create a Sorcerer Role token attached to up to
+# one other target creature you control. Activate only as a sorcery." Bot1 has a Mox Jet left untapped on turn 2 and still cannot activate it
+# in Bot2's turn (CR 602.5d), but does on turn 3 with the Ornithopter as its target: the Lectern is sacrificed, one card is drawn,
+# and the Sorcerer Role makes the 0/2 Ornithopter a 1/3 (CR 613.4c) that "whenever this creature attacks, scry 1". The Ornithopter attacks
+# and Bot1 keeps the top card of its library (Island) on top; Bot2 takes 1.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Living Lectern
+Ornithopter
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Living Lectern.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+! Bot1.Battlefield.Living Lectern.Activate(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Living Lectern.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+? Bot1.Graveyard = Living Lectern
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot1.Battlefield.Sorcerer.AttachedTo = Ornithopter
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Arrange(Island | )
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Ornithopter.Tapped = true
