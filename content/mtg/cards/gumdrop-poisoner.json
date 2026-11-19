@@ -1,0 +1,17 @@
+{
+  "name": "Gumdrop Poisoner",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Human Warlock",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Lifelink\nWhen this creature enters, up to one target creature gets -X/-X until end of turn, where X is the amount of life you gained this turn.",
+  "keywords": [
+    "Lifelink"
+  ],
+  "adventure": {
+    "name": "Tempt with Treats",
+    "manaCost": "{B}",
+    "type": "Instant — Adventure",
+    "oracleText": "Create a Food token. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

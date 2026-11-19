@@ -1,0 +1,40 @@
+# Gumdrop Poisoner: no life was gained this turn, so X is 0 and the target (Hill Giant) is unchanged. The creature
+# itself is a 3/2 with lifelink.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+Gumdrop Poisoner
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Mountain
+Hill Giant
+Mountain x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Hill Giant.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Gumdrop Poisoner.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Battlefield.Hill Giant.Power = 3
+Bot2.Battlefield.Hill Giant.Toughness = 3
+Bot1.Battlefield = Mox Jet; Swamp; Gumdrop Poisoner
+Bot1.Battlefield.Gumdrop Poisoner.Power = 3
+Bot1.Battlefield.Gumdrop Poisoner.Toughness = 2
+Bot1.Battlefield.Gumdrop Poisoner.Keywords = Lifelink

@@ -1,0 +1,49 @@
+# Gumdrop Poisoner: "When this creature enters, up to one target creature gets -X/-X until end of turn, where X is the
+# amount of life you gained this turn." Bot1 casts Tempt with Treats (the Adventure, making a Food), eats the Food for 3
+# life, then casts Gumdrop Poisoner from exile: Hill Giant (3/3) gets -3/-3 and dies.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+Gumdrop Poisoner
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Mountain
+Hill Giant
+Mountain x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Hill Giant.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Gumdrop Poisoner.Cast(Ability: Adventure)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot1.Battlefield.Food Token.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Pass
+Bot1.Exile.Gumdrop Poisoner.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 23
+Bot2.Graveyard = Hill Giant; Black Lotus
+Bot1.Battlefield = Mox Jet; Swamp; Swamp; Gumdrop Poisoner
+Bot1.Battlefield.Gumdrop Poisoner.Power = 3
+Bot1.Battlefield.Gumdrop Poisoner.Toughness = 2
+Bot1.Battlefield.Gumdrop Poisoner.Keywords = Lifelink

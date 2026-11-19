@@ -1,0 +1,51 @@
+# Gumdrop Poisoner: gaining 3 life this turn makes exactly -3/-3, not more: Serra Angel (4/4) becomes 1/1 and
+# survives, and is a 4/4 again on its controller's turn ("until end of turn").
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+Gumdrop Poisoner
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Plains
+Mox Pearl
+Serra Angel
+Plains x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Serra Angel.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Gumdrop Poisoner.Cast(Ability: Adventure)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot1.Battlefield.Food Token.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Pass
+Bot1.Exile.Gumdrop Poisoner.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Target(Bot2.Battlefield.Serra Angel)
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Serra Angel.Power = 1
+? Bot2.Battlefield.Serra Angel.Toughness = 1
+[T4 Bot2.Upkeep]
+
+[Expect]
+Bot2.Battlefield.Serra Angel.Power = 4
+Bot2.Battlefield.Serra Angel.Toughness = 4
+Bot2.Graveyard = Black Lotus
