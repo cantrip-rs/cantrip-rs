@@ -1,0 +1,58 @@
+# Bot2's Llanowar Elves is exiled by Bot1's Journey (X = 1, turn 3: two Islands, Mox Sapphire and Mox Jet). Only its owner may play it: Bot1
+# cannot cast it. On turn 4 Bot2 casts the Elves from exile for {G}, and the Journey's controller, Bot1, draws, because the trigger watches
+# every player's nontoken creatures.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Extraordinary Journey
+Island
+Island
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Extraordinary Journey.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Exile = Llanowar Elves
+! Bot1.Exile.Llanowar Elves.Cast
+? Bot1.Library.Count = 12
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Exile.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot2.Battlefield.Llanowar Elves.Power = 1
+Bot1.Library.Count = 11
+Stack.Count = 0

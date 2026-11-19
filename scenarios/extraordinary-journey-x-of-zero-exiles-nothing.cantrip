@@ -1,0 +1,29 @@
+# Extraordinary Journey with X = 0 costs only {U}{U} (Island and Mox Sapphire): "up to X target creatures" allows no targets, so the
+# Ornithopter in play is not exiled and nothing is played from exile.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Ornithopter
+Extraordinary Journey
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Extraordinary Journey.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Count = 4
+Stack.Count = 0

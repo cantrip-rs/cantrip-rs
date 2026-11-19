@@ -1,0 +1,45 @@
+# Turn 1: Journey with X = 0 and an Ornithopter. Turn 3: Essence Flux blinks the Ornithopter; at the next end step it returns from exile without
+# being cast, a nontoken creature "entered from exile" (CR 603.6a), so Bot1 draws. Nothing else enters from exile, so exactly one card.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Extraordinary Journey
+Ornithopter
+Essence Flux
+Island
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Extraordinary Journey.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Essence Flux.Cast(Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Library.Count = 12
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Bot1.Library.Count = 11
+Exile.Count = 0
+Stack.Count = 0

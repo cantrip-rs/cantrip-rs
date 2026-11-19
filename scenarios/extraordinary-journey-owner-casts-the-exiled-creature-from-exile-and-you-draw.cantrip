@@ -1,0 +1,44 @@
+# Extraordinary Journey with X = 1 on turn 1 (Island, Mox Sapphire, Mox Jet, Mox Ruby pay {1}{1}{U}{U}): its enters trigger exiles the
+# targeted Ornithopter, and Bot1, its owner, may play it from exile. Casting it for {0} puts a nontoken creature onto the battlefield that was
+# cast from exile, so the second ability draws a card.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ornithopter
+Extraordinary Journey
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Extraordinary Journey.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+? Bot1.Library.Count = 14
+Bot1.Exile.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Library.Count = 13
+Stack.Count = 0

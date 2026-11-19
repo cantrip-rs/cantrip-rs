@@ -1,0 +1,62 @@
+# Extraordinary Journey with X = 2 on turn 5 (two Islands and four Moxen pay {2}{2}{U}{U}) exiles both Ornithopters; Bot1 casts them
+# both for {0}. Each is a separate nontoken creature cast from exile, but the draw triggers only once each turn: one card, not two.
+# Ornithopter is cast on turn 1 so it sits on the battlefield; the Journey waits for turn 5's draw.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Ornithopter
+Ornithopter
+Island
+Extraordinary Journey
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Extraordinary Journey.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Ornithopter#1; Ornithopter#2)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 2
+? Bot1.Library.Count = 11
+Bot1.Exile.Ornithopter#1.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 10
+Bot1.Exile.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Count = 9
+Bot1.Library.Count = 10
+Stack.Count = 0

@@ -1,0 +1,48 @@
+# Extraordinary Journey with X = 1 on turn 3 exiles Dryad Arbor, a land creature. Its owner may play it, not just cast it (CR 305.1): on turn 5
+# Bot1 plays it from exile as the land drop. A nontoken creature entering from exile, though never cast, draws a card (CR 603.6a). Turn 5
+# draws one card and the Journey a second.
+
+[Bot1 Deck]
+Dryad Arbor
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Extraordinary Journey
+Island
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Extraordinary Journey.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Dryad Arbor)
+Bot1.Pass
+Bot2.Pass
+? Exile = Dryad Arbor
+? Bot1.Library.Count = 12
+[T5 Bot1.Main1]
+Bot1.Exile.Dryad Arbor.Play
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Dryad Arbor.Power = 1
+Bot1.Library.Count = 10
+Stack.Count = 0

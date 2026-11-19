@@ -1,0 +1,6 @@
+{
+  "name": "Extraordinary Journey",
+  "manaCost": "{X}{X}{U}{U}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, exile up to X target creatures. For each of those cards, its owner may play it for as long as it remains exiled.\nWhenever one or more nontoken creatures enter, if one or more of them entered from exile or was cast from exile, you draw a card. This ability triggers only once each turn."
+}
