@@ -1,0 +1,46 @@
+# Breeches, Eager Pillager: "Whenever a Pirate you control attacks, choose one that hasn't been chosen this turn - Create a Treasure token; Target creature can't block
+# this turn; Exile the top card of your library. You may play it this turn." (CR 508.1, 603.2c, 700.2) Turn 1 Bot1 casts Breeches (a Goblin Pirate) and a Goblin Tomb Raider
+# (also a Pirate) with Black Lotus and two Moxen, and a non-Pirate Ornithopter. On turn 3 all three attack Bot2, which controls an Ornithopter: the two Pirates trigger the
+# ability once each and the Ornithopter triggers nothing. The first trigger chooses the Treasure; choosing it again for the second trigger is refused, so the second takes
+# "target creature can't block" aimed at Bot2's Ornithopter. Nothing blocks, so 3 + 2 + 0 combat damage reaches Bot2 (Raider 1+1 for the Mox), and the Treasure is Bot1's.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Breeches, Eager Pillager
+Goblin Tomb Raider
+Ornithopter
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Breeches, Eager Pillager.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Goblin Tomb Raider.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Breeches, Eager Pillager > Bot2; Goblin Tomb Raider > Bot2; Ornithopter > Bot2)
+Bot1.Modes(Create a Treasure)
+! Bot1.Modes(Create a Treasure)
+Bot1.Modes(Target creature can't block)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Exile.Count = 0
+Bot1.Battlefield.Treasure Token.Types = Artifact

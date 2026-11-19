@@ -1,0 +1,46 @@
+# Breeches, Eager Pillager: "Whenever a Pirate you control attacks" - an opponent's Pirate attacking does not trigger it (CR 603.2c), and "that hasn't been chosen this turn" counts only the current turn
+# (CR 700.2), so Breeches may choose the same mode on a later turn. Bot1 casts Breeches on turn 1 and attacks with it on turn 3, choosing the Treasure. On turn 4 Bot2's Goblin Tomb Raider (a Pirate,
+# hasty under its Mox) attacks Bot1: Breeches is not triggered and Bot1 has no more than its one Treasure. On turn 5 Breeches attacks again and chooses the Treasure again: two Treasures.
+
+[Bot1 Deck]
+Black Lotus
+Breeches, Eager Pillager
+Plains x18
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Goblin Tomb Raider
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Breeches, Eager Pillager.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Goblin Tomb Raider.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Breeches, Eager Pillager > Bot2)
+Bot1.Modes(Create a Treasure)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Treasure Token.Types = Artifact
+[T4 Bot2.Main1]
+Bot2.Attack(Goblin Tomb Raider > Bot1)
+[T4 Bot2.Main2]
+? Stack.Count = 0
+? Bot1.Battlefield.Count = 2
+[T5 Bot1.Main1]
+Bot1.Attack(Breeches, Eager Pillager > Bot2)
+Bot1.Modes(Create a Treasure)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 3
+Bot1.Life = 18
+Bot2.Life = 14

@@ -1,0 +1,51 @@
+# Breeches, Eager Pillager: three Pirates attack, so the ability triggers three times and each trigger chooses a mode that hasn't been chosen this turn (CR 700.2, 603.2c): the Treasure, "target
+# creature can't block this turn", then "exile the top card of your library. You may play it this turn" (the only mode left, so it is chosen without a prompt). Turn 1 Bot1 casts Breeches and a Goblin Tomb Raider; on turn 3 it casts the second Raider
+# off the Moxen (a 2/2 with haste while it controls an artifact) and attacks with all three Pirates. The exiled card is a Mountain, which Bot1 plays from exile as its land drop in the second
+# main phase (CR 305.1, 601.3); Bot2's Ornithopter can't block, so 3 + 2 + 2 damage reaches Bot2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Breeches, Eager Pillager
+Goblin Tomb Raider
+Goblin Tomb Raider
+Plains
+Plains
+Mountain
+Plains x11
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Breeches, Eager Pillager.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Goblin Tomb Raider.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Goblin Tomb Raider.Cast
+Bot1.Attack(Breeches, Eager Pillager > Bot2; Goblin Tomb Raider > Bot2; Goblin Tomb Raider > Bot2)
+Bot1.Modes(Create a Treasure)
+Bot1.Modes(Target creature can't block)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+Bot1.Exile.Mountain.Play
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Treasure Token.Types = Artifact
+Bot1.Battlefield.Mountain.Types = Land
+Exile.Count = 0
