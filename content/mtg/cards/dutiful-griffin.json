@@ -1,0 +1,11 @@
+{
+  "name": "Dutiful Griffin",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Griffin",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying\n{2}{W}, Sacrifice two enchantments: Return this card from your graveyard to your hand.",
+  "keywords": [
+    "Flying"
+  ]
+}

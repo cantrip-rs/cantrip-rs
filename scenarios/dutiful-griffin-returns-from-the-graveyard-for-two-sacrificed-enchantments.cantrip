@@ -1,0 +1,72 @@
+# Dutiful Griffin {3}{W}{W}, a 4/4 flyer: "{2}{W}, Sacrifice two enchantments: Return this card from your graveyard to your
+# hand." Bot1 casts it on turn one, and Bot2 kills it with Terror on turn two. On turn three Bot1 puts two Pacifisms on Bot2's
+# Ornithopter, and on turn five pays {2}{W} and sacrifices both: the Griffin goes back to Bot1's hand and both Pacifisms to the
+# graveyard (CR 118.3, 701.21a), so the Ornithopter is free again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Dutiful Griffin
+Pacifism
+Plains
+Plains
+Pacifism
+Plains x12
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Ornithopter
+Terror
+Plains x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Dutiful Griffin.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dutiful Griffin.Power = 4
+? Bot1.Battlefield.Dutiful Griffin.Keywords = Flying
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Terror.Cast(Bot1.Battlefield.Dutiful Griffin)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Dutiful Griffin; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pacifism#1.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Pacifism.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+? Bot1.Battlefield = Mox Pearl; Mox Jet; Plains; Plains; Pacifism; Pacifism
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Dutiful Griffin.Activate
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Dutiful Griffin.Power = 4
+Bot1.Graveyard = Pacifism; Pacifism; Black Lotus
+Bot1.Battlefield = Mox Pearl; Mox Jet; Plains; Plains

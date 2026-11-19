@@ -1,0 +1,58 @@
+# The cost is two enchantments (CR 118.3): with the Griffin in the graveyard and only one Pacifism in play, Bot1 cannot pay
+# "Sacrifice two enchantments" even with {2}{W} available, and the activation is refused (CR 601.2h). The Pacifism stays in play.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Dutiful Griffin
+Pacifism
+Plains
+Plains
+Pacifism
+Plains x12
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Ornithopter
+Terror
+Plains x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Dutiful Griffin.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Terror.Cast(Bot1.Battlefield.Dutiful Griffin)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pacifism#1.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Graveyard.Dutiful Griffin.Activate
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Dutiful Griffin; Black Lotus
+Bot1.Battlefield = Mox Pearl; Mox Jet; Plains; Plains; Pacifism
