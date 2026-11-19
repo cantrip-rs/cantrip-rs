@@ -1,0 +1,8 @@
+{
+  "name": "Spiteful Hexmage",
+  "manaCost": "{B}",
+  "type": "Creature — Human Warlock",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters, create a Cursed Role token attached to target creature you control. (If you control another Role on it, put that one into the graveyard. Enchanted creature is 1/1.)"
+}

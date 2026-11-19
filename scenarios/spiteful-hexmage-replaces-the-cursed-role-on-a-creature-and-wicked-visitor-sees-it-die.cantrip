@@ -1,0 +1,57 @@
+# Spiteful Hexmage ("create a Cursed Role token attached to target creature you control"): a creature has at most one Role you control
+# (CR 303.7). Bot1 casts Wicked Visitor, then a Hexmage on it (the Visitor becomes 1/1), then on turn 3 a second Hexmage on the Visitor:
+# the first Cursed Role goes to the graveyard, so Wicked Visitor drains Bot2 for 1 (20 -> 19), and exactly one Cursed remains.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Swamp
+Wicked Visitor
+Spiteful Hexmage
+Spiteful Hexmage
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wicked Visitor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Spiteful Hexmage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Wicked Visitor)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wicked Visitor.Power = 1
+? Bot1.Battlefield.Wicked Visitor.Toughness = 1
+? Bot2.Life = 20
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Spiteful Hexmage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Wicked Visitor)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Wicked Visitor.Power = 1
+Bot1.Battlefield.Wicked Visitor.Toughness = 1
+Bot1.Battlefield.Cursed.Subtypes = Aura; Role
+Bot1.Graveyard.Count = 0

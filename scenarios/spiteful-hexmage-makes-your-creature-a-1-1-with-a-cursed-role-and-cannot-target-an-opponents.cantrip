@@ -1,0 +1,40 @@
+# Spiteful Hexmage: "When this creature enters, create a Cursed Role token attached to target creature you control." Both players
+# have an Ornithopter (0/2); Bot1 casts the Hexmage on turn 3. Bot2's Ornithopter is refused as a target; Bot1's own Ornithopter is
+# chosen and becomes 1/1 (CR 303.7: the Cursed Role makes it a 1/1), while the Hexmage stays 3/2 and Bot2's Ornithopter stays 0/2.
+
+[Bot1 Deck]
+Mox Jet
+Ornithopter
+Spiteful Hexmage
+Swamp x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Spiteful Hexmage.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 1
+
+[Expect]
+Bot1.Battlefield.Spiteful Hexmage.Power = 3
+Bot1.Battlefield.Spiteful Hexmage.Toughness = 2
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Count = 4
