@@ -1,0 +1,30 @@
+# Rampaging Spiketail's swampcycling {2} (CR 702.29e): paying it and discarding the card from the hand finds the Swamp in the library and
+# puts it into the hand. The cost {2} is paid exactly with Mana Crypt's {C}{C}, so it holds no colored pip, and the pool ends empty; with
+# only Blasted Landscape's {C} the ability is not offered. A Plains is no Swamp card (the refusal sits beside the card found).
+
+[Bot1 Deck]
+Blasted Landscape
+Mana Crypt
+Rampaging Spiketail
+Plains x4
+Swamp
+Plains x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Blasted Landscape.Play
+! Bot1.Hand.Rampaging Spiketail.Activate(Ability: Swampcycling; Mana: short)
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Rampaging Spiketail.Activate(Ability: Swampcycling)
+Bot1.Pass
+? Bot1.Mana = 
+! Bot1.Search(Plains)
+Bot1.Search(Swamp)
+
+[Expect]
+Bot1.Graveyard.Rampaging Spiketail.Power = 5
+Bot1.Hand = Plains; Plains; Plains; Plains; Swamp

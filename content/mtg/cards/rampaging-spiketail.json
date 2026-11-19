@@ -1,0 +1,8 @@
+{
+  "name": "Rampaging Spiketail",
+  "manaCost": "{4}{B}{B}",
+  "type": "Creature — Dinosaur",
+  "power": 5,
+  "toughness": 6,
+  "oracleText": "When this creature enters, target creature you control gets +2/+0 and gains indestructible until end of turn.\nSwampcycling {2} ({2}, Discard this card: Search your library for a Swamp card, reveal it, put it into your hand, then shuffle.)"
+}

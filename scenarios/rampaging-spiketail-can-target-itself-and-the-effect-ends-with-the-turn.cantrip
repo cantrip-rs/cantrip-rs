@@ -1,0 +1,31 @@
+# Rampaging Spiketail alone on the battlefield: "target creature you control" is the Spiketail itself (CR 115.1), so it becomes a 7/6 with
+# indestructible for the turn. Bot1 casts it on turn 1 off two Black Lotuses; on turn 3 the effect has ended (CR 514.2) and it is a 5/6
+# with no keywords again.
+
+[Bot1 Deck]
+Black Lotus x2
+Rampaging Spiketail
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Rampaging Spiketail.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rampaging Spiketail.Power = 7
+? Bot1.Battlefield.Rampaging Spiketail.Toughness = 6
+? Bot1.Battlefield.Rampaging Spiketail.Keywords = Indestructible
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Rampaging Spiketail.Power = 5
+? Bot1.Battlefield.Rampaging Spiketail.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.Rampaging Spiketail.Toughness = 6
