@@ -1,0 +1,59 @@
+# Explorer's Cache: "Whenever a creature you control with a +1/+1 counter on it dies, put a +1/+1 counter on this artifact." Bot1 moves
+# both of the Cache's counters, one per turn, onto two Ornithopters, leaving the Cache with none, then casts Wrath of God on turn 3. The
+# two Ornithopters die together, each with a +1/+1 counter as it last was on the battlefield (CR 603.10a), and the trigger happens once
+# for each (CR 603.2c): the Cache, which is no creature and stays, ends with two counters.
+
+[Bot1 Deck]
+Explorer's Cache
+Mox Emerald
+Mox Pearl
+Mox Jet
+Plains
+Ornithopter
+Ornithopter
+Wrath of God
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Explorer's Cache.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Explorer's Cache.Activate(Bot1.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Explorer's Cache.Activate(Bot1.Battlefield.Ornithopter#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Explorer's Cache.Counters.PlusOnePlusOne = (absent)
+? Bot1.Battlefield.Ornithopter#1.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Ornithopter#2.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wrath of God.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Graveyard = Wrath of God; Ornithopter; Ornithopter
+Bot1.Battlefield.Explorer's Cache.Counters.PlusOnePlusOne = 2
+Stack.Count = 0
