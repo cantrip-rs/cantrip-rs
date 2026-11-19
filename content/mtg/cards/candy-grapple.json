@@ -1,0 +1,6 @@
+{
+  "name": "Candy Grapple",
+  "manaCost": "{1}{B}",
+  "type": "Instant",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nTarget creature gets -3/-3 until end of turn. If this spell was bargained, that creature gets -5/-5 until end of turn instead."
+}

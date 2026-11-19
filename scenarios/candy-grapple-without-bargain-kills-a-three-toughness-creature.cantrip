@@ -1,0 +1,36 @@
+# Not bargained, -3/-3 is enough for Hill Giant (3/3): it dies. Mox Emerald is not sacrificed.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Candy Grapple
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Hill Giant
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Candy Grapple.Cast(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Hill Giant; Black Lotus
+Bot1.Graveyard = Candy Grapple
+Bot1.Battlefield.Mox Emerald.Tapped = false

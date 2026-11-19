@@ -1,0 +1,35 @@
+# The bargained -5/-5 is exactly that, not -3/-3 plus more: Wall of Stone (0/8) becomes -5/3 until end of turn, and survives.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Candy Grapple
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Wall of Stone
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Wall of Stone.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Candy Grapple.Cast(Bot2.Battlefield.Wall of Stone)
+Bot1.Modes(Bargain:)
+Bot1.Choose(Mox Emerald)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Wall of Stone.Power = -5
+? Bot2.Battlefield.Wall of Stone.Toughness = 3
+
+[Expect]
+Bot1.Graveyard = Candy Grapple; Mox Emerald

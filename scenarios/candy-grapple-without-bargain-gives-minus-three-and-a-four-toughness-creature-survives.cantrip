@@ -1,0 +1,40 @@
+# Candy Grapple, not bargained (CR 702.166): the target gets -3/-3 until end of turn. Giant Spider (2/4) is a -1/1 and survives, and is a
+# 2/4 again on its controller's next turn.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Candy Grapple
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Giant Spider
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Giant Spider.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Candy Grapple.Cast(Bot2.Battlefield.Giant Spider)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Giant Spider.Power = -1
+? Bot2.Battlefield.Giant Spider.Toughness = 1
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Giant Spider.Power = 2
+Bot2.Battlefield.Giant Spider.Toughness = 4
+Bot1.Graveyard = Candy Grapple
