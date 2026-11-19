@@ -1,0 +1,76 @@
+# Malamet Scythe: cast on turn 1 with no creature of Bot1's on the battlefield, its enters trigger has no target and is not put on
+# the stack (CR 603.3d), so the Scythe stays unattached. On turn 3 Equip {4} (all four of Bot1's Moxen) attaches it to the Elvish
+# Mystic (3/3, CR 702.6a). It is "only as a sorcery" (CR 602.5d): not on the opponent's turn and not with a spell on the stack.
+# On turn 5, once the Grizzly Bears has resolved, Equip {4} moves it: the Mystic is a 1/1 again and the Bears a 4/4 (CR 301.5c).
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Malamet Scythe
+Elvish Mystic
+Grizzly Bears
+Mox Sapphire
+Island x13
+
+[Bot2 Deck]
+Forest
+Island x19
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Malamet Scythe.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Malamet Scythe.AttachedTo = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Malamet Scythe.Activate(Bot1.Battlefield.Elvish Mystic)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Malamet Scythe.AttachedTo = Elvish Mystic
+? Bot1.Battlefield.Elvish Mystic.Power = 3
+[T4 Bot2.Main1]
+! Bot1.Battlefield.Malamet Scythe.Activate(Bot1.Battlefield.Elvish Mystic)
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grizzly Bears.Cast
+! Bot1.Battlefield.Malamet Scythe.Activate(Bot1.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Malamet Scythe.Activate(Bot1.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Malamet Scythe.AttachedTo = Grizzly Bears
+Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot1.Battlefield.Grizzly Bears.Toughness = 4
+Bot1.Battlefield.Elvish Mystic.Power = 1
+Bot1.Battlefield.Elvish Mystic.Toughness = 1

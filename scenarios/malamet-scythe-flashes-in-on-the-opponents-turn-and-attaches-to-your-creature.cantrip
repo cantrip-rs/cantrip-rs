@@ -1,0 +1,54 @@
+# Malamet Scythe: "Flash. When this Equipment enters, attach it to target creature you control. Equipped creature gets +2/+2."
+# On turn 2 Bot2 casts an Elvish Mystic; Bot1 flashes the Scythe in on Bot2's turn (so it has flash, CR 702.8a), and its enters
+# trigger attaches it to Bot1's only creature, the Elvish Mystic, which becomes a 3/3 (CR 301.5, 701.3). The Scythe costs exactly
+# {2}{G}: Mox Ruby, Mox Jet and Mox Emerald. Bot2's creature is not a legal target and is not changed.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Emerald
+Mox Jet
+Elvish Mystic
+Malamet Scythe
+Island
+Island x13
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Malamet Scythe.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Malamet Scythe.AttachedTo = Elvish Mystic
+? Bot1.Battlefield.Elvish Mystic.Power = 3
+? Bot1.Battlefield.Elvish Mystic.Toughness = 3
+? Bot2.Battlefield.Elvish Mystic.Power = 1
+[T3 Bot1.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Malamet Scythe.AttachedTo = Elvish Mystic
+Bot1.Battlefield.Elvish Mystic.Power = 3

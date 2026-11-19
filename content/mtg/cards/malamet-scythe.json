@@ -1,0 +1,9 @@
+{
+  "name": "Malamet Scythe",
+  "manaCost": "{2}{G}",
+  "type": "Artifact — Equipment",
+  "oracleText": "Flash\nWhen this Equipment enters, attach it to target creature you control.\nEquipped creature gets +2/+2.\nEquip {4} ({4}: Attach to target creature you control. Equip only as a sorcery.)",
+  "keywords": [
+    "Flash"
+  ]
+}

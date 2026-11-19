@@ -1,0 +1,52 @@
+# Malamet Scythe: the enters trigger targets Bot1's Elvish Mystic. Bot2 answers it with Lightning Bolt, the Mystic dies, and the
+# trigger is countered on resolution for lack of a legal target (CR 608.2b): the Scythe stays on the battlefield unattached
+# (CR 301.5c) and Bot1 has no creature for it to give +2/+2 to. Equipment unattached does nothing (CR 301.5).
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Emerald
+Mox Jet
+Elvish Mystic
+Malamet Scythe
+Island
+Island x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Malamet Scythe.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Elvish Mystic)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Elvish Mystic
+[T3 Bot1.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Malamet Scythe.AttachedTo = (absent)
+Bot1.Graveyard = Elvish Mystic
+Bot2.Graveyard = Lightning Bolt
