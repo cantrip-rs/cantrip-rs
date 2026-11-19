@@ -1,0 +1,54 @@
+# Staggering Size: "Target creature gets +3/+3 and gains trample until end of turn." Bot1's Grizzly Bears attacks, Bot2 blocks it
+# with an Elvish Mystic, and Bot1 casts Staggering Size on the Bears after blockers are declared: a 5/5 with trample (CR 702.19b)
+# assigns 1 (lethal) to the Mystic and the other 4 to Bot2, who goes to 16. The cost is {1}{G}: Mox Emerald and Forest. At end of turn the bonus and trample wear off (CR 514.2).
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Emerald
+Grizzly Bears
+Staggering Size
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Elvish Mystic > Grizzly Bears)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Staggering Size.Cast(Grizzly Bears)
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 5
+? Bot1.Battlefield.Grizzly Bears.Toughness = 5
+? Bot1.Battlefield.Grizzly Bears.Keywords = Trample
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 16
+Bot2.Graveyard = Elvish Mystic
+Bot1.Graveyard = Staggering Size
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Battlefield.Grizzly Bears.Keywords = (absent)

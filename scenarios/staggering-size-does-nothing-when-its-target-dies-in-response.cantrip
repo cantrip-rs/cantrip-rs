@@ -1,0 +1,48 @@
+# Staggering Size: its only target is gone when it tries to resolve, so it is countered on resolution and does nothing (CR 608.2b).
+# Bot1 casts it on Grizzly Bears; Bot2 answers with Lightning Bolt, which resolves first and kills the Bears. Staggering Size
+# goes to the graveyard, and Bot2's other creature is untouched.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Staggering Size
+Mox Ruby
+Island x18
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Elvish Mystic
+Mox Emerald
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Staggering Size.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Graveyard = Staggering Size; Grizzly Bears
+Bot2.Graveyard = Lightning Bolt
+Bot2.Battlefield.Elvish Mystic.Power = 1

@@ -1,0 +1,37 @@
+# Staggering Size: "Target creature" is any creature, not only the caster's. Bot1 casts it on Bot2's Elvish Mystic in Bot1's main
+# phase: the Mystic is a 4/4 with trample until the cleanup step (CR 514.2), then a 1/1 with no keywords again on turn 4.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Staggering Size
+Island x20
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Staggering Size.Cast(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Elvish Mystic.Power = 4
+? Bot2.Battlefield.Elvish Mystic.Toughness = 4
+? Bot2.Battlefield.Elvish Mystic.Keywords = Trample
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Elvish Mystic.Power = 1
+Bot2.Battlefield.Elvish Mystic.Toughness = 1
+Bot2.Battlefield.Elvish Mystic.Keywords = (absent)
+Bot1.Graveyard = Staggering Size
