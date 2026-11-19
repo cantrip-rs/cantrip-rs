@@ -1,0 +1,32 @@
+# Plundering Pirate {2}{R} 3/2: "When this creature enters, create a Treasure token." Cast off three Moxen on turn 1: the
+# trigger resolves and Bot1 has the Pirate and an untapped Treasure.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Plundering Pirate
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Plundering Pirate.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Plundering Pirate; Treasure Token
+Bot1.Battlefield.Treasure Token.Tapped = false
+Bot1.Battlefield.Plundering Pirate.Power = 3
+Bot1.Battlefield.Plundering Pirate.Toughness = 2

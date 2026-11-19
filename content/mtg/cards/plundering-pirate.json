@@ -1,0 +1,8 @@
+{
+  "name": "Plundering Pirate",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Orc Pirate",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")"
+}
