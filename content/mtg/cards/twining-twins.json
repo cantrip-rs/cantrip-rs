@@ -1,0 +1,18 @@
+{
+  "name": "Twining Twins",
+  "manaCost": "{2}{U}{U}",
+  "type": "Creature — Faerie Wizard",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying, vigilance, ward {1}",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ],
+  "adventure": {
+    "name": "Swift Spiral",
+    "manaCost": "{1}{W}",
+    "type": "Instant — Adventure",
+    "oracleText": "Exile target nontoken creature. Return it to the battlefield under its owner's control at the beginning of the next end step."
+  }
+}
