@@ -1,0 +1,60 @@
+# Only an enchantment Bot1 controls counts (CR 603.10a). Bot2's Pacifism (on Knight of Doves) is destroyed, and so is Bot1's own
+# Ornithopter - an artifact creature, no enchantment: no Bird either time.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Ruby
+Knight of Doves
+Plains
+Disenchant
+Disenchant
+Ornithopter
+Plains x13
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Pacifism
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Knight of Doves.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Pacifism.Cast(Knight of Doves)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Disenchant.Cast(Pacifism)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Pacifism
+? Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Disenchant.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Graveyard = Disenchant; Ornithopter; Disenchant
+Bot1.Battlefield = Plains; Plains; Mox Pearl; Mox Ruby; Knight of Doves

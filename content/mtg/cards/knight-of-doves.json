@@ -1,0 +1,8 @@
+{
+  "name": "Knight of Doves",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Knight",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Whenever an enchantment you control is put into a graveyard from the battlefield, create a 1/1 white Bird creature token with flying."
+}

@@ -1,0 +1,52 @@
+# "Whenever an enchantment you control is put into a graveyard from the battlefield, create a 1/1 white Bird creature token with
+# flying" (CR 603.10a). Bot1's own Pacifism (on Bot2's Ornithopter) is destroyed by Disenchant: one Bird. The Disenchant itself,
+# a spell going to the graveyard from the stack, is no permanent and makes none.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Ruby
+Knight of Doves
+Plains
+Pacifism
+Disenchant
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Knight of Doves.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pacifism.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Ornithopter
+? Attached = Pacifism > Ornithopter
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Disenchant.Cast(Pacifism)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Graveyard = Disenchant; Pacifism
+Bot1.Battlefield = Bird Token; Knight of Doves; Mox Pearl; Mox Ruby; Plains; Plains
+Bot2.Battlefield = Ornithopter
