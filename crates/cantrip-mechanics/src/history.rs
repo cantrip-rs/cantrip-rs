@@ -258,6 +258,21 @@ pub fn celebration(history: History<'_>, player: PlayerId) -> bool {
     history.entered().filter(|e| e.controller == player && !e.is(CardType::Land)).count() >= 2
 }
 
+/// `celebration` as a condition of the ability's controller: a triggered ability's intervening "if two or more nonland permanents
+/// entered the battlefield under your control this turn" (CR 207.2c, 603.4), checked as the trigger event happens and again as the
+/// ability resolves. Lady of Laughter and Pests of Honor print it.
+pub fn you_celebrate(q: &dyn Query, asker: &Asker) -> bool {
+    celebration(q.history(), asker.controller)
+}
+
+/// `celebration` as a static ability's `StaticDef::affects`: only the source itself, and only while its controller celebrates
+/// (CR 207.2c, 611.3a). The layers ask again whenever characteristics are computed, so it turns on with the second permanent,
+/// off as the turn ends, and follows the source to a new controller. Gallant Pie-Wielder, Tuinvale Guide and Armory Mice
+/// print it.
+pub fn this_while_you_celebrate(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Chars) -> bool {
+    source == affected && celebration(q.history(), q.state().obj(source).controller)
+}
+
 /// The number of permanents `player` has sacrificed this turn (CR 701.21a): every permanent that went from the battlefield to a
 /// graveyard as a sacrifice this turn, token or not, under that player's control as it left. Asked of the history (CR 603.10a).
 /// Obsessive Pursuit counts them; Phoenix Fleet Airship asks whether there was one ("if you sacrificed a permanent this turn").
