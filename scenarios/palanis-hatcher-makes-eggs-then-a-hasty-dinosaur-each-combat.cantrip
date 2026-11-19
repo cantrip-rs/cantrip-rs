@@ -1,0 +1,93 @@
+# Palani's Hatcher ("Other Dinosaurs you control have haste"; enters: two 0/1 green Dinosaur Egg tokens; at the beginning of combat
+# on your turn, if you control one or more Eggs, sacrifice an Egg, then create a 3/3 green Dinosaur token). Turn 1: five Moxen pay for the
+# Hatcher, whose enters trigger makes two Eggs; at the beginning of combat one Egg is sacrificed and the 3/3 Dinosaur token made
+# in its place has haste from the Hatcher (it attacks the turn it is made), while the Hatcher, which is no "other" Dinosaur, is
+# summoning sick and refused. Turn 2: Bot2's own Pygmy Allosaurus (a Dinosaur Bot1's Hatcher does not reach) has no haste. Turn 3:
+# Bot1's Pygmy Allosaurus, cast this turn, has haste and attacks; the second Egg is sacrificed for a second Dinosaur token.
+# CR 111.1, 603.4, 701.21a, 702.10a, 613.1f.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Palani's Hatcher
+Pygmy Allosaurus
+Forest x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Pygmy Allosaurus
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Palani's Hatcher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dinosaur Egg Token#2.Toughness = 1
+? Bot1.Battlefield.Palani's Hatcher.Keywords = (absent)
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Dinosaur Egg Token)
+? Bot1.Battlefield.Dinosaur Egg Token.Toughness = 1
+? Bot1.Battlefield.Count = 8
+? Bot1.Battlefield.Dinosaur Token.Keywords = Haste
+! Bot1.Attack(Palani's Hatcher > Bot2)
+Bot1.Attack(Dinosaur Token > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 17
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Pygmy Allosaurus.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Pygmy Allosaurus.Keywords = Swampwalk
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pygmy Allosaurus.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dinosaur Egg Token = (absent)
+Bot1.Attack(Pygmy Allosaurus > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Dinosaur Token#1.Power = 3
+Bot1.Battlefield.Dinosaur Token#1.Toughness = 3
+Bot1.Battlefield.Dinosaur Token#1.Colors = Green
+Bot1.Battlefield.Dinosaur Token#2.Power = 3
+Bot1.Battlefield.Dinosaur Egg Token = (absent)
+Bot1.Battlefield.Pygmy Allosaurus.Keywords = Haste; Swampwalk
+Bot1.Battlefield.Pygmy Allosaurus.Tapped = True
+Bot2.Battlefield.Pygmy Allosaurus.Keywords = Swampwalk
+Bot2.Life = 15

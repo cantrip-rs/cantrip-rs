@@ -1,0 +1,104 @@
+# Palani's Hatcher ("At the beginning of combat on your turn, if you control one or more Eggs, sacrifice an Egg, then create a 3/3 green
+# Dinosaur creature token" - an intervening if, CR 603.4). Turn 1: Hatcher makes two Egg tokens and the first combat sacrifices one. Turn 2:
+# Bot2 casts Rukh Egg, an Egg Bot1 does not control. Turn 3: Bot1 casts its own Rukh Egg, a card, not a token; with both kinds of Egg in
+# play it sacrifices the Rukh Egg, which dies and brings a 4/4 Bird at the next end step (CR 701.21a, 603.10a), leaving the token. Turn 5:
+# the Egg token is sacrificed too. Turn 7: Bot1 controls no Egg (Bot2's Rukh Egg does not count), the condition fails and no
+# Dinosaur is made. CR 603.4, 701.21a, 111.1.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Palani's Hatcher
+Rukh Egg
+Forest x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Jet
+Rukh Egg
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Palani's Hatcher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Dinosaur Egg Token)
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Count = 8
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Rukh Egg.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Rukh Egg.Power = 0
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rukh Egg.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Rukh Egg)
+? Bot1.Battlefield.Rukh Egg = (absent)
+? Bot1.Battlefield.Dinosaur Egg Token.Power = 0
+? Bot1.Graveyard.Rukh Egg.Power = 0
+[T3 Bot1.Main2]
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bird Token.Power = 4
+[T5 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dinosaur Egg Token = (absent)
+[T7 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dinosaur Token#4 = (absent)
+? Bot2.Battlefield.Rukh Egg.Power = 0
+
+[Expect]
+Bot1.Battlefield.Dinosaur Token#1.Power = 3
+Bot1.Battlefield.Dinosaur Token#2.Power = 3
+Bot1.Battlefield.Dinosaur Token#3.Power = 3
+Bot1.Battlefield.Dinosaur Token#4 = (absent)
+Bot1.Battlefield.Dinosaur Egg Token = (absent)
+Bot1.Battlefield.Bird Token.Power = 4
+Bot1.Graveyard.Rukh Egg.Power = 0
+Bot1.Battlefield.Count = 10
+Bot2.Battlefield.Rukh Egg.Power = 0
