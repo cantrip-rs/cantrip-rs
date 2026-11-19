@@ -1,0 +1,54 @@
+# Deathly Ride (CR 715, 115.1): "Return target creature card from your graveyard to your hand." Bot2 kills Bot1's Memnite; Bot1's Black Lotus, sacrificed for mana,
+# is in the graveyard too but is no creature card (the refused target), so Ride takes the Memnite back to hand, the Horseman is exiled on an adventure
+# (CR 715.3d), and Bot1 casts the Horseman from exile the same turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Memnite
+Fell Horseman
+Swamp x1
+Swamp x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Memnite
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Graveyard = Black Lotus; Memnite
+! Bot1.Hand.Fell Horseman.Cast(Bot1.Graveyard.Black Lotus; Ability: Adventure)
+Bot1.Hand.Fell Horseman.Cast(Bot1.Graveyard.Memnite; Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Memnite; Swamp; Swamp
+? Exile = Fell Horseman
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Fell Horseman.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Hand = Memnite; Swamp; Swamp
+Bot1.Battlefield.Fell Horseman.Power = 3

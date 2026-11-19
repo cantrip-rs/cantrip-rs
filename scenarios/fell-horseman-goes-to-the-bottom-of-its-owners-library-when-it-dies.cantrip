@@ -1,0 +1,41 @@
+# Fell Horseman (CR 401.4, 700.4): "When this creature dies, put it on the bottom of its owner's library." Bot1 casts it with a Black Lotus and a Mox Jet;
+# Bot2 kills the 3/3 with Lightning Bolt on its turn, and the trigger puts the card in Bot1's library instead of leaving it in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Fell Horseman
+Swamp x4
+Swamp x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fell Horseman.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fell Horseman.Power = 3
+? Bot1.Battlefield.Fell Horseman.Toughness = 3
+? Bot1.Library.Count = 10
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Fell Horseman)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 1
+Bot1.Graveyard = Black Lotus
+Bot1.Library.Count = 11

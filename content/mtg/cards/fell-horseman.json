@@ -1,0 +1,14 @@
+{
+  "name": "Fell Horseman",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Zombie Knight",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When this creature dies, put it on the bottom of its owner's library.",
+  "adventure": {
+    "name": "Deathly Ride",
+    "manaCost": "{1}{B}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Return target creature card from your graveyard to your hand. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}
