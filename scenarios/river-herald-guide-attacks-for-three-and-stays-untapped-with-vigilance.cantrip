@@ -1,0 +1,36 @@
+# River Herald Guide has vigilance (CR 702.20b): attacking on turn 3 does not tap it, so it is still untapped afterwards, and
+# its 3 power (it explored a land, so no counter) takes Bot2 from 20 to 17.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Jet
+River Herald Guide
+Island
+Island
+Island
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.River Herald Guide.Cast
+! Bot1.Accept
+[T3 Bot1.Main1]
+Bot1.Attack(River Herald Guide)
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot2.Life = 17
+Bot1.Battlefield.River Herald Guide.Tapped = false
+Bot1.Battlefield.River Herald Guide.Power = 3
+Stack.Count = 0

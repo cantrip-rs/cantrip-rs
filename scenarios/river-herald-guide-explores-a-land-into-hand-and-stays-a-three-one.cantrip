@@ -1,0 +1,42 @@
+# River Herald Guide: "When this creature enters, it explores." (CR 701.44a) The top card of Bot1's library, a Mountain, is
+# revealed and put into the hand; the Guide gets no +1/+1 counter and stays a 3/1, and no question about the card is asked.
+# The cost is exactly {2}{G}: with Forest and one Mox tapped it cannot be cast, and Forest and two Moxen pay it with nothing left.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Jet
+River Herald Guide
+Island
+Island
+Island
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.River Herald Guide.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.River Herald Guide.Cast
+! Bot1.Accept
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Mana =
+Stack.Count = 0
+Bot1.Battlefield.River Herald Guide.Power = 3
+Bot1.Battlefield.River Herald Guide.Toughness = 1
+Bot1.Battlefield.River Herald Guide.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand = Island; Island; Island; Mountain
+Bot1.Revealed = Mountain
+Bot1.Library.Count = 12
+Bot1.Graveyard.Count = 0
