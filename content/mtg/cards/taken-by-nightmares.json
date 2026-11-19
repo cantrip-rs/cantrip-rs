@@ -1,0 +1,6 @@
+{
+  "name": "Taken by Nightmares",
+  "manaCost": "{2}{B}{B}",
+  "type": "Instant",
+  "oracleText": "Exile target creature. If you control an enchantment, scry 2."
+}

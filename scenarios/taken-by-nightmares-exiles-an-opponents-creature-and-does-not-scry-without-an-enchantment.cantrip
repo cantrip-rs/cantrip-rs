@@ -1,0 +1,47 @@
+# Taken by Nightmares: "Exile target creature. If you control an enchantment, scry 2." Bot1 controls no enchantment (only Moxen and a
+# Swamp): on turn 3 it exiles Bot2's Ornithopter and is never asked to scry; its library is untouched.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Taken by Nightmares
+Swamp
+Swamp
+Swamp
+Island
+Forest
+Mountain x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Taken by Nightmares.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+! Bot1.Arrange
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Ornithopter
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard.Count = 0
+Bot1.Library.Top = Forest
