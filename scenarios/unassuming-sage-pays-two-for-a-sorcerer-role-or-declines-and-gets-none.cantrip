@@ -1,0 +1,49 @@
+# Unassuming Sage (a 2/2): "When this creature enters, you may pay {2}. If you do, create a Sorcerer Role token attached to it."
+# Turn 1 Bot1 casts the first Sage with Plains and a Mox Pearl, pays {2} with two more Moxen, and it is a 3/3 with a Sorcerer
+# Role. Turn 3 the second Sage is cast and the payment declined: a 2/2 and still only one Role.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Unassuming Sage
+Unassuming Sage
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Unassuming Sage.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Unassuming Sage.Power = 3
+? Bot1.Battlefield.Unassuming Sage.Toughness = 3
+? Bot1.Battlefield.Sorcerer.Tapped = False
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Unassuming Sage.Cast
+Bot1.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Unassuming Sage#1.Power = 3
+Bot1.Battlefield.Unassuming Sage#2.Power = 2
+Bot1.Battlefield.Unassuming Sage#2.Toughness = 2
+Bot1.Battlefield.Count = 8

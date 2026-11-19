@@ -1,0 +1,8 @@
+{
+  "name": "Unassuming Sage",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Peasant Wizard",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, you may pay {2}. If you do, create a Sorcerer Role token attached to it. (Enchanted creature gets +1/+1 and has \"Whenever this creature attacks, scry 1.\")"
+}
