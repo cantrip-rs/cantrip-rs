@@ -1,0 +1,44 @@
+# Misleading Motes {3}{U}, instant (CR 401.1, 608.2d): "Target creature's owner puts it on their choice of the top or bottom of their library." Bot2's
+# Memnite is Bot2's, so Bot2 (not the caster) makes the choice: it accepts the top, so the Memnite is drawn again and Bot2's library holds
+# 13 cards: the 12 left after its turn-2 draw and the Memnite. A land and a nonland, noncreature permanent are no legal target (only a creature is), so naming Bot2's Island or Bot1's own Mox Sapphire is refused.
+# Bot1 pays the full {3}{U} with Black Lotus (blue) and Mox Sapphire, checked empty right after.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Misleading Motes
+Island x19
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Misleading Motes.Cast(Bot2.Battlefield.Island)
+! Bot1.Hand.Misleading Motes.Cast(Bot1.Battlefield.Mox Sapphire)
+Bot1.Hand.Misleading Motes.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Accept
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Memnite = (absent)
+Bot2.Library.Top = Memnite
+Bot2.Hand.Count = 6
+Bot2.Library.Count = 13
+Bot1.Graveyard = Misleading Motes; Black Lotus

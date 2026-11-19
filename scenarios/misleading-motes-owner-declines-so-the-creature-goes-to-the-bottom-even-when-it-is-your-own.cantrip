@@ -1,0 +1,38 @@
+# Misleading Motes (CR 401.1, 608.2d): any creature may be targeted, the caster's own included, and its owner decides. Bot1 targets its own
+# Ornithopter and declines the top, so it goes to the bottom of Bot1's library: the top is still an Island and the library is one card larger.
+# The same spell and the same owner choice as the opponent-owned case, with the other answer.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Misleading Motes
+Ornithopter
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Misleading Motes.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Library.Top = Island
+Bot1.Library.Count = 17
+Bot1.Graveyard = Misleading Motes; Black Lotus
