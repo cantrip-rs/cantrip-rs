@@ -1,0 +1,41 @@
+# "{2}{B}: This creature gets +1/+0 until end of turn." On turn 3 Bot1 pays it once (Swamp for {B}, Mox Jet and Mox Ruby for {2}) before
+# attacking: it is a 2/3 (the toughness is untouched) that deals 2, and it is a 1/3 again the next turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Barrow Naughty
+Swamp
+Swamp
+Swamp x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Barrow Naughty.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Barrow Naughty.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Barrow Naughty.Power = 2
+? Bot1.Battlefield.Barrow Naughty.Toughness = 3
+Bot1.Attack(Barrow Naughty > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Barrow Naughty.Power = 1
+Bot1.Battlefield.Barrow Naughty.Toughness = 3

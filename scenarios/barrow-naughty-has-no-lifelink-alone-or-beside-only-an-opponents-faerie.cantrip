@@ -1,0 +1,35 @@
+# "Another Faerie" you control: Bot1's lone Barrow Naughty has flying but no lifelink, and an opponent's Faerie (Bot2 has its own Barrow
+# Naughty, and it is not "another Faerie" Bot1 controls) does not give it any. It attacks on turn 3 for 1 and Bot1 gains nothing.
+
+[Bot1 Deck]
+Black Lotus
+Barrow Naughty
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Barrow Naughty
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Barrow Naughty.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Barrow Naughty.Keywords = Flying
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Barrow Naughty.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Barrow Naughty.Keywords = Flying
+? Bot2.Battlefield.Barrow Naughty.Keywords = Flying
+[T3 Bot1.Main1]
+Bot1.Attack(Barrow Naughty > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20

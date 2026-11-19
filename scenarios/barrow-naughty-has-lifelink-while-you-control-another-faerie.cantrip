@@ -1,0 +1,34 @@
+# Barrow Naughty: flying, and "lifelink as long as you control another Faerie". Bot1 casts two on turn 1 (Black Lotus and Mox Jet pay the
+# four mana): each is "another Faerie" to the other, so both have flying and lifelink, and attacking on turn 3 deals 2 in the air while
+# gaining 2 (Bot2 has no creatures to block).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Barrow Naughty
+Barrow Naughty
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Barrow Naughty.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Barrow Naughty.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Barrow Naughty#1.Keywords = Flying; Lifelink
+? Bot1.Battlefield.Barrow Naughty#2.Keywords = Flying; Lifelink
+[T3 Bot1.Main1]
+Bot1.Attack(Barrow Naughty#1 > Bot2; Barrow Naughty#2 > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
