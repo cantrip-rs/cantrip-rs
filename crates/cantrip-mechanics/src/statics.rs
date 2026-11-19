@@ -127,6 +127,10 @@ pub fn your_creature_tokens(q: &dyn LayerQuery, source: ObjectId, affected: Obje
 /// `your_spells_of_types::<ANY_SPELL>`: every spell, whatever its card types (Hexing Squelcher).
 pub const ANY_SPELL: u16 = 0;
 
+/// `your_spells_of_types::<INSTANT_OR_SORCERY>`: "instant and sorcery spells you control" (Sphinx of the Final Word, Samut, Tyrant of
+/// Naktamun, Heartflame Duelist).
+pub const INSTANT_OR_SORCERY: u16 = TypeSet::of(&[CardType::Instant, CardType::Sorcery]).0;
+
 /// "[Creature / Instant and sorcery / No qualifier] spells you control" (CR 113.6, 601.2i, layer 6) as the `StaticDef::affects` of a
 /// static ability declared `.everywhere()`: a spell on the stack (an ability on the stack has no card types) controlled by the
 /// source's controller that has one of the card types in `TYPES`, a bitset of `CardType as u16` positions (`TypeSet.0`), judged on
