@@ -1,0 +1,53 @@
+# Bedrock Tortoise (0/6): "Each creature you control with toughness greater than its power assigns combat damage equal to its
+# toughness rather than its power" (CR 510.1a). On turn 5 Bot1 attacks with the Tortoise, Ornithopter (0/2) and Hired Blade (3/2),
+# and Bot2's Ornithopter blocks the Tortoise: the Tortoise deals 6 (not its power, 0) and kills the blocker, Bot1's Ornithopter
+# deals 2 and Hired Blade, whose toughness is not greater than its power, its 3 power (not its 2 toughness): Bot2 goes from 20 to
+# 15. Bot2's blocking Ornithopter has the same 0/2 but is not "you control" for the Tortoise: it deals 0 to the Tortoise.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Bedrock Tortoise
+Hired Blade
+Ornithopter
+Plains x20
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bedrock Tortoise.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hired Blade.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Bedrock Tortoise; Ornithopter; Hired Blade > Bot2)
+Bot2.Block(Ornithopter > Bedrock Tortoise)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 15
+? Bot2.Battlefield.Count = 0
+
+[Expect]
+Bot2.Life = 15
+Bot2.Battlefield.Count = 0
+Bot1.Battlefield.Bedrock Tortoise.Damage = 0
+Bot1.Battlefield.Hired Blade.Power = 3

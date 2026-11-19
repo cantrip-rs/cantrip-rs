@@ -1,0 +1,62 @@
+# Bedrock Tortoise {3}{G} (0/6): "During your turn, creatures you control have hexproof" (CR 604.1, 702.11b). Bot1 casts it
+# with Black Lotus and Mox Emerald, and Ornithopter. On turn 3 (Bot1's), Bot2 cannot target the Tortoise or the Ornithopter with Swords to
+# Plowshares (with Plains untapped and Mox Jet's spell on the stack for it to answer), but can still target its own Ornithopter,
+# which the Tortoise's controller's ability does not cover (the positive control). On turn 4 (Bot2's), the hexproof is gone and
+# Bot2 exiles Bot1's Ornithopter (the static applies only during its controller's turn).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Bedrock Tortoise
+Ornithopter
+Plains x20
+
+[Bot2 Deck]
+Plains
+Plains
+Ornithopter
+Swords to Plowshares
+Swords to Plowshares
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bedrock Tortoise.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+! Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Bedrock Tortoise)
+! Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Exile = Ornithopter
+? Bot1.Battlefield = Bedrock Tortoise; Mox Emerald; Ornithopter
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains#1.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Bedrock Tortoise; Mox Emerald; Mox Jet
+Exile = Ornithopter; Ornithopter
+Bot1.Life = 20

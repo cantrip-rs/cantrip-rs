@@ -1,0 +1,8 @@
+{
+  "name": "Bedrock Tortoise",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Turtle",
+  "power": 0,
+  "toughness": 6,
+  "oracleText": "During your turn, creatures you control have hexproof.\nEach creature you control with toughness greater than its power assigns combat damage equal to its toughness rather than its power."
+}
