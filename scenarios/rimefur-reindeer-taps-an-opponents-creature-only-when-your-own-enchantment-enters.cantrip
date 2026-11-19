@@ -1,0 +1,64 @@
+# Rimefur Reindeer: "Whenever an enchantment you control enters, tap target creature an opponent controls." Turn 1: Rimefur
+# Reindeer is cast, then Flood (an enchantment entering) while Bot2 has no creature: the trigger has no target and does
+# nothing. Turn 2: Bot2 casts Ornithopter and its own Flood (an enchantment under an opponent's control: no trigger, so
+# Ornithopter stays untapped). Turn 3: Holy Strength (an Aura, an enchantment) enters on Rimefur Reindeer: Bot2's
+# Ornithopter is tapped, and Bot1's own Rimefur Reindeer is not (only an opponent's creature is a target).
+
+[Bot1 Deck]
+Plains
+Mox Sapphire
+Black Lotus
+Rimefur Reindeer
+Flood
+Plains
+Holy Strength
+Island x10
+
+[Bot2 Deck]
+Island
+Island
+Mox Sapphire
+Ornithopter
+Flood
+Island x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Rimefur Reindeer.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flood.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Flood.Tapped = False
+? Stack.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Flood.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Flood.Tapped = False
+? Bot2.Battlefield.Ornithopter.Tapped = False
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Holy Strength.Cast(Bot1.Battlefield.Rimefur Reindeer)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = True
+? Bot1.Battlefield.Rimefur Reindeer.Tapped = False
+
+[Expect]
+Bot1.Battlefield.Holy Strength.Tapped = False

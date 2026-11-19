@@ -1,0 +1,8 @@
+{
+  "name": "Rimefur Reindeer",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Elk",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Whenever an enchantment you control enters, tap target creature an opponent controls."
+}
