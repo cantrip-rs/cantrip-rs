@@ -1,0 +1,77 @@
+# Storyteller Pixie: "Whenever you cast an Adventure spell, draw a card" (CR 603.2, 715.3). Only the Adventure half is an Adventure spell
+# (CR 715.3a), so Bot1's Stomp (cast from the hand) draws a card, while casting the Giant later from exile as a creature (no Adventure
+# spell), the Mox Emerald cast after the Pixie is out, and Bot2's own Stomp (not Bot1's spell) draw nothing. Hand sizes are checked
+# after each.
+
+[Bot1 Deck]
+Storyteller Pixie
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Bonecrusher Giant
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Sapphire
+Bonecrusher Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Storyteller Pixie.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bonecrusher Giant.Cast(Bot2; Ability: Stomp)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Bonecrusher Giant.Cast(Bot1; Ability: Stomp)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Exile.Bonecrusher Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Bonecrusher Giant.Power = 4
+Bot2.Life = 18
+Bot1.Life = 18

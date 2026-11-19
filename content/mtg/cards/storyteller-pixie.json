@@ -1,0 +1,11 @@
+{
+  "name": "Storyteller Pixie",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Faerie Wizard",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nWhenever you cast an Adventure spell, draw a card.",
+  "keywords": [
+    "Flying"
+  ]
+}
