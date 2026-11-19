@@ -13,10 +13,10 @@ pub fn reached(g: &mut dyn Game, player: PlayerId) -> bool {
 }
 
 /// The choices "[a player] loses N life unless they sacrifice a nonland permanent of their choice or discard a card" asks, in the
-/// order of the card's `labels`: "Sacrifice a nonland permanent", "Discard a card", "Lose N life".
+/// order of the card's `labels`: "Sacrifice a nonland permanent", "Discard a card", and giving neither ("Lose N life").
 const SACRIFICE: u8 = 0;
 const DISCARD: u8 = 1;
-const LOSE: u8 = 2;
+const NEITHER: u8 = 2;
 
 /// "Each opponent loses `life` life unless that player sacrifices a nonland permanent of their choice or discards a card" (or
 /// "unless they discard a card or sacrifice a creature"), done `times` over (Rottenmouth Viper's "for each blight counter on
@@ -38,11 +38,34 @@ pub fn each_opponent_loses_life_unless_sacrifices_or_discards(g: &mut dyn Game, 
             if !reached(g, opponent) {
                 break;
             }
-            loses_life_unless_sacrifices_or_discards(g, item, card, opponent, sacrifice, life, &mut chosen)?;
+            if !sacrifices_or_discards(g, item, card, opponent, sacrifice, &mut chosen)? {
+                chosen.losses.push((opponent, -life));
+            }
         }
     }
     chosen.happen(g);
     Ok(())
+}
+
+/// "Each opponent may sacrifice a permanent (`sacrifice`) of their choice or discard a card" as a sentence of its own, the next one
+/// doing something to "each opponent who didn't" (Osseous Sticktwister's "Then this creature deals damage equal to its power to each
+/// opponent who didn't sacrifice a permanent or discard a card this way"; Zoyowa Lava-Tongue's "Zoyowa deals 3 damage to each opponent
+/// who didn't"). Each opponent in turn order (CR 101.4) chooses to sacrifice a permanent `sacrifice` allows, to discard a card, or
+/// neither, asked only when they have one to give, and then every sacrifice and every discard happens together (the rulings,
+/// `Game::together`). Returns the opponents who gave neither, in turn order, for the caller's next sentence, which follows this one
+/// (CR 608.2c). `card` is the card whose `labels` are the sacrifice, "Discard a card" and giving neither, in that order.
+pub fn each_opponent_may_sacrifice_or_discard(g: &mut dyn Game, item: &StackItem, card: &'static CardDef, sacrifice: ObjectFilter) -> Result<Vec<PlayerId>, Suspend> {
+    let card = g.card_id(card);
+    let mut chosen = Chosen::default();
+    let mut neither = Vec::new();
+    let opponents: Vec<PlayerId> = g.state().apnap().filter(|&p| g.state().opponents(item.controller).any(|o| o == p)).collect();
+    for opponent in opponents {
+        if reached(g, opponent) && !sacrifices_or_discards(g, item, card, opponent, sacrifice, &mut chosen)? {
+            neither.push(opponent);
+        }
+    }
+    chosen.happen(g);
+    Ok(neither)
 }
 
 /// "Target opponent [or player] loses `LIFE` life unless they sacrifice a nonland permanent of their choice or discard a card" as an
@@ -54,7 +77,9 @@ pub fn each_opponent_loses_life_unless_sacrifices_or_discards(g: &mut dyn Game, 
 pub fn target_player_loses_life_unless_sacrifices_or_discards<const LIFE: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(player) = item.target(0).player() else { return Ok(()) };
     let mut chosen = Chosen::default();
-    loses_life_unless_sacrifices_or_discards(g, item, item.ability.card, player, nonland, LIFE, &mut chosen)?;
+    if !sacrifices_or_discards(g, item, item.ability.card, player, nonland, &mut chosen)? {
+        chosen.losses.push((player, -LIFE));
+    }
     chosen.happen(g);
     Ok(())
 }
@@ -73,10 +98,10 @@ impl Chosen {
     }
 }
 
-/// One choice of `player` for "loses `life` life unless they sacrifice a permanent (`sacrifice`) of their choice or discard a card", asked
-/// with `card`'s labels: to sacrifice a permanent `sacrifice` allows, to discard a card, or to lose the life, a permanent or card already in
-/// `chosen` not offered again, and losing the life the one choice left (asked nothing) to a player with neither.
-fn loses_life_unless_sacrifices_or_discards(g: &mut dyn Game, item: &StackItem, card: CardId, player: PlayerId, sacrifice: ObjectFilter, life: i32, chosen: &mut Chosen) -> Result<(), Suspend> {
+/// One choice of `player` to sacrifice a permanent (`sacrifice`) of their choice, to discard a card, or neither, asked with `card`'s
+/// labels, a permanent or card already in `chosen` not offered again, and neither the one choice left (asked nothing) to a player with
+/// nothing to give. The permanent or card chosen goes into `chosen`; false when they gave neither.
+fn sacrifices_or_discards(g: &mut dyn Game, item: &StackItem, card: CardId, player: PlayerId, sacrifice: ObjectFilter, chosen: &mut Chosen) -> Result<bool, Suspend> {
     let asker = g.item_asker(item, player);
     let permanents: Vec<ObjectId> = g
         .permanents_of(player)
@@ -92,9 +117,9 @@ fn loses_life_unless_sacrifices_or_discards(g: &mut dyn Game, item: &StackItem, 
     if !cards.is_empty() {
         options.push(DISCARD);
     }
-    options.push(LOSE);
+    options.push(NEITHER);
     let choice = if options.len() == 1 {
-        LOSE
+        NEITHER
     } else {
         let labels = options.iter().map(|&i| Label::Card(card, i)).collect();
         options[crate::choose::one_of(g, player, item.object, labels)? as usize]
@@ -102,7 +127,7 @@ fn loses_life_unless_sacrifices_or_discards(g: &mut dyn Game, item: &StackItem, 
     match choice {
         SACRIFICE => chosen.sacrificed.extend(crate::choose::cards(g, player, item.object, Purpose::Sacrifice, permanents, 1, false)?.into_iter().map(|id| (player, id))),
         DISCARD => chosen.discarded.extend(crate::choose::cards_from(g, player, item.object, Purpose::Discard, hand, cards, 1, false)?),
-        _ => chosen.losses.push((player, -life)),
+        _ => return Ok(false),
     }
-    Ok(())
+    Ok(true)
 }
