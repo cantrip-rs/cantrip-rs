@@ -1,0 +1,111 @@
+# Uchbenbak, the Great Mistake (descend 8): "{3}{U}{B}... {4}{U}{B}: Return this card from your graveyard to the battlefield with a finality counter on it.
+# Activate only if there are eight or more permanent cards in your graveyard and only as a sorcery." Bot1's five Thought Scours (instants,
+# no permanent cards) mill Uchbenbak itself and then, over turns 1 and 3, six more permanent cards and a Lightning Bolt: seven permanent
+# cards in all. On turn 5, with the whole {4}{U}{B} (and one mana more) floating, the ability is refused (CR 207.2c, 110.4a), though
+# Bot2's graveyard holds a Forest discarded to its hand size, which is not Bot1's own (seven and that one would be eight). A last Scour mills a Bolt and one more
+# permanent card: eight. With Ornithopter on the stack the ability is refused again (CR 602.5d); once it has resolved the six
+# floating mana pay for it exactly, and Uchbenbak returns untapped with a finality counter (CR 122.1h) from the graveyard (CR 113.6m).
+# Turn 7: it attacks, and one Ornithopter alone (it has two) cannot block a menace creature (CR 702.111b), vigilance leaves it untapped
+# (CR 702.20b), and six damage reach Bot2.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Thought Scour
+Island
+Uchbenbak, the Great Mistake
+Plains
+Thought Scour
+Plains
+Plains
+Thought Scour
+Thought Scour
+Plains
+Plains
+Thought Scour
+Lightning Bolt
+Plains
+Ornithopter
+Island
+Lightning Bolt
+Plains
+Plains x10
+
+[Bot2 Deck]
+Forest x7
+Forest
+Ornithopter
+Ornithopter
+Forest x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 6
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 12
+[T4 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T5 Bot1.Main1]
+? Bot2.Graveyard.Count = 1
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Island#3.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Graveyard.Uchbenbak, the Great Mistake.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 15
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Graveyard.Uchbenbak, the Great Mistake.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Graveyard.Uchbenbak, the Great Mistake.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Uchbenbak, the Great Mistake.Tapped = false
+[T6 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T7 Bot1.Main1]
+Bot1.Attack(Uchbenbak, the Great Mistake > Bot2)
+[T7 Bot1.DeclareBlockers]
+! Bot2.Block(Ornithopter > Uchbenbak, the Great Mistake)
+Bot2.Block()
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Uchbenbak, the Great Mistake.Counters.Finality = 1
+Bot1.Battlefield.Uchbenbak, the Great Mistake.Tapped = false
+Bot1.Battlefield.Uchbenbak, the Great Mistake.Keywords = Menace; Vigilance
+Bot1.Graveyard.Uchbenbak, the Great Mistake = (absent)
+Bot1.Graveyard.Count = 14
+Bot2.Life = 14

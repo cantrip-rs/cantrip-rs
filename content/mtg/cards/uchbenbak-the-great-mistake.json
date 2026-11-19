@@ -1,0 +1,12 @@
+{
+  "name": "Uchbenbak, the Great Mistake",
+  "manaCost": "{3}{U}{B}",
+  "type": "Legendary Creature — Skeleton Horror",
+  "power": 6,
+  "toughness": 4,
+  "oracleText": "Vigilance, menace\nDescend 8 — {4}{U}{B}: Return this card from your graveyard to the battlefield with a finality counter on it. Activate only if there are eight or more permanent cards in your graveyard and only as a sorcery. (If a creature with a finality counter on it would die, exile it instead.)",
+  "keywords": [
+    "Vigilance",
+    "Menace"
+  ]
+}
