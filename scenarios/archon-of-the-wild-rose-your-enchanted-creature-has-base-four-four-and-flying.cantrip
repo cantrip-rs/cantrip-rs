@@ -1,0 +1,51 @@
+# Archon of the Wild Rose {2}{W}{W} (4/4 flier): "Other creatures you control that are enchanted by Auras you control have base power
+# and toughness 4/4 and have flying." Turn one: Memnite and the Archon (Black Lotus and Mox Pearl pay {2}{W}{W}). Turn three: Bot1's
+# Pacifism on its own Memnite makes it a 4/4 with flying (layers 7b and 6, CR 613.4b), and Archon's Glory (+2/+2, layer 7c) then
+# applies on top of that base: 6/6.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Memnite
+Archon of the Wild Rose
+Pacifism
+Plains
+Plains
+Archon's Glory
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Archon of the Wild Rose.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Pacifism.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 4
+? Bot1.Battlefield.Memnite.Toughness = 4
+? Bot1.Battlefield.Memnite.Keywords = Flying
+? Bot1.Battlefield.Archon of the Wild Rose.Power = 4
+? Bot1.Battlefield.Archon of the Wild Rose.Toughness = 4
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Archon's Glory.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 6
+Bot1.Battlefield.Memnite.Toughness = 6

@@ -1,0 +1,64 @@
+# Archon of the Wild Rose only helps "creatures you control that are enchanted by Auras you control". Bot2's Pacifism on Bot1's
+# Memnite is not an Aura Bot1 controls, so the Memnite stays a 1/1 with no flying; Bot1's Pacifism on Bot2's Ornithopter is an Aura
+# Bot1 controls but the Ornithopter is not a creature Bot1 controls, so it stays a 0/2. The Archon itself, enchanted by Bot1's own
+# Pacifism, stays the 4/4 it is (it is not one of the "other" creatures).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Memnite
+Archon of the Wild Rose
+Pacifism
+Pacifism
+Plains
+Plains x14
+
+[Bot2 Deck]
+Pacifism
+Mox Pearl
+Ornithopter
+Plains x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Archon of the Wild Rose.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Pacifism.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Pacifism.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Pacifism.Cast(Bot1.Battlefield.Archon of the Wild Rose)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Archon of the Wild Rose.Power = 4
+Bot1.Battlefield.Archon of the Wild Rose.Toughness = 4
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2

@@ -1,0 +1,11 @@
+{
+  "name": "Archon of the Wild Rose",
+  "manaCost": "{2}{W}{W}",
+  "type": "Creature — Archon",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying\nOther creatures you control that are enchanted by Auras you control have base power and toughness 4/4 and have flying.",
+  "keywords": [
+    "Flying"
+  ]
+}

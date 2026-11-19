@@ -1,0 +1,51 @@
+# The Archon's effect needs the Aura (CR 303.4, 611.3a): Memnite wearing Bot1's Pacifism is 4/4 with flying, and 1/1 again once Bot2
+# destroys the Pacifism with Disenchant, while the Archon stays in play.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Memnite
+Archon of the Wild Rose
+Pacifism
+Plains
+Plains
+Plains x14
+
+[Bot2 Deck]
+Mox Pearl
+Disenchant
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Archon of the Wild Rose.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Pacifism.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 4
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Pacifism)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Pacifism; Black Lotus
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Archon of the Wild Rose.Power = 4
