@@ -1,0 +1,195 @@
+# Nine Dire Blunderbusses on one Ornithopter give it nine instances of "Whenever this creature attacks, you may sacrifice
+# an artifact other than Dire Blunderbuss ..." (CR 613.1f), each naming the Blunderbuss that gave it (the layers' giver of
+# that instance, CR 113.2c): nine attack triggers, as many as there are Blunderbusses, with no cap on how many one creature
+# can tell apart. As each resolves, the Blunderbuss it names may not be sacrificed (the refusals) while every other is
+# still offered: the first sacrifices a Gleemox instead (the positive control), and its reflexive ability deals the
+# Ornithopter's power, 27 with nine Blunderbusses' +3/+0, to Bot2's Ornithopter; the other eight are declined.
+# Setup: each Flail is cast and crafted with a Black Lotus, sacrificed for the mana, as its material from the graveyard;
+# Gleemoxen pay the rest, and Wheels of Fortune draw the cards. The script ends with the triggers resolved, before blocks.
+
+[Bot1 Deck]
+Gleemox x4
+Ornithopter
+Dire Flail
+Black Lotus
+Wheel of Fortune
+Dire Flail
+Black Lotus
+Dire Flail
+Black Lotus
+Gleemox x3
+Wheel of Fortune
+Dire Flail
+Black Lotus
+Dire Flail
+Black Lotus
+Dire Flail
+Black Lotus
+Gleemox
+Gleemox
+Wheel of Fortune
+Dire Flail
+Black Lotus
+Dire Flail
+Black Lotus
+Dire Flail
+Black Lotus
+Gleemox
+Mountain
+Island
+Island x10
+
+[Bot2 Deck]
+Ornithopter
+Island x60
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Dire Flail.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Flail.Activate(Ability: Craft)
+Bot1.Choose(Graveyard.Black Lotus)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Blunderbuss#1.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Dire Flail.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Flail.Activate(Ability: Craft)
+Bot1.Choose(Graveyard.Black Lotus)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Blunderbuss#2.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Dire Flail.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Flail.Activate(Ability: Craft)
+Bot1.Choose(Graveyard.Black Lotus)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Blunderbuss#3.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Hand.Gleemox.Cast
+[T7 Bot1.Main1]
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Dire Flail.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Flail.Activate(Ability: Craft)
+Bot1.Choose(Graveyard.Black Lotus)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Blunderbuss#4.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Dire Flail.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Flail.Activate(Ability: Craft)
+Bot1.Choose(Graveyard.Black Lotus)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Blunderbuss#5.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+[T9 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Dire Flail.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Flail.Activate(Ability: Craft)
+Bot1.Choose(Graveyard.Black Lotus)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Blunderbuss#6.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Hand.Gleemox.Cast
+[T11 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Dire Flail.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Flail.Activate(Ability: Craft)
+Bot1.Choose(Graveyard.Black Lotus)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Blunderbuss#7.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Dire Flail.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Flail.Activate(Ability: Craft)
+Bot1.Choose(Graveyard.Black Lotus)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Blunderbuss#8.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+[T13 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Dire Flail.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Flail.Activate(Ability: Craft)
+Bot1.Choose(Graveyard.Black Lotus)
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Dire Blunderbuss#9.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+[T13 Bot1.BeginCombat]
+? Bot1.Battlefield.Ornithopter.Power = 27
+Bot1.Attack(Bot1.Battlefield.Ornithopter > Bot2)
+! Bot1.Choose(Dire Blunderbuss#9)
+Bot1.Choose(Gleemox)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+! Bot1.Choose(Dire Blunderbuss#8)
+Bot1.Choose()
+! Bot1.Choose(Dire Blunderbuss#7)
+Bot1.Choose()
+! Bot1.Choose(Dire Blunderbuss#6)
+Bot1.Choose()
+! Bot1.Choose(Dire Blunderbuss#5)
+Bot1.Choose()
+! Bot1.Choose(Dire Blunderbuss#4)
+Bot1.Choose()
+! Bot1.Choose(Dire Blunderbuss#3)
+Bot1.Choose()
+! Bot1.Choose(Dire Blunderbuss#2)
+Bot1.Choose()
+! Bot1.Choose(Dire Blunderbuss#1)
+Bot1.Choose()
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 27
+Bot2.Battlefield = 
+Bot2.Life = 20
