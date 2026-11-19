@@ -1,0 +1,63 @@
+# Bitter Chill: "When this Aura is put into a graveyard from the battlefield, you may pay {1}." Same game as the paying scenario -
+# Bot1 enchants Bot2's Ornithopter on turn 3 and Bot2 Disenchants the Aura on turn 4 - but Bot1 declines to pay: no scry is
+# asked (nothing to arrange), no card is drawn (Counterspell stays in the library, Lightning Bolt still on top of it), and Mox Jet
+# and the second Mox Sapphire stay untapped.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Bitter Chill
+Island
+Island
+Island
+Lightning Bolt
+Counterspell
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Mox Pearl
+Disenchant
+Island x4
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bitter Chill.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Bitter Chill)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Decline
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Bitter Chill
+Bot1.Hand = Island; Island; Island
+Bot1.Library.Count = 22
+Bot1.Battlefield.Mox Sapphire#1.Tapped = true
+Bot1.Battlefield.Mox Sapphire#2.Tapped = false
+Bot1.Battlefield.Mox Jet.Tapped = false

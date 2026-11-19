@@ -1,0 +1,50 @@
+# Bitter Chill: the Aura is also "put into a graveyard from the battlefield" when the enchanted creature dies (CR 704.5m). Bot1
+# enchants Bot2's Ornithopter on turn 3 with Mox Sapphire + Mox Jet and Lightning Bolts it with Mox Ruby, which taps all three
+# Moxen: when the Aura goes to the graveyard there is no {1} to pay, so no payment is offered (`! Bot1.PayCost`), nothing is
+# scried and Bot1 draws nothing.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Bitter Chill
+Lightning Bolt
+Island
+Island
+Island
+Counterspell
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bitter Chill.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Bitter Chill; Lightning Bolt
+Bot2.Graveyard = Ornithopter
+Bot1.Hand = Island; Island; Island
+Bot1.Library.Count = 21
