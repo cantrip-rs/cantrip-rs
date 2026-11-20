@@ -1,0 +1,82 @@
+# Treasure Map // Treasure Cove. "{1}, {T}: Scry 1. Put a landmark counter on this artifact. Then if there are three or more
+# landmark counters on it, remove those counters, transform this artifact, and create three Treasure tokens."
+# Turn 1: both Moxes are tapped to cast it, so the {1} can't be paid (CR 601.2h). Turn 3: it is activated, the scry bottoms the
+# Lightning Bolt, and it is tapped for the cost, so it can't be activated again though an Island is untapped (CR 602.2).
+# Turn 5: a second counter, still an artifact. Turn 7: the third counter - the counters come off, it transforms (CR 701.27a)
+# and three Treasures come with it. Treasure Cove stays tapped, so "{T}, Sacrifice a Treasure: Draw a card" is refused.
+# Turn 9: a Mox Jet can't be sacrificed for it, a Treasure can and draws one card. Turn 11: "{T}: Add {C}".
+
+[Bot1 Deck]
+Treasure Map
+Mox Jet
+Mox Ruby
+Island
+Island
+Island
+Island
+Island
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Treasure Map.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Treasure Map.Activate(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Treasure Map.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt)
+? Bot1.Mana =
+? Bot1.Battlefield.Treasure Map.Counters.Landmark = 1
+? Bot1.Battlefield.Treasure Map.Tapped = true
+! Bot1.Battlefield.Treasure Map.Activate
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Treasure Map.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+? Bot1.Battlefield.Treasure Map.Counters.Landmark = 2
+? Bot1.Battlefield.Count = 5
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Treasure Map.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+? Bot1.Battlefield.Treasure Cove.Counters.Landmark = (absent)
+? Bot1.Battlefield.Count = 9
+? Bot1.Battlefield.Treasure Token#3.Tapped = false
+? Bot1.Battlefield.Treasure Cove.Tapped = true
+! Bot1.Battlefield.Treasure Cove.Activate(Ability: Sacrifice)
+[T9 Bot1.Main1]
+Bot1.Battlefield.Treasure Cove.Activate(Ability: Sacrifice)
+! Bot1.Choose(Mox Jet)
+Bot1.Choose(Treasure Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 8
+? Bot1.Hand.Count = 6
+[T11 Bot1.Main1]
+Bot1.Battlefield.Treasure Cove.Activate(Ability: Add)
+? Bot1.Mana = {C}
+
+[Expect]
+Bot1.Battlefield.Count = 8

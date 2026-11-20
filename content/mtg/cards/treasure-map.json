@@ -1,0 +1,11 @@
+{
+  "name": "Treasure Map",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "{1}, {T}: Scry 1. Put a landmark counter on this artifact. Then if there are three or more landmark counters on it, remove those counters, transform this artifact, and create three Treasure tokens. (They're artifacts with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "backFace": {
+    "name": "Treasure Cove",
+    "type": "Land",
+    "oracleText": "(Transforms from Treasure Map.)\n{T}: Add {C}.\n{T}, Sacrifice a Treasure: Draw a card."
+  }
+}
