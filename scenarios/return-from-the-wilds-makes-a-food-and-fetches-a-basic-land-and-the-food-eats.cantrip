@@ -1,0 +1,32 @@
+# Return from the Wilds, modes 1 and 3: "Create a Food token" (CR 111.10b) and the basic-land search (CR 701.23). The Island found enters tapped and the Food is a Food artifact: on turn 3 an
+# untapped pair of lands pays its {2}, {T}, Sacrifice cost for 3 life, so it is the real token. Nothing makes a creature.
+[Bot1 Deck]
+Black Lotus
+Return from the Wilds
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Return from the Wilds.Cast
+Bot1.Modes(1; 3)
+Bot1.Search(Island)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 2
+? Bot1.Battlefield.Island.Tapped = true
+? Bot1.Battlefield.Food Token.Tapped = false
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Food Token.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield.Count = 2

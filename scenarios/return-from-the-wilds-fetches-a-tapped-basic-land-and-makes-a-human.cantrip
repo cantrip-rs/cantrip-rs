@@ -1,0 +1,33 @@
+# Return from the Wilds, modes 1 and 2: "Search your library for a basic land card, put it onto the battlefield tapped, then shuffle" and "Create a 1/1 white Human creature
+# token" (CR 700.2, 701.23). A Black Lotus pays the {2}{G} exactly; the Island found enters tapped, the library is shuffled once, and the Human is a 1/1 white creature.
+# Bot2's Islands stay in Bot2's library: the search is only of Bot1's.
+
+[Bot1 Deck]
+Black Lotus
+Return from the Wilds
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Return from the Wilds.Cast
+Bot1.Modes(1; 2)
+? Bot1.Mana =
+Bot1.Search(Island)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 2
+? Bot1.Battlefield.Island.Tapped = true
+? Bot1.Battlefield.Human Token.Power = 1
+? Bot1.Battlefield.Human Token.Toughness = 1
+? Bot1.Battlefield.Human Token.Colors = White
+
+[Expect]
+Bot1.Shuffles = 1
+Bot1.Library.Count = 11
+Bot1.Graveyard.Count = 2
+Bot2.Library.Count = 13
+Bot2.Battlefield.Count = 0

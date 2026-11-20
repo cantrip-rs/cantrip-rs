@@ -1,0 +1,26 @@
+# Return from the Wilds, modes 2 and 3: a 1/1 white Human and a Food token, and no search at all: nothing is asked, the library is not shuffled and keeps its twelve cards
+# (CR 700.2, 701.23). A single mode or three modes are refused: "Choose two" is exactly two (CR 700.2).
+[Bot1 Deck]
+Black Lotus
+Return from the Wilds
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Return from the Wilds.Cast
+! Bot1.Modes(2)
+! Bot1.Modes(1; 2; 3)
+Bot1.Modes(2; 3)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 2
+? Bot1.Battlefield.Human Token.Power = 1
+
+[Expect]
+Bot1.Shuffles = 0
+Bot1.Library.Count = 12
+Bot1.Battlefield.Count = 2
