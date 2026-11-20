@@ -513,11 +513,11 @@ pub fn search_two_one_onto_battlefield_tapped_other_into_hand(g: &mut dyn Game, 
         0 | 1 => found.clone(),
         _ => crate::choose::select(g, you, item.object, Purpose::PutOntoBattlefield, found.clone(), crate::select::cards(crate::select::exactly(1)))?,
     };
-    if let Some(&land) = onto_battlefield.first() {
-        g.put_onto_battlefield(land, you, true)?;
-    }
-    let to_hand: Vec<(ObjectId, Zone)> = found.iter().filter(|c| !onto_battlefield.contains(c)).map(|&c| (c, Zone::hand(you))).collect();
-    g.move_together_revealed(&to_hand, MoveReason::Search);
+    // One instruction, so both cards leave the library, the one entering and the one going to the hand, in one move (CR 101.4,
+    // 608.2c).
+    let onto: Vec<(ObjectId, PlayerId, bool, PlayerId)> = onto_battlefield.first().map(|&land| (land, you, true, you)).into_iter().collect();
+    let to_hand: Vec<ObjectId> = found.iter().copied().filter(|c| !onto_battlefield.contains(c)).collect();
+    g.put_onto_battlefield_and_into_hand(&onto, &to_hand, MoveReason::Search, true)?;
     g.shuffle(you);
     Ok(())
 }
