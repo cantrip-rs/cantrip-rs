@@ -1,0 +1,29 @@
+# Charming Scoundrel's first mode: "Discard a card, then draw a card" (CR 701.9, 121.1). Bot1 discards the Mountain it picks and draws the
+# top card of its library, an Ornithopter: the hand is the same size. The discard is a choice among the cards still in hand.
+
+[Bot1 Deck]
+Black Lotus
+Charming Scoundrel
+Mountain
+Ornithopter
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Charming Scoundrel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mountain)
+? Bot1.Graveyard = Mountain; Black Lotus
+? Bot1.Hand.Count = 5
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Battlefield = Charming Scoundrel

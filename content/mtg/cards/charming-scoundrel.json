@@ -1,0 +1,11 @@
+{
+  "name": "Charming Scoundrel",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Rogue",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Haste\nWhen this creature enters, choose one —\n• Discard a card, then draw a card.\n• Create a Treasure token.\n• Create a Wicked Role token attached to target creature you control.",
+  "keywords": [
+    "Haste"
+  ]
+}

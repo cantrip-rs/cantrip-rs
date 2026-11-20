@@ -1,0 +1,49 @@
+# Charming Scoundrel's third mode: "Create a Wicked Role token attached to target creature you control" (CR 111.10, 303.7). The target
+# is a creature Bot1 controls (the Ornithopter or the Scoundrel itself), never Bot2's Memnite. The Wicked Role gives +1/+1 and "When
+# this Aura is put into a graveyard from the battlefield, each opponent loses 1 life": the Ornithopter (0/2) is a 1/3 with it, and
+# when Bot2's Lightning Bolt (3 damage) kills it, the Role goes to the graveyard (and, a token, ceases to exist: CR 111.7) and Bot2 loses 1 life.
+
+[Bot1 Deck]
+Black Lotus
+Charming Scoundrel
+Ornithopter
+Mountain x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Charming Scoundrel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(3)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Charming Scoundrel; Ornithopter; Wicked
+? Bot1.Battlefield.Wicked.AttachedTo = Ornithopter
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot2.Life = 20
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot1.Graveyard = Ornithopter; Black Lotus
+Bot1.Battlefield = Charming Scoundrel

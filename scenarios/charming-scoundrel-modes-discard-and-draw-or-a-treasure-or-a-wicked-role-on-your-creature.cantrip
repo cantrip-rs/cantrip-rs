@@ -1,0 +1,31 @@
+# Charming Scoundrel ({1}{R}, 1/1 haste): "When this creature enters, choose one — Discard a card, then draw a card; Create a Treasure
+# token; Create a Wicked Role token attached to target creature you control." (CR 700.2, 111.10, 303.7.) Three turns, one mode each
+# (Black Lotus pays the first, a Mox Ruby and a Mountain the later two).
+# First, the Treasure mode (the first mode needs a card in hand, so the Treasure is the plain case): exactly one Treasure, no Role.
+
+[Bot1 Deck]
+Black Lotus
+Charming Scoundrel
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Charming Scoundrel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Charming Scoundrel; Treasure Token
+? Bot1.Battlefield.Charming Scoundrel.Keywords = Haste
+? Bot1.Hand.Count = 5
+
+[Expect]
+Bot1.Battlefield.Treasure Token.Token = true
+Bot1.Hand.Count = 5
+Bot1.Battlefield.Charming Scoundrel.Power = 1
+Bot1.Battlefield.Charming Scoundrel.Toughness = 1
