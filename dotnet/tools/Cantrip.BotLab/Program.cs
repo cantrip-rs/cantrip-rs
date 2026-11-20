@@ -37,7 +37,7 @@ public static class Program
         }
 
         string root = FindRoot();
-        Parallelism = Math.Clamp(Number(args, "--parallel", Parallelism), 1, 64);
+        Parallelism = Math.Clamp(Number(args, "--parallel", Parallelism), 1, 256);
         try
         {
             Format = HostAndPlay.FormatFrom(args);
@@ -212,16 +212,12 @@ public static class Program
         return games.Length > 0 ? games : throw new FormatException("no game numbers");
     }
 
-    private static void WriteResult(int game, ulong shuffle, int seatOfA, IReadOnlyList<DeckList> seated, MatchResult result)
+    /// <summary>A game's result line (<c>--results</c>; its columns <see cref="GrantRun.Columns"/>).</summary>
+    internal static string ResultRow(int game, ulong shuffle, int seatOfA, IReadOnlyList<DeckList> seated, MatchResult result)
     {
-        if (ResultsFile.Length == 0)
-        {
-            return;
-        }
-
         string winner = result.Finished ? result.Winner.ToString(CultureInfo.InvariantCulture) : "-";
         string points = !result.Finished ? "-" : result.Winner == 0 ? "0.5" : result.Winner == seatOfA ? "1" : "0";
-        string line = string.Join('\t',
+        return string.Join('\t',
             game.ToString(CultureInfo.InvariantCulture),
             (EachShuffle ? game : game / 2).ToString(CultureInfo.InvariantCulture),
             shuffle.ToString(CultureInfo.InvariantCulture),
@@ -232,11 +228,20 @@ public static class Program
             points,
             result.Starter.ToString(CultureInfo.InvariantCulture),
             result.Turns.ToString(CultureInfo.InvariantCulture));
+    }
+
+    private static void WriteResult(string line)
+    {
+        if (ResultsFile.Length == 0)
+        {
+            return;
+        }
+
         lock (ResultsGate)
         {
             if (!File.Exists(ResultsFile))
             {
-                File.WriteAllText(ResultsFile, "game\tpair\tshuffle\ta_seat\tdeck1\tdeck2\twinner\ta_points\tstarter\tturns\n");
+                File.WriteAllText(ResultsFile, GrantRun.Columns + "\n");
             }
 
             File.AppendAllText(ResultsFile, line + "\n");
@@ -283,6 +288,9 @@ public static class Program
     /// <summary>Games played at once: one per core unless <c>--parallel</c> says fewer.</summary>
     private static int Parallelism { get; set; } = Math.Clamp(Environment.ProcessorCount, 1, 32);
 
+    /// <summary>Games played at once (<see cref="Parallelism"/>), as a grant run's status reports its lanes.</summary>
+    internal static int Lanes => Parallelism;
+
     private static int Unknown(string command)
     {
         Console.Error.WriteLine($"No command '{command}'. See --help.");
@@ -291,37 +299,48 @@ public static class Program
 
     // --- duel ----------------------------------------------------------------------------------------------------------
 
+    /// <summary>
+    /// <c>duel</c>: two seats against each other. With <c>--grant FILE --out DIR</c> it plays a distributed duel's part
+    /// (<see cref="GrantRun"/>); <c>--recover --out DIR</c> closes what such a part left open; <c>--print-header</c>
+    /// prints the header its results carry and plays nothing; <c>--summarize FILE</c> plays nothing and writes the
+    /// duel's summary from a results file (<c>--results</c>'s, or a distributed duel's merged), its rows in order as if
+    /// they had just been played: the same lines a duel writes at its end, its sequential stops replayed over the rows.
+    /// </summary>
     private static int Duel(string root, string[] args)
     {
+        if (args.Contains("--recover"))
+        {
+            string output = Text(args, "--out", string.Empty);
+            if (output.Length == 0)
+            {
+                Console.Error.WriteLine("--recover needs --out DIR, the run's results directory.");
+                return 2;
+            }
+
+            Console.WriteLine($"Recovered {GrantRun.Recover(output)} results in {output}.");
+            return 0;
+        }
+
         string a = Text(args, "--a", "tactical");
         string b = Text(args, "--b", "random");
         int games = Number(args, "--games", 400);
         ulong seed = (ulong)Number(args, "--seed", Random.Shared.Next(1, 1_000_000_000));
         List<DeckList> decks = Decks(root, args);
 
-        string dealt = Versus.Count > 0 ? $"{a} with {decks.Count} decks against {b} with {Versus.Count}"
-            : PairingsFile.Length > 0 ? $"{decks.Count} decks in the pairings of {Path.GetFileName(PairingsFile)}{(PairingsKeepDecks ? ", each deck kept by its player" : ", each pair one deal")}"
-            : Named(decks);
-        Console.WriteLine($"{a} against {b}, {games} games, {dealt}, shuffles from {seed}.");
-        Console.WriteLine("Seats swapped every other game, so each plays first as often as the other and each plays each deck.");
-
-        // --cards N: which cards each seat won with, the N it did worst and best by.
-        int cards = Number(args, "--cards", 0);
-
         // --ai-record DIR: the host records every game that ends as AI training shards (docs/ai-player-plan.md, "Data").
-        bool recording = Record(root, args, a, b);
-        if (recording && a == b && !RecordPairs)
+        bool recordingAsked = Text(args, "--ai-record", string.Empty).Length > 0;
+        if (recordingAsked && a == b && !RecordPairs)
         {
             EachShuffle = true;
         }
 
-        if (recording)
+        string header = GrantRun.Header(a, b, games, seed, decks, PairingsFile, EachShuffle, Mirrors, SeatModels(a, b));
+        if (args.Contains("--print-header"))
         {
-            NativeHostProcess.SharedArguments = [.. NativeHostProcess.SharedArguments, "--ai-record-seeds", $"{seed}..{Shuffle(seed, games - 1) + 1}"];
-            Console.WriteLine(EachShuffle ? "Every game its own shuffle." : "Each pair of games one shuffle.");
+            Console.WriteLine(header);
+            return 0;
         }
 
-        var clock = Stopwatch.StartNew();
         // --sprt: stop once the sequential test has its verdict, --games the most it may take (docs/ai-player-plan.md, "Serving and measuring").
         // --sprt-paired: the same by pair, the pentanomial GSPRT. --interval-stop: stop once the paired interval
         // excludes a half. Whichever says first stops the duel.
@@ -345,7 +364,39 @@ public static class Program
             return 2;
         }
 
-        Tally tally = Play(root, decks, games, seed, Maker(root, a), Maker(root, b, b: true), sample: false, out _, hands: cards > 0, stops: stops);
+        string dealt = Versus.Count > 0 ? $"{a} with {decks.Count} decks against {b} with {Versus.Count}"
+            : PairingsFile.Length > 0 ? $"{decks.Count} decks in the pairings of {Path.GetFileName(PairingsFile)}{(PairingsKeepDecks ? ", each deck kept by its player" : ", each pair one deal")}"
+            : Named(decks);
+        Console.WriteLine($"{a} against {b}, {games} games, {dealt}, shuffles from {seed}.");
+        Console.WriteLine("Seats swapped every other game, so each plays first as often as the other and each plays each deck.");
+
+        string summarize = Text(args, "--summarize", string.Empty);
+        if (summarize.Length > 0)
+        {
+            return Summarize(summarize, a, b, header, stops, double.Parse(Text(args, "--elapsed", "0"), CultureInfo.InvariantCulture));
+        }
+
+        GrantRun? grant = GrantRun.From(args, games, header);
+        if (grant is not null && stops.Any)
+        {
+            Console.Error.WriteLine("A grant run plays what it is granted: a distributed duel's sequential stop is its driver's (no --sprt, --sprt-paired or --interval-stop with --grant).");
+            return 2;
+        }
+
+        // --cards N: which cards each seat won with, the N it did worst and best by.
+        int cards = Number(args, "--cards", 0);
+
+        // With a grant, the recordings go into the run's replay directory, under --ai-record's name.
+        bool recording = Record(root, args, a, b, grant?.ReplayPart);
+        if (recording)
+        {
+            NativeHostProcess.SharedArguments = [.. NativeHostProcess.SharedArguments, "--ai-record-seeds", $"{seed}..{Shuffle(seed, games - 1) + 1}"];
+            Console.WriteLine(EachShuffle ? "Every game its own shuffle." : "Each pair of games one shuffle.");
+        }
+
+        var clock = Stopwatch.StartNew();
+        grant?.Start();
+        Tally tally = Play(root, decks, games, seed, Maker(root, a), Maker(root, b, b: true), sample: false, out _, hands: cards > 0, stops: stops, grant: grant);
         tally.Write(a, b, clock.Elapsed);
         if (stops.Sprt)
         {
@@ -368,6 +419,84 @@ public static class Program
             tally.WriteCards(a, b, cards, Number(args, "--least", 60));
         }
 
+        // A grant run's games that did not finish are its driver's to count (each is played again elsewhere once).
+        if (grant is not null)
+        {
+            return grant.Finish();
+        }
+
+        return tally.Failures.IsEmpty ? 0 : 1;
+    }
+
+    /// <summary>The models a duel's neural seats play: <c>--model</c>, and <c>--model-b</c> and <c>--model-c</c> when given.</summary>
+    private static List<string> SeatModels(string a, string b)
+    {
+        if (NeuralSeat.Parse(a) is null && NeuralSeat.Parse(b) is null)
+        {
+            return [];
+        }
+
+        return [Neural.Model, .. Neural.ModelB.Length > 0 ? [Neural.ModelB] : (string[])[], .. Neural.ModelC.Length > 0 ? [Neural.ModelC] : (string[])[]];
+    }
+
+    /// <summary>
+    /// <c>--summarize FILE</c>: the duel's summary from its results, each row counted in the file's order as the duel
+    /// counts a game as it ends, its sequential stops looked at after each (<see cref="Tally.CheckStops"/>), and the same
+    /// lines written (the time an answer took aside, which no results file holds). A file whose header line is not this
+    /// duel's is refused. Returns 1 when a game did not finish, as the duel does.
+    /// </summary>
+    internal static int Summarize(string path, string a, string b, string header, Stops stops, double seconds)
+    {
+        var tally = new Tally();
+        foreach (string line in File.ReadLines(path))
+        {
+            if (line.StartsWith("# ", StringComparison.Ordinal))
+            {
+                if (line[2..] != header)
+                {
+                    Console.Error.WriteLine($"{path} is the results of another duel: its header is {line[2..]}, this duel's {header}.");
+                    return 2;
+                }
+
+                continue;
+            }
+
+            if (line.Length == 0 || line == GrantRun.Columns)
+            {
+                continue;
+            }
+
+            string[] f = line.Split('\t');
+            int Number(int k) => int.Parse(f[k], NumberStyles.Integer, CultureInfo.InvariantCulture);
+            if (f.Length < 10)
+            {
+                Console.Error.WriteLine($"{path}: not a result line: {line}");
+                return 2;
+            }
+
+            if (f[6] == "-")
+            {
+                tally.CountFailure(Number(0), $"did not finish [game {f[0]}: {f[4]} / {f[5]}]");
+            }
+            else
+            {
+                tally.Count(Number(0), Number(3), [f[4], f[5]], Number(6), Number(8), Number(9));
+            }
+
+            if (stops.Any)
+            {
+                tally.CheckStops(stops);
+            }
+        }
+
+        tally.Write(a, b, TimeSpan.FromSeconds(seconds), answers: false);
+        if (stops.Sprt)
+        {
+            Console.WriteLine(tally.SprtLine(a, b));
+        }
+
+        tally.WritePaired(a, stops);
+        tally.WriteSplits(a, b, []);
         return tally.Failures.IsEmpty ? 0 : 1;
     }
 
@@ -376,12 +505,18 @@ public static class Program
     /// <c>--ai-record-games N</c>, <c>--ai-record-mb N</c>): starts the shared host recording the games that end as
     /// training shards, its header naming the seats that played and the shuffles. False when not asked for.
     /// </summary>
-    private static bool Record(string root, string[] args, string a, string b)
+    private static bool Record(string root, string[] args, string a, string b, string? within = null)
     {
         string directory = Text(args, "--ai-record", string.Empty);
         if (directory.Length == 0)
         {
             return false;
+        }
+
+        if (within is not null)
+        {
+            directory = Path.Combine(within, directory);
+            Directory.CreateDirectory(directory);
         }
 
         string model = Path.Combine(root, "dotnet", "src", "Cantrip.Client", "Tactics", "tactical-model.txt");
@@ -811,6 +946,123 @@ public static class Program
         public int Finished => WinsA + WinsB + Draws;
 
         /// <summary>
+        /// A game that finished, counted: the winning seat (0 a draw), A's seat, the seats' decks (seat 1 first), who
+        /// started and its turns. What a duel counts of each game as it ends and what <c>--summarize</c> counts of each
+        /// result line, the one code for both.
+        /// </summary>
+        public void Count(int game, int seatOfA, IReadOnlyList<string> decks, int winner, int starter, int turns)
+        {
+            lock (Gate)
+            {
+                if (winner == 0)
+                {
+                    Draws++;
+                }
+                else
+                {
+                    if (winner == seatOfA)
+                    {
+                        WinsA++;
+                    }
+                    else
+                    {
+                        WinsB++;
+                    }
+
+                    Decided++;
+                    if (winner == starter)
+                    {
+                        PlayWins++;
+                    }
+                }
+
+                Turns += turns;
+                Pairs.Add(game, winner == 0 ? 0.5 : winner == seatOfA ? 1 : 0);
+                int seatA = seatOfA - 1;
+                int seatB = 1 - seatA;
+                if (winner != 0)
+                {
+                    bool won = winner == seatOfA;
+                    int turn = starter == seatOfA ? 0 : 1;
+                    GamesBySeat[seatA]++;
+                    WinsBySeat[seatA] += won ? 1 : 0;
+                    GamesByTurn[turn]++;
+                    WinsByTurn[turn] += won ? 1 : 0;
+                    string pair = $"{decks[seatA]} vs {decks[seatB]}";
+                    if (!ByPair.TryGetValue(pair, out int[]? counts))
+                    {
+                        ByPair[pair] = counts = new int[2];
+                    }
+
+                    counts[0] += won ? 1 : 0;
+                    counts[1]++;
+                }
+            }
+        }
+
+        /// <summary>A game that did not finish: its failure kept, its pair never counted.</summary>
+        public void CountFailure(int game, string failure)
+        {
+            Failures.Enqueue(failure);
+            lock (Gate)
+            {
+                Pairs.Fail(game);
+            }
+        }
+
+        /// <summary>
+        /// The sequential tests looked at after a game is counted: true when one has just reached its verdict, which
+        /// stops the duel (the first to reach one; the games in play finish and are counted after). Between verdicts a
+        /// progress line every 20 games.
+        /// </summary>
+        public bool CheckStops(Stops stops)
+        {
+            lock (Gate)
+            {
+                bool stopped = StoppedAt > 0 || PairedStoppedAt > 0 || IntervalStoppedAt > 0;
+                if (stops.Sprt && !stopped && Verdict != 0)
+                {
+                    StoppedAt = Finished;
+                    StoppedLlr = Llr;
+                    Console.WriteLine($"SPRT verdict after {Finished} games: LLR {Llr:N3} ({WinsA} to {WinsB}, {Draws} drawn).");
+                    return true;
+                }
+
+                if (stops.PairedSprt && !stopped && PairedVerdict != 0)
+                {
+                    PairedStoppedAt = Pairs.Pairs;
+                    PairedStoppedLlr = PairedLlr;
+                    Console.WriteLine(
+                        $"Paired SPRT verdict after {Pairs.Pairs} pairs: LLR {PairedLlr.ToString("0.000", CultureInfo.InvariantCulture)} " +
+                        $"(pairs {Pairs.CountsText}).");
+                    return true;
+                }
+
+                if (stops.Interval && !stopped && IntervalVerdict != 0)
+                {
+                    (double share, double margin) = Pairs.Interval(IntervalZ);
+                    IntervalStoppedAt = Pairs.Pairs;
+                    IntervalStoppedShare = share;
+                    IntervalStoppedMargin = margin;
+                    IntervalStoppedWay = IntervalVerdict;
+                    Console.WriteLine($"Interval stop after {Pairs.Pairs} pairs: {share:P1} +/- {margin:P1} (pairs {Pairs.CountsText}).");
+                    return true;
+                }
+
+                if (Finished % 20 == 0)
+                {
+                    string paired = stops.PairedSprt || stops.Interval
+                        ? $"; pairs {Pairs.CountsText}, paired {Pairs.Interval().Share:P1}" +
+                          (stops.PairedSprt ? $", paired LLR {PairedLlr.ToString("0.000", CultureInfo.InvariantCulture)}" : string.Empty)
+                        : string.Empty;
+                    Console.WriteLine($"  {Finished} games: {WinsA} to {WinsB}, {Draws} drawn, LLR {Llr:N3}{paired}");
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
         /// The sequential probability ratio test's log-likelihood ratio of A's games so far, H1 (A wins 55%) against H0
         /// (50%), a draw half a win and half a loss: each game adds <c>x ln(p1/p0) + (1-x) ln((1-p1)/(1-p0))</c> for its
         /// score x. With alpha = beta = 0.05 it accepts H1 at ln(19) and H0 at -ln(19) (Wald).
@@ -1057,7 +1309,8 @@ public static class Program
             return $"{At(0.5).ToString(format, CultureInfo.InvariantCulture)} / {At(0.95).ToString(format, CultureInfo.InvariantCulture)} / {sorted[^1].ToString(format, CultureInfo.InvariantCulture)}";
         }
 
-        public void Write(string a, string b, TimeSpan elapsed)
+        /// <summary>The result, the games and their time, and (with <paramref name="answers"/>) what an answer cost each seat.</summary>
+        public void Write(string a, string b, TimeSpan elapsed, bool answers = true)
         {
             Console.WriteLine();
             Console.WriteLine($"{a} beat {b} {Line()}.");
@@ -1066,9 +1319,12 @@ public static class Program
                 $"{Turns / (double)Math.Max(Finished, 1):N1} turns a game; whoever played first won {PlayWins / (double)Math.Max(Decided, 1):P1}.");
 
             // What an answer costs, with the game's own work in the same call: the session runs inside the send.
-            Console.WriteLine(
-                $"An answer took {a} {ThinkingA / Math.Max(AnswersA, 1):N3} ms on average and {SlowestA:N1} ms at most; " +
-                $"{b} {ThinkingB / Math.Max(AnswersB, 1):N3} ms and {SlowestB:N1} ms.");
+            if (answers)
+            {
+                Console.WriteLine(
+                    $"An answer took {a} {ThinkingA / Math.Max(AnswersA, 1):N3} ms on average and {SlowestA:N1} ms at most; " +
+                    $"{b} {ThinkingB / Math.Max(AnswersB, 1):N3} ms and {SlowestB:N1} ms.");
+            }
 
             if (!Failures.IsEmpty)
             {
@@ -1173,7 +1429,8 @@ public static class Program
         bool sample,
         out List<Sample> samples,
         bool hands = false,
-        Stops stops = default)
+        Stops stops = default,
+        GrantRun? grant = null)
     {
         RunSeed = seed;
         var tally = new Tally();
@@ -1188,16 +1445,9 @@ public static class Program
         var made = new ConcurrentBag<Lane>();
         NeuralAnswers.Clear();
 
-        int[] order = OnlyGames ?? Enumerable.Range(0, games).ToArray();
-        Parallel.For(0, order.Length, new ParallelOptions { MaxDegreeOfParallelism = Parallelism }, (index, loop) =>
+        // One game, played and counted: true when a sequential test has just reached its verdict.
+        bool PlayOne(int game)
         {
-            int game = order[index];
-            // Once a sequential test has its verdict no new game starts; those in play finish and are counted.
-            if (stops.Any && loop.ShouldExitCurrentIteration)
-            {
-                return;
-            }
-
             // A sits in seat 1 on even games and seat 2 on odd ones, each pair dealt from the same shuffle; the decks
             // swap every second pair, so each way of playing has each deck in each seat.
             bool swapped = game % 2 == 1;
@@ -1237,17 +1487,15 @@ public static class Program
                 }
             }
 
-            WriteResult(game, Shuffle(seed, game), swapped ? 2 : 1, seated, result);
+            int seatOfA = swapped ? 2 : 1;
+            string row = ResultRow(game, Shuffle(seed, game), seatOfA, seated, result);
+            WriteResult(row);
+            grant?.Played(row, result.Finished);
             if (!result.Finished)
             {
                 // The game's number in the run, with the run's own seed, is what plays it again: watch --game.
-                tally.Failures.Enqueue($"{result.Failure} [game {game}: {seated[0].Name} / {seated[1].Name}]");
-                lock (tally.Gate)
-                {
-                    tally.Pairs.Fail(game);
-                }
-
-                return;
+                tally.CountFailure(game, $"{result.Failure} [game {game}: {seated[0].Name} / {seated[1].Name}]");
+                return false;
             }
 
             foreach (Sample position in result.Samples)
@@ -1255,46 +1503,12 @@ public static class Program
                 collected.Add(position with { Game = game });
             }
 
-            int seatOfA = swapped ? 2 : 1;
-            if (result.Winner == 0)
-            {
-                Interlocked.Increment(ref tally.Draws);
-            }
-            else
-            {
-                Interlocked.Increment(ref result.Winner == seatOfA ? ref tally.WinsA : ref tally.WinsB);
-                Interlocked.Increment(ref tally.Decided);
-                if (result.Winner == result.Starter)
-                {
-                    Interlocked.Increment(ref tally.PlayWins);
-                }
-            }
-
-            Interlocked.Add(ref tally.Turns, result.Turns);
+            tally.Count(game, seatOfA, [seated[0].Name, seated[1].Name], result.Winner, result.Starter, result.Turns);
 
             lock (tally.Gate)
             {
-                tally.Pairs.Add(game, result.Winner == 0 ? 0.5 : result.Winner == seatOfA ? 1 : 0);
                 int seatA = seatOfA - 1;
                 int seatB = 1 - seatA;
-                if (result.Winner != 0)
-                {
-                    bool won = result.Winner == seatOfA;
-                    int turn = result.Starter == seatOfA ? 0 : 1;
-                    tally.GamesBySeat[seatA]++;
-                    tally.WinsBySeat[seatA] += won ? 1 : 0;
-                    tally.GamesByTurn[turn]++;
-                    tally.WinsByTurn[turn] += won ? 1 : 0;
-                    string pair = $"{seated[seatA].Name} vs {seated[seatB].Name}";
-                    if (!tally.ByPair.TryGetValue(pair, out int[]? counts))
-                    {
-                        tally.ByPair[pair] = counts = new int[2];
-                    }
-
-                    counts[0] += won ? 1 : 0;
-                    counts[1]++;
-                }
-
                 if (result.Times.Count == 2)
                 {
                     tally.TimesA.AddRange(result.Times[seatA]);
@@ -1328,54 +1542,54 @@ public static class Program
                 }
             }
 
-            if (stops.Any)
+            // The first test to reach its verdict stops the duel; the games in play finish and are counted.
+            return stops.Any && tally.CheckStops(stops);
+        }
+
+        if (grant is not null)
+        {
+            // A distributed duel's part: each lane takes the next granted game until the grant is ended and handed out
+            // (or the run is stopped).
+            Thread[] workers = [.. Enumerable.Range(0, Parallelism).Select(k => new Thread(() =>
             {
-                lock (tally.Gate)
+                while (grant.Next() is int game)
                 {
-                    // The first test to reach its verdict stops the duel; the games in play finish and are counted.
-                    bool stopped = tally.StoppedAt > 0 || tally.PairedStoppedAt > 0 || tally.IntervalStoppedAt > 0;
-                    if (stops.Sprt && !stopped && tally.Verdict != 0)
-                    {
-                        tally.StoppedAt = tally.Finished;
-                        tally.StoppedLlr = tally.Llr;
-                        Console.WriteLine($"SPRT verdict after {tally.Finished} games: LLR {tally.Llr:N3} ({tally.WinsA} to {tally.WinsB}, {tally.Draws} drawn).");
-                        loop.Stop();
-                    }
-                    else if (stops.PairedSprt && !stopped && tally.PairedVerdict != 0)
-                    {
-                        tally.PairedStoppedAt = tally.Pairs.Pairs;
-                        tally.PairedStoppedLlr = tally.PairedLlr;
-                        Console.WriteLine(
-                            $"Paired SPRT verdict after {tally.Pairs.Pairs} pairs: LLR {tally.PairedLlr.ToString("0.000", CultureInfo.InvariantCulture)} " +
-                            $"(pairs {tally.Pairs.CountsText}).");
-                        loop.Stop();
-                    }
-                    else if (stops.Interval && !stopped && tally.IntervalVerdict != 0)
-                    {
-                        (double share, double margin) = tally.Pairs.Interval(Tally.IntervalZ);
-                        tally.IntervalStoppedAt = tally.Pairs.Pairs;
-                        tally.IntervalStoppedShare = share;
-                        tally.IntervalStoppedMargin = margin;
-                        tally.IntervalStoppedWay = tally.IntervalVerdict;
-                        Console.WriteLine($"Interval stop after {tally.Pairs.Pairs} pairs: {share:P1} +/- {margin:P1} (pairs {tally.Pairs.CountsText}).");
-                        loop.Stop();
-                    }
-                    else if (tally.Finished % 20 == 0)
-                    {
-                        string paired = stops.PairedSprt || stops.Interval
-                            ? $"; pairs {tally.Pairs.CountsText}, paired {tally.Pairs.Interval().Share:P1}" +
-                              (stops.PairedSprt ? $", paired LLR {tally.PairedLlr.ToString("0.000", CultureInfo.InvariantCulture)}" : string.Empty)
-                            : string.Empty;
-                        Console.WriteLine($"  {tally.Finished} games: {tally.WinsA} to {tally.WinsB}, {tally.Draws} drawn, LLR {tally.Llr:N3}{paired}");
-                    }
+                    PlayOne(game);
                 }
+            })
+            { Name = $"duel lane {k}" })];
+            foreach (Thread worker in workers)
+            {
+                worker.Start();
             }
 
-            if (Interlocked.Increment(ref done) % 100 == 0 && !Console.IsOutputRedirected)
+            foreach (Thread worker in workers)
             {
-                Console.Write($"\r{done} of {order.Length}...    ");
+                worker.Join();
             }
-        });
+        }
+        else
+        {
+            int[] order = OnlyGames ?? Enumerable.Range(0, games).ToArray();
+            Parallel.For(0, order.Length, new ParallelOptions { MaxDegreeOfParallelism = Parallelism }, (index, loop) =>
+            {
+                // Once a sequential test has its verdict no new game starts; those in play finish and are counted.
+                if (stops.Any && loop.ShouldExitCurrentIteration)
+                {
+                    return;
+                }
+
+                if (PlayOne(order[index]))
+                {
+                    loop.Stop();
+                }
+
+                if (Interlocked.Increment(ref done) % 100 == 0 && !Console.IsOutputRedirected)
+                {
+                    Console.Write($"\r{done} of {order.Length}...    ");
+                }
+            });
+        }
 
         if (!Console.IsOutputRedirected)
         {
@@ -1553,8 +1767,18 @@ public static class Program
     private static string Named(IReadOnlyList<DeckList> decks) =>
         decks.Count > 2 ? $"{decks.Count} decks, each a mirror" : string.Join(" vs ", decks.Select(deck => deck.Name));
 
+    /// <summary>
+    /// The repository's root: <c>CANTRIP_ROOT</c> when it is set (a worker's bundle, which holds the decks a duel names
+    /// and no repository: docs/ai-training.md, "Distributed duels"), else the first directory above this executable
+    /// with <c>content/mtg</c> and <c>decks</c>.
+    /// </summary>
     private static string FindRoot()
     {
+        if (Environment.GetEnvironmentVariable("CANTRIP_ROOT") is { Length: > 0 } configured)
+        {
+            return Path.GetFullPath(configured);
+        }
+
         DirectoryInfo? here = new(AppContext.BaseDirectory);
 
         while (here is not null)
