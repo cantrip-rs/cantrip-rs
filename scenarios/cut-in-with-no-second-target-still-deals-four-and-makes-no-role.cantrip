@@ -1,0 +1,36 @@
+# "Up to one target creature you control": Bot1 names none, so Cut In deals its 4 damage to Bot2's Wall of Earth (0/6) and creates no
+# Role (CR 601.2c, 608.2b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Cut In
+Mountain x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Wall of Earth
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Wall of Earth.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cut In.Cast
+Bot1.Target(Bot2.Battlefield.Wall of Earth)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Wall of Earth.Damage = 4
+Bot1.Battlefield = Mox Ruby
+Bot2.Battlefield = Mox Ruby; Mox Ruby; Wall of Earth

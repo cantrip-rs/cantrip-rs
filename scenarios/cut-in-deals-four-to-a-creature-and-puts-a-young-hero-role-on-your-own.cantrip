@@ -1,0 +1,50 @@
+# Cut In ({3}{R}, sorcery): "deals 4 damage to target creature. Create a Young Hero Role token attached to up to one target creature
+# you control." (CR 120.3, 111.10, 303.7.) Bot2's Wall of Earth (0/6) takes exactly 4, and Bot1's Ornithopter gets the Role: Bot1's
+# creature only (Bot2's Wall is refused for the second target), and the Role gives the Ornithopter (toughness 2) a counter when it
+# attacks (CR 603.4). Black Lotus and a Mox Ruby pay {3}{R}. The damage's target is a creature: Bot2 is refused for it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Ornithopter
+Cut In
+Mountain x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Wall of Earth
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Wall of Earth.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cut In.Cast
+! Bot1.Target(Bot2)
+Bot1.Target(Bot2.Battlefield.Wall of Earth)
+! Bot1.Target(Bot2.Battlefield.Wall of Earth)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Wall of Earth.Damage = 4
+? Bot1.Battlefield.Young Hero.AttachedTo = Ornithopter
+? Bot1.Battlefield = Mox Ruby; Ornithopter; Young Hero
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Graveyard = Cut In; Black Lotus

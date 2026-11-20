@@ -1,0 +1,47 @@
+# Cut In has two targets and is not countered on resolution unless all its targets are illegal (CR 608.2b). Bot2 kills Bot1's Ornithopter,
+# the Role's target, with a Lightning Bolt in response: the 4 damage still hits Bot2's Wall of Earth, and no Role is created.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Ornithopter
+Cut In
+Mountain x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Wall of Earth
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Wall of Earth.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cut In.Cast
+Bot1.Target(Bot2.Battlefield.Wall of Earth)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Wall of Earth.Damage = 4
+Bot1.Battlefield = Mox Ruby
+Bot1.Graveyard = Cut In; Ornithopter; Black Lotus

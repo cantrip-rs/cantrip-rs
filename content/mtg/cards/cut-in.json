@@ -1,0 +1,6 @@
+{
+  "name": "Cut In",
+  "manaCost": "{3}{R}",
+  "type": "Sorcery",
+  "oracleText": "Cut In deals 4 damage to target creature.\nCreate a Young Hero Role token attached to up to one target creature you control. (If you control another Role on it, put that one into the graveyard. Enchanted creature has \"Whenever this creature attacks, if its toughness is 3 or less, put a +1/+1 counter on it.\")"
+}

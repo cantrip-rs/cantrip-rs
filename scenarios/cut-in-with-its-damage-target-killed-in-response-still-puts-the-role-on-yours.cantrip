@@ -1,0 +1,42 @@
+# Cut In with its first target (the damage's) gone as it resolves: the spell still resolves for the target that is legal (CR 608.2b),
+# so no damage is dealt, but Bot1's Ornithopter still gets the Young Hero Role. Bot2 kills its own Memnite with a Lightning Bolt in
+# response.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Ornithopter
+Cut In
+Mountain x20
+
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cut In.Cast
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Graveyard = Memnite; Lightning Bolt
+Bot1.Battlefield = Mox Ruby; Ornithopter; Young Hero
+Bot1.Battlefield.Young Hero.AttachedTo = Ornithopter
