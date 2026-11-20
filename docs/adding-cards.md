@@ -458,7 +458,10 @@ shapes have an example:
   ("You may cast Aura and Equipment spells as though they had flash", Sigarda's Aid; `fn(q, asker, spell, caster)`, the spell
   read through the query as it would be on the stack under the caster), and a card's own condition ("You may cast this spell as
   though it had flash if you control a Human", Bard's Company) is `CardDef.flash_if` (`fn(&dyn Query, &Asker) -> bool`, the card as
-  source and the player who would cast it as controller, judged as the casting begins); a static lifting a loyalty ability's timing is `CardDef.instant_activation`
+  source and the player who would cast it as controller, judged as the casting begins); a card's own permission bought with
+an additional cost ("You may cast this spell as though it had flash if you pay {2} more to cast it", Harbinger of the Tides) is
+the optional cost `cantrip_mechanics::flash_cost::OPTIONAL_COST` (`OptionalCost::flash`) with `flash_cost::LABELS`: the {2} is
+asked at sorcery speed (it may be paid anyway) and owed without asking when the spell could not be cast otherwise (CR 601.2b, 601.2f); a static lifting a loyalty ability's timing is `CardDef.instant_activation`
   (The Wandering Emperor), and a resolved spell's "you may activate loyalty abilities of [Jace] planeswalkers you control
   ... any time you could cast an instant" is `EffectKind::InstantLoyalty(Some(Subtype::Jace))` (Jace's Machinations; `None`
   for every planeswalker), which changes only the timing (CR 606.3). The board is searched for these only when something is cast or activated.

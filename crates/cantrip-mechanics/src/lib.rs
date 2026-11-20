@@ -41,6 +41,7 @@ pub mod history;
 pub mod library;
 pub mod impending;
 pub mod firebending;
+pub mod flash_cost;
 pub mod flashback;
 pub mod harmonize;
 pub mod flurry;
