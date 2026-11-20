@@ -3963,10 +3963,23 @@ pub fn draw_a_card_for_each_artifact_you_control(g: &mut dyn Game, item: &StackI
 /// or ability resolves, whoever controls them, and none that attack or are put onto the battlefield attacking later. One
 /// instruction. Army of Allah, Auron's Inspiration and Morale print it.
 pub fn attacking_creatures_get(g: &mut dyn Game, source: ObjectId, power: i32, toughness: i32) {
+    attacking_creatures_get_and_maybe_gain_trample(g, source, power, toughness, false);
+}
+
+/// "Attacking creatures get +`power`/+`toughness` and gain trample until end of turn" (CR 611.2c): `attacking_creatures_get`
+/// with trample given to the same creatures in the same instruction. Stampede and Provisions Merchant print it.
+pub fn attacking_creatures_get_and_gain_trample(g: &mut dyn Game, source: ObjectId, power: i32, toughness: i32) {
+    attacking_creatures_get_and_maybe_gain_trample(g, source, power, toughness, true);
+}
+
+fn attacking_creatures_get_and_maybe_gain_trample(g: &mut dyn Game, source: ObjectId, power: i32, toughness: i32, trample: bool) {
     let attackers: Vec<ObjectId> = g.state().battlefield().iter().copied().filter(|&id| g.is_attacking(id)).collect();
     instruction(g, |g| {
         for id in attackers {
             crate::pump(g, source, id, power, toughness);
+            if trample {
+                gain_until_end_of_turn(g, source, id, Keyword::Trample);
+            }
         }
     });
 }
