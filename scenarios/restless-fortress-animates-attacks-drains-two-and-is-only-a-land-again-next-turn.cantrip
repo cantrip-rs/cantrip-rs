@@ -1,0 +1,53 @@
+# Restless Fortress enters tapped on turn 1 and is a plain land. On turn 3 Bot1 pays {2}{W}{B} with four Moxen and animates it: until end of turn it is a 1/4 white and
+# black Nightmare land creature (CR 613.1d, 613.4b). It attacks: "Whenever this land attacks, defending player loses 2 life and you gain 2 life" (CR 508.1m, 603.2,
+# 119.3): Bot2 goes to 18 and Bot1 to 22 as the trigger resolves, then Bot2 takes 1 combat damage more (17) because nothing blocks. On turn 4 the effect is gone.
+
+[Bot1 Deck]
+Restless Fortress
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Plains
+Plains x10
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Restless Fortress.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+? Bot1.Battlefield.Restless Fortress.Tapped = true
+? Bot1.Battlefield.Restless Fortress.Types = Land
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Restless Fortress.Activate(Ability: Until end of turn)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Restless Fortress.Types = Land; Creature
+? Bot1.Battlefield.Restless Fortress.Subtypes = Nightmare
+? Bot1.Battlefield.Restless Fortress.Colors = Black; White
+? Bot1.Battlefield.Restless Fortress.Power = 1
+? Bot1.Battlefield.Restless Fortress.Toughness = 4
+Bot1.Attack(Restless Fortress > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+? Bot1.Life = 22
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Life = 22
+[T4 Bot2.Main1]
+
+[Expect]
+Turn = 4
+Bot2.Life = 17
+Bot1.Life = 22
+Bot1.Battlefield.Restless Fortress.Types = Land
+Bot1.Battlefield.Restless Fortress.Colors = (absent)

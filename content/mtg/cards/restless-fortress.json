@@ -1,0 +1,5 @@
+{
+  "name": "Restless Fortress",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {W} or {B}.\n{2}{W}{B}: This land becomes a 1/4 white and black Nightmare creature until end of turn. It's still a land.\nWhenever this land attacks, defending player loses 2 life and you gain 2 life."
+}

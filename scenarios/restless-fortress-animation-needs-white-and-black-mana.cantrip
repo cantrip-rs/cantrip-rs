@@ -1,0 +1,35 @@
+# {2}{W}{B}: with {B}{B}{R}{G} in the pool (the Fortress itself tapped for the black) there is no white and the ability is refused; casting Mox Pearl and tapping it for {W} makes the
+# same ability payable and it animates (the positive control). See the next scenario for the missing black.
+
+[Bot1 Deck]
+Restless Fortress
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Plains
+Plains x12
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Restless Fortress.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Restless Fortress.Activate(Ability: Add; Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Restless Fortress.Activate(Ability: Until end of turn; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Restless Fortress.Activate(Ability: Until end of turn)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Restless Fortress.Types = Land; Creature
+
+[Expect]
+Bot1.Battlefield.Restless Fortress.Types = Land; Creature

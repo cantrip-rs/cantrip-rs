@@ -1,0 +1,25 @@
+# Restless Fortress: "This land enters tapped. {T}: Add {W} or {B}" (CR 614.1c, 605.1a). Bot1 plays it on turn 1: it enters tapped and cannot be tapped for mana (refused). On turn 3 it adds
+# white, and not red or green (refused). On turn 5 it adds black.
+
+[Bot1 Deck]
+Restless Fortress
+Plains x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Restless Fortress.Play
+? Bot1.Battlefield.Restless Fortress.Tapped = true
+! Bot1.Battlefield.Restless Fortress.Activate(Ability: Add; Color: White)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Restless Fortress.Activate(Ability: Add; Color: Red)
+! Bot1.Battlefield.Restless Fortress.Activate(Ability: Add; Color: Green)
+Bot1.Battlefield.Restless Fortress.Activate(Ability: Add; Color: White)
+? Bot1.Mana = {W}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Restless Fortress.Activate(Ability: Add; Color: Black)
+? Bot1.Mana = {B}
+
+[Expect]
+Bot1.Mana = {B}
