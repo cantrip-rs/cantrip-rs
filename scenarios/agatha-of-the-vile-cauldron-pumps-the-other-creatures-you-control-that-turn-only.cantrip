@@ -1,0 +1,55 @@
+# Agatha of the Vile Cauldron: "{4}{R}{G}: Other creatures you control get +1/+1 and gain trample and haste until end of turn." Her own first ability takes
+# {1} off it (she is a creature you control, power 1): {3}{R}{G} paid exactly with Black Lotus (GGG), Mox Ruby and Mox Emerald, nothing left in the pool. Bot1's
+# Memnite becomes 2/2 with trample and haste; Agatha herself is untouched, Bot2's Memnite is untouched and an Ornithopter cast afterwards gets nothing
+# (CR 611.2c). At Bot2's turn the Memnite is 1/1 again and has lost its keywords.
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Black Lotus
+Agatha of the Vile Cauldron
+Memnite
+Ornithopter
+Plains x14
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Agatha of the Vile Cauldron.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Agatha of the Vile Cauldron.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Memnite.Keywords = Haste; Trample
+? Bot1.Battlefield.Agatha of the Vile Cauldron.Power = 1
+? Bot1.Battlefield.Agatha of the Vile Cauldron.Toughness = 1
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Ornithopter.Toughness = 2

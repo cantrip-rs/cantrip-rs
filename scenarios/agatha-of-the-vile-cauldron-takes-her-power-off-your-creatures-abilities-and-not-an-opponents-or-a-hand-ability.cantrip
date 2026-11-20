@@ -1,0 +1,63 @@
+# Agatha of the Vile Cauldron: "Activated abilities of creatures you control cost {X} less to activate, where X is Agatha's power. This effect can't
+# reduce the mana in that cost to less than one mana" (CR 601.2f, 118.7). With power 1, Bot1's Moopsy ({2}: gains reach) costs {1}: of the two mana
+# Lotus left over, one is spent and one stays in the pool. Macetail Hystrodon's cycling {3} is the ability of a card in hand, not of a creature on the
+# battlefield, so it is paid in full: one floating mana plus two Moxen and nothing is left. Bot2's own Moopsy is not Bot1's creature, so its {2}
+# is paid in full with two Moxen.
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Black Lotus
+Agatha of the Vile Cauldron
+Moopsy
+Macetail Hystrodon
+Plains x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Moopsy
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Agatha of the Vile Cauldron.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Moopsy.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Moopsy.Activate
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Moopsy.Keywords = Deathtouch; Reach
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Moopsy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Moopsy.Activate
+? Bot1.Mana = {G}
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Macetail Hystrodon.Activate
+? Bot1.Mana =
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Moopsy.Keywords = Deathtouch; Reach
+Bot1.Battlefield.Mox Pearl.Tapped = false

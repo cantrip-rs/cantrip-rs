@@ -1,0 +1,54 @@
+# Agatha of the Vile Cauldron: X is Agatha's power as the cost is worked out, and "can't reduce the mana in that cost to less than one mana" (CR 601.2f,
+# 118.7). Holy Strength (+1/+2) makes her power 2. Moopsy's {2} would then cost nothing, but stays {1}: of the Lotus mana left over, one G is spent and
+# one stays in the pool. Intrepid Tenderfoot's {3} costs {1}, exactly two less: one Mox pays it and the pool is empty.
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Black Lotus
+Agatha of the Vile Cauldron
+Moopsy
+Intrepid Tenderfoot
+Holy Strength
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Agatha of the Vile Cauldron.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Holy Strength.Cast(Bot1.Battlefield.Agatha of the Vile Cauldron)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Agatha of the Vile Cauldron.Power = 2
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Moopsy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Intrepid Tenderfoot.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Moopsy.Activate
+? Bot1.Mana =
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Intrepid Tenderfoot.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Moopsy.Keywords = Deathtouch; Reach
+Bot1.Battlefield.Intrepid Tenderfoot.Counters.PlusOnePlusOne = 1
