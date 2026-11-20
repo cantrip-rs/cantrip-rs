@@ -647,7 +647,15 @@ pub fn counters_on_creatures_you_control(g: &mut dyn Game, player: PlayerId, kin
 /// controls as it resolves (`counters_on_creatures_you_control`, CR 122.1, 608.2). Abandoned Air Temple, Cosmogrand Zenith (a mode),
 /// Denzilore Fatehold, Gavony Township, Origin of the Avengers (chapter III) and Wilderland Scrounger print it.
 pub fn plus_one_counter_on_each_creature_you_control(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    counters_on_creatures_you_control(g, item.controller, CounterKind::PlusOne, 1);
+    counter_on_each_creature_you_control::<{ CounterKind::PlusOne as usize }>(g, item)
+}
+
+/// "Put a [kind] counter on each creature you control" as a spell's or ability's whole effect, `KIND` a `CounterKind` as `usize`
+/// (CR 122.1, 608.2): on the creatures its controller controls as it resolves, all at once (`counters_on_creatures_you_control`).
+/// Illicit Masquerade (impostor) and Vraska Joins Up (deathtouch) print it, and `plus_one_counter_on_each_creature_you_control` is
+/// it for +1/+1 counters.
+pub fn counter_on_each_creature_you_control<const KIND: usize>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    counters_on_creatures_you_control(g, item.controller, CounterKind::ALL[KIND], 1);
     Ok(())
 }
 
