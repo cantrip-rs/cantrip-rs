@@ -1,0 +1,62 @@
+# Night of the Sweets' Revenge: "{5}{G}{G}, Sacrifice this enchantment: Creatures you control get +X/+X until end of turn, where X is the number of Foods you control."
+# (CR 611.2c, 608.2h). Turn 1: Bot1 makes its Food and a Memnite; Bot2 plays its own Memnite on turn 2. Turn 3: Bot1 pays {5}{G}{G} (Foods tap for {G}),
+# sacrificing the enchantment (no Food itself), so X = 1 (the token): its Memnite is 2/2, a second Memnite cast afterwards stays 1/1 (it was not
+# controlled as the ability resolved) and Bot2's Memnite stays 1/1. The pump ends at the cleanup step.
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Night of the Sweets' Revenge
+Memnite
+Black Lotus
+Memnite
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Night of the Sweets' Revenge.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Food Token.Activate(Ability: Add)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Night of the Sweets' Revenge.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot2.Battlefield.Memnite.Power = 1
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#1.Power = 2
+? Bot1.Battlefield.Memnite#2.Power = 1
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Memnite#1.Power = 1
+Bot1.Battlefield = Food Token; Memnite; Memnite; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire

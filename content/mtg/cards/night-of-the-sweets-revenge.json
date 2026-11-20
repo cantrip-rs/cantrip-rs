@@ -1,0 +1,6 @@
+{
+  "name": "Night of the Sweets' Revenge",
+  "manaCost": "{3}{G}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\nFoods you control have \"{T}: Add {G}.\"\n{5}{G}{G}, Sacrifice this enchantment: Creatures you control get +X/+X until end of turn, where X is the number of Foods you control. Activate only as a sorcery."
+}

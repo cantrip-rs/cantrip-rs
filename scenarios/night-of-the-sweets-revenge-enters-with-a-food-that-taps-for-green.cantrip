@@ -1,0 +1,34 @@
+# Night of the Sweets' Revenge ({3}{G} enchantment): "When this enchantment enters, create a Food token." and "Foods you control have '{T}: Add {G}.'" (CR 111.10b, 613.1f).
+# Bot1 pays {3}{G} with four Moxen (the pool is empty after), the trigger makes one Food token, and that Food taps for {G} the turn it arrives (an artifact, not a creature).
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Night of the Sweets' Revenge
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Night of the Sweets' Revenge.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Food Token; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire; Night of the Sweets' Revenge
+Bot1.Battlefield.Food Token.Activate(Ability: Add)
+? Bot1.Mana = {G}
+
+[Expect]
+Bot1.Battlefield.Food Token.Tapped = true

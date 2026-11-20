@@ -1,0 +1,71 @@
+# Night of the Sweets' Revenge: the Foods are "Foods you control" (an opponent's Food gets no {T}: Add {G}, CR 613.1f) and the sacrifice ability is "Activate only as a
+# sorcery" (CR 602.5d, 307.5). Turn 2: Bot2's Hot Dog Cart makes a Food token that cannot tap for mana. Turn 3: Bot1 has Nutrient Block (a nontoken Food artifact) on the
+# stack, so the ability is refused until it resolves; then X = 2 (the token and the Block, never Bot2's Food) and the Memnite is 3/3 at the end of the turn.
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Night of the Sweets' Revenge
+Memnite
+Black Lotus
+Nutrient Block
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Hot Dog Cart
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Night of the Sweets' Revenge.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hot Dog Cart.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield = Food Token; Hot Dog Cart; Mox Jet; Mox Pearl; Mox Ruby
+! Bot2.Battlefield.Food Token.Activate(Ability: Add)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Food Token.Activate(Ability: Add)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Nutrient Block.Cast
+! Bot1.Battlefield.Night of the Sweets' Revenge.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Night of the Sweets' Revenge.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 3
+
+[Expect]
+Bot1.Battlefield = Food Token; Memnite; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire; Nutrient Block
+Bot2.Battlefield = Food Token; Hot Dog Cart; Mox Jet; Mox Pearl; Mox Ruby
