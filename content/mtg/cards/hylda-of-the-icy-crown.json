@@ -1,0 +1,8 @@
+{
+  "name": "Hylda of the Icy Crown",
+  "manaCost": "{2}{W}{U}",
+  "type": "Legendary Creature — Human Warlock",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Whenever you tap an untapped creature an opponent controls, you may pay {1}. When you do, choose one —\n• Create a 4/4 white and blue Elemental creature token.\n• Put a +1/+1 counter on each creature you control.\n• Scry 2, then draw a card."
+}

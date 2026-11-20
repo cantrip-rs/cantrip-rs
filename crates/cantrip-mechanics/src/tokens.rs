@@ -1933,6 +1933,15 @@ pub static ELEMENTAL_3_3_BLUE_RED: CardDef = CardDef {
     ..token!(Elemental)
 };
 
+/// The 4/4 white and blue Elemental creature token. Hylda of the Icy Crown makes it.
+pub static ELEMENTAL_4_4_WHITE_BLUE: CardDef = CardDef {
+    colors: Some(ColorSet(ColorSet::of(Color::White).0 | ColorSet::of(Color::Blue).0)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(4),
+    toughness: Some(4),
+    ..token!(Elemental)
+};
+
 /// The 4/4 blue and red Elemental creature token. Elemental Masterpiece, Elemental Summoning and Magma Opus make it.
 pub static ELEMENTAL_4_4_BLUE_RED: CardDef = CardDef {
     colors: Some(ColorSet(ColorSet::of(Color::Blue).0 | ColorSet::of(Color::Red).0)),
