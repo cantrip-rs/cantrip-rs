@@ -1,0 +1,42 @@
+# "For each creature your opponents control" with none: Bot2 controls only a Mox Jet (an artifact, no creature), and Bot1
+# has its own Ornithopter, which is not an opponent's creature. Asinine Antics, cast on turn 3 at sorcery speed for {2}{U}{U},
+# resolves and creates no Cursed Role at all: Bot1's battlefield is as before and the Ornithopter is still 0/2.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ornithopter
+Asinine Antics
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Jet
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Asinine Antics.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Count = 1
+Bot1.Graveyard = Asinine Antics
+Stack.Count = 0

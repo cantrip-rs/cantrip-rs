@@ -1,0 +1,53 @@
+# Asinine Antics at sorcery speed: {2}{U}{U} from Mox Sapphire, Mox Jet, Mox Ruby and an Island, nothing asked about the extra {2}
+# (it could not be paid). "For each creature your opponents control, create a Cursed Role token attached to that creature"
+# (CR 111.10q, 303.7): Bot2's two Ornithopters (0/2) each get one, and are 1/1 (CR 613.4b); Bot2's Mox Jet is no creature and
+# gets none, and Bot1's own Ornithopter ("your opponents") gets none and stays 0/2. The Roles are Bot1's: two of them. The mana
+# value of Asinine Antics is four (CR 202.3).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ornithopter
+Asinine Antics
+Island
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Mox Jet
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Asinine Antics.Cast
+Bot1.Pass
+? Stack.Asinine Antics.ManaValue = 4
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Count = 3
+Bot2.Battlefield.Ornithopter#1.Power = 1
+Bot2.Battlefield.Ornithopter#1.Toughness = 1
+Bot2.Battlefield.Ornithopter#2.Power = 1
+Bot2.Battlefield.Ornithopter#2.Toughness = 1
+Bot1.Graveyard = Asinine Antics
+Stack.Count = 0

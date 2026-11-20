@@ -1,0 +1,52 @@
+# Asinine Antics at instant speed owes {2} more (CR 601.2b, 601.2f). On turn 4 Bot2 casts Lightning Bolt at Bot1, and Bot1, with
+# only a Mox Sapphire, Mox Jet, Mox Ruby and an Island, has the Antics' own {2}{U}{U}: it still can't cast the Antics then
+# (refused), as the extra {2} would have to be paid and there is no more mana. The Bolt resolves. On turn 5, a main phase with an
+# empty stack, the Antics is cast for {2}{U}{U} as its mana cost says, and Bot2's Ornithopter is a 1/1.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Asinine Antics
+Island
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Asinine Antics.Cast(Mana: short)
+[T5 Bot1.Main1]
+? Bot1.Life = 17
+? Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Asinine Antics.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 1
+Bot2.Battlefield.Ornithopter.Toughness = 1
+Bot1.Graveyard = Asinine Antics
+Stack.Count = 0

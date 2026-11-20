@@ -1,0 +1,60 @@
+# The extra {2} is an additional cost added to the total (CR 601.2f, 118.8), so a cost reduction applies to it: Stone Calendar
+# ("spells you cast cost {1} less") makes the flashed Asinine Antics {1}{U}{U}{2}, five mana. On turn 4 Bot2 casts Lightning Bolt
+# at Bot1 and Bot1 flashes the Antics in over it with Mox Sapphire, Mox Jet, Mox Ruby and two Islands, exactly five sources (without
+# the Calendar it would need six and be refused). The extra {2} is still owed unasked.
+
+[Bot1 Deck]
+Stone Calendar
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Black Lotus
+Asinine Antics
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Stone Calendar.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Asinine Antics.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot2.Battlefield.Ornithopter.Power = 1
+Bot2.Battlefield.Ornithopter.Toughness = 1
+Bot1.Graveyard = Asinine Antics; Black Lotus
+Stack.Count = 0

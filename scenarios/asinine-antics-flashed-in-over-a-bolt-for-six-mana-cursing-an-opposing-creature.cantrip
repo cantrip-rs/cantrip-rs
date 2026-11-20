@@ -1,0 +1,56 @@
+# Asinine Antics at instant speed owes {2} more (CR 601.2b, 601.2f, 118.8). On turn 2 Bot2 casts Lightning Bolt at Bot1, and
+# Bot1 flashes the Antics in over it for {2}{U}{U}{2}: a Black Lotus' three blue mana and a Mox Sapphire, Mox Jet and Mox Ruby, all
+# six spent, nothing asked. It resolves before the Bolt: Bot2's Grizzly Bears gets a Cursed Role and is a 1/1; the Bolt takes
+# Bot1 to 17.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Asinine Antics
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Asinine Antics.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Power = 1
+? Bot2.Battlefield.Grizzly Bears.Toughness = 1
+? Bot1.Life = 20
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire; Cursed
+Bot1.Graveyard = Asinine Antics; Black Lotus
+Stack.Count = 0

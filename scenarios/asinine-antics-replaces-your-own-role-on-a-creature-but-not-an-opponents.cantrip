@@ -1,0 +1,58 @@
+# "If you control another Role on it, put that one into the graveyard" (CR 303.7a, 704.5z). Bot2 has a Cursed Courtier, which
+# wears Bot2's own Cursed Role, and an Ornithopter. On turn 3 Bot1's first Asinine Antics puts a Cursed Role of Bot1's on each:
+# the Courtier now wears two Cursed Roles, one of each player (Bot1 controls two Roles, with its three Moxen and Island: six
+# permanents). On turn 5 the second Antics replaces both of Bot1's Roles, which go to the graveyard, with new ones: Bot1 still
+# controls two Roles, not four, and Bot2's own Role stays on the Courtier (it has three permanents throughout).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Asinine Antics
+Asinine Antics
+Island
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Cursed Courtier
+Ornithopter
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Cursed Courtier.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Asinine Antics.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 6
+? Bot2.Battlefield.Count = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Asinine Antics.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot2.Battlefield.Count = 3
+Bot2.Battlefield.Cursed Courtier.Power = 1
+Bot2.Battlefield.Ornithopter.Power = 1
+Bot1.Graveyard = Asinine Antics; Asinine Antics
+Stack.Count = 0

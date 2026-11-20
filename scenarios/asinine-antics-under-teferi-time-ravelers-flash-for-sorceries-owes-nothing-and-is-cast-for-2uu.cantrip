@@ -1,0 +1,60 @@
+# Asinine Antics cast at instant speed by another permission owes nothing (CR 601.2b, 118.8): Teferi, Time Raveler's +1 lets Bot1
+# cast sorcery spells as though they had flash, so over Bot2's Lightning Bolt on turn 2 the Antics is cast for {2}{U}{U} alone,
+# a Black Lotus' three blue mana and a Mox Jet, all four spent: the extra {2} that its own permission would have owed is not
+# paid. The question of paying it anyway is asked, as it is of any optional cost (the rulings allow it), and declined.
+# Bot2's Grizzly Bears gets the Cursed Role.
+
+[Bot1 Deck]
+Tundra
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Black Lotus
+Teferi, Time Raveler
+Asinine Antics
+Island x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Ruby
+Grizzly Bears
+Lightning Bolt
+Mountain x16
+
+[Actions]
+Bot1.Hand.Tundra.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Teferi, Time Raveler.Cast
+Bot1.Battlefield.Tundra.Activate(Ability: {U})
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Teferi, Time Raveler.Activate(Ability: +1)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Asinine Antics.Cast
+Bot1.Modes(Cast without flash)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Power = 1
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Stack.Count = 0

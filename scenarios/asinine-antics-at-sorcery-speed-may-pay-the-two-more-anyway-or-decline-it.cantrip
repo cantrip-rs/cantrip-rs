@@ -1,0 +1,57 @@
+# Asinine Antics at sorcery speed (CR 601.2b, 601.2f, 118.8). With six mana in hand (Mox Sapphire, Mox Jet, Mox Ruby, Mox Pearl,
+# Mox Emerald and an Island) the question "Flash: Pay {2} more" is asked, though nothing needs it (the rulings allow it): on
+# turn 3 Bot1 pays it, all six sources tapped, and the mana value is still four (CR 202.3). On turn 5 the second Antics is cast
+# for {2}{U}{U} alone: the extra is declined and the Mox Pearl and Mox Emerald stay untapped.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Island
+Asinine Antics
+Asinine Antics
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Asinine Antics.Cast
+Bot1.Modes(Flash:)
+Bot1.Pass
+? Stack.Asinine Antics.ManaValue = 4
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Asinine Antics.Cast
+Bot1.Modes(Cast without flash)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Mox Pearl.Tapped = false
+Bot1.Battlefield.Mox Emerald.Tapped = false
+Stack.Count = 0
