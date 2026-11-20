@@ -1,0 +1,6 @@
+{
+  "name": "Collector's Vault",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "{2}, {T}: Draw a card, then discard a card. Create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")"
+}

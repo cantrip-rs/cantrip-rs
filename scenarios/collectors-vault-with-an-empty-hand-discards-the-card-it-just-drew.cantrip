@@ -1,0 +1,48 @@
+# Collector's Vault: "Draw a card, then discard a card" (CR 608.2c): the draw is first, so a player with no cards in hand
+# discards the one just drawn (a discard first would find nothing). Bot1's hand is empty after casting everything; the activation
+# draws the top card, the Island, which is the only card to discard (it is in the hand, the ability not yet done), and it goes to the graveyard. The Treasure
+# token is made after it regardless.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Collector's Vault
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Island
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Collector's Vault.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 0
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Collector's Vault.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Island
+Bot1.Choose(Island)
+? Bot1.Hand.Count = 0
+? Bot1.Graveyard = Island
+? Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Mox Sapphire; Mox Emerald; Black Lotus; Collector's Vault; Treasure Token
+
+[Expect]
+Bot1.Graveyard = Island
+Bot1.Hand.Count = 0

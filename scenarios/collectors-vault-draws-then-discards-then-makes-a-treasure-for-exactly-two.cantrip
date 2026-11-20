@@ -1,0 +1,50 @@
+# Collector's Vault {2}, "{2}, {T}: Draw a card, then discard a card. Create a Treasure token." Turn 1: four Moxen, and two of them
+# pay the Vault's {2} (CR 601.2f). Turn 3: Mox Pearl and Mox Sapphire pay it with exactly {W}{U} (the pool is empty afterwards,
+# Mox Jet and Mox Ruby stay untapped). Bot1 draws a card (Swamp: the hand of three is four, CR 121.1), discards one of
+# their choice (the Forest, CR 701.9), and then the Treasure token is made (CR 111.10a): the Vault is tapped and a second activation
+# is refused while it is, though Jet and Ruby could pay it.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Collector's Vault
+Island
+Forest
+Mountain
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Collector's Vault.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana = {W}{U}
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Collector's Vault.Activate
+? Bot1.Mana =
+? Bot1.Battlefield.Mox Jet.Tapped = false
+? Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest)
+? Bot1.Hand.Count = 3
+? Bot1.Graveyard = Forest
+? Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Mox Sapphire; Collector's Vault; Treasure Token
+? Bot1.Battlefield.Collector's Vault.Tapped = true
+! Bot1.Battlefield.Collector's Vault.Activate
+
+[Expect]
+Bot1.Battlefield.Collector's Vault.Tapped = true
+Bot1.Hand.Count = 3
