@@ -1,0 +1,65 @@
+# Tough Cookie {1}{G} (2/2 Artifact Creature - Food Golem): "When this creature enters, create a Food token" and "{2}{G}: Until end
+# of turn, target noncreature artifact you control becomes a 4/4 artifact creature" (CR 205.1b, 611.2). Bot1 casts it on turn 1 and
+# on turn 3 animates Mox Ruby: the targets Bot1 can't choose are the Cookie (already a creature), Bot2's Mox Pearl (an opponent's) and
+# a Plains (no artifact). The Mox is a 4/4 colorless Artifact Creature that attacks (it came in on turn 1, so it isn't summoning
+# sick) for 4; on turn 5 the effect is over: just an artifact again.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Ruby
+Tough Cookie
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tough Cookie.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Food Token.Types = Artifact
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Tough Cookie.Activate(Ability: becomes; Bot1.Battlefield.Tough Cookie)
+! Bot1.Battlefield.Tough Cookie.Activate(Ability: becomes; Bot2.Battlefield.Mox Pearl)
+! Bot1.Battlefield.Tough Cookie.Activate(Ability: becomes; Bot1.Battlefield.Plains)
+Bot1.Battlefield.Tough Cookie.Activate(Ability: becomes; Bot1.Battlefield.Mox Ruby)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Ruby.Types = Artifact; Creature
+? Bot1.Battlefield.Mox Ruby.Power = 4
+? Bot1.Battlefield.Mox Ruby.Toughness = 4
+? Bot1.Battlefield.Mox Ruby.Colors = (absent)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Mox Ruby > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Mox Ruby.Types = Artifact
+? Bot1.Battlefield.Mox Ruby.Power = (absent)
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Mox Ruby.Types = Artifact

@@ -1,0 +1,40 @@
+# Tough Cookie's "{2}, {T}, Sacrifice this creature: You gain 3 life" has {T} in its cost, so the creature can't use it the turn it
+# came under Bot1's control (CR 302.6, 602.5a): on turn 1 it is refused although Bot1 has the mana. On turn 3 it is paid with two
+# Moxen, the Cookie is sacrificed and Bot1 goes to 23; its Food token stays.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Tough Cookie
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Tough Cookie.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Tough Cookie.Activate(Ability: Sacrifice this creature)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Tough Cookie.Activate(Ability: Sacrifice this creature)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+
+[Expect]
+Bot1.Graveyard = Tough Cookie; Black Lotus
+Bot1.Battlefield.Food Token.Types = Artifact

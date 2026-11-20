@@ -1,0 +1,49 @@
+# Tough Cookie's {2}{G} targets any noncreature artifact you control (CR 115.1), a Food token among them: it becomes a 4/4 artifact
+# creature until end of turn and keeps being a Food (CR 205.1b: the effect adds the Creature type; "Food" is an artifact subtype).
+# Bot1 casts the Cookie on turn 1 (its Food token is made) and animates the token on turn 3; it attacks for 4. The Cookie, a Food
+# itself but a creature already, isn't a legal target.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Tough Cookie
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tough Cookie.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Tough Cookie.Activate(Ability: becomes; Bot1.Battlefield.Tough Cookie)
+Bot1.Battlefield.Tough Cookie.Activate(Ability: becomes; Bot1.Battlefield.Food Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Food Token.Types = Artifact; Creature
+? Bot1.Battlefield.Food Token.Subtypes = Food
+? Bot1.Battlefield.Food Token.Power = 4
+? Bot1.Battlefield.Food Token.Toughness = 4
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Food Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+
+[Expect]
+Bot2.Life = 16
