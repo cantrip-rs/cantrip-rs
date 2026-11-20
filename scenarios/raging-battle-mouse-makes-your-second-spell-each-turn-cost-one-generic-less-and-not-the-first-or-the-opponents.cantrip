@@ -1,0 +1,49 @@
+# Raging Battle Mouse: "The second spell you cast each turn costs {1} less to cast." (CR 601.2f). Turn 1: Bot1 casts two Black
+# Lotuses and, with one, the Mouse. Turn 2: Bot2 (no Mouse) casts its own Lotus first and Dancing Scimitar ({4}) second: the
+# discount is Bot1's alone, so with 3 mana it is refused. Turn 3: with the untapped Lotus's 3 mana Bot1 can't cast the Scimitar
+# as its first spell ({4}), then casts a Memnite (first) and the Scimitar (second) for {3} (the Lotus's three mana): the earlier turns' spells don't count.
+
+[Bot1 Deck]
+Black Lotus x2
+Raging Battle Mouse
+Dancing Scimitar
+Memnite
+Mountain x2
+Mountain x14
+
+[Bot2 Deck]
+Black Lotus
+Dancing Scimitar
+Mountain x5
+Mountain x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Raging Battle Mouse.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+! Bot2.Hand.Dancing Scimitar.Cast(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+! Bot1.Hand.Dancing Scimitar.Cast(Mana: short)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dancing Scimitar.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Dancing Scimitar; Memnite; Raging Battle Mouse
+
+[Expect]
+Bot1.Battlefield = Dancing Scimitar; Memnite; Raging Battle Mouse
+Bot2.Hand.Count = 7

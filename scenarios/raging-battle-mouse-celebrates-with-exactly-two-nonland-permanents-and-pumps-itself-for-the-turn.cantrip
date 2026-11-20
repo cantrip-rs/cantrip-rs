@@ -1,0 +1,37 @@
+# Raging Battle Mouse ({1}{R}, 2/1): "Celebration — At the beginning of combat on your turn, if two or more nonland permanents
+# entered the battlefield under your control this turn, target creature you control gets +1/+1 until end of turn." On turn 1
+# Bot1 casts a Black Lotus and, with its mana, the Mouse: exactly two nonland permanents entered (the Lotus counts although it is
+# sacrificed, CR 207.2c), so at the beginning of combat the trigger (its only legal target is the Mouse) targets itself and is a 3/2 until end of turn (CR 611.2a).
+# At turn 2 (the opponent's turn, no trigger) the Mouse is a 2/1 again (CR 514.2).
+
+[Bot1 Deck]
+Black Lotus
+Raging Battle Mouse
+Mountain x5
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Raging Battle Mouse.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Raging Battle Mouse.Power = 2
+? Bot1.Battlefield.Raging Battle Mouse.Toughness = 1
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Raging Battle Mouse.Power = 3
+? Bot1.Battlefield.Raging Battle Mouse.Toughness = 2
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Raging Battle Mouse.Power = 2
+? Bot1.Battlefield.Raging Battle Mouse.Toughness = 1
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Raging Battle Mouse.Power = 2
+Bot1.Battlefield.Raging Battle Mouse.Toughness = 1
+Stack.Count = 0

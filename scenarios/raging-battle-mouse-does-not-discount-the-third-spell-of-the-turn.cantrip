@@ -1,0 +1,38 @@
+# Raging Battle Mouse: only the second spell each turn is cheaper (CR 601.2f). Turn 3: Bot1 casts a Memnite, an Ornithopter (the
+# second, free anyway) and then can't cast Dancing Scimitar ({4}) as the third with only 3 mana from a Black Lotus: it stays in hand.
+
+[Bot1 Deck]
+Black Lotus x2
+Raging Battle Mouse
+Dancing Scimitar
+Memnite
+Ornithopter
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Raging Battle Mouse.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Dancing Scimitar.Cast(Mana: short)
+
+[Expect]
+Bot1.Hand = Dancing Scimitar; Mountain; Mountain
+Bot1.Battlefield = Memnite; Ornithopter; Raging Battle Mouse

@@ -1,0 +1,66 @@
+# Raging Battle Mouse: the Celebration condition (CR 207.2c, 603.4) is checked each turn at the beginning of combat. Turn 1: a
+# Black Lotus and the Mouse entered, so Bot1 pumps the Mouse. Turn 3: Bot1 plays a Mountain and casts a Memnite: a land doesn't
+# count, so one nonland permanent (and the Mouse and Lotus from turn 1 don't count either): no trigger, the Mouse stays a 2/1.
+# Turn 5: Bot1 casts a Mox Ruby and a Mox Pearl, the second nonland permanent: the trigger happens. The target must be a creature
+# Bot1 controls: Bot2's Ornithopter is refused (CR 115.1, 601.2c) and Bot1 pumps its Memnite, a 2/2 for the turn.
+
+[Bot1 Deck]
+Black Lotus
+Raging Battle Mouse
+Memnite
+Mox Ruby
+Mox Pearl
+Mountain
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Raging Battle Mouse.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Raging Battle Mouse.Power = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+? Stack.Count = 0
+? Bot1.Battlefield.Raging Battle Mouse.Power = 2
+? Bot1.Battlefield.Raging Battle Mouse.Toughness = 1
+? Bot1.Battlefield.Memnite.Power = 1
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.BeginCombat]
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Raging Battle Mouse.Power = 2
+? Bot2.Battlefield.Ornithopter.Power = 0
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Raging Battle Mouse.Power = 2
+Bot2.Battlefield.Ornithopter.Power = 0

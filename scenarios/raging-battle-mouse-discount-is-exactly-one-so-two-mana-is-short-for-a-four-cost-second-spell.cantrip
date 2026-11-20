@@ -1,0 +1,36 @@
+# Raging Battle Mouse: the second spell costs exactly {1} less (CR 601.2f), not two: Dancing Scimitar ({4}) as the second spell
+# of the turn costs {3}. On turn 3 Bot1 has two Mountains (one played on each of turns 1 and 3): it casts a Memnite first, and
+# then has only {R}{R} for the Scimitar, which still costs {3}: refused.
+
+[Bot1 Deck]
+Black Lotus
+Raging Battle Mouse
+Dancing Scimitar
+Memnite
+Mountain
+Mountain
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Raging Battle Mouse.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Hand.Dancing Scimitar.Cast(Mana: short)
+
+[Expect]
+Bot1.Hand = Dancing Scimitar; Mountain; Mountain
+Bot1.Battlefield = Memnite; Mountain; Mountain; Raging Battle Mouse
