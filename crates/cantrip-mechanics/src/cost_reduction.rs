@@ -1,6 +1,6 @@
 //! "This spell costs {1} less to cast for each ..." and "This ability costs {1} less to activate for each ..." where the card is not
 //! affinity (CR 702.41a is the keyword, and only the cards that print the word use `affinity`): a cost reduction (CR 601.2f, 118.7) that
-//! counts a pool of the caster's.
+//! counts a pool of the caster's, or what the turn's history holds.
 
 use cantrip_api::*;
 
@@ -9,6 +9,15 @@ use cantrip_api::*;
 pub fn for_each_instant_and_sorcery_in_your_graveyard(q: &dyn Query, _: ObjectId, player: PlayerId, _: Costed, _: &[Target]) -> CostDelta {
     let cards = q.state().zone(Zone::graveyard(player)).iter().filter(|&&id| q.chars(id).is(CardType::Instant) || q.chars(id).is(CardType::Sorcery)).count();
     CostDelta::less(cards as u32)
+}
+
+/// "This spell costs {1} less to cast for each creature that attacked this turn" (CR 601.2f, 118.7a, 508.1): the creatures declared as
+/// attackers this turn, whoever controls them now (only the active player declares attackers, CR 506.2). A creature that attacked in
+/// two combats counts once, one put onto the battlefield attacking was never declared (CR 508.4), and one that has since left the
+/// battlefield still attacked. Counted as the cost is determined, and never off a colored symbol (CR 118.7a, which the core leaves
+/// in place). Rowdy Research and Witchstalker Frenzy print it.
+pub fn for_each_creature_that_attacked_this_turn(q: &dyn Query, _: ObjectId, _: PlayerId, _: Costed, _: &[Target]) -> CostDelta {
+    CostDelta::less(crate::history::creatures_attacked_with(q, q.state().turn.active) as u32)
 }
 
 /// "This spell costs {1} less to cast for each noncreature, nonland card in your graveyard" (CR 601.2f, 118.7a): counted as
