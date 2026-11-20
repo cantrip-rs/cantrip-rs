@@ -1,0 +1,56 @@
+# Ogre Chitterlord ({4}{R}{R}, 6/5 menace): "Whenever this creature enters or attacks, create two 1/1 black Rat creature tokens with
+# 'This token can't block.' Then if you control five or more Rats, each Rat you control gets +2/+0 until end of turn." Turn 1: two
+# Black Lotuses pay for it; it enters: two Rats (2 Rats, the Ogre is no Rat), no pump. Turn 3: it attacks: two more, 4 Rats: still
+# no pump. Turn 5: it attacks again: 6 Rats, all six (the two new ones too, they are counted and pumped as the ability resolves) are
+# 3/1 until end of turn (CR 611.2a), and at turn 6 they are 1/1 again (CR 514.2). The Ogre isn't a Rat and stays 6/5.
+
+[Bot1 Deck]
+Black Lotus x2
+Ogre Chitterlord
+Mountain x4
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Ogre Chitterlord.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Ogre Chitterlord; Rat Token; Rat Token
+? Bot1.Battlefield.Rat Token#1.Power = 1
+? Bot1.Battlefield.Rat Token#1.Keywords = CantBlock
+? Bot1.Battlefield.Rat Token#1.Colors = Black
+? Bot1.Battlefield.Rat Token#1.Toughness = 1
+? Bot1.Battlefield.Ogre Chitterlord.Keywords = Menace
+[T3 Bot1.Main1]
+Bot1.Attack(Ogre Chitterlord > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+? Bot1.Battlefield.Rat Token#1.Power = 1
+? Bot1.Battlefield.Rat Token#4.Power = 1
+[T5 Bot1.Main1]
+Bot1.Attack(Ogre Chitterlord > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 7
+? Bot1.Battlefield.Rat Token#1.Power = 3
+? Bot1.Battlefield.Rat Token#1.Toughness = 1
+? Bot1.Battlefield.Rat Token#6.Power = 3
+? Bot1.Battlefield.Ogre Chitterlord.Power = 6
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Rat Token#1.Power = 1
+? Bot1.Battlefield.Rat Token#6.Power = 1
+
+[Expect]
+Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Rat Token#1.Power = 1
+Bot2.Life = 8

@@ -1,0 +1,52 @@
+# Ogre Chitterlord: "if you control five or more Rats" is checked as the ability resolves, after its two Rats are made (CR 608.2c).
+# On turn 1 the Ogre enters for two Rats, no pump (2 Rats). On turn 3 Bot1 casts a Harried Spearguard and Lightning Bolts its own
+# Spearguard: it dies and makes a Rat (3 Rats, a Rat that came from a dying Human Soldier is a Rat like the rest). Then the Ogre
+# attacks and its two new Rats make exactly five: every Rat is a 3/1 until end of turn. The Ogre isn't a Rat and stays 6/5.
+
+[Bot1 Deck]
+Black Lotus x3
+Ogre Chitterlord
+Harried Spearguard
+Lightning Bolt
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Ogre Chitterlord.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 3
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Harried Spearguard.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Harried Spearguard)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 4
+? Bot1.Battlefield.Rat Token#3.Power = 1
+Bot1.Attack(Ogre Chitterlord > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 6
+? Bot1.Battlefield.Rat Token#1.Power = 3
+? Bot1.Battlefield.Rat Token#3.Power = 3
+? Bot1.Battlefield.Rat Token#5.Power = 3
+? Bot1.Battlefield.Ogre Chitterlord.Power = 6
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Rat Token#5.Power = 3
+Bot1.Graveyard = Harried Spearguard; Lightning Bolt; Black Lotus; Black Lotus; Black Lotus

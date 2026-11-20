@@ -1,0 +1,11 @@
+{
+  "name": "Ogre Chitterlord",
+  "manaCost": "{4}{R}{R}",
+  "type": "Creature — Ogre Warrior",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": "Menace\nWhenever this creature enters or attacks, create two 1/1 black Rat creature tokens with \"This token can't block.\" Then if you control five or more Rats, each Rat you control gets +2/+0 until end of turn.",
+  "keywords": [
+    "Menace"
+  ]
+}

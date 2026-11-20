@@ -1,0 +1,61 @@
+# Ogre Chitterlord: "if you control five or more Rats, each Rat you control gets +2/+0" -- the Rats are yours alone (CR 109.4).
+# Turn 1: Bot1's Ogre makes two Rats. Turn 2: Bot2 casts its own Ogre Chitterlord, two Rats of its own. Turn 3: Bot1's Ogre
+# attacks: Bot1 controls four Rats and there are six in play, but Bot1's Rats stay 1/1 (no pump) and Bot2's are untouched. Turn 5:
+# the Ogre attacks again, Bot1 has six Rats, all pumped to 3/1 for the turn while Bot2's two Rats stay 1/1.
+
+[Bot1 Deck]
+Black Lotus x2
+Ogre Chitterlord
+Mountain x4
+Mountain x14
+
+[Bot2 Deck]
+Black Lotus x2
+Ogre Chitterlord
+Mountain x4
+Mountain x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Ogre Chitterlord.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Ogre Chitterlord.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Count = 3
+[T3 Bot1.Main1]
+Bot1.Attack(Ogre Chitterlord > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+? Bot1.Battlefield.Rat Token#1.Power = 1
+? Bot1.Battlefield.Rat Token#4.Power = 1
+? Bot2.Battlefield.Rat Token#1.Power = 1
+[T5 Bot1.Main1]
+Bot1.Attack(Ogre Chitterlord > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 7
+? Bot1.Battlefield.Rat Token#1.Power = 3
+? Bot1.Battlefield.Rat Token#6.Power = 3
+? Bot2.Battlefield.Rat Token#1.Power = 1
+? Bot2.Battlefield.Rat Token#2.Power = 1
+? Bot2.Battlefield.Ogre Chitterlord.Power = 6
+
+[Expect]
+Bot1.Battlefield.Count = 7
+Bot2.Battlefield.Count = 3
+Bot2.Battlefield.Rat Token#1.Power = 1
