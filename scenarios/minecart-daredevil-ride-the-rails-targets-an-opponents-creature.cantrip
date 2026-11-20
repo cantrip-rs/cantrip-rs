@@ -1,0 +1,33 @@
+# Ride the Rails targets any creature (CR 115.1): on turn 3 Bot1 makes Bot2's Ornithopter (0/2 flying) a 2/3 for the turn, and
+# the Adventure card is exiled afterwards (CR 715.4), not put into the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Minecart Daredevil
+Mountain x5
+Mountain x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Minecart Daredevil.Cast(Bot2.Battlefield.Ornithopter; Ability: Ride the Rails)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 2
+? Bot2.Battlefield.Ornithopter.Toughness = 3
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+
+[Expect]
+Exile = Minecart Daredevil
+Bot1.Graveyard = Black Lotus

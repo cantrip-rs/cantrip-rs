@@ -1,0 +1,45 @@
+# Ride the Rails ({1}{R} instant Adventure): "Target creature gets +2/+1 until end of turn." On turn 1 Bot1 casts it on its own
+# Memnite (1/1): a 3/2 for the turn, and a Mox Ruby and a Black Lotus are refused (CR 115.1). The Adventure card goes to exile
+# (CR 715.4) and at the next turn the Memnite is a 1/1 again (CR 514.2). On turn 3 Bot1 casts Minecart Daredevil from exile
+# (CR 715.3d): a 4/2 Dwarf Knight (it is not the Adventure's characteristics) that enters with no pump.
+
+[Bot1 Deck]
+Black Lotus x2
+Mox Ruby
+Memnite
+Minecart Daredevil
+Mountain x2
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+! Bot1.Hand.Minecart Daredevil.Cast(Bot1.Battlefield.Mox Ruby; Ability: Ride the Rails)
+! Bot1.Hand.Minecart Daredevil.Cast(Bot1.Battlefield.Black Lotus; Ability: Ride the Rails)
+Bot1.Hand.Minecart Daredevil.Cast(Bot1.Battlefield.Memnite; Ability: Ride the Rails)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Exile = Minecart Daredevil
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Exile.Minecart Daredevil.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Minecart Daredevil.Power = 4
+? Bot1.Battlefield.Minecart Daredevil.Toughness = 2
+? Bot1.Battlefield.Minecart Daredevil.Subtypes = Dwarf; Knight
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Minecart Daredevil.Types = Creature
