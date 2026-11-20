@@ -1,0 +1,40 @@
+# "If you control another Role on it, put that one into the graveyard" (CR 303.7): two Genealogists put a Royal Role on Memnite one after the other. The first Role is put into
+# the graveyard (a token that ceases to exist) so only one Role stays on the Memnite, which is 2/2 (+1/+1 once), not 3/3. With Memnite the only other creature the first trigger
+# has a single legal target and picks it; the second has two (Memnite, the first Genealogist).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Memnite
+Redtooth Genealogist
+Redtooth Genealogist
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Redtooth Genealogist#1.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Redtooth Genealogist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Royal.AttachedTo = Memnite
+Bot1.Battlefield.Count = 4

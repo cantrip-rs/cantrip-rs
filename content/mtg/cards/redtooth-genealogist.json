@@ -1,0 +1,8 @@
+{
+  "name": "Redtooth Genealogist",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Elf Advisor",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "When this creature enters, create a Royal Role token attached to another target creature you control. (If you control another Role on it, put that one into the graveyard. Enchanted creature gets +1/+1 and has ward {1}.)"
+}

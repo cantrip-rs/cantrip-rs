@@ -1,0 +1,45 @@
+# Redtooth Genealogist {2}{G}, a 2/3 Elf Advisor: "When this creature enters, create a Royal Role token attached to another target creature you control." Bot1 has Memnite
+# and Ornithopter, Bot2 an Ornithopter. The trigger refuses the Genealogist itself (CR 115.1, "another") and Bot2's creature ("you control"); targeting Memnite, the Role makes
+# it 2/2 with ward {1} (CR 111.10m, 303.4). Ornithopter and the Genealogist are unchanged.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Memnite
+Ornithopter
+Redtooth Genealogist
+Forest x16
+
+[Bot2 Deck]
+Ornithopter
+Forest x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Redtooth Genealogist.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Redtooth Genealogist)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Royal.AttachedTo = Memnite
+Bot1.Battlefield.Royal.Token = true
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Redtooth Genealogist.Power = 2
+Bot1.Battlefield.Redtooth Genealogist.Toughness = 3
+Bot2.Battlefield.Ornithopter.Toughness = 2
