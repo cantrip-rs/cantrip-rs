@@ -1,0 +1,30 @@
+# Belligerent of the Ball: "if two or more nonland permanents entered the battlefield under your control this turn" (CR 603.4).
+# Black Lotus enters on turn 1 (not on turn 3, so it does not count then). On turn 3 Bot1 plays a Mountain (a land, not counted) and casts the
+# Belligerent with the Lotus: only one nonland permanent entered, so no trigger and no target prompt at the beginning of combat.
+
+[Bot1 Deck]
+Black Lotus
+Memnite
+Mountain
+Belligerent of the Ball
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Belligerent of the Ball.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Belligerent of the Ball.Power = 3
+
+[Expect]
+Bot1.Battlefield.Belligerent of the Ball.Power = 3
+Bot1.Battlefield.Belligerent of the Ball.Keywords = (absent)
