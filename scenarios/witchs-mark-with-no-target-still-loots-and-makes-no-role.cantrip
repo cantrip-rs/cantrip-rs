@@ -1,0 +1,34 @@
+# Witch's Mark: "up to one target creature you control" (CR 601.2c): Bot1 casts it with no target, still may loot, and no Role is made
+# (nothing to attach it to). Bot1 discards the Bolt and draws two.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Ornithopter
+Witch's Mark
+Lightning Bolt
+Mountain
+Mountain
+Island
+Plains
+Mountain x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Witch's Mark.Cast()
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+
+[Expect]
+Bot1.Hand = Island; Mountain; Mountain; Plains
+Bot1.Graveyard = Witch's Mark; Lightning Bolt
+Bot1.Battlefield = Mox Jet; Mox Ruby; Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 0

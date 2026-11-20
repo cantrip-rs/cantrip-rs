@@ -1,0 +1,35 @@
+# Witch's Mark: the discard is a "may" (CR 608.2d); Bot1 declines it, so no cards are drawn and the Bolt stays in hand. The Role
+# is created regardless, since it is its own sentence and does not depend on the discard.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Ornithopter
+Witch's Mark
+Lightning Bolt
+Mountain
+Mountain
+Island
+Plains
+Mountain x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Witch's Mark.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+
+[Expect]
+Bot1.Hand = Lightning Bolt; Mountain; Mountain
+Bot1.Graveyard = Witch's Mark
+Bot1.Battlefield = Mox Jet; Mox Ruby; Ornithopter; Wicked
+Bot1.Battlefield.Wicked.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 1
