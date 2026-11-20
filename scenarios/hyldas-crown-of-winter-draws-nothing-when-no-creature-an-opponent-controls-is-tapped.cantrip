@@ -1,0 +1,53 @@
+# Hylda's Crown of Winter: "Draw a card for each tapped creature your opponents control" (CR 121.1) draws no card when none is tapped. Bot2's Llanowar Elves is untapped
+# (cast on turn 2), so on turn 3 Bot1 pays {3} from three Moxen, sacrifices the Crown and draws nothing: its hand is the four Islands it already held.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Hylda's Crown of Winter
+Island x21
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hylda's Crown of Winter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand = Island; Island; Island; Island
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Hylda's Crown of Winter.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Hylda's Crown of Winter
+? Bot1.Hand = Island; Island; Island; Island
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island
+Bot1.Graveyard = Hylda's Crown of Winter

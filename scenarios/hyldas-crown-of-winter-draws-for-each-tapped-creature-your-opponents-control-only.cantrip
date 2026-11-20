@@ -1,0 +1,79 @@
+# Hylda's Crown of Winter: "{3}, Sacrifice this artifact: Draw a card for each tapped creature your opponents control" (CR 602.2, 701.21, 121.1). Bot1 has the Crown and a
+# Llanowar Elves; Bot2 has a Llanowar Elves and Birds of Paradise. On turn 3 Bot1 taps Bot2's Elves with the Crown (free on its own turn), taps its own Elves for mana (not
+# counted: not an opponent's creature) and pays {3} with that mana and two Moxen. Bot2's untapped Birds are not counted either, so Bot1 draws exactly one card.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Hylda's Crown of Winter
+Llanowar Elves
+Island x21
+
+[Bot2 Deck]
+Mox Emerald
+Mox Emerald
+Llanowar Elves
+Birds of Paradise
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hylda's Crown of Winter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Birds of Paradise.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand = Island; Island
+Bot1.Battlefield.Hylda's Crown of Winter.Activate(Ability: Tap target; Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+? Bot2.Battlefield.Birds of Paradise.Tapped = false
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Battlefield.Hylda's Crown of Winter.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Graveyard = Hylda's Crown of Winter
+? Bot1.Hand = Island; Island; Island
+
+[Expect]
+Bot1.Hand = Island; Island; Island
+Bot1.Graveyard = Hylda's Crown of Winter

@@ -1,0 +1,62 @@
+# Hylda's Crown of Winter: "{1}, {T}: Tap target creature. This ability costs {1} less to activate during your turn" (CR 601.2f, 118.7a):
+# the reduction is exactly {1}, applied to the total cost. Bot2's Anointed Peacekeeper names the Crown, so its activated abilities cost {2}
+# more: on Bot1's turn 3 the tap ability costs {1} + {2} - {1} = {2}. With Mox Sapphire its only mana source it is refused
+# for want of mana; once Mox Emerald joins it, it is paid with both (the pool is empty afterwards) and taps the Peacekeeper.
+
+[Bot1 Deck]
+Black Lotus
+Hylda's Crown of Winter
+Mox Sapphire
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Anointed Peacekeeper
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Hylda's Crown of Winter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Anointed Peacekeeper.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Name(Hylda's Crown of Winter)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Hylda's Crown of Winter.Activate(Ability: Tap target; Bot2.Battlefield.Anointed Peacekeeper; Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Hylda's Crown of Winter.Activate(Ability: Tap target; Bot2.Battlefield.Anointed Peacekeeper)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Anointed Peacekeeper.Tapped = true
+
+[Expect]
+Bot1.Mana =
+Bot2.Battlefield.Anointed Peacekeeper.Tapped = true
+Bot1.Battlefield.Hylda's Crown of Winter.Tapped = true

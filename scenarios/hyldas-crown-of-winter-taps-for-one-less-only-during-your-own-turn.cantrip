@@ -1,0 +1,69 @@
+# Hylda's Crown of Winter: "{1}, {T}: Tap target creature. This ability costs {1} less to activate during your turn" (CR 601.2f, 602.2b, 118.7a).
+# Bot1 casts the Crown on turn 1 with three Moxen, so on turn 2 (Bot2's turn), with the Crown untapped but no mana source untapped, the ability (still {1} there)
+# is not offered. On turn 3 (Bot1's turn) Bot1 plays an Island and does not use the Crown. On turn 4 (Bot2's turn) it costs {1}: Bot1 taps the Island for it and
+# taps Bot2's Llanowar Elves, leaving the pool empty. On turn 5 (Bot1's turn) the Crown has untapped and the ability costs {0}: it is activated with an empty pool,
+# taps the Elves again, and the Island stays untapped.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Hylda's Crown of Winter
+Island x21
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hylda's Crown of Winter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Hylda's Crown of Winter.Tapped = false
+! Bot1.Battlefield.Hylda's Crown of Winter.Activate(Ability: Tap target; Bot2.Battlefield.Llanowar Elves; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Llanowar Elves.Tapped = false
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Hylda's Crown of Winter.Activate(Ability: Tap target; Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+? Bot1.Battlefield.Hylda's Crown of Winter.Tapped = true
+? Bot1.Mana =
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Hylda's Crown of Winter.Tapped = false
+? Bot1.Mana =
+Bot1.Battlefield.Hylda's Crown of Winter.Activate(Ability: Tap target; Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hylda's Crown of Winter.Tapped = true
+? Bot1.Battlefield.Island.Tapped = false
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Hylda's Crown of Winter.Tapped = true
+Bot1.Battlefield.Island.Tapped = false
+Bot2.Battlefield.Llanowar Elves.Tapped = true
