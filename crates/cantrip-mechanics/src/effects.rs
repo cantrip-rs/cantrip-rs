@@ -1698,6 +1698,17 @@ pub fn target_player_loses_1_life_you_gain_1(g: &mut dyn Game, item: &StackItem)
     target_player_loses_life_you_gain_life(g, item, 1)
 }
 
+/// "Defending player loses `N` life and you gain `N` life" (CR 508.5, 119.3): the player the source attacked, or the controller of
+/// the planeswalker or protector of the battle it attacked, from the attack it made (`Query::defending_player`), also once it has
+/// left combat. The gain does not depend on the loss. Agate-Blade Assassin prints it of 1 and Restless Fortress of 2.
+pub fn defending_player_loses_life_you_gain_life<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(defending) = g.defending_player(item.object) {
+        g.lose_life(defending, N);
+    }
+    g.gain_life(item.controller, N);
+    Ok(())
+}
+
 /// "[This source] deals `n` damage to each opponent" (CR 120.3, 102.2): one damage event for each opponent still in the game,
 /// dealt together (CR 120.2), by the resolving object as it last was if it has left (CR 113.7a). Chandra, Torch of Defiance,
 /// Eye of Jace, Fiery Confluence, Impact Tremors, Warleader's Call, Vivi Ornitier, Gau, Keral Keep Disciples, Voldaren
