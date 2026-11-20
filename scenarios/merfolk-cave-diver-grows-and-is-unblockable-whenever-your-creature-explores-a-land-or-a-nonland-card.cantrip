@@ -1,0 +1,66 @@
+# Merfolk Cave-Diver {2}{U}, 2/4: "Whenever a creature you control explores, this creature gets +1/+0 until end of turn and can't be blocked this turn" (CR 701.44a, 603.2, 611.2).
+# Black Lotus pays for the Diver. A Cenote Scout then explores a land (the Island goes to Bot1's hand): the Diver is a 3/4 that can't be blocked. A second Scout explores
+# a nonland (the Lightning Bolt, left on top, drawn on turn 3; the Scout is a 2/2): each explore is its own trigger, so the Diver is a 4/4. The effects end with the turn, the Diver is a 2/4 and blockable again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Merfolk Cave-Diver
+Cenote Scout
+Cenote Scout
+Forest
+Island
+Island
+Lightning Bolt
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Merfolk Cave-Diver.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Merfolk Cave-Diver.Power = 2
+? Bot1.Battlefield.Merfolk Cave-Diver.CantBeBlocked = (absent)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cenote Scout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Merfolk Cave-Diver.Power = 3
+? Bot1.Battlefield.Merfolk Cave-Diver.Toughness = 4
+? Bot1.Battlefield.Merfolk Cave-Diver.CantBeBlocked = true
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Cenote Scout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Merfolk Cave-Diver.Power = 4
+Bot1.Pass
+[T1 Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Merfolk Cave-Diver.Power = 2
+? Bot1.Battlefield.Merfolk Cave-Diver.CantBeBlocked = (absent)
+
+[Expect]
+Bot1.Battlefield.Cenote Scout#1.Power = 1
+Bot1.Battlefield.Cenote Scout#2.Counters.PlusOnePlusOne = 1
+Bot1.Hand = Island; Island; Lightning Bolt
+Bot1.Library.Count = 13
+Bot1.Revealed = Island; Lightning Bolt
+Bot1.Graveyard = Black Lotus

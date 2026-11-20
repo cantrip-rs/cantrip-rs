@@ -1,0 +1,8 @@
+{
+  "name": "Merfolk Cave-Diver",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Merfolk Scout",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Whenever a creature you control explores, this creature gets +1/+0 until end of turn and can't be blocked this turn."
+}

@@ -1,0 +1,44 @@
+# Merfolk Cave-Diver and an explore by a creature that is gone (CR 701.44c, 603.2): with the Cenote Scout's trigger on the stack Bot1 Bolts its own Scout, which dies.
+# The trigger still explores - Mox Jet, a nonland card, is revealed and Bot1 puts it into the graveyard, with no +1/+1 counter for anything - and it was still a
+# creature Bot1 controlled, so the Diver is a 3/4 that can't be blocked.
+
+[Bot1 Deck]
+Black Lotus
+Merfolk Cave-Diver
+Forest
+Cenote Scout
+Mox Ruby
+Lightning Bolt
+Island
+Mox Jet
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Merfolk Cave-Diver.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Cenote Scout.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Cenote Scout)
+? Stack.Count = 2
+Bot1.Accept
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Forest; Merfolk Cave-Diver; Mox Ruby
+Bot1.Battlefield.Merfolk Cave-Diver.Power = 3
+Bot1.Battlefield.Merfolk Cave-Diver.CantBeBlocked = true
+Bot1.Graveyard.Count = 4
+Bot1.Revealed = Mox Jet
+Bot1.Library.Count = 12
+Stack.Count = 0
+Bot1.Graveyard.Cenote Scout.Counters.PlusOnePlusOne = (absent)

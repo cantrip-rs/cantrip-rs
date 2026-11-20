@@ -1,0 +1,38 @@
+# Merfolk Cave-Diver triggers on a creature exploring, not on what it found (CR 701.44a-b, 603.2): Bot1's library is empty, so the Cenote Scout's explore reveals
+# no card - and still gets the Scout its +1/+1 counter (a 2/2) - and the Diver is a 3/4 that can't be blocked.
+
+[Bot1 Deck]
+Black Lotus
+Merfolk Cave-Diver
+Cenote Scout
+Forest
+Island
+Island
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Merfolk Cave-Diver.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Cenote Scout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Merfolk Cave-Diver.Power = 3
+? Bot1.Battlefield.Merfolk Cave-Diver.CantBeBlocked = true
+
+[Expect]
+Bot1.Battlefield.Cenote Scout.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Cenote Scout.Power = 2
+Bot1.Library.Count = 0
+Bot1.Hand = Island; Island; Island

@@ -1,0 +1,41 @@
+# Merfolk Cave-Diver's trigger is "a creature you control" (CR 603.2, 701.44a): Bot2's Cenote Scout explores a nonland card (the Lightning Bolt on top, which Bot2 keeps
+# there, the Scout a 2/2), and Bot1's Diver does nothing - still a 2/4 that can be blocked, where its own creature exploring would have made it a 3/4 that can't.
+
+[Bot1 Deck]
+Black Lotus
+Merfolk Cave-Diver
+Island x18
+
+[Bot2 Deck]
+Mox Emerald
+Cenote Scout
+Island x5
+Island
+Lightning Bolt
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Merfolk Cave-Diver.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Cenote Scout.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Cenote Scout.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Merfolk Cave-Diver.Power = 2
+? Bot1.Battlefield.Merfolk Cave-Diver.CantBeBlocked = (absent)
+
+[Expect]
+Bot2.Revealed = Lightning Bolt
+Bot2.Library.Count = 11
+Bot1.Battlefield.Merfolk Cave-Diver.Power = 2
