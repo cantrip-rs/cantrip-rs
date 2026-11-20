@@ -1,13 +1,11 @@
 use cantrip_api::*;
-use cantrip_mechanics::library::{look_at_top, Rest};
-use cantrip_mechanics::{effects, lands, targets, triggers};
+use cantrip_mechanics::{effects, lands, look_for_card_type, targets, triggers};
 use cantrip_oracle as oracle;
 
 /// "Look at the top six cards of your library. You may reveal an artifact card from among them and put it into your hand.
 /// Put the rest on the bottom of your library in a random order." With no artifact among them nobody is asked.
 fn look_for_an_artifact(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    look_at_top(g, item.controller, item.object, 6, (0, 1), true, |c| c.is(CardType::Artifact), Rest::BottomRandom)?;
-    Ok(())
+    look_for_card_type(g, item.controller, item.object, 6, CardType::Artifact)
 }
 
 /// "Whenever you cast a Spacecraft spell" (CR 603.2): the trigger is about the spell, which is no permanent, so the

@@ -1383,8 +1383,15 @@ pub fn look_for_creature_or_land(g: &mut dyn Game, player: PlayerId, source: Obj
     look_for_one(g, player, source, count, |chars| chars.is(CardType::Creature) || chars.is(CardType::Land))
 }
 
-/// The look both of the above make: one card `wanted` may go to the hand, the rest to the bottom at random.
-fn look_for_one(g: &mut dyn Game, player: PlayerId, source: ObjectId, count: usize, wanted: fn(&Chars) -> bool) -> Result<(), Suspend> {
+/// "Look at the top `count` cards of your library. You may reveal a[n] `kind` card from among them and put it into your hand. Put the
+/// rest on the bottom of your library in a random order." Case File Auditor (an enchantment, of six), Rutherford, Upgraded Ensign (an
+/// artifact, of six) and Mycoid Maze (a creature, of four). With no such card among them nobody is asked.
+pub fn look_for_card_type(g: &mut dyn Game, player: PlayerId, source: ObjectId, count: usize, kind: CardType) -> Result<(), Suspend> {
+    look_for_one(g, player, source, count, |chars| chars.is(kind))
+}
+
+/// The look the three above make: one card `wanted` may go to the hand, the rest to the bottom at random.
+fn look_for_one(g: &mut dyn Game, player: PlayerId, source: ObjectId, count: usize, wanted: impl Fn(&Chars) -> bool) -> Result<(), Suspend> {
     library::look_at_top(g, player, source, count, (0, 1), true, wanted, library::Rest::BottomRandom)?;
     Ok(())
 }

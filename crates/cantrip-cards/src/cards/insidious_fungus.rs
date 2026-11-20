@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{destroy_target, hand, targets};
+use cantrip_mechanics::{destroy_target, effects, targets};
 use cantrip_oracle as oracle;
 
 /// "Destroy target artifact" / "Destroy target enchantment" (CR 701.8): nothing if the target is no longer legal (CR 608.2b); an
@@ -9,19 +9,10 @@ fn destroy_its_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
     Ok(())
 }
 
-/// "Draw a card. Then you may put a land card from your hand onto the battlefield tapped." (CR 121.1, 608.2d, 110.2a): the whole
-/// hand is shown, the card just drawn included, and any land card in it may be chosen, or none; nothing is asked with no land card.
-/// Putting a land onto the battlefield is not playing it, so it uses no land play (CR 305.2).
-fn draw_and_put_a_land(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.draw(item.controller, 1);
-    hand::may_put_onto_battlefield_tapped(g, item.controller, item.object, |g, c| g.chars(c).is(CardType::Land))?;
-    Ok(())
-}
-
 static MODAL: ModalDef = modes(&[
     mode(destroy_its_target, "Destroy target artifact.").targets(&[targets::ARTIFACT]),
     mode(destroy_its_target, "Destroy target enchantment.").targets(&[targets::ENCHANTMENT]),
-    mode(draw_and_put_a_land, "Draw a card. Then you may put a land card from your hand onto the battlefield tapped."),
+    mode(effects::draw_a_card_then_may_put_a_land_tapped, "Draw a card. Then you may put a land card from your hand onto the battlefield tapped."),
 ]);
 
 pub static CARD: CardDef = CardDef {
