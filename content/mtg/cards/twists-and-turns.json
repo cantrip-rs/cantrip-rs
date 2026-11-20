@@ -1,0 +1,11 @@
+{
+  "name": "Twists and Turns",
+  "manaCost": "{G}",
+  "type": "Enchantment",
+  "oracleText": "If a creature you control would explore, instead you scry 1, then that creature explores.\nWhen this enchantment enters, target creature you control explores.\nWhen a land you control enters, if you control seven or more lands, transform this enchantment.",
+  "backFace": {
+    "name": "Mycoid Maze",
+    "type": "Land — Cave",
+    "oracleText": "(Transforms from Twists and Turns.)\n{T}: Add {G}.\n{3}{G}, {T}: Look at the top four cards of your library. You may reveal a creature card from among them and put that card into your hand. Put the rest on the bottom of your library in a random order."
+  }
+}

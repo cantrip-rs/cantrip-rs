@@ -1,0 +1,45 @@
+# Two Twists and Turns (CR 614.5, 616.1, the ruling): each replacement effect applies to the explore once, so "a creature you control would explore" gets
+# "instead you scry 1, then that creature explores" twice over - scry 1, scry 1 again, then the one explore, not two. The second Twists and Turns' own enters trigger, which
+# targets the Ornithopter, is the explore: Bot1 scries the Lightning Bolt to the bottom, then Mox Jet to the bottom, and the Ornithopter explores the Forest beneath them.
+
+[Bot1 Deck]
+Mox Emerald
+Forest
+Ornithopter
+Twists and Turns
+Twists and Turns
+Island
+Island
+Lightning Bolt
+Mox Jet
+Forest
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Twists and Turns.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Twists and Turns.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt)
+Bot1.Arrange( | Mox Jet)
+
+[Expect]
+Bot1.Hand = Forest; Island; Island
+Bot1.Library.Count = 15
+Bot1.Library.Top = Mountain
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)

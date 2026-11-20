@@ -1,0 +1,61 @@
+# Mycoid Maze (the back of Twists and Turns): "{3}{G}, {T}: Look at the top four cards of your library. You may reveal a creature card from among them and put that card into
+# your hand. Put the rest on the bottom of your library in a random order" (CR 701.20a, 401.4). Turn 7, Bot1's Maze looks at Memnite, Sol Ring, Ornithopter and Forest: two
+# creature cards may not both be taken, a land card or a noncreature artifact card may not be taken, and taking none is allowed - all four go to the bottom and the hand is only the Island drawn this turn.
+
+[Bot1 Deck]
+Forest
+Fastbond
+Twists and Turns
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest
+Island
+Memnite
+Sol Ring
+Ornithopter
+Forest
+Island x6
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Fastbond.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Twists and Turns.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Hand.Forest.Play
+Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mycoid Maze.Activate(Ability: Look at the top four)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Memnite; Ornithopter | Sol Ring; Forest)
+! Bot1.Arrange(Forest | Memnite; Sol Ring; Ornithopter)
+! Bot1.Arrange(Sol Ring | Memnite; Ornithopter; Forest)
+Bot1.Arrange( | Memnite; Sol Ring; Ornithopter; Forest)
+
+[Expect]
+Bot1.Hand = Island
+Bot1.Library.Count = 10
+Bot1.Battlefield.Mycoid Maze.Tapped = true

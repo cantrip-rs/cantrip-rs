@@ -1,0 +1,73 @@
+# Twists and Turns: "When a land you control enters, if you control seven or more lands, transform this enchantment" (CR 603.4, 701.27a), and back it is Mycoid Maze, a Cave land
+# (CR 712.8e: no longer an enchantment). Bot1 piles five Forests in on turn 1 with Fastbond (no creature to target, so Twists' enters trigger is never put on the stack), a
+# sixth on turn 3 (still an enchantment, the intervening "if" is false at six) and a seventh on turn 5, which transforms it. On turn 5 the Maze taps for {G}; on turn 7 four
+# Forests pay {3}{G} and tapping the Maze looks at the top four (Island, Ornithopter, Island, Island): the Ornithopter goes to hand, the rest to the bottom. Tapped for
+# mana on turn 5, the Maze cannot also pay {T} for the look: that is refused.
+
+[Bot1 Deck]
+Forest
+Fastbond
+Twists and Turns
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest
+Island
+Island
+Ornithopter
+Island
+Island
+Island x6
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Fastbond.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Twists and Turns.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Hand.Forest.Play
+Bot1.Hand.Forest.Play
+Bot1.Hand.Forest.Play
+? Bot1.Battlefield.Twists and Turns.Types = Enchantment
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+? Stack.Count = 0
+? Bot1.Battlefield.Twists and Turns.Types = Enchantment
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Mycoid Maze.Types = Land
+Bot1.Battlefield.Mycoid Maze.Activate(Ability: Add {G}.)
+? Bot1.Mana = {G}
+! Bot1.Battlefield.Mycoid Maze.Activate(Ability: Look at the top four)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mycoid Maze.Activate(Ability: Look at the top four)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Ornithopter | Island; Island; Island)
+
+[Expect]
+Bot1.Battlefield.Mycoid Maze.Types = Land
+Bot1.Battlefield.Mycoid Maze.Tapped = true
+Bot1.Hand = Island; Ornithopter
+Bot1.Revealed = Ornithopter
+Bot1.Library.Count = 9
+Bot1.Mana =

@@ -1,0 +1,38 @@
+# Twists and Turns {G}: "If a creature you control would explore, instead you scry 1, then that creature explores. When this enchantment enters, target creature you control explores"
+# (CR 614.1a, 614.6, 701.44a). Its own enters trigger targets Bot1's Ornithopter and is replaced: the scry comes first and sees the Lightning Bolt, which Bot1 puts on the bottom,
+# so the Ornithopter explores the Forest beneath it - a land card, into the hand, with no counter (the Bolt would have been a counter and a choice).
+
+[Bot1 Deck]
+Mox Emerald
+Ornithopter
+Twists and Turns
+Island
+Island
+Island
+Island
+Lightning Bolt
+Forest
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Twists and Turns.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt)
+? Bot1.Hand = Forest; Island; Island; Island; Island
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot1.Library.Count = 14
+Bot1.Revealed = Forest

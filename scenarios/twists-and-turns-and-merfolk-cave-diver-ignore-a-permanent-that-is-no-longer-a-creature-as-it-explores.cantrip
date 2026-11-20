@@ -1,0 +1,60 @@
+# A permanent that is not a creature can still explore (CR 701.44a, the rulings), but it is not "a creature you control": Twists and Turns doesn't replace
+# its explore and Merfolk Cave-Diver doesn't trigger. With Cenote Scout's "it explores" on the stack, Bot1 flashes Swift Reconfiguration onto the Scout,
+# which becomes a Vehicle artifact and no longer a creature. The Scout explores with no scry first: Lightning Bolt, a nonland card, is revealed, the Scout
+# gets its +1/+1 counter all the same, and Bot1 leaves the Bolt on top. The Diver stays a 2/4.
+
+[Bot1 Deck]
+Forest
+Twists and Turns
+Black Lotus
+Merfolk Cave-Diver
+Mox Emerald
+Mox Pearl
+Cenote Scout
+Swift Reconfiguration
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Twists and Turns.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Merfolk Cave-Diver.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cenote Scout.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swift Reconfiguration.Cast(Cenote Scout)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cenote Scout.Types = Artifact
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange
+Bot1.Decline
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Revealed = Lightning Bolt
+Bot1.Library.Top = Lightning Bolt
+Bot1.Library.Count = 13
+Bot1.Battlefield.Cenote Scout.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Merfolk Cave-Diver.Power = 2
+Stack.Count = 0

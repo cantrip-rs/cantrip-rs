@@ -1,0 +1,53 @@
+# Twists and Turns: the transform trigger is "when a land YOU control enters" (CR 603.2), so neither casting it with seven lands already out (turn 5) nor an opponent's land
+# entering (Bot2's Island on turn 6) transforms it. Bot1's next land, an eighth, on turn 7 does (CR 603.4, 701.27a): the enters trigger sees seven or more lands.
+
+[Bot1 Deck]
+Forest
+Fastbond
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest
+Twists and Turns
+Forest
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Fastbond.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Hand.Forest.Play
+Bot1.Hand.Forest.Play
+Bot1.Hand.Forest.Play
+Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+? Bot1.LandsPlayed = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Twists and Turns.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Twists and Turns.Types = Enchantment
+[T6 Bot2.Main1]
+Bot2.Hand.Island.Play
+? Stack.Count = 0
+? Bot1.Battlefield.Twists and Turns.Types = Enchantment
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Mycoid Maze.Types = Land

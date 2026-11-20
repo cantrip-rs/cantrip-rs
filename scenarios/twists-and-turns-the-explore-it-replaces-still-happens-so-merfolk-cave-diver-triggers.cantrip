@@ -1,0 +1,44 @@
+# Twists and Turns replaces the explore with a scry and the explore (CR 614.6), so it still happens - and "whenever a creature you control explores" is about that
+# explore (CR 701.44a-b, 603.2). Bot1's Merfolk Cave-Diver is the target of Twists and Turns' enters trigger: Bot1 scries the Lightning Bolt and keeps it on top, the Diver
+# explores it (a +1/+1 counter, and Bot1 leaves the Bolt on top), and the Diver gets +1/+0 and can't be blocked: with the counter, a 4/5.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Merfolk Cave-Diver
+Twists and Turns
+Island
+Island
+Island
+Lightning Bolt
+Mox Jet
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Merfolk Cave-Diver.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Twists and Turns.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt |)
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Merfolk Cave-Diver.CantBeBlocked = true
+
+[Expect]
+Bot1.Battlefield.Merfolk Cave-Diver.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Merfolk Cave-Diver.Power = 4
+Bot1.Battlefield.Merfolk Cave-Diver.Toughness = 5
+Bot1.Revealed = Lightning Bolt
+Bot1.Library.Count = 14
