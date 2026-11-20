@@ -1,0 +1,59 @@
+# Grand Ball Guest {1}{R}, a 2/2: "Celebration — This creature gets +1/+1 and has trample as long as two or more nonland
+# permanents entered the battlefield under your control this turn." On turn three Bot1 plays a Mountain and casts the Guest: a
+# land and one nonland permanent, so a 2/2 without trample. A Memnite entering after it is the second nonland permanent, so a 3/3
+# with trample. The Mox Ruby of turn one doesn't count on turn three: the Guest is a 2/2 again at the start of turn five, where a
+# Mountain and a Memnite are still one nonland permanent (2/2) and an Ornithopter is the second (3/3 trample).
+
+[Bot1 Deck]
+Mox Ruby
+Mountain
+Grand Ball Guest
+Memnite
+Memnite
+Ornithopter
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grand Ball Guest.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grand Ball Guest.Power = 2
+? Bot1.Battlefield.Grand Ball Guest.Toughness = 2
+? Bot1.Battlefield.Grand Ball Guest.Keywords = (absent)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grand Ball Guest.Power = 3
+? Bot1.Battlefield.Grand Ball Guest.Toughness = 3
+? Bot1.Battlefield.Grand Ball Guest.Keywords = Trample
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Grand Ball Guest.Power = 2
+? Bot1.Battlefield.Grand Ball Guest.Toughness = 2
+? Bot1.Battlefield.Grand Ball Guest.Keywords = (absent)
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grand Ball Guest.Power = 2
+? Bot1.Battlefield.Grand Ball Guest.Keywords = (absent)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grand Ball Guest.Power = 3
+? Bot1.Battlefield.Grand Ball Guest.Toughness = 3
+? Bot1.Battlefield.Grand Ball Guest.Keywords = Trample
+
+[Expect]
+Bot1.Battlefield.Grand Ball Guest.Power = 3
+Bot1.Battlefield.Grand Ball Guest.Toughness = 3
+Bot1.Battlefield.Grand Ball Guest.Keywords = Trample

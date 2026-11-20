@@ -1,0 +1,8 @@
+{
+  "name": "Grand Ball Guest",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Peasant",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Celebration — This creature gets +1/+1 and has trample as long as two or more nonland permanents entered the battlefield under your control this turn."
+}
