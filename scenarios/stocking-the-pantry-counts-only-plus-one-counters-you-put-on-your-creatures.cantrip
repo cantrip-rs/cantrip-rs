@@ -1,0 +1,72 @@
+# Stocking the Pantry: "Whenever you put one or more +1/+1 counters on a creature you control" (CR 122.6, 603.2c). Nothing
+# counts when Bot1 puts a -1/-1 counter on its own Devoted Druid (not +1/+1), when Bot2's Honor puts one on Bot1's
+# Ornithopter (not "you" put it), or when Bot1's own Honor puts one on Bot2's Ornithopter (not a creature you control). Bot1's
+# Honor on its own Ornithopter is the one that puts a supply counter on it.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Pearl
+Devoted Druid
+Ornithopter
+Stocking the Pantry
+Honor
+Plains
+Honor
+Forest x14
+
+[Bot2 Deck]
+Mox Pearl
+Ornithopter
+Honor
+Island x15
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Devoted Druid.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Stocking the Pantry.Cast
+Bot1.Pass
+Bot1.Battlefield.Devoted Druid.Activate
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Devoted Druid.Counters.MinusOneMinusOne = 1
+? Bot1.Battlefield.Stocking the Pantry.Counters.Supply = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Honor.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Stocking the Pantry.Counters.Supply = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Honor.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Stocking the Pantry.Counters.Supply = (absent)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Honor.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Stocking the Pantry.Counters.Supply = 1

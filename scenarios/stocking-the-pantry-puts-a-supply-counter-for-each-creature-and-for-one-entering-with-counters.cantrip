@@ -1,0 +1,57 @@
+# Stocking the Pantry puts a supply counter for each creature the +1/+1 counters went on (CR 603.2c): Test of Conviction
+# (Battle Stations) puts one on each of Bot1's two Ornithopters at once, so two supply counters. A Wildwood Scourge entering
+# with two +1/+1 counters is one creature, however many counters, so one more (the Scourge's own trigger is for other creatures).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Stocking the Pantry
+Ornithopter
+Ornithopter
+Test of Conviction
+Wildwood Scourge
+Forest x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Stocking the Pantry.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Test of Conviction.Cast
+Bot1.Modes(Battle Stations)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stocking the Pantry.Counters.Supply = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wildwood Scourge.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Wildwood Scourge.Counters.PlusOnePlusOne = 2
+
+[Expect]
+Bot1.Battlefield.Stocking the Pantry.Counters.Supply = 3

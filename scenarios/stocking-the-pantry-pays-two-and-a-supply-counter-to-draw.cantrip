@@ -1,0 +1,54 @@
+# Stocking the Pantry: "{2}, Remove a supply counter from this enchantment: Draw a card." Bot1's Honor on its own Ornithopter
+# gives it a supply counter (Honor draws a card too: the hand is counted after it). With one mana in the pool the ability is not
+# offered (only the Forest to pay with); with two it draws exactly one card, spends exactly {2} and removes the counter, and with no counter left it is not
+# offered even with mana to spare.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Forest
+Ornithopter
+Stocking the Pantry
+Honor
+Plains x8
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Stocking the Pantry.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Honor.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stocking the Pantry.Counters.Supply = 1
+? Bot1.Hand.Count = 2
+! Bot1.Battlefield.Stocking the Pantry.Activate(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Stocking the Pantry.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+? Bot1.Battlefield.Stocking the Pantry.Counters.Supply = (absent)
+! Bot1.Battlefield.Stocking the Pantry.Activate
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot1.Battlefield.Stocking the Pantry.Counters.Supply = (absent)
