@@ -1,0 +1,47 @@
+# Only a blocked Rat you control triggers it. Bot1's unblocked Muck Rats stay 1/1 and deal 1 damage (Bot2 at 19). Bot2's own
+# Muck Rats attack on turn 4 and Bot1's Tattered Ratter blocks them: they are not Bot1's, so they stay 1/1 and mark only 1
+# damage on the Ratter.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Tattered Ratter
+Muck Rats
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Mox Jet
+Muck Rats
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tattered Ratter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Muck Rats.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Muck Rats.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Muck Rats > Bot2)
+? Stack.Count = 0
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+? Bot1.Battlefield.Muck Rats.Power = 1
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Muck Rats > Bot1)
+Bot1.Block(Tattered Ratter > Muck Rats)
+? Stack.Count = 0
+? Bot2.Battlefield.Muck Rats.Power = 1
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Tattered Ratter.Damage = 1
+Bot2.Graveyard = Muck Rats

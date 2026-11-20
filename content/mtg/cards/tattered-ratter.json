@@ -1,0 +1,8 @@
+{
+  "name": "Tattered Ratter",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Peasant",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever a Rat you control becomes blocked, it gets +2/+0 until end of turn."
+}

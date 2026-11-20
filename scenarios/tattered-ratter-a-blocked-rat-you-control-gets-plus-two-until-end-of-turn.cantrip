@@ -1,0 +1,52 @@
+# "Whenever a Rat you control becomes blocked, it gets +2/+0 until end of turn" (CR 509.1h, 611.2a): Bot1's Muck Rats (1/1)
+# attacks and Fortified Rampart (0/6, defender, can block) blocks it. The trigger resolves before combat damage, so the Rats
+# deal 3 damage to the Rampart, and are back to 1 power on the next turn. The Rampart has 0 power, so the Rats survive.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Tattered Ratter
+Muck Rats
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Mox Pearl
+Mox Emerald
+Fortified Rampart
+Forest x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tattered Ratter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Muck Rats.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Fortified Rampart.Cast
+[T3 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Muck Rats.Power = 1
+Bot1.Attack(Muck Rats > Bot2)
+Bot2.Block(Fortified Rampart > Muck Rats)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Muck Rats.Power = 3
+? Bot1.Battlefield.Muck Rats.Toughness = 1
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Fortified Rampart.Damage = 3
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Muck Rats.Power = 1
+
+[Expect]
+Bot1.Battlefield.Muck Rats.Power = 1
+Bot1.Battlefield.Muck Rats.Damage = 0
+Bot2.Life = 20

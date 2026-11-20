@@ -1,0 +1,54 @@
+# Tattered Ratter (a Human Peasant, not a Rat) gets no bonus when it is blocked itself: it deals 2 damage to Fortified Rampart.
+# (An unblocked Rat gets nothing: see the next scenario.) A Rat blocked by two creatures (Fortified Rampart and Ornithopter)
+# triggers it once, not once per blocker: the Muck Rats are 3/1 afterwards, not 5/1.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Tattered Ratter
+Muck Rats
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Mox Pearl
+Mox Emerald
+Fortified Rampart
+Ornithopter
+Forest x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tattered Ratter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Muck Rats.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Fortified Rampart.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Tattered Ratter > Bot2)
+Bot2.Block(Fortified Rampart > Tattered Ratter)
+? Stack.Count = 0
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Fortified Rampart.Damage = 2
+? Bot1.Battlefield.Tattered Ratter.Power = 2
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Muck Rats > Bot2)
+Bot2.Block(Fortified Rampart > Muck Rats; Ornithopter > Muck Rats)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Muck Rats.Power = 3
+
+[Expect]
+Bot1.Battlefield.Muck Rats.Power = 3
+Bot2.Life = 20
