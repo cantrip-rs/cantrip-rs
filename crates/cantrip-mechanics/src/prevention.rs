@@ -30,6 +30,17 @@ pub const ANY_DAMAGE: GrantedPreventionDef = GrantedPreventionDef { hint: "preve
 /// Peace). The card gives its own words (`.text(..)`).
 pub const COMBAT_DAMAGE: GrantedPreventionDef = GrantedPreventionDef { hint: "prevents all combat damage", damage: "combat damage", of_it: None, applies: combat, portion: None, then: None, gain_prevented: false, text: "" };
 
+/// Damage "by a creature" (CR 615.1, 109.2, 608.2h): the source is a creature if it is a creature on the battlefield, or was
+/// one there as it last existed (a sacrificed Mogg Fanatic). A creature card in a hand or a graveyard is not a creature (a
+/// discarded Trumpeting Carnosaur), nor is a creature spell on the stack. A departed object's row keeps the zone it left from.
+/// Uncle Istvan and Eerie Interference print it.
+pub fn damage_by_a_creature(q: &dyn Query, d: &DamageEvent) -> bool {
+    let state = q.state();
+    let zone = state.obj(d.source).zone;
+    (zone.is(ZoneKind::Battlefield) || zone.is(ZoneKind::PhasedOut))
+        && state.last_known(d.source).map_or_else(|| q.chars(d.source).is(CardType::Creature), |row| row.types.has(CardType::Creature))
+}
+
 fn dealt_by(_: &dyn Query, _: &Asker, source: ObjectId, d: &DamageEvent) -> bool {
     d.source == source
 }
