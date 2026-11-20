@@ -382,3 +382,95 @@ fn another_model_is_refused() {
         .unwrap();
     assert!(e.0.contains("inference server"), "{e}");
 }
+
+/// Positions sent at their own lengths (`remote::request_positions`) make, byte for byte, the frame the padded batch of
+/// them makes once the model's input contract is applied, for every contract, with and without a card map, and their
+/// reply reads as the batch's does.
+#[test]
+fn positions_at_their_own_lengths_make_the_batch_s_frame() {
+    use cantrip_ai::eval::{InputCompatibility, Outputs};
+    let r = references();
+    let es: Vec<&Encoded> = r.positions.iter().collect();
+    let biggest = es.iter().flat_map(|e| e.card.iter().copied()).max().unwrap() as usize;
+    let wide: Vec<u32> = (0..=biggest as u32).map(|c| if c == 0 { 0 } else { c + 70_000 }).collect();
+    let narrow: Vec<u32> = (0..=biggest as u32 / 2).map(|c| c + 1).collect();
+    let mut frames = 0;
+    for compatibility in [InputCompatibility::Native, InputCompatibility::LegacySnowInputV2, InputCompatibility::LegacyCostInputV3] {
+        for remap in [&[][..], &wide[..], &narrow[..]] {
+            for size in [1, 3, 7, 16] {
+                for chunk in es.chunks(size) {
+                    let mut batch = FeatureBatch::new(chunk);
+                    compatibility.adapt(&mut batch);
+                    let (padded, order) = remote::request(&batch, remap).unwrap();
+                    let (sparse, sparse_order) = remote::request_positions(chunk, remap, compatibility).unwrap().expect("encoded positions are sent sparse");
+                    assert_eq!(padded, sparse, "{compatibility:?}, {} rows", chunk.len());
+                    assert_eq!(order, sparse_order);
+                    // A reply with a number of its own at every legal token, read both ways.
+                    let read = read_request(&padded).unwrap();
+                    let out = Outputs {
+                        value: (0..chunk.len()).map(|i| i as f32 + 0.5).collect(),
+                        policy: Vec::new(),
+                        aux: (0..chunk.len()).map(|i| [i as f32 - 3.0, 0.25 * i as f32]).collect(),
+                    };
+                    let logits: Vec<f32> = (0..read.rows * read.tokens).map(|at| at as f32 * 0.125 - 7.0).collect();
+                    let reply = remote::reply(&read, &out, &logits);
+                    let plain = FeatureBatch::new(chunk);
+                    assert_eq!(remote::read_reply(&plain, &order, &reply).unwrap(), remote::read_reply_positions(chunk, &order, &reply).unwrap());
+                    assert!(remote::read_reply_positions(chunk, &order, &reply[..reply.len() - 1]).is_err());
+                    frames += 1;
+                }
+            }
+        }
+    }
+    assert!(frames > 100);
+
+    // A number f16 cannot hold, or a legal bit past a position's tokens: the padded batch's frame is the one sent.
+    let mut odd = r.positions[0].clone();
+    let at = odd.nums.iter().position(|x| x.to_bits() != 0).unwrap();
+    odd.nums[at] = 0.1;
+    assert!(remote::request_positions(&[&odd], &[], InputCompatibility::Native).unwrap().is_none());
+    let mut past = r.positions.iter().find(|e| e.len < e.bucket).unwrap().clone();
+    past.legal[past.len] = true;
+    assert!(remote::request_positions(&[&past], &[], InputCompatibility::Native).unwrap().is_none());
+}
+
+/// A measurement (`--ignored`): a request of 7 positions built from the padded batch, as the client did, and from the
+/// positions themselves.
+#[test]
+#[ignore]
+fn request_speed() {
+    use cantrip_ai::eval::InputCompatibility;
+    let r = references();
+    let es: Vec<&Encoded> = r.positions.iter().collect();
+    let chunks: Vec<&[&Encoded]> = es.chunks(7).filter(|c| c.len() == 7).collect();
+    let rounds = 200;
+    let t0 = std::time::Instant::now();
+    let mut bytes = 0usize;
+    for _ in 0..rounds {
+        for chunk in &chunks {
+            let batch = FeatureBatch::new(chunk);
+            let mut adapted = batch.clone();
+            InputCompatibility::Native.adapt(&mut adapted);
+            bytes += remote::request(&adapted, &[]).unwrap().0.len();
+        }
+    }
+    let padded = t0.elapsed();
+    let t1 = std::time::Instant::now();
+    let mut sparse_bytes = 0usize;
+    for _ in 0..rounds {
+        for chunk in &chunks {
+            sparse_bytes += remote::request_positions(chunk, &[], InputCompatibility::Native).unwrap().unwrap().0.len();
+        }
+    }
+    let sparse = t1.elapsed();
+    assert_eq!(bytes, sparse_bytes);
+    let n = (rounds * chunks.len()) as f64;
+    let tokens: usize = es.iter().map(|e| e.len).sum();
+    println!(
+        "request of 7 rows ({} real tokens a row, buckets {:?}): padded batch {:.1} us, positions {:.1} us",
+        tokens / es.len(),
+        es.iter().map(|e| e.bucket).max(),
+        padded.as_secs_f64() * 1e6 / n,
+        sparse.as_secs_f64() * 1e6 / n
+    );
+}

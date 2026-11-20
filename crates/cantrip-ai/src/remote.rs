@@ -41,7 +41,9 @@ use cantrip_obs::encode::{
 };
 
 use crate::CardIndex;
-use crate::eval::{EvalError, Evaluator, FeatureBatch, MASKED, Model, Outputs, outputs};
+use cantrip_obs::encode::Encoded;
+
+use crate::eval::{EvalError, Evaluator, FeatureBatch, InputCompatibility, MASKED, Model, Outputs, outputs};
 
 pub const MAGIC: &[u8; 8] = b"CNTRPAI\0";
 /// The wire protocol's version: the server refuses a client of another.
@@ -240,6 +242,164 @@ pub fn request(b: &FeatureBatch, remap: &[u32]) -> Result<(Vec<u8>, Vec<usize>),
         }
     }
     Ok((out, order))
+}
+
+/// The evaluate frame's payload for encoded positions, each read at its own length: byte for byte what `request` makes
+/// of `FeatureBatch::new(positions)` once the model's input contract is applied to it (`InputCompatibility::adapt`),
+/// and the same order - without the batch. A self-play lane sends a few rows a request, and the batch pads each to its
+/// widest row: 128 tokens of 96 numbers, of which a position has about 6 a token.
+///
+/// `None` where the padded path reads a position differently or takes another form: a legal bit past a position's
+/// tokens (which no encoder sets, and which the batch keeps as a token), or a number f16 does not hold exactly (which
+/// the frame then carries dense). The caller sends `request`'s frame for those.
+pub fn request_positions(
+    positions: &[&Encoded],
+    remap: &[u32],
+    compatibility: InputCompatibility,
+) -> Result<Option<(Vec<u8>, Vec<usize>)>, EvalError> {
+    use cantrip_obs::encode::{cat, kind as token_kind};
+    let rows = positions.len();
+    let t = positions.iter().map(|e| e.bucket).max().unwrap_or(0);
+    if t > MAX_TOKENS {
+        return Err(err(format!("{t} tokens")));
+    }
+    if positions.iter().any(|e| e.len > e.bucket || e.legal[e.len..e.bucket].iter().any(|&l| l)) {
+        return Ok(None);
+    }
+    let native = compatibility == InputCompatibility::Native;
+    // A token's categoricals, pointers and numbers as the model's graph takes them (`InputCompatibility::adapt`).
+    let cats_of = |e: &Encoded, k: usize| -> [u8; CATS] {
+        let mut c = [0u8; CATS];
+        c.copy_from_slice(&e.cats[k * CATS..(k + 1) * CATS]);
+        if !native {
+            c[cat::ASK] = compatibility.category(cat::ASK, c[cat::ASK]);
+            c[cat::TOK] = compatibility.category(cat::TOK, c[cat::TOK]);
+        }
+        c
+    };
+    let ptrs_of = |e: &Encoded, k: usize| -> [u8; PTRS] {
+        let mut p = [0u8; PTRS];
+        p.copy_from_slice(&e.ptrs[k * PTRS..(k + 1) * PTRS]);
+        if !native && e.kind[k] == token_kind::OPTION {
+            for slot in p.iter_mut().skip(2) {
+                *slot = NO_POINTER;
+            }
+        }
+        p
+    };
+    let masked = |e: &Encoded, k: usize, feature: usize| !native && compatibility.masks(e.kind[k], feature);
+    // A row's real tokens: up to its last one that is not all padding, as the batch's are counted.
+    let padding = |e: &Encoded, k: usize| {
+        e.kind[k] == 0
+            && e.card[k] == UNKNOWN_CARD
+            && !e.legal[k]
+            && cats_of(e, k).iter().all(|&c| c == 0)
+            && ptrs_of(e, k).iter().all(|&p| p == NO_POINTER)
+            && e.nums[k * NUMS..(k + 1) * NUMS].iter().enumerate().all(|(f, x)| x.to_bits() == 0 || masked(e, k, f))
+    };
+    let lengths: Vec<usize> =
+        positions.iter().map(|e| (0..e.len).rev().find(|&k| !padding(e, k)).map_or(0, |k| k + 1)).collect();
+    let bucket = |l: usize| GRAPH_BUCKETS.iter().position(|&b| b >= l.max(1)).unwrap_or(GRAPH_BUCKETS.len());
+    let mut order: Vec<usize> = (0..rows).collect();
+    order.sort_by_key(|&i| bucket(lengths[i]));
+    let n: usize = lengths.iter().sum();
+    let card = |c: u32| if remap.is_empty() { c } else { remap.get(c as usize).copied().unwrap_or(UNKNOWN_CARD) };
+    let wide = order.iter().any(|&i| positions[i].card[..lengths[i]].iter().any(|&c| card(c) > u16::MAX as u32));
+    let mut out = Vec::with_capacity(16 + rows + n * (24 + CATS + PTRS));
+    out.push(EVALUATE);
+    out.extend((rows as u32).to_le_bytes());
+    out.push(if wide { 4 } else { 2 });
+    out.push(NUMS_SPARSE);
+    out.extend(order.iter().map(|&i| lengths[i] as u8));
+    for &i in &order {
+        out.extend_from_slice(&positions[i].kind[..lengths[i]]);
+    }
+    for &i in &order {
+        for &c in &positions[i].card[..lengths[i]] {
+            if wide {
+                out.extend(card(c).to_le_bytes());
+            } else {
+                out.extend((card(c) as u16).to_le_bytes());
+            }
+        }
+    }
+    for &i in &order {
+        for k in 0..lengths[i] {
+            out.extend(cats_of(positions[i], k));
+        }
+    }
+    for &i in &order {
+        for k in 0..lengths[i] {
+            out.extend(ptrs_of(positions[i], k));
+        }
+    }
+    let mut bits = vec![0u8; n.div_ceil(8)];
+    let mut at = 0;
+    for &i in &order {
+        for &l in &positions[i].legal[..lengths[i]] {
+            if l {
+                bits[at / 8] |= 1 << (at % 8);
+            }
+            at += 1;
+        }
+    }
+    out.extend(bits);
+    // The numbers, sparse: a number f16 does not hold exactly makes the batch's frame dense, a masked one aside (it is
+    // zero in the batch, and zero is exact).
+    let mut features = Vec::new();
+    let mut values = Vec::new();
+    for &i in &order {
+        let e = positions[i];
+        for k in 0..lengths[i] {
+            let mut count = 0u8;
+            for (f, &x) in e.nums[k * NUMS..(k + 1) * NUMS].iter().enumerate() {
+                if x.to_bits() == 0 || masked(e, k, f) {
+                    continue;
+                }
+                let half = f16_bits(x);
+                if f16_value(half).to_bits() != x.to_bits() {
+                    return Ok(None);
+                }
+                count += 1;
+                features.push(f as u8);
+                values.extend(half.to_le_bytes());
+            }
+            out.push(count);
+        }
+    }
+    out.extend(features);
+    out.extend(values);
+    Ok(Some((out, order)))
+}
+
+/// A reply to `request_positions`' frame for `positions` (its rows sent in `order`): what `read_reply` makes of it for
+/// `FeatureBatch::new(positions)`.
+pub fn read_reply_positions(positions: &[&Encoded], order: &[usize], bytes: &[u8]) -> Result<Outputs, EvalError> {
+    if bytes.first() != Some(&0) {
+        return Err(err(format!("the inference server: {}", read_status(bytes)?.err().unwrap_or_default())));
+    }
+    let mut r = Reader::new(&bytes[1..]);
+    let rows = positions.len();
+    if order.len() != rows {
+        return Err(err("a reply to another batch"));
+    }
+    let mut out = Outputs { value: vec![0.0; rows], policy: vec![Vec::new(); rows], aux: vec![[0.0; 2]; rows] };
+    for &i in order {
+        out.value[i] = r.f32()?;
+    }
+    for &i in order {
+        out.aux[i] = [r.f32()?, r.f32()?];
+    }
+    let mut logits = [MASKED; MAX_TOKENS];
+    for &i in order {
+        let e = positions[i];
+        for k in 0..e.bucket {
+            logits[k] = if e.legal[k] { r.f32()? } else { MASKED };
+        }
+        out.policy[i] = (e.first_option..e.first_option + e.options).map(|k| if k < e.bucket { logits[k] } else { MASKED }).collect();
+    }
+    r.end()?;
+    Ok(out)
 }
 
 /// An evaluate payload read back as a batch of `MAX_TOKENS`-wide rows, in the frame's order (what a server is sent;
@@ -466,6 +626,8 @@ pub struct RemoteEvaluator {
     hello: Vec<u8>,
     server: String,
     pool: Mutex<Vec<TcpStream>>,
+    /// The model's input contract (`Model::input_compatibility`), worked out once.
+    compatibility: InputCompatibility,
 }
 
 impl RemoteEvaluator {
@@ -483,7 +645,9 @@ impl RemoteEvaluator {
             .unwrap_or_default();
         let hash = u64::from_str_radix(&model.manifest.encoder_hash, 16).map_err(err)?;
         let hello = hello_encoding(model_identity(dir)?, &name, model.manifest.schema, hash);
+        let compatibility = model.input_compatibility();
         let mut e = RemoteEvaluator {
+            compatibility,
             address: address.to_string(),
             model,
             hello,
@@ -506,6 +670,25 @@ impl RemoteEvaluator {
     /// What the server said of itself when it welcomed the model (its device).
     pub fn server(&self) -> &str {
         &self.server
+    }
+
+    /// One request sent on a pooled connection and its reply read; the connection goes back to the pool once the reply
+    /// has been read as outputs.
+    fn round_trip(&self, payload: &[u8], read: impl FnOnce(&[u8]) -> Result<Outputs, EvalError>) -> Result<Outputs, EvalError> {
+        let pooled = self.pool.lock().unwrap_or_else(|p| p.into_inner()).pop();
+        let mut stream = match pooled {
+            Some(s) => s,
+            None => self.open()?.0,
+        };
+        write_frame(&mut stream, payload).map_err(err)?;
+        let bytes = read_frame(&mut stream)
+            .map_err(|e| err(format!("the inference server at {}: {e}", self.address)))?;
+        let out = read(&bytes)?;
+        self.pool
+            .lock()
+            .unwrap_or_else(|p| p.into_inner())
+            .push(stream);
+        Ok(out)
     }
 
     fn open(&self) -> Result<(TcpStream, String), EvalError> {
@@ -533,22 +716,29 @@ impl Evaluator for RemoteEvaluator {
             return Ok(Outputs::default());
         }
         let mut adapted = batch.clone();
-        self.model.input_compatibility().adapt(&mut adapted);
+        self.compatibility.adapt(&mut adapted);
         let (payload, order) = request(&adapted, &self.model.remap)?;
-        let pooled = self.pool.lock().unwrap_or_else(|p| p.into_inner()).pop();
-        let mut stream = match pooled {
-            Some(s) => s,
-            None => self.open()?.0,
-        };
-        write_frame(&mut stream, &payload).map_err(err)?;
-        let bytes = read_frame(&mut stream)
-            .map_err(|e| err(format!("the inference server at {}: {e}", self.address)))?;
-        let out = read_reply(batch, &order, &bytes)?;
-        self.pool
-            .lock()
-            .unwrap_or_else(|p| p.into_inner())
-            .push(stream);
-        Ok(out)
+        self.round_trip(&payload, |bytes| read_reply(batch, &order, bytes))
+    }
+
+    /// The positions sent at their own lengths (`request_positions`): the same frame as the batch of them makes, and so
+    /// the same outputs, without the batch.
+    fn evaluate_positions(&self, positions: &[&Encoded]) -> Result<Outputs, EvalError> {
+        if positions.is_empty() {
+            return Ok(Outputs::default());
+        }
+        let sparse = request_positions(positions, &self.model.remap, self.compatibility)?;
+        #[cfg(debug_assertions)]
+        if let Some((payload, order)) = &sparse {
+            let mut batch = FeatureBatch::new(positions);
+            self.compatibility.adapt(&mut batch);
+            let padded = request(&batch, &self.model.remap)?;
+            debug_assert!(padded.0 == *payload && padded.1 == *order, "positions sent at their own lengths make the batch's frame");
+        }
+        match sparse {
+            Some((payload, order)) => self.round_trip(&payload, |bytes| read_reply_positions(positions, &order, bytes)),
+            None => self.evaluate(&FeatureBatch::new(positions)),
+        }
     }
 
     /// Closes the pooled connections, each a client the server counts; the next evaluation connects again.

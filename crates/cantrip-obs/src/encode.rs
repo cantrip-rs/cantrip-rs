@@ -1838,7 +1838,9 @@ pub fn fnv1a64(bytes: &[u8]) -> u64 {
 /// The hash of the layout (`layout_json`): a shard's header and a model's manifest carry it, and a loader refuses a
 /// model whose hash differs.
 pub fn encoder_hash() -> u64 {
-    fnv1a64(layout_json().as_bytes())
+    // The layout is the build's: its hash is worked out once (an evaluator asks for it at every request).
+    static HASH: std::sync::OnceLock<u64> = std::sync::OnceLock::new();
+    *HASH.get_or_init(|| fnv1a64(layout_json().as_bytes()))
 }
 
 /// A readable dump of a position, token by token (the golden files).
