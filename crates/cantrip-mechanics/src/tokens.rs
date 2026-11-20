@@ -161,6 +161,27 @@ pub static SORCERER_ROLE: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+/// A Wicked Role token (CR 111.10q, 303.7): "a colorless Aura Role enchantment token named Wicked with enchant creature,
+/// 'Enchanted creature gets +1/+1,' and 'When this token is put into a graveyard from the battlefield, each opponent loses 1
+/// life.'" The trigger looks back at the token as it last existed (CR 603.10a), so its controller is the one whose opponents
+/// lose the life. Conceited Witch, Eriette's Whisper, Not Dead After All, Shatter the Oath, Lord Skitter's Blessing, The
+/// Witch's Vanity and Twisted Sewer-Witch create it (`create_role`).
+pub static WICKED_ROLE: CardDef = CardDef {
+    name: "Wicked",
+    has_cost: false,
+    types: TypeSet::of(&[CardType::Enchantment]),
+    subtypes: SubtypeSet::of(&[Subtype::Aura, Subtype::Role]),
+    enchant: Some(crate::targets::CREATURE),
+    abilities: &[triggered(
+        crate::triggers::THIS_DIES,
+        crate::effects::each_opponent_loses_1_life,
+        "When this token is put into a graveyard from the battlefield, each opponent loses 1 life.",
+    )],
+    statics: &[static_ability(Layer::PtModify, crate::attach::attached_object, crate::statics::plus_pt::<1, 1>, "Enchanted creature gets +1/+1.")],
+    text: "Enchant creature\nEnchanted creature gets +1/+1.\nWhen this token is put into a graveyard from the battlefield, each opponent loses 1 life.",
+    ..CardDef::BLANK
+};
+
 /// "If its toughness is 3 or less" (CR 603.4): the creature that attacked, as it is now or as it last was.
 fn its_toughness_is_3_or_less(q: &dyn Query, asker: &Asker) -> bool {
     q.chars(asker.source).toughness.is_some_and(|t| t <= 3)
