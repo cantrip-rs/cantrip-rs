@@ -1,0 +1,43 @@
+# The Goose Mother: "Whenever The Goose Mother attacks, you may sacrifice a Food. If you do, draw a card." Cast with X = 2 on turn one
+# she makes one Food (half of two). On turn three she attacks and Bot1 sacrifices the Food, drawing a card (CR 701.21a, 608.2c): the
+# Food is gone, Bot1's hand grows from three cards (Memnite, Ornithopter and the turn's draw) to four, and Bot2 takes 4 from the 4/4.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+The Goose Mother
+Memnite
+Ornithopter
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Goose Mother.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Food Token.Types = Artifact
+[T3 Bot1.DeclareAttackers]
+? Bot1.Hand.Count = 3
+Bot1.Attack(The Goose Mother > Bot2)
+Bot1.Pass
+Bot1.Choose(Food Token)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire; The Goose Mother
+Bot2.Life = 16

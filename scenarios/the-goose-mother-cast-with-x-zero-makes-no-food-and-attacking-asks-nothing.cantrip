@@ -1,0 +1,34 @@
+# The Goose Mother cast with X = 0 is a 2/2 and makes no Food (half of zero). Attacking with no Food to sacrifice, nothing is asked and
+# nothing is drawn: the hand stays at five cards (Memnite, Ornithopter, two Plains and the turn's draw), and Bot2 takes 2.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+The Goose Mother
+Memnite
+Ornithopter
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Goose Mother.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Emerald; Mox Sapphire; The Goose Mother
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(The Goose Mother > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot2.Life = 18

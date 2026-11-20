@@ -1,0 +1,11 @@
+{
+  "name": "The Goose Mother",
+  "manaCost": "{X}{G}{U}",
+  "type": "Legendary Creature — Bird Hydra",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nThe Goose Mother enters with X +1/+1 counters on it.\nWhen The Goose Mother enters, create half X Food tokens, rounded up.\nWhenever The Goose Mother attacks, you may sacrifice a Food. If you do, draw a card.",
+  "keywords": [
+    "Flying"
+  ]
+}

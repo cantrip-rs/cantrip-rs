@@ -1,0 +1,39 @@
+# The Goose Mother: the sacrifice is a "may" (CR 701.21a, 608.2c): attacking with one Food, Bot1 chooses none, so the Food stays and no
+# card is drawn ("if you do"): the hand stays at three cards (Memnite, Ornithopter and the turn's draw).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+The Goose Mother
+Memnite
+Ornithopter
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Goose Mother.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(The Goose Mother > Bot2)
+Bot1.Pass
+Bot1.Choose()
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Battlefield = Food Token; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire; The Goose Mother

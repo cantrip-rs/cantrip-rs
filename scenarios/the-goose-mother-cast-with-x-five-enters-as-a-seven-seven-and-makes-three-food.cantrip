@@ -1,0 +1,43 @@
+# The Goose Mother {X}{G}{U}, a 2/2 flyer: "enters with X +1/+1 counters on it" and "When The Goose Mother enters, create half X Food
+# tokens, rounded up." Cast on turn one with X = 5 (Mox Emerald and Mox Sapphire for the colours, Black Lotus, Mox Jet and Mox Ruby for X),
+# it is a 7/7 and makes three Food, half of five rounded up (CR 107.1a), not two.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+The Goose Mother
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Goose Mother.Cast(X: 5)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 8
+Bot1.Battlefield.The Goose Mother.Power = 7
+Bot1.Battlefield.The Goose Mother.Toughness = 7
+Bot1.Battlefield.The Goose Mother.Keywords = Flying
+Bot1.Battlefield.Food Token#1.Types = Artifact
+Bot1.Battlefield.Food Token#2.Types = Artifact
+Bot1.Battlefield.Food Token#3.Types = Artifact
