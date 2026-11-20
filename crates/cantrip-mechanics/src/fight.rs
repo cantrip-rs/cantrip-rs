@@ -15,6 +15,17 @@ pub fn targets_fight(g: &mut dyn Game, item: &StackItem, first: usize, second: u
     }
 }
 
+/// "[This creature] fights up to one [other] target creature" (CR 701.14a-b, 608.2b) as a whole effect: the ability's first target,
+/// if one was chosen and is still legal as it resolves, fights the source; the fight does nothing unless both are still creatures
+/// on the battlefield (a source that left and came back is a new object, CR 400.7). Mind Meanderer, Wolverine, Fierce Fighter,
+/// Clive, Ifrit's Dominant's chapter I and Agatha's Champion print it.
+pub fn this_fights_first_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(prey) = targets::object(g, item, 0) {
+        g.fight(item.object, prey);
+    }
+    Ok(())
+}
+
 const THIS_MAY_FIGHT: Question = Question::new("Fight", "have {source} fight that creature?", "Chosen as the ability resolves", "Fight", "Don't");
 
 /// "You may have [this creature] fight [that creature]" (CR 701.14a-b, 608.2d): the source's controller chooses as the ability

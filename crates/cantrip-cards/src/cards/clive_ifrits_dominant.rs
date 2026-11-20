@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{devotion::devotion, effects, exile_and_return, exile_and_return_transformed, targets, triggers::THIS_ENTERS};
+use cantrip_mechanics::{devotion::devotion, effects, fight, exile_and_return, exile_and_return_transformed, targets, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
 
 const DISCARD_HAND: Question = Question::new("DiscardHand", "discard your hand, then draw cards equal to your devotion to red?", "", "Discard and draw", "Keep your hand");
@@ -25,14 +25,6 @@ fn transform(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     exile_and_return_transformed(g, item.object, owner)
 }
 
-/// "Lunge \u{2014} Ifrit fights up to one other target creature." (CR 701.14): a target that is gone is no fight (CR 701.14b).
-fn lunge(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(other) = targets::object(g, item, 0) {
-        g.fight(item.object, other);
-    }
-    Ok(())
-}
-
 /// "Brimstone \u{2014} Add {R}{R}{R}{R}. If Ifrit has three or more lore counters on it, exile it, then return it to the battlefield
 /// (front face up)." (CR 106.1, 714.2, 712.14): the lore counters are counted as this resolves; if Ifrit has left, he has none
 /// and is not the object to exile (CR 400.7). Chapter II has two lore counters, III three.
@@ -46,7 +38,7 @@ fn brimstone(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static BACK: CardDef = CardDef {
     abilities: &[
-        chapter(1, lunge, "I \u{2014} Lunge \u{2014} Ifrit fights up to one other target creature.").targets(&[up_to_one(targets::other_creature_filter)]),
+        chapter(1, fight::this_fights_first_target, "I \u{2014} Lunge \u{2014} Ifrit fights up to one other target creature.").targets(&[up_to_one(targets::other_creature_filter)]),
         chapter(2, brimstone, "II \u{2014} Brimstone \u{2014} Add {R}{R}{R}{R}. If Ifrit has three or more lore counters on it, exile it, then return it to the battlefield (front face up)."),
         chapter(3, brimstone, "III \u{2014} Brimstone \u{2014} Add {R}{R}{R}{R}. If Ifrit has three or more lore counters on it, exile it, then return it to the battlefield (front face up)."),
     ],

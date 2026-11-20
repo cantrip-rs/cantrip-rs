@@ -1,15 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{targets, triggers::THIS_ENTERS};
+use cantrip_mechanics::{fight, targets, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
-
-/// "He fights up to one other target creature" (CR 701.14). A Wolverine that left and came back is a new object, not
-/// "he" (CR 400.7), and fights nothing: `fight` checks that both are still creatures on the battlefield.
-fn fight(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(other) = targets::object(g, item, 0) {
-        g.fight(item.object, other);
-    }
-    Ok(())
-}
 
 /// "If damage would be dealt to Wolverine, instead that damage is dealt, but all other damage already dealt to him is
 /// healed."
@@ -24,7 +15,7 @@ fn heal_the_rest(_: &dyn Query, _: &Asker, p: &mut Proposal) {
 }
 
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(THIS_ENTERS, fight, "When Wolverine enters, he fights up to one other target creature.")
+    abilities: &[triggered(THIS_ENTERS, fight::this_fights_first_target, "When Wolverine enters, he fights up to one other target creature.")
         .targets(&[up_to_one(targets::other_creature_filter)])],
     replacements: &[replacement(ReplacementKind::Damage, damage_to_him, heal_the_rest, "heal damage already dealt to Wolverine")],
     ..oracle::WOLVERINE_FIERCE_FIGHTER

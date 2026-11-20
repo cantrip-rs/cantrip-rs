@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::targets;
+use cantrip_mechanics::{fight, targets};
 use cantrip_mechanics::statics::{have_vigilance, itself};
 use cantrip_oracle as oracle;
 
@@ -17,19 +17,10 @@ fn vigilance_while_jace(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId
     itself(q, source, affected, so_far) && you_control_a_jace(q, source)
 }
 
-/// "It fights up to one target creature an opponent controls" (CR 701.14a): the target, if one was chosen and is still
-/// legal (CR 608.2b), fights this creature.
-fn fight(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = targets::object(g, item, 0) {
-        g.fight(item.object, creature);
-    }
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         cantrip_mechanics::triggers::THIS_ENTERS,
-        fight,
+        fight::this_fights_first_target,
         "When this creature enters, it fights up to one target creature an opponent controls.",
     )
     .targets(&[targets::CREATURE_AN_OPPONENT_CONTROLS.between(0, 1)])],
