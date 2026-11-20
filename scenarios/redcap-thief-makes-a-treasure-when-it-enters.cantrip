@@ -1,0 +1,33 @@
+# Redcap Thief {2}{R} 2/3: "When this creature enters, create a Treasure token." Cast off three Moxen on turn 1 (the pool is
+# empty right after, so exactly {2}{R} was charged): the trigger resolves and Bot1 has the Thief and one untapped Treasure.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Redcap Thief
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Redcap Thief.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Redcap Thief; Treasure Token
+Bot1.Battlefield.Treasure Token.Tapped = false
+Bot1.Battlefield.Redcap Thief.Power = 2
+Bot1.Battlefield.Redcap Thief.Toughness = 3

@@ -1,0 +1,8 @@
+{
+  "name": "Redcap Thief",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goblin Rogue",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "When this creature enters, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")"
+}
