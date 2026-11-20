@@ -1,0 +1,59 @@
+# Obyra, Dreaming Duelist ({U}{B}, 2/2 flash flying): "Whenever another Faerie you control enters, each opponent loses 1 life" (CR 603.6a).
+# Bot1 flashes Obyra in during Bot2's turn two upkeep (Flash, CR 702.8a; she flies, CR 702.9a): she is not "another" Faerie, so Bot2 stays at 20. Bot2 then
+# casts its own Faerie (a Zephyr Sprite): not one Bot1 controls, so Bot1 stays at 20. On turn three Bot1's Memnite is no Faerie (20)
+# and Bot1's Zephyr Sprite is: Bot2 loses exactly 1 (19).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Obyra, Dreaming Duelist
+Zephyr Sprite
+Memnite
+Island x15
+
+[Bot2 Deck]
+Mox Sapphire
+Zephyr Sprite
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Obyra, Dreaming Duelist.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Obyra, Dreaming Duelist.Power = 2
+? Bot1.Battlefield.Obyra, Dreaming Duelist.Keywords = Flash; Flying
+? Stack.Count = 0
+? Bot2.Life = 20
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Zephyr Sprite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Zephyr Sprite.Power = 1
+? Stack.Count = 0
+? Bot1.Life = 20
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20
+Bot1.Battlefield.Zephyr Sprite.Power = 1

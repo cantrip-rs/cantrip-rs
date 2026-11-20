@@ -1,0 +1,12 @@
+{
+  "name": "Obyra, Dreaming Duelist",
+  "manaCost": "{U}{B}",
+  "type": "Legendary Creature — Faerie Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flash\nFlying\nWhenever another Faerie you control enters, each opponent loses 1 life.",
+  "keywords": [
+    "Flash",
+    "Flying"
+  ]
+}
