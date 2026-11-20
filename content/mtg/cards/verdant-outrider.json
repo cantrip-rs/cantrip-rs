@@ -1,0 +1,8 @@
+{
+  "name": "Verdant Outrider",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Human Knight",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "{1}{G}: This creature can't be blocked by creatures with power 2 or less this turn."
+}

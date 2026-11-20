@@ -1,0 +1,63 @@
+# Verdant Outrider's "can't be blocked by creatures with power 2 or less" leaves a power-3 creature free to block (CR 509.1b): after
+# the {1}{G} activation on turn 3, Bot2's Hired Blade (power 3, one past the limit) blocks it. Outrider (4/2) and Hired Blade trade.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Verdant Outrider
+Forest
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Ballyrush Banneret
+Hired Blade
+Ornithopter x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Verdant Outrider.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Ballyrush Banneret.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Hired Blade.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Verdant Outrider.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Verdant Outrider > Bot2)
+Bot2.Block(Hired Blade > Verdant Outrider)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Hired Blade
+Bot1.Battlefield.Verdant Outrider = (absent)
+Bot1.Graveyard = Verdant Outrider; Black Lotus
