@@ -1,0 +1,64 @@
+# Ferocious Werefox // Guard Change (CR 715.3b): Guard Change, "Create a Monster Role token attached to target creature you control." Bot1
+# targets its Grizzly Bears (2/2): the Role (an Aura token, +1/+1 and trample) makes it 3/3 with trample, and the Adventure card goes to
+# exile rather than the graveyard (CR 715.3d). From exile Bot1 casts Ferocious Werefox, with its normal
+# characteristics (CR 715.4), as a 4/3 creature with trample.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Grizzly Bears
+Ferocious Werefox
+Forest
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ferocious Werefox.Cast(Bot1.Battlefield.Grizzly Bears; Ability: Guard Change)
+? Stack.Count = 1
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Grizzly Bears.Power = 3
+? Bot1.Battlefield.Grizzly Bears.Toughness = 3
+? Bot1.Battlefield.Grizzly Bears.Keywords = Trample
+? Attached = Monster > Grizzly Bears
+? Exile = Ferocious Werefox
+? Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Ferocious Werefox.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Ferocious Werefox.Power = 4
+Bot1.Battlefield.Ferocious Werefox.Toughness = 3
+Bot1.Battlefield.Ferocious Werefox.Keywords = Trample
+Bot1.Battlefield.Ferocious Werefox.Subtypes = Elf; Fox; Warrior
+Bot1.Battlefield.Grizzly Bears.Power = 3

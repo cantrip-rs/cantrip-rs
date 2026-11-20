@@ -1,0 +1,48 @@
+# Ferocious Werefox // Guard Change: if its only target is an illegal target as it resolves, the Adventure spell does not resolve (CR
+# 608.2b), so no Role is created and the card is put into the graveyard, not exile (CR 715.3d: only an Adventure that resolves is exiled).
+# In response Bot2's Lightning Bolt kills the Bears.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Grizzly Bears
+Ferocious Werefox
+Island x2
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ferocious Werefox.Cast(Bot1.Battlefield.Grizzly Bears; Ability: Guard Change)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Graveyard = Ferocious Werefox; Grizzly Bears

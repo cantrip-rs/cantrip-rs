@@ -1,0 +1,52 @@
+# Ferocious Werefox // Guard Change: "target creature you control". Bot2's Grizzly Bears, a noncreature permanent of Bot1's (a Mox) and
+# Bot2 itself are refused as the target (with the Bears there are two creatures, so the filter is the one that matters); Bot1's own
+# Bears is accepted and gets the Role, Bot2's Bears does not.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Grizzly Bears
+Ferocious Werefox
+Island x2
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x4
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Ferocious Werefox.Cast(Bot2.Battlefield.Grizzly Bears; Ability: Guard Change)
+! Bot1.Hand.Ferocious Werefox.Cast(Bot1.Battlefield.Mox Ruby; Ability: Guard Change)
+! Bot1.Hand.Ferocious Werefox.Cast(Bot2; Ability: Guard Change)
+Bot1.Hand.Ferocious Werefox.Cast(Bot1.Battlefield.Grizzly Bears; Ability: Guard Change)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Attached = Monster > Grizzly Bears
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Exile = Ferocious Werefox

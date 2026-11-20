@@ -1,0 +1,17 @@
+{
+  "name": "Ferocious Werefox",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Elf Fox Warrior",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ],
+  "adventure": {
+    "name": "Guard Change",
+    "manaCost": "{1}{G}",
+    "type": "Instant — Adventure",
+    "oracleText": "Create a Monster Role token attached to target creature you control. (Enchanted creature gets +1/+1 and has trample.)"
+  }
+}
