@@ -1,0 +1,54 @@
+# Talion, the Kindly Lord: 10 is the top of the range and 11 is refused (CR 107.1). With 10 chosen, an opponent's Baloth Prime
+# (a 10/10 of mana value 7) matches through its power and toughness: Bot2 loses 2 life and Bot1 draws a card.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Talion, the Kindly Lord
+Plains x15
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Mox Jet
+Baloth Prime
+Forest x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Talion, the Kindly Lord.Cast
+! Bot1.Number(11)
+Bot1.Number(10)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Baloth Prime.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 18
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Talion, the Kindly Lord.ChosenNumber = 10

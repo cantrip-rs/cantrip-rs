@@ -1,0 +1,66 @@
+# Talion, the Kindly Lord {2}{U}{B}, a 3/4 flyer: "As Talion enters, choose a number between 1 and 10" and "Whenever an opponent casts a
+# spell with mana value, power, or toughness equal to the chosen number, that player loses 2 life and you draw a card." Bot1 chooses 2.
+# On turn two Bot2 casts a Memnite (mana value 0, a 1/1: no), an Ornithopter (0, a 0/2: its toughness matches), a Savannah Lions
+# (1, a 2/1: its power matches) and a Lightning Bolt (mana value 1, no power or toughness: no). The two matches each cost Bot2 2 life
+# and draw Bot1 a card: Bot2 is at 16, and Bot1's hand has grown from two Plains to four cards.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Talion, the Kindly Lord
+Plains x15
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Memnite
+Ornithopter
+Savannah Lions
+Lightning Bolt
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Talion, the Kindly Lord.Cast
+Bot1.Number(2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 18
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Talion, the Kindly Lord)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 16
+Bot1.Life = 20
+Bot1.Hand.Count = 4
+Bot1.Battlefield.Talion, the Kindly Lord.ChosenNumber = 2

@@ -1,0 +1,44 @@
+# Talion, the Kindly Lord: the number is between 1 and 10 inclusive, so 0 is refused and 1 is allowed (CR 107.1). With 1 chosen, an
+# opponent's Memnite (a 1/1 of mana value 0) matches through both its power and its toughness yet the trigger fires once: Bot2 loses 2
+# life and Bot1 draws one card, not two.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Talion, the Kindly Lord
+Plains x15
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Talion, the Kindly Lord.Cast
+! Bot1.Number(0)
+Bot1.Number(1)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 18
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Talion, the Kindly Lord.ChosenNumber = 1
+Bot1.Battlefield.Talion, the Kindly Lord.Keywords = Flying
