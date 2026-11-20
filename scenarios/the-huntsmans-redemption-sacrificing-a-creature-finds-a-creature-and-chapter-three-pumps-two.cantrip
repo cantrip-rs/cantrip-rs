@@ -1,0 +1,93 @@
+# The Huntsman's Redemption {2}{G} (Saga): "I - Create a 3/3 green Beast creature token. II - You may sacrifice a creature. If you do,
+# search your library for a creature or basic land card, reveal it, put it into your hand, then shuffle. III - Up to two target creatures
+# each get +2/+2 and gain trample until end of turn." Turn 1: the Saga (chapter I: a Beast) with an Elvish Mystic beside it. Turn 3,
+# chapter II: any creature of Bot1's may be sacrificed (the Beast or the Mystic, not a Mox), and Bot1 gives up the Mystic, then the
+# search finds only a creature or basic land: not an instant, not the nonbasic land Taiga. It finds Grizzly Bears, revealed (Bot2 sees
+# it), puts it in hand and shuffles once. Turn 5, chapter III: two creatures are targeted (not a Mox), the Beast and the Bears become
+# 5/5 and 4/4 tramplers, and are 3/3 and 2/2 with no trample again on Bot2's turn.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+The Huntsman's Redemption
+Elvish Mystic
+Forest
+Plains
+Plains
+Plains
+Taiga
+Lightning Bolt
+Forest
+Grizzly Bears
+Plains x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Huntsman's Redemption.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast Token.Power = 3
+? Bot1.Battlefield.Beast Token.Toughness = 3
+? Bot1.Battlefield.Beast Token.Colors = Green
+? Bot1.Battlefield.The Huntsman's Redemption.Counters.Lore = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+! Bot1.Choose(Mox Ruby)
+! Bot1.Choose(Beast Token; Elvish Mystic)
+Bot1.Choose(Elvish Mystic)
+! Bot1.Search(Lightning Bolt)
+! Bot1.Search(Taiga)
+! Bot1.Search(Grizzly Bears; Forest)
+Bot1.Search(Grizzly Bears)
+? Client.Bot2.OpponentHand = Grizzly Bears
+? Bot1.Revealed = Grizzly Bears
+? Bot1.Graveyard = Elvish Mystic
+? Bot1.Shuffles = 1
+? Bot1.Battlefield.The Huntsman's Redemption.Counters.Lore = 2
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+! Bot1.Target(Mox Ruby)
+Bot1.Target(Beast Token; Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast Token.Power = 5
+? Bot1.Battlefield.Beast Token.Toughness = 5
+? Bot1.Battlefield.Beast Token.Keywords = Trample
+? Bot1.Battlefield.Grizzly Bears.Power = 4
+? Bot1.Battlefield.Grizzly Bears.Toughness = 4
+? Bot1.Battlefield.Grizzly Bears.Keywords = Trample
+[T6 Bot2.Main1]
+
+[Expect]
+Bot1.Graveyard = The Huntsman's Redemption; Elvish Mystic
+Bot1.Battlefield.Beast Token.Power = 3
+Bot1.Battlefield.Beast Token.Toughness = 3
+Bot1.Battlefield.Beast Token.Keywords = (absent)
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+Bot1.Shuffles = 1

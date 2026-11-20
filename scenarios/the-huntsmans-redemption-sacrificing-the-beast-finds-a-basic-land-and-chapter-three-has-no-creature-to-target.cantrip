@@ -1,0 +1,53 @@
+# The Huntsman's Redemption, chapter II: Bot1 sacrifices the Beast token, the only creature, and takes a basic Forest rather than a
+# creature card: both are allowed but not the nonbasic Taiga (CR 205.4a). The Forest is revealed and put in hand, the library shuffled once.
+# Chapter III then has no creature to target: "up to two" lets it be put on the stack with none, and the Saga is sacrificed after it
+# (CR 714.4).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+The Huntsman's Redemption
+Plains
+Plains
+Plains
+Plains
+Taiga
+Grizzly Bears
+Forest
+Plains x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Huntsman's Redemption.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Choose(Beast Token)
+! Bot1.Search(Taiga)
+Bot1.Search(Forest)
+? Client.Bot2.OpponentHand = Forest
+? Bot1.Revealed = Forest
+? Bot1.Shuffles = 1
+? Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; The Huntsman's Redemption
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = The Huntsman's Redemption
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby
+Bot1.Shuffles = 1

@@ -1,0 +1,55 @@
+# The Huntsman's Redemption, chapter III "up to two target creatures": Bot1 declines chapter II and then chooses no target at all
+# though the Beast and the Mystic could be, so nothing is pumped (no +2/+2, no trample) and the Saga is sacrificed after it (CR 714.4).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+The Huntsman's Redemption
+Elvish Mystic
+Forest
+Plains
+Plains
+Plains
+Grizzly Bears
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Huntsman's Redemption.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Choose()
+[T5 Bot1.Main1]
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast Token.Power = 3
+? Bot1.Battlefield.Beast Token.Keywords = (absent)
+? Bot1.Battlefield.Elvish Mystic.Power = 1
+
+[Expect]
+Bot1.Graveyard = The Huntsman's Redemption
+Bot1.Battlefield.Beast Token.Toughness = 3
+Bot1.Battlefield.Elvish Mystic.Keywords = (absent)

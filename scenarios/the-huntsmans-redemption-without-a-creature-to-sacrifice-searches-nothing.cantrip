@@ -1,0 +1,55 @@
+# The Huntsman's Redemption, "if you do" (CR 608.2c): Bot2 kills the Beast with Lightning Bolt on its turn, so at chapter II Bot1
+# controls no creature (a Mox is not one) and has nothing to sacrifice: no choice is offered, no search happens, the library is
+# not shuffled and no card leaves it.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+The Huntsman's Redemption
+Plains
+Plains
+Plains
+Plains
+Grizzly Bears
+Forest
+Plains x9
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Huntsman's Redemption.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Beast Token)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; The Huntsman's Redemption
+[T3 Bot1.Main1]
+? Bot1.Battlefield.The Huntsman's Redemption.Counters.Lore = 2
+? Bot1.Shuffles = 0
+? Bot1.Library.Count = 11
+
+[Expect]
+Bot1.Shuffles = 0
+Bot1.Library.Count = 11
+Bot1.Hand.Count = 4
+Client.Bot2.OpponentHand = (absent)

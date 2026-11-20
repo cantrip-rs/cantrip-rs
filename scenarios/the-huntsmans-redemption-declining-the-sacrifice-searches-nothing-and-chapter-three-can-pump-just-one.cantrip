@@ -1,0 +1,69 @@
+# The Huntsman's Redemption, chapter II "you may sacrifice a creature. If you do, search ..." (CR 701.21a, 608.2c): Bot1 declines, so
+# the Elvish Mystic stays, nothing is searched (no search prompt, no shuffle, no card leaves the library) and no card is revealed.
+# Chapter III is "up to two": Bot1 targets only the Beast, which becomes a 5/5 trampler while the untargeted Mystic stays a 1/1
+# without trample, nor the Bears: three targets are refused.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+The Huntsman's Redemption
+Elvish Mystic
+Forest
+Grizzly Bears
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Huntsman's Redemption.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Choose()
+? Bot1.Battlefield.Elvish Mystic.Power = 1
+? Bot1.Shuffles = 0
+? Bot1.Library.Count = 12
+? Client.Bot2.OpponentHand = (absent)
+? Bot1.Revealed = (absent)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+! Bot1.Target(Beast Token; Elvish Mystic; Grizzly Bears)
+Bot1.Target(Beast Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast Token.Power = 5
+? Bot1.Battlefield.Beast Token.Keywords = Trample
+? Bot1.Battlefield.Elvish Mystic.Power = 1
+? Bot1.Battlefield.Elvish Mystic.Keywords = (absent)
+
+[Expect]
+Bot1.Graveyard = The Huntsman's Redemption
+Bot1.Shuffles = 0
+Bot1.Library.Count = 11

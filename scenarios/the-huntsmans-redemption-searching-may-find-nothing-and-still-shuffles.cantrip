@@ -1,0 +1,48 @@
+# The Huntsman's Redemption, chapter II: the sacrifice happened (the Beast), so the library is searched, but a search for a card
+# with a quality may find nothing (CR 701.23b): Bot1 takes none, the hand does not grow, and the library is shuffled anyway.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+The Huntsman's Redemption
+Plains
+Plains
+Plains
+Plains
+Grizzly Bears
+Forest
+Plains x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Huntsman's Redemption.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Choose(Beast Token)
+Bot1.Search()
+? Client.Bot2.OpponentHand = (absent)
+? Bot1.Revealed = (absent)
+? Bot1.Hand.Count = 4
+? Bot1.Shuffles = 1
+? Bot1.Library.Count = 11
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Shuffles = 1
