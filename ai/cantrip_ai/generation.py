@@ -1396,6 +1396,8 @@ def main(argv=None):
                                                        w.get("lanes") or args.worker_lanes)[1:]]
             if decks_dir is not None:
                 remote += ["--decks", f"{b}/decks", "--prior", f"{b}/decks", "--pairings", f"{b}/pairings.txt"]
+            # The worker's own self-play settings (its governor's start and gains, say), after the shared ones.
+            remote += [str(x) for x in w.get("selfplay_args") or []]
             remote.append("--resume")
             # The recovery opens no evaluator: a backend that needs no server.
             recover = remote + ["--backend", "tract", "--recover"]
@@ -1619,7 +1621,7 @@ def main(argv=None):
         logs = gen_dir / "logs"
         if args.dry_run:
             log(f"  would mine the gate's pairs in {p.root}, judged by {judge_model.name}"
-                + (f" on {distributed.judge_worker(distributed.load_workers(Path(args.workers)))['name']}" if args.workers else " here"))
+                + (f" on {w['name']}" if args.workers and (w := distributed.judge_worker(distributed.load_workers(Path(args.workers)))) else " here"))
             return
         if not results.exists():
             raise SystemExit(f"no gate results to mine ({results})")
@@ -1688,8 +1690,8 @@ def main(argv=None):
         planned = mining.split_plan(p)
         log(f"  planned {planned['forks']} forks and {planned['losers']} losers' decisions")
         where = "here"
-        if args.workers:
-            worker = distributed.judge_worker(distributed.load_workers(Path(args.workers)))
+        worker = distributed.judge_worker(distributed.load_workers(Path(args.workers))) if args.workers else None
+        if worker is not None:
             cuda = os.environ.get("CANTRIP_CUDA_LIBS")
             if not cuda:
                 import torch  # noqa: PLC0415

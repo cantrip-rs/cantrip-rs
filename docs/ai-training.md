@@ -370,6 +370,22 @@ a process is recorded by its id, its start (`/proc/<pid>/stat`) and its executab
 binary, so a Linux build's games are the same as this machine's. A rented machine's effective CPUs are its CPU quota
 (`/sys/fs/cgroup/cpu/cpu.cfs_quota_us` over the period, or `cpu.max`), not `nproc`: self-play scales to the first
 limiter, and on a slice of a large host that is usually the CPU. Pair mining's judge stays on the first Windows worker.
+Without one, it judges on this machine.
+
+**A Linux worker's cores.** Its supervisor pins self-play to one hardware thread on each of as many physical cores as
+the quota's whole CPUs allow, less three, and the server to both threads of those three (`distributed.pin_plan`; the
+plan is the attempt's `pin.json`, and nothing is pinned where the topology cannot be read). A lane waits on the server
+for a third of its time or more, so a box needs more lanes than cores; but two lanes on one core's sibling threads make
+little more than one, and a quota counts thread-seconds, so lanes Linux places itself double up on siblings while
+other cores idle, spend the quota for half the work, and get the container throttled, the server with it (measured on a
+5090 with a 64-core EPYC: 2,533 requests a second as Linux placed 60 lanes, 3,246 with 100 lanes on one thread each of
+58 cores, and 3,974 with the changes below too). The lanes are then `distributed.LANES_PER_CORE` (1.7) a pinned core,
+all from the start; a worker's `lanes` sets them instead, `lanes_per_core` the factor, and `"pin": false` turns the
+pinning off. Self-play also runs with `MIMALLOC_PURGE_DELAY=-1`: mimalloc otherwise returns each full search's tree to
+the system and faults it back (about 250,000 faults a second over a box, 9% of its CPU). A worker's `selfplay_args`
+(a list) are added to its self-play's arguments. When renting, count physical cores and the quota, not threads: a
+5090 can serve more than 64 cores feed it, and a GPU's utilisation is no load signal (the server runs its fixed-shape
+batches whatever arrives).
 
 **The lease.** Every self-play the driver starts, local or remote, holds a lease (`cantrip-selfplay --lease`): a
 `heartbeat` file the driver touches at each poll. Once it has not been touched for `--dist-lease` seconds (900), the

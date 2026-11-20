@@ -553,6 +553,56 @@ class DistributedTest(unittest.TestCase):
             (repo / "crates/a/lib.rs").write_text("fn b() {}\n")
             self.assertNotEqual(dist.source_tar(repo, Path(tmp) / "a").name, first.name)
 
+    def test_a_linux_box_pins_self_play_to_one_thread_a_core_under_its_quota(self):
+        # An EPYC 7763 container as rented: 64 cores, CPU N and N+64 on one core, a quota of 61.44 CPUs.
+        allowed = set(range(128))
+        siblings = {c: frozenset({c % 64, c % 64 + 64}) for c in allowed}
+        plan = dist.pin_plan(allowed, siblings, 61.44, lanes_per_core=dist.LANES_PER_CORE)
+        self.assertEqual(plan["cores"], 58)
+        self.assertEqual(plan["selfplay"], list(range(58)), "one hardware thread of each self-play core")
+        self.assertEqual(plan["server"], [58, 59, 60, 122, 123, 124], "both threads of three cores of its own")
+        self.assertEqual(plan["lanes"], 99)
+        self.assertLessEqual(len(plan["selfplay"]) + 3, 61.44, "self-play and the server never reach the quota")
+        # No quota: every core but the server's; no lanes asked for: none set.
+        self.assertEqual(dist.pin_plan(allowed, siblings, None)["cores"], 61)
+        self.assertIsNone(dist.pin_plan(allowed, siblings, None)["lanes"])
+        # Only some CPUs allowed (a cpuset), no SMT, and a box too small to split.
+        few = {0, 1, 2, 3, 4, 5}
+        plan = dist.pin_plan(few, {c: frozenset({c}) for c in few}, None)
+        self.assertEqual((plan["selfplay"], plan["server"]), ([0, 1, 2], [3, 4, 5]))
+        self.assertIsNone(dist.pin_plan({0, 1}, {0: frozenset({0}), 1: frozenset({1})}, None))
+        self.assertIsNone(dist.pin_plan(allowed, siblings, 3.5), "a quota of three CPUs leaves self-play none")
+        self.assertEqual(dist.parse_cpus("0-3,8,10-11\n"), {0, 1, 2, 3, 8, 10, 11})
+
+    def test_the_lanes_a_box_is_given_replace_the_ceiling_and_turn_growth_off(self):
+        args = ["--model", "m", "--lanes", "256", "--autoscale", "--resume"]
+        self.assertEqual(dist.with_lanes(args, 99), ["--model", "m", "--lanes", "99", "--resume", "--no-autoscale"])
+        self.assertEqual(dist.with_lanes(["--no-autoscale"], 7), ["--no-autoscale", "--lanes", "7"])
+
+    def test_a_linux_attempts_job_asks_its_supervisor_to_pin_and_keep_freed_memory(self):
+        calls = []
+
+        class R:
+            def __init__(self, code, out=b"", err=b""):
+                self.returncode, self.stdout, self.stderr = code, out, err
+
+        def run(cmd, **kw):
+            calls.append(kw.get("input"))
+            return R(0, json.dumps(dict(supervisor=dict(pid=1), gpu="x")).encode())
+
+        def job(host, a, d):
+            return dict(selfplay="sp", selfplay_args=["--lanes", "256"], env={"CANTRIP_PROGRESS": "0"}, infer=None,
+                        infer_args=[], recover_args=[])
+
+        for worker, want in ((dict(), (True, dist.LANES_PER_CORE)), (dict(lanes=60), (True, None)), (dict(pin=False), (False, dist.LANES_PER_CORE))):
+            w = dict(name="v", host="h", user="root", root="/w", os="linux", **worker)
+            h = dist.LinuxSshHost(w, "fp-abc", 6, {}, {}, "h", job, log=lambda *_: None, run=run)
+            h.pushed = True
+            h.launch(dict(id="v-a1", nonce="n"), "0..9\nend\n")
+            sent = json.loads(base64_args(calls[-1]))["job"]
+            self.assertEqual((sent["pin"], sent["lanes_per_core"]), want, worker)
+            self.assertEqual(sent["env"], {"CANTRIP_PROGRESS": "0", "MIMALLOC_PURGE_DELAY": "-1"})
+
     def test_load_workers_reads_the_file(self):
         with tempfile.TemporaryDirectory() as tmp:
             p = Path(tmp) / "workers.json"

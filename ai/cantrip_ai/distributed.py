@@ -46,6 +46,7 @@ import base64
 import contextlib
 import gzip
 import hashlib
+import inspect
 import io
 import json
 import math
@@ -1713,11 +1714,82 @@ touch "$R/builds/$S/done"
 echo "[$(date -Is)] done"
 """
 
+# Where a Linux worker's self-play and server run (`pin_plan`). A lane waits on the server for a third of its time or
+# more, so a box needs more lanes than cores to keep its cores busy; but two lanes on one core's two hardware threads
+# make little more than one, and a container's CPU quota counts thread-seconds, so lanes left for Linux to place double
+# up on siblings while other cores sit idle, burn the quota for half the work and get the whole container throttled,
+# the server too (measured on a 5090 with 64 cores: 2,533 requests a second as Linux placed 60 lanes, 3,246 with 100
+# lanes on one thread each of 58 cores). Self-play gets one hardware thread on each of as many cores as the quota allows
+# less `PIN_SERVER_CORES`, the server both threads of those, and the lanes `LANES_PER_CORE` a pinned core.
+PIN_SERVER_CORES = 3
+LANES_PER_CORE = 1.7
+
+
+def parse_cpus(text: str) -> set[int]:
+    """A kernel CPU list ("0-3,8,10-11") as a set."""
+    out = set()
+    for part in text.strip().split(","):
+        if part:
+            a, _, b = part.partition("-")
+            out.update(range(int(a), int(b or a) + 1))
+    return out
+
+
+def read_topology():
+    """This process's CPUs, each one's core (the hardware threads it shares one with), and the cgroup's CPU quota in
+    CPUs (cgroup v2's `cpu.max`, or v1's quota over its period; None without one)."""
+    allowed = set(os.sched_getaffinity(0))
+    siblings = {}
+    for c in allowed:
+        with open(f"/sys/devices/system/cpu/cpu{c}/topology/thread_siblings_list") as f:
+            siblings[c] = frozenset(parse_cpus(f.read()))
+    quota = None
+    try:
+        q, p = open("/sys/fs/cgroup/cpu.max").read().split()[:2]
+        quota = int(q) / int(p) if q != "max" else None
+    except (OSError, ValueError):
+        try:
+            q = int(open("/sys/fs/cgroup/cpu/cpu.cfs_quota_us").read())
+            quota = q / int(open("/sys/fs/cgroup/cpu/cpu.cfs_period_us").read()) if q > 0 else None
+        except (OSError, ValueError):
+            quota = None
+    return allowed, siblings, quota
+
+
+def pin_plan(allowed, siblings, quota, server_cores=PIN_SERVER_CORES, lanes_per_core=None):
+    """Self-play's CPUs (one hardware thread of each of its cores), the server's (every thread of `server_cores` cores
+    of its own), and the lanes (`lanes_per_core` a self-play core, if given): self-play has as many cores as the
+    quota's whole CPUs (all of them without one) less the server's, so the two together never reach the quota. None
+    on a box too small to split."""
+    cores = sorted({tuple(sorted(siblings[c] & allowed)) for c in allowed})
+    n = min(len(cores), len(cores) if quota is None else int(quota)) - server_cores
+    if n < 1 or len(cores) < n + server_cores:
+        return None
+    return dict(selfplay=sorted(core[0] for core in cores[:n]),
+                server=sorted(c for core in cores[n:n + server_cores] for c in core),
+                cores=n, physical=len(cores), quota=quota,
+                lanes=max(1, round(lanes_per_core * n)) if lanes_per_core else None)
+
+
+def with_lanes(arguments: list, lanes: int) -> list:
+    """Self-play's arguments with `lanes` lanes, all of them from the start (the governor's growth off)."""
+    out = [a for a in arguments if a != "--autoscale"]
+    if "--lanes" in out:
+        out[out.index("--lanes") + 1] = str(lanes)
+    else:
+        out += ["--lanes", str(lanes)]
+    return out if "--no-autoscale" in out else out + ["--no-autoscale"]
+
+
 # A Linux attempt's supervisor (`run.py` in its directory, started in a session of its own): job.json's cantrip-infer
 # (until its ready file) and cantrip-selfplay, with job.json's environment and the worker's `env.json`; pids.json as
-# each starts, exit.json when self-play ends; the server stopped with it. What `RUN_PS1` does on Windows.
+# each starts, exit.json when self-play ends; the server stopped with it. What `RUN_PS1` does on Windows. With
+# job.json's `pin`, the two are pinned to the box's cores (`pin_plan`, written to pin.json; nothing is pinned where the
+# topology cannot be read), and with its `lanes_per_core` the lanes are that many a self-play core.
 RUN_PY = r'''
 import json, os, subprocess, sys, time
+
+@PIN@
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 job = json.load(open("job.json", encoding="utf-8"))
@@ -1751,14 +1823,30 @@ def save(name, o):
 pids = dict(supervisor=who(os.getpid()))
 infer = sp = None
 code, why = -1, ""
+plan = None
+if job.get("pin"):
+    try:
+        plan = pin_plan(*read_topology(), lanes_per_core=job.get("lanes_per_core"))
+        save("pin.json", plan or dict(pinned=False, why="too few cores to split"))
+    except Exception as e:
+        save("pin.json", dict(pinned=False, why=str(e)))
+
+
+def on(cpus):
+    """A child's start: pinned to `cpus` (none: where Linux places it)."""
+    return (lambda: os.sched_setaffinity(0, cpus)) if cpus else None
+
+
 try:
     save("pids.json", pids)
     arguments = list(job["selfplay_args"])
+    if plan and plan.get("lanes"):
+        arguments = with_lanes(arguments, plan["lanes"])
     if job.get("infer"):
         if os.path.exists("infer.ready"):
             os.remove("infer.ready")
         infer = subprocess.Popen([job["infer"], *job["infer_args"]], stdin=subprocess.DEVNULL, stdout=open("infer.out.log", "wb"),
-                                 stderr=open("infer.log", "wb"), env=env)
+                                 stderr=open("infer.log", "wb"), env=env, preexec_fn=on(plan and plan["server"]))
         pids["infer"] = who(infer.pid)
         save("pids.json", pids)
         deadline = time.time() + 600
@@ -1769,7 +1857,7 @@ try:
             time.sleep(0.3)
         arguments += ["--server", open("infer.ready", encoding="utf-8").read().strip()]
     sp = subprocess.Popen([job["selfplay"], *arguments], stdin=subprocess.DEVNULL, stdout=open("selfplay.out.log", "wb"),
-                          stderr=open("selfplay.log", "wb"), env=env)
+                          stderr=open("selfplay.log", "wb"), env=env, preexec_fn=on(plan and plan["selfplay"]))
     pids["selfplay"] = who(sp.pid)
     save("pids.json", pids)
     code = sp.wait()
@@ -1785,6 +1873,9 @@ finally:
         infer.kill()
         infer.wait()
 '''
+# The pinning's functions, as they are here (and tested here), in the script the worker runs.
+RUN_PY = RUN_PY.replace("@PIN@", "\n\n".join(
+    [f"PIN_SERVER_CORES = {PIN_SERVER_CORES}"] + [inspect.getsource(f) for f in (parse_cpus, read_topology, pin_plan, with_lanes)]))
 
 # What every script sent to a Linux worker starts with: its arguments (`A`, from base64'd JSON), and the helpers. A
 # process is recorded by its id, its start (clock ticks since boot, /proc/PID/stat) and its executable, and is the one
@@ -2124,6 +2215,12 @@ class LinuxSshHost(SshHost):
         job = self.job(self, a, d)
         job["selfplay_args"] = list(job["selfplay_args"]) + ["--lease", f"{d}/heartbeat", "--lease-seconds", str(self.lease)]
         job["env_file"] = f"{self.root}/env.json"
+        # The box's cores (`pin_plan`): pinned unless the worker says `"pin": false`, and the lanes `LANES_PER_CORE`
+        # a self-play core unless it names its `lanes`. mimalloc keeps what a search frees instead of returning it to
+        # the system and faulting it back (each full search's tree: ~250,000 faults a second over a box, 9% of the CPU).
+        job["pin"] = self.w.get("pin", True)
+        job["lanes_per_core"] = None if self.w.get("lanes") else self.w.get("lanes_per_core", LANES_PER_CORE)
+        job["env"] = {**(job.get("env") or {}), "MIMALLOC_PURGE_DELAY": "-1"}
         r = self.py_json(_LINUX_LAUNCH, d=d, job=job, grant=grant, run=RUN_PY, stop_file=STOP_FILE)
         self.gpu = (r.get("gpu") or "").strip() or None
         return dict(launched=dict(supervisor=r.get("supervisor")), remote_dir=d, gpu=self.gpu, **(job.get("record") or {}))
@@ -2156,12 +2253,10 @@ def host_class(worker: dict):
     return LinuxSshHost if worker.get("os") == "linux" else SshHost
 
 
-def judge_worker(workers: list[dict]) -> dict:
-    """The worker pair mining judges on: the first Windows one (`mining.RemoteJudge` is PowerShell)."""
-    for w in workers:
-        if w.get("os", "windows") == "windows":
-            return w
-    raise SystemExit("pair mining judges on a Windows worker, and the workers file has none: --no-mine, or add one")
+def judge_worker(workers: list[dict]) -> dict | None:
+    """The worker pair mining judges on: the first Windows one (`mining.RemoteJudge` is PowerShell); none, and it
+    judges on this machine."""
+    return next((w for w in workers if w.get("os", "windows") == "windows"), None)
 
 
 def poll_from(r: dict, a: dict) -> Poll:
