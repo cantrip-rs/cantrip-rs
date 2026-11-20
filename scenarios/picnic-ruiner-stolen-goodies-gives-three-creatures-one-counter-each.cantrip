@@ -1,0 +1,44 @@
+# Picnic Ruiner // Stolen Goodies: any number of targets, up to one per counter (CR 601.2d): Bot1 puts one +1/+1 counter on each of
+# a Memnite, an Ornithopter and a Phyrexian Walker (a 2/2, a 1/3 and a 1/4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Picnic Ruiner
+Memnite
+Ornithopter
+Phyrexian Walker
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Picnic Ruiner.Cast(Ability: Stolen Goodies)
+Bot1.Divide(Memnite: 1; Ornithopter: 1; Phyrexian Walker: 1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Phyrexian Walker.Power = 1
+Bot1.Battlefield.Phyrexian Walker.Toughness = 4

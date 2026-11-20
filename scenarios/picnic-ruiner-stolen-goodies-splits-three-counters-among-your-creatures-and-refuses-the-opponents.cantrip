@@ -1,0 +1,56 @@
+# Picnic Ruiner // Stolen Goodies: "Distribute three +1/+1 counters among any number of target creatures you control" (CR 601.2d).
+# Turn 2: Bot2 casts a Llanowar Elves. Turn 3: Bot1 casts Stolen Goodies (Black Lotus and Mox Emerald) with a Memnite and an
+# Ornithopter in play: the Elves are refused as a target, then two counters go on the
+# Memnite and one on the Ornithopter: a 3/3 and a 1/3; the Elves stay a 1/1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Picnic Ruiner
+Memnite
+Ornithopter
+Mountain
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Picnic Ruiner.Cast(Ability: Stolen Goodies)
+! Bot1.Divide(Llanowar Elves: 1; Memnite: 2)
+Bot1.Divide(Memnite: 2; Ornithopter: 1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 3
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot2.Battlefield.Llanowar Elves.Power = 1
+Bot2.Battlefield.Llanowar Elves.Toughness = 1
+Bot1.Exile.Picnic Ruiner.Power = 2

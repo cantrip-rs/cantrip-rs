@@ -1,0 +1,48 @@
+# Picnic Ruiner: the creature with power 4 or greater may be the Ruiner itself, as the game is now with layers applied (CR 208.1).
+# Turn 3: Bot1 casts Gnawing Crescendo (creatures you control get +2/+0 until end of turn) before attacking: the Ruiner is a 4/2 and
+# gains double strike, hitting for 4 twice: Bot2 at 12.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Picnic Ruiner
+Gnawing Crescendo
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Picnic Ruiner.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Gnawing Crescendo.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Picnic Ruiner.Power = 4
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Picnic Ruiner > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Picnic Ruiner.Keywords = DoubleStrike
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 12

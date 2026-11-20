@@ -1,0 +1,14 @@
+{
+  "name": "Picnic Ruiner",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin Rogue",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature attacks while you control a creature with power 4 or greater, this creature gains double strike until end of turn.",
+  "adventure": {
+    "name": "Stolen Goodies",
+    "manaCost": "{3}{G}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Distribute three +1/+1 counters among any number of target creatures you control."
+  }
+}

@@ -1,0 +1,28 @@
+# Picnic Ruiner // Stolen Goodies: "any number of target creatures" includes none (CR 601.2c): with no creature on the battlefield
+# Bot1 can still cast Stolen Goodies for {3}{G}, nothing happens, and the Ruiner is exiled on an adventure (CR 715.3d).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Picnic Ruiner
+Mountain
+Mountain x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Picnic Ruiner.Cast(Ability: Stolen Goodies)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Exile.Picnic Ruiner.Power = 2
+Bot1.Battlefield = Mox Emerald
+Stack.Count = 0

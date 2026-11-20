@@ -1,0 +1,56 @@
+# Picnic Ruiner: "while you control a creature with power 4 or greater" is part of the trigger event, checked only as the Ruiner
+# attacks and not again on resolution (no intervening "if", CR 603.4). Turn 1 Bot1 casts the Ruiner and an Alpine Grizzly (power 4).
+# On turn 3 Bot2 exiles the Grizzly with Swords to Plowshares in response to the trigger: it still resolves, the Ruiner has double
+# strike, and hits for 2 twice: Bot2 at 16. The Swords gives Bot1 4 life (24).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Picnic Ruiner
+Alpine Grizzly
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Picnic Ruiner.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Picnic Ruiner > Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Alpine Grizzly)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Alpine Grizzly = (absent)
+Bot1.Battlefield.Picnic Ruiner.Keywords = DoubleStrike
+Bot2.Life = 16
+Bot1.Life = 24
