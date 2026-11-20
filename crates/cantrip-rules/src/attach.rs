@@ -198,27 +198,13 @@ pub fn choose_aura_hosts(cx: &mut Cx, moves: &mut Vec<ops::Moving>) -> R<()> {
             continue;
         }
         let hosts = aura_hosts(cx, moves[i].id, &prospective.chars, e.controller, prospective.mana_value, &entering);
-        let chosen = match hosts.len() {
-            0 => {
+        let chosen = match choose_among_hosts(cx, moves[i].id, e.controller, hosts)? {
+            HostChoice::None => {
                 dropped.push(i);
                 continue;
             }
-            1 => hosts[0],
-            _ => {
-                let ask = RequestKind::ChooseTarget { replacing: None, label: "", slot_player: None, together: None,
-                    source: moves[i].id,
-                    purpose: Purpose::Attach,
-                    candidates: hosts,
-                    optional: false,
-                    least: 1,
-                    count: 1,
-                    any_number: false,
-                };
-                match cx.ask_core(e.controller, ask, false)? {
-                    Answer::Targets(t) if t.len() == 1 => t[0],
-                    _ => continue,
-                }
-            }
+            HostChoice::Unanswered => continue,
+            HostChoice::Host(host) => host,
         };
         e.attach = chosen.object();
         e.attach_player = chosen.player();
@@ -229,4 +215,35 @@ pub fn choose_aura_hosts(cx: &mut Cx, moves: &mut Vec<ops::Moving>) -> R<()> {
         moves.remove(i);
     }
     Ok(())
+}
+
+/// What `choose_among_hosts` came to: no legal host, one chosen, or a question the player left unanswered.
+pub(crate) enum HostChoice {
+    None,
+    Unanswered,
+    Host(Target),
+}
+
+/// The host an Aura entering without being cast enchants (CR 303.4f): the only one there is without asking, otherwise the one its
+/// controller chooses (no target, so hexproof does not matter). No host at all means it does not enter (CR 303.4g).
+pub(crate) fn choose_among_hosts(cx: &mut Cx, aura: ObjectId, controller: PlayerId, hosts: Vec<Target>) -> R<HostChoice> {
+    Ok(match hosts.len() {
+        0 => HostChoice::None,
+        1 => HostChoice::Host(hosts[0]),
+        _ => {
+            let ask = RequestKind::ChooseTarget { replacing: None, label: "", slot_player: None, together: None,
+                source: aura,
+                purpose: Purpose::Attach,
+                candidates: hosts,
+                optional: false,
+                least: 1,
+                count: 1,
+                any_number: false,
+            };
+            match cx.ask_core(controller, ask, false)? {
+                Answer::Targets(t) if t.len() == 1 => HostChoice::Host(t[0]),
+                _ => HostChoice::Unanswered,
+            }
+        }
+    })
 }

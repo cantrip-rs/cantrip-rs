@@ -3188,6 +3188,22 @@ fn create_tokens_entering(
             } else if (chars.has_subtype(Subtype::Equipment) || chars.has_subtype(Subtype::Fortification)) && allowed {
                 entering.attach = Some(host);
             }
+        } else if spell.is_none() {
+            // An Aura token created attached to nothing in particular chooses what it enchants as it enters, as an Aura card put onto
+            // the battlefield does (CR 303.4f), and with nothing it could enchant is not created (CR 303.4g, 111.7): a token copy of an Aura
+            // (Yenna, Redtooth Regent). A copy of an Aura spell has the spell's target (above).
+            let prospective = as_it_would_exist(cx, &entering);
+            if prospective.chars.has_subtype(Subtype::Aura) {
+                let hosts = crate::attach::aura_hosts(cx, id, &prospective.chars, entering.controller, prospective.mana_value, &[id]);
+                match crate::attach::choose_among_hosts(cx, id, entering.controller, hosts)? {
+                    crate::attach::HostChoice::None => continue,
+                    crate::attach::HostChoice::Unanswered => {}
+                    crate::attach::HostChoice::Host(chosen) => {
+                        entering.attach = chosen.object();
+                        entering.attach_player = chosen.player();
+                    }
+                }
+            }
         }
         // A token enters the battlefield as it is created (CR 111.1): the replacements of a permanent's entry apply to it
         // as to any other's (CR 614.1c-d), "enters tapped" and the counters one gives as it arrives.
