@@ -302,7 +302,8 @@ nothing run by hand on them (`ai/cantrip_ai/distributed.py`). Off by default; wi
 CUDA device, 0), `server_args` (its `cantrip-infer`'s; otherwise `--worker-server-args`, which defaults to
 `--server-args` with `--server-impl native` and else to `--precision fp16 --pipelines 1`, the native server's settings
 for self-play; `--shapes` is refused, since smaller batch shapes make a game depend on its batch companions),
-`duel_parallel` (its games at once in a distributed duel: "Distributed duels" below), `backend` (`gpu`, the default:
+`duel_parallel` (its games at once in a distributed duel: "Distributed duels" below), `judge_lanes` (its lanes in the
+pair miner's judgements: "Distributed judgements"), `backend` (`gpu`, the default:
 `cantrip-infer` on its GPU; or `tract`/`ort`: no server, the CPU), `os` (`windows`, the default, or `linux`: "A Linux
 worker" below), `enabled: false` to leave it out, and anything else as notes.
 
@@ -370,8 +371,8 @@ started in a session of its own (`setsid`), which outlives the SSH session as `W
 a process is recorded by its id, its start (`/proc/<pid>/stat`) and its executable. The shards' header names no
 binary, so a Linux build's games are the same as this machine's. A rented machine's effective CPUs are its CPU quota
 (`/sys/fs/cgroup/cpu/cpu.cfs_quota_us` over the period, or `cpu.max`), not `nproc`: self-play scales to the first
-limiter, and on a slice of a large host that is usually the CPU. Pair mining's judge stays on the first Windows worker.
-Without one, it judges on this machine.
+limiter, and on a slice of a large host that is usually the CPU. Its duels and the pair miner's judgements run there
+too ("Distributed duels", "Distributed judgements").
 
 **A Linux worker's cores.** Its supervisor pins self-play to one hardware thread on each of as many physical cores as
 the quota's whole CPUs allow, less three, and the server to both threads of those three (`distributed.pin_plan`; the
@@ -519,6 +520,30 @@ duel are `gens/<root tag>/genN/<name>/<duel>-<attempt>-<nonce>/`, and a duel's l
 complete is only merged and summarised again. A worker plays `--worker-duel-parallel` (32) games at once, or its own
 `duel_parallel`; on Linux, pinned as self-play is, `lanes_per_core` a pinned core. A duel's games without a decks
 directory (`--decks-dir ''`, the fixed slice) are played here.
+
+### Distributed judgements
+
+With `--workers`, the pair miner's deep judgements (`cantrip-explore mine-judge`, `mining.judge_runs`: the forks twice
+at the verdict budget, once deeper for targets, and the losers' decisions) are made within the `mine` stage across this
+machine and every worker (`mining.judge_distributed`; `--no-judge-local` leaves this machine out), each run in turn
+and each run's plan split among the hosts by game (a game's positions together; the games numbered by their recorded
+directory and seed, as `mine-judge` sorts them), by the same coordinator as self-play and the duels, with a `Kind` of
+its own (`mining.JUDGE`). A host's part is `mine-judge --grant FILE`: the plan's games the grant names (read once),
+judged beside an inference server of its own (`--duel-server-args`, every host's the same), written into
+`ATTEMPT.judged.part` and renamed `ATTEMPT.judged` once whole, with `items.txt` naming its games; the driver takes a
+part whole, its header (the search's simulations, worlds, seed and targets, from its report) held to the run's, and a
+part that lost a position to its inference server is refused and its games judged again. A position's judgement is
+seeded by the judge's seed, its game and its decision, so a game judged in any part is judged the same (on the same
+hardware): `cantrip-ai-host`'s `mine` test splits a plan in two parts and checks the judgements are the whole run's. The
+parts are about a third of a host's share each, so a fast host takes more of them and a lost one costs its part
+only. The accepted parts are merged into `genN/mine/judge/<run>/` as one machine writes it (`judged.jsonl` by
+position id, the targets' shards under `<split>/<directory>/` named after their part), and the `mined` stage goes on
+from there as before. A worker's bundle is the judge's (`cantrip-explore`, `cantrip-infer` and their libraries, or
+on Linux the source it builds them from), the judge network, the decklists, and the plans and recordings (shards and
+traces) under `data/`; a worker judges with `--worker-judge-lanes` lanes (4 x `--mine-lanes`, the four runs' lanes
+when one worker made them all at once before), or its own `judge_lanes`; this machine with `--mine-local-lanes`. A
+run's ledger is `genN/dist/judge-<run>/ledger.json`; a ledger of another plan (the stage made again) is started over,
+as are the replays' of another selection. Without `--workers` the judgements are made here, as before.
 
 ### The gate, by pair
 

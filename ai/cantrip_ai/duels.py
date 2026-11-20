@@ -195,13 +195,15 @@ def substitute(args: list, paths: dict[str, str]) -> list[str]:
 
 def run(setup: Setup, name: str, args: list, models: list[Path], games: int, seed: int, decks: Path | None,
         pairings: Path | None, kind: distributed.Kind = DUEL, only=None, affinity: dict[int, str] | None = None,
-        stops: list | None = None, record: str | None = None, env: dict | None = None) -> tuple[distributed.Ledger, Path, list[str], float]:
+        stops: list | None = None, record: str | None = None, env: dict | None = None,
+        restart_stale: bool = False) -> tuple[distributed.Ledger, Path, list[str], float]:
     """Duel `name` (`args`: BotLab's duel arguments, with `--games` and `--seed`, but no `--parallel`, `--results` or
     `--ai-server`) played across the hosts to the end: its ledger, its results directory, its merged result lines and
     the seconds this run took. `stops` are the duel's sequential-stop arguments (the driver's here, not BotLab's);
     `only` the games to play of the `games`; `affinity` each game's host; `record` (a replay) the recordings' name
     within each host's output. With neural seats every host evaluates on an inference server of its own (this
-    machine's `setup.server`), or, without one here, none does: a duel's hosts evaluate alike."""
+    machine's `setup.server`), or, without one here, none does: a duel's hosts evaluate alike. With `restart_stale`
+    (a replay, made again for a new selection) a ledger of another run's is started over rather than refused."""
     log = setup.log
     dist_dir = setup.gen_dir / "dist" / name
     out = dist_dir / "results"
@@ -261,9 +263,13 @@ def run(setup: Setup, name: str, args: list, models: list[Path], games: int, see
         return out_job
 
     binaries = LINUX_BINARIES + (LINUX_RECORD if record else ())
+    whole = {"global": identity, "hosts": hosts_identity}
+    if restart_stale and (why := distributed.stale(dist_dir / "ledger.json", games, seed, whole, header, only)):
+        log(f"  {name}: its ledger is another run's ({why.splitlines()[0]}): started over")
+        shutil.rmtree(dist_dir)
+        out.mkdir(parents=True)
     with distributed.LedgerLock(dist_dir / "ledger.lock"):
-        ledger = distributed.Ledger.load(dist_dir / "ledger.json", games, seed, header=header, only=only,
-                                         identity={"global": identity, "hosts": hosts_identity})
+        ledger = distributed.Ledger.load(dist_dir / "ledger.json", games, seed, header=header, only=only, identity=whole)
         ledger.save()
         if not ledger.complete():
             # A stop asked of an earlier run of this duel is not this one's.
@@ -359,12 +365,15 @@ def host_rows(ledger: distributed.Ledger) -> dict[str, dict]:
 
 
 def recordings(ledger: distributed.Ledger, out: Path, record: str, dest: Path) -> int:
-    """A replay's recordings, every accepted output's, gathered into `dest` (the miner's `recorded/<half>`), each
-    shard named after its output so none meets another. How many shards."""
-    dest.mkdir(parents=True, exist_ok=True)
+    """A replay's recordings, every accepted output's, gathered into `dest` (the miner's `recorded/<half>`): its shards
+    and its traces (`traces/*.jsonl`, the AI host's), each named after its output so none meets another's. How many
+    shards."""
+    (dest / "traces").mkdir(parents=True, exist_ok=True)
     n = 0
     for name in ledger.shards:
         for p in sorted((out / name / record).glob("*.shard.zst")):
             shutil.copy2(p, dest / f"{name}-{p.name}")
             n += 1
+        for p in sorted((out / name / record / "traces").glob("*.jsonl")):
+            shutil.copy2(p, dest / "traces" / f"{name}-{p.name}")
     return n

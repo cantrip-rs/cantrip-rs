@@ -202,6 +202,40 @@ class GenerationTest(unittest.TestCase):
             self.assertRegex(text, r"duel --a neural:decklist@32 --b tactical --model \S+champions[/\\]gen0 .*ladder-tactical-32-pairings.txt")
             self.assertRegex(text, r"duel --a neural:decklist@128 --b tactical --model \S+champions[/\\]gen0 ")
 
+    def test_a_dry_run_with_workers_plans_the_duels_and_the_judgements_across_the_hosts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = root_with(Path(tmp), gens=(1,))
+            decks = decks_in(Path(tmp))
+            workers = Path(tmp) / "workers.json"
+            workers.write_text(json.dumps({"workers": [
+                {"name": "w1", "host": "192.0.2.1", "user": "u", "root": "D:/compute"},
+                {"name": "w2", "host": "192.0.2.2", "user": "u", "root": "/root/compute", "os": "linux"}]}))
+            before = sorted(p for p in root.rglob("*"))
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                generation.main(["--root", str(root), "--dry-run", "--decks-dir", str(decks), "--workers", str(workers),
+                                 "--accept", "above-half", "--gate-early-stop", "--no-mine", "--net-duel-games", "200",
+                                 "--ladder-every", "2"])
+            text = out.getvalue()
+            self.assertEqual(sorted(p for p in root.rglob("*")), before, "a dry run writes nothing")
+            # BotLab published for both kinds of worker.
+            self.assertRegex(text, r"dotnet publish \S+Cantrip.BotLab.csproj -c Release -r linux-x64 --self-contained")
+            self.assertRegex(text, r"dotnet publish \S+Cantrip.BotLab.csproj -c Release -r win-x64 --self-contained")
+            # The gate across the hosts, its early stop the driver's (after the duel's own arguments).
+            self.assertRegex(text, r"would play gate across this machine and the workers: BotLab duel --a neural@64 .*--games 6000 "
+                                   r"--seed 25000000 --interval-z 2.58 .* --interval-stop")
+            self.assertRegex(text, r"would play netduel across this machine and the workers")
+            self.assertRegex(text, r"would play ladder-tactical-64 across this machine and the workers")
+        with tempfile.TemporaryDirectory() as tmp:
+            root = root_with(Path(tmp), gens=(1,))
+            decks = decks_in(Path(tmp))
+            workers = Path(tmp) / "workers.json"
+            workers.write_text(json.dumps({"workers": [{"name": "w1", "host": "192.0.2.1", "user": "u", "root": "D:/c"}]}))
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                generation.main(["--root", str(root), "--dry-run", "--decks-dir", str(decks), "--workers", str(workers)])
+            self.assertIn("judged by gen0 across this machine and the workers", out.getvalue())
+
     def test_a_dry_run_of_above_half_with_its_early_stop_and_of_always(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = root_with(Path(tmp), gens=(1,))

@@ -64,8 +64,10 @@ class FakeRun:
             name = f"{self.id}.replay"
             (self.host.dir / name / "record").mkdir(parents=True)
             (self.host.dir / name / "results.tsv").write_text(text)
+            (self.host.dir / name / "record" / "traces").mkdir()
             for r in self.open:
                 (self.host.dir / name / "record" / f"g{duels.game_of(r)}.shard.zst").write_text(r)
+                (self.host.dir / name / "record" / "traces" / f"g{duels.game_of(r)}.jsonl").write_text(r)
         else:
             name = f"{self.id}-{len(self.outputs):03}.results.tsv"
             (self.host.dir / name).write_text(text)
@@ -315,6 +317,7 @@ class DuelTest(unittest.TestCase):
         # Its recordings gathered, each shard once, under its output's name.
         n = duels.recordings(led, self.results, "record", self.tmp / "recorded")
         self.assertEqual(n, len(wanted))
+        self.assertEqual(len(list((self.tmp / "recorded" / "traces").glob("*.jsonl"))), len(wanted))
         self.assertEqual(sorted(duels.game_of(r) for r in duels.merged(led, self.results)), wanted)
         self.assertEqual(duels.hosts_of(led), affinity)
 

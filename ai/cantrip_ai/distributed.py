@@ -387,6 +387,18 @@ class Ledger:
         return left
 
 
+def stale(path: Path, games: int, seed: int, identity: dict | None = None, header: dict | None = None, only=None) -> str | None:
+    """Why the ledger at `path` is another run's than this one (`Ledger.load` refuses it), or None: a run made again
+    from new inputs (the miner's replays and judgements of a new selection or plan) starts over instead."""
+    if not path.exists():
+        return None
+    try:
+        Ledger.load(path, games, seed, identity=identity, header=header, only=only)
+    except SystemExit as e:
+        return str(e)
+    return None
+
+
 class LedgerLock:
     """`genN/dist/ledger.lock`: one driver at a time on a generation's ledger (its pid and the process's start time; a
     lock whose process is gone is taken over)."""
@@ -1592,7 +1604,7 @@ $root = {ps_quote(self.root)}
 $keep = @({", ".join(ps_quote(k.replace("/", "\\").lower()) for k in keep) or ""})
 $gens = Join-Path $root {ps_quote("gens/" + self.tag)}
 if (Test-Path $gens) {{
-  # Self-play attempts only: a pair-mining job (`mining.RemoteJudge`, a `mine-` directory) is no attempt's orphan.
+  # Attempts only: a pair-mining job of the driver before 2026-11-20 (a `mine-` directory) is no attempt's orphan.
   Get-ChildItem -Path $gens -Recurse -Filter pids.json -File | Where-Object {{ (Split-Path (Split-Path $_.DirectoryName) -Leaf) -eq {ps_quote(self.name)} -and (Split-Path $_.DirectoryName -Leaf) -notlike 'mine-*' }} | ForEach-Object {{
     $dir = $_.DirectoryName
     if ($keep -notcontains $dir.ToLower()) {{
@@ -2439,12 +2451,6 @@ class LinuxSshHost(SshHost):
 def host_class(worker: dict):
     """A worker's host: `"os": "linux"` a `LinuxSshHost`, a Windows one (the default) an `SshHost`."""
     return LinuxSshHost if worker.get("os") == "linux" else SshHost
-
-
-def judge_worker(workers: list[dict]) -> dict | None:
-    """The worker pair mining judges on: the first Windows one (`mining.RemoteJudge` is PowerShell); none, and it
-    judges on this machine."""
-    return next((w for w in workers if w.get("os", "windows") == "windows"), None)
 
 
 def poll_from(r: dict, a: dict) -> Poll:

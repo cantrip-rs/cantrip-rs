@@ -86,5 +86,124 @@ class Mining(unittest.TestCase):
         self.assertEqual(runs[1]["args"][runs[1]["args"].index("--targets") + 1], "false")
 
 
+class FakeJudgeHost:
+    """A host whose judgement parts (`mining.JUDGE`) judge their grant at once: a `ATTEMPT.judged` directory with its
+    items, a line a planned position (an inference failure in `fail_once`'s games, once) and a target shard a game."""
+
+    def __init__(self, name, base, plan, header, down=False):
+        from cantrip_ai.distributed import Poll  # noqa: PLC0415
+        self.Poll, self.name, self.remote, self.plan, self.header = Poll, name, True, plan, header
+        self.dir = base / name
+        self.dir.mkdir(parents=True)
+        self.games = mining.plan_games(plan)
+        self.runs, self.judged, self.fail_once = {}, [], set()
+
+    def launch(self, a, grant):
+        from cantrip_ai import distributed  # noqa: PLC0415
+        items = distributed.from_ranges([[int(x.split("..")[0]), int(x.split("..")[1]) if ".." in x else int(x) + 1]
+                                         for x in grant.split() if x != "end"])
+        out = self.dir / f"{a['id']}.judged"
+        (out / "train" / "first").mkdir(parents=True)
+        lines = []
+        for i in items:
+            d, seed = self.games[i]
+            bad = i in self.fail_once
+            self.fail_once.discard(i)
+            for pos in [json.loads(x) for x in self.plan.read_text().splitlines() if x.strip()]:
+                if (pos["dir"], pos["seed"]) == (d, seed):
+                    lines.append({"id": pos["id"], "judgement": {"verdict": "first"} if not bad else
+                                  {"error": "the inference server closed"}})
+            (out / "train" / "first" / f"mine-l0-{i}.shard.zst").write_text(str(i))
+            if not bad:
+                self.judged.append(i)
+        (out / "items.txt").write_text("".join(f"{i}\n" for i in items))
+        (out / "judged.jsonl").write_text("".join(json.dumps(x) + "\n" for x in lines))
+        (out / "judge-report.json").write_text(json.dumps(dict(Simulations=int(self.header["simulations"]),
+                                                               Worlds=int(self.header["worlds"]), Seed=int(self.header["seed"]),
+                                                               Targets=self.header["targets"])))
+        self.runs[a["id"]] = out.name
+        return {}
+
+    def grant(self, a, text):
+        pass
+
+    def poll(self, a):
+        return self.Poll(status=None, exit=0, alive=False, shards=[self.runs[a["id"]]], started=True)
+
+    def fetch(self, a, name, dest):
+        import shutil  # noqa: PLC0415
+        shutil.copytree(self.dir / name, dest)
+
+    def fetch_logs(self, a, dest):
+        pass
+
+    def delete(self, a, names):
+        pass
+
+    def stop(self, a, now):
+        pass
+
+    def kill(self, a):
+        pass
+
+
+class DistributedJudgements(unittest.TestCase):
+    def plan(self, tmp: Path) -> Path:
+        lines = []
+        for k, (d, seed) in enumerate([("second", 5), ("first", 9), ("first", 3), ("first", 9), ("second", 1)]):
+            lines.append(json.dumps(dict(id=f"p{k:02}", dir=d, seed=seed, decision=k, split="train")))
+        path = tmp / "plan-forks.jsonl"
+        path.write_text("\n".join(lines) + "\n")
+        return path
+
+    def test_a_plans_games_are_numbered_as_mine_judge_numbers_them(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.assertEqual(mining.plan_games(self.plan(Path(tmp))), [("first", 3), ("first", 9), ("second", 1), ("second", 5)])
+
+    def test_a_runs_games_are_judged_once_across_hosts_and_merged_as_one_machine_writes_them(self):
+        from cantrip_ai import distributed  # noqa: PLC0415
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            plan = self.plan(tmp)
+            games = len(mining.plan_games(plan))
+            header = mining.judge_header(games, ["mine-judge", "--simulations", "64", "--worlds", "2", "--seed", "1",
+                                                 "--targets", "true"])
+            a = FakeJudgeHost("a", tmp, plan, header)
+            b = FakeJudgeHost("b", tmp, plan, header)
+            a.fail_once = {0, 1, 2, 3}  # its first part loses its positions to its server: refused, judged again
+            led = distributed.Ledger(tmp / "ledger.json", games, 0)
+            led.header = header
+            out = tmp / "results"
+            out.mkdir()
+            logs = []
+            c = distributed.Coordinator(led, [a, b], out, tmp / "dist", read=lambda path: mining.read_judged(path, games),
+                                        log=logs.append, sleep=lambda s: None, kind=mining.JUDGE, chunk=1, initial=1,
+                                        lookahead=0.0, max_failures=5)
+            self.assertEqual(c.run(), "done")
+            self.assertEqual(sorted(set(a.judged + b.judged)), list(range(games)))
+            self.assertTrue(led.rejected and "inference server" in led.rejected[0]["why"])
+            dest = tmp / "judge" / "forks-a"
+            mining.merge_judged(led, out, dest)
+            lines = [json.loads(x) for x in (dest / "judged.jsonl").read_text().splitlines()]
+            self.assertEqual([x["id"] for x in lines], [f"p{k:02}" for k in range(5)])
+            self.assertTrue(all(x["judgement"]["verdict"] == "first" for x in lines))
+            self.assertEqual(len(list((dest / "train" / "first").glob("*.shard.zst"))), games)
+            self.assertEqual(mining.check_judged(tmp / "judge", ["forks-a"])["forks-a"]["judged"], 5)
+
+    def test_a_part_of_another_search_is_refused(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            plan = self.plan(tmp)
+            header = mining.judge_header(4, ["mine-judge", "--simulations", "64", "--worlds", "2", "--seed", "1", "--targets", "true"])
+            host = FakeJudgeHost("a", tmp, plan, dict(header, simulations="128"))
+            from cantrip_ai.distributed import Ledger  # noqa: PLC0415
+            host.launch(dict(id="a-a1"), "0..4\n")
+            got, items, _ = mining.read_judged(host.dir / "a-a1.judged", 4)
+            self.assertEqual(items, [0, 1, 2, 3])
+            led = Ledger(None, 4, 0)
+            led.header = header
+            self.assertIn("simulations", led.check(got))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -7,15 +7,16 @@ stage):
 1. chooses the pairs (`mine select`): every decisive pair (one network won both games) and a control of split pairs;
 2. plays their games again, recording every position (BotLab `--only-games` with the gate's settings, through the native
    host built with `ai-record`): a game's searches are seeded by its number, so it replays exactly, on the hardware that
-   played it (this machine);
+   played it (this machine, or with a distributed gate each game on its host: `duels.REPLAY`);
 3. checks every replayed game's result is the gate's (`mine verify`); a pair whose games differ is left out;
 4. finds each pair's fork, the first decision its two games answer differently (`mine-forks`), and the loser's
    decisions before its largest fall of value (`mine-values`, `mine losers`), and plans them (`mine plan`), a share of
    the pairs held out;
-5. starts the deep judgements (`mine-judge`): on a worker (`--workers`, over SSH as distributed self-play's) while the
-   driver plays the network duel and the ladder, or here. The judge is the network the gate leaves champion.
+5. judges them (`mine-judge`): here, or with `--workers` across this machine and the workers (`judge_distributed`:
+   each run's plan's games split among the hosts by the self-play coordinator, the parts merged). The judge is the
+   network the gate leaves champion.
 
-Then `finish` (the `mined` stage, after the ladder) waits for the judgements, keeps the decided forks and the loser
+Then `finish` (the `mined` stage, after the ladder) keeps the decided forks and the loser
 decisions whose deep target is far from the network's prior (`mine keep`), writes them as policy-only shards
 (`mine-filter`): `genN/mine/targets/` for training and `genN/mine/heldout/` for measuring, and the report
 (`genN/mine/REPORT.md`). Outcomes only choose which games are looked at; every target is the deep search's.
@@ -26,10 +27,9 @@ them scaled up, if need be, to at least `--mine-floor` of the policy-target weig
 
 from __future__ import annotations
 
+import contextlib
 import json
 import shutil
-import tarfile
-import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -86,21 +86,23 @@ class Paths:
         return self.root / f"values-{d}.jsonl"
 
 
-def judge_runs(p: Paths, s: Settings, model: str, prior: str, here: Path, judge_dir: str) -> list[dict]:
+def judge_runs(p: Paths, s: Settings, model: str, prior: str, here, judge_dir: str) -> list[dict]:
     """The `mine-judge` runs, each `name` and its arguments with the plans and recordings under `here` and its output
-    under `judge_dir` (paths as the machine running them sees them); the server's address is added there."""
-    dirs = ["--dir", f"first={here / 'recorded' / 'first'}", "--dir", f"second={here / 'recorded' / 'second'}"]
+    under `judge_dir` (paths as the machine running them sees them, a worker's as it names them); the server's address
+    is added there."""
+    h = str(here).rstrip("/\\")
+    dirs = ["--dir", f"first={h}/recorded/first", "--dir", f"second={h}/recorded/second"]
     common = ["--model", model, "--batch", str(s.batch), "--lanes", str(s.lanes), "--search", "RootShortcut=false",
               "--prior", prior]
     runs = []
     for name, seed, targets in FORK_RUNS:
-        runs.append(dict(name=name, args=["mine-judge", "--plan", str(here / "plan-forks.jsonl"), *dirs, "--out",
+        runs.append(dict(name=name, args=["mine-judge", "--plan", f"{h}/plan-forks.jsonl", *dirs, "--out",
                                           f"{judge_dir}/{name}", "--simulations", str(s.fork_simulations), "--worlds",
                                           str(s.fork_worlds), "--seed", str(seed), "--targets", str(targets).lower(), *common]))
-    runs.append(dict(name=DEEP_RUN, args=["mine-judge", "--plan", str(here / "plan-forks.jsonl"), *dirs, "--out",
+    runs.append(dict(name=DEEP_RUN, args=["mine-judge", "--plan", f"{h}/plan-forks.jsonl", *dirs, "--out",
                                           f"{judge_dir}/{DEEP_RUN}", "--simulations", str(s.deep_simulations), "--worlds",
                                           str(s.deep_worlds), "--seed", "3", "--targets", "true", *common]))
-    runs.append(dict(name=LOSERS_RUN, args=["mine-judge", "--plan", str(here / "plan-losers.jsonl"), *dirs, "--out",
+    runs.append(dict(name=LOSERS_RUN, args=["mine-judge", "--plan", f"{h}/plan-losers.jsonl", *dirs, "--out",
                                             f"{judge_dir}/{LOSERS_RUN}", "--simulations", str(s.loser_simulations),
                                             "--worlds", str(s.loser_worlds), "--seed", "1", "--targets", "true", *common]))
     return runs
@@ -142,136 +144,187 @@ def split_plan(p: Paths) -> dict:
     return dict(forks=len(forks), losers=len(losers))
 
 
-def judge_data(p: Paths) -> Path:
-    """The plans and the recordings, one archive for a worker."""
-    out = p.root / "judge-data.tar"
-    with tarfile.open(out, "w") as t:
-        for f in (p.plan_forks, p.plan_losers):
-            t.add(f, arcname=f.name)
-        t.add(p.recorded, arcname="recorded")
+# --- The judgements, distributed ----------------------------------------------------------------------------------
+
+# A judgement's part on a host (docs/ai-training.md, "Distributed judgements"): `cantrip-explore mine-judge --grant`,
+# the plan's games it is granted (read once), its output closed by a rename into one directory (`ATTEMPT.judged`).
+JUDGE = distributed.Kind(name="judge", out="judge", outputs="*.judged", dirs=True, status="judge-status.json",
+                         report="judge-report.json", stop="judge.stop", runaways=None, lease=False, recovers=False)
+# What a Linux worker builds for the judgements (`distributed.LINUX_BUILD`).
+LINUX_BINARIES = ("cantrip-explore", "cantrip-infer")
+
+
+def plan_games(plan: Path) -> list[tuple[str, int]]:
+    """A plan's games in the order `mine-judge` numbers them for `--grant` (`mine::run`'s work: by recorded
+    directory, then seed)."""
+    games = set()
+    for line in plan.read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            d = json.loads(line)
+            games.add((d["dir"], int(d["seed"])))
+    return sorted(games)
+
+
+def judge_header(games: int, args: list[str]) -> dict:
+    """What a part's output must say of itself: the plan's games, and the search it judged them with."""
+    def arg(k):
+        return args[args.index(k) + 1] if k in args[:-1] else None
+    return dict(seeds=f"0..{games}", simulations=arg("--simulations"), worlds=arg("--worlds"), seed=arg("--seed"),
+                targets=arg("--targets") != "false")
+
+
+def read_judged(path: Path, games: int) -> tuple[dict, list[int], dict]:
+    """A part's output (`ATTEMPT.judged`) as the coordinator takes it: its header (from its report), the plan's games
+    it judged (`items.txt`), and what it holds. A part that lost a position to its inference server is no result: it
+    is refused, and its games are judged again."""
+    report = json.loads((path / "judge-report.json").read_text(encoding="utf-8"))
+    items = [int(x) for x in (path / "items.txt").read_text(encoding="utf-8").split()]
+    lines = [json.loads(x) for x in (path / "judged.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
+    served = [x for x in lines if "inference" in str((x.get("judgement") or {}).get("error") or "")]
+    if served:
+        raise ValueError(f"{len(served)} of {len(lines)} positions lost to its inference server: "
+                         f"{(served[0].get('judgement') or {}).get('error')}")
+    header = dict(seeds=f"0..{games}", simulations=str(report.get("Simulations")), worlds=str(report.get("Worlds")),
+                  seed=str(report.get("Seed")), targets=bool(report.get("Targets")))
+    return header, items, dict(games=len(items), positions=len(lines), samples=report.get("Samples", 0))
+
+
+def merge_judged(ledger: distributed.Ledger, out: Path, dest: Path):
+    """A run's judgements as one machine writes them (`dest`, the miner's `judge/<run>`): every accepted part's lines in
+    `judged.jsonl`, by position id, and its target shards under `<split>/<directory>/`, each named after its part."""
+    clear(dest)
+    dest.mkdir(parents=True)
+    lines = []
+    for name in ledger.shards:
+        part = out / name
+        lines += [x for x in (part / "judged.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
+        for split in ("train", "heldout"):
+            for d in sorted(x for x in (part / split).glob("*") if x.is_dir()):
+                (dest / split / d.name).mkdir(parents=True, exist_ok=True)
+                for f in sorted(d.glob("*.shard.zst")):
+                    shutil.copy2(f, dest / split / d.name / f"{name}-{f.name}")
+    lines.sort(key=lambda x: json.loads(x)["id"])
+    (dest / "judged.jsonl").write_text("".join(x + "\n" for x in lines), encoding="utf-8")
+
+
+def judge_data_files(p: Paths) -> dict[str, Path]:
+    """The plans and the recordings (shards and traces), by their place in a worker's bundle (`data/`)."""
+    files = {"data/plan-forks.jsonl": p.plan_forks, "data/plan-losers.jsonl": p.plan_losers}
+    for half in ("first", "second"):
+        d = p.recorded / half
+        for f in sorted(d.glob("*.shard.zst")):
+            files[f"data/recorded/{half}/{f.name}"] = f
+        for f in sorted((d / "traces").glob("*.jsonl")):
+            files[f"data/recorded/{half}/traces/{f.name}"] = f
+    return files
+
+
+def with_arg(args: list[str], flag: str, value: str) -> list[str]:
+    """`args` with `flag` set to `value` (added if it is not there)."""
+    out = list(args)
+    if flag in out[:-1]:
+        out[out.index(flag) + 1] = value
+    else:
+        out += [flag, value]
     return out
 
 
-# The worker's script: the inference server, every judge run at once, the judgements archived, its exit last.
-JUDGE_PS1 = r"""
-$ErrorActionPreference = 'Stop'
-Set-Location $PSScriptRoot
-$job = Get-Content -Raw job.json | ConvertFrom-Json
-foreach ($p in $job.env.PSObject.Properties) { Set-Item -Path ("env:" + $p.Name) -Value $p.Value }
-function Who($proc) { [ordered]@{ pid = $proc.Id; start = $proc.StartTime.ToFileTimeUtc(); path = $proc.Path } }
-$pids = [ordered]@{ supervisor = (Who (Get-Process -Id $PID)) }
-function Save-Pids { $pids | ConvertTo-Json | Set-Content -Encoding Ascii pids.json.tmp; Move-Item -Force pids.json.tmp pids.json }
-function Save-Exit($code, $why) {
-  [ordered]@{ code = $code; why = $why; at = (Get-Date -Format s) } | ConvertTo-Json | Set-Content -Encoding Ascii exit.json.tmp
-  Move-Item -Force exit.json.tmp exit.json
-}
-$infer = $null
-$runs = @()
-$code = -1
-$why = ''
-try {
-  Save-Pids
-  tar -xf judge-data.tar
-  if ($LASTEXITCODE -ne 0) { throw 'the judge data did not unpack' }
-  Remove-Item -ErrorAction SilentlyContinue infer.ready
-  $infer = Start-Process -FilePath $job.infer -ArgumentList $job.infer_args -RedirectStandardOutput infer.out.log -RedirectStandardError infer.log -PassThru -NoNewWindow
-  $null = $infer.Handle
-  $pids.infer = (Who $infer); Save-Pids
-  $deadline = (Get-Date).AddMinutes(10)
-  while (-not (Test-Path infer.ready)) {
-    if ($infer.HasExited -or (Get-Date) -gt $deadline) { $code = -2; throw 'the inference server did not start (infer.log)' }
-    Start-Sleep -Milliseconds 300
-  }
-  $addr = (Get-Content -Raw infer.ready).Trim()
-  foreach ($r in $job.runs) {
-    $a = @($r.args) + @('--server', $addr)
-    $p = Start-Process -FilePath $job.explore -ArgumentList $a -RedirectStandardOutput "$($r.name).out.log" -RedirectStandardError "$($r.name).log" -PassThru -NoNewWindow
-    $null = $p.Handle
-    $runs += $p
-    $pids[$r.name] = (Who $p); Save-Pids
-  }
-  foreach ($p in $runs) { $p.WaitForExit() }
-  $failed = @($runs | Where-Object { $_.ExitCode -ne 0 })
-  if ($failed.Count) { $code = 1; $why = "$($failed.Count) judge run(s) failed (their logs)" } else {
-    tar -cf judge.tar judge *.log
-    $code = $LASTEXITCODE
-  }
-} catch {
-  $why = "$_"
-} finally {
-  foreach ($p in $runs) { if (-not $p.HasExited) { Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue } }
-  Save-Exit $code $why
-  if ($infer -and -not $infer.HasExited) { Stop-Process -Id $infer.Id -Force -ErrorAction SilentlyContinue }
-}
-"""
+def judge_distributed(setup, p: Paths, s: Settings, judge_model: Path, decks: Path, explore: Path, local_lanes: int,
+                      worker_lanes: int, parts: int = 3) -> dict:
+    """The judgements across this machine and the workers (`setup`: a `duels.Setup`): each run of `judge_runs` in
+    turn, its plan's games split among the hosts by the self-play coordinator (`JUDGE`), each host's part a
+    `mine-judge --grant` beside an inference server of its own (every host's with the same arguments), a part about
+    a `parts`-th of a host's share; a host lost or failing has its parts judged by the others. The accepted parts are
+    merged into `p.judge/<run>` as one machine writes them. Returns each run's hosts' parts."""
+    log = setup.log
+    tag = distributed.root_tag(setup.root)
+    data = judge_data_files(p)
+    bundles: dict[str, tuple] = {}
+    by_os = {w.get("os", "windows") for w in setup.workers}
+    if "windows" in by_os:
+        if setup.ort_dir is None or setup.cuda_dir is None:
+            raise SystemExit("a Windows worker's judgements need onnxruntime-gpu (--ort-dylib) and CUDA's libraries")
+        files = {**bundle(explore, setup.infer, setup.ort_dir, setup.cuda_dir, judge_model, decks, setup.cuda_dlls), **data}
+        bundles["windows"] = (files, *reversed(distributed.bundle_manifest(files, setup.cache)))
+    if "linux" in by_os:
+        files = {**distributed.linux_bundle_files(distributed.source_tar(setup.repo, setup.root / "dist" / "src"),
+                                                  judge_model, decks, None, None), **data}
+        bundles["linux"] = (files, *reversed(distributed.bundle_manifest(files, setup.cache)))
+    local_runs = {r["name"]: r["args"] for r in judge_runs(p, s, str(judge_model), str(decks), p.root, str(p.judge))}
+    done = {}
+    for name, local_args in local_runs.items():
+        plan = Path(local_args[local_args.index("--plan") + 1])
+        games = len(plan_games(plan))
+        if games == 0:
+            merge_judged(distributed.Ledger(None, 0, 0), p.root, p.judge / name)
+            done[name] = {}
+            continue
+        task = f"judge-{name}"
+        dist_dir = setup.gen_dir / "dist" / task
+        out = dist_dir / "results"
+        out.mkdir(parents=True, exist_ok=True)
+        header = judge_header(games, local_args)
+        identity = dict(header=header, server_args=" ".join(setup.server_args),
+                        model=distributed.files_hash([x for x in judge_model.iterdir() if x.is_file() and
+                                                      (x.name == "manifest.json" or x.suffix == ".onnx")], setup.cache),
+                        plan=distributed.files_hash([plan], setup.cache))
 
+        def job(host, a, d, name=name):
+            w, b = host.w, host.bundle_dir()
+            linux = w.get("os") == "linux"
+            exe = "" if linux else ".exe"
+            remote = {r["name"]: r["args"] for r in judge_runs(p, s, f"{b}/model/{judge_model.name}", f"{b}/decks",
+                                                                 f"{b}/data", f"{d}/judge")}[name]
+            remote = with_arg(remote, "--out", f"{d}/judge/{a['id']}.judged")
+            remote = with_arg(remote, "--lanes", str(w.get("judge_lanes") or worker_lanes))
+            remote += ["--grant", f"{d}/grant.txt"]
+            env = {"CANTRIP_PROGRESS": "0"}
+            if not linux:
+                env.update(ORT_DYLIB_PATH=f"{b}/bin/onnxruntime.dll", CANTRIP_CUDA_LIBS=f"{b}/bin")
+            return dict(selfplay=f"{b}/bin/cantrip-explore{exe}", selfplay_args=remote, recover_args=None, env=env,
+                        infer=f"{b}/bin/cantrip-infer{exe}", server_flag="--server", lanes_per_core=None,
+                        infer_args=["serve", "--model", f"{b}/model/{judge_model.name}", "--port", "0", "--ready-file",
+                                    f"{d}/infer.ready", "--device", str(w.get("device", 0)), *setup.server_args],
+                        record=dict(server_args=" ".join(setup.server_args), bundle=host.hash))
 
-class RemoteJudge:
-    """The judgements on a worker: the bundle (cantrip-explore, cantrip-infer, their libraries, the judge network, the
-    decklists) pushed as distributed self-play pushes its own (`SshHost.push`: each file once), the plans and recordings
-    as one archive, then `JUDGE_PS1` started detached in `ROOT/gens/<tag>/genN/<host>/mine-<nonce>`. `poll` reads its
-    exit; `fetch` brings the judgements home."""
-
-    def __init__(self, worker: dict, tag: str, gen: int, files: dict[str, Path], cache: dict, log=print):
-        bundle_hash, manifest = distributed.bundle_manifest(files, cache)
-        self.host = distributed.SshHost(worker, tag, gen, files, manifest, bundle_hash, job=None, log=log)
-        self.log = log
-        self.name = worker["name"]
-
-    def job_dir(self, nonce: str) -> str:
-        return f"{self.host.root}/gens/{self.host.tag}/gen{self.host.gen}/{self.name}/mine-{nonce}"
-
-    def start(self, data: Path, model_name: str, s: Settings, server_args: list[str], nonce: str,
-              runs: list[dict] | None = None) -> str:
-        """The job started; `runs` (each `name` and its `mine-judge` arguments, the model and prior as `{model}` and
-        `{prior}`) in place of the miner's own (`judge_runs`), for an experiment over the same plans."""
-        self.host.push()
-        d = self.job_dir(nonce)
-        b = self.host.bundle_dir()
-        if runs is None:
-            runs = judge_runs(Paths(Path(".")), s, f"{b}/model/{model_name}", f"{b}/decks", Path("."), "judge")
-        else:
-            runs = [dict(r, args=[a.replace("{model}", f"{b}/model/{model_name}").replace("{prior}", f"{b}/decks")
-                                  for a in r["args"]]) for r in runs]
-        for r in runs:  # the plans and recordings as the job's own directory holds them
-            r["args"] = [a.replace("\\", "/") for a in r["args"]]
-        job = dict(explore=f"{b}/bin/cantrip-explore.exe", infer=f"{b}/bin/cantrip-infer.exe",
-                   infer_args=["serve", "--model", f"{b}/model/{model_name}", "--port", "0", "--ready-file", "infer.ready",
-                               *server_args],
-                   env={"ORT_DYLIB_PATH": f"{b}/bin/onnxruntime.dll", "CANTRIP_CUDA_LIBS": f"{b}/bin",
-                        "CANTRIP_PROGRESS": "0"}, runs=runs)
-        self.host.ps(f"New-Item -ItemType Directory -Force {distributed.ps_quote(d)} | Out-Null")
-        self.log(f"  [{self.name}] pushing the judge data ({data.stat().st_size / 2**20:.0f} MB)")
-        self.host.scp(str(data), self.host.remote_path(f"gens/{self.host.tag}/gen{self.host.gen}/{self.name}/mine-{nonce}/judge-data.tar"))
-        r = self.host.ps_json(f"""
-$d = {distributed.ps_quote(d)}
-function Put($name, $text) {{ [IO.File]::WriteAllText("$d/$name.tmp", [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($text))); Move-Item -Force "$d/$name.tmp" "$d/$name" }}
-Put 'run.ps1' {distributed.ps_quote(distributed.b64(JUDGE_PS1))}
-Put 'job.json' {distributed.ps_quote(distributed.b64(json.dumps(job, indent=1)))}
-Remove-Item -ErrorAction SilentlyContinue "$d/exit.json"
-$line = 'powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "' + ($d -replace '/', '\\') + '\\run.ps1"'
-$r = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{{ CommandLine = $line; CurrentDirectory = ($d -replace '/', '\\') }}
-if ($r.ReturnValue -ne 0) {{ throw "Win32_Process.Create returned $($r.ReturnValue)" }}
-ConvertTo-Json -Compress -InputObject @{{ pid = [int]$r.ProcessId }}
-""")
-        self.log(f"  [{self.name}] judging in {d} (supervisor {r.get('pid')}): {', '.join(x['name'] for x in runs)}")
-        return d
-
-    def poll(self, nonce: str) -> dict | None:
-        """The job's exit (`code`, `why`), or None while it runs."""
-        d = self.job_dir(nonce)
-        return self.host.ps_json(f"""
-$d = {distributed.ps_quote(d)}
-if (Test-Path "$d/exit.json") {{ Get-Content -Raw "$d/exit.json" | ConvertFrom-Json | ConvertTo-Json -Compress }} else {{ 'null' }}
-""")
-
-    def fetch(self, nonce: str, dest: Path):
-        dest.mkdir(parents=True, exist_ok=True)
-        tar = dest.parent / "judge.tar"
-        self.host.scp(self.host.remote_path(f"gens/{self.host.tag}/gen{self.host.gen}/{self.name}/mine-{nonce}/judge.tar"), str(tar))
-        with tarfile.open(tar) as t:
-            t.extractall(dest.parent, filter="data")
-        tar.unlink()
+        whole = {"global": identity, "hosts": {w["name"]: dict(bundle=bundles[w.get("os", "windows")][2]) for w in setup.workers}}
+        if why := distributed.stale(dist_dir / "ledger.json", games, 0, whole, header):
+            # Another plan's (the mine stage made again): started over.
+            log(f"  {task}: its ledger is another plan's ({why.splitlines()[0]}): started over")
+            shutil.rmtree(dist_dir)
+            out.mkdir(parents=True)
+        with distributed.LedgerLock(dist_dir / "ledger.lock"):
+            ledger = distributed.Ledger.load(dist_dir / "ledger.json", games, 0, header=header, identity=whole)
+            ledger.save()
+            serving = setup.server is not None and setup.local and not ledger.complete()
+            with (setup.server([judge_model]) if serving else contextlib.nullcontext(None)) as gpu:
+                hosts = []
+                if setup.local:
+                    command = [explore, *with_arg(local_args, "--lanes", str(local_lanes))]
+                    command = [c for k, c in enumerate(command) if not (c == "--out" or (k and command[k - 1] == "--out"))]
+                    if gpu is not None:
+                        command += ["--server", gpu.address]
+                    hosts.append(distributed.LocalHost(setup.local_name, command, out, dist_dir, setup.gen_dir / "logs",
+                                                       env={"CANTRIP_PROGRESS": "0"}, cwd=setup.repo, kind=JUDGE,
+                                                       extra=lambda a, out=out: ["--out", str(out / f"{a['id']}.judged")]))
+                hosts += [distributed.host_class(w)(w, tag, setup.gen, *bundles[w.get("os", "windows")], job, log,
+                                                    kind=JUDGE, task=task, binaries=LINUX_BINARIES)
+                          for w in setup.workers]
+                if not hosts:
+                    raise SystemExit("the judgements: no host to judge on")
+                chunk = max(1, -(-games // (len(hosts) * max(1, parts))))
+                coordinator = distributed.Coordinator(
+                    ledger, hosts, out, dist_dir, read=lambda path, games=games: read_judged(path, games), log=log,
+                    chunk=chunk, initial=chunk, lookahead=0.0, poll_seconds=setup.poll, timeout=setup.timeout, kind=JUDGE)
+                if not ledger.complete():
+                    log(f"  {task}: {games} games' positions on {', '.join(h.name for h in hosts)}, parts of {chunk}")
+                    if coordinator.run() == "stopped":
+                        raise SystemExit(f"the judgements stopped: run the driver again to go on ({dist_dir / 'ledger.json'})")
+        merge_judged(ledger, out, p.judge / name)
+        done[name] = {h: r["games"] for h, r in distributed.host_rows(ledger).items()}
+        if ledger.dropped:
+            log(f"  {task}: {len(ledger.dropped)} games' positions failed twice and are left unjudged")
+    return done
 
 
 def bundle(explore: Path, infer: Path, ort_dir: Path, cuda_dir: Path, model: Path, decks: Path, cuda_dlls) -> dict[str, Path]:
@@ -346,22 +399,6 @@ def weighted_dirs(root: Path, gen: int, window: int, full_simulations: int, floo
         share = mined * scale / (mined * scale + policy_targets) if policy_targets else 1.0
         log(f"  mined targets: {share:.1%} of the policy-target weight ({policy_targets:.0f} self-play targets weighted)")
     return [f"{d}:{w * scale:.10g}" for d, w, _ in dirs]
-
-
-def wait(judge: RemoteJudge, nonce: str, poll_seconds: float, timeout_hours: float, log=print) -> dict:
-    """The remote judgements' exit, polling; an unreachable worker is retried until the timeout."""
-    until = time.time() + timeout_hours * 3600
-    while True:
-        try:
-            exit_ = judge.poll(nonce)
-        except distributed.Unreachable as e:
-            log(f"  [{judge.name}] unreachable ({e}); retrying")
-            exit_ = None
-        if exit_ is not None:
-            return exit_
-        if time.time() > until:
-            raise SystemExit(f"the judgements on {judge.name} did not finish in {timeout_hours:g} h")
-        time.sleep(poll_seconds)
 
 
 def clear(path: Path):

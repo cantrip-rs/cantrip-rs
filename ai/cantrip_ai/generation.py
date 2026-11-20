@@ -1031,12 +1031,18 @@ def main(argv=None):
     a.add_argument("--mine-floor", type=float, default=0.10,
                    help="the least share of the policy-target weight the mined targets make (they are scaled up to it); "
                         "each mined directory is weighted by its search's simulations over self-play's full search's")
-    a.add_argument("--mine-lanes", type=int, default=24, help="lanes of each deep judgement run (on a worker: all at once)")
+    a.add_argument("--mine-lanes", type=int, default=24, help="lanes of each deep judgement run (with --workers, a worker's are --worker-judge-lanes)")
     a.add_argument("--mine-local-lanes", type=int, default=8,
                    help="lanes of each judgement run here, with no worker (one run at a time, each search up to 2 GB)")
     a.add_argument("--mine-control", type=int, default=200, help="split pairs mined as a control")
     a.add_argument("--mine-heldout", type=float, default=0.15, help="the share of mined pairs held out for measuring")
-    a.add_argument("--mine-timeout", type=float, default=8.0, help="hours to wait for a worker's judgements")
+    a.add_argument("--mine-timeout", type=float, default=8.0,
+                   help="unused: the judgements are made within the mine stage now (kept so older command lines run)")
+    a.add_argument("--judge-local", action=argparse.BooleanOptionalAction, default=True,
+                   help="with --workers: this machine judges its part of the pair miner's judgements")
+    a.add_argument("--worker-judge-lanes", type=int,
+                   help="a worker's judgement lanes, one run at a time (its own `judge_lanes` wins; default 4 x --mine-lanes, "
+                        "the four runs at once on one worker before)")
     a.add_argument("--extra-data", action="append", default=[], metavar="DIR[:WEIGHT]",
                    help="another directory of shards in the training window (repeatable), e.g. the pair miner's targets "
                         "(policy-only, `reanalysed`) at a weight above 1 to repeat them")
@@ -1667,7 +1673,8 @@ def main(argv=None):
             distributed.write_atomic(root / "dist" / "hashes.json", json.dumps(duel_setup_made[0].cache))
 
     def distributed_duel(name: str, duel_args: list, stops: list, models: list[Path], games: int, at: int, kind=duels.DUEL,
-                         only=None, affinity=None, record: str | None = None, env: dict | None = None):
+                         only=None, affinity=None, record: str | None = None, env: dict | None = None,
+                         restart_stale: bool = False):
         """A duel across this machine and the workers (`duels.run`): its results merged into genN/logs/NAME-results.tsv,
         as one machine writes them, and BotLab's summary of them in genN/logs/NAME.log. Returns the summary's text,
         the ledger and the results directory; a game that did not finish fails it, as it fails one machine's."""
@@ -1676,7 +1683,8 @@ def main(argv=None):
         unique = list(dict.fromkeys(Path(m) for m in models))
         try:
             ledger, out, rows, seconds = duels.run(setup, name, duel_args, unique, games, at, decks_dir, pairings, kind=kind,
-                                                   only=only, affinity=affinity, stops=stops, record=record, env=env)
+                                                   only=only, affinity=affinity, stops=stops, record=record, env=env,
+                                                   restart_stale=restart_stale)
         finally:
             save_hashes()
         results = gen_dir / "logs" / f"{name}-results.tsv"
@@ -1724,8 +1732,9 @@ def main(argv=None):
 
     def mine():
         """The pair miner's first half (`mining.py`): the gate's decisive pairs (and a control) replayed and recorded on
-        this machine, their forks and losers' decisions found and planned, the deep judgements started (on the first
-        worker, else here). The judge is the network the gate leaves champion."""
+        this machine (with a distributed gate, each game on the host that played it), their forks and losers' decisions
+        found and planned, and judged (here, or with --workers across this machine and the workers:
+        `mining.judge_distributed`). The judge is the network the gate leaves champion."""
         p, s = mining.Paths(gen_dir), mine_settings()
         results = gen_dir / "logs" / "gate-results.tsv"
         accepted = (rec.data["stages"].get("promote") or {}).get("accepted")
@@ -1735,7 +1744,7 @@ def main(argv=None):
         logs = gen_dir / "logs"
         if args.dry_run:
             log(f"  would mine the gate's pairs in {p.root}, judged by {judge_model.name}"
-                + (f" on {w['name']}" if args.workers and (w := distributed.judge_worker(distributed.load_workers(Path(args.workers)))) else " here"))
+                + (" across this machine and the workers" if args.workers else " here"))
             return
         if not results.exists():
             raise SystemExit(f"no gate results to mine ({results})")
@@ -1785,7 +1794,7 @@ def main(argv=None):
                     _, ledger, results = distributed_duel(f"replay-{half}", replay_args, [], [model_dir, champ],
                                                           args.gate_games, seed + 5_000_000, kind=duels.REPLAY,
                                                           only=wanted, affinity=played_on, record="record",
-                                                          env={"CANTRIP_AI_TRACES": "1"})
+                                                          env={"CANTRIP_AI_TRACES": "1"}, restart_stale=True)
                     shutil.copy2(gen_dir / "logs" / f"replay-{half}-results.tsv", out)
                     shards = duels.recordings(ledger, results, "record", p.recorded / half)
                     moved = sum(1 for g in wanted if played_on.get(g) and ledger.shards.get(ledger.done.get(g, ""), {}).get("host") != played_on[g])
@@ -1824,28 +1833,17 @@ def main(argv=None):
         planned = mining.split_plan(p)
         log(f"  planned {planned['forks']} forks and {planned['losers']} losers' decisions")
         where = "here"
-        worker = distributed.judge_worker(distributed.load_workers(Path(args.workers))) if args.workers else None
-        if worker is not None:
-            cuda = os.environ.get("CANTRIP_CUDA_LIBS")
-            if not cuda:
-                import torch  # noqa: PLC0415
-
-                cuda = str(Path(torch.__file__).parent / "lib")
-            cache_path = root / "dist" / "hashes.json"
-            cache = distributed.read_json(cache_path) or {}
-            files = mining.bundle(EXPLORE, INFER, Path(args.ort_dylib).parent, Path(cuda), judge_model, decks_dir,
-                                  [n.strip() for n in args.worker_cuda_dlls.split(",") if n.strip()])
-            judge = mining.RemoteJudge(worker, distributed.root_tag(root), gen, files, cache, log)
-            cache_path.parent.mkdir(parents=True, exist_ok=True)
-            distributed.write_atomic(cache_path, json.dumps(cache))
-            default = args.worker_server_args
-            if default is None:
-                default = (args.server_args if args.server_impl == "native" and args.server_args.strip()
-                           else distributed.WORKER_SERVER_ARGS)
-            nonce = distributed.secrets.token_hex(4)
-            judge.start(mining.judge_data(p), judge_model.name, s, distributed.worker_server_args(worker, default), nonce)
-            p.job.write_text(json.dumps(dict(worker=worker["name"], nonce=nonce, model=judge_model.name)), encoding="utf-8")
-            where = worker["name"]
+        if args.workers:
+            # Across this machine and the workers (`mining.judge_distributed`): each run's plan split by game.
+            setup = duel_setup()
+            setup = duels.Setup(**{**setup.__dict__, "local": args.judge_local})
+            try:
+                parts = mining.judge_distributed(setup, p, s, judge_model, decks_dir, EXPLORE, args.mine_local_lanes,
+                                                 args.worker_judge_lanes or 4 * args.mine_lanes)
+            finally:
+                save_hashes()
+            p.job.write_text(json.dumps(dict(worker=None, distributed=parts, model=judge_model.name)), encoding="utf-8")
+            where = ", ".join(sorted({h for r in parts.values() for h in r})) or "nowhere"
         else:
             local_judge(p, s, judge_model)
             p.job.write_text(json.dumps(dict(worker=None, model=judge_model.name)), encoding="utf-8")
@@ -1862,7 +1860,7 @@ def main(argv=None):
                     gen_dir / "logs" / f"mine-judge-{r['name']}.log", False, stream=show_progress)
 
     def mined():
-        """The pair miner's second half: the judgements waited for and fetched, the decided forks and the loser
+        """The pair miner's second half: the judgements checked, the decided forks and the loser
         decisions far from the network's prior kept, written as policy-only shards (`genN/mine/targets`, the next
         generations' training; `genN/mine/heldout`, measurement), and the report."""
         p = mining.Paths(gen_dir)
@@ -1873,13 +1871,8 @@ def main(argv=None):
             raise SystemExit("the mine stage started no judgements")
         job = json.loads(p.job.read_text(encoding="utf-8"))
         if job.get("worker"):
-            worker = next(w for w in distributed.load_workers(Path(args.workers)) if w["name"] == job["worker"])
-            judge = mining.RemoteJudge(worker, distributed.root_tag(root), gen, {}, {}, log)
-            exit_ = mining.wait(judge, job["nonce"], 60.0, args.mine_timeout, log)
-            if exit_.get("code") != 0:
-                raise SystemExit(f"the judgements on {job['worker']} failed: {exit_}")
-            mining.clear(p.judge)
-            judge.fetch(job["nonce"], p.judge)
+            raise SystemExit(f"the mine stage started its judgements on {job['worker']} in the way before 2026-11-20 "
+                             "(one worker, in the background): run the mine stage again to judge them now")
         judged = mining.check_judged(p.judge, [name for name, _, _ in mining.FORK_RUNS] + [mining.DEEP_RUN, mining.LOSERS_RUN])
         log(f"  judged: {json.dumps(judged)}")
         py = [sys.executable, "-m", "cantrip_ai.mine"]
