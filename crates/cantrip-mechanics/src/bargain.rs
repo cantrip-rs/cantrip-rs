@@ -20,3 +20,12 @@ pub const LABELS: &[&str] = &["Cast without bargain", "Bargain: Sacrifice an art
 pub fn bargained(item: &StackItem) -> bool {
     item.paid > 0
 }
+
+/// An intervening "if it was bargained" (CR 603.4, 702.166a) as a condition (`AbilityDef::condition`) of a permanent's own
+/// triggered ability: the permanent was cast with its optional cost paid (`Obj::paid`, carried from the spell to the permanent),
+/// checked as the ability triggers and again as it resolves; one that has left the battlefield is judged by how it last
+/// existed there (CR 608.2h). A permanent put onto the battlefield without being cast was never bargained. Agatha's Champion,
+/// Diminisher Witch, High Fae Negotiator, Realm-Scorcher Hellkite, Tenacious Tomeseeker and Troublemaker Ouphe print it.
+pub fn was_bargained(q: &dyn Query, asker: &Asker) -> bool {
+    q.obj(asker.source).paid > 0
+}
