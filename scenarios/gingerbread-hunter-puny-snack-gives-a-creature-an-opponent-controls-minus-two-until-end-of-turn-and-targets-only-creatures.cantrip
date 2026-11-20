@@ -1,0 +1,63 @@
+# Gingerbread Hunter // Puny Snack (CR 715.3b): "Target creature gets -2/-2 until end of turn." With three Moxen untapped Bot1 cannot
+# target its own Mox Ruby (not a creature), then targets Bot2's Hill Giant (3/3): it becomes 1/1, and survives. The Adventure card is
+# exiled, not put into the graveyard (CR 715.3d), and no Food is created (the Hunter did not enter). On Bot2's next turn the effect has
+# ended (until end of turn) and the Giant is a 3/3 again.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Gingerbread Hunter
+Island x3
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mountain
+Hill Giant
+Mountain x2
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Gingerbread Hunter.Cast(Bot1.Battlefield.Mox Ruby; Ability: Puny Snack)
+Bot1.Hand.Gingerbread Hunter.Cast(Bot2.Battlefield.Hill Giant; Ability: Puny Snack)
+? Stack.Count = 1
+? Bot2.Battlefield.Hill Giant.Power = 3
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Battlefield.Hill Giant.Power = 1
+? Bot2.Battlefield.Hill Giant.Toughness = 1
+? Exile = Gingerbread Hunter
+? Bot1.Graveyard.Count = 0
+? Bot1.Battlefield.Count = 3
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Hill Giant.Power = 3
+Bot2.Battlefield.Hill Giant.Toughness = 3
+Bot2.Graveyard.Count = 0
+Exile = Gingerbread Hunter

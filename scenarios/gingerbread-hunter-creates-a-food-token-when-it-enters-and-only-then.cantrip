@@ -1,0 +1,44 @@
+# Gingerbread Hunter: "When this creature enters, create a Food token." Cast from hand for {4}{G} with five Moxen, it enters as a 5/5
+# Giant and Bot1 gets one Food token (CR 111.10b); Bot2, who controls nothing, gets none. The trigger is on the stack above the Giant
+# before it resolves (CR 603.2), and Bot1 cannot pay {4}{G} with fewer than five sources.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Gingerbread Hunter
+Island x2
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Gingerbread Hunter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Gingerbread Hunter.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Battlefield.Gingerbread Hunter.Power = 5
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Food Token; Gingerbread Hunter; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot2.Battlefield.Count = 0
+Bot1.Graveyard.Count = 0
+Exile.Count = 0
