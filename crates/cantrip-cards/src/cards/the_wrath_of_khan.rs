@@ -1,4 +1,5 @@
 use cantrip_api::*;
+use cantrip_mechanics::triggers::EACH_BEGINNING_OF_COMBAT;
 use cantrip_mechanics::{each_opponent_sacrifices, effects, exile_chosen_from_hand, targets};
 use cantrip_oracle as oracle;
 
@@ -9,15 +10,6 @@ const MAY_EXILE: Question = Question::new(
     "Exile a card",
     "Don't exile",
 );
-
-/// "At the beginning of the next combat this turn" (CR 603.7b, 611.2a): the delayed ability watches for the beginning of
-/// the next combat step, whoever's turn it is.
-fn combat_begins(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
-    match event {
-        Event::StepBegan { step: Step::BeginCombat } => Fired::PLAIN,
-        _ => None,
-    }
-}
 
 /// I: "This Saga deals 4 damage to target creature an opponent controls. At the beginning of the next combat this turn, gain
 /// control of that creature until end of turn. Untap it. It gains haste until end of turn." (CR 608.2b, 603.7c): the delayed
@@ -74,7 +66,7 @@ pub static CARD: CardDef = CardDef {
         chapter(3, chapter_three, "III \u{2014} Each opponent sacrifices a nontoken permanent of their choice."),
     ],
     delayed: &[triggered(
-        when(EventMask::STEP_BEGAN, combat_begins),
+        EACH_BEGINNING_OF_COMBAT,
         steal_it,
         "At the beginning of the next combat this turn, gain control of that creature until end of turn. Untap it. It gains haste until end of turn.",
     )],

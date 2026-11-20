@@ -1977,6 +1977,16 @@ pub fn each_end_step(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired>
     }
 }
 
+/// "At the beginning of each combat" / "at the beginning of the next combat this turn" (CR 507.1, 603.2, 603.7b): any player's
+/// beginning of combat step began, of any combat phase of the turn. Reverberating Summons, The Wrath of Khan (its delayed ability)
+/// and Feral Encounter print it.
+pub fn each_beginning_of_combat(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::StepBegan { step: Step::BeginCombat } => Fired::PLAIN,
+        _ => None,
+    }
+}
+
 /// The upkeep of the controller of the permanent the source enchants. "Enchanted [permanent]" is a permanent on the
 /// battlefield (CR 109.2, 303.4m): an Aura left attached to a card in a graveyard (Dance of the Dead's enters ability
 /// countered) enchants no permanent, and the card's owner, its controller by CR 108.4a, is no enchanted permanent's controller.
@@ -3054,6 +3064,7 @@ pub const EACH_PLAYERS_DRAW_STEP: Trigger = when(EventMask::STEP_BEGAN, each_pla
 pub const EACH_PLAYERS_FIRST_MAIN_PHASE: Trigger = when(EventMask::STEP_BEGAN, each_players_first_main_phase);
 pub const EACH_PLAYERS_END_STEP: Trigger = when(EventMask::STEP_BEGAN, each_players_end_step);
 pub const EACH_PLAYERS_BEGINNING_OF_COMBAT: Trigger = when(EventMask::STEP_BEGAN, each_players_beginning_of_combat);
+pub const EACH_BEGINNING_OF_COMBAT: Trigger = when(EventMask::STEP_BEGAN, each_beginning_of_combat);
 pub const EACH_END_STEP: Trigger = when(EventMask::STEP_BEGAN, each_end_step);
 pub const END_OF_COMBAT: Trigger = when(EventMask::STEP_BEGAN, end_of_combat);
 pub const CREATURE_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_you_control_enters);

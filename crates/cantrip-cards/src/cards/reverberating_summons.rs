@@ -1,14 +1,7 @@
 use cantrip_api::*;
+use cantrip_mechanics::triggers::EACH_BEGINNING_OF_COMBAT;
 use cantrip_mechanics::{Animation, animate, effects, history};
 use cantrip_oracle as oracle;
-
-/// "At the beginning of each combat" (CR 507.1): the beginning of combat step of any player's turn.
-fn each_combat(_: &dyn Query, _: &Asker, event: &Event) -> Option<Fired> {
-    match event {
-        Event::StepBegan { step: Step::BeginCombat } => Fired::PLAIN,
-        _ => None,
-    }
-}
 
 /// "... if you've cast two or more spells this turn" (CR 603.4): asked as the combat begins and again as the ability
 /// resolves, of the spells its controller has cast this turn, on whosever turn it is.
@@ -40,7 +33,7 @@ fn becomes_monk(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
-            when_asked(EventMask::STEP_BEGAN, each_combat),
+            EACH_BEGINNING_OF_COMBAT,
             becomes_monk,
             "At the beginning of each combat, if you've cast two or more spells this turn, this enchantment becomes a 3/3 Monk creature with haste in addition to its other types until end of turn.",
         )
