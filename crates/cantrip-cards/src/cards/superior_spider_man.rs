@@ -13,9 +13,7 @@ const ASK: Question = Question::new(
 /// Every creature card in every graveyard (CR 608.2d): chosen rather than targeted, so an opponent's graveyard is as available
 /// as your own.
 fn copyable(g: &dyn Game) -> Vec<ObjectId> {
-    graveyards::cards_in_graveyards(g.state())
-        .filter(|&id| g.chars(id).is(CardType::Creature))
-        .collect()
+    graveyards::creature_cards_in_graveyards(g).collect()
 }
 
 /// Mind Swap: "You may have Superior Spider-Man enter as a copy of any creature card in a graveyard, except his name is Superior

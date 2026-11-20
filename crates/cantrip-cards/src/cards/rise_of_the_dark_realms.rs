@@ -7,8 +7,7 @@ use cantrip_oracle as oracle;
 /// so each sees the others enter (CR 603.6a).
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
-    let cards: Vec<(ObjectId, PlayerId)> =
-        graveyards::cards_in_graveyards(g.state()).filter(|&card| g.chars(card).is(CardType::Creature)).map(|card| (card, you)).collect();
+    let cards: Vec<(ObjectId, PlayerId)> = graveyards::creature_cards_in_graveyards(g).map(|card| (card, you)).collect();
     g.put_all_onto_battlefield(&cards)?;
     Ok(())
 }

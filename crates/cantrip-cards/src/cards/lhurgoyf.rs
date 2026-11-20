@@ -8,9 +8,7 @@ fn lhurgoyfs_power_equal_number_creature_apply_0(
     _: ObjectId,
     chars: &mut Chars,
 ) {
-    let count = graveyards::cards_in_graveyards(q.state())
-        .filter(|&card| q.chars(card).is(CardType::Creature))
-        .count();
+    let count = graveyards::creature_cards_in_graveyards_in_layers(q).count();
     chars.power = Some(count as i32);
     chars.toughness = Some((count + 1) as i32);
 }
