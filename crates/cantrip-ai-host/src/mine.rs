@@ -509,6 +509,10 @@ pub struct JudgeRun {
     pub producer: String,
     /// Whether each position is also searched without a floor and written as a target (`reanalyse_game`).
     pub targets: bool,
+    /// A distributed judgement's part (docs/ai-training.md, "Distributed judgements"): a grant file
+    /// (`selfplay::parse_grant`'s format, read once) naming the plan's games this run judges, by their index in the
+    /// plan's games in order (`(dir, seed)`, as `work` sorts them); `OUT/items.txt` then lists them, a line each.
+    pub grant: Option<PathBuf>,
 }
 
 /// The plan's positions judged and searched (see the module) on `run.lanes` lanes: a JSON line a position into
@@ -543,7 +547,18 @@ where
             return Err(format!("game {} of {}: positions in two splits", list[0].seed, list[0].dir));
         }
     }
-    let work: Vec<((String, u64), Vec<&Planned>)> = work.into_iter().collect();
+    let mut work: Vec<((String, u64), Vec<&Planned>)> = work.into_iter().collect();
+    let mut items: Option<Vec<usize>> = None;
+    if let Some(grant) = &run.grant {
+        let text = std::fs::read_to_string(grant).map_err(|e| format!("{}: {e}", grant.display()))?;
+        let (ranges, _) = crate::selfplay::parse_grant(&text, work.len()).map_err(|e| format!("{}: {e}", grant.display()))?;
+        let mut granted: Vec<usize> = ranges.into_iter().flatten().collect();
+        granted.sort_unstable();
+        granted.dedup();
+        let mut keep = granted.iter().copied().peekable();
+        work = work.into_iter().enumerate().filter(|(i, _)| keep.next_if_eq(i).is_some()).map(|(_, w)| w).collect();
+        items = Some(granted);
+    }
     let mode = o.mode;
     let header = Header::new(table(), &run.producer, "mine", mode);
     let next = AtomicUsize::new(0);
@@ -632,6 +647,10 @@ where
         "Producer": run.producer,
         "Targets": run.targets,
     });
+    if let Some(items) = items {
+        let path = run.out.join("items.txt");
+        std::fs::write(&path, items.iter().map(|i| format!("{i}\n")).collect::<String>()).map_err(|e| format!("{}: {e}", path.display()))?;
+    }
     let _ = std::fs::write(run.out.join("judge-report.json"), serde_json::to_string_pretty(&report).unwrap_or_default());
     Ok(report)
 }

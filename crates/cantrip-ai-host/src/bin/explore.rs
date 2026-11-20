@@ -22,8 +22,10 @@
 //!   - `mine-filter --from DIR --keep FILE --out DIR`: of the target shards `mine-judge` wrote for one split
 //!     (`OUT/<split>`), the positions `FILE` names (a JSON line each, `{"dir", "seed", "decision"}`), into `DIR`.
 //!   - `mine-judge --plan FILE --dir NAME=DIR ... --model DIR --out DIR [--simulations N] [--worlds N] [--floor F]
-//!     [--batch N] [--seed N] [--lanes N] [--targets true|false] [--producer TEXT]`: the plan's positions (`mine::Planned`, a
-//!     JSON line each) judged and searched; targets in `OUT/<split>/`, a line a position in `OUT/judged.jsonl`.
+//!     [--batch N] [--seed N] [--lanes N] [--targets true|false] [--producer TEXT] [--grant FILE]`: the plan's positions
+//!     (`mine::Planned`, a JSON line each) judged and searched; targets in `OUT/<split>/`, a line a position in
+//!     `OUT/judged.jsonl`. With `--grant` only the plan's games it grants (`mine::JudgeRun::grant`), written into
+//!     `OUT.part` and renamed `OUT` once whole: a distributed judgement's part.
 //!
 //! All but `mine-forks` take `--backend ort|tract|remote`, `--server HOST:PORT`, `--threads N`, `--prior DIR`. The summary
 //! or the verdict is printed as JSON.
@@ -48,7 +50,7 @@ const USAGE: &str = "usage: cantrip-explore audit --traces DIR --model DIR --out
        cantrip-explore mine-values --dir DIR --games FILE --out FILE [--lanes N]
        cantrip-explore mine-filter --from DIR --keep FILE --out DIR [--producer TEXT]
        cantrip-explore mine-judge --plan FILE --dir NAME=DIR ... --model DIR --out DIR [--simulations N] [--worlds N] [--floor F] [--batch N]
-           [--seed N] [--lanes N] [--targets true|false] [--producer TEXT] [--mode M] [--search K=V,...]
+           [--seed N] [--lanes N] [--targets true|false] [--producer TEXT] [--mode M] [--search K=V,...] [--grant FILE]
        all but mine-forks: [--backend ort|tract|remote] [--server HOST:PORT] [--threads N] [--prior DIR]";
 
 fn main() {
@@ -170,7 +172,7 @@ fn mine(command: &str, flags: &BTreeMap<String, String>, dirs: BTreeMap<String, 
         "mine-values" => &["--dir", "--games", "--out", "--lanes", "--backend", "--server", "--threads", "--prior"],
         "mine-judge" => &[
             "--plan", "--model", "--out", "--simulations", "--worlds", "--floor", "--batch", "--seed", "--lanes", "--targets", "--producer", "--mode", "--backend",
-            "--server", "--threads", "--prior", "--search",
+            "--server", "--threads", "--prior", "--search", "--grant",
         ],
         other => return Err(format!("no command {other}")),
     };
@@ -293,16 +295,38 @@ fn mine(command: &str, flags: &BTreeMap<String, String>, dirs: BTreeMap<String, 
                 return Err("no --dir NAME=DIR".into());
             }
             let targets = take("--targets").is_none_or(|v| v == "true");
+            let out = PathBuf::from(take("--out").ok_or("no --out")?);
+            let grant = take("--grant").map(PathBuf::from);
+            // A distributed judgement's part writes into `OUT.part` and renames it `OUT` once it is whole: the driver
+            // takes a part only closed.
+            let open = match &grant {
+                Some(_) => {
+                    if out.exists() {
+                        return Err(format!("{} exists; remove it", out.display()));
+                    }
+                    let open = PathBuf::from(format!("{}.part", out.display()));
+                    if open.exists() {
+                        std::fs::remove_dir_all(&open).map_err(|e| format!("{}: {e}", open.display()))?;
+                    }
+                    open
+                }
+                None => out.clone(),
+            };
             let run = mine::JudgeRun {
                 dirs,
-                out: PathBuf::from(take("--out").ok_or("no --out")?),
+                out: open.clone(),
                 lanes,
                 producer: take("--producer").unwrap_or_else(|| format!("mine:{}@{}", cantrip_ai_host::selfplay::model_id(&model), o.simulations)),
                 targets,
+                grant,
             };
             let evaluator = || load(&model, &backend, threads, server.as_deref());
             evaluator()?;
-            mine::run(&run, &plan, &o, &prior, evaluator)?
+            let report = mine::run(&run, &plan, &o, &prior, evaluator)?;
+            if open != out {
+                std::fs::rename(&open, &out).map_err(|e| format!("{} to {}: {e}", open.display(), out.display()))?;
+            }
+            report
         }
     };
     println!("{}", serde_json::to_string_pretty(&report).unwrap_or_default());

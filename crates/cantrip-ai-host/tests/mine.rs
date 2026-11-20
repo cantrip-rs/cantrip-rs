@@ -263,7 +263,7 @@ fn a_plans_positions_are_judged_and_written_as_reanalyse_targets() {
         drop(tiny);
         let prior = Prior::from_decks(&root().join("decks")).unwrap();
         let out = base.join("mined");
-        let run = JudgeRun { dirs: [("a".to_string(), dir.clone())].into_iter().collect(), out: out.clone(), lanes: 2, producer: "mine:tiny@64".into(), targets: true };
+        let run = JudgeRun { dirs: [("a".to_string(), dir.clone())].into_iter().collect(), out: out.clone(), lanes: 2, producer: "mine:tiny@64".into(), targets: true, grant: None };
         let o = JudgeOptions { simulations: 64, worlds: 2, batch: 4, search: vec![("RootShortcut".into(), "false".into())], ..JudgeOptions::default() };
         let report = mine::run(&run, &plan, &o, &prior, load).unwrap();
         assert_eq!(report["MismatchedPositions"], 0, "{report}");
@@ -313,6 +313,23 @@ fn a_plans_positions_are_judged_and_written_as_reanalyse_targets() {
         }
         assert!(mine::filter(&out.join("train"), &keep, &kept, "mine:tiny@64").is_err(), "an output with shards is refused");
         // The judgement alone (another network's cross-check): no shards.
+        // Split by game across two parts (a distributed judgement's: `--grant`), the same judgements as the whole run's.
+        let games = plan.iter().map(|p| (p.dir.clone(), p.seed)).collect::<std::collections::BTreeSet<_>>().len();
+        assert!(games >= 2);
+        let mut parted: Vec<serde_json::Value> = Vec::new();
+        for (k, grant) in [format!("0..{}\n", games / 2), format!("{}..{games}\nend\n", games / 2)].into_iter().enumerate() {
+            let file = base.join(format!("grant-{k}.txt"));
+            std::fs::write(&file, grant).unwrap();
+            let part = base.join(format!("part-{k}"));
+            let r = JudgeRun { dirs: run.dirs.clone(), out: part.clone(), lanes: 1, producer: run.producer.clone(), targets: true, grant: Some(file) };
+            mine::run(&r, &plan, &o, &prior, load).unwrap();
+            let items: Vec<usize> = std::fs::read_to_string(part.join("items.txt")).unwrap().lines().map(|l| l.parse().unwrap()).collect();
+            let want: Vec<usize> = if k == 0 { (0..games / 2).collect() } else { (games / 2..games).collect() };
+            assert_eq!(items, want);
+            parted.extend(std::fs::read_to_string(part.join("judged.jsonl")).unwrap().lines().map(|l| serde_json::from_str::<serde_json::Value>(l).unwrap()));
+        }
+        parted.sort_by(|a, b| a["id"].as_str().cmp(&b["id"].as_str()));
+        assert_eq!(parted, lines, "the parts' judgements are the whole run's");
         let out2 = base.join("judged-only");
         let run2 = JudgeRun { out: out2.clone(), targets: false, ..run };
         let r2 = mine::run(&run2, &plan[..1], &o, &prior, load).unwrap();
