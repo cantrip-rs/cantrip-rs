@@ -1,0 +1,52 @@
+# Korvold chapter III, the positive control for the turn-7 refusal beside it: on the turn chapter III resolves Bot1 casts the exiled
+# Hill Giant ({3}{R}) with the same four Moxen mana, and it enters under Bot1's control (CR 406.3, 601.2, 110.2) although Bot2 owns it.
+# The Mountain and Lightning Bolt exiled with it stay exiled (Exile.Count = 2).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Korvold and the Noble Thief
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mountain x20
+
+[Bot2 Deck]
+Island x9
+Mountain
+Lightning Bolt
+Hill Giant
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Korvold and the Noble Thief.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Exile.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 2
+Bot1.Battlefield.Hill Giant.Power = 3
+Bot2.Library.Count = 10
+Bot1.Library.Count = 17

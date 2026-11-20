@@ -1,0 +1,6 @@
+{
+  "name": "Korvold and the Noble Thief",
+  "manaCost": "{3}{R}",
+  "type": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI, II — Create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")\nIII — Exile the top three cards of target opponent's library. You may play those cards this turn."
+}

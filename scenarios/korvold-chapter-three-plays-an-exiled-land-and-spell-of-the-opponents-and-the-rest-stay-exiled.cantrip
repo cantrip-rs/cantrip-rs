@@ -1,0 +1,58 @@
+# Korvold chapter III: "Exile the top three cards of target opponent's library. You may play those cards this turn." (CR 406.3, 305.1,
+# 601.2): the exiled cards stay Bot2's but Bot1 may play them this turn, a land included - Mountain is Bot1's land drop (a second
+# land from hand is refused, CR 305.2) - and Lightning Bolt is cast for its mana cost with a Treasure. Hill Giant, left in exile, is
+# no longer playable on turn 7 although Bot1 has the mana for it (the permission lasts only "this turn", CR 611.2a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Korvold and the Noble Thief
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mountain x20
+
+[Bot2 Deck]
+Island x9
+Mountain
+Lightning Bolt
+Hill Giant
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Korvold and the Noble Thief.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Exile.Mountain.Play
+? Bot1.Battlefield.Mountain.Tapped = false
+? Turn = 5
+! Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Exile.Hill Giant.Cast
+
+[Expect]
+Bot2.Life = 17
+Exile.Count = 1

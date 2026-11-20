@@ -1,0 +1,45 @@
+# Korvold and the Noble Thief ({3}{R} Saga): chapter I (on entering, CR 714.3a) and chapter II (turn 3, after the second lore counter)
+# each create one Treasure token, so there are one and then two; the Treasure from chapter I is still there when II adds the second.
+# Chapter III (turn 5) exiles three of Bot2's cards (25 - 7 in hand - 2 draws - 3 = 13 left) and then the Saga is sacrificed (CR 714.4).
+# Nothing is created by chapter III, so the Treasure count stays at two.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Korvold and the Noble Thief
+Mountain x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Korvold and the Noble Thief.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Treasure Token.Subtypes = Treasure
+? Bot1.Battlefield.Treasure Token#2 = (absent)
+? Bot1.Battlefield.Korvold and the Noble Thief.Counters.Lore = 1
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Treasure Token#2.Subtypes = Treasure
+? Bot1.Battlefield.Treasure Token#3 = (absent)
+? Bot1.Battlefield.Korvold and the Noble Thief.Counters.Lore = 2
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Korvold and the Noble Thief = (absent)
+? Bot1.Battlefield.Treasure Token#2.Subtypes = Treasure
+? Bot1.Battlefield.Treasure Token#3 = (absent)
+
+[Expect]
+Bot2.Library.Count = 13
