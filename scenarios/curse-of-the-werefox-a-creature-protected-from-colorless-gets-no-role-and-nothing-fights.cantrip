@@ -1,0 +1,67 @@
+# Curse of the Werefox: the reflexive ability triggers "when you do" create a Monster Role token attached to the creature (CR 603.12),
+# and a Role that could not enchant it is not created (CR 303.4i). Bot1 casts the Curse on its Grizzly Bears and, in response, has
+# Giver of Runes give the Bears protection from colorless: no Role is created, so Bot1 is never asked what the Bears fight (the
+# bare refusal) and Bot2's Hill Giant takes no damage, and the Bears stay 2/2.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Grizzly Bears
+Curse of the Werefox
+Giver of Runes
+Island
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mountain
+Hill Giant
+Mountain x2
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Giver of Runes.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Curse of the Werefox.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Giver of Runes.Activate(Grizzly Bears)
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot2.Battlefield.Hill Giant.Damage = 0

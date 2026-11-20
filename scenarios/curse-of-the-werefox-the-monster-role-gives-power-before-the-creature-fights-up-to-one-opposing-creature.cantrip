@@ -1,0 +1,64 @@
+# Curse of the Werefox: "Create a Monster Role token attached to target creature you control. When you do, that creature fights up to
+# one target creature you don't control." Bot1 targets its Grizzly Bears (2/2). The Role makes it 3/3 with trample, the reflexive
+# ability (CR 603.12) is put on the stack and Bot1 then chooses Bot2's Hill Giant (3/3) as the creature to fight (CR 701.14a). Each
+# deals damage equal to its power: only the 3 the Role gives kills the Giant, and the Bears, 3/3, dies to its 3. The Role, an Aura
+# token, goes with it (CR 704.5d). The cast names only the Bears: Bot2's creature is chosen as the reflexive ability goes on the stack.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Grizzly Bears
+Curse of the Werefox
+Island x2
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mountain
+Hill Giant
+Mountain x2
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Curse of the Werefox.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Target(Hill Giant)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Grizzly Bears; Curse of the Werefox
+Attached = Monster > Grizzly Bears
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby
+Bot2.Graveyard = Hill Giant

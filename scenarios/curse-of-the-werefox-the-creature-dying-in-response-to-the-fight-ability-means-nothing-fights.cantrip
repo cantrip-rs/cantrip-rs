@@ -1,0 +1,63 @@
+# Curse of the Werefox: with the Role attached and the Bears 3/3, Bot1 targets Bot2's Hill Giant and, with the reflexive ability on the
+# stack, Lightning Bolts its own Bears (3 damage to a 3/3). The Bears are gone before the ability resolves, so there is no creature to
+# fight (CR 701.14b) and the Giant takes no damage.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Grizzly Bears
+Curse of the Werefox
+Lightning Bolt
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mountain
+Hill Giant
+Mountain x2
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Curse of the Werefox.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Hill Giant)
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Grizzly Bears; Lightning Bolt; Curse of the Werefox
+Bot2.Battlefield.Hill Giant.Damage = 0
