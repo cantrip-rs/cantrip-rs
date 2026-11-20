@@ -1,0 +1,38 @@
+# Train Troops ({4}{W} sorcery Adventure): "Create two 2/2 white Knight creature tokens with vigilance." On turn 1 Bot1 casts it
+# with two Black Lotuses (white for the {W}, red for the rest): two Knight tokens (white, vigilance) and the card is exiled
+# (CR 715.4), not put into the graveyard. Recruiter's own "When this creature enters" ability is not on the Adventure: the
+# Knights are plain 2/2s and nothing has haste (CR 715.3b, the spell has only its Adventure half's characteristics).
+
+[Bot1 Deck]
+Black Lotus x2
+Imodane's Recruiter
+Mountain x4
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Imodane's Recruiter.Cast(Ability: Train Troops)
+Bot1.Pass
+Bot2.Pass
+? Exile = Imodane's Recruiter
+? Bot1.Graveyard = Black Lotus; Black Lotus
+? Bot1.Battlefield.Count = 2
+
+[Expect]
+Bot1.Battlefield = Knight Token; Knight Token
+Bot1.Battlefield.Knight Token#1.Power = 2
+Bot1.Battlefield.Knight Token#1.Toughness = 2
+Bot1.Battlefield.Knight Token#1.Colors = White
+Bot1.Battlefield.Knight Token#1.Subtypes = Knight
+Bot1.Battlefield.Knight Token#1.Keywords = Vigilance
+Bot1.Battlefield.Knight Token#2.Power = 2
+Bot1.Battlefield.Knight Token#2.Toughness = 2
+Bot1.Battlefield.Knight Token#2.Colors = White
+Bot1.Battlefield.Knight Token#2.Keywords = Vigilance
+Bot1.Hand.Count = 4

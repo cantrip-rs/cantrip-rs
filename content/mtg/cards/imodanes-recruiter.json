@@ -1,0 +1,14 @@
+{
+  "name": "Imodane's Recruiter",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Human Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, creatures you control get +1/+0 and gain haste until end of turn.",
+  "adventure": {
+    "name": "Train Troops",
+    "manaCost": "{4}{W}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Create two 2/2 white Knight creature tokens with vigilance. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

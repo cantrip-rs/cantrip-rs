@@ -1,0 +1,67 @@
+# Imodane's Recruiter ({2}{R}, 2/2): "When this creature enters, creatures you control get +1/+0 and gain haste until end of turn."
+# Turn 1: Train Troops (two Knights). Turn 3: Bot1 casts the Recruiter from exile (CR 715.3d) with three Moxen. Its trigger
+# affects the creatures Bot1 controls as it resolves: both Knights and the Recruiter itself become 3/2 with haste, so the
+# Recruiter (just cast) and a Knight attack for 6. Bot2's Ornithopter (0/2) is not affected (a Memnite Bot1 casts afterwards is
+# not either: the effect has already locked in its creatures, CR 611.2c, and the new 1/1 stays summoning-sick and can't attack).
+# At turn 4 the pump has ended and the Recruiter is a 2/2 again (CR 514.2).
+
+[Bot1 Deck]
+Black Lotus x2
+Imodane's Recruiter
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Memnite
+Mountain x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Imodane's Recruiter.Cast(Ability: Train Troops)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Imodane's Recruiter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Imodane's Recruiter.Power = 3
+? Bot1.Battlefield.Imodane's Recruiter.Toughness = 2
+? Bot1.Battlefield.Imodane's Recruiter.Keywords = Haste
+? Bot1.Battlefield.Knight Token#1.Power = 3
+? Bot1.Battlefield.Knight Token#1.Keywords = Haste; Vigilance
+? Bot1.Battlefield.Knight Token#2.Power = 3
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+! Bot1.Attack(Memnite > Bot2)
+Bot1.Attack(Imodane's Recruiter > Bot2; Knight Token > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 14
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Imodane's Recruiter.Power = 2
+? Bot1.Battlefield.Imodane's Recruiter.Keywords = (absent)
+? Bot1.Battlefield.Knight Token#1.Power = 2
+
+[Expect]
+Bot2.Life = 14
+Bot2.Battlefield.Ornithopter.Power = 0
