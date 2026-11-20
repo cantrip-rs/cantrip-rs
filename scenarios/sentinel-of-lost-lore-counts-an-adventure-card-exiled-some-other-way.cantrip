@@ -1,0 +1,49 @@
+# Sentinel of Lost Lore: "a card you own in exile that has an Adventure" is about the card (CR 715.2), not about how it got there. Bot1 casts Bonecrusher Giant as a creature
+# (never on an adventure) and exiles it with its own Swords to Plowshares (the Giant deals 2 to Bot1 as it is targeted, Swords gains 4: 22); the Sentinel's first mode can still return it to hand.
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Emerald
+Bonecrusher Giant
+Swords to Plowshares
+Sentinel of Lost Lore
+Black Lotus
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bonecrusher Giant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bonecrusher Giant)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Bonecrusher Giant
+? Bot1.Life = 22
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Sentinel of Lost Lore.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Bonecrusher Giant
+Exile =
+Stack.Count = 0

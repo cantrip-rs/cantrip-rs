@@ -1,0 +1,52 @@
+# Sentinel of Lost Lore: a mode with no legal target cannot be chosen (CR 700.2b). The only card in exile is Bot1's Memnite (Swords to Plowshares; no Adventure), so neither of the
+# Adventure modes can be chosen, and a card that is not an Adventure card is never a target; only "Exile target player's graveyard" can be, here aimed at Bot2, whose graveyard
+# holds the Lightning Bolt it cast.
+
+[Bot1 Deck]
+Mox Pearl
+Memnite
+Swords to Plowshares
+Sentinel of Lost Lore
+Black Lotus
+Mountain x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Exile = Memnite
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Sentinel of Lost Lore.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Modes(Count: 0)
+! Bot1.Modes(1)
+! Bot1.Modes(2)
+! Bot1.Modes(1; 3)
+Bot1.Modes(3)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard =
+Bot1.Graveyard = Black Lotus; Swords to Plowshares
+Exile = Lightning Bolt; Memnite
+Stack.Count = 0

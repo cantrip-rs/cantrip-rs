@@ -1,0 +1,51 @@
+# A card exiled face down has no characteristics (CR 406.3a, 708.2), so a face-down Bonecrusher Giant (Necropotence) is no
+# "card in exile that has an Adventure": the first mode is not offered.
+[Bot1 Deck]
+Black Lotus
+Necropotence
+Sentinel of Lost Lore
+Forest
+Forest
+Forest
+Forest
+Bonecrusher Giant
+Forest x20
+
+[Bot2 Deck]
+Island x40
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Necropotence.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Necropotence.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Forest#3.Activate
+
+Bot1.Hand.Sentinel of Lost Lore.Cast
+Bot1.Pass
+Bot2.Pass
+
+! Bot1.Modes(1)
+Bot1.Modes(3)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.FaceDown.Count = 1
+Exile.Count = 4

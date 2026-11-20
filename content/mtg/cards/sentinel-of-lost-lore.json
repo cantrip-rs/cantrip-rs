@@ -1,0 +1,8 @@
+{
+  "name": "Sentinel of Lost Lore",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Elf Knight",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "When this creature enters, choose one or more —\n• Return target card you own in exile that has an Adventure to your hand.\n• Put target card you don't own in exile that has an Adventure on the bottom of its owner's library.\n• Exile target player's graveyard."
+}

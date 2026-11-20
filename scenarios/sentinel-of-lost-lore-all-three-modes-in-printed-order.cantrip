@@ -1,0 +1,62 @@
+# Sentinel of Lost Lore: "When this creature enters, choose one or more" (CR 700.2), each mode with its own target (CR 700.2c). Turn 1: Bot1 casts Bonecrusher Giant as Stomp, so
+# its Giant sits in exile on an adventure. Turn 2: Bot2 does the same with its Giant and also bolts Bot1 (the Bolt is in Bot2's graveyard). Turn 3: Bot1 casts the Sentinel
+# with the Lotus and chooses all three modes: its own Giant returns to its hand, Bot2's Giant goes on the bottom of Bot2's library (not to Bot1's), and Bot2's graveyard is exiled.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Bonecrusher Giant
+Black Lotus
+Sentinel of Lost Lore
+Mountain x15
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Emerald
+Bonecrusher Giant
+Lightning Bolt
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bonecrusher Giant.Cast(Bot2; Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+? Exile = Bonecrusher Giant
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Bonecrusher Giant.Cast(Bot1; Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 15
+? Bot2.Graveyard = Lightning Bolt
+? Exile = Bonecrusher Giant; Bonecrusher Giant
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Sentinel of Lost Lore.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1; 2; 3)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Bonecrusher Giant; Mountain; Mountain; Mountain
+Exile = Lightning Bolt
+Bot2.Graveyard =
+Stack.Count = 0
+Bot2.Library = Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Bonecrusher Giant
