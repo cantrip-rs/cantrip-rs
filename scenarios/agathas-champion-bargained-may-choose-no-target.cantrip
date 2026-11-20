@@ -1,0 +1,40 @@
+# "Up to one target creature you don't control": a bargained Champion's trigger may be put on the stack with no target (CR 601.2c),
+# and then it fights nothing. Bot2's Hill Giant is left undamaged (and so is the Champion), though the Mox was sacrificed.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Agatha's Champion
+Forest
+Forest x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Hill Giant
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Agatha's Champion.Cast
+Bot1.Modes(Bargain:)
+Bot1.Choose(Mox Ruby)
+Bot1.Target()
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Agatha's Champion.Damage = 0
+Bot1.Graveyard = Mox Ruby; Black Lotus; Black Lotus
+Bot2.Battlefield.Hill Giant.Damage = 0

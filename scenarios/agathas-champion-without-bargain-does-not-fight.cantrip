@@ -1,0 +1,42 @@
+# Without bargain (CR 702.166b) the intervening "if it was bargained" (CR 603.4) is false as the Champion enters, so nothing
+# triggers: no target is asked for (a trigger that did would offer Bot2's Hill Giant), Bot2's Giant is never fought and the Champion is undamaged.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Agatha's Champion
+Forest
+Forest x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Hill Giant
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Agatha's Champion.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target
+? Stack.Count = 0
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Agatha's Champion.Damage = 0
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot2.Battlefield.Hill Giant.Damage = 0
+Bot2.Graveyard = Black Lotus

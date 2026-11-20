@@ -1,0 +1,11 @@
+{
+  "name": "Agatha's Champion",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Human Knight",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nTrample\nWhen this creature enters, if it was bargained, it fights up to one target creature you don't control. (Each deals damage equal to its power to the other.)",
+  "keywords": [
+    "Trample"
+  ]
+}

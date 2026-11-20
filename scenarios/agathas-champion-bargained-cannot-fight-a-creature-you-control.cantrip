@@ -1,0 +1,49 @@
+# "Up to one target creature you don't control": with a bargained Champion's trigger on the stack, Bot1's own Grizzly Bears is
+# refused as its target and Bot2's Hill Giant is accepted; the Champion fights only the Giant, the Bears are untouched.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Forest
+Grizzly Bears
+Black Lotus
+Black Lotus
+Agatha's Champion
+Forest x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Hill Giant
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Agatha's Champion.Cast
+Bot1.Modes(Bargain:)
+Bot1.Choose(Mox Ruby)
+! Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot1.Battlefield.Agatha's Champion)
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Battlefield.Agatha's Champion.Damage = 3
+Bot2.Graveyard = Hill Giant; Black Lotus
