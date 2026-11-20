@@ -1,0 +1,33 @@
+# Leaping Ambush: "Target creature": a land (Forest) is not a legal target (the refusal comes with the {G} ready), and a creature
+# (Elvish Mystic) is, after which the land is left unchanged and the Mystic is 2/4.
+
+[Bot1 Deck]
+Forest
+Forest
+Elvish Mystic
+Leaping Ambush
+Forest x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest#1.Activate
+! Bot1.Hand.Leaping Ambush.Cast(Bot1.Battlefield.Forest#2)
+Bot1.Hand.Leaping Ambush.Cast(Bot1.Battlefield.Elvish Mystic)
+Bot1.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Elvish Mystic.Power = 2
+Bot1.Battlefield.Elvish Mystic.Toughness = 4
+Bot1.Battlefield.Forest#2.Tapped = false
+Bot1.Graveyard = Leaping Ambush
