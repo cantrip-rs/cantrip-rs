@@ -1,0 +1,44 @@
+# "For each of those creatures, create a Monster Role token attached to it" is one instruction (CR 101.4): the two Roles are
+# created together, as one event (CR 603.2c). Kambal's "whenever one or more tokens you control enter, each opponent loses 1 life
+# and you gain 1 life" triggers once for both: Bot2 at 19, Bot1 at 21.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Memnite x2
+Kambal, Profiteering Mayor
+Become Brutes
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kambal, Profiteering Mayor.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Become Brutes.Cast
+Bot1.Target(Bot1.Battlefield.Memnite#1; Bot1.Battlefield.Memnite#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#1.Power = 2
+? Bot1.Battlefield.Memnite#2.Power = 2
+
+[Expect]
+Stack.Count = 0
+Attached = Monster > Memnite; Monster > Memnite
+Bot2.Life = 19
+Bot1.Life = 21

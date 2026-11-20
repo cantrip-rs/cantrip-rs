@@ -1,0 +1,6 @@
+{
+  "name": "Become Brutes",
+  "manaCost": "{1}{R}",
+  "type": "Sorcery",
+  "oracleText": "One or two target creatures each gain haste until end of turn. For each of those creatures, create a Monster Role token attached to it. (If you control another Role on it, put that one into the graveyard. Enchanted creature gets +1/+1 and has trample.)"
+}

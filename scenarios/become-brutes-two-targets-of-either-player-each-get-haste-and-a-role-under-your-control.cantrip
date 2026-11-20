@@ -1,0 +1,49 @@
+# Become Brutes at two targets (CR 115.1): Bot1's first Memnite and Bot2's Ornithopter. Zero targets, three targets and a noncreature
+# permanent (Bot1's Mox Ruby) are refused. Each gains haste until end of turn, and one Monster Role is made for each, attached to its
+# creature and controlled by Bot1, the spell's controller, even on Bot2's Ornithopter (CR 111.10m, 303.7): Memnite becomes a 2/2 with
+# trample, the Ornithopter a 1/3 with trample. The Roles are made for the creatures both, not one.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Memnite x2
+Become Brutes
+Island x16
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Become Brutes.Cast
+! Bot1.Target(Mox Ruby)
+! Bot1.Target(Count: 0)
+! Bot1.Target(Bot1.Battlefield.Memnite#1; Bot1.Battlefield.Memnite#2; Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Memnite#1; Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#1.Keywords = Haste; Trample
+? Bot2.Battlefield.Ornithopter.Keywords = Flying; Haste; Trample
+? Bot1.Battlefield.Memnite#1.Power = 2
+? Bot1.Battlefield.Memnite#1.Toughness = 2
+? Bot2.Battlefield.Ornithopter.Power = 1
+? Bot2.Battlefield.Ornithopter.Toughness = 3
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Memnite; Memnite; Monster; Monster; Mox Ruby
+Bot2.Battlefield = Island; Ornithopter
+Bot1.Graveyard = Become Brutes; Black Lotus

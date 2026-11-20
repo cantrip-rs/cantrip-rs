@@ -222,8 +222,8 @@ pub fn create_role(g: &mut dyn Game, role: &'static CardDef, controller: PlayerI
 
 /// "For each [creature], create a [Role] token attached to it" (CR 111.10j-r, 303.7, 101.4): `create_role` for each of
 /// `creatures`, all created as one instruction, so what watches tokens entering sees one event (CR 603.2c;
-/// `Game::create_tokens_attached`). Twisted Sewer-Witch's Role on each Rat, and Not Dead After All's on each card of a
-/// merged permanent that returns. The tokens created.
+/// `Game::create_tokens_attached`). Become Brutes' Monster Role on each target, Twisted Sewer-Witch's on each Rat, and Not
+/// Dead After All's on each card of a merged permanent that returns. The tokens created.
 pub fn create_roles(g: &mut dyn Game, role: &'static CardDef, controller: PlayerId, creatures: &[ObjectId]) -> Result<Vec<ObjectId>, Suspend> {
     let role = g.card_id(role);
     let tokens: Vec<(CardId, PlayerId, ObjectId)> = creatures.iter().map(|&creature| (role, controller, creature)).collect();
