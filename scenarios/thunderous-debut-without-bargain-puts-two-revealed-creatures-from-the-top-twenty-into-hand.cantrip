@@ -1,0 +1,59 @@
+# Thunderous Debut {6}{G}{G} (bargain): "Look at the top twenty cards of your library. You may reveal up to two creature cards from
+# among them. If this spell was bargained, put the revealed cards onto the battlefield. Otherwise, put the revealed cards into your
+# hand. Then shuffle." Cast without bargain: Bot1 reveals two creatures among the top twenty (the Bears on top and the Mystic tenth,
+# never Serra Angel, the twenty-first card and out of sight, nor a land, nor three at once), they are revealed and go to the hand, and the
+# library is shuffled once.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Thunderous Debut
+Grizzly Bears
+Plains x8
+Elvish Mystic
+Plains x9
+Hill Giant
+Serra Angel
+Plains x2
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Thunderous Debut.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Choose(Plains)
+! Bot1.Choose(Serra Angel)
+! Bot1.Choose(Grizzly Bears; Elvish Mystic; Hill Giant)
+Bot1.Choose(Grizzly Bears; Elvish Mystic)
+? Bot1.Revealed = Elvish Mystic; Grizzly Bears
+? Bot1.Shuffles = 1
+? Bot1.Looked.Count = 20
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Grizzly Bears; Elvish Mystic
+Bot1.Graveyard = Thunderous Debut; Black Lotus
+Bot1.Library.Count = 21
+Bot1.Battlefield.Count = 5

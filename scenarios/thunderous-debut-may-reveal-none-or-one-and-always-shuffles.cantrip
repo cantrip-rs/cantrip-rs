@@ -1,0 +1,54 @@
+# Thunderous Debut, "up to two": Bot1 may reveal no creature at all (nothing is revealed, no card moves) and the library is still
+# shuffled (CR 701.24).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Thunderous Debut
+Grizzly Bears
+Plains x8
+Elvish Mystic
+Plains x9
+Hill Giant
+Serra Angel
+Plains x2
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Thunderous Debut.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose()
+? Client.Bot2.OpponentHand = (absent)
+? Bot1.Revealed = (absent)
+? Bot1.Looked.Count = 20
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 0
+Bot1.Graveyard = Thunderous Debut; Black Lotus
+Bot1.Battlefield.Count = 5
+Bot1.Library.Count = 23
+Bot1.Shuffles = 1
