@@ -1,0 +1,60 @@
+# Bandit's Haul: "{2}, {T}, Remove two loot counters from this artifact: Draw a card." One crime a turn gives one counter, so the
+# Haul has one on turn 1 and two on turn 3. With one counter the ability is not offered even with mana to spare; with two it is
+# not offered while the Haul is tapped (for its own mana); on turn 5 it untaps and the Moxen's exactly {2} draw one card, remove both
+# counters and tap it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Bandit's Haul
+Lightning Bolt
+Lightning Bolt
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Bandit's Haul.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bandit's Haul.Counters.Loot = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+! Bot1.Battlefield.Bandit's Haul.Activate(Ability: Draw)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bandit's Haul.Counters.Loot = 2
+Bot1.Battlefield.Bandit's Haul.Activate(Ability: any color; Color: Red)
+! Bot1.Battlefield.Bandit's Haul.Activate(Ability: Draw)
+[T5 Bot1.Main1]
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Bandit's Haul.Activate(Ability: Draw)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+? Bot1.Battlefield.Bandit's Haul.Counters.Loot = (absent)
+! Bot1.Battlefield.Bandit's Haul.Activate(Ability: Draw)
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Bandit's Haul.Counters.Loot = (absent)

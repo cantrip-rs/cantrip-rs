@@ -1,0 +1,6 @@
+{
+  "name": "Bandit's Haul",
+  "manaCost": "{3}",
+  "type": "Artifact",
+  "oracleText": "Whenever you commit a crime, put a loot counter on this artifact. This ability triggers only once each turn. (Targeting opponents, anything they control, and/or cards in their graveyards is a crime.)\n{T}: Add one mana of any color.\n{2}, {T}, Remove two loot counters from this artifact: Draw a card."
+}

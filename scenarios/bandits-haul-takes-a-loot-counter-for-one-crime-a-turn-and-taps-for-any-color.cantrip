@@ -1,0 +1,61 @@
+# Bandit's Haul: "Whenever you commit a crime, put a loot counter on this artifact. This ability triggers only once each turn."
+# On turn 1 Bot1 casts it with a Black Lotus, then bolts Bot2 twice (Mox Rubies): each is a crime (CR 700.13) but there is one loot
+# counter. On turn 3 a Bolt at Bot1 itself is no crime (the Haul's own "{T}: Add one mana of any color" pays for it; still one
+# counter); a Bolt at Bot2 on that same turn is a crime on a new turn, so the second counter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Bandit's Haul
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mountain x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Bandit's Haul.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bandit's Haul.Counters.Loot = 1
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bandit's Haul.Counters.Loot = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Bandit's Haul.Activate(Ability: any color; Color: Red)
+? Bot1.Mana = {R}
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bandit's Haul.Counters.Loot = 1
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Bandit's Haul.Counters.Loot = 2
+Bot1.Life = 17
+Bot2.Life = 11
