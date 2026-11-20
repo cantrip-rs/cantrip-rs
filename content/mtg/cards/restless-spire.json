@@ -1,0 +1,5 @@
+{
+  "name": "Restless Spire",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {U} or {R}.\n{U}{R}: Until end of turn, this land becomes a 2/1 blue and red Elemental creature with \"During your turn, this creature has first strike.\" It's still a land.\nWhenever this land attacks, scry 1."
+}

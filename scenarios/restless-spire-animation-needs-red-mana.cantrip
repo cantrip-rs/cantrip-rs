@@ -1,0 +1,31 @@
+# {U}{R}: with {U}{U}{G} in the pool (the Spire itself tapped for blue) there is no red and the ability is refused; casting Mox Ruby and tapping it for {R} makes the same ability payable
+# and it animates (the positive control).
+
+[Bot1 Deck]
+Restless Spire
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Plains x12
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Restless Spire.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Restless Spire.Activate(Ability: Add; Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Restless Spire.Activate(Ability: Until end of turn; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Restless Spire.Activate(Ability: Until end of turn)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Restless Spire.Types = Land; Creature
+
+[Expect]
+Bot1.Battlefield.Restless Spire.Types = Land; Creature

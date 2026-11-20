@@ -1,0 +1,41 @@
+# "During your turn, this creature has first strike" (CR 613.1f, 702.7): the Spire has it only while it is Bot1's turn. Bot1 plays the Spire on turn 1 and on turn 4, Bot2's
+# turn, pays {U}{R} and animates it (instant speed, CR 602.5d): it has no first strike now. Bot2 attacks with Llanowar Elves and Bot1 blocks with the Spire: both deal damage
+# at the same time, so the 2/1 Spire dies to the Elves' 1 damage and kills them too.
+
+[Bot1 Deck]
+Restless Spire
+Mox Sapphire
+Mox Ruby
+Plains x20
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Forest x20
+
+[Actions]
+Bot1.Hand.Restless Spire.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot2.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Restless Spire.Activate(Ability: Until end of turn)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Restless Spire.Types = Land; Creature
+? Bot1.Battlefield.Restless Spire.Keywords = (absent)
+Bot2.Attack(Llanowar Elves > Bot1)
+Bot1.Block(Restless Spire > Llanowar Elves)
+[T4 Bot2.Main2]
+? Bot1.Graveyard = Restless Spire
+? Bot2.Graveyard = Llanowar Elves
+? Bot1.Life = 20
+
+[Expect]
+Bot1.Graveyard = Restless Spire
+Bot2.Graveyard = Llanowar Elves

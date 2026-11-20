@@ -1,0 +1,25 @@
+# Restless Spire: "This land enters tapped. {T}: Add {U} or {R}" (CR 614.1c, 605.1a). Bot1 plays it on turn 1: it enters tapped and cannot be tapped for mana (refused). On turn 3 it adds
+# blue, and not white or green (refused). On turn 5 it adds red.
+
+[Bot1 Deck]
+Restless Spire
+Plains x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Restless Spire.Play
+? Bot1.Battlefield.Restless Spire.Tapped = true
+! Bot1.Battlefield.Restless Spire.Activate(Ability: Add; Color: Blue)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Restless Spire.Activate(Ability: Add; Color: White)
+! Bot1.Battlefield.Restless Spire.Activate(Ability: Add; Color: Green)
+Bot1.Battlefield.Restless Spire.Activate(Ability: Add; Color: Blue)
+? Bot1.Mana = {U}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Restless Spire.Activate(Ability: Add; Color: Red)
+? Bot1.Mana = {R}
+
+[Expect]
+Bot1.Mana = {R}

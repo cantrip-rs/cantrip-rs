@@ -1,0 +1,61 @@
+# Restless Spire enters tapped on turn 1. On turn 3 Bot1 pays {U}{R} with Mox Sapphire and Mox Ruby and animates it: until end of turn it is a 2/1 blue and red Elemental
+# land creature with "During your turn, this creature has first strike" (CR 613.1d, 613.4b, 613.1f, 702.7). It attacks: "Whenever this land attacks, scry 1" (CR 701.22):
+# Bot1 sees Black Lotus and puts it on the bottom, so the card it draws on turn 5 is Counterspell. Bot2's Llanowar Elves blocks and dies to the first-strike damage before
+# it deals any: the Spire is undamaged. On turn 4 the effect is gone: it is only a Land again.
+
+[Bot1 Deck]
+Restless Spire
+Mox Sapphire
+Mox Ruby
+Plains
+Plains
+Plains
+Plains
+Lightning Bolt
+Black Lotus
+Counterspell
+Plains x20
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Forest x20
+
+[Actions]
+Bot1.Hand.Restless Spire.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Restless Spire.Activate(Ability: Until end of turn)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Restless Spire.Types = Land; Creature
+? Bot1.Battlefield.Restless Spire.Subtypes = Elemental
+? Bot1.Battlefield.Restless Spire.Colors = Blue; Red
+? Bot1.Battlefield.Restless Spire.Power = 2
+? Bot1.Battlefield.Restless Spire.Toughness = 1
+? Bot1.Battlefield.Restless Spire.Keywords = FirstStrike
+Bot1.Attack(Restless Spire > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Black Lotus)
+Bot2.Block(Llanowar Elves > Restless Spire)
+[T3 Bot1.Main2]
+? Bot2.Graveyard = Llanowar Elves
+? Bot1.Battlefield.Restless Spire.Damage = 0
+? Bot2.Life = 20
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Restless Spire.Types = Land
+[T5 Bot1.Main1]
+? Bot1.Hand = Counterspell; Lightning Bolt; Plains; Plains; Plains; Plains
+
+[Expect]
+Bot2.Graveyard = Llanowar Elves
+Bot1.Battlefield.Restless Spire.Types = Land
+Bot1.Hand = Counterspell; Lightning Bolt; Plains; Plains; Plains; Plains
