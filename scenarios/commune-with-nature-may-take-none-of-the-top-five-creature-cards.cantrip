@@ -1,0 +1,32 @@
+# Commune with Nature: "You may reveal a creature card": the top five hold a Memnite, but Bot1 leaves it. Nothing is revealed, the hand
+# stays as it was and all five go to the bottom in the order chosen (CR 701.20a, 401.4); the Island below them is on top.
+
+[Bot1 Deck]
+Mox Emerald
+Commune with Nature
+Island x5
+Forest
+Memnite
+Swamp
+Plains
+Mountain
+Island
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Commune with Nature.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Mountain; Memnite; Swamp; Forest; Plains)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island; Island
+Bot1.Revealed = (absent)
+Bot1.Library = Island; Island; Mountain; Memnite; Swamp; Forest; Plains
+Stack.Count = 0

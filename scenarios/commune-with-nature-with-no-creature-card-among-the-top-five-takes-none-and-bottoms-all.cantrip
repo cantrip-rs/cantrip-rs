@@ -1,0 +1,33 @@
+# Commune with Nature: with no creature card among the top five (the Memnite, sixth from the top, is not looked at) there is nothing
+# that may be taken: a land is refused, and all five go to the bottom in the order chosen, the Memnite then on top (CR 701.20a, 401.4).
+
+[Bot1 Deck]
+Mox Emerald
+Commune with Nature
+Island x5
+Forest
+Swamp
+Plains
+Mountain
+Island
+Memnite
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Commune with Nature.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Forest | Island; Mountain; Plains; Swamp)
+Bot1.Arrange( | Island; Mountain; Plains; Swamp; Forest)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island; Island
+Bot1.Revealed = (absent)
+Bot1.Library = Memnite; Island; Island; Mountain; Plains; Swamp; Forest
+Stack.Count = 0

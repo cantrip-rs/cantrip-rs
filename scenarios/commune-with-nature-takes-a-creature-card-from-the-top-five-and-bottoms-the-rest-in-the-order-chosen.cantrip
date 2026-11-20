@@ -1,0 +1,41 @@
+# Commune with Nature: "Look at the top five cards of your library. You may reveal a creature card from among them and put it into your
+# hand. Put the rest on the bottom of your library in any order" (CR 701.20a, 401.4). The top five are Forest, Memnite, Swamp, Plains and
+# Ornithopter, the fifth: either creature card may be taken (the fifth proves five are looked at), a land may not, the Mesa Pegasus
+# sixth from the top is not among them, and only one card goes to the hand. The other four go to the bottom in the order chosen, the
+# Pegasus then on top. Bot2's library, with a creature on top, is untouched.
+
+[Bot1 Deck]
+Mox Emerald
+Commune with Nature
+Island x5
+Forest
+Memnite
+Swamp
+Plains
+Ornithopter
+Mesa Pegasus
+Island x2
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Commune with Nature.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Forest | Swamp; Plains; Ornithopter; Memnite)
+! Bot1.Arrange(Memnite; Ornithopter | Forest; Swamp; Plains)
+Bot1.Arrange(Ornithopter | Plains; Forest; Memnite; Swamp)
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Hand = Island; Island; Island; Island; Island; Ornithopter
+Bot1.Revealed = Ornithopter
+Bot1.Library = Mesa Pegasus; Island; Island; Plains; Forest; Memnite; Swamp
+Bot1.Graveyard = Commune with Nature
+Bot2.Library.Count = 13
+Stack.Count = 0
