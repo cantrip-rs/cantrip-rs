@@ -1,0 +1,49 @@
+# Icewrought Sentry: the second ability only triggers when you tap an untapped creature an opponent controls (CR 701.26a: a
+# permanent that is already tapped cannot be tapped, so nothing is tapped). Turn 4: Bot2 taps its Llanowar Elves for mana, and it
+# stays tapped through turn 5. Bot1 attacks with the Sentry and pays {1}{U}; the reflexive trigger targets the tapped Elves and does
+# nothing, so the Sentry stays 2/3 and deals 2 (20 - 2 = 18).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Icewrought Sentry
+Island x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Icewrought Sentry.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Forest.Activate
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves.Activate
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Attack(Icewrought Sentry > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.PayCost
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Battlefield.Icewrought Sentry.Power = 2
+Bot1.Battlefield.Icewrought Sentry.Toughness = 3
+Stack.Count = 0

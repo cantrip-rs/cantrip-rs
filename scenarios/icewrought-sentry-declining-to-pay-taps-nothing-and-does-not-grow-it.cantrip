@@ -1,0 +1,45 @@
+# Icewrought Sentry: "Whenever this creature attacks, you may pay {1}{U}. When you do, tap target creature an opponent controls."
+# Turn 3: Bot1 attacks with the Sentry and declines to pay, so the reflexive trigger never happens (CR 603.12): Bot2's Llanowar
+# Elves stays untapped, nothing was tapped by Bot1, and the Sentry stays 2/3, dealing 2 (20 - 2 = 18).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Icewrought Sentry
+Island x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Icewrought Sentry.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Forest.Activate
+[T3 Bot1.Main1]
+Bot1.Attack(Icewrought Sentry > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield.Llanowar Elves.Tapped = false
+Bot1.Battlefield.Icewrought Sentry.Power = 2
+Bot1.Battlefield.Icewrought Sentry.Toughness = 3
+Bot1.Battlefield.Mox Sapphire#1.Tapped = false
+Bot1.Battlefield.Mox Sapphire#2.Tapped = false
+Stack.Count = 0

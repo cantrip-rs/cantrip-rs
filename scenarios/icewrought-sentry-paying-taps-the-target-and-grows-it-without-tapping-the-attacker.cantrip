@@ -1,0 +1,53 @@
+# Icewrought Sentry (2/3 vigilance): "Whenever this creature attacks, you may pay {1}{U}. When you do, tap target creature an
+# opponent controls." and "Whenever you tap an untapped creature an opponent controls, this creature gets +2/+1 until end of turn."
+# Turn 3: Bot1 attacks with the Sentry and pays {1}{U}; the reflexive trigger taps Bot2's untapped Llanowar Elves (CR 603.12,
+# 701.26a), which is Bot1 tapping an untapped creature, so the Sentry is 4/4 until end of turn. Vigilance keeps the Sentry untapped
+# (CR 702.20b) and the tapped Elves cannot block, so Bot2 takes 4 (20 - 4 = 16).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Icewrought Sentry
+Island x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Icewrought Sentry.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Forest.Activate
+[T3 Bot1.Main1]
+Bot1.Attack(Icewrought Sentry > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.PayCost
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+? Bot1.Battlefield.Icewrought Sentry.Tapped = false
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Icewrought Sentry.Power = 4
+? Bot1.Battlefield.Icewrought Sentry.Toughness = 4
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Battlefield.Icewrought Sentry.Tapped = false
+Bot1.Battlefield.Icewrought Sentry.Power = 4
+Bot1.Battlefield.Icewrought Sentry.Toughness = 4

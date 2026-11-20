@@ -1,0 +1,11 @@
+{
+  "name": "Icewrought Sentry",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Elemental Soldier",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Vigilance\nWhenever this creature attacks, you may pay {1}{U}. When you do, tap target creature an opponent controls.\nWhenever you tap an untapped creature an opponent controls, this creature gets +2/+1 until end of turn.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
