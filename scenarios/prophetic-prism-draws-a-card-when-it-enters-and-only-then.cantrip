@@ -1,0 +1,35 @@
+# Prophetic Prism {2}: "When this artifact enters, draw a card." (CR 603.6a). Bot1 casts it on turn 1 off Mox Jet and Mox Ruby: the
+# trigger goes on the stack with the Prism on the battlefield, and resolving it draws exactly one card (the hand of seven is
+# four after the three cards cast, five after the draw). It does not draw again on turn 3 when it is simply on the battlefield (the
+# turn's draw alone: six).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Prophetic Prism
+Island x4
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Prophetic Prism.Cast
+? Bot1.Hand.Count = 4
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Jet; Mox Ruby; Prophetic Prism
+? Bot1.Hand.Count = 5
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 6
+
+[Expect]
+Bot1.Hand.Count = 6
+Bot1.Battlefield = Mox Jet; Mox Ruby; Prophetic Prism
