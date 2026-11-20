@@ -597,6 +597,22 @@ pub fn you_are_dealt_damage(_: &dyn Query, asker: &Asker, event: &Event) -> Opti
 
 pub const YOU_ARE_DEALT_DAMAGE: Trigger = when_asked(EventMask::DAMAGE, you_are_dealt_damage);
 
+/// "Whenever a source you control deals noncombat damage to an opponent" (CR 120.3, 603.2): any source its controller controls as it
+/// dealt the damage (a spell, an ability's source or a permanent, even one that has since left; `Event::Damage::controller`), to an
+/// opponent as a player and not a permanent they control, and of more than zero (damage prevented to nothing is not dealt). Each
+/// source's damage is its own trigger (CR 603.2c), and `damage_amount` keeps that source's amount for "that many". The opponent is the
+/// trigger's subject ("that player"). Niv-Mizzet, Visionary, Virtue of Courage and Fear of Burning Alive print it. The `listens` mask is `EventMask::DAMAGE`.
+pub fn source_you_control_deals_noncombat_damage_to_an_opponent(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::Damage { target: Target::Player(p), amount, kind, controller, .. }
+            if !kind.is_combat() && *amount > 0 && *controller == me.controller && q.state().opponents(me.controller).any(|o| o == *p) =>
+        {
+            Fired::about(Target::Player(*p))
+        }
+        _ => None,
+    }
+}
+
 /// "Whenever you sacrifice an artifact" (CR 701.21a, 603.10a): an artifact of yours that a sacrifice moved from the battlefield,
 /// read as it was when it left, so a Lander or a Treasure sacrificed as a cost counts. The ability is `.on_sacrifice()`. Biotech
 /// Specialist and Gleaming Geardrake print it.
