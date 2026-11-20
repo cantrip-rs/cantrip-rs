@@ -1,0 +1,34 @@
+# Contested Game Ball: "Whenever you're dealt combat damage, ..." Bot2's Ornithopter has power 0 and attacks Bot1: it deals no
+# damage (CR 120.8), so Bot1 is not dealt combat damage, nothing triggers and Bot1 keeps the Ball, and Bot1's life is unchanged.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Contested Game Ball
+Island x17
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Contested Game Ball.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+[T4 Bot2.CombatDamage]
+? Stack.Count = 0
+? Bot1.Life = 20
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Contested Game Ball.Tapped = false

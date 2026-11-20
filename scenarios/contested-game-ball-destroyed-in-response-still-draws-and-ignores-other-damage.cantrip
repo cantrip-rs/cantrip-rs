@@ -1,0 +1,71 @@
+# Contested Game Ball: "Whenever you're dealt combat damage, the attacking player gains control of this artifact and untaps it."
+# Damage that is not combat damage dealt to you (Bot2's Lightning Bolt), and combat damage dealt to someone else (Bot1's Memnite
+# attacking Bot2), does not trigger it. "{2}, {T}: Draw a card. Put a point counter on this artifact. Then ...": with Bot2's Shatter
+# destroying the Ball in response, the ability still draws a card but there is no Ball to put a counter on.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Contested Game Ball
+Memnite
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Shatter
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Contested Game Ball.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+? Stack.Count = 0
+? Bot1.Battlefield.Contested Game Ball.Tapped = false
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.CombatDamage]
+? Stack.Count = 0
+? Bot2.Life = 19
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Contested Game Ball.Activate
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Contested Game Ball)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Contested Game Ball = (absent)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Contested Game Ball = (absent)
+Bot2.Graveyard = Shatter; Lightning Bolt

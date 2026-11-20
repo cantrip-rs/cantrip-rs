@@ -1,0 +1,64 @@
+# Contested Game Ball: "{2}, {T}: Draw a card. Put a point counter on this artifact. Then if it has five or more point counters
+# on it, sacrifice it and create a Treasure token." Bot1 draws with it on turns 1, 3, 5 and 7: four counters and the Ball stays in
+# play. On turn 9 the fifth draw puts the fifth counter on it, and it is sacrificed and a Treasure token created.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Contested Game Ball
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Contested Game Ball.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Contested Game Ball.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Contested Game Ball.Counters.Point = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Contested Game Ball.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Contested Game Ball.Counters.Point = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Contested Game Ball.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Contested Game Ball.Counters.Point = 3
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Contested Game Ball.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Contested Game Ball.Counters.Point = 4
+? Bot1.Battlefield.Treasure Token = (absent)
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Contested Game Ball.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Contested Game Ball = (absent)
+
+[Expect]
+Bot1.Battlefield.Treasure Token.Token = true
+Bot1.Battlefield.Treasure Token.Types = Artifact

@@ -1,0 +1,66 @@
+# Contested Game Ball: "Whenever you're dealt combat damage, the attacking player gains control of this artifact and untaps it."
+# Bot1 draws with it on turns 1 and 3 (two point counters), leaving it tapped. Bot2 attacks with two Memnites on
+# turn 4: both deal combat damage at once, which is one trigger (a stack of one), and it resolves by handing the tapped Ball
+# over, untapped and with its two counters, to Bot2, who draws with it for a third counter. Bot1 is at 18.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Contested Game Ball
+Island x16
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Memnite
+Memnite
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Contested Game Ball.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Contested Game Ball.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Contested Game Ball.Counters.Point = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Contested Game Ball.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Contested Game Ball.Counters.Point = 2
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite#1 > Bot1; Memnite#2 > Bot1)
+[T4 Bot2.CombatDamage]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Contested Game Ball = (absent)
+? Bot2.Battlefield.Contested Game Ball.Tapped = false
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Contested Game Ball.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Contested Game Ball.Counters.Point = 3
+Bot2.Battlefield.Contested Game Ball.Tapped = true
+Bot1.Life = 18
