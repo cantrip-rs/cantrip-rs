@@ -1685,6 +1685,22 @@ pub fn return_a_card_from_your_graveyard(g: &mut dyn Game, item: &StackItem, rul
     Ok(())
 }
 
+/// "Mill `count` cards, then return a [kind of] card from your graveyard to the battlefield tapped" as a whole ability effect
+/// (CR 701.17a, 608.2c, 400.7): the graveyard is read after the mill, so a card just milled may be chosen. The card does not target
+/// and the return is not optional, so one is chosen, by `rule` (`select::land_cards(select::as_many_as_can(1))`), whenever the
+/// graveyard holds a card it allows; it comes back under its owner's control, tapped. Port of Karfell (four, a creature) and
+/// Blossoming Tortoise (three, a land) print it.
+pub fn mill_then_return_a_card_to_the_battlefield_tapped(g: &mut dyn Game, item: &StackItem, count: u32, rule: Selection) -> Result<(), Suspend> {
+    let you = item.controller;
+    g.mill(you, count);
+    g.end_sentence();
+    let graveyard = g.state().zone(Zone::graveyard(you)).to_vec();
+    if let Some(&card) = crate::choose::select(g, you, item.object, Purpose::PutOntoBattlefield, graveyard, rule)?.first() {
+        g.put_onto_battlefield(card, you, true)?;
+    }
+    Ok(())
+}
+
 /// "Mill two cards, then put a +1/+1 counter on this creature for each artifact and/or creature card in your graveyard"
 /// (CR 701.17a, 608.2c, 122.1): the count is made after the mill, in the whole graveyard as the mill left it, so a milled
 /// card counts, and a card that is both an artifact and a creature counts once. Ceti Eel and Ooze Patrol print it.
