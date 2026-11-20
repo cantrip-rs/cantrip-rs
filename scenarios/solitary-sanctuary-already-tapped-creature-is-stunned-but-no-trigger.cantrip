@@ -1,0 +1,45 @@
+# Solitary Sanctuary's enters ability may target a creature that is already tapped: it still gets the stun counter (CR 122.1d), but
+# nothing is tapped (CR 701.26a), so the second ability does not trigger: Devoted Hero gets no +1/+1 counter. Bot2 tapped its Elves
+# for mana on turn 4, and it is still tapped when Bot1 casts Sanctuary on turn 5.
+
+[Bot1 Deck]
+Mox Pearl
+Devoted Hero
+Black Lotus
+Solitary Sanctuary
+Island x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Devoted Hero.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves.Activate
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Solitary Sanctuary.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot2.Battlefield.Llanowar Elves.Counters.Stun = 1
+Bot1.Battlefield.Devoted Hero.Power = 1
+Bot1.Battlefield.Devoted Hero.Counters.PlusOnePlusOne = (absent)
+Bot1.Taps = Black Lotus

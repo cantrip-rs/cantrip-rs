@@ -1,0 +1,78 @@
+# Solitary Sanctuary triggers once for each untapped creature an opponent controls that Bot1 taps, not for the one that was
+# already tapped (CR 701.26a, 603.2c): Bot1's Cryptic Command taps all three of Bot2's creatures on turn 5 but Llanowar Elves#1
+# was already tapped (its stun counter kept it down on turn 4), so only the other two Elves give Devoted Hero a counter. Hero is
+# 1/2, +1/+1 from the Sanctuary's own enters tap on turn 3, then +2/+2 from the tap-all: 4/5.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Devoted Hero
+Black Lotus
+Solitary Sanctuary
+Cryptic Command
+Island x20
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Llanowar Elves
+Llanowar Elves
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Devoted Hero.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Solitary Sanctuary.Cast
+Bot1.Target(Bot2.Battlefield.Llanowar Elves#1)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Devoted Hero.Power = 2
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+? Bot2.Battlefield.Llanowar Elves#1.Tapped = true
+? Bot2.Battlefield.Llanowar Elves#2.Tapped = false
+? Bot2.Battlefield.Llanowar Elves#3.Tapped = false
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Cryptic Command.Cast
+Bot1.Modes(3; 4)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves#1.Tapped = true
+Bot2.Battlefield.Llanowar Elves#2.Tapped = true
+Bot2.Battlefield.Llanowar Elves#3.Tapped = true
+Bot1.Battlefield.Devoted Hero.Power = 4
+Bot1.Battlefield.Devoted Hero.Toughness = 5

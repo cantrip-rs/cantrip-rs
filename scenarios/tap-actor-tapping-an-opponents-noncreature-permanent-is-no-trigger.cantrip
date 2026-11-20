@@ -1,0 +1,56 @@
+# "Whenever you tap an untapped creature an opponent controls" (CR 603.2, 701.26a) names a creature: Bot1's Icy Manipulator tapping
+# Bot2's untapped Mox Emerald, an artifact that is no creature, is a tap by Bot1 (it is in Bot1.Taps) but no trigger of Solitary
+# Sanctuary, so Devoted Hero gets no +1/+1 counter.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Devoted Hero
+Black Lotus
+Icy Manipulator
+Solitary Sanctuary
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Devoted Hero.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Icy Manipulator.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Solitary Sanctuary.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Icy Manipulator.Activate(Bot2.Battlefield.Mox Emerald)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Mox Emerald.Tapped = true
+
+[Expect]
+Bot2.Battlefield.Mox Emerald.Tapped = true
+Bot1.Battlefield.Devoted Hero.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Devoted Hero.Power = 1
+Bot1.Taps = Mox Pearl; Mox Jet; Mox Ruby; Island; Icy Manipulator; Mox Emerald

@@ -1,0 +1,6 @@
+{
+  "name": "Solitary Sanctuary",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, tap target creature an opponent controls and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)\nWhenever you tap an untapped creature an opponent controls, put a +1/+1 counter on target creature you control."
+}

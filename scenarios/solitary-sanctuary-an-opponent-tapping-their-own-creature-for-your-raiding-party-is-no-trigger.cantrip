@@ -1,0 +1,59 @@
+# Solitary Sanctuary's second ability sees only creatures its controller taps (ruling 2023-09-01, the Tangle Wire example):
+# Bot1's Raiding Party has each player tap white creatures they control, and Bot2 taps its own Savannah Lions (CR 701.26a). That
+# is Bot2's tap, not Bot1's, so the Sanctuary does not trigger and Devoted Hero gets no +1/+1 counter.
+[Bot1 Deck]
+Raiding Party
+Orcish Lumberjack
+Black Lotus
+Black Lotus
+Mox Ruby
+Solitary Sanctuary
+Devoted Hero
+Plains
+Island x20
+[Bot2 Deck]
+Plains
+Savannah Lions
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Orcish Lumberjack.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raiding Party.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Solitary Sanctuary.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Devoted Hero.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Raiding Party.Activate
+Bot1.Choose(Orcish Lumberjack)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+Bot2.Choose(Bot2.Battlefield.Savannah Lions)
+Bot2.Choose(Bot2.Battlefield.Plains)
+[Expect]
+Bot2.Battlefield.Savannah Lions.Tapped = true
+Bot2.Taps = Savannah Lions
+Bot1.Taps = Plains
+Bot1.Battlefield.Devoted Hero.Counters.PlusOnePlusOne = (absent)
+Stack.Count = 0

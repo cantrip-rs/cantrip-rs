@@ -1,0 +1,60 @@
+# Solitary Sanctuary: its enters ability taps Bot2's untapped Llanowar Elves and puts a stun counter on it (CR 701.26a, 122.1d), and
+# Bot1 tapping an untapped creature an opponent controls triggers the second ability: Devoted Hero gets a +1/+1 counter (it is
+# 2/3). When Bot2 taps its own other Elves for mana on turn 4 that is not Bot1 tapping it, so Hero stays 2/3. In Bot2's untap step
+# (turn 4) the stun counter is removed instead of untapping the stunned Elves (CR 122.1d), which untaps on turn 6.
+
+[Bot1 Deck]
+Mox Pearl
+Devoted Hero
+Black Lotus
+Solitary Sanctuary
+Island x20
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Llanowar Elves
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Devoted Hero.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Solitary Sanctuary.Cast
+Bot1.Target(Bot2.Battlefield.Llanowar Elves#1)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Bot2.Battlefield.Llanowar Elves#1.Tapped = true
+? Bot2.Battlefield.Llanowar Elves#1.Counters.Stun = 1
+? Bot1.Battlefield.Devoted Hero.Power = 2
+? Bot1.Battlefield.Devoted Hero.Toughness = 3
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves#2.Activate
+Bot2.Pass
+? Bot2.Taps = Llanowar Elves
+? Bot1.Battlefield.Devoted Hero.Power = 2
+? Bot2.Battlefield.Llanowar Elves#1.Tapped = true
+? Bot2.Battlefield.Llanowar Elves#1.Counters.Stun = (absent)
+[T6 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves#1.Tapped = false
+Bot1.Battlefield.Devoted Hero.Power = 2
