@@ -1,0 +1,6 @@
+{
+  "name": "Three Bowls of Porridge",
+  "manaCost": "{2}",
+  "type": "Artifact — Food",
+  "oracleText": "{2}, {T}: Choose one that hasn't been chosen —\n• This artifact deals 2 damage to target creature.\n• Tap target creature.\n• Sacrifice this artifact. You gain 3 life."
+}

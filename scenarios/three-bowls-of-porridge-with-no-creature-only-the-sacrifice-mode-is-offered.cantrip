@@ -1,0 +1,36 @@
+# "{2}, {T}: Choose one that hasn't been chosen": the cost is {2}. With one Mox Pearl as Bot1's only mana source the Bowls cannot be activated (refused, Mana: short); once a Mox
+# Jet joins it, it can. "This artifact deals 2 damage to target creature" and "Tap target creature" each need a creature to target (CR 601.2c), so with no creature on the
+# battlefield they are not offered; only the third mode is, and it sacrifices the Bowls for 3 life (23).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Three Bowls of Porridge
+Plains x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Three Bowls of Porridge.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Three Bowls of Porridge.Activate(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Three Bowls of Porridge.Activate
+! Bot1.Modes(This artifact deals 2 damage)
+! Bot1.Modes(Tap target creature)
+Bot1.Modes(Sacrifice this artifact)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot1.Graveyard = Three Bowls of Porridge; Black Lotus

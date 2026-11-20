@@ -1,0 +1,74 @@
+# "{2}, {T}: Choose one that hasn't been chosen" (CR 700.2). Bot1 casts Three Bowls of Porridge on turn 1 with Mox Pearl and Mox Jet. Bot2 casts Grizzly Bears and Llanowar Elves
+# on turn 2. Turn 3: the first mode deals 2 damage to the Bears, which dies. Turn 5: that mode is refused now, the second mode taps the Elves. Turn 7: both are refused and the
+# third mode sacrifices the Bowls and gains 3 life (23). A chosen mode stays chosen for the object; the Bowls is gone afterwards.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Three Bowls of Porridge
+Plains x20
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Llanowar Elves
+Forest x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Three Bowls of Porridge.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Three Bowls of Porridge.Activate
+Bot1.Modes(This artifact deals 2 damage)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Grizzly Bears
+? Bot1.Battlefield.Three Bowls of Porridge.ChosenModes = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Three Bowls of Porridge.Activate
+! Bot1.Modes(This artifact deals 2 damage)
+Bot1.Modes(Tap target creature)
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+? Bot1.Battlefield.Three Bowls of Porridge.ChosenModes = 1, 2
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Three Bowls of Porridge.Activate
+! Bot1.Modes(This artifact deals 2 damage)
+! Bot1.Modes(Tap target creature)
+Bot1.Modes(Sacrifice this artifact)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot1.Graveyard = Three Bowls of Porridge
+Bot2.Graveyard = Grizzly Bears
