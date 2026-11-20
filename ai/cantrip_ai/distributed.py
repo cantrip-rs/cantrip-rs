@@ -83,6 +83,31 @@ WORKER_SERVER_ARGS = "--precision fp16 --pipelines 1"
 LAUNCH_GRACE = 180.0
 
 
+@dataclass(frozen=True)
+class Kind:
+    """What a coordinator's runs are and what they leave, as the hosts and the coordinator see it: self-play's
+    (`SELFPLAY`), a duel's (`duels.DUEL`, `duels.REPLAY`) or the pair miner's judgements (`mining.JUDGE`). A run plays
+    the indices its grant file grants and writes its closed outputs (`outputs`, a glob; directories with `dirs`) into
+    its output directory (`out`, in a worker's attempt directory), with a status file there while it runs and a report
+    at its end, and stops gracefully when `stop` appears there. With `lease` it takes `--host`, `--lease` and
+    `--lease-seconds`; with `recovers`, a crashed run's open work is closed by its `recover_args`. `unit` > 1 grants
+    whole units (a duel's pairs, games 2k and 2k + 1, played on one host)."""
+    name: str = "selfplay"
+    out: str = "selfplay"
+    outputs: str = "*.shard.zst"
+    dirs: bool = False
+    status: str = "selfplay-status.json"
+    report: str = "selfplay-report.json"
+    stop: str = "selfplay.stop"
+    runaways: str | None = "runaways.jsonl"
+    lease: bool = True
+    recovers: bool = True
+    unit: int = 1
+
+
+SELFPLAY = Kind()
+
+
 class Unreachable(Exception):
     """A host could not be reached (or a command on it failed): the attempt is retried, and given up past the timeout."""
 
@@ -143,8 +168,13 @@ class Ledger:
     failed and dropped games, and the shards rejected. `owner` (an index to the attempt that owns it) is derived on
     load: an attempt not released owns what it was granted that is not yet accounted for."""
 
-    def __init__(self, path: Path | None, games: int, seed: int):
+    def __init__(self, path: Path | None, games: int, seed: int, only=None):
         self.path, self.games, self.seed = path, games, seed
+        # The indices to play: all of 0..games-1, or `only` (a duel's subset: the games a replay plays again).
+        self.only: set[int] | None = set(only) if only is not None else None
+        # Closed (a duel's sequential test had its verdict): nothing more is granted, and what is not played is skipped.
+        self.closed: str | None = None
+        self.skipped: dict[int, str] = {}
         self.attempts: dict[str, dict] = {}
         self.shards: dict[str, dict] = {}
         self.done: dict[int, str] = {}
@@ -157,15 +187,20 @@ class Ledger:
         self.owner: dict[int, str] = {}
 
     @classmethod
-    def load(cls, path: Path, games: int, seed: int, identity: dict | None = None, header: dict | None = None) -> "Ledger":
+    def load(cls, path: Path, games: int, seed: int, identity: dict | None = None, header: dict | None = None,
+             only=None) -> "Ledger":
         """The ledger at `path` (a new one if there is none), held to `identity` and `header`: a ledger made with other
         settings is refused, a new host's identity joins."""
-        led = cls(path, games, seed)
+        led = cls(path, games, seed, only)
         if path.exists():
             d = json.loads(path.read_text(encoding="utf-8"))
             if d["games"] != games or d["seed"] != seed:
                 raise SystemExit(f"{path} is for {d['games']} games from seed {d['seed']}, not {games} from {seed}: "
-                                 "another self-play; remove it (and the self-play directory) to start again")
+                                 "another run; remove it (and its directory) to start again")
+            if (d.get("only") is None) != (only is None) or (only is not None and from_ranges(d["only"]) != sorted(set(only))):
+                raise SystemExit(f"{path} is for another set of games than this run's: remove it to start again")
+            led.closed = d.get("closed")
+            led.skipped = {int(k): v for k, v in d.get("skipped", {}).items()}
             led.attempts = d["attempts"]
             led.shards = d["shards"]
             led.rejected = d.get("rejected", [])
@@ -206,6 +241,8 @@ class Ledger:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         d = dict(games=self.games, seed=self.seed, identity=self.identity, header=self.header, attempts=self.attempts,
                  shards=self.shards, rejected=self.rejected,
+                 only=to_ranges(self.only) if self.only is not None else None, closed=self.closed,
+                 skipped={str(k): v for k, v in sorted(self.skipped.items())},
                  runaways={str(k): v for k, v in sorted(self.runaways.items())},
                  dropped={str(k): v for k, v in sorted(self.dropped.items())},
                  fails={str(k): v for k, v in sorted(self.fails.items())})
@@ -235,15 +272,32 @@ class Ledger:
             self.derive_owners()
         return gone
 
+    def wanted(self):
+        """The indices this run plays, lowest first."""
+        return range(self.games) if self.only is None else sorted(self.only)
+
     def accounted(self, i: int) -> bool:
-        return i in self.done or i in self.runaways or i in self.dropped
+        return (i in self.done or i in self.runaways or i in self.dropped or i in self.skipped
+                or (self.only is not None and i not in self.only))
 
     def complete(self) -> bool:
-        return len(self.done) + len(self.runaways) + len(self.dropped) == self.games
+        return all(self.accounted(i) for i in self.wanted())
 
     def pending(self) -> list[int]:
-        """The indices no one has: not accounted for and owned by no attempt, lowest first."""
-        return [i for i in range(self.games) if i not in self.owner and not self.accounted(i)]
+        """The indices no one has: not accounted for and owned by no attempt, lowest first; none once closed."""
+        if self.closed:
+            return []
+        return [i for i in self.wanted() if i not in self.owner and not self.accounted(i)]
+
+    def close(self, why: str):
+        """Nothing more is granted (a duel's sequential test had its verdict): every index no attempt owns is skipped
+        now, and those the attempts own as they end unplayed (`release`); the games in play finish and count."""
+        if self.closed:
+            return
+        self.closed = why
+        for i in self.wanted():
+            if i not in self.owner and not self.accounted(i):
+                self.skipped[i] = why
 
     def new_attempt(self, host: str, started: float | None = None) -> dict:
         k = 1 + sum(1 for a in self.attempts.values() if a["host"] == host)
@@ -326,6 +380,8 @@ class Ledger:
                 self.fails[i] = self.fails.get(i, 0) + 1
                 if self.fails[i] >= DROP_AFTER:
                     self.dropped[i] = attempt["id"]
+            if self.closed and not self.accounted(i):
+                self.skipped[i] = self.closed
         attempt["released"] = True
         attempt["ended"] = attempt.get("ended") or time.time()
         return left
@@ -359,6 +415,14 @@ class LedgerLock:
 
 
 # --- Shards -------------------------------------------------------------------------------------------------------
+
+
+def remove_path(path: Path):
+    """A file, or a directory (an output that is one), gone if it is there."""
+    if path.is_dir():
+        shutil.rmtree(path, ignore_errors=True)
+    else:
+        path.unlink(missing_ok=True)
 
 
 def read_shard(path: Path, seed: int, pairings: int) -> tuple[dict, list[int], dict]:
@@ -411,23 +475,36 @@ class Poll:
 
 
 class Coordinator:
-    """Runs a generation's self-play across `hosts` to the end (see the module): `run()` returns "done" or
-    "stopped". Timeouts are on `monotonic`; how long a host has been unreachable is this run's alone."""
+    """Runs a generation's self-play across `hosts` to the end (see the module), or any other work of the same shape
+    (`kind`: a duel's games, the pair miner's judgements): `run()` returns "done" or "stopped". Timeouts are on
+    `monotonic`; how long a host has been unreachable is this run's alone.
+
+    `affinity` (an index to the host that must play it: a replay's game, on the hardware that played it first) keeps
+    each index for its host while that host can play: once the host is gone (failed `max_failures` times, or not ready
+    or unreachable past `timeout`), its indices go to the others. `stop_check` (given the ledger, after each poll's
+    outputs are taken: a reason to stop, or None) closes the run once it says so (`Ledger.close`): no more is granted,
+    every run is asked to stop gracefully, and what was granted and not played is skipped."""
 
     def __init__(self, ledger: Ledger, hosts: list, selfplay_dir: Path, dist_dir: Path, read=None, log=print,
                  clock=time.time, sleep=time.sleep, monotonic=time.monotonic, chunk: int = 25, lookahead: float = 0.05,
                  initial: int = 16, poll_seconds: float = 30.0, timeout: float = 600.0, max_failures: int = 3,
                  report_every: float = 300.0, stop_file: Path | None = None, retry_seconds: float = 300.0,
-                 heldout: Path | None = None, drop_limit: int = 3, drop_share: float = 0.2):
+                 heldout: Path | None = None, drop_limit: int = 3, drop_share: float = 0.2, kind: Kind = SELFPLAY,
+                 affinity: dict[int, str] | None = None, stop_check=None):
         self.ledger, self.hosts, self.dir, self.dist = ledger, {h.name: h for h in hosts}, selfplay_dir, dist_dir
         self.read = read
+        self.kind, self.affinity, self.stop_check = kind, affinity or {}, stop_check
         self.log, self.clock, self.sleep, self.monotonic = log, clock, sleep, monotonic
-        self.chunk, self.lookahead, self.initial = max(1, chunk), lookahead, max(1, initial)
+        unit = max(1, kind.unit)
+        self.chunk, self.lookahead, self.initial = unit * math.ceil(max(1, chunk) / unit), lookahead, max(1, initial)
         self.poll_seconds, self.timeout, self.max_failures = poll_seconds, timeout, max_failures
         self.report_every, self.retry_seconds = report_every, retry_seconds
         self.drop_limit, self.drop_share = drop_limit, drop_share
-        self.stop_file = stop_file or selfplay_dir / STOP_FILE
+        self.stop_file = stop_file or selfplay_dir / kind.stop
         self.heldout = heldout
+        # Since when each host has been out of reach (not ready, not started, or an attempt given up): past `timeout`,
+        # an index it has affinity for goes to the others.
+        self.down_since: dict[str, float] = {}
         self.stopping = False
         self.stopped_now = False
         self.interrupts = 0
@@ -475,11 +552,12 @@ class Coordinator:
             incoming = self.dist / "incoming"
             incoming.mkdir(parents=True, exist_ok=True)
             path = incoming / f"{final}.pulling"
+            remove_path(path)
             try:
                 host.fetch(attempt, name, path)
             except Unreachable as e:
                 self.log(f"  [{attempt['host']}] {name} not fetched ({e}); tried again at the next poll")
-                path.unlink(missing_ok=True)
+                remove_path(path)
                 return False
         try:
             header, indices, info = self.read(path)
@@ -505,6 +583,7 @@ class Coordinator:
             aside = self.dist / "rejected"
             aside.mkdir(parents=True, exist_ok=True)
             if path.exists():
+                remove_path(aside / final)
                 os.replace(path, aside / final)
             self.log(f"  [{host_name}] rejected {final} ({why}): moved to {aside}, never trained on")
         if attempt is not None:
@@ -522,11 +601,11 @@ class Coordinator:
         return owners.pop() if len(owners) == 1 else "(several)"
 
     def adopt(self):
-        """Shards in the self-play directory the ledger does not hold: the local attempts' (accepted by their owner),
-        or a shard there before distribution (owned by no one), or one a coordinator moved in and stopped before
+        """Outputs in the run's directory the ledger does not hold: the local attempts' (accepted by their owner), or
+        a shard there before distribution (owned by no one), or one a coordinator moved in and stopped before
         recording."""
-        for p in sorted(self.dir.glob("*.shard.zst")):
-            if p.name not in self.ledger.shards:
+        for p in sorted(self.dir.glob(self.kind.outputs)):
+            if p.name not in self.ledger.shards and p.is_dir() == self.kind.dirs:
                 self.take(None, None, p.name)
 
     # One attempt.
@@ -548,11 +627,13 @@ class Coordinator:
         except Unreachable as e:
             now = self.monotonic()
             since = self.unreachable.setdefault(a["id"], now)
+            self.down_since.setdefault(a["host"], since)
             if now - since > self.timeout and a["state"] in LIVE:
                 self.give_up(a, f"unreachable for {now - since:.0f} s: {e}")
             self.ledger.save()
             return
         self.unreachable.pop(a["id"], None)
+        self.down_since.pop(a["host"], None)
         a.pop("to_delete", None)  # deleted by that poll
         if not host.remote:
             # After the poll: a local run that exited closed its shards before its exit code was read.
@@ -636,7 +717,8 @@ class Coordinator:
                 self.log(f"  [{a['host']}] {a['id']} crashed (exit {p.exit}): recovering its open shards")
             try:
                 host.kill(a)
-                host.recover(a)
+                if self.kind.recovers:
+                    host.recover(a)
                 if not host.remote:
                     self.adopt()
                 q = host.poll(a)
@@ -675,12 +757,40 @@ class Coordinator:
             try:
                 host.prepare(live)
                 self.prepared.add(name)
+                self.down_since.pop(name, None)
             except Unreachable as e:
                 self.backoff[name] = self.monotonic() + self.retry_seconds
+                self.down_since.setdefault(name, self.monotonic())
                 self.log(f"  [{name}] not ready ({e}); trying again in {self.retry_seconds:.0f} s")
 
+    def gone(self, name: str) -> bool:
+        """Whether a host can no longer be counted on for the indices it has affinity for: not one of this run's,
+        failed `max_failures` times, or out of reach for longer than the timeout."""
+        if name not in self.hosts or self.failures(name) >= self.max_failures:
+            return True
+        since = self.down_since.get(name)
+        return since is not None and self.monotonic() - since > self.timeout
+
+    def pending_for(self, name: str) -> list[int]:
+        """The pending indices host `name` may be granted: all of them, but those another host has affinity for
+        while that host is not gone."""
+        pend = self.ledger.pending()
+        if not self.affinity:
+            return pend
+        return [i for i in pend if (h := self.affinity.get(i)) is None or h == name or self.gone(h)]
+
+    def first(self, pend: list[int], n: int) -> list[int]:
+        """The first `n` of `pend` (sorted), and in whole units (`Kind.unit`): a unit begun is granted whole."""
+        unit = max(1, self.kind.unit)
+        out: list[int] = []
+        for i in pend:
+            if len(out) >= n and (unit == 1 or i // unit != out[-1] // unit):
+                break
+            out.append(i)
+        return out
+
     def launch(self):
-        """A new attempt on every host that has none, while games are pending."""
+        """A new attempt on every host that has none, while games are pending for it."""
         if not self.ledger.pending():
             return
         self.prepare()
@@ -689,18 +799,20 @@ class Coordinator:
                 continue
             if self.backoff.get(name, 0) > self.monotonic() or (hasattr(host, "prepare") and name not in self.prepared):
                 continue
-            pend = self.ledger.pending()
+            pend = self.pending_for(name)
             if not pend:
-                return
+                continue
             a = self.ledger.new_attempt(name, started=self.clock())
-            self.ledger.grant(a, pend[:self.rounded(self.initial)])
+            self.ledger.grant(a, self.first(pend, self.rounded(self.initial)))
             self.ledger.save()
             try:
                 a.update(host.launch(a, attempt_grant(a)) or {})
+                self.down_since.pop(name, None)
                 self.log(f"  [{name}] {a['id']} started with games {fmt_ranges(a['granted'])}")
             except Unreachable as e:
                 # Never started (a launch that did start shows itself at the next poll, and is then taken up).
                 self.backoff[name] = self.monotonic() + self.retry_seconds
+                self.down_since.setdefault(name, self.monotonic())
                 self.log(f"  [{name}] could not start ({e}); trying again in {self.retry_seconds:.0f} s")
             self.ledger.save()
 
@@ -717,17 +829,16 @@ class Coordinator:
             g = s.get("Governor") or {}
             backlog = a["granted_count"] - int(s.get("Taken") or 0)
             want = (g.get("LanesAllowed") or 1) + float(s.get("GamesPerHour") or 0) * self.lookahead
-            pend = self.ledger.pending()
+            pend = self.pending_for(a["host"])
             if backlog < want and pend:
-                self.ledger.grant(a, pend[:self.rounded(want - backlog)])
+                self.ledger.grant(a, self.first(pend, self.rounded(want - backlog)))
                 self.ledger.save()
                 self.write_grant(a)
-        if not self.ledger.pending():
-            for a in self.live():
-                if not a["grant_ended"] and a["state"] != "stopping":
-                    a["grant_ended"] = True
-                    self.ledger.save()
-                    self.write_grant(a)
+        for a in self.live():
+            if not a["grant_ended"] and a["state"] != "stopping" and not self.pending_for(a["host"]):
+                a["grant_ended"] = True
+                self.ledger.save()
+                self.write_grant(a)
 
     def write_grant(self, a: dict):
         try:
@@ -764,8 +875,10 @@ class Coordinator:
             return
         self.reported = now
         led = self.ledger
-        self.log(f"  self-play: {len(led.done)} of {led.games} games in, {len(led.runaways)} runaways, {len(led.dropped)} "
-                 f"dropped, {len(led.pending())} not yet granted ({(now - self.started) / 60:.0f} min)")
+        self.log(f"  {self.kind.name}: {len(led.done)} of {len(led.wanted())} in, {len(led.runaways)} runaways, "
+                 f"{len(led.dropped)} dropped, {len(led.pending())} not yet granted"
+                 + (f", {len(led.skipped)} skipped ({led.closed})" if led.closed else "")
+                 + f" ({(now - self.started) / 60:.0f} min)")
         for name, h in host_rows(led).items():
             live = self.live(name)
             s = (live[0].get("status") if live else None) or {}
@@ -823,6 +936,18 @@ class Coordinator:
         for a in list(self.ledger.attempts.values()):
             if a["state"] in LIVE or (a["state"] == "lost" and not a.get("lost_over")):
                 self.check(a)
+        if self.stop_check is not None and not self.ledger.closed and not self.stopping:
+            why = self.stop_check(self.ledger)
+            if why:
+                self.ledger.close(why)
+                self.ledger.save()
+                self.log(f"  {self.kind.name}: {why}; nothing more is granted, the games in play finish")
+        if self.ledger.closed:
+            # Closed: every run is asked to stop gracefully (again, if the asking did not reach it).
+            for a in self.live():
+                if a["state"] != "stopping" and self.attempt(lambda a=a: self.hosts[a["host"]].stop(a, False), a, "ask it to stop"):
+                    a["state"] = "stopping"
+            self.ledger.save()
         if self.stopping:
             # One whose stop did not reach it: asked again.
             if any(a["state"] != "stopping" for a in self.live()):
@@ -983,14 +1108,16 @@ class LocalHost:
     grant file (`genN/dist/<attempt>.grant`) and a lease (`genN/dist/<attempt>.heartbeat`, touched at each poll).
     `command` is the self-play command line without `--grant`; its shards land where the window reads them, so the
     coordinator adopts them in place. A process is known by its id and start time, so a coordinator that restarted
-    takes up a run it did not start."""
+    takes up a run it did not start. Another `kind` of run (a duel's part, a judgement) is the same with its own
+    files, and `extra` (given the attempt) adds an attempt's own arguments."""
 
     remote = False
 
     def __init__(self, name: str, command: list, selfplay_dir: Path, dist_dir: Path, logs: Path, env: dict | None = None,
-                 cwd: Path | None = None, lease: float = 900.0, identity: dict | None = None):
+                 cwd: Path | None = None, lease: float = 900.0, identity: dict | None = None, kind: Kind = SELFPLAY,
+                 extra=None):
         self.name, self.command, self.dir, self.dist, self.logs, self.env, self.cwd = name, command, selfplay_dir, dist_dir, logs, env, cwd
-        self.lease, self.identity = lease, identity or {}
+        self.lease, self.identity, self.kind, self.extra = lease, identity or {}, kind, extra
         self.processes: dict[str, subprocess.Popen] = {}
         self.files = {}
 
@@ -1007,10 +1134,12 @@ class LocalHost:
         touch(self.heartbeat(a))
         # A stop file there now is a stop asked (`--stop`), not a stale one (the stage removes those as it starts):
         # the run sees it and plays nothing.
-        log = self.logs / f"selfplay-{a['id']}.log"
+        log = self.logs / f"{self.kind.name}-{a['id']}.log"
         f = log.open("w")
-        cmd = [str(c) for c in self.command] + ["--grant", str(self.grant_path(a)), "--host", self.name,
-                                                "--lease", str(self.heartbeat(a)), "--lease-seconds", str(self.lease)]
+        cmd = [str(c) for c in self.command] + [str(c) for c in (self.extra(a) if self.extra else [])]
+        cmd += ["--grant", str(self.grant_path(a))]
+        if self.kind.lease:
+            cmd += ["--host", self.name, "--lease", str(self.heartbeat(a)), "--lease-seconds", str(self.lease)]
         p = subprocess.Popen(cmd, cwd=self.cwd, stdout=f, stderr=subprocess.STDOUT, env={**os.environ, **(self.env or {})})
         self.processes[a["id"]], self.files[a["id"]] = p, f
         return dict(pids=dict(selfplay=dict(pid=p.pid, start=process_start(p.pid))), log=str(log), dir=str(self.dir),
@@ -1032,23 +1161,24 @@ class LocalHost:
             alive = code is None
         else:
             alive, code = process_matches(sp.get("pid"), sp.get("start")), None
-        status = read_json(self.dir / STATUS)
+        status = read_json(self.dir / self.kind.status)
         if status and status.get("Pid") != sp.get("pid"):
             status = None
         if p is None and not alive:
             # Not ours (a coordinator restarted): its end by its last status.
             if status and status.get("Finished"):
-                report = read_json(self.dir / "selfplay-report.json") or {}
+                report = read_json(self.dir / self.kind.report) or {}
                 code = SELFPLAY_STOPPED if report.get("Stopped") else 0
-        report = read_json(self.dir / "selfplay-report.json") if not alive else None
+        report = read_json(self.dir / self.kind.report) if not alive else None
         if code is not None and p is not None and a["id"] in self.files:
             self.files.pop(a["id"]).close()
         try:
             grant = self.grant_path(a).read_text(encoding="utf-8")
         except OSError:
             grant = ""
-        return Poll(status=status, exit=code, alive=alive, shards=[], runaways=runaway_indices(self.dir / RUNAWAYS),
-                    report=report, started=True, grant=grant)
+        runaways = runaway_indices(self.dir / self.kind.runaways) if self.kind.runaways else []
+        return Poll(status=status, exit=code, alive=alive, shards=[], runaways=runaways, report=report, started=True,
+                    grant=grant)
 
     def fetch(self, a, name, dest):
         raise AssertionError("a local shard is adopted in place")
@@ -1059,10 +1189,10 @@ class LocalHost:
         with (self.logs / f"recover-{a['id']}.log").open("w") as f:
             code = subprocess.call(cmd, cwd=self.cwd, stdout=f, stderr=subprocess.STDOUT, env={**os.environ, **(self.env or {})})
         if code != 0:
-            raise Unreachable(f"cantrip-selfplay --recover exited {code}")
+            raise Unreachable(f"{Path(str(self.command[0])).name} --recover exited {code}")
 
     def stop(self, a: dict, now: bool):
-        (self.dir / STOP_FILE).write_text("now\n" if now else "", encoding="utf-8")
+        (self.dir / self.kind.stop).write_text("now\n" if now else "", encoding="utf-8")
 
     def kill(self, a: dict):
         p = self.processes.get(a["id"])
@@ -1177,19 +1307,25 @@ def bundle_files(selfplay: Path, infer: Path, ort_dir: Path, cuda_dir: Path, mod
     return _with_data(files, model, decks, prior, pairings)
 
 
-def linux_bundle_files(source: Path, model: Path, decks: Path | None, prior: Path | None,
+def linux_bundle_files(source: Path, model, decks: Path | None, prior: Path | None,
                        pairings: Path | None) -> dict[str, Path]:
     """What a Linux worker needs (`LinuxSshHost`): the engine's source (`source_tar`), which it builds its binaries
     from, and the same model, decklists and pairings as a Windows worker's bundle; its GPU libraries are its own."""
     return _with_data({"src.tar.gz": source}, model, decks, prior, pairings)
 
 
-def _with_data(files: dict[str, Path], model: Path, decks: Path | None, prior: Path | None,
+def _with_data(files: dict[str, Path], model, decks: Path | None, prior: Path | None,
                pairings: Path | None) -> dict[str, Path]:
-    for p in sorted(model.rglob("*")):
-        rel = p.relative_to(model)
-        if p.is_file() and rel.parts[0] != "train" and p.name != "model.pt":
-            files[f"model/{model.name}/{rel.as_posix()}"] = p
+    """`files` with the data a run reads: the model (or models: a duel's two networks), each as `model/<its name>/`
+    without its training or its PyTorch weights, the decklists, the prior's decklists and the pairings."""
+    models = [model] if isinstance(model, Path) else list(model)
+    if len({m.name for m in models}) != len(models):
+        raise SystemExit("two models of one bundle share a directory name: " + ", ".join(str(m) for m in models))
+    for m in models:
+        for p in sorted(m.rglob("*")):
+            rel = p.relative_to(m)
+            if p.is_file() and rel.parts[0] != "train" and p.name != "model.pt":
+                files[f"model/{m.name}/{rel.as_posix()}"] = p
     for sub, d in (("decks", decks), ("prior", prior if prior and decks and prior.resolve() != decks.resolve() else None)):
         if d is not None:
             for p in sorted(d.glob("*.txt")):
@@ -1204,8 +1340,9 @@ def _with_data(files: dict[str, Path], model: Path, decks: Path | None, prior: P
 
 # What a Linux worker builds from (`source_tar`): the Cargo workspace and what its build scripts read.
 SOURCE_PATHS = ("Cargo.toml", "Cargo.lock", "rust-toolchain.toml", "crates", "content", "scenarios")
-# What it builds (`LINUX_BUILD`), as this machine's driver builds them: cantrip-selfplay and cantrip-explore with
-# onnxruntime (`--features ort`), cantrip-infer with the GPU engine (`--features gpu`).
+# What self-play's worker builds (`LINUX_BUILD`), as this machine's driver builds them: cantrip-selfplay and
+# cantrip-explore with onnxruntime (`--features ort`), cantrip-infer with the GPU engine (`--features gpu`). A duel's
+# worker builds the AI host and the native host too (`duels.LINUX_BINARIES`).
 LINUX_BINARIES = ("cantrip-selfplay", "cantrip-explore", "cantrip-infer")
 
 
@@ -1331,7 +1468,9 @@ try {
       if ($infer.HasExited -or (Get-Date) -gt $deadline) { $code = -2; throw 'the inference server did not start (infer.log)' }
       Start-Sleep -Milliseconds 300
     }
-    $arguments += @('--server', (Get-Content -Raw infer.ready).Trim())
+    $flag = '--server'
+    if ($job.server_flag) { $flag = $job.server_flag }
+    $arguments += @($flag, (Get-Content -Raw infer.ready).Trim())
   }
   $sp = Start-Process -FilePath $job.selfplay -ArgumentList $arguments -RedirectStandardOutput selfplay.out.log -RedirectStandardError selfplay.log -PassThru -NoNewWindow
   $null = $sp.Handle
@@ -1372,11 +1511,15 @@ class SshHost:
     remote = True
 
     def __init__(self, worker: dict, tag: str, gen: int, files: dict[str, Path], manifest: dict, bundle_hash: str,
-                 job, log=print, run=_shielded, lease: float = 900.0):
+                 job, log=print, run=_shielded, lease: float = 900.0, kind: Kind = SELFPLAY, task: str = "",
+                 binaries=LINUX_BINARIES):
         self.w, self.name, self.tag, self.gen = worker, worker["name"], tag, gen
         self.root = worker["root"].rstrip("/\\").replace("\\", "/")
         self.files, self.manifest, self.hash = files, manifest, bundle_hash
         self.job, self.log, self._run, self.lease = job, log, run, lease
+        # What its runs are (`Kind`), and the task's name, which prefixes its attempts' directories (a duel's, the
+        # judgements'): self-play's have none, as before.
+        self.kind, self.task, self.binaries = kind, task, tuple(binaries)
         self.pushed = False
         self.gpu = None
 
@@ -1414,8 +1557,8 @@ class SshHost:
         except ValueError as e:
             raise Unreachable(f"{self.name}: not JSON: {out[-300:]}") from e
 
-    def scp(self, src: str, dst: str, timeout: float = 3600):
-        cmd = ["scp", "-q", "-B", "-o", "ConnectTimeout=10", "-o", "StrictHostKeyChecking=accept-new"]
+    def scp(self, src: str, dst: str, timeout: float = 3600, recursive: bool = False):
+        cmd = ["scp", "-q", "-B", "-o", "ConnectTimeout=10", "-o", "StrictHostKeyChecking=accept-new"] + (["-r"] if recursive else [])
         if self.w.get("key"):
             cmd += ["-i", self.w["key"]]
         if self.w.get("port"):
@@ -1519,24 +1662,31 @@ function Link($rel, $sha) {{
     # Attempts.
 
     def attempt_dir(self, a: dict) -> str:
-        return f"{self.root}/gens/{self.tag}/gen{self.gen}/{self.name}/{a['id']}-{a.get('nonce', 'x')}"
+        task = f"{self.task}-" if self.task else ""
+        return f"{self.root}/gens/{self.tag}/gen{self.gen}/{self.name}/{task}{a['id']}-{a.get('nonce', 'x')}"
+
+    def out_dir(self, a: dict) -> str:
+        """Where an attempt's run writes its outputs, status and report (`Kind.out`)."""
+        return f"{self.attempt_dir(a)}/{self.kind.out}"
 
     def launch(self, a: dict, grant: str) -> dict:
         self.push()
         d = self.attempt_dir(a)
         job = self.job(self, a, d)
-        job["selfplay_args"] = list(job["selfplay_args"]) + ["--lease", f"{d}/heartbeat", "--lease-seconds", str(self.lease)]
+        if self.kind.lease:
+            job["selfplay_args"] = list(job["selfplay_args"]) + ["--lease", f"{d}/heartbeat", "--lease-seconds", str(self.lease)]
         for v in [job.get("infer") or "", job["selfplay"], *job.get("infer_args", []), *job["selfplay_args"]]:
             if " " in str(v) or '"' in str(v):
                 raise SystemExit(f"a worker's argument with a space or a quote cannot be passed: {v!r}")
+        out = self.kind.out
         r = self.ps_json(f"""
 $d = {ps_quote(d)}
-New-Item -ItemType Directory -Force "$d/selfplay" | Out-Null
+New-Item -ItemType Directory -Force "$d/{out}" | Out-Null
 function Put($name, $text) {{ [IO.File]::WriteAllText("$d/$name.tmp", [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($text))); Move-Item -Force "$d/$name.tmp" "$d/$name" }}
 Put 'run.ps1' {ps_quote(b64(RUN_PS1))}
 Put 'grant.txt' {ps_quote(b64(grant))}
 Put 'heartbeat' ''
-Remove-Item -ErrorAction SilentlyContinue "$d/selfplay/{STOP_FILE}", "$d/exit.json"
+Remove-Item -ErrorAction SilentlyContinue "$d/{out}/{self.kind.stop}", "$d/exit.json"
 $gpu = ''
 try {{ $gpu = (& nvidia-smi --query-gpu=name,driver_version --format=csv,noheader 2>$null | Select-Object -First 1) }} catch {{ $gpu = '' }}
 # job.json last: an attempt directory with one was launched (or is being launched); one without never started.
@@ -1564,15 +1714,17 @@ Move-Item -Force "$d/grant.txt.tmp" "$d/grant.txt"
         pids.json, or the supervisor its launch recorded), and only then its exit, status, shards, runaways, report and
         grant file."""
         d = self.attempt_dir(a)
+        k = self.kind
         launched = json.dumps(((a.get("launched") or {}).get("supervisor")) or {})
         deletes = ", ".join(ps_quote(n) for n in a.get("to_delete") or [])
+        runaways = f'(Raw "$d/{k.out}/{k.runaways}")' if k.runaways else "$null"
         r = self.ps_json(f"""
 $d = {ps_quote(d)}
 {_SAME}
 function Raw($p) {{ try {{ [IO.File]::ReadAllText($p) }} catch {{ $null }} }}
 $job = Test-Path "$d/job.json"
 if ($job) {{ if (Test-Path "$d/heartbeat") {{ [IO.File]::SetLastWriteTimeUtc("$d/heartbeat", [DateTime]::UtcNow) }} else {{ [IO.File]::WriteAllText("$d/heartbeat", '') }} }}
-foreach ($n in @({deletes})) {{ Remove-Item -Force -ErrorAction SilentlyContinue "$d/selfplay/$n" }}
+foreach ($n in @({deletes})) {{ Remove-Item -Recurse -Force -ErrorAction SilentlyContinue "$d/{k.out}/$n" }}
 $pids = Raw "$d/pids.json"
 $alive = $false
 $known = $false
@@ -1585,42 +1737,42 @@ if ($pids) {{
   if ($l.pid) {{ $known = $true; if (Same $l) {{ $alive = $true }} }}
 }}
 $exit = Raw "$d/exit.json"
-$shards = @(Get-ChildItem "$d/selfplay" -Filter *.shard.zst -File -ErrorAction SilentlyContinue | ForEach-Object {{ $_.Name }})
-$o = [ordered]@{{ job = $job; known = $known; status = (Raw "$d/selfplay/{STATUS}"); exit = $exit; pids = $pids; alive = $alive;
-  shards = $shards; runaways = (Raw "$d/selfplay/{RUNAWAYS}"); grant = (Raw "$d/grant.txt");
-  report = $(if ($exit) {{ Raw "$d/selfplay/selfplay-report.json" }} else {{ $null }}) }}
+$shards = @(Get-ChildItem "$d/{k.out}" -ErrorAction SilentlyContinue | Where-Object {{ $_.Name -like {ps_quote(k.outputs)} -and $_.PSIsContainer -eq ${str(k.dirs).lower()} }} | ForEach-Object {{ $_.Name }})
+$o = [ordered]@{{ job = $job; known = $known; status = (Raw "$d/{k.out}/{k.status}"); exit = $exit; pids = $pids; alive = $alive;
+  shards = $shards; runaways = {runaways}; grant = (Raw "$d/grant.txt");
+  report = $(if ($exit) {{ Raw "$d/{k.out}/{k.report}" }} else {{ $null }}) }}
 ConvertTo-Json -Compress -InputObject $o
 """)
 
         return poll_from(r, a)
 
     def fetch(self, a: dict, name: str, dest: Path):
-        rel = f"{self.attempt_dir(a)[len(self.root) + 1:]}/selfplay/{name}"
-        self.scp(self.remote_path(rel), str(dest), timeout=1800)
+        rel = f"{self.out_dir(a)[len(self.root) + 1:]}/{name}"
+        self.scp(self.remote_path(rel), str(dest), timeout=1800, recursive=self.kind.dirs)
 
     def fetch_logs(self, a: dict, dest: Path):
         """The attempt's logs, beside the generation's (best effort)."""
         dest.mkdir(parents=True, exist_ok=True)
         base = self.attempt_dir(a)[len(self.root) + 1:]
-        for n in ("selfplay.log", "infer.log"):
+        for n in ("selfplay.log", "infer.log") if self.kind is SELFPLAY else ("selfplay.out.log", "selfplay.log", "infer.log"):
             try:
                 self.scp(self.remote_path(f"{base}/{n}"), str(dest / f"{a['id']}-{n}"), timeout=300)
             except Unreachable:
                 pass
 
     def delete(self, a: dict, names: list[str]):
-        """Its shards accepted here, deleted there."""
-        d = self.attempt_dir(a)
+        """Its outputs accepted here, deleted there."""
+        d = self.out_dir(a)
         self.ps(f"""
 $d = {ps_quote(d)}
-foreach ($n in @({", ".join(ps_quote(n) for n in names)})) {{ Remove-Item -Force -ErrorAction SilentlyContinue "$d/selfplay/$n" }}
+foreach ($n in @({", ".join(ps_quote(n) for n in names)})) {{ Remove-Item -Recurse -Force -ErrorAction SilentlyContinue "$d/$n" }}
 """)
 
     def stop(self, a: dict, now: bool):
-        d = self.attempt_dir(a)
+        d = self.out_dir(a)
         self.ps(f"""
 $d = {ps_quote(d)}
-if (Test-Path "$d/selfplay") {{ Set-Content -Encoding Ascii -Path "$d/selfplay/{STOP_FILE}" -Value {ps_quote('now' if now else '')} }}
+if (Test-Path "$d") {{ Set-Content -Encoding Ascii -Path "$d/{self.kind.stop}" -Value {ps_quote('now' if now else '')} }}
 """)
 
     def kill(self, a: dict):
@@ -1630,7 +1782,7 @@ if (Test-Path "$d/selfplay") {{ Set-Content -Encoding Ascii -Path "$d/selfplay/{
         self.ps(f"""
 $d = {ps_quote(d)}
 {_SAME}
-if (Test-Path "$d/selfplay") {{ Set-Content -Encoding Ascii -Path "$d/selfplay/{STOP_FILE}" -Value 'now' }}
+if (Test-Path "$d/{self.kind.out}") {{ Set-Content -Encoding Ascii -Path "$d/{self.kind.out}/{self.kind.stop}" -Value 'now' }}
 $p = $null
 if (Test-Path "$d/pids.json") {{ $p = Get-Content -Raw "$d/pids.json" | ConvertFrom-Json }}
 $all = @()
@@ -1694,23 +1846,36 @@ PY
 echo "[$(date -Is)] done"
 """
 
-# A Linux worker's binaries from a bundle's source (`bash build.sh ROOT SHA`, detached; `builds/SHA/build.log`):
-# unpacked into `src/SHA`, built with cargo's `target/` shared by every build (a change rebuilds only what it
-# touches), the binaries copied into `builds/SHA/` and `done` written last.
+# A Linux worker's binaries from a bundle's source (`bash build.sh ROOT SHA NAME...`, detached;
+# `builds/SHA/build.log`): unpacked into `src/SHA`, the named binaries built as this machine's driver builds them,
+# with cargo's `target/` shared by every build (a change rebuilds only what it touches; the recording native host in
+# a `target-record/` of its own, as here), each copied into `builds/SHA/` once built (written whole, then renamed).
 LINUX_BUILD = r"""#!/bin/bash
 set -eu
-R=$1; S=$2
+R=$1; S=$2; shift 2
 source "$HOME/.cargo/env"
-echo "[$(date -Is)] build $S"
+echo "[$(date -Is)] build $S: $*"
 rm -rf "$R/src/$S"; mkdir -p "$R/src/$S"
 tar -xzf "$R/blobs/$S" -C "$R/src/$S"
 cd "$R/src/$S"
-export CARGO_TARGET_DIR="$R/target"
-cargo build --release -p cantrip-ai-host --features ort --bin cantrip-selfplay --bin cantrip-explore
-cp "$R/target/release/cantrip-selfplay" "$R/target/release/cantrip-explore" "$R/builds/$S/"
-cargo build --release -p cantrip-ai-host --features gpu --bin cantrip-infer
-cp "$R/target/release/cantrip-infer" "$R/builds/$S/"
-touch "$R/builds/$S/done"
+put() { cp "$1" "$R/builds/$S/$2.tmp"; mv -f "$R/builds/$S/$2.tmp" "$R/builds/$S/$2"; }
+for n in "$@"; do
+  case "$n" in
+    cantrip-selfplay|cantrip-explore|cantrip-ai-host)
+      CARGO_TARGET_DIR="$R/target" cargo build --release -p cantrip-ai-host --features ort --bin "$n"
+      put "$R/target/release/$n" "$n" ;;
+    cantrip-infer)
+      CARGO_TARGET_DIR="$R/target" cargo build --release -p cantrip-ai-host --features gpu --bin cantrip-infer
+      put "$R/target/release/cantrip-infer" "$n" ;;
+    cantrip-native-host)
+      CARGO_TARGET_DIR="$R/target" cargo build --profile cards -p cantrip-host --bin cantrip-native-host
+      put "$R/target/cards/cantrip-native-host" "$n" ;;
+    cantrip-native-host-record)
+      CARGO_TARGET_DIR="$R/target-record" cargo build --profile cards -p cantrip-host --bin cantrip-native-host --features ai-record
+      put "$R/target-record/cards/cantrip-native-host" "$n" ;;
+    *) echo "no such binary: $n"; exit 1 ;;
+  esac
+done
 echo "[$(date -Is)] done"
 """
 
@@ -1771,8 +1936,16 @@ def pin_plan(allowed, siblings, quota, server_cores=PIN_SERVER_CORES, lanes_per_
                 lanes=max(1, round(lanes_per_core * n)) if lanes_per_core else None)
 
 
-def with_lanes(arguments: list, lanes: int) -> list:
-    """Self-play's arguments with `lanes` lanes, all of them from the start (the governor's growth off)."""
+def with_lanes(arguments: list, lanes: int, flag: str | None = None) -> list:
+    """Self-play's arguments with `lanes` lanes, all of them from the start (the governor's growth off); with `flag`,
+    another run's (a duel's `--parallel`) with that argument set to `lanes`."""
+    if flag:
+        out = list(arguments)
+        if flag in out[:-1]:
+            out[out.index(flag) + 1] = str(lanes)
+        else:
+            out += [flag, str(lanes)]
+        return out
     out = [a for a in arguments if a != "--autoscale"]
     if "--lanes" in out:
         out[out.index("--lanes") + 1] = str(lanes)
@@ -1782,10 +1955,11 @@ def with_lanes(arguments: list, lanes: int) -> list:
 
 
 # A Linux attempt's supervisor (`run.py` in its directory, started in a session of its own): job.json's cantrip-infer
-# (until its ready file) and cantrip-selfplay, with job.json's environment and the worker's `env.json`; pids.json as
-# each starts, exit.json when self-play ends; the server stopped with it. What `RUN_PS1` does on Windows. With
-# job.json's `pin`, the two are pinned to the box's cores (`pin_plan`, written to pin.json; nothing is pinned where the
-# topology cannot be read), and with its `lanes_per_core` the lanes are that many a self-play core.
+# (until its ready file) and cantrip-selfplay (or the run's own process, given the server's address by its
+# `server_flag`), with job.json's environment and the worker's `env.json`; pids.json as each starts, exit.json when the
+# run ends; the server stopped with it. What `RUN_PS1` does on Windows. With job.json's `pin`, the two are pinned to the
+# box's cores (`pin_plan`, written to pin.json; nothing is pinned where the topology cannot be read), and with its
+# `lanes_per_core` the lanes (`lanes_flag`'s, a duel's games at once) are that many a self-play core.
 RUN_PY = r'''
 import json, os, subprocess, sys, time
 
@@ -1841,7 +2015,7 @@ try:
     save("pids.json", pids)
     arguments = list(job["selfplay_args"])
     if plan and plan.get("lanes"):
-        arguments = with_lanes(arguments, plan["lanes"])
+        arguments = with_lanes(arguments, plan["lanes"], job.get("lanes_flag"))
     if job.get("infer"):
         if os.path.exists("infer.ready"):
             os.remove("infer.ready")
@@ -1855,7 +2029,7 @@ try:
                 code = -2
                 raise RuntimeError("the inference server did not start (infer.log)")
             time.sleep(0.3)
-        arguments += ["--server", open("infer.ready", encoding="utf-8").read().strip()]
+        arguments += [job.get("server_flag") or "--server", open("infer.ready", encoding="utf-8").read().strip()]
     sp = subprocess.Popen([job["selfplay"], *arguments], stdin=subprocess.DEVNULL, stdout=open("selfplay.out.log", "wb"),
                           stderr=open("selfplay.log", "wb"), env=env, preexec_fn=on(plan and plan["selfplay"]))
     pids["selfplay"] = who(sp.pid)
@@ -2035,6 +2209,8 @@ for rel, m in A["manifest"].items():
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     remove(dst)
     os.link(f"{ROOT}/blobs/{m['sha256']}", dst)
+for rel in A["executables"]:
+    os.chmod(f"{b}/{rel}", 0o755)
 
 
 def started(script, argv, pidfile, log):
@@ -2053,11 +2229,12 @@ if not os.path.exists(f"{ROOT}/env.json"):
     sys.exit(0)
 s = A["source"]
 built = f"{ROOT}/builds/{s}"
-if not os.path.exists(f"{built}/done"):
+missing = [n for n in A["binaries"] if not os.path.exists(f"{built}/{n}")]
+if missing:
     os.makedirs(built, exist_ok=True)
     if not running(f"{built}/pid.json"):
         before = tail(f"{built}/build.log", 3)
-        started(f"{ROOT}/build.sh", [ROOT, s], f"{built}/pid.json", f"{built}/build.log")
+        started(f"{ROOT}/build.sh", [ROOT, s, *missing], f"{built}/pid.json", f"{built}/build.log")
         out(dict(state="building", note=f"started (the last build ended: {before})" if before else "started"))
     else:
         out(dict(state="building", note=tail(f"{built}/build.log")))
@@ -2073,11 +2250,11 @@ out(dict(state="ready"))
 
 _LINUX_LAUNCH = r'''
 d = A["d"]
-os.makedirs(f"{d}/selfplay", exist_ok=True)
+os.makedirs(f"{d}/{A['out']}", exist_ok=True)
 put(f"{d}/run.py", A["run"])
 put(f"{d}/grant.txt", A["grant"])
 put(f"{d}/heartbeat", "")
-remove(f"{d}/selfplay/{A['stop_file']}")
+remove(f"{d}/{A['out']}/{A['stop_file']}")
 remove(f"{d}/exit.json")
 try:
     gpu = subprocess.run(["nvidia-smi", "--query-gpu=name,driver_version", "--format=csv,noheader"], capture_output=True,
@@ -2099,7 +2276,8 @@ if job:
     except OSError:
         put(f"{d}/heartbeat", "")
 for n in A["deletes"]:
-    remove(f"{d}/selfplay/{n}")
+    p = f"{d}/{A['out']}/{n}"
+    shutil.rmtree(p, ignore_errors=True) if os.path.isdir(p) else remove(p)
 pids = read(f"{d}/pids.json")
 alive = known = False
 if pids:
@@ -2113,16 +2291,17 @@ elif (A["launched"] or {}).get("pid"):
     known = True
     alive = same(A["launched"])
 ex = read(f"{d}/exit.json")
-out(dict(job=job, known=known, status=read(f"{d}/selfplay/{A['status']}"), exit=ex, pids=pids, alive=alive,
-         shards=sorted(os.path.basename(f) for f in glob.glob(f"{d}/selfplay/*.shard.zst")),
-         runaways=read(f"{d}/selfplay/{A['runaways']}"), grant=read(f"{d}/grant.txt"),
-         report=read(f"{d}/selfplay/selfplay-report.json") if ex else None))
+o = f"{d}/{A['out']}"
+out(dict(job=job, known=known, status=read(f"{o}/{A['status']}"), exit=ex, pids=pids, alive=alive,
+         shards=sorted(os.path.basename(f) for f in glob.glob(f"{o}/{A['outputs']}") if os.path.isdir(f) == A["dirs"]),
+         runaways=read(f"{o}/{A['runaways']}") if A["runaways"] else None, grant=read(f"{d}/grant.txt"),
+         report=read(f"{o}/{A['report']}") if ex else None))
 '''
 
 _LINUX_KILL = r'''
 d = A["d"]
-if os.path.isdir(f"{d}/selfplay"):
-    put(f"{d}/selfplay/{A['stop_file']}", "now")
+if os.path.isdir(f"{d}/{A['out']}"):
+    put(f"{d}/{A['out']}/{A['stop_file']}", "now")
 try:
     p = json.loads(read(f"{d}/pids.json") or "null")
 except ValueError:
@@ -2202,8 +2381,11 @@ class LinuxSshHost(SshHost):
                          f"{len(self.manifest) - len(want)} there already")
             for sha, p in want.items():
                 self.scp(str(p), self.remote_path(f"blobs/{sha}.tmp"))
+            # What the bundle carries ready to run (a duel's BotLab, built here): executable there.
+            executables = [rel for rel in self.manifest if rel.startswith("botlab/")]
             r = self.py_json(_LINUX_ASSEMBLE, timeout=1800, hash=self.hash, manifest=self.manifest, check=sorted(want),
-                             source=self.source(), binaries=list(LINUX_BINARIES), setup=LINUX_SETUP, build=LINUX_BUILD)
+                             source=self.source(), binaries=list(self.binaries), setup=LINUX_SETUP, build=LINUX_BUILD,
+                             executables=executables)
             if r.get("state") != "ready":
                 raise Unreachable(f"{self.name}: {r.get('state')}: {r.get('note') or '...'}")
             self.log(f"  [{self.name}] bundle {self.hash} ready (built from source {self.source()[:16]})")
@@ -2213,15 +2395,18 @@ class LinuxSshHost(SshHost):
         self.push()
         d = self.attempt_dir(a)
         job = self.job(self, a, d)
-        job["selfplay_args"] = list(job["selfplay_args"]) + ["--lease", f"{d}/heartbeat", "--lease-seconds", str(self.lease)]
+        if self.kind.lease:
+            job["selfplay_args"] = list(job["selfplay_args"]) + ["--lease", f"{d}/heartbeat", "--lease-seconds", str(self.lease)]
         job["env_file"] = f"{self.root}/env.json"
         # The box's cores (`pin_plan`): pinned unless the worker says `"pin": false`, and the lanes `LANES_PER_CORE`
-        # a self-play core unless it names its `lanes`. mimalloc keeps what a search frees instead of returning it to
-        # the system and faulting it back (each full search's tree: ~250,000 faults a second over a box, 9% of the CPU).
-        job["pin"] = self.w.get("pin", True)
-        job["lanes_per_core"] = None if self.w.get("lanes") else self.w.get("lanes_per_core", LANES_PER_CORE)
+        # a self-play core unless it names its `lanes` (a job may say otherwise: a duel's games at once). mimalloc keeps
+        # what a search frees instead of returning it to the system and faulting it back (each full search's tree:
+        # ~250,000 faults a second over a box, 9% of the CPU).
+        job.setdefault("pin", self.w.get("pin", True))
+        if "lanes_per_core" not in job:
+            job["lanes_per_core"] = None if self.w.get("lanes") else self.w.get("lanes_per_core", LANES_PER_CORE)
         job["env"] = {**(job.get("env") or {}), "MIMALLOC_PURGE_DELAY": "-1"}
-        r = self.py_json(_LINUX_LAUNCH, d=d, job=job, grant=grant, run=RUN_PY, stop_file=STOP_FILE)
+        r = self.py_json(_LINUX_LAUNCH, d=d, job=job, grant=grant, run=RUN_PY, stop_file=self.kind.stop, out=self.kind.out)
         self.gpu = (r.get("gpu") or "").strip() or None
         return dict(launched=dict(supervisor=r.get("supervisor")), remote_dir=d, gpu=self.gpu, **(job.get("record") or {}))
 
@@ -2229,19 +2414,22 @@ class LinuxSshHost(SshHost):
         self.py('put(f"{A[\'d\']}/grant.txt", A["text"])\n', d=self.attempt_dir(a), text=text)
 
     def poll(self, a: dict) -> Poll:
+        k = self.kind
         r = self.py_json(_LINUX_POLL, d=self.attempt_dir(a), deletes=list(a.get("to_delete") or []),
-                         launched=((a.get("launched") or {}).get("supervisor")) or {}, status=STATUS, runaways=RUNAWAYS)
+                         launched=((a.get("launched") or {}).get("supervisor")) or {}, out=k.out, status=k.status,
+                         runaways=k.runaways, outputs=k.outputs, dirs=k.dirs, report=k.report)
         return poll_from(r, a)
 
     def delete(self, a: dict, names: list[str]):
-        self.py('for n in A["names"]:\n    remove(f"{A[\'d\']}/selfplay/{n}")\n', d=self.attempt_dir(a), names=list(names))
+        self.py('for n in A["names"]:\n    p = f"{A[\'d\']}/{n}"\n    shutil.rmtree(p, ignore_errors=True) if os.path.isdir(p) else remove(p)\n',
+                d=self.out_dir(a), names=list(names))
 
     def stop(self, a: dict, now: bool):
-        self.py('if os.path.isdir(f"{A[\'d\']}/selfplay"):\n    put(f"{A[\'d\']}/selfplay/{A[\'stop_file\']}", A["text"])\n',
-                d=self.attempt_dir(a), stop_file=STOP_FILE, text="now" if now else "")
+        self.py('if os.path.isdir(A["d"]):\n    put(f"{A[\'d\']}/{A[\'stop_file\']}", A["text"])\n',
+                d=self.out_dir(a), stop_file=self.kind.stop, text="now" if now else "")
 
     def kill(self, a: dict):
-        self.py(_LINUX_KILL, d=self.attempt_dir(a), stop_file=STOP_FILE,
+        self.py(_LINUX_KILL, d=self.attempt_dir(a), stop_file=self.kind.stop, out=self.kind.out,
                 launched=((a.get("launched") or {}).get("supervisor")) or {})
 
     def recover(self, a: dict):

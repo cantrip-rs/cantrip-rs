@@ -246,7 +246,7 @@ own, started and stopped by the driver; the ones marked optional run only when a
 | train | fine-tunes the champion on the window of recent generations (`--window`, `--older-weight`, `--imitation-weight`); the window never holds the held-out set |
 | export | ONNX models and the manifest, to `models/genN` |
 | parity | the Rust evaluators against PyTorch on held-out positions, and with the GPU server, the server too (it checks the references itself as it starts) |
-| gate | the candidate against the champion in BotLab on self-play's metagame pairings, scored by pair, by `--accept` (below) over at most `--gate-games` (6,000) |
+| gate | the candidate against the champion in BotLab on self-play's metagame pairings, scored by pair, by `--accept` (below) over at most `--gate-games` (6,000); with `--workers`, on other machines too ("Distributed duels"), as are the network duel, the ladder and the miner's replays |
 | promote | an accepted candidate goes to `champions/genN` and becomes `champions/current` |
 | netduel (optional) | `--net-duel-games N`: the candidate's network against the champion's, no search, by pair: a measurement |
 | evaluate (when a held-out set exists) | `value_eval` on the held-out set, candidate and champion: value MSE and ECE, policy CE and top-1 against its full searches' targets |
@@ -301,7 +301,8 @@ nothing run by hand on them (`ai/cantrip_ai/distributed.py`). Off by default; wi
 (its lane ceiling, `--worker-lanes` 256 otherwise: its governor scales below it to its first limiter), `device` (its
 CUDA device, 0), `server_args` (its `cantrip-infer`'s; otherwise `--worker-server-args`, which defaults to
 `--server-args` with `--server-impl native` and else to `--precision fp16 --pipelines 1`, the native server's settings
-for self-play; `--shapes` is refused, since smaller batch shapes make a game depend on its batch companions), `backend` (`gpu`, the default:
+for self-play; `--shapes` is refused, since smaller batch shapes make a game depend on its batch companions),
+`duel_parallel` (its games at once in a distributed duel: "Distributed duels" below), `backend` (`gpu`, the default:
 `cantrip-infer` on its GPU; or `tract`/`ort`: no server, the CPU), `os` (`windows`, the default, or `linux`: "A Linux
 worker" below), `enabled: false` to leave it out, and anything else as notes.
 
@@ -468,6 +469,56 @@ self-play. `--no-selfplay-local` leaves this machine out of the self-play.
 python -m cantrip_ai.generation --root ../../ai-data ... --workers ../../ai-data/compute/workers.json
 python -m cantrip_ai.generation --root ../../ai-data --stop     # from another terminal
 ```
+
+### Distributed duels
+
+With `--workers`, the gate, the network duel, the ladder's duels and the pair miner's replays are split across this
+machine and the workers too (`ai/cantrip_ai/duels.py`; `--no-dist-duels` keeps them here, `--no-duel-local` leaves this
+machine out of them). A duel's game is a function of its number and the duel's settings (its deal from `--seed` and
+the number, its seats and decks from the number, its searches seeded by the number), so a duel is split as self-play
+is, by the same coordinator, ledger, bundles and supervisors: each host runs BotLab's grant mode (`duel --grant FILE
+--out DIR`, the grant file self-play's format) beside an inference server of its own, and returns its results in
+closed files of a few games each (`*.results.tsv`, a line a game, each headed by the duel's header). The driver asks
+BotLab for that header before any game (`duel --print-header`: the seats, the seeds, the decks, the pairings and the
+models by content, no path) and accepts a file only if it carries it and its games are its host's to play. Pairs
+(games 2k and 2k + 1) are granted whole, so each pair is played on one host. A game that does not finish is played
+once more elsewhere, and a game that fails twice fails the duel, as it fails one machine's.
+
+At the end the results are merged into `genN/logs/NAME-results.tsv` (the file one machine's `--results` writes, in
+the order the games came in) and BotLab summarises it: `duel --summarize FILE` counts each line as a duel counts a game
+as it ends, with the same code, and prints the same lines (all but the time an answer took, which no results file
+holds), which go to `genN/logs/NAME.log`, where the driver reads the verdict as before; a last line names each host's
+part. Played whole on one machine or split across several, a duel's games and summary are the same where the hosts
+compute alike: `ai/tests/test_duels.py`'s `WholeAndSplitTest` plays a duel whole and split across this machine and a
+worker (on the loopback) and checks it. A different GPU can round differently, so a game's evaluations, and so its
+play, are exactly reproducible on the hardware that played it; every host of a duel runs `cantrip-infer` with the
+same arguments (`--duel-server-args`; by default `--server-args` with `--server-impl native`, else `cantrip-infer`'s
+own, fp32; `--shapes` refused), this machine's too, and the ledger's identity holds them.
+
+A sequential stop (`--accept sprt`, `sprt-paired`, or `above-half` with `--gate-early-stop`) is the driver's: after each
+poll that brought results it summarises them so far, in the order they came, and once a test has its verdict nothing
+more is granted, every host is asked to stop starting games (its stop file), and the games in play finish and count,
+as one machine's duel stops; the rest are skipped. The summary replays the stop over the merged lines, so its verdict
+line is the driver's.
+
+The pair miner's replays of a distributed gate are distributed by the gate: each game is played again on the host
+that played it in the gate (its ledger says which), with the recorder on (`--ai-record` in grant mode records into the
+host's output, `RUN.replay/`, a directory with the results and the recordings closed together once the recorder has
+written them, so no result comes home without its recording); a host that is gone (failed three times, or out of
+reach past `--worker-timeout`) has its games replayed by the others, and the miner's check of every replay against
+the gate keeps or leaves out their pairs as it does any replay.
+
+A worker's duel bundle is the self-play bundle's kind, pushed the same way, each file once: BotLab published
+self-contained in one file (`dotnet publish -r win-x64` or `linux-x64`, by the build stage when `--workers` is given,
+into `dotnet/tools/Cantrip.BotLab/bin/publish/`), the native host (and the recording one for replays), the AI host,
+`cantrip-infer` and its libraries, the duel's models, decklists and pairings; BotLab finds the bundle as its root by
+`CANTRIP_ROOT`. A Linux worker builds the AI host, the native host and `cantrip-infer` from the bundle's source (and the
+recording native host for replays) as it builds self-play's binaries, each once a source. A worker's attempts of a
+duel are `gens/<root tag>/genN/<name>/<duel>-<attempt>-<nonce>/`, and a duel's ledger is `genN/dist/<duel>/ledger.json`
+(results in `genN/dist/<duel>/results/`): a restarted driver re-attaches as self-play's does, and a duel already
+complete is only merged and summarised again. A worker plays `--worker-duel-parallel` (32) games at once, or its own
+`duel_parallel`; on Linux, pinned as self-play is, `lanes_per_core` a pinned core. A duel's games without a decks
+directory (`--decks-dir ''`, the fixed slice) are played here.
 
 ### The gate, by pair
 

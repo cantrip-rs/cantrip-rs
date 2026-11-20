@@ -83,6 +83,9 @@ Distributed self-play (docs/ai-training.md, "Distributed self-play"): `--workers
 machine and on the workers the file names, over SSH (`distributed.py`): each game index played exactly once across
 them, handed out on demand, the shards pulled back into `genN/selfplay` as they close, checked, and recorded with the
 host that played them (`genN/selfplay/HOSTS.json`). Off by default, and with it off nothing changes.
+With `--workers` the duels are distributed too (docs/ai-training.md, "Distributed duels"; `duels.py`): the gate, the
+network duel, the ladder and the pair miner's replays, each game played on one host, the results merged and summarised
+by BotLab as one machine's duel (`--no-dist-duels` keeps them here, `--no-duel-local` leaves this machine out).
 `generation.py --root ROOT --stop` (`--stop-now`: the games in flight too) writes `selfplay.stop` in the current
 generation's self-play directory: self-play stops gracefully as at Ctrl-C (exit 3), and a distributed driver stops its
 workers the same way. The driver removes the file when it runs the stage again.
@@ -106,7 +109,7 @@ import sys
 import time
 from pathlib import Path
 
-from . import distributed, mining, retention
+from . import distributed, duels, mining, retention
 
 REPO = Path(__file__).resolve().parents[2]
 # heldout, netduel, evaluate and ladder run only when asked for (or, evaluate, when a held-out set exists). The
@@ -130,6 +133,12 @@ EXPLORE = REPO / f"target/release/cantrip-explore{EXE}"
 # The native host that records every position of a table's games (`--features ai-record`), built apart: the pair
 # miner's replays (`mining.py`). The recorder changes nothing a game does.
 RECORD_NATIVE = REPO / f"target/record/cards/cantrip-native-host{EXE}"
+# BotLab published self-contained, one file, for a worker's duels (`duels.py`): by the build stage, for each kind of
+# worker the workers file names.
+BOTLAB_PUBLISH = REPO / "dotnet/tools/Cantrip.BotLab/bin/publish"
+BOTLAB_RIDS = {"windows": ("win-x64", "cantrip-botlab.exe"), "linux": ("linux-x64", "cantrip-botlab")}
+# BotLab's sequential stops: a distributed duel's are the driver's (`duels.sequential_stop`), not each host's.
+STOP_FLAGS = ("--sprt", "--sprt-paired", "--interval-stop")
 # With the GPU server, lanes and gate games a CPU thread: they wait on the server, so more than the cores keep the GPU
 # fed (measured on 32 threads and an RTX 4080; docs/ai-training.md).
 SERVER_LANES = 2
@@ -1129,6 +1138,16 @@ def main(argv=None):
                         f"--server-args with --server-impl native, else '{distributed.WORKER_SERVER_ARGS}'. --shapes is refused")
     a.add_argument("--dist-lease", type=float, default=900.0, metavar="S",
                    help="with --workers: a self-play whose coordinator has not polled it for this long stops gracefully")
+    a.add_argument("--dist-duels", action=argparse.BooleanOptionalAction, default=True,
+                   help="with --workers: the gate, the network duel, the ladder and the pair miner's replays played on "
+                        "this machine and the workers too (docs/ai-training.md, \"Distributed duels\")")
+    a.add_argument("--duel-local", action=argparse.BooleanOptionalAction, default=True,
+                   help="with --workers: this machine plays its part of each distributed duel")
+    a.add_argument("--duel-server-args", default=None,
+                   help="every host's cantrip-infer in a distributed duel, one string (default: --server-args with "
+                        "--server-impl native, else cantrip-infer's own defaults, fp32); --shapes is refused")
+    a.add_argument("--worker-duel-parallel", type=int, default=32,
+                   help="a worker's duel games at once (its own `duel_parallel` wins; on Linux, pinned, 1.7 a core)")
     a.add_argument("--abandon-workers", action="store_true",
                    help="finish a distributed generation's self-play on this machine alone, without its ledger")
     a.add_argument("--stop", action="store_true",
@@ -1227,6 +1246,14 @@ def main(argv=None):
                 env=dict(CARGO_TARGET_DIR=str(REPO / "target" / "record")), stream=show_progress)
         run([*dotnet(), "build", "dotnet/tools/Cantrip.BotLab/Cantrip.BotLab.csproj", "-c", "Release", "-v", "q", "--nologo"],
             gen_dir / "logs/build-botlab.log", args.dry_run, env=dict(DOTNET_ROLL_FORWARD="Major"), stream=show_progress)
+        if duels_distributed():
+            # BotLab for the workers: self-contained, one file, for each kind of worker there is.
+            for kind in sorted({w.get("os", "windows") for w in load_workers()}):
+                rid, _ = BOTLAB_RIDS[kind]
+                run([*dotnet(), "publish", "dotnet/tools/Cantrip.BotLab/Cantrip.BotLab.csproj", "-c", "Release", "-r", rid,
+                     "--self-contained", "-p:PublishSingleFile=true", "-p:IncludeNativeLibrariesForSelfExtract=true",
+                     "-o", BOTLAB_PUBLISH / rid, "-v", "q", "--nologo"], gen_dir / f"logs/build-botlab-{rid}.log",
+                    args.dry_run, env=dict(DOTNET_ROLL_FORWARD="Major"), stream=show_progress)
 
     def selfplay_command(exe, model, out, lanes) -> list:
         """cantrip-selfplay's command line but for its decks, its resume and its backend: the same on every host."""
@@ -1587,13 +1614,100 @@ def main(argv=None):
             listed.write_text("".join(p + "\n" for p in metagame_pairings(pool, max(1, (games + 1) // 2), at)), encoding="utf-8")
         return ["--decks", decks_dir, "--ai-prior", decks_dir, "--pairings", listed]
 
+    def load_workers() -> list[dict]:
+        return distributed.load_workers(Path(args.workers)) if args.workers else []
+
+    def duels_distributed() -> bool:
+        return bool(args.workers) and args.dist_duels
+
+    def worker_libraries() -> tuple[Path | None, Path | None]:
+        """What a Windows worker's cantrip-infer loads: onnxruntime-gpu's directory and CUDA's libraries'."""
+        cuda = os.environ.get("CANTRIP_CUDA_LIBS")
+        if not cuda:
+            with contextlib.suppress(ImportError):
+                import torch  # noqa: PLC0415
+
+                cuda = str(Path(torch.__file__).parent / "lib")
+        return (Path(args.ort_dylib).parent if args.ort_dylib else None), (Path(cuda) if cuda else None)
+
+    duel_setup_made: list = []
+
+    def duel_setup() -> duels.Setup:
+        """What every distributed duel of this generation shares (`duels.Setup`): made once."""
+        if duel_setup_made:
+            return duel_setup_made[0]
+        workers = load_workers()
+        server_args = args.duel_server_args
+        if server_args is None:
+            server_args = args.server_args if args.server_impl == "native" else ""
+        words = distributed.worker_server_args({"name": "every host of a duel", "server_args": server_args}, "")
+        ort_dir, cuda_dir = worker_libraries()
+        cache = distributed.read_json(root / "dist" / "hashes.json") or {}
+
+        def local_server(models: list[Path]):
+            # Every host's server of a duel is cantrip-infer with the same arguments, this machine's too.
+            return InferenceServer(models, gen_dir / "logs" / "server-duel.log", args.server_device or args.device, words,
+                                   args.dry_run, log, native=True, ort_dylib=args.ort_dylib)
+
+        setup = duels.Setup(
+            root=root, gen=gen, gen_dir=gen_dir, repo=REPO, workers=workers, local=args.duel_local,
+            local_name=distributed.local_name(), botlab_local=[*dotnet(), BOTLAB],
+            botlab={kind: BOTLAB_PUBLISH / rid / exe for kind, (rid, exe) in BOTLAB_RIDS.items()},
+            native=NATIVE, record_native=RECORD_NATIVE, ai_host=AI_HOST, infer=INFER, ort_dir=ort_dir, cuda_dir=cuda_dir,
+            cuda_dlls=tuple(n.strip() for n in args.worker_cuda_dlls.split(",") if n.strip()), server_args=words,
+            local_parallel=args.gate_parallel, worker_parallel=args.worker_duel_parallel,
+            server=local_server if server else None, lease=args.dist_lease, poll=args.dist_poll,
+            timeout=args.worker_timeout, log=log, cache=cache)
+        duel_setup_made.append(setup)
+        return setup
+
+    def save_hashes():
+        if duel_setup_made:
+            (root / "dist").mkdir(parents=True, exist_ok=True)
+            distributed.write_atomic(root / "dist" / "hashes.json", json.dumps(duel_setup_made[0].cache))
+
+    def distributed_duel(name: str, duel_args: list, stops: list, models: list[Path], games: int, at: int, kind=duels.DUEL,
+                         only=None, affinity=None, record: str | None = None, env: dict | None = None):
+        """A duel across this machine and the workers (`duels.run`): its results merged into genN/logs/NAME-results.tsv,
+        as one machine writes them, and BotLab's summary of them in genN/logs/NAME.log. Returns the summary's text,
+        the ledger and the results directory; a game that did not finish fails it, as it fails one machine's."""
+        setup = duel_setup()
+        pairings = next((Path(duel_args[k + 1]) for k in range(len(duel_args) - 1) if duel_args[k] == "--pairings"), None)
+        unique = list(dict.fromkeys(Path(m) for m in models))
+        try:
+            ledger, out, rows, seconds = duels.run(setup, name, duel_args, unique, games, at, decks_dir, pairings, kind=kind,
+                                                   only=only, affinity=affinity, stops=stops, record=record, env=env)
+        finally:
+            save_hashes()
+        results = gen_dir / "logs" / f"{name}-results.tsv"
+        duels.write_results(rows, results)
+        code, text = duels.summarize(setup, [str(x) for x in duel_args], results, seconds, stops)
+        hosts = duels.host_rows(ledger)
+        text += "\nPlayed on " + "; ".join(f"{h}: {r['games']} games" for h, r in hosts.items()) + f" (ledger {out.parent / 'ledger.json'}).\n"
+        (gen_dir / "logs" / f"{name}.log").write_text(text, encoding="utf-8")
+        if code != 0:
+            raise SystemExit(f"{name}: a game did not finish on any host it was given to (the summary: "
+                             f"{gen_dir / 'logs' / f'{name}.log'})")
+        return text, ledger, out
+
     def duel(name: str, a: str, b: str, models: list[Path], games: int, at: int, extra: list, b_model: Path | None) -> dict | None:
         """A BotLab duel, A playing `models[0]`, B `b_model` (or a BotLab seat by name), logged to genN/logs/NAME.log;
-        its summary read by `parse_gate`, or None in a dry run."""
-        cmd = [*dotnet(), BOTLAB, "duel", "--a", a, "--b", b, "--model", models[0]]
+        its summary read by `parse_gate`, or None in a dry run. With `--workers` (and `--dist-duels`), played across
+        this machine and the workers (`distributed_duel`)."""
+        seats = ["duel", "--a", a, "--b", b, "--model", models[0]]
         if b_model is not None:
-            cmd += ["--model-b", b_model]
-        cmd += [*dealt(name, games, at), "--games", games, "--parallel", args.gate_parallel, "--seed", at, *extra]
+            seats += ["--model-b", b_model]
+        decks = dealt(name, games, at)
+        if duels_distributed() and decks_dir is not None:
+            # The sequential stops are the driver's (each host plays what it is granted); every other argument the same.
+            duel_args = [*seats, *decks, "--games", games, "--seed", at, *[x for x in extra if x not in STOP_FLAGS]]
+            stops = [x for x in extra if x in STOP_FLAGS]
+            if args.dry_run:
+                log(f"  would play {name} across this machine and the workers: BotLab {' '.join(str(x) for x in duel_args + stops)}")
+                return None
+            text, ledger, _ = distributed_duel(name, duel_args, stops, models, games, at)
+            return dict(parse_gate(text), hosts=duels.host_rows(ledger))
+        cmd = [*dotnet(), BOTLAB, *seats, *decks, "--games", games, "--parallel", args.gate_parallel, "--seed", at, *extra]
         # Every game's result beside the log (BotLab's --results): at a fixed budget a game is played again exactly from
         # its number and the duel's seed, seats and decks (--only-games), so any pair's positions can be mined later.
         cmd += ["--results", gen_dir / "logs" / f"{name}-results.tsv"]
@@ -1649,7 +1763,11 @@ def main(argv=None):
                "CANTRIP_AI_TRACES": "1"}
         p.replay.mkdir(parents=True, exist_ok=True)
         replayed = []
-        with server_for([model_dir, champ], "mine-replay") if not resumed else contextlib.nullcontext(None) as gpu:
+        # A distributed gate's games are replayed each on the host that played it (`duels.REPLAY`): a game replays
+        # exactly only on that hardware.
+        gate_ledger = gen_dir / "dist" / "gate" / "ledger.json"
+        spread = duels_distributed() and gate_ledger.exists() and decks_dir is not None
+        with server_for([model_dir, champ], "mine-replay") if not resumed and not spread else contextlib.nullcontext(None) as gpu:
             for half in ("first", "second"):
                 games = p.selected / f"{half}.txt"
                 if not games.read_text(encoding="utf-8").strip():
@@ -1657,6 +1775,22 @@ def main(argv=None):
                 out = p.replay / f"{half}-results.tsv"
                 replayed.append(out)
                 if resumed:
+                    continue
+                if spread:
+                    played_on = duels.hosts_of(distributed.Ledger.load(gate_ledger, args.gate_games, seed + 5_000_000))
+                    wanted = [int(x) for x in games.read_text(encoding="utf-8").split()]
+                    replay_args = ["duel", "--a", name, "--b", name, "--model", model_dir, "--model-b", champ, *decks,
+                                   "--games", args.gate_games, "--seed", seed + 5_000_000, "--ai-record", "record",
+                                   "--ai-record-mode", "decklist", "--ai-record-pairs"]
+                    _, ledger, results = distributed_duel(f"replay-{half}", replay_args, [], [model_dir, champ],
+                                                          args.gate_games, seed + 5_000_000, kind=duels.REPLAY,
+                                                          only=wanted, affinity=played_on, record="record",
+                                                          env={"CANTRIP_AI_TRACES": "1"})
+                    shutil.copy2(gen_dir / "logs" / f"replay-{half}-results.tsv", out)
+                    shards = duels.recordings(ledger, results, "record", p.recorded / half)
+                    moved = sum(1 for g in wanted if played_on.get(g) and ledger.shards.get(ledger.done.get(g, ""), {}).get("host") != played_on[g])
+                    log(f"  replayed {len(ledger.done)} of {len(wanted)} {half} games across the hosts ({shards} recorded shards)"
+                        + (f"; {moved} on another host than the gate's (their pairs are checked as every replay is)" if moved else ""))
                     continue
                 cmd = [*dotnet(), BOTLAB, "duel", "--a", name, "--b", name, "--model", model_dir, "--model-b", champ, *decks,
                        "--games", args.gate_games, "--parallel", args.gate_parallel, "--seed", seed + 5_000_000,
