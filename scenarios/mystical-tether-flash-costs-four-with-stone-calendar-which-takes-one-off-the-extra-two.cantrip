@@ -1,0 +1,60 @@
+# The extra {2} is an additional cost added to the total (CR 601.2f, 118.8), so a cost reduction applies to it: Stone Calendar
+# ("spells you cast cost {1} less") makes the flashed Mystical Tether {3}{W}. On turn 4 Bot2 casts Lightning Bolt at Bot1 and
+# Bot1 flashes the Tether in over it with Mox Pearl, Mox Jet and two Plains, four mana (the Mox Ruby and one Plains are left
+# untapped) (without the Calendar it would be five). The extra {2} is still owed unasked, the mana value stays three, and the
+# enters trigger exiles Bot2's Mox Ruby, its only artifact or creature.
+
+[Bot1 Deck]
+Stone Calendar
+Mox Pearl
+Mox Jet
+Mox Ruby
+Black Lotus
+Mystical Tether
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Stone Calendar.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Mystical Tether.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mystical Tether; Plains; Plains; Stone Calendar
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot1.Battlefield.Mystical Tether.ManaValue = 3
+Exile = Mox Ruby
+Stack.Count = 0

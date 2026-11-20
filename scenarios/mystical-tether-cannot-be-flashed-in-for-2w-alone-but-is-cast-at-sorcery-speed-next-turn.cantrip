@@ -1,0 +1,45 @@
+# Mystical Tether at instant speed owes {2} more (CR 601.2b, 601.2f). On turn 4 Bot2 casts Lightning Bolt at Bot1, and Bot1,
+# with only three Mox Pearls, has the Tether's own {2}{W} available: it still can't cast the Tether then (refused), as the
+# extra {2} would have to be paid and there is no more mana. The Bolt resolves. On turn 5, a main phase with an empty stack,
+# the Tether is cast for {2}{W} as its mana cost says, and exiles Bot2's Mox Ruby.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mystical Tether
+Plains x17
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+! Bot1.Hand.Mystical Tether.Cast(Mana: short)
+[T5 Bot1.Main1]
+? Bot1.Life = 17
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Mystical Tether.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Pearl; Mox Pearl; Mystical Tether
+Bot1.Battlefield.Mystical Tether.ManaValue = 3
+Exile = Mox Ruby
+Stack.Count = 0

@@ -1,0 +1,59 @@
+# Mystical Tether at sorcery speed (CR 601.2b, 601.2f, 118.8). With five mana in hand (three Mox Pearls and a Mox Jet and Mox
+# Ruby) the question "Flash: Pay {2} more" is asked, though nothing needs it (the rulings allow it): on turn 3 Bot1 pays it,
+# all five Moxen tapped for the {2}{W}{2}, and the mana value is still three (CR 202.3). On turn 5 the second Tether is cast
+# for {2}{W} alone: the extra is declined and the Mox Jet and Mox Ruby stay untapped. Each exiles one of Bot2's two Moxen.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mystical Tether
+Mystical Tether
+Plains x15
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Emerald
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mystical Tether.Cast
+Bot1.Modes(Flash:)
+Bot1.Target(Bot2.Battlefield.Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mystical Tether.ManaValue = 3
+? Exile = Mox Sapphire
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Mystical Tether.Cast
+Bot1.Modes(Cast without flash)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Mystical Tether#1.ManaValue = 3
+Bot1.Battlefield.Mystical Tether#2.ManaValue = 3
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Exile = Mox Emerald; Mox Sapphire
+Stack.Count = 0

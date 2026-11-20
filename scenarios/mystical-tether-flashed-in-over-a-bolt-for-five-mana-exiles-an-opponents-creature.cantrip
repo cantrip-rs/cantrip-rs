@@ -1,0 +1,54 @@
+# Mystical Tether at instant speed owes {2} more (CR 601.2b, 601.2f, 118.8). On turn 2 Bot2 casts Lightning Bolt at Bot1, and
+# Bot1 flashes the Tether in over it for {2}{W}{2}: a Black Lotus' three white mana and two Mox Pearls, all five spent,
+# nothing asked. The Tether resolves before the Bolt, and its enters trigger exiles Bot2's Grizzly Bears (the creature half
+# of "artifact or creature") before the Bolt resolves and takes Bot1 to 17.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Black Lotus
+Mystical Tether
+Plains x16
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Ruby
+Grizzly Bears
+Lightning Bolt
+Mountain x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Mystical Tether.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield = Mox Emerald; Mox Ruby; Mox Ruby
+? Exile = Grizzly Bears
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield = Mox Pearl; Mox Pearl; Mystical Tether
+Bot1.Graveyard = Black Lotus
+Stack.Count = 0

@@ -1,0 +1,48 @@
+# "Until this enchantment leaves the battlefield" (CR 610.3b): if the Mystical Tether has left the battlefield before its enters
+# trigger resolves, the target is not exiled at all (it would stay exiled forever otherwise). On turn 3 Bot1 casts the Tether
+# for {2}{W} and picks Bot2's Mox Jet; with the trigger on the stack Bot2 destroys the Tether with Disenchant, and the
+# trigger then resolves doing nothing: the Mox Jet is still on the battlefield, nothing is in exile.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mystical Tether
+Plains x16
+
+[Bot2 Deck]
+Plains
+Mox Jet
+Mox Pearl
+Disenchant
+Plains x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Mystical Tether.Cast
+Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Mystical Tether)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Mystical Tether
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot2.Battlefield = Mox Jet; Plains; Mox Pearl
+Stack.Count = 0

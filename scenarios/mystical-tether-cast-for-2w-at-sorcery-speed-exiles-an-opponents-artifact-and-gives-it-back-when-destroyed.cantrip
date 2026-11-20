@@ -1,0 +1,55 @@
+# Mystical Tether at sorcery speed: {2}{W} from three Mox Pearls, nothing asked about the extra {2} (it could not be paid). Its enters
+# trigger "exile target artifact or creature an opponent controls until this enchantment leaves the battlefield" (CR 610.3)
+# refuses Bot1's own Ornithopter and Bot2's Plains (the lands are neither) and takes Bot2's Mox Jet, an artifact that is no
+# creature. The mana value is three whether or not the {2} could have been paid (CR 202.3). On turn 4 Bot2's Disenchant destroys
+# the Tether and the Mox comes back to the battlefield, a new object, under its owner's control.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Ornithopter
+Mystical Tether
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Plains
+Mox Jet
+Mox Pearl
+Disenchant
+Plains x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Mystical Tether.Cast
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Plains)
+Bot1.Target(Bot2.Battlefield.Mox Jet)
+[T3 Bot1.Main2]
+? Bot2.Battlefield = Mox Pearl; Plains
+? Exile = Mox Jet
+? Bot1.Battlefield.Mystical Tether.ManaValue = 3
+[T4 Bot2.Main1]
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Mystical Tether)
+[T4 Bot2.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard = Mystical Tether
+Bot2.Battlefield = Mox Jet; Mox Pearl; Plains
+Stack.Count = 0
