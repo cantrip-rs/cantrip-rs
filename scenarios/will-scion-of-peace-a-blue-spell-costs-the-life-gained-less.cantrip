@@ -1,0 +1,43 @@
+# Will, Scion of Peace: a blue spell costs {X} less too, X the life gained this turn (CR 601.2f, 608.2h). Bot1 gains 3 life with
+# Healing Salve and activates Will; the blue Wind Drake ({2}{U}) then costs {U}, paid with the Sapphire's single mana.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Will, Scion of Peace
+Healing Salve
+Wind Drake
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Will, Scion of Peace.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Will, Scion of Peace.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Wind Drake.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield.Wind Drake.ManaValue = 3

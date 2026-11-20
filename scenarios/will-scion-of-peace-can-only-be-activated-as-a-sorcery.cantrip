@@ -1,0 +1,34 @@
+# Will, Scion of Peace: "Activate only as a sorcery" (CR 602.5d). Bot1 cast Will on turn one; on turn three it is refused the
+# activation in the declare attackers step (`!`) and gets it in its second main phase, where the ability resolves and Will is tapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Will, Scion of Peace
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Will, Scion of Peace.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+! Bot1.Battlefield.Will, Scion of Peace.Activate
+[T3 Bot1.Main2]
+Bot1.Battlefield.Will, Scion of Peace.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Will, Scion of Peace.Tapped = true
+Stack.Count = 0
+Bot1.Battlefield.Will, Scion of Peace.Keywords = Vigilance

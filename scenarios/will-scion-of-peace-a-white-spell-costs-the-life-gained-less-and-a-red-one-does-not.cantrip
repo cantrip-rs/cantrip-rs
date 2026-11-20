@@ -1,0 +1,52 @@
+# Will, Scion of Peace: "{T}: Spells you cast this turn that are white and/or blue cost {X} less to cast, where X is the amount of
+# life you gained this turn. Activate only as a sorcery." (CR 611.2c, 601.2f, 608.2h). On turn three Bot1 gains 3 life with Healing
+# Salve, then activates Will: the white Pillarfield Ox ({3}{W}) costs {W}, paid with the Plains's single mana, while the red Hill
+# Giant ({3}{R}) is not cheaper (refused with the lone Ruby's mana). Healing Salve is cast before Will's ability, so its three life
+# is counted.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Will, Scion of Peace
+Plains
+Healing Salve
+Pillarfield Ox
+Hill Giant
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Will, Scion of Peace.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Will, Scion of Peace.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Pillarfield Ox.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Hill Giant.Cast(Mana: short)
+
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield.Pillarfield Ox.ManaValue = 4
+Bot1.Hand.Hill Giant.Colors = Red

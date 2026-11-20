@@ -1,0 +1,11 @@
+{
+  "name": "Will, Scion of Peace",
+  "manaCost": "{1}{W}{U}",
+  "type": "Legendary Creature — Human Wizard",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Vigilance\n{T}: Spells you cast this turn that are white and/or blue cost {X} less to cast, where X is the amount of life you gained this turn. Activate only as a sorcery.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
