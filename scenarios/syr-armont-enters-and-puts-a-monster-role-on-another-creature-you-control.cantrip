@@ -1,0 +1,53 @@
+# Syr Armont, the Redeemer {3}{G}{W}, a 4/4: "When Syr Armont enters, create a Monster Role token attached to another target creature
+# you control." and "Enchanted creatures you control get +1/+1." On turn three Bot1 has Memnite and Ornithopter, and Bot2 an
+# Ornithopter. The trigger refuses Syr Armont itself (CR 115.1, "another") and Bot2's creature ("you control"); targeting Memnite,
+# the Monster Role gives it +1/+1 and trample (CR 111.10k, 303.4) and Syr Armont's own pump +1/+1 more: 3/3. Ornithopter, with no
+# Aura, stays 0/2, and so does Syr Armont, who is no enchanted creature (4/4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Memnite
+Ornithopter
+Syr Armont, the Redeemer
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Syr Armont, the Redeemer.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Syr Armont, the Redeemer)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Monster.AttachedTo = Memnite
+Bot1.Battlefield.Monster.Token = true
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 3
+Bot1.Battlefield.Memnite.Keywords = Trample
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Syr Armont, the Redeemer.Power = 4
+Bot1.Battlefield.Syr Armont, the Redeemer.Toughness = 4
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2

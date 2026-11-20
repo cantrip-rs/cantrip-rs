@@ -1,0 +1,8 @@
+{
+  "name": "Syr Armont, the Redeemer",
+  "manaCost": "{3}{G}{W}",
+  "type": "Legendary Creature — Human Knight",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When Syr Armont enters, create a Monster Role token attached to another target creature you control. (If you control another Role on it, put that one into the graveyard. Enchanted creature gets +1/+1 and has trample.)\nEnchanted creatures you control get +1/+1."
+}
