@@ -9,9 +9,9 @@
 //!   [--worlds N]`: for each position (a JSON line: `id`, `seed`, `at`) of the traces' games, the search with trimming
 //!   on and off at each budget, from the same worlds; a JSON line a position with each run's choice and root options.
 
-#[cfg(windows)]
+/// What a search holds is counted, as in the AI host.
 #[global_allocator]
-static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+static GLOBAL: cantrip_ai_host::Allocator = cantrip_ai_host::ALLOCATOR;
 
 use std::collections::BTreeMap;
 use std::io::Write;

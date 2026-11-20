@@ -14,7 +14,7 @@ const USAGE: &str = "usage: cantrip-ai-host --model DIR [--model DIR ...] [--bac
 
 /// What a search holds is counted (`cantrip_ai::alloc`, `AiResult.Search.TreeBytes`).
 #[global_allocator]
-static ALLOCATOR: cantrip_ai::alloc::Counting = cantrip_ai::alloc::Counting;
+static ALLOCATOR: cantrip_ai_host::Allocator = cantrip_ai_host::ALLOCATOR;
 
 struct Config {
     models: Vec<PathBuf>,

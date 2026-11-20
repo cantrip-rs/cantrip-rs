@@ -157,7 +157,11 @@ cantrip-infer graph --model DIR [--bucket 128] --out FILE [engine options]   # t
   (built with `--features gpu`) runs the same engine inside self-play, every lane an evaluator: no sockets, and each
   position goes to the engine at its own length (`Evaluator::evaluate_positions`) instead of padded to a batch.
 
-The binary installs a counting allocator (`cantrip_ai::alloc`), so a search's `TreeBytes` is measured, not estimated.
+The binary installs a counting allocator (`cantrip_ai::alloc`), so a search's `TreeBytes` is measured, not estimated,
+and `MemoryMb` bounds it. It counts over mimalloc (`cantrip_ai_host::Allocator`), as every binary of the crate does, on
+every system: the lanes' millions of small allocations are serialised by Windows' heap, and kept by glibc's per-thread
+arenas after a lane frees them (sixteen lanes of deep searches held 10.6 GB over glibc and 6.7 GB over mimalloc, which
+was 11% faster).
 
 stderr is the log. Build it with ONNX Runtime using `cargo build --profile cards -p cantrip-ai-host --features ort`.
 A plain `cargo test --workspace` rebuilds the binary tract-only, so rebuild it with `ort` before a duel.
@@ -438,8 +442,10 @@ cantrip-selfplay --model DIR --out DIR [--games N] [--hours H] [--simulations N]
   encoder hashes, schema, format, seeds) and plays nothing: the driver holds every shard to it.
 - `--recover` recovers the `.part`s a run killed outright left in `--out` (as `--resume` does first) and plays
   nothing: the games they hold are then in closed shards before another process is given the rest.
-- On Windows it allocates with mimalloc: the system heap serialised the lanes' allocations (32 lanes made half the
-  evaluations a second with it). The Linux build keeps the system allocator.
+- It allocates with mimalloc under the counting allocator, as the AI host does, on Windows and on Linux: Windows'
+  heap serialised the lanes' allocations (32 lanes made half the evaluations a second with it), and glibc keeps
+  what each lane freed, so a run's memory stayed at every lane's peak. Counted, a search's `MemoryMb` bound holds in
+  self-play too (2 GiB by default: a search stops there, and a kept tree past half of it is let go).
 - Build it with `cargo build --release -p cantrip-ai-host --features ort`.
 
 ### The governor

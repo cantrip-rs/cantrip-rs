@@ -38,6 +38,15 @@ use cantrip_obs::InfoMode;
 use serde::Deserialize;
 use serde_json::{Value, json};
 
+/// What every binary of this crate allocates with: mimalloc, counted (`cantrip_ai::alloc`). Counted, so that what a
+/// search holds is measured (`Searched::tree_bytes`) and bounded (`search::Config::memory`) in each of them, on every
+/// system; mimalloc, because a search's lanes make millions of small allocations each: Windows' heap serialises them
+/// across the lanes, and glibc's arenas keep what a lane freed, so a run's memory stays at every lane's peak.
+pub type Allocator = cantrip_ai::alloc::Counting<mimalloc::MiMalloc>;
+
+/// The allocator a binary installs: `#[global_allocator] static GLOBAL: Allocator = ALLOCATOR;`.
+pub const ALLOCATOR: Allocator = cantrip_ai::alloc::Counting(mimalloc::MiMalloc);
+
 /// Card code recurses, so the loop and the workers run on threads with room (as the native host's does).
 pub const STACK_SIZE: usize = 256 << 20;
 

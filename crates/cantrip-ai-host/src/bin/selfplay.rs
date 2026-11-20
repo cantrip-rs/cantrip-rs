@@ -15,9 +15,9 @@
 //! driver's heartbeat); `--host NAME` names the machine in the report and in `OUT/selfplay-status.json`, which is
 //! rewritten every few seconds with the run's progress.
 
-#[cfg(windows)]
+/// What a search holds is counted, as in the AI host.
 #[global_allocator]
-static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+static GLOBAL: cantrip_ai_host::Allocator = cantrip_ai_host::ALLOCATOR;
 
 use std::path::PathBuf;
 use std::time::Duration;

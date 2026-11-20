@@ -14,7 +14,7 @@ use cantrip_obs::InfoMode;
 use cantrip_script::GameScript;
 
 #[global_allocator]
-static ALLOCATOR: cantrip_ai::alloc::Counting = cantrip_ai::alloc::Counting;
+static ALLOCATOR: cantrip_ai::alloc::Counting = cantrip_ai::alloc::Counting(std::alloc::System);
 
 /// Every option alike, every position even.
 struct Uniform;

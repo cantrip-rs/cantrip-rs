@@ -28,8 +28,9 @@
 //! All but `mine-forks` take `--backend ort|tract|remote`, `--server HOST:PORT`, `--threads N`, `--prior DIR`. The summary
 //! or the verdict is printed as JSON.
 
+/// What a search holds is counted, as in the AI host: `MemoryMb` bounds it and `MeasureMemory` breaks it down.
 #[global_allocator]
-static GLOBAL: cantrip_ai::alloc::Counting = cantrip_ai::alloc::Counting;
+static GLOBAL: cantrip_ai_host::Allocator = cantrip_ai_host::ALLOCATOR;
 
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};

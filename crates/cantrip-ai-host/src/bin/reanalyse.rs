@@ -9,9 +9,9 @@
 //! The report is printed and written to `OUT/reanalyse-report.json`; the chosen positions, with why, to
 //! `OUT/reanalyse-positions.jsonl`.
 
-#[cfg(windows)]
+/// What a search holds is counted, as in the AI host.
 #[global_allocator]
-static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+static GLOBAL: cantrip_ai_host::Allocator = cantrip_ai_host::ALLOCATOR;
 
 use std::path::{Path, PathBuf};
 

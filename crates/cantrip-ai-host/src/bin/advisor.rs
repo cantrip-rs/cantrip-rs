@@ -21,7 +21,7 @@ const USAGE: &str = "usage: cantrip-advisor-host --model DIR [--model DIR ...] [
 
 /// What a search holds is counted, as in the AI host.
 #[global_allocator]
-static ALLOCATOR: cantrip_ai::alloc::Counting = cantrip_ai::alloc::Counting;
+static ALLOCATOR: cantrip_ai_host::Allocator = cantrip_ai_host::ALLOCATOR;
 
 struct Config {
     models: Vec<PathBuf>,

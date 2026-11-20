@@ -13,9 +13,9 @@
 //! answer by default (pass, no attack, no block) to the start of the next turn, and the leaf is measured against the
 //! position.
 
-#[cfg(windows)]
+/// What a search holds is counted, as in the AI host.
 #[global_allocator]
-static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+static GLOBAL: cantrip_ai_host::Allocator = cantrip_ai_host::ALLOCATOR;
 
 use std::collections::{HashMap, HashSet};
 use std::io::{BufRead, Write};

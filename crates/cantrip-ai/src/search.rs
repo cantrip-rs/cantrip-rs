@@ -215,8 +215,10 @@ pub struct Config {
     /// what a position holds (about 94 KB), and a deep search reaches hundreds of thousands of positions, while a
     /// position's observation is read again only when a node there is encoded after its first. Past this many the
     /// least recently used are let go, and one read again is rebuilt from its game node and the knowledge the
-    /// position keeps (`World::obs`): the same observation, at the cost of the rebuild. Above the positions a search
-    /// reaches (8192 by default: a self-play full search of 8192 simulations reaches about 7,800), nothing is let go.
+    /// position keeps (`World::obs`): the same observation, at the cost of the rebuild. 512 by default, and never fewer
+    /// than 64 a world: rebuilds are rare at any size (a search of 8192 simulations rebuilt 454 observations of the
+    /// 7,800 positions it reached, at no cost to be measured), and at 512 its tree is a third of what it holds at
+    /// 8192, where nothing is let go.
     pub obs_cache: usize,
     /// What a re-rooted tree follows of another seat's choices on the way (`Follow`).
     pub reuse_follow: Follow,
@@ -382,7 +384,7 @@ impl Default for Config {
             reuse: Reuse::Add,
             min_fresh: 0,
             measure_memory: false,
-            obs_cache: 8192,
+            obs_cache: 512,
             reuse_follow: Follow::All,
             reuse_check: false,
             atomic: true,

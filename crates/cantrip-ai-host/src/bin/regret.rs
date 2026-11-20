@@ -7,9 +7,9 @@
 //!   position of FILE (a JSON line each: `id`, `seed`, `at`) into OUT, a JSON line each; a rerun skips the positions OUT
 //!   holds. `--worlds N`, `--top N`, `--turns N`, `--lanes N`, `--seed N`.
 
-#[cfg(windows)]
+/// What a search holds is counted, as in the AI host.
 #[global_allocator]
-static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+static GLOBAL: cantrip_ai_host::Allocator = cantrip_ai_host::ALLOCATOR;
 
 use std::path::PathBuf;
 

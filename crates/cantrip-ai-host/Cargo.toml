@@ -56,6 +56,8 @@ cantrip-obs.workspace = true
 cantrip-script.workspace = true
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+# What every binary here allocates with, under the counting allocator (`Allocator`).
+mimalloc = { version = "0.1", default-features = false }
 
 [features]
 # onnxruntime on the CPU, the faster backend (`cantrip_ai::eval::OrtEvaluator`); tract otherwise.
@@ -65,7 +67,6 @@ ort = ["cantrip-ai/ort"]
 gpu = ["ort", "cantrip-ai/gpu"]
 
 [target.'cfg(windows)'.dependencies]
-mimalloc = { version = "0.1", default-features = false }
 # Self-play's governor: memory and CPU readings, and the console's Ctrl-C (`governor`).
 windows-sys = { version = "0.61", features = [
     "Win32_Foundation",
