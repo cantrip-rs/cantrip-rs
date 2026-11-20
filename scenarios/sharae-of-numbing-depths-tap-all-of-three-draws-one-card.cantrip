@@ -1,0 +1,67 @@
+# Sharae of Numbing Depths: "Whenever you tap one or more untapped creatures your opponents control, draw a card." Creatures tapped
+# together are one batch and trigger it once (CR 603.2c). Turn 3: Bot1's Cryptic Command taps all three of Bot2's Llanowar Elves
+# and Bot1 draws two cards in all: Cryptic Command's own and Sharae's one, not three.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Sapphire
+Mox Sapphire
+Sharae of Numbing Depths
+Cryptic Command
+Black Lotus
+Island
+Island x20
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Llanowar Elves
+Llanowar Elves
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Sharae of Numbing Depths.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Cryptic Command.Cast
+Bot1.Modes(3; 4)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot2.Battlefield.Llanowar Elves#1.Tapped = true
+Bot2.Battlefield.Llanowar Elves#2.Tapped = true
+Bot2.Battlefield.Llanowar Elves#3.Tapped = true
+Stack.Count = 0

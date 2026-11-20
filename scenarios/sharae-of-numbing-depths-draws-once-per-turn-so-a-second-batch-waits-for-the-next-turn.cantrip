@@ -1,0 +1,99 @@
+# Sharae of Numbing Depths: "When Sharae enters, tap target creature an opponent controls and put a stun counter on it" and
+# "Whenever you tap one or more untapped creatures your opponents control, draw a card. This ability triggers only once each turn."
+# Turn 3: Sharae's own enters tap of Llanowar Elves#1 is the first batch and draws (CR 603.2c, 701.26a), and the stun counter keeps
+# it tapped through Bot2's untap (CR 122.1d). Bot1's Cryptic Command then taps the other two Elves, a second batch the same turn
+# that draws nothing (603.2h), leaving Bot1 two cards (Cryptic Command's own draw and Sharae's). Turn 5: a second Cryptic Command
+# taps the Elves again, a new turn, so Sharae draws again.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Sapphire
+Mox Sapphire
+Sharae of Numbing Depths
+Cryptic Command
+Black Lotus
+Island
+Cryptic Command
+Island x20
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Llanowar Elves
+Llanowar Elves
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Sharae of Numbing Depths.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Llanowar Elves#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves#1.Tapped = true
+? Bot2.Battlefield.Llanowar Elves#1.Counters.Stun = 1
+? Bot1.Hand.Count = 4
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Cryptic Command.Cast
+Bot1.Modes(3; 4)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves#2.Tapped = true
+? Bot2.Battlefield.Llanowar Elves#3.Tapped = true
+? Bot1.Hand.Count = 2
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Llanowar Elves#1.Tapped = true
+? Bot2.Battlefield.Llanowar Elves#1.Counters.Stun = (absent)
+? Bot2.Battlefield.Llanowar Elves#2.Tapped = false
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Cryptic Command.Cast
+Bot1.Modes(3; 4)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot2.Battlefield.Llanowar Elves#1.Tapped = true
+Bot2.Battlefield.Llanowar Elves#2.Tapped = true
+Bot2.Battlefield.Llanowar Elves#3.Tapped = true
+Stack.Count = 0
