@@ -1,0 +1,56 @@
+# Blossoming Tortoise: "Activated abilities of lands you control cost {1} less" and "land creatures you control get +1/+1" are about
+# your lands only. Bot1's three milled cards on turn 1 are Ornithopters, so no land is returned (a land card is needed). On turn 2
+# Bot2's own Mutavault is not reduced: its {1} is paid in full by tapping the Mutavault itself for {C} (nothing is left in the pool), and it is a plain 2/2. On turn 3
+# Bot1's Gingerbrute, an artifact creature not a land, pays its full {1} from the Island (nothing is left in the pool) and is not pumped (1/1); and with
+# one Island left a Blasted Landscape in hand still cannot be cycled for {2}, an ability a land has outside the battlefield not being reduced.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Blossoming Tortoise
+Gingerbrute
+Island x2
+Blasted Landscape
+Ornithopter x3
+Island x13
+
+[Bot2 Deck]
+Mutavault
+Mountain x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Blossoming Tortoise.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mutavault.Play
+Bot2.Battlefield.Mutavault.Activate(Ability: {1})
+Bot2.Battlefield.Mutavault.Activate(Ability: {T}: Add)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Mutavault.Tapped = true
+? Bot2.Battlefield.Mutavault.Power = 2
+? Bot2.Battlefield.Mutavault.Toughness = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gingerbrute.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Blasted Landscape.Activate(Ability: Cycling; Mana: short)
+Bot1.Battlefield.Gingerbrute.Activate(Ability: {1})
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana =
+? Bot1.Battlefield.Island.Tapped = true
+? Bot1.Battlefield.Gingerbrute.Power = 1
+? Bot1.Battlefield.Gingerbrute.Toughness = 1
+
+[Expect]
+Bot1.Battlefield.Blossoming Tortoise.Power = 3

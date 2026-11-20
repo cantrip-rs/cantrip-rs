@@ -1,0 +1,50 @@
+# Blossoming Tortoise: its trigger also happens whenever it attacks (turn 3: three Islands are milled, one is returned tapped).
+# "Land creatures you control get +1/+1" (CR 613.4c): the Mutavault Bot1 returned on turn 1 and animates on turn 3 is a 2/2 plus +1/+1,
+# so 3/3, while the Tortoise itself, a creature but not a land, stays 3/3 (it would be 4/4 if it counted). "Activated abilities of lands you control cost {1} less to activate": with nothing else untapped the Mutavault's {1}
+# costs {0}, so it does not tap itself to pay and stays untapped. The attacking Tortoise deals 3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Blossoming Tortoise
+Island x4
+Mutavault
+Plains
+Ornithopter
+Forest
+Island x13
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Blossoming Tortoise.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mutavault)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mutavault.Activate(Ability: {1})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mutavault.Power = 3
+? Bot1.Battlefield.Mutavault.Toughness = 3
+? Bot1.Battlefield.Mutavault.Tapped = false
+? Bot1.Battlefield.Blossoming Tortoise.Power = 3
+? Bot1.Battlefield.Blossoming Tortoise.Toughness = 3
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Blossoming Tortoise > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Island.Tapped = true
+Bot1.Library.Count = 10

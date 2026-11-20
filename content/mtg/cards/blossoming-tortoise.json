@@ -1,0 +1,8 @@
+{
+  "name": "Blossoming Tortoise",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Turtle",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever this creature enters or attacks, mill three cards, then return a land card from your graveyard to the battlefield tapped.\nActivated abilities of lands you control cost {1} less to activate.\nLand creatures you control get +1/+1."
+}

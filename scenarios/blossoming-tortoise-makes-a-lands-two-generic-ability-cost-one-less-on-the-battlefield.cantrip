@@ -1,0 +1,39 @@
+# Blossoming Tortoise: "Activated abilities of lands you control cost {1} less to activate" takes exactly one generic mana off (CR 601.2f).
+# The milled Drannith Ruins comes back tapped on turn 1 and, untapped on turn 3, puts its counters on the Ornithopter that entered this
+# turn for {1} and {T} instead of {2} and {T}: Mox Jet's single mana pays it (nothing is left in the pool; a cost of {T} alone would leave it floating). The
+# Ruins cannot pay for itself, tapping as part of the cost.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Blossoming Tortoise
+Ornithopter
+Island x3
+Drannith Ruins
+Island x15
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Blossoming Tortoise.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Drannith Ruins)
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Drannith Ruins.Activate(Ability: Put two; Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Drannith Ruins.Tapped = true

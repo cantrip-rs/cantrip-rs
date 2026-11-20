@@ -1,0 +1,39 @@
+# Blossoming Tortoise: when it enters it mills exactly three cards (the fourth, a Forest, stays on top of the library), then the
+# controller returns a land card of their choice from the graveyard to the battlefield tapped (CR 701.17, 608.2c). The land is
+# read after the mill, so a milled Mutavault is eligible; the milled Plains is left behind, and the milled Ornithopter, not a land
+# card, is refused. Black Lotus (GGG) and Mox Jet pay {2}{G}{G}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Blossoming Tortoise
+Island x4
+Mutavault
+Plains
+Ornithopter
+Forest
+Island x13
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Blossoming Tortoise.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 14
+! Bot1.Choose()
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Forest)
+Bot1.Choose(Mutavault)
+
+[Expect]
+Bot1.Battlefield.Mutavault.Tapped = true
+Bot1.Graveyard = Ornithopter; Plains; Black Lotus
+Bot1.Library.Count = 14
