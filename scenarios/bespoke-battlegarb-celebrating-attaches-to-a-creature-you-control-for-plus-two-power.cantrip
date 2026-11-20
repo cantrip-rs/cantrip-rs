@@ -1,0 +1,38 @@
+# Bespoke Battlegarb ({1}{R}): "Equipped creature gets +2/+0. Celebration — At the beginning of combat on your turn, if two or more
+# nonland permanents entered the battlefield under your control this turn, attach this Equipment to up to one target creature you
+# control." (CR 301.5, 603.4.) Black Lotus, the Battlegarb and a Memnite enter on turn 1: Bot1 targets the Memnite, which becomes
+# 3/1; the Battlegarb stays attached after the turn.
+
+[Bot1 Deck]
+Black Lotus
+Bespoke Battlegarb
+Memnite
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Bespoke Battlegarb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Memnite)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bespoke Battlegarb.AttachedTo = Memnite
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 1
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Bespoke Battlegarb.AttachedTo = Memnite
+Bot1.Battlefield.Memnite.Power = 3

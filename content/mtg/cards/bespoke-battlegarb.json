@@ -1,0 +1,6 @@
+{
+  "name": "Bespoke Battlegarb",
+  "manaCost": "{1}{R}",
+  "type": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +2/+0.\nCelebration — At the beginning of combat on your turn, if two or more nonland permanents entered the battlefield under your control this turn, attach this Equipment to up to one target creature you control.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)"
+}

@@ -1,0 +1,45 @@
+# Bespoke Battlegarb: "Celebration — ... attach this Equipment to up to one target creature you control." (CR 603.4, 115.1.) The
+# Battlegarb comes down after combat on turn 1, so it does not celebrate then. Bot2 casts an Ornithopter on turn 2. On turn 3 a
+# Memnite and a Mox Ruby enter under Bot1's control (two nonland permanents): at the beginning of combat the trigger may not target
+# Bot2's Ornithopter, a creature Bot1 does not control, and attaches the Battlegarb to Bot1's Memnite, which becomes 3/1.
+
+[Bot1 Deck]
+Black Lotus
+Bespoke Battlegarb
+Memnite
+Mox Ruby
+Mountain x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+[T1 Bot1.Main2]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Bespoke Battlegarb.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bespoke Battlegarb.AttachedTo = Memnite
+? Bot2.Battlefield.Ornithopter.Power = 0
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 3

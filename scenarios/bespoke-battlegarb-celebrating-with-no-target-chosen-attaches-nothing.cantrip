@@ -1,0 +1,31 @@
+# Bespoke Battlegarb: "attach this Equipment to up to one target creature you control" - "up to one" lets Bot1 choose no target
+# (CR 601.2c): the celebration trigger still goes on the stack, resolves, and the Equipment stays unattached; the Memnite is 1/1.
+
+[Bot1 Deck]
+Black Lotus
+Bespoke Battlegarb
+Memnite
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Bespoke Battlegarb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Bespoke Battlegarb.AttachedTo = (absent)
+Bot1.Battlefield.Memnite.Power = 1
