@@ -1,0 +1,53 @@
+# Eriette's Tempting Apple: "{2}, {T}, Sacrifice this artifact: Target opponent loses 3 life" (CR 602.2, 701.21, 119.3). Bot1 casts the Apple on turn 1 and on turn 3 pays {2}
+# and sacrifices it: Bot1 itself is refused as the target (not an opponent), Bot2 loses 3 life and Bot1's life does not change.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Eriette's Tempting Apple
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Eriette's Tempting Apple.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Mox Emerald; Eriette's Tempting Apple
+? Bot1.Life = 20
+? Bot2.Life = 20
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Eriette's Tempting Apple.Activate(Ability: Target opponent; Bot1)
+Bot1.Battlefield.Eriette's Tempting Apple.Activate(Ability: Target opponent; Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Life = 20
+? Bot2.Life = 17
+? Bot1.Graveyard = Eriette's Tempting Apple
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 17
+Bot1.Graveyard = Eriette's Tempting Apple

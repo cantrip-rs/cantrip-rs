@@ -1,0 +1,53 @@
+# Eriette's Tempting Apple: "{2}, {T}, Sacrifice this artifact: You gain 3 life" (CR 602.2, 701.21, 119.1). Bot1 casts the Apple on turn 1 with no creature on the battlefield, so
+# its enters trigger has no target and does nothing (CR 603.3d); on turn 3 it pays {2} from the Moxen and sacrifices the Apple for 3 life. Bot2 is not affected.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Eriette's Tempting Apple
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Eriette's Tempting Apple.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Mox Emerald; Eriette's Tempting Apple
+? Bot1.Life = 20
+? Bot2.Life = 20
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {B}{R}
+Bot1.Battlefield.Eriette's Tempting Apple.Activate(Ability: You gain)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Life = 23
+? Bot2.Life = 20
+? Bot1.Graveyard = Eriette's Tempting Apple
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 20
+Bot1.Graveyard = Eriette's Tempting Apple
