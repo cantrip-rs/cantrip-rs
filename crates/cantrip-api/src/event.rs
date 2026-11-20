@@ -508,6 +508,11 @@ pub enum Event {
     /// `graveyard` is the cards the process put into their graveyard, as the objects they became there - none, one, or both
     /// when the manifested one could not enter (CR 701.40f).
     ManifestedDread { player: PlayerId, graveyard: [Option<ObjectId>; 2] },
+    /// `permanent` explored (CR 701.44a, 701.44b), recorded once the process is complete, even if some or all of it was
+    /// impossible, by `player`, who controlled it (CR 701.44c: as it last was, if it has left the battlefield). `revealed`
+    /// is what the reveal showed, judged as the card was revealed whatever became of it after (Nicanzil, Current
+    /// Conductor's ruling): a land card, a nonland card, or nothing for an empty library.
+    Explored { permanent: ObjectId, player: PlayerId, revealed: ExploreReveal },
     /// `player` foraged (CR 701.61a): paid a cost that is a way to forage (`Cost::forage`), as a cost of a spell or an
     /// ability or as a resolving one asks (CR 118.12), by `by`, the spell or ability's source. Recorded once the whole
     /// payment is made, for "whenever you forage".
@@ -557,6 +562,15 @@ pub enum Event {
     /// or an effect reselected what it attacks. Recorded only, never an attack trigger. Retains its defender after
     /// removal from combat, without making "whenever this creature attacks" see an undeclared attack.
     AttackAssigned { attacker: ObjectId, defender: Target, defending: PlayerId },
+}
+
+/// What an explore revealed (CR 701.44a): the top card of the library as it was revealed, a land card or a nonland card, or no
+/// card at all when the library was empty (the exploring permanent still explores, CR 701.44b).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum ExploreReveal {
+    Land,
+    Nonland,
+    Nothing,
 }
 
 /// Why a player loses the game (CR 104.3): what a "can't lose the game" or "don't lose the game for ..." effect is asked
@@ -638,6 +652,7 @@ impl Event {
             | Event::Scried { player, .. }
             | Event::Surveilled { player, .. }
             | Event::ManifestedDread { player, .. }
+            | Event::Explored { player, .. }
             | Event::Foraged { player, .. }
             | Event::CollectedEvidence { player, .. }
             | Event::SpeedChanged { player, .. }
@@ -690,6 +705,7 @@ impl Event {
             | Event::Done { source, .. } => source == object,
             Event::CrimeCommitted { by, .. } => by == object,
             Event::ManifestedDread { graveyard, .. } => graveyard.contains(&Some(object)),
+            Event::Explored { permanent, .. } => permanent == object,
             Event::Attacks { attacker, .. } | Event::AttackAssigned { attacker, .. }
             | Event::Unblocked { attacker, .. } | Event::BecameBlocked { attacker } => attacker == object,
             Event::PaidToAttack { attacker, tapped, .. } => attacker == object || tapped == object,
@@ -837,6 +853,8 @@ impl EventMask {
     pub const MUTATED: EventMask = EventMask(1 << 70);
     /// A player manifested dread (CR 701.62b).
     pub const MANIFESTED_DREAD: EventMask = EventMask(1 << 67);
+    /// A permanent explored (CR 701.44b).
+    pub const EXPLORED: EventMask = EventMask(1 << 74);
     /// A player collected evidence (CR 701.59a).
     pub const COLLECTED_EVIDENCE: EventMask = EventMask(1 << 71);
     /// A card became plotted (CR 702.170a).
@@ -949,6 +967,7 @@ impl EventMask {
             Event::Scried { .. } => EventMask::SCRIED,
             Event::Surveilled { .. } => EventMask::SURVEILLED,
             Event::ManifestedDread { .. } => EventMask::MANIFESTED_DREAD,
+            Event::Explored { .. } => EventMask::EXPLORED,
             Event::Foraged { .. } => EventMask::FORAGED,
             Event::CollectedEvidence { .. } => EventMask::COLLECTED_EVIDENCE,
             Event::DamagePrevented { .. } => EventMask::DAMAGE_PREVENTED,

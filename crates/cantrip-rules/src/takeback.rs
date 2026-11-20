@@ -315,6 +315,7 @@ fn reveals(g: &Game, event: &Event) -> bool {
         | Event::Scried { .. }
         | Event::Surveilled { .. }
         | Event::ManifestedDread { .. }
+        | Event::Explored { .. }
         | Event::TurnedFaceUp { .. } => true,
         _ => false,
     }

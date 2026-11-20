@@ -9,7 +9,7 @@ use crate::card::{AbilityDef, ActivatedDef, Asker, CardDef, CauseKind, PlayerCou
 use crate::chars::Chars;
 use crate::history::{History, Record};
 use crate::{DamageResult, LeftBattlefield, MillResult, Together};
-use crate::Event;
+use crate::{Event, ExploreReveal};
 
 /// A die roll (CR 706.2): the face the die showed, and the result once the roll was modified (CR 706.4).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -1598,6 +1598,10 @@ pub trait Game: Query {
     /// `graveyard` (as the objects they became there): `cantrip_mechanics::manifest_dread` calls it once the process is
     /// complete, even if some or all of it was impossible.
     fn manifested_dread(&mut self, player: PlayerId, graveyard: &[ObjectId]);
+    /// Records that `permanent` explored (CR 701.44a, 701.44b): `cantrip_mechanics::explore` calls it once the process is
+    /// complete, even if some or all of it was impossible, naming the player who controlled the permanent (CR 701.44c: as it
+    /// last did, if it has left the battlefield) and what the reveal showed.
+    fn explored(&mut self, permanent: ObjectId, player: PlayerId, revealed: ExploreReveal);
     /// `player` gave a gift to `to` (CR 702.174c): the gift triggered ability of a permanent they control resolved. (A
     /// spell's gift is announced by the core as the spell resolves.)
     fn gave_gift(&mut self, player: PlayerId, to: PlayerId, gift: Gift);

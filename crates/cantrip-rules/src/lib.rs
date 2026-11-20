@@ -289,6 +289,8 @@ mod crewed_tests;
 #[cfg(test)]
 mod cycled_tests;
 #[cfg(test)]
+mod explore_event_tests;
+#[cfg(test)]
 mod counters_putter_tests;
 #[cfg(test)]
 mod counters_together_tests;
@@ -3148,6 +3150,10 @@ impl cantrip_api::Game for Cx<'_> {
             *slot = Some(card);
         }
         self.emit(Event::ManifestedDread { player, graveyard: cards });
+    }
+
+    fn explored(&mut self, permanent: ObjectId, player: PlayerId, revealed: ExploreReveal) {
+        self.emit(Event::Explored { permanent, player, revealed });
     }
 
     fn attach(&mut self, attachment: ObjectId, host: ObjectId) -> bool {

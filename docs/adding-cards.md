@@ -101,6 +101,11 @@ abilities: &[
   and `YOU_SCRY_OR_SURVEIL`: `cantrip_mechanics::scry` and `surveil` record `Event::Scried` / `Event::Surveilled` once
   the action is complete, an empty library included (CR 701.22d, 701.25d), and never for scry 0 or surveil 0 (CR
   701.22b, 701.25c), so every scry and surveil goes through them; the trigger's `data` is the number and the cards looked at.
+  "Whenever a creature you control explores [a land card / a nonland card]" listens to `EventMask::EXPLORED`:
+  `cantrip_mechanics::explore` records `Event::Explored { permanent, player, revealed }` once the explore is carried out
+  (CR 701.44b), the controller it had read as it last was if the permanent has left the battlefield (CR 701.44c), and
+  `revealed` says which card it was - `ExploreReveal::Land`, `Nonland`, or `Nothing` for an empty library (CR 701.44a-b),
+  so every explore goes through it.
   "Whenever ... activate(s) an ability" listens to `EventMask::ABILITY_ACTIVATED` and reads the event with
   `triggers::activation` (the object, the activating player, the `ActivatedDef`: `is_loyalty_ability()`,
   `is_mana_ability()`, `from`); only abilities that use the stack are activations a trigger sees - a mana ability's is
