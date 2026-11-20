@@ -1,0 +1,59 @@
+# Bestial Bloodline: "{4}{G}: Return this card from your graveyard to your hand." Bot1 puts the Aura on its Ornithopter (a 0/2 becomes
+# a 2/4). Bot2's Disenchant destroys the Aura on turn 2 (the Ornithopter is a 0/2 again). On turn 3 Bot1 has four sources, Mox Emerald
+# (the {G}) among them, tapped: the ability is refused for one short of {4}{G}. A Plains played then makes the fifth mana, which pays it
+# exactly (the pool is empty afterwards) and the card goes to Bot1's hand from the graveyard.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Ornithopter
+Bestial Bloodline
+Ornithopter
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl x2
+Disenchant
+Plains x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bestial Bloodline.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Bestial Bloodline)
+Bot1.Pass
+? Bot1.Graveyard = Bestial Bloodline
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Graveyard.Bestial Bloodline.Activate(Mana: short)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Graveyard.Bestial Bloodline.Activate
+? Bot1.Mana =
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = 
+Bot1.Hand = Bestial Bloodline; Ornithopter
+Bot2.Graveyard = Disenchant

@@ -1,0 +1,71 @@
+# Bestial Bloodline: "{4}{G}: Return this card from your graveyard to your hand." On turn 1 Bot1's Black Lotus pays the Aura's {1}{G}
+# (cast on its Ornithopter) and, with four Moxen tapped, five mana with a green among it is in the pool: the ability is refused while the
+# Aura is on the battlefield (it works from a graveyard only). Bot2's Disenchant puts it into the graveyard on turn 2. On turn 3 Bot1 has
+# five sources that make no green (four Moxen and a Plains) and no green source anywhere: the ability is refused, the {G} being a colored
+# symbol. On turn 5 a Forest's green mana with the Moxen pays it, and the card goes to Bot1's hand.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Bestial Bloodline
+Plains
+Forest
+Plains x12
+
+[Bot2 Deck]
+Mox Pearl x2
+Disenchant
+Plains x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Bestial Bloodline.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Bestial Bloodline.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Bestial Bloodline)
+Bot1.Pass
+? Bot1.Graveyard = Bestial Bloodline; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Plains.Activate
+! Bot1.Graveyard.Bestial Bloodline.Activate(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Graveyard.Bestial Bloodline.Activate
+? Bot1.Mana =
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Black Lotus
+Bot1.Hand = Bestial Bloodline
+Bot2.Graveyard = Disenchant

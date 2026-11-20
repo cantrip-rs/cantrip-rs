@@ -1,0 +1,40 @@
+# Bestial Bloodline: "Enchant creature. Enchanted creature gets +2/+2." Bot1 casts Llanowar Elves (1/1) with Mox Emerald, then tries
+# Bestial Bloodline on its Forest (a land, refused: it enchants a creature only, CR 303.4a) with the {1}{G} for it in the pool, and
+# casts it on the Elves, which become a 3/3 (exactly +2/+2); the Bloodline is on the battlefield, not the graveyard.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Llanowar Elves
+Bestial Bloodline
+Forest
+Plains
+Plains
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 1
+? Bot1.Battlefield.Llanowar Elves.Toughness = 1
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Bestial Bloodline.Cast(Bot1.Battlefield.Forest)
+Bot1.Hand.Bestial Bloodline.Cast(Bot1.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Power = 3
+Bot1.Battlefield.Llanowar Elves.Toughness = 3
+Bot1.Battlefield = Bestial Bloodline; Forest; Llanowar Elves; Mox Emerald; Mox Jet
+Bot1.Graveyard.Count = 0

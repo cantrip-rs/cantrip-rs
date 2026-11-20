@@ -1,0 +1,6 @@
+{
+  "name": "Bestial Bloodline",
+  "manaCost": "{1}{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +2/+2.\n{4}{G}: Return this card from your graveyard to your hand."
+}
