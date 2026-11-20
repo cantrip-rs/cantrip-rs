@@ -1,0 +1,6 @@
+{
+  "name": "Welcome to Sweettooth",
+  "manaCost": "{1}{G}",
+  "type": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Create a 1/1 white Human creature token.\nII — Create a Food token.\nIII — Put X +1/+1 counters on target creature you control, where X is one plus the number of Foods you control."
+}

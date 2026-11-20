@@ -1,0 +1,60 @@
+# Welcome to Sweettooth {1}{G} (Saga): "I - Create a 1/1 white Human creature token. II - Create a Food token. III - Put X +1/+1
+# counters on target creature you control, where X is one plus the number of Foods you control." Bot1 casts it on turn 1 with two Moxen
+# (chapter I: a Human token), chapter II comes after the turn 3 draw (a Food token), and chapter III after the turn 5 draw: one Food
+# under Bot1's control, so X is 2 and the Human becomes a 3/3. Bot2's two Foods (Tough Cookie, an Artifact Creature - Food Golem,
+# and the Food token it made on turn 2) are not Foods Bot1 controls and add nothing. The Saga is sacrificed after III (CR 714.4).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Welcome to Sweettooth
+Plains x20
+
+[Bot2 Deck]
+Mox Emerald
+Tough Cookie
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Welcome to Sweettooth.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Welcome to Sweettooth.Counters.Lore = 1
+? Bot1.Battlefield.Human Token.Colors = White
+? Bot1.Battlefield.Human Token.Power = 1
+? Bot1.Battlefield.Human Token.Toughness = 1
+? Bot1.Battlefield.Count = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Tough Cookie.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Food Token.Types = Artifact
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Welcome to Sweettooth.Counters.Lore = 2
+? Bot1.Battlefield.Food Token.Types = Artifact
+? Bot1.Battlefield.Count = 5
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Human Token.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Human Token.Power = 3
+? Bot1.Battlefield.Human Token.Toughness = 3
+
+[Expect]
+Bot1.Graveyard = Welcome to Sweettooth
+Bot1.Battlefield.Food Token.Types = Artifact
+Bot1.Battlefield.Human Token.Counters.PlusOnePlusOne = 2

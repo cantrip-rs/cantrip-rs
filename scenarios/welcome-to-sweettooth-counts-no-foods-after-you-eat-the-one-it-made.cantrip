@@ -1,0 +1,50 @@
+# Welcome to Sweettooth chapter III counts the Foods Bot1 controls as it resolves (CR 608.2h), not the ones the chapter II made:
+# Bot1 eats the Food on turn 3 ({2}, {T}, sacrifice: gain 3 life, CR 111.10b) with the two Moxen, so by chapter III there are none and X
+# is one plus zero: the Human token gets one counter and is a 2/2.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Welcome to Sweettooth
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Welcome to Sweettooth.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Welcome to Sweettooth.Counters.Lore = 1
+? Bot1.Battlefield.Human Token.Colors = White
+? Bot1.Battlefield.Human Token.Power = 1
+? Bot1.Battlefield.Human Token.Toughness = 1
+? Bot1.Battlefield.Count = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Food Token.Types = Artifact
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Food Token.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Bot1.Battlefield.Food Token = (absent)
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Human Token.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Human Token.Power = 2
+
+[Expect]
+Bot1.Graveyard = Welcome to Sweettooth
+Bot1.Battlefield.Human Token.Toughness = 2
