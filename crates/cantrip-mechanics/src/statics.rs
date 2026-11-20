@@ -1150,6 +1150,16 @@ pub fn attacking_you_or_your_planeswalkers_costs<const N: u8>(q: &dyn Query, ask
     attacks_you_or_your_planeswalker(q, asker, target).then_some(ManaCost { generic: N as u32, ..ManaCost::ZERO })
 }
 
+/// The permanent whose activated ability a cost change of the source's controller is asked about (CR 601.2f, 602.2b): the ability
+/// is one of a permanent on the battlefield that its controller controls, activated by that player. Never a spell, nor a special action
+/// (CR 116.1): only `Costed::Ability` is one. "Activated abilities of artifacts/creatures you control cost {N} less to activate"
+/// (Forensic Gadgeteer, Agatha of the Vile Cauldron) judge what kind of permanent it is next.
+pub fn permanent_whose_ability_you_activate(q: &dyn Query, source: ObjectId, player: PlayerId, costed: Costed) -> Option<ObjectId> {
+    let Costed::Ability(permanent, ..) = costed else { return None };
+    let you = q.controller(source);
+    (player == you && q.controller(permanent) == you && q.is_on_battlefield(permanent)).then_some(permanent)
+}
+
 /// Whether an attack on `target` is one on "you or planeswalkers you control" of an attack cost (CR 508.1d) or an attack
 /// restriction (CR 508.1c, `CardDef::attack_rules`): the source's controller, or a planeswalker they control; never a
 /// battle. Baird, Steward of Argive and Archon of Absolution ask it with {1} (`attacking_you_or_your_planeswalkers_costs`),
