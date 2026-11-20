@@ -1,0 +1,8 @@
+{
+  "name": "Greta, Sweettooth Scourge",
+  "manaCost": "{1}{B}{G}",
+  "type": "Legendary Creature — Human Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When Greta enters, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\n{G}, Sacrifice a Food: Put a +1/+1 counter on target creature. Activate only as a sorcery.\n{1}{B}, Sacrifice a Food: You draw a card and you lose 1 life."
+}

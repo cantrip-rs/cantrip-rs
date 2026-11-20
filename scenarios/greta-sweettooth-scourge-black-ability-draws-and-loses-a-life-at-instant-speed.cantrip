@@ -1,0 +1,49 @@
+# Greta, Sweettooth Scourge: "{1}{B}, Sacrifice a Food: You draw a card and you lose 1 life." Turn 1: Greta is paid by Jet, Emerald and
+# Pearl, the ETB makes a Food, and Ruby and a Mountain stay: two mana but no {B}, so the ability is refused for want of mana (offered
+# with mana to spare, pinning the {B}). Turn 3, in the upkeep (an instant-speed moment, no sorcery restriction on this ability), Jet's
+# {B} and Ruby's {1} pay it exactly, the pool is empty, the Food is sacrificed, and Bot1 draws (hand 1 -> 2, before its draw step) and goes to 19.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Greta, Sweettooth Scourge
+Mountain
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Greta, Sweettooth Scourge.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Battlefield.Greta, Sweettooth Scourge.Activate(Ability: {1}{B}; Mana: short)
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Greta, Sweettooth Scourge.Activate(Ability: {1}{B}; Sacrifice: Food Token)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Food Token = (absent)
+Bot1.Hand.Count = 3

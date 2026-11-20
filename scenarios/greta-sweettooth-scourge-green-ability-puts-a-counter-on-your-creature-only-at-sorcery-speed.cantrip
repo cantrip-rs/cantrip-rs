@@ -1,0 +1,52 @@
+# Greta, Sweettooth Scourge: "When Greta enters, create a Food token." and "{G}, Sacrifice a Food: Put a +1/+1 counter on target
+# creature. Activate only as a sorcery." Turn 1: Greta is paid by Jet's {B}, the Forest's {G} and Pearl's {1}, so Emerald and Ruby stay
+# untapped; the ETB makes the Food. During Bot2's turn 2, in its end step, the ability is refused though the Food, Emerald's {G} and a
+# creature (Bot1's Memnite) are all there (sorcery speed, CR 307.5). Turn 3: the Mox Ruby, an artifact but no creature, is not a legal
+# target; then Emerald's {G} alone pays, the Food token is sacrificed and Bot1's Memnite gets the counter (2/2); the pool is empty
+# afterwards, so the cost is exactly {G}.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Greta, Sweettooth Scourge
+Memnite
+Forest
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Greta, Sweettooth Scourge.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Food Token.Types = Artifact
+[T2 Bot2.End]
+! Bot1.Battlefield.Greta, Sweettooth Scourge.Activate(Ability: {G}; Bot1.Battlefield.Memnite)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Greta, Sweettooth Scourge.Activate(Ability: {G}; Bot1.Battlefield.Mox Ruby)
+Bot1.Battlefield.Greta, Sweettooth Scourge.Activate(Ability: {G}; Sacrifice: Food Token; Bot1.Battlefield.Memnite)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Food Token = (absent)
+Bot1.Battlefield.Greta, Sweettooth Scourge.Counters.PlusOnePlusOne = (absent)

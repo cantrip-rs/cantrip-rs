@@ -1,0 +1,52 @@
+# Greta, Sweettooth Scourge: "{G}, Sacrifice a Food: Put a +1/+1 counter on target creature." The target is any creature: Bot2's
+# Memnite takes the counter (2/2), Bot1's own Greta does not. Greta is cast on turn 1 off Jet, Emerald and Pearl; Ruby and a Mountain
+# are left, neither green: the ability is refused for want of {G} (offered with mana to spare, so the refusal pins the colour), and
+# turn 3's Emerald pays it exactly.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Greta, Sweettooth Scourge
+Mountain
+Island
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Greta, Sweettooth Scourge.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Battlefield.Greta, Sweettooth Scourge.Activate(Ability: {G}; Bot1.Battlefield.Greta, Sweettooth Scourge; Mana: short)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Greta, Sweettooth Scourge.Activate(Ability: {G}; Sacrifice: Food Token; Bot2.Battlefield.Memnite)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Food Token = (absent)
