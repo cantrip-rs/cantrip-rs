@@ -1,0 +1,58 @@
+# Imodane, the Pyrohammer: the spell must be one "you control" and a spell. Turn 2: Bot2's Lightning Bolt kills Bot1's Ornithopter -
+# a spell that targets only a single creature, but not one Bot1 controls - and Imodane does nothing: Bot2 stays at 20 (it would be 17
+# if Imodane dealt Bot2 the 3). Turn 5: Bot1's Prodigal Sorcerer pings Bot2's Ornithopter (1 damage) with an ability, not a spell, and
+# Bot2 stays at 20 again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Imodane, the Pyrohammer
+Mox Sapphire
+Prodigal Sorcerer
+Ornithopter
+Mountain x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Imodane, the Pyrohammer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter = (absent)
+? Bot2.Life = 20
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Prodigal Sorcerer.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield.Ornithopter.Damage = 1

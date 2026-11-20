@@ -1,0 +1,54 @@
+# Imodane, the Pyrohammer: "that much damage" (CR 120.3, 120.8): damage of 0 is not dealt, so it triggers nothing, and 1 is passed on
+# as 1. Turn 3: Fireball with X = 0 at Bot2's Ornithopter (a spell that targets only a single creature) deals it nothing and
+# Bot2 stays at 20. Turn 5: X = 1 at the same Ornithopter deals it 1 and Imodane deals Bot2 1 (20 -> 19).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Imodane, the Pyrohammer
+Fireball
+Fireball
+Mountain
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Imodane, the Pyrohammer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Fireball.Cast(X: 0)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+? Bot2.Battlefield.Ornithopter.Damage = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Fireball.Cast(X: 1)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield.Ornithopter.Damage = 1

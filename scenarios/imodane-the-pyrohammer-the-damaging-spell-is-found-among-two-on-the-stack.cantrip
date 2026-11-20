@@ -1,0 +1,48 @@
+# Imodane, the Pyrohammer: the spell that deals the damage is the one the ability asks about, not another spell beneath it. Bot1 casts
+# Lightning Bolt at Bot2's face, then in response Lightning Bolt at Bot2's Ornithopter. The second resolves first: it targets only a
+# single creature, so Imodane's trigger (3 to Bot2) goes above the first Bolt (3 to Bot2), 20 -> 17 -> 14. The Bolt beneath, aimed at
+# a player, would not have triggered anything if it were the one asked about.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Imodane, the Pyrohammer
+Lightning Bolt
+Lightning Bolt
+Mountain x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Imodane, the Pyrohammer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 2
+? Bot2.Battlefield.Ornithopter = (absent)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14

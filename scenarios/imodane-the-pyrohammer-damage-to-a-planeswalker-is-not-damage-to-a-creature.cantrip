@@ -1,0 +1,50 @@
+# Imodane, the Pyrohammer: the one target must be a creature (CR 115.1). Bot2's Ajani, Outland Chaperone is a planeswalker, not a
+# creature: Bot1's Lightning Bolt at it kills it (3 loyalty) and Imodane does nothing: Bot2 stays at 20.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Imodane, the Pyrohammer
+Lightning Bolt
+Mountain x10
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Mox Jet
+Ajani, Outland Chaperone
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Imodane, the Pyrohammer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Ajani, Outland Chaperone.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ajani, Outland Chaperone.Counters.Loyalty = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ajani, Outland Chaperone)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ajani, Outland Chaperone = (absent)
+
+[Expect]
+Bot2.Life = 20

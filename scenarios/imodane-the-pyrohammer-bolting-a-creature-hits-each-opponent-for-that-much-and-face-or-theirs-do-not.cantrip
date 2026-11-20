@@ -1,0 +1,59 @@
+# Imodane, the Pyrohammer: "Whenever an instant or sorcery spell you control that targets only a single creature deals damage to that
+# creature, Imodane deals that much damage to each opponent" (CR 120.2, 603.2). Turn 1: Lightning Bolt at Bot2's face targets no
+# creature, so Imodane does nothing (Bot2 20 -> 17, refusal). Turn 3: Bolt at Bot2's Ornithopter - a 0/2, so the 3 damage is dealt in
+# full though only 2 is lethal (CR 120.3) - and Imodane deals Bot2 that 3 (17 -> 14). Turn 5: Bolt at Bot1's own Ornithopter counts
+# as well - "a single creature", whoever controls it - for another 3 (14 -> 11).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Imodane, the Pyrohammer
+Lightning Bolt
+Lightning Bolt
+Ornithopter
+Lightning Bolt
+Mountain x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Imodane, the Pyrohammer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter = (absent)
+? Bot2.Life = 14
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 11
+Bot1.Life = 20
+Bot1.Battlefield.Ornithopter = (absent)

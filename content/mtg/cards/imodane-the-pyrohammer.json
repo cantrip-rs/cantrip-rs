@@ -1,0 +1,8 @@
+{
+  "name": "Imodane, the Pyrohammer",
+  "manaCost": "{2}{R}{R}",
+  "type": "Legendary Creature — Human Knight",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Whenever an instant or sorcery spell you control that targets only a single creature deals damage to that creature, Imodane deals that much damage to each opponent."
+}
