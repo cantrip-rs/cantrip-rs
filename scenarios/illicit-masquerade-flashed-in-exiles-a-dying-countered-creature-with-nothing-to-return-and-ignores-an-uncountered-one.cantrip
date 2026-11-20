@@ -1,0 +1,57 @@
+# Illicit Masquerade has flash: Bot1 casts it in Bot2's turn 2, putting an impostor counter on its Memnite (CR 702.36a).
+# A Bolt kills the Memnite in turn 3: it is exiled and, with no other creature card in the graveyard, "up to one" returns
+# nothing (CR 601.2c). The Ornithopter cast later has no counter, so when a Bolt kills it in turn 5 nothing is exiled and it
+# stays in the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Memnite
+Illicit Masquerade
+Lightning Bolt
+Ornithopter
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Illicit Masquerade.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Counters.Impostor = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Memnite
+? Bot1.Battlefield.Count = 5
+[T5 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Memnite
+Bot1.Graveyard = Ornithopter; Lightning Bolt; Lightning Bolt
+Bot1.Battlefield.Count = 5

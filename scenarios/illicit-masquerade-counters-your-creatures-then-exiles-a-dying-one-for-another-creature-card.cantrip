@@ -1,0 +1,72 @@
+# Illicit Masquerade: "Flash. When this enchantment enters, put an impostor counter on each creature you control. Whenever a creature
+# you control with an impostor counter on it dies, exile it. Return up to one other target creature card from your graveyard to the
+# battlefield." An Ornithopter and a Phyrexian Walker die to Bolts first (turns 1 and 3, no counters, so nothing happens). On turn 7
+# Bot1 casts the Masquerade with a Memnite out: the Memnite gets a counter and Bot2's Memnite does not. On turn 9 a Bolt kills
+# Bot1's Memnite: it is exiled, and the creature card to return is chosen between the Ornithopter and the Walker - the Memnite
+# that is dying cannot be chosen. The Ornithopter returns to the battlefield with no counter and the Walker stays in the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Ornithopter
+Phyrexian Walker
+Lightning Bolt
+Lightning Bolt
+Memnite
+Illicit Masquerade
+Lightning Bolt
+Island x9
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Phyrexian Walker; Lightning Bolt; Ornithopter; Lightning Bolt
+[T5 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Illicit Masquerade.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Counters.Impostor = 1
+? Bot2.Battlefield.Memnite.Counters.Impostor = (absent)
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Graveyard.Memnite)
+Bot1.Target(Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Memnite
+Bot1.Battlefield.Ornithopter.Counters.Impostor = (absent)
+Bot1.Graveyard = Lightning Bolt; Phyrexian Walker; Lightning Bolt; Lightning Bolt
