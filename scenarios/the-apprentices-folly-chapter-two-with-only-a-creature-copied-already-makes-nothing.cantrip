@@ -1,0 +1,41 @@
+# The Apprentice's Folly: chapter II has no legal target when the only nontoken creature Bot1 controls, Rograkh, Son of Rohgahh, already
+# has a token copy with its name (CR 115.1, 201.2): the ability is removed from the stack and makes no second Reflection. On turn five
+# chapter III sacrifices the one Reflection, leaving Rograkh alone.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Rograkh, Son of Rohgahh
+The Apprentice's Folly
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Rograkh, Son of Rohgahh.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Apprentice's Folly.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 7
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Count = 7
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 5

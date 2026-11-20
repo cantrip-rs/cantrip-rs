@@ -1,0 +1,58 @@
+# The Apprentice's Folly {2}{U}{R}, a Saga: "I, II - Choose target nontoken creature you control that doesn't have the same name as a token
+# you control. Create a token that's a copy of it, except it isn't legendary, is a Reflection in addition to its other types, and has
+# haste. III - Sacrifice all Reflections you control." Bot1 casts it on turn one: chapter I copies the legendary Rograkh, Son of Rohgahh,
+# the token is no legend (both Rograkhs stay) and is a hasty Reflection (a copy of it has haste: the exception is a copiable value). On
+# turn three chapter II cannot choose Rograkh again - a token with its name is there - so Memnite is the one creature it can choose and it
+# is copied. On turn five chapter III sacrifices both Reflections and the Saga goes; the creatures that were copied stay.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Rograkh, Son of Rohgahh
+Memnite
+The Apprentice's Folly
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Rograkh, Son of Rohgahh.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Apprentice's Folly.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Rograkh, Son of Rohgahh)
+Bot1.Pass
+Bot2.Pass
+
+? Bot1.Battlefield.Count = 8
+? Bot1.Battlefield.Rograkh, Son of Rohgahh#2.Supertypes = (absent)
+? Bot1.Battlefield.Rograkh, Son of Rohgahh#2.Subtypes = Kobold; Reflection; Warrior
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 9
+? Bot1.Battlefield.Memnite#2.Subtypes = Construct; Reflection
+? Bot1.Battlefield.Memnite#2.SummoningSick = false
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 6
