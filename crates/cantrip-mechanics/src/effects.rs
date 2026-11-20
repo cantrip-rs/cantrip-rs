@@ -3982,6 +3982,21 @@ pub fn draw_a_card_for_each_artifact_you_control(g: &mut dyn Game, item: &StackI
     Ok(())
 }
 
+/// "Draw a card for each tapped creature your opponents control" (CR 121.2): the tapped creatures the ability controller's
+/// opponents control as it resolves, as the layers make them (CR 608.2h, 613), drawn as one draw of that many. Summon: Shiva's
+/// chapter III and Hylda's Crown of Winter print it.
+pub fn draw_a_card_for_each_tapped_creature_your_opponents_control(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let opponents: Vec<PlayerId> = g.state().opponents(item.controller).collect();
+    let tapped = g
+        .state()
+        .battlefield()
+        .iter()
+        .copied()
+        .filter(|&id| opponents.contains(&g.controller(id)) && g.obj(id).tapped && g.chars(id).is(CardType::Creature))
+        .count() as u32;
+    draw(g, item, tapped)
+}
+
 /// "Attacking creatures get +`power`/+`toughness` until end of turn" (CR 611.2c): the creatures attacking as `source`'s spell
 /// or ability resolves, whoever controls them, and none that attack or are put onto the battlefield attacking later. One
 /// instruction. Army of Allah, Auron's Inspiration and Morale print it.
