@@ -1,0 +1,8 @@
+{
+  "name": "Boundary Lands Ranger",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Ranger",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "At the beginning of combat on your turn, if you control a creature with power 4 or greater, you may discard a card. If you do, draw a card."
+}

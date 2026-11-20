@@ -1,0 +1,40 @@
+# Boundary Lands Ranger: "if you control a creature with power 4 or greater" (CR 603.4). A Charging Hooligan (3/3) is one short, and
+# the Ranger itself is 2/2, so nothing goes on the stack at the beginning of combat and the hand is untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Boundary Lands Ranger
+Charging Hooligan
+Mountain
+Ornithopter
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Boundary Lands Ranger.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Charging Hooligan.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand = Mountain
+Bot1.Graveyard = Black Lotus
+Bot1.Battlefield.Charging Hooligan.Power = 3

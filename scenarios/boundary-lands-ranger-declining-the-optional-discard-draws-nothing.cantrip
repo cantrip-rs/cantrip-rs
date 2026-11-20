@@ -1,0 +1,43 @@
+# Boundary Lands Ranger: "you may discard a card. If you do, draw a card." (CR 603.5.) With a Juggernaut (power 5) out, the trigger
+# goes on the stack at the beginning of combat; Bot1 declines, so the Mountain stays in hand and no card is drawn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Boundary Lands Ranger
+Juggernaut
+Mountain
+Ornithopter
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Boundary Lands Ranger.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Juggernaut.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+
+[Expect]
+Bot1.Hand = Mountain
+Bot1.Graveyard = Black Lotus
+Bot1.Library.Count = 21
