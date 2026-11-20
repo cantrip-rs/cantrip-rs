@@ -1,0 +1,60 @@
+# Unruly Catapult untaps only for an instant or sorcery spell YOU cast. On turn 3 it taps (Bot2 19) and Bot1 casts a creature
+# spell (Dwarven Trader) and an artifact spell (Mox Emerald): it stays tapped. On turn 4 Bot2 casts Lightning Bolt (an instant,
+# at Bot1: 17): it is still tapped, Bot2 never untaps it.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Unruly Catapult
+Mountain
+Mountain
+Dwarven Trader
+Mox Emerald
+Mountain x12
+
+[Bot2 Deck]
+Mountain
+Mountain
+Lightning Bolt
+Mountain x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Unruly Catapult.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Unruly Catapult.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Dwarven Trader.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Unruly Catapult.Tapped = true
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 19
+Bot1.Battlefield.Unruly Catapult.Tapped = true
+Bot1.Battlefield.Dwarven Trader.Tapped = false
+Bot1.Battlefield.Mox Emerald.Tapped = false

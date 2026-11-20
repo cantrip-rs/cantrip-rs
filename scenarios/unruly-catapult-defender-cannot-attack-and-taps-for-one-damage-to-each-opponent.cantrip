@@ -1,0 +1,49 @@
+# Unruly Catapult {2}{R} 0/4: "Defender. {T}: This creature deals 1 damage to each opponent." Cast on turn 1 beside a Dwarven
+# Trader (1/1, the positive control). On turn 3 the Trader may attack and the Catapult may not (defender), so Bot2 takes 1
+# from the Trader. After combat the Catapult taps for 1 more: Bot2 18, Bot1 untouched at 20.
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Unruly Catapult
+Dwarven Trader
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Unruly Catapult.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Dwarven Trader.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Attackers]
+! Bot1.Attack(Unruly Catapult > Bot2)
+Bot1.Attack(Dwarven Trader > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+Bot1.Battlefield.Unruly Catapult.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 20
+Bot1.Battlefield.Unruly Catapult.Tapped = true
+Bot1.Battlefield.Unruly Catapult.Power = 0
+Bot1.Battlefield.Unruly Catapult.Toughness = 4

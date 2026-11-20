@@ -1,0 +1,65 @@
+# Unruly Catapult: "Whenever you cast an instant or sorcery spell, untap this creature." On turn 3 the Catapult taps for 1
+# (Bot2 19), then Boltwave (a sorcery, 3 to each opponent: 16) untaps it as it is cast; it taps again (15), a Lightning Bolt
+# (an instant, 3: 12) untaps it again and it taps a third time: Bot2 at 11 and the Catapult tapped. Both untaps are checked
+# before the second tap.
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Unruly Catapult
+Mountain
+Mountain
+Boltwave
+Lightning Bolt
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Unruly Catapult.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Unruly Catapult.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Battlefield.Unruly Catapult.Tapped = true
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Boltwave.Cast
+? Bot1.Battlefield.Unruly Catapult.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Unruly Catapult.Tapped = false
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+Bot1.Battlefield.Unruly Catapult.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 15
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Unruly Catapult.Tapped = false
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 12
+Bot1.Battlefield.Unruly Catapult.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 11
+Bot1.Life = 20
+Bot1.Battlefield.Unruly Catapult.Tapped = true
+Bot1.Graveyard = Lightning Bolt; Boltwave
