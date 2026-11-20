@@ -1927,6 +1927,11 @@ pub mod filters {
     pub fn food(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
         q.chars(id).has_subtype(Subtype::Food)
     }
+    /// "A [subtype] attached to this permanent" (CR 701.21a, 301.5c, 303.4): a permanent of the subtype, in the word the source's text has
+    /// now (CR 612), attached to the source of the cost. Ronin, Shadow Stalker sacrifices an Equipment and Faunsbane Troll an Aura.
+    pub fn subtype_attached_to_this<const SUBTYPE: u16>(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
+        q.attached_to(id) == Some(asker.source) && q.chars(id).has_subtype(crate::lands::word(q, asker.source, SUBTYPE))
+    }
     /// A nonland permanent. Bolas's Citadel sacrifices ten; Rottenmouth Viper any number.
     pub fn nonland(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
         !q.chars(id).is(CardType::Land)

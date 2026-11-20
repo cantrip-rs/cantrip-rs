@@ -1,12 +1,7 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, targets};
+use cantrip_mechanics::targets::filters;
+use cantrip_mechanics::{effects, lands, targets};
 use cantrip_oracle as oracle;
-
-/// "Sacrifice an Equipment attached to Ronin" (CR 701.21a, 301.5c): an Equipment attached to the source as the cost is paid. The
-/// word is that of the ability's own text (CR 612).
-fn equipment_attached_to_this(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
-    q.attached_to(id) == Some(asker.source) && q.chars(id).has_subtype(q.words(asker.source).subtype(Subtype::Equipment))
-}
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
@@ -17,7 +12,7 @@ pub static CARD: CardDef = CardDef {
         )
         .once_each_turn(),
         ability(
-            TAP.and(sacrifice(1, equipment_attached_to_this)),
+            TAP.and(sacrifice(1, filters::subtype_attached_to_this::<{ lands::sub(Subtype::Equipment) }>)),
             effects::target_creature_gets::<-4, -4>,
             "{T}, Sacrifice an Equipment attached to Ronin: Target creature gets -4/-4 until end of turn. Activate only as a sorcery.",
         )
