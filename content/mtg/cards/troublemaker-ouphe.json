@@ -1,0 +1,8 @@
+{
+  "name": "Troublemaker Ouphe",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Ouphe",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nWhen this creature enters, if it was bargained, exile target artifact or enchantment an opponent controls."
+}

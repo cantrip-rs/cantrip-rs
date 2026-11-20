@@ -1,0 +1,48 @@
+# Troublemaker Ouphe cast without bargain (CR 702.166a): "if it was bargained" is false as it enters, so the intervening "if"
+# (CR 603.4) keeps the trigger from going on the stack even though Bot2's Moxen and Ghostly Prison are legal targets. Bot1 pays
+# {1}{G} with two Moxen and keeps all three.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Troublemaker Ouphe
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Ghostly Prison
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ghostly Prison.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ghostly Prison.Types = Enchantment
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Troublemaker Ouphe.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T3 Bot1.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot2.Battlefield = Ghostly Prison; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Troublemaker Ouphe
+Bot1.Graveyard.Count = 0

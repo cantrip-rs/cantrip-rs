@@ -1,0 +1,37 @@
+# Troublemaker Ouphe bargained with no artifact or enchantment an opponent controls (Bot2 has only an Island): no legal target, so
+# the trigger is removed from the stack (CR 603.3d) and the Ouphe is simply a 2/2. Bot1's own Moxen aren't an opponent's, so nothing
+# is exiled; the sacrificed Mox Jet is in the graveyard.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Troublemaker Ouphe
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Troublemaker Ouphe.Cast
+Bot1.Modes(Bargain:)
+Bot1.Choose(Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T3 Bot1.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield = Mox Emerald; Mox Pearl; Troublemaker Ouphe
+Bot1.Graveyard = Mox Jet
+Bot2.Battlefield = Island

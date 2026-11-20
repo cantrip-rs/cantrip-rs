@@ -1,0 +1,49 @@
+# Troublemaker Ouphe's intervening "if it was bargained" (CR 603.4) is checked again as the trigger resolves, and an Ouphe that
+# has left the battlefield is judged by how it last existed there (CR 608.2h): in response to the trigger Bot2 bolts the 2/2 Ouphe
+# with Mox Ruby, and the trigger still resolves and exiles Mox Jet.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Troublemaker Ouphe
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Troublemaker Ouphe.Cast
+Bot1.Modes(Bargain:)
+Bot1.Choose(Mox Jet)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Troublemaker Ouphe)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Mox Jet
+Bot1.Graveyard = Troublemaker Ouphe; Mox Jet
+Bot2.Battlefield = Mox Ruby

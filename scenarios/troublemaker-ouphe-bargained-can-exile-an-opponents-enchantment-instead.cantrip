@@ -1,0 +1,48 @@
+# Troublemaker Ouphe's trigger exiles "an artifact or enchantment" (CR 115.2): bargained on turn 3 (sacrificing Mox Jet), Bot1 picks
+# Bot2's Ghostly Prison, an enchantment, and it is exiled while the three Moxen stay.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Troublemaker Ouphe
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Ghostly Prison
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ghostly Prison.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ghostly Prison.Types = Enchantment
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Troublemaker Ouphe.Cast
+Bot1.Modes(Bargain:)
+Bot1.Choose(Mox Jet)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Ghostly Prison)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Ghostly Prison
+Bot2.Battlefield = Mox Jet; Mox Pearl; Mox Ruby
