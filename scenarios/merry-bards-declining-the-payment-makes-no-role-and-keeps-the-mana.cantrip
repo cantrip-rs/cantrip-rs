@@ -1,0 +1,35 @@
+# Merry Bards: "you may pay {1}": declining (or not paying) is not doing it, so "when you do" never happens (CR 603.12): no Young Hero
+# token is created, no target is chosen, and the Mox Ruby is still untapped with its mana unspent.
+
+[Bot1 Deck]
+Black Lotus
+Merry Bards
+Mox Ruby
+Memnite
+Mountain
+Mountain
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Merry Bards.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield = Memnite; Merry Bards; Mox Ruby
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Stack.Count = 0

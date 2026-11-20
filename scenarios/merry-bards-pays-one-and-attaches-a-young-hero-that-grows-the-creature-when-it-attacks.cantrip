@@ -1,0 +1,50 @@
+# Merry Bards: "When this creature enters, you may pay {1}. When you do, create a Young Hero Role token attached to target creature
+# you control." (CR 603.12, 111.10r). Turn 1: Bot1 casts a Memnite, Mox Ruby and Merry Bards (Black Lotus), then pays {1} with the Mox.
+# Bot1 picks the Memnite over the Bards as the target. Turn 3: the
+# Memnite (toughness 1) attacks and the Role puts a +1/+1 counter on it (CR 303.7): a 2/2, and the Bards stays a 3/2 with no Role.
+
+[Bot1 Deck]
+Black Lotus
+Merry Bards
+Mox Ruby
+Memnite
+Mountain
+Mountain
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Merry Bards.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.PayCost
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Young Hero.AttachedTo = Memnite
+? Bot1.Battlefield.Merry Bards.Power = 3
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Young Hero.AttachedTo = Memnite
+Bot1.Battlefield.Merry Bards.Power = 3
+Bot1.Battlefield.Merry Bards.Toughness = 2
