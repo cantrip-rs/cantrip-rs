@@ -1,0 +1,12 @@
+{
+  "name": "Realm-Scorcher Hellkite",
+  "manaCost": "{4}{R}{R}",
+  "type": "Creature — Dragon",
+  "power": 4,
+  "toughness": 6,
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nFlying, haste\nWhen this creature enters, if it was bargained, add four mana in any combination of colors.\n{1}{R}: This creature deals 1 damage to any target.",
+  "keywords": [
+    "Flying",
+    "Haste"
+  ]
+}
