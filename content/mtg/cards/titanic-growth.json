@@ -1,0 +1,6 @@
+{
+  "name": "Titanic Growth",
+  "manaCost": "{1}{G}",
+  "type": "Instant",
+  "oracleText": "Target creature gets +4/+4 until end of turn."
+}

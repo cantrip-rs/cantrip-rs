@@ -1,0 +1,46 @@
+# Titanic Growth {1}{G}: "Target creature gets +4/+4 until end of turn" (CR 611.2a). Bot1 pays with Black Lotus (GGG) on turn 1
+# for an Elvish Mystic (G) and the Growth ({1}{G}) on it: the 1/1 is 5/5 for the turn and 1/1 again on Bot2's turn. A second Growth
+# on Bot2's 0/2 Ornithopter (it is any creature, not only Bot1's) makes it 4/6 until the end of the turn.
+
+[Bot1 Deck]
+Black Lotus
+Elvish Mystic
+Titanic Growth
+Mox Emerald
+Mox Emerald
+Titanic Growth
+Forest x20
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Hand.Titanic Growth.Cast(Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Mystic.Power = 5
+? Bot1.Battlefield.Elvish Mystic.Toughness = 5
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Elvish Mystic.Power = 1
+? Bot1.Battlefield.Elvish Mystic.Toughness = 1
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Titanic Growth.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 4
+? Bot2.Battlefield.Ornithopter.Toughness = 6
+
+[Expect]
+Bot1.Graveyard.Count = 3
+Bot2.Battlefield.Ornithopter.Power = 4
+Bot2.Battlefield.Ornithopter.Toughness = 6
