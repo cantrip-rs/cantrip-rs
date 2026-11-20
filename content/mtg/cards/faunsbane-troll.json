@@ -1,0 +1,8 @@
+{
+  "name": "Faunsbane Troll",
+  "manaCost": "{2}{B}{G}",
+  "type": "Creature — Troll",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When this creature enters, create a Monster Role token attached to it. (Enchanted creature gets +1/+1 and has trample.)\n{1}, Sacrifice an Aura attached to this creature: This creature fights target creature you don't control. If that creature would die this turn, exile it instead. Activate only as a sorcery."
+}

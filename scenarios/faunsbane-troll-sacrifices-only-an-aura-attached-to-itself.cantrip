@@ -1,0 +1,65 @@
+# Faunsbane Troll: "Sacrifice an Aura attached to this creature". Turn 1: the Troll enters with its Monster Role and Holy Strength
+# (+1/+2) is put on it too (6/7 with the Role). Turn 3: Unholy Strength is put on Bot1's Memnite. An Aura
+# attached to the Memnite is no legal sacrifice for the cost (CR 701.21a), and the Troll chooses between its two Auras: sacrificing
+# Holy Strength leaves the Monster Role, so the Troll is a 5/5 with trample after the fight with Bot2's Memnite, which is exiled.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Faunsbane Troll
+Holy Strength
+Memnite
+Unholy Strength
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Faunsbane Troll.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Holy Strength.Cast(Bot1.Battlefield.Faunsbane Troll)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Unholy Strength.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Faunsbane Troll.Power = 6
+? Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Faunsbane Troll.Activate(Ability: {1}; Bot2.Battlefield.Memnite)
+! Bot1.Choose(Unholy Strength)
+Bot1.Choose(Holy Strength)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Memnite
+Bot1.Battlefield.Faunsbane Troll.Power = 5
+Bot1.Battlefield.Faunsbane Troll.Damage = 1
+Bot1.Battlefield.Faunsbane Troll.Keywords = Trample
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Unholy Strength.AttachedTo = Memnite
+Bot1.Graveyard = Holy Strength

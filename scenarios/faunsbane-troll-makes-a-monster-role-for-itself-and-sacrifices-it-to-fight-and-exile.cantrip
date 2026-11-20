@@ -1,0 +1,60 @@
+# Faunsbane Troll: "When this creature enters, create a Monster Role token attached to it." and "{1}, Sacrifice an Aura attached to this
+# creature: This creature fights target creature you don't control. If that creature would die this turn, exile it instead. Activate
+# only as a sorcery." Turn 1: the Troll (4/4) enters and the Monster Role makes it a 5/5 with trample, off Jet, Emerald, Ruby and Pearl.
+# During Bot2's end step of turn 2 the ability is refused (sorcery speed, CR 307.5). On turn 3, Bot1's own Memnite is no legal target
+# (the creature must be one you don't control); Pearl's {1} pays exactly and the Role is sacrificed: the Troll is 4/4 again, fights Bot2's
+# Memnite, takes 1 damage, and the dying Memnite is exiled instead of going to the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Faunsbane Troll
+Memnite
+Island
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Faunsbane Troll.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Faunsbane Troll.Power = 5
+? Bot1.Battlefield.Faunsbane Troll.Keywords = Trample
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T2 Bot2.End]
+! Bot1.Battlefield.Faunsbane Troll.Activate(Ability: {1}; Sacrifice: Monster; Bot2.Battlefield.Memnite)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Faunsbane Troll.Activate(Ability: {1}; Sacrifice: Monster; Bot1.Battlefield.Memnite)
+Bot1.Battlefield.Faunsbane Troll.Activate(Ability: {1}; Sacrifice: Monster; Bot2.Battlefield.Memnite)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Memnite
+Bot2.Graveyard.Count = 0
+Bot2.Battlefield.Memnite = (absent)
+Bot1.Battlefield.Faunsbane Troll.Power = 4
+Bot1.Battlefield.Faunsbane Troll.Damage = 1
+Bot1.Battlefield.Faunsbane Troll.Keywords = (absent)
+Bot1.Battlefield.Monster = (absent)
+Bot1.Battlefield.Memnite.Power = 1
