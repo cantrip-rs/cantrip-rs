@@ -1943,6 +1943,11 @@ pub mod filters {
     pub fn nonland(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
         !q.chars(id).is(CardType::Land)
     }
+    /// An artifact or a land. Marwyn, the Clearcutter and Grabby Giant sacrifice one.
+    pub fn artifact_or_land(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
+        let c = q.chars(id);
+        c.is(CardType::Artifact) || c.is(CardType::Land)
+    }
     /// An artifact or a creature. Deadly Dispute, Eviscerator's Insight and Fanatical Offering sacrifice one.
     pub fn artifact_or_creature(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
         let c = q.chars(id);
