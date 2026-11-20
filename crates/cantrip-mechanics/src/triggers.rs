@@ -3157,8 +3157,29 @@ pub fn another_nontoken_creature_you_control_dies(q: &dyn Query, me: &Asker, eve
         _ => another_creature_you_control_dies(q, me, event),
     }
 }
+/// "Whenever [this creature] or another nontoken creature you control dies" (CR 700.4, 603.10a, 201.5): "nontoken" qualifies only
+/// "another ... creature", so this permanent triggers it whatever it is, a token copy of it included; any other creature you
+/// controlled as it died, looked back on as it last was on the battlefield, only if it was not a token (CR 111.7). The ability is
+/// about the creature that died, from which "that card" finds what it became (CR 400.7). Avacyn, Angel of Horror and Totentanz,
+/// Swarm Piper print it.
+pub fn this_or_another_nontoken_creature_you_control_dies(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { old, from, to, .. }
+            if from.is(ZoneKind::Battlefield)
+                && to.is(ZoneKind::Graveyard)
+                && q.chars(*old).is(CardType::Creature)
+                && q.obj(*old).controller == me.controller
+                && (*old == me.source || !q.obj(*old).token) =>
+        {
+            Fired::about(Target::Object(*old))
+        }
+        _ => None,
+    }
+}
 pub const NONTOKEN_CREATURE_YOU_CONTROL_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, nontoken_creature_you_control_dies);
 pub const ANOTHER_NONTOKEN_CREATURE_YOU_CONTROL_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, another_nontoken_creature_you_control_dies);
+pub const THIS_OR_ANOTHER_NONTOKEN_CREATURE_YOU_CONTROL_DIES: Trigger =
+    when_asked(EventMask::ZONE_CHANGE, this_or_another_nontoken_creature_you_control_dies);
 /// "Whenever you cast an enchantment spell" (CR 603.2): the spell is the subject. Verduran Enchantress and Dathon, His Heart Open print it.
 pub fn you_cast_an_enchantment(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
