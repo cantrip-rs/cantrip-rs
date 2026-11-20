@@ -651,10 +651,10 @@ mod tests {
         let mark = context.s().mark();
         phase_out(&mut context, &[bear], None, false);
         let after = context.s().clone_with_journal();
-        let (undos, redos) = context.st().step_back(mark);
+        let redos = context.st().step_back(mark);
         assert!(context.s() == &before);
         assert!(context.s().phased_last_known(bear).is_none());
-        context.st().step_forward(undos, redos);
+        context.st().step_forward(redos);
         assert!(context.s() == &after);
         assert!(Query::chars(&context, bear).has(Keyword::Lifelink));
     }

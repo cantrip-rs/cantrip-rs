@@ -107,9 +107,9 @@ fn removing_and_readding_the_last_vow_in_one_instruction_permanently_ends_it() {
     assert!(barred(&g, &[bear], &[Target::Player(P0)]).is_empty());
     assert!(g.state.effects.is_empty(), "ended, not dormant");
     let after = g.state.clone();
-    let (undos, redos) = g.state.step_back(mark);
+    let redos = g.state.step_back(mark);
     assert!(g.state == before, "exact counter/effect journal restoration");
-    g.state.step_forward(undos, redos);
+    g.state.step_forward(redos);
     assert!(g.state == after, "exact counter/effect redo");
     g.state.step_back(mark);
     restrict(&mut g, source, bear, P2, true);

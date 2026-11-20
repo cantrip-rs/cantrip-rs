@@ -452,10 +452,10 @@ fn acquired_cdas_undo_redo_and_leave_as_new_objects() {
     let values = Copiable::of(g.cards.id_of(&COPY_BODY)).sized(2, 1).with_text(g.cards.id_of(&COPY_CDA));
     copy_values(&mut g, copy, values);
     assert_eq!(pt_and_base(&g, copy), (Some(1), Some(1), Some(1)));
-    let (undos, redos) = g.state.step_back(mark);
+    let redos = g.state.step_back(mark);
     assert!(g.state.obj(copy).copy.is_none());
     assert_eq!(pt_and_base(&g, copy), (Some(0), Some(2), Some(0)));
-    g.state.step_forward(undos, redos);
+    g.state.step_forward(redos);
     assert_eq!(cantrip_api::Query::copiable_values(&g, copy), values);
     assert_eq!(pt_and_base(&g, copy), (Some(1), Some(1), Some(1)));
     cantrip_api::Game::exile(&mut cx(&mut g), copy);

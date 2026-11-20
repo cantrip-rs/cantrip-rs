@@ -136,10 +136,10 @@ fn undo_and_redo_restore_the_counter_values_and_derived_characteristics() {
     let before = game.state.mark();
     counters(&mut game, id, &[(CounterKind::Plus1Plus2, 2)]);
     assert_eq!(pt(&game, id), (Some(4), Some(7)));
-    let (undos, redos) = game.state.step_back(before);
+    let redos = game.state.step_back(before);
     assert_eq!(pt(&game, id), (Some(2), Some(3)));
     assert_eq!(game.state.obj(id).counters(CounterKind::Plus1Plus2), 0);
-    game.state.step_forward(undos, redos);
+    game.state.step_forward(redos);
     assert_eq!(pt(&game, id), (Some(4), Some(7)));
 }
 

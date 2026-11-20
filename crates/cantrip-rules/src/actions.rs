@@ -16710,9 +16710,9 @@ mod tests {
         assert!(!game.state.obj(creature).prepared && game.state.obj(copy).prepared_from.is_none());
         assert_eq!(game.state.zone(Zone::exile(ME)), &[copy]);
         assert!(casts(&mut game, ME, copy).is_empty());
-        let (undos, redos) = game.state.step_back(mark);
+        let redos = game.state.step_back(mark);
         assert!(game.state.obj(creature).prepared && game.state.obj(copy).prepared_from == Some(creature));
-        game.state.step_forward(undos, redos);
+        game.state.step_forward(redos);
         assert!(!game.state.obj(creature).prepared && game.state.obj(copy).prepared_from.is_none());
         let mark = game.state.mark();
         cantrip_api::Game::become_unprepared(&mut cx(&mut game), creature);

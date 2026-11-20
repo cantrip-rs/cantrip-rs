@@ -7,8 +7,9 @@
 //! The game holds one working state and moves it through the tree as a checkout does: undo up to the common ancestor,
 //! redo down to the target. For the nodes on the current path, the writes are the working state's own journal and the
 //! events its own history, so nothing about them is copied; a node keeps its writes and events itself only while the
-//! working state is off it. Going up undoes each write and keeps the entry that redoes it; going down applies those and
-//! puts the original entries back on the journal. Answering a question a node already has an answer for moves to that
+//! working state is off it, and of its writes only the entries that redo them. Going up undoes each write and keeps
+//! the entry that redoes it; going down applies those and journals for each the entry that undoes it again
+//! (`GameState::step_back`, `step_forward`). Answering a question a node already has an answer for moves to that
 //! child instead of playing it out again.
 
 use cantrip_api::*;
@@ -22,10 +23,11 @@ impl NodeId {
     pub const ROOT: NodeId = NodeId(0);
 }
 
-/// What a node holds while the working state is not on it: its writes, the entries that redo them, its events.
+/// What a node holds while the working state is not on it: the entries that redo its writes, and its events. The
+/// entries that undo them are no part of it: each is what its redo entry's inverse is where it is applied, and a
+/// search's tree is nearly all nodes off the path.
 #[derive(Clone, Debug, Default)]
 struct Away {
-    undos: Vec<Undo>,
     redos: Vec<Undo>,
     events: Vec<Record>,
 }
@@ -157,15 +159,15 @@ impl Tree {
         }
     }
 
-    pub(crate) fn put_away(&mut self, node: NodeId, undos: Vec<Undo>, redos: Vec<Undo>, events: Vec<Record>) {
+    pub(crate) fn put_away(&mut self, node: NodeId, redos: Vec<Undo>, events: Vec<Record>) {
         let i = self.ix(node);
-        self.nodes[i].away = Some(Away { undos, redos, events });
+        self.nodes[i].away = Some(Away { redos, events });
     }
 
-    pub(crate) fn take_back(&mut self, node: NodeId) -> (Vec<Undo>, Vec<Undo>, Vec<Record>) {
+    pub(crate) fn take_back(&mut self, node: NodeId) -> (Vec<Undo>, Vec<Record>) {
         let i = self.ix(node);
         let away = self.nodes[i].away.take().expect("a node off the path holds its writes");
-        (away.undos, away.redos, away.events)
+        (away.redos, away.events)
     }
 }
 

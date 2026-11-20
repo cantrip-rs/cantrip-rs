@@ -1347,9 +1347,9 @@ fn native_ability_copy_and_state_replay_keep_the_frozen_damage_payload() {
         assert_eq!(item.matched_damage_amount(), 2);
         assert_eq!(item.controller, THEM);
     }
-    let (undos, redos) = g.state.step_back(mark);
+    let redos = g.state.step_back(mark);
     assert_eq!(g.state, before);
-    g.state.step_forward(undos, redos);
+    g.state.step_forward(redos);
     assert_eq!(g.state.stack.last().unwrap().matched_damage_amount(), 2);
     let mut missing = original;
     missing.data[0] = 99;

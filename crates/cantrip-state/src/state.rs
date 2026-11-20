@@ -1842,11 +1842,6 @@ impl GameState {
 
     // --- Moving through the journal ---------------------------------------------------------------------------
 
-    /// Undoes every write since `mark`.
-    /// Moves the state back to `mark` for the game-log tree (docs/engine-design.md, "The game log is the search
-    /// tree"): pops and undoes every entry after it, and hands back the entries in the order they were written with,
-    /// in the same order, the entries that redo them. Nothing is copied but the redo entries, made from the state as
-    /// each is undone.
     /// A copy of the state and its whole journal, for one that must still be able to roll back.
     pub fn clone_with_journal(&self) -> GameState {
         let mut copy = self.clone();
@@ -2106,30 +2101,39 @@ impl GameState {
         self.zones[slot].iter().copied().filter(|id| id.index() >= len).collect()
     }
 
-    pub fn step_back(&mut self, mark: Mark) -> (Vec<Undo>, Vec<Undo>) {
+    /// Moves the state back to `mark` for the game-log tree (docs/engine-design.md, "The game log is the search
+    /// tree"): pops and undoes every entry after it, and hands back, in the order the entries were written, the
+    /// entries that redo them, each made from the state as its write is undone. The entries undone are not kept:
+    /// `step_forward` makes them again.
+    pub fn step_back(&mut self, mark: Mark) -> Vec<Undo> {
         assert!(mark.0 >= self.journal.base, "stepping back past what the journal still holds");
-        let mut undos = Vec::new();
-        let mut redos = Vec::new();
-        while self.journal.base + self.journal.entries.len() as u32 > mark.0 {
+        let keep = (mark.0 - self.journal.base) as usize;
+        let mut redos = Vec::with_capacity(self.journal.entries.len().saturating_sub(keep));
+        while self.journal.entries.len() > keep {
             let undo = self.journal.entries.pop().expect("entry");
             redos.push(self.inverse(&undo));
-            undos.push(undo.clone());
             self.undo(undo);
         }
-        undos.reverse();
         redos.reverse();
-        (undos, redos)
+        redos
     }
 
-    /// The reverse of `step_back`: reapplies the redo entries in order and puts the original entries back on the
-    /// journal, so the state and its journal are as they were before stepping back.
-    pub fn step_forward(&mut self, undos: Vec<Undo>, redos: Vec<Undo>) {
+    /// The reverse of `step_back`: reapplies the redo entries in order and journals for each the entry that undoes it
+    /// again, its inverse where it is applied (as `revert` journals the inverse of a write it undoes), so the state is
+    /// as it was before stepping back and its journal undoes to the same states, entry by entry. The entry made again
+    /// is the one the write journalled, but for a value pushed onto a list whose inverse is a removal by place (mana
+    /// produced, an effect, a permission, a pending or delayed trigger): that one comes back as an insertion at the
+    /// last place, which undoes and inverts as the push did and counts alike for the layers (`Undo::layered`).
+    pub fn step_forward(&mut self, redos: Vec<Undo>) {
+        self.journal.entries.reserve(redos.len());
         for redo in redos {
+            let undo = self.inverse(&redo);
             self.undo(redo);
+            self.journal.entries.push(undo);
         }
-        self.journal.entries.extend(undos);
     }
 
+    /// Undoes every write since `mark`.
     pub fn rollback(&mut self, mark: Mark) {
         assert!(mark.0 >= self.journal.base, "rolling back past what the journal still holds");
         while self.journal.base + self.journal.entries.len() as u32 > mark.0 {
@@ -2468,9 +2472,9 @@ mod tests {
         }));
         let clone = state.clone_with_journal();
         assert_eq!(clone.chosen_subtype_pair(by), Some([Subtype::Forest, Subtype::Island]));
-        let (undos, redos) = state.step_back(mark);
+        let redos = state.step_back(mark);
         assert_eq!(state.chosen_subtype_pair(by), None);
-        state.step_forward(undos, redos);
+        state.step_forward(redos);
         assert_eq!(state.chosen_subtype_pair(by), Some([Subtype::Forest, Subtype::Island]));
     }
 
@@ -2482,9 +2486,9 @@ mod tests {
         let id = state.cost_receipt_push(receipt) as usize;
         assert_eq!(state.cost_receipts[id], receipt);
         let mut copy = state.clone_with_journal();
-        let (undos, redos) = state.step_back(mark);
+        let redos = state.step_back(mark);
         assert!(state.cost_receipts.is_empty());
-        state.step_forward(undos, redos);
+        state.step_forward(redos);
         assert_eq!(state.cost_receipts[id], receipt);
         copy.rollback(mark);
         assert!(copy.cost_receipts.is_empty());
@@ -2541,9 +2545,9 @@ mod tests {
         assert_eq!(values.extra_texts_with_exclusions().filter(|&(_, e)| e == CdaExclusions::PT).count(), 512);
         assert_eq!(values.extra_texts_with_exclusions().last(), Some((text, CdaExclusions::NONE)));
         let after = s.clone_with_journal();
-        let (undos, redos) = s.step_back(mark);
+        let redos = s.step_back(mark);
         assert!(s == before && s.obj(id).copy.is_none());
-        s.step_forward(undos, redos);
+        s.step_forward(redos);
         assert!(s == after);
         assert_eq!(s.obj(id).copy, Some(values));
         s.rollback(mark);

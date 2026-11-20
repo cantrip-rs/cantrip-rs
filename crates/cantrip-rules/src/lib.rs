@@ -369,7 +369,8 @@ pub struct Game {
     pub tree: tree::Tree,
     pub at: tree::NodeId,
     pub cards: &'static CardTable,
-    /// Check that every rollback restores the state exactly (slow; for tests). See [`Game::verifying`].
+    /// Check that every rollback restores the state exactly, and that going up the game tree and back down makes the
+    /// journal again as it was written (slow; for tests). See [`Game::verifying`].
     pub verify: bool,
     /// The most events the game records: one that reaches it is a draw (`MAX_GAME_EVENTS`). Smaller in a test.
     pub max_events: usize,
@@ -935,6 +936,11 @@ impl Game {
             // game quadratic (a 256-round loop to a draw took a minute).
             let from = self.tree.start(child).1;
             let (state, len, tail) = (self.state.clone(), self.log.len(), self.log[from.min(self.log.len())..].to_vec());
+            // The journal as the answer wrote it, from where the child began: coming back down journals each write's
+            // undo entry again from the entry that redoes it (`GameState::step_forward`), and the journal made again
+            // must undo to the same states as the one written, entry by entry.
+            let child_mark = self.tree.start(child).0;
+            let mut written = self.state.clone_with_journal_from(child_mark);
             let parent = self.tree.parent(child).expect("a parent");
             self.goto(parent);
             assert_eq!(self.log.len(), here.1, "going back up to the node the answer was given at did not restore its history");
@@ -943,6 +949,18 @@ impl Game {
                 self.state == state && self.log.len() == len && self.log[from.min(len)..] == tail[..],
                 "moving through the game tree did not restore the position"
             );
+            let mut redone = self.state.clone_with_journal_from(child_mark);
+            assert_eq!(written.mark(), redone.mark(), "coming back down did not journal as many entries as the answer wrote");
+            // The frames' marks too, which are no part of a position's equality: an answer reverts to them.
+            let marks = |s: &GameState| s.agenda.iter().map(|f| (f.mark, f.log_mark)).collect::<Vec<_>>();
+            for mark in (child_mark.0..redone.mark().0).rev() {
+                written.rollback(Mark(mark));
+                redone.rollback(Mark(mark));
+                assert!(
+                    written == redone && marks(&written) == marks(&redone),
+                    "the journal made again coming back down does not undo to the states the answer's did"
+                );
+            }
         }
         Ok(())
     }
@@ -971,14 +989,14 @@ impl Game {
         let shared = from.iter().zip(&to).take_while(|(a, b)| a == b).count();
         for &node in from[shared..].iter().rev() {
             let (mark, events_from) = self.tree.start(node);
-            let (undos, redos) = self.state.step_back(mark);
+            let redos = self.state.step_back(mark);
             let events = self.log.split_off(events_from);
             self.log.extend_from_slice(self.tree.displaced(node));
-            self.tree.put_away(node, undos, redos, events);
+            self.tree.put_away(node, redos, events);
         }
         for &node in &to[shared..] {
-            let (undos, redos, events) = self.tree.take_back(node);
-            self.state.step_forward(undos, redos);
+            let (redos, events) = self.tree.take_back(node);
+            self.state.step_forward(redos);
             self.log.truncate(self.tree.start(node).1);
             self.log.extend(events);
         }
