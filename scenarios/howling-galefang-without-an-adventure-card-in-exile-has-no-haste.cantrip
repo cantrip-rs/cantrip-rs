@@ -1,0 +1,25 @@
+# Howling Galefang with no card in exile has no haste: it is cast on turn one and cannot attack that turn (CR 302.6), and Bot2 stays at 20.
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Howling Galefang
+Mountain x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Howling Galefang.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Howling Galefang.Keywords = Vigilance
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Howling Galefang.Tapped = false

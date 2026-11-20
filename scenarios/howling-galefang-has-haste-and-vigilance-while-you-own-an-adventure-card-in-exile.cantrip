@@ -1,0 +1,42 @@
+# Howling Galefang {2}{G}{G}, a 4/4 with vigilance: "This creature has haste as long as you own a card in exile that has an Adventure" (CR 604.1, 715.3d). On turn one Bot1 casts
+# Bonecrusher Giant as Stomp (2 damage to Bot2, 20 to 18), which leaves the Giant in exile on an adventure, then casts the Galefang with Black Lotus and a Mox Jet. It has haste
+# and attacks at once: Bot2 goes 18 to 14, and vigilance keeps the Galefang untapped.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Black Lotus
+Bonecrusher Giant
+Howling Galefang
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bonecrusher Giant.Cast(Bot2; Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+? Exile = Bonecrusher Giant
+? Bot2.Life = 18
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Howling Galefang.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Howling Galefang.Keywords = Haste; Vigilance
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Howling Galefang > Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Howling Galefang.Tapped = false

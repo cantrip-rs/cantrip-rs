@@ -1,0 +1,39 @@
+# Howling Galefang: "a card in exile that has an Adventure" must be one Bot1 owns. On turn two Bot2 casts its Bonecrusher Giant as Stomp (Bot1 from 20 to 18) so the Giant sits in
+# exile on Bot2's adventure; on turn three Bot1's Galefang has no haste and cannot attack, while the exiled card is in exile (not Bot1's).
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Howling Galefang
+Mountain x17
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Bonecrusher Giant
+Island x17
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Bonecrusher Giant.Cast(Bot1; Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+? Exile = Bonecrusher Giant
+? Bot1.Life = 18
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Howling Galefang.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Howling Galefang.Keywords = Vigilance
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20

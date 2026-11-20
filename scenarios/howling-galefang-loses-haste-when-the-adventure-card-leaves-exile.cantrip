@@ -1,0 +1,47 @@
+# Howling Galefang's haste lasts only while the Adventure card stays in exile (CR 611.3a): Bot1 casts Bonecrusher Giant as Stomp on turn one, and on turn three casts the Galefang,
+# which has haste, then casts the Giant itself from exile ({2}{R}). The exiled card has left exile, so the Galefang loses haste at once and cannot attack.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Black Lotus
+Mox Sapphire
+Bonecrusher Giant
+Howling Galefang
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bonecrusher Giant.Cast(Bot2; Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+? Exile = Bonecrusher Giant
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Howling Galefang.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Howling Galefang.Keywords = Haste; Vigilance
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Bonecrusher Giant.Cast
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+? Bot1.Battlefield.Howling Galefang.Keywords = Vigilance
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18

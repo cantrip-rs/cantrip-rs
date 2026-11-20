@@ -1,0 +1,36 @@
+# Howling Galefang: the exiled card must have an Adventure. Bot1 exiles its own Memnite with Swords to Plowshares (a card it owns in exile, but with no Adventure), then casts the
+# Galefang, which has no haste and cannot attack.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Black Lotus
+Memnite
+Swords to Plowshares
+Howling Galefang
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Exile = Memnite
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Howling Galefang.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Howling Galefang.Keywords = Vigilance
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20

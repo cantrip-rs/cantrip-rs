@@ -1,0 +1,45 @@
+# A card exiled face down has no characteristics (CR 406.3a, 708.2), so a face-down Bonecrusher Giant (Necropotence) is no
+# "card in exile that has an Adventure" and gives the Galefang no haste.
+[Bot1 Deck]
+Black Lotus
+Necropotence
+Howling Galefang
+Forest
+Forest
+Forest
+Forest
+Bonecrusher Giant
+Forest x20
+
+[Bot2 Deck]
+Island x40
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Necropotence.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Necropotence.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Forest#3.Activate
+Bot1.Battlefield.Forest#4.Activate
+Bot1.Hand.Howling Galefang.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Howling Galefang.Keywords = Vigilance
+Exile.FaceDown.Count = 1

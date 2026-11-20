@@ -1,0 +1,11 @@
+{
+  "name": "Howling Galefang",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Beast",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Vigilance\nThis creature has haste as long as you own a card in exile that has an Adventure.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
