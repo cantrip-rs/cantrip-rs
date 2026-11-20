@@ -1049,6 +1049,20 @@ pub fn subject_gets_plus_one(g: &mut dyn Game, item: &StackItem) -> Result<(), S
     Ok(())
 }
 
+/// "Whenever you cast a permanent spell using mana produced by this permanent" (CR 601.2h, 603.2): a spell its controller cast, a
+/// permanent spell as it is on the stack (CR 110.4a), some of whose total cost was paid with mana this permanent produced -
+/// however little, and with whatever else. The ability is about the spell. The Myriad Pools and Tecutlan, the Searing Rift print it.
+pub fn permanent_spell_cast_with_this_permanents_mana(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match *event {
+        Event::SpellCast { spell, player, .. }
+            if player == me.controller && crate::targets::is_permanent_card(&q.chars(spell)) && q.history().cast_using_mana_from(spell, me.source) =>
+        {
+            Fired::about(Target::Object(spell))
+        }
+        _ => None,
+    }
+}
+
 /// Exalted (CR 702.83a): "Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn."
 /// Ignoble Hierarch and Noble Hierarch print it word for word.
 pub const EXALTED: AbilityDef = triggered(CREATURE_YOU_CONTROL_ATTACKS_ALONE, subject_gets_plus_one, "Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.");

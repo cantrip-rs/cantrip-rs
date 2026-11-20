@@ -2,18 +2,6 @@ use cantrip_api::*;
 use cantrip_mechanics::{effects, spent, targets, triggers};
 use cantrip_oracle as oracle;
 
-/// "Whenever you cast a permanent spell using mana produced by The Myriad Pools" (CR 601.2h, 603.2, 106.3): a spell its controller
-/// cast, a permanent spell as it is on the stack (CR 110.4a), some of whose total cost was paid with mana this permanent produced
-/// - however little, and with whatever else. The ability is about the spell.
-fn permanent_spell_cast_with_its_mana(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
-    match *event {
-        Event::SpellCast { spell, player, .. } if player == me.controller && targets::is_permanent_card(&q.chars(spell)) && q.history().cast_using_mana_from(spell, me.source) => {
-            Fired::about(Target::Object(spell))
-        }
-        _ => None,
-    }
-}
-
 /// "Up to one other target permanent you control becomes a copy of that spell until end of turn" (CR 707.2, 611.2a): the target,
 /// if it is still a legal target as the ability resolves (CR 608.2b), takes the copiable values of the spell that caused the
 /// ability to trigger (`item.subject`), as it is then on the stack or, if it has left, as it last was (CR 608.2h). It is the
@@ -29,7 +17,7 @@ pub static BACK: CardDef = CardDef {
     abilities: &[
         mana_ability(TAP, add(Mana::U), "{T}: Add {U}."),
         triggered(
-            when_asked(EventMask::SPELL_CAST, permanent_spell_cast_with_its_mana),
+            when_asked(EventMask::SPELL_CAST, triggers::permanent_spell_cast_with_this_permanents_mana),
             becomes_a_copy_of_the_spell,
             "Whenever you cast a permanent spell using mana produced by The Myriad Pools, up to one other target permanent you control becomes a copy of that spell until end of turn.",
         )
