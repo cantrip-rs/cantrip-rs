@@ -505,7 +505,7 @@ pub struct CostDelta {
     /// control cost {1} less to activate. This effect can't reduce the mana in that cost to less than one mana" (Forensic
     /// Gadgeteer, Zirda, the Dawnwaker). Applied to the cost every other increase and reduction has left, together, and
     /// leaving at least one mana where there was any; 0 for none.
-    pub less_to_one: u8,
+    pub less_to_one: u32,
 }
 
 impl CostDelta {
@@ -538,7 +538,7 @@ impl CostDelta {
     }
 
     /// "Costs {n} less ... can't reduce the mana in that cost to less than one mana" (`less_to_one`).
-    pub const fn less_to_one(n: u8) -> CostDelta {
+    pub const fn less_to_one(n: u32) -> CostDelta {
         CostDelta { less_to_one: n, ..CostDelta::NONE }
     }
 

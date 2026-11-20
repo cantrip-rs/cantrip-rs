@@ -5872,7 +5872,7 @@ fn deltas_watched(
         less = less.plus(&delta.less);
         life += delta.life as u32;
         least = least.max(delta.at_least);
-        discount += delta.less_to_one as u32;
+        discount += delta.less_to_one;
     };
     for change in own {
         add(change(q, id, player, costed, targets));

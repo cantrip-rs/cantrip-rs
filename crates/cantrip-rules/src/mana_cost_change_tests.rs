@@ -13,6 +13,10 @@ fn discount(q: &dyn Query, _: ObjectId, _: PlayerId, costed: Costed, _: &[Target
         _ => CostDelta::NONE,
     }
 }
+/// "Costs {X} less ... to less than one mana" where X is past what a byte holds: Agatha of the Vile Cauldron at power 300.
+fn big_discount(_: &dyn Query, _: ObjectId, _: PlayerId, costed: Costed, _: &[Target]) -> CostDelta {
+    if matches!(costed, Costed::Ability(..)) { CostDelta::less_to_one(300) } else { CostDelta::NONE }
+}
 fn untapped_discount(q: &dyn Query, source: ObjectId, player: PlayerId, costed: Costed, targets: &[Target]) -> CostDelta {
     match costed {
         Costed::Ability(id, ..) if q.state().obj(id).tapped => CostDelta::NONE,
@@ -46,6 +50,7 @@ static X: CardDef = CardDef {
     name: "Mana change X", abilities: &[mana_ability(cost("{X}, {T}"), add_by(add_x), "{X}, {T}: Add X {G}.").x_is_mana_amount()], ..PRISM
 };
 static DISCOUNT: CardDef = CardDef { name: "Mana change discount", types: TypeSet::of(&[CardType::Enchantment]), cost_changes: &[discount], ..CardDef::BLANK };
+static BIG_DISCOUNT: CardDef = CardDef { name: "Mana change big discount", cost_changes: &[big_discount], ..DISCOUNT };
 static UNTAPPED: CardDef = CardDef { name: "Mana change untapped", cost_changes: &[untapped_discount], ..DISCOUNT };
 static INCREASE: CardDef = CardDef { name: "Mana change increase", cost_changes: &[increase], ..DISCOUNT };
 static LIFE: CardDef = CardDef { name: "Mana change life", cost_changes: &[life_tax], ..DISCOUNT };
@@ -59,7 +64,7 @@ fn put(game: &mut Game, def: &'static CardDef, zone: Zone) -> ObjectId {
     game.state.zone_push(zone, id); game.state.see_statics(); id
 }
 fn game(source: &'static CardDef, modifier: &'static CardDef, amount: u32) -> (Game, ObjectId) {
-    let cards = Box::leak(Box::new(CardTable::new([&FILLER, &PRISM, &COLORED, &ZERO, &X, &DISCOUNT, &UNTAPPED, &INCREASE, &LIFE, &SPELL])));
+    let cards = Box::leak(Box::new(CardTable::new([&FILLER, &PRISM, &COLORED, &ZERO, &X, &DISCOUNT, &UNTAPPED, &INCREASE, &LIFE, &SPELL, &BIG_DISCOUNT])));
     let deck = vec![cards.id_of(&FILLER); 20];
     let mut g = Game::new(cards, &Setup { decks: vec![deck.clone(), deck], ..Default::default() });
     g.verify = true;
@@ -153,6 +158,13 @@ fn reductions_apply_after_the_activations_x_is_expanded() {
     let (mut g, source) = game(&X, &DISCOUNT, 1);
     activate(&mut g, source, None); answer(&mut g, Answer::Announce(3)); finish(&mut g);
     assert_eq!(g.state.player(YOU).pool.get(Mana::G), 3); assert_eq!(g.state.player(YOU).pool.get(Mana::C), 0);
+}
+#[test]
+fn a_less_to_one_reduction_past_255_takes_all_but_one_mana_off() {
+    // {X} with X = 301 less 300 is {1}: the whole reduction applies, none of it lost to a narrow count (RX-5).
+    let (mut g, source) = game(&X, &BIG_DISCOUNT, 1);
+    activate(&mut g, source, None); answer(&mut g, Answer::Announce(301)); finish(&mut g);
+    assert_eq!(g.state.player(YOU).pool.get(Mana::G), 301); assert_eq!(g.state.player(YOU).pool.get(Mana::C), 0);
 }
 #[test]
 fn life_added_to_the_total_is_paid_as_well_as_mana() {
