@@ -1,0 +1,11 @@
+{
+  "name": "Edgewall Pack",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Dog",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhen this creature enters, create a 1/1 black Rat creature token with \"This token can't block.\"",
+  "keywords": [
+    "Menace"
+  ]
+}

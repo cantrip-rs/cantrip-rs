@@ -1,0 +1,48 @@
+# Edgewall Pack ({3}{R}, 3/3 menace): "When this creature enters, create a 1/1 black Rat creature token with 'This token can't
+# block.'" (CR 111.4, 702.111b). Exactly one Rat: a 1/1, black. Black Lotus and a Mox Ruby pay {3}{R} exactly. On Bot2's turn an
+# Memnite attacks: the Rat may not block it (CR 509.1a, a "can't block" restriction), though the untapped Pack still may.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Edgewall Pack
+Mountain x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Edgewall Pack.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield = Mox Ruby; Edgewall Pack; Rat Token
+? Bot1.Battlefield.Edgewall Pack.Keywords = Menace
+? Bot1.Battlefield.Edgewall Pack.Power = 3
+? Bot1.Battlefield.Edgewall Pack.Toughness = 3
+? Bot1.Battlefield.Rat Token.Power = 1
+? Bot1.Battlefield.Rat Token.Toughness = 1
+? Bot1.Battlefield.Rat Token.Colors = Black
+? Bot1.Battlefield.Rat Token.Keywords = CantBlock
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+Bot2.Pass
+! Bot1.Block(Bot1.Battlefield.Rat Token > Bot2.Battlefield.Memnite)
+Bot1.Block(Bot1.Battlefield.Edgewall Pack > Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Edgewall Pack.Damage = 1
+Bot2.Battlefield.Memnite = (absent)
