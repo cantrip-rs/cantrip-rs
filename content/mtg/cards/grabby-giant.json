@@ -1,0 +1,17 @@
+{
+  "name": "Grabby Giant",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Giant",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Reach\n{2}{R}, Sacrifice an artifact or land: Draw a card.",
+  "keywords": [
+    "Reach"
+  ],
+  "adventure": {
+    "name": "That's Mine",
+    "manaCost": "{1}{R}",
+    "type": "Instant — Adventure",
+    "oracleText": "Create a Treasure token. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

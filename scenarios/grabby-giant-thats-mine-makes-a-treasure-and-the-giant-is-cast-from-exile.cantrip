@@ -1,0 +1,39 @@
+# That's Mine ({1}{R} instant Adventure): "Create a Treasure token." On turn 1 Bot1 casts it with a Black Lotus: one Treasure
+# (an artifact token) and the card is exiled (CR 715.4). On turn 3 Bot1 casts the Giant from exile (CR 715.3d) for {3}{R} with
+# the other Lotus and the Treasure, which is sacrificed for its mana: a 4/3 reach creature, and the Treasure is gone.
+
+[Bot1 Deck]
+Black Lotus x2
+Grabby Giant
+Mountain x4
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Grabby Giant.Cast(Ability: That's Mine)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Black Lotus; Treasure Token
+? Bot1.Battlefield.Treasure Token.Types = Artifact
+? Bot1.Battlefield.Treasure Token.Subtypes = Treasure
+? Exile = Grabby Giant
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Treasure Token.Activate(Color: Red)
+Bot1.Exile.Grabby Giant.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Grabby Giant
+Bot1.Battlefield.Grabby Giant.Power = 4
+Bot1.Battlefield.Grabby Giant.Toughness = 3
+Bot1.Battlefield.Grabby Giant.Keywords = Reach
+Exile.Count = 0

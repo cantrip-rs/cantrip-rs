@@ -1,0 +1,37 @@
+# Grabby Giant: the sacrifice may be a land. On turn 3 Bot1 plays a Mountain, then pays {2}{R} with a Black Lotus and sacrifices
+# that Mountain (an untapped land is fine, CR 118.3): the Mountain goes to the graveyard, a card is drawn (hand 3 after the land
+# drop, 4 after the draw) and the Giant stays.
+
+[Bot1 Deck]
+Black Lotus x2
+Mox Ruby
+Grabby Giant
+Mountain x3
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grabby Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Grabby Giant.Activate
+! Bot1.Choose(Grabby Giant)
+Bot1.Choose(Mountain)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+
+[Expect]
+Bot1.Graveyard = Mountain; Black Lotus; Black Lotus
+Bot1.Battlefield = Grabby Giant; Mox Ruby

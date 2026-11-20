@@ -1,0 +1,41 @@
+# Grabby Giant ({3}{R}, 4/3 reach): "{2}{R}, Sacrifice an artifact or land: Draw a card." On turn 3 Bot1 pays {2}{R} (a Black Lotus)
+# and sacrifices a Mox Pearl, an artifact: the Giant itself, a creature that is neither an artifact nor a land, is refused as the
+# sacrifice (CR 118.3). The card is drawn as the ability resolves: the hand holds 3 cards before and 4 after.
+
+[Bot1 Deck]
+Black Lotus x2
+Mox Ruby
+Mox Pearl
+Grabby Giant
+Mountain x2
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grabby Giant.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grabby Giant.Keywords = Reach
+? Bot1.Battlefield.Grabby Giant.Power = 4
+? Bot1.Battlefield.Grabby Giant.Toughness = 3
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Grabby Giant.Activate
+! Bot1.Choose(Grabby Giant)
+Bot1.Choose(Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+
+[Expect]
+Bot1.Graveyard = Mox Pearl; Black Lotus; Black Lotus
+Bot1.Hand.Count = 4
