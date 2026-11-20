@@ -1,0 +1,50 @@
+# Harbinger of the Tides at instant speed (CR 601.2b, 601.2f, 118.8): on turn 4 Bot2 attacks with its Ornithopter and casts
+# Lightning Bolt at Bot1, and Bot1 flashes the Harbinger in over it. Cast any time Bot1 could cast an instant, the spell owes
+# the {2} more, so nothing is asked and the cost is {2}{U}{U}: Mox Sapphire and Black Lotus' three blue mana, all four spent.
+# The Harbinger resolves before the Bolt, its enters trigger takes the one tapped creature an opponent controls (the
+# attacking Ornithopter, targeted without being asked as it is the only one) and the Ornithopter is returned to Bot2's hand
+# before the Bolt resolves and takes Bot1 to 17.
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Harbinger of the Tides
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Bot2.Battlefield.Ornithopter > Bot1)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Harbinger of the Tides.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+? Bot2.Battlefield = Mox Ruby
+? Bot1.Life = 20
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield = Harbinger of the Tides; Mox Sapphire
+Bot1.Battlefield.Mox Sapphire.Tapped = true
+Bot1.Battlefield.Harbinger of the Tides.ManaValue = 2
+Bot1.Graveyard = Black Lotus
+Bot2.Graveyard = Lightning Bolt
+Stack.Count = 0

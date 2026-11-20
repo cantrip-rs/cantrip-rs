@@ -1,0 +1,46 @@
+# A spell cast without paying its mana cost still gets its optional additional costs (CR 601.2b, 601.2f, 118.9d), and a cast made
+# as an effect resolves is not bound by timing, so the Harbinger's flash permission is never owed there: it is a plain question,
+# and here it is answered yes (the rulings allow paying {2} more to cast it without flash trouble). Bot1 casts Bloodbraid
+# Elf with four Moxen; cascade exiles the Harbinger, mana value 2 (a Mountain is first and goes to the bottom of the
+# library), and casts it for free; the extra {2} is paid from the three blue mana of a Black Lotus Bot1 sacrifices with the
+# cascade trigger on the stack. The Harbinger enters with no tapped creature of an opponent's to return (the trigger has no target).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Black Lotus
+Bloodbraid Elf
+Island
+Mountain
+Harbinger of the Tides
+Island x6
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bloodbraid Elf.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+? Stack.Count = 2
+Bot1.Accept
+Bot1.Modes(Flash:)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Harbinger of the Tides.Power = 2
+Bot1.Graveyard = Black Lotus
+Bot1.Library = Island; Island; Island; Island; Island; Island; Mountain
+Stack.Count = 0

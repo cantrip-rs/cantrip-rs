@@ -1,0 +1,44 @@
+# Harbinger of the Tides cast by another permission owes nothing (CR 601.2b, 118.8, 118.9): Primal Prayers lets Bot1 cast a creature
+# spell with mana value 3 or less by paying {E} rather than its mana cost, "and if you cast a spell this way, you may cast it as
+# though it had flash". Over Bot2's Lightning Bolt on turn 2 the Harbinger is cast for that {E} alone: the {2} its own permission
+# would owe is not paid (it is asked, as any optional cost is, and declined), with no mana left to pay it.
+
+[Bot1 Deck]
+Island
+Black Lotus
+Show and Tell
+Primal Prayers
+Harbinger of the Tides
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt x19
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Primal Prayers)
+Bot2.Choose(Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Energy = 2
+[T2 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Hand.Harbinger of the Tides.Cast(Ability: Pay {E})
+Bot1.Modes(Cast without flash)
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Energy = 1
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield = Island; Primal Prayers; Harbinger of the Tides
+Bot2.Graveyard = Lightning Bolt
+Stack.Count = 0

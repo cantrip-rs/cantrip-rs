@@ -351,6 +351,65 @@ fn a_spell_and_its_target_are_one_option() {
     assert_eq!(s.waste_leaves, 0, "nothing below a cancel or a mana ability: {s:#?}");
 }
 
+/// Bot2's Lightning Bolt is on its way to Bot1, who holds a Harbinger of the Tides and four mana (two Moxen, a third and an
+/// Island: {U}{U} and the {2} more its flash costs): on Bot2's turn the Harbinger can only be cast with the flash.
+const FLASH_IN: &str = "\
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island
+Harbinger of the Tides
+Island x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[Handover Bot1.Pass]
+
+[Expect]
+Turn = 2
+";
+
+#[test]
+fn a_flash_cast_that_owes_two_more_is_one_of_the_options_searched() {
+    let (game, request) = handed(FLASH_IN, "flash in");
+    let k = Knowledge::of(&game, request.player);
+    let searched = |guard: &CancelGuard| {
+        search::search(
+            &game,
+            &request,
+            &k,
+            InfoMode::Full,
+            table(),
+            &Uniform(0.0),
+            &Config::simulations(200),
+            prior(),
+            guard,
+            &WallClock,
+        )
+        .expect("a search answers")
+    };
+    let open = searched(&CancelGuard::default());
+    let mut guard = CancelGuard::default();
+    guard.ban(&game, "Harbinger of the Tides");
+    let barred = searched(&guard);
+    let edges = open.search.as_ref().expect("a choice to search: the Harbinger or passing").root_edges;
+    assert!(edges >= 2, "the Harbinger's flash cast is an option of the root beside passing ({edges} edges): {open:#?}");
+    assert!(barred.search.is_none(), "with it barred only passing is left, nothing to search: {barred:#?}");
+    assert!(matches!(barred.answer, Answer::Pass), "with it barred only passing is left: {barred:#?}");
+}
+
 #[test]
 fn branch_trimming_can_be_turned_off() {
     let (game, request) = handed(BOLT_EITHER_WAY, "no prune");

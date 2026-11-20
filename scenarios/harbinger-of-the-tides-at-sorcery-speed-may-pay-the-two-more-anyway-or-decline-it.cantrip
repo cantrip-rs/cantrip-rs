@@ -1,0 +1,49 @@
+# Harbinger of the Tides at sorcery speed (CR 601.2b, 601.2f, 118.8). With four mana in hand ({U}{U} from a Mox Sapphire and an
+# Island, two more from Moxen) the question "Flash: Pay {2} more" is asked, though nothing needs it (the rulings allow it): on
+# turn 3 Bot1 pays it, all four mana sources tapped for the {2}{U}{U} (the Modes answer), and the Harbinger's mana value is
+# still two (CR 202.3). On turn 5 the second Harbinger is cast for {U}{U} alone: the extra is declined and the two Moxen stay
+# untapped.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island
+Harbinger of the Tides
+Harbinger of the Tides
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Harbinger of the Tides.Cast
+Bot1.Modes(Flash:)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Harbinger of the Tides.ManaValue = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Harbinger of the Tides.Cast
+Bot1.Modes(Cast without flash)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Harbinger of the Tides#1.ManaValue = 2
+Bot1.Battlefield.Harbinger of the Tides#2.ManaValue = 2
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Stack.Count = 0

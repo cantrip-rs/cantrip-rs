@@ -1,0 +1,53 @@
+# The flash another alternative cost gives is that cast's alone (CR 118.9, 601.2b, 601.2f): with Omniscience and Primal Prayers
+# both in play, Bot1 over Bot2's Lightning Bolt casts Harbinger of the Tides "without paying its mana cost" - and Omniscience gives
+# no flash, so the Harbinger's own permission owes {2} more, paid unasked from the two Moxen, though Primal Prayers' {E} cast (which
+# does give flash, and owes nothing) is on offer beside it. (Prayers itself is cast free through Omniscience, which Show and Tell
+# put into play.)
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Show and Tell
+Omniscience
+Primal Prayers
+Harbinger of the Tides
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Omniscience)
+Bot2.Choose(Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Primal Prayers.Cast(Ability: Without paying)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Hand.Harbinger of the Tides.Cast(Ability: Without paying)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Energy = 2
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield = Mox Emerald; Mox Sapphire; Omniscience; Primal Prayers; Harbinger of the Tides
+Bot1.Graveyard = Show and Tell; Black Lotus
+Bot2.Graveyard = Lightning Bolt
+Stack.Count = 0

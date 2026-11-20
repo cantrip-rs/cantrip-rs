@@ -1,0 +1,85 @@
+# Harbinger of the Tides cast by the sneak Ninja Teen's level 3 gives it (CR 702.190a) owes no {2} more: sneak is itself a
+# permission to cast at instant speed, so the Harbinger isn't cast "as though it had flash" through its own words (CR 601.2b,
+# 601.2f). The Harbinger is cast on turn 5 for {U}{U} (declining the {2}) and bolted by Bot2 on turn 6 (the leave trigger
+# drains Bot2 to 19). On turn 7 Bot1's Ornithopter attacks and, in the declare blockers step, the Harbinger is cast from the
+# graveyard for sneak's {3}{B} with four of Bot1's five mana sources: the {2} more could not be paid with the fifth, and it is
+# not owed. The Ornithopter returns (Bot2 to 18); the Harbinger enters tapped and attacking as a 3/2 with the level 2 bonus,
+# and its enters trigger finds no tapped creature of Bot2's: Bot2 at 15.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Ninja Teen
+Ornithopter
+Harbinger of the Tides
+Island
+Swamp x13
+
+[Bot2 Deck]
+Lightning Bolt
+Mountain x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ninja Teen.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Ninja Teen.Activate(Ability: Level 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Ninja Teen.Activate(Ability: Level 3)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Harbinger of the Tides.Cast
+Bot1.Modes(Cast without flash)
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Harbinger of the Tides)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 19
+[T7 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T7 Bot1.DeclareBlockers]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Graveyard.Harbinger of the Tides.Cast(Ability: Sneak {3}{B})
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Combat.Attackers = Harbinger of the Tides > Bot2
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Hand = Ornithopter; Swamp; Swamp
+Bot1.Battlefield.Harbinger of the Tides.Tapped = true
+Bot1.Battlefield.Island.Tapped = false
+Stack.Count = 0

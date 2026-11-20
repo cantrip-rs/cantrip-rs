@@ -1,0 +1,40 @@
+# Harbinger of the Tides at instant speed owes {2} more (CR 601.2b, 601.2f). On turn 4 Bot2 casts Lightning Bolt at Bot1, and
+# Bot1, with only Mox Sapphire and an Island, has the Harbinger's own {U}{U} in its mana pool: it still can't cast the
+# Harbinger then (refused), as the extra {2} would have to be paid and there is no more mana. The Bolt resolves. On turn 5, a
+# main phase with an empty stack, the Harbinger is cast for {U}{U} as its mana cost says.
+
+[Bot1 Deck]
+Mox Sapphire
+Island
+Harbinger of the Tides
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Harbinger of the Tides.Cast(Mana: short)
+[T5 Bot1.Main1]
+? Bot1.Life = 17
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Harbinger of the Tides.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Harbinger of the Tides; Island; Mox Sapphire
+Bot1.Battlefield.Harbinger of the Tides.ManaValue = 2
+Stack.Count = 0

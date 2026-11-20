@@ -1,0 +1,53 @@
+# Harbinger of the Tides at sorcery speed (CR 601.2b: the {2} is an optional additional cost that is only asked while you
+# propose the spell): on turn 5 Bot1 casts it for {U}{U} (a Mox Sapphire and an Island) and declines the flash cost, since
+# nothing is owed at sorcery speed. Its enters trigger targets Bot2's tapped Llanowar Elves (tapped for mana on turn 4) and
+# not the untapped Grizzly Bears (refused), and "you may return" is answered yes: the Elves go back to Bot2's hand. The
+# {2} is no part of the mana cost, so the Harbinger's mana value is 2 whether or not it was paid (CR 202.3).
+
+[Bot1 Deck]
+Mox Sapphire
+Island
+Island
+Island
+Harbinger of the Tides
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Llanowar Elves
+Grizzly Bears
+Forest
+Forest x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves.Activate
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Harbinger of the Tides.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Harbinger of the Tides.ManaValue = 2
+Bot1.Battlefield.Island#2.Tapped = false
+Bot2.Battlefield = Forest; Grizzly Bears; Mox Emerald; Mox Ruby
+Stack.Count = 0

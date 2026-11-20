@@ -1,0 +1,58 @@
+# A spell cast as an effect resolves is cast by that effect's permission, whatever the timing (CR 608.2g, 702.85a), so Harbinger of
+# the Tides' own flash permission is not what lets it be cast and its {2} is only asked, never owed (CR 601.2b). Over Bot2's
+# Lightning Bolt on turn 2 Bot1 casts Shardless Agent for Primal Prayers' {E} (that cast alone may be made as though it had
+# flash); its cascade exiles the Harbinger, mana value 2, and casts it without paying its mana cost on Bot2's turn. The flash
+# cost is asked and declined: Bot1's one untapped Island, too little to pay {2}, stays untapped, and the Harbinger enters.
+
+[Bot1 Deck]
+Island
+Black Lotus
+Show and Tell
+Primal Prayers
+Shardless Agent
+Island
+Island
+Harbinger of the Tides
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt x19
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Primal Prayers)
+Bot2.Choose(Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Energy = 2
+[T2 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Hand.Shardless Agent.Cast(Ability: Pay {E})
+? Stack.Count = 3
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Modes(Cast without flash)
+? Stack.Count = 3
+? Bot1.Battlefield.Island.Tapped = false
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Harbinger of the Tides.ManaValue = 2
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Energy = 1
+Bot1.Battlefield = Island; Primal Prayers; Shardless Agent; Harbinger of the Tides
+Bot1.Battlefield.Island.Tapped = false
+Bot2.Graveyard = Lightning Bolt
+Stack.Count = 0

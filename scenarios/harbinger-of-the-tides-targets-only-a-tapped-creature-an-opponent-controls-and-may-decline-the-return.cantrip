@@ -1,0 +1,58 @@
+# Harbinger of the Tides' enters trigger: "target tapped creature an opponent controls" (CR 115.1, 603.3d) with a "may" asked as it
+# resolves (CR 608.2b). Bot2 has two Llanowar Elves, tapped for mana on turn 4, and an untapped Ornithopter; Bot1 taps its own
+# Llanowar Elves (a tapped creature, but its own) on turn 5 before casting the Harbinger for {U}{U}. Two candidates make the
+# trigger ask: the untapped Ornithopter and Bot1's own tapped Elves are refused, and one of Bot2's Elves is chosen. Declining
+# the may (the Elves stay on the battlefield, tapped) returns nothing.
+
+[Bot1 Deck]
+Mox Emerald
+Llanowar Elves
+Mox Sapphire
+Island
+Harbinger of the Tides
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Llanowar Elves
+Ornithopter
+Forest
+Forest x15
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves#1.Activate
+Bot2.Battlefield.Llanowar Elves#2.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Harbinger of the Tides.Cast
+Bot1.Modes(Cast without flash)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+! Bot1.Target(Bot1.Battlefield.Llanowar Elves)
+Bot1.Target(Bot2.Battlefield.Llanowar Elves#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield = Forest; Llanowar Elves; Llanowar Elves; Mox Emerald; Ornithopter
+Stack.Count = 0

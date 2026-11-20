@@ -1,0 +1,70 @@
+# Harbinger of the Tides escaped through Underworld Breach at instant speed pays {2} more unasked (CR 601.2b, 601.2f, 702.138):
+# escape gives no permission to cast it at instant speed, so its own words do, and the extra {2} is owed. On turn 1 the
+# Harbinger is cast for {U}{U} (declining the {2}) and Bot1 bolts it. On turn 7 Black Lotus pays for Breach and a Lotus Petal
+# is spent. In the beginning of combat Bot1 taps all five sources ({U}{U}{R}{R}{R}) and escapes the Harbinger, exiling the
+# Bolt, the Petal and the Lotus: {2}{U}{U} is paid with nothing asked and {R} is left.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Island
+Harbinger of the Tides
+Lightning Bolt
+Black Lotus
+Lotus Petal
+Mountain
+Mountain
+Underworld Breach
+Mountain x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Harbinger of the Tides.Cast
+Bot1.Modes(Cast without flash)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Harbinger of the Tides)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T7 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Underworld Breach.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Lotus Petal.Activate(Color: Red)
+? Bot1.Graveyard.Count = 4
+[T7 Bot1.BeginCombat]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Graveyard.Harbinger of the Tides.Cast(Ability: Escape)
+Bot1.Choose(Lightning Bolt; Lotus Petal; Black Lotus)
+? Bot1.Mana = {R}
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Harbinger of the Tides; Island; Mountain; Mountain; Mox Ruby; Mox Sapphire; Underworld Breach
+Exile = Black Lotus; Lightning Bolt; Lotus Petal
+Bot1.Graveyard.Count = 0
+Stack.Count = 0

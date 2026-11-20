@@ -1,0 +1,70 @@
+# Harbinger of the Tides escaped through Underworld Breach at instant speed owes {2} more (CR 601.2b, 601.2f, 702.138): escape
+# lets it be cast from the graveyard but not at instant speed, so in the beginning of combat its own words are what let it be
+# cast, with the extra {2}. On turn 1 the Harbinger is cast for {U}{U} (declining the {2}) and Bot1 bolts it. On turn 7 Black
+# Lotus pays for Breach, a Lotus Petal is spent, and the Mountains and Mox Ruby are tapped for nothing. In the beginning of
+# combat Mox Sapphire and the Island give {U}{U}, the Harbinger's mana cost and the escape's, and the escape is refused for
+# the mana ({2}{U}{U} is owed): the Harbinger stays in the graveyard with the three cards it would have exiled. The Lotus
+# Petal, an artifact with no flash of any kind, is not offered by escape at all in the beginning of combat.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Island
+Harbinger of the Tides
+Lightning Bolt
+Black Lotus
+Lotus Petal
+Mountain
+Mountain
+Underworld Breach
+Mountain x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Harbinger of the Tides.Cast
+Bot1.Modes(Cast without flash)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Harbinger of the Tides)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T7 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Underworld Breach.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Lotus Petal.Activate(Color: Red)
+? Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+[T7 Bot1.BeginCombat]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Graveyard.Harbinger of the Tides.Cast(Ability: Escape; Mana: short)
+? Bot1.Mana = {U}{U}
+! Bot1.Graveyard.Lotus Petal.Cast(Ability: Escape)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Island; Mountain; Mountain; Mox Ruby; Mox Sapphire; Underworld Breach
+Bot1.Graveyard.Count = 4
+Exile.Count = 0
+Stack.Count = 0
