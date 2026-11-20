@@ -1,0 +1,76 @@
+# Totentanz, Swarm Piper: "{1}{B}: Target attacking Rat you control gains deathtouch until end of turn." Turn one Bot1 plays
+# Totentanz, a Memnite and an Ornithopter; on turn two Bot2 plays a Hill Giant and Bolts the Memnite and the Ornithopter (two Rats
+# from nontoken creatures dying). On turn three Rat Token#1 attacks and the Giant blocks it. The ability refuses the Rat that stays
+# home (not attacking) and Totentanz (no Rat), and Bot2's Giant (not yours); with Rat Token#1 as the target it gains deathtouch, so
+# the Rat dies to the Giant's 3 damage but kills it.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Memnite
+Ornithopter
+Totentanz, Swarm Piper
+Plains x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Lightning Bolt
+Lightning Bolt
+Hill Giant
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Totentanz, Swarm Piper.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Lightning Bolt#1.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 6
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Rat Token#1 > Bot2)
+Bot2.Block(Hill Giant > Rat Token#1)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Totentanz, Swarm Piper.Activate(Bot1.Battlefield.Totentanz, Swarm Piper)
+! Bot1.Battlefield.Totentanz, Swarm Piper.Activate(Bot1.Battlefield.Rat Token#2)
+! Bot1.Battlefield.Totentanz, Swarm Piper.Activate(Bot2.Battlefield.Hill Giant)
+Bot1.Battlefield.Totentanz, Swarm Piper.Activate(Bot1.Battlefield.Rat Token#1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Hill Giant; Lightning Bolt; Lightning Bolt; Black Lotus
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Rat Token; Totentanz, Swarm Piper

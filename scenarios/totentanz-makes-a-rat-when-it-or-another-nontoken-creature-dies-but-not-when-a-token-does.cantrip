@@ -1,0 +1,61 @@
+# Totentanz, Swarm Piper {1}{B}{R}, a 2/3: "Whenever Totentanz or another nontoken creature you control dies, create a 1/1 black Rat
+# creature token with 'This token can't block.'" Bot1 plays Totentanz and a Memnite on turn one. On turn two Bot2's Black Lotus and
+# three Lightning Bolts kill the Memnite (a nontoken creature: a Rat), then that Rat token (a token: nothing, CR 111.7) and then
+# Totentanz itself (a Rat again), leaving one Rat token: black, 1/1, unable to block.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Memnite
+Totentanz, Swarm Piper
+Plains x20
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Totentanz, Swarm Piper.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt#1.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Memnite
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Rat Token.Keywords = CantBlock
+Bot2.Hand.Lightning Bolt#1.Cast(Bot1.Battlefield.Rat Token)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Totentanz, Swarm Piper)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Totentanz, Swarm Piper; Memnite
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Rat Token
+Bot1.Battlefield.Rat Token.Power = 1
+Bot1.Battlefield.Rat Token.Toughness = 1
+Bot1.Battlefield.Rat Token.Colors = Black
+Bot1.Battlefield.Rat Token.Keywords = CantBlock

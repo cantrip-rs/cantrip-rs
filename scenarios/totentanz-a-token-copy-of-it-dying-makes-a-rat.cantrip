@@ -1,0 +1,48 @@
+# Totentanz, Swarm Piper: "Whenever Totentanz or another nontoken creature you control dies" - "nontoken" qualifies only "another
+# ... creature", so Totentanz itself triggers it as a token too (CR 201.5, 603.10a). The Apprentice's Folly makes a token
+# Reflection copy of Totentanz; chapter III sacrifices it, and it makes a Rat.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Black Lotus
+Totentanz, Swarm Piper
+The Apprentice's Folly
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Totentanz, Swarm Piper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Apprentice's Folly.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Totentanz, Swarm Piper#2.Subtypes = Bard; Human; Reflection; Warlock
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Rat Token; Totentanz, Swarm Piper

@@ -1,0 +1,8 @@
+{
+  "name": "Totentanz, Swarm Piper",
+  "manaCost": "{1}{B}{R}",
+  "type": "Legendary Creature — Human Warlock Bard",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever Totentanz or another nontoken creature you control dies, create a 1/1 black Rat creature token with \"This token can't block.\"\n{1}{B}: Target attacking Rat you control gains deathtouch until end of turn."
+}
