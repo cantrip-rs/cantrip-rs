@@ -1,0 +1,44 @@
+# "Each creature that attacked this turn" is any player's: Bot2 attacks with its Aegis Turtle on turn 4, so Bot1's Frenzy costs
+# {2}{R}: Ruby, Jet and Pearl pay it exactly (an empty pool; a cost of 4 or 2 would fail or leave mana),
+# and its 5 damage kills the attacking Turtle before damage (Bot1 stays at 20).
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Witchstalker Frenzy
+Mountain x16
+
+[Bot2 Deck]
+Island
+Island
+Aegis Turtle
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Aegis Turtle > Bot1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Witchstalker Frenzy.Cast(Bot2.Battlefield.Aegis Turtle)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot2.Battlefield.Aegis Turtle = (absent)
+Bot2.Graveyard = Aegis Turtle
+Bot1.Graveyard = Witchstalker Frenzy
+Bot1.Life = 20

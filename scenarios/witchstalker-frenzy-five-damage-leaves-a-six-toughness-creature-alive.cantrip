@@ -1,0 +1,47 @@
+# Witchstalker Frenzy deals exactly 5 damage (not 6): it leaves Bot2's Fortified Rampart (0/6) alive with 5 damage marked.
+# Nothing attacked, so the Frenzy costs the full {3}{R}: Ruby, Jet, Pearl and a Mountain pay it exactly (empty pool).
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Witchstalker Frenzy
+Mountain x14
+
+[Bot2 Deck]
+Mox Pearl
+Plains
+Fortified Rampart
+Plains x14
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Fortified Rampart.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Witchstalker Frenzy.Cast(Bot2.Battlefield.Fortified Rampart)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Fortified Rampart.Damage = 5
+Bot2.Graveyard.Count = 0
+Bot1.Graveyard = Witchstalker Frenzy
