@@ -1764,6 +1764,128 @@ fn a_lazy_node_refined_has_the_edges_of_an_eager_one() {
     assert!(mismatches.is_empty(), "lazily expanded roots differ from eager ones: {mismatches:?} over {checked} worlds");
 }
 
+/// A topped-up search (`Reuse::TopUp`) holds the budget at its root whatever its kept tree carried, and runs at least
+/// `min_fresh` new simulations: a decision's search does not hang on how far the game went the way the last one
+/// expected. Over whole games of re-rooted searches: every root holds the budget (or the kept visits and the floor),
+/// within a batch.
+#[test]
+fn a_topped_up_root_holds_the_budget_and_runs_the_fresh_floor() {
+    let (budget, floor, batch) = (160usize, 32usize, 8usize);
+    let (mut rerooted, mut deep_kept) = (0usize, 0usize);
+    for seed in 0..6u64 {
+        let (mut game, _) = handed(STRIKE_SHOCK_OPT, "topped up");
+        let evaluator = Uniform(0.0);
+        let mut ks: Vec<Knowledge> = game.state.seats().map(Knowledge::new).collect();
+        let mut payments = vec![cantrip_ai::net::Payment::default(); 2];
+        let mut kept: Vec<Option<search::Kept>> = vec![None, None];
+        for _ in 0..200 {
+            if game.is_over() || game.state.turn.number > 12 {
+                break;
+            }
+            let Some(request) = game.pending().cloned() else { break };
+            let p = request.player.index();
+            ks[p].update(&game);
+            let mut config = Config {
+                seed: seed * 1000 + request.id as u64,
+                batch,
+                reuse_follow: search::Follow::All,
+                choice: Choice::Sample { temperature: 1.0, seed: seed * 7 + request.id as u64 },
+                ..Config::simulations(budget)
+            };
+            config.set_pair("Reuse=TopUp").unwrap();
+            config.set_pair(&format!("MinFresh={floor}")).unwrap();
+            let kn = &ks[p];
+            let keep = &mut kept[p];
+            let d = payments[p]
+                .decide(&game, &request, kn, InfoMode::Full, |request, guard| {
+                    search::search_keeping(&game, request, kn, InfoMode::Full, table(), &evaluator, &config, prior(), guard, &WallClock, keep)
+                })
+                .unwrap();
+            if let Some(s) = d.search.as_ref().filter(|s| !s.shortcut && !s.early_stopped && s.simulations > 0) {
+                if let Some(r) = s.reused.as_ref() {
+                    rerooted += 1;
+                    let carried = r.visits as usize;
+                    deep_kept += usize::from(carried + floor > budget);
+                    let want = budget.max(carried + floor) - carried;
+                    assert!(s.simulations >= want && s.simulations < want + batch,
+                            "carried {carried}: {} new simulations, wanted {want} (budget {budget}, floor {floor})", s.simulations);
+                } else {
+                    assert!(s.simulations >= budget && s.simulations < budget + batch, "a fresh search ran {}", s.simulations);
+                }
+            }
+            let board = cantrip_ai::cancel::board_hash(&game.state);
+            payments[p].played(&game, board, &request, &d.answer);
+            game.answer(request.id, request.player, d.answer).expect("the answer is taken");
+        }
+    }
+    println!("{rerooted} re-rooted searches, {deep_kept} of them with the floor above the budget");
+    assert!(rerooted > 8, "too few re-rooted searches to check: {rerooted}");
+}
+
+/// The observation cache (`Config::obs_cache`) lets observations go and rebuilds them exactly: with the cache at its
+/// floor, every search of a game - one world and several, fresh and re-rooted on a kept tree - makes the same answer,
+/// root visits, value and simulations as with every observation kept, on a network whose outputs hash its whole
+/// input (so an observation rebuilt any differently would change them), and observations were let go and rebuilt.
+#[test]
+fn an_observation_let_go_and_rebuilt_is_the_one_the_search_made() {
+    let evaluator = Hashed::new();
+    let mut rebuilt = 0usize;
+    let mut compared = 0usize;
+    for (mode, worlds) in [(InfoMode::Full, 1usize), (InfoMode::Decklist, 3)] {
+        for reuse in ["None", "Add"] {
+            let (mut game, _) = handed(STRIKE_SHOCK_OPT, "obs cache");
+            let mut ks: Vec<Knowledge> = game.state.seats().map(Knowledge::new).collect();
+            let mut payments = vec![cantrip_ai::net::Payment::default(); 2];
+            let mut kept_all: Vec<Option<search::Kept>> = vec![None, None];
+            let mut kept_few: Vec<Option<search::Kept>> = vec![None, None];
+            for _ in 0..80 {
+                if game.is_over() || game.state.turn.number > 8 {
+                    break;
+                }
+                let Some(request) = game.pending().cloned() else { break };
+                let p = request.player.index();
+                ks[p].update(&game);
+                let config = |cache: usize| {
+                    let mut c = Config { seed: request.id as u64, batch: 8, worlds, ..Config::simulations(600) };
+                    c.set_pair(&format!("Reuse={reuse}")).unwrap();
+                    c.set_pair(&format!("ObsCache={cache}")).unwrap();
+                    c
+                };
+                let (all, few) = (config(1 << 20), config(1));
+                let kn = &ks[p];
+                let run = |c: &Config, keep: &mut Option<search::Kept>| {
+                    payments[p]
+                        .clone()
+                        .decide(&game, &request, kn, mode, |request, guard| {
+                            search::search_keeping(&game, request, kn, mode, table(), &evaluator, c, prior(), guard, &WallClock, keep)
+                        })
+                        .unwrap()
+                };
+                let a = run(&all, &mut kept_all[p]);
+                let b = run(&few, &mut kept_few[p]);
+                assert_eq!(a.answer, b.answer, "{mode:?} reuse {reuse}, request {}", request.id);
+                match (a.search.as_ref(), b.search.as_ref()) {
+                    (Some(x), Some(y)) => {
+                        assert_eq!(format!("{:?}", x.visits), format!("{:?}", y.visits), "{mode:?} reuse {reuse}");
+                        assert_eq!(x.root_value.to_bits(), y.root_value.to_bits(), "{mode:?} reuse {reuse}");
+                        assert_eq!(x.simulations, y.simulations, "{mode:?} reuse {reuse}");
+                        assert_eq!(x.obs_rebuilt, 0, "the full cache let an observation go");
+                        rebuilt += y.obs_rebuilt;
+                        compared += 1;
+                    }
+                    (x, y) => assert_eq!(x.is_some(), y.is_some(), "{mode:?} reuse {reuse}"),
+                }
+                let board = cantrip_ai::cancel::board_hash(&game.state);
+                payments[p].played(&game, board, &request, &a.answer);
+                game.answer(request.id, request.player, a.answer).expect("the answer is taken");
+            }
+        }
+    }
+    println!("{compared} searches compared, {rebuilt} observations rebuilt");
+    assert!(compared > 20, "too few searches compared: {compared}");
+    assert!(rebuilt > 0, "the cache at its floor let nothing go");
+}
+
 /// A measurement (run by name with `CANTRIP_SPLIT_DUMP=FILE`): the turn of `STRIKE_SHOCK_OPT`, searched eagerly at
 /// every request on even and on leaning priors, written as each search's root options with their classes of payment.
 #[test]
@@ -1910,4 +2032,51 @@ fn a_kept_trees_capped_lines_move_with_the_horizon() {
     println!("{rerooted} re-rooted searches, {capped} lines capped, {uncapped} played again past the old cap; lost {lost:?}");
     assert!(rerooted > 8 && capped > 0, "too little to check: {rerooted} searches, {capped} capped");
     assert!(mismatches.is_empty(), "re-rooted roots differ from fresh ones: {mismatches:?}");
+}
+
+/// A measurement (`--ignored`): the searches of one game at 64 and at 2048 simulations, one world and three, on the
+/// hashing network (CPU only), timed: the search's own cost, before and after a change to it.
+#[test]
+#[ignore]
+fn search_speed() {
+    let evaluator = Hashed::new();
+    for (sims, mode, worlds) in [(64usize, InfoMode::Full, 1usize), (64, InfoMode::Decklist, 3), (2048, InfoMode::Full, 1), (2048, InfoMode::Decklist, 3)] {
+        let mut spent = std::time::Duration::ZERO;
+        let mut searches = 0usize;
+        let mut simulations = 0usize;
+        for seed in 0..3u64 {
+            let (mut game, _) = handed(STRIKE_SHOCK_OPT, "speed");
+            let mut ks: Vec<Knowledge> = game.state.seats().map(Knowledge::new).collect();
+            let mut payments = vec![cantrip_ai::net::Payment::default(); 2];
+            let mut kept: Vec<Option<search::Kept>> = vec![None, None];
+            for _ in 0..120 {
+                if game.is_over() || game.state.turn.number > 10 {
+                    break;
+                }
+                let Some(request) = game.pending().cloned() else { break };
+                let p = request.player.index();
+                ks[p].update(&game);
+                let config = Config { seed: seed * 1000 + request.id as u64, batch: 8, worlds, ..Config::simulations(sims) };
+                let kn = &ks[p];
+                let keep = &mut kept[p];
+                let t0 = Instant::now();
+                let d = payments[p]
+                    .clone()
+                    .decide(&game, &request, kn, mode, |request, guard| {
+                        search::search_keeping(&game, request, kn, mode, table(), &evaluator, &config, prior(), guard, &WallClock, keep)
+                    })
+                    .unwrap();
+                spent += t0.elapsed();
+                if let Some(s) = d.search.as_ref() {
+                    searches += 1;
+                    simulations += s.simulations;
+                }
+                let board = cantrip_ai::cancel::board_hash(&game.state);
+                payments[p].played(&game, board, &request, &d.answer);
+                game.answer(request.id, request.player, d.answer).expect("the answer is taken");
+            }
+        }
+        println!("speed {sims} sims {mode:?} x{worlds}: {searches} searches, {simulations} simulations, {:.1} ms, {:.2} us a simulation",
+                 spent.as_secs_f64() * 1e3, spent.as_secs_f64() * 1e6 / simulations.max(1) as f64);
+    }
 }

@@ -261,7 +261,7 @@ impl Search<'_> {
 
     /// Whether a position is past `limit`: that turn's precombat main phase or later.
     fn past(&self, world: &World, pos: usize, limit: u32) -> bool {
-        let turn = world.positions[pos].obs.turn;
+        let turn = world.positions[pos].observation().turn;
         turn.number > limit || (turn.number == limit && turn.step >= Step::PrecombatMain as u8)
     }
 
@@ -270,10 +270,10 @@ impl Search<'_> {
         let p = &w.positions[pos];
         let seat = p.request.player;
         let step = machine.step().expect("a node is at a step");
-        let e = encode::encode(&p.obs, step, machine.chosen(), &machine.names(), self.forks.table);
+        let e = encode::encode(p.observation(), step, machine.chosen(), &machine.names(), self.forks.table);
         let key = key_of(seat, &to_compact(&e));
         let mut boundary = self.past(w, pos, self.boundary.0);
-        if boundary && self.config.extend && !self.past(w, pos, self.boundary.1) && hot(&p.obs) {
+        if boundary && self.config.extend && !self.past(w, pos, self.boundary.1) && hot(p.observation()) {
             boundary = false;
             self.stats.hot += 1;
         }
@@ -288,7 +288,7 @@ impl Search<'_> {
         let node = &self.nodes[n];
         let p = &self.forks.worlds[node.world].positions[node.pos];
         let m = &node.machine;
-        encode::encode(&p.obs, m.step().expect("a node is at a step"), m.chosen(), &m.names(), self.forks.table)
+        encode::encode(p.observation(), m.step().expect("a node is at a step"), m.chosen(), &m.names(), self.forks.table)
     }
 
     /// The network's outputs for a node: its value, and its information set made (the first time a node of it is).
@@ -563,7 +563,7 @@ pub fn search(
         let ks: Vec<Knowledge> = (0..players).map(|p| if p == seat.index() && own { knowledge.clone() } else { Knowledge::of(&g, PlayerId(p as u8)) }).collect();
         let hand: Vec<String> = g.state.zone(Zone::hand(opponent)).iter().map(|&id| g.name(id).to_string()).collect();
         let root_turn = g.state.turn.number;
-        s.forks.worlds.push(World { game: g, positions: Vec::new(), root: 0, dead: false, root_turn, root_pos: 0 });
+        s.forks.worlds.push(World { game: g, positions: Vec::new(), obs_cache: Default::default(), root: 0, dead: false, root_turn, root_pos: 0 });
         let world = s.forks.worlds.len() - 1;
         let root = s.forks.position(world, ks, vec![None; players], guards).and_then(|pos| match forward(Machine::new(&s.forks.worlds[world].positions[pos].answering.ask, &[])) {
             Forward::Decide(m) => Some(s.node(world, pos, m)),

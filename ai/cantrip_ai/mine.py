@@ -231,6 +231,35 @@ def plan(sel: dict, forks: list[dict], values: list[dict], heldout: float, befor
     return sorted(positions.values(), key=lambda p: p["id"])
 
 
+def sample(sel: dict, values: list[dict], per_seat: int, heldout: float, seed: int) -> list[dict]:
+    """Positions chosen at random, not by outcome (`mine sample`): in every game of every pair of `sel`, `per_seat`
+    of each seat's decisions with a choice (the decisions `mine-values` valued), drawn by a generator seeded from the
+    run's seed, the game and the seat; a share `heldout` of the pairs held out, as `plan` holds them out."""
+    by_seed = {p["shuffle"]: (pn, p) for pn, p in sel["pairs"].items()}
+    out = []
+    for v in values:
+        if "values" not in v or v["seed"] not in by_seed:
+            continue
+        pair, _ = by_seed[v["seed"]]
+        decisions = sorted({x[0] for x in v["values"]})
+        rng = random.Random(f"{seed}:{v['seed']}:{v['dir']}:{v.get('seat')}")
+        for d in sorted(rng.sample(decisions, min(per_seat, len(decisions)))):
+            out.append({"id": f"p{pair:05d}-{v['dir']}-{d:04d}", "dir": v["dir"], "seed": v["seed"], "decision": d,
+                        "split": "heldout" if held_out(pair, heldout, seed) else "train", "pair": pair, "why": ["random"]})
+    return sorted({x["id"]: x for x in out}.values(), key=lambda x: x["id"])
+
+
+def both_seats(sel: dict, a_model: str, b_model: str) -> dict[str, list[dict]]:
+    """For `mine-values`: both seats of every game of `sel`, each with the model that played it, by directory."""
+    out: dict[str, list[dict]] = {"first": [], "second": []}
+    for p in sel["pairs"].values():
+        for g in p["games"]:
+            for seat, who in enumerate(models_of(g)):
+                out["first" if g % 2 == 0 else "second"].append(
+                    {"seed": p["shuffle"], "seat": seat, "model": a_model if who == "A" else b_model, "game": g})
+    return out
+
+
 def loser_games(sel: dict, a_model: str, b_model: str) -> dict[str, list[dict]]:
     """For `mine-values`: in each game of each decisive pair, the loser's seat and model, by directory."""
     out: dict[str, list[dict]] = {"first": [], "second": []}
@@ -573,6 +602,17 @@ def main(argv=None):
     lo.add_argument("--selected", required=True, type=Path)
     lo.add_argument("--a-model", required=True)
     lo.add_argument("--b-model", required=True)
+    sa = sub.add_parser("sample")
+    sa.add_argument("--selected", required=True, type=Path)
+    sa.add_argument("--values", type=Path, nargs="+", required=True)
+    sa.add_argument("--out", required=True, type=Path)
+    sa.add_argument("--per-seat", type=int, default=2)
+    sa.add_argument("--heldout", type=float, default=0.15)
+    sa.add_argument("--seed", type=int, default=5)
+    bs = sub.add_parser("both-seats")
+    bs.add_argument("--selected", required=True, type=Path)
+    bs.add_argument("--a-model", required=True)
+    bs.add_argument("--b-model", required=True)
     p = sub.add_parser("plan")
     p.add_argument("--selected", required=True, type=Path)
     p.add_argument("--forks", required=True, type=Path)
@@ -621,6 +661,20 @@ def main(argv=None):
         for name, games in loser_games(sel, args.a_model, args.b_model).items():
             (args.selected / f"losers-{name}.jsonl").write_text("".join(json.dumps(g) + "\n" for g in games), encoding="utf-8")
             print(name, len(games))
+    elif args.command == "both-seats":
+        sel = load_selection(args.selected)
+        for name, games in both_seats(sel, args.a_model, args.b_model).items():
+            (args.selected / f"seats-{name}.jsonl").write_text("".join(json.dumps(g) + "\n" for g in games), encoding="utf-8")
+            print(name, len(games))
+    elif args.command == "sample":
+        sel = load_selection(args.selected)
+        values = []
+        for f in args.values:
+            name = "first" if "first" in Path(f).name else "second"
+            values += [dict(x, dir=name) for x in read_jsonl(f)]
+        positions = sample(sel, values, args.per_seat, args.heldout, args.seed)
+        args.out.write_text("".join(json.dumps(x) + "\n" for x in positions), encoding="utf-8")
+        print(json.dumps(dict(collections.Counter(x["split"] for x in positions))))
     elif args.command == "plan":
         sel = load_selection(args.selected)
         values = []

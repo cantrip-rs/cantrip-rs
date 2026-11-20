@@ -409,6 +409,9 @@ pub struct Played {
     pub trace: Option<Trace>,
     /// The search's tree at each searched request.
     pub shapes: Vec<Shape>,
+    /// Each searched request's visits carried over from the seat's kept tree before any new simulation (0: searched
+    /// afresh), and whether it was a full search: how much more than its budget a decision's root held.
+    pub carried: Vec<(bool, u32)>,
     /// The worlds' agreement at the root of each searched request that dealt two or more.
     pub fusions: Vec<Fusion>,
     pub elapsed: Duration,
@@ -525,6 +528,7 @@ pub fn play_with(
     let mut searched_by = vec![0u32; seats];
     let mut roots = Roots::new();
     let mut shapes = Vec::new();
+    let mut carried = Vec::new();
     let mut timing = Timing::default();
     let mut full_searched = 0u32;
     let mut fusions = Vec::new();
@@ -690,6 +694,7 @@ pub fn play_with(
                 searched += 1;
                 searched_by[p] += 1;
                 full_searched += u32::from(full && !capped_off);
+                carried.push((full, s.reused.as_ref().map_or(0, |r| r.visits)));
                 // The tree's shape of the searches that are policy targets.
                 if full {
                     shapes.push(s.shape);
@@ -776,6 +781,7 @@ pub fn play_with(
         network_fallbacks,
         trace,
         shapes,
+        carried,
         fusions,
         elapsed: started.elapsed(),
         timing,
@@ -1648,6 +1654,7 @@ where
                                 writeln!(w, "{line}").and_then(|_| w.flush()).map_err(|e| e.to_string())?;
                             }
                             let shapes = std::mem::take(&mut played.shapes);
+                            let carried = std::mem::take(&mut played.carried);
                             let snapshot_agreement = std::mem::take(&mut played.snapshots);
                             let belief_errors = played.belief_errors;
                             let timing = played.timing;
@@ -1690,6 +1697,10 @@ where
                                 for (name, v) in shape_measures(shape) {
                                     *t.shape.entry(name).or_default().entry(v).or_default() += 1;
                                 }
+                            }
+                            for &(full, visits) in &carried {
+                                let name = if full { "CarriedFull" } else { "CarriedFast" };
+                                *t.shape.entry(name).or_default().entry(u64::from(visits)).or_default() += 1;
                             }
                             for f in &fusions {
                                 t.fusion_roots += 1;

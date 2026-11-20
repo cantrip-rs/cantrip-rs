@@ -1382,8 +1382,10 @@ class SshHost:
     # Transport.
 
     def ssh_base(self) -> list[str]:
+        # A host seen for the first time (a rented machine is new each time) is trusted and remembered; one whose key
+        # changed is still refused.
         cmd = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=10", "-o", "ServerAliveInterval=15",
-               "-o", "ServerAliveCountMax=4"]
+               "-o", "ServerAliveCountMax=4", "-o", "StrictHostKeyChecking=accept-new"]
         if self.w.get("key"):
             cmd += ["-i", self.w["key"]]
         if self.w.get("port"):
@@ -1412,7 +1414,7 @@ class SshHost:
             raise Unreachable(f"{self.name}: not JSON: {out[-300:]}") from e
 
     def scp(self, src: str, dst: str, timeout: float = 3600):
-        cmd = ["scp", "-q", "-B", "-o", "ConnectTimeout=10"]
+        cmd = ["scp", "-q", "-B", "-o", "ConnectTimeout=10", "-o", "StrictHostKeyChecking=accept-new"]
         if self.w.get("key"):
             cmd += ["-i", self.w["key"]]
         if self.w.get("port"):
@@ -1659,10 +1661,14 @@ LINUX_SETUP = r"""#!/bin/bash
 set -u
 R=$1
 echo "[$(date -Is)] setup"
+# A bare CUDA image (nvidia/cuda's) has no curl, compiler or venv: what is missing is installed.
+if ! command -v curl >/dev/null || ! command -v cc >/dev/null || ! python3 -c "import ensurepip" 2>/dev/null; then
+  export DEBIAN_FRONTEND=noninteractive
+  apt-get -qq update && apt-get -qq install -y curl ca-certificates build-essential python3 python3-venv >/dev/null || exit 1
+fi
 if [ ! -x "$HOME/.cargo/bin/cargo" ]; then
   curl -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable || exit 1
 fi
-command -v cc >/dev/null || { apt-get -qq update && apt-get -qq install -y build-essential >/dev/null; } || exit 1
 if [ ! -x "$R/venv/bin/pip" ]; then
   rm -rf "$R/venv"
   python3 -m venv "$R/venv" || { rm -rf "$R/venv"; apt-get -qq update && apt-get -qq install -y python3-venv >/dev/null && python3 -m venv "$R/venv"; } || exit 1

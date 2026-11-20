@@ -460,6 +460,17 @@ pub fn against_prior(game: &Game, payment: &Payment, d: &Decision, played: Optio
         "options": s.root_options.len(),
         "root_value": s.root_value,
         "net_value": s.net_value,
+        "simulations": s.simulations,
+        "tree_bytes": s.tree_bytes,
+        "memory_bound": s.memory_bound,
+        // `MeasureMemory=true`: what each part of the tree held at the end.
+        "memory": s.memory.as_ref().map(|m| json!({
+            "observation": m.observation, "knowledge": m.knowledge, "answering": m.answering, "request": m.request,
+            "runs_guards": m.runs_guards, "positions_vec": m.positions_vec, "game_log": m.game_log,
+            "game_state": m.game_state, "node_edges": m.node_edges, "node_machines": m.node_machines,
+            "node_lazy": m.node_lazy, "nodes_vec": m.nodes_vec, "worlds": m.worlds, "positions": m.positions,
+            "nodes": m.nodes, "edges": m.edges, "game_nodes": m.game_nodes,
+        })),
         "chosen": crate::advisor::describe(game, &request, &d.answer),
         "chosen_tokens": deep.as_ref().map(|t| words(&t.0)),
         "played_tokens": played_tokens.as_ref().map(|t| words(&t.0)),

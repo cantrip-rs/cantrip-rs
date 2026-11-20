@@ -63,11 +63,13 @@ class collate:
     """A batch's tensors from its rows. A class at module level rather than a closure, so a DataLoader worker can be
     handed it by pickling (Windows and macOS start workers by spawning, which pickles the collate function)."""
 
-    def __init__(self, data: dataset.Data):
+    def __init__(self, data: dataset.Data, deep_value: bool = False):
         self.data = data
+        self.deep_value = deep_value
 
     def __call__(self, rows):
         data = self.data
+        dealt = np.asarray(rows)
         rows, fresh = dataset.unmark(data, rows)
         inputs = dataset.decode(data.blob, data.offset, rows)
         inputs["card"] = dataset.cards(data, rows, inputs["card"])
@@ -75,11 +77,19 @@ class collate:
         if not fresh.all():
             # Policy-only copies of search targets (`dataset.batches`' search_repeat): the other losses skip them.
             target["fresh"] = fresh.astype(np.float32)
+        again = getattr(data, "reanalysed", None)
+        if self.deep_value and again is not None and len(again):
+            # `--reanalysed-value`: a reanalysed sample with its deep search's root value trains the value towards that
+            # value (its other losses still skipped); a policy-only copy of one does not.
+            deep = (dealt < len(data.length)) & (again[rows] == 1) & np.isfinite(data.root[rows])
+            if deep.any():
+                target["deep_value"] = deep.astype(np.float32)
+                target.setdefault("fresh", fresh.astype(np.float32))
         return {k: torch.from_numpy(np.ascontiguousarray(v)) for k, v in {**inputs, **target}.items()}
 
 
-def loader(data, batches, workers, pin=False):
-    return torch.utils.data.DataLoader(batches, batch_size=None, shuffle=False, collate_fn=collate(data),
+def loader(data, batches, workers, pin=False, deep_value=False):
+    return torch.utils.data.DataLoader(batches, batch_size=None, shuffle=False, collate_fn=collate(data, deep_value),
                                        num_workers=workers, persistent_workers=False, pin_memory=pin,
                                        prefetch_factor=4 if workers else None)
 
@@ -299,6 +309,11 @@ def losses(net, b, belief: bool, value_mix: float = 0.0, future_weight: float = 
         value_rows = b["value_weight"] if rows is None else rows * b["value_weight"]
     else:
         value_rows = rows
+    deep = b.get("deep_value")
+    if deep is not None:
+        # `--reanalysed-value`: those rows' value target is their deep search's root value alone.
+        target_value = torch.where(deep > 0, torch.nan_to_num(root.to(target_value.dtype), nan=0.0), target_value)
+        value_rows = deep if value_rows is None else value_rows + deep
     if o.value_loss == "bce":
         # Against the outcome's win probability (a draw is a half), on the win logit: calibrated as a probability.
         per = F.binary_cross_entropy_with_logits(logit.float(), (target_value + 1) / 2, reduction="none")
@@ -710,6 +725,9 @@ def main(argv=None):
                    help="a fast search's visits are a policy target too (dataset.load's fast_policy): for self-play run "
                         "with Gumbel, whose target is softmax(logit + sigma(completed q)) and improves on the prior at "
                         "any budget; visit counts of a 64-simulation PUCT search mostly echo the prior")
+    a.add_argument("--reanalysed-value", action="store_true",
+                   help="a reanalysed sample with a root value (a deep judgement's target, `mine-judge --targets`) also "
+                        "trains the value, towards that root value alone; its other losses stay skipped")
     a.add_argument("--searched-policy", action="store_true",
                    help="in self-played games, only the decisions a search answered are policy targets "
                         "(dataset.load's searched_policy); imitation data is unchanged")
@@ -1153,7 +1171,7 @@ def main(argv=None):
             key = args.seed + 1 + epoch if chunks == 1 else args.seed + 1 + epoch * chunks + position[0]
             for b in loader(data, dataset.batches(data, train, args.batch, np.random.default_rng(key), trivial,
                                                   args.search_target_repeat),
-                            args.workers, device.type == "cuda"):
+                            args.workers, device.type == "cuda", args.reanalysed_value):
                 if skip:
                     skip -= 1
                     continue

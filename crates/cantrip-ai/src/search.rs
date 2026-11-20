@@ -202,6 +202,22 @@ pub struct Config {
     /// fresh deal and reuse can at worst equal searching afresh. `reuse_check` tests that.
     /// The recorded visits and root value of a re-rooted search include the visits carried over (as AlphaZero's do).
     pub reuse: Reuse,
+    /// With `Reuse::TopUp`, the fewest new simulations a search runs however many visits the kept root held: the root
+    /// holds the budget (or the kept visits and this many more, if those are more), so a decision's quality does not
+    /// hang on how far the game went the way the last search expected, which an opponent's play decides, and every
+    /// search still compares its root options with fresh simulations. 0: none.
+    pub min_fresh: usize,
+    /// At the search's end, what each part of its tree held, measured by freeing the parts one by one with the counting
+    /// allocator installed (`Searched::memory`); the tree is then not kept. A diagnosis (`MeasureMemory=true`), off by
+    /// default.
+    pub measure_memory: bool,
+    /// How many positions' observations the search keeps, over its worlds (`ObsCache`): an observation is most of
+    /// what a position holds (about 94 KB), and a deep search reaches hundreds of thousands of positions, while a
+    /// position's observation is read again only when a node there is encoded after its first. Past this many the
+    /// least recently used are let go, and one read again is rebuilt from its game node and the knowledge the
+    /// position keeps (`World::obs`): the same observation, at the cost of the rebuild. Above the positions a search
+    /// reaches (8192 by default: a self-play full search of 8192 simulations reaches about 7,800), nothing is let go.
+    pub obs_cache: usize,
     /// What a re-rooted tree follows of another seat's choices on the way (`Follow`).
     pub reuse_follow: Follow,
     /// Check every re-rooted world against the same root built fresh in it (`ReuseCheck`): off in play, on in tests
@@ -364,6 +380,9 @@ impl Default for Config {
             prune_after_replies: 1,
             prune_reversible: true,
             reuse: Reuse::Add,
+            min_fresh: 0,
+            measure_memory: false,
+            obs_cache: 8192,
             reuse_follow: Follow::All,
             reuse_check: false,
             atomic: true,
@@ -466,6 +485,23 @@ impl Config {
                     .collect::<Result<_, _>>()?;
             }
             "EarlyStop" => self.early_stop = count()?,
+            "Reuse" => {
+                self.reuse = match value {
+                    "None" => Reuse::None,
+                    "TopUp" => Reuse::TopUp,
+                    "Add" => Reuse::Add,
+                    "KeepOnly" => Reuse::KeepOnly,
+                    _ => return Err(bad()),
+                }
+            }
+            "MinFresh" => self.min_fresh = count()?,
+            "MeasureMemory" => self.measure_memory = value.parse().map_err(|_| bad())?,
+            "ObsCache" => self.obs_cache = count()?.max(1),
+            // The tree's bound in megabytes (`memory`): a very deep search needs more than the default; 0, none.
+            "MemoryMb" => self.memory = match count()? {
+                0 => None,
+                mb => Some(mb.saturating_mul(1 << 20)),
+            },
             "EarlyStopMargin" => self.early_stop_margin = float()?,
             "RootFloor" => self.root_floor = float()?.clamp(0.0, 1.0),
             "RootNoise" => self.root_noise = float()?.clamp(0.0, 1.0),
@@ -752,6 +788,33 @@ pub const CHECK_TOLERANCE: f32 = 2e-3;
 /// Requests answered with no choice in a row before a line is taken as a draw.
 pub const MAX_FORCED: usize = 2000;
 
+/// What each part of a search's tree held at its end, in bytes as the counting allocator counts them (requested, not
+/// the allocator's own overhead), each part freed on its own and measured by what the thread's live bytes fell by
+/// (`Config::measure_memory`). The positions' parts are what each request a line reached caches: the acting seat's
+/// observation, every seat's knowledge, the answer's options (`Answering`), the request, the runs and cancel guards.
+/// The game log is each world's tree of answers and the writes and events they made (`cantrip_rules::tree`); the game
+/// state the rest of each world's game (its working state and history).
+#[derive(Clone, Debug, Default)]
+pub struct MemoryBreakdown {
+    pub observation: u64,
+    pub knowledge: u64,
+    pub answering: u64,
+    pub request: u64,
+    pub runs_guards: u64,
+    pub positions_vec: u64,
+    pub game_log: u64,
+    pub game_state: u64,
+    pub node_edges: u64,
+    pub node_machines: u64,
+    pub node_lazy: u64,
+    pub nodes_vec: u64,
+    pub worlds: usize,
+    pub positions: usize,
+    pub nodes: usize,
+    pub edges: usize,
+    pub game_nodes: usize,
+}
+
 /// What a search made of a request.
 #[derive(Clone, Debug, Default)]
 pub struct Searched {
@@ -766,6 +829,10 @@ pub struct Searched {
     /// The peak heap the search held, by the counting allocator (`crate::alloc`) when it is installed (`counted`);
     /// otherwise an estimate of the search's own structures (not the forks' trees).
     pub tree_bytes: usize,
+    /// What each part of the tree held at the end (`Config::measure_memory`).
+    pub memory: Option<MemoryBreakdown>,
+    /// Observations let go by the cache and rebuilt when read again (`Config::obs_cache`).
+    pub obs_rebuilt: usize,
     pub counted: bool,
     /// Whether the search stopped for `Config::memory` before its budget was spent, and whether a kept tree was let go
     /// unsearched for holding more than half of it.
@@ -1067,13 +1134,168 @@ impl PartialEq for RootStep {
     }
 }
 
+/// `Config::measure_memory`: the worlds and nodes taken apart and freed part by part, each part's bytes what the
+/// thread's live bytes fell by as it was dropped.
+fn measure_memory(worlds: &mut Vec<World>, nodes: &mut Vec<Node>) -> MemoryBreakdown {
+    fn freed<T>(x: T) -> u64 {
+        let before = crate::alloc::live();
+        drop(x);
+        (before - crate::alloc::live()).max(0) as u64
+    }
+    let mut m = MemoryBreakdown { worlds: worlds.len(), nodes: nodes.len(), ..MemoryBreakdown::default() };
+    for n in nodes.drain(..) {
+        m.edges += n.edges.len();
+        let Node { edges, machine, lazy, .. } = n;
+        m.node_edges += freed(edges);
+        m.node_machines += freed(machine);
+        m.node_lazy += freed(lazy);
+    }
+    m.nodes_vec = freed(std::mem::take(nodes));
+    for w in worlds.drain(..) {
+        let World { mut game, mut positions, .. } = w;
+        m.positions += positions.len();
+        m.game_nodes += game.tree.len().saturating_sub(1);
+        for p in positions.drain(..) {
+            let Position { request, knowledge, obs, answering, runs, guards, .. } = p;
+            m.observation += freed(obs);
+            m.knowledge += freed(knowledge);
+            m.answering += freed(answering);
+            m.request += freed(request);
+            m.runs_guards += freed((runs, guards));
+        }
+        m.positions_vec += freed(positions);
+        m.game_log += freed(std::mem::replace(&mut game.tree, tree::Tree::new()));
+        m.game_state += freed(game);
+    }
+    m
+}
+
+/// Which positions of a world keep their observation (`Config::obs_cache`): the least recently read let go past `cap`,
+/// never one read since `pinned` (the batch being made). A queue of reads, each with its tick; a read that a later one
+/// of the same position supersedes is skipped when it comes up.
+pub(crate) struct ObsCache {
+    pub(crate) cap: usize,
+    /// The search's information mode, to rebuild in; none: never let go (the information-set search's).
+    pub(crate) mode: Option<InfoMode>,
+    live: usize,
+    tick: u64,
+    pinned: u64,
+    queue: std::collections::VecDeque<(u32, u64)>,
+    pub(crate) rebuilt: usize,
+}
+
+impl Default for ObsCache {
+    fn default() -> ObsCache {
+        ObsCache { cap: usize::MAX, mode: None, live: 0, tick: 0, pinned: 0, queue: Default::default(), rebuilt: 0 }
+    }
+}
+
+impl World {
+    /// Position `p` added, its observation cached.
+    pub(crate) fn add_position(&mut self, p: Position) -> usize {
+        self.positions.push(p);
+        let at = self.positions.len() - 1;
+        if self.positions[at].obs.is_some() {
+            self.obs_cache.live += 1;
+        }
+        self.touch(at);
+        at
+    }
+
+    /// Position `pos`'s observation: the cached one, or one rebuilt from its game node and the knowledge it keeps
+    /// (the game moved there), as it was made: the acting seat's knowledge is the one brought up to date when it was.
+    pub(crate) fn obs(&mut self, pos: usize) -> &Observation {
+        if self.positions[pos].obs.is_none() {
+            let mode = self.obs_cache.mode.expect("an observation let go has a mode to be rebuilt in");
+            let node = self.positions[pos].node;
+            self.game.goto(node);
+            let p = &self.positions[pos];
+            let seat = p.request.player;
+            let (obs, _) = observe_indexed(&self.game, &p.knowledge[seat.index()], seat, mode)
+                .expect("a position's observation was made once and is made again");
+            self.positions[pos].obs = Some(obs);
+            self.obs_cache.live += 1;
+            self.obs_cache.rebuilt += 1;
+        }
+        self.touch(pos);
+        self.positions[pos].obs.as_ref().expect("just cached")
+    }
+
+    /// From here on, what is read is not let go until the next pin: the reads of one batch all stay.
+    pub(crate) fn pin(&mut self) {
+        self.obs_cache.pinned = self.obs_cache.tick + 1;
+    }
+
+    /// The cache's size for this search, and what it is past it let go.
+    pub(crate) fn configure_obs(&mut self, cap: usize, mode: InfoMode) {
+        self.obs_cache.cap = cap;
+        self.obs_cache.mode = Some(mode);
+        self.resync_obs();
+    }
+
+    /// The cache made again from the positions (after they are renumbered, `reroot`): its reads in their order.
+    pub(crate) fn resync_obs(&mut self) {
+        let c = &mut self.obs_cache;
+        let mut cached: Vec<(u32, u64)> =
+            self.positions.iter().enumerate().filter(|(_, p)| p.obs.is_some()).map(|(i, p)| (i as u32, p.obs_tick)).collect();
+        cached.sort_unstable_by_key(|&(_, t)| t);
+        c.live = cached.len();
+        c.queue = if c.cap == usize::MAX { Default::default() } else { cached.into() };
+        self.evict();
+    }
+
+    fn touch(&mut self, pos: usize) {
+        let c = &mut self.obs_cache;
+        c.tick += 1;
+        self.positions[pos].obs_tick = c.tick;
+        if c.cap != usize::MAX {
+            c.queue.push_back((pos as u32, c.tick));
+            self.evict();
+        }
+    }
+
+    fn evict(&mut self) {
+        let (c, positions) = (&mut self.obs_cache, &mut self.positions);
+        if c.cap == usize::MAX {
+            return;
+        }
+        while c.live > c.cap {
+            let Some((pos, tick)) = c.queue.pop_front() else { break };
+            let Some(p) = positions.get_mut(pos as usize) else { continue };
+            if p.obs_tick != tick || p.obs.is_none() {
+                continue;
+            }
+            if tick >= c.pinned {
+                c.queue.push_front((pos, tick));
+                break;
+            }
+            p.obs = None;
+            c.live -= 1;
+        }
+        // Reads superseded by later ones are only skipped when they come up: dropped here once they are most of it.
+        if c.queue.len() > 4 * c.cap.max(1024) {
+            c.queue.retain(|&(pos, tick)| positions.get(pos as usize).is_some_and(|p| p.obs_tick == tick && p.obs.is_some()));
+        }
+    }
+}
+
+impl Position {
+    /// The observation, where the cache is known to keep it (`World::obs` makes sure of it).
+    pub(crate) fn observation(&self) -> &Observation {
+        self.obs.as_ref().expect("an observation read is cached (World::obs first)")
+    }
+}
+
 /// A request in a fork: where its game node is, and what the acting seat sees there.
 pub(crate) struct Position {
     pub(crate) node: tree::NodeId,
     pub(crate) request: Request,
     /// Every seat's knowledge at this position, the acting seat's up to date.
     pub(crate) knowledge: Vec<Knowledge>,
-    pub(crate) obs: Observation,
+    /// What the acting seat observes here, while the world's cache keeps it (`World::obs` rebuilds it otherwise).
+    pub(crate) obs: Option<Observation>,
+    /// When the cache last saw it read (`ObsCache::tick`).
+    pub(crate) obs_tick: u64,
     pub(crate) answering: Answering,
     /// Each seat's payment run in this line: the run's key and the answer its first request was given.
     pub(crate) runs: Vec<Option<(RunKey, FactoredAnswer)>>,
@@ -1087,6 +1309,7 @@ pub(crate) type RunKey = (PlayerId, u8, ObjectId, ObjectId, bool);
 pub(crate) struct World {
     pub(crate) game: Game,
     pub(crate) positions: Vec<Position>,
+    pub(crate) obs_cache: ObsCache,
     pub(crate) root: usize,
     pub(crate) dead: bool,
     pub(crate) root_turn: u32,
@@ -1583,17 +1806,9 @@ impl Forks<'_> {
         knowledge[p].update(&w.game);
         let (obs, index) = observe_indexed(&w.game, &knowledge[p], request.player, self.mode)?;
         let answering = Answering::new(&w.game, &request, &obs, &index);
-        w.positions.push(Position {
-            node: w.game.checkpoint(),
-            request,
-            knowledge,
-            obs,
-            answering,
-            runs,
-            guards,
-            turn: w.game.state.turn.number,
-        });
-        Some(w.positions.len() - 1)
+        let node = w.game.checkpoint();
+        let turn = w.game.state.turn.number;
+        Some(w.add_position(Position { node, request, knowledge, obs: Some(obs), obs_tick: 0, answering, runs, guards, turn }))
     }
 
     /// The position at the request a capped line stopped at, observed by the seat it asks, and its factoring's first
@@ -1617,17 +1832,9 @@ impl Forks<'_> {
         let answering = Answering::new(&w.game, &request, &obs, &index);
         let m = Machine::new(&answering.ask, &[]);
         m.step()?;
-        w.positions.push(Position {
-            node: w.game.checkpoint(),
-            request,
-            knowledge,
-            obs,
-            answering,
-            runs,
-            guards,
-            turn: w.game.state.turn.number,
-        });
-        let at = w.positions.len() - 1;
+        let node = w.game.checkpoint();
+        let turn = w.game.state.turn.number;
+        let at = w.add_position(Position { node, request, knowledge, obs: Some(obs), obs_tick: 0, answering, runs, guards, turn });
         self.t_observe += observing.elapsed();
         Some(Reached::CappedAt(at, m))
     }
@@ -1795,17 +2002,10 @@ impl Forks<'_> {
                     return Reached::Stuck;
                 }
                 Forward::Decide(m) => {
-                    w.positions.push(Position {
-                        node: w.game.checkpoint(),
-                        request,
-                        knowledge,
-                        obs,
-                        answering,
-                        runs,
-                        guards,
-                        turn: w.game.state.turn.number,
-                    });
-                    return Reached::Decide(w.positions.len() - 1, m);
+                    let node = w.game.checkpoint();
+                    let turn = w.game.state.turn.number;
+                    let at = w.add_position(Position { node, request, knowledge, obs: Some(obs), obs_tick: 0, answering, runs, guards, turn });
+                    return Reached::Decide(at, m);
                 }
             }
         }
@@ -2318,7 +2518,7 @@ impl Search<'_> {
     fn encoded_at(&self, at: usize, m: &Machine) -> encode::Encoded {
         let node = &self.nodes[at];
         let pos = &self.forks.worlds[node.world].positions[node.pos];
-        encode::encode(&pos.obs, m.step().expect("an inner step is at a step"), m.chosen(), &m.names(), self.forks.table)
+        encode::encode(pos.observation(), m.step().expect("an inner step is at a step"), m.chosen(), &m.names(), self.forks.table)
     }
 
     /// Node `at` expanded with the network's `value` and `logits` at its step, and, for a priority searched as whole
@@ -2663,14 +2863,14 @@ impl Search<'_> {
             let r = self.forks.worlds[wi].root;
             let w = &mut self.forks.worlds[wi];
             let kept = &w.positions[self.nodes[r].pos];
-            let (node, kept_request, kept_knowledge, kept_guards, kept_runs, kept_obs) = (
+            let (node, kept_request, kept_knowledge, kept_guards, kept_runs) = (
                 kept.node,
                 kept.request.clone(),
                 kept.knowledge.clone(),
                 kept.guards.clone(),
                 kept.runs.clone(),
-                kept.obs.clone(),
             );
+            let kept_obs = w.obs(self.nodes[r].pos).clone();
             w.game.goto(node);
             let players = w.game.state.players.len();
             // The same question, but for which of two alike cards is which object (`Knowledge::alike`).
@@ -2759,7 +2959,7 @@ impl Search<'_> {
             match fresh {
                 Some(f) => {
                     let fp = self.nodes[f].pos;
-                    if self.forks.worlds[wi].positions[fp].obs != kept_obs {
+                    if *self.forks.worlds[wi].obs(fp) != kept_obs {
                         miss.push("observation");
                     }
                     if self.encoded(f) != self.encoded(r) {
@@ -2777,6 +2977,7 @@ impl Search<'_> {
         let mut encoded: Vec<encode::Encoded> = Vec::new();
         let mut first_row = Vec::with_capacity(pairs.len());
         for (k, &(_, f, _)) in pairs.iter().enumerate() {
+            self.ensure_obs(f);
             first_row.push(encoded.len());
             encoded.push(self.encoded(f));
             if let Some(flat) = &flats[k] {
@@ -2844,12 +3045,18 @@ impl Search<'_> {
         Some(encode::encode(&obs, step, m.chosen(), &m.names(), self.forks.table))
     }
 
+    /// Node `at`'s position's observation cached for the encodings that read it next (`World::obs`).
+    fn ensure_obs(&mut self, at: usize) {
+        let (wi, pi) = (self.nodes[at].world, self.nodes[at].pos);
+        self.forks.worlds[wi].obs(pi);
+    }
+
     fn encoded(&self, at: usize) -> encode::Encoded {
         let node = &self.nodes[at];
         let pos = &self.forks.worlds[node.world].positions[node.pos];
         let m = &node.machine;
         encode::encode(
-            &pos.obs,
+            pos.observation(),
             m.step().expect("a node is at a step"),
             m.chosen(),
             &m.names(),
@@ -3053,6 +3260,7 @@ impl Search<'_> {
         // Each group: its rows (the root's step, then its inner steps), and the roots that are those rows.
         let mut groups: Vec<(Vec<encode::Encoded>, Vec<usize>)> = Vec::new();
         for r in roots {
+            self.ensure_obs(r);
             let mut own = vec![self.encoded(r)];
             if let Some(f) = self.flat_plan(r) {
                 for m in &f.inner {
@@ -3104,6 +3312,7 @@ impl Search<'_> {
         let mut rows: Vec<encode::Encoded> = Vec::new();
         let mut spans = Vec::with_capacity(pending.len());
         for &r in &pending {
+            self.ensure_obs(r);
             let start = rows.len();
             let inner: Vec<encode::Encoded> = self.nodes[r]
                 .lazy
@@ -3649,6 +3858,7 @@ fn compact(worlds: &mut [World], nodes: Vec<Node>) -> Vec<Node> {
     for (w, world) in worlds.iter_mut().enumerate() {
         if world.dead {
             world.positions = Vec::new();
+            world.resync_obs();
             pos_map.push(Vec::new());
             continue;
         }
@@ -3662,6 +3872,7 @@ fn compact(worlds: &mut [World], nodes: Vec<Node>) -> Vec<Node> {
             }
         }
         world.positions = kept;
+        world.resync_obs();
         world.root_pos = map[world.root_pos];
         pos_map.push(map);
     }
@@ -3795,11 +4006,12 @@ fn follow(
     if nodes[at].capped {
         return Err(Lost::Unsearched);
     }
-    let position = &w.positions[nodes[at].pos];
-    if nodes[at].pos == w.root_pos
+    let pi = nodes[at].pos;
+    let position = &w.positions[pi];
+    if pi == w.root_pos
         || position.request.id != request.id.wrapping_add(offset)
         || position.request.player != seat
-        || position.obs != *obs
+        || w.obs(pi) != obs
     {
         return Err(Lost::Diverged);
     }
@@ -4038,6 +4250,7 @@ pub fn search_valued(
         s.forks.worlds.push(World {
             game: g,
             positions: Vec::new(),
+            obs_cache: ObsCache::default(),
             root: 0,
             dead: false,
             root_turn,
@@ -4047,7 +4260,7 @@ pub fn search_valued(
         let pos = s.forks.position(world, ks, vec![None; players], guards);
         if config.reuse_check && let Some(p) = pos {
             fresh_checked += 1;
-            if s.forks.worlds[world].positions[p].obs != obs {
+            if *s.forks.worlds[world].obs(p) != obs {
                 fresh_mismatched += 1;
                 if std::env::var_os("CANTRIP_REUSE_CHECK_LOG").is_some() {
                     eprintln!("reuse check: a fresh world's root observation differs at request {} ({:?})", request.id, crate::kind_name(&request.kind));
@@ -4076,6 +4289,8 @@ pub fn search_valued(
         (Reuse::TopUp, Some(r)) => r.visits as usize,
         _ => 0,
     };
+    // A topped-up root holds the budget, and runs at least `min_fresh` new simulations whatever it held.
+    let target = if config.reuse == Reuse::TopUp { target.max(carried.saturating_add(config.min_fresh)) } else { target };
     let (mut sims, mut evaluations, mut batches) = (carried, 0usize, 0usize);
     let mut rows = pre_rows;
     let mut waste_leaves = 0usize;
@@ -4109,7 +4324,16 @@ pub fn search_valued(
     };
     let mut snapshots: Vec<Snapshot> = Vec::new();
     let (mut early_stopped, mut time_stopped) = (false, false);
+    // The observation cache's share of `Config::obs_cache` for each world, for this search.
+    let per_world = (config.obs_cache / s.forks.worlds.len().max(1)).max(64);
+    for w in &mut s.forks.worlds {
+        w.configure_obs(per_world, mode);
+    }
     while sims < target {
+        // What this batch reads stays cached while it is made.
+        for w in &mut s.forks.worlds {
+            w.pin();
+        }
         if past(clock) {
             break;
         }
@@ -4230,6 +4454,7 @@ pub fn search_valued(
         let mut encoded: Vec<encode::Encoded> = Vec::with_capacity(leaves.len());
         let mut first_row = Vec::with_capacity(leaves.len());
         for (n, _, refine) in &leaves {
+            s.ensure_obs(*n);
             first_row.push(encoded.len());
             if *refine {
                 let inner: Vec<encode::Encoded> = s.nodes[*n]
@@ -4484,6 +4709,8 @@ pub fn search_valued(
             .map(|w| w.game.tree.len().saturating_sub(1))
             .sum(),
         tree_bytes: 0,
+        memory: None,
+        obs_rebuilt: s.forks.worlds.iter().map(|w| w.obs_cache.rebuilt).sum(),
         counted,
         memory_bound,
         kept_dropped,
@@ -4595,7 +4822,10 @@ pub fn search_valued(
             .sum::<usize>()
             + searched.positions * std::mem::size_of::<Position>()
     };
-    let mut keep = (config.reuse != Reuse::None).then(|| Kept {
+    if config.measure_memory && counted {
+        searched.memory = Some(measure_memory(&mut s.forks.worlds, &mut s.nodes));
+    }
+    let mut keep = (config.reuse != Reuse::None && !config.measure_memory).then(|| Kept {
         seat,
         mode,
         at: game.at,

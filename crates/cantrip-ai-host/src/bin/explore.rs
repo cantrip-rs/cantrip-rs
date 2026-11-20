@@ -28,9 +28,8 @@
 //! All but `mine-forks` take `--backend ort|tract|remote`, `--server HOST:PORT`, `--threads N`, `--prior DIR`. The summary
 //! or the verdict is printed as JSON.
 
-#[cfg(windows)]
 #[global_allocator]
-static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+static GLOBAL: cantrip_ai::alloc::Counting = cantrip_ai::alloc::Counting;
 
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
