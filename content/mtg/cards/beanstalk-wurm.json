@@ -1,0 +1,17 @@
+{
+  "name": "Beanstalk Wurm",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Plant Wurm",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Reach",
+  "keywords": [
+    "Reach"
+  ],
+  "adventure": {
+    "name": "Plant Beans",
+    "manaCost": "{1}{G}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "You may play an additional land this turn. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}
