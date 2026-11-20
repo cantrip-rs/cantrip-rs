@@ -143,7 +143,12 @@ impl Probe for SystemProbe {
         let status = std::fs::read_to_string("/proc/self/status").ok()?;
         let info = std::fs::read_to_string("/proc/meminfo").ok()?;
         let private = kb(&status, "RssAnon:")? + kb(&status, "VmSwap:").unwrap_or(0);
-        let available = kb(&info, "MemAvailable:")?;
+        // The host's available memory, and in a container (a cgroup with a memory limit) no more than the room under
+        // its limit: /proc/meminfo is the whole host's there, other tenants' use and all.
+        let mut available = kb(&info, "MemAvailable:")?;
+        if let Some(room) = cgroup::Files::get().memory_room() {
+            available = available.min(room);
+        }
         let strict = std::fs::read_to_string("/proc/sys/vm/overcommit_memory").is_ok_and(|v| v.trim() == "2");
         let commit_headroom = if strict {
             kb(&info, "CommitLimit:")?.saturating_sub(kb(&info, "Committed_AS:")?)
@@ -154,6 +159,10 @@ impl Probe for SystemProbe {
     }
 
     fn cpu(&self) -> Option<(u64, u64)> {
+        // In a container with a CPU quota, its own CPU time against the quota: /proc/stat is the whole host's.
+        if let Some(times) = cgroup::Files::get().cpu_times() {
+            return Some(times);
+        }
         let stat = std::fs::read_to_string("/proc/stat").ok()?;
         let line = stat.lines().next()?.strip_prefix("cpu ")?;
         let v: Vec<u64> = line.split_whitespace().take(8).filter_map(|x| x.parse().ok()).collect();
@@ -161,6 +170,152 @@ impl Probe for SystemProbe {
             return None;
         }
         Some((v[3] + v[4], v.iter().sum()))
+    }
+}
+
+#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
+mod cgroup {
+    /// A cgroup v1 limit at or above this is no limit (the kernel's "unlimited" is a page-rounded `i64::MAX`).
+    const UNLIMITED: u64 = 1 << 60;
+
+    /// The room under a memory limit: the limit less what is used, file cache that can be dropped (`inactive_file`;
+    /// v1's hierarchical `total_inactive_file`) not counted as used. `None` without a limit (v2's `max`).
+    pub fn memory_room(limit: &str, usage: &str, stat: &str) -> Option<u64> {
+        let limit = limit.trim().parse::<u64>().ok().filter(|&l| l < UNLIMITED)?;
+        let usage = usage.trim().parse::<u64>().ok()?;
+        let field = |key: &str| stat.lines().find_map(|l| l.strip_prefix(key)?.strip_prefix(' ')?.trim().parse::<u64>().ok());
+        let inactive = field("total_inactive_file").or_else(|| field("inactive_file")).unwrap_or(0);
+        Some(limit.saturating_sub(usage.saturating_sub(inactive)))
+    }
+
+    /// The CPUs a quota allows: v2's `cpu.max` ("QUOTA PERIOD", or "max PERIOD"), or v1's `cpu.cfs_quota_us` (-1: none)
+    /// over `cpu.cfs_period_us`.
+    pub fn quota_cpus(v2_max: Option<&str>, v1_quota: Option<&str>, v1_period: Option<&str>) -> Option<f64> {
+        let (quota, period) = match v2_max {
+            Some(text) => {
+                let mut words = text.split_whitespace();
+                (words.next()?.to_owned(), words.next().unwrap_or("100000").to_owned())
+            }
+            None => (v1_quota?.trim().to_owned(), v1_period?.trim().to_owned()),
+        };
+        let quota = quota.parse::<f64>().ok().filter(|&q| q > 0.0)?;
+        let period = period.parse::<f64>().ok().filter(|&p| p > 0.0)?;
+        Some(quota / period)
+    }
+
+    /// The CPU time used, in nanoseconds: v2's `cpu.stat` (`usage_usec`), or v1's `cpuacct.usage`.
+    pub fn usage_ns(v2_stat: Option<&str>, v1_usage: Option<&str>) -> Option<u64> {
+        match v2_stat {
+            Some(text) => text.lines().find_map(|l| l.strip_prefix("usage_usec ")?.trim().parse::<u64>().ok()).map(|us| us * 1000),
+            None => v1_usage?.trim().parse().ok(),
+        }
+    }
+
+    /// CPU times for `Probe::cpu` (idle and in all): in all, the quota's CPUs times the time since `base_at`; idle, that
+    /// less the CPU time used since then (`base_used`). Both start from a large offset, so CPU time used a little faster
+    /// than the quota (a period's burst) never takes idle below zero, and the busy share over an interval is the CPU
+    /// time used over what the quota allowed.
+    pub fn times(cpus: f64, elapsed_ns: u64, used_ns: u64, base_used: u64) -> (u64, u64) {
+        const OFFSET: u64 = 1 << 62;
+        let total = OFFSET + (elapsed_ns as f64 * cpus) as u64;
+        (total.saturating_sub(used_ns.saturating_sub(base_used)), total)
+    }
+
+    #[cfg(target_os = "linux")]
+    pub use files::Files;
+
+    #[cfg(target_os = "linux")]
+    mod files {
+        use std::path::{Path, PathBuf};
+        use std::sync::OnceLock;
+        use std::time::Instant;
+
+        /// Where this process's cgroup keeps its limits and use, found once.
+        pub struct Files {
+            /// Memory: the limit, the use and the stat file.
+            memory: Option<(PathBuf, PathBuf, PathBuf)>,
+            /// CPU: the quota's CPUs, the use file and whether it is v2's `cpu.stat`, and the first reading.
+            cpu: Option<(f64, PathBuf, bool, Instant, u64)>,
+        }
+
+        fn read(p: &Path) -> Option<String> {
+            std::fs::read_to_string(p).ok()
+        }
+
+        /// A controller's directory: this process's own cgroup under the mount (`/proc/self/cgroup`) where it is
+        /// there, else the mount itself (a container's own cgroup namespace mounts its cgroup at the root).
+        fn dir(mount: &Path, own: Option<&str>, probe: &str) -> Option<PathBuf> {
+            let mut candidates = Vec::new();
+            if let Some(own) = own {
+                candidates.push(mount.join(own.trim_start_matches('/')));
+            }
+            candidates.push(mount.to_path_buf());
+            candidates.into_iter().find(|d| d.join(probe).exists())
+        }
+
+        impl Files {
+            pub fn get() -> &'static Files {
+                static FILES: OnceLock<Files> = OnceLock::new();
+                FILES.get_or_init(Files::find)
+            }
+
+            fn find() -> Files {
+                let root = Path::new("/sys/fs/cgroup");
+                let membership = read(Path::new("/proc/self/cgroup")).unwrap_or_default();
+                // v2: "0::/path"; v1: "N:controller,controller:/path".
+                let v2_own = membership.lines().find_map(|l| l.strip_prefix("0::")).map(str::to_owned);
+                let v1_own = |controller: &str| {
+                    membership.lines().find_map(|l| {
+                        let mut parts = l.splitn(3, ':');
+                        let (_, controllers, path) = (parts.next()?, parts.next()?, parts.next()?);
+                        controllers.split(',').any(|c| c == controller).then(|| path.to_owned())
+                    })
+                };
+                let memory = if let Some(d) = dir(root, v2_own.as_deref(), "memory.max") {
+                    Some((d.join("memory.max"), d.join("memory.current"), d.join("memory.stat")))
+                } else {
+                    dir(&root.join("memory"), v1_own("memory").as_deref(), "memory.limit_in_bytes")
+                        .map(|d| (d.join("memory.limit_in_bytes"), d.join("memory.usage_in_bytes"), d.join("memory.stat")))
+                };
+                let cpu = if let Some(d) = dir(root, v2_own.as_deref(), "cpu.max") {
+                    super::quota_cpus(read(&d.join("cpu.max")).as_deref(), None, None).map(|c| (c, d.join("cpu.stat"), true))
+                } else {
+                    let quota = ["cpu", "cpu,cpuacct"]
+                        .iter()
+                        .find_map(|m| dir(&root.join(m), v1_own("cpu").as_deref(), "cpu.cfs_quota_us"))
+                        .and_then(|d| {
+                            super::quota_cpus(None, read(&d.join("cpu.cfs_quota_us")).as_deref(), read(&d.join("cpu.cfs_period_us")).as_deref())
+                        });
+                    let usage = ["cpuacct", "cpu,cpuacct", "cpu"]
+                        .iter()
+                        .find_map(|m| dir(&root.join(m), v1_own("cpuacct").as_deref(), "cpuacct.usage"));
+                    quota.zip(usage).map(|(c, d)| (c, d.join("cpuacct.usage"), false))
+                };
+                let cpu = cpu.and_then(|(c, file, v2)| {
+                    let used = Files::used(&file, v2)?;
+                    Some((c, file, v2, Instant::now(), used))
+                });
+                Files { memory, cpu }
+            }
+
+            fn used(file: &Path, v2: bool) -> Option<u64> {
+                let text = read(file)?;
+                if v2 { super::usage_ns(Some(&text), None) } else { super::usage_ns(None, Some(&text)) }
+            }
+
+            /// The room under the cgroup's memory limit; `None` without one.
+            pub fn memory_room(&self) -> Option<u64> {
+                let (limit, usage, stat) = self.memory.as_ref()?;
+                super::memory_room(&read(limit)?, &read(usage)?, &read(stat).unwrap_or_default())
+            }
+
+            /// `Probe::cpu`'s times against the cgroup's quota; `None` without one.
+            pub fn cpu_times(&self) -> Option<(u64, u64)> {
+                let (cpus, file, v2, at, base) = self.cpu.as_ref()?;
+                let used = Files::used(file, *v2)?;
+                Some(super::times(*cpus, at.elapsed().as_nanos() as u64, used, *base))
+            }
+        }
     }
 }
 
@@ -1664,6 +1819,39 @@ mod tests {
         // Only two of six lanes busy (the run's tail): no growth on that.
         let d = s.step(&window(2.0, 200.0));
         assert_eq!(d.change, 0, "{d:?}");
+    }
+
+    #[test]
+    fn a_containers_memory_room_is_its_limit_less_what_it_uses_and_no_limit_is_none() {
+        // v1 (a rented container: 413 GB, 200 GB used of which 30 GB inactive file cache).
+        let stat = "cache 1\ntotal_inactive_file 32212254720\ninactive_file 5\n";
+        assert_eq!(cgroup::memory_room("443519850496\n", "214748364800\n", stat), Some(443519850496 - (214748364800 - 32212254720)));
+        // v2.
+        assert_eq!(cgroup::memory_room("1073741824\n", "536870912\n", "anon 1\ninactive_file 268435456\n"), Some(805306368));
+        // No limit: v2's max, v1's page-rounded i64::MAX.
+        assert_eq!(cgroup::memory_room("max\n", "5\n", ""), None);
+        assert_eq!(cgroup::memory_room("9223372036854771712\n", "5\n", ""), None);
+        // Over the limit (a burst before reclaim): no room, never a wrapped value.
+        assert_eq!(cgroup::memory_room("100\n", "150\n", ""), Some(0));
+    }
+
+    #[test]
+    fn a_cpu_quota_is_the_cpus_it_allows_and_the_busy_share_is_measured_against_it() {
+        assert_eq!(cgroup::quota_cpus(Some("6143999 100000\n"), None, None).map(|c| (c * 100.0).round()), Some(6144.0));
+        assert_eq!(cgroup::quota_cpus(Some("max 100000\n"), None, None), None);
+        assert_eq!(cgroup::quota_cpus(None, Some("3071999\n"), Some("100000\n")).map(|c| c.round()), Some(31.0));
+        assert_eq!(cgroup::quota_cpus(None, Some("-1\n"), Some("100000\n")), None);
+        assert_eq!(cgroup::usage_ns(Some("usage_usec 1500\nuser_usec 1000\n"), None), Some(1_500_000));
+        assert_eq!(cgroup::usage_ns(None, Some("2500\n")), Some(2500));
+        // 60 CPUs allowed; over 10 s, 450 CPU-seconds used: 75% busy, whatever the container used before.
+        let base = 9_000_000_000_000;
+        let (i0, t0) = cgroup::times(60.0, 0, base, base);
+        let (i1, t1) = cgroup::times(60.0, 10_000_000_000, base + 450_000_000_000, base);
+        let busy = 1.0 - (i1 - i0) as f64 / (t1 - t0) as f64;
+        assert!((busy - 0.75).abs() < 1e-9, "{busy}");
+        // Used faster than the quota (a burst): fully busy, idle never below zero.
+        let (i2, t2) = cgroup::times(60.0, 20_000_000_000, base + 1_700_000_000_000, base);
+        assert!(i2 <= t2 && 1.0 - i2.saturating_sub(i1) as f64 / (t2 - t1) as f64 >= 1.0);
     }
 
     #[test]

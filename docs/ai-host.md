@@ -467,7 +467,10 @@ index alone, so a game's record is the same bytes whatever the lanes, the schedu
 GB is 2^30 bytes. The readings are Windows' `GlobalMemoryStatusEx` (`ullAvailPhys`, and `ullAvailPageFile` for the
 commit headroom), `GetProcessMemoryInfo` (`PrivateUsage`) and `GetSystemTimes`; on Linux `/proc` (anonymous resident
 and swapped bytes for the process, `MemAvailable`, the commit headroom only with `vm.overcommit_memory` 2, `/proc/stat`
-for the CPU); elsewhere none, and no memory limit applies.
+for the CPU), and in a container its own cgroup's (v1 or v2), since `/proc/meminfo` and `/proc/stat` are the whole
+host's there: the available memory is no more than the room under the cgroup's memory limit (the limit less its use,
+dropped file cache not counted), and with a CPU quota the busy share is the cgroup's CPU time over what the quota
+allows (a rented GPU machine is usually such a slice of a larger host); elsewhere none, and no memory limit applies.
 
 - **Admission.** A lane asks before it starts each game, and waits (woken when a game ends, or every quarter second)
   while there is no room. What a game takes is learnt as the run goes: at each tick no game started or ended since
