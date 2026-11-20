@@ -1,0 +1,69 @@
+# Johann, Apprentice Sorcerer: "Once each turn, you may cast an instant or sorcery spell from the top of your library." (CR 601.3).
+# Turn 1: Bot1 casts Johann with four Moxen, then Black Lotus (RRR) and Lightning Bolt from the top at Bot2 (17); the next top card, a second Bolt, is
+# refused with red mana still floating: once each turn. Turn 2: Bot2 has no Johann, so its own top Lightning Bolt is refused with its Mox Ruby's mana.
+# Turn 3: the top card is Goblin Roughrider, no instant or sorcery, refused with the mana for it. Turn 5: the top card is a Lightning Bolt again and is cast:
+# the permission renews with the turn (Bot2 14).
+# "You may look at the top card of your library any time." (CR 401.2): Bot1 sees its top card once Johann is out, Bot2 never does.
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Johann, Apprentice Sorcerer
+Black Lotus
+Island
+Lightning Bolt
+Lightning Bolt
+Goblin Roughrider
+Lightning Bolt
+Island x9
+
+[Bot2 Deck]
+Mox Ruby
+Island x6
+Island
+Lightning Bolt
+Island x11
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+? Bot1.Sees.Bot1.LibraryTop = (hidden)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Johann, Apprentice Sorcerer.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Sees.Bot1.LibraryTop = Lightning Bolt
+? Bot2.Sees.Bot1.LibraryTop = (hidden)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Library.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+! Bot1.Library.Lightning Bolt.Cast(Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Library.Lightning Bolt.Cast(Bot1)
+? Bot2.Sees.Bot2.LibraryTop = (hidden)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Library.Goblin Roughrider.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Library.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Bot1.Library.Count = 9
+Bot2.Library.Count = 11

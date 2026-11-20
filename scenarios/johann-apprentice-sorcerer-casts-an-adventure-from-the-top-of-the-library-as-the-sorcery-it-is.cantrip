@@ -1,0 +1,47 @@
+# Johann, Apprentice Sorcerer: "If the top card of your library has an Adventure, you can cast the Adventure spell this way" (the ruling, CR 715.3a). Turn 3:
+# the top card is Embereth Shieldbreaker, a creature card that is no instant or sorcery, but its Adventure Battle Display is a sorcery: Bot1 casts it from the
+# top at Bot2's Mox Emerald and it is destroyed. The card goes to exile on an adventure, not to the graveyard. The creature itself ({1}{R}) is
+# refused with Sapphire's and Ruby's mana in the pool: only the Adventure's characteristics make it an instant or sorcery spell (the ruling).
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Johann, Apprentice Sorcerer
+Island
+Island
+Island
+Embereth Shieldbreaker
+Island x11
+
+[Bot2 Deck]
+Mox Emerald
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Johann, Apprentice Sorcerer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+? Bot1.Sees.Bot1.LibraryTop = Embereth Shieldbreaker
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Library.Embereth Shieldbreaker.Cast(Ability: #1)
+Bot1.Library.Embereth Shieldbreaker.Cast(Bot2.Battlefield.Mox Emerald; Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Mox Emerald
+Exile = Embereth Shieldbreaker
+Bot1.Library.Count = 11

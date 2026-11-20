@@ -1,0 +1,8 @@
+{
+  "name": "Johann, Apprentice Sorcerer",
+  "manaCost": "{2}{U}{R}",
+  "type": "Legendary Creature — Human Wizard Sorcerer",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "You may look at the top card of your library any time.\nOnce each turn, you may cast an instant or sorcery spell from the top of your library. (You still pay its costs. Timing rules still apply.)"
+}
