@@ -1,0 +1,50 @@
+# Virtue of Courage: the exile is a "may". Bot1 bolts Bot2 for 3 and declines, so nothing leaves the library (13 cards, the same as
+# before the trigger resolved) and the exile stays empty.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Mountain
+Virtue of Courage
+Lightning Bolt
+Ornithopter
+Island
+Mountain
+Mountain
+Mountain x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Virtue of Courage.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Library.Count = 13
+
+[Expect]
+Bot2.Life = 17
+Exile.Count = 0
+Bot1.Library.Count = 13

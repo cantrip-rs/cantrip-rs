@@ -1,0 +1,12 @@
+{
+  "name": "Virtue of Courage",
+  "manaCost": "{3}{R}{R}",
+  "type": "Enchantment",
+  "oracleText": "Whenever a source you control deals noncombat damage to an opponent, you may exile that many cards from the top of your library. You may play those cards this turn.",
+  "adventure": {
+    "name": "Embereth Blaze",
+    "manaCost": "{1}{R}",
+    "type": "Instant — Adventure",
+    "oracleText": "Embereth Blaze deals 2 damage to any target. (Then exile this card. You may cast the enchantment later from exile.)"
+  }
+}

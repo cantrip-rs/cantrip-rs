@@ -1,0 +1,57 @@
+# Virtue of Courage: "Whenever a source you control deals noncombat damage to an opponent, you may exile that many cards from the top
+# of your library. You may play those cards this turn." Bot1 bolts Bot2 (3 damage), accepts, and exiles the top three cards: Ornithopter,
+# Island and Mountain. They may be played this turn (CR 305.1, 601.3): the Mountain is the land drop (the Island is then refused) and the
+# Ornithopter is cast from exile. On turn 5 the Island, still exiled, can no longer be played.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Mountain
+Virtue of Courage
+Lightning Bolt
+Ornithopter
+Island
+Mountain
+Mountain
+Mountain x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Virtue of Courage.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Exile = Island; Mountain; Ornithopter
+Bot1.Exile.Mountain.Play
+Bot1.Exile.Ornithopter.Cast
+! Bot1.Exile.Island.Play
+[T5 Bot1.Main1]
+! Bot1.Exile.Island.Play
+
+[Expect]
+Bot2.Life = 17
+Exile = Island
+Bot1.Battlefield = Mountain; Mountain; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter; Virtue of Courage

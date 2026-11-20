@@ -1,0 +1,29 @@
+# "Any target" (CR 115.4): Embereth Blaze may hit a creature as well as a player. Bot1 kills Bot2's 0/2 Ornithopter with it on turn 3;
+# Bot2's life is unchanged.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Virtue of Courage
+Mountain x17
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Virtue of Courage.Cast(Bot2.Battlefield.Ornithopter; Ability: Embereth Blaze)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
+Exile = Virtue of Courage

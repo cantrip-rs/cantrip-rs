@@ -1,0 +1,60 @@
+# The trigger needs noncombat damage dealt to an opponent (CR 120.2, 510.2): Bot1's Memnite deals 1 combat damage to Bot2 (turn 3),
+# a Lightning Bolt kills Bot2's Ornithopter (damage to a creature), and a second Bolt hits Bot1 itself (turn 5). Each would be asked
+# "exile that many cards?" if it triggered; none is, so nothing is exiled and the script's next lines are not displaced by a question.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mountain
+Virtue of Courage
+Memnite
+Lightning Bolt
+Lightning Bolt
+Mountain x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Virtue of Courage.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Count: 0)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+? Exile.Count = 0
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Ornithopter
+? Exile.Count = 0
+[T5 Bot1.Main1]
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 19
+Exile.Count = 0
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt
