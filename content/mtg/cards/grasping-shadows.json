@@ -1,0 +1,11 @@
+{
+  "name": "Grasping Shadows",
+  "manaCost": "{3}{B}",
+  "type": "Enchantment",
+  "oracleText": "Whenever a creature you control attacks alone, it gains deathtouch and lifelink until end of turn. Put a dread counter on this enchantment. Then if there are three or more dread counters on it, transform it.",
+  "backFace": {
+    "name": "Shadows' Lair",
+    "type": "Land — Cave",
+    "oracleText": "(Transforms from Grasping Shadows.)\n{T}: Add {B}.\n{B}, {T}, Remove a dread counter from this land: You draw a card and you lose 1 life."
+  }
+}

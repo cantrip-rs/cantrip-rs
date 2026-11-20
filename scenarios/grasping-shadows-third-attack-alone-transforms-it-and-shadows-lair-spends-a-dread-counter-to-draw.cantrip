@@ -1,0 +1,112 @@
+# Grasping Shadows // Shadows' Lair. "Whenever a creature you control attacks alone, it gains deathtouch and lifelink until end
+# of turn. Put a dread counter on this enchantment. Then if there are three or more dread counters on it, transform it."
+# A creature of Bot2's attacking alone in turn 4 (Bot2's Ornithopter, before the block) is not "a creature you control" and adds no counter.
+# Turn 3: the Memnite attacks alone and gains both keywords (one dread counter); unblocked it gains 1 life. Turn 5: it has
+# lost them (until end of turn, CR 514.2); blocked by Bot2's Ornithopter it kills the 0/2 with deathtouch (CR 702.2) and gains
+# 1 life (two counters). Turn 7: with the Memnite and the Ornithopter attacking together nothing triggers (CR 506.5). Turn 9:
+# the Ornithopter attacks alone, the third counter transforms it (CR 701.27a) and the counters stay on Shadows' Lair.
+# Turn 11: {T}: Add {B}. Turn 13: "{B}, {T}, Remove a dread counter from this land: You draw a card and you lose 1 life" is
+# refused with no {B}, then paid by a Mox Jet.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Grasping Shadows
+Memnite
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Ornithopter x2
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grasping Shadows.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Deathtouch; Lifelink
+? Bot1.Battlefield.Grasping Shadows.Counters.Dread = 1
+[T3 Bot1.Main2]
+? Bot1.Life = 21
+? Bot2.Life = 19
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Grasping Shadows.Counters.Dread = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Block(Ornithopter#2 > Memnite)
+[T5 Bot1.Main2]
+? Bot2.Graveyard = Ornithopter
+? Bot1.Life = 22
+? Bot1.Battlefield.Grasping Shadows.Counters.Dread = 2
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2; Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grasping Shadows.Counters.Dread = 2
+[T9 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Shadows' Lair.Counters.Dread = 3
+[T11 Bot1.Main1]
+Bot1.Battlefield.Shadows' Lair.Activate(Ability: Add)
+? Bot1.Mana = {B}
+[T13 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+[T13 Bot1.Main2]
+! Bot1.Battlefield.Shadows' Lair.Activate(Ability: Remove; Mana: short)
+[T15 Bot1.Main1]
+? Bot1.Hand.Count = 7
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Shadows' Lair.Activate(Ability: Remove)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Shadows' Lair.Counters.Dread = 2
+? Bot1.Life = 21
+? Bot1.Hand.Count = 8
+
+[Expect]
+Bot1.Battlefield.Shadows' Lair.Tapped = true
