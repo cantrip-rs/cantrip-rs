@@ -123,6 +123,14 @@ pub fn your_planeswalkers(q: &dyn LayerQuery, source: ObjectId, affected: Object
     so_far.is(CardType::Planeswalker) && s.obj(affected).controller == s.obj(source).controller
 }
 
+/// "Artifacts you control" (CR 613.1f, layer 6): every artifact under the source's controller's control, judged on what the
+/// earlier layers made it - an artifact only because of another effect counts - and by control, not ownership. Mm'menon, the
+/// Right Hand, Ragost, Deft Gastronaut (in layer 4 too) and Food Fight use it as `StaticDef::affects`.
+pub fn your_artifacts(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
+    let s = q.state();
+    so_far.is(CardType::Artifact) && s.obj(affected).controller == s.obj(source).controller
+}
+
 /// "Lands you control" (CR 613.1f, layer 6): every land under the source's controller's control, judged on what the earlier
 /// layers made it, and by control, not ownership. The emblem of Nissa, Who Shakes the World and Resonating Lute use it as
 /// `StaticDef::affects`.
