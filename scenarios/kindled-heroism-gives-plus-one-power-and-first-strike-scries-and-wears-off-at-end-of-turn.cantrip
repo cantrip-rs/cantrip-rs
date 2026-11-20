@@ -1,0 +1,38 @@
+# Kindled Heroism ({R} instant): "Target creature gets +1/+0 and gains first strike until end of turn. Scry 1." Bot1's
+# Ornithopter (0/2 flying) becomes a 1/2 first striker, toughness untouched and the pool empty after paying exactly {R}; the
+# scry puts the top card, Lightning Bolt, on the bottom (CR 701.22a). At the next turn the Ornithopter is a 0/2 again (CR 514.2).
+
+[Bot1 Deck]
+Mox Ruby
+Ornithopter
+Kindled Heroism
+Mountain x4
+Lightning Bolt
+Black Lotus
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kindled Heroism.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt)
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = FirstStrike; Flying
+? Bot1.Library = Black Lotus; Lightning Bolt
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+
+[Expect]
+Bot1.Graveyard = Kindled Heroism
+Bot1.Library = Black Lotus; Lightning Bolt

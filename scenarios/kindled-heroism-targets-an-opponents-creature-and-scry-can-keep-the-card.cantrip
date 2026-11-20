@@ -1,0 +1,34 @@
+# Kindled Heroism targets any creature: on turn 3 Bot1 gives Bot2's Ornithopter +1/+0 and first strike, and the scry may
+# leave the card looked at on top (CR 701.22a): Black Lotus stays on top of Bot1's library, above Mox Sapphire. Lightning Bolt
+# was drawn on turn 3. Turn 2: the Ornithopter is still a 0/2 flier.
+
+[Bot1 Deck]
+Mox Ruby
+Kindled Heroism
+Mountain x5
+Lightning Bolt
+Black Lotus
+Mox Sapphire
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kindled Heroism.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Black Lotus | )
+? Bot2.Battlefield.Ornithopter.Power = 1
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+? Bot2.Battlefield.Ornithopter.Keywords = FirstStrike; Flying
+
+[Expect]
+Bot1.Library = Black Lotus; Mox Sapphire

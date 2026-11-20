@@ -1,0 +1,6 @@
+{
+  "name": "Kindled Heroism",
+  "manaCost": "{R}",
+  "type": "Instant",
+  "oracleText": "Target creature gets +1/+0 and gains first strike until end of turn. Scry 1."
+}

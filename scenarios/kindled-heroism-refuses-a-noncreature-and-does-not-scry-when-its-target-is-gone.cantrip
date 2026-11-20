@@ -1,0 +1,44 @@
+# Kindled Heroism targets a creature only (CR 115.1): a Mox Ruby and a player are refused. Bot1 then targets its own Ornithopter
+# and Bot2, on turn 3, Lightning Bolts it in response. With its only target gone the spell does not resolve (CR 608.2b): it goes
+# to the graveyard and the "Scry 1" never happens (`! Bot1.Arrange`; the library, Black Lotus above Mox Sapphire, is untouched).
+
+[Bot1 Deck]
+Mox Ruby x2
+Ornithopter
+Kindled Heroism
+Mountain x3
+Lightning Bolt
+Black Lotus
+Mox Sapphire
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Kindled Heroism.Cast(Bot1.Battlefield.Mox Ruby)
+! Bot1.Hand.Kindled Heroism.Cast(Bot2)
+Bot1.Hand.Kindled Heroism.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+! Bot1.Arrange
+
+[Expect]
+Bot1.Graveyard = Kindled Heroism; Ornithopter
+Bot2.Graveyard = Lightning Bolt
+Bot1.Library = Black Lotus; Mox Sapphire
