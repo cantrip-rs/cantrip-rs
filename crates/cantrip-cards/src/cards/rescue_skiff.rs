@@ -7,11 +7,6 @@ use cantrip_oracle as oracle;
 /// as its reminder text says. One static ability, applied in each layer it touches (CR 613.6).
 const TEN_PLUS: &str = "10+ | Flying (5/6)";
 
-/// "Target creature or enchantment card from your graveyard" (CR 115.1, 400.7).
-fn creature_or_enchantment_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    targets::card_in_your_graveyard(q, asker, t, &[CardType::Creature, CardType::Enchantment])
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
@@ -19,7 +14,7 @@ pub static CARD: CardDef = CardDef {
             effects::return_first_target_to_battlefield,
             "When this Spacecraft enters, return target creature or enchantment card from your graveyard to the battlefield.",
         )
-        .targets(&[target(creature_or_enchantment_card_in_your_graveyard)]),
+        .targets(&[targets::CREATURE_OR_ENCHANTMENT_CARD_IN_YOUR_GRAVEYARD]),
         station::ability("Station (Tap another creature you control: Put charge counters equal to its power on this Spacecraft. Station only as a sorcery. It's an artifact creature at 10+.)"),
     ],
     statics: &[

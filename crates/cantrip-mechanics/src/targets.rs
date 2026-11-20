@@ -1607,6 +1607,14 @@ fn enchantment_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target) -
 /// "Target enchantment card from your graveyard" (CR 115.1, 404.1): Call Damage Control, Yuna, Hope of Spira and Skull of Orm print it.
 pub const ENCHANTMENT_CARD_IN_YOUR_GRAVEYARD: TargetSpec = target(enchantment_card_in_your_graveyard);
 
+fn creature_or_enchantment_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    card_in_your_graveyard(q, asker, t, &[CardType::Creature, CardType::Enchantment])
+}
+
+/// "Target creature or enchantment card from your graveyard" (CR 115.1, 404.1): a card there is the types it has in a graveyard.
+/// Rescue Skiff and Neva, Stalked by Nightmares print it.
+pub const CREATURE_OR_ENCHANTMENT_CARD_IN_YOUR_GRAVEYARD: TargetSpec = target(creature_or_enchantment_card_in_your_graveyard);
+
 /// "Noncreature, nonland card from your graveyard" (CR 115.1, 404.1): a card there is the types it has in a graveyard. Used as
 /// `target(..)` or `up_to_one(..)`; Monastery Messenger and Practiced Scrollsmith print it.
 pub fn noncreature_nonland_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target) -> bool {
