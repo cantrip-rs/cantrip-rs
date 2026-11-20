@@ -1,0 +1,43 @@
+# Stonesplitter Bolt targets a creature or planeswalker (CR 115.1): X = 2 unbargained removes two loyalty from Wrenn and Six
+# (3 loyalty), leaving 1. It cannot target a player (Bot2) or a noncreature, nonplaneswalker permanent (Mox Emerald).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mountain
+Stonesplitter Bolt
+Mountain x2
+Mountain x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Wrenn and Six
+Forest x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Wrenn and Six.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+[T3 Bot1.Main1]
+! Bot1.Hand.Stonesplitter Bolt.Cast(Bot2; X: 2)
+! Bot1.Hand.Stonesplitter Bolt.Cast(Bot2.Battlefield.Mox Emerald; X: 2)
+Bot1.Hand.Stonesplitter Bolt.Cast(Bot2.Battlefield.Wrenn and Six; X: 2)
+Bot1.Modes(Cast without bargain)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Wrenn and Six.Counters.Loyalty = 1
+Bot2.Life = 20
+Bot1.Graveyard = Stonesplitter Bolt

@@ -1,0 +1,42 @@
+# Bargained with X = 2, Stonesplitter Bolt deals exactly 4 damage (twice X, not three times X): Fortified Rampart (0/6) is
+# left with 4 damage and survives.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mountain
+Stonesplitter Bolt
+Mountain x2
+Mountain x10
+
+[Bot2 Deck]
+Mox Pearl
+Mox Emerald
+Fortified Rampart
+Forest x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Fortified Rampart.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Stonesplitter Bolt.Cast(Bot2.Battlefield.Fortified Rampart; X: 2)
+Bot1.Modes(Bargain:)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Choose(Mox Pearl)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Fortified Rampart.Damage = 4
+Bot2.Graveyard.Count = 0
+Bot1.Graveyard = Stonesplitter Bolt; Mox Pearl

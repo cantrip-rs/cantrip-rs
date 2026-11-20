@@ -1,0 +1,6 @@
+{
+  "name": "Stonesplitter Bolt",
+  "manaCost": "{X}{R}",
+  "type": "Instant",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nStonesplitter Bolt deals X damage to target creature or planeswalker. If this spell was bargained, it deals twice X damage to that permanent instead."
+}

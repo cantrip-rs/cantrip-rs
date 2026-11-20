@@ -1,0 +1,46 @@
+# Unbargained, Stonesplitter Bolt deals X damage (here X = 2) to target creature: Keen-Eyed Curator (3/3) is left with 2 damage.
+# {X}{R} with X = 2 costs three mana: Mox Ruby, Mox Pearl and Mox Jet pay it, leaving the pool empty and the Mountains untapped.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mountain
+Stonesplitter Bolt
+Mountain x2
+Mountain x10
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Keen-Eyed Curator
+Forest x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Hand.Keen-Eyed Curator.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Stonesplitter Bolt.Cast(Bot2.Battlefield.Keen-Eyed Curator; X: 2)
+Bot1.Modes(Cast without bargain)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana = 
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Keen-Eyed Curator.Damage = 2
+Bot2.Graveyard.Count = 0
+Bot1.Graveyard = Stonesplitter Bolt
+Bot1.Battlefield.Mountain.Tapped = false
+Bot1.Battlefield.Mox Ruby.Tapped = true
+Bot1.Battlefield.Mox Pearl.Tapped = true
+Bot1.Battlefield.Mox Jet.Tapped = true
