@@ -1,0 +1,49 @@
+# Twisted Fealty's two targets may be the same creature (CR 115.3 only forbids one target twice for the same slot): Bot1 takes
+# Bot2's Llanowar Elves and attaches a Wicked Role to it, so it attacks as a 2/2 with haste. At end of turn the control effect
+# ends (CR 514.2) and the Elves return to Bot2, but the Role is a permanent Bot1 controls and it stays attached (CR 303.4e,
+# 611.2a): the Elves are a 2/2 under Bot2's control, with Bot1's Wicked Role on them.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Twisted Fealty
+Mountain
+Mountain x15
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Twisted Fealty.Cast
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 2
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Llanowar Elves > Bot2)
+[T4 Bot2.Main1]
+? Bot2.Life = 18
+
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield = Forest; Llanowar Elves
+Bot2.Battlefield.Llanowar Elves.Power = 2
+Bot2.Battlefield.Llanowar Elves.Toughness = 2
+Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Pearl; Mountain; Wicked
+Bot1.Battlefield.Wicked.AttachedTo = Llanowar Elves

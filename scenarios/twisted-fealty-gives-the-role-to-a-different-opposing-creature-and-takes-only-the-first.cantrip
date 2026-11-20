@@ -1,0 +1,47 @@
+# The two targets are judged apart: the first (Llanowar Elves) is stolen, untapped and given haste; the Wicked Role, created under
+# Bot1's control (CR 111.2), goes to Bot2's other creature, Elvish Mystic, which stays Bot2's and becomes a 2/2.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Twisted Fealty
+Mountain
+Mountain x15
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Llanowar Elves
+Elvish Mystic
+Forest x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Twisted Fealty.Cast
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Target(Bot2.Battlefield.Elvish Mystic)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 1
+? Bot2.Battlefield.Elvish Mystic.Power = 2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Pearl; Mountain; Llanowar Elves; Wicked
+Bot1.Battlefield.Wicked.AttachedTo = Elvish Mystic
+Bot2.Battlefield = Forest; Mox Emerald; Elvish Mystic

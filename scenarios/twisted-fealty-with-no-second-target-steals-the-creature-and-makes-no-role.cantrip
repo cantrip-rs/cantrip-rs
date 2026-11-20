@@ -1,0 +1,44 @@
+# "Up to one target creature" for the Role (CR 601.2c): Bot1 chooses no second target (`Bot1.Target()`), so Twisted Fealty steals
+# Llanowar Elves (untapped, with haste) and creates no Role: Bot1 controls no Wicked token.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Twisted Fealty
+Mountain
+Mountain x15
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Twisted Fealty.Cast
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Target()
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Keywords = Haste
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Llanowar Elves > Bot2)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Pearl; Mountain
+Bot2.Battlefield = Forest; Llanowar Elves
+Bot1.Graveyard = Twisted Fealty

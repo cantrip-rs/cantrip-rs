@@ -1,0 +1,57 @@
+# Twisted Fealty: Bot2's Llanowar Elves is tapped (Bot2 tapped it for mana on its turn). Bot1 casts it with the Elves as the
+# first target and its own Ornithopter as the second: Bot1 gains control of the Elves until end of turn, untaps it and it
+# gains haste (CR 611.2a, 302.6), and a Wicked Role token attached to the Ornithopter (CR 303.7) makes it 1/3. Both attack
+# Bot2 for 1 each. The Elves go back at the end of turn without haste.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Twisted Fealty
+Ornithopter
+Mountain
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves.Activate
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Hand.Twisted Fealty.Cast
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Tapped = false
+? Bot1.Battlefield.Llanowar Elves.Keywords = Haste
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Llanowar Elves > Bot2; Ornithopter > Bot2)
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Llanowar Elves.Keywords = (absent)
+
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield = Forest; Llanowar Elves
+Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Pearl; Ornithopter; Mountain; Wicked
+Bot1.Battlefield.Wicked.AttachedTo = Ornithopter
+Bot1.Graveyard = Twisted Fealty

@@ -1,0 +1,54 @@
+# The Role's creature, Bot2's Elvish Mystic, is bolted in response: no Role is made (CR 608.2b), but the Llanowar Elves, the
+# other target, are still stolen, untapped and hasty, and attack Bot2 for 1.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+Twisted Fealty
+Lightning Bolt
+Mountain x15
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Llanowar Elves
+Elvish Mystic
+Forest x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Twisted Fealty.Cast
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Target(Bot2.Battlefield.Elvish Mystic)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Llanowar Elves > Bot2)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Graveyard = Elvish Mystic
+Bot1.Battlefield = Mox Ruby; Mox Ruby; Mox Jet; Mox Pearl
+Bot2.Battlefield = Forest; Mox Emerald; Llanowar Elves
