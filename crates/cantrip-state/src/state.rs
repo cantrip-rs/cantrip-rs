@@ -2103,16 +2103,14 @@ impl GameState {
 
     /// Moves the state back to `mark` for the game-log tree (docs/engine-design.md, "The game log is the search
     /// tree"): pops and undoes every entry after it, and hands back, in the order the entries were written, the
-    /// entries that redo them, each made from the state as its write is undone. The entries undone are not kept:
-    /// `step_forward` makes them again.
+    /// entries that redo them (`turn_back`). The entries undone are not kept: `step_forward` makes them again.
     pub fn step_back(&mut self, mark: Mark) -> Vec<Undo> {
         assert!(mark.0 >= self.journal.base, "stepping back past what the journal still holds");
         let keep = (mark.0 - self.journal.base) as usize;
         let mut redos = Vec::with_capacity(self.journal.entries.len().saturating_sub(keep));
         while self.journal.entries.len() > keep {
             let undo = self.journal.entries.pop().expect("entry");
-            redos.push(self.inverse(&undo));
-            self.undo(undo);
+            redos.push(self.turn_back(undo));
         }
         redos.reverse();
         redos
@@ -2127,10 +2125,263 @@ impl GameState {
     pub fn step_forward(&mut self, redos: Vec<Undo>) {
         self.journal.entries.reserve(redos.len());
         for redo in redos {
-            let undo = self.inverse(&redo);
-            self.undo(redo);
+            let undo = self.turn_back(redo);
             self.journal.entries.push(undo);
         }
+    }
+
+    /// Applies `entry` and gives back the entry that undoes that: `inverse` then `undo`, in one step that copies
+    /// nothing. A value set trades places with the one in the entry, and a value taken off a list moves into it,
+    /// where `inverse` cloned each (a whole frame, an object's row) before `undo` put the other in its place. It is
+    /// what moving through the game-log tree is made of (`step_back`, `step_forward`), which a search does for every
+    /// simulation. `revert` and `rollback` keep `inverse` and `undo`: one must leave the entries it undoes in the
+    /// journal, the other makes no entry.
+    fn turn_back(&mut self, entry: Undo) -> Undo {
+        self.epoch += 1;
+        if entry.layered() {
+            self.chars_epoch += 1;
+        }
+        use std::mem::swap;
+        let back = match entry {
+            Undo::Object(id, mut old) => {
+                swap(&mut self.objects[id.index()], &mut *old);
+                Undo::Object(id, old)
+            }
+            Undo::ObjectPushed => Undo::ObjectPopped(Box::new(self.objects.pop().expect("an object"))),
+            Undo::ObjectPopped(obj) => {
+                self.objects.push(*obj);
+                Undo::ObjectPushed
+            }
+            Undo::Player(p, mut old) => {
+                swap(&mut self.players[p.index()], &mut *old);
+                Undo::Player(p, old)
+            }
+            Undo::Turn(mut old) => {
+                swap(&mut self.turn, &mut *old);
+                Undo::Turn(old)
+            }
+            Undo::RestrictedManaSet(mut old) => {
+                swap(&mut self.restricted_mana, &mut old);
+                Undo::RestrictedManaSet(old)
+            }
+            Undo::ManaFromPushed => {
+                let mana = self.mana_from.pop().expect("mana");
+                Undo::ManaFromRemoved(self.mana_from.len() as u32, Box::new(mana))
+            }
+            Undo::ManaFromSet(at, mut old) => {
+                swap(&mut self.mana_from[at as usize], &mut *old);
+                Undo::ManaFromSet(at, old)
+            }
+            Undo::ManaFromRemoved(at, old) => {
+                self.mana_from.insert(at as usize, *old);
+                Undo::ManaFromInserted(at)
+            }
+            Undo::ManaFromInserted(at) => Undo::ManaFromRemoved(at, Box::new(self.mana_from.remove(at as usize))),
+            Undo::ManaFromAll(mut old) => {
+                swap(&mut self.mana_from, &mut old);
+                Undo::ManaFromAll(old)
+            }
+            Undo::CounterStampsSet(mut old) => {
+                swap(&mut self.counter_stamps, &mut old);
+                Undo::CounterStampsSet(old)
+            }
+            Undo::ZoneInserted { slot, at } => {
+                let id = self.zones[slot as usize].remove(at as usize);
+                Undo::ZoneRemoved { slot, at, id }
+            }
+            Undo::ZoneRemoved { slot, at, id } => {
+                self.zones[slot as usize].insert(at as usize, id);
+                Undo::ZoneInserted { slot, at }
+            }
+            Undo::StackPushed => Undo::StackPopped(Box::new(self.stack.pop().expect("an item"))),
+            Undo::StackPopped(item) => {
+                self.stack.push(*item);
+                Undo::StackPushed
+            }
+            Undo::StackSet(at, mut old) => {
+                swap(&mut self.stack[at as usize], &mut *old);
+                Undo::StackSet(at, old)
+            }
+            Undo::EffectPushed => {
+                let effect = self.effects.pop().expect("an effect");
+                Undo::EffectRemoved(self.effects.len() as u32, Box::new(effect))
+            }
+            Undo::EffectRemoved(at, effect) => {
+                self.effects.insert(at as usize, *effect);
+                Undo::EffectInserted(at)
+            }
+            Undo::EffectInserted(at) => Undo::EffectRemoved(at, Box::new(self.effects.remove(at as usize))),
+            Undo::EffectSet(at, mut old) => {
+                swap(&mut self.effects[at as usize], &mut *old);
+                Undo::EffectSet(at, old)
+            }
+            Undo::PermissionPushed => {
+                let permission = self.permissions.pop().expect("a permission");
+                Undo::PermissionRemoved(self.permissions.len() as u32, Box::new(permission))
+            }
+            Undo::PermissionRemoved(at, p) => {
+                self.permissions.insert(at as usize, *p);
+                Undo::PermissionInserted(at)
+            }
+            Undo::PermissionInserted(at) => Undo::PermissionRemoved(at, Box::new(self.permissions.remove(at as usize))),
+            Undo::TriggerPushed => {
+                let trigger = self.triggers.pop().expect("a trigger");
+                Undo::TriggerRemoved(self.triggers.len() as u32, Box::new(trigger))
+            }
+            Undo::TriggerRemoved(at, trigger) => {
+                self.triggers.insert(at as usize, *trigger);
+                Undo::TriggerInserted(at)
+            }
+            Undo::TriggerInserted(at) => Undo::TriggerRemoved(at, Box::new(self.triggers.remove(at as usize))),
+            Undo::DelayedPushed => {
+                let delayed = self.delayed.pop().expect("delayed");
+                Undo::DelayedRemoved(self.delayed.len() as u32, Box::new(delayed))
+            }
+            Undo::DelayedRemoved(at, d) => {
+                self.delayed.insert(at as usize, *d);
+                Undo::DelayedInserted(at)
+            }
+            Undo::DelayedInserted(at) => Undo::DelayedRemoved(at, Box::new(self.delayed.remove(at as usize))),
+            Undo::LastKnownPushed => Undo::LastKnownPopped(Box::new(self.last_known.pop().expect("a row"))),
+            Undo::LastKnownPopped(row) => {
+                self.last_known.push(*row);
+                Undo::LastKnownPushed
+            }
+            Undo::LeftStackPushed => Undo::LeftStackPopped(Box::new(self.left_stack.pop().expect("an item"))),
+            Undo::LeftStackPopped(item) => {
+                self.left_stack.push(*item);
+                Undo::LeftStackPushed
+            }
+            Undo::CostReceiptPushed => Undo::CostReceiptPopped(Box::new(self.cost_receipts.pop().expect("receipt"))),
+            Undo::CostReceiptPopped(receipt) => {
+                self.cost_receipts.push(*receipt);
+                Undo::CostReceiptPushed
+            }
+            Undo::MembersPushed(len) => Undo::MembersPopped(self.members.split_off(len as usize)),
+            Undo::MembersPopped(objects) => {
+                let len = self.members.len() as u32;
+                self.members.extend(objects);
+                Undo::MembersPushed(len)
+            }
+            Undo::TargetsSpilled(len) => {
+                Undo::TargetsUnspilled(Box::new((self.spill_targets.split_off(len), self.spill_specs.split_off(len))))
+            }
+            Undo::TargetsUnspilled(spilled) => {
+                let len = self.spill_targets.len();
+                let (targets, specs) = *spilled;
+                self.spill_targets.extend(targets);
+                self.spill_specs.extend(specs);
+                Undo::TargetsSpilled(len)
+            }
+            Undo::SharesPushed(len) => Undo::SharesPopped(self.share_arena.split_off(len)),
+            Undo::SharesPopped(shares) => {
+                let len = self.share_arena.len();
+                self.share_arena.extend(shares);
+                Undo::SharesPushed(len)
+            }
+            Undo::MergesPushed(len) => Undo::MergesPopped(self.merges.split_off(len as usize)),
+            Undo::MergesPopped(merges) => {
+                let len = self.merges.len() as u32;
+                self.merges.extend(merges);
+                Undo::MergesPushed(len)
+            }
+            Undo::SourcesPushed(len) => Undo::SourcesPopped(self.merged_sources.split_off(len as usize)),
+            Undo::SourcesPopped(sources) => {
+                let len = self.merged_sources.len() as u32;
+                self.merged_sources.extend(sources);
+                Undo::SourcesPushed(len)
+            }
+            Undo::MergedObjectsSet(mut old) => {
+                swap(&mut self.merged_objects, &mut old);
+                Undo::MergedObjectsSet(old)
+            }
+            Undo::AttackersSet(mut old) => {
+                swap(&mut self.attackers, &mut old);
+                Undo::AttackersSet(old)
+            }
+            Undo::BlockersSet(mut old) => {
+                swap(&mut self.blockers, &mut old);
+                Undo::BlockersSet(old)
+            }
+            Undo::BlocksSet(mut old) => {
+                swap(&mut self.blocks, &mut old);
+                Undo::BlocksSet(old)
+            }
+            Undo::ExtraTurnsSet(mut old) => {
+                swap(&mut self.extra_turns, &mut old);
+                Undo::ExtraTurnsSet(old)
+            }
+            Undo::PhaseScheduleSet(mut old) => {
+                swap(&mut self.phase_schedule, &mut old);
+                Undo::PhaseScheduleSet(old)
+            }
+            Undo::LoopWatchSet(mut old) => {
+                swap(&mut self.loop_watch, &mut old);
+                Undo::LoopWatchSet(old)
+            }
+            Undo::LoopKeyPushed => {
+                let key = self.loop_keys.pop().expect("a key");
+                self.loop_index.remove(&key.key);
+                Undo::LoopKeyPopped(Box::new(key))
+            }
+            Undo::LoopKeyPopped(key) => {
+                self.loop_index.insert(key.key, self.loop_keys.len() as u32);
+                self.loop_keys.push(*key);
+                Undo::LoopKeyPushed
+            }
+            Undo::LoopKeyRounds(at, mut old) => {
+                swap(&mut self.loop_keys[at as usize].rounds, &mut old);
+                Undo::LoopKeyRounds(at, old)
+            }
+            Undo::LoopKeyWords(at, mut old) => {
+                swap(&mut self.loop_keys[at as usize].words, &mut old);
+                Undo::LoopKeyWords(at, old)
+            }
+            Undo::LoopKeysSet(mut old) => {
+                swap(&mut self.loop_keys, &mut old);
+                self.loop_index = self.loop_keys.iter().enumerate().map(|(at, k)| (k.key, at as u32)).collect();
+                Undo::LoopKeysSet(old)
+            }
+            Undo::StaticsSeen(mut old) => {
+                swap(&mut self.statics_seen, &mut old);
+                Undo::StaticsSeen(old)
+            }
+            Undo::ShownHands(mut old) => {
+                swap(&mut self.shown_hands, &mut old);
+                Undo::ShownHands(old)
+            }
+            Undo::FramePushed => Undo::FramePopped(Box::new(self.agenda.pop().expect("a frame"))),
+            Undo::FramePopped(frame) => {
+                self.agenda.push(*frame);
+                Undo::FramePushed
+            }
+            Undo::FrameRemoved(at, frame) => {
+                self.agenda.insert(at as usize, *frame);
+                Undo::FrameInserted(at)
+            }
+            Undo::FrameInserted(at) => Undo::FrameRemoved(at, Box::new(self.agenda.remove(at as usize))),
+            Undo::FrameSet(at, mut old) => {
+                swap(&mut self.agenda[at as usize], &mut *old);
+                Undo::FrameSet(at, old)
+            }
+            Undo::Rng(mut old) => {
+                swap(&mut self.rng, &mut *old);
+                Undo::Rng(old)
+            }
+            Undo::Timestamp(mut old) => {
+                swap(&mut self.next_timestamp, &mut old);
+                Undo::Timestamp(old)
+            }
+            Undo::Outcome(mut old) => {
+                swap(&mut self.outcome, &mut old);
+                Undo::Outcome(old)
+            }
+            Undo::Unsettled(mut old) => {
+                swap(&mut self.unsettled, &mut old);
+                Undo::Unsettled(old)
+            }
+        };
+        back
     }
 
     /// Undoes every write since `mark`.
@@ -2428,6 +2679,73 @@ mod tests {
     #[test]
     fn an_undo_entry_is_no_bigger_than_a_list_and_its_place() {
         assert!(std::mem::size_of::<Undo>() <= 32, "an undo entry is {} bytes: box what grew", std::mem::size_of::<Undo>());
+    }
+
+    /// Turning an entry back is its inverse then its undo, both ways through a journal of many kinds of write: the
+    /// same entry (as it prints) and the same state at every step.
+    #[test]
+    fn turning_an_entry_back_is_its_inverse_then_its_undo() {
+        let mut s = GameState::new(2, 1);
+        let mark = s.mark();
+        let a = s.push_obj(Obj::new(CardId(4), PlayerId(0), Zone::BATTLEFIELD));
+        let b = s.push_obj(Obj::new(CardId(5), PlayerId(1), Zone::BATTLEFIELD));
+        s.zone_push(Zone::BATTLEFIELD, a);
+        s.zone_push(Zone::BATTLEFIELD, b);
+        s.zone_remove(Zone::BATTLEFIELD, a);
+        s.zone_insert(Zone::BATTLEFIELD, 0, a);
+        s.update_obj(a, |o| o.timestamp = 9);
+        s.update_obj(a, |o| o.timestamp = 11);
+        s.update_player(PlayerId(1), |p| p.life -= 3);
+        s.update_turn(|t| t.number += 1);
+        s.stack_push(item());
+        s.stack_set(0, StackItem { x: 2, ..item() });
+        s.stack_push(item());
+        s.stack_pop();
+        s.frame_push(Frame::new(FrameKind::Opening));
+        s.frame_push(Frame::new(FrameKind::Opening));
+        s.update_frame(0, |f| f.stage = 3);
+        s.update_frame(1, |f| f.answers.push((None, Answer::Pass)));
+        s.frame_remove(0);
+        s.frame_pop();
+        s.random(100);
+        s.timestamp();
+        s.members_push(&[a, b]);
+        s.cost_receipt_push(CostReceiptDetails { origin: None, component: 1, part: CostPart::Discard(2) });
+        s.set_blockers(vec![b]);
+        s.set_shown_hands(1);
+        s.see_statics();
+        s.clear_unsettled();
+        s.set_unsettled();
+        let at = s.loop_key_entry(77);
+        s.set_loop_rounds(at, 2);
+        s.set_loop_words(at, vec![1, 2, 3]);
+        s.loop_keys_clear();
+        let b2 = s.push_obj(Obj::new(CardId(6), PlayerId(1), Zone::BATTLEFIELD));
+        s.pop_obj(b2);
+        assert!(s.mark().0 - mark.0 > 30, "a journal of many writes");
+
+        let mut copied = s.clone_with_journal();
+        let mut turned = s.clone_with_journal();
+        let mut redos = Vec::new();
+        while turned.mark() != mark {
+            let entry = copied.journal.entries.pop().expect("an entry");
+            let inverse = copied.inverse(&entry);
+            copied.undo(entry);
+            let entry = turned.journal.entries.pop().expect("an entry");
+            let back = turned.turn_back(entry);
+            assert_eq!(format!("{back:?}"), format!("{inverse:?}"));
+            assert!(copied == turned, "undone alike");
+            redos.push(back);
+        }
+        assert!(turned == GameState::new(2, 1), "back at the start");
+        for redo in redos.into_iter().rev() {
+            let inverse = copied.inverse(&redo);
+            copied.undo(redo.clone());
+            let back = turned.turn_back(redo);
+            assert_eq!(format!("{back:?}"), format!("{inverse:?}"));
+            assert!(copied == turned, "redone alike");
+        }
+        assert!(turned == s, "and forward again to where it was");
     }
 
     #[test]

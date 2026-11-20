@@ -138,7 +138,9 @@ a search branch is a sibling path that shares everything above it.
   `Game::goto` moves the working state from one node to another as a checkout does: undo up to the common ancestor,
   each entry undone leaving the one that redoes it; redo down to the target, each entry redone journalling the one
   that undoes it again (its inverse where it is applied: `GameState::step_back`, `step_forward`). Nothing is kept
-  twice, and `Game::verify` holds the journal made again to the one written, entry by entry. An answer already given
+  twice, and nothing is copied on the way: applying an entry and making its inverse is one step that trades the
+  value set for the one in the entry (`GameState::turn_back`). `Game::verify` holds the journal made again to the
+  one written, entry by entry. An answer already given
   at a node is reused rather than played again. A move costs 4-9 us. **Search moves through the tree, never by
   copying the game.**
 - **A working state is the quick reference.** The live game, and each search thread, holds one fully built state and
