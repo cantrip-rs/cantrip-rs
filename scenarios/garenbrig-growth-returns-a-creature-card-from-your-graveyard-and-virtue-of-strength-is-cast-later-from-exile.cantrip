@@ -1,0 +1,71 @@
+# Virtue of Strength // Garenbrig Growth (CR 715): "Return target creature or land card from your graveyard to your hand." Turn 1 Bot1
+# casts Faithless Looting (draws a Mox Jet and a Mox Sapphire, discards Grizzly Bears and Forest). Turn 2 Bot2 bolts its own
+# Ornithopter. Turn 3 Bot1 casts Garenbrig Growth for {G}: Faithless Looting (a sorcery) in its own graveyard, and the Ornithopter
+# and Lightning Bolt in Bot2's, are refused; the Grizzly Bears are chosen and return to hand. Virtue of Strength is exiled on an
+# adventure, not put into the graveyard, and Bot1 then casts it from exile for {5}{G}{G} (Black Lotus GGG and four Moxen) and it
+# is on the battlefield.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Virtue of Strength
+Faithless Looting
+Grizzly Bears
+Forest
+Black Lotus
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Forest x20
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Grizzly Bears; Forest)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Ornithopter; Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Virtue of Strength.Cast(Ability: Garenbrig Growth; Bot2.Graveyard.Ornithopter)
+! Bot1.Hand.Virtue of Strength.Cast(Ability: Garenbrig Growth; Bot2.Graveyard.Lightning Bolt)
+! Bot1.Hand.Virtue of Strength.Cast(Ability: Garenbrig Growth; Bot1.Graveyard.Faithless Looting)
+Bot1.Hand.Virtue of Strength.Cast(Ability: Garenbrig Growth; Bot1.Graveyard.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Black Lotus; Grizzly Bears
+? Exile = Virtue of Strength
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Exile.Virtue of Strength.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Hand = Grizzly Bears
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Virtue of Strength
+Bot1.Graveyard = Black Lotus; Faithless Looting; Forest
+Bot2.Graveyard = Ornithopter; Lightning Bolt

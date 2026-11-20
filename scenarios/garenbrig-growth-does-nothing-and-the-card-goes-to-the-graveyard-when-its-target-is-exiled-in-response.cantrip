@@ -1,0 +1,44 @@
+# Garenbrig Growth (CR 715.4, 608.2b): when its only target is gone as it would resolve it is countered on resolution and does not
+# resolve, so it is put into its owner's graveyard, not exiled on an adventure: Virtue of Strength can no longer be cast later.
+# Turn 3 Bot1 targets the Grizzly Bears in its graveyard; Bot2 answers with Tormod's Crypt, exiling that graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Virtue of Strength
+Faithless Looting
+Grizzly Bears
+Forest
+Black Lotus
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Forest x20
+
+[Bot2 Deck]
+Tormod's Crypt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Grizzly Bears; Forest)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Virtue of Strength.Cast(Ability: Garenbrig Growth; Bot1.Graveyard.Grizzly Bears)
+Bot1.Pass
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Exile = Faithless Looting; Forest; Grizzly Bears
+Bot1.Graveyard = Virtue of Strength

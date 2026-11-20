@@ -1,0 +1,54 @@
+# Virtue of Strength: each copy of the replacement applies once to the same mana (CR 614.5, 616.1), so two of them make a basic land
+# produce nine times as much. Turn 1 Bot1 casts one with Black Lotus and four Moxen; turn 3 it plays a Forest, taps it ({G}{G}{G}, one
+# Virtue) and with that {G}{G}{G} and the four Moxen pays for a second. Turn 5 a second Forest taps for {G} x9.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Virtue of Strength
+Virtue of Strength
+Forest
+Forest
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Virtue of Strength.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+? Bot1.Mana = {G}{G}{G}
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Virtue of Strength.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Replace(1)
+? Bot1.Mana = {G}{G}{G}{G}{G}{G}{G}{G}{G}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Forest; Forest; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire; Virtue of Strength; Virtue of Strength

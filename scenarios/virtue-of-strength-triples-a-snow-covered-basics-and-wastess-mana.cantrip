@@ -1,0 +1,48 @@
+# Virtue of Strength: "If you tap a basic land for mana, it produces three times as much of that mana" (CR 205.4a): the basic
+# supertype, whatever the land types or none. Turn 1 Bot1 casts it with Black Lotus and four Moxen. Turn 3 Bot1 plays a Snow-Covered Forest
+# (basic and snow) and taps it: {G}{G}{G}. Turn 5 Bot1 plays Wastes, a basic land with no land type, and taps it: {C}{C}{C}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Virtue of Strength
+Forest
+Snow-Covered Forest
+Wastes
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Virtue of Strength.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Battlefield.Snow-Covered Forest.Activate
+? Bot1.Mana = {G}{G}{G}
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Wastes.Play
+Bot1.Battlefield.Wastes.Activate
+? Bot1.Mana = {C}{C}{C}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire; Snow-Covered Forest; Virtue of Strength; Wastes

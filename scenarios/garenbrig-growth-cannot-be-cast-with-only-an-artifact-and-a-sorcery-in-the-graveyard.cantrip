@@ -1,0 +1,34 @@
+# Garenbrig Growth {G} (CR 715.3, 601.2c): "Return target creature or land card from your graveyard to your hand" has no legal target
+# when the graveyard holds only a Mox Sapphire and a Mox Pearl (artifacts) and the Faithless Looting just cast (a sorcery): the
+# Adventure cannot be cast, at any of them, and Virtue of Strength stays in hand to be cast as the enchantment.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Virtue of Strength
+Faithless Looting
+Mox Sapphire
+Mox Pearl
+Forest
+Forest
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Mox Sapphire; Mox Pearl)
+? Bot1.Graveyard = Faithless Looting; Mox Pearl; Mox Sapphire
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Virtue of Strength.Cast(Ability: Garenbrig Growth)
+! Bot1.Hand.Virtue of Strength.Cast(Ability: Garenbrig Growth; Bot1.Graveyard.Faithless Looting)
+! Bot1.Hand.Virtue of Strength.Cast(Ability: Garenbrig Growth; Bot1.Graveyard.Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Forest; Forest; Forest; Virtue of Strength

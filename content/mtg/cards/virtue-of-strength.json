@@ -1,0 +1,12 @@
+{
+  "name": "Virtue of Strength",
+  "manaCost": "{5}{G}{G}",
+  "type": "Enchantment",
+  "oracleText": "If you tap a basic land for mana, it produces three times as much of that mana instead.",
+  "adventure": {
+    "name": "Garenbrig Growth",
+    "manaCost": "{G}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Return target creature or land card from your graveyard to your hand. (Then exile this card. You may cast the enchantment later from exile.)"
+  }
+}

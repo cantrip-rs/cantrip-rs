@@ -1,0 +1,35 @@
+# Garenbrig Growth {G} (CR 715.3): a land card in your graveyard is as legal a target as a creature card. Turn 1 Bot1's Faithless
+# Looting draws two Forests and discards a Mox Sapphire and a Forest; Garenbrig Growth refuses the Mox Sapphire (an artifact card)
+# and returns the Forest, so Bot1 holds four Forests again and Virtue of Strength is in exile.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Virtue of Strength
+Faithless Looting
+Mox Sapphire
+Forest
+Forest
+Forest
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Mox Sapphire; Forest#1)
+? Bot1.Graveyard = Faithless Looting; Forest; Mox Sapphire
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Virtue of Strength.Cast(Ability: Garenbrig Growth; Bot1.Graveyard.Mox Sapphire)
+Bot1.Hand.Virtue of Strength.Cast(Ability: Garenbrig Growth; Bot1.Graveyard.Forest)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Virtue of Strength
+Bot1.Graveyard = Faithless Looting; Mox Sapphire
+Bot1.Hand = Forest; Forest; Forest; Forest
