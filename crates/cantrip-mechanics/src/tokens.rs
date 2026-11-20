@@ -217,8 +217,17 @@ pub static YOUNG_HERO_ROLE: CardDef = CardDef {
 /// enchant it (CR 303.4i). If `controller` already controls a Role on it, the state-based action puts the older one into
 /// its owner's graveyard (CR 704.5z). The card file lists `role` in its `EXTRA`. The tokens created.
 pub fn create_role(g: &mut dyn Game, role: &'static CardDef, controller: PlayerId, creature: ObjectId) -> Result<Vec<ObjectId>, Suspend> {
+    create_roles(g, role, controller, &[creature])
+}
+
+/// "For each [creature], create a [Role] token attached to it" (CR 111.10j-r, 303.7, 101.4): `create_role` for each of
+/// `creatures`, all created as one instruction, so what watches tokens entering sees one event (CR 603.2c;
+/// `Game::create_tokens_attached`). Twisted Sewer-Witch's Role on each Rat, and Not Dead After All's on each card of a
+/// merged permanent that returns. The tokens created.
+pub fn create_roles(g: &mut dyn Game, role: &'static CardDef, controller: PlayerId, creatures: &[ObjectId]) -> Result<Vec<ObjectId>, Suspend> {
     let role = g.card_id(role);
-    g.create_token_attached(role, controller, creature)
+    let tokens: Vec<(CardId, PlayerId, ObjectId)> = creatures.iter().map(|&creature| (role, controller, creature)).collect();
+    g.create_tokens_attached(&tokens)
 }
 
 fn draw_a_card(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
