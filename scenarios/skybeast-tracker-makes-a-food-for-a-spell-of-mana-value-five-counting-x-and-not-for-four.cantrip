@@ -1,0 +1,61 @@
+# Skybeast Tracker: "Whenever you cast a spell with mana value 5 or greater, create a Food token" (CR 603.2, 202.3e). The X chosen for a spell on the stack counts, so
+# Fireball with X = 4 (mana value 5) makes a Food as it is cast, before it resolves, and Fireball with X = 3 (mana value 4) makes none. Turn 1: the Lotus and the Forest
+# pay for the Tracker (casting it does not trigger it); turn 3: Fireball for 4 gets its Food; turn 5: Fireball for 3 does not, and the Moxes and Mox Jet are not spells.
+[Bot1 Deck]
+Skybeast Tracker
+Forest
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Fireball
+Mox Jet
+Fireball
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Skybeast Tracker.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Forest; Mox Ruby; Mox Emerald; Mox Pearl; Skybeast Tracker
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Fireball.Cast(X: 4)
+Bot1.Target(Bot2)
+? Stack.Count = 2
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+? Bot1.Battlefield.Count = 7
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fireball.Cast(X: 3)
+Bot1.Target(Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Count = 7

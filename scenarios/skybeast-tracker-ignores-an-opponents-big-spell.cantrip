@@ -1,0 +1,41 @@
+# Skybeast Tracker: "Whenever you cast a spell..." is only its controller's spells (CR 603.2): Bot2's Fireball with X = 4 (mana value 5) on turn 2 makes no Food for Bot1.
+[Bot1 Deck]
+Skybeast Tracker
+Forest
+Black Lotus
+Forest x17
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Fireball
+Island x16
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Skybeast Tracker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Forest; Skybeast Tracker
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Fireball.Cast(X: 4)
+Bot2.Target(Bot1)
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 16
+
+[Expect]
+Bot1.Battlefield = Forest; Skybeast Tracker

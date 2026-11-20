@@ -1,0 +1,11 @@
+{
+  "name": "Skybeast Tracker",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Giant Archer",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Reach\nWhenever you cast a spell with mana value 5 or greater, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")",
+  "keywords": [
+    "Reach"
+  ]
+}
