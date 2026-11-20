@@ -1,0 +1,35 @@
+# Flick a Coin with its only target illegal as it resolves does not resolve at all (CR 608.2b): Bot2 kills its own Memnite with
+# Lightning Bolt in response, so Bot1 gets no Treasure and draws no card.
+
+[Bot1 Deck]
+Black Lotus
+Flick a Coin
+Mountain x20
+
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Flick a Coin.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Graveyard = Memnite; Lightning Bolt
+Bot1.Battlefield.Count = 0
+Bot1.Hand.Count = 6
+Bot1.Graveyard = Flick a Coin; Black Lotus

@@ -1,0 +1,6 @@
+{
+  "name": "Flick a Coin",
+  "manaCost": "{2}{R}",
+  "type": "Instant",
+  "oracleText": "Flick a Coin deals 1 damage to any target. You create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")\nDraw a card."
+}

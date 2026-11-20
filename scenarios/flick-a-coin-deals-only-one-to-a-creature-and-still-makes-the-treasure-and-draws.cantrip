@@ -1,0 +1,31 @@
+# Flick a Coin's damage is 1, no more (CR 120.3): aimed at Bot2's Ornithopter (0/2) it leaves it alive with 1 damage marked, and
+# the rest of the spell happens all the same: a Treasure token under Bot1's control and a card drawn. The Treasure can then pay for
+# a mana ability: it is sacrificed for {R} (CR 111.10a, 605.1a).
+
+[Bot1 Deck]
+Black Lotus
+Flick a Coin
+Mountain x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Flick a Coin.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Damage = 1
+Bot1.Battlefield.Treasure Token.Activate(Color: Red)
+? Bot1.Mana = {R}
+
+[Expect]
+Bot2.Battlefield = Ornithopter
+Bot1.Battlefield.Treasure Token = (absent)
+Bot1.Hand.Count = 7
+Bot2.Life = 20
