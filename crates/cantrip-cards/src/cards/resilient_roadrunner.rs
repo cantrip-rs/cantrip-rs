@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 pub static CARD: CardDef = CardDef {
     abilities: &[ability(
         cost("{3}"),
-        combat::this_cant_be_blocked_this_turn_except_by_haste,
+        combat::this_gets_its_block_rule_this_turn,
         "{3}: This creature can't be blocked this turn except by creatures with haste.",
     )],
     statics: &[protection::from_subtype::<{ Subtype::Coyote as u16 }>("Protection from Coyotes")],
