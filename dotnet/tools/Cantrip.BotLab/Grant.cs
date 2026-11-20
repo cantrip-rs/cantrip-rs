@@ -471,6 +471,8 @@ internal sealed class GrantRun
         {
             ["Pid"] = Environment.ProcessId,
             ["Host"] = Host,
+            // The grant it plays: what tells its driver the status is its run's, a run started through a wrapper too.
+            ["Grant"] = Grant,
             ["Granted"] = granted,
             ["Taken"] = taken,
             ["GamesThisRun"] = played,

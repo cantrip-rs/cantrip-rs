@@ -502,19 +502,28 @@ more is granted, every host is asked to stop starting games (its stop file), and
 as one machine's duel stops; the rest are skipped. The summary replays the stop over the merged lines, so its verdict
 line is the driver's.
 
+Stopping: `generation.py --stop` (or `--stop-now`) also writes `genN/dist/stop`, which the running duel's (or
+judgement's) driver reads, a file apart from each host's own stop file (which the driver writes to close a duel or to
+stop a host dropping games), so neither is taken for the other; the driver removes it when it starts a duel again. A
+duel's ledger that holds a live attempt of a host the run no longer has (a worker left out of the workers file, this
+machine with `--no-duel-local`) gives it up as it starts: its games go to the hosts there are, and what it sends later
+is rejected.
+
 The pair miner's replays of a distributed gate are distributed by the gate: each game is played again on the host
 that played it in the gate (its ledger says which), with the recorder on (`--ai-record` in grant mode records into the
 host's output, `RUN.replay/`, a directory with the results and the recordings closed together once the recorder has
-written them, so no result comes home without its recording); a host that is gone (failed three times, or out of
-reach past `--worker-timeout`) has its games replayed by the others, and the miner's check of every replay against
+written them, so no result comes home without its recording); a host that is gone (failed three times, out of reach
+past `--worker-timeout`, or still setting itself up or building after two hours: a Linux worker reports that while it
+does, and that is not being out of reach) has its games replayed by the others, and the miner's check of every replay against
 the gate keeps or leaves out their pairs as it does any replay.
 
 A worker's duel bundle is the self-play bundle's kind, pushed the same way, each file once: BotLab published
 self-contained in one file (`dotnet publish -r win-x64` or `linux-x64`, by the build stage when `--workers` is given,
-into `dotnet/tools/Cantrip.BotLab/bin/publish/`), the native host (and the recording one for replays), the AI host,
+into `dotnet/tools/Cantrip.BotLab/bin/publish/`; with `--no-build` the driver stops with a word if it is not there), the native host (and the recording one for replays), the AI host,
 `cantrip-infer` and its libraries, the duel's models, decklists and pairings; BotLab finds the bundle as its root by
 `CANTRIP_ROOT`. A Linux worker builds the AI host, the native host and `cantrip-infer` from the bundle's source (and the
-recording native host for replays) as it builds self-play's binaries, each once a source. A worker's attempts of a
+recording native host for replays) as it builds self-play's binaries, each once a source; a bundle counts as there
+only with every binary its run needs (a replay's bundle is its gate's, which had no recording host). A worker's attempts of a
 duel are `gens/<root tag>/genN/<name>/<duel>-<attempt>-<nonce>/`, and a duel's ledger is `genN/dist/<duel>/ledger.json`
 (results in `genN/dist/<duel>/results/`): a restarted driver re-attaches as self-play's does, and a duel already
 complete is only merged and summarised again. A worker plays `--worker-duel-parallel` (32) games at once, or its own

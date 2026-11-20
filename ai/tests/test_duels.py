@@ -199,7 +199,7 @@ class FakeHost:
             r.exit = -9
 
 
-class DuelTest(unittest.TestCase):
+class DuelBase(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp())
         self.results = self.tmp / "results"
@@ -215,12 +215,16 @@ class DuelTest(unittest.TestCase):
 
         def sleep(s):
             t[0] += s
+            if t[0] > 1e6:
+                raise AssertionError("the run never ends")
 
         c = dist.Coordinator(led, hosts, self.results, self.tmp / "dist", read=duels.read_results, log=self.logs.append,
                              clock=lambda: t[0], sleep=sleep, monotonic=lambda: t[0], chunk=chunk, initial=chunk,
                              poll_seconds=30, kind=kind, affinity=affinity, stop_check=stop_check, **kw)
         return led, c
 
+
+class DuelTest(DuelBase):
     def test_every_game_once_in_whole_pairs_and_merged_as_one_machine_writes_them(self):
         games = 40
         fast = FakeHost("fast", self.tmp, games, rate=5)
@@ -319,7 +323,7 @@ class DuelTest(unittest.TestCase):
         self.assertEqual(n, len(wanted))
         self.assertEqual(len(list((self.tmp / "recorded" / "traces").glob("*.jsonl"))), len(wanted))
         self.assertEqual(sorted(duels.game_of(r) for r in duels.merged(led, self.results)), wanted)
-        self.assertEqual(duels.hosts_of(led), affinity)
+        self.assertEqual(duels.hosts_of(led, "here"), affinity)
 
     def test_a_replays_games_go_to_the_others_once_its_host_is_gone(self):
         games = 20
@@ -340,10 +344,143 @@ class DuelTest(unittest.TestCase):
         led = dist.Ledger.load(self.tmp / "ledger.json", games, SEED, header=dict(header(games), a="other"))
         c = dist.Coordinator(led, [a], self.results, self.tmp / "dist", read=duels.read_results, log=self.logs.append,
                              sleep=lambda s: None, kind=duels.DUEL, chunk=4, initial=4, max_failures=1)
-        with self.assertRaises(SystemExit):
+        with self.assertRaises(SystemExit) as raised:
             c.run()
+        self.assertIn("distributed duel: every host has failed", str(raised.exception))
         self.assertTrue(led.rejected)
         self.assertFalse(led.done)
+
+
+class LocalStopHost(FakeHost):
+    """A local host whose stop is a stop file in the duel's results directory, as `LocalHost.stop` writes it."""
+
+    def stop(self, a, now):
+        super().stop(a, now)
+        (self.dir / duels.DUEL.stop).write_text("now" if now else "")
+
+
+class ReadyLater(FakeHost):
+    """A worker that answers but makes itself ready (a Linux worker building) until the clock passes `ready_at`."""
+
+    def __init__(self, *a, clock=None, ready_at=0.0, **kw):
+        super().__init__(*a, **kw)
+        self.clock, self.ready_at = clock, ready_at
+
+    def prepare(self, live):
+        if self.clock() < self.ready_at:
+            raise dist.NotReady(f"{self.name}: building: ...")
+
+
+class ReviewFixes(DuelBase):
+    def test_a_closed_duel_whose_local_run_is_asked_to_stop_ends_done_not_stopped(self):
+        games = 40
+        local = LocalStopHost("here", self.tmp, games, rate=2, remote=False, results=self.results)
+        w = FakeHost("w", self.tmp, games, rate=2)
+        led, c = self.coordinator([local, w], games, stop_check=lambda led: "SPRT verdict" if len(led.done) >= 6 else None)
+        self.assertEqual(c.run(), "done")
+        self.assertTrue((self.results / duels.DUEL.stop).exists(), "the local run was asked to stop")
+        self.assertTrue(led.closed)
+
+    def test_the_whole_runs_stop_file_stops_a_duel(self):
+        games = 40
+        a = FakeHost("a", self.tmp, games, rate=1)
+        led, c = self.coordinator([a], games)
+        (self.tmp / "dist").mkdir(parents=True, exist_ok=True)
+        (self.tmp / "dist" / "stop").write_text("")
+        self.assertEqual(c.run(), "stopped")
+
+    def test_a_host_making_itself_ready_keeps_its_replays_past_the_timeout(self):
+        games = 20
+        wanted = [0, 2, 4, 6]
+        t = [0.0]
+        a = ReadyLater("a", self.tmp, games, rate=2, replay=True, clock=lambda: t[0], ready_at=900.0)
+        b = FakeHost("b", self.tmp, games, rate=2, replay=True)
+        led = dist.Ledger.load(self.tmp / "ledger.json", games, SEED, header=header(games), only=wanted)
+
+        def sleep(s):
+            t[0] += s
+
+        c = dist.Coordinator(led, [a, b], self.results, self.tmp / "dist", read=duels.read_results, log=self.logs.append,
+                             clock=lambda: t[0], sleep=sleep, monotonic=lambda: t[0], chunk=2, initial=2, poll_seconds=30,
+                             timeout=100, retry_seconds=30, kind=duels.REPLAY, affinity={i: "a" for i in wanted})
+        self.assertEqual(c.run(), "done")
+        self.assertEqual(sorted(a.played), wanted)
+        self.assertEqual(b.played, [])
+        self.assertGreater(t[0], 900.0)
+
+    def test_a_live_attempt_of_a_host_not_in_this_run_is_given_up_not_a_key_error(self):
+        games = 12
+        led = dist.Ledger.load(self.tmp / "ledger.json", games, SEED, header=header(games))
+        stray = led.new_attempt("old")
+        led.grant(stray, [0, 1, 2, 3])
+        stray["state"] = "running"
+        led.save()
+        a = FakeHost("a", self.tmp, games, rate=3)
+        led, c = self.coordinator([a], games, stop_check=lambda led: "SPRT verdict" if len(led.done) >= 4 else None)
+        self.assertEqual(c.run(), "done")
+        self.assertEqual(led.attempts["old-a1"]["state"], "lost")
+        self.assertIn(0, a.played)
+
+    def test_an_output_found_here_owned_by_no_attempt_is_this_machines(self):
+        games = 2
+        (self.results / "x.results.tsv").write_text(f"# {json.dumps(header(games))}\n{duels.COLUMNS}\n{row(0)}\n{row(1)}\n")
+        local = FakeHost("here", self.tmp, games, rate=1, remote=False, results=self.results)
+        led, c = self.coordinator([local], games)
+        self.assertEqual(c.run(), "done")
+        self.assertEqual(led.shards["x.results.tsv"]["host"], "here")
+        self.assertEqual(duels.hosts_of(led, "here"), {0: "here", 1: "here"})
+
+    def test_a_linux_bundle_is_complete_only_with_every_binary_its_run_needs(self):
+        import base64  # noqa: PLC0415
+        import contextlib  # noqa: PLC0415
+        import io  # noqa: PLC0415
+        root = self.tmp / "linux"
+        b = root / "bundle" / "h1"
+        (b / "bin").mkdir(parents=True)
+        (b / "MANIFEST.json").write_text("{}")
+        (b / "bin" / "cantrip-native-host").write_text("x")
+
+        def have(binaries):
+            args = base64.b64encode(json.dumps(dict(root=str(root), hash="h1", binaries=binaries)).encode()).decode()
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                exec(compile(dist._PY_PRELUDE.replace("@ARGS@", args) + dist._LINUX_HAVE, "have", "exec"), {})
+            return json.loads(out.getvalue().strip().splitlines()[-1])["complete"]
+
+        self.assertTrue(have(["cantrip-native-host"]))
+        # A replay's bundle is a gate's (one hash) needing the recording host the gate's did not build.
+        self.assertFalse(have(["cantrip-native-host", "cantrip-native-host-record"]))
+
+    def test_a_distributed_duel_without_botlab_published_says_so(self):
+        with self.assertRaises(SystemExit) as raised:
+            duels.check_published({"windows": self.tmp / "none.exe", "linux": self.tmp / "none"},
+                                  [{"name": "w", "os": "linux"}])
+        self.assertIn("--no-build", str(raised.exception))
+        duels.check_published({"windows": self.tmp / "none.exe"}, [])
+
+    def test_a_local_run_through_a_wrapper_is_known_by_its_grant(self):
+        import time  # noqa: PLC0415
+        script = self.tmp / "run.py"
+        script.write_text("import json, sys, time, pathlib\n"
+                          "a = sys.argv\n"
+                          "out = pathlib.Path(a[1])\n"
+                          "grant = a[a.index('--grant') + 1]\n"
+                          "(out / 'duel-status.json').write_text(json.dumps(dict(Pid=4, Grant=grant, Taken=0)))\n"
+                          "time.sleep(20)\n")
+        host = dist.LocalHost("here", [sys.executable, script, self.results], self.results, self.tmp / "dist",
+                              self.tmp / "logs", kind=duels.DUEL)
+        a = dict(id="here-a1", state="launching")
+        a.update(host.launch(a, "0..2\n"))
+        try:
+            p = None
+            for _ in range(100):
+                p = host.poll(a)
+                if p.status:
+                    break
+                time.sleep(0.1)
+            self.assertEqual((p.status or {}).get("Pid"), 4)
+        finally:
+            host.kill(a)
 
 
 def loopback(cmd, input=None, stdout=None, stderr=None, timeout=120.0):

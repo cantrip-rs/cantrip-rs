@@ -920,13 +920,17 @@ class InferenceServer:
 
 def request_stop(root: Path, gen: int | None, now: bool, log=print) -> Path:
     """`--stop`: `selfplay.stop` in the generation's self-play directory (the current one: started, not finished), which
-    its self-play reads each tick (and a distributed driver passes on to its workers)."""
+    its self-play reads each tick (and a distributed driver passes on to its workers), and `genN/dist/stop`, which a
+    distributed duel's or judgement's driver reads."""
     gen = gen or next_generation(root)
     out = root / f"gen{gen}" / "selfplay"
     out.mkdir(parents=True, exist_ok=True)
     path = out / distributed.STOP_FILE
     path.write_text("now\n" if now else "", encoding="utf-8")
-    log(f"asked gen{gen}'s self-play to stop{' now (its games in flight too)' if now else ''}: {path}")
+    # And its distributed duels and judgements, whichever is running (`duels.stop_file`).
+    (root / f"gen{gen}" / "dist").mkdir(parents=True, exist_ok=True)
+    (root / f"gen{gen}" / "dist" / "stop").write_text("now\n" if now else "", encoding="utf-8")
+    log(f"asked gen{gen}'s self-play, duels and judgements to stop{' now (their games in flight too)' if now else ''}: {path}")
     return path
 
 
@@ -1664,6 +1668,8 @@ def main(argv=None):
             local_parallel=args.gate_parallel, worker_parallel=args.worker_duel_parallel,
             server=local_server if server else None, lease=args.dist_lease, poll=args.dist_poll,
             timeout=args.worker_timeout, log=log, cache=cache)
+        if args.dist_duels and not args.dry_run:
+            duels.check_published(setup.botlab, workers)
         duel_setup_made.append(setup)
         return setup
 
@@ -1786,7 +1792,8 @@ def main(argv=None):
                 if resumed:
                     continue
                 if spread:
-                    played_on = duels.hosts_of(distributed.Ledger.load(gate_ledger, args.gate_games, seed + 5_000_000))
+                    played_on = duels.hosts_of(distributed.Ledger.load(gate_ledger, args.gate_games, seed + 5_000_000),
+                                               distributed.local_name())
                     wanted = [int(x) for x in games.read_text(encoding="utf-8").split()]
                     replay_args = ["duel", "--a", name, "--b", name, "--model", model_dir, "--model-b", champ, *decks,
                                    "--games", args.gate_games, "--seed", seed + 5_000_000, "--ai-record", "record",

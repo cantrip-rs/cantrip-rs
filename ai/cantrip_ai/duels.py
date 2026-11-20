@@ -272,8 +272,9 @@ def run(setup: Setup, name: str, args: list, models: list[Path], games: int, see
         ledger = distributed.Ledger.load(dist_dir / "ledger.json", games, seed, header=header, only=only, identity=whole)
         ledger.save()
         if not ledger.complete():
-            # A stop asked of an earlier run of this duel is not this one's.
+            # A stop asked of an earlier run of this duel is not this one's: its local run's, and the whole run's.
             (out / kind.stop).unlink(missing_ok=True)
+            stop_file(setup).unlink(missing_ok=True)
         with (setup.server(models) if serve and setup.local and not ledger.complete() else contextlib.nullcontext(None)) as gpu:
             hosts = []
             if setup.local:
@@ -292,7 +293,7 @@ def run(setup: Setup, name: str, args: list, models: list[Path], games: int, see
             coordinator = distributed.Coordinator(
                 ledger, hosts, out, dist_dir, read=read_results, log=log, chunk=setup.chunk,
                 initial=max(setup.chunk, setup.local_parallel, setup.worker_parallel),
-                poll_seconds=setup.poll, timeout=setup.timeout, kind=kind, affinity=affinity,
+                poll_seconds=setup.poll, timeout=setup.timeout, kind=kind, affinity=affinity, stop_file=stop_file(setup),
                 stop_check=sequential_stop(setup, local_args, stops, out) if stops else None)
             started = time.time()
             if not ledger.complete():
@@ -302,6 +303,12 @@ def run(setup: Setup, name: str, args: list, models: list[Path], games: int, see
                                      f"are in; run the driver again with the same arguments to go on (the ledger: "
                                      f"{dist_dir / 'ledger.json'})")
     return ledger, out, merged(ledger, out), time.time() - started
+
+
+def stop_file(setup: Setup) -> Path:
+    """The stop asked of a generation's distributed duels and judgements (`generation.py --stop` writes it): apart from
+    each run's own, which its coordinator writes."""
+    return setup.gen_dir / "dist" / "stop"
 
 
 def print_header(setup: Setup, args: list[str], env: dict | None = None) -> dict:
@@ -349,13 +356,23 @@ def sequential_stop(setup: Setup, args: list[str], stops: list, out: Path):
     return check
 
 
-def hosts_of(ledger: distributed.Ledger) -> dict[int, str]:
-    """Which host played each game of a duel: what its replays are held to (`affinity`)."""
+def hosts_of(ledger: distributed.Ledger, local: str) -> dict[int, str]:
+    """Which host played each game of a duel: what its replays are held to (`affinity`); `local` this machine's name,
+    for an output recorded with none."""
     out = {}
     for name, s in ledger.shards.items():
         for i in distributed.from_ranges(s["indices"]):
-            out[i] = s.get("host") or "local"
+            out[i] = s.get("host") or local
     return out
+
+
+def check_published(botlab: dict, workers: list[dict]):
+    """BotLab published for every kind of worker there is (the build stage's `dotnet publish`), or why not."""
+    for kind in sorted({w.get("os", "windows") for w in workers}):
+        if not Path(botlab[kind]).exists():
+            raise SystemExit(f"a distributed duel needs BotLab published for its {kind} workers, and {botlab[kind]} is "
+                             "not there: run the driver without --no-build (its build stage publishes it), or "
+                             "--no-dist-duels to play the duels here")
 
 
 def host_rows(ledger: distributed.Ledger) -> dict[str, dict]:

@@ -313,10 +313,13 @@ def judge_distributed(setup, p: Paths, s: Settings, judge_model: Path, decks: Pa
                 if not hosts:
                     raise SystemExit("the judgements: no host to judge on")
                 chunk = max(1, -(-games // (len(hosts) * max(1, parts))))
+                stop = setup.gen_dir / "dist" / "stop"
                 coordinator = distributed.Coordinator(
                     ledger, hosts, out, dist_dir, read=lambda path, games=games: read_judged(path, games), log=log,
-                    chunk=chunk, initial=chunk, lookahead=0.0, poll_seconds=setup.poll, timeout=setup.timeout, kind=JUDGE)
+                    chunk=chunk, initial=chunk, lookahead=0.0, poll_seconds=setup.poll, timeout=setup.timeout, kind=JUDGE,
+                    stop_file=stop)
                 if not ledger.complete():
+                    stop.unlink(missing_ok=True)
                     log(f"  {task}: {games} games' positions on {', '.join(h.name for h in hosts)}, parts of {chunk}")
                     if coordinator.run() == "stopped":
                         raise SystemExit(f"the judgements stopped: run the driver again to go on ({dist_dir / 'ledger.json'})")

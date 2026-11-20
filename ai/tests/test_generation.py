@@ -202,6 +202,15 @@ class GenerationTest(unittest.TestCase):
             self.assertRegex(text, r"duel --a neural:decklist@32 --b tactical --model \S+champions[/\\]gen0 .*ladder-tactical-32-pairings.txt")
             self.assertRegex(text, r"duel --a neural:decklist@128 --b tactical --model \S+champions[/\\]gen0 ")
 
+    def test_a_stop_reaches_the_self_play_and_the_distributed_duels(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                generation.request_stop(root, 3, now=True)
+            self.assertEqual((root / "gen3" / "selfplay" / "selfplay.stop").read_text().strip(), "now")
+            self.assertEqual((root / "gen3" / "dist" / "stop").read_text().strip(), "now")
+
     def test_a_dry_run_with_workers_plans_the_duels_and_the_judgements_across_the_hosts(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = root_with(Path(tmp), gens=(1,))

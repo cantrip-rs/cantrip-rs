@@ -112,6 +112,11 @@ class Unreachable(Exception):
     """A host could not be reached (or a command on it failed): the attempt is retried, and given up past the timeout."""
 
 
+class NotReady(Unreachable):
+    """A host answers but is making itself ready (a Linux worker setting up or building): it is asked again later, and
+    counted out of reach only past `Coordinator.ready_grace`, not the timeout."""
+
+
 # --- Index ranges -------------------------------------------------------------------------------------------------
 
 
@@ -502,7 +507,7 @@ class Coordinator:
                  initial: int = 16, poll_seconds: float = 30.0, timeout: float = 600.0, max_failures: int = 3,
                  report_every: float = 300.0, stop_file: Path | None = None, retry_seconds: float = 300.0,
                  heldout: Path | None = None, drop_limit: int = 3, drop_share: float = 0.2, kind: Kind = SELFPLAY,
-                 affinity: dict[int, str] | None = None, stop_check=None):
+                 affinity: dict[int, str] | None = None, stop_check=None, ready_grace: float = 7200.0):
         self.ledger, self.hosts, self.dir, self.dist = ledger, {h.name: h for h in hosts}, selfplay_dir, dist_dir
         self.read = read
         self.kind, self.affinity, self.stop_check = kind, affinity or {}, stop_check
@@ -512,11 +517,19 @@ class Coordinator:
         self.poll_seconds, self.timeout, self.max_failures = poll_seconds, timeout, max_failures
         self.report_every, self.retry_seconds = report_every, retry_seconds
         self.drop_limit, self.drop_share = drop_limit, drop_share
-        self.stop_file = stop_file or selfplay_dir / kind.stop
+        # The stop asked of the whole run (`generation.py --stop`). Self-play's is its local run's own stop file, which
+        # the local run reads too; any other run's is apart from its runs' (`dist_dir/stop` by default), so a local
+        # run asked to stop by its coordinator (a duel closed, a run dropping games) is never taken for a stop asked.
+        self.stop_file = stop_file or (selfplay_dir / kind.stop if kind == SELFPLAY else dist_dir / "stop")
         self.heldout = heldout
-        # Since when each host has been out of reach (not ready, not started, or an attempt given up): past `timeout`,
-        # an index it has affinity for goes to the others.
+        # Since when each host has been out of reach (not started, unreachable, an attempt given up): past `timeout`,
+        # an index it has affinity for goes to the others; and since when it has been making itself ready, past
+        # `ready_grace` (a first setup and build take ten to twenty minutes).
         self.down_since: dict[str, float] = {}
+        self.not_ready_since: dict[str, float] = {}
+        self.ready_grace = ready_grace
+        # The name an output found here and owned by no attempt is recorded as played by.
+        self.local_name = next((h.name for h in hosts if not h.remote), "local")
         self.stopping = False
         self.stopped_now = False
         self.interrupts = 0
@@ -578,7 +591,7 @@ class Coordinator:
             indices, info, why = [], {}, f"does not read: {e}"
         who = attempt["id"] if attempt is not None else self.owner_of(indices)
         owner = self.ledger.attempts.get(who or "")
-        host_name = attempt["host"] if attempt is not None else (owner["host"] if owner else "local")
+        host_name = attempt["host"] if attempt is not None else (owner["host"] if owner else self.local_name)
         if why is None:
             why = self.ledger.acceptable(who, final, indices)
         if why is None:
@@ -770,6 +783,11 @@ class Coordinator:
                 host.prepare(live)
                 self.prepared.add(name)
                 self.down_since.pop(name, None)
+                self.not_ready_since.pop(name, None)
+            except NotReady as e:
+                self.backoff[name] = self.monotonic() + self.retry_seconds
+                self.not_ready_since.setdefault(name, self.monotonic())
+                self.log(f"  [{name}] not ready ({e}); trying again in {self.retry_seconds:.0f} s")
             except Unreachable as e:
                 self.backoff[name] = self.monotonic() + self.retry_seconds
                 self.down_since.setdefault(name, self.monotonic())
@@ -777,11 +795,13 @@ class Coordinator:
 
     def gone(self, name: str) -> bool:
         """Whether a host can no longer be counted on for the indices it has affinity for: not one of this run's,
-        failed `max_failures` times, or out of reach for longer than the timeout."""
+        failed `max_failures` times, out of reach for longer than the timeout, or making itself ready for longer than
+        `ready_grace`."""
         if name not in self.hosts or self.failures(name) >= self.max_failures:
             return True
-        since = self.down_since.get(name)
-        return since is not None and self.monotonic() - since > self.timeout
+        now = self.monotonic()
+        since, readying = self.down_since.get(name), self.not_ready_since.get(name)
+        return (since is not None and now - since > self.timeout) or (readying is not None and now - readying > self.ready_grace)
 
     def pending_for(self, name: str) -> list[int]:
         """The pending indices host `name` may be granted: all of them, but those another host has affinity for
@@ -853,6 +873,8 @@ class Coordinator:
                 self.write_grant(a)
 
     def write_grant(self, a: dict):
+        if a["host"] not in self.hosts:
+            return
         try:
             self.hosts[a["host"]].grant(a, attempt_grant(a))
             a.pop("grant_unwritten", None)
@@ -866,8 +888,16 @@ class Coordinator:
     def stop_all(self, now: bool):
         self.stopping = True
         for a in self.live():
-            if self.attempt(lambda a=a: self.hosts[a["host"]].stop(a, now), a, "ask it to stop"):
+            if a["host"] in self.hosts and self.attempt(lambda a=a: self.hosts[a["host"]].stop(a, now), a, "ask it to stop"):
                 a["state"] = "stopping"
+        self.ledger.save()
+
+    def strays(self):
+        """Attempts the ledger holds live on a host this run does not have (a worker left out of the workers file, or
+        this machine with `--no-duel-local`): given up, their games to this run's hosts, what they send later rejected."""
+        for a in self.live():
+            if a["host"] not in self.hosts:
+                self.give_up(a, "its host is not one of this run's")
         self.ledger.save()
 
     def stop_requested(self) -> str | None:
@@ -907,6 +937,7 @@ class Coordinator:
         self.dir.mkdir(parents=True, exist_ok=True)
         self.ledger.verify(self.dir, self.dist / "incoming", [self.heldout] if self.heldout else (), log=self.log)
         self.ledger.save()
+        self.strays()
         self.adopt()
         while True:
             try:
@@ -920,18 +951,18 @@ class Coordinator:
                 if not self.stopping and not self.live() and not self.ledger.complete():
                     able = [n for n in self.hosts if self.failures(n) < self.max_failures]
                     if not able:
-                        raise SystemExit("distributed self-play: every host has failed; nothing left to play the "
-                                         f"{len(self.ledger.pending())} games pending (see the log above)")
+                        raise SystemExit(f"distributed {self.kind.name}: every host has failed; nothing left to play the "
+                                         f"{len(self.ledger.pending())} pending (see the log above)")
                 self.progress()
                 self.sleep(self.poll_seconds)
             except KeyboardInterrupt:
                 self.interrupts += 1
                 if self.interrupts >= 3:
-                    self.log("interrupted a third time: killing the local self-play (the workers were asked to stop "
-                             "their games in flight)")
+                    self.log(f"interrupted a third time: killing the local {self.kind.name} (the workers were asked to "
+                             "stop their games in flight)")
                     for a in self.live():
-                        h = self.hosts[a["host"]]
-                        if not h.remote:
+                        h = self.hosts.get(a["host"])
+                        if h is not None and not h.remote:
                             h.kill(a)
                     raise
                 self.log("interrupted: every host stops and closes its shards"
@@ -957,7 +988,8 @@ class Coordinator:
         if self.ledger.closed:
             # Closed: every run is asked to stop gracefully (again, if the asking did not reach it).
             for a in self.live():
-                if a["state"] != "stopping" and self.attempt(lambda a=a: self.hosts[a["host"]].stop(a, False), a, "ask it to stop"):
+                if (a["state"] != "stopping" and a["host"] in self.hosts
+                        and self.attempt(lambda a=a: self.hosts[a["host"]].stop(a, False), a, "ask it to stop")):
                     a["state"] = "stopping"
             self.ledger.save()
         if self.stopping:
@@ -1174,7 +1206,7 @@ class LocalHost:
         else:
             alive, code = process_matches(sp.get("pid"), sp.get("start")), None
         status = read_json(self.dir / self.kind.status)
-        if status and status.get("Pid") != sp.get("pid"):
+        if status and status.get("Pid") != sp.get("pid") and not self.ours(status, a):
             status = None
         if p is None and not alive:
             # Not ours (a coordinator restarted): its end by its last status.
@@ -1191,6 +1223,15 @@ class LocalHost:
         runaways = runaway_indices(self.dir / self.kind.runaways) if self.kind.runaways else []
         return Poll(status=status, exit=code, alive=alive, shards=[], runaways=runaways, report=report, started=True,
                     grant=grant)
+
+    def ours(self, status: dict, a: dict) -> bool:
+        """Whether a status whose process is not the one started (a run started through a wrapper: `CANTRIP_DOTNET`'s
+        nix shell) is this attempt's: it names this attempt's grant file."""
+        grant = status.get("Grant")
+        try:
+            return bool(grant) and Path(grant).resolve() == self.grant_path(a).resolve()
+        except OSError:
+            return False
 
     def fetch(self, a, name, dest):
         raise AssertionError("a local shard is adopted in place")
@@ -2194,7 +2235,8 @@ out({})
 
 _LINUX_HAVE = r'''
 b = f"{ROOT}/bundle/{A['hash']}"
-if os.path.exists(f"{b}/MANIFEST.json"):
+# Complete with its manifest and every binary this run needs (a replay's recording host beside a gate's, one bundle).
+if os.path.exists(f"{b}/MANIFEST.json") and all(os.path.exists(f"{b}/bin/{n}") for n in A["binaries"]):
     out(dict(complete=True))
 else:
     os.makedirs(f"{ROOT}/blobs", exist_ok=True)
@@ -2383,7 +2425,7 @@ class LinuxSshHost(SshHost):
     def push(self):
         if self.pushed:
             return
-        have = self.py_json(_LINUX_HAVE, hash=self.hash)
+        have = self.py_json(_LINUX_HAVE, hash=self.hash, binaries=list(self.binaries))
         if not have.get("complete"):
             blobs = set(have.get("blobs") or [])
             want = {m["sha256"]: self.files[rel] for rel, m in self.manifest.items() if m["sha256"] not in blobs}
@@ -2399,7 +2441,7 @@ class LinuxSshHost(SshHost):
                              source=self.source(), binaries=list(self.binaries), setup=LINUX_SETUP, build=LINUX_BUILD,
                              executables=executables)
             if r.get("state") != "ready":
-                raise Unreachable(f"{self.name}: {r.get('state')}: {r.get('note') or '...'}")
+                raise NotReady(f"{self.name}: {r.get('state')}: {r.get('note') or '...'}")
             self.log(f"  [{self.name}] bundle {self.hash} ready (built from source {self.source()[:16]})")
         self.pushed = True
 
