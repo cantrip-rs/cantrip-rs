@@ -638,6 +638,15 @@ pub fn look_for_an_artifact<const N: usize>(g: &mut dyn Game, item: &StackItem) 
     Ok(())
 }
 
+/// "Look at the top `N` cards of your library. You may reveal a creature card from among them and put it into your hand. Put the
+/// rest on the bottom of your library in any order." (CR 401.4, 701.20a) as an ability's whole effect (`look_at_top`): the player
+/// chooses the order of the cards put on the bottom, and with no creature card among those looked at all of them go there. A library
+/// with fewer cards shows what it has (CR 609.3). Growing Rites of Itlimoc (4) and Commune with Nature (5) print it.
+pub fn look_for_a_creature_rest_on_the_bottom_in_any_order<const N: usize>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    look_at_top(g, item.controller, item.object, N, (0, 1), true, |c| c.is(CardType::Creature), Rest::BottomChosen)?;
+    Ok(())
+}
+
 /// "Look at the top `COUNT` cards of your library. You may reveal a creature card with power `POWER` or less from among them and put it
 /// into your hand. Put the rest on the bottom of your library in a random order." (CR 701.20a, 401.4) as an ability's whole effect
 /// (`look_at_top_select`): the power as `select::power_at_most` reads it through `q.chars`, which includes power-defining abilities (CR 604.3). Water Tribe Rallier (4, 3)

@@ -1,15 +1,8 @@
 use cantrip_api::*;
-use cantrip_mechanics::library::{look_at_top, Rest};
+use cantrip_mechanics::library;
 use cantrip_mechanics::triggers::{THIS_ENTERS, YOUR_END_STEP};
 use cantrip_mechanics::{creatures_you_control, effects, mana};
 use cantrip_oracle as oracle;
-
-/// "Look at the top four cards of your library. You may reveal a creature card from among them and put it into your hand. Put
-/// the rest on the bottom of your library in any order." (CR 701.20a, 401.4)
-fn look(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    look_at_top(g, item.controller, item.object, 4, (0, 1), true, |c| c.is(CardType::Creature), Rest::BottomChosen)?;
-    Ok(())
-}
 
 /// "If you control four or more creatures" (CR 603.4): an intervening "if", asked as the end step begins and again as the
 /// ability resolves (the ruling). The creatures are counted as they are now, through the layers.
@@ -30,7 +23,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
             THIS_ENTERS,
-            look,
+            library::look_for_a_creature_rest_on_the_bottom_in_any_order::<4>,
             "When Growing Rites of Itlimoc enters, look at the top four cards of your library. You may reveal a creature card from among them and put it into your hand. Put the rest on the bottom of your library in any order.",
         ),
         triggered(
