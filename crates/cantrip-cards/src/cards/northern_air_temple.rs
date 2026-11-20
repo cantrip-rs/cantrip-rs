@@ -1,23 +1,12 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, lands, permanents_with_subtype_you_control, triggers};
+use cantrip_mechanics::{effects, lands, triggers};
 use cantrip_oracle as oracle;
-
-/// "Each opponent loses X life and you gain X life, where X is the number of Shrines you control" (CR 119.3, 608.2h): X is
-/// counted once, as the ability resolves, in the layers, the Temple itself among them if it is still there and Shrines the
-/// opponents control not at all; the Shrine type is read through this card's words (CR 612).
-fn drain_for_each_shrine(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let shrine = g.words(item.object).subtype(Subtype::Shrine);
-    let x = permanents_with_subtype_you_control(g, item.controller, shrine) as i32;
-    g.each_opponent_loses_life(item.controller, x);
-    g.gain_life(item.controller, x);
-    Ok(())
-}
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
             triggers::THIS_ENTERS,
-            drain_for_each_shrine,
+            effects::each_opponent_loses_life_you_gain_life_for_each_subtype_you_control::<{ lands::sub(Subtype::Shrine) }>,
             "When Northern Air Temple enters, each opponent loses X life and you gain X life, where X is the number of Shrines you control.",
         ),
         triggered(

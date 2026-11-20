@@ -1651,6 +1651,18 @@ pub fn each_opponent_loses_1_life_you_gain_1(g: &mut dyn Game, item: &StackItem)
     each_opponent_loses_life_you_gain_life::<1>(g, item)
 }
 
+/// "Each opponent loses X life and you gain X life, where X is the number of [subtype]s you control" (CR 119.3, 608.2h): X is
+/// counted once, as the ability resolves, in the layers (the source itself among them if it is still there, and permanents the
+/// opponents control not at all), the subtype read through the source's text (CR 612). Northern Air Temple's Shrines and
+/// Eriette of the Charmed Apple's Auras are such counts.
+pub fn each_opponent_loses_life_you_gain_life_for_each_subtype_you_control<const SUBTYPE: u16>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let subtype = crate::lands::word(g, item.object, SUBTYPE);
+    let x = crate::permanents_with_subtype_you_control(g, item.controller, subtype) as i32;
+    g.each_opponent_loses_life(item.controller, x);
+    g.gain_life(item.controller, x);
+    Ok(())
+}
+
 /// "Each opponent loses 1 life" (CR 119.3): every opponent still in the game loses it together. Lunar Convocation, Starscape
 /// Cleric and The Meathook Massacre print it.
 pub fn each_opponent_loses_1_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
