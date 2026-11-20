@@ -1,0 +1,14 @@
+{
+  "name": "Hollow Scavenger",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Wolf",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "{1}, Sacrifice a Food: This creature gets +2/+2 until end of turn. Activate only once each turn.",
+  "adventure": {
+    "name": "Bakery Raid",
+    "manaCost": "{G}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Create a Food token. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

@@ -1,0 +1,44 @@
+# Bakery Raid {G} (the Adventure half of Hollow Scavenger): "Create a Food token." Bot1 casts it from hand on turn one with
+# Mox Emerald, the Food token coming under Bot1's control (CR 111.10b), and on resolving the card goes on an Adventure in exile
+# rather than to the graveyard (CR 715.3d). On turn three the Wolf is cast from exile for {2}{G} as a plain 3/2 Wolf with no
+# Food of its own.
+
+[Bot1 Deck]
+Forest
+Hollow Scavenger
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hollow Scavenger.Cast(Ability: Adventure)
+? Bot1.Battlefield = Mox Emerald; Mox Pearl; Mox Ruby
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Emerald; Mox Pearl; Mox Ruby; Food Token
+? Bot2.Battlefield.Count = 0
+? Exile = Hollow Scavenger
+? Bot1.Graveyard.Count = 0
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Hollow Scavenger.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Pearl; Mox Ruby; Food Token; Hollow Scavenger
+Bot1.Battlefield.Hollow Scavenger.Power = 3
+Bot1.Battlefield.Hollow Scavenger.Toughness = 2
+Bot1.Battlefield.Hollow Scavenger.Subtypes = Wolf

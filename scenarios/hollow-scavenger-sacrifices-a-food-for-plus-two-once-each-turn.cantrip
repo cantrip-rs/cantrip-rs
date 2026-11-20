@@ -1,0 +1,66 @@
+# Hollow Scavenger: "{1}, Sacrifice a Food: This creature gets +2/+2 until end of turn. Activate only once each turn." Two Bakery
+# Raids on turn one (two copies, Lotus mana) make two Foods. On turn three the Wolf is cast from exile for {2}{G}; then {1}
+# and one Food make it 5/4 (CR 611.2a), the Food gone and the mana pool empty. A second activation the same turn is refused
+# although a Food and {1} are still there (the 'once each turn' limit, CR 602.5b). On turn five the +2/+2 has worn off (3/2)
+# and the second Food pays for another 5/4.
+
+[Bot1 Deck]
+Forest
+Hollow Scavenger
+Hollow Scavenger
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Forest
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hollow Scavenger.Cast(Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Hollow Scavenger.Cast(Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 2
+? Bot1.Battlefield.Count = 6
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Exile.Hollow Scavenger.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Hollow Scavenger.Activate(Sacrifice: Food Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Hollow Scavenger.Power = 5
+? Bot1.Battlefield.Hollow Scavenger.Toughness = 4
+? Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Hollow Scavenger.Activate()
+? Bot1.Battlefield.Count = 7
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Hollow Scavenger.Power = 3
+? Bot1.Battlefield.Hollow Scavenger.Toughness = 2
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Hollow Scavenger.Activate(Sacrifice: Food Token)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Hollow Scavenger.Power = 5
+Bot1.Battlefield.Hollow Scavenger.Toughness = 4
+Bot1.Battlefield.Count = 6

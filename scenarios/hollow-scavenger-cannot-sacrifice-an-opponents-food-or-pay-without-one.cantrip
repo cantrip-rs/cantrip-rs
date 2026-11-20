@@ -1,0 +1,44 @@
+# Hollow Scavenger: "Sacrifice a Food" is a cost only its controller can pay with a Food they control (CR 118.3, 701.21a).
+# Bot1's Wolf is on the battlefield with {1} ready, but Bot1 has no Food; Bot2's Bakery Raid (the Adventure half of its own
+# Hollow Scavenger) made Bot2 one, and that Food cannot be sacrificed by Bot1, so the activation is refused (the first
+# check: the Wolf is still 3/2 and the Food is still Bot2's).
+
+[Bot1 Deck]
+Forest
+Forest
+Hollow Scavenger
+Mox Emerald
+Mox Pearl
+Forest x15
+
+[Bot2 Deck]
+Mox Emerald
+Hollow Scavenger
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Hollow Scavenger.Cast(Ability: Adventure)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hollow Scavenger.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Hollow Scavenger.Activate(Sacrifice: Bot2.Battlefield.Food Token)
+! Bot1.Battlefield.Hollow Scavenger.Activate()
+? Bot1.Battlefield.Hollow Scavenger.Power = 3
+
+[Expect]
+Bot1.Battlefield.Hollow Scavenger.Toughness = 2
+Bot2.Battlefield = Mox Emerald; Food Token
