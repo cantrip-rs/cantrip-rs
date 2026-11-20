@@ -1757,6 +1757,17 @@ counter_kinds! {
     Possession = 101, "possession", "Possession";
     Pin = 102, "pin", "Pin";
     Nest = 103, "nest", "Nest";
+    Bloodstain = 104, "bloodstain", "Bloodstain";
+    Bore = 105, "bore", "Bore";
+    Coin = 106, "coin", "Coin";
+    Dread = 107, "dread", "Dread";
+    Impostor = 108, "impostor", "Impostor";
+    Landmark = 109, "landmark", "Landmark";
+    Loot = 110, "loot", "Loot";
+    Point = 111, "point", "Point";
+    Skewer = 112, "skewer", "Skewer";
+    Supply = 113, "supply", "Supply";
+    Unlock = 114, "unlock", "Unlock";
 }
 
 impl CounterKind {
@@ -2444,7 +2455,18 @@ mod carrion_counter_tests {
         assert_eq!(CounterKind::Possession as usize, 101);
         assert_eq!(CounterKind::Pin as usize, 102);
         assert_eq!(CounterKind::Nest as usize, 103);
-        assert_eq!(CounterKind::COUNT, 104);
+        assert_eq!(CounterKind::Bloodstain as usize, 104);
+        assert_eq!(CounterKind::Bore as usize, 105);
+        assert_eq!(CounterKind::Coin as usize, 106);
+        assert_eq!(CounterKind::Dread as usize, 107);
+        assert_eq!(CounterKind::Impostor as usize, 108);
+        assert_eq!(CounterKind::Landmark as usize, 109);
+        assert_eq!(CounterKind::Loot as usize, 110);
+        assert_eq!(CounterKind::Point as usize, 111);
+        assert_eq!(CounterKind::Skewer as usize, 112);
+        assert_eq!(CounterKind::Supply as usize, 113);
+        assert_eq!(CounterKind::Unlock as usize, 114);
+        assert_eq!(CounterKind::COUNT, 115);
         assert!(!CounterKind::POWER_TOUGHNESS.iter().any(|(kind, _, _)| *kind == carrion));
     }
     #[test]
