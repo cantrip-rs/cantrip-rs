@@ -1,0 +1,42 @@
+# Goddric, Cloaked Reveler: "base power and toughness 4/4" sets the base (CR 613.4b, layer 7b), and an effect from a later spell
+# applies on top of it (layer 7c). Turn 1: Goddric celebrates (Black Lotus and Goddric entered) as a 4/4; Bot1 then casts a free
+# Mox Ruby and Mox Emerald and Gnawing Crescendo ({2}{R}, creatures you control get +2/+0 until end of turn) with the Mountain and the two Moxen: Goddric is
+# 6/4, not a 5/3 or a 3/3 + 2.
+
+[Bot1 Deck]
+Black Lotus
+Goddric, Cloaked Reveler
+Mox Ruby
+Mox Emerald
+Gnawing Crescendo
+Mountain
+Mountain x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goddric, Cloaked Reveler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Power = 4
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Gnawing Crescendo.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Goddric, Cloaked Reveler.Power = 6
+Bot1.Battlefield.Goddric, Cloaked Reveler.Toughness = 4
+Bot1.Battlefield.Goddric, Cloaked Reveler.Subtypes = Dragon

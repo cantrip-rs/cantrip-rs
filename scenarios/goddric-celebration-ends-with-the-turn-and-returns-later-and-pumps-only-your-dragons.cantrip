@@ -1,0 +1,67 @@
+# Goddric, Cloaked Reveler: Celebration is per turn (CR 207.2c, 611.3a). Turn 1: Goddric celebrates (Black Lotus and Goddric
+# entered). Turn 2: Bot2 casts a Dragon Whelp (its own permanents never count for Bot1). Turn 3: Bot1's earlier permanents don't
+# count, so Goddric is a 3/3 Human Noble again with no flying and no {R} ability (refused). A Mountain (land) and a free Memnite are
+# one nonland permanent: still 3/3 and no ability. A free Mox Ruby is the second: Goddric is a 4/4 flying Dragon with the ability
+# again. Its {R} pumps Dragons Bot1 controls (Goddric 5/4), and not Bot2's Dragon Whelp (still 2/3).
+
+[Bot1 Deck]
+Black Lotus
+Goddric, Cloaked Reveler
+Mox Ruby
+Memnite
+Mountain
+Mountain
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Dragon Whelp
+Island x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goddric, Cloaked Reveler.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Power = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dragon Whelp.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Subtypes = Human; Noble
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Keywords = Haste
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Power = 3
+! Bot1.Battlefield.Goddric, Cloaked Reveler.Activate
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Power = 3
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Toughness = 3
+! Bot1.Battlefield.Goddric, Cloaked Reveler.Activate
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Subtypes = Dragon
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Keywords = Flying; Haste
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Power = 4
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Goddric, Cloaked Reveler.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Goddric, Cloaked Reveler.Power = 5
+Bot1.Battlefield.Goddric, Cloaked Reveler.Toughness = 4
+Bot2.Battlefield.Dragon Whelp.Power = 2
+Bot2.Battlefield.Dragon Whelp.Toughness = 3
+Stack.Count = 0

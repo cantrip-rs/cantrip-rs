@@ -1,0 +1,38 @@
+# Goddric, Cloaked Reveler: one nonland permanent is not enough, and a land is not a second one (CR 207.2c). Turn 5: Bot1 plays its
+# third Mountain (a land entering this turn) and casts Goddric with the three Mountains: only Goddric (one nonland permanent) has
+# entered, so he is a 3/3 Human Noble with haste, no flying, and no "{R}: Dragons ..." ability (refused).
+
+[Bot1 Deck]
+Goddric, Cloaked Reveler
+Mountain x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mountain#3.Activate
+Bot1.Hand.Goddric, Cloaked Reveler.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Power = 3
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Toughness = 3
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Subtypes = Human; Noble
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Keywords = Haste
+! Bot1.Battlefield.Goddric, Cloaked Reveler.Activate
+
+[Expect]
+Bot1.Battlefield.Goddric, Cloaked Reveler.Subtypes = Human; Noble
+Bot1.Battlefield.Goddric, Cloaked Reveler.Keywords = Haste
+Bot1.Battlefield.Goddric, Cloaked Reveler.Power = 3
+Bot1.Battlefield.Goddric, Cloaked Reveler.Toughness = 3

@@ -1,0 +1,38 @@
+# Goddric, Cloaked Reveler: Celebration (CR 207.2c) turns on the moment the second nonland permanent has entered under Bot1's control
+# this turn. Turn 1: Bot1 plays a Mountain (a land doesn't count), casts Black Lotus (1) and Goddric (2): Goddric is a Dragon (and no
+# longer a Human Noble, CR 205.3m) with base power and toughness 4/4 (not 3/3) and flying (haste stays), and has "{R}: Dragons you
+# control get +1/+0 until end of turn." Bot1 pays {R} with the Mountain: Goddric is 5/4. The Lotus has left the battlefield, but it
+# entered this turn, so Celebration still holds.
+
+[Bot1 Deck]
+Black Lotus
+Goddric, Cloaked Reveler
+Mountain
+Mountain x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goddric, Cloaked Reveler.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Subtypes = Dragon
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Types = Creature
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Keywords = Flying; Haste
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Power = 4
+? Bot1.Battlefield.Goddric, Cloaked Reveler.Toughness = 4
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Goddric, Cloaked Reveler.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Goddric, Cloaked Reveler.Subtypes = Dragon
+Bot1.Battlefield.Goddric, Cloaked Reveler.Keywords = Flying; Haste
+Bot1.Battlefield.Goddric, Cloaked Reveler.Power = 5
+Bot1.Battlefield.Goddric, Cloaked Reveler.Toughness = 4
+Stack.Count = 0

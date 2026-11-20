@@ -1,0 +1,11 @@
+{
+  "name": "Goddric, Cloaked Reveler",
+  "manaCost": "{1}{R}{R}",
+  "type": "Legendary Creature — Human Noble",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Haste\nCelebration — As long as two or more nonland permanents entered the battlefield under your control this turn, Goddric is a Dragon with base power and toughness 4/4, flying, and \"{R}: Dragons you control get +1/+0 until end of turn.\" (He loses all other creature types.)",
+  "keywords": [
+    "Haste"
+  ]
+}
