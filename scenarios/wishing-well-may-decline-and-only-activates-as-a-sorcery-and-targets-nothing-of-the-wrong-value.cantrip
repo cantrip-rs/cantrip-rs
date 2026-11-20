@@ -1,0 +1,59 @@
+# Wishing Well: "Activate only as a sorcery" (CR 602.5d) and "you may cast" (CR 608.2d). With a Lightning Bolt on the stack the Well
+# cannot be activated. Two Bolts in the graveyard make two choices for the first coin counter (mana value 1): Bot1 picks one and
+# declines to cast it, so it stays in the graveyard (Bot2 stays at 14). On turn 3 the second counter looks for mana value 2 and
+# the graveyard holds only Bolts (1), so nothing is targeted, nothing goes on the stack and the counter is still put on.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Ruby
+Black Lotus
+Wishing Well
+Lightning Bolt
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Wishing Well.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+! Bot1.Battlefield.Wishing Well.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 14
+Bot1.Battlefield.Wishing Well.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot2.Life = 14
+? Bot1.Battlefield.Wishing Well.Counters.Coin = 1
+? Bot1.Graveyard.Count = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Wishing Well.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Wishing Well.Counters.Coin = 2
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Black Lotus
+Exile.Count = 0
+Stack.Count = 0
+Bot2.Life = 14
