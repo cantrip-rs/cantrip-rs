@@ -1,0 +1,57 @@
+# Gnawing Crescendo: "Whenever a nontoken creature you control dies this turn, create a 1/1 black Rat creature token with 'This
+# token can't block.'" (CR 603.7, 700.4). On turn 3 Bot1 casts it, then Lightning Bolts Bot2's Ornithopter (not a creature Bot1
+# controls: no Rat), then its own Memnite and Ornithopter: a Rat for each of those two, so two Rats.
+
+[Bot1 Deck]
+Memnite
+Ornithopter
+Black Lotus x2
+Gnawing Crescendo
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mountain x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Gnawing Crescendo.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Count = 0
+? Bot1.Battlefield.Count = 2
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 2
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Rat Token; Rat Token
+Bot1.Battlefield.Rat Token#1.Power = 1
+Bot1.Battlefield.Rat Token#1.Keywords = CantBlock
+Bot2.Battlefield.Count = 0

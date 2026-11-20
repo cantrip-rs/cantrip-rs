@@ -1,0 +1,48 @@
+# Gnawing Crescendo: only nontoken creatures make a Rat (CR 700.4, 111.7), and only this turn (CR 603.7). On turn 1 Bot1 casts
+# it and Lightning Bolts its Memnite (a Rat is made, checked below), then Bolts that Rat: a token dies, no new Rat.
+# Turn 2: Bot2 Bolts Bot1's Ornithopter: the Crescendo's turn is over, and no Rat is made.
+
+[Bot1 Deck]
+Memnite
+Ornithopter
+Black Lotus x2
+Gnawing Crescendo
+Lightning Bolt
+Lightning Bolt
+Mountain x14
+
+[Bot2 Deck]
+Lightning Bolt
+Mountain
+Island x18
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Gnawing Crescendo.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Ornithopter; Rat Token
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Rat Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Ornithopter
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 0
+Bot1.Graveyard = Ornithopter; Lightning Bolt; Memnite; Lightning Bolt; Black Lotus; Gnawing Crescendo; Black Lotus

@@ -1,0 +1,50 @@
+# Gnawing Crescendo ({2}{R} instant): "Creatures you control get +2/+0 until end of turn." The creatures Bot1 controls as it
+# resolves get it (CR 611.2c): on turn 3 its Memnite is a 3/1 for the turn, but an Ornithopter cast afterwards stays 0/2, and Bot2's
+# Memnite and Ornithopter (not "creatures you control") are unchanged. At the next turn the Memnite is a 1/1 again (CR 514.2).
+
+[Bot1 Deck]
+Black Lotus
+Gnawing Crescendo
+Memnite
+Ornithopter
+Mountain x3
+Mountain x14
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Gnawing Crescendo.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot2.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Memnite.Power = 1

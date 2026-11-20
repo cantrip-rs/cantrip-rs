@@ -1,0 +1,6 @@
+{
+  "name": "Gnawing Crescendo",
+  "manaCost": "{2}{R}",
+  "type": "Instant",
+  "oracleText": "Creatures you control get +2/+0 until end of turn. Whenever a nontoken creature you control dies this turn, create a 1/1 black Rat creature token with \"This token can't block.\""
+}
