@@ -1,0 +1,45 @@
+# Redtooth Vanguard: "Whenever an enchantment you control enters, you may pay {2}. If you do, return this card from your graveyard to your hand" (CR 603.2, 113.6m).
+# Entomb puts it in Bot1's graveyard. On turn 3 Bot1's own Bad Moon enters, the Vanguard's ability triggers from the graveyard, Bot1 pays {2} with the Emerald and
+# the Sapphire and the Vanguard returns to its hand (not the battlefield).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Entomb
+Bad Moon
+Plains
+Redtooth Vanguard
+Plains x12
+
+[Bot2 Deck]
+Mox Pearl
+Crusade
+Plains
+Plains x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Redtooth Vanguard)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bad Moon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+
+[Expect]
+Bot1.Graveyard = Entomb
+Bot1.Hand = Plains; Plains; Redtooth Vanguard
+Bot1.Battlefield = Bad Moon; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire

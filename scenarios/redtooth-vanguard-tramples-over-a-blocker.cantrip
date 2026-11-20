@@ -1,0 +1,30 @@
+# Redtooth Vanguard has trample (CR 702.19): the 3/1 attacks on turn 3 and Bot2's Memnite (1/1) blocks it. The Vanguard assigns lethal damage 1 to the Memnite and the other 2
+# to Bot2, who goes from 20 to 18; the Memnite dies and the Vanguard (toughness 1) dies to the Memnite's 1 damage.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Redtooth Vanguard
+Plains x17
+
+[Bot2 Deck]
+Memnite
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Redtooth Vanguard.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Redtooth Vanguard > Bot2)
+Bot2.Block(Memnite > Redtooth Vanguard)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard = Memnite
+Bot1.Graveyard = Redtooth Vanguard

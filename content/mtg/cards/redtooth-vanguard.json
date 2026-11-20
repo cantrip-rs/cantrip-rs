@@ -1,0 +1,11 @@
+{
+  "name": "Redtooth Vanguard",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Elf Warrior",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Trample\nWhenever an enchantment you control enters, you may pay {2}. If you do, return this card from your graveyard to your hand.",
+  "keywords": [
+    "Trample"
+  ]
+}

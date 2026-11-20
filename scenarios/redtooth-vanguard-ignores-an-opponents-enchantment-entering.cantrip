@@ -1,0 +1,42 @@
+# Redtooth Vanguard in the graveyard: "Whenever an enchantment you control enters" (CR 603.6a). Entomb puts it in Bot1's graveyard; Bot2's Crusade entering is an enchantment Bot1
+# does not control, so nothing triggers: Bot1 is never asked to pay, the Stack is empty after Crusade resolves and the Vanguard stays in the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Entomb
+Plains
+Plains
+Redtooth Vanguard
+Plains x12
+
+[Bot2 Deck]
+Mox Pearl
+Crusade
+Plains
+Plains x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Redtooth Vanguard)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Crusade.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Entomb; Redtooth Vanguard
+Bot2.Battlefield = Crusade; Mox Pearl; Plains

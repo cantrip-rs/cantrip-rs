@@ -1,0 +1,37 @@
+# Redtooth Vanguard's ability functions only in the graveyard (CR 113.6m): with the Vanguard on the battlefield, Bot1's Bad Moon entering triggers nothing, so Bot1 is never asked
+# to pay {2}, the Stack is empty once Bad Moon resolves, and the Vanguard stays on the battlefield (Bad Moon only pumps black creatures).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Bad Moon
+Redtooth Vanguard
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Redtooth Vanguard.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Bad Moon.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Redtooth Vanguard.Power = 3
+Bot1.Battlefield.Redtooth Vanguard.Toughness = 1
+Bot1.Battlefield = Bad Moon; Mox Emerald; Mox Jet; Mox Ruby; Plains; Redtooth Vanguard
+Bot1.Graveyard.Count = 0

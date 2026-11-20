@@ -1,0 +1,39 @@
+# Redtooth Vanguard: the payment is optional ("you may pay {2}"). Same game as the paying scenario, but Bot1 declines with the Emerald and the Sapphire untapped
+# and the Vanguard stays in the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Entomb
+Bad Moon
+Plains
+Redtooth Vanguard
+Plains x12
+
+[Bot2 Deck]
+Mox Pearl
+Crusade
+Plains
+Plains x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Redtooth Vanguard)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bad Moon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Bot1.Graveyard = Entomb; Redtooth Vanguard
+Bot1.Battlefield = Bad Moon; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire
