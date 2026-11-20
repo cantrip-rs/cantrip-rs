@@ -1,0 +1,46 @@
+# Seek Thrills (CR 715): "Mill seven cards. Then put all cards that have an Adventure from among the milled cards into your hand."
+# Turn 1: Bot1 casts Beluna's Adventure with five Moxen ({2}{G}{U}{R}, Beluna is exiled on an adventure). The seven milled cards are
+# Bonecrusher Giant, Embereth Shieldbreaker and a Lightning Bolt among Islands: both adventurer cards (creature cards in the graveyard) go to the hand,
+# every other card stays; the eighth card, a second Giant, is not milled and stays in the library.
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Beluna Grandsquall
+Island
+Bonecrusher Giant
+Island
+Embereth Shieldbreaker
+Island
+Island
+Lightning Bolt
+Island
+Bonecrusher Giant
+Island x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Beluna Grandsquall.Cast(Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Bonecrusher Giant; Embereth Shieldbreaker; Island
+Bot1.Graveyard = Island; Lightning Bolt; Island; Island; Island
+Bot1.Library.Count = 6
+Bot1.Library.Top = Bonecrusher Giant
+Exile = Beluna Grandsquall

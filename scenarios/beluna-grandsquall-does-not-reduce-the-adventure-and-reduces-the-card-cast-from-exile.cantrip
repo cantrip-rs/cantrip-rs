@@ -1,0 +1,48 @@
+# Beluna Grandsquall: "Permanent spells you cast that have an Adventure cost {1} less to cast." (CR 601.2f, 715.3b)
+# Turn 1: with Beluna out, Bonecrusher Giant's Adventure Stomp ({1}{R}) is an instant spell, not a permanent spell: it costs
+# the two Moxen Ruby and Jet, both of them (nothing left, as the full {1}{R}), dealing 2 damage to Bot2. Turn 3: the Giant, on an Adventure in exile, is cast as the
+# permanent spell it is for {1}{R}: with Ruby and Jet tapped nothing is left in the pool.
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mountain
+Beluna Grandsquall
+Mox Ruby
+Mox Jet
+Bonecrusher Giant
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Beluna Grandsquall.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bonecrusher Giant.Cast(Bot2; Ability: Adventure)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+? Exile = Bonecrusher Giant
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Exile.Bonecrusher Giant.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Beluna Grandsquall; Bonecrusher Giant; Mountain; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire
+Exile.Count = 0

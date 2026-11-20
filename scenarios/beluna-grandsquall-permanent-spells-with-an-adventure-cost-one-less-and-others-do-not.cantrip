@@ -1,0 +1,59 @@
+# Beluna Grandsquall: "Permanent spells you cast that have an Adventure cost {1} less to cast." (CR 601.2f, 118.7a)
+# Turn 1: Bot1 casts Beluna with Mox Emerald, Mox Sapphire and a Mountain, then casts Bonecrusher Giant ({2}{R}) with the two Moxen Ruby and Jet
+# alone: {1}{R}, with nothing left in the pool. Turn 3: Goblin Roughrider ({2}{R}), a permanent spell with no Adventure, takes all three
+# of Ruby, Jet and Emerald. Bot2 has no Beluna: its own Giant takes all three of its Moxen. Beluna has trample (CR 702.19).
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mountain
+Beluna Grandsquall
+Mox Ruby
+Mox Jet
+Bonecrusher Giant
+Goblin Roughrider
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Bonecrusher Giant
+Island x16
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Beluna Grandsquall.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bonecrusher Giant.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Bonecrusher Giant.Cast
+? Bot2.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Goblin Roughrider.Cast
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield = Beluna Grandsquall; Bonecrusher Giant; Goblin Roughrider; Mountain; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Battlefield.Beluna Grandsquall.Keywords = Trample

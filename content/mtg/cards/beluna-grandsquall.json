@@ -1,0 +1,17 @@
+{
+  "name": "Beluna Grandsquall",
+  "manaCost": "{G}{U}{R}",
+  "type": "Legendary Creature — Giant Noble",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Trample\nPermanent spells you cast that have an Adventure cost {1} less to cast.",
+  "keywords": [
+    "Trample"
+  ],
+  "adventure": {
+    "name": "Seek Thrills",
+    "manaCost": "{2}{G}{U}{R}",
+    "type": "Instant — Adventure",
+    "oracleText": "Mill seven cards. Then put all cards that have an Adventure from among the milled cards into your hand."
+  }
+}
