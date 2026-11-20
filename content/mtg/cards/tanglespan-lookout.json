@@ -1,0 +1,8 @@
+{
+  "name": "Tanglespan Lookout",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Satyr",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever an Aura you control enters, draw a card."
+}

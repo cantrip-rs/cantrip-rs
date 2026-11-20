@@ -1,0 +1,63 @@
+# Tanglespan Lookout {2}{G}: "Whenever an Aura you control enters, draw a card." Bot1 casts it on turn 1 off Black Lotus (hand 3: Forest,
+# Rancor, Sylvan Library). On turn 2 Bot2's Pacifism, an Aura it controls, enters enchanting the Lookout: no draw for Bot1 (hand still 3).
+# On turn 3 Bot1 draws (4), plays Forest, and casts Rancor, its own Aura: it draws (3). Sylvan Library, an enchantment that isn't an Aura,
+# entering draws nothing (hand 2 after it is cast). The Lookout itself, a creature, draws nothing as it enters.
+
+[Bot1 Deck]
+Black Lotus
+Tanglespan Lookout
+Forest
+Rancor
+Sylvan Library
+Mox Emerald
+Mox Emerald
+Forest
+Forest x3
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Pacifism
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Tanglespan Lookout.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Pacifism.Cast(Bot1.Battlefield.Tanglespan Lookout)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 3
+? Bot2.Battlefield.Pacifism.Subtypes = Aura
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 4
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Rancor.Cast(Tanglespan Lookout)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Sylvan Library.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sylvan Library.Types = Enchantment
+
+[Expect]
+Bot1.Hand.Count = 2
