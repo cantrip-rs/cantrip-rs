@@ -1003,6 +1003,16 @@ impl Game {
         self.at = target;
     }
 
+    /// Lets go of the tree's nodes that are not on the way to one of `keep` or to where the game is (`tree::Tree::prune`):
+    /// for a search's fork whose search will only ever go back to those (`cantrip_ai::search`, a kept tree re-rooted).
+    /// An answer that led to a node let go is played out again when it is given again, to the same position; its
+    /// requests are then asked under new ids, the request counter being no part of a position. The nodes let go.
+    pub fn prune(&mut self, keep: &[tree::NodeId]) -> usize {
+        let mut keep = keep.to_vec();
+        keep.push(self.at);
+        self.tree.prune(&keep)
+    }
+
     /// The game ends from outside its rules with `outcome`, whatever is being asked of whom: a draw its players agree to (CR
     /// 104.4a), or a match clock or an abandoned table ending it (`docs/rules-exceptions.md`, RX-4). Its end reveals what
     /// every end does (CR 708.9, `ops::end_game`), and nothing more is asked. Nothing for a game already over.
@@ -3717,6 +3727,64 @@ mod tests {
         assert_eq!(game.state.journal.entries.len(), entries);
         replay(&mut game, &answers);
         assert!(game.state == after && game.log == after_log, "the real game plays the same answers to the same position");
+    }
+
+    /// A fork lets go of the branches a search will not go back to (`Game::prune`): the branch kept is gone back to as
+    /// before, and the answers of a branch let go, given again, are played out again to the position they led to.
+    #[test]
+    fn a_fork_pruned_keeps_the_lines_asked_for_and_plays_the_others_again() {
+        let mut game = deal();
+        while game.state.turn.number < 3 {
+            assert!(!play(&mut game, 1).is_empty());
+        }
+        let mut fork = game.fork_for_search();
+        let root = fork.checkpoint();
+        let (state, log) = (fork.state.clone(), fork.log.clone());
+        let kept_answers = play(&mut fork, 12);
+        let kept = fork.checkpoint();
+        let (kept_state, kept_log) = (fork.state.clone(), fork.log.clone());
+        // Another line: the same first answers, then a pass where the line kept cast, or no attack where it attacked.
+        let (at, other) = kept_answers
+            .iter()
+            .enumerate()
+            .find_map(|(i, (_, _, a))| match a {
+                Answer::Act(_) => Some((i, Answer::Pass)),
+                Answer::Attack(with) if !with.is_empty() => Some((i, Answer::Attack(Vec::new()))),
+                _ => None,
+            })
+            .expect("the line kept has a choice to make otherwise");
+        fork.goto(root);
+        replay(&mut fork, &kept_answers[..at]);
+        let branch = fork.checkpoint();
+        let request = fork.pending().cloned().expect("a request");
+        let mut gone_answers = vec![(request.id, request.player, other.clone())];
+        fork.answer(request.id, request.player, other).expect("legal");
+        gone_answers.extend(play(&mut fork, 8));
+        let gone = fork.checkpoint();
+        let (gone_state, gone_log) = (fork.state.clone(), fork.log.clone());
+        let nodes = fork.tree.len();
+
+        // From the line let go, the working state there: nothing is let go of the path it is on.
+        assert_eq!(fork.prune(&[kept]), 0, "the game is on the other line: it is kept with the line asked for");
+        fork.goto(branch);
+        let let_go = fork.prune(&[kept]);
+        assert!(let_go >= gone_answers.len(), "the other line is let go");
+        assert_eq!(fork.tree.len(), nodes, "ids are not reused");
+        fork.goto(kept);
+        assert!(fork.state == kept_state && fork.log == kept_log, "the line kept is gone back to");
+        fork.goto(root);
+        assert!(fork.state == state && fork.log == log);
+        // Played again, its requests are asked again, under new ids.
+        fork.goto(branch);
+        for (_, player, answer) in &gone_answers {
+            let request = fork.pending().cloned().expect("a request");
+            fork.answer(request.id, *player, answer.clone()).expect("legal");
+        }
+        assert!(fork.state == gone_state && fork.log == gone_log, "the line let go is played again to the same position");
+        assert_ne!(fork.checkpoint(), gone, "as new nodes");
+        assert_eq!(fork.tree.len(), nodes + gone_answers.len());
+        fork.goto(kept);
+        assert!(fork.state == kept_state && fork.log == kept_log);
     }
 
     /// A fork cannot go back into the true past: the game's own nodes are before its root.

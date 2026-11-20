@@ -3833,7 +3833,9 @@ fn uncap(worlds: &[World], nodes: &mut [Node], turn_cap: u32) -> usize {
 /// A re-rooted tree with only what its new roots reach: the nodes below each live world's root, and the positions those
 /// nodes are at, renumbered; a dead world keeps nothing. Without it a kept tree carries every node and position it ever
 /// held from one request to the next, its memory growing through a game (a position holds every seat's knowledge and
-/// the seat's observation). What is dropped no root could reach again: the search walks only down from the roots.
+/// the seat's observation). What is dropped no root could reach again: the search walks only down from the roots. Each
+/// world's game log is cut back with them, to the lines of answers that lead to a position kept: it is the largest
+/// part of what a deep search holds, and without this a kept tree's log held every line ever played.
 fn compact(worlds: &mut [World], nodes: Vec<Node>) -> Vec<Node> {
     let mut keep = vec![false; nodes.len()];
     let mut stack: Vec<usize> = worlds.iter().filter(|w| !w.dead).map(|w| w.root).collect();
@@ -3861,6 +3863,7 @@ fn compact(worlds: &mut [World], nodes: Vec<Node>) -> Vec<Node> {
         if world.dead {
             world.positions = Vec::new();
             world.resync_obs();
+            world.game.prune(&[]);
             pos_map.push(Vec::new());
             continue;
         }
@@ -3876,6 +3879,12 @@ fn compact(worlds: &mut [World], nodes: Vec<Node>) -> Vec<Node> {
         world.positions = kept;
         world.resync_obs();
         world.root_pos = map[world.root_pos];
+        // The game log too: the search only ever goes back to the positions kept, so the lines of answers that led to
+        // the others are let go with them (`Game::prune`). The game is moved to the root first: where it stands is
+        // kept whatever it is, and it may stand in a line let go.
+        let keep: Vec<tree::NodeId> = world.positions.iter().map(|p| p.node).collect();
+        world.game.goto(world.positions[world.root_pos].node);
+        world.game.prune(&keep);
         pos_map.push(map);
     }
     let mut node_map = vec![usize::MAX; nodes.len()];

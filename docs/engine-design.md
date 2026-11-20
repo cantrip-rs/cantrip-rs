@@ -143,6 +143,10 @@ a search branch is a sibling path that shares everything above it.
   one written, entry by entry. An answer already given
   at a node is reused rather than played again. A move costs 4-9 us. **Search moves through the tree, never by
   copying the game.**
+- **A search lets go of the lines it will not go back to.** Nodes are only ever added, but `Game::prune` frees what
+  the nodes off the way to a given set of nodes hold, and takes them from their parents: a kept search tree re-rooted
+  after an answer keeps only the lines under it (`cantrip_ai::search`). An answer that led to a node let go is played
+  out again if it is given again, to the same position.
 - **A working state is the quick reference.** The live game, and each search thread, holds one fully built state and
   moves it through the tree. A value lookup is a read of the working state, never a rebuild.
 - **A search thread starts from `Game::fork_for_search`**: the working state, the journal back to the lowest mark

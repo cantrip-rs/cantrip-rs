@@ -11,6 +11,8 @@
 //! the entry that redoes it; going down applies those and journals for each the entry that undoes it again
 //! (`GameState::step_back`, `step_forward`). Answering a question a node already has an answer for moves to that
 //! child instead of playing it out again.
+//!
+//! Nodes are only ever added, but a search may let go of what the ones it will not go back to hold (`Tree::prune`).
 
 use cantrip_api::*;
 use cantrip_state::{Mark, Undo};
@@ -136,6 +138,39 @@ impl Tree {
         let i = self.ix(parent);
         self.nodes[i].children.push(id);
         id
+    }
+
+    /// Lets go of every node that is not on the way from the root to one of `keep`: what they hold (the entries that
+    /// redo their writes, their events, their answers) is freed, and none is its parent's child any more, so its
+    /// answer given there again is played out again, as it was. For a search that will never go back to them: a kept
+    /// tree re-rooted, whose lines under the answers not taken would otherwise be held for the rest of the game. Ids
+    /// are not reused, so a node let go keeps its place. The nodes let go.
+    pub(crate) fn prune(&mut self, keep: &[NodeId]) -> usize {
+        let mut kept = vec![false; self.nodes.len()];
+        for &node in keep {
+            let mut at = Some(node);
+            while let Some(n) = at {
+                let i = self.ix(n);
+                if std::mem::replace(&mut kept[i], true) {
+                    break;
+                }
+                at = self.nodes[i].parent;
+            }
+        }
+        let first = self.first;
+        let mut gone = 0;
+        for i in 0..self.nodes.len() {
+            if kept[i] {
+                self.nodes[i].children.retain(|c| kept[(c.0 - first) as usize]);
+            } else if self.nodes[i].answer.is_some() {
+                let n = &mut self.nodes[i];
+                n.away = None;
+                n.answer = None;
+                n.children = Vec::new();
+                gone += 1;
+            }
+        }
+        gone
     }
 
     pub(crate) fn start(&self, node: NodeId) -> (Mark, usize) {
