@@ -1,0 +1,11 @@
+{
+  "name": "Ash, Party Crasher",
+  "manaCost": "{R}{W}",
+  "type": "Legendary Creature — Human Peasant",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Haste\nCelebration — Whenever Ash attacks, if two or more nonland permanents entered the battlefield under your control this turn, put a +1/+1 counter on Ash.",
+  "keywords": [
+    "Haste"
+  ]
+}

@@ -1,0 +1,49 @@
+# Ash, Party Crasher ({R}{W}, 2/2 haste): "Celebration — Whenever Ash attacks, if two or more nonland permanents entered the battlefield
+# under your control this turn, put a +1/+1 counter on Ash" (CR 207.2c, 603.4). On turn one a Mox Ruby and Ash are exactly two nonland
+# permanents (the Plains is a land and does not count), so Ash grows as it attacks: 3 damage with the counter on it (17). On turn
+# three a Plains and a Memnite entered, but only one of them is a nonland permanent (and the turn-one two are another turn's), so
+# Ash stays 3/3: 3 damage (14).
+
+[Bot1 Deck]
+Mox Ruby
+Plains
+Ash, Party Crasher
+Memnite
+Plains
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ash, Party Crasher.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Ash, Party Crasher > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ash, Party Crasher.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Ash, Party Crasher.Power = 3
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ash, Party Crasher > Bot2)
+? Stack.Count = 0
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ash, Party Crasher.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ash, Party Crasher.Power = 3
+Bot2.Life = 14
