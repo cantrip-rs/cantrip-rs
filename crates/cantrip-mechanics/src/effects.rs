@@ -4110,6 +4110,24 @@ pub fn counters_on_self<const KIND: usize, const N: i32>(g: &mut dyn Game, item:
     Ok(())
 }
 
+/// "Put a [kind] counter on this permanent. Then if there are three or more [kind] counters on it, remove those counters,
+/// transform it" (CR 122.1, 701.27): the counters are counted as the first sentence leaves them (CR 608.2c), so a
+/// replacement that puts more counts too. The transform is the ability's own instruction about its source, which does
+/// nothing if the permanent has transformed since the ability was activated (CR 701.27f). Whether there were three or more
+/// is returned for what comes after (Hostile Hostel untaps it, Treasure Map creates three Treasures), which happens either way.
+pub fn counter_then_transform_at_three<const KIND: usize>(g: &mut dyn Game, item: &StackItem) -> Result<bool, Suspend> {
+    let kind = CounterKind::ALL[KIND];
+    g.add_counters(item.object, kind, 1);
+    g.end_sentence();
+    let counters = g.obj(item.object).counters(kind);
+    if counters < 3 {
+        return Ok(false);
+    }
+    g.remove_counters(item.object, kind, counters);
+    g.transform_by(item.object, item)?;
+    Ok(true)
+}
+
 /// "You gain life equal to the sacrificed creature's toughness" (CR 608.2h, 119.3), as Diamond Valley and Life Chisel
 /// print it. The first cost object is its original battlefield identity, so chars reads its last-known toughness.
 /// The ability's controller gains the life; a nonpositive toughness does not make that player lose life (CR 107.1b).

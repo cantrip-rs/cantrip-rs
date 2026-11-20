@@ -1,23 +1,14 @@
 use cantrip_api::*;
-use cantrip_mechanics::{choose, select, targets, triggers};
+use cantrip_mechanics::{choose, effects, select, targets, triggers};
 use cantrip_oracle as oracle;
 
 /// "Put a soul counter on this land. Then if there are three or more soul counters on it, remove those counters, transform
-/// it, then untap it." The counters are counted as the first sentence leaves them (CR 608.2c), so a replacement that puts
-/// more counts too. The transform is the ability's own instruction about its source, which does nothing if the permanent
-/// has transformed since the ability was activated (CR 701.27f); the untap still happens. An instruction about a
+/// it, then untap it." The untap happens whether or not the transform did anything (CR 701.27f); an instruction about a
 /// permanent that has left the battlefield does nothing to it (CR 400.7).
 fn soul_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let hostel = item.object;
-    g.add_counters(hostel, CounterKind::Soul, 1);
-    g.end_sentence();
-    let souls = g.obj(hostel).counters(CounterKind::Soul);
-    if souls < 3 {
-        return Ok(());
+    if effects::counter_then_transform_at_three::<{ CounterKind::Soul as usize }>(g, item)? {
+        g.untap(item.object);
     }
-    g.remove_counters(hostel, CounterKind::Soul, souls);
-    g.transform_by(hostel, item)?;
-    g.untap(hostel);
     Ok(())
 }
 
