@@ -1582,6 +1582,22 @@ pub fn instant_or_sorcery_card(q: &dyn Query, card: ObjectId) -> bool {
     chars.is(CardType::Instant) || chars.is(CardType::Sorcery)
 }
 
+/// "A card that has an Adventure" (CR 715.2, and the 2023-09-01 ruling) for a card in a hand, library, graveyard or exile: the card is an
+/// adventurer card in every such zone, whether or not it was ever cast as an Adventure, and the card's own printing answers it, not the
+/// characteristics it has where it is. A card exiled face down has no characteristics (CR 406.3a, 708.2), so it is not one, and a spell
+/// on the stack is not found by it. Hearth Elemental counts them in a graveyard, Sentinel of Lost Lore takes them from exile and Howling
+/// Galefang looks for them there.
+pub fn card_has_an_adventure(q: &dyn Query, card: ObjectId) -> bool {
+    let obj = q.state().obj(card);
+    object_has_an_adventure(obj, q.card(obj.card))
+}
+
+/// `card_has_an_adventure` for an object and its printing, which a `LayerQuery` (a static ability's `affects`) has through its state and
+/// card table (`q.cards().get(obj.card)`).
+pub fn object_has_an_adventure(obj: &Obj, printing: &CardDef) -> bool {
+    !obj.face_down_card() && printing.adventure.is_some()
+}
+
 /// "[Player] shuffles their graveyard into their library" (CR 701.24c): every card in the graveyard goes into the library
 /// at once and the library is shuffled, which it is even when no card arrives. Emrakul, the Aeons Torn, Spirit Water
 /// Revival and Quest for Ancient Secrets print it.

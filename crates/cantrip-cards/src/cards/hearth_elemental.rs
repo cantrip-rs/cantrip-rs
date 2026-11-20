@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::effects;
+use cantrip_mechanics::{effects, library};
 use cantrip_oracle as oracle;
 
 /// "This spell costs {X} less to cast, where X is the number of cards in your graveyard that are instant cards, sorcery
@@ -15,7 +15,7 @@ fn less_per_instant_sorcery_or_adventure_in_your_graveyard(q: &dyn Query, _: Obj
         .iter()
         .filter(|&&id| {
             let chars = q.chars(id);
-            chars.is(CardType::Instant) || chars.is(CardType::Sorcery) || q.card(q.state().obj(id).card).adventure.is_some()
+            chars.is(CardType::Instant) || chars.is(CardType::Sorcery) || library::card_has_an_adventure(q, id)
         })
         .count();
     CostDelta::less(cards as u32)
