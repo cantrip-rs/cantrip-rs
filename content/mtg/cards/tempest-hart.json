@@ -1,0 +1,17 @@
+{
+  "name": "Tempest Hart",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Elemental Elk",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Trample\nWhenever you cast a spell with mana value 5 or greater, put a +1/+1 counter on this creature.",
+  "keywords": [
+    "Trample"
+  ],
+  "adventure": {
+    "name": "Scan the Clouds",
+    "manaCost": "{1}{U}",
+    "type": "Instant — Adventure",
+    "oracleText": "Draw two cards, then discard two cards. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

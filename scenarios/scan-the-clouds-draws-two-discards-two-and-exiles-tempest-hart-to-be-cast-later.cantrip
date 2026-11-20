@@ -1,0 +1,51 @@
+# Tempest Hart // Scan the Clouds (CR 715): Bot1 pays {1}{U} with Mox Sapphire and Mox Jet on turn 1 for Scan the Clouds, "Draw two cards,
+# then discard two cards." The hand holds Tempest Hart and a Forest when it is cast; Bot1 draws a Plains and a Forest, discards the two
+# Forests (hand: the Plains), and the card is exiled on an adventure, not put into the graveyard. On turn 3 Bot1 casts Tempest Hart from
+# exile for {3}{G} (Mox Sapphire, Mox Jet, Mox Emerald, Mox Ruby) and it enters as a 3/4.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Tempest Hart
+Forest
+Forest
+Plains
+Forest x20
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Hand.Count = 2
+Bot1.Hand.Tempest Hart.Cast(Ability: Scan the Clouds)
+Bot1.Choose(Forest#1; Forest#2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Hand = Plains
+? Bot1.Graveyard.Count = 2
+? Exile.Count = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Tempest Hart.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard = Forest; Forest
+Bot1.Battlefield.Tempest Hart.Power = 3
+Bot1.Battlefield.Tempest Hart.Toughness = 4

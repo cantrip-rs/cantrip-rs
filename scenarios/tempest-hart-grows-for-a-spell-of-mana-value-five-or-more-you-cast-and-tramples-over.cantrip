@@ -1,0 +1,93 @@
+# Tempest Hart {3}{G} (3/4 trample): "Whenever you cast a spell with mana value 5 or greater, put a +1/+1 counter on this creature."
+# Bot1 casts it on turn 1 (Black Lotus GGG and Mox Emerald). On turn 2 Bot2 casts Stone Golem (mana value 5): an opponent's spell, still 3/4.
+# On turn 3 Bot1 casts Gilded Sentinel (mana value 4, one under the limit): still 3/4. On turn 5 Bot1 casts Stone Golem (mana value 5,
+# exactly the limit): the Hart is 4/5. It attacks and Bot2's 0/2 Ornithopter blocks: 2 damage tramples over (CR 702.19b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Tempest Hart
+Stone Golem
+Gilded Sentinel
+Mox Pearl
+Forest x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Stone Golem
+Ornithopter
+Forest x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Tempest Hart.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tempest Hart.Power = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Stone Golem.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Stone Golem.Power = 4
+? Bot1.Battlefield.Tempest Hart.Power = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Gilded Sentinel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gilded Sentinel.Power = 3
+? Bot1.Battlefield.Tempest Hart.Power = 3
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Stone Golem.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tempest Hart.Power = 4
+? Bot1.Battlefield.Tempest Hart.Toughness = 5
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Tempest Hart > Bot2)
+Bot2.Block(Ornithopter > Tempest Hart)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Tempest Hart.Power = 4
