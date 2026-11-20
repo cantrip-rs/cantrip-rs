@@ -1,0 +1,58 @@
+# Rotisserie Elemental: "Whenever this creature deals combat damage to a player, put a skewer counter on this creature. Then you may
+# sacrifice it. If you do, exile the top X cards of your library, where X is the number of skewer counters on this creature. You may
+# play those cards this turn." On turn 3 Bot1 declines the sacrifice: one counter, the Elemental stays. On turn 5 the second
+# counter goes on and Bot1 accepts: the Elemental is sacrificed and exactly two cards, the Mountain and Lightning Bolt from the
+# top of Bot1's own library (not the Mountain of Bot2's), are exiled. Bot1 plays the Mountain as the turn's land drop and does not
+# cast the Bolt, which is no longer castable once the turn has ended: on turn 7 even with a Mox's red mana to pay it is refused.
+
+[Bot1 Deck]
+Mox Ruby
+Rotisserie Elemental
+Island x5
+Island
+Island
+Mountain
+Lightning Bolt
+Island x9
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rotisserie Elemental.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Rotisserie Elemental > Bot2)
+[T3 Bot1.CombatDamage]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Battlefield.Rotisserie Elemental.Counters.Skewer = 1
+? Exile.Count = 0
+? Bot2.Life = 19
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Rotisserie Elemental > Bot2)
+[T5 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Battlefield = Mox Ruby
+? Bot1.Graveyard = Rotisserie Elemental
+? Exile = Mountain; Lightning Bolt
+? Bot2.Life = 18
+[T5 Bot1.Main2]
+Bot1.Exile.Mountain.Play
+? Bot1.Battlefield = Mox Ruby; Mountain
+? Exile = Lightning Bolt
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Exile = Lightning Bolt
+Bot2.Life = 18
+Bot1.Battlefield = Mox Ruby; Mountain

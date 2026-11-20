@@ -1,0 +1,43 @@
+# Rotisserie Elemental: its trigger resolves with the Elemental gone: Bot2 answers with Lightning Bolt on it after it deals combat
+# damage. No counter can go on it and it cannot be sacrificed, so the question is never asked and nothing is exiled from the
+# library.
+
+[Bot1 Deck]
+Mox Ruby
+Rotisserie Elemental
+Island x5
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rotisserie Elemental.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Rotisserie Elemental > Bot2)
+[T3 Bot1.CombatDamage]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Rotisserie Elemental)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Rotisserie Elemental
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+? Stack.Count = 0
+
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard = Rotisserie Elemental
+Bot2.Life = 19
