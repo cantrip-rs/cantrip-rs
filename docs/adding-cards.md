@@ -461,7 +461,7 @@ shapes have an example:
   source and the player who would cast it as controller, judged as the casting begins); a card's own permission bought with
 an additional cost ("You may cast this spell as though it had flash if you pay {2} more to cast it", Harbinger of the Tides) is
 the optional cost `cantrip_mechanics::flash_cost::OPTIONAL_COST` (`OptionalCost::flash`) with `flash_cost::LABELS`: the {2} is
-asked at sorcery speed (it may be paid anyway) and owed without asking when the spell could not be cast otherwise (CR 601.2b, 601.2f); a static lifting a loyalty ability's timing is `CardDef.instant_activation`
+asked at sorcery speed (it may be paid anyway) and owed without asking when the spell could not be cast otherwise (CR 601.2b, 601.2f); the extra cost may be a behold as well (Molten Exhale: `OptionalCost { flash: true, ..behold::optional(behold::dragon, "Dragon") }`); a static lifting a loyalty ability's timing is `CardDef.instant_activation`
   (The Wandering Emperor), and a resolved spell's "you may activate loyalty abilities of [Jace] planeswalkers you control
   ... any time you could cast an instant" is `EffectKind::InstantLoyalty(Some(Subtype::Jace))` (Jace's Machinations; `None`
   for every planeswalker), which changes only the timing (CR 606.3). The board is searched for these only when something is cast or activated.

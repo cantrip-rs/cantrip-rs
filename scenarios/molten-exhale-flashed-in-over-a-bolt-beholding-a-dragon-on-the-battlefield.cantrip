@@ -1,0 +1,50 @@
+# Molten Exhale at instant speed owes its behold (CR 601.2b, 701.4a, 118.8). On turn 4 Bot2 casts Lightning Bolt at Bot1, and
+# Bot1, holding up Mox Ruby and Mox Emerald with a Phyrexian Dragon Engine on the battlefield, casts the Exhale over it for {1}{R}:
+# nothing is asked about the extra but the Dragon chosen (beholding moves nothing: the Engine stays untapped on the battlefield).
+# It resolves before the Bolt: Bot2's Ornithopter dies, and the Bolt then takes Bot1 to 17.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Phyrexian Dragon Engine
+Molten Exhale
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Phyrexian Dragon Engine.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Molten Exhale.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Phyrexian Dragon Engine)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Ornithopter
+? Bot1.Life = 20
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Phyrexian Dragon Engine.Tapped = false
+Bot1.Graveyard = Molten Exhale
+Stack.Count = 0

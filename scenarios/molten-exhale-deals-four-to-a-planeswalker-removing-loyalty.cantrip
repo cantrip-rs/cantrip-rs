@@ -1,0 +1,43 @@
+# Molten Exhale: "4 damage to target creature or planeswalker". Bot2's Chandra, Torch of Defiance (cast off Black Lotus and
+# Mox Ruby, then +1 to 5 loyalty) takes 4 damage from the Exhale, cast for {1}{R} at sorcery speed, and survives on 1 loyalty
+# (damage to a planeswalker removes loyalty counters, CR 120.3c).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Molten Exhale
+Island x17
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Chandra, Torch of Defiance
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Chandra, Torch of Defiance.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Chandra, Torch of Defiance.Activate(Ability: Add)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Chandra, Torch of Defiance.Counters.Loyalty = 5
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Molten Exhale.Cast(Bot2.Battlefield.Chandra, Torch of Defiance)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Chandra, Torch of Defiance.Counters.Loyalty = 1
+Bot1.Graveyard = Molten Exhale
+Stack.Count = 0

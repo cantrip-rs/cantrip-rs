@@ -1,0 +1,6 @@
+{
+  "name": "Molten Exhale",
+  "manaCost": "{1}{R}",
+  "type": "Sorcery",
+  "oracleText": "You may cast this spell as though it had flash if you behold a Dragon as an additional cost to cast it. (To behold a Dragon, choose a Dragon you control or reveal a Dragon card from your hand.)\nMolten Exhale deals 4 damage to target creature or planeswalker."
+}

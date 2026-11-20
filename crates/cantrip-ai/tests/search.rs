@@ -410,6 +410,56 @@ fn a_flash_cast_that_owes_two_more_is_one_of_the_options_searched() {
     assert!(matches!(barred.answer, Answer::Pass), "with it barred only passing is left: {barred:#?}");
 }
 
+/// Bot2's Lightning Bolt is on its way to Bot1, who holds Molten Exhale ("you may cast this spell as though it had flash if
+/// you behold a Dragon as an additional cost") and two Moxen for its {1}{R}, and Bot2 has an Ornithopter to aim it at. With a
+/// Dragon card in hand (`{dragon}`) the Exhale's flash cast is searched; with none it is not offered, the {1}{R} alone being
+/// no way to pay what the cast owes.
+const BEHOLD_IN: &str = "\
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+{dragon}
+Molten Exhale
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[Handover Bot1.Pass]
+
+[Expect]
+Turn = 4
+";
+
+#[test]
+fn a_flash_cast_that_owes_a_behold_is_searched_only_with_a_dragon_to_behold() {
+    let searched = |dragon: &str| {
+        let (game, request) = handed(&BEHOLD_IN.replace("{dragon}", dragon), "behold in");
+        let k = Knowledge::of(&game, request.player);
+        let config = Config::simulations(200);
+        search::search(&game, &request, &k, InfoMode::Full, table(), &Uniform(0.0), &config, prior(), &CancelGuard::default(), &WallClock)
+            .expect("a search answers")
+    };
+    let with = searched("Kokusho, the Evening Star");
+    let edges = with.search.as_ref().expect("a choice to search: the Exhale or passing").root_edges;
+    assert!(edges >= 2, "the Exhale's flash cast, beholding Kokusho, is an option of the root beside passing ({edges} edges): {with:#?}");
+    let without = searched("Island");
+    assert!(without.search.is_none(), "with no Dragon to behold only passing is left, nothing to search: {without:#?}");
+    assert!(matches!(without.answer, Answer::Pass), "with no Dragon to behold only passing is left: {without:#?}");
+}
+
 #[test]
 fn branch_trimming_can_be_turned_off() {
     let (game, request) = handed(BOLT_EITHER_WAY, "no prune");

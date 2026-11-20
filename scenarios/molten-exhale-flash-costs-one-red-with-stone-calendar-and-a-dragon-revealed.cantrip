@@ -1,0 +1,55 @@
+# The extra behold is an additional cost added to the total (CR 601.2f, 118.8) and costs no mana, so a cost reduction applies to
+# the Exhale's {1}{R} alone: with Stone Calendar ("spells you cast cost {1} less") it is flashed in over Bot2's Lightning Bolt for
+# {R}, Mox Ruby alone, revealing Kokusho, the Evening Star from Bot1's hand as the Dragon. Bot2's Ornithopter dies before the Bolt
+# resolves and takes Bot1 to 17.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Black Lotus
+Stone Calendar
+Kokusho, the Evening Star
+Molten Exhale
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Stone Calendar.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Molten Exhale.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Kokusho, the Evening Star)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Ornithopter
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield.Mox Pearl.Tapped = false
+Bot1.Hand.Kokusho, the Evening Star.Colors = Black
+Bot1.Graveyard = Molten Exhale; Black Lotus
+Stack.Count = 0

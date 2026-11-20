@@ -1,0 +1,69 @@
+# Molten Exhale's own "as though it had flash if you behold a Dragon" applies to every cast of it, flashback included (CR
+# 601.2b, 702.34a, 701.4a): flashback changes where it is cast from and what it costs, not when. Bot2's Duress takes the Exhale
+# from Bot1's hand. On turn 4 Bot2 casts Lightning Bolt at Bot1; Bot1 flashes in Snapcaster Mage over it, gives the Exhale
+# flashback (its {1}{R}), and casts it from the graveyard with the Bolt still on the stack, beholding the Phyrexian Dragon Engine
+# it controls, unasked about the extra. It kills Bot2's Ornithopter and is exiled; the Bolt then takes Bot1 to 17.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Phyrexian Dragon Engine
+Molten Exhale
+Snapcaster Mage
+Mox Ruby
+Island x13
+
+[Bot2 Deck]
+Swamp
+Duress
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Swamp x15
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Phyrexian Dragon Engine.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Duress.Cast(Bot1)
+Bot2.Choose(Molten Exhale)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Snapcaster Mage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Graveyard.Molten Exhale.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Choose(Phyrexian Dragon Engine)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Ornithopter; Duress
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Exile = Molten Exhale
+Stack.Count = 0

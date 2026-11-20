@@ -1,0 +1,43 @@
+# Molten Exhale at instant speed owes a behold (CR 601.2b, 701.4a): on turn 4 Bot2 casts Lightning Bolt at Bot1, and Bot1, with
+# Mox Ruby and Mox Emerald untapped but no Dragon on the battlefield or in its hand (a Hill Giant is no Dragon), can't cast the
+# Exhale then (refused, mana there). The Bolt resolves. On turn 5, with an empty stack, the Exhale is cast for {1}{R} as its
+# mana cost says and kills the Ornithopter.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Hill Giant
+Molten Exhale
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+! Bot1.Hand.Molten Exhale.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+? Bot1.Life = 17
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Molten Exhale.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Graveyard = Molten Exhale
+Stack.Count = 0

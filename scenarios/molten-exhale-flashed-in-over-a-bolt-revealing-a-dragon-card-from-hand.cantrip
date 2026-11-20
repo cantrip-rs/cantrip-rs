@@ -1,0 +1,42 @@
+# Molten Exhale at instant speed can behold a Dragon card in hand (CR 701.4a): with no Dragon on the battlefield, Bot1 reveals
+# Kokusho, the Evening Star from its hand as the cost of flashing the Exhale in over Bot2's Lightning Bolt. Kokusho stays in
+# Bot1's hand (nothing moves), the Exhale kills Bot2's Ornithopter, and the Bolt takes Bot1 to 17.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Kokusho, the Evening Star
+Molten Exhale
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Molten Exhale.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Kokusho, the Evening Star)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Ornithopter
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Hand.Kokusho, the Evening Star.Colors = Black
+Bot1.Graveyard = Molten Exhale
+Stack.Count = 0

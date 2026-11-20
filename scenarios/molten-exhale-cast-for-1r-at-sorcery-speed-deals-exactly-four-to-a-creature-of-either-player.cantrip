@@ -1,0 +1,79 @@
+# Molten Exhale at sorcery speed with no Dragon to behold: {1}{R}, nothing asked (CR 601.2b), and its mana value is two (CR 202.3).
+# "4 damage to target creature or planeswalker": refused on Bot2's Mox Jet (an artifact, no creature) with the mana there. On
+# turn 3 it kills Bot2's Concealing Curtains (0/4: exactly lethal) and Bot1's own Grizzly Bears (own creatures are legal targets);
+# on turn 5 it leaves Bot2's 8/8 Force of Nature on the battlefield with 4 damage marked, as four is not eight.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Grizzly Bears
+Molten Exhale
+Molten Exhale
+Molten Exhale
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+Force of Nature
+Concealing Curtains
+Swamp
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Force of Nature.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Concealing Curtains.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Molten Exhale.Cast(Bot2.Battlefield.Mox Jet)
+Bot1.Hand.Molten Exhale.Cast(Bot2.Battlefield.Concealing Curtains)
+Bot1.Pass
+? Stack.Molten Exhale.ManaValue = 2
+Bot2.Pass
+? Bot2.Graveyard = Concealing Curtains; Black Lotus
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Molten Exhale.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Grizzly Bears; Molten Exhale; Molten Exhale
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Molten Exhale.Cast(Bot2.Battlefield.Force of Nature)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Force of Nature.Damage = 4
+Bot2.Graveyard = Concealing Curtains; Black Lotus
+Bot1.Graveyard = Molten Exhale; Grizzly Bears; Molten Exhale; Molten Exhale
+Stack.Count = 0

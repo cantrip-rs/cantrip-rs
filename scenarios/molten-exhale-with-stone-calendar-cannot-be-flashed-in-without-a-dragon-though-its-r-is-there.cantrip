@@ -1,0 +1,52 @@
+# The cost reduction does not pay the behold (CR 601.2b, 601.2f, 701.4a): with Stone Calendar the flashed Exhale would cost {R},
+# and Bot1 holds Mox Ruby untapped over Bot2's Lightning Bolt, but there is no Dragon on its battlefield or in its hand, so the cast is
+# not offered (refused, the mana there). The Bolt resolves, and on turn 5 the Exhale is cast at sorcery speed for {R} alone.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Black Lotus
+Stone Calendar
+Molten Exhale
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Stone Calendar.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Molten Exhale.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+? Bot1.Life = 17
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Molten Exhale.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Graveyard = Molten Exhale; Black Lotus
+Stack.Count = 0

@@ -1,0 +1,50 @@
+# Molten Exhale at sorcery speed (CR 601.2b, 701.4a): with a Dragon in hand to behold, "Flash: behold a Dragon" is asked though
+# nothing needs it (the rulings allow it). On turn 3 Bot1 beholds Kokusho, the Evening Star (revealed, and it stays in hand)
+# and kills an Ornithopter; on turn 5 it declines and kills the other. Either way the cost was paid with mana alone: Mox Jet
+# stays untapped.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Kokusho, the Evening Star
+Molten Exhale
+Molten Exhale
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Molten Exhale.Cast(Bot2.Battlefield.Ornithopter#1)
+Bot1.Modes(Flash:)
+Bot1.Choose(Kokusho, the Evening Star)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 1
+? Bot1.Hand.Kokusho, the Evening Star.Colors = Black
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Molten Exhale.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Modes(Cast without flash)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Ornithopter
+Bot1.Hand.Kokusho, the Evening Star.Colors = Black
+Bot1.Battlefield.Mox Jet.Tapped = false
+Stack.Count = 0
