@@ -1,0 +1,75 @@
+# Neva, Stalked by Nightmares: "Whenever an enchantment you control is put into a graveyard from the battlefield, put a +1/+1
+# counter on Neva, then scry 1." Turn 1: Neva (2/2). Turn 3: Flood and then Disenchant destroying Flood: one counter (3/3) and a
+# scry that sends the Memnite on top to the bottom. Neva has menace (CR 702.111b): Bot2's lone Memnite may not
+# block it, and the 3/3 attack takes Bot2 to 17. Turn 5: Disenchant destroys Bot2's Flood, an enchantment an opponent controls:
+# no second counter and no scry (Bot1 is not asked to arrange).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Neva, Stalked by Nightmares
+Flood
+Disenchant
+Disenchant
+Memnite
+Island x12
+
+[Bot2 Deck]
+Memnite
+Flood
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Neva, Stalked by Nightmares.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Flood.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flood.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Flood)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Memnite)
+Bot1.Attack(Neva, Stalked by Nightmares > Bot2)
+! Bot2.Block(Memnite > Neva, Stalked by Nightmares)
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Battlefield.Neva, Stalked by Nightmares.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Neva, Stalked by Nightmares.Power = 3
+? Bot1.Library.Top = Island
+? Bot1.Library.Count = 13
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Disenchant.Cast(Bot2.Battlefield.Flood)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Flood
+Bot1.Battlefield.Neva, Stalked by Nightmares.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Neva, Stalked by Nightmares.Toughness = 3

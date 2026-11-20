@@ -1,0 +1,11 @@
+{
+  "name": "Neva, Stalked by Nightmares",
+  "manaCost": "{2}{W}{B}",
+  "type": "Legendary Creature — Human Noble",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Menace\nWhen Neva enters, return target creature or enchantment card from your graveyard to your hand.\nWhenever an enchantment you control is put into a graveyard from the battlefield, put a +1/+1 counter on Neva, then scry 1.",
+  "keywords": [
+    "Menace"
+  ]
+}

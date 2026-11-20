@@ -1,0 +1,42 @@
+# Neva, Stalked by Nightmares: "When this creature enters, return target creature or enchantment card from your graveyard to your
+# hand." Faithless Looting draws Ornithopter and Rest in Peace and discards both, so the graveyard holds Black Lotus and Faithless
+# Looting (artifact, sorcery: not legal targets, the refusals) beside the creature card and the enchantment card. Bot1 targets the
+# Rest in Peace instead: an enchantment card is as legal a target as the creature card (CR 400.3); the Ornithopter stays.
+# The mana: Ruby pays Looting; Jet's {B} and Lotus's {W}{W}{W} pay {2}{W}{B}.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Black Lotus
+Faithless Looting
+Neva, Stalked by Nightmares
+Island
+Island
+Ornithopter
+Rest in Peace
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Ornithopter; Rest in Peace)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Neva, Stalked by Nightmares.Cast
+Bot1.Pass
+! Bot1.Target(Bot1.Graveyard.Black Lotus)
+! Bot1.Target(Bot1.Graveyard.Faithless Looting)
+Bot1.Target(Bot1.Graveyard.Rest in Peace)
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Mox Jet; Neva, Stalked by Nightmares
+Bot1.Hand = Island; Island; Rest in Peace
+Bot1.Graveyard = Black Lotus; Faithless Looting; Ornithopter
