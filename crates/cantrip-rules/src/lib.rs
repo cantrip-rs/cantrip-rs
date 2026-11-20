@@ -2702,6 +2702,16 @@ impl cantrip_api::Game for Cx<'_> {
         ops::put_onto_battlefield_by(self, objects, counters).map_err(|_| Suspend)
     }
 
+    fn put_onto_battlefield_and_into_hand(
+        &mut self,
+        onto: &[(ObjectId, PlayerId, bool, PlayerId)],
+        into_hand: &[ObjectId],
+        reason: MoveReason,
+        revealed: bool,
+    ) -> Result<Vec<ObjectId>, Suspend> {
+        ops::put_onto_battlefield_and_into_hand(self, onto, into_hand, reason.into(), revealed).map_err(|_| Suspend)
+    }
+
     fn put_onto_battlefield_attacking(&mut self, object: ObjectId, controller: PlayerId, defender: Target, counters: &[(CounterKind, i32)]) -> Result<ObjectId, Suspend> {
         ops::put_onto_battlefield_attacking(self, object, controller, defender, counters).map_err(|_| Suspend)
     }

@@ -174,7 +174,11 @@ recorded `Entered` event still describes the entering controller and characteris
 Default entry verbs use the actual acting/resolving player, including scoped
 replacement and mana effects. Explicit named-player actions use
 `put_onto_battlefield_by` or simultaneous `put_all_onto_battlefield_by`: each row
-separately states its controller and actor. Shared search/put recipes and existing
+separately states its controller and actor. An instruction that puts some cards onto the battlefield and the rest into
+their owners' hands ("put one onto the battlefield tapped and the other into your hand", Back for Seconds' "onto the
+battlefield instead of putting it into your hand") is `put_onto_battlefield_and_into_hand`: one move
+(`ops::put_onto_battlefield_into` with the hand moves alongside, as Goblin Welder's sacrifice is), so a "one or more cards
+leave" ability sees it once (CR 101.4, 608.2c, 603.2c). Shared search/put recipes and existing
 "each player puts/returns" callers name those players explicitly. A control-only
 entry replacement preserves the actor; a replacement redirecting a move onto the
 battlefield supplies its own instructed player. Tokens are put by their creator,

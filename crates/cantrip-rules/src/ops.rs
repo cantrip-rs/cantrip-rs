@@ -2152,6 +2152,26 @@ pub fn put_onto_battlefield_by(cx: &mut Cx, objects: &[(ObjectId, PlayerId, bool
     put_onto_battlefield_into(cx, Vec::new(), &rows, ZoneReason::Other, with, None, None, None, &actors)
 }
 
+/// `put_onto_battlefield_by` and `return_to_hand_as` in one move (CR 101.4, 608.2c): the cards of `into_hand` go to their
+/// owners' hands for `reason` (revealed as `return_to_hand_as` has it) as the others enter, so what watches either sees one
+/// event (CR 603.2c). Something that is no longer the object it was is not moved (CR 400.7), nor a phased-out permanent
+/// (CR 702.26b).
+pub fn put_onto_battlefield_and_into_hand(
+    cx: &mut Cx,
+    onto: &[(ObjectId, PlayerId, bool, PlayerId)],
+    into_hand: &[ObjectId],
+    reason: ZoneReason,
+    revealed: bool,
+) -> R<Vec<ObjectId>> {
+    let moves: Vec<Moving> = live_ones(cx, into_hand)
+        .into_iter()
+        .map(|id| Moving { revealed, reason: Some(reason), ..Moving::to(id, Zone::hand(cx.s().obj(id).owner)) })
+        .collect();
+    let rows: Vec<_> = onto.iter().map(|&(id, controller, tapped, _)| (id, controller, tapped)).collect();
+    let actors: Vec<_> = onto.iter().map(|&(id, _, _, by)| (id, PutBy::Player(by))).collect();
+    put_onto_battlefield_into(cx, moves, &rows, ZoneReason::Other, &[], None, None, None, &actors)
+}
+
 fn put_onto_battlefield_into(
     cx: &mut Cx,
     mut moves: Vec<Moving>,

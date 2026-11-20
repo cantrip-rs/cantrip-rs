@@ -1126,6 +1126,20 @@ pub trait Game: Query {
     /// Each row is (object, entering controller, tapped, player putting it there); the counters apply to all arrivals.
     /// Different actors share one simultaneous move. Show and Tell and shared search/put recipes use this authority.
     fn put_all_onto_battlefield_by(&mut self, objects: &[(ObjectId, PlayerId, bool, PlayerId)], counters: &[(CounterKind, i32)]) -> Result<Vec<ObjectId>, Suspend>;
+    /// `put_all_onto_battlefield_by` and `return_to_hand` as one instruction, every object moving at once (CR 101.4, 608.2c):
+    /// "put one onto the battlefield tapped and the other into your hand", "you may put one of those cards onto the battlefield
+    /// instead of putting it into your hand". One event, so what watches "one or more" cards leave a zone or enter one sees
+    /// them once (CR 603.2c), each entering permanent's replacements are worked out as `put_all_onto_battlefield_by`'s are
+    /// (CR 614.12), and the cards going to their owners' hands are moved for `reason`, by the instruction that reveals them
+    /// if `revealed` (CR 701.20a, as `move_together_revealed`). The new objects, in order, of what moved. Back for Seconds;
+    /// Troop of Ponies and Bloomvine Regent (`library::search_two_one_onto_battlefield_tapped_other_into_hand`).
+    fn put_onto_battlefield_and_into_hand(
+        &mut self,
+        onto: &[(ObjectId, PlayerId, bool, PlayerId)],
+        into_hand: &[ObjectId],
+        reason: MoveReason,
+        revealed: bool,
+    ) -> Result<Vec<ObjectId>, Suspend>;
     /// `put_onto_battlefield`, the object entering with these counters as well (CR 122.6, 614.1c): persist's and undying's
     /// "return it with a counter on it". They are part of how it enters, so a replacement of counters applies (CR 614.1).
     fn put_onto_battlefield_with_counters(&mut self, object: ObjectId, controller: PlayerId, tapped: bool, counters: &[(CounterKind, i32)]) -> Result<ObjectId, Suspend>;
