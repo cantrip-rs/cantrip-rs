@@ -1347,6 +1347,14 @@ pub fn any_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target) -> bo
 /// "Target card from your graveyard": see `any_card_in_your_graveyard`.
 pub const CARD_IN_YOUR_GRAVEYARD: TargetSpec = target(any_card_in_your_graveyard);
 
+fn creature_or_land_card_in_your_graveyard_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    card_in_your_graveyard(q, asker, t, &[CardType::Creature, CardType::Land])
+}
+
+/// "Target creature or land card from your graveyard" (CR 115.1, 205.2a): a creature card or a land card in the asker's own
+/// graveyard. Awaken the Honored Dead's reflexive ability and Garenbrig Growth print it.
+pub const CREATURE_OR_LAND_CARD_IN_YOUR_GRAVEYARD: TargetSpec = target(creature_or_land_card_in_your_graveyard_filter);
+
 fn creature_card_in_a_graveyard_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
     card_in_graveyard(q, t, &[CardType::Creature])
 }
