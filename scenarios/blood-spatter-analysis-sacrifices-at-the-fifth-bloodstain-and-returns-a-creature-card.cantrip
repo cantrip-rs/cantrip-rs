@@ -1,0 +1,91 @@
+# Blood Spatter Analysis: "Whenever one or more creatures die, mill a card and put a bloodstain counter on this enchantment. Then
+# sacrifice it if it has five or more bloodstain counters on it. When you do, return target creature card from your graveyard to your
+# hand." Lightning Bolt kills one of Bot2's Memnites each of turns 3, 5, 7 and 9: four counters and four milled cards, and the
+# enchantment stays. On turn 11 Pyroclasm kills the last two Memnites at once: that is one trigger, so the fifth counter and one
+# card milled, not two; the Spatter is sacrificed and the reflexive trigger returns a creature card from Bot1's graveyard - the
+# Memnite just milled, which was milled before the target was chosen. It is the only legal target, so none is asked for: the six dead Memnites in Bot2's graveyard are not offered.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Blood Spatter Analysis
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Pyroclasm
+Lightning Bolt
+Island x8
+Memnite
+Island x3
+
+[Bot2 Deck]
+Memnite x6
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Blood Spatter Analysis.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Blood Spatter Analysis.Counters.Bloodstain = 1
+? Bot1.Graveyard.Count = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Blood Spatter Analysis.Counters.Bloodstain = 2
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Blood Spatter Analysis.Counters.Bloodstain = 3
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Blood Spatter Analysis.Counters.Bloodstain = 4
+? Bot1.Battlefield.Blood Spatter Analysis.Tapped = false
+[T11 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pyroclasm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby
+Bot1.Hand = Island; Island; Island; Island; Memnite
+Bot1.Graveyard.Count = 10
+Bot1.Library.Count = 3
+Bot2.Graveyard.Count = 6

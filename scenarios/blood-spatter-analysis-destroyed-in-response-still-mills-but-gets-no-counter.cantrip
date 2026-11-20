@@ -1,0 +1,52 @@
+# Blood Spatter Analysis: "Whenever one or more creatures die, mill a card and put a bloodstain counter on this enchantment." With
+# the Spatter destroyed (by Bot2's Disenchant) in response to that trigger, the trigger still resolves and mills a card, but there
+# is no enchantment to put a counter on, so it never gets to five and nothing is returned or sacrificed.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Blood Spatter Analysis
+Lightning Bolt
+Island x16
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Disenchant
+Memnite
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Blood Spatter Analysis.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Blood Spatter Analysis)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Blood Spatter Analysis; Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 3
+Bot1.Library.Count = 11
+Bot2.Graveyard.Count = 2
+Exile.Count = 0
+Stack.Count = 0

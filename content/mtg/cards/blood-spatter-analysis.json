@@ -1,0 +1,6 @@
+{
+  "name": "Blood Spatter Analysis",
+  "manaCost": "{B}{R}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, it deals 3 damage to target creature an opponent controls.\nWhenever one or more creatures die, mill a card and put a bloodstain counter on this enchantment. Then sacrifice it if it has five or more bloodstain counters on it. When you do, return target creature card from your graveyard to your hand."
+}
