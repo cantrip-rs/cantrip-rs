@@ -461,7 +461,9 @@ busy; at steady state 1,800 to 2,000 games an hour (565 to 744 games over six mi
 an hour at 42 lanes, CPU-bound. The on-demand grants follow each host's rate without a setting.
 
 **Stopping.** Ctrl-C, or `python -m cantrip_ai.generation --root ROOT --stop` from another terminal (it writes
-`genN/selfplay/selfplay.stop`), stops every host gracefully: the driver writes each worker's stop file, every
+`genN/selfplay/selfplay.stop`, which this machine's self-play reads, and `genN/dist/stop`, which a distributed driver
+reads: a file apart from the one a local run is stopped through, so the driver stopping one run that drops games is
+never taken for a stop of them all), stops every host gracefully: the driver writes each worker's stop file, every
 self-play finishes its games in flight and closes its shards, the driver pulls them, and exits with the stage not
 done; run it again to resume. A second Ctrl-C (or `--stop-now`) stops the games in flight too; a third kills the local
 self-play. `--no-selfplay-local` leaves this machine out of the self-play.

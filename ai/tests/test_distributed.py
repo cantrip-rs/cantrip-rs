@@ -410,7 +410,9 @@ class DistributedTest(unittest.TestCase):
 
             def ask(t):
                 if t == 120:
-                    (selfplay / dist.STOP_FILE).write_text("")
+                    # `generation.py --stop`: the whole run's stop (and each local run's own, which a fake ignores).
+                    d.mkdir(parents=True, exist_ok=True)
+                    (d / "stop").write_text("")
             clock.hooks.append(ask)
             led = ledger(d, 100)
             self.assertEqual(coordinator(led, hs, selfplay, d, clock).run(), "stopped")
@@ -420,7 +422,7 @@ class DistributedTest(unittest.TestCase):
             self.assertLess(len(first), 100)
             self.assertEqual(led.owner, {}, "a stopped attempt owns nothing")
             clock.hooks.clear()
-            (selfplay / dist.STOP_FILE).unlink()
+            (d / "stop").unlink()
             again = ledger(d, 100)
             self.assertEqual(coordinator(again, hs, selfplay, d, clock).run(), "done")
             self.assertEqual(accepted(selfplay), list(range(100)))
@@ -686,7 +688,8 @@ class DistributedTest(unittest.TestCase):
             def before(c, clock, hs):
                 def ask(t):
                     if t == 150:
-                        (c.dir / dist.STOP_FILE).write_text("")
+                        c.dist.mkdir(parents=True, exist_ok=True)
+                        (c.dist / "stop").write_text("")
                 clock.hooks.append(ask)
             result, led, hs, selfplay, _ = self.run_to_end(Path(tmp), 40, hosts, before=before)
             self.assertEqual(result, "stopped")
@@ -782,6 +785,42 @@ class DistributedTest(unittest.TestCase):
             self.assertTrue(bad["dropping"])
             self.assertEqual(bad["state"], "stopped")
             self.assertEqual(hs[1].launches, 1, "not fed again")
+
+    def test_a_local_run_dropping_games_is_stopped_alone_and_the_others_play_on(self):
+        class LocalStop(FakeHost):
+            """A local host stopped as `LocalHost` is: a stop file in the self-play directory."""
+
+            def stop(self, a, now):
+                super().stop(a, now)
+                (self.dir / dist.STOP_FILE).write_text("now" if now else "")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            def hosts(t, sp):
+                here = LocalStop("here", t, 60, 6, remote=False, selfplay=sp)
+                here.fail = set(range(60))  # its server is gone: every game it plays fails
+                return [here, FakeHost("w", t, 60, 3)]
+            result, led, hs, selfplay, _ = self.run_to_end(Path(tmp), 60, hosts, max_failures=1)
+            self.assertTrue((selfplay / dist.STOP_FILE).exists(), "the local run was stopped through its stop file")
+            self.assertEqual(result, "done", "stopping one local run is not a stop of the whole self-play")
+            self.assertEqual(accepted(selfplay), list(range(60)))
+            self.assertTrue(led.attempts["here-a1"]["dropping"])
+
+    def test_a_local_hosts_own_stop_is_not_a_stop_of_its_next_run(self):
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+            tmp = Path(tmp)
+            selfplay, d = setup(tmp, 10)
+            host = dist.LocalHost("here", [sys.executable, "-c", "import time; time.sleep(30)"], selfplay, d, tmp / "logs")
+            a = dict(id="here-a1", state="launching", granted=[[0, 5]], grant_ended=False)
+            a.update(host.launch(a, "0..5\n"))
+            host.stop(a, now=True)
+            host.kill(a)
+            self.assertTrue((selfplay / dist.STOP_FILE).exists())
+            b = dict(id="here-a2", state="launching", granted=[[5, 10]], grant_ended=False)
+            b.update(host.launch(b, "5..10\n"))
+            try:
+                self.assertFalse((selfplay / dist.STOP_FILE).exists(), "its own stop is taken back for its next run")
+            finally:
+                host.kill(b)
 
     def test_a_game_that_fails_on_two_attempts_is_dropped_and_one_that_fails_once_is_played_again(self):
         with tempfile.TemporaryDirectory() as tmp:

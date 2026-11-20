@@ -517,10 +517,10 @@ class Coordinator:
         self.poll_seconds, self.timeout, self.max_failures = poll_seconds, timeout, max_failures
         self.report_every, self.retry_seconds = report_every, retry_seconds
         self.drop_limit, self.drop_share = drop_limit, drop_share
-        # The stop asked of the whole run (`generation.py --stop`). Self-play's is its local run's own stop file, which
-        # the local run reads too; any other run's is apart from its runs' (`dist_dir/stop` by default), so a local
-        # run asked to stop by its coordinator (a duel closed, a run dropping games) is never taken for a stop asked.
-        self.stop_file = stop_file or (selfplay_dir / kind.stop if kind == SELFPLAY else dist_dir / "stop")
+        # The stop asked of the whole run (`generation.py --stop`, which writes it beside every local run's own):
+        # `dist_dir/stop` by default, apart from the stop file a local run is stopped through, so a local run asked to
+        # stop by its coordinator (a run dropping games, a duel closed) is never taken for a stop of them all.
+        self.stop_file = stop_file or dist_dir / "stop"
         self.heldout = heldout
         # Since when each host has been out of reach (not started, unreachable, an attempt given up): past `timeout`,
         # an index it has affinity for goes to the others; and since when it has been making itself ready, past
@@ -1164,6 +1164,9 @@ class LocalHost:
         self.lease, self.identity, self.kind, self.extra = lease, identity or {}, kind, extra
         self.processes: dict[str, subprocess.Popen] = {}
         self.files = {}
+        # Whether the stop file there is one this host wrote (its coordinator stopping one run): not a stop asked of
+        # the next run it starts.
+        self.wrote_stop = False
 
     def grant_path(self, a: dict) -> Path:
         return self.dist / f"{a['id']}.grant"
@@ -1177,7 +1180,10 @@ class LocalHost:
         write_atomic(self.grant_path(a), grant)
         touch(self.heartbeat(a))
         # A stop file there now is a stop asked (`--stop`), not a stale one (the stage removes those as it starts):
-        # the run sees it and plays nothing.
+        # the run sees it and plays nothing; unless this host wrote it, to stop its last run.
+        if self.wrote_stop:
+            (self.dir / self.kind.stop).unlink(missing_ok=True)
+            self.wrote_stop = False
         log = self.logs / f"{self.kind.name}-{a['id']}.log"
         f = log.open("w")
         cmd = [str(c) for c in self.command] + [str(c) for c in (self.extra(a) if self.extra else [])]
@@ -1246,6 +1252,7 @@ class LocalHost:
 
     def stop(self, a: dict, now: bool):
         (self.dir / self.kind.stop).write_text("now\n" if now else "", encoding="utf-8")
+        self.wrote_stop = True
 
     def kill(self, a: dict):
         p = self.processes.get(a["id"])

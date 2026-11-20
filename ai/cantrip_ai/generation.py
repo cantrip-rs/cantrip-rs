@@ -87,8 +87,9 @@ With `--workers` the duels are distributed too (docs/ai-training.md, "Distribute
 network duel, the ladder and the pair miner's replays, each game played on one host, the results merged and summarised
 by BotLab as one machine's duel (`--no-dist-duels` keeps them here, `--no-duel-local` leaves this machine out).
 `generation.py --root ROOT --stop` (`--stop-now`: the games in flight too) writes `selfplay.stop` in the current
-generation's self-play directory: self-play stops gracefully as at Ctrl-C (exit 3), and a distributed driver stops its
-workers the same way. The driver removes the file when it runs the stage again.
+generation's self-play directory and `genN/dist/stop`: self-play stops gracefully as at Ctrl-C (exit 3), and a
+distributed driver (self-play's, a duel's, the judgements') stops its hosts the same way. The driver removes the files
+when it runs the stage again.
 
 `--dry-run` prints the stages' commands and the window and runs nothing. `--tiny` sets a toy scale (a handful of
 games at 8 simulations, a few training steps, a gate of 4 games, no SPRT stop) for testing the driver end to end.
@@ -1299,8 +1300,9 @@ def main(argv=None):
         if out.exists() and not args.dry_run and not resume:
             shutil.rmtree(out)
         if not args.dry_run:
-            # A stop asked of an earlier run (`--stop`) is not this one's.
+            # A stop asked of an earlier run (`--stop`) is not this one's: its local run's, and the whole run's.
             (out / distributed.STOP_FILE).unlink(missing_ok=True)
+            (gen_dir / "dist" / "stop").unlink(missing_ok=True)
         cmd = selfplay_command(SELFPLAY, champ, out, args.lanes)
         if resume or args.workers:
             # Distributed, the directory is resumed whatever it holds: the workers' shards come into it.
