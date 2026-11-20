@@ -646,6 +646,22 @@ pub fn becomes_creature_until_end_of_turn(
     subtype: Subtype,
     keywords: Keywords,
 ) {
+    becomes_creature_with_ability_until_end_of_turn(g, item, (power, toughness), colors, subtype, keywords, None);
+}
+
+/// A manland's animation that also gives the land one of the card's own abilities for the turn (CR 613.1f): "Until end of turn,
+/// this land becomes a P/T [colors] [subtype] creature with \"[ability]\". It's still a land." `ability` is that ability, a
+/// `CardDef::delayed` entry of the card (`AbilityRef::delayed`). Restless Spire, Hall of Storm Giants, Hive of the Eye Tyrant and Den
+/// of the Bugbear print it.
+pub fn becomes_creature_with_ability_until_end_of_turn(
+    g: &mut dyn Game,
+    item: &StackItem,
+    (power, toughness): (i32, i32),
+    colors: ColorSet,
+    subtype: Subtype,
+    keywords: Keywords,
+    ability: Option<AbilityRef>,
+) {
     let words = g.words(item.object);
     let animation = crate::Animation {
         power,
@@ -656,7 +672,7 @@ pub fn becomes_creature_until_end_of_turn(
         all_creature_types: false,
         replaces_creature_types: false,
         keywords,
-        ability: None,
+        ability,
     };
     crate::animate(g, item.object, item.object, &animation, Duration::EndOfTurn);
 }

@@ -1,25 +1,13 @@
 use cantrip_api::*;
-use cantrip_mechanics::{Animation, animate, mana, targets, triggers};
+use cantrip_mechanics::{lands, mana, targets, triggers};
 use cantrip_oracle as oracle;
 
 /// "Until end of turn, this land becomes a 3/3 black Beholder creature with menace and 'Whenever this creature attacks, exile
 /// target card from defending player's graveyard.' It's still a land." (CR 613.1d, 613.1f, 613.4b): the color and creature
 /// type are the ones its own text has now (CR 612). Each activation grants its own instance of the trigger (the ruling).
 fn becomes_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let me = item.object;
-    let words = g.words(me);
-    let animation = Animation {
-        power: 3,
-        toughness: 3,
-        colors: Some(words.colors(ColorSet::of(Color::Black))),
-        types: TypeSet::NONE,
-        subtypes: &[words.subtype(Subtype::Beholder)],
-        all_creature_types: false,
-        replaces_creature_types: false,
-        keywords: Keywords::of(&[Keyword::Menace]),
-        ability: Some(AbilityRef::delayed(item.ability.card, 0)),
-    };
-    animate(g, me, me, &animation, Duration::EndOfTurn);
+    let ability = Some(AbilityRef::delayed(item.ability.card, 0));
+    lands::becomes_creature_with_ability_until_end_of_turn(g, item, (3, 3), ColorSet::of(Color::Black), Subtype::Beholder, Keywords::of(&[Keyword::Menace]), ability);
     Ok(())
 }
 
