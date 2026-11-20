@@ -1,0 +1,35 @@
+# Spider Food: "Destroy up to one target artifact, enchantment, or creature with flying. Create a Food token." Bot2's Wind Drake
+# (a creature with flying) is destroyed (CR 701.8a) and Bot1 gets a Food token (CR 111.10b). It costs {2}{G}, all three paid by
+# Bot1's Black Lotus. (Bot2's Lotus is spent on the Drake.)
+
+[Bot1 Deck]
+Black Lotus
+Spider Food
+Forest x18
+
+[Bot2 Deck]
+Black Lotus
+Wind Drake
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wind Drake.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Spider Food.Cast(Bot2.Battlefield.Wind Drake)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Wind Drake; Black Lotus
+Bot1.Graveyard = Spider Food; Black Lotus
+Bot1.Battlefield = Food Token

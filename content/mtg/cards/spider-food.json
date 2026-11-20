@@ -1,0 +1,6 @@
+{
+  "name": "Spider Food",
+  "manaCost": "{2}{G}",
+  "type": "Sorcery",
+  "oracleText": "Destroy up to one target artifact, enchantment, or creature with flying. Create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")"
+}

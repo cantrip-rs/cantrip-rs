@@ -1,0 +1,35 @@
+# Spider Food: its one target is Bot2's Ornithopter. Bot2 kills it with Lightning Bolt in response, so the target is illegal as the
+# spell resolves and, with its only target illegal, the spell does not resolve (CR 608.2b): no Food token comes, though the
+# token sentence has no target of its own.
+
+[Bot1 Deck]
+Black Lotus
+Spider Food
+Forest x18
+
+[Bot2 Deck]
+Mountain
+Ornithopter
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Spider Food.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield =
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Graveyard = Spider Food; Black Lotus

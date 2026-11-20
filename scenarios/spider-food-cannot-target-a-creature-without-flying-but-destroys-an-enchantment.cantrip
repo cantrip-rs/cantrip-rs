@@ -1,0 +1,37 @@
+# Spider Food: a creature without flying (Grizzly Bears) is not a legal target (the refusal comes with the mana ready and
+# nothing else in the way); an enchantment (Hardened Scales) is, and it goes to the graveyard (CR 701.8a) while Bot1 gets a Food.
+
+[Bot1 Deck]
+Black Lotus
+Spider Food
+Forest x18
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Hardened Scales
+Forest x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Hardened Scales.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Hand.Spider Food.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Hand.Spider Food.Cast(Bot2.Battlefield.Hardened Scales)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Hardened Scales; Black Lotus
+Bot2.Battlefield = Grizzly Bears
+Bot1.Battlefield = Food Token

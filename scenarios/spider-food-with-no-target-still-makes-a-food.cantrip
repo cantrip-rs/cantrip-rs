@@ -1,0 +1,29 @@
+# Spider Food: "up to one" target, so it is cast with none (CR 601.2c) and still creates its Food token; nothing is destroyed,
+# not even Bot2's Ornithopter.
+
+[Bot1 Deck]
+Black Lotus
+Spider Food
+Forest x18
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Spider Food.Cast()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Food Token
+Bot2.Battlefield = Ornithopter
+Bot1.Graveyard = Spider Food; Black Lotus
