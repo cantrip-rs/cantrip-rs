@@ -9,14 +9,11 @@ fn two_food(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "A Food" (CR 205.3g): a permanent with the Food subtype, a token or not.
-const FOOD: select::Selection = select::Selection::of(select::up_to(1), &[select::subtype_card(Subtype::Food)]).called("Food");
-
 /// "You may sacrifice a Food. If you do, mill three cards. You may put a permanent card from among them into your hand."
 /// (CR 701.21a, 608.2c, 701.17): the sacrifice is chosen as the ability resolves, not paid as a cost, and the mill happens only
 /// if a Food really was sacrificed. A Food is any permanent with the Food subtype, a token or not; nothing is asked with none.
 fn sacrifice_a_food_to_mill(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if !effects::may_sacrifice(g, item.controller, item.object, FOOD)?.is_empty() {
+    if !effects::may_sacrifice(g, item.controller, item.object, select::FOOD_CARD)?.is_empty() {
         library::mill_then_may_take_into_hand(g, item.controller, item.object, 3, "permanent", targets::is_permanent_card)?;
     }
     Ok(())

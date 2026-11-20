@@ -1,15 +1,8 @@
 use cantrip_api::*;
 use cantrip_mechanics::library::{ask_may_search, find_to_hand};
-use cantrip_mechanics::select::{self, Part, Selection};
+use cantrip_mechanics::select;
 use cantrip_mechanics::{tokens, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
-
-fn food(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
-    Verdict::each(choice, |card| q.chars(card).has_subtype(Subtype::Food))
-}
-
-/// "A Food card" (CR 205.3g): an artifact card with the subtype Food, a token or not, as it is in the library.
-const FOOD_CARD: Part = select::part(&(food as SelectFn), 0, "");
 
 const ASK: Question = Question::new("SearchLibrary", "search your library for a Food card?", "Reveal it and put it into your hand, then shuffle", "Search", "Don't search");
 
@@ -19,7 +12,7 @@ const ASK: Question = Question::new("SearchLibrary", "search your library for a 
 /// hand, so the Food token is made.
 fn search_or_food(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let found = if ask_may_search(g, item.controller, item.object, &ASK)? {
-        find_to_hand(g, item.controller, item.object, Selection::of(select::up_to(1), &[FOOD_CARD]).called("Food"), true)?
+        find_to_hand(g, item.controller, item.object, select::FOOD_CARD, true)?
     } else {
         Vec::new()
     };

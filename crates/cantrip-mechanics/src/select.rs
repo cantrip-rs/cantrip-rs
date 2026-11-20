@@ -606,6 +606,10 @@ pub const FOREST_CARD: Selection = forest_cards(up_to(1));
 /// "An Equipment card", which may be left unfound (CR 701.23b): Cloud, Midgar Mercenary and Honored Knight-Captain search for it.
 pub const EQUIPMENT_CARD: Selection = Selection::of(up_to(1), &[EQUIPMENT]).called("Equipment");
 
+/// "A Food card" (CR 205.3g), a token or not, which may be left unfound (CR 701.23b) or unchosen: Bristlebud Farmer and Provisions Merchant
+/// sacrifice one and Courier of Comestibles searches for one.
+pub const FOOD_CARD: Selection = Selection::of(up_to(1), &[subtype_card(Subtype::Food)]).called("Food");
+
 /// "A land card with a basic land type", which may be left unfound (CR 701.23b): Boseiju, Who Endures and Nervous Gardener search for it.
 pub const LAND_WITH_A_BASIC_LAND_TYPE_CARD: Selection = Selection::of(up_to(1), &[LAND_WITH_A_BASIC_LAND_TYPE]).called("land with a basic land type");
 
