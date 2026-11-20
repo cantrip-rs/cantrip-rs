@@ -2126,6 +2126,19 @@ pub fn you_mill_then_draw<const MILL: u32, const DRAW: u32>(g: &mut dyn Game, it
     Ok(())
 }
 
+/// "Discard any number of cards, then draw that many cards plus one" (CR 701.9, 121.1): the controller chooses how many as it
+/// resolves, none included, the discards happen together, and the draw is one more than the cards actually discarded - a card a
+/// replacement kept in the hand is not counted. Brass's Tunnel-Grinder (when it enters) and Colossus of the Blood Age (when it
+/// dies) print it.
+pub fn discard_any_number_then_draw_that_many_plus_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let player = item.controller;
+    let hand: Vec<ObjectId> = g.state().zone(Zone::hand(player)).to_vec();
+    let chosen = crate::choose::select(g, player, item.object, Purpose::Discard, hand, crate::select::cards(crate::select::ANY_NUMBER))?;
+    let discarded = if chosen.is_empty() { Vec::new() } else { g.discard_together(&chosen) };
+    g.draw(player, discarded.len() as u32 + 1);
+    Ok(())
+}
+
 /// "Each opponent mills N cards" (CR 701.17a, 101.4): every opponent of the controller mills together, as one instruction.
 /// Aether Syphon and Psychic Corrosion print it (two).
 pub fn each_opponent_mills<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
