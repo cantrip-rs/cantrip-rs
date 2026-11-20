@@ -1,0 +1,8 @@
+{
+  "name": "Wildwood Mentor",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Treefolk",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Whenever a token you control enters, put a +1/+1 counter on this creature.\nWhenever this creature attacks, another target attacking creature gets +X/+X until end of turn, where X is this creature's power."
+}
