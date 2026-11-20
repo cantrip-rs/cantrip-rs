@@ -2865,6 +2865,34 @@ pub fn you_scry_or_surveil(q: &dyn Query, me: &Asker, event: &Event) -> Option<F
     you_scry(q, me, event).or_else(|| you_surveil(q, me, event))
 }
 
+/// An explore by one of its controller's creatures (CR 701.44) as `Event::Explored` names it: the creature, as it last was if it has left
+/// the battlefield (CR 701.44c), under the controller it had, and what the explore revealed.
+fn your_creature_explored(q: &dyn Query, me: &Asker, event: &Event) -> Option<(ObjectId, ExploreReveal)> {
+    match *event {
+        Event::Explored { permanent, player, revealed } if player == me.controller && q.chars(permanent).is(CardType::Creature) => Some((permanent, revealed)),
+        _ => None,
+    }
+}
+
+/// "Whenever a creature you control explores" (CR 701.44b, 603.2): each explore on its own, once it has been carried out,
+/// whether or not a card was revealed. The creature is the trigger's subject (`Fired::about`). Merfolk Cave-Diver prints it.
+pub fn creature_you_control_explores(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    your_creature_explored(q, me, event).and_then(|(creature, _)| Fired::about(Target::Object(creature)))
+}
+
+/// "Whenever a creature you control explores a land card" (CR 701.44a-b): `creature_you_control_explores` where the card
+/// revealed was a land card, judged as it was revealed. An explore of an empty library revealed none. Nicanzil, Current
+/// Conductor prints it.
+pub fn creature_you_control_explores_a_land_card(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    your_creature_explored(q, me, event).filter(|&(_, revealed)| revealed == ExploreReveal::Land).and_then(|(creature, _)| Fired::about(Target::Object(creature)))
+}
+
+/// "Whenever a creature you control explores a nonland card" (CR 701.44a-b): as `creature_you_control_explores_a_land_card`,
+/// for a nonland card. Nicanzil, Current Conductor prints it.
+pub fn creature_you_control_explores_a_nonland_card(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    your_creature_explored(q, me, event).filter(|&(_, revealed)| revealed == ExploreReveal::Nonland).and_then(|(creature, _)| Fired::about(Target::Object(creature)))
+}
+
 /// An activation (CR 602.2) as the event a "whenever ... activate(s) an ability" trigger sees: the object whose ability
 /// it is, the player who activated it, and the ability. The object is read as it is, or as it last was if paying the cost
 /// took it away (CR 113.7a, 608.2h). A mana ability's activation is one too (CR 605.3): a trigger that means only abilities that use the stack asks `ActivatedDef::is_mana_ability`.
@@ -2963,6 +2991,9 @@ pub const ENCHANTMENT_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_C
 pub const YOU_SCRY: Trigger = when_asked(EventMask::SCRIED, you_scry);
 pub const YOU_SURVEIL: Trigger = when_asked(EventMask::SURVEILLED, you_surveil);
 pub const YOU_SCRY_OR_SURVEIL: Trigger = when_asked(EventMask(EventMask::SCRIED.0 | EventMask::SURVEILLED.0), you_scry_or_surveil);
+pub const CREATURE_YOU_CONTROL_EXPLORES: Trigger = when_asked(EventMask::EXPLORED, creature_you_control_explores);
+pub const CREATURE_YOU_CONTROL_EXPLORES_A_LAND_CARD: Trigger = when_asked(EventMask::EXPLORED, creature_you_control_explores_a_land_card);
+pub const CREATURE_YOU_CONTROL_EXPLORES_A_NONLAND_CARD: Trigger = when_asked(EventMask::EXPLORED, creature_you_control_explores_a_nonland_card);
 pub const YOU_DRAW_A_CARD: Trigger = when_asked(EventMask::DREW, you_draw_a_card);
 pub const AN_OPPONENT_DRAWS_A_CARD: Trigger = when_asked(EventMask::DREW, an_opponent_draws_a_card);
 pub const YOU_GAIN_LIFE: Trigger = when_asked(EventMask::LIFE_CHANGE, you_gain_life);
