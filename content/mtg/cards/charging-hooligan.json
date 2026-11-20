@@ -1,0 +1,8 @@
+{
+  "name": "Charging Hooligan",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Human Peasant",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever this creature attacks, it gets +1/+0 until end of turn for each attacking creature. If a Rat is attacking, this creature gains trample until end of turn."
+}

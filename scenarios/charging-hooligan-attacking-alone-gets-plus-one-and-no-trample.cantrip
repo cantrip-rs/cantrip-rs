@@ -1,0 +1,35 @@
+# Charging Hooligan ({3}{R}, 3/3): "Whenever this creature attacks, it gets +1/+0 until end of turn for each attacking creature. If a
+# Rat is attacking, this creature gains trample until end of turn." (CR 508.1k, 611.2a.) Attacking alone it counts one attacker
+# (itself): 4/3, and with no Rat attacking it has no trample. At the end of the turn it is a 3/3 again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Charging Hooligan
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Charging Hooligan.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Charging Hooligan > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Charging Hooligan.Power = 4
+? Bot1.Battlefield.Charging Hooligan.Toughness = 3
+? Bot1.Battlefield.Charging Hooligan.Keywords = (absent)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Charging Hooligan.Power = 3

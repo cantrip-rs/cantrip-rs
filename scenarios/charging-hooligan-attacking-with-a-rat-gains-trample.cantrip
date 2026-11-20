@@ -1,0 +1,49 @@
+# Charging Hooligan: "If a Rat is attacking, this creature gains trample until end of turn." (CR 608.2c.) Edgewall Pack's Rat token
+# attacks beside the Hooligan on turn 5: two attackers, so the Hooligan is 5/3, and the Rat makes it trample. The Pack stays home.
+# Trample is gone again by the next turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Edgewall Pack
+Charging Hooligan
+Mountain
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Edgewall Pack.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Charging Hooligan.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Charging Hooligan > Bot2; Rat Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Charging Hooligan.Power = 5
+? Bot1.Battlefield.Charging Hooligan.Keywords = Trample
+[T7 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Charging Hooligan.Power = 3
+Bot1.Battlefield.Charging Hooligan.Keywords = (absent)
