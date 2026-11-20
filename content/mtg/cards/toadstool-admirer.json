@@ -1,0 +1,8 @@
+{
+  "name": "Toadstool Admirer",
+  "manaCost": "{G}",
+  "type": "Creature — Ouphe",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Ward {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\n{3}{G}: Put a +1/+1 counter on this creature."
+}

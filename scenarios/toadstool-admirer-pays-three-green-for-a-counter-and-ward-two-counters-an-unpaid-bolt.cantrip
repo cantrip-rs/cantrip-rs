@@ -1,0 +1,45 @@
+# Toadstool Admirer {G} (1/1, ward {2}): "{3}{G}: Put a +1/+1 counter on this creature." Bot1 casts it with Mox Emerald on turn 1, then
+# pays {3}{G} (Black Lotus GGG and Mox Ruby, exactly) for a counter: a 2/2. On turn 2 Bot2's only mana is a Mox Ruby, which pays for the
+# Lightning Bolt, so the ward trigger counters the Bolt (the unpaid {2}) and the Admirer takes no damage.
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Mox Ruby
+Toadstool Admirer
+Forest x30
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Toadstool Admirer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Toadstool Admirer.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Toadstool Admirer.Power = 2
+? Bot1.Battlefield.Toadstool Admirer.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Toadstool Admirer)
+[T2 Bot2.Main2]
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Toadstool Admirer.Damage = 0
+Bot1.Battlefield.Toadstool Admirer.Power = 2
+Bot2.Graveyard = Lightning Bolt
