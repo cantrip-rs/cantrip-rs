@@ -11,6 +11,14 @@ pub fn your_creatures(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, 
     so_far.is(CardType::Creature) && q.controller(affected) == q.controller(source)
 }
 
+/// "Enchanted creatures you control" (CR 303.4, 613.1f): `your_creatures` with an Aura attached, whoever controls the Aura (a Role
+/// token counts), judged on what the earlier layers made each object. A non-Aura enchantment is not attached to anything, so it
+/// enchants nothing. A Tale for the Ages and Syr Armont, the Redeemer print it, as `StaticDef::affects`.
+pub fn enchanted_creatures_you_control(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
+    your_creatures(q, source, affected, so_far)
+        && q.state().battlefield().iter().any(|&id| q.state().obj(id).attached_to == Some(affected) && q.chars(id).has_subtype(Subtype::Aura))
+}
+
 /// "During your turn, creatures you control ..." (CR 604.1, 613.1f): `your_creatures`, only while it is their controller's turn. Vibrating
 /// Sphere (+2/+0) and Bedrock Tortoise (hexproof) print it, as `StaticDef::affects`.
 pub fn your_creatures_during_your_turn(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
