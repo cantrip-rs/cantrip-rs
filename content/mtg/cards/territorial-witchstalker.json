@@ -1,0 +1,11 @@
+{
+  "name": "Territorial Witchstalker",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Wolf",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Defender\nAt the beginning of combat on your turn, if you control a creature with power 4 or greater, this creature gets +1/+0 until end of turn and can attack this turn as though it didn't have defender.",
+  "keywords": [
+    "Defender"
+  ]
+}

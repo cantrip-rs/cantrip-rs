@@ -1,0 +1,78 @@
+# Territorial Witchstalker {1}{G} (2/3 defender): "At the beginning of combat on your turn, if you control a creature with power 4 or
+# greater, this creature gets +1/+0 until end of turn and can attack this turn as though it didn't have defender." An intervening "if"
+# (CR 603.4). Turn 1: Bot1 casts the Witchstalker and a Centaur Courser (power 3, just short): no trigger, power stays 2. Turn 3: an
+# Alpine Grizzly (power 4 exactly) is cast first, so the Witchstalker becomes a 3/3 that attacks despite defender. Turn 5: Bot2 bolts
+# the Grizzly in response to the combat trigger, so the condition fails on resolution (checked again, CR 603.4): no pump, and the
+# Witchstalker (defender, power 2) can't attack.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Territorial Witchstalker
+Centaur Courser
+Alpine Grizzly
+Plains
+Plains x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Territorial Witchstalker.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Centaur Courser.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+? Stack.Count = 0
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Territorial Witchstalker.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Territorial Witchstalker.Power = 3
+? Bot1.Battlefield.Territorial Witchstalker.Toughness = 3
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Territorial Witchstalker > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Battlefield.Territorial Witchstalker.Power = 3
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Territorial Witchstalker.Power = 2
+[T5 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Alpine Grizzly)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.DeclareAttackers]
+! Bot1.Attack(Territorial Witchstalker > Bot2)
+
+[Expect]
+Bot1.Battlefield.Alpine Grizzly = (absent)
+Bot1.Battlefield.Territorial Witchstalker.Power = 2
+Bot2.Life = 17
