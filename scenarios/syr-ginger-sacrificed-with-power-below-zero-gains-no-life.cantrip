@@ -1,0 +1,44 @@
+# "You gain life equal to its power" (CR 119.3, 107.1b: no player gains negative life). Bot1 gives its own Syr Ginger -5/-0 with Icy Reception on turn 3 (she is -2/1), then
+# sacrifices her with the {2}, {T} ability: she is -2/1 on the battlefield, so Bot1 gains no life and loses none (still 20).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Syr Ginger, the Meal Ender
+Icy Reception
+Plains x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Syr Ginger, the Meal Ender.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Icy Reception.Cast
+Bot1.Modes(2)
+Bot1.Target(Syr Ginger, the Meal Ender)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Syr Ginger, the Meal Ender.Power = -2
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Syr Ginger, the Meal Ender.Activate(Ability: {2})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Syr Ginger, the Meal Ender = (absent)
+
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Syr Ginger, the Meal Ender; Icy Reception

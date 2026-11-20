@@ -1,0 +1,41 @@
+# "Syr Ginger has trample, hexproof, and haste as long as an opponent controls a planeswalker" (CR 604.1, 613.1f): a planeswalker of her
+# own controller's is not one an opponent controls. Bot1 casts Liliana of the Veil with Black Lotus's {B}{B}{B} on turn 1, then Syr Ginger
+# with Mox Pearl and Mox Jet: she has none of the three keywords, is still summoning sick (CR 302.6) and cannot attack Bot2.
+
+[Bot1 Deck]
+Black Lotus
+Liliana of the Veil
+Mox Pearl
+Mox Jet
+Syr Ginger, the Meal Ender
+Plains x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Liliana of the Veil.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Syr Ginger, the Meal Ender.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Liliana of the Veil.Types = Planeswalker
+? Bot1.Battlefield.Syr Ginger, the Meal Ender.Keywords = (absent)
+? Bot1.Battlefield.Syr Ginger, the Meal Ender.SummoningSick = true
+
+[Expect]
+Bot1.Battlefield.Syr Ginger, the Meal Ender.Keywords = (absent)
+Bot1.Battlefield.Syr Ginger, the Meal Ender.SummoningSick = true

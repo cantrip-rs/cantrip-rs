@@ -1,0 +1,34 @@
+# Bot1 casts Syr Ginger on turn 3 (two Moxen) with no planeswalker on the table: she has none of trample, hexproof or haste. Without haste she cannot attack the turn she
+# arrives (CR 302.6: she is still summoning sick), and on turn 4 Bot2's Lightning Bolt can target and kill her (CR 702.11b: only hexproof protects).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Syr Ginger, the Meal Ender
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Syr Ginger, the Meal Ender.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Syr Ginger, the Meal Ender.Keywords = (absent)
+? Bot1.Battlefield.Syr Ginger, the Meal Ender.SummoningSick = true
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Syr Ginger, the Meal Ender)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Syr Ginger, the Meal Ender

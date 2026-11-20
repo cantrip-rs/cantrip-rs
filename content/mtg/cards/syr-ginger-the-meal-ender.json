@@ -1,0 +1,8 @@
+{
+  "name": "Syr Ginger, the Meal Ender",
+  "manaCost": "{2}",
+  "type": "Legendary Artifact Creature — Food Knight",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Syr Ginger has trample, hexproof, and haste as long as an opponent controls a planeswalker.\nWhenever another artifact you control is put into a graveyard from the battlefield, put a +1/+1 counter on Syr Ginger and scry 1.\n{2}, {T}, Sacrifice Syr Ginger: You gain life equal to its power."
+}

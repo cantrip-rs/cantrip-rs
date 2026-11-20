@@ -1,0 +1,43 @@
+# "Whenever another artifact you control is put into a graveyard from the battlefield, put a +1/+1 counter on Syr Ginger and scry 1." Bot1 casts Syr Ginger (two Moxen)
+# and sacrifices Black Lotus for white mana: the trigger puts a +1/+1 counter on her (4/2) and scries 1 (the Plains stays on top). On turn 3 "{2}, {T}, Sacrifice Syr Ginger:
+# You gain life equal to its power" gains 4 (CR 113.7a: the power she had on the battlefield, counter included): 20 + 4 = 24. Her own death from the cost triggers nothing
+# (CR 603.10a: "another"), so no scry is asked for.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Black Lotus
+Syr Ginger, the Meal Ender
+Plains x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Syr Ginger, the Meal Ender.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Syr Ginger, the Meal Ender.Power = 3
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains | )
+? Bot1.Battlefield.Syr Ginger, the Meal Ender.Power = 4
+? Bot1.Battlefield.Syr Ginger, the Meal Ender.Toughness = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Syr Ginger, the Meal Ender.Activate(Ability: {2})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 24
+? Bot1.Battlefield.Syr Ginger, the Meal Ender = (absent)
+
+[Expect]
+Bot1.Life = 24
+Bot1.Graveyard = Syr Ginger, the Meal Ender; Black Lotus

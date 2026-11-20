@@ -1,0 +1,39 @@
+# "{2}, {T}, Sacrifice Syr Ginger": the {T} cost cannot be paid while she is summoning sick (CR 302.6, 602.5a). Bot1 casts her on turn 1 with Mox Pearl and Mox Jet and keeps
+# Mox Sapphire and Mox Ruby untapped, which could pay the {2}, but on turn 2 the activation is refused. On turn 3 she can be used: she is sacrificed for 3 life (23).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Syr Ginger, the Meal Ender
+Plains x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Syr Ginger, the Meal Ender.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Mox Sapphire.Tapped = false
+? Bot1.Battlefield.Mox Ruby.Tapped = false
+! Bot1.Battlefield.Syr Ginger, the Meal Ender.Activate(Ability: {2})
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Syr Ginger, the Meal Ender.Activate(Ability: {2})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+
+[Expect]
+Bot1.Life = 23
+Bot1.Graveyard = Syr Ginger, the Meal Ender

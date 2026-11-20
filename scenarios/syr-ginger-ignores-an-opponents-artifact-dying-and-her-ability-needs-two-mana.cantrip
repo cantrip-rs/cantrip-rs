@@ -1,0 +1,52 @@
+# Bot2 casts Black Lotus and sacrifices it for mana: an artifact an opponent controls going to a graveyard does not trigger Syr Ginger ("another artifact you control"), so
+# she stays a 3/1 with no counter and no scry is asked for. On turn 3 Bot1 spends two of its three Moxen on Grizzly Bears, so her
+# {2} ability is refused (one mana cannot pay it); on turn 5 two Moxen pay it and she is sacrificed for 3 life (power 3): 23.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Syr Ginger, the Meal Ender
+Grizzly Bears
+Plains x18
+
+[Bot2 Deck]
+Black Lotus
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Syr Ginger, the Meal Ender.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Black Lotus
+? Bot1.Battlefield.Syr Ginger, the Meal Ender.Power = 3
+? Bot1.Battlefield.Syr Ginger, the Meal Ender.Toughness = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+! Bot1.Battlefield.Syr Ginger, the Meal Ender.Activate(Ability: {2}; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Syr Ginger, the Meal Ender.Activate(Ability: {2})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+
+[Expect]
+Bot1.Life = 23
+Bot1.Graveyard = Syr Ginger, the Meal Ender

@@ -1,0 +1,40 @@
+# "Put a +1/+1 counter on Syr Ginger and scry 1": Bot1 sacrifices Black Lotus on turn 3, and with the trigger on the stack Bot2 kills Syr Ginger with Lightning Bolt. The
+# counter has nowhere to go but the scry is still done (CR 608.2b, 608.2c: the instructions are followed in order; one that cannot be done does not stop the next).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Black Lotus
+Syr Ginger, the Meal Ender
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Syr Ginger, the Meal Ender.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Syr Ginger, the Meal Ender)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Plains)
+? Bot1.Graveyard = Syr Ginger, the Meal Ender; Black Lotus
+
+[Expect]
+Bot1.Graveyard = Syr Ginger, the Meal Ender; Black Lotus

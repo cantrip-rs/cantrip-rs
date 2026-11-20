@@ -1,0 +1,68 @@
+# "Syr Ginger has trample, hexproof, and haste as long as an opponent controls a planeswalker." Bot2 casts Liliana of the Veil on turn 2. On turn 3 Bot1 casts
+# Syr Ginger with two Moxen: she has Trample; Hexproof; Haste (CR 604.1, 613.1f), so Bot2's Lightning Bolt cannot target her (CR 702.11b) and she attacks the turn she
+# arrives (CR 702.10b), hitting Liliana for 3, which empties her loyalty (CR 306.9). With no planeswalker left Syr Ginger has none of the three keywords, and the Bolt
+# Bot2 casts in the second main phase (paid with Black Lotus; the Ruby is tapped from the refusal) kills her (3/1).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Syr Ginger, the Meal Ender
+Plains x20
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Mox Emerald
+Liliana of the Veil
+Lightning Bolt
+Black Lotus
+Swamp x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Liliana of the Veil.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Syr Ginger, the Meal Ender.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Syr Ginger, the Meal Ender.Keywords = Haste; Hexproof; Trample
+? Bot1.Battlefield.Syr Ginger, the Meal Ender.SummoningSick = false
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Syr Ginger, the Meal Ender)
+Bot2.Pass
+Bot1.Attack(Syr Ginger, the Meal Ender > Bot2.Battlefield.Liliana of the Veil)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Liliana of the Veil
+? Bot1.Battlefield.Syr Ginger, the Meal Ender.Keywords = (absent)
+[T3 Bot1.Main2]
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Syr Ginger, the Meal Ender)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Syr Ginger, the Meal Ender
+Bot2.Graveyard = Lightning Bolt; Black Lotus; Liliana of the Veil

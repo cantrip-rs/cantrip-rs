@@ -1,0 +1,45 @@
+# "You gain life equal to its power" (CR 119.3) as Syr Ginger last existed on the battlefield (CR 113.7a). Bot1 enchants its own
+# Syr Ginger with Swift Reconfiguration: she is a Vehicle artifact and no longer a creature (CR 205.1a), and a noncreature
+# permanent has no power (CR 208.3), but she keeps her abilities. Bot1 sacrifices her with the {2}, {T} ability (a noncreature
+# permanent can pay {T} however long it has been under Bot1's control, CR 302.6): Bot1 gains no life and stays at 20.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Syr Ginger, the Meal Ender
+Swift Reconfiguration
+Plains
+Plains x19
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Syr Ginger, the Meal Ender.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Swift Reconfiguration.Cast(Bot1.Battlefield.Syr Ginger, the Meal Ender)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Syr Ginger, the Meal Ender.Types = Artifact
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Syr Ginger, the Meal Ender.Activate(Ability: {2})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Syr Ginger, the Meal Ender = (absent)
+
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Swift Reconfiguration; Syr Ginger, the Meal Ender
