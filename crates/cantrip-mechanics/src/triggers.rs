@@ -64,6 +64,21 @@ pub fn attached_permanent_becomes_tapped(q: &dyn Query, source: ObjectId, event:
     }
 }
 
+/// "Whenever you tap an untapped creature an opponent controls" (CR 701.26a, 603.2): the creature became tapped (an event is
+/// emitted only when an untapped permanent is tapped, so a tapped one is never tapped again), it is a creature an opponent of
+/// this source's controller controls, and the player who tapped it - whose effect, cost or attack declaration did - is the
+/// source's controller. The creature is the subject, one event for each creature of a "tap all", so a trigger that is not
+/// `once_per_batch` triggers once for each (CR 603.2c). Solitary Sanctuary, Icewrought Sentry, Hylda of the Icy Crown and
+/// Sharae of Numbing Depths print it.
+pub fn you_tap_an_untapped_creature_an_opponent_controls(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    let Event::Tapped { permanent, player } = event else { return None };
+    let id = *permanent;
+    if *player == me.controller && q.chars(id).is(CardType::Creature) && q.state().opponents(me.controller).any(|p| p == q.controller(id)) {
+        return Fired::about(Target::Object(id));
+    }
+    None
+}
+
 /// "Whenever another creature or planeswalker you control enters" (CR 603.6a): a different permanent that entered
 /// the battlefield under this source's controller's control, and is a creature or planeswalker as it entered. Liliana
 /// the Faultless and Liliana the Repentant print it.
@@ -2937,6 +2952,8 @@ pub const THIS_ENTERS: Trigger = when(EventMask::ZONE_CHANGE, this_enters);
 pub const THIS_ENTERS_UNTAPPED: Trigger = when(EventMask::ZONE_CHANGE, this_enters_untapped);
 pub const THIS_BECOMES_TAPPED: Trigger = when(EventMask::TAPPED, this_becomes_tapped);
 pub const ATTACHED_PERMANENT_BECOMES_TAPPED: Trigger = when(EventMask::TAPPED, attached_permanent_becomes_tapped);
+pub const YOU_TAP_AN_UNTAPPED_CREATURE_AN_OPPONENT_CONTROLS: Trigger =
+    when_asked(EventMask::TAPPED, you_tap_an_untapped_creature_an_opponent_controls);
 pub const THIS_ENTERS_IF_CAST: Trigger = when(EventMask::ZONE_CHANGE, this_enters_if_cast);
 pub const LANDFALL: Trigger = when_asked(EventMask::ZONE_CHANGE, landfall);
 pub const YOU_UNLOCK_THIS_RIGHT_DOOR: Trigger = when(EventMask::DOOR_UNLOCKED, you_unlock_this_right_door);
