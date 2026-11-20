@@ -166,25 +166,28 @@ pub fn choose_copy_of_one_of(
     Ok(Some(chosen))
 }
 
-/// The intervening "if it isn't a token" of "When this creature dies, if it isn't a token, create a token that's a copy
-/// of it" (CR 603.4, 111.7): judged on the creature as it last existed on the battlefield (CR 603.10a). Use as
-/// `TriggeredDef::condition` of a dies ability, which looks back. Sphinx of False Conclusions and Vaultborn Tyrant print it.
+/// The intervening "if it isn't a token" of "When this creature dies / enters, if it isn't a token, create [tokens that are]
+/// copies of it" (CR 603.4, 111.7): of a dies ability, which looks back, judged on the creature as it last existed on the
+/// battlefield (CR 603.10a); of an enters ability, on the permanent as it is, or as it last was if it has left. Use as
+/// `TriggeredDef::condition`. Sphinx of False Conclusions and Vaultborn Tyrant (dies), Gruff Triplets and The Notary Hobbits
+/// (enters) print it.
 pub fn not_a_token(q: &dyn Query, asker: &Asker) -> bool {
     !q.obj(asker.source).token
 }
 
-/// "Create a token that's a copy of it" (CR 707.2, 111.1) for the ability's controller: the copiable values of the
-/// ability's object as it last existed, with `exception` applied for the copy's exceptions (CR 707.9b), as
-/// `enter_as_copy` takes them. Sphinx of False Conclusions copies as is; Vaultborn Tyrant's copy is an artifact in
-/// addition to its other types.
-pub fn create_token_copy_of_it(
-    g: &mut dyn Game,
-    item: &StackItem,
-    exception: fn(&dyn Query, Copiable) -> Copiable,
-) -> Result<(), Suspend> {
+/// "Create a token that's a copy of it" (CR 707.2, 111.1) for the ability's controller: `create_token_copies_of_it` once. Sphinx of
+/// False Conclusions copies as is; Vaultborn Tyrant's copy is an artifact in addition to its other types.
+pub fn create_token_copy_of_it(g: &mut dyn Game, item: &StackItem, exception: fn(&dyn Query, Copiable) -> Copiable) -> Result<(), Suspend> {
+    create_token_copies_of_it(g, item, 1, exception)
+}
+
+/// "Create `count` tokens that are copies of it" (CR 707.2, 111.1) for the ability's controller, all at once: the copiable values of
+/// the ability's object as it last existed (CR 608.2h), with `exception` applied for the copies' exceptions (CR 707.9b), as
+/// `enter_as_copy` takes them. Gruff Triplets copies as is; The Notary Hobbits' copies aren't legendary.
+pub fn create_token_copies_of_it(g: &mut dyn Game, item: &StackItem, count: u32, exception: fn(&dyn Query, Copiable) -> Copiable) -> Result<(), Suspend> {
     let values = g.copiable_values(item.object);
     let values = exception(g, values);
-    g.create_token_copies_of(values, item.controller, 1)?;
+    g.create_token_copies_of(values, item.controller, count)?;
     Ok(())
 }
 
