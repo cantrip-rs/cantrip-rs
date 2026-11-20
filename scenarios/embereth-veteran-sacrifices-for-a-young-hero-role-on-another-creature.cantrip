@@ -1,0 +1,42 @@
+# Embereth Veteran ({R}, 2/1): "{1}, Sacrifice this creature: Create a Young Hero Role token attached to another target
+# creature" (CR 111.10, 303.7). The Role is a colorless Aura enchantment: "Enchanted creature has 'Whenever this creature attacks,
+# if its toughness is 3 or less, put a +1/+1 counter on it'". The Veteran is sacrificed as a cost, so it cannot be its own target
+# ("another"); the Ornithopter (0/2) is, and its toughness 2 is 3 or less, so the Role puts a counter on it when it attacks.
+# Black Lotus pays the Veteran's {R} and the ability's {1}, a mana still in the pool.
+
+[Bot1 Deck]
+Black Lotus
+Embereth Veteran
+Ornithopter
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Embereth Veteran.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R}
+! Bot1.Battlefield.Embereth Veteran.Activate(Bot1.Battlefield.Embereth Veteran)
+Bot1.Battlefield.Embereth Veteran.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Ornithopter; Young Hero
+? Bot1.Graveyard = Embereth Veteran; Black Lotus
+? Bot1.Battlefield.Young Hero.AttachedTo = Ornithopter
+? Bot1.Battlefield.Young Hero.Token = true
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot2.Life = 19

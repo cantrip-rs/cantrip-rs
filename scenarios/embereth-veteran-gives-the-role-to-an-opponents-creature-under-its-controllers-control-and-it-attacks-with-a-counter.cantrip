@@ -1,0 +1,43 @@
+# Embereth Veteran's target is "another target creature", not "another creature you control" (CR 115.1): Bot1 puts the Young Hero
+# Role on Bot2's Memnite. Bot1 controls the Role token (CR 111.2: the token's creator controls it), Bot2 controls the creature, and
+# the Role's granted ability is the creature's: on Bot2's turn the Memnite (1/1, toughness 1 is 3 or less) attacks and gets a
+# +1/+1 counter (CR 303.4e, 113.6).
+
+[Bot1 Deck]
+Black Lotus
+Embereth Veteran
+Mountain x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Embereth Veteran.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Embereth Veteran.Activate(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Young Hero.AttachedTo = Memnite
+? Bot2.Battlefield = Memnite
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+
+[Expect]
+Bot1.Battlefield = Mountain; Young Hero
+Bot2.Battlefield.Memnite.Power = 2
+Bot2.Battlefield.Memnite.Toughness = 2
