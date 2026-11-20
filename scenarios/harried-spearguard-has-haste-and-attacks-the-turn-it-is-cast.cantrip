@@ -1,0 +1,26 @@
+# Harried Spearguard ({R}, 1/1, haste): cast on turn 1 off a Mox Ruby, it attacks the same turn and Bot2, who has no creatures,
+# takes 1. It is a Human Soldier and the only permanent besides the Mox: no Rat yet (it has not died).
+
+[Bot1 Deck]
+Mox Ruby
+Harried Spearguard
+Mountain x5
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Harried Spearguard.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Harried Spearguard.Keywords = Haste
+? Bot1.Battlefield.Harried Spearguard.Subtypes = Human; Soldier
+Bot1.Attack(Harried Spearguard > Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield = Harried Spearguard; Mox Ruby

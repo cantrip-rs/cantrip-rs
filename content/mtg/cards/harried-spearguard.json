@@ -1,0 +1,11 @@
+{
+  "name": "Harried Spearguard",
+  "manaCost": "{R}",
+  "type": "Creature — Human Soldier",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Haste\nWhen this creature dies, create a 1/1 black Rat creature token with \"This token can't block.\"",
+  "keywords": [
+    "Haste"
+  ]
+}

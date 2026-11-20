@@ -1,0 +1,32 @@
+# "Dies" means put into a graveyard from the battlefield (CR 700.4): Bot2's Swords to Plowshares exiles Bot1's Spearguard, so it
+# does not die and there is no Rat token.
+
+[Bot1 Deck]
+Mox Ruby
+Harried Spearguard
+Mountain x5
+Mountain x14
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Harried Spearguard.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Harried Spearguard)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Exile = Harried Spearguard
+Bot1.Battlefield = Mox Ruby
+Bot1.Life = 21
