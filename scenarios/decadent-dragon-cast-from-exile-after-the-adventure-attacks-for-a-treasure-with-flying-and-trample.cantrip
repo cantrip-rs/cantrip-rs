@@ -1,0 +1,59 @@
+# Decadent Dragon ({2}{R}{R}, 4/4 flying, trample): "Whenever this creature attacks, create a Treasure token." Expensive Taste's only
+# target is an opponent (CR 115.1: a spell's own controller is no legal target), so aiming it at Bot1 is refused. Cast as the
+# Adventure it goes to exile (CR 715.4), from where only the creature may be cast later (CR 715.3d): four Mox Rubies pay for it on
+# turn 3. On turn 5 it attacks: the Treasure token arrives, the Dragon's flyer cannot be blocked by Bot2's ground Memnite, and
+# Bot2 takes 4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Decadent Dragon
+Mountain
+Mountain x20
+
+[Bot2 Deck]
+Memnite
+Island x6
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Hand.Decadent Dragon.Cast(Bot1; Ability: Adventure)
+Bot1.Hand.Decadent Dragon.Cast(Bot2; Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+! Bot1.Exile.Decadent Dragon.Cast(Bot2; Ability: Adventure)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Exile.Decadent Dragon.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Decadent Dragon.Power = 4
+? Bot1.Battlefield.Decadent Dragon.Keywords = Flying; Trample
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Decadent Dragon > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 6
+Bot1.Pass
+Bot2.Pass
+! Bot2.Block(Bot2.Battlefield.Memnite > Bot1.Battlefield.Decadent Dragon)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield = Mox Ruby; Mox Ruby; Mox Ruby; Mox Ruby; Decadent Dragon; Treasure Token

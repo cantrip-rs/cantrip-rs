@@ -1,0 +1,18 @@
+{
+  "name": "Decadent Dragon",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Dragon",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying, trample\nWhenever this creature attacks, create a Treasure token.",
+  "keywords": [
+    "Flying",
+    "Trample"
+  ],
+  "adventure": {
+    "name": "Expensive Taste",
+    "manaCost": "{2}{B}",
+    "type": "Instant — Adventure",
+    "oracleText": "Exile the top two cards of target opponent's library face down. You may look at and play those cards for as long as they remain exiled."
+  }
+}

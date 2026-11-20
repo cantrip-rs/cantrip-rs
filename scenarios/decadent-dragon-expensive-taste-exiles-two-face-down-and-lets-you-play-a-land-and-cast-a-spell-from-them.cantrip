@@ -1,0 +1,36 @@
+# Expensive Taste ({2}{B} Adventure of Decadent Dragon): "Exile the top two cards of target opponent's library face down. You may look
+# at and play those cards for as long as they remain exiled." (CR 715.3, 406.3, 305.1, 601.3.) Bot1 casts it with Black Lotus,
+# targeting Bot2, whose library holds a Mountain then a Lightning Bolt on top: both leave Bot2's library (two fewer cards).
+# Several turns later Bot1 plays the Mountain from exile (the permission has no time limit) and casts the Bolt with its mana at Bot2.
+
+[Bot1 Deck]
+Black Lotus
+Decadent Dragon
+Mountain x20
+
+[Bot2 Deck]
+Island x7
+Mountain
+Lightning Bolt
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Decadent Dragon.Cast(Bot2; Ability: Adventure)
+? Bot2.Library.Count = 15
+Bot1.Pass
+Bot2.Pass
+? Bot2.Library.Count = 13
+? Exile.Count = 3
+[T5 Bot1.Main1]
+Bot1.Exile.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot2.Graveyard = Lightning Bolt; Island; Island
+Bot1.Battlefield.Mountain.Tapped = True
