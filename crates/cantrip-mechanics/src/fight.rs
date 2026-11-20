@@ -142,7 +142,7 @@ pub fn first_target_bites_second(g: &mut dyn Game, item: &StackItem) -> Result<(
 /// "One or two target creatures you control each deal damage equal to their power to target creature an opponent controls"
 /// (CR 120.2, 120.3, 120.4b, 608.2b): the targets before the last are the sources, the last the recipient. The powers are read as
 /// this resolves and all the damage is dealt together; a source that is no longer a legal target deals none, and with the
-/// recipient illegal nothing is dealt. Common Goal and Terrific Team-Up print it.
+/// recipient illegal nothing is dealt. Common Goal, Graceful Takedown and Terrific Team-Up print it.
 pub fn targets_each_bite_last(g: &mut dyn Game, item: &StackItem) {
     let recipient_slot = item.target_count as usize - 1;
     let Some(recipient) = targets::object(g, item, recipient_slot) else { return };

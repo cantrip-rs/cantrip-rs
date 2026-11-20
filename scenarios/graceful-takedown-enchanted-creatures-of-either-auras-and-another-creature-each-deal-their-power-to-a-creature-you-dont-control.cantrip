@@ -1,0 +1,75 @@
+# Graceful Takedown: "Any number of target enchanted creatures you control and up to one other target creature you control each deal
+# damage equal to their power to target creature you don't control." Bot1's Memnite #1 carries its own Escape Velocity (+1/+0, power 2)
+# and Memnite #2 one Bot2 cast (an Aura anyone controls makes the creature enchanted, CR 303.4b; power 2); Memnite #3 is not
+# enchanted (power 1). Memnite #3 is refused as an enchanted creature, Bot2's Wall of Mist as one you control, Memnite #1 as the "other"
+# creature (it is already chosen, CR 115.3) and Bot1's own Memnite as the creature you don't control. All three then deal their power
+# at once (CR 120.3): 2 + 2 + 1 = 5, exactly the Wall's toughness, so it dies (CR 704.5g), and the Memnites are not dealt damage.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Memnite
+Memnite
+Memnite
+Escape Velocity
+Graceful Takedown
+Island x12
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Wall of Mist
+Escape Velocity
+Island x2
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Escape Velocity.Cast(Bot1.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Mist.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Escape Velocity.Cast(Bot1.Battlefield.Memnite#2)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Graceful Takedown.Cast
+! Bot1.Target(Bot1.Battlefield.Memnite#3)
+! Bot1.Target(Bot2.Battlefield.Wall of Mist)
+Bot1.Target(Bot1.Battlefield.Memnite#1; Bot1.Battlefield.Memnite#2)
+! Bot1.Target(Bot1.Battlefield.Memnite#1)
+Bot1.Target(Bot1.Battlefield.Memnite#3)
+! Bot1.Target(Bot1.Battlefield.Memnite#3)
+Bot1.Target(Bot2.Battlefield.Wall of Mist)
+? Stack.Count = 1
+? Bot2.Battlefield.Wall of Mist.Damage = 0
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard = Wall of Mist
+Bot2.Battlefield = Escape Velocity; Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Battlefield.Memnite#1.Damage = 0
+Bot1.Battlefield.Memnite#2.Damage = 0
+Bot1.Battlefield.Memnite#3.Damage = 0
+Bot1.Graveyard = Graceful Takedown

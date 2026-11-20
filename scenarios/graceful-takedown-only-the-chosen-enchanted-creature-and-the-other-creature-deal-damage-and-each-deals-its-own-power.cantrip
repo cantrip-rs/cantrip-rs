@@ -1,0 +1,62 @@
+# Graceful Takedown: "any number" of enchanted creatures may be one, and the others are not made to deal damage. Bot1 chooses only
+# Memnite #1 (enchanted, power 2) and Memnite #3 (the other creature, power 1); Memnite #2, also enchanted, is left out and deals
+# none (CR 608.2b): the Wall of Mist is dealt exactly 2 + 1 = 3 (CR 120.3), which it survives.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Memnite
+Memnite
+Memnite
+Escape Velocity
+Graceful Takedown
+Island x12
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Wall of Mist
+Escape Velocity
+Island x2
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Escape Velocity.Cast(Bot1.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Mist.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Escape Velocity.Cast(Bot1.Battlefield.Memnite#2)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Graceful Takedown.Cast
+Bot1.Target(Bot1.Battlefield.Memnite#1)
+Bot1.Target(Bot1.Battlefield.Memnite#3)
+Bot1.Target(Bot2.Battlefield.Wall of Mist)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Wall of Mist.Damage = 3
+Bot1.Graveyard = Graceful Takedown

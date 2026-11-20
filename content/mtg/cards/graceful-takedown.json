@@ -1,0 +1,6 @@
+{
+  "name": "Graceful Takedown",
+  "manaCost": "{1}{G}",
+  "type": "Sorcery",
+  "oracleText": "Any number of target enchanted creatures you control and up to one other target creature you control each deal damage equal to their power to target creature you don't control."
+}
