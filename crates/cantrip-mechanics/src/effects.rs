@@ -3235,6 +3235,16 @@ pub fn this_cant_be_blocked_this_turn(g: &mut dyn Game, item: &StackItem) -> Res
     Ok(())
 }
 
+/// "This creature gets +`P`/+`T` until end of turn and can't be blocked this turn" (CR 611.2a, 509.1b): one instruction of two
+/// continuous effects from the ability's source on the same creature, both of which do nothing once it has left the battlefield
+/// (CR 400.7). Otter-Penguin (+1/+2) and Merfolk Cave-Diver (+1/+0) print it.
+pub fn this_gets_and_cant_be_blocked_this_turn<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.one_instruction(&mut |g| {
+        this_gets::<P, T>(g, item)?;
+        this_cant_be_blocked_this_turn(g, item)
+    })
+}
+
 /// "`target` gains hexproof until end of turn" (CR 702.11b, 611.2a): a layer 6 keyword for the rest of the turn, from the
 /// effect's source. Liliana the Faultless, Octopus Form, Shore Up and Snakeskin Veil print it.
 pub fn gain_hexproof_until_end_of_turn(g: &mut dyn Game, source: ObjectId, target: ObjectId) {
