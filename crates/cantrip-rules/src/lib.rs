@@ -3188,8 +3188,8 @@ impl cantrip_api::Game for Cx<'_> {
         ops::create_tokens_worded(self, tokens, tapped, None, &[], words, None, attacking).map_err(|_| Suspend)
     }
 
-    fn create_token_attached(&mut self, def: CardId, controller: PlayerId, host: ObjectId) -> Result<Vec<ObjectId>, Suspend> {
-        ops::create_token_attached(self, def, controller, host).map_err(|_| Suspend)
+    fn create_tokens_attached(&mut self, tokens: &[(CardId, PlayerId, ObjectId)]) -> Result<Vec<ObjectId>, Suspend> {
+        ops::create_tokens_attached(self, tokens).map_err(|_| Suspend)
     }
 
     fn gain_life(&mut self, player: PlayerId, amount: i32) {

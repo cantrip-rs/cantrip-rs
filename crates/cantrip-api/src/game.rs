@@ -1654,8 +1654,18 @@ pub trait Game: Query {
     /// and not targeted, so hexproof and shroud do not matter (the Role rulings, 2023-09-01). If the Aura could not legally
     /// enchant `host` - gone from the battlefield, or protected from it - it is not created (CR 303.4i); an Equipment token
     /// that could not equip it is created unattached (CR 301.5e), and any other token enters unattached (CR 303.4h). Every token a replacement makes of it
-    /// (CR 614.1a) enters so. The tokens created.
-    fn create_token_attached(&mut self, def: CardId, controller: PlayerId, host: ObjectId) -> Result<Vec<ObjectId>, Suspend>;
+    /// (CR 614.1a) enters so. The tokens created. `create_tokens_attached` with one token.
+    fn create_token_attached(&mut self, def: CardId, controller: PlayerId, host: ObjectId) -> Result<Vec<ObjectId>, Suspend> {
+        self.create_tokens_attached(&[(def, controller, host)])
+    }
+    /// Creates tokens, each "attached to" its own host, as one instruction (CR 101.4, 111.1, 303.4): `(def, controller,
+    /// host)` for each, as `create_token_attached` makes one. All enter at once, and what watches tokens entering sees one
+    /// event (CR 603.2c): "for each Rat you control, create a Wicked Role token attached to that Rat" (Twisted Sewer-Witch),
+    /// a Role for each card of a merged permanent returned (Not Dead After All). A replacement changes that one event
+    /// (CR 614.1a): each token it makes is attached as the token asked for that it is one of "those tokens" for would be
+    /// (two Roles on each Rat under Doubling Season), and a token it adds to the event ("those tokens plus a [token]") is
+    /// attached to nothing. The tokens created.
+    fn create_tokens_attached(&mut self, tokens: &[(CardId, PlayerId, ObjectId)]) -> Result<Vec<ObjectId>, Suspend>;
     /// Exiles cards together and remembers them as exiled with `by`, the ability exiling them (`Query::linked`; CR 607.2a,
     /// 610.3). With `until_leaves` they return to where they were exiled from the moment `by`'s object is no longer on the
     /// battlefield (CR 610.3), no stack and nothing

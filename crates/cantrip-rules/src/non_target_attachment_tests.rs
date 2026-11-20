@@ -470,7 +470,7 @@ fn equipment_token_uses_prospective_battlefield_characteristics() {
         if animated { put(&mut g, &ARTIFACT_ANIMATOR, 0); }
         let host = put(&mut g, &PLAIN, 0);
         let card = g.cards.id_of(&EQUIPMENT);
-        let created = crate::ops::create_token_attached(&mut cx(&mut g), card, PlayerId(0), host).unwrap();
+        let created = crate::ops::create_tokens_attached(&mut cx(&mut g), &[(card, PlayerId(0), host)]).unwrap();
         assert_eq!(created.len(), 1);
         let token = created[0];
         assert_eq!(g.chars(token).is(CardType::Creature), animated);
@@ -488,7 +488,7 @@ fn aura_token_that_would_be_a_creature_is_not_created() {
         if animated { put(&mut g, &ARTIFACT_ANIMATOR, 0); }
         let host = put(&mut g, &PLAIN, 0);
         let card = g.cards.id_of(&ARTIFACT_AURA);
-        let created = crate::ops::create_token_attached(&mut cx(&mut g), card, PlayerId(0), host).unwrap();
+        let created = crate::ops::create_tokens_attached(&mut cx(&mut g), &[(card, PlayerId(0), host)]).unwrap();
         if animated {
             assert!(created.is_empty(), "an Aura creature cannot enchant and is not created");
         } else {
@@ -505,7 +505,7 @@ fn transformed_equipment_token_uses_prospective_mana_value_for_protection() {
         g.state.update_turn(|turn| turn.day_night = DayNight::Night);
         let host = put(&mut g, if protected { &VALUE_PROTECTED } else { &PLAIN }, 0);
         let card = g.cards.id_of(&FRONT_EQUIPMENT);
-        let created = crate::ops::create_token_attached(&mut cx(&mut g), card, PlayerId(0), host).unwrap();
+        let created = crate::ops::create_tokens_attached(&mut cx(&mut g), &[(card, PlayerId(0), host)]).unwrap();
         assert_eq!(created.len(), 1);
         let token = created[0];
         assert!(g.state.obj(token).transformed);
@@ -515,4 +515,21 @@ fn transformed_equipment_token_uses_prospective_mana_value_for_protection() {
             Event::Attached { attachment, to: Target::Object(to) } if attachment == token && to == host
         )), !protected);
     }
+}
+
+#[test]
+fn tokens_attached_each_to_its_own_host_and_an_aura_whose_host_is_gone_is_not_created() {
+    let mut g = game();
+    let first = put(&mut g, &PLAIN, 0);
+    let second = put(&mut g, &PLAIN, 0);
+    let hand = Zone::hand(PlayerId(0));
+    let gone = g.state.push_obj(Obj::new(g.cards.id_of(&PLAIN), PlayerId(0), hand));
+    g.state.zone_push(hand, gone);
+    let card = g.cards.id_of(&ARTIFACT_AURA);
+    let created =
+        crate::ops::create_tokens_attached(&mut cx(&mut g), &[(card, PlayerId(0), first), (card, PlayerId(0), gone), (card, PlayerId(0), second)])
+            .unwrap();
+    assert_eq!(created.len(), 2, "the Aura whose host is not on the battlefield is not created (CR 303.4i)");
+    assert_eq!(g.state.obj(created[0]).attached_to, Some(first));
+    assert_eq!(g.state.obj(created[1]).attached_to, Some(second));
 }

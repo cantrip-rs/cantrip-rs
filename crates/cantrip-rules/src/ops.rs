@@ -2760,7 +2760,7 @@ pub fn create_token_copies_together(cx: &mut Cx, copies: &[(Copiable, PlayerId)]
 pub fn create_token_copies_together_tapped(cx: &mut Cx, copies: &[(Copiable, PlayerId)], tapped: bool) -> R<Vec<ObjectId>> {
     let tokens: Vec<(CardId, PlayerId)> = copies.iter().map(|&(values, controller)| (values.card, controller)).collect();
     let values: Vec<Copiable> = copies.iter().map(|&(values, _)| values).collect();
-    create_tokens_onto(cx, &tokens, tapped, Copies::Each(&values), &[], Words::NONE, None, None, None)
+    create_tokens_onto(cx, &tokens, tapped, Copies::Each(&values), &[], Words::NONE, None, &[], None)
 }
 
 /// One token for each of `entries`, created together as one instruction (CR 101.4, 111.1) and each entering attacking
@@ -2780,7 +2780,7 @@ pub fn create_tokens_attacking_each(cx: &mut Cx, card: CardId, copy: Option<Copi
     let words = creating_words(cx, copy);
     let card = copy.map_or(card, |values| values.card);
     let tokens = vec![(card, controller); entries.len()];
-    create_tokens_onto(cx, &tokens, tapped, Copies::All(copy), &[], words, None, None, Some(AttackEntry::Each(entries)))
+    create_tokens_onto(cx, &tokens, tapped, Copies::All(copy), &[], words, None, &[], Some(AttackEntry::Each(entries)))
 }
 
 /// The words of the text creating tokens (CR 612.4, 612.2a): a token is what the text that makes it says, so a changed text
@@ -2810,7 +2810,7 @@ pub fn create_token_copies_tapped(cx: &mut Cx, values: Copiable, controller: Pla
 pub fn create_token_copies_attacking(cx: &mut Cx, values: Copiable, controller: PlayerId, count: u32, tapped: bool, defender: Option<Target>) -> R<Vec<ObjectId>> {
     let tokens = vec![(values.card, controller); count as usize];
     let attack = defender.map_or(AttackEntry::Choose, AttackEntry::Defender);
-    create_tokens_onto(cx, &tokens, tapped, Copies::All(Some(values)), &[], Words::NONE, None, None, Some(attack))
+    create_tokens_onto(cx, &tokens, tapped, Copies::All(Some(values)), &[], Words::NONE, None, &[], Some(attack))
 }
 
 /// An object that ceases to exist where it is, in no zone it can be in (CR 111.7, 111.8, 707.10a, 704.5d, 800.4a), as it
@@ -3049,23 +3049,29 @@ pub fn create_tokens_worded(
     spell: Option<&StackItem>,
     attacking: Option<Target>,
 ) -> R<Vec<ObjectId>> {
-    create_tokens_onto(cx, tokens, tapped, Copies::All(copy), with, words, spell, None, attacking.map(AttackEntry::Defender))
+    create_tokens_onto(cx, tokens, tapped, Copies::All(copy), with, words, spell, &[], attacking.map(AttackEntry::Defender))
 }
 
-/// Creates a token "attached to" a permanent (CR 111.1, 303.4): `Game::create_token_attached`, with the words of the text
-/// making it (CR 612.4).
-pub fn create_token_attached(cx: &mut Cx, card: CardId, controller: PlayerId, host: ObjectId) -> R<Vec<ObjectId>> {
+/// Creates tokens, each "attached to" its own permanent, as one instruction (CR 111.1, 303.4, 101.4):
+/// `Game::create_tokens_attached`, with the words of the text making them (CR 612.4). All enter at once and what watches
+/// tokens entering sees one event (CR 603.2c).
+pub fn create_tokens_attached(cx: &mut Cx, tokens: &[(CardId, PlayerId, ObjectId)]) -> R<Vec<ObjectId>> {
     let words = match cx.cause() {
         Cause::Spell(source) | Cause::Ability { source, .. } => Query::words(&*cx, source),
         _ => Words::NONE,
     };
-    create_tokens_onto(cx, &[(card, controller)], false, Copies::All(None), &[], words, None, Some(host), None)
+    let made: Vec<(CardId, PlayerId)> = tokens.iter().map(|&(card, controller, _)| (card, controller)).collect();
+    let hosts: Vec<ObjectId> = tokens.iter().map(|&(_, _, host)| host).collect();
+    create_tokens_onto(cx, &made, false, Copies::All(None), &[], words, None, &hosts, None)
 }
 
-/// `create_tokens_worded`, each token an effect says is created attached to `host` entering so (CR 303.4): an Aura only
-/// if it could legally enchant `host` as it enters, and not created otherwise (CR 303.4i); an Equipment if it could
-/// equip it, and unattached otherwise (CR 301.5e); a Fortification follows the same rule for a land (CR 301.6);
-/// anything else enters unattached (CR 303.4h). The choice is the effect's, not a target (hexproof does not matter).
+/// `create_tokens_worded`, each token an effect says is created attached to a host entering so (CR 303.4): `hosts` are
+/// the hosts of the tokens asked for, by place in `tokens` (none when empty), and each token made enters attached to the
+/// host of the token asked for that it is one of "those tokens" for (`replace::token_batch`; a token an effect added to
+/// the event has none). An Aura only if it could legally enchant its host as it enters, and not created otherwise
+/// (CR 303.4i); an Equipment if it could equip it, and unattached otherwise (CR 301.5e); a Fortification follows the
+/// same rule for a land (CR 301.6); anything else enters unattached (CR 303.4h). The choice is the effect's, not a target
+/// (hexproof does not matter).
 #[allow(clippy::too_many_arguments)]
 fn create_tokens_onto(
     cx: &mut Cx,
@@ -3075,13 +3081,13 @@ fn create_tokens_onto(
     with: &[(CounterKind, i32)],
     words: Words,
     spell: Option<&StackItem>,
-    host: Option<ObjectId>,
+    hosts: &[ObjectId],
     defender: Option<AttackEntry<'_>>,
 ) -> R<Vec<ObjectId>> {
     // The replacement effects that apply to the tokens' entry with more of their modified events to do once they are
     // created (CR 614.6), done at the end; none where the creation stops on a question.
     let outer = replace::afterward_scope(cx);
-    let created = create_tokens_entering(cx, tokens, tapped, copies, with, words, spell, host, defender);
+    let created = create_tokens_entering(cx, tokens, tapped, copies, with, words, spell, hosts, defender);
     let rest = replace::afterward_done(cx, outer);
     if created.is_ok() {
         replace::rest_of_replacements(cx, rest);
@@ -3098,7 +3104,7 @@ fn create_tokens_entering(
     with: &[(CounterKind, i32)],
     words: Words,
     spell: Option<&StackItem>,
-    host: Option<ObjectId>,
+    hosts: &[ObjectId],
     defender: Option<AttackEntry<'_>>,
 ) -> R<Vec<ObjectId>> {
     // Replacements inspect copy exceptions and changed text too (CR 614.12).
@@ -3167,7 +3173,7 @@ fn create_tokens_entering(
         }
         // "Create a token attached to [a permanent]" (CR 303.4h-i, 301.5e): an Aura that could not enchant it is not
         // created; an Equipment that could not equip it is created unattached; anything else enters unattached.
-        if let Some(host) = host {
+        if let Some(host) = stands_for(place).and_then(|asked| hosts.get(asked).copied()) {
             // CR 614.12: attachment legality is determined as the token would
             // exist on the battlefield, including entry changes and continuous effects.
             let prospective = as_it_would_exist(cx, &entering);
