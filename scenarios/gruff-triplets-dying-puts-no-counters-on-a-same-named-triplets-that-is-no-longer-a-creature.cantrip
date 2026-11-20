@@ -1,0 +1,67 @@
+# Gruff Triplets: "...put a number of +1/+1 counters equal to its power on each creature you control named Gruff Triplets." Bot2
+# enchants one of Bot1's three Triplets with Imprisoned in the Moon: it is still named Gruff Triplets but is a land, no creature.
+# On Bot2's turn, bolting another Triplets puts three counters on the last one, now 6/6, and none on the imprisoned land.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Gruff Triplets
+Island x15
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Imprisoned in the Moon
+Lightning Bolt
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gruff Triplets.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Gruff Triplets; Gruff Triplets; Gruff Triplets; Mox Jet; Mox Pearl; Mox Ruby
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Imprisoned in the Moon.Cast(Bot1.Battlefield.Gruff Triplets#1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Gruff Triplets#1.Types = Land
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Gruff Triplets#2)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Gruff Triplets; Gruff Triplets; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Battlefield.Gruff Triplets#1.Types = Land
+Bot1.Battlefield.Gruff Triplets#1.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Gruff Triplets#2.Power = 6
+Bot1.Battlefield.Gruff Triplets#2.Toughness = 6

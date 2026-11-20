@@ -1,0 +1,60 @@
+# Gruff Triplets: the counters equal "its power" as it last existed on the battlefield (CR 608.2h, 603.10a). Bot2 enchants one of Bot1's
+# Triplets with Weakness (-2/-1), a 1/2, and Shocks it: it dies with 1 power, so one counter goes on each of the other two, now 4/4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Gruff Triplets
+Island x15
+
+[Bot2 Deck]
+Swamp
+Mox Ruby
+Weakness
+Shock
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gruff Triplets.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Gruff Triplets; Gruff Triplets; Gruff Triplets; Mox Jet; Mox Pearl; Mox Ruby
+[T4 Bot2.Main1]
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Weakness.Cast(Bot1.Battlefield.Gruff Triplets#2)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Gruff Triplets#2.Power = 1
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Gruff Triplets#2)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Gruff Triplets; Gruff Triplets; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Battlefield.Gruff Triplets#1.Power = 4
+Bot1.Battlefield.Gruff Triplets#1.Toughness = 4
+Bot1.Battlefield.Gruff Triplets#2.Power = 4
+Bot1.Battlefield.Gruff Triplets#2.Toughness = 4

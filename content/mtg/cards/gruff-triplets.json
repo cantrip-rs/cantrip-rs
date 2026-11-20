@@ -1,0 +1,11 @@
+{
+  "name": "Gruff Triplets",
+  "manaCost": "{3}{G}{G}{G}",
+  "type": "Creature — Satyr Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Trample\nWhen this creature enters, if it isn't a token, create two tokens that are copies of it.\nWhen this creature dies, put a number of +1/+1 counters equal to its power on each creature you control named Gruff Triplets.",
+  "keywords": [
+    "Trample"
+  ]
+}

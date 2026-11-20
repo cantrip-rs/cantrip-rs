@@ -1,0 +1,60 @@
+# Gruff Triplets: the counters equal "its power" as it last existed on the battlefield (CR 608.2h, 603.10a), not the printed 3 of the card
+# in the graveyard. Bot2's Dismember (-5/-5) kills one of Bot1's Triplets at -2 power, so no counters are put on the other two (CR 107.1b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Gruff Triplets
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Dismember
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gruff Triplets.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dismember.Cast(Bot1.Battlefield.Gruff Triplets#2)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Gruff Triplets; Gruff Triplets; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Battlefield.Gruff Triplets#1.Power = 3
+Bot1.Battlefield.Gruff Triplets#2.Power = 3
+Bot1.Graveyard = Black Lotus

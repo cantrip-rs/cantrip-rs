@@ -1,0 +1,53 @@
+# Gruff Triplets: "When this creature enters, if it isn't a token, create two tokens that are copies of it." The cast Triplets makes two token
+# copies, each a 3/3 Triplets with trample and both abilities, and their own entering triggers nothing (CR 603.4: they are tokens), so there are
+# exactly three Triplets and no more.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Gruff Triplets
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gruff Triplets.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Gruff Triplets; Gruff Triplets; Gruff Triplets; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Battlefield.Gruff Triplets#1.Token = (absent)
+Bot1.Battlefield.Gruff Triplets#2.Token = true
+Bot1.Battlefield.Gruff Triplets#3.Token = true
+Bot1.Battlefield.Gruff Triplets#1.Power = 3
+Bot1.Battlefield.Gruff Triplets#2.Power = 3
+Bot1.Battlefield.Gruff Triplets#3.Power = 3
+Bot1.Battlefield.Gruff Triplets#2.Keywords = Trample
+Bot1.Battlefield.Gruff Triplets#3.Keywords = Trample
+Bot1.Battlefield.Gruff Triplets#4 = (absent)
