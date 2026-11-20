@@ -117,7 +117,9 @@ The card table is shared and immutable, so it is never copied. A whole position 
 (`clone_with_journal` is the deep copy, the journal included).
 
 **Every write goes through one journalled API.** Nothing mutates the state directly. Each write (move this object,
-add this counter, tap this, push this frame) records an undo entry. The journal serves three purposes at once:
+add this counter, tap this, push this frame) records an undo entry. An entry is 32 bytes (`Undo`): what it must keep
+that is bigger than a list (an object's row, a frame, a player, the turn) is boxed, since a search's tree holds
+millions of entries and most are a length or a place. The journal serves three purposes at once:
 
 - **Moving through the game tree.** The journal's entries are what the game log's nodes hold (next section), so
   any position is reached from any other by undoing and redoing them.
