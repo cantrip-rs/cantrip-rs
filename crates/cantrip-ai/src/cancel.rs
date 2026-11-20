@@ -31,7 +31,53 @@ use cantrip_engine::*;
 ///
 /// foldhash with a fixed seed: the hash is taken several times a search step, and it is the same in every process. The
 /// guard only compares it for equality, and it never leaves the process.
+///
+/// Its top `PRINT_BITS` bits are the board's print (`board_print`), a hash of a small part of the board, and the rest
+/// the top bits of the hash of all of it: two boards whose prints differ have different hashes whatever the rest is, so
+/// a guard that holds no board of the present print needs no hash of the board at all (`CancelGuard::filtered`).
 pub fn board_hash(state: &GameState) -> u64 {
+    with_print(board_print(state), board_rest(state))
+}
+
+/// The bits of a board's hash that are its print.
+const PRINT_BITS: u32 = 16;
+
+fn with_print(print: u16, rest: u64) -> u64 {
+    (u64::from(print) << (64 - PRINT_BITS)) | (rest >> PRINT_BITS)
+}
+
+/// The print of the board `hash` is of.
+fn print_of(hash: u64) -> u16 {
+    (hash >> (64 - PRINT_BITS)) as u16
+}
+
+/// A board's print: a hash of the players (life, pools), the turn, which object is in which zone and in what order, and
+/// how many objects and stack items there are - a few hundred bytes of the hundred thousand `board_hash` reads, and what
+/// nearly every action changes (a card cast is a new object in another zone, mana made is a pool, a turn begun is the
+/// turn). Every part is part of `board_hash`'s board, so equal boards have equal prints.
+pub(crate) fn board_print(state: &GameState) -> u16 {
+    let mut h = foldhash::fast::FixedState::with_seed(1).build_hasher();
+    (&state.players, &state.turn, &state.zones, state.stack.len(), state.objects.len()).hash(&mut h);
+    h.finish() as u16
+}
+
+thread_local! {
+    /// For tests (`hash_every_board`): `CancelGuard::filtered` hashes every board whole, as it did before the print.
+    static HASH_EVERY_BOARD: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+    /// The requests `CancelGuard::filtered` answered on this thread without hashing the board.
+    static BOARDS_NOT_HASHED: std::cell::Cell<u64> = const { std::cell::Cell::new(0) };
+}
+
+/// For tests that show the print changes nothing: on this thread, whether `CancelGuard::filtered` hashes every board
+/// whole whatever its print; it returns how many boards it had not hashed so far, and starts that count again.
+#[doc(hidden)]
+pub fn hash_every_board(on: bool) -> u64 {
+    HASH_EVERY_BOARD.with(|w| w.set(on));
+    BOARDS_NOT_HASHED.with(|n| n.replace(0))
+}
+
+/// The hash of the whole board, before its print is put in (`board_hash`).
+fn board_rest(state: &GameState) -> u64 {
     let mut h = foldhash::fast::FixedState::with_seed(0).build_hasher();
     (
         &state.players,
@@ -151,7 +197,27 @@ impl CancelGuard {
         if self.is_empty() {
             return request.clone();
         }
-        self.filtered_on(game, board_hash(&game.state), request)
+        // The board is hashed only where a board the guard holds could be this one: `filtered_on` compares it with the
+        // boards cancelled on, and at a priority with the board the pending action began on, and a board of another
+        // print is another board. With none of this print, any hash of this print compares as the board's own would.
+        let print = board_print(&game.state);
+        let priority = matches!(request.kind, RequestKind::Priority { .. });
+        let held = HASH_EVERY_BOARD.with(|w| w.get())
+            || self.cancelled.iter().any(|(hash, _)| print_of(*hash) == print)
+            || (priority && self.pending.is_some_and(|(hash, _, _)| print_of(hash) == print));
+        if !held {
+            BOARDS_NOT_HASHED.with(|n| n.set(n.get() + 1));
+        }
+        let board = if held { with_print(print, board_rest(&game.state)) } else { with_print(print, 0) };
+        #[cfg(debug_assertions)]
+        {
+            let mut whole = self.clone();
+            let request_whole = whole.filtered_on(game, board_hash(&game.state), request);
+            let mut fast = self.clone();
+            let request_fast = fast.filtered_on(game, board, request);
+            debug_assert!(whole == fast && request_whole == request_fast, "the guard filters by the board's print as by its whole hash");
+        }
+        self.filtered_on(game, board, request)
     }
 
     /// `filtered`, on a board the caller has already hashed.

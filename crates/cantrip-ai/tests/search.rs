@@ -2080,3 +2080,63 @@ fn search_speed() {
                  spent.as_secs_f64() * 1e3, spent.as_secs_f64() * 1e6 / simulations.max(1) as f64);
     }
 }
+
+/// The cancel guard's board print (`cancel::board_print`) changes no search: with the guard hashing a board only where
+/// one it holds has the board's print, every search of a game - one world and several, fresh and re-rooted on a kept
+/// tree - makes the same answer, root visits, value and simulations as with every board hashed whole, and boards went
+/// unhashed.
+#[test]
+fn a_board_not_hashed_is_a_board_the_guard_does_not_hold() {
+    let evaluator = Hashed::new();
+    let mut unhashed = 0u64;
+    let mut compared = 0usize;
+    for (mode, worlds) in [(InfoMode::Full, 1usize), (InfoMode::Decklist, 3)] {
+        for reuse in ["None", "TopUp"] {
+            let (mut game, _) = handed(STRIKE_SHOCK_OPT, "board print");
+            let mut ks: Vec<Knowledge> = game.state.seats().map(Knowledge::new).collect();
+            let mut payments = vec![cantrip_ai::net::Payment::default(); 2];
+            let mut kept_whole: Vec<Option<search::Kept>> = vec![None, None];
+            let mut kept_print: Vec<Option<search::Kept>> = vec![None, None];
+            for _ in 0..80 {
+                if game.is_over() || game.state.turn.number > 8 {
+                    break;
+                }
+                let Some(request) = game.pending().cloned() else { break };
+                let p = request.player.index();
+                ks[p].update(&game);
+                let mut config = Config { seed: request.id as u64, batch: 8, worlds, ..Config::simulations(600) };
+                config.set_pair(&format!("Reuse={reuse}")).unwrap();
+                let kn = &ks[p];
+                let run = |keep: &mut Option<search::Kept>| {
+                    payments[p]
+                        .clone()
+                        .decide(&game, &request, kn, mode, |request, guard| {
+                            search::search_keeping(&game, request, kn, mode, table(), &evaluator, &config, prior(), guard, &WallClock, keep)
+                        })
+                        .unwrap()
+                };
+                cantrip_ai::cancel::hash_every_board(true);
+                let a = run(&mut kept_whole[p]);
+                cantrip_ai::cancel::hash_every_board(false);
+                let b = run(&mut kept_print[p]);
+                unhashed += cantrip_ai::cancel::hash_every_board(false);
+                assert_eq!(a.answer, b.answer, "{mode:?} reuse {reuse}, request {}", request.id);
+                match (a.search.as_ref(), b.search.as_ref()) {
+                    (Some(x), Some(y)) => {
+                        assert_eq!(format!("{:?}", x.visits), format!("{:?}", y.visits), "{mode:?} reuse {reuse}");
+                        assert_eq!(x.root_value.to_bits(), y.root_value.to_bits(), "{mode:?} reuse {reuse}");
+                        assert_eq!(x.simulations, y.simulations, "{mode:?} reuse {reuse}");
+                        assert_eq!(x.refused, y.refused, "{mode:?} reuse {reuse}");
+                        compared += 1;
+                    }
+                    (x, y) => assert_eq!(x.is_some(), y.is_some(), "{mode:?} reuse {reuse}"),
+                }
+                let board = cantrip_ai::cancel::board_hash(&game.state);
+                payments[p].played(&game, board, &request, &a.answer);
+                game.answer(request.id, request.player, a.answer).expect("the answer is taken");
+            }
+        }
+    }
+    assert!(compared > 20, "too few searches compared: {compared}");
+    assert!(unhashed > 1000, "too few boards went unhashed to show anything: {unhashed}");
+}
