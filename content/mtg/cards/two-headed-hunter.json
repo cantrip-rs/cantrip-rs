@@ -1,0 +1,17 @@
+{
+  "name": "Two-Headed Hunter",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Giant",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Menace"
+  ],
+  "adventure": {
+    "name": "Twice the Rage",
+    "manaCost": "{1}{R}",
+    "type": "Instant — Adventure",
+    "oracleText": "Target creature gains double strike until end of turn. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

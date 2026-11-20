@@ -1,0 +1,36 @@
+# Twice the Rage (CR 702.4, 611.2a): "Target creature gains double strike until end of turn." Bot1's 1/1 Memnite is given it on turn 3
+# and deals 1 first-strike plus 1 regular damage (Bot2 goes to 18). On turn 5 the effect has ended and the Memnite deals only 1: Bot2
+# goes to 17.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Memnite
+Two-Headed Hunter
+Mountain x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Two-Headed Hunter.Cast(Bot1.Battlefield.Memnite; Ability: Twice the Rage)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = DoubleStrike
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Exile = Two-Headed Hunter
