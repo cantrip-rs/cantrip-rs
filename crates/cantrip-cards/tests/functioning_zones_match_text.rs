@@ -225,14 +225,16 @@ fn a_card_name_is_not_a_cast_keyword() {
     assert!(!cast_keyword("Create a token with \"Cascade\"."));
 }
 
-/// The triggered abilities of an Oracle text: each line, quoted ability and parenthesised reminder cut into sentences, a
+/// The triggered abilities of an Oracle text: each line and quoted ability, its reminder text left out, cut into sentences, a
 /// sentence that starts with "when", "whenever" or "at" (after an ability word's dash) beginning one and the sentences after
 /// it in the same part continuing it ("If you do, return this card from your graveyard ..."). A delayed trigger an ability
 /// creates ("at the beginning of the next end step") is no ability of its card and functions from no zone (CR 603.7).
 fn oracle_abilities(text: &str) -> Vec<String> {
-    let text = text.to_ascii_lowercase().replace('\u{2014}', "-");
+    // Reminder text is not an ability (CR 207.2): a Role's "(... When this token is put into a graveyard, ...)" describes the
+    // token's own ability, not one of the card that makes it.
+    let text = without_reminders(&text.to_ascii_lowercase().replace('\u{2014}', "-"));
     let mut abilities = Vec::new();
-    for part in text.split(['\n', '(', ')', '"', '\u{201c}', '\u{201d}']) {
+    for part in text.split(['\n', '"', '\u{201c}', '\u{201d}']) {
         let mut current: Option<String> = None;
         for sentence in part.split(". ") {
             let s = sentence.trim();
@@ -252,6 +254,17 @@ fn oracle_abilities(text: &str) -> Vec<String> {
         abilities.extend(current);
     }
     abilities
+}
+
+#[test]
+fn reminder_text_is_no_ability_of_the_card() {
+    // Conceited Witch's Price of Beauty: the Wicked Role's reminder text is that token's ability (CR 207.2, 111.10q), so the card
+    // has no triggered ability, and none that functions from a graveyard.
+    let text = "Create a Wicked Role token attached to target creature you control. (If you control another Role on it, put that one into the graveyard. Enchanted creature gets +1/+1. When this token is put into a graveyard, each opponent loses 1 life.)";
+    assert_eq!(oracle_abilities(text), Vec::<String>::new());
+    // A triggered ability outside the parentheses is still read.
+    let text = "When this creature enters, draw a card. (Reminder text.)";
+    assert_eq!(oracle_abilities(text), vec!["when this creature enters, draw a card.".to_string()]);
 }
 
 /// The zones, by name, for a failure's message.
