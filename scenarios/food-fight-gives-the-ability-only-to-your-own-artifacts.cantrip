@@ -1,0 +1,32 @@
+# Food Fight: "Artifacts you control have ..." (CR 613.1f) only gives the ability to the Food Fight controller's own artifacts.
+# Bot1 controls a Food Fight; Bot2 controls a Mox Ruby and an Ornithopter, and even with its Mox Ruby tapped for mana
+# (so {2} could be paid) Bot2's Ornithopter has no such ability: the activation is refused.
+
+[Bot1 Deck]
+Black Lotus
+Food Fight
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Food Fight.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+! Bot2.Battlefield.Ornithopter.Activate(Bot1)
+
+[Expect]
+Bot1.Life = 20
+Bot2.Battlefield.Ornithopter.Power = 0

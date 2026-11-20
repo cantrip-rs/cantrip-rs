@@ -1,0 +1,32 @@
+# Food Fight ({1}{R} enchantment): "Artifacts you control have '{2}, Sacrifice this artifact: It deals damage to any target equal to
+# 1 plus the number of permanents named Food Fight you control.'" (CR 613.1f, 602.2, 701.17.) With one Food Fight the damage is 1 + 1 = 2:
+# Bot1 pays {2} (a leftover Black Lotus red and a Mox Ruby), sacrifices an Ornithopter and Bot2 goes to 18.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Food Fight
+Ornithopter
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Food Fight.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate(Ability: Add)
+Bot1.Battlefield.Ornithopter.Activate(Bot2)
+? Stack.Count = 1
+? Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Ornithopter; Black Lotus
