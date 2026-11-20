@@ -1,0 +1,52 @@
+# Yenna, Redtooth Regent: an Aura token with nothing it could legally enchant is not created (CR 303.4g, 111.7). Bot1 plays a Plains and
+# enchants it with Consecrate Land ("Enchant land. Enchanted land ... can't be enchanted by other Auras"), and no other land is on the
+# battlefield (Bot1's mana comes from Moxen, Bot2 plays nothing). Yenna copies Consecrate Land: the copy could enchant only a land, and
+# the one land refuses other Auras, so no token is made. There is no Aura token, so Yenna stays tapped and Bot1 does not scry.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Ruby
+Yenna, Redtooth Regent
+Consecrate Land
+Plains
+Mountain
+Forest
+Plains x11
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Yenna, Redtooth Regent.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Consecrate Land.Cast(Bot1.Battlefield.Plains)
+Bot1.Pass
+Bot2.Pass
+? Attached = Consecrate Land > Plains
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Yenna, Redtooth Regent.Activate(Bot1.Battlefield.Consecrate Land)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Attached = Consecrate Land > Plains
+Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Yenna, Redtooth Regent.Tapped = true
+Bot1.Graveyard.Count = 0
+Bot1.Library.Count = 12

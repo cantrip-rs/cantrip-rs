@@ -1,0 +1,61 @@
+# Yenna, Redtooth Regent {2}{G}{W}, a 4/4: "{2}, {T}: Choose target enchantment you control that doesn't have the same name as another
+# permanent you control. Create a token that's a copy of it, except it isn't legendary. If the token is an Aura, untap Yenna, then scry
+# 2. Activate only as a sorcery." Bot1 casts Yenna on turn one. On turn three Bot1 puts a Pacifism on Bot2's Ornithopter and copies it:
+# the token Aura enters enchanting a creature Bot1 chooses (CR 303.4f), Bot2's Ornithopter again, so it is Pacified twice. Yenna untaps,
+# and Bot1 scries 2: the Mountain stays on top and the Forest goes to the bottom of Bot1's library.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Ruby
+Yenna, Redtooth Regent
+Glorious Anthem
+Pacifism
+Forest
+Mountain
+Plains x11
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Yenna, Redtooth Regent.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pacifism.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Battlefield.Yenna, Redtooth Regent.Tapped = false
+Bot1.Battlefield.Yenna, Redtooth Regent.Activate(Bot1.Battlefield.Pacifism)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Arrange(Mountain | Forest)
+
+[Expect]
+Stack.Count = 0
+Attached = Pacifism > Ornithopter; Pacifism > Ornithopter
+Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Yenna, Redtooth Regent.Tapped = false
+Bot1.Library.Count = 13
+Bot1.Library = Mountain; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Forest

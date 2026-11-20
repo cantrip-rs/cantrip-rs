@@ -1,0 +1,49 @@
+# Yenna, Redtooth Regent: a token copy of a Glorious Anthem (a non-Aura enchantment) is made and Yenna does not untap or scry. The two
+# Anthems give creatures +2/+2, so Yenna is a 6/6. On turn five Yenna is untapped and Bot1 has mana, but the Anthem has the same name as
+# another permanent Bot1 controls, so neither of them can be chosen.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Ruby
+Yenna, Redtooth Regent
+Glorious Anthem
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Glorious Anthem.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Yenna, Redtooth Regent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Yenna, Redtooth Regent.Activate(Bot1.Battlefield.Glorious Anthem)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Yenna, Redtooth Regent.Tapped = true
+? Bot1.Battlefield.Yenna, Redtooth Regent.Power = 6
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Yenna, Redtooth Regent.Activate(Bot1.Battlefield.Glorious Anthem#1)
+! Bot1.Battlefield.Yenna, Redtooth Regent.Activate(Bot1.Battlefield.Glorious Anthem#2)
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Yenna, Redtooth Regent.Power = 6

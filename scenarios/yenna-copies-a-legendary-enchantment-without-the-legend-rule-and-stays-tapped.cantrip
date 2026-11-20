@@ -1,0 +1,46 @@
+# Yenna, Redtooth Regent: the token copy isn't legendary, so a copy of the legendary Vraska Joins Up leaves both Vraskas on the battlefield
+# (CR 704.5j would put one in the graveyard if the token were legendary too). Vraska Joins Up isn't an Aura: Yenna stays tapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Ruby
+Yenna, Redtooth Regent
+Vraska Joins Up
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Yenna, Redtooth Regent.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Vraska Joins Up.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Yenna, Redtooth Regent.Activate(Bot1.Battlefield.Vraska Joins Up)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Yenna, Redtooth Regent.Tapped = true

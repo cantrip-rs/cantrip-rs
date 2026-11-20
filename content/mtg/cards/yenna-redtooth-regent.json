@@ -1,0 +1,8 @@
+{
+  "name": "Yenna, Redtooth Regent",
+  "manaCost": "{2}{G}{W}",
+  "type": "Legendary Creature — Elf Noble",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "{2}, {T}: Choose target enchantment you control that doesn't have the same name as another permanent you control. Create a token that's a copy of it, except it isn't legendary. If the token is an Aura, untap Yenna, then scry 2. Activate only as a sorcery."
+}
