@@ -1,0 +1,11 @@
+{
+  "name": "Hamlet Glutton",
+  "manaCost": "{5}{G}{G}",
+  "type": "Creature — Giant",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nThis spell costs {2} less to cast if it's bargained.\nTrample\nWhen this creature enters, you gain 3 life.",
+  "keywords": [
+    "Trample"
+  ]
+}

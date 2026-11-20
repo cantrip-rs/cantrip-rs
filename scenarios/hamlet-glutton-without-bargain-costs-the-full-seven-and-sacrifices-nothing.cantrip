@@ -1,0 +1,41 @@
+# Hamlet Glutton cast without bargain is not cheaper: it costs the full {5}{G}{G}, all seven mana of Black Lotus and four Moxen, with nothing
+# left in the pool, and Memnite, which could have been sacrificed, is untouched. Its enters ability still gains 3 life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Jet
+Memnite
+Hamlet Glutton
+Island x13
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hamlet Glutton.Cast
+Bot1.Modes(Cast without)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 23
+Bot1.Battlefield = Hamlet Glutton; Memnite; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Graveyard = Black Lotus

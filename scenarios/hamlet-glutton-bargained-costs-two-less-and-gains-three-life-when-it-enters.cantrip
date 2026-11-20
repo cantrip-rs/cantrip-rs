@@ -1,0 +1,41 @@
+# Hamlet Glutton: bargained (sacrificing Memnite, an artifact) it costs {2} less, {3}{G}{G}: exactly the five mana of Black Lotus, Mox Emerald and
+# Mox Ruby, with nothing left in the pool, and the enters ability gains 3 life (CR 702.166, 601.2f, 119.3).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Memnite
+Hamlet Glutton
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hamlet Glutton.Cast
+Bot1.Modes(Bargain:)
+Bot1.Choose(Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 23
+Bot1.Battlefield = Hamlet Glutton; Mox Emerald; Mox Ruby
+Bot1.Battlefield.Hamlet Glutton.Power = 6
+Bot1.Battlefield.Hamlet Glutton.Toughness = 6
+Bot1.Battlefield.Hamlet Glutton.Keywords = Trample
+Bot1.Graveyard = Memnite; Black Lotus
