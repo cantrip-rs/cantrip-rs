@@ -1,0 +1,46 @@
+# Nicanzil, Current Conductor: "Whenever a creature you control explores a nonland card, put a +1/+1 counter on Nicanzil" (CR 701.44a, 603.2). Bot1's Cenote Scout explores a
+# Lightning Bolt: the Scout gets its own counter (a 2/2) and Bot1 keeps the Bolt on top; Nicanzil gets one too (a 3/4) and, the card being a nonland, is not offered the
+# Plains in the hand (the land trigger is for a land card).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Nicanzil, Current Conductor
+Cenote Scout
+Forest
+Plains
+Island
+Lightning Bolt
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Nicanzil, Current Conductor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Cenote Scout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Nicanzil, Current Conductor.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Nicanzil, Current Conductor.Power = 3
+Bot1.Battlefield.Nicanzil, Current Conductor.Toughness = 4
+Bot1.Battlefield.Cenote Scout.Counters.PlusOnePlusOne = 1
+Bot1.Hand = Island; Plains
+Bot1.Revealed = Lightning Bolt
+Bot1.Library.Count = 14

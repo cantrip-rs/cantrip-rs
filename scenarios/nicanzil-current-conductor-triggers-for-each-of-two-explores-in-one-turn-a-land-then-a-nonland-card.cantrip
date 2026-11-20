@@ -1,0 +1,60 @@
+# Nicanzil, Current Conductor and two explores in one turn (CR 701.44a, 603.2): each explore is its own event, and the trigger for the card it revealed is the
+# one that fires. Bot1's first Cenote Scout explores an Island, which goes to the hand, and the land trigger puts the Plains from the hand onto the battlefield
+# tapped. The second Scout then explores Lightning Bolt, a nonland card that Bot1 leaves on top: this time the counter trigger fires and Nicanzil gets a +1/+1
+# counter, and no land is asked for. The Island stays in the hand.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Nicanzil, Current Conductor
+Cenote Scout
+Cenote Scout
+Plains
+Island
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Nicanzil, Current Conductor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Cenote Scout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Cenote Scout; Island; Plains
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains)
+? Bot1.Battlefield.Plains.Tapped = true
+Bot1.Hand.Cenote Scout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+! Bot1.Choose
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island
+Bot1.Revealed = Island; Lightning Bolt
+Bot1.Library.Top = Lightning Bolt
+Bot1.Battlefield = Cenote Scout; Cenote Scout; Mox Emerald; Mox Sapphire; Nicanzil, Current Conductor; Plains
+Bot1.Battlefield.Nicanzil, Current Conductor.Counters.PlusOnePlusOne = 1
+Bot1.LandsPlayed = 0
+Stack.Count = 0

@@ -1,0 +1,40 @@
+# Nicanzil, Current Conductor, "you may" (CR 603.5, 701.44a): Bot1's Cenote Scout explores a land card (an Island, into the hand) and Bot1, offered a land card from the hand
+# (the Plains or the Island), chooses none: both stay in the hand and nothing enters the battlefield.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Nicanzil, Current Conductor
+Cenote Scout
+Forest
+Plains
+Lightning Bolt
+Island
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Nicanzil, Current Conductor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Cenote Scout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+
+[Expect]
+Bot1.Battlefield = Cenote Scout; Forest; Mox Emerald; Mox Sapphire; Nicanzil, Current Conductor
+Bot1.Hand = Island; Lightning Bolt; Plains

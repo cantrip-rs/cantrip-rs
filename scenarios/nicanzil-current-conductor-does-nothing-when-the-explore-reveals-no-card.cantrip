@@ -1,0 +1,39 @@
+# Nicanzil, Current Conductor needs a land card or a nonland card revealed (CR 701.44a-b). Bot1's library is empty, so the Cenote Scout's explore reveals nothing: the Scout
+# still gets its counter (a 2/2), but Nicanzil gets none (a 2/3) and Bot1 is not offered the Plains in the hand.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Nicanzil, Current Conductor
+Cenote Scout
+Forest
+Plains
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Nicanzil, Current Conductor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Cenote Scout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Cenote Scout.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Nicanzil, Current Conductor.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Nicanzil, Current Conductor.Power = 2
+Bot1.Hand = Island; Plains
+Bot1.Library.Count = 0

@@ -1,0 +1,41 @@
+# Nicanzil, Current Conductor (CR 701.44a, 603.3): the Island Bot1's Cenote Scout explores into the hand is the only land card there - the Forest was played - and the trigger,
+# which resolves once the explore is over, can put exactly that Island onto the battlefield tapped.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Nicanzil, Current Conductor
+Cenote Scout
+Forest
+Lightning Bolt
+Lightning Bolt
+Island
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Nicanzil, Current Conductor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Cenote Scout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+? Bot1.Battlefield.Island.Tapped = true
+
+[Expect]
+Bot1.Battlefield = Cenote Scout; Forest; Island; Mox Emerald; Mox Sapphire; Nicanzil, Current Conductor
+Bot1.Hand = Lightning Bolt; Lightning Bolt

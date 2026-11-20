@@ -1,0 +1,59 @@
+# Nicanzil, Current Conductor's triggers are for "a creature you control" (CR 603.2, 701.44a). Bot2's two Cenote Scouts explore a Mountain (into Bot2's hand) and a Lightning
+# Bolt (a counter on the second Scout, which Bot2 leaves on top): Bot1 is not offered a land from the hand and Nicanzil stays a 2/3 with no counter.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Nicanzil, Current Conductor
+Plains
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Cenote Scout
+Cenote Scout
+Forest
+Island
+Island
+Island
+Island
+Mountain
+Lightning Bolt
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Nicanzil, Current Conductor.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Forest.Play
+Bot2.Hand.Cenote Scout.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Cenote Scout.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Nicanzil, Current Conductor.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Nicanzil, Current Conductor.Power = 2
+Bot1.Hand = Island; Island; Island; Plains
+Bot2.Hand = Island; Island; Island; Island; Mountain
+Bot2.Battlefield.Count = 4

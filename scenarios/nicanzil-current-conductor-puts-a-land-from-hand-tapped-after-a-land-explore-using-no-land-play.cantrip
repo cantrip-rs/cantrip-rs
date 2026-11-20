@@ -1,0 +1,48 @@
+# Nicanzil, Current Conductor {G}{U}: "Whenever a creature you control explores a land card, you may put a land card from your hand onto the battlefield tapped"
+# (CR 701.44a, 603.2, 614.1c). Bot1's Cenote Scout explores an Island, which goes to the hand, and the trigger resolves after: the hand holds a Plains, a Lightning Bolt and
+# that Island. The Bolt is refused (not a land card), and the Island itself is chosen: it enters tapped, the Plains stays, and putting it is not playing it, so
+# Bot1's land play (the Forest) is the only one used. Bot2's hand of Islands is not a choice and stays put.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Nicanzil, Current Conductor
+Cenote Scout
+Forest
+Plains
+Lightning Bolt
+Island
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Nicanzil, Current Conductor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Cenote Scout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Island)
+? Bot1.Battlefield.Island.Tapped = true
+? Bot1.LandsPlayed = 1
+
+[Expect]
+Bot1.Battlefield = Cenote Scout; Forest; Island; Mox Emerald; Mox Sapphire; Nicanzil, Current Conductor
+Bot1.Hand = Lightning Bolt; Plains
+Bot1.Battlefield.Nicanzil, Current Conductor.Counters.PlusOnePlusOne = (absent)
+Bot2.Hand.Count = 7
+Bot2.Battlefield.Count = 0
