@@ -1,0 +1,17 @@
+{
+  "name": "Bellowing Bruiser",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Ogre",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Haste",
+  "keywords": [
+    "Haste"
+  ],
+  "adventure": {
+    "name": "Beat a Path",
+    "manaCost": "{2}{R}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Up to two target creatures can't block this turn. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

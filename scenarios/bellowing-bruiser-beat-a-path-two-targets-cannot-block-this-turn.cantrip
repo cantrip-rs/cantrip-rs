@@ -1,0 +1,41 @@
+# Beat a Path ({2}{R} Adventure of Bellowing Bruiser): "Up to two target creatures can't block this turn." (CR 509.1b, 715.) Bot2's
+# Memnite and Ornithopter are both targeted: neither can block Bot1's attacking Memnite, so Bot2 takes 1.
+# A third target (Bot1's own Memnite) is refused: "up to two" is at most two. A player is refused: the targets are creatures.
+
+[Bot1 Deck]
+Black Lotus
+Memnite
+Bellowing Bruiser
+Mountain x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Bellowing Bruiser.Cast(Ability: Beat a Path)
+! Bot1.Target(Bot2.Battlefield.Memnite; Bot2.Battlefield.Ornithopter; Bot1.Battlefield.Memnite)
+! Bot1.Target(Bot2)
+Bot1.Target(Bot2.Battlefield.Memnite; Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+? Bot2.Battlefield.Count = 2
+
+[Expect]
+Bot2.Life = 19
