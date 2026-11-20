@@ -1341,6 +1341,7 @@ pub fn same_name(q: &dyn Query, a: ObjectId, b: ObjectId) -> bool {
 /// is read as it last was, CR 701.44c) and whether the revealed card was a land card, for "whenever a creature you control
 /// explores [a land card]". Fanatical Offering's Map token, Seasoned Dungeoneer and Amalia Benavides Aguirre explore it.
 pub fn explore(g: &mut dyn Game, permanent: ObjectId) -> Result<(), Suspend> {
+    g.would_explore(permanent);
     let who = g.obj(permanent).controller;
     let top = top_of_library(g, who, 1).first().copied();
     let mut revealed = ExploreReveal::Nothing;

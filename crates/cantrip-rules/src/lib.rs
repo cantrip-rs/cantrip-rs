@@ -2494,6 +2494,10 @@ impl cantrip_api::Game for Cx<'_> {
         replace::would_connive(self, creature, count);
     }
 
+    fn would_explore(&mut self, creature: ObjectId) {
+        replace::would_explore(self, creature);
+    }
+
     fn discard(&mut self, card: ObjectId) {
         ops::discard(self, card);
     }

@@ -439,6 +439,7 @@ fn subject_of(proposal: &Proposal) -> Option<ObjectId> {
         // sacrificed Treasure's): no printed card has one of this kind, which would function from its new zone here.
         Proposal::ManaProduction(m) => Some(m.permanent),
         Proposal::Connive(c) => Some(c.creature),
+        Proposal::Explore(e) => Some(e.creature),
         Proposal::Untap(u) => Some(u.permanent),
         Proposal::DrawInstruction(_)
         | Proposal::Draw(_)
@@ -479,6 +480,8 @@ fn affected(cx: &Cx, proposal: &Proposal) -> PlayerId {
         Proposal::Mill(m) => m.player,
         // Whoever controls the conniving creature (last controlled, CR 701.50b), who is the one that draws and discards.
         Proposal::Connive(c) => cx.s().obj(c.creature).controller,
+        // Whoever controls the exploring creature (last controlled, CR 701.44c), who is the one that reveals and decides.
+        Proposal::Explore(e) => cx.s().obj(e.creature).controller,
         Proposal::TokenCreation(t) => t.controller,
         Proposal::LifeChange(l) => l.player,
         // "If multiple replacement effects would modify the mana an ability you control produces, choose one to apply"
@@ -2189,6 +2192,14 @@ pub fn mill_count(cx: &mut Cx, player: PlayerId, count: u32) -> u32 {
 pub fn would_connive(cx: &mut Cx, creature: ObjectId, count: u32) {
     if possible(cx, None) {
         apply(cx, &mut Proposal::Connive(Connive { creature, count }));
+    }
+}
+
+/// A permanent about to explore (CR 701.44): the effects that replace it apply, each once (CR 614.5), doing what they do in
+/// its place ("instead you scry 1", their `then`); the explore then goes on as it is. Two of them scry twice.
+pub fn would_explore(cx: &mut Cx, creature: ObjectId) {
+    if possible(cx, None) {
+        apply(cx, &mut Proposal::Explore(Explore { creature }));
     }
 }
 

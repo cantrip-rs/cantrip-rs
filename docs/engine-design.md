@@ -1348,6 +1348,12 @@ before it draws; connive 0 is no event, CR 701.50e): "instead you draw a card, t
 leaves the event as it was and draws in its `then`, the card meeting the draw replacements, so the connive that follows draws and
 discards after it. The creature is read as it was if it has left the battlefield (CR 701.50b).
 
+A permanent exploring (CR 701.44) is the same: `Proposal::Explore` (`cantrip_mechanics::explore` asks `Game::would_explore` before it
+reveals), "if a creature you control would explore, instead you scry 1, then that creature explores" (Twists and Turns) leaves the
+event as it was and scries in its `then`; two of them scry twice and the creature explores once (CR 614.5). When it is carried out
+the explore is `Event::Explored` (CR 701.44b), which the explore triggers listen to; the creature is read as it was if it has left
+the battlefield (CR 701.44c).
+
 A modified event whose own part comes first and the effect's after it - "that player instead puts that land onto the
 battlefield then sacrifices a land" (Land Equilibrium) - leaves the zone change as it was and does the rest in its
 `afterward` (`ReplacementDef::afterward`, zone changes only), not its `then`: a `then` runs as the effect applies, before

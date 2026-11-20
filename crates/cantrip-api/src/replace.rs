@@ -181,6 +181,14 @@ pub struct Connive {
     pub count: u32,
 }
 
+/// A permanent about to explore (CR 701.44): "if a creature you control would explore, instead you scry 1, then that
+/// creature explores" (Twists and Turns), what the effect does besides being its `ReplacementThen`. The creature is its
+/// last known information if it has left the battlefield (CR 701.44c).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Explore {
+    pub creature: ObjectId,
+}
+
 /// One card about to be drawn (CR 121.1, 121.6): replaceable even when the library has no cards to draw. `replaced`
 /// is set by an effect that replaces the draw ("instead you win the game"): nothing is drawn then (CR 614.6).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -326,6 +334,7 @@ pub enum Proposal {
     DrawInstruction(DrawInstruction),
     Draw(CardDraw),
     Connive(Connive),
+    Explore(Explore),
     Mill(MillInstruction),
     Damage(DamageEvent),
     TokenCreation(TokenCreation),
@@ -343,6 +352,8 @@ pub enum ReplacementKind {
     Draw,
     /// A permanent conniving (CR 701.50): `Proposal::Connive`.
     Connive,
+    /// A permanent exploring (CR 701.44): `Proposal::Explore`.
+    Explore,
     /// An instruction to mill cards (CR 701.17a): `Proposal::Mill`.
     Mill,
     Damage,
@@ -362,6 +373,7 @@ impl Proposal {
             Proposal::DrawInstruction(_) => ReplacementKind::DrawInstruction,
             Proposal::Draw(_) => ReplacementKind::Draw,
             Proposal::Connive(_) => ReplacementKind::Connive,
+            Proposal::Explore(_) => ReplacementKind::Explore,
             Proposal::Mill(_) => ReplacementKind::Mill,
             Proposal::Damage(_) => ReplacementKind::Damage,
             Proposal::TokenCreation(_) => ReplacementKind::TokenCreation,

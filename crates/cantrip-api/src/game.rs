@@ -964,6 +964,10 @@ pub trait Game: Query {
     /// connives" (Leader, Super-Genius) draws the card, once for each such effect (CR 614.5); the connive itself is the
     /// caller's (`cantrip_mechanics::connive_n`).
     fn would_connive(&mut self, creature: ObjectId, count: u32);
+    /// Applies the replacement effects of `creature` exploring (CR 701.44): "instead you scry 1, then that creature
+    /// explores" (Twists and Turns) scries, once for each such effect (CR 614.5); the explore itself is the caller's
+    /// (`cantrip_mechanics::explore`).
+    fn would_explore(&mut self, creature: ObjectId);
     fn discard(&mut self, card: ObjectId);
     /// Discards cards at once (CR 701.9): one event for what watches "one or more" discards.
     ///
