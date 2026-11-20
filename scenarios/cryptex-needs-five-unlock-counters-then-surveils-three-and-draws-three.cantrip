@@ -1,0 +1,78 @@
+# Cryptex: "{T}, Collect evidence 3: Add one mana of any color. Put an unlock counter on this artifact." and "Sacrifice this artifact:
+# Surveil 3, then draw three cards. Activate only if this artifact has five or more unlock counters on it." (CR 701.59a, 602.5, 122.6).
+# One Hero of Bladehold (mana value 4) is exiled for each of five turns' activations, an unlock counter at a time; with four counters
+# the sacrifice is refused, with five it surveils three (Plains and Swamp binned, Mountain kept on top) and then draws three.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Cryptex
+Thought Scour
+Thought Scour
+Thought Scour
+Hero of Bladehold x13
+Mountain
+Plains
+Swamp
+Forest
+Island
+Mountain
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cryptex.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Thought Scour; Hero of Bladehold; Hero of Bladehold
+Bot1.Battlefield.Cryptex.Activate(Ability: Collect evidence; Color: Blue)
+Bot1.Choose(Hero of Bladehold)
+? Bot1.Mana = {U}
+? Bot1.Battlefield.Cryptex.Counters.Unlock = 1
+? Exile.Count = 1
+! Bot1.Battlefield.Cryptex.Activate(Ability: Sacrifice)
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Cryptex.Activate(Ability: Collect evidence; Color: Blue)
+Bot1.Choose(Hero of Bladehold)
+? Bot1.Battlefield.Cryptex.Counters.Unlock = 2
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Cryptex.Activate(Ability: Collect evidence; Color: Blue)
+Bot1.Choose(Hero of Bladehold)
+? Bot1.Battlefield.Cryptex.Counters.Unlock = 3
+[T7 Bot1.Main1]
+Bot1.Battlefield.Cryptex.Activate(Ability: Collect evidence; Color: Blue)
+Bot1.Choose(Hero of Bladehold)
+? Bot1.Battlefield.Cryptex.Counters.Unlock = 4
+! Bot1.Battlefield.Cryptex.Activate(Ability: Sacrifice)
+[T9 Bot1.Main1]
+Bot1.Battlefield.Cryptex.Activate(Ability: Collect evidence; Color: Blue)
+Bot1.Choose(Hero of Bladehold)
+? Bot1.Battlefield.Cryptex.Counters.Unlock = 5
+? Bot1.Hand.Count = 7
+Bot1.Battlefield.Cryptex.Activate(Ability: Sacrifice)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Mountain | Plains; Swamp)
+
+[Expect]
+Bot1.Battlefield.Cryptex = (absent)
+Bot1.Hand.Count = 10
+Bot1.Library = Mountain
+Exile.Count = 5

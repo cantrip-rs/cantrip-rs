@@ -1,0 +1,48 @@
+# Cryptex: "{T}, Collect evidence 3: Add one mana of any color." (CR 701.59a, 701.59b) The graveyard holds a Black Lotus (mana value 0)
+# and two Lightning Bolts: worth 2, so the activation is refused and the Cryptex stays untapped with no unlock counter. A third Bolt makes exactly 3, the
+# three Bolts are exiled (the Lotus stays), the Cryptex taps for one red mana and gets one unlock counter.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Cryptex
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cryptex.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Black Lotus
+! Bot1.Battlefield.Cryptex.Activate(Ability: Collect evidence; Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cryptex.Counters.Unlock = (absent)
+Bot1.Battlefield.Cryptex.Activate(Ability: Collect evidence; Color: Red)
+Bot1.Choose(Lightning Bolt; Lightning Bolt; Lightning Bolt)
+? Bot1.Mana = {R}
+
+[Expect]
+Bot1.Battlefield.Cryptex.Counters.Unlock = 1
+Bot1.Graveyard = Black Lotus
+Exile.Count = 3
+Bot2.Life = 11
