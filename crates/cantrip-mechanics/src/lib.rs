@@ -612,6 +612,18 @@ pub fn creature_cards_in_graveyard(q: &dyn Query, player: PlayerId) -> usize {
     q.state().zone(Zone::graveyard(player)).iter().filter(|&&card| q.chars(card).is(CardType::Creature)).count()
 }
 
+/// How many cards in `player`'s graveyard are instant cards, sorcery cards, and/or have an Adventure (CR 715.1, 404.1): each counted
+/// once however many of those it is, as it is asked. A card that has an Adventure counts whether or not it was ever cast as one, and
+/// a card the graveyard holds counts as the card it is there, so a creature card with an Adventure is not an instant or a sorcery but
+/// has one (the Hearth Elemental ruling). Hearth Elemental reduces its cost by it and Frantic Firebolt adds it to its damage.
+pub fn instant_sorcery_or_adventure_cards_in_graveyard(q: &dyn Query, player: PlayerId) -> usize {
+    q.state()
+        .zone(Zone::graveyard(player))
+        .iter()
+        .filter(|&&id| library::instant_or_sorcery_card(q, id) || library::card_has_an_adventure(q, id))
+        .count()
+}
+
 /// How many cards of `subtype` are in `player`'s graveyard (CR 205.3d, 404.1): cards only, never tokens, and any card type, a
 /// Kindred noncreature card included, counted as it is asked. Morcant's Eyes, Dawnhand Eulogist, Creakwood Safewright and Gloom
 /// Ripper count the Elf cards for a number; Lys Alana Dignitary and Trystan, Callous Cultivator ask whether there is one.
