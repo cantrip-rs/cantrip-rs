@@ -1,0 +1,44 @@
+# Rowan, Scion of War: the amount of life lost is worked out as the ability resolves (CR 608.2h) and does not grow with later
+# losses, and the ability is a sorcery (CR 602.5d). On turn three Bot1 has lost no life: it is refused the activation in the
+# combat phase (`!` at the declaration of attackers), activates Rowan in its second main phase (X is 0), then Lightning Bolts
+# itself for 3. The black Scathe Zombies ({2}{B}) is still {2}{B}: with a Jet and a Sapphire's two mana it is refused.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Rowan, Scion of War
+Lightning Bolt
+Scathe Zombies
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Rowan, Scion of War.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+! Bot1.Battlefield.Rowan, Scion of War.Activate
+[T3 Bot1.Main2]
+Bot1.Battlefield.Rowan, Scion of War.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Scathe Zombies.Cast(Mana: short)
+
+[Expect]
+Bot1.Life = 17
+Bot1.Hand.Scathe Zombies.Colors = Black

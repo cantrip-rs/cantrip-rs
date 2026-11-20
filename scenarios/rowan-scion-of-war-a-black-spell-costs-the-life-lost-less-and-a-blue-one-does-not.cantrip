@@ -1,0 +1,47 @@
+# Rowan, Scion of War: "{T}: Spells you cast this turn that are black and/or red cost {X} less to cast, where X is the amount of
+# life you lost this turn. Activate only as a sorcery." (CR 611.2c, 601.2f, 608.2h). On turn three Bot1 Lightning Bolts itself for
+# 3 and activates Rowan: the black Scathe Zombies ({2}{B}) then costs {B}, paid with a single mana, while the blue Air Elemental
+# ({3}{U}) is not cheaper: with the Sapphire's one mana it is refused (`Mana: short`). The reduction takes generic mana only.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Rowan, Scion of War
+Lightning Bolt
+Scathe Zombies
+Air Elemental
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Rowan, Scion of War.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Rowan, Scion of War.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Scathe Zombies.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Air Elemental.Cast(Mana: short)
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Scathe Zombies.ManaValue = 3
+Bot1.Hand.Air Elemental.Colors = Blue

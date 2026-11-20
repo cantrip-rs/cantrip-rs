@@ -1,0 +1,42 @@
+# Rowan, Scion of War: a red spell costs {X} less too, X the life lost this turn (CR 601.2f, 608.2h). Bot1 Lightning Bolts itself
+# for 3 and activates Rowan; the red Hill Giant ({3}{R}) then costs {R}, paid with the second Mox Ruby's single mana.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Ruby
+Rowan, Scion of War
+Lightning Bolt
+Hill Giant
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Rowan, Scion of War.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Rowan, Scion of War.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Hill Giant.ManaValue = 4
+Bot1.Battlefield.Rowan, Scion of War.Keywords = Menace
