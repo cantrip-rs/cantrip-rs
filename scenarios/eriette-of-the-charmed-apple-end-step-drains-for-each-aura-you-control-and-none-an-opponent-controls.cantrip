@@ -1,0 +1,52 @@
+# Eriette of the Charmed Apple: "At the beginning of your end step, each opponent loses X life and you gain X life, where X is the number of Auras you
+# control" (CR 119.3). With no Aura the first end step drains 0. At Bot1's second end step Bot1 controls two Auras (Holy Strength on Eriette herself, and
+# Holy Strength on Bot2's Memnite: an Aura counts whoever's creature it is on) and Bot2 controls a third on its own Memnite, which does not count: X = 2.
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Black Lotus
+Eriette of the Charmed Apple
+Holy Strength
+Holy Strength
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl
+Memnite
+Holy Strength
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Eriette of the Charmed Apple.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Life = 20
+? Bot2.Life = 20
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Holy Strength.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Holy Strength.Cast(Bot1.Battlefield.Eriette of the Charmed Apple)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Holy Strength.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18

@@ -1,0 +1,8 @@
+{
+  "name": "Eriette of the Charmed Apple",
+  "manaCost": "{1}{W}{B}",
+  "type": "Legendary Creature — Human Warlock",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Each creature that's enchanted by an Aura you control can't attack you or planeswalkers you control.\nAt the beginning of your end step, each opponent loses X life and you gain X life, where X is the number of Auras you control."
+}

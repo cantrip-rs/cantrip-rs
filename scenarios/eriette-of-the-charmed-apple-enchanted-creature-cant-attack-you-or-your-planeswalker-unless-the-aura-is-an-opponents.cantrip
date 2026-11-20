@@ -1,0 +1,67 @@
+# Eriette of the Charmed Apple: "Each creature that's enchanted by an Aura you control can't attack you or planeswalkers you control" (CR 508.1c).
+# Turn 1: Bot1 casts Eriette. Turn 2: Bot2 enchants its own Ornithopter with its own Holy Strength and casts a Memnite. Turn 3: Bot1 puts
+# its Holy Strength on Bot2's Memnite and casts Karn; at Bot1's end step Eriette drains for the one Aura Bot1 controls (Bot2's does not count).
+# Turn 4: the Memnite, enchanted by Bot1's Aura, can attack neither Bot1 nor Karn; the Ornithopter, enchanted only by Bot2's Aura, attacks Karn.
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Black Lotus
+Eriette of the Charmed Apple
+Holy Strength
+Karn, Scion of Urza
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl
+Memnite
+Ornithopter
+Holy Strength
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Eriette of the Charmed Apple.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Holy Strength.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Holy Strength.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Karn, Scion of Urza.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Karn, Scion of Urza.Counters.Loyalty = 5
+[T4 Bot2.Main1]
+? Bot1.Life = 21
+? Bot2.Life = 19
+[T4 Bot2.DeclareAttackers]
+! Bot2.Attack(Memnite > Bot1)
+! Bot2.Attack(Memnite > Bot1.Battlefield.Karn, Scion of Urza)
+Bot2.Attack(Ornithopter > Bot1.Battlefield.Karn, Scion of Urza)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19
+Bot1.Battlefield.Karn, Scion of Urza.Counters.Loyalty = 4
+Bot2.Battlefield.Memnite.AttachedTo = (absent)
+Bot1.Battlefield.Holy Strength.AttachedTo = Memnite
+Bot2.Battlefield.Holy Strength.AttachedTo = Ornithopter
