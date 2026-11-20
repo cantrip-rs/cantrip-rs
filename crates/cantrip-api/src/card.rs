@@ -2382,18 +2382,23 @@ pub struct OptionalCost {
     /// many times this instance's was paid as its first datum (`Event::PaidRepeatedly`, CR 702.56b). A cost of mana only
     /// (`repeated`).
     pub repeatable: bool,
+    /// Paying it is using the card's own "you may cast this spell as though it had flash if you pay [cost] more to cast it"
+    /// (CR 601.2b, 702.8, 307.5): the spell may be cast whenever its caster could cast an instant, but only if they pay it; at a
+    /// time it could be cast anyway it may be paid or not as any optional cost is (the rulings), and it is no mana cost and so
+    /// no part of the mana value (CR 202.3). The spell is `paid` once, as for any optional cost.
+    pub flash: bool,
 }
 
 impl OptionalCost {
     /// An optional additional cost that is not a kicker.
     pub const fn new(cost: Cost) -> OptionalCost {
-        OptionalCost { cost, kicker: false, repeatable: false }
+        OptionalCost { cost, kicker: false, repeatable: false, flash: false }
     }
 
     /// An optional additional cost of `mana` that may be paid any number of times (CR 702.56a), an object giving a spell
     /// replicate: paid with the other costs, and counted for its instance alone (CR 702.56b).
     pub const fn repeated(mana: ManaCost) -> OptionalCost {
-        OptionalCost { cost: Cost { mana, ..Cost::NONE }, kicker: false, repeatable: true }
+        OptionalCost { cost: Cost { mana, ..Cost::NONE }, kicker: false, repeatable: true, flash: false }
     }
 }
 

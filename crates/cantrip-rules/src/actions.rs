@@ -4606,7 +4606,8 @@ fn each_splice_order(cards: &[ObjectId], now: &mut Vec<ObjectId>, f: &mut dyn Fn
 /// cast for {1}{U} aimed at a permanent of its caster's, and Fireball ("costs {1} more to cast for each target beyond the
 /// first", any number of targets) for its {R} with one target or none. `prefix` is the target announced with the cast, where
 /// it is (`targets_with_cast`): the kicker, optional cost and splices are judged with it, and X at its least, which is all
-/// its target needs. `x_symbols` is the {X} of the cost being paid. Past `ANNOUNCEMENT_BUDGET` it answers yes.
+/// its target needs. `x_symbols` is the {X} of the cost being paid. `owed` is whether the optional cost is owed (`offer_costed`),
+/// so that it is announced as paid. Past `ANNOUNCEMENT_BUDGET` it answers yes.
 #[allow(clippy::too_many_arguments)]
 fn some_cast(
     cx: &Cx,
@@ -4614,6 +4615,7 @@ fn some_cast(
     asker: &Asker,
     def: &'static CardDef,
     x_symbols: u8,
+    owed: bool,
     prefix: Option<&[Target]>,
     budget: &mut u32,
     covered: &dyn Fn(&[Target], &Earlier) -> bool,
@@ -4629,7 +4631,12 @@ fn some_cast(
     if open && def.gift.is_some() {
         gifts.extend(cx.s().opponents(player).filter(|&p| !cx.s().player(p).lost).map(Some));
     }
-    let paid: &[bool] = if def.optional_cost.is_some() { &[false, true] } else { &[false] };
+    // The optional cost, paid or not - or paid, where it is the cost of the permission that lets the cast be made (`owed`).
+    let paid: &[bool] = match (def.optional_cost, owed) {
+        (None, _) => &[false],
+        (Some(_), true) => &[true],
+        (Some(_), false) => &[false, true],
+    };
     let mode_specs_all = def.modal.iter().flat_map(|m| m.modes.iter().flat_map(|mode| mode.targets.iter()));
     let splice_specs = splices.iter().flat_map(|&c| cx.card(cx.s().obj(c).card).spell.map_or(&[][..], |s| s.targets).iter());
     let mut bound = count_bound(cx, asker, own.iter().chain(mode_specs_all).chain(splice_specs));
@@ -4797,16 +4804,21 @@ fn some_activation(
 /// once the targets are announced (CR 601.2c, 601.2f), after what is announced before them (CR 601.2b): where something
 /// could change the cost, a cast whose one target is announced with it is judged for each candidate (`covered`), with the
 /// cards that could be spliced onto it and their targets, and only those it could be paid for are offered; any other is
-/// offered if some legal announcement could be paid for (`some_cast`). Otherwise it is judged once, with no target.
+/// offered if some legal announcement could be paid for (`some_cast`). Otherwise it is judged once, with no target. `owed` is
+/// whether the optional cost of the card's own "you may cast this spell as though it had flash if you pay {2} more" is owed
+/// with this cast (`flash_cost_needed`): every announcement pays it, so the one judged with nothing announced does.
+#[allow(clippy::too_many_arguments)]
 fn offer_costed(
     cx: &Cx,
     a: &Available,
     asker: &Asker,
     def: &'static CardDef,
     x_symbols: u8,
+    owed: bool,
     option: &mut ActionOption,
     covered: impl Fn(&[Target], &Earlier) -> bool,
 ) -> bool {
+    let covered = |targets: &[Target], earlier: &Earlier| covered(targets, &Earlier { paid: earlier.paid || owed, ..earlier.clone() });
     // CR 107.3a: the {X} of a waterbend cost an additional cost has is announced with the spell's own.
     let x_symbols = x_symbols + def.additional_cost.map_or(0, |c| c.waterbend.x);
     let changes = !a.changers.is_empty() || !def.own_cost_changes.is_empty() || lasting_changes(cx) || def.x_rule.is_some();
@@ -4822,12 +4834,12 @@ fn offer_costed(
             return false;
         }
         let mut judge =
-            |prefix: &[Target]| covered(prefix, &Earlier::NONE) || announces && some_cast(cx, a, asker, def, x_symbols, Some(prefix), &mut budget, &covered);
+            |prefix: &[Target]| covered(prefix, &Earlier::NONE) || announces && some_cast(cx, a, asker, def, x_symbols, owed, Some(prefix), &mut budget, &covered);
         let none_covered = option.targets_optional && judge(&[]);
         option.target_candidates.retain(|&t| judge(&[t]));
         !option.target_candidates.is_empty() || none_covered
     } else {
-        offer_spell(cx, asker, def, option) && some_cast(cx, a, asker, def, x_symbols, None, &mut budget, &covered)
+        offer_spell(cx, asker, def, option) && some_cast(cx, a, asker, def, x_symbols, owed, None, &mut budget, &covered)
     }
 }
 
@@ -8898,7 +8910,7 @@ impl Speed<'_> {
     /// `of`, or `None` where a permission is not yet judged on the spell the card would be (`as_though_flash_judged`): asked
     /// for (`ask`) only where it would change what is offered.
     fn of_judged(&self, whole: &'static CardDef, way: u8, face: &'static CardDef) -> Option<bool> {
-        if way == 0 && (whole.cast_as_though_flash || own_speed(whole) || flash_if_met(self.cx, whole, self.card, self.player)) || way != 0 && own_speed(face) {
+        if way == 0 && (flash_of_its_own(self.cx, whole, self.card, self.player) || pays_for_flash(whole)) || way != 0 && own_speed(face) {
             return Some(true);
         }
         as_though_flash_judged(self.cx, self.card, self.face_id(way, face))
@@ -8925,6 +8937,29 @@ fn flash_if_met(cx: &Cx, def: &CardDef, card: ObjectId, player: PlayerId) -> boo
 /// An instant, or a spell with flash (CR 307.5, 702.8).
 fn own_speed(def: &CardDef) -> bool {
     def.is(CardType::Instant) || def.keywords.has(Keyword::Flash)
+}
+
+/// "You may cast this spell as though it had flash if you pay {2} more to cast it" (CR 307.5, 601.2b, 118.8): the card's own
+/// permission, bought with its optional cost (`OptionalCost::flash`). It is offered whenever an instant could be cast; the
+/// cost is owed only if the cast could not be made without it (`flash_cost_needed`).
+fn pays_for_flash(def: &CardDef) -> bool {
+    def.optional_cost.is_some_and(|o| o.flash)
+}
+
+/// Whether `player` casting `card` (its card `whole`, by its own way 0) now needs the card's own "you may cast this spell as
+/// though it had flash if you pay {2} more" (CR 601.2b, 118.8): no sorcery could be cast now (CR 307.1) and nothing of the
+/// card's own lets it be cast now (`flash_of_its_own`). Its cost is owed where, besides, no permission another object gives
+/// and no alternative cost that says so (Primal Prayers) lets the cast be made, which the offer judges on the spell the card
+/// would be and the cast on the spell it is. Read before the spell goes on the stack. Where it is not owed, the cost may still
+/// be paid or not, as any optional cost is announced (Oakshade Stalker's 2021-11-19 ruling: "even if it's night").
+fn flash_cost_needed(cx: &Cx, whole: &CardDef, card: ObjectId, player: PlayerId) -> bool {
+    pays_for_flash(whole) && !sorcery_timing(cx, player) && !flash_of_its_own(cx, whole, card, player)
+}
+
+/// The card's own permission to be cast whenever an instant could be: it is an instant or has flash, or prints "you may cast
+/// this spell as though it had flash" (`cast_as_though_flash`) or a condition for it that holds (`flash_if`).
+fn flash_of_its_own(cx: &Cx, def: &CardDef, card: ObjectId, player: PlayerId) -> bool {
+    def.cast_as_though_flash || own_speed(def) || flash_if_met(cx, def, card, player)
 }
 
 /// The face of the card `whole` a cast by the way `way` casts (CR 709.3, 715.3, 720.3, 712.8a, 702.103b): an inset face (an
@@ -9423,7 +9458,7 @@ impl<'a> Offer<'a> {
     /// instead of the mana cost where there is one, if the cast could be paid (advice, CR 601.2g-h): what the route adds is
     /// owed with it (CR 118.8), and the cost changes apply to it (CR 601.2f).
     #[allow(clippy::too_many_arguments)]
-    fn offer(&self, card: ObjectId, face: &'static CardDef, way: u8, route: &Route, base: ManaCost, paid_by: Option<Grant>, options: &mut Vec<ActionOption>) {
+    fn offer(&self, card: ObjectId, face: &'static CardDef, way: u8, route: &Route, base: ManaCost, paid_by: Option<&Given<SpellAlternative>>, options: &mut Vec<ActionOption>) {
         let (cx, player) = (self.cx, self.player);
         let a = self.available();
         // What the permission adds is part of the total before the cost changes apply, as the cast adds it (CR 118.8, 601.2f).
@@ -9437,8 +9472,11 @@ impl<'a> Offer<'a> {
             })
                 && added_life_payable(cx, a, player, card, face, targets, earlier)
         };
-        let mut option = ActionOption { granted_by: route.by, paid_by, ..ActionOption::on(ActionKind::CastSpell, card, way) };
-        if offer_costed(cx, a, &self.asker(card), face, base.x, &mut option, covered) {
+        let mut option = ActionOption { granted_by: route.by, paid_by: paid_by.map(|alt| alt.grant), ..ActionOption::on(ActionKind::CastSpell, card, way) };
+        // The cost of the card's own "you may cast this spell as though it had flash if you pay {2} more" (CR 601.2b), owed where
+        // that permission is all that lets it be cast now: judged for the cast offered (an alternative cost may give flash).
+        let owed = way == 0 && flash_cost_needed(cx, face, card, player) && !paid_by.is_some_and(|alt| alt.what.flash) && !as_though_flash(cx, card, None);
+        if offer_costed(cx, a, &self.asker(card), face, base.x, owed, &mut option, covered) {
             options.push(option);
         }
     }
@@ -9481,7 +9519,7 @@ impl<'a> Offer<'a> {
             let flash = alternative.what.flash && !route.terms.sorcery_speed;
             let cost = alternative.what.cost.cost();
             if (instant || flash) == self.instants && can_pay_cast_parts(self.cx, card, self.player, &cost, &route.additional) {
-                self.offer(card, face, way, route, cost.mana, Some(alternative.grant), options);
+                self.offer(card, face, way, route, cost.mana, Some(&alternative), options);
             }
         }
     }
@@ -9791,7 +9829,8 @@ impl<'a> Offer<'a> {
         let land = def.is(CardType::Land);
         let speed = self.speed(card);
         for (way_number, face) in faces_to_cast(def).filter(|&(w, _)| !(land && w == 0)) {
-            let at_its_speed = speed.of(def, way_number, face) == self.instants;
+            // The card's own "as though it had flash if you pay {2} more" goes with the instants, its cost owed below (CR 601.2b).
+            let at_its_speed = (speed.of(def, way_number, face) || way_number == 0 && pays_for_flash(def)) == self.instants;
             let view = (way_number != 0).then(|| AsFace { cx, spell: card, face: cx.card_id(face) });
             let q: &dyn Query = match &view {
                 Some(view) => view,
@@ -9819,7 +9858,11 @@ impl<'a> Offer<'a> {
                         && added_life_payable(cx, a, player, card, face, targets, earlier)
                 };
                 let mut option = ActionOption { granted_by: Some(way.grant), ..ActionOption::on(ActionKind::CastSpell, card, way_number) };
-                if offer_costed(cx, a, &self.asker(card), face, cost.mana.x, &mut option, covered) {
+                // The card's own "as though it had flash if you pay {2} more" owes its cost here as by the card's own ways
+                // (CR 601.2b): escape (Underworld Breach) lets it be cast from the graveyard, not at instant speed; a way for
+                // any time an instant could be cast (sneak) is a permission of its own.
+                let owed = way_number == 0 && !way.what.instant_speed && flash_cost_needed(cx, face, card, player) && !as_though_flash(cx, card, None);
+                if offer_costed(cx, a, &self.asker(card), face, cost.mana.x, owed, &mut option, covered) {
                     options.push(option);
                 }
             }
@@ -10862,11 +10905,18 @@ fn cast(
     if !cx.s().permissions.is_empty() {
         use_up_permission(cx, card, player, by.by);
     }
+    // Whether the card's own "you may cast this spell as though it had flash if you pay {2} more" is needed now (CR 601.2b):
+    // read before the spell goes on the stack. An effect that casts it as it resolves casts it by its own say-so (CR 608.2g),
+    // and a way a permanent gives for any time an instant could be cast (Ninja Teen's sneak, CR 702.190a) by that way's.
+    let flash_needed = !resolving && way == 0 && !granted.is_some_and(|w| w.what.instant_speed) && flash_cost_needed(cx, whole, card, player);
     let spell = ops::move_to_for(cx, card, Zone::STACK, ZoneReason::Cast);
     cx.st().update_obj(spell, |o| {
         o.controller = player;
         o.cast_from = Some(from);
     });
+    // Its cost is owed where that permission is all that lets it be cast now (CR 601.2b, 118.8): the other permissions are
+    // judged on the spell it is on the stack.
+    let flash_owed = flash_needed && other_flash_permissions(cx, player, spell, whole, way, by.flash_alternative).is_empty();
     if untimely {
         let other_permissions = other_flash_permissions(cx, player, spell, whole, way, by.flash_alternative);
         let by_own = other_permissions.is_empty() || choose_own_flash(cx, player, spell, &other_permissions)?;
@@ -10945,7 +10995,7 @@ fn cast(
 
     // CR 601.2b: an optional cost that is not mana (teamwork) is announced like a kicker: paid or not, before any target.
     if let Some(optional) = def.optional_cost
-        && announce_optional(cx, player, spell, face, def, &optional)?
+        && announce_optional(cx, player, spell, face, def, &optional, flash_owed)?
     {
         extra_parts.push((CostOrigin::Optional, optional.cost));
         extra = add_extra_totals(extra, optional.cost);
@@ -12803,7 +12853,12 @@ fn paid_options_now(cx: &Cx, spell: ObjectId, mut paid: Vec<(AbilityRef, ObjectI
 
 /// Announces whether an optional cost that is not mana is paid (CR 601.2b), as the C# engine asks it: a choice between
 /// casting without it and paying it, the second on offer only when it could be paid. Whether it was chosen.
-fn announce_optional(cx: &mut Cx, player: PlayerId, spell: ObjectId, face: CardId, def: &'static CardDef, optional: &OptionalCost) -> R<bool> {
+fn announce_optional(cx: &mut Cx, player: PlayerId, spell: ObjectId, face: CardId, def: &'static CardDef, optional: &OptionalCost, owed: bool) -> R<bool> {
+    // The cost of the permission that lets the spell be cast now is paid, with nothing to announce (CR 601.2b): the cast was
+    // offered only for it (`flash_cost_needed`).
+    if owed {
+        return Ok(true);
+    }
     // A spell that must choose more modes when it is paid ("choose both instead") can be cast that way only when that
     // many modes could be chosen (CR 700.2a, 601.2b): paying is not on offer otherwise.
     let asker = Asker { instance: None, source: spell, controller: player, by: None, spell: true };

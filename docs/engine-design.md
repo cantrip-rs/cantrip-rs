@@ -1849,7 +1849,15 @@ cards with targets that could be spliced on), the card judged as it would then b
 that reads its X or kicker sees them), then the targets each brings, as `choose_slots` would take them
 (`some_announcement`), each slot's targets different; the payment is judged once for each different thing the cost
 changes make of them (`deltas`), at the total that announcement comes to (`Earlier`: the modes' costs, X, the kicker,
-the optional cost, the splices). A kicker's cost may be more than mana (`Kicker::extra`, `multikicker_cost`: Squad--Exile four
+the optional cost, the splices). An optional cost flagged `OptionalCost::flash` ("You may cast this spell as though it had flash if you pay {2} more to cast it", CR 601.2b, 601.2f, 118.8) is that
+same question: `Speed::of_judged` lists the card with the instants, since the permission can be used at any time, and where the
+spell could not otherwise be cast now (no sorcery timing, no flash of its own - `flash`, `flash_if`, a static or resolved
+permission - and none granted by another source) the cost is owed, so `Offer::offer` judges it paid (`some_cast`'s `paid` is only `true`)
+and `cast` pays it without asking; at sorcery timing it is asked like any optional cost. A way another permanent gives the card
+(`Offer::granted_ways`: Underworld Breach's escape) lists and owes it the same, as escape lets it be cast from the graveyard and
+not at instant speed; a given way for any time an instant could be cast (Ninja Teen's sneak, `GrantedWay::instant_speed`) is a
+permission of its own, so nothing is owed, nor where an effect casts it as it resolves (cascade, CR 608.2g), which only asks. It is an additional cost, so it adds to the total
+with cost changes, other additional costs and alternative costs, and changes no mana value (CR 202.3). A kicker's cost may be more than mana (`Kicker::extra`, `multikicker_cost`: Squad--Exile four
 cards from your graveyard, CR 702.157a): the times it is paid are announced no higher than that whole cost can be paid (and no
 higher than a byte-sized count of it holds, `Cost::most_times`), and the cost beside mana, times the kicks, joins the spell's
 additional costs, chosen and paid with them. So This Town Ain't Big Enough ("{3} less if it targets a permanent you control", up to
