@@ -37,14 +37,8 @@ fn transform_at_the_next_upkeep(g: &mut dyn Game, item: &StackItem) -> Result<()
     Ok(())
 }
 
-/// "Land creatures you control" (CR 613.1f, layer 6): a creature under Aang's controller's control that is a land, as the
-/// earlier layers made it (an earthbent land among them).
-fn land_creatures_you_control(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
-    so_far.is(CardType::Land) && statics::your_creatures(q, source, affected, so_far)
-}
-
 pub static BACK: CardDef = CardDef {
-    statics: &[static_ability(Layer::Ability, land_creatures_you_control, statics::have_vigilance, "Land creatures you control have vigilance.")],
+    statics: &[static_ability(Layer::Ability, statics::your_land_creatures, statics::have_vigilance, "Land creatures you control have vigilance.")],
     abilities: &[triggered(BEGINNING_OF_YOUR_COMBAT, earthbend::effect::<2>, "At the beginning of combat on your turn, earthbend 2.")
         .targets(&[earthbend::TARGET])],
     // The back face's earthbend creates the back face's delayed ability 0 (`earthbend::RETURN`).

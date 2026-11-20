@@ -54,6 +54,12 @@ pub fn your_artifact_creatures(q: &dyn LayerQuery, source: ObjectId, affected: O
     so_far.is(CardType::Artifact) && your_creatures(q, source, affected, so_far)
 }
 
+/// "Land creatures you control" (CR 613.1): a creature under the source's controller's control that is a land, as the earlier layers
+/// made it (an earthbent land or an animated Mutavault among them). Aang at the Crossroads' back face and Blossoming Tortoise use it.
+pub fn your_land_creatures(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
+    so_far.is(CardType::Land) && your_creatures(q, source, affected, so_far)
+}
+
 /// "Other artifact creatures you control" (CR 613.1f): `your_artifact_creatures` without the source itself, judged on what the
 /// earlier layers made the object. Krang, Utrom Warlord and Chrome Dome print it.
 pub fn other_artifact_creatures_you_control(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
