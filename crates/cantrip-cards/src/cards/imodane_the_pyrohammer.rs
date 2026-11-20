@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::effects;
+use cantrip_mechanics::{effects, targets};
 use cantrip_oracle as oracle;
 
 /// "Whenever an instant or sorcery spell you control that targets only a single creature deals damage to that creature" (CR 120.2,
@@ -10,15 +10,9 @@ use cantrip_oracle as oracle;
 /// (Fireball with X = 0 is the scenario). Each damage event is its own trigger.
 fn your_spell_deals_damage_to_the_one_creature_it_targets(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     let Event::Damage { source, target: Target::Object(hurt), .. } = event else { return None };
-    let state = q.state();
-    let item = state.stack.iter().find(|i| i.kind == StackKind::Spell && i.object == *source).or_else(|| state.left_stack(*source))?;
+    let (item, first) = targets::spell_targeting_only_one_object(q, *source)?;
     let chars = q.chars(*source);
-    if item.controller != me.controller || !(chars.is(CardType::Instant) || chars.is(CardType::Sorcery)) {
-        return None;
-    }
-    let mut chosen = state.targets(item).iter();
-    let first = chosen.next()?.object()?;
-    if chosen.any(|t| t.object() != Some(first)) || first != *hurt || !q.chars(first).is(CardType::Creature) {
+    if item.controller != me.controller || !(chars.is(CardType::Instant) || chars.is(CardType::Sorcery)) || first != *hurt || !q.chars(first).is(CardType::Creature) {
         return None;
     }
     Fired::about(Target::Object(*source))

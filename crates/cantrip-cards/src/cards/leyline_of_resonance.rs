@@ -13,11 +13,8 @@ fn instant_or_sorcery_targeting_only_one_creature_you_control(q: &dyn Query, sou
     if *player != you || !(chars.is(CardType::Instant) || chars.is(CardType::Sorcery)) {
         return None;
     }
-    let state = q.state();
-    let item = state.stack.iter().find(|i| i.kind == StackKind::Spell && i.object == *spell).or_else(|| state.left_stack(*spell))?;
-    let mut chosen = state.targets(item).iter();
-    let first = chosen.next()?.object()?;
-    if chosen.any(|t| t.object() != Some(first)) || !targets::permanent(q, first) || !q.chars(first).is(CardType::Creature) || q.controller(first) != you {
+    let (_, first) = targets::spell_targeting_only_one_object(q, *spell)?;
+    if !targets::permanent(q, first) || !q.chars(first).is(CardType::Creature) || q.controller(first) != you {
         return None;
     }
     Fired::about(Target::Object(*spell))

@@ -657,6 +657,22 @@ pub fn mana_value_is_x(q: &dyn Query, id: ObjectId) -> bool {
     q.announced_x().is_none_or(|x| q.mana_value(id) == x)
 }
 
+/// "A spell that targets only a single [thing]" (CR 115.1, 601.2c): the spell's stack item (on the stack, or as it last was when
+/// it has left it, CR 608.2h) and the one object that every target it was announced with is, however many times it is chosen. A
+/// player or a second object among the targets, or no target at all, disqualifies it (`None`). The caller adds its own
+/// conditions on the object and the spell (a creature, one you control, the one damaged). Leyline of Resonance, Imodane, the
+/// Pyrohammer, Precursor Golem and the other "targets only a single ..." cards print it.
+pub fn spell_targeting_only_one_object<'a>(q: &'a dyn Query, spell: ObjectId) -> Option<(&'a StackItem, ObjectId)> {
+    let state = q.state();
+    let item = state.stack.iter().find(|i| i.kind == StackKind::Spell && i.object == spell).or_else(|| state.left_stack(spell))?;
+    let mut chosen = state.targets(item).iter();
+    let first = chosen.next()?.object()?;
+    if chosen.any(|t| t.object() != Some(first)) {
+        return None;
+    }
+    Some((item, first))
+}
+
 /// The object a resolving item targeted in `slot`, if the target is still legal (CR 608.2b) and is an object (not a
 /// player). Every effect that acts on "target [thing]" begins here rather than pairing `target_legal` with a pattern
 /// match. Used by `destroy_target`, `exile_target` and by most of the cards that act on one target.
