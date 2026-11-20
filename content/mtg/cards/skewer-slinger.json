@@ -1,0 +1,11 @@
+{
+  "name": "Skewer Slinger",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Dwarf Knight",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Reach\nWhenever this creature blocks or becomes blocked by a creature, this creature deals 1 damage to that creature.",
+  "keywords": [
+    "Reach"
+  ]
+}

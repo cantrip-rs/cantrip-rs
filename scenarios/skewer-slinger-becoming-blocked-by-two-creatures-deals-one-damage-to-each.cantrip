@@ -1,0 +1,48 @@
+# "Whenever this creature ... becomes blocked by a creature" triggers once for each creature that blocks it (CR 509.1h,
+# 603.2): Skewer Slinger attacks and is blocked by Llanowar Elves and Elvish Mystic (both 1/1). Two triggers each deal 1
+# damage to a different blocker, killing both before combat damage, so the Slinger takes none. It stays blocked (CR 506.4),
+# so Bot2 takes no damage.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Skewer Slinger
+Mountain x17
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Llanowar Elves
+Elvish Mystic
+Forest x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Skewer Slinger.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Skewer Slinger > Bot2)
+Bot2.Block(Llanowar Elves > Skewer Slinger; Elvish Mystic > Skewer Slinger)
+Bot1.Triggers(Skewer Slinger; Skewer Slinger)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Llanowar Elves; Elvish Mystic
+? Bot1.Battlefield.Skewer Slinger.Damage = 0
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Skewer Slinger.Damage = 0
+Bot2.Graveyard = Llanowar Elves; Elvish Mystic

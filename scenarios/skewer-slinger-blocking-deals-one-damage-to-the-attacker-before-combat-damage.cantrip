@@ -1,0 +1,39 @@
+# "Whenever this creature blocks ... a creature, this creature deals 1 damage to that creature" (CR 509.1, 603.2): Skewer
+# Slinger (1/3) blocks Bot2's Llanowar Elves (1/1). The trigger resolves in the declare blockers step, before combat damage,
+# and the 1 damage kills the Elves, so no combat damage is dealt to the Slinger.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Skewer Slinger
+Mountain x17
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Skewer Slinger.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Forest.Activate
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Llanowar Elves > Bot1)
+Bot1.Block(Skewer Slinger > Llanowar Elves)
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Llanowar Elves
+? Bot1.Battlefield.Skewer Slinger.Damage = 0
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Skewer Slinger.Damage = 0
+Bot2.Graveyard = Llanowar Elves
