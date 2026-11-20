@@ -1,0 +1,108 @@
+# Brass's Tunnel-Grinder: "When this artifact enters, discard any number of cards, then draw that many cards plus one. At the
+# beginning of your end step, if you descended this turn, put a bore counter on it. Then if there are three or more bore counters
+# on it, remove those counters and transform it." Turn 1: discarding the Island (a permanent card put into a graveyard, CR 700.14)
+# is a descent, so the end step puts the first counter; two cards are drawn (the Ornithopter and a Lightning Bolt). Turn 3 has no
+# descent: no counter (the condition is checked at the beginning of the step, CR 603.4). Turns 5 and 7: Bot1 Bolts its own Memnite
+# and then its Ornithopter, each dying a permanent card to the graveyard; the second adds the third counter, which are removed as
+# it transforms (CR 701.27a). Tecutlan, the Searing Rift: a Sol Ring cast with a Mox Jet's mana does not trigger it on turn 9
+# although Tecutlan is on the battlefield; on turn 11 a Sol Ring paid with Tecutlan's {R} discovers 1 (X is its mana value,
+# CR 701.57a): the Island is skipped, the Mox Emerald (mana value 0) is cast for free.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Brass's Tunnel-Grinder
+Island
+Memnite
+Lightning Bolt
+Ornithopter
+Lightning Bolt
+Sol Ring
+Island
+Sol Ring
+Island
+Island
+Island
+Mox Emerald
+Island x6
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Brass's Tunnel-Grinder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+? Bot1.Graveyard = Island
+? Bot1.Hand.Count = 3
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Brass's Tunnel-Grinder.Counters.Bore = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Brass's Tunnel-Grinder.Counters.Bore = 1
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Brass's Tunnel-Grinder.Counters.Bore = 2
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tecutlan, the Searing Rift.Counters.Bore = (absent)
+? Bot1.Battlefield.Tecutlan, the Searing Rift.Types = Land
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+? Stack = Sol Ring
+? Exile.Count = 0
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sol Ring.Types = Artifact
+[T11 Bot1.Main1]
+Bot1.Battlefield.Tecutlan, the Searing Rift.Activate
+? Bot1.Mana = {R}
+Bot1.Hand.Sol Ring.Cast
+? Stack = Tecutlan, the Searing Rift; Sol Ring
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 2
+Bot1.Accept
+? Stack = Mox Emerald; Sol Ring
+Bot1.Pass
+Bot2.Pass
+[T11 Bot1.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Count = 7
