@@ -31,7 +31,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(triggers::NONCREATURE_SPELL_YOU_CAST, effects::put_loyalty_counter_on_this, "Whenever you cast a noncreature spell, put a loyalty counter on Ral."),
         ability(loyalty(1), otter, "+1: Create a 1/1 blue and red Otter creature token with prowess."),
-        ability(loyalty(-3), effects::draw_three_then_discard_two, "\u{2212}3: Draw three cards, then discard two cards."),
+        ability(loyalty(-3), effects::draw_then_discard::<3, 2>, "\u{2212}3: Draw three cards, then discard two cards."),
         ability(loyalty(-10), draw_three_and_emblem, "\u{2212}10: Draw three cards. You get an emblem with \"Instant and sorcery spells you cast have storm.\" (Whenever you cast an instant or sorcery spell, copy it for each spell cast before it this turn.)"),
     ],
     ..oracle::RAL_CRACKLING_WIT

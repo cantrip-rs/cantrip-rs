@@ -9,7 +9,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
             triggers::THIS_ENTERS,
-            effects::draw_two_then_discard,
+            effects::draw_then_discard::<2, 1>,
             "When this Spacecraft enters, draw two cards, then discard a card.",
         ),
         station::ability(

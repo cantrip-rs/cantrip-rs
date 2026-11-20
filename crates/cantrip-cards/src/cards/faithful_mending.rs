@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 fn mending(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     effects::gain_life(g, item, 2)?;
     g.end_sentence();
-    effects::draw_two_then_discard_two(g, item)
+    effects::draw_then_discard::<2, 2>(g, item)
 }
 
 pub static CARD: CardDef = CardDef {

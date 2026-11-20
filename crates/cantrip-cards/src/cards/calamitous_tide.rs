@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     effects::return_each_target_to_hand(g, item)?;
     g.end_sentence();
-    effects::draw_two_then_discard(g, item)
+    effects::draw_then_discard::<2, 1>(g, item)
 }
 
 pub static CARD: CardDef = CardDef {

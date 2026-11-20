@@ -20,7 +20,7 @@ pub static MEAT_LOCKER: CardDef = CardDef {
 pub static DROWNED_DINER: CardDef = CardDef {
     abilities: &[triggered(
         triggers::YOU_UNLOCK_THIS_RIGHT_DOOR,
-        effects::draw_three_then_discard,
+        effects::draw_then_discard::<3, 1>,
         "When you unlock this door, draw three cards, then discard a card.",
     )],
     ..oracle::DROWNED_DINER

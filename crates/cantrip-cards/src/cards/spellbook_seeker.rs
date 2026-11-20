@@ -7,7 +7,7 @@ pub static CAREFUL_STUDY: CardDef = CardDef {
     name: "Careful Study",
     cost: mana("{U}"),
     types: TypeSet::of(&[CardType::Sorcery]),
-    spell: spell(&[], effects::draw_two_then_discard_two),
+    spell: spell(&[], effects::draw_then_discard::<2, 2>),
     text: "Draw two cards, then discard two cards.",
     ..CardDef::BLANK
 };

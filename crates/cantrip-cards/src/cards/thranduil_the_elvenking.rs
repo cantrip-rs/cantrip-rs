@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::effects::draw_two_then_discard;
+use cantrip_mechanics::effects;
 use cantrip_mechanics::statics::{grant_activated_abilities_from, itself};
 use cantrip_oracle as oracle;
 
@@ -36,7 +36,7 @@ pub static CARD: CardDef = CardDef {
     statics: &[static_ability(Layer::Ability, itself, graveyard_elf_abilities, "This creature has all activated abilities of all Elf cards in your graveyard.")],
     abilities: &[triggered(
         when_asked(EventMask::ZONE_CHANGE, another_legendary_elf_you_control_enters),
-        draw_two_then_discard,
+        effects::draw_then_discard::<2, 1>,
         "Whenever another legendary Elf you control enters, draw two cards, then discard a card.",
     )],
     ..oracle::THRANDUIL_THE_ELVENKING

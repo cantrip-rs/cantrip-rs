@@ -27,7 +27,7 @@ fn create_scion(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(triggers::THIS_ENTERS, effects::draw_two_then_discard_two, "When Kiora enters, draw two cards, then discard two cards."),
+        triggered(triggers::THIS_ENTERS, effects::draw_then_discard::<2, 2>, "When Kiora enters, draw two cards, then discard two cards."),
         triggered(
             triggers::THIS_ATTACKS,
             create_scion,

@@ -12,7 +12,7 @@ fn scry_planeswalkers(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(triggers::THIS_ENTERS, effects::draw_three_then_discard_two, "When Oath of Jace enters, draw three cards, then discard two cards."),
+        triggered(triggers::THIS_ENTERS, effects::draw_then_discard::<3, 2>, "When Oath of Jace enters, draw three cards, then discard two cards."),
         triggered(triggers::YOUR_UPKEEP, scry_planeswalkers, "At the beginning of your upkeep, scry X, where X is the number of planeswalkers you control."),
     ],
     ..oracle::OATH_OF_JACE

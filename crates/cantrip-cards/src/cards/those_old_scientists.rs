@@ -19,7 +19,7 @@ fn shuffle_them_in(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        chapter(1, effects::draw_two_then_discard_two, "I \u{2014} Draw two cards, then discard two cards."),
+        chapter(1, effects::draw_then_discard::<2, 2>, "I \u{2014} Draw two cards, then discard two cards."),
         chapter(
             2,
             effects::return_first_target_to_hand,

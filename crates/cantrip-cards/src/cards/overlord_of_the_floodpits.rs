@@ -9,7 +9,7 @@ pub static CARD: CardDef = CardDef {
     enters: Some(impending::enters::<4>),
     statics: &[impending::NOT_A_CREATURE],
     abilities: &[
-        triggered(triggers::THIS_ENTERS_OR_ATTACKS, effects::draw_two_then_discard, "Whenever this permanent enters or attacks, draw two cards, then discard a card."),
+        triggered(triggers::THIS_ENTERS_OR_ATTACKS, effects::draw_then_discard::<2, 1>, "Whenever this permanent enters or attacks, draw two cards, then discard a card."),
         impending::REMOVE_A_TIME_COUNTER,
     ],
     ..oracle::OVERLORD_OF_THE_FLOODPITS

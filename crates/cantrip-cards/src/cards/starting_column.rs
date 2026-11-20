@@ -8,7 +8,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[mana_ability(TAP, add_any_color(1), "{T}: Add one mana of any color.")],
     delayed: &[ability(
         TAP.and(SACRIFICE_THIS),
-        effects::draw_two_then_discard,
+        effects::draw_then_discard::<2, 1>,
         "{T}, Sacrifice this artifact: Draw two cards, then discard a card.",
     )],
     statics: &[max_speed("Max speed \u{2014} {T}, Sacrifice this artifact: Draw two cards, then discard a card.")],

@@ -28,7 +28,7 @@ fn a_pirate_and_a_vehicle_attacked(q: &dyn Query, asker: &Asker) -> bool {
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         YOU_ATTACK,
-        effects::draw_three_then_discard_two,
+        effects::draw_then_discard::<3, 2>,
         "Whenever you attack, if a Pirate and a Vehicle attacked this combat, draw three cards, then discard two cards.",
     )
     .condition(a_pirate_and_a_vehicle_attacked)],

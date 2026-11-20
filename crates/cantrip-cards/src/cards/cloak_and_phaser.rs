@@ -13,7 +13,7 @@ fn cost_reduction(q: &dyn Query, _: ObjectId, player: PlayerId, _: Costed, _: &[
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     tokens::create(g, item.controller, &tokens::ROMULAN, 2)?;
     g.end_sentence();
-    effects::draw_two_then_discard(g, item)
+    effects::draw_then_discard::<2, 1>(g, item)
 }
 
 pub static CARD: CardDef = CardDef {

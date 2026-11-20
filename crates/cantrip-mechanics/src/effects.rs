@@ -1165,6 +1165,18 @@ pub fn loot(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
+/// "Draw DRAW cards, then discard DISCARD cards" (CR 121.1, 701.9, 608.2c): the controller draws, the draw is done, then they
+/// choose that many cards of their hand, the drawn ones included, and discard them together (all of a smaller hand, nothing
+/// asked of an empty one). Bazaar of Baghdad (two, three), Galvanic
+/// Giant's Storm Reading (four, two), Faithless Looting (two, two) and Overlord of the Floodpits (two, one) print it.
+pub fn draw_then_discard<const DRAW: u32, const DISCARD: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.draw(item.controller, DRAW);
+    // A draw replacement may change state without recording an event (CR 603.8, 608.2c).
+    g.end_sentence();
+    crate::discard_chosen(g, item.controller, item.object, DISCARD)?;
+    Ok(())
+}
+
 /// `loot` for an ability that goes on to ask about the card: the cards the discard actually discarded, wherever they went (a
 /// graveyard, or exile by a madness replacement), none for an empty hand. Ninja's Blades loses the damaged player life equal to its mana value.
 pub fn loot_discarding(g: &mut dyn Game, player: PlayerId, source: ObjectId) -> Result<Vec<ObjectId>, Suspend> {
@@ -1244,40 +1256,6 @@ pub fn you_and_target_player_each_draw(g: &mut dyn Game, item: &StackItem, slot:
     for player in players {
         g.draw(player, n);
     }
-}
-
-/// "Draw two cards, then discard a card" (CR 121.1, 701.9): the controller draws two, then chooses a card of their hand, the
-/// two drawn included, and discards it. Overlord of the Floodpits, Roiling Dragonstorm and Wistfulness print it.
-pub fn draw_two_then_discard(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.draw(item.controller, 2);
-    crate::discard_chosen(g, item.controller, item.object, 1)?;
-    Ok(())
-}
-
-/// "Draw two cards, then discard two cards" (CR 121.1, 701.9): the controller draws two, then chooses two cards of their hand,
-/// the two drawn included, and discards them. Faithless Looting, Jadzi, Steward of Fate and Spellbook Seeker's Careful Study
-/// print it.
-pub fn draw_two_then_discard_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.draw(item.controller, 2);
-    crate::discard_chosen(g, item.controller, item.object, 2)?;
-    Ok(())
-}
-
-/// "Draw three cards, then discard a card" (CR 121.1, 701.9): the controller draws three, then chooses a card of their hand, the
-/// three drawn included, and discards it. Coil and Catch (Marang River Regent's Omen) and Unexpected Assistance print it.
-pub fn draw_three_then_discard(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.draw(item.controller, 3);
-    crate::discard_chosen(g, item.controller, item.object, 1)?;
-    Ok(())
-}
-
-/// "Draw three cards, then discard two cards" (CR 121.1, 701.9): the controller draws three, then chooses two cards of their
-/// hand, the three drawn included, and discards them. Oath of Jace, Ral, Crackling Wit, Sidequest: Card Collection and
-/// Fearless Swashbuckler print it.
-pub fn draw_three_then_discard_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.draw(item.controller, 3);
-    crate::discard_chosen(g, item.controller, item.object, 2)?;
-    Ok(())
 }
 
 /// "You may discard a card. If you do, draw `n` cards" (CR 701.9, 121.1): the controller chooses a card of their hand to

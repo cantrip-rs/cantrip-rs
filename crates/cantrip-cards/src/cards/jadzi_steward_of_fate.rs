@@ -28,7 +28,7 @@ pub static ORACLES_GIFT: CardDef = CardDef {
 };
 
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(triggers::THIS_ENTERS, effects::draw_two_then_discard_two, "When Jadzi enters, draw two cards, then discard two cards.")],
+    abilities: &[triggered(triggers::THIS_ENTERS, effects::draw_then_discard::<2, 2>, "When Jadzi enters, draw two cards, then discard two cards.")],
     enters: Some(prepare::enters_prepared),
     prepare: Some(&ORACLES_GIFT),
     ..oracle::JADZI_STEWARD_OF_FATE

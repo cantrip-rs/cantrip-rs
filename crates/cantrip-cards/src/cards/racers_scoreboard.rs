@@ -16,7 +16,7 @@ fn spells_cost_1_less_at_max_speed(q: &dyn Query, source: ObjectId, player: Play
 
 pub static CARD: CardDef = CardDef {
     start_your_engines: true,
-    abilities: &[triggered(THIS_ENTERS, effects::draw_two_then_discard, "When this artifact enters, draw two cards, then discard a card.")],
+    abilities: &[triggered(THIS_ENTERS, effects::draw_then_discard::<2, 1>, "When this artifact enters, draw two cards, then discard a card.")],
     cost_changes: &[spells_cost_1_less_at_max_speed],
     ..oracle::RACERS_SCOREBOARD
 };

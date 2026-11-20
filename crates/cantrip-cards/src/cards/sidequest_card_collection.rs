@@ -16,7 +16,7 @@ pub static BACK: CardDef = CardDef {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(triggers::THIS_ENTERS, effects::draw_three_then_discard_two, "When this enchantment enters, draw three cards, then discard two cards."),
+        triggered(triggers::THIS_ENTERS, effects::draw_then_discard::<3, 2>, "When this enchantment enters, draw three cards, then discard two cards."),
         triggered(triggers::YOUR_END_STEP, effects::transform_self, "At the beginning of your end step, if eight or more cards are in your graveyard, transform this enchantment.")
             .condition(eight_or_more_cards_in_your_graveyard),
     ],
