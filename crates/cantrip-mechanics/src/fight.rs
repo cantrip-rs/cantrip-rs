@@ -38,6 +38,21 @@ pub fn may_have_this_fight(g: &mut dyn Game, item: &StackItem, prey: ObjectId) -
     Ok(())
 }
 
+/// "[This creature] fights [up to one] target creature [an opponent controls / you don't control]. If that creature would die this turn,
+/// exile it instead" (CR 701.14, 614.1a, 608.2b): the exile replacement is the ability's own effect on the target, made whether or not
+/// the fight happens, so with the source no longer a creature on the battlefield nothing fights (CR 701.14b) and the target is still
+/// exiled if it dies this turn (the Faunsbane Troll ruling). The replacement is the card's first granted replacement
+/// (`EXILE_INSTEAD_OF_DYING`). With no target, or one no longer legal, nothing happens. Mawloc and Faunsbane Troll print it.
+pub fn this_fights_target_exiling_it_if_it_would_die(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if item.target_count == 0 || !g.target_legal(item, 0) {
+        return Ok(());
+    }
+    let Target::Object(prey) = item.target(0) else { return Ok(()) };
+    crate::replacements::exile_if_it_would_die(g, item, 0, prey);
+    g.fight(item.object, prey);
+    Ok(())
+}
+
 /// "Put `N` +1/+1 counters on target creature you control. [Then] it fights target creature an opponent controls." (CR 122.1,
 /// 701.14, 608.2b-c): the creature is the spell's first target and the one fought its second, each judged as the spell resolves.
 /// With the first gone nothing is put on and nothing fights; with only the second gone the counters are still put on and no
