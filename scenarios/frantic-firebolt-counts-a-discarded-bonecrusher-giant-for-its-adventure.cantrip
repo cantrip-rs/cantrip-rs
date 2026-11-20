@@ -1,0 +1,48 @@
+# Frantic Firebolt also counts a card "that has an Adventure" (CR 715.1, 700.2): Charming Scoundrel's first mode discards Bonecrusher
+# Giant (a creature card with the Adventure Stomp) and draws, so X is 2 + 1 = 3 and Bot2's Wall of Earth (0/6) is dealt exactly 3.
+# The Black Lotus in the graveyard (no Adventure, an artifact) adds nothing. Charming Scoundrel itself, on the battlefield, is not in the
+# graveyard. Black Lotus and two Mox Rubies pay for {1}{R} and {2}{R}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Charming Scoundrel
+Bonecrusher Giant
+Frantic Firebolt
+Mountain x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Wall of Earth
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Wall of Earth.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Charming Scoundrel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Bonecrusher Giant)
+? Bot1.Graveyard = Bonecrusher Giant; Black Lotus
+Bot1.Hand.Frantic Firebolt.Cast(Bot2.Battlefield.Wall of Earth)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Wall of Earth.Damage = 3

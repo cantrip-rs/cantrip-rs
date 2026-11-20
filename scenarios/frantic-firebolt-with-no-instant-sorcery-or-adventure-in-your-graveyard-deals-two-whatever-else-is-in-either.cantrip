@@ -1,0 +1,46 @@
+# Frantic Firebolt ({2}{R}) deals X damage to target creature, "where X is 2 plus the number of cards in your graveyard that are
+# instant cards, sorcery cards, and/or have an Adventure" (CR 120.3, 700.2). Bot1's own graveyard holds only the Black Lotus that paid
+# for it (an artifact: it is not counted; the Firebolt itself is on the stack, not in the graveyard), and Bot2's graveyard holds a
+# Lightning Bolt, an instant, which is not "your graveyard". So X is exactly 2: Bot2's Wall of Earth (0/6) has 2 damage marked. It
+# targets a creature only: not a player, nor a noncreature artifact (CR 115.1).
+
+[Bot1 Deck]
+Black Lotus
+Frantic Firebolt
+Mountain x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Wall of Earth
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Wall of Earth.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+! Bot1.Hand.Frantic Firebolt.Cast(Bot2)
+! Bot1.Hand.Frantic Firebolt.Cast(Bot2.Battlefield.Mox Ruby#1)
+Bot1.Hand.Frantic Firebolt.Cast(Bot2.Battlefield.Wall of Earth)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Wall of Earth.Damage = 2
+Bot1.Graveyard = Frantic Firebolt; Black Lotus

@@ -1,0 +1,48 @@
+# Frantic Firebolt counts "instant cards, sorcery cards" in Bot1's graveyard (CR 700.2): a Lightning Bolt (instant) and a Chain
+# Lightning (sorcery) cast first, both at Bot2's face, are two cards, and the Black Lotus (an artifact) is not one, so X is 4. Bot2's
+# Wall of Earth (0/6) has exactly 4 damage marked. Black Lotus and two Mox Rubies pay {R} + {R} + {2}{R}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Chain Lightning
+Frantic Firebolt
+Mountain x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Wall of Earth
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Wall of Earth.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Chain Lightning.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Decline
+? Bot1.Graveyard = Chain Lightning; Lightning Bolt; Black Lotus
+Bot1.Hand.Frantic Firebolt.Cast(Bot2.Battlefield.Wall of Earth)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Wall of Earth.Damage = 4
+Bot2.Life = 14
