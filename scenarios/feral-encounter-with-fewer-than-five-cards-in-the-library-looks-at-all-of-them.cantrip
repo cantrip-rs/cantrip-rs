@@ -1,0 +1,65 @@
+# Feral Encounter: "Look at the top five cards of your library." Bot1's library holds only a Llanowar Elves and an Island after the
+# draw on turn 3 (CR 609.3): it looks at both, exiles the Elves and the Island goes to the bottom, alone in the library. The Elves
+# can be cast this turn for {G} from the third Mox Emerald.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Grizzly Bears
+Feral Encounter
+Island x3
+Mox Emerald
+Llanowar Elves
+Island
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x4
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald#1.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Feral Encounter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Looked = Llanowar Elves; Island
+Bot1.Choose(Llanowar Elves)
+? Exile = Llanowar Elves
+? Bot1.Library = Island
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Exile.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+? Step = BeginCombat
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Llanowar Elves.Tapped = false
+Bot2.Graveyard = Grizzly Bears

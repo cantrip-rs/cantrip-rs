@@ -1,0 +1,56 @@
+# Feral Encounter: "Look at the top five cards of your library." Bot1's library is empty after its draw on turn 3: nothing is looked
+# at or exiled and nobody is asked (CR 609.3), but the delayed ability is made all the same, so at the beginning of combat Bot1's
+# Grizzly Bears deals 2 damage to Bot2's, which dies.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Grizzly Bears
+Feral Encounter
+Island x3
+Mox Emerald
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x4
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald#1.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Feral Encounter.Cast
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+? Bot1.Library.Count = 0
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+? Step = BeginCombat
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Graveyard = Grizzly Bears

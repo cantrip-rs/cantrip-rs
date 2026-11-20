@@ -1,0 +1,61 @@
+# Feral Encounter: "At the beginning of the next combat phase this turn". Cast in Bot1's second main phase there is no combat phase
+# left this turn, so the delayed ability never triggers (the ruling): it ends with the turn, and Bot2's combat on turn 4 asks nobody
+# for targets and deals no damage. The Elves exiled are cast this turn all the same, from the second main phase.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Grizzly Bears
+Feral Encounter
+Island x3
+Mox Emerald
+Lightning Bolt
+Llanowar Elves
+Island
+Mesa Pegasus
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x4
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald#1.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Feral Encounter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Llanowar Elves)
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Exile.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+? Delayed.Count = 1
+[T5 Bot1.Main1]
+? Delayed.Count = 0
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Battlefield = Grizzly Bears; Llanowar Elves; Mox Emerald; Mox Emerald; Mox Emerald

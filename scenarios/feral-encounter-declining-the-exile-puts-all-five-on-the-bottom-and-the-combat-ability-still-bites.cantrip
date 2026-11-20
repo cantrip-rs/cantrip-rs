@@ -1,0 +1,67 @@
+# Feral Encounter: "You may exile a creature card from among them." Bot1 looks at Lightning Bolt, Llanowar Elves, Island, Mesa Pegasus
+# and Island and may exile only a creature card: the Bolt and the Island are refused, and Bot1 declines the Elves and the Pegasus.
+# All five go to the bottom of its library, nothing is exiled, and the combat ability, made whatever was exiled, still has Bot1's
+# Grizzly Bears deal 2 to Bot2's Grizzly Bears at the beginning of combat.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Grizzly Bears
+Feral Encounter
+Island x3
+Mox Emerald
+Lightning Bolt
+Llanowar Elves
+Island
+Mesa Pegasus
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x4
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald#1.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Feral Encounter.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Lightning Bolt)
+! Bot1.Choose(Island)
+Bot1.Choose()
+? Exile.Count = 0
+? Bot1.Library.Count = 15
+? Bot1.Library.Top = Island
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+? Step = BeginCombat
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Exile.Count = 0
