@@ -1,0 +1,14 @@
+{
+  "name": "Ratcatcher Trainee",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Peasant",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "During your turn, this creature has first strike.",
+  "adventure": {
+    "name": "Pest Problem",
+    "manaCost": "{2}{R}",
+    "type": "Instant — Adventure",
+    "oracleText": "Create two 1/1 black Rat creature tokens with \"This token can't block.\" (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

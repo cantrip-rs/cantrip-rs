@@ -1,0 +1,42 @@
+# Pest Problem (CR 715, 701.7): an instant Adventure that creates two 1/1 black Rats with "This token can't block." Bot1 casts it
+# for {2}{R} on turn 1 (the card goes to exile as it resolves, CR 715.4), and Bot2's attacking Memnite on turn 4 cannot be blocked by the
+# Rats (the block is refused). On turn 3 Bot1 casts Ratcatcher Trainee from exile (CR 715.3d) for {1}{R}.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Ratcatcher Trainee
+Mountain x17
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ratcatcher Trainee.Cast(Ability: Pest Problem)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Exile = Ratcatcher Trainee
+? Bot1.Battlefield.Count = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Exile.Ratcatcher Trainee.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+! Bot1.Block(Rat Token > Memnite)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Exile.Count = 0
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Rat Token; Rat Token; Ratcatcher Trainee
