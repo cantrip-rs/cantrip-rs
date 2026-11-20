@@ -2415,14 +2415,26 @@ pub fn creature_you_control_with_counters_dies(q: &dyn Query, me: &Asker, event:
     }
 }
 
-/// "Whenever a creature you control with a +1/+1 counter on it dies" (CR 700.4, 603.10a): `creature_you_control_dies`, narrowed
-/// to a creature that had a +1/+1 counter on it as it last was on the battlefield. Each creature is its own event, so creatures
-/// dying together trigger once each, and this permanent too, if it died with one. Meltstrider Eulogist and Explorer's Cache print it.
-pub fn creature_you_control_with_a_plus_one_counter_dies(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+/// "Whenever a creature you control with a [kind] counter on it dies" (CR 700.4, 603.10a, 122.1), `KIND` a `CounterKind` as `usize`:
+/// `creature_you_control_dies`, narrowed to a creature that had a counter of that kind on it as it last was on the battlefield. Each
+/// creature is its own event, so creatures dying together trigger once each, and this permanent too, if it died with one. The
+/// trigger is about the creature as it last existed (`Fired::about`; `event_subject`, `item.subject`), whose cards in the graveyard
+/// (every card of a merged permanent, CR 730.3c) "exile it" and "other" read through `found_all_after_move`.
+/// Illicit Masquerade (impostor) prints it.
+pub fn creature_you_control_with_counter_dies<const KIND: usize>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
-        Event::ZoneChange { old, .. } if q.obj(*old).counters(CounterKind::PlusOne) == 0 => None,
-        _ => creature_you_control_dies(q, me, event),
+        Event::ZoneChange { old, .. } if q.obj(*old).counters(CounterKind::ALL[KIND]) > 0 => {
+            creature_you_control_dies(q, me, event)?;
+            Fired::about(Target::Object(*old))
+        }
+        _ => None,
     }
+}
+
+/// "Whenever a creature you control with a +1/+1 counter on it dies" (CR 700.4, 603.10a): `creature_you_control_with_counter_dies`
+/// for +1/+1 counters. Meltstrider Eulogist and Explorer's Cache print it.
+pub fn creature_you_control_with_a_plus_one_counter_dies(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    creature_you_control_with_counter_dies::<{ CounterKind::PlusOne as usize }>(q, me, event)
 }
 
 /// "Whenever a [subtype] you control dies" (CR 700.4, 603.10a), `SUBTYPE` a `Subtype` as `u16` (`lands::sub`), looked back on: a
