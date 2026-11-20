@@ -1,0 +1,27 @@
+# Rootrider Faun: "{1}, {T}: Add one mana of any color." (CR 605.1a, 106.4). With no other mana the filter is refused (the Faun's own {T} cannot also pay its {1}), then on
+# turn 3 a Forest's {G} pays the {1} and the Faun adds {R}: the pool is {R} alone, and both are tapped.
+[Bot1 Deck]
+Rootrider Faun
+Black Lotus
+Forest x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Rootrider Faun.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Rootrider Faun.Activate(Ability: any color; Color: Red; Mana: short)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Rootrider Faun.Activate(Ability: any color; Color: Red)
+? Bot1.Mana = {R}
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Rootrider Faun.Tapped = true
+Bot1.Battlefield.Forest.Tapped = true

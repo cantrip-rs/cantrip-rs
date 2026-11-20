@@ -1,0 +1,8 @@
+{
+  "name": "Rootrider Faun",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Satyr Scout",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "{T}: Add {G}.\n{1}, {T}: Add one mana of any color."
+}

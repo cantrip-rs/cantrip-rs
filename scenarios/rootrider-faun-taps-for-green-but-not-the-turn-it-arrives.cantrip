@@ -1,0 +1,24 @@
+# Rootrider Faun: "{T}: Add {G}." is a mana ability with the tap symbol, so the creature cannot use it the turn it comes under its controller's control (CR 302.6, 605.1a).
+# Turn 1: a Black Lotus pays for the Faun; its mana ability is refused. Turn 3 it taps for {G} alone and is tapped.
+[Bot1 Deck]
+Rootrider Faun
+Black Lotus
+Forest x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Rootrider Faun.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Rootrider Faun.Activate()
+[T3 Bot1.Main1]
+Bot1.Battlefield.Rootrider Faun.Activate(Ability: {T}: Add {G})
+? Bot1.Mana = {G}
+? Bot1.Battlefield.Rootrider Faun.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Rootrider Faun.Tapped = true
