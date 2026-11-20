@@ -1512,7 +1512,13 @@ pub trait Game: Query {
     /// stays on the battlefield. Armor Wars, Urza, Planeswalker, Ballad of the Black Flag, Spellbinding Soprano and Academy
     /// Loremaster print it. The effect is controlled by `item`'s controller (CR 109.5).
     fn spells_cost_this_turn(&mut self, item: &StackItem, player: PlayerId, index: u8) {
-        let kind = EffectKind::SpellCostChange { card: item.ability.card, index, player };
+        self.spells_cost_this_turn_by(item, player, index, 0);
+    }
+    /// The same, with a number the words fixed as the spell or ability resolved (CR 608.2h): "cost {X} less to cast, where X is
+    /// the amount of life you lost this turn" (Rowan, Scion of War; Will, Scion of Peace). The change reads it as
+    /// `Query::replacement_value`, and it does not change as the turn goes on. 0 is no number, as `spells_cost_this_turn`.
+    fn spells_cost_this_turn_by(&mut self, item: &StackItem, player: PlayerId, index: u8, value: u32) {
+        let kind = EffectKind::SpellCostChange { card: item.ability.card, index, player, value };
         self.add_player_effect(item.controller, item.object, kind, Duration::EndOfTurn);
     }
     /// "The next [kind of] spell [player] casts this turn can be cast without paying its mana cost" (CR 611.2a/c, 118.9, 601.2b),

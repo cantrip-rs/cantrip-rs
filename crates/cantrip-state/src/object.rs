@@ -1986,7 +1986,7 @@ pub enum EffectKind {
     /// its source is still on the battlefield (CR 611.2a). It is the `index`th of the
     /// `lasting_cost_changes` of `card`, the card whose spell or ability made it, which says which spells and by how much.
     /// About the player, so it reaches spells cast later and outlives its `affected` object, which is only the source.
-    SpellCostChange { card: CardId, index: u8, player: PlayerId },
+    SpellCostChange { card: CardId, index: u8, player: PlayerId, value: u32 },
     /// "The next red or green creature spell you cast this turn can be cast without paying its mana cost" (CR 611.2a/c, 118.9,
     /// 601.2b): an alternative cost a resolved spell or ability made available to the spells `player` casts, for as long as it
     /// lasts, whether or not its source is still on the battlefield. It is the `index`th of the `lasting_spell_alternatives` of
@@ -2049,7 +2049,7 @@ impl EffectKind {
     /// every other effect.
     pub const fn replacement_value(self) -> u32 {
         match self {
-            EffectKind::Replacement { value, .. } | EffectKind::ReplacementRule { value, .. } => value,
+            EffectKind::Replacement { value, .. } | EffectKind::ReplacementRule { value, .. } | EffectKind::SpellCostChange { value, .. } => value,
             _ => 0,
         }
     }

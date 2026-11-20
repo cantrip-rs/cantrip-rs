@@ -797,7 +797,7 @@ impl<'a> Projector<'a> {
         // made about the player's spells, on no object, so the page says it beside their life total in the card's own words,
         // named for the card that made it. The other seat is told whose spells it changes.
         for e in s.effects.iter() {
-            if let EffectKind::SpellCostChange { card, index, player } = e.kind
+            if let EffectKind::SpellCostChange { card, index, player, .. } = e.kind
                 && player == p
             {
                 let def = game.cards.get(card);

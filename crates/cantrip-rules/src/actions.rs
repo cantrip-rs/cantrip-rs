@@ -5896,7 +5896,7 @@ fn deltas_watched(
     // become of its source, asks the card that made it what it does to this spell.
     if lasting {
         for e in &cx.s().effects {
-            if let EffectKind::SpellCostChange { card, index, player: whose } = e.kind
+            if let EffectKind::SpellCostChange { card, index, player: whose, value } = e.kind
                 && whose == player
             {
                 let def = &cx.card(card).lasting_cost_changes[index as usize];
@@ -5906,7 +5906,13 @@ fn deltas_watched(
                 {
                     continue;
                 }
-                add((def.change)(q, e.source, player, costed, targets));
+                // A number the effect fixed as it was made (Rowan, Scion of War, CR 608.2h) is read through `Query::replacement_value`.
+                if value > 0 {
+                    let reads = WithWords { q, source: e.source, words: e.words, into: Target::None, value };
+                    add((def.change)(&reads, e.source, player, costed, targets));
+                } else {
+                    add((def.change)(q, e.source, player, costed, targets));
+                }
             }
         }
     }
@@ -10618,7 +10624,7 @@ pub(crate) fn stack_item(kind: StackKind, object: ObjectId, ability: AbilityRef,
 fn apply_next_spell_effects(cx: &mut Cx, player: PlayerId, spell: ObjectId) {
     let uncounterable = |e: &cantrip_state::ContinuousEffect| e.kind == EffectKind::NextSpellCantBeCountered && e.controller == player;
     let costs_next = |e: &cantrip_state::ContinuousEffect| match e.kind {
-        EffectKind::SpellCostChange { card, index, player: whose } => {
+        EffectKind::SpellCostChange { card, index, player: whose, .. } => {
             whose == player && cx.card(card).lasting_cost_changes[index as usize].next.is_some_and(|next| next(&*cx, spell))
         }
         // An alternative cost it gave the next spell is used up by the first it applies to, paid or not (CR 611.2c).
