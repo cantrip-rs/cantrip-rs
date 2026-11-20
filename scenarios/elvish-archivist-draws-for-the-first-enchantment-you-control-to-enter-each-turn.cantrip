@@ -1,0 +1,65 @@
+# Elvish Archivist: "Whenever one or more enchantments you control enter, draw a card. This ability triggers only once each turn."
+# Bot2's Sylvan Library entering on turn 2 is not an enchantment Bot1 controls: Bot1 draws nothing. On turn 3 Bot1's Sylvan Library
+# draws a card (CR 603.6a) and the Mystic Remora cast after it, the same turn, draws none (CR 603.2). The Mox Sapphire, the first
+# artifact to enter that turn, gives the Archivist its two counters, and is not made unavailable by the draw (separate abilities).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Elvish Archivist
+Sylvan Library
+Mystic Remora
+Mox Sapphire
+Island
+Plains
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Sylvan Library
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Elvish Archivist.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Sylvan Library.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 3
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 4
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Archivist.Power = 2
+Bot1.Hand.Sylvan Library.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mystic Remora.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island; Plains
+Bot1.Battlefield.Elvish Archivist.Power = 2

@@ -1,0 +1,59 @@
+# Elvish Archivist: "Whenever one or more artifacts you control enter, put two +1/+1 counters on this creature. This ability
+# triggers only once each turn." The 0/1 Archivist is in play on turn 1 when Bot1's Mox Ruby enters (CR 603.6a): it becomes 2/3, and
+# the Mox Pearl cast right after, the same turn, adds nothing more (CR 603.2). Bot2's Mox Emerald on turn 2 is not an artifact Bot1
+# controls. On turn 3 the ability triggers again for the Mox Sapphire, and not for the Black Lotus after it: 4/5 and no further.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Elvish Archivist
+Mox Ruby
+Mox Pearl
+Black Lotus
+Island
+Mox Sapphire
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Elvish Archivist.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Archivist.Power = 0
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Archivist.Power = 2
+? Bot1.Battlefield.Elvish Archivist.Toughness = 3
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Archivist.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Elvish Archivist.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Archivist.Power = 4
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Elvish Archivist.Power = 4
+Bot1.Battlefield.Elvish Archivist.Toughness = 5
