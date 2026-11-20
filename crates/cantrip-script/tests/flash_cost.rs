@@ -35,13 +35,49 @@ static PROBE: CardDef = CardDef {
 static FLASHER: CardDef = CardDef { name: "Flash Cost Flasher", keywords: Keywords::of(&[Keyword::Flash]), ..PROBE };
 
 
+/// A creature whose permission is bought with a behold: "if you behold a creature as an additional cost" (Molten Exhale
+/// beholds a Dragon). Nothing else in the hand or on the battlefield being a creature, it has nothing to behold.
+static BEHOLDER: CardDef = CardDef {
+    name: "Flash Cost Beholder",
+    optional_cost: Some(OptionalCost { flash: true, ..OptionalCost::new(Cost { behold: Some((1, a_creature, "creature")), ..Cost::NONE }) }),
+    labels: &["Cast without flash", "Flash: behold a creature"],
+    ..PROBE
+};
+
+fn a_creature(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
+    q.chars(id).is(CardType::Creature)
+}
+
+/// The same with a target announced as it is cast and a cost change of its own, which sends the offer through the announcement of
+/// the cost rather than the one judgment of it: the behold is judged there too.
+static AIMED: CardDef = CardDef {
+    name: "Flash Cost Aimed",
+    spell: spell(&AIM, nothing),
+    own_cost_changes: &[no_change],
+    ..BEHOLDER
+};
+
+static AIM: [TargetSpec; 1] = [target(an_artifact)];
+
+fn an_artifact(q: &dyn Query, _: &Asker, t: Target) -> bool {
+    matches!(t, Target::Object(id) if q.is_on_battlefield(id) && q.chars(id).is(CardType::Artifact))
+}
+
+fn nothing(_: &mut dyn cantrip_api::Game, _: &StackItem) -> Result<(), Suspend> {
+    Ok(())
+}
+
+fn no_change(_: &dyn Query, _: ObjectId, _: PlayerId, _: Costed, _: &[Target]) -> CostDelta {
+    CostDelta::NONE
+}
+
 static SOURCE: CardDef = CardDef { name: "Flash Cost Source", has_cost: false, types: TypeSet::of(&[CardType::Artifact]), ..CardDef::BLANK };
 
 static FILLER: CardDef = CardDef { name: "Flash Cost Filler", types: TypeSet::of(&[CardType::Land]), ..CardDef::BLANK };
 
 fn table() -> &'static CardTable {
     static TABLE: OnceLock<CardTable> = OnceLock::new();
-    TABLE.get_or_init(|| CardTable::new([&PROBE, &FLASHER, &SOURCE, &FILLER]))
+    TABLE.get_or_init(|| CardTable::new([&PROBE, &FLASHER, &BEHOLDER, &AIMED, &SOURCE, &FILLER]))
 }
 
 const YOU: PlayerId = PlayerId(0);
@@ -189,4 +225,26 @@ fn the_extra_cost_is_not_part_of_the_mana_value() {
     cast(&mut game, "Flash Cost Probe", false);
     let spell = game.state.stack.last().expect("on the stack").object;
     assert_eq!(game.mana_value(spell), 1);
+}
+
+/// The extra cost need not be mana (CR 118.8): a permission bought with a behold is on offer at instant speed only where
+/// something could be beheld (CR 601.2b, 701.4a), the card being cast beheld by nothing.
+#[test]
+fn at_instant_speed_a_behold_that_cannot_be_paid_is_not_offered() {
+    let game = at(THEY, Step::PrecombatMain, &[&BEHOLDER], 1);
+    assert!(cast_on_offer(&game, "Flash Cost Beholder").is_none(), "the {{1}} is in the pool but there is nothing to behold");
+    let game = at(THEY, Step::PrecombatMain, &[&BEHOLDER, &PROBE], 1);
+    assert!(cast_on_offer(&game, "Flash Cost Beholder").is_some(), "a creature card in the hand may be revealed");
+    // At sorcery speed it needs no permission, and so no behold.
+    let game = at(YOU, Step::PrecombatMain, &[&BEHOLDER], 1);
+    assert!(cast_on_offer(&game, "Flash Cost Beholder").is_some());
+}
+
+/// Judged with its target and a cost change, the owed behold still has to be payable.
+#[test]
+fn at_instant_speed_a_behold_that_cannot_be_paid_is_not_offered_with_a_target_and_a_cost_change() {
+    let game = at(THEY, Step::PrecombatMain, &[&AIMED], 1);
+    assert!(cast_on_offer(&game, "Flash Cost Aimed").is_none(), "the {{1}} is in the pool but there is nothing to behold");
+    let game = at(THEY, Step::PrecombatMain, &[&AIMED, &PROBE], 1);
+    assert!(cast_on_offer(&game, "Flash Cost Aimed").is_some(), "a creature card in the hand may be revealed");
 }

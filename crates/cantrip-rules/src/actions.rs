@@ -4822,6 +4822,11 @@ fn offer_costed(
     // CR 107.3a: the {X} of a waterbend cost an additional cost has is announced with the spell's own.
     let x_symbols = x_symbols + def.additional_cost.map_or(0, |c| c.waterbend.x);
     let changes = !a.changers.is_empty() || !def.own_cost_changes.is_empty() || lasting_changes(cx) || def.x_rule.is_some();
+    // The optional cost that is owed is paid by every announcement, so its parts that are not mana (a behold, CR 701.4a) must be
+    // payable for the cast to be offered at all: `covered` judges the mana, with the cost paid, and so do the targets it asks of.
+    if owed && def.optional_cost.is_some_and(|o| !can_pay_other(cx, asker.source, asker.controller, &o.cost)) {
+        return false;
+    }
     if !changes {
         return covered(&[], &Earlier::NONE) && offer_spell(cx, asker, def, option);
     }
