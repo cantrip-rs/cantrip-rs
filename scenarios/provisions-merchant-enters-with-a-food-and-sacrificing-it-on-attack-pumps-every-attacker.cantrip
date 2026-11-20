@@ -1,0 +1,46 @@
+# Provisions Merchant: "When this creature enters, create a Food token" (CR 111.10b) and "Whenever this creature attacks, you may sacrifice a Food. If you do,
+# attacking creatures get +1/+1 and gain trample until end of turn" (CR 701.21a, 608.2c, 611.2c). Turn 1: a Black Lotus and a Forest pay for the Merchant (a Memnite
+# comes first); a Food token arrives. Turn 3: both creatures attack, Bot1 sacrifices the Food and both get +1/+1 and trample; nothing is paid as a cost.
+# Memnite, an artifact but no Food, is not offered for the sacrifice.
+[Bot1 Deck]
+Black Lotus
+Provisions Merchant
+Memnite
+Forest x24
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Provisions Merchant.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 4
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Provisions Merchant > Bot2; Memnite > Bot2)
+Bot1.Pass
+! Bot1.Choose(Memnite)
+Bot1.Choose(Food Token)
+? Bot1.Battlefield.Count = 3
+? Bot1.Battlefield.Provisions Merchant.Power = 4
+? Bot1.Battlefield.Provisions Merchant.Toughness = 4
+? Bot1.Battlefield.Provisions Merchant.Keywords = Trample
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Memnite.Keywords = Trample
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Provisions Merchant.Power = 3
+Bot1.Battlefield.Provisions Merchant.Toughness = 3
+Bot1.Battlefield.Provisions Merchant.Keywords = (absent)
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot2.Life = 14

@@ -1,0 +1,8 @@
+{
+  "name": "Provisions Merchant",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Beast Peasant",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When this creature enters, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\nWhenever this creature attacks, you may sacrifice a Food. If you do, attacking creatures get +1/+1 and gain trample until end of turn."
+}

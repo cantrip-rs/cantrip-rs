@@ -1,0 +1,34 @@
+# Provisions Merchant: the sacrifice is a choice (CR 701.21a): Bot1 declines, keeps the Food, and neither attacker gets +1/+1 or trample (CR 608.2c).
+[Bot1 Deck]
+Black Lotus
+Provisions Merchant
+Memnite
+Forest x24
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Provisions Merchant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Provisions Merchant > Bot2; Memnite > Bot2)
+Bot1.Pass
+Bot1.Choose()
+? Bot1.Battlefield.Count = 4
+? Bot1.Battlefield.Provisions Merchant.Power = 3
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Count = 4
+Bot2.Life = 16

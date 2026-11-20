@@ -1,0 +1,38 @@
+# Provisions Merchant: with no Food to sacrifice nothing is asked and nothing is pumped (CR 701.21a, 608.2c). Turn 3: Bot1 eats the Food ({2}, {T}, sacrifice: gain 3 life)
+# with its two Forests before attacking, so the attack trigger finds none: the Merchant hits for 3, not 4, without trample.
+[Bot1 Deck]
+Black Lotus
+Provisions Merchant
+Forest x25
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Provisions Merchant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Food Token.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Bot1.Battlefield.Count = 3
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Provisions Merchant > Bot2)
+Bot1.Pass
+? Bot1.Battlefield.Provisions Merchant.Power = 3
+? Bot1.Battlefield.Provisions Merchant.Keywords = (absent)
+
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Life = 17
