@@ -1,0 +1,5 @@
+{
+  "name": "Edgewall Inn",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\nAs this land enters, choose a color.\n{T}: Add one mana of the chosen color.\n{3}, {T}, Sacrifice this land: Return target card that has an Adventure from your graveyard to your hand."
+}

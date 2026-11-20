@@ -1,0 +1,87 @@
+# Edgewall Inn: "{3}, {T}, Sacrifice this land: Return target card that has an Adventure from your graveyard to your hand" (CR 115.1, 602.2, 715.1, 701.21).
+# Bot1 plays the Inn on turn 1 and casts Cheeky House-Mouse (a creature card that has the Adventure Squeak By); Bot2 bolts it on turn 2 and casts its
+# own Mouse, which Bot1 bolts on turn 3. The Inn then cannot return Bot1's Lightning Bolt (no Adventure) or Bot2's Mouse (not Bot1's graveyard);
+# it returns Bot1's Mouse, paid with {3} from three Moxen (pool left empty) and with the Inn itself tapped (refused while it is still tapped on turn 2) and sacrificed.
+
+[Bot1 Deck]
+Edgewall Inn
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Cheeky House-Mouse
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Lightning Bolt
+Cheeky House-Mouse
+Island x20
+
+[Actions]
+Bot1.Hand.Edgewall Inn.Play
+Bot1.Colors(Black)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cheeky House-Mouse.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Edgewall Inn; Mox Pearl; Mox Jet; Mox Ruby; Mox Emerald; Cheeky House-Mouse
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Cheeky House-Mouse)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Cheeky House-Mouse.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Cheeky House-Mouse
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+? Bot1.Battlefield.Edgewall Inn.Tapped = true
+! Bot1.Battlefield.Edgewall Inn.Activate(Ability: Return target; Bot1.Graveyard.Cheeky House-Mouse)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Cheeky House-Mouse)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt; Cheeky House-Mouse
+? Bot2.Graveyard = Cheeky House-Mouse; Lightning Bolt
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+? Bot1.Mana = {W}{B}{G}
+! Bot1.Battlefield.Edgewall Inn.Activate(Ability: Return target; Bot1.Graveyard.Lightning Bolt)
+! Bot1.Battlefield.Edgewall Inn.Activate(Ability: Return target; Bot2.Graveyard.Cheeky House-Mouse)
+Bot1.Battlefield.Edgewall Inn.Activate(Ability: Return target; Bot1.Graveyard.Cheeky House-Mouse)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Hand = Cheeky House-Mouse; Island
+? Bot1.Graveyard = Edgewall Inn; Lightning Bolt
+? Bot2.Graveyard = Cheeky House-Mouse; Lightning Bolt
+
+[Expect]
+Bot1.Hand = Cheeky House-Mouse; Island
+Bot1.Graveyard = Edgewall Inn; Lightning Bolt

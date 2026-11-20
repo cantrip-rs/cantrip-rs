@@ -1,0 +1,24 @@
+# Edgewall Inn: "This land enters tapped. As this land enters, choose a color. {T}: Add one mana of the chosen color" (CR 614.1c, 605.1a, 607.2d).
+# Bot1 plays it on turn 1 and chooses black: it enters tapped and cannot be tapped for mana (refused). On turn 3 it adds black and no other color (refused for white).
+
+[Bot1 Deck]
+Edgewall Inn
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Edgewall Inn.Play
+Bot1.Colors(Black)
+? Bot1.Battlefield.Edgewall Inn.Tapped = true
+? Bot1.Battlefield.Edgewall Inn.ChosenColor = Black
+! Bot1.Battlefield.Edgewall Inn.Activate(Color: Black)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Edgewall Inn.Activate(Color: White)
+Bot1.Battlefield.Edgewall Inn.Activate(Color: Black)
+? Bot1.Mana = {B}
+
+[Expect]
+Bot1.Battlefield.Edgewall Inn.ChosenColor = Black
+Bot1.Mana = {B}
