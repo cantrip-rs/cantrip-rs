@@ -1,0 +1,41 @@
+# A regeneration shield (CR 701.19) replaces the destruction, and "its controller taps it" (CR 701.19a): the tap is its controller's
+# (Bot1), not the opponent's whose Lightning Bolt would have destroyed it. Bot2's only tap is its Mountain for mana.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Clay Statue
+Island x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Clay Statue.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Clay Statue)
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Clay Statue.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Clay Statue.Tapped = true
+Bot1.Taps = Mox Ruby; Mox Sapphire; Clay Statue
+Bot2.Taps = Mountain

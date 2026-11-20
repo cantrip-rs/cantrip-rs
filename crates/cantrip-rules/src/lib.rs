@@ -3159,11 +3159,17 @@ impl cantrip_api::Game for Cx<'_> {
     }
 
     fn tap(&mut self, permanent: ObjectId) {
-        ops::tap(self, permanent);
+        let by = self.doer();
+        ops::tap(self, permanent, by);
     }
 
     fn tap_together(&mut self, permanents: &[ObjectId]) {
-        ops::tap_together(self, permanents);
+        let by = self.doer();
+        ops::tap_together(self, permanents, by);
+    }
+
+    fn tap_together_by_controllers(&mut self, permanents: &[ObjectId]) {
+        ops::tap_together_by_controllers(self, permanents);
     }
 
     fn untap(&mut self, permanent: ObjectId) {

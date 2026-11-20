@@ -184,7 +184,7 @@ impl Tracker {
             Event::Damage { target: Target::Object(object), amount, .. } => {
                 out.push(Proto::Damage { object, amount: amount as i32 });
             }
-            Event::Tapped { permanent } => out.push(Proto::Tap { object: permanent, tapped: true }),
+            Event::Tapped { permanent, .. } => out.push(Proto::Tap { object: permanent, tapped: true }),
             Event::Untapped { permanent } => out.push(Proto::Tap { object: permanent, tapped: false }),
             Event::SpellCast { spell, player, .. } => {
                 let (targets, x, modes, kicked, gift) = spell_facts(game, spell);

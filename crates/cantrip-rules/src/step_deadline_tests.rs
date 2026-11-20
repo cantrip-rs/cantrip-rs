@@ -85,7 +85,7 @@ fn independent_untap_effects_advance_together_even_if_already_untapped_and_rollb
     let mark=g.state.mark();let log=g.log.len();
     untap_step(&mut cx(&mut g),YOU).unwrap();assert_eq!(g.state.effects.len(),1);assert_eq!(g.state.effects[0].duration,Duration::DuringControllersNextUntapSteps(1));
     g.state.rollback(mark);g.log.truncate(log);assert_eq!(g.state.effects.len(),2);assert_eq!(g.state.effects[1].duration,Duration::DuringControllersNextUntapSteps(2));
-    ops::tap(&mut cx(&mut g),id);untap_step(&mut cx(&mut g),YOU).unwrap();assert!(g.state.obj(id).tapped);
+    ops::tap(&mut cx(&mut g),id, YOU);untap_step(&mut cx(&mut g),YOU).unwrap();assert!(g.state.obj(id).tapped);
     untap_step(&mut cx(&mut g),YOU).unwrap();assert!(g.state.obj(id).tapped);
     untap_step(&mut cx(&mut g),YOU).unwrap();assert!(!g.state.obj(id).tapped);
 }

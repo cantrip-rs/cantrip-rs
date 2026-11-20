@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 /// (`once_per_batch`).
 fn creature_you_control_becomes_tapped(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
-        Event::Tapped { permanent } if q.controller(*permanent) == me.controller && q.chars(*permanent).is(CardType::Creature) => {
+        Event::Tapped { permanent, .. } if q.controller(*permanent) == me.controller && q.chars(*permanent).is(CardType::Creature) => {
             Fired::PLAIN
         }
         _ => None,

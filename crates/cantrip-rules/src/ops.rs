@@ -5086,7 +5086,9 @@ pub fn regenerate_instead(cx: &mut Cx, ids: &[(ObjectId, bool)]) -> Vec<ObjectId
             o.damage = 0;
             o.deathtouched = false;
         });
-        tap(cx, id);
+        // "Its controller taps it" (CR 701.19a, 701.19b).
+        let by = cx.s().obj(id).controller;
+        tap(cx, id, by);
         // An attacking or blocking creature that regenerates is removed from combat (CR 506.4) - a planeswalker being attacked
         // that is one too with it; one that is neither is not.
         if cx.s().attackers.iter().any(|a| a.id == id) || cx.s().blockers.contains(&id) {
@@ -5456,10 +5458,10 @@ pub fn proliferate(cx: &mut Cx, player: PlayerId, source: ObjectId) -> R<()> {
     Ok(())
 }
 
-/// Taps an untapped permanent (CR 701.26a): only a live, phased-in permanent on the battlefield can become tapped.
-pub fn tap(cx: &mut Cx, id: ObjectId) {
+/// `by` taps an untapped permanent (CR 701.26a): only a live, phased-in permanent on the battlefield can become tapped.
+pub fn tap(cx: &mut Cx, id: ObjectId, by: PlayerId) {
     if tap_quietly(cx, id) {
-        cx.emit(Event::Tapped { permanent: id });
+        cx.emit(Event::Tapped { permanent: id, player: by });
     }
 }
 
@@ -5477,16 +5479,28 @@ pub fn tap_quietly(cx: &mut Cx, id: ObjectId) -> bool {
 /// teamwork cost taps, any other cost that taps several (CR 601.2h, 602.2b). Each is tapped, then what watches them sees one
 /// batch of events, so a "whenever one or more creatures you control become tapped" ability triggers once. The permanents that
 /// became tapped.
-pub fn tap_together(cx: &mut Cx, ids: &[ObjectId]) -> Vec<ObjectId> {
-    tap_together_with(cx, &mut Vec::new(), ids)
+pub fn tap_together(cx: &mut Cx, ids: &[ObjectId], by: PlayerId) -> Vec<ObjectId> {
+    tap_together_with(cx, &mut Vec::new(), ids, by)
 }
 
 /// `tap_together` for a cost whose `{T}` was paid already (CR 602.2b, 601.2h): the permanents in `pending` were tapped
 /// quietly (`tap_quietly`) and are announced in the same batch as the ones tapped now, since one cost taps them at once. They
 /// are announced even when none of `ids` becomes tapped, and `pending` is left empty.
-pub fn tap_together_with(cx: &mut Cx, pending: &mut Vec<ObjectId>, ids: &[ObjectId]) -> Vec<ObjectId> {
+pub fn tap_together_with(cx: &mut Cx, pending: &mut Vec<ObjectId>, ids: &[ObjectId], by: PlayerId) -> Vec<ObjectId> {
+    tap_together_as(cx, pending, ids, |_, _| by)
+}
+
+/// `tap_together` for an effect that has each player tap permanents they control (CR 701.26a): each permanent's controller taps
+/// it, not the effect's controller, so "whenever you tap an untapped creature an opponent controls" does not see an opponent tap
+/// their own (Hylda of the Icy Crown, ruling 2023-09-01, Tangle Wire). Power Sink, Raiding Party.
+pub fn tap_together_by_controllers(cx: &mut Cx, ids: &[ObjectId]) -> Vec<ObjectId> {
+    tap_together_as(cx, &mut Vec::new(), ids, |cx, id| cx.s().obj(id).controller)
+}
+
+/// `tap_together_with`, with `by` naming the player who taps each permanent.
+fn tap_together_as(cx: &mut Cx, pending: &mut Vec<ObjectId>, ids: &[ObjectId], by: impl Fn(&Cx, ObjectId) -> PlayerId) -> Vec<ObjectId> {
     let tapped: Vec<ObjectId> = ids.iter().copied().filter(|&id| tap_quietly(cx, id)).collect();
-    let events: Vec<Event> = pending.drain(..).chain(tapped.iter().copied()).map(|permanent| Event::Tapped { permanent }).collect();
+    let events: Vec<Event> = pending.drain(..).chain(tapped.iter().copied()).map(|permanent| Event::Tapped { permanent, player: by(cx, permanent) }).collect();
     if !events.is_empty() {
         cx.emit_batch(&events, None);
     }
@@ -5950,7 +5964,7 @@ fn source_interval_begins(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool 
     for record in cx.g.log.iter().skip(since as usize) {
         let transition = match record.event {
             Event::Untapped { permanent } if permanent == e.source && tapped && record.serial >= tapped_since => Some(false),
-            Event::Tapped { permanent } if permanent == e.source && tapped && record.serial >= tapped_since => Some(true),
+            Event::Tapped { permanent, .. } if permanent == e.source && tapped && record.serial >= tapped_since => Some(true),
             Event::ControlChanged { permanent, controller, .. } if permanent == e.source && controlled => Some(controller == e.controller),
             Event::PhasedOut { permanent, .. } if permanent == e.source && (controlled || record.serial >= tapped_since) => Some(false),
             Event::PhasedIn { permanent } if permanent == e.source && (controlled || record.serial >= tapped_since) => Some(true),
@@ -6814,10 +6828,10 @@ mod tests {
     fn tap_only_changes_a_live_untapped_permanent_on_the_battlefield() {
         let (mut game, held) = game_with(&[&ANIMATOR]);
         let permanent = game.state.battlefield()[0];
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: Some(PlayerId(0)), producing: None, reached: None };
         cantrip_api::Game::tap(&mut cx, permanent);
         assert!(cx.s().obj(permanent).tapped);
-        assert_eq!(cx.g.log.iter().filter(|r| matches!(r.event, Event::Tapped { permanent: id } if id == permanent)).count(), 1);
+        assert_eq!(cx.g.log.iter().filter(|r| matches!(r.event, Event::Tapped { permanent: id, .. } if id == permanent)).count(), 1);
         let mark = cx.s().mark();
         let events = cx.g.log.len();
         cantrip_api::Game::tap(&mut cx, permanent);

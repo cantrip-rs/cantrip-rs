@@ -118,7 +118,7 @@ fn untap_and_retap_before_resolution_cannot_restart_the_first_abilitys_duration(
     item.since = g.log.len() as u32;
     g.state.stack_push(item);
     crate::ops::untap(&mut cx(&mut g), source);
-    crate::ops::tap(&mut cx(&mut g), source);
+    crate::ops::tap(&mut cx(&mut g), source, YOU);
     let serial = g.state.stack[0].serial;
     let mut frame = Frame::new(FrameKind::Resolve { serial });
     frame.log_mark = g.log.len() as u32;
@@ -199,7 +199,7 @@ fn source_control_is_independent_of_tapping_and_ends_permanently_on_control_loss
     let duration = source_control_duration(&g);
     apply(&mut g, frame, source, target, duration);
     assert_eq!(g.chars(target).power, Some(4));
-    crate::ops::tap(&mut cx(&mut g), source);
+    crate::ops::tap(&mut cx(&mut g), source, YOU);
     crate::ops::untap(&mut cx(&mut g), source);
     assert_eq!(g.chars(target).power, Some(4), "this duration does not require remaining tapped");
     control(&mut g, source, THEM);
@@ -247,7 +247,7 @@ fn an_unbroken_source_interval_begins_and_ends_at_the_actual_untap() {
     assert_eq!(g.chars(target).power, Some(4));
     crate::ops::untap(&mut cx(&mut g), source);
     assert_eq!(g.chars(target).power, Some(2));
-    crate::ops::tap(&mut cx(&mut g), source);
+    crate::ops::tap(&mut cx(&mut g), source, YOU);
     assert_eq!(
         g.chars(target).power,
         Some(2),
@@ -263,7 +263,7 @@ fn retapping_during_resolution_restarts_a_duration_broken_before_resolution() {
     let serial = interval(&mut g, source);
     crate::ops::untap(&mut cx(&mut g), source);
     let frame = begin_resolution(&mut g, serial);
-    crate::ops::tap(&mut cx(&mut g), source);
+    crate::ops::tap(&mut cx(&mut g), source, YOU);
     apply(&mut g, frame, source, target, Duration::WhileSourceTapped);
     assert_eq!(
         g.chars(target).power,
@@ -309,7 +309,7 @@ fn a_conjunction_restarts_only_when_its_entire_condition_returns_during_resoluti
             control(&mut g, source, THEM);
             let frame = begin_resolution(&mut g, serial);
             if restore_tap {
-                crate::ops::tap(&mut cx(&mut g), source);
+                crate::ops::tap(&mut cx(&mut g), source, YOU);
             }
             if restore_control {
                 control(&mut g, source, YOU);
@@ -337,7 +337,7 @@ fn a_restart_followed_by_another_lapse_does_not_begin_an_effect() {
     let serial = interval(&mut g, source);
     crate::ops::untap(&mut cx(&mut g), source);
     let frame = begin_resolution(&mut g, serial);
-    crate::ops::tap(&mut cx(&mut g), source);
+    crate::ops::tap(&mut cx(&mut g), source, YOU);
     control(&mut g, source, THEM);
     apply(
         &mut g,
@@ -356,7 +356,7 @@ fn a_copy_starts_its_own_interval_and_does_not_repair_the_original() {
     let target = put(&mut g, &HOLDER, THEM, false);
     let original = interval(&mut g, source);
     crate::ops::untap(&mut cx(&mut g), source);
-    crate::ops::tap(&mut cx(&mut g), source);
+    crate::ops::tap(&mut cx(&mut g), source, YOU);
     let copied = crate::ops::copy_ability(&mut cx(&mut g), Target::Ability(original), YOU, false)
         .unwrap()
         .unwrap();
@@ -514,7 +514,7 @@ fn simultaneous_untaps_are_one_trigger_batch_with_one_event_per_changed_permanen
         .collect();
     assert_eq!(triggers.len(), 1);
     assert_eq!(g.state.members(triggers[0].members), [a, b]);
-    crate::ops::tap(&mut cx(&mut g), a);
+    crate::ops::tap(&mut cx(&mut g), a, YOU);
     crate::ops::untap(&mut cx(&mut g), a);
     assert_eq!(
         g.state
@@ -652,7 +652,7 @@ fn an_immediate_nested_mana_effect_does_not_borrow_an_outer_stack_interval() {
     let target = put(&mut g, &HOLDER, THEM, false);
     let serial = interval(&mut g, source);
     crate::ops::untap(&mut cx(&mut g), source);
-    crate::ops::tap(&mut cx(&mut g), source);
+    crate::ops::tap(&mut cx(&mut g), source, YOU);
     let frame = begin_resolution(&mut g, serial);
     let mut cx = cx(&mut g);
     cx.frame = frame;
@@ -708,7 +708,7 @@ fn affected_tapped_and_counter_durations_still_end_on_their_own_conditions() {
 
 fn tapped_match(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
     match event {
-        Event::Tapped { permanent } => Fired::about(Target::Object(*permanent)),
+        Event::Tapped { permanent, .. } => Fired::about(Target::Object(*permanent)),
         _ => None,
     }
 }
@@ -755,7 +755,7 @@ fn tap_and_untap_masks_keep_history_counts_and_trigger_subscribers_separate() {
             .count(),
         1
     );
-    crate::ops::tap(&mut cx(&mut g), source);
+    crate::ops::tap(&mut cx(&mut g), source, YOU);
     assert_eq!(
         g.history()
             .count(EventQuery::kind(EventMask::TAPPED).object(source)),

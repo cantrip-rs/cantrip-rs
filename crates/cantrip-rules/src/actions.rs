@@ -1475,21 +1475,20 @@ fn choose_tappers(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost) 
 /// taps other permanents (`cost.tap_permanents`, or `others`: the creatures of a tap-creatures cost) they are tapped at once,
 /// so its `Event::Tapped` waits to be announced in their batch (CR 603.2c) and the source is returned as pending; otherwise it is
 /// announced here and nothing is pending.
-fn tap_source(cx: &mut Cx, source: ObjectId, cost: &Cost, others: bool) -> Vec<ObjectId> {
+fn tap_source(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost, others: bool) -> Vec<ObjectId> {
     if !cost.tap {
         return Vec::new();
     }
     if !(cost.tap_permanents || others) {
-        ops::tap(cx, source);
+        ops::tap(cx, source, player);
         return Vec::new();
     }
     if ops::tap_quietly(cx, source) { vec![source] } else { Vec::new() }
 }
 
 /// Pays the exert and tap-creatures parts of a cost.
-fn pay_exert_and_tappers(cx: &mut Cx, source: ObjectId, cost: &Cost, tappers: &[ObjectId], pending: &mut Vec<ObjectId>) {
+fn pay_exert_and_tappers(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost, tappers: &[ObjectId], pending: &mut Vec<ObjectId>) {
     if cost.exert {
-        let player = cx.doer();
         ops::exert(cx, source, player);
     }
     if cost.unattach_self {
@@ -1497,7 +1496,7 @@ fn pay_exert_and_tappers(cx: &mut Cx, source: ObjectId, cost: &Cost, tappers: &[
     }
     // Nothing to announce with, when there are none: the cost's `{T}` waits for its other taps (`tap_source`).
     if !tappers.is_empty() {
-        ops::tap_together_with(cx, pending, tappers);
+        ops::tap_together_with(cx, pending, tappers, player);
     }
 }
 
@@ -2486,7 +2485,7 @@ fn pay_permanents(cx: &mut Cx, player: PlayerId, cost: &Cost, chosen: &[ObjectId
         return paid;
     }
     if cost.tap_permanents {
-        return ops::tap_together_with(cx, pending, chosen).into_iter().map(|id| (0, id)).collect();
+        return ops::tap_together_with(cx, pending, chosen, player).into_iter().map(|id| (0, id)).collect();
     }
     let moved = match cost.permanents.map(|p| p.action) {
         Some(PermanentAction::ReturnToHand | PermanentAction::BeamUp) => ops::return_to_hand(cx, chosen),
@@ -3351,7 +3350,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 if let Some(VariableCost::TapX(filter)) = cost.variable {
                     let candidates = tap_x_candidates(cx, spell, player, filter, cost.tap, scope.by());
                     let selected = ask_cards(cx, player, spell, Purpose::TapToPay, candidates, amount as usize, false)?;
-                    let tapped = ops::tap_together_with(cx, &mut Vec::new(), &selected);
+                    let tapped = ops::tap_together_with(cx, &mut Vec::new(), &selected, player);
                     if tapped.len() != selected.len() { return Err(Stop::Cancel); }
                     for object in tapped { scope.record(cx, spell, object, origin, component, CostPart::Variable); }
                     return Ok(false);
@@ -3426,7 +3425,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             }
             SpellPayment::TapCreatures { origin, component, cost, .. } => {
                 let selected = choose_tappers(cx, player, spell, cost)?;
-                let tapped = ops::tap_together_with(cx, &mut Vec::new(), &selected);
+                let tapped = ops::tap_together_with(cx, &mut Vec::new(), &selected, player);
                 if tapped.len() != selected.len() { return Err(Stop::Cancel); }
                 for object in tapped {
                     if matches!(scope, PaymentScope::Ability { .. }) {
@@ -3490,7 +3489,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                     if let Some(interval) = &mut cx.g.mana_interval { interval.tapped_since = head; }
                 }
                 if !ops::tap_quietly(cx, spell) { return Err(Stop::Cancel); }
-                cx.emit(Event::Tapped { permanent: spell });
+                cx.emit(Event::Tapped { permanent: spell, player });
                 scope.record(cx, spell, spell, origin, component, CostPart::TapSelf);
             }
             SpellPayment::SacrificeSelf { origin, component, object, part, .. } => {
@@ -3526,7 +3525,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             SpellPayment::Mana => return Ok(true),
             SpellPayment::Reducer(object) => {
                 if !ops::tap_quietly(cx, object) { return Err(Stop::Cancel); }
-                cx.emit(Event::Tapped { permanent: object });
+                cx.emit(Event::Tapped { permanent: object, player });
             }
             SpellPayment::Permanent { origin, component, cost, objects, combat_attackers, .. } => {
                 let selected = if objects.is_empty() {
@@ -3572,7 +3571,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             } else {
                 let mut checkpoint = |cx: &mut Cx, tapped: &mut Vec<Event>, helper_receipts: &mut Vec<(ObjectId, CostPart)>, delved: &mut Vec<ObjectId>| -> R<bool> {
                     if !tapped.is_empty() || !delved.is_empty() {
-                        let objects = tapped.iter().filter_map(|event| match event { Event::Tapped { permanent } => Some(*permanent), _ => None }).chain(delved.iter().copied()).collect();
+                        let objects = tapped.iter().filter_map(|event| match event { Event::Tapped { permanent, .. } => Some(*permanent), _ => None }).chain(delved.iter().copied()).collect();
                         let name = cx.chars(spell).name;
                         let choices = vec![
                             CostPaymentChoice { label: format!("Continue paying mana — cost of {name}"), objects: Vec::new(), kind: CostPaymentKind::Mana },
@@ -11432,7 +11431,7 @@ fn cast(
 
     pay_life_and_counters(cx, player, spell, &Cost { life: 0, energy: 0, ..cost });
     pay_life_and_counters(cx, player, spell, &Cost { life: 0, energy: 0, ..extra });
-    pay_exert_and_tappers(cx, spell, &extra, &[], &mut Vec::new());
+    pay_exert_and_tappers(cx, player, spell, &extra, &[], &mut Vec::new());
 
     let targets = &targets[..];
 
@@ -13501,7 +13500,7 @@ fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abil
     if life > 0 {
         ops::change_life(cx, player, -life_paid(life));
     }
-    let mut tapped = tap_source(cx, source, &whole, !tappers.is_empty());
+    let mut tapped = tap_source(cx, player, source, &whole, !tappers.is_empty());
     pay_blight(cx, player, &whole, blighted, 0);
     pay_counters_among(cx, &removed);
     if pay_permanents(cx, player, &whole, &chosen, None, &mut tapped).len() != chosen.len() { return Err(Stop::Cancel); }
@@ -13512,8 +13511,8 @@ fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abil
     if let Some(kind) = counter {
         counters::remove(cx, source, kind, 1);
     }
-    pay_exert_and_tappers(cx, source, &whole, &tappers, &mut tapped);
-    ops::tap_together_with(cx, &mut tapped, &[]);
+    pay_exert_and_tappers(cx, player, source, &whole, &tappers, &mut tapped);
+    ops::tap_together_with(cx, &mut tapped, &[], player);
     if whole.sacrifice_self {
         ops::sacrifice(cx, player, &[source]);
     }
@@ -15922,7 +15921,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                     // The creatures and artifacts tapped to pay are tapped as the cost is paid, all at once (CR 601.2h): their
                     // events are announced together when it is (CR 603.2c).
                     if ops::tap_quietly(cx, id) {
-                        tapped_to_pay.push(Event::Tapped { permanent: id });
+                        tapped_to_pay.push(Event::Tapped { permanent: id, player });
                         let part = if action.index == PAY_CONVOKE { CostPart::Convoke }
                             else if action.index == PAY_IMPROVISE { CostPart::Improvise }
                             else if bent < helpers.waterbend { CostPart::Waterbend }

@@ -12,7 +12,7 @@ fn times_tapped_this_turn(q: &dyn Query, creature: ObjectId) -> usize {
 /// was just before its event, so the first time is when no tap is recorded yet.
 fn creature_you_control_becomes_tapped_first_time(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
-        Event::Tapped { permanent }
+        Event::Tapped { permanent, .. }
             if q.state().turn.active == me.controller
                 && q.chars(*permanent).is(CardType::Creature)
                 && q.controller(*permanent) == me.controller

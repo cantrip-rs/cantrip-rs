@@ -5,7 +5,7 @@ use cantrip_oracle as oracle;
 /// "Whenever an artifact an opponent controls becomes tapped or an opponent activates an artifact's ability without {T} in its
 /// activation cost" (CR 603.2, 602.2): one triggered ability with two conditions, listening to `TAPPED` and `ABILITY_ACTIVATED`.
 fn opponent_artifact_tapped_or_activated(q: &dyn Query, asker: &Asker, event: &Event) -> Option<Fired> {
-    if let Event::Tapped { permanent } = *event {
+    if let Event::Tapped { permanent, .. } = *event {
         return if q.chars(permanent).is(CardType::Artifact)
             && q.state().opponents(asker.controller).any(|p| p == q.controller(permanent))
         {

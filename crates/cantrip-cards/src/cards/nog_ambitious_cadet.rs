@@ -38,7 +38,7 @@ fn become_officer(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 fn nog_becomes_tapped(_q: &dyn Query, asker: &Asker, event: &Event) -> Option<Fired> {
     match event {
-        Event::Tapped { permanent } if *permanent == asker.source => Fired::PLAIN,
+        Event::Tapped { permanent, .. } if *permanent == asker.source => Fired::PLAIN,
         _ => None,
     }
 }

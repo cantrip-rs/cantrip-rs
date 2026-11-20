@@ -20,7 +20,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
                         || g.triggered_ability(a).is_some_and(|d| d.mana_ability)
                 })
         }).collect();
-        g.tap_together(&lands);
+        g.tap_together_by_controllers(&lands);
         g.empty_mana_pool(payer);
     }
     Ok(())

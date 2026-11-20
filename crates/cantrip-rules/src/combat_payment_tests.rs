@@ -163,7 +163,7 @@ fn an_enlisted_land_creature_is_tapped_before_it_pays_a_sacrifice_and_no_strandi
     let RequestKind::ChooseCards{ref cards,purpose:Purpose::SacrificeCost,..}=r.kind else{panic!("the tap goes first, unasked: {:?}",r.kind)};
     assert_eq!(cards,&vec![l]);assert!(g.state.obj(l).tapped,"tapped for the enlist already");
     answer(&mut g,r,Answer::Cards(vec![l]));done(&mut g);assert_eq!(g.state.attackers.len(),1);
-    let tapped=g.events().iter().position(|r|matches!(r.event,Event::Tapped{permanent} if permanent==l)).unwrap();
+    let tapped=g.events().iter().position(|r|matches!(r.event,Event::Tapped{permanent, ..} if permanent==l)).unwrap();
     let sacrificed=g.events().iter().position(|r|matches!(r.event,Event::ZoneChange{old,reason:ZoneReason::Sacrifice,..} if old==l)).unwrap();
     assert!(tapped<sacrificed);
 }

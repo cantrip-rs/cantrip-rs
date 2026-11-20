@@ -1608,11 +1608,17 @@ pub trait Game: Query {
     /// Unattaches an Aura or Equipment (CR 701.3d); it stays on the battlefield.
     fn unattach(&mut self, attachment: ObjectId);
     /// Taps a permanent (CR 701.26a): nothing happens to one already tapped, gone (CR 400.7) or phased out (CR 702.26b).
+    /// The controller of the spell or ability resolving taps it (`Event::Tapped::player`); so for `tap_together`.
     fn tap(&mut self, permanent: ObjectId);
     /// Taps several permanents as one instruction (CR 701.26a): each that is not tapped, gone (CR 400.7) or phased out is
     /// tapped, then what watches them sees them become tapped together (CR 603.2c), so a "whenever one or more creatures
     /// become tapped" ability triggers once. For "tap X target creatures", "tap five untapped artifacts".
     fn tap_together(&mut self, permanents: &[ObjectId]);
+    /// `tap_together` for an effect that has players tap permanents they control (CR 701.26a): each permanent's controller taps
+    /// it, not the effect's controller, so "whenever you tap an untapped creature an opponent controls" does not see an opponent
+    /// tap their own (Hylda of the Icy Crown, ruling 2023-09-01). Power Sink's "they tap all lands with mana abilities they
+    /// control", Raiding Party's "each player may tap any number of untapped white creatures they control".
+    fn tap_together_by_controllers(&mut self, permanents: &[ObjectId]);
     /// Untaps a permanent (CR 701.26b). One with a stun counter on it has one removed instead (CR 122.1d).
     fn untap(&mut self, permanent: ObjectId);
     /// Untaps permanents simultaneously (CR 701.26b, 603.2c). Prohibitions and stun replacements are determined before

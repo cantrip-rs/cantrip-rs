@@ -15,7 +15,7 @@ fn tap_islands_and_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Susp
     let before = g.history().head() as usize;
     g.tap_together(&islands);
     let tapped = g.history().all()[before..].iter()
-        .filter(|r| matches!(r.event, Event::Tapped { permanent } if islands.contains(&permanent)))
+        .filter(|r| matches!(r.event, Event::Tapped { permanent, .. } if islands.contains(&permanent)))
         .count() as u32;
     g.end_sentence();
     g.damage(item.object, Target::Player(player), tapped);

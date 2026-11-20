@@ -1,0 +1,52 @@
+# Tapping untapped permanents as a cost (CR 118.3, 602.2b) is done by the player paying it: Bot1 pays Adaptive Gemguard's
+# "Tap two untapped artifacts and/or creatures you control" by tapping Mox Pearl and Mox Jet, so both are in Bot1.Taps this turn
+# and Bot2, who tapped nothing, has none.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Savannah Lions
+Ornithopter
+Adaptive Gemguard
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Adaptive Gemguard.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+! Bot1.Battlefield.Adaptive Gemguard.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Adaptive Gemguard.Activate
+Bot1.Choose(Mox Pearl; Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Adaptive Gemguard.Counters.PlusOnePlusOne = 1
+
+[Expect]
+Bot1.Taps = Mox Pearl; Mox Jet
+Bot2.Taps.Count = 0

@@ -41,7 +41,7 @@ fn mana_triggers_finish_immediately_and_the_ordinary_trigger_uses_the_stack_once
 #[test]
 fn ordinary_tapping_and_artifact_mana_do_not_trigger_a_land_observer() {
     let mut g=board();put(&mut g,&BARBS,Zone::BATTLEFIELD);let land=put(&mut g,&LAND,Zone::BATTLEFIELD);let artifact=put(&mut g,&ARTIFACT,Zone::BATTLEFIELD);
-    crate::ops::tap(&mut cx(&mut g),land);activate(&mut g,artifact);
+    crate::ops::tap(&mut cx(&mut g),land,YOU);activate(&mut g,artifact);
     assert!(g.state.stack.is_empty());assert_eq!(g.state.player(YOU).life,20);
 }
 #[test]

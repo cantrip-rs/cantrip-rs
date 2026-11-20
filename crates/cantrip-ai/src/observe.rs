@@ -420,7 +420,7 @@ impl View<'_> {
                     Event::Attacks { attacker, defender, .. } => obs.objects = vec![o(attacker), target_ref(defender, refs)],
                     Event::Blocks { blocker, attacker, .. } => obs.objects = vec![o(blocker), o(attacker)],
                     Event::BecameBlocked { attacker } => obs.objects = vec![o(attacker)],
-                    Event::Tapped { permanent } | Event::Untapped { permanent } | Event::TurnedFaceUp { permanent, .. } | Event::Transformed { object: permanent } => obs.objects = vec![o(permanent)],
+                    Event::Tapped { permanent, .. } | Event::Untapped { permanent } | Event::TurnedFaceUp { permanent, .. } | Event::Transformed { object: permanent } => obs.objects = vec![o(permanent)],
                     Event::CountersPut { object, kind, amount, .. } => {
                         obs.objects = vec![o(object)];
                         obs.amount = amount << 8 | kind as i32;

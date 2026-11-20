@@ -1041,7 +1041,7 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
                     && crate::static_rules::lasting_rules_on(cx, cx.cards(), id, LastingRuleKind::AttackingDoesntCauseTap).next().is_none()
             })
             .collect();
-        ops::tap_together(cx, &tapping);
+        ops::tap_together(cx, &tapping, active);
         // CR 508.1g: the optional costs to attack the active player chooses to pay.
         let options = choose_attack_options(cx, active, &attacks)?;
         let locked = crate::static_rules::lock_attack_costs(cx, &attacks);
@@ -1082,7 +1082,7 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
         }
         for o in options.iter().filter(|_| !scheduled_options) {
             match o.option {
-                AttackOption::Enlist => ops::tap(cx, o.tapped),
+                AttackOption::Enlist => ops::tap(cx, o.tapped, active),
                 AttackOption::Exert => ops::exert(cx, o.attacker, active),
             }
         }

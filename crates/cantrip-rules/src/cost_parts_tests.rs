@@ -218,7 +218,7 @@ static SPELL_WITH_WATERBEND_MIDPAYMENT_SACRIFICE: CardDef = CardDef {
     additional_cost: Some(Cost::waterbend(1, 0).and(Cost::sacrifice(1, dork_when_bear_is_tapped))), ..CardDef::BLANK
 };
 fn tap_batch_match(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
-    match event { Event::Tapped { permanent } => Fired::about(Target::Object(*permanent)), _ => None }
+    match event { Event::Tapped { permanent, .. } => Fired::about(Target::Object(*permanent)), _ => None }
 }
 static TAP_BATCH_WATCHER: CardDef = CardDef {
     name: "Cost Test Tap Batch Watcher", types: TypeSet::of(&[CardType::Enchantment]),

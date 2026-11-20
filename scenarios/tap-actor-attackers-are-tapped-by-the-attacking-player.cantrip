@@ -1,0 +1,29 @@
+# Declaring attackers (CR 508.1f) taps each attacker without vigilance, and the attacking player is the one who tapped it:
+# Devoted Hero is listed in Bot1.Taps, Alpine Watchdog (vigilance, CR 702.20b) is not tapped and not listed, and Bot2 tapped nothing.
+
+[Bot1 Deck]
+Black Lotus
+Devoted Hero
+Alpine Watchdog
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Devoted Hero.Cast
+Bot1.Hand.Alpine Watchdog.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Devoted Hero; Alpine Watchdog > Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Devoted Hero.Tapped = true
+Bot1.Battlefield.Alpine Watchdog.Tapped = false
+Bot1.Taps = Devoted Hero
+Bot2.Taps.Count = 0

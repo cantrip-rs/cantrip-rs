@@ -16,7 +16,7 @@ pub static MERFOLK: CardDef = CardDef {
 /// (read through the words of this enchantment's text, CR 612.2), is not a token, and is controlled by this enchantment's
 /// controller, whatever tapped it. Those tapped together are the batch's subjects, so they trigger it once.
 fn nontoken_merfolk_you_control_become_tapped(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
-    let Event::Tapped { permanent } = event else { return None };
+    let Event::Tapped { permanent, .. } = event else { return None };
     let id = *permanent;
     let merfolk = q.chars(id).has_subtype(lands::word(q, me.source, lands::sub(Subtype::Merfolk)));
     (merfolk && !q.obj(id).token && q.controller(id) == me.controller).then(|| Fired::about(Target::Object(id))).flatten()

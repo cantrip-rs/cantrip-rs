@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 /// `ABILITY_ACTIVATED`.
 fn enchanted_artifact_tapped_or_activated(q: &dyn Query, asker: &Asker, event: &Event) -> Option<Fired> {
     let enchanted = q.state().obj(asker.source).attached_to;
-    if let Event::Tapped { permanent } = *event {
+    if let Event::Tapped { permanent, .. } = *event {
         return if enchanted == Some(permanent) { Fired::about(Target::Object(permanent)) } else { None };
     }
     let (source, _, def) = triggers::activation(q, event)?;

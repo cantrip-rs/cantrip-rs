@@ -6,7 +6,7 @@ use cantrip_oracle as oracle;
 /// "Whenever a Dwarf you control becomes tapped" (CR 701.26a, 603.2): by any path that taps a permanent.
 fn dwarf_becomes_tapped(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
     match event {
-        Event::Tapped { permanent }
+        Event::Tapped { permanent, .. }
             if q.controller(*permanent) == q.controller(source)
                 && q.chars(*permanent).has_subtype(q.words(source).subtype(Subtype::Dwarf)) =>
         {

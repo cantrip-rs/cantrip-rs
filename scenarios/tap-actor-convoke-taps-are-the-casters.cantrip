@@ -1,0 +1,29 @@
+# Creatures tapped for convoke (CR 702.51) and the Mox tapped for mana are all tapped by their caster, in the order paid.
+# Convoke taps no more than the cost needs: Mox Pearl pays {W}, the three Ornithopters pay the generic {3}.
+
+[Bot1 Deck]
+Mox Pearl
+Ornithopter
+Ornithopter
+Ornithopter
+Appeal to Eirdu
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Appeal to Eirdu.Cast(Convoke: Ornithopter, Ornithopter, Ornithopter)
+Bot1.Target(Bot1.Battlefield.Ornithopter#1; Bot1.Battlefield.Ornithopter#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Taps = Mox Pearl; Ornithopter; Ornithopter; Ornithopter
+? Bot2.Taps.Count = 0
+
+[Expect]
+Bot1.Taps.Count = 4

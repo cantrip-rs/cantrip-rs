@@ -265,7 +265,7 @@ impl StateDump {
             .enumerate()
             .filter_map(|(at, r)| match r.event {
                 Event::ZoneChange { old, from, .. } if from.is(ZoneKind::Battlefield) => {
-                    let tapped_later = records[at + 1..].iter().any(|later| matches!(later.event, Event::Tapped { permanent } if permanent == old));
+                    let tapped_later = records[at + 1..].iter().any(|later| matches!(later.event, Event::Tapped { permanent, .. } if permanent == old));
                     let tapped = s.obj(old).tapped && !tapped_later;
                     Some(if tapped { format!("{} (tapped)", game.known_name(old)) } else { game.known_name(old).to_string() })
                 }
@@ -383,6 +383,13 @@ impl StateDump {
                 _ => None,
             }).collect();
             d.list(&format!("{b}.Exertions"), exerted, false);
+            // Every untapped permanent this player tapped this turn (CR 701.26a), in the order the history recorded it: the player is
+            // whoever's instruction, cost or declaration tapped it, not the permanent's controller (`Event::Tapped`).
+            let tapped = game.history().this_turn().iter().filter_map(|record| match record.event {
+                Event::Tapped { permanent, player: by } if by == p => Some(game.known_name(permanent).to_string()),
+                _ => None,
+            }).collect();
+            d.list(&format!("{b}.Taps"), tapped, false);
             // A completed surveil (CR 701.25d): both the number instructed and how many cards were actually looked at.
             let surveilled: Vec<String> = game
                 .history()
@@ -1053,7 +1060,7 @@ const GAME_KEYS: &[&str] = &[
 /// The keys the dump writes of a player, after `BotN.`.
 const PLAYER_KEYS: &[&str] = &[
     "Life", "Poison", "Energy", "Experience", "Status", "CantWin", "MayLookAtLibraryTop", "LostTo", "Mana", "ManaFrom", "LandsPlayed", "CitysBlessing",
-    "Exertions", "EnduringStory", "Speed", "Dungeon", "DungeonsCompleted", "TurnsToSkip", "ControlledBy", "NextTurnControlledBy", "Looked", "Surveilled", "Shuffles",
+    "Exertions", "Taps", "EnduringStory", "Speed", "Dungeon", "DungeonsCompleted", "TurnsToSkip", "ControlledBy", "NextTurnControlledBy", "Looked", "Surveilled", "Shuffles",
     "Sees", "Hand", "Revealed", "Crimes", "Library", "Library.Top", "Companion", "Sideboard", "Graveyard", "Emblems", "Emblems.MadeBy", "Emblems.ExiledWithMakers", "Command", "Commanders", "CommanderColorIdentity", "Battlefield", "PhasedOut",
 ];
 

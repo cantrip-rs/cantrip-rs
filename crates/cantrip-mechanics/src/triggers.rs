@@ -38,7 +38,7 @@ pub fn this_enters_untapped(q: &dyn Query, source: ObjectId, event: &Event) -> O
 /// Gran-Gran and Hawkeye, Master Marksman print it.
 pub fn this_becomes_tapped(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
     match event {
-        Event::Tapped { permanent } if *permanent == source => Fired::PLAIN,
+        Event::Tapped { permanent, .. } if *permanent == source => Fired::PLAIN,
         _ => None,
     }
 }
@@ -47,7 +47,7 @@ pub fn this_becomes_tapped(_: &dyn Query, source: ObjectId, event: &Event) -> Op
 /// subject. `SUBTYPE` is a `Subtype` as `u16` (`lands::sub`), read through the words of the source's text (CR 612.2).
 /// Lifetap (Forest) and Lifeblood (Mountain) print it.
 pub fn subtype_an_opponent_controls_becomes_tapped<const SUBTYPE: u16>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
-    let Event::Tapped { permanent } = event else { return None };
+    let Event::Tapped { permanent, .. } = event else { return None };
     let id = *permanent;
     if q.chars(id).has_subtype(crate::lands::word(q, me.source, SUBTYPE)) && q.state().opponents(me.controller).any(|p| p == q.controller(id)) {
         return Fired::about(Target::Object(id));
@@ -59,7 +59,7 @@ pub fn subtype_an_opponent_controls_becomes_tapped<const SUBTYPE: u16>(q: &dyn Q
 /// Psychic Venom, Blight and Hawkeye's Bow print this trigger for an enchanted land and equipped creature respectively.
 pub fn attached_permanent_becomes_tapped(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
     match event {
-        Event::Tapped { permanent } if q.attached_to(source) == Some(*permanent) => Fired::about(Target::Object(*permanent)),
+        Event::Tapped { permanent, .. } if q.attached_to(source) == Some(*permanent) => Fired::about(Target::Object(*permanent)),
         _ => None,
     }
 }

@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 /// "destroy it" destroys that creature even if Cryoshatter has left the battlefield or enchants another creature by then.
 fn enchanted_creature_becomes_tapped_or_is_dealt_damage(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
     match event {
-        Event::Tapped { permanent } if q.attached_to(source) == Some(*permanent) => Fired::about(Target::Object(*permanent)),
+        Event::Tapped { permanent, .. } if q.attached_to(source) == Some(*permanent) => Fired::about(Target::Object(*permanent)),
         Event::Damage { target: Target::Object(hurt), .. } if q.attached_to(source) == Some(*hurt) => Fired::about(Target::Object(*hurt)),
         _ => None,
     }

@@ -49,7 +49,7 @@ static AURA: CardDef = CardDef {
 };
 static BODY: CardDef = CardDef { name: "Delayed capture creature", types: TypeSet::of(&[CardType::Creature]), power: Some(1), toughness: Some(4), ..CardDef::BLANK };
 fn watched_tap(q: &dyn Query, asker: &Asker, event: &Event) -> Option<Fired> {
-    if matches!(event, Event::Tapped { permanent } if *permanent == asker.source)
+    if matches!(event, Event::Tapped { permanent, .. } if *permanent == asker.source)
         && q.words(asker.source).subtype(Subtype::Goblin) == Subtype::Elf {
         Fired::about(Target::Player(THEM))
     } else { None }
@@ -352,10 +352,10 @@ fn this_turn_watching_keeps_event_payload_and_captured_words_until_cleanup() {
     run.delayed_trigger(DelayedWhen::WatchingThisTurn, source, YOU, ability, Target::Object(watched));
     drop(run);
     cx(&mut g).exile_all(&[source]);
-    cx(&mut g).emit(Event::Tapped { permanent: other });
+    cx(&mut g).emit(Event::Tapped { permanent: other, player: YOU });
     assert!(g.state.triggers.is_empty());
-    cx(&mut g).emit(Event::Tapped { permanent: watched });
-    cx(&mut g).emit(Event::Tapped { permanent: watched });
+    cx(&mut g).emit(Event::Tapped { permanent: watched, player: YOU });
+    cx(&mut g).emit(Event::Tapped { permanent: watched, player: YOU });
     assert_eq!(g.state.triggers.len(), 2);
     for t in &g.state.triggers {
         assert_eq!(t.source, source); assert_eq!(t.subject, Target::Player(THEM));
@@ -363,7 +363,7 @@ fn this_turn_watching_keeps_event_payload_and_captured_words_until_cleanup() {
     }
     crate::turn::cleanup(&mut cx(&mut g)).unwrap();
     assert!(g.state.delayed.is_empty());
-    cx(&mut g).emit(Event::Tapped { permanent: watched });
+    cx(&mut g).emit(Event::Tapped { permanent: watched, player: YOU });
     assert_eq!(g.state.triggers.len(), 2);
 }
 

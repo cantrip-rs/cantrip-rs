@@ -1,5 +1,5 @@
 //! Event watchers whose stated duration is this combat (Goblin Flotilla, Melee).
-use crate::{Cx, Game, Setup};
+use crate::{Cx, Game, Setup, ops};
 use cantrip_api::Game as Rules;
 use cantrip_api::*;
 use cantrip_state::{Frame, FrameKind};
@@ -9,7 +9,7 @@ fn nothing(_: &mut dyn Rules, _: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 fn tapped(_: &dyn Query, _: &Asker, event: &Event) -> Option<Fired> {
-    if let Event::Tapped { permanent } = event {
+    if let Event::Tapped { permanent, .. } = event {
         Fired::about(Target::Object(*permanent))
     } else {
         None
@@ -98,7 +98,7 @@ fn watch(g: &mut Game, source: ObjectId, index: u8, when: DelayedWhen) {
     cx(g).delayed_trigger(when, source, A, ability, Target::None);
 }
 fn tap(g: &mut Game, body: ObjectId) {
-    cx(g).tap(body);
+    ops::tap(&mut cx(g), body, A);
 }
 #[test]
 fn repeats_through_end_combat_priority_then_expires_without_cancelling_pending_triggers() {

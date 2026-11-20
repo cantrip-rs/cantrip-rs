@@ -745,3 +745,6 @@ Snow source mana (CR 107.4h) retains its production-time quality. `Spend:` items
 
 `BotN.Exertions` (with `.Count`) lists that player's exertions this turn in event order, one name per
 exertion (CR 701.43b). It differs from a permanent's `.Exerted`, which marks a pending missed untap.
+`BotN.Taps` (with `.Count`) lists the permanents that player tapped this turn in event order, one name per tap (CR 701.26a):
+the player whose effect, cost or attack declaration tapped it, which is not always its controller (Power Sink makes the
+countered spell's controller tap their own lands). A permanent that was already tapped is not tapped again, and is not listed.

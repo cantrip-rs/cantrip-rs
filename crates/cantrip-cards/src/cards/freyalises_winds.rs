@@ -4,7 +4,7 @@ use cantrip_oracle as oracle;
 /// "Whenever a permanent becomes tapped" (CR 701.26a, 603.2): any player's permanent, by any means - a cost, a tap for
 /// mana, an attack, an effect. The permanent is the ability's subject, "it".
 fn a_permanent_becomes_tapped(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
-    let Event::Tapped { permanent } = event else { return None };
+    let Event::Tapped { permanent, .. } = event else { return None };
     Fired::about(Target::Object(*permanent))
 }
 

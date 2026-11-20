@@ -103,7 +103,7 @@ fn conditions_and_phasing_stop_public_visibility() {
     let mut g = game();
     let source = put(&mut g, &CONDITIONAL, A, Zone::BATTLEFIELD);
     assert_eq!(g.revealed_hands(), 0);
-    cx(&mut g).tap(source);
+    ops::tap(&mut cx(&mut g), source, A);
     assert_eq!(g.revealed_hands(), 3);
     g.state.zone_remove(Zone::BATTLEFIELD, source);
     g.state.update_obj(source, |o| o.zone = Zone::PHASED_OUT);
@@ -162,7 +162,7 @@ fn showing_an_existing_hand_is_once_per_interval_and_rolls_back() {
     let source = put(&mut g, &CONDITIONAL, A, Zone::BATTLEFIELD);
     let mark = g.state.mark();
     let log = g.log.len();
-    cx(&mut g).tap(source);
+    ops::tap(&mut cx(&mut g), source, A);
     sync(&mut g);
     sync(&mut g);
     assert_eq!(
@@ -180,7 +180,7 @@ fn showing_an_existing_hand_is_once_per_interval_and_rolls_back() {
     g.state.revert(mark);
     g.log.truncate(log);
     assert_eq!(g.state.shown_hands, 0);
-    cx(&mut g).tap(source);
+    ops::tap(&mut cx(&mut g), source, A);
     assert_eq!(
         g.log
             .iter()
@@ -195,7 +195,7 @@ fn a_hand_revealed_only_between_two_events_is_still_shown() {
     let mut g = game();
     let card = put(&mut g, &FILL, B, Zone::hand(B));
     let source = put(&mut g, &CONDITIONAL, A, Zone::BATTLEFIELD);
-    cx(&mut g).tap(source);
+    ops::tap(&mut cx(&mut g), source, A);
     cx(&mut g).untap(source);
     assert_eq!(g.revealed_hands(), 0);
     assert!(g.log.iter().any(|r| matches!(r.event, Event::Shown { player: A, card: c } if c == card)));

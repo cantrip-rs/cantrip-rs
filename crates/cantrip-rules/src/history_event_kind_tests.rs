@@ -26,7 +26,7 @@ fn review_independent_exert_event_is_not_a_tapped_history_event() {
 #[test]
 fn kind_queries_distinguish_tapping_exerting_transforming_and_mutating_with_combined_masks() {
     let (mut g, id) = game();
-    for event in [Event::Tapped { permanent: id }, Event::Exerted { permanent: id, player: YOU },
+    for event in [Event::Tapped { permanent: id, player: YOU }, Event::Exerted { permanent: id, player: YOU },
         Event::Transformed { object: id }, Event::Mutated { permanent: id, spell: id, on_top: true }] {
         cx(&mut g).record(event);
     }
@@ -49,7 +49,7 @@ fn exact_tap_and_exert_history_survives_source_departure_and_tree_undo_redo() {
     let mark = (g.state.mark(), g.log.len());
     g.tree.close(before, mark);
     let child = g.tree.add(before, (0, YOU, Answer::Yes), mark, &[]);
-    ops::tap(&mut cx(&mut g), id);
+    ops::tap(&mut cx(&mut g), id, YOU);
     ops::exert(&mut cx(&mut g), id, YOU);
     ops::exile_all(&mut cx(&mut g), &[id]);
     g.at = child;

@@ -260,7 +260,13 @@ pub enum Event {
     /// A library was searched (CR 701.23).
     /// `player` searched the library of `library` (CR 701.23, 701.23f): their own, or another player's.
     Searched { player: PlayerId, library: PlayerId },
-    Tapped { permanent: ObjectId },
+    /// `player` tapped an untapped permanent (CR 701.26a): the player whose instruction, cost or turn-based action did it - the
+    /// controller of the spell or ability whose effect says "tap" (or the player it tells to tap their own), the player paying a
+    /// cost that taps it (CR 601.2h, 602.2b), the active player for the creatures an attack declaration taps (CR 508.1f) or an
+    /// enlist cost. Never recorded for a permanent that was already tapped. "Whenever you tap an untapped creature an opponent
+    /// controls" (Hylda of the Icy Crown) reads it: a spell or ability that tells an opponent to tap their own creature is
+    /// that opponent's doing, not yours.
+    Tapped { permanent: ObjectId, player: PlayerId },
     /// A tapped permanent became untapped (CR 701.26b). Never emitted for a prohibited untap, an already untapped
     /// permanent, or an untap replaced by removing a stun counter (CR 122.1d). Wake Thrasher and Mesmeric Orb listen
     /// for this event; a simultaneous untap announces all its events in one batch (CR 603.2c).
@@ -612,6 +618,7 @@ impl Event {
             | Event::Plotted { player, .. }
             | Event::Searched { player, .. }
             | Event::AttackersDeclared { player, .. }
+            | Event::Tapped { player, .. }
             | Event::Exerted { player, .. }
             | Event::TappedForMana { player, .. }
             | Event::ManaSpent { player, .. }
@@ -691,7 +698,7 @@ impl Event {
             | Event::CountersPut { object: o, .. }
             | Event::CountersRemoved { object: o, .. }
             | Event::Transformed { object: o } => o == object,
-            Event::Tapped { permanent }
+            Event::Tapped { permanent, .. }
             | Event::Untapped { permanent }
             | Event::Exerted { permanent, .. }
             | Event::TappedForMana { permanent, .. }

@@ -5,7 +5,7 @@ use cantrip_oracle as oracle;
 /// "Whenever an artifact becomes tapped (CR 603.2e) or a player activates an artifact's ability without {T} in its activation
 /// cost (CR 602.2, 603.2)": the artifact is the subject.
 fn artifact_tapped_or_ability_activated_without_tap(q: &dyn Query, _: &Asker, event: &Event) -> Option<Fired> {
-    if let Event::Tapped { permanent } = event {
+    if let Event::Tapped { permanent, .. } = event {
         return if q.chars(*permanent).is(CardType::Artifact) { Fired::about(Target::Object(*permanent)) } else { None };
     }
     let (source, _, def) = triggers::activation(q, event)?;

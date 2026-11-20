@@ -35,7 +35,8 @@ fn has_land_subtype(q: &dyn Query, choice: &cantrip_api::select::Choice, subtype
     cantrip_api::select::Verdict::each(choice, |id| q.chars(id).has_subtype(Subtype::ALL[subtype as usize]))
 }
 
-/// The players choose in turn order, tap simultaneously, then choose Plains before the rest are destroyed (CR 101.4, 701.8a, 701.26a).
+/// The players choose in turn order, each taps their own simultaneously (`tap_together_by_controllers`), then they choose Plains
+/// before the rest are destroyed (CR 101.4, 701.8a, 701.26a).
 fn player_tap_any_number_untapped(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let players: Vec<_> = g.state().apnap().collect();
     let color = g.words(item.object).color(Color::White) as u32;
@@ -59,7 +60,7 @@ fn player_tap_any_number_untapped(g: &mut dyn Game, item: &StackItem) -> Result<
         chosen_by_player.push((player, chosen.len()));
     }
     g.end_sentence();
-    g.tap_together(&all_tapped);
+    g.tap_together_by_controllers(&all_tapped);
     g.end_sentence();
     let mut saved = Vec::new();
     for &(player, count) in &chosen_by_player {
