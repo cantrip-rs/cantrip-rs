@@ -1,0 +1,11 @@
+{
+  "name": "Scarecrow Guide",
+  "manaCost": "{2}",
+  "type": "Artifact Creature — Scarecrow",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Reach\n{1}: Add one mana of any color. Activate only once each turn.",
+  "keywords": [
+    "Reach"
+  ]
+}

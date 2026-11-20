@@ -1,0 +1,54 @@
+# Scarecrow Guide is a 2/1 artifact creature with reach (CR 702.17b): it may block a creature with flying, which Llanowar Elves, with
+# no reach, may not (CR 702.9b). Bot2 casts Birds of Paradise on turn 2 and attacks with it on turn 4: Bot1's Elves are refused as a blocker,
+# then the Guide blocks and its 2 damage kills the Birds (0/1), which deal no damage to it.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Scarecrow Guide
+Llanowar Elves
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Birds of Paradise
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Scarecrow Guide.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Birds of Paradise.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Birds of Paradise > Bot1)
+! Bot1.Block(Llanowar Elves > Birds of Paradise)
+Bot1.Block(Scarecrow Guide > Birds of Paradise)
+[T4 Bot2.Main2]
+? Bot2.Graveyard = Birds of Paradise
+? Bot1.Battlefield.Scarecrow Guide.Damage = 0
+
+[Expect]
+Bot2.Graveyard = Birds of Paradise
+Bot1.Battlefield.Scarecrow Guide.Damage = 0
+Bot1.Life = 20
