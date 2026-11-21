@@ -1,0 +1,61 @@
+# Fatal Fissure: the delayed ability is fixed on the chosen creature (CR 603.7c) and lasts only this turn. Bot1 chooses Bot2's Elvish Mystic
+# and kills Bot2's other creature, an Ornithopter, with Lightning Bolt: nothing is asked and no land becomes a creature. The next turn Bolt
+# kills the Mystic itself: still nothing, the turn has ended. (An illegal choice - a land - is refused for the spell.)
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Fatal Fissure
+Lightning Bolt
+Lightning Bolt
+Forest
+Forest
+Forest x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Elvish Mystic
+Ornithopter
+Forest
+Forest
+Forest x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forest#1.Activate
+! Bot1.Hand.Fatal Fissure.Cast(Bot2.Battlefield.Forest)
+Bot1.Hand.Fatal Fissure.Cast(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Ornithopter
+? Bot1.Battlefield.Forest#2.Types = Land
+[T5 Bot1.Main1]
+? Delayed.Count = 0
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard = Elvish Mystic; Ornithopter
+Bot1.Battlefield.Forest#2.Types = Land
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Fatal Fissure
