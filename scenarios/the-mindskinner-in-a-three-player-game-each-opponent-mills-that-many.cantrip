@@ -1,0 +1,31 @@
+# "Each opponent mills that many cards" (CR 615.5, 701.17a, 101.4): in a three-player game The Mindskinner (10/1, can't be
+# blocked) attacks Bot2. The 10 combat damage it would deal to Bot2 is prevented, and both opponents mill 10 - Bot3 too, though
+# it was dealt nothing - while Bot1, its controller, mills none. Libraries: Bot2 22 after its turn-2 draw, Bot3 22 after its
+# turn-3 draw, each then 12; Bot1's 5 after its turn-1 draw (CR 103.8a: no skip in a multiplayer game) and turn-4 draw stays 5.
+[Bot1 Deck]
+The Mindskinner
+Black Lotus
+Island x12
+[Bot2 Deck]
+Island x30
+[Bot3 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.The Mindskinner.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T4 Bot1.Main1]
+? Bot2.Library.Count = 22
+? Bot3.Library.Count = 22
+Bot1.Attack(The Mindskinner > Bot2)
+[T4 Bot1.Main2]
+[Expect]
+Prevented = 10 The Mindskinner > Bot2 by The Mindskinner
+Bot2.Life = 20
+Bot3.Life = 20
+Bot2.Library.Count = 12
+Bot3.Library.Count = 12
+Bot1.Library.Count = 5

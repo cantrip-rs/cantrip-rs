@@ -1,0 +1,11 @@
+{
+  "name": "The Mindskinner",
+  "manaCost": "{U}{U}{U}",
+  "type": "Legendary Enchantment Creature — Nightmare",
+  "power": 10,
+  "toughness": 1,
+  "oracleText": "The Mindskinner can't be blocked.\nIf a source you control would deal damage to an opponent, prevent that damage and each opponent mills that many cards.",
+  "keywords": [
+    "CantBeBlocked"
+  ]
+}

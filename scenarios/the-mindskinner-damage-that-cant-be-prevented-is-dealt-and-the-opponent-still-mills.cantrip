@@ -1,0 +1,30 @@
+# Skullcrack makes damage unpreventable this turn, and deals 3 to Bot2. Such damage still meets the prevention effects that apply
+# to it: they prevent none of it, but their additional effects take place (CR 615.12). So Bot2 takes the 3 (17) and The
+# Mindskinner still has Bot2 mill that many cards: library 22 after its draw, then 19.
+[Bot1 Deck]
+The Mindskinner
+Black Lotus
+Skullcrack
+Mox Ruby
+Mox Jet
+Island x12
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.The Mindskinner.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Skullcrack.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Life = 17
+Bot2.Library.Count = 19
+Prevented = (absent)

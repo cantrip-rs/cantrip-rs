@@ -1,0 +1,26 @@
+# The Mindskinner (10/1, can't be blocked) attacks: the 10 combat damage it would deal to Bot2 is prevented (CR 615.1) and Bot2
+# mills 10 cards (CR 615.5, 701.17a), so Bot2 keeps 20 life and its library is 10 cards smaller - 22 after its turn-2 draw, then
+# 12. The prevention is in the game record.
+[Bot1 Deck]
+The Mindskinner
+Black Lotus
+Island x12
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.The Mindskinner.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot2.Library.Count = 22
+[T3 Bot1.Main1]
+Bot1.Attack(The Mindskinner > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+? Bot2.Library.Count = 12
+[Expect]
+Prevented = 10 The Mindskinner > Bot2 by The Mindskinner
+Bot2.Life = 20
+Bot2.Library.Count = 12

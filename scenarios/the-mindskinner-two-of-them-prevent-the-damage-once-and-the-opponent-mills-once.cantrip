@@ -1,0 +1,55 @@
+# Two Mindskinners under Mirror Gallery (no legend rule): Bot1's Shock at Bot2 would be damage to an opponent twice over, but the
+# first prevents it and the second finds no damage left to prevent (CR 615.6), so Bot2 mills 2, not 4 (the ruling): library 19
+# after its turn-8 draw, then 17, life 20, and one prevention in the record.
+[Bot1 Deck]
+The Mindskinner
+The Mindskinner
+Black Lotus
+Mirror Gallery
+Mox Sapphire
+Mox Ruby
+Shock
+Island x12
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.The Mindskinner.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mirror Gallery.Cast
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Mindskinner.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Mindskinner#2.Power = 10
+? Bot2.Library.Count = 19
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Life = 20
+Bot2.Library.Count = 17
+Prevented.Count = 1
+Prevented = 2 Shock > Bot2 by The Mindskinner
