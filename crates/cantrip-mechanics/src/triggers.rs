@@ -469,20 +469,28 @@ pub fn you_put_plus_one_counters_on_this(_: &dyn Query, me: &Asker, event: &Even
     }
 }
 
-/// "Whenever you put one or more +1/+1 counters on a creature you control" (CR 122.6, 122.6a, 603.2c): the player who put them
-/// is the event's, so an opponent's effect putting counters on your creature does not trigger it, and a creature entering under
-/// your control with counters does. The creature is the subject, the number put is `data[0]` and the creature's id `data[1]`, so
-/// `.once_per_batch().batch_by_data()` triggers once per creature however its counters were put. The `listens` mask is
-/// `EventMask::COUNTERS`. Stocking the Pantry and Terrasymbiosis print it (and Casey Jones, Back Alley Brute).
-pub fn you_put_plus_one_counters_on_a_creature_you_control(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+/// "Whenever you put one or more +1/+1 counters on a creature" (CR 122.6, 603.2c): the player who put them is the event's, so
+/// counters an opponent's spell or ability puts on a creature do not trigger it, while ones its controller puts on any creature
+/// (theirs or another player's, one entering with them included) do. The creature is the subject, the number put is `data[0]`
+/// and the creature's id `data[1]`, so `.once_per_batch().batch_by_data()` triggers once per creature however its counters were
+/// put. The `listens` mask is `EventMask::COUNTERS`. Earth Kingdom General prints it, and
+/// `you_put_plus_one_counters_on_a_creature_you_control` narrows it to creatures its controller controls.
+pub fn you_put_plus_one_counters_on_a_creature(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
         Event::CountersPut { object, kind: CounterKind::PlusOne, amount, by, .. }
-            if *amount > 0 && *by == me.controller && q.controller(*object) == me.controller && q.chars(*object).is(CardType::Creature) =>
+            if *amount > 0 && *by == me.controller && q.chars(*object).is(CardType::Creature) =>
         {
             Some(Fired { subject: Target::Object(*object), data: [*amount as u32, object.0] })
         }
         _ => None,
     }
+}
+
+/// "Whenever you put one or more +1/+1 counters on a creature you control" (CR 122.6, 122.6a, 603.2c): the wider trigger, narrowed
+/// to a creature entering or already under your control. Stocking the Pantry and Terrasymbiosis print it (and Casey Jones, Back
+/// Alley Brute).
+pub fn you_put_plus_one_counters_on_a_creature_you_control(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    you_put_plus_one_counters_on_a_creature(q, me, event).filter(|fired| fired.subject.object().is_some_and(|c| q.controller(c) == me.controller))
 }
 
 /// "Whenever you cast a spell with {X} in its mana cost" (CR 107.3, 601.2i, 603.2): the spell's mana cost as it is on the
