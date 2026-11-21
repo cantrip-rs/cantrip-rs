@@ -1,0 +1,34 @@
+# Harmonized Trio activated again while it is prepared: the cost is paid and the ability resolves, but a creature cannot become
+# prepared twice (CR 722.3a), so there is still exactly one copy of Brainstorm in exile.
+
+[Bot1 Deck]
+Mox Sapphire
+Harmonized Trio
+Ornithopter
+Ornithopter
+Island x3
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Harmonized Trio.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Harmonized Trio.Activate
+Bot1.Pass
+Bot2.Pass
+? Exile = Brainstorm
+[T5 Bot1.Main1]
+Bot1.Battlefield.Harmonized Trio.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Brainstorm
+Exile.Count = 1
+Bot1.Battlefield.Harmonized Trio.Prepared = true

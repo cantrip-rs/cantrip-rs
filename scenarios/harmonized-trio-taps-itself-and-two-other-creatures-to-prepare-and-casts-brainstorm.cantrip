@@ -1,0 +1,43 @@
+# Harmonized Trio: "{T}, Tap two untapped creatures you control: This creature becomes prepared." Cast on turn 1 with two
+# Ornithopters, it is summoning sick, so its own {T} cost cannot be paid yet (CR 302.6) - the refusal - though the Ornithopters,
+# also just cast, could be tapped for another's cost. On turn 3 it taps itself and both Ornithopters, becomes prepared (CR 722.3a)
+# and Bot1 casts the Brainstorm copy from exile (CR 722.3c), which unprepares it and goes away with it.
+
+[Bot1 Deck]
+Mox Sapphire
+Harmonized Trio
+Ornithopter
+Ornithopter
+Island x3
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Harmonized Trio.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Battlefield.Harmonized Trio.Activate
+[T3 Bot1.Main1]
+? Exile.Count = 0
+Bot1.Battlefield.Harmonized Trio.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Harmonized Trio.Prepared = true
+? Bot1.Battlefield.Harmonized Trio.Tapped = true
+? Bot1.Battlefield.Ornithopter#1.Tapped = true
+? Bot1.Battlefield.Ornithopter#2.Tapped = true
+? Exile = Brainstorm
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Brainstorm.Cast
+Bot1.Choose(Island; Island)
+
+[Expect]
+Bot1.Battlefield.Harmonized Trio.Prepared = (absent)
+Exile.Count = 0
+Bot1.Graveyard.Count = 0
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 12
