@@ -1,0 +1,31 @@
+# "{4}, {T}, Sacrifice this land: Draw a card." With three Mox Rubies' mana ({R}{R}{R}) the ability is refused; with the fourth it
+# is paid, Boiling Rock Prison is sacrificed and Bot1 draws exactly one card (CR 602.2, 118.3). Opening hand 7 on the play, the land and
+# four Moxen played out of it (7 - 5 = 2), turn 3's draw makes 3, the ability's draw 4.
+
+[Bot1 Deck]
+Boiling Rock Prison
+Mox Ruby x4
+Island x15
+
+[Bot2 Deck]
+Swamp x15
+
+[Actions]
+Bot1.Hand.Boiling Rock Prison.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Boiling Rock Prison.Activate(Ability: Draw; Mana: short)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Boiling Rock Prison.Activate(Ability: Draw)
+
+[Expect]
+Bot1.Graveyard = Boiling Rock Prison
+Bot1.Mana = 
+Bot1.Hand.Count = 4
+Stack.Count = 0
