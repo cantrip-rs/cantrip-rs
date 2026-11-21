@@ -1,0 +1,76 @@
+# Beifong's Bounty Hunters: "Whenever a nonland creature you control dies, earthbend X, where X is that creature's power." (CR 701.66a, 603.10a,
+# 608.2h). Bot1 casts it on turn 1 with its Forest, four Moxen and a Memnite. Bot2's Lightning Bolt kills Memnite (power 1) on turn 2: the Forest
+# is earthbent for 1 (a 1/1 land creature). On turn 3 Bot1 casts Hill Giant, and Bot2's second Bolt kills it on turn 4 (power 3): the Forest is
+# earthbent again, for 3 more, so 4 counters in all - not 1 more, not the 0/0 the Giant has once dead.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Forest
+Beifong's Bounty Hunters
+Memnite
+Hill Giant
+Forest x20
+
+[Bot2 Deck]
+Mountain
+Mountain
+Lightning Bolt
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Beifong's Bounty Hunters.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Forest.Types = Land; Creature
+? Bot1.Battlefield.Forest.Counters.PlusOnePlusOne = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Hill Giant)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Forest.Types = Land; Creature
+Bot1.Battlefield.Forest.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Forest.Power = 4
+Bot1.Battlefield.Forest.Toughness = 4
+Bot1.Graveyard = Hill Giant; Memnite

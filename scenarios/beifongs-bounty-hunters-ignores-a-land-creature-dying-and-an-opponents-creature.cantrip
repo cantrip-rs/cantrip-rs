@@ -1,0 +1,85 @@
+# Beifong's Bounty Hunters: "Whenever a nonland creature you control dies" (CR 603.10a, 205.4). Bot2's Bolt kills its own Memnite and then Bot1's
+# Memnite, the second one earthbending Bot1's Forest for 1, and only that one: an opponent's creature dying does nothing. On turn 4 a Bolt kills
+# the Forest itself, a land creature: no second earthbend (the Forest played on turn 3 is left alone), so it returns tapped as a plain land with no counters.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Forest
+Beifong's Bounty Hunters
+Memnite
+Forest x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Memnite
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mountain
+Mountain x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Beifong's Bounty Hunters.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Forest.Types = Land
+? Bot2.Graveyard = Memnite; Lightning Bolt
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Forest.Types = Land; Creature
+? Bot1.Battlefield.Forest.Counters.PlusOnePlusOne = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Forest)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Forest#1.Types = Land
+Bot1.Battlefield.Forest#1.Tapped = false
+Bot1.Battlefield.Forest#1.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Forest#2.Types = Land
+Bot1.Battlefield.Forest#2.Tapped = true
+Bot1.Battlefield.Forest#2.Counters.PlusOnePlusOne = (absent)
+Bot1.Graveyard = Memnite

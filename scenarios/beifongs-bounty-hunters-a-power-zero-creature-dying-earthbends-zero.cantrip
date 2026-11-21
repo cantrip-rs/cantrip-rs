@@ -1,0 +1,52 @@
+# Beifong's Bounty Hunters: "earthbend X, where X is that creature's power" (CR 603.10a, 701.62): a 0/1 Crimson Kobolds dying makes X = 0, so the
+# Forest becomes a 0/0 land creature with no counters, dies as a state-based action (CR 704.5f) and its return trigger puts it back tapped as a plain land.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Forest
+Beifong's Bounty Hunters
+Crimson Kobolds
+Forest x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Beifong's Bounty Hunters.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Crimson Kobolds.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Crimson Kobolds)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Forest.Types = Land
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Forest.Counters.PlusOnePlusOne = (absent)
+Bot1.Graveyard = Crimson Kobolds
