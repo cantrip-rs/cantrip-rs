@@ -1,0 +1,42 @@
+# Sun Warriors: "{5}: Create a 1/1 white Ally creature token." On turn 3 Bot1 has four mana sources (Mox Pearl and three Moxen):
+# the activation is refused for being one short. With a Plains as the fifth source it works and makes one Ally token.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Sun Warriors
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sun Warriors.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Sun Warriors.Activate(Mana: short)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sun Warriors.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ally Token.Power = 1
+Bot1.Battlefield.Ally Token.Tapped = False

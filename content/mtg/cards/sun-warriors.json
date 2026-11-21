@@ -1,0 +1,8 @@
+{
+  "name": "Sun Warriors",
+  "manaCost": "{2}{R}{W}",
+  "type": "Creature — Human Warrior Ally",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Firebending X, where X is the number of creatures you control. (Whenever this creature attacks, add X {R}. This mana lasts until end of combat.)\n{5}: Create a 1/1 white Ally creature token."
+}
