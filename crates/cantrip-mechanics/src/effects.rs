@@ -2426,6 +2426,21 @@ pub fn may_pay_then_when_you_do(g: &mut dyn Game, item: &StackItem, card: &'stat
     Ok(())
 }
 
+/// "When this creature dies, you may exile it. When you do, ..." (CR 603.12): the card it became in the graveyard (CR 400.7; each
+/// card of a merged permanent, CR 730.3c) is exiled, and only if one really was does the reflexive ability (the card's first
+/// `delayed` one) trigger. Its targets are chosen as it goes on the stack, so the exiled card is not among the cards in the
+/// graveyard then. Paramecia Coloniex and Sandbender Scavengers print it; `question` is the card's own wording of the choice.
+pub fn may_exile_it_when_you_do(g: &mut dyn Game, item: &StackItem, card: &'static CardDef, question: &'static Question) -> Result<(), Suspend> {
+    if g.found_all_after_move(item.object).is_empty() || !ask_may(g, item.controller, item.object, Purpose::Ask(question))? {
+        return Ok(());
+    }
+    if !exile_what_it_became(g, item.object).is_empty() {
+        let this = g.card_id(card);
+        g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(this, 0), Target::None);
+    }
+    Ok(())
+}
+
 /// "Untap this [permanent]" (CR 701.26): the ability's source. Basalt Monolith and Grim Monolith print it.
 pub fn untap_self(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.untap(item.object);
