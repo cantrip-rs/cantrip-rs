@@ -1,0 +1,55 @@
+# Zidane, Tantalus Thief: "Whenever an opponent gains control of a permanent from you, you create a Treasure token." Bot2's Act of Treason takes
+# Zidane himself (CR 613.1b). Zidane is Bot2's by the time the change is looked at, but the ability looks back on the game as it was before (CR 603.10d): it
+# triggers under Bot1, who had him, and Bot1 creates the Treasure - not Bot2, whom Zidane's ability would now answer to. The turn ends: Zidane is Bot1's again, which is Bot1 gaining control of a permanent from Bot2, and Bot2's Zidane, as he
+# was just before, triggers under Bot2: one Treasure each.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Zidane, Tantalus Thief
+Mountain
+Mountain
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Mountain
+Mountain
+Mox Ruby
+Act of Treason
+Mountain x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Zidane, Tantalus Thief.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Treasure Token = (absent)
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Battlefield.Mountain#2.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Act of Treason.Cast(Bot1.Battlefield.Zidane, Tantalus Thief)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield = Mox Ruby; Mox Pearl; Treasure Token
+? Bot2.Battlefield.Zidane, Tantalus Thief.Keywords = Haste
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Mox Pearl; Zidane, Tantalus Thief; Treasure Token
+Bot2.Battlefield = Mountain; Mountain; Mox Ruby; Treasure Token

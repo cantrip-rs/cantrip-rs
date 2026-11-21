@@ -1,0 +1,64 @@
+# Zidane, Tantalus Thief: "When Zidane enters, gain control of target creature an opponent controls until end of turn. Untap it. It gains
+# lifelink and haste until end of turn." Bot1 takes Bot2's Grizzly Bears: it
+# attacks Bot2 with haste and lifelink for 2, so Bot1 gains 2 (CR 702.15b). Taking it is Bot1 gaining control, which Zidane doesn't watch.
+# "Whenever an opponent gains control of a permanent from you, you create a Treasure token" (CR 603.10d): when the turn ends the Bears is
+# Bot2's again (CR 611.2a, 514.2), an opponent gaining control of a permanent from Bot1, and Bot1 creates one Treasure. Bot2 is not given one.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Zidane, Tantalus Thief
+Mountain
+Mountain
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Forest x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Zidane, Tantalus Thief.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Tapped = false
+? Bot1.Battlefield.Grizzly Bears.Keywords = Haste; Lifelink
+? Bot1.Battlefield.Treasure Token = (absent)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+? Bot1.Life = 22
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Keywords = (absent)
+Bot1.Battlefield = Zidane, Tantalus Thief; Mox Ruby; Mox Pearl; Treasure Token
+Bot2.Battlefield.Treasure Token = (absent)
+Bot1.Life = 22

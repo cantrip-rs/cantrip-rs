@@ -1,0 +1,8 @@
+{
+  "name": "Zidane, Tantalus Thief",
+  "manaCost": "{3}{R}{W}",
+  "type": "Legendary Creature — Human Mutant Scout",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When Zidane enters, gain control of target creature an opponent controls until end of turn. Untap it. It gains lifelink and haste until end of turn.\nWhenever an opponent gains control of a permanent from you, you create a Treasure token."
+}

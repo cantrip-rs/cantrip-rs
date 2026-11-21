@@ -1,0 +1,58 @@
+# Zidane, Tantalus Thief: "Whenever an opponent gains control of a permanent from you" is a permanent taken from Zidane's controller
+# only (CR 603.10d). In a three-player game Bot2's Act of Treason takes Bot3's Grizzly Bears, and at the end of the turn the Bears
+# goes back to Bot3: an opponent of Bot1 gains control of a permanent each time, but never from Bot1, so Bot1 creates no Treasure.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Zidane, Tantalus Thief
+Mountain x16
+
+[Bot2 Deck]
+Mountain
+Mountain
+Mox Ruby
+Act of Treason
+Mountain x16
+
+[Bot3 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Forest x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Zidane, Tantalus Thief.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot3.Main1]
+Bot3.Hand.Forest.Play
+Bot3.Hand.Mox Emerald.Cast
+Bot3.Battlefield.Forest.Activate
+Bot3.Battlefield.Mox Emerald.Activate
+Bot3.Hand.Grizzly Bears.Cast
+[T5 Bot2.Main1]
+? Bot1.Battlefield.Zidane, Tantalus Thief.Power = 3
+? Bot3.Battlefield.Grizzly Bears.Power = 2
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Battlefield.Mountain#2.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Act of Treason.Cast(Bot3.Battlefield.Grizzly Bears)
+[T5 Bot2.Main2]
+? Bot2.Battlefield.Grizzly Bears.Keywords = Haste
+[T6 Bot3.Main1]
+
+[Expect]
+Bot3.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield = Zidane, Tantalus Thief; Mox Ruby; Mox Pearl
+Bot2.Battlefield.Treasure Token = (absent)
+Bot3.Battlefield.Treasure Token = (absent)
