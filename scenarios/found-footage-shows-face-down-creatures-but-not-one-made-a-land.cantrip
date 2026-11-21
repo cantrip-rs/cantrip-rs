@@ -1,0 +1,85 @@
+# Found Footage: "You may look at face-down creatures your opponents control any time" (CR 708.5) - creatures only. Turn 1
+# Bot1 casts it. Turn 2 Bot2 casts Vengeful Creeper and Basilica Stalker face down for their disguise costs, and Bot1 knows
+# both. Turn 3 Bot1 casts Imprisoned in the Moon on the face-down Creeper, paying its ward {2}: it is now a colorless land and
+# no creature (CR 205.1b), still face down, so Bot1 no longer knows it, and still knows the Stalker. Bot2 knows its own all
+# along (CR 708.5).
+
+[Bot1 Deck]
+Island
+Found Footage
+Mox Sapphire
+Sol Ring
+Black Lotus
+Imprisoned in the Moon
+Island
+Island x20
+
+[Bot2 Deck]
+Forest
+Sol Ring
+Mox Emerald
+Black Lotus
+Vengeful Creeper
+Basilica Stalker
+Forest x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Found Footage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Vengeful Creeper.Cast(Ability: Disguise)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Basilica Stalker.Cast(Ability: Disguise)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.#1.FaceDown = true
+? Bot2.Battlefield.#2.FaceDown = true
+? Bot1.Sees.Bot2.FaceDown = Basilica Stalker; Vengeful Creeper
+? Bot1.Sees.Bot2.FaceDown.Count = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Imprisoned in the Moon.Cast(Bot2.Battlefield.#1)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.#1.FaceDown = true
+Bot2.Battlefield.#1.Types = Land
+Bot2.Battlefield.#2.FaceDown = true
+Bot1.Sees.Bot2.FaceDown = Basilica Stalker
+Bot2.Sees.Bot1.FaceDown =
