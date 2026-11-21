@@ -1,0 +1,36 @@
+# Air Nomad Legacy: "When this enchantment enters, create a Clue token." and "Creatures you control with flying get +1/+1."
+# Bot1's Ornithopter (0/2 flying) becomes 1/3; Bot1's Memnite (1/1, no flying) and Bot2's Ornithopter stay as printed.
+
+[Bot1 Deck]
+Air Nomad Legacy
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Memnite
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Forest x22
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Air Nomad Legacy.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Clue Token.Types = Artifact
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2

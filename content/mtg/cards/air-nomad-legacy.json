@@ -1,0 +1,6 @@
+{
+  "name": "Air Nomad Legacy",
+  "manaCost": "{W}{U}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, create a Clue token. (It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")\nCreatures you control with flying get +1/+1."
+}
