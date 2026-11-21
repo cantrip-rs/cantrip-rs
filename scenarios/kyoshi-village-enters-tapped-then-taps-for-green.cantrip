@@ -1,0 +1,22 @@
+# Kyoshi Village enters tapped (CR 614.1d), so the turn it is played it cannot be tapped for mana (the refusal); next turn it taps for either
+# {G} or {W}: Green here (the other colour is taken by the sibling scenario), and never Red, which it does not make.
+
+[Bot1 Deck]
+Kyoshi Village
+Plains x19
+
+[Bot2 Deck]
+Swamp x15
+
+[Actions]
+Bot1.Hand.Kyoshi Village.Play
+? Bot1.Battlefield.Kyoshi Village.Tapped = true
+! Bot1.Battlefield.Kyoshi Village.Activate(Ability: Add; Color: Green)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Kyoshi Village.Activate(Ability: Add; Color: Red)
+Bot1.Battlefield.Kyoshi Village.Activate(Ability: Add; Color: Green)
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Kyoshi Village.Tapped = true
+Bot1.Mana = {G}
