@@ -662,6 +662,25 @@ pub fn you_sacrifice_an_artifact(q: &dyn Query, me: &Asker, event: &Event) -> Op
 
 pub const YOU_SACRIFICE_AN_ARTIFACT: Trigger = when_asked(EventMask::ZONE_CHANGE, you_sacrifice_an_artifact);
 
+/// "Whenever you sacrifice a permanent" (CR 701.21a, 603.10a): any permanent of yours that moved from the battlefield by a sacrifice, the
+/// source itself included, read as it was when it left. One trigger for each permanent, however many are sacrificed together. The
+/// ability is `.on_sacrifice()`. Popular Egotist prints it.
+pub fn you_sacrifice_a_permanent(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    sacrificed_by(q, me.controller, event)?;
+    Fired::PLAIN
+}
+
+pub const YOU_SACRIFICE_A_PERMANENT: Trigger = when_asked(EventMask::ZONE_CHANGE, you_sacrifice_a_permanent);
+
+/// "Whenever you sacrifice another permanent" (CR 701.21a, 603.10a): `you_sacrifice_a_permanent` without the source itself, which
+/// sacrificed alongside others still sees them. The ability is `.on_sacrifice()`. Pirate Peddlers and Vito, Fanatic of Aclazotz print it.
+pub fn you_sacrifice_another_permanent(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    let sacrificed = sacrificed_by(q, me.controller, event)?;
+    if sacrificed == me.source { None } else { Fired::PLAIN }
+}
+
+pub const YOU_SACRIFICE_ANOTHER_PERMANENT: Trigger = when_asked(EventMask::ZONE_CHANGE, you_sacrifice_another_permanent);
+
 /// "Whenever you sacrifice [a permanent]" (CR 701.21a): the permanent `player` sacrificed, as it last was on the
 /// battlefield, for the card to judge the quality it names. The ability is `.on_sacrifice()`, and looks back as any ability
 /// that triggers on a sacrifice does (CR 603.10a). Tireless Tracker (a Clue) and Biotech Specialist (an artifact) print it.
