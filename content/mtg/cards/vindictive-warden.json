@@ -1,0 +1,11 @@
+{
+  "name": "Vindictive Warden",
+  "manaCost": "{2}{B/R}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nFirebending 1 (Whenever this creature attacks, add {R}. This mana lasts until end of combat.)\n{3}: This creature deals 1 damage to each opponent.",
+  "keywords": [
+    "Menace"
+  ]
+}

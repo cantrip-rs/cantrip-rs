@@ -1,0 +1,45 @@
+# Vindictive Warden {2}{B/R}, 2/3 menace: "Firebending 1" and "{3}: This creature deals 1 damage to each opponent." On turn 3 Bot1 attacks: firebending
+# adds exactly {R}, lasting until end of combat. Two Moxen taps plus that {R} pay for {3}: Bot2 takes 1 (20 -> 19) from the ability, and the unblocked 2/3
+# deals 2 more (17). With only two Moxen left untapped, {3} cannot be paid (the refusal).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Vindictive Warden
+Plains x20
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Vindictive Warden.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Vindictive Warden.Keywords = Menace
+Bot1.Attack(Vindictive Warden > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R} lasting {R}
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Vindictive Warden.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+! Bot1.Battlefield.Vindictive Warden.Activate(Mana: short)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
