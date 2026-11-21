@@ -1,0 +1,8 @@
+{
+  "name": "Turtle-Duck",
+  "manaCost": "{G}",
+  "type": "Creature — Turtle Bird",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": "{3}: Until end of turn, this creature has base power 4 and gains trample."
+}
