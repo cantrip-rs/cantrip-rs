@@ -1,0 +1,22 @@
+# Foggy Bottom Swamp enters tapped (CR 614.1d), so the turn it is played it cannot be tapped for mana (the refusal); next turn it taps for either
+# {B} or {G}: Black here (the other colour is taken by the sibling scenario), and never White, which it does not make.
+
+[Bot1 Deck]
+Foggy Bottom Swamp
+Plains x19
+
+[Bot2 Deck]
+Swamp x15
+
+[Actions]
+Bot1.Hand.Foggy Bottom Swamp.Play
+? Bot1.Battlefield.Foggy Bottom Swamp.Tapped = true
+! Bot1.Battlefield.Foggy Bottom Swamp.Activate(Ability: Add; Color: Black)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Foggy Bottom Swamp.Activate(Ability: Add; Color: White)
+Bot1.Battlefield.Foggy Bottom Swamp.Activate(Ability: Add; Color: Black)
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Foggy Bottom Swamp.Tapped = true
+Bot1.Mana = {B}
