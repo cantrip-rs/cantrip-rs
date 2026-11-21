@@ -1,0 +1,46 @@
+# Cycle of Renewal: "Sacrifice a land. Search your library for up to two basic land cards ..." (CR 701.21a, 701.23): the
+# sacrifice comes first, so with a single Forest it is sacrificed without a choice and the lands found afterwards are not
+# offered for it. Only one basic land is in the library, so only it is found ("up to two"), and a basic land of the other
+# player's, left where it is, is not.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Jet
+Mox Ruby
+Cycle of Renewal
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Plains
+Tropical Island
+Elvish Mystic x9
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cycle of Renewal.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Tropical Island)
+! Bot1.Search(Elvish Mystic)
+Bot1.Search(Plains)
+? Bot1.Battlefield.Plains.Tapped = true
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; Plains
+Bot1.Graveyard = Cycle of Renewal; Forest

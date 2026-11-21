@@ -1,0 +1,42 @@
+# Cycle of Renewal: "search your library for up to two basic land cards" (CR 701.23): with none in the library the land is still
+# sacrificed and nothing is found, so Bot1 ends with one land fewer. A basic land in the other player's library is not found.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Jet
+Mox Ruby
+Cycle of Renewal
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Tropical Island
+Elvish Mystic x10
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cycle of Renewal.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Tropical Island)
+Bot1.Search()
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby
+Bot1.Graveyard = Cycle of Renewal; Forest
+Bot2.Library.Count = 12
