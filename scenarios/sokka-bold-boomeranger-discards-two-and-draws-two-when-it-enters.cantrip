@@ -1,0 +1,31 @@
+# Sokka, Bold Boomeranger ({U}{R}, 1/1): "When Sokka enters, discard up to two cards, then draw that many cards." Bot1 casts it with Mox
+# Ruby and Mox Sapphire, leaving Bolt, Bolt, Plains, Plains in hand, and discards both Bolts: it then draws two (the Islands on top:
+# the discards come first, so the drawn cards can't be among them). The Moxes were cast before Sokka was on the battlefield, so no
+# counter: it is still 1/1.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Sokka, Bold Boomeranger
+Lightning Bolt
+Lightning Bolt
+Plains
+Plains
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sokka, Bold Boomeranger.Cast
+Bot1.Choose(Lightning Bolt; Lightning Bolt)
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt
+Bot1.Hand = Island; Island; Plains; Plains
+Bot1.Library.Count = 11
+Bot1.Battlefield.Sokka, Bold Boomeranger.Power = 1

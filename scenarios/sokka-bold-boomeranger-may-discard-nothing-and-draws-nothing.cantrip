@@ -1,0 +1,28 @@
+# Sokka, Bold Boomeranger: "discard up to two cards" includes none: Bot1 chooses nothing, so nothing is discarded and, "that many",
+# nothing is drawn (hand and library unchanged).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Sokka, Bold Boomeranger
+Lightning Bolt
+Plains
+Plains
+Plains
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sokka, Bold Boomeranger.Cast
+Bot1.Choose()
+
+[Expect]
+Bot1.Graveyard = 
+Bot1.Hand = Lightning Bolt; Plains; Plains; Plains
+Bot1.Library.Count = 13

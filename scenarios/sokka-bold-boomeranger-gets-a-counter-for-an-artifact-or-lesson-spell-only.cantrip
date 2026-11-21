@@ -1,0 +1,49 @@
+# Sokka, Bold Boomeranger: "Whenever you cast an artifact or Lesson spell, put a +1/+1 counter on Sokka." On turn 3 Bot1 casts Mox Jet
+# (an artifact: +1), Octopus Form with Mox Sapphire's {U} (an instant Lesson: +1) and Lightning Bolt with Mox Ruby's {R} (neither: no
+# counter): 1/1 plus two counters is 3/3 (Octopus Form itself gives +1/+1 until end of turn: 4/4 at the end; Bot2's life 20 -> 17 is the Bolt).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Sokka, Bold Boomeranger
+Mox Jet
+Octopus Form
+Lightning Bolt
+Plains
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sokka, Bold Boomeranger.Cast
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sokka, Bold Boomeranger.Power = 2
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Octopus Form.Cast(Bot1.Battlefield.Sokka, Bold Boomeranger)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sokka, Bold Boomeranger.Power = 3
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Sokka, Bold Boomeranger.Power = 4
+Bot1.Battlefield.Sokka, Bold Boomeranger.Toughness = 4
+Bot2.Life = 17

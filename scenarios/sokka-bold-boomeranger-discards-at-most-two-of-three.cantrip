@@ -1,0 +1,28 @@
+# Sokka, Bold Boomeranger: "When Sokka enters, discard up to two cards, then draw that many cards." With three Lightning Bolts and a
+# Plains left in hand, Bot1 is asked for up to two and gives every card it may (the question is left unanswered): two Bolts are
+# discarded, never the third, and two Islands are drawn.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Sokka, Bold Boomeranger
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Plains
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sokka, Bold Boomeranger.Cast
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt
+Bot1.Hand = Lightning Bolt; Island; Island; Plains
+Bot1.Library.Count = 11

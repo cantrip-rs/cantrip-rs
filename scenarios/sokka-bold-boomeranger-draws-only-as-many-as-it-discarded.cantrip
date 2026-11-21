@@ -1,0 +1,28 @@
+# Sokka, Bold Boomeranger: "discard up to two cards, then draw that many cards" -- one discarded draws one (library 13 -> 12), and
+# none discarded draws none (the second Sokka's trigger, with Bot1's hand left alone, below).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Sokka, Bold Boomeranger
+Lightning Bolt
+Plains
+Plains
+Plains
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sokka, Bold Boomeranger.Cast
+Bot1.Choose(Lightning Bolt)
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt
+Bot1.Hand = Island; Plains; Plains; Plains
+Bot1.Library.Count = 12
