@@ -1,0 +1,53 @@
+# Fire Lord Zuko: "Whenever you cast a spell from exile" (CR 603.2, 601.2a). Loan Shark is plotted on turn 1 with four Moxen and, on turn 3, cast
+# free from exile after Zuko: the trigger puts one counter on Zuko (Zuko 3/5). A Memnite cast from hand does nothing, and the Shark enters from the
+# stack, not from exile, so it does not trigger Zuko a second time. Zuko then attacks: "Firebending X, where X is Fire Lord Zuko's power" adds 3 {R}.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Loan Shark
+Fire Lord Zuko
+Memnite
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Loan Shark.Activate(Ability: Plot)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fire Lord Zuko.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fire Lord Zuko.Counters.PlusOnePlusOne = (absent)
+Bot1.Exile.Loan Shark.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fire Lord Zuko.Counters.PlusOnePlusOne = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Loan Shark.Counters.PlusOnePlusOne = (absent)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Fire Lord Zuko)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R}{R} lasting {R}{R}{R}
+
+[Expect]
+Bot1.Battlefield.Fire Lord Zuko.Counters.PlusOnePlusOne = 1

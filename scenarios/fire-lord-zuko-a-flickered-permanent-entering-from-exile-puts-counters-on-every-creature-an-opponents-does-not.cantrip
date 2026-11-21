@@ -1,0 +1,66 @@
+# Fire Lord Zuko: "whenever a permanent you control enters from exile, put a +1/+1 counter on each creature you control." (CR 603.2, 400.7)
+# Ephemerate flickers Bot1's Memnite: it returns from exile as a new object and both it and Zuko get a counter (Zuko 3/5, Memnite 2/2).
+# On turn 2 Bot2 flickers its own Memnite with Ephemerate: it enters from exile under Bot2, so Zuko's controller gets nothing.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Fire Lord Zuko
+Ephemerate
+Memnite
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Memnite
+Ephemerate
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fire Lord Zuko.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fire Lord Zuko.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Ephemerate.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fire Lord Zuko.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Ephemerate.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Fire Lord Zuko.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Fire Lord Zuko.Power = 3
+Bot1.Battlefield.Fire Lord Zuko.Toughness = 5
+Bot1.Battlefield.Memnite.Power = 2
+Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
