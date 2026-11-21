@@ -1,0 +1,8 @@
+use cantrip_api::*;
+use cantrip_mechanics::{effects, targets};
+use cantrip_oracle as oracle;
+
+pub static CARD: CardDef = CardDef {
+    spell: spell(&[targets::CREATURE], effects::first_target_gets_and_gains_reach_until_end_of_turn_then_untap::<2, 2>),
+    ..oracle::PILLAR_LAUNCH
+};

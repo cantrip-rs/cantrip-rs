@@ -1,0 +1,32 @@
+# Pillar Launch: "+2/+2 and gains reach until end of turn. Untap it." After Elvish Mystic attacks (T5) it is
+# tapped and 1/1; the instant makes it 3/3 with reach and untaps it (CR 613.4c, 701.26a, 609.4).
+
+[Bot1 Deck]
+Forest
+Forest
+Elvish Mystic
+Pillar Launch
+Forest x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Elvish Mystic.Cast
+[T5 Bot1.Main1]
+Bot1.Attack(Elvish Mystic)
+[T5 Bot1.Main2]
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Hand.Pillar Launch.Cast(Bot1.Battlefield.Elvish Mystic)
+
+[Expect]
+Bot1.Battlefield.Elvish Mystic.Power = 3
+Bot1.Battlefield.Elvish Mystic.Toughness = 3
+Bot1.Battlefield.Elvish Mystic.Keywords = Reach
+Bot1.Battlefield.Elvish Mystic.Tapped = false
+Bot2.Life = 19
