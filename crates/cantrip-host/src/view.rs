@@ -162,6 +162,7 @@ pub fn restriction_view(restriction: ManaRestriction) -> (ManaSpendFilterView, M
         r if r == ManaRestriction::ARTIFACT_SPELLS => ManaSpendFilterView::ArtifactSpells,
         r if r == ManaRestriction::ENCHANTMENT_SPELLS => ManaSpendFilterView::EnchantmentSpells,
         r if r == ManaRestriction::UNLOCK_DOORS => ManaSpendFilterView::UnlockingDoors,
+        r if r == ManaRestriction::FACE_DOWN_SPELLS => ManaSpendFilterView::FaceDownSpells,
         r if r == ManaRestriction::TURN_FACE_UP => ManaSpendFilterView::TurningFaceUp,
         r if r == ManaRestriction::TURN_CREATURES_FACE_UP => ManaSpendFilterView::TurningCreaturesFaceUp,
         r if r == ManaRestriction::INSTANT_OR_SORCERY_SPELLS => ManaSpendFilterView::InstantOrSorcerySpells,
@@ -182,6 +183,7 @@ pub fn restriction_view(restriction: ManaRestriction) -> (ManaSpendFilterView, M
         r if r == ManaRestriction::ENCHANTMENT_SPELLS_OR_UNLOCKING_DOORS_OR_TURNING_UP => {
             ManaSpendFilterView::EnchantmentSpellsOrUnlockingDoorsOrTurningFaceUp
         }
+        r if r == ManaRestriction::FACE_DOWN_SPELLS_OR_TURNING_CREATURES_FACE_UP => ManaSpendFilterView::FaceDownSpellsOrTurningCreaturesFaceUp,
         // The card goes beside it as the viewer's handle for it (`spend_card`).
         ManaRestriction::Card(_) => ManaSpendFilterView::Card,
         r => panic!("a mana restriction the wire has no word for: {}", r.name()),

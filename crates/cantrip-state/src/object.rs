@@ -2852,6 +2852,10 @@ pub enum ManaRestriction {
     /// whatever the Room - never on a spell, an ability, nor any other special action. On its own it is a part of a union
     /// (`ANY_OF`): Creeping Peeper's.
     UnlockDoors,
+    /// "Spend this mana only to cast face-down spells" (CR 106.6, 708.4): only on casting a spell that is face down as it is cast
+    /// (a morph or disguise card cast face down, CR 702.37c, 702.168b) - not on turning one face up, which is not casting it
+    /// (CR 116.2b), nor on any other spell. On its own it is a part of a union (`ANY_OF`): Tin Street Gossip's.
+    FaceDownSpells,
     /// "Spend this mana only to turn [permanents | creatures] face up" (CR 106.6, 116.2b, 702.37e, 702.168d, 701.40b, 701.58b): only on the
     /// special action of turning a face-down permanent face up (CR 116.2) - the mana of its morph or disguise cost or of the
     /// mana cost of a manifested or cloaked creature card (the rulings of Creeping Peeper and Overgrown Zealot) - never on a
@@ -3041,7 +3045,8 @@ pub enum ManaPayment {
     /// `card`: the card cast, as the object it was before it was put on the stack (CR 601.2a, 400.7) - the card where it is,
     /// for the advice - which mana limited to one card (`ManaRestriction::Card`) asks; on the stack it is worked out only
     /// where some such mana is at hand, and is `ObjectId::NONE` otherwise.
-    Spell { types: TypeSet, subtypes: SubtypeSet, legendary: bool, mana_value: u32, x: bool, from: ZoneKind, commander: bool, card: ObjectId },
+    /// `face_down`: whether it is a face-down spell (CR 708.4), as it is cast by morph or disguise (CR 702.37c, 702.168b).
+    Spell { types: TypeSet, subtypes: SubtypeSet, legendary: bool, mana_value: u32, x: bool, from: ZoneKind, commander: bool, card: ObjectId, face_down: bool },
     /// Activating an ability whose source has these card types and these subtypes as it is activated (CR 602.2b, 605.3a):
     /// both always filled, from the source's characteristics. `on_battlefield`: whether the source is a permanent (CR
     /// 109.2), not a card in a hand, a graveyard or exile.
@@ -3083,6 +3088,7 @@ impl ManaRestriction {
     pub const CREATURE_SPELLS: ManaRestriction = ManaRestriction::Spells(TypeSet::of(&[CardType::Creature]));
     pub const ENCHANTMENT_SPELLS: ManaRestriction = ManaRestriction::Spells(TypeSet::of(&[CardType::Enchantment]));
     pub const UNLOCK_DOORS: ManaRestriction = ManaRestriction::UnlockDoors;
+    pub const FACE_DOWN_SPELLS: ManaRestriction = ManaRestriction::FaceDownSpells;
     pub const TURN_FACE_UP: ManaRestriction = ManaRestriction::TurnFaceUp { creature: false };
     pub const TURN_CREATURES_FACE_UP: ManaRestriction = ManaRestriction::TurnFaceUp { creature: true };
     pub const CREATURE_ABILITIES: ManaRestriction = ManaRestriction::Abilities(TypeSet::of(&[CardType::Creature]), AbilitiesOf::Sources);
@@ -3111,10 +3117,15 @@ impl ManaRestriction {
     pub const ENCHANTMENT_SPELLS_OR_UNLOCKING_DOORS_OR_TURNING_UP: ManaRestriction =
         ManaRestriction::AnyOf(&[ManaRestriction::ENCHANTMENT_SPELLS, ManaRestriction::UNLOCK_DOORS, ManaRestriction::TURN_FACE_UP]);
 
+    /// "Spend this mana only to cast face-down spells or turn face-down creatures face up" (Tin Street Gossip).
+    pub const FACE_DOWN_SPELLS_OR_TURNING_CREATURES_FACE_UP: ManaRestriction =
+        ManaRestriction::AnyOf(&[ManaRestriction::FACE_DOWN_SPELLS, ManaRestriction::TURN_CREATURES_FACE_UP]);
+
     /// The unions the wire has a word for, by their parts (`AnyOf`).
-    pub const ANY_OF: [&'static [ManaRestriction]; 2] = [
+    pub const ANY_OF: [&'static [ManaRestriction]; 3] = [
         &[ManaRestriction::ARTIFACT_SPELLS, ManaRestriction::ABILITIES],
         &[ManaRestriction::ENCHANTMENT_SPELLS, ManaRestriction::UNLOCK_DOORS, ManaRestriction::TURN_FACE_UP],
+        &[ManaRestriction::FACE_DOWN_SPELLS, ManaRestriction::TURN_CREATURES_FACE_UP],
     ];
 
     /// "Spend this mana only to cast spells with mana value `n` or greater."
@@ -3131,7 +3142,7 @@ impl ManaRestriction {
     /// of `Subtypes` are named for their subtypes and those of `ManaValue` for their number (`name`). A card naming a
     /// restriction of card types not here fails the build (`Adds::only_for` is checked at compile time), since the host
     /// has no word for it on the wire.
-    pub const NAMED: [(ManaRestriction, &'static str); 26] = [
+    pub const NAMED: [(ManaRestriction, &'static str); 27] = [
         (ManaRestriction::CumulativeUpkeep, "CumulativeUpkeep"),
         (ManaRestriction::NotNonartifactSpells, "NotNonartifactSpells"),
         (ManaRestriction::GainsHaste, "GainsHaste"),
@@ -3148,6 +3159,7 @@ impl ManaRestriction {
         (ManaRestriction::CREATURE_SPELLS, "CreatureSpells"),
         (ManaRestriction::ENCHANTMENT_SPELLS, "EnchantmentSpells"),
         (ManaRestriction::UNLOCK_DOORS, "UnlockDoors"),
+        (ManaRestriction::FACE_DOWN_SPELLS, "FaceDownSpells"),
         (ManaRestriction::TURN_FACE_UP, "TurnFaceUp"),
         (ManaRestriction::TURN_CREATURES_FACE_UP, "TurnCreaturesFaceUp"),
         (ManaRestriction::CREATURE_ABILITIES, "CreatureAbilities"),
@@ -3168,6 +3180,7 @@ impl ManaRestriction {
             | (ManaRestriction::LegendaryUncounterable, ManaRestriction::LegendaryUncounterable)
             | (ManaRestriction::LegendarySpells, ManaRestriction::LegendarySpells)
             | (ManaRestriction::YourCommander, ManaRestriction::YourCommander)
+            | (ManaRestriction::FaceDownSpells, ManaRestriction::FaceDownSpells)
             | (ManaRestriction::UnlockDoors, ManaRestriction::UnlockDoors) => true,
             (ManaRestriction::TurnFaceUp { creature: a }, ManaRestriction::TurnFaceUp { creature: b }) => a == b,
             (ManaRestriction::Spells(a), ManaRestriction::Spells(b)) | (ManaRestriction::NonSpells(a), ManaRestriction::NonSpells(b)) => {
@@ -3298,6 +3311,7 @@ impl ManaRestriction {
             }
             (ManaRestriction::Subtypes(s), ManaPayment::UnlockDoor) => s.unlock,
             (ManaRestriction::UnlockDoors, ManaPayment::UnlockDoor) => true,
+            (ManaRestriction::FaceDownSpells, ManaPayment::Spell { face_down, .. }) => face_down,
             (ManaRestriction::TurnFaceUp { creature }, ManaPayment::TurnFaceUp { creature: is }) => is || !creature,
             _ => false,
         }
@@ -3842,6 +3856,7 @@ mod tests {
             from: ZoneKind::Hand,
             commander: false,
             card: ObjectId::NONE,
+            face_down: false,
         };
         let ability = ManaPayment::Ability { source: TypeSet::NONE, subtypes: SubtypeSet::NONE, on_battlefield: true, equip: false };
         assert!(ManaRestriction::TURN_FACE_UP.may_pay(&turn(true)) && ManaRestriction::TURN_FACE_UP.may_pay(&turn(false)));
@@ -3901,6 +3916,7 @@ mod tests {
             from: ZoneKind::Hand,
             commander: false,
             card: ObjectId::NONE,
+            face_down: false,
         };
         let creature = TypeSet::of(&[CardType::Creature]);
         let plaza = ManaRestriction::LegendarySpells;
@@ -3936,6 +3952,7 @@ mod tests {
             from: ZoneKind::Hand,
             commander: false,
             card: ObjectId::NONE,
+            face_down: false,
         };
         let restriction = ManaRestriction::SubtypeGainsHaste(SubtypeSet::of(&[Subtype::Dragon]));
         let dragon = spell(&[CardType::Creature], &[Subtype::Dragon]);
@@ -3970,6 +3987,7 @@ mod tests {
             from: ZoneKind::Hand,
             commander,
             card: ObjectId::NONE,
+            face_down: false,
         };
         let restriction = ManaRestriction::YourCommander;
         assert!(restriction.may_pay(&spell(true)));
@@ -4000,6 +4018,7 @@ mod tests {
             from: ZoneKind::Exile,
             commander: false,
             card,
+            face_down: false,
         };
         let restriction = ManaRestriction::Card(ObjectId(7));
         assert!(restriction.may_pay(&spell(ObjectId(7))));
@@ -4032,6 +4051,7 @@ mod tests {
             from: ZoneKind::Hand,
             commander: false,
             card: ObjectId::NONE,
+            face_down: false,
         };
         for subtype in [Subtype::Dragon, Subtype::Omen, Subtype::Elf] {
             assert!(restriction.may_pay(&spell(subtype)), "{subtype:?}");
@@ -4047,7 +4067,7 @@ mod tests {
     fn equipment_spells_or_equip_abilities() {
         let restriction = ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Equipment).or_equip_abilities());
         let artifact = TypeSet::of(&[CardType::Artifact]);
-        let spell = |subtypes| ManaPayment::Spell { types: artifact, subtypes, legendary: false, mana_value: 2, x: false, from: ZoneKind::Hand, commander: false, card: ObjectId::NONE };
+        let spell = |subtypes| ManaPayment::Spell { types: artifact, subtypes, legendary: false, mana_value: 2, x: false, from: ZoneKind::Hand, commander: false, card: ObjectId::NONE, face_down: false };
         let ability = |subtypes, equip| ManaPayment::Ability { source: artifact, subtypes, on_battlefield: true, equip };
         let equipment = SubtypeSet::of(&[Subtype::Equipment]);
         assert!(restriction.may_pay(&spell(equipment)));
@@ -4068,7 +4088,7 @@ mod tests {
     fn room_spells_and_unlocking_doors() {
         let restriction = ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Room).or_unlocking_doors());
         let enchantment = TypeSet::of(&[CardType::Enchantment]);
-        let spell = |subtypes| ManaPayment::Spell { types: enchantment, subtypes, legendary: false, mana_value: 3, x: false, from: ZoneKind::Hand, commander: false, card: ObjectId::NONE };
+        let spell = |subtypes| ManaPayment::Spell { types: enchantment, subtypes, legendary: false, mana_value: 3, x: false, from: ZoneKind::Hand, commander: false, card: ObjectId::NONE, face_down: false };
         let room = SubtypeSet::of(&[Subtype::Room]);
         assert!(restriction.may_pay(&spell(room)));
         assert!(!restriction.may_pay(&spell(SubtypeSet::NONE)), "an enchantment that is no Room");
@@ -4090,7 +4110,7 @@ mod tests {
         let artifact = TypeSet::of(&[CardType::Artifact]);
         let elemental = || SubtypeSet::of(&[Subtype::Elemental]);
         let ability = |source, subtypes, on_battlefield| ManaPayment::Ability { source, subtypes, on_battlefield, equip: false };
-        let spell = |types| ManaPayment::Spell { types, subtypes: SubtypeSet::NONE, legendary: false, mana_value: 2, x: false, from: ZoneKind::Hand, commander: false, card: ObjectId::NONE };
+        let spell = |types| ManaPayment::Spell { types, subtypes: SubtypeSet::NONE, legendary: false, mana_value: 2, x: false, from: ZoneKind::Hand, commander: false, card: ObjectId::NONE, face_down: false };
         let castle = ManaRestriction::CREATURE_SPELLS_OR_ABILITIES_OF_CREATURES;
         assert!(castle.may_pay(&spell(creature)));
         assert!(!castle.may_pay(&spell(artifact)));

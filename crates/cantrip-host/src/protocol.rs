@@ -400,6 +400,10 @@ pub enum ManaSpendFilterView {
     /// Enchantment spells, unlocking doors, or turning a permanent face up: "an enchantment spell, unlock a door, or turn a
     /// permanent face up" (`ManaRestriction::AnyOf`).
     EnchantmentSpellsOrUnlockingDoorsOrTurningFaceUp,
+    /// Only to cast a face-down spell (CR 708.4): a morph or disguise card cast face down.
+    FaceDownSpells,
+    /// Face-down spells, or turning a creature face up: "cast a face-down spell or turn a creature face up".
+    FaceDownSpellsOrTurningCreaturesFaceUp,
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Serialize, Deserialize)]

@@ -707,6 +707,8 @@ public sealed class CardActions
         ManaSpendFilterView.TurningFaceUp => "turning permanents face up",
         ManaSpendFilterView.TurningCreaturesFaceUp => "turning creatures face up",
         ManaSpendFilterView.EnchantmentSpellsOrUnlockingDoorsOrTurningFaceUp => "enchantment spells, unlocking doors and turning permanents face up",
+        ManaSpendFilterView.FaceDownSpells => "face-down spells",
+        ManaSpendFilterView.FaceDownSpellsOrTurningCreaturesFaceUp => "face-down spells and turning creatures face up",
         ManaSpendFilterView.SubtypeCreatureSpellsOrAbilities =>
             $"{Subtypes(subtypes)} creature spells and abilities of {Subtypes(subtypes)} creature sources",
         ManaSpendFilterView.CreatureSpells => "creature spells",

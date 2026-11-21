@@ -771,6 +771,8 @@ public sealed partial class MainPage
         (ManaSpendFilterView.TurningFaceUp, _) => "turning face up",
         (ManaSpendFilterView.TurningCreaturesFaceUp, _) => "turning creatures face up",
         (ManaSpendFilterView.EnchantmentSpellsOrUnlockingDoorsOrTurningFaceUp, _) => "enchantments, doors & turning face up",
+        (ManaSpendFilterView.FaceDownSpells, _) => "face-down spells",
+        (ManaSpendFilterView.FaceDownSpellsOrTurningCreaturesFaceUp, _) => "face-down spells & turning creatures face up",
         (_, ManaSpendEffectView.GainsHaste) => "haste",
         (_, ManaSpendEffectView.CantBeCountered) => "uncounterable",
         _ => "restricted",
@@ -852,6 +854,9 @@ public sealed partial class MainPage
             ManaSpendFilterView.TurningCreaturesFaceUp => "Spend this mana only to turn creatures face up.",
             ManaSpendFilterView.EnchantmentSpellsOrUnlockingDoorsOrTurningFaceUp =>
                 "Spend this mana only to cast an enchantment spell, unlock a door, or turn a permanent face up.",
+            ManaSpendFilterView.FaceDownSpells => "Spend this mana only to cast face-down spells.",
+            ManaSpendFilterView.FaceDownSpellsOrTurningCreaturesFaceUp =>
+                "Spend this mana only to cast a face-down spell or turn a creature face up.",
             _ => "This mana may only be spent on certain things.",
         };
 

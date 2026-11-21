@@ -1056,3 +1056,53 @@ fn mana_for_turning_face_up_casts_no_spell() {
     add_restricted(&mut g, Mana::C, 3, ManaRestriction::TURN_FACE_UP);
     assert!(!options(&mut g).iter().any(|o| o.kind == ActionKind::CastSpell && o.source == Some(bear)));
 }
+
+/// CR 106.6, 708.4, 702.37c: mana to be spent only to cast face-down spells pays the {3} of casting a morph card face down
+/// (and "turn creatures face up" with it, as a union), and the spell is face down on the stack where the payment is judged
+/// again.
+#[test]
+fn mana_for_face_down_spells_casts_a_card_face_down() {
+    for restriction in [ManaRestriction::FACE_DOWN_SPELLS, ManaRestriction::FACE_DOWN_SPELLS_OR_TURNING_CREATURES_FACE_UP] {
+        let mut g = game();
+        let card = put(&mut g, &SKYWARDEN, Zone::hand(YOU));
+        add_restricted(&mut g, Mana::C, 3, restriction);
+        let spell = cast_face_down(&mut g, card);
+        assert!(g.state.obj(spell).face_down, "{}", restriction.name());
+        assert_eq!(g.state.restricted_of(YOU).map(|(_, pool)| pool.total()).sum::<u32>(), 0, "{}", restriction.name());
+    }
+}
+
+/// CR 106.6, 708.4: it pays for no other spell: not the face-up cast of the same card (CR 601.2, whose cost is {4}{W}), nor a
+/// spell that is not a morph card at all.
+#[test]
+fn mana_for_face_down_spells_pays_no_face_up_spell() {
+    let mut g = game();
+    let card = put(&mut g, &SKYWARDEN, Zone::hand(YOU));
+    let bear = put(&mut g, &BEAR, Zone::hand(YOU));
+    add_restricted(&mut g, Mana::W, 1, ManaRestriction::FACE_DOWN_SPELLS);
+    add_restricted(&mut g, Mana::C, 4, ManaRestriction::FACE_DOWN_SPELLS);
+    let options = options(&mut g);
+    assert!(options.iter().any(|o| o.kind == ActionKind::CastSpell && o.source == Some(card) && o.index == 1), "face down is paid");
+    assert!(!options.iter().any(|o| o.kind == ActionKind::CastSpell && o.source == Some(card) && o.index == 0), "face up is not");
+    assert!(!options.iter().any(|o| o.kind == ActionKind::CastSpell && o.source == Some(bear)), "a spell that is not face down is not");
+}
+
+/// CR 106.6, 116.2b: it does not turn a permanent face up either, which is a special action and not casting a spell.
+#[test]
+fn mana_for_face_down_spells_does_not_turn_a_permanent_face_up() {
+    let (mut g, permanent) = face_down_skywarden();
+    add_restricted(&mut g, Mana::W, 1, ManaRestriction::FACE_DOWN_SPELLS);
+    add_restricted(&mut g, Mana::C, 3, ManaRestriction::FACE_DOWN_SPELLS);
+    assert!(turn_up_option(&mut g, permanent, TurnUp::Morph).is_none());
+}
+
+/// CR 106.6, 708.2: the union with turning creatures face up also turns a face-down creature up, as one of its parts.
+#[test]
+fn mana_for_face_down_spells_or_turning_creatures_face_up_does_both() {
+    let (mut g, permanent) = face_down_skywarden();
+    add_restricted(&mut g, Mana::W, 1, ManaRestriction::FACE_DOWN_SPELLS_OR_TURNING_CREATURES_FACE_UP);
+    add_restricted(&mut g, Mana::C, 3, ManaRestriction::FACE_DOWN_SPELLS_OR_TURNING_CREATURES_FACE_UP);
+    let option = turn_up_option(&mut g, permanent, TurnUp::Morph).expect("it pays for turning the creature up");
+    take(&mut g, &option);
+    assert!(!g.state.obj(permanent).face_down);
+}

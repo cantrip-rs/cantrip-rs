@@ -6986,13 +6986,13 @@ fn spell_kind(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &Ca
     let back = !def.has_cost && whole.back.is_some_and(|b| std::ptr::eq(b, def));
     // At the least X may be announced as (CR 202.3e), as `least_cost` judges it.
     let mana_value = if back { whole.cost.mana_value() } else { def.cost.mana_value() + u32::from(def.cost.x) * u32::from(least_x(def.x_cant_be_zero)) };
-    let (types, legendary, x) = (def.types, def.supertypes.legendary, def.cost.x > 0);
+    let (types, legendary, x, face_down) = (def.types, def.supertypes.legendary, def.cost.x > 0, def.face_down);
     // Cast from where the card is (CR 601.2a). The payer's own commander (CR 903.3, 903.3d): the card was designated a commander
     // and the payer owns it.
     let from = cx.s().obj(card).zone.kind();
     let commander = cx.s().obj(card).commander && cx.s().obj(card).owner == player;
     if !a.names_subtypes() {
-        return ManaPayment::Spell { types, subtypes: SubtypeSet::NONE, legendary, mana_value, x, from, commander, card };
+        return ManaPayment::Spell { types, subtypes: SubtypeSet::NONE, legendary, mana_value, x, from, commander, card, face_down };
     }
     let mut subtypes = def.subtypes;
     if std::ptr::eq(def, cx.card(cx.s().obj(card).card)) {
@@ -7001,7 +7001,7 @@ fn spell_kind(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &Ca
     if def.keywords.has(Keyword::Changeling) && (def.types.has(CardType::Creature) || def.types.has(CardType::Kindred)) {
         subtypes = Subtype::CREATURE_TYPES.into_iter().fold(subtypes, SubtypeSet::with);
     }
-    ManaPayment::Spell { types, subtypes, legendary, mana_value, x, from, commander, card }
+    ManaPayment::Spell { types, subtypes, legendary, mana_value, x, from, commander, card, face_down }
 }
 
 /// What a static ability lets `player` spend as though it were mana of another kind to cast `card` as `def` (CR 609.4b:
@@ -7069,7 +7069,7 @@ impl Available {
         // A spell whose X is still to be announced (CR 601.2b) has the larger mana value the larger X is (CR 202.3e):
         // mana for spells of a mana value or greater may pay for it at an X that brings it there (Ashling, Rimebound's
         // mana and a {X}{R} spell), each X costing its {X} symbols more.
-        let ManaPayment::Spell { types, subtypes, legendary, mana_value, x, from, commander, card } = *payment else { return false };
+        let ManaPayment::Spell { types, subtypes, legendary, mana_value, x, from, commander, card, face_down } = *payment else { return false };
         let complex = self.complex.iter().flat_map(|(alternatives, _)| alternatives).filter_map(|a| a.restriction);
         let Some(most) = self.restricted.iter().map(|&(r, ..)| r).chain(complex).filter_map(|r| r.least_mana_value()).max() else { return false };
         if cost.x == 0 || mana_value >= most as u32 {
@@ -7081,7 +7081,7 @@ impl Available {
             let more = cost.plus_x(n * per, cost.x_mana);
             self.covers_as(
                 &more,
-                &ManaPayment::Spell { types, subtypes, legendary, mana_value: mana_value + n * per, x, from, commander, card },
+                &ManaPayment::Spell { types, subtypes, legendary, mana_value: mana_value + n * per, x, from, commander, card, face_down },
             )
         })
     }
@@ -15278,6 +15278,7 @@ fn spell_payment(cx: &Cx, payer: PlayerId, spell: ObjectId, with_subtypes: bool)
         from: cx.s().obj(spell).cast_from.unwrap_or(ZoneKind::Stack),
         commander: cx.s().obj(spell).commander && cx.s().obj(spell).owner == payer,
         card: cast_card(cx, payer, spell),
+        face_down: cx.s().obj(spell).face_down,
     }
 }
 
@@ -17134,6 +17135,7 @@ mod tests {
         from: ZoneKind::Hand,
         commander: false,
         card: ObjectId::NONE,
+        face_down: false,
     };
 
     #[test]

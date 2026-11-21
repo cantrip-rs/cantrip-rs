@@ -243,7 +243,7 @@ doors", its tooltip "Spend this mana only to cast Room spells or unlock doors." 
 to unlock a door (`UnlockingDoors`, CR 709.5e), to turn a permanent face up (`TurningFaceUp`, CR 116.2b, 702.37e, 708) or
 to turn a creature face up (`TurningCreaturesFaceUp`: the permanent is a creature as it is turned up, CR 708.2) is the
 `ManaSpendFilterView` of that name; "an enchantment spell, unlock a door, or turn a permanent face up" (Creeping Peeper) is the
-one union `EnchantmentSpellsOrUnlockingDoorsOrTurningFaceUp`. Version 245.
+one union `EnchantmentSpellsOrUnlockingDoorsOrTurningFaceUp`. Mana that may be spent only to cast face-down spells (`FaceDownSpells`, CR 708.4) is that filter, and "cast a face-down spell or turn a creature face up" (Tin Street Gossip) the union `FaceDownSpellsOrTurningCreaturesFaceUp`. Version 245.
 
 An unrestricted `SeparatePiles` selection (`AnyNumber`, no parts or candidate restriction) uses the existing non-targeted
 `ChooseTargetPromptMessage` presentation; its `TargetsChosenAnswer` is translated to the engine's card selection and
@@ -413,4 +413,4 @@ Protocol 243 adds `Pawprints` (key 14) to `ChooseModesPromptMessage` (see **Pawp
 
 Protocol 244 adds the Room-spells-and-unlocking-doors mana spend filter (`SubtypeSpellsOrUnlockingDoors`, CR 106.6, 709.5e); prior filter values are unchanged.
 
-Protocol 245 adds the `EnchantmentSpells`, `UnlockingDoors`, `TurningFaceUp`, `TurningCreaturesFaceUp` and `EnchantmentSpellsOrUnlockingDoorsOrTurningFaceUp` mana spend filters (CR 106.6, 116.2, 702.37e, 709.5e); prior filter values are unchanged.
+Protocol 245 adds the `EnchantmentSpells`, `UnlockingDoors`, `TurningFaceUp`, `TurningCreaturesFaceUp` and `EnchantmentSpellsOrUnlockingDoorsOrTurningFaceUp`, `FaceDownSpells` and `FaceDownSpellsOrTurningCreaturesFaceUp` mana spend filters (CR 106.6, 116.2, 702.37e, 708.4, 709.5e); prior filter values are unchanged.

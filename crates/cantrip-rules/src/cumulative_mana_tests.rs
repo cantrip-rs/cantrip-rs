@@ -119,7 +119,7 @@ fn restriction_is_rejected_for_spells_and_activations_and_union_remains_additive
     assert!(!r.may_pay(&ManaPayment::Other));
     assert!(!r.may_pay(&ManaPayment::PlayerAbility));
     assert!(!r.may_pay(&ManaPayment::Ability { source: TypeSet::NONE, subtypes: SubtypeSet::NONE, on_battlefield: true, equip: false }));
-    let spell = ManaPayment::Spell { types: TypeSet::of(&[CardType::Creature]), subtypes: SubtypeSet::NONE, legendary: false, mana_value: 1, x: false, from: ZoneKind::Hand, commander: false, card: ObjectId::NONE };
+    let spell = ManaPayment::Spell { types: TypeSet::of(&[CardType::Creature]), subtypes: SubtypeSet::NONE, legendary: false, mana_value: 1, x: false, from: ZoneKind::Hand, commander: false, card: ObjectId::NONE, face_down: false };
     assert!(!r.may_pay(&spell));
     static PARTS: [ManaRestriction; 2] = [ManaRestriction::CumulativeUpkeep, ManaRestriction::CREATURE_SPELLS];
     let union = ManaRestriction::AnyOf(&PARTS);

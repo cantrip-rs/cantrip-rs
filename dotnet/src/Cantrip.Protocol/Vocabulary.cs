@@ -488,6 +488,10 @@ public enum ManaSpendFilterView
     TurningCreaturesFaceUp = 35,
     /// <summary>Only to cast an enchantment spell, unlock a door, or turn a permanent face up.</summary>
     EnchantmentSpellsOrUnlockingDoorsOrTurningFaceUp = 36,
+    /// <summary>Only to cast a face-down spell (CR 708.4): a morph or disguise card cast face down.</summary>
+    FaceDownSpells = 37,
+    /// <summary>Only to cast a face-down spell or turn a creature face up.</summary>
+    FaceDownSpellsOrTurningCreaturesFaceUp = 38,
 }
 
 /// <summary>What spending some mana does to whatever it pays for (CR 106.6): the effect half of a restriction.</summary>
