@@ -1,0 +1,53 @@
+# Kyoshi Island Plaza: X is counted as the ability resolves (CR 608.2c). Bot2 destroys the Plaza with Disenchant in response to its
+# enters ability, so Bot1 controls no Shrine and X is 0: no land is found and the Plaza is in Bot1's graveyard.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Kyoshi Island Plaza
+Island
+Island
+Forest
+Island x12
+
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Disenchant
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kyoshi Island Plaza.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Kyoshi Island Plaza)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Kyoshi Island Plaza
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
+Bot2.Graveyard = Disenchant
