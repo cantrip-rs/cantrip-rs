@@ -199,7 +199,7 @@ impl View<'_> {
         let s = &game.state;
         let o = s.obj(id);
         let on_battlefield = o.zone.is(ZoneKind::Battlefield) || o.zone.is(ZoneKind::PhasedOut);
-        let looks = self.full || knows_face(s, self.seat, id);
+        let looks = self.full || knows_face(self.game, self.seat, id);
         // Face down off the battlefield and the stack it has no characteristics at all (CR 406.3); a face-down permanent or
         // spell has its face-down values (CR 708.2a, 708.4).
         let chars = if o.face_down && !on_battlefield && !o.zone.is(ZoneKind::Stack) {
@@ -276,7 +276,7 @@ impl View<'_> {
                 let s = &self.game.state;
                 let source = s.obj(item.object);
                 // Named for its source where the seat could see that: a card it can see now, or last saw.
-                let public = self.sees(item.object) || (!live(s, item.object) && (self.full || (looks_into(s, self.seat, source.zone) && knows_face(s, self.seat, item.object))));
+                let public = self.sees(item.object) || (!live(s, item.object) && (self.full || (looks_into(s, self.seat, source.zone) && knows_face(self.game, self.seat, item.object))));
                 let name = if !public {
                     String::new()
                 } else if live(s, item.object) && !source.face_down {
@@ -353,7 +353,7 @@ impl View<'_> {
         }
         for id in (0..s.objects.len() as u32).map(ObjectId) {
             let o = s.obj(id);
-            let known = self.knowledge.knows(id).is_some() || (self.visible.contains(&id) && knows_face(s, self.seat, id));
+            let known = self.knowledge.knows(id).is_some() || (self.visible.contains(&id) && knows_face(self.game, self.seat, id));
             if o.owner == p && !o.token && !o.card_copy && live(s, id) && known
                 && let Some(n) = pool.get_mut(&self.card_name(id))
             {

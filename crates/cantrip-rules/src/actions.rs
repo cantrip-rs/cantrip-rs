@@ -8557,7 +8557,7 @@ fn land_rules(cx: &Cx, player: PlayerId) -> LandRules {
         PlayRule::LibraryTop | PlayRule::LibraryTopLands => {
             rules.top_lands.push(Grant { object: source, ability });
         }
-        PlayRule::HandRevealed(_) | PlayRule::LibraryTopSpells(..) | PlayRule::MaximumHandSize(_) | PlayRule::MaximumHandSizeOf(..) | PlayRule::LookAtLibraryTop | PlayRule::RevealLibraryTop | PlayRule::While(..) => {}
+        PlayRule::HandRevealed(_) | PlayRule::LibraryTopSpells(..) | PlayRule::MaximumHandSize(_) | PlayRule::MaximumHandSizeOf(..) | PlayRule::LookAtLibraryTop | PlayRule::LookAtFaceDown(_) | PlayRule::RevealLibraryTop | PlayRule::While(..) => {}
     });
     // "You may play an additional land this turn" (CR 305.2, 611.2c): an effect a resolved spell or ability made, added to
     // the rest - the number a player can play is the sum of everything that increases it.
@@ -8615,6 +8615,25 @@ pub fn maximum_hand_size(cx: &Cx, player: PlayerId) -> Option<u32> {
 pub fn may_look_at_library_top(q: &dyn Query, cards: &CardTable, player: PlayerId) -> bool {
     let mut may = false;
     each_play_rule(q, cards, player, false, |_, rule| may |= matches!(rule, PlayRule::LookAtLibraryTop));
+    may
+}
+
+/// Whether `player` may look at `id`, a face-down permanent on the battlefield, as a rule says (CR 708.5,
+/// `PlayRule::LookAtFaceDown`): a permanent they control (Found Footage's "you may look at face-down creatures your
+/// opponents control any time") or a resolved effect that gave them the rule (Lumbering Laundry's "until end of turn"),
+/// each asking of the permanent as it is now. Not one on the stack: a spell cast face down stays its controller's
+/// alone to see (the rulings of both cards).
+pub fn may_look_at_face_down(q: &dyn Query, cards: &CardTable, player: PlayerId, id: ObjectId) -> bool {
+    let o = q.state().obj(id);
+    if !o.face_down || !o.zone.is(ZoneKind::Battlefield) {
+        return false;
+    }
+    let mut may = false;
+    each_play_rule(q, cards, player, false, |source, rule| {
+        if let PlayRule::LookAtFaceDown(passes) = rule {
+            may = may || passes(q, &Asker::new(source, player), id);
+        }
+    });
     may
 }
 

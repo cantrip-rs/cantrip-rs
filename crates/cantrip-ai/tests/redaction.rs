@@ -190,7 +190,7 @@ fn short(game: &Game, seat: PlayerId, id: ObjectId) -> String {
         return format!("ability {}", id.0 & 0x7fff_ffff);
     }
     let o = game.state.obj(id);
-    let name = if knows_face(&game.state, seat, id) { game.name(id) } else { "?" };
+    let name = if knows_face(game, seat, id) { game.name(id) } else { "?" };
     format!("{name}@{:?}{}", o.zone.kind(), o.zone.player.0)
 }
 
@@ -223,7 +223,7 @@ fn witness(game: &Game, seat: PlayerId) -> Vec<String> {
         let attacking = s.attackers.iter().find(|a| a.id == id).map(|a| (target(game, seat, &a.target), a.blocked));
         let blocking: Vec<String> = s.blocks.iter().filter(|b| b.blocker == id).map(|b| short(game, seat, b.attacker)).collect();
         let attached = o.attached_to.map(|a| short(game, seat, a));
-        let face = knows_face(s, seat, id);
+        let face = knows_face(game, seat, id);
         let chars = if face || o.zone.is(ZoneKind::Battlefield) { format!("{:?}", game.chars(id)) } else { String::new() };
         let counters: Vec<(usize, i32)> = o.counter_array().iter().enumerate().filter(|&(_, &n)| n != 0).map(|(k, &n)| (k, n)).collect();
         lines.insert(format!(
@@ -285,7 +285,7 @@ impl Trail {
                 Event::TurnedFaceUp { permanent, .. } => format!("face up {}", name(permanent)),
                 Event::ZoneChange { old, new, from, to, .. } => {
                     let sees = |zone: Zone| looks_into(&game.state, seat, zone) && !zone.is(ZoneKind::Gone);
-                    let what = if (sees(from) && knows_face(&game.state, seat, old)) || (sees(to) && knows_face(&game.state, seat, new)) { name(new) } else { "?" };
+                    let what = if (sees(from) && knows_face(game, seat, old)) || (sees(to) && knows_face(game, seat, new)) { name(new) } else { "?" };
                     format!("moved {what} {:?}{} {:?}{}", from.kind(), from.player.0, to.kind(), to.player.0)
                 }
                 _ => continue,

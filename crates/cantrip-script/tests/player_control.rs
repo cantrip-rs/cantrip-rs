@@ -603,7 +603,7 @@ fn the_controller_sees_what_the_controlled_player_sees_of_the_game() {
             !looks_into(s, P1, Zone::sideboard(P2)),
             "outside the game is the player's alone"
         );
-        (hand, knows_face(s, P1, face_down), sideboard)
+        (hand, knows_face(game, P1, face_down), sideboard)
     };
     assert_eq!(
         sees(&game),
