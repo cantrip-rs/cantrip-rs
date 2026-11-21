@@ -1,0 +1,58 @@
+# Earth King's Lieutenant: "Whenever another Ally you control enters, put a +1/+1 counter on this creature." Entering itself
+# gives it nothing, nor does Bot1's Ornithopter (no Ally). Bot1's Invasion Reinforcements (an Ally) and the Ally token it makes
+# give it two counters, 3/3; Bot2's own Invasion Reinforcements and its token, entering under the other player, give it none.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Emerald
+Mox Jet
+Mox Ruby
+Ornithopter
+Earth King's Lieutenant
+Invasion Reinforcements
+Plains x14
+
+[Bot2 Deck]
+Invasion Reinforcements
+Mox Pearl
+Mox Sapphire
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Earth King's Lieutenant.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Earth King's Lieutenant.Counters.PlusOnePlusOne = (absent)
+Bot1.Pass
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Invasion Reinforcements.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Earth King's Lieutenant.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Invasion Reinforcements.Cast
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Earth King's Lieutenant.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Earth King's Lieutenant.Power = 3
+Bot1.Battlefield.Earth King's Lieutenant.Toughness = 3

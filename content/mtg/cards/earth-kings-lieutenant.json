@@ -1,0 +1,11 @@
+{
+  "name": "Earth King's Lieutenant",
+  "manaCost": "{G}{W}",
+  "type": "Creature — Human Soldier Ally",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Trample\nWhen this creature enters, put a +1/+1 counter on each other Ally creature you control.\nWhenever another Ally you control enters, put a +1/+1 counter on this creature.",
+  "keywords": [
+    "Trample"
+  ]
+}
