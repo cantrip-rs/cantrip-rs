@@ -1,0 +1,44 @@
+# Emeritus of Woe: "This creature enters prepared" (CR 722.3a) - a copy of Demonic Tutor in exile once it enters (cast with
+# Black Lotus and a Mox Jet on turn 1, a 5/4). Turn 3 Bot1 casts the copy (CR 722.3c) with its two Mox Jets, searching for
+# Lightning Bolt: the Emeritus is unprepared again and the copy is gone.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Emeritus of Woe
+Swamp x3
+Swamp
+Lightning Bolt
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Emeritus of Woe.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Emeritus of Woe.Prepared = true
+? Bot1.Battlefield.Emeritus of Woe.Power = 5
+? Bot1.Battlefield.Emeritus of Woe.Toughness = 4
+? Exile = Demonic Tutor
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Exile.Demonic Tutor.Cast
+Bot1.Pass
+Bot1.Search(Lightning Bolt)
+
+[Expect]
+Bot1.Battlefield.Emeritus of Woe.Prepared = (absent)
+Exile.Count = 0
+Bot1.Graveyard.Count = 1
+Bot1.Hand.Count = 5
+Bot1.Hand = Swamp; Swamp; Swamp; Swamp; Lightning Bolt
+Bot1.Library.Count = 12

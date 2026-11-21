@@ -1,0 +1,47 @@
+# The intervening "if two or more creatures died this turn" (CR 603.4) fails with one: Bot1 casts the Demonic Tutor copy on
+# turn 3 (unprepared again), Bolts one Ornithopter, and the end step does nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Emeritus of Woe
+Mox Ruby
+Lightning Bolt
+Swamp x2
+Swamp x13
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Emeritus of Woe.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Exile.Demonic Tutor.Cast
+Bot1.Pass
+Bot1.Search(Swamp)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 1
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Emeritus of Woe.Prepared = (absent)
+Exile.Count = 0

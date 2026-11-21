@@ -1,0 +1,60 @@
+# Emeritus of Woe: "At the beginning of your end step, if two or more creatures died this turn, this creature becomes prepared"
+# (CR 603.4). It enters prepared on turn 1; on turn 3 Bot1 casts the Demonic Tutor copy (fetching a second Lightning Bolt),
+# then Bolts both of Bot2's Ornithopters, so two creatures died this turn: the end step prepares it again, a new Demonic Tutor
+# copy in exile for turn 5.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Emeritus of Woe
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Swamp
+Lightning Bolt
+Swamp x12
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Emeritus of Woe.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Exile.Demonic Tutor.Cast
+Bot1.Pass
+Bot1.Search(Lightning Bolt)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 2
+? Bot1.Battlefield.Emeritus of Woe.Prepared = (absent)
+? Exile.Count = 0
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Emeritus of Woe.Prepared = true
+Exile = Demonic Tutor
+Exile.Count = 1
+Bot1.Graveyard.Count = 3

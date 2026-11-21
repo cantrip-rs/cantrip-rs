@@ -1,0 +1,54 @@
+# "If two or more creatures died this turn" (CR 603.4): both Ornithopters die to Bolts during Bot2's turn 2, so none died on
+# Bot1's turn 3. Bot1 casts the Demonic Tutor copy that turn (unprepared again) and its end step does not prepare it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Emeritus of Woe
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Swamp x3
+Swamp x13
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Emeritus of Woe.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Exile.Demonic Tutor.Cast
+Bot1.Pass
+Bot1.Search(Swamp)
+? Bot1.Battlefield.Emeritus of Woe.Prepared = (absent)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Emeritus of Woe.Prepared = (absent)
+Exile.Count = 0
