@@ -2354,7 +2354,7 @@ fn measured_most(measure: CostMeasure, values: &[u32]) -> u32 {
     match measure {
         CostMeasure::Count => count_u32(values.len()),
         CostMeasure::ManaValue => values.iter().copied().max().unwrap_or(0),
-        CostMeasure::TotalManaValue => values.iter().fold(0u32, |sum, &v| sum.saturating_add(v)),
+        CostMeasure::TotalManaValue => values.iter().sum(),
     }
 }
 
