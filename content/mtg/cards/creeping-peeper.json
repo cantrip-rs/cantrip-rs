@@ -1,0 +1,8 @@
+{
+  "name": "Creeping Peeper",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Eye",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "{T}: Add {U}. Spend this mana only to cast an enchantment spell, unlock a door, or turn a permanent face up."
+}

@@ -1,0 +1,49 @@
+# Creeping Peeper's {U} may turn a manifested permanent face up too (CR 106.6, 701.40b, 708.2a): a manifested creature card
+# is turned up for its mana cost, a special action (CR 116.2b). Turn 1: Black Lotus and the Moxen pay for Creeping Peeper
+# ({1}{U}) and for Reality Shift ({1}{U}) on Bot1's own Ornithopter; Bot1 manifests their top card, Snapcaster Mage: a
+# nameless 2/2. Turn 3: Creeping Peeper's {U} with Mox Ruby's {R} pays Snapcaster Mage's {1}{U}: it is turned face up
+# (the same permanent, not entering the battlefield, so its "when this enters" does not trigger): a 2/1 with Flash.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Creeping Peeper
+Reality Shift
+Ornithopter
+Island
+Snapcaster Mage
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Creeping Peeper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Reality Shift.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Snapcaster Mage
+[T3 Bot1.Main1]
+Bot1.Battlefield.Creeping Peeper.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {R} {U} (AnyOf(EnchantmentSpells+UnlockDoors+TurnFaceUp))
+Bot1.Battlefield.#1.Activate
+? Bot1.Mana =
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield.Snapcaster Mage.FaceDown = (absent)
+Bot1.Battlefield.Snapcaster Mage.Power = 2
+Bot1.Battlefield.Snapcaster Mage.Toughness = 1
+Bot1.Battlefield.Snapcaster Mage.Keywords = Flash

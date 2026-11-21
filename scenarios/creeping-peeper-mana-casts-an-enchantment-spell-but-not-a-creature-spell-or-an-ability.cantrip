@@ -1,0 +1,44 @@
+# Creeping Peeper's "{T}: Add {U}. Spend this mana only to cast an enchantment spell, unlock a door, or turn a permanent
+# face up" (CR 106.6). Turn 1: Black Lotus pays for Creeping Peeper ({1}{U}) and Aether Spellbomb ({1}), nothing else
+# is untapped. Turn 3: the Peeper taps for {U}, shown with the three things it may pay. That {U} alone would pay Flying Men
+# ({U}, a creature spell) or Aether Spellbomb's "{U}, Sacrifice: Return target creature", but the restriction refuses both,
+# as it would for any spell that is not an enchantment (CR 106.6). It pays Curious Obsession ({U}, an enchantment spell),
+# which the Peeper now wears: the pool ends empty.
+
+[Bot1 Deck]
+Black Lotus
+Creeping Peeper
+Aether Spellbomb
+Curious Obsession
+Flying Men
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Creeping Peeper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Aether Spellbomb.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Creeping Peeper.Activate
+? Bot1.Mana = {U} (AnyOf(EnchantmentSpells+UnlockDoors+TurnFaceUp))
+! Bot1.Hand.Flying Men.Cast(Mana: short)
+! Bot1.Battlefield.Aether Spellbomb.Activate(Ability: Return; Mana: short)
+? Bot1.Mana = {U} (AnyOf(EnchantmentSpells+UnlockDoors+TurnFaceUp))
+Bot1.Hand.Curious Obsession.Cast(Bot1.Battlefield.Creeping Peeper)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Mana =
+Bot1.Battlefield.Creeping Peeper.Power = 3
+Bot1.Battlefield.Creeping Peeper.Toughness = 2
+Bot1.Battlefield = Aether Spellbomb; Creeping Peeper; Curious Obsession

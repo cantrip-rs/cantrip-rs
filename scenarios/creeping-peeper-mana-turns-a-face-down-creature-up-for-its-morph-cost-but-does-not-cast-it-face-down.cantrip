@@ -1,0 +1,49 @@
+# Creeping Peeper's {U} may be spent "to turn a permanent face up" (CR 106.6, 702.37e, 116.2b). Turn 1: Black Lotus, Mox
+# Ruby and Mox Pearl pay for Creeping Peeper ({1}{U}) and for one Monastery Flock cast face down ({3}, CR 702.37a): a
+# nameless 2/2. Turn 3: the Peeper's {U}, with Mox Ruby's {R} and Mox Pearl's {W}, would make the three mana the second
+# Flock costs face down, but casting it is a creature spell and the Peeper's mana is refused for it. The same {U} pays the
+# whole morph cost {U} of the face-down Flock, a special action with nothing on the stack: the Flock is face up, a 0/5 with
+# Defender and Flying, and the {R}{W} are left.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Creeping Peeper
+Monastery Flock
+Monastery Flock
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Creeping Peeper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Monastery Flock.Cast(Ability: Morph)
+? Stack..FaceDown = true
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Creeping Peeper.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana = {W}{R} {U} (AnyOf(EnchantmentSpells+UnlockDoors+TurnFaceUp))
+! Bot1.Hand.Monastery Flock.Cast(Ability: Morph; Mana: short)
+? Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+? Bot1.Mana = {W}{R}
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Monastery Flock.FaceDown = (absent)
+Bot1.Battlefield.Monastery Flock.Power = 0
+Bot1.Battlefield.Monastery Flock.Toughness = 5
+Bot1.Battlefield.Monastery Flock.Keywords = Defender; Flying; Morph
