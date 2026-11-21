@@ -1,0 +1,45 @@
+# Kyoshi Island Plaza: "When this enters, search your library for up to X basic land cards, where X is the number of Shrines you
+# control. Put those cards onto the battlefield tapped, then shuffle." Alone in turn 1 the Plaza is the one Shrine Bot1 controls, so
+# X is 1: two basic lands are refused, so is the Tropical Island (a land card, not a basic one), and the Forest comes in tapped. The
+# Plaza is not "another" Shrine for its own second ability, so there is no second search.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Kyoshi Island Plaza
+Island
+Island
+Tropical Island
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kyoshi Island Plaza.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Tropical Island)
+! Bot1.Search(Forest; Island)
+Bot1.Search(Forest)
+
+[Expect]
+Bot1.Battlefield = Forest; Kyoshi Island Plaza; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Library != Forest
+Bot1.Library.Count = 13
+Bot1.Hand = Island; Island
+Bot2.Library.Count = 13

@@ -1,0 +1,6 @@
+{
+  "name": "Kyoshi Island Plaza",
+  "manaCost": "{3}{G}",
+  "type": "Legendary Enchantment — Shrine",
+  "oracleText": "When Kyoshi Island Plaza enters, search your library for up to X basic land cards, where X is the number of Shrines you control. Put those cards onto the battlefield tapped, then shuffle.\nWhenever another Shrine you control enters, search your library for a basic land card, put it onto the battlefield tapped, then shuffle."
+}

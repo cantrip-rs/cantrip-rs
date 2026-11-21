@@ -1,0 +1,77 @@
+# Kyoshi Island Plaza: X counts the Shrines Bot1 controls as the ability resolves. Bot1 has Southern Air Temple (turn 1) and Bot2
+# has its own (turn 2, not a Shrine Bot1 controls). In turn 3 the Plaza enters with two Shrines under Bot1's control (the Temple and
+# itself): X is 2, not 3 and not 1. Three lands are refused, the Tropical Island is refused, and the Forest and an Island come in
+# tapped. The Temple's own "another Shrine" ability puts a counter on each creature Bot1 has: none.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Mox Jet
+Southern Air Temple
+Kyoshi Island Plaza
+Island
+Island
+Tropical Island
+Forest
+Island x10
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Southern Air Temple
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Southern Air Temple.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.Battlefield.Mox Pearl#4.Activate
+Bot2.Hand.Southern Air Temple.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 5
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kyoshi Island Plaza.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Forest; Island; Island)
+! Bot1.Search(Tropical Island)
+Bot1.Search(Forest; Island)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Forest; Island; Kyoshi Island Plaza; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Southern Air Temple
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Island.Tapped = true
+Bot1.Library != Forest
+Bot2.Battlefield.Count = 5
