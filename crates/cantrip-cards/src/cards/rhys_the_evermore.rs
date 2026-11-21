@@ -1,15 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{persist, targets, triggers::THIS_ENTERS};
+use cantrip_mechanics::{delayed, persist, targets, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
-
-/// "Another target creature you control gains persist until end of turn" (CR 611.2a, 613.1f, 702.79a): a layer 6 effect that
-/// gives it the card's delayed ability 0, a persist trigger of its own, until the cleanup step.
-fn gain_persist(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
-    let this = g.card_id(&CARD);
-    g.add_effect(item.object, creature, EffectKind::AddAbility(AbilityRef::delayed(this, 0)), Duration::EndOfTurn);
-    Ok(())
-}
 
 /// "Remove any number of counters from target creature you control" (CR 122.1, 608.2d): the controller chooses which, of any
 /// kinds, from none up to all of them. The most the request can name is 255 counters at once, far beyond a creature in a timed game.
@@ -23,7 +14,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
             THIS_ENTERS,
-            gain_persist,
+            delayed::first_target_gains_its_delayed_ability_until_end_of_turn,
             "When Rhys enters, another target creature you control gains persist until end of turn.",
         )
         .targets(&[targets::OTHER_CREATURE_YOU_CONTROL]),

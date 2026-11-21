@@ -422,3 +422,14 @@ pub fn target_creature_gets_plus_power_and_a_delayed_ability_for_when_it_dies<co
     this_turn_watching(g, item, creature);
     Ok(())
 }
+
+/// "Until end of turn, target creature gains '[a triggered ability]'" (CR 611.2a, 613.1f): the creature in target slot 0 gets the card's
+/// delayed ability number 0 as an ability of its own (so its controller controls the triggers) until the cleanup step, fixed to the
+/// creature as this resolves (CR 611.2c). The target gone nothing is gained (CR 608.2b). Undying Malice, Not Dead After All, Rhys the
+/// Evermore (persist) and Fire Nation Palace (firebending 4) print it.
+pub fn first_target_gains_its_delayed_ability_until_end_of_turn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    let this = ability_card(g, item);
+    g.add_effect(item.object, creature, EffectKind::AddAbility(AbilityRef::delayed(this, 0)), Duration::EndOfTurn);
+    Ok(())
+}
