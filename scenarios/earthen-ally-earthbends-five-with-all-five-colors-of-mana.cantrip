@@ -1,0 +1,48 @@
+# Earthen Ally: "{2}{W}{U}{B}{R}{G}: Earthbend 5." On turn 3 Bot1 has only a Forest and four Moxen (no black, five mana):
+# it cannot be activated (CR 601.2g, 602.2b). After Mox Jet and Black Lotus (three black) arrive, seven are paid and the Forest becomes a 5/5 land
+# creature with haste and five +1/+1 counters.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Earthen Ally
+Black Lotus
+Mox Jet
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Earthen Ally.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Earthen Ally.Activate(Bot1.Battlefield.Forest; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Earthen Ally.Activate(Bot1.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Forest.Types = Land; Creature
+Bot1.Battlefield.Forest.Power = 5
+Bot1.Battlefield.Forest.Toughness = 5
+Bot1.Battlefield.Forest.Counters.PlusOnePlusOne = 5
+Bot1.Battlefield.Forest.Keywords = Haste

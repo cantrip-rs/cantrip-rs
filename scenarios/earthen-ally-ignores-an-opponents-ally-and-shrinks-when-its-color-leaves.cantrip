@@ -1,0 +1,50 @@
+# Earthen Ally counts only Allies "you control" (CR 105.2): with Earth Kingdom Protectors (white) it is a 2/2 on turn 1. Bot2's
+# First-Time Flyer, a blue Ally, adds no blue (still 2/2). Bot2's Lightning Bolt kills the Protectors and the white goes with
+# it: Earthen Ally is a 1/2 again (it is a green Ally itself).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Earthen Ally
+Earth Kingdom Protectors
+Island x16
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Ruby
+First-Time Flyer
+Lightning Bolt
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Earthen Ally.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Earth Kingdom Protectors.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Earthen Ally.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.First-Time Flyer.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Earthen Ally.Power = 2
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Earth Kingdom Protectors)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Earthen Ally.Power = 1
+Bot1.Battlefield.Earthen Ally.Toughness = 2
+Bot1.Battlefield.Earth Kingdom Protectors = (absent)

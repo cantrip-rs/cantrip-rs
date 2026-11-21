@@ -1,0 +1,62 @@
+# Earthen Ally (0/2, green): "+1/+0 for each color among Allies you control" (CR 105.2, 613.4c). Alone it is a 1/2 (it is a green
+# Ally itself); Earth Kingdom Protectors (white) makes it 2/2 and First-Time Flyer (blue) a 3/2. On turn 3 Leopard-Spotted Jiao,
+# a red creature that is no Ally, adds none (3/2 still), and on turn 5 Guru Pathik, a green-or-blue hybrid Ally, adds no
+# color the others lack (3/2 still).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Earthen Ally
+Earth Kingdom Protectors
+First-Time Flyer
+Leopard-Spotted Jiao
+Guru Pathik
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Earthen Ally.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Earthen Ally.Power = 1
+? Bot1.Battlefield.Earthen Ally.Toughness = 2
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Earth Kingdom Protectors.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Earthen Ally.Power = 2
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.First-Time Flyer.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Earthen Ally.Power = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Leopard-Spotted Jiao.Cast(Spend: R, U)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Earthen Ally.Power = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Guru Pathik.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Earthen Ally.Power = 3
+Bot1.Battlefield.Earthen Ally.Toughness = 2
+Bot1.Battlefield.Guru Pathik.Types = Creature
