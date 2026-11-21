@@ -871,7 +871,9 @@ impl AbilityDef {
         AbilityDef::Triggered(TriggeredDef { batch_by_data: true, ..triggered_def(self, "only a triggered ability triggers per batch") })
     }
 
-    /// A triggered mana ability (CR 605.1b), with what it adds to the player who tapped the permanent (`TriggeredMana`).
+    /// A triggered mana ability (CR 605.1b), with what it adds to the player who tapped the permanent (`TriggeredMana`). Its event
+    /// is one a mana ability's activation or resolution causes - a tap, or a sacrifice paying its cost; where the event arises from
+    /// anything else it is an ordinary triggered ability.
     pub const fn mana_ability(self, adds: TriggeredMana) -> AbilityDef {
         AbilityDef::Triggered(TriggeredDef {
             mana_ability: true,

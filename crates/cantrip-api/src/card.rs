@@ -2120,9 +2120,11 @@ pub struct TriggeredDef {
     /// With `once_per_batch`: events of the batch whose `data[1]` differ are different batches, each triggering it once (CR 603.2c):
     /// "whenever one or more cards are put into a library" is one for each library (Wan Shi Tong, All-Knowing).
     pub batch_by_data: bool,
-    /// A triggered mana ability (CR 605.1b): it triggers on the tapping of a permanent for mana (`Event::TappedForMana`) and resolves at
-    /// once, not on the stack, as part of the mana ability that triggered it (CR 605.4a). `matches` is asked of every permanent that has
-    /// one; `effect` adds the mana.
+    /// A triggered mana ability (CR 605.1b): one whose event arises from the activation or resolution of an activated mana ability
+    /// - a permanent's being tapped for mana (`Event::TappedForMana`), a sacrifice that paid the mana ability's cost (Crime
+    /// Novelist's) - resolves at once, not on the stack, as part of the mana ability that triggered it (CR 605.4a). `matches` is
+    /// asked of every permanent that has one; `effect` adds the mana. Where the same kind of event arises elsewhere (an artifact
+    /// sacrificed for a Clue's ability) it is no mana ability and waits on the stack as any triggered ability does.
     pub mana_ability: bool,
     /// Its effect can produce mana if resolving now (CR 106.7). This identifies capability without changing
     /// whether it uses the stack (CR 605.1b), or making its trigger event happen.

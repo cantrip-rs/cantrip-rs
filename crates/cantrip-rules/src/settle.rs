@@ -947,9 +947,10 @@ fn consider(
     for (nth, ability) in chars.abilities().enumerate() {
         // Only a triggered ability is asked anything here.
         let AbilityDef::Triggered(t) = cx.cards().ability(ability) else { continue };
-        // Triggered mana abilities resolve within the activation in
-        // `tapped_for_mana`, regardless of which event mask their matcher uses.
-        if t.mana_ability { continue; }
+        // A triggered mana ability whose event arises from a mana ability resolves as that ends (CR 605.1b, 605.4a,
+        // `actions::activation_triggers`), regardless of which event mask its matcher uses; its event arising elsewhere (a
+        // Treasure's sacrifice is a mana ability's cost, a Clue's is not) it is no mana ability and waits on the stack.
+        if t.mana_ability && cx.within_mana_ability() { continue; }
         let by = || {
             let given = *given.get_or_init(|| taken.is_some() || possible);
             if given { layers::given_link(cx.cards(), cx.s(), source, ability, acquired_at(nth)) } else { None }
@@ -1856,9 +1857,9 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                     if d.when.is_event()
                         && times > 0
                         && let AbilityDef::Triggered(t) = cx.cards().ability(d.ability)
-                        // A delayed triggered mana ability never goes on the stack: it resolves as the mana ability that
-                        // triggered it does (CR 605.1b, 605.4a), in `tapped_for_mana`.
-                        && !t.mana_ability
+                        // A delayed triggered mana ability whose event arises from a mana ability never goes on the stack: it
+                        // resolves as the mana ability that triggered it does (CR 605.1b, 605.4a), in `activation_triggers`.
+                        && !(t.mana_ability && cx.within_mana_ability())
                         && (group_leaves || t.listens.intersects(mask))
                         && let Some(fired) = (if group_leaves {
                             // This mode's event is fixed by the rules, not by the delayed effect definition.

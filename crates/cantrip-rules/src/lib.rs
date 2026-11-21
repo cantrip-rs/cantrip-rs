@@ -175,6 +175,8 @@ mod x_minimum_tests;
 #[cfg(test)]
 mod cost_choice_tests;
 #[cfg(test)]
+mod triggered_mana_tests;
+#[cfg(test)]
 mod x_defined_tests;
 #[cfg(test)]
 mod waterbend_cost_tests;
@@ -431,6 +433,9 @@ struct ManaInterval {
     tapped_since: u32,
     resolution: u32,
     cost_objects: Vec<(usize, cantrip_api::CostPart, ObjectId)>,
+    /// The spans of the history the mana abilities done within this one took up (CR 605.3b), whose events their own ends
+    /// looked at for triggered mana abilities (`actions::activation_triggers`): not looked at again as this one ends.
+    nested: Vec<(u32, u32)>,
 }
 
 /// When the state triggers judge a change that records no event (CR 603.8: a state trigger "triggers as soon as the game
@@ -1997,14 +2002,26 @@ impl<'a> Cx<'a> {
     /// activation even if this one suspends or cannot pay its costs (CR 605.3, 107.3k, 611.2b).
     pub(crate) fn with_mana_interval<T>(&mut self, source: ObjectId, f: impl FnOnce(&mut Self) -> T) -> T {
         let head = self.g.log.len() as u32;
-        let outer_interval = self.g.mana_interval.replace(ManaInterval { source, since: head, tapped_since: head, resolution: head, cost_objects: Vec::new() });
+        let outer_interval = self.g.mana_interval.replace(ManaInterval { source, since: head, tapped_since: head, resolution: head, cost_objects: Vec::new(), nested: Vec::new() });
         let outer_x = self.g.mana_activation_x.take();
         let outer_rider = std::mem::take(&mut self.g.mana_rider);
         let done = f(self);
         self.g.mana_rider = outer_rider;
         self.g.mana_activation_x = outer_x;
         self.g.mana_interval = outer_interval;
+        let end = self.g.log.len() as u32;
+        if let Some(outer) = &mut self.g.mana_interval
+            && end > head
+        {
+            outer.nested.push((head, end));
+        }
         done
+    }
+
+    /// Whether a mana ability is being activated or is resolving (CR 605.3, 605.4a): what happens now is part of it, and the
+    /// triggered mana abilities it triggers (CR 605.1b) resolve as it ends rather than wait on the stack.
+    pub(crate) fn within_mana_ability(&self) -> bool {
+        self.g.mana_interval.is_some()
     }
 
     /// CR 107.4h: current characteristics at production, including LKI if the source has left (CR 608.2h).

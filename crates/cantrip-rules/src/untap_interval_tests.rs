@@ -938,6 +938,7 @@ fn mana_position(
         tapped_since: 0,
         resolution: 0,
         cost_objects: vec![(4, CostPart::Permanents, outer)],
+        nested: Vec::new(),
     };
     g.mana_activation_x = Some(37);
     g.mana_interval = Some(interval.clone());
@@ -989,7 +990,10 @@ fn an_immediate_mana_ability_keeps_its_own_interval_through_real_nested_cost_pay
             assert!(matches!(result, Err(crate::Stop::Cancel)), "the inner retap leaves the outer tap cost unpayable");
             assert_eq!(cx.mana_source, Some(outer));
             assert_eq!(cx.g.mana_activation_x, Some(37));
-            assert_eq!(cx.g.mana_interval, Some(enclosing_interval));
+            // What the inner ability did is kept as a span of the enclosing one (`ManaInterval::nested`).
+            let nested = cx.g.mana_interval.as_ref().map(|i| i.nested.clone());
+            assert_eq!(nested.as_deref(), Some(&[(1, 6)][..]));
+            assert_eq!(cx.g.mana_interval, Some(crate::ManaInterval { nested: nested.unwrap(), ..enclosing_interval }));
             continue;
         }
         result.expect("the untap leaves the outer tap cost payable");
@@ -1011,7 +1015,7 @@ fn an_immediate_mana_ability_keeps_its_own_interval_through_real_nested_cost_pay
         );
         assert_eq!(cx.mana_source, Some(outer));
         assert_eq!(cx.g.mana_activation_x, Some(37));
-        assert_eq!(cx.g.mana_interval, Some(enclosing_interval));
+        assert_eq!(cx.g.mana_interval, Some(crate::ManaInterval { nested: vec![(1, 8)], ..enclosing_interval }));
     }
 }
 
