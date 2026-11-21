@@ -1,0 +1,33 @@
+# Earth Village Ruffians: "When this creature dies, earthbend 2." Lightning Bolt kills the Ruffians (3/1); the trigger
+# earthbends Bot1's Forest, a 2/2 land creature with haste, and Bot2's Mountain is no legal target (a land you control), so it is left alone.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Earth Village Ruffians
+Forest x17
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Earth Village Ruffians.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Earth Village Ruffians)
+Bot2.Battlefield.Mountain.Activate
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Earth Village Ruffians; Black Lotus
+Bot1.Battlefield.Forest.Types = Land; Creature
+Bot1.Battlefield.Forest.Power = 2
+Bot1.Battlefield.Forest.Toughness = 2
+Bot1.Battlefield.Forest.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Forest.Keywords = Haste
+Bot2.Battlefield.Mountain.Types = Land

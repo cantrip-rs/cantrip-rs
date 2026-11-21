@@ -1,0 +1,8 @@
+{
+  "name": "Earth Village Ruffians",
+  "manaCost": "{2}{B/G}",
+  "type": "Creature — Human Soldier Rogue",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "When this creature dies, earthbend 2. (Target land you control becomes a 0/0 creature with haste that's still a land. Put two +1/+1 counters on it. When it dies or is exiled, return it to the battlefield tapped.)"
+}
