@@ -2320,6 +2320,14 @@ public sealed class UnlessPaysPromptMessage : PromptPayload
     [Key(22)]
     public string XCounter { get; set; } = string.Empty;
 
+    /// <summary>
+    /// For an <see cref="X"/> that is "collect evidence X" (CR 701.59a, 107.3f), as Incinerator of the Guilty's: paying exiles
+    /// cards with total mana value X or more from the payer's graveyard, and <see cref="Total"/> has no part of it. False for
+    /// any other payment.
+    /// </summary>
+    [Key(23)]
+    public bool XCollectsEvidence { get; set; }
+
 }
 
 /// <summary>

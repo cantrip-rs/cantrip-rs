@@ -630,6 +630,20 @@ public sealed class Decisions
                 _paying = picked > 0;
                 _xWanted = Math.Max(0, picked - 1);
             }
+            else if (prompt.ChoosingX && prompt.XCollectsEvidence)
+            {
+                // "You may collect evidence X" (CR 701.59a): X is the total mana value of the cards exiled from your graveyard,
+                // up to what its cards other than the source add up to - not mana.
+                int most = client.Zone(ZoneKindView.Graveyard, client.Seat).Where(card => card.Handle != prompt.Source).Sum(card => Math.Max(0, card.ManaValue));
+                int picked = One(new Question
+                {
+                    Heading = $"{source}: {question}{(detail.Length > 0 ? $" ({detail}.)" : string.Empty)}{no} "
+                        + $"X is yours to choose: collecting evidence X exiles cards with total mana value X or more from your graveyard, whose cards add up to {most}. How much X do you collect?",
+                    Choices = ["Don't collect evidence.", .. Enumerable.Range(0, most + 1).Select(x => $"Collect evidence X = {x}.")],
+                });
+                _paying = picked > 0;
+                _xWanted = Math.Max(0, picked - 1);
+            }
             else if (prompt.ChoosingX)
             {
                 // "You may pay {X}" with X yours to choose (CR 107.3f): how much X, up to the mana there is to make, or nothing.

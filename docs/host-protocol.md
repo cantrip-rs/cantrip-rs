@@ -187,6 +187,10 @@ Version 234.
 [kind] counters from" the source (Tetravus, CR 118.3) rather than mana has `XCounter`, the counters' kind as the table names
 them ("+1/+1"): paying removes `X` of them, and `Total` is `{0}`, the payment having no mana. Empty for any other payment.
 The web client captions the X with it ("X = 2, so remove 2 +1/+1 counters from Tetravus"). Version 235.
+`XCollectsEvidence` is set where the X is "collect evidence X" (Incinerator of the Guilty, CR 701.59a, 107.3f): paying exiles
+cards with total mana value `X` or more from the payer's graveyard, chosen next with a collect-evidence `ChooseCardsPromptMessage`,
+and `Total` is `{0}`. The web client captions it "X = 3, so collect evidence 3", and the language-model client asks X as mana
+value up to what the graveyard's cards add up to. False for any other payment. Version 246.
 
 **Checking a declaration of blockers.** A declaration of blockers (`DeclareBlockersPromptMessage`) is judged by one validator
 in the engine (`BlockRequirements::judge`, `crates/cantrip-state/src/blocks.rs`) against every restriction, requirement and

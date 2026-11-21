@@ -369,7 +369,7 @@ fn a_question_listed_before_a_concession_offers_nothing_that_left() {
     assert_eq!(candidates, vec![P2]);
     // A payment for an object that left is not made; one for an object still here is asked.
     let pay = |subject| RequestKind::UnlessPays { source, subject, total: ManaCost::ZERO, remaining: ManaCost::ZERO, life: 0, life_payable: false,
-        question: &ASKED, options: Vec::new(), x: None, times: None, removes: None };
+        question: &ASKED, options: Vec::new(), x: None, times: None, removes: None, evidence: false };
     assert_eq!(cantrip_state::without_departed(s, pay(theirs), false).err(), Some(Answer::Pass));
     assert!(cantrip_state::without_departed(s, pay(mine), false).is_ok());
 }
@@ -389,7 +389,7 @@ fn a_concession_waits_for_a_question_put_to_a_player_still_in_the_game() {
     game.state.update_frame(frame, |f| f.conceded.push((0, P2)));
     let mut cx = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     let pay = RequestKind::UnlessPays { source, subject: source, total: ManaCost::ZERO, remaining: ManaCost::ZERO, life: 0, life_payable: false,
-        question: &ASKED, options: Vec::new(), x: None, times: None, removes: None };
+        question: &ASKED, options: Vec::new(), x: None, times: None, removes: None, evidence: false };
     assert_eq!(cx.ask_core(p4, pay, false).ok(), Some(Answer::Pass), "a cost of a player who left is not paid, unasked");
     assert!(!cx.s().player(P2).lost, "the concession is not made at a question no one is asked");
     let ask = RequestKind::ChoosePlayer { source, candidates: vec![P2, P3], verb: "", amount: 0, subject: None };

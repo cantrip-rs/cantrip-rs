@@ -16474,7 +16474,9 @@ fn pay_during_resolution_inner(
         options.push(ActionOption::simple(ActionKind::DeclineCost));
         // A counter count is X's when the X removes counters from the source: the payer reads what X removes, not mana.
         let removes = match cost.variable { Some(VariableCost::RemoveAnyNumberOfCounters(kind)) if x.is_some() => Some(kind), _ => None };
-        let ask = RequestKind::UnlessPays { source, subject, total, remaining, life, life_payable, question, options, x, times, removes };
+        // A collect evidence X is X's too: the payer reads the evidence X collects, not mana.
+        let evidence = cost.collect_evidence_x && x.is_some();
+        let ask = RequestKind::UnlessPays { source, subject, total, remaining, life, life_payable, question, options, x, times, removes, evidence };
         let answer = cx.ask_core(payer, ask, false)?;
         let Answer::Act(action) = answer else { return Ok(None) };
         match action.kind {

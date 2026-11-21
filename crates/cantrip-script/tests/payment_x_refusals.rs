@@ -36,7 +36,7 @@ fn bounded(g: &mut dyn Rules, item: &StackItem) -> Result<(), Suspend> {
         if x > 0 { options.push(ActionOption::simple(ActionKind::DecreaseX)); }
         let answer = g.ask(item.controller, RequestKind::UnlessPays {
             source: item.object, subject: item.object, total: ManaCost::ZERO, remaining: ManaCost::ZERO,
-            life: 0, life_payable: true, question: &ASK, options, x: Some(x), times: None, removes: None,
+            life: 0, life_payable: true, question: &ASK, options, x: Some(x), times: None, removes: None, evidence: false,
         })?;
         match answer {
             Answer::Act(action) if action.kind == ActionKind::IncreaseX => x += 1,

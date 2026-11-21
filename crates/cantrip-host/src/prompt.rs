@@ -1063,7 +1063,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 ..Default::default()
             })
         }
-        RequestKind::UnlessPays { source, subject, total, remaining, life, life_payable, question, options, x, times, removes } => PromptPayload::UnlessPaysPromptMessage(UnlessPaysPrompt {
+        RequestKind::UnlessPays { source, subject, total, remaining, life, life_payable, question, options, x, times, removes, evidence } => PromptPayload::UnlessPaysPromptMessage(UnlessPaysPrompt {
             remaining_snow: remaining.snow,
             player,
             source: source_handle(game, handles, *source),
@@ -1093,6 +1093,8 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
             },
             // An X that is a number of counters removed from the source (Tetravus), named as the counters on the table are.
             x_counter: removes.map_or_else(String::new, |kind| kind.name().to_string()),
+            // An X that is collect evidence X (Incinerator of the Guilty): paying exiles cards with total mana value X or more.
+            x_collects_evidence: *evidence,
         }),
         // The protocol already shows an unrestricted, non-targeted set choice. Keep that presentation for pile
         // separation while the engine asks and validates it through its selection rule.

@@ -1438,6 +1438,10 @@ pub struct UnlessPaysPrompt {
     /// removes `X` of them, and `Total` has no part of it. Empty for an X of mana, and for any other cost.
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub x_counter: String,
+    /// For an X that is "collect evidence X" (CR 701.59a, 107.3f): paying exiles cards with total mana value `X` or more from
+    /// the payer's graveyard, and `Total` has no part of it. False for any other payment.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub x_collects_evidence: bool,
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]

@@ -525,6 +525,9 @@ pub enum RequestKind {
     /// `removes` is the kind of counter `x` counts when the X is "remove any number of [kind] counters from" the source
     /// (`VariableCost::RemoveAnyNumberOfCounters`, CR 118.3) rather than mana - paying removes X of them, and `total` has no
     /// part of it. `None` for any other cost.
+    ///
+    /// `evidence` is set when the X is "collect evidence X" (`Cost::collect_evidence_x`, CR 701.59a, 107.3f) rather than mana:
+    /// paying exiles cards with total mana value X or more from the payer's graveyard, and `total` has no part of it.
     UnlessPays {
         source: ObjectId,
         subject: ObjectId,
@@ -537,6 +540,7 @@ pub enum RequestKind {
         x: Option<u32>,
         times: Option<u32>,
         removes: Option<CounterKind>,
+        evidence: bool,
     },
     /// Choose cards from among `cards`, every one of which the player sees: which sets of them are an answer is `rule`'s to
     /// say (`Selection`; the core checks every answer with it), and what may be chosen next as the player picks is asked of

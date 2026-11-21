@@ -684,6 +684,51 @@ public sealed class DecisionTests
     }
 
     [Fact]
+    public void Asks_a_collect_evidence_x_as_mana_value_up_to_what_the_graveyard_adds_up_to()
+    {
+        // Incinerator of the Guilty: "you may collect evidence X" (CR 701.59a). X is the total mana value of the cards exiled
+        // from the graveyard - here a 1 and a 2 - not mana, and choosing two raises X toward it.
+        var chooser = new ScriptedChooser([3]);
+        ObjectView incinerator = Creature(1, "Incinerator of the Guilty", 6, 6);
+        ObjectView bolt = Card(2, "Lightning Bolt", "{R}");
+        ObjectView bears = Card(3, "Grizzly Bears", "{1}{G}");
+        foreach ((ObjectView card, int value) in new[] { (bolt, 1), (bears, 2) })
+        {
+            card.Zone = ZoneKindView.Graveyard;
+            card.ManaValue = value;
+        }
+
+        PlayerView view = View(incinerator, bolt, bears);
+        view.Zones.Add(new() { Kind = ZoneKindView.Graveyard, Owner = Me, ContentsVisible = true, Contents = [bolt.Handle, bears.Handle], Count = 2 });
+        var transport = new Held();
+        var client = new GameClient(transport);
+        transport.Inbound.Enqueue(new WelcomeMessage { Seat = Me, PlayerNames = ["Bot 1", "Bot 2"] });
+        transport.Inbound.Enqueue(new StateMessage { View = view });
+        client.Pump();
+
+        AnswerPayload answer = new Decisions(chooser).Answer(
+            client,
+            new UnlessPaysPromptMessage
+            {
+                Player = Me,
+                Source = Handle(1),
+                Subject = Handle(1),
+                Verb = "CollectEvidenceX",
+                Question = "collect evidence X?",
+                Total = "{0}",
+                Remaining = "{0}",
+                ChoosingX = true,
+                X = 0,
+                XCollectsEvidence = true,
+                Options = [new() { Kind = ActionKindView.PayCost }, new() { Kind = ActionKindView.IncreaseX }, new() { Kind = ActionKindView.DeclineCost }],
+            });
+
+        Assert.Equal(ActionKindView.IncreaseX, Assert.IsType<TakeActionAnswer>(answer).Kind);
+        Assert.Contains("total mana value X or more from your graveyard, whose cards add up to 3", chooser.Asked[0].Heading, StringComparison.Ordinal);
+        Assert.Equal(["Don't collect evidence.", "Collect evidence X = 0.", "Collect evidence X = 1.", "Collect evidence X = 2.", "Collect evidence X = 3."], chooser.Asked[0].Choices);
+    }
+
+    [Fact]
     public void Puts_the_trigger_chosen_to_resolve_first_on_the_stack_last()
     {
         // The last ability named goes on the stack last and therefore resolves first (CR 603.3b), so the question is

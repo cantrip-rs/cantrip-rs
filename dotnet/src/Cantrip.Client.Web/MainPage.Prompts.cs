@@ -1919,8 +1919,11 @@ public sealed partial class MainPage
         // "You may pay {G} up to three times" (CR 603.12a): how many times is chosen here too, and the payment is the cost
         // that many times over.
         // An X that counts counters removed from the source (Tetravus's) is no mana: the caption says what paying removes.
+        // So is collect evidence X (Incinerator of the Guilty's): the caption says how much evidence paying collects.
         string chosen = prompt.ChoosingX && prompt.XCounter.Length > 0
                 ? $"X = {prompt.X}, so remove {prompt.X} {prompt.XCounter} counter{(prompt.X == 1 ? "" : "s")} from {source}  ·  − and + change X"
+            : prompt.ChoosingX && prompt.XCollectsEvidence
+                ? $"X = {prompt.X}, so collect evidence {prompt.X}  ·  − and + change X"
             : prompt.ChoosingX ? $"X = {prompt.X}, so {prompt.Total}  ·  − and + change X"
             : prompt.ChoosingTimes ? $"{Times(prompt.X)}, so {prompt.Total}  ·  − and + change how many times{(prompt.MostTimes > 0 ? $" (up to {Spelled(prompt.MostTimes)})" : string.Empty)}"
             : "";
