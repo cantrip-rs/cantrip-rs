@@ -1,0 +1,75 @@
+# Jet, Freedom Fighter: the damage is "equal to the number of creatures you control" as it resolves. Bot1 controls only Ornithopter and
+# Jet (two) while Bot2 controls Hill Giant and Ornithopter, so Jet deals 2 and the 3/3 Hill Giant survives with 2 damage marked. "When
+# Jet dies, put a +1/+1 counter on each of up to two target creatures": Bot2 Bolts Jet and Bot1 chooses no target, so nothing grows.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby x2
+Ornithopter
+Jet, Freedom Fighter
+Mountain x10
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby x2
+Hill Giant
+Ornithopter
+Lightning Bolt
+Mountain x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Jet, Freedom Fighter.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Hill Giant.Damage = 2
+? Bot2.Graveyard = Black Lotus
+? Bot2.Battlefield.Ornithopter.Damage = 0
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Jet, Freedom Fighter)
+Bot2.Pass
+Bot1.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Jet, Freedom Fighter; Black Lotus
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Hill Giant.Counters.PlusOnePlusOne = (absent)

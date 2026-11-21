@@ -2057,7 +2057,7 @@ pub fn this_deals_damage_equal_to_its_power_to_first_target(g: &mut dyn Game, it
 
 /// "It deals damage equal to the number of creatures you control to target [creature]" (CR 120.3, 608.2h): the creatures counted as
 /// the ability resolves, so a creature sacrificed for its cost is not in the count (ruling 2025-04-04). Which targets
-/// are allowed is the card's own. Stadium Headliner and Team Avatar print it.
+/// are allowed is the card's own. Stadium Headliner, Team Avatar and Jet, Freedom Fighter (an enters trigger) print it.
 pub fn damage_first_target_by_creatures_you_control(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let creatures = crate::creatures_you_control(g, item.controller);
     crate::damage_target(g, item, 0, creatures as u32);
