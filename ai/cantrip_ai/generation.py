@@ -18,13 +18,17 @@ with no gate (`--gate-measure` plays it anyway, as a measurement).
 
 Measurements beside the gate, each optional and each after the promotion, so none can hold up or stop a generation (a
 measurement that fails is recorded as failed, in `generation.json` and the README, and the generation goes on):
-`--net-duel-games N` (the networks alone, no search, by pair; stage `netduel`); the permanent held-out set
+the permanent held-out set
 (`--heldout-games N` chooses it once, from a generation's self-play before its training, moved to `ROOT/heldout`, which
 no window holds; stage `evaluate` then scores the candidate and the champion on it every generation: value MSE and
-ECE, policy CE and top-1 against its full searches' targets); and the anchor ladder (`--ladder-every N`: the champion
-after promotion against `--ladder-anchors`, gen0 and the tactical bot, at the budget and every
-`--ladder-play-every`-th time at the play budget, in `ROOT/ladder.json` and `ladder.md`, a generation's rows replaced
-when it runs again). The fixed
+ECE, policy CE and top-1 against its full searches' targets, the two paired by game, and each network's mean value by
+the seat's deck against the seat's mean outcome); and the anchor ladder (`--ladder-every N`: a new champion against
+`--ladder-anchors`, gen0 and the tactical bot, at the budget, after every N-th promotion, and every
+`--ladder-play-every`-th of those also at the play budget, in `ROOT/ladder.json` and `ladder.md`, a generation's rows
+replaced when it runs again; a generation that promoted nothing plays no ladder: its champion was measured when it was
+promoted). The gate and every ladder duel are also read by matchup (`reports.matchups`, from the duel's results file):
+the paired share in each pairing of decks, the mirrors and the rest, and a matchup far below a half is flagged at the
+top of the README, as a seat a network misvalues is (`reports.py`). The fixed
 evaluation set train.py scores (`--eval-data`, the tactical bot's games in `pi/eval`) measures the distance from the
 tactical bot: its policy CE rising is expected as the policy improves, and the README says so where it shows it.
 
@@ -85,7 +89,7 @@ for each distributed stage and let go after it: each game index played exactly o
 them, handed out on demand, the shards pulled back into `genN/selfplay` as they close, checked, and recorded with the
 host that played them (`genN/selfplay/HOSTS.json`). Off by default, and with it off nothing changes.
 With `--workers` the duels are distributed too (docs/ai-training.md, "Distributed duels"; `duels.py`): the gate, the
-network duel, the ladder and the pair miner's replays, each game played on one host, the results merged and summarised
+ladder and the pair miner's replays, each game played on one host, the results merged and summarised
 by BotLab as one machine's duel (`--no-dist-duels` keeps them here, `--no-duel-local` leaves this machine out).
 `generation.py --root ROOT --stop` (`--stop-now`: the games in flight too) writes `selfplay.stop` in the current
 generation's self-play directory and `genN/dist/stop`: self-play stops gracefully as at Ctrl-C (exit 3), and a
@@ -111,18 +115,23 @@ import sys
 import time
 from pathlib import Path
 
-from . import distributed, duels, mining, retention
+from . import distributed, duels, mining, reports, retention
 
 REPO = Path(__file__).resolve().parents[2]
-# heldout, netduel, evaluate and ladder run only when asked for (or, evaluate, when a held-out set exists). The
-# measurements come after the promotion, and a failure of one is recorded and passed over (`MEASUREMENTS`).
-STAGES = ("build", "selfplay", "heldout", "train", "export", "parity", "gate", "promote", "mine", "netduel", "evaluate",
-          "ladder", "mined", "retire")
+# heldout, evaluate and ladder run only when asked for (or, evaluate, when a held-out set exists; the ladder, when the
+# generation promoted). The measurements come after the promotion, and a failure of one is recorded and passed over
+# (`MEASUREMENTS`).
+STAGES = ("build", "selfplay", "heldout", "train", "export", "parity", "gate", "promote", "mine", "evaluate", "ladder",
+          "mined", "retire")
 # The stages a retrain runs again (all but the build, the self-play and the held-out set's choice).
-LATER = ("train", "export", "parity", "gate", "promote", "mine", "netduel", "evaluate", "ladder", "mined", "retire")
+LATER = ("train", "export", "parity", "gate", "promote", "mine", "evaluate", "ladder", "mined", "retire")
+# Stages the driver ran once and no longer does, which an older generation's record may hold: the network-only duel
+# (until 2026-11-21; by hand now, docs/ai-training.md "A network-only duel"). The README still shows one recorded, and
+# a retrain sets it aside with the rest.
+RETIRED = ("netduel",)
 # The stages that decide nothing about this generation: a failure is recorded and the generation goes on. The pair
 # miner's two (`mining.py`) make the next generation's targets; without them it trains without this one's.
-MEASUREMENTS = ("mine", "netduel", "evaluate", "ladder", "mined")
+MEASUREMENTS = ("mine", "evaluate", "ladder", "mined")
 # BotLab's `Decks`: a file of a decks folder with fewer cards than this is no decklist (a pool's run.txt and the like).
 MIN_DECK = 30
 EXE = ".exe" if os.name == "nt" else ""
@@ -385,11 +394,20 @@ def ladder_record(root: Path, rows: list[dict], gen: int | None = None):
     (root / "ladder.md").write_text(ladder_table(every), encoding="utf-8")
 
 
-def ladder_due(gen: int, every: int, play_every: int) -> tuple[bool, bool]:
-    """Whether generation `gen` runs the ladder (every `every` generations), and whether also at the play budget (every
-    `play_every`-th of those)."""
-    due = every > 0 and gen % every == 0
-    return due, due and play_every > 0 and (gen // every) % play_every == 0
+def ladder_due(promotions: int, every: int, play_every: int) -> tuple[bool, bool]:
+    """Whether the generation that made the `promotions`-th champion runs the ladder (every `every`-th promotion), and
+    whether also at the play budget (every `play_every`-th of those). A generation that promoted nothing has no ladder
+    (`promotions` 0): its champion is the one an earlier ladder measured."""
+    due = every > 0 and promotions > 0 and promotions % every == 0
+    return due, due and play_every > 0 and (promotions // every) % play_every == 0
+
+
+def promotions(root: Path, gen: int) -> int:
+    """How many generations up to `gen` promoted their candidate (`champions/history.json`; a generation retrained is
+    one generation)."""
+    path = root / "champions" / "history.json"
+    rows = json.loads(path.read_text(encoding="utf-8")) if path.exists() else []
+    return len({r.get("generation") for r in rows if r.get("accepted") and (r.get("generation") or 0) <= gen})
 
 
 def seat_name(mode: str, budget) -> str:
@@ -647,7 +665,19 @@ def readme(d: dict) -> str:
     gen = d["generation"]
     lines = [f"# Generation {gen}", "", f"Expert iteration (docs/ai-player-plan.md, \"Phase 4\"), {d.get('mode', 'full')} mode throughout. "
              f"Started {d['started']}; champion at the start: {d.get('champion', '?')}. Written by `ai/cantrip_ai/generation.py` "
-             "from `generation.json`.", "", "| stage | time | numbers |", "|---|---|---|"]
+             "from `generation.json`.", ""]
+    # What a total hides, first: a matchup of a duel far below a half, a seat a network misvalues (`reports.py`).
+    duels_read = [(name, s[name].get("matchups")) for name in ("gate", *RETIRED) if name in s]
+    duels_read += [(f"ladder against {x['anchor']} at {x['budget']}", x.get("matchups"))
+                   for x in s.get("ladder", {}).get("rows", [])]
+    duels_read = [(name, m) for name, m in duels_read if m]
+    seats = s.get("evaluate", {}).get("seats") or []
+    flags = [f"{name}, {f}" for name, m in duels_read for f in reports.matchup_flags(m)] + reports.seat_flags(seats)
+    if flags:
+        lines += [f"> **WARNING: {len(flags)} flagged** (a matchup more than {reports.MATCHUP_Z:g} standard errors below "
+                  f"a half; a seat whose mean value is more than {reports.SEAT_GAP:g} from its mean outcome). The tables "
+                  "are below.", *[f"> - **{f}**" for f in flags], ""]
+    lines += ["| stage | time | numbers |", "|---|---|---|"]
 
     def row(stage, text):
         if stage in s:
@@ -700,7 +730,7 @@ def readme(d: dict) -> str:
         r = s["promote"]
         row("promote", ("accepted: gen{0} is the champion".format(gen) if r["accepted"] else f"rejected: {r['champion']} stays the champion")
             + f" ({r['rule']})")
-    for name in MEASUREMENTS:
+    for name in MEASUREMENTS + RETIRED:
         if s.get(name, {}).get("failed"):
             why = " ".join(str(s[name]["failed"]).split())
             row(name, f"failed, and passed over (a measurement): {why[:300]}")
@@ -713,8 +743,10 @@ def readme(d: dict) -> str:
         parts = [f"{n}: value MSE {_f(e.get('value_mse'), '{:.4f}')}, ECE {_f(e.get('ece'), '{:.4f}')}, "
                  f"policy CE {_f(e.get('policy_ce'), '{:.4f}')}, top-1 {_f(e.get('top1'))} on {e.get('choices', '-')} targets"
                  for n, e in r["networks"].items()]
+        if text := reports.pairs_text(r.get("paired")):
+            parts.append(text)
         row("evaluate", f"the permanent held-out set ({r['games']} games, {r['positions']} positions; full-search policy "
-                        f"targets): " + "; ".join(parts))
+                        f"targets): " + "; ".join(parts) + ("; by seat below" if seats else ""))
     if "ladder" in s and not s["ladder"].get("failed"):
         r = s["ladder"]
         row("ladder", "; ".join(f"{x['champion']} against {x['anchor']} at {x['budget']}: {duel_text(x)}" for x in r["rows"])
@@ -733,6 +765,13 @@ def readme(d: dict) -> str:
                      + f"), SPRT LLR {_f(g.get('llr'))}: {g.get('sprt')} |")
     total = sum(v["seconds"] for v in s.values()) + sum(v["seconds"] for at in d.get("attempts", []) for v in at["stages"].values())
     lines += ["", f"In all {total / 3600:.2f} h.", ""]
+    for name, m in duels_read:
+        lines += [f"## {name} by matchup", "", "The first seat's paired share (the gate's: the candidate's) in each "
+                  "pairing of decks, whichever seat holds which; from the duel's results file.", "",
+                  *reports.matchup_table(m), ""]
+    if seats:
+        lines += ["## The held-out set by seat", "", "Each network's mean value over the positions a deck's seat answered, "
+                  "against how those games ended for it (both from -1, lost, to 1, won).", "", *reports.seat_table(seats), ""]
     return "\n".join(lines)
 
 
@@ -744,7 +783,7 @@ def retrain(rec: Record, gen_dir: Path, model_dir: Path, args, log=print):
     s = rec.data["stages"]
     if not s.get("promote", {}).get("done") or s["promote"].get("accepted"):
         raise SystemExit(f"--retrain: gen{rec.gen} has no rejected attempt to set aside")
-    later = LATER
+    later = LATER + RETIRED
     k = len(rec.data.get("attempts", [])) + 1
     log(f"setting attempt {k} aside ({args.retrain}); self-play kept")
     if args.dry_run:
@@ -1102,9 +1141,6 @@ def main(argv=None):
     a.add_argument("--gate-stop-min-decisive", type=int, default=30,
                    help="pairs not split 1-1 counted before the early stop may stop (the interval rests on them)")
     a.add_argument("--gate-measure", action="store_true", help="with --accept always: play the gate anyway, as a measurement")
-    a.add_argument("--net-duel-games", type=int, default=0,
-                   help="a network-only duel (no search) of the candidate against the champion after the promotion, this "
-                        "many games, by pair: cheap, and it resolves about 1%% in tens of thousands of games (0: off)")
     a.add_argument("--heldout-dir", help="the permanent held-out set of self-play games, never trained on (default "
                                          "ROOT/heldout); every window leaves it out")
     a.add_argument("--heldout-games", type=int, default=0,
@@ -1113,11 +1149,12 @@ def main(argv=None):
                         "is kept)")
     a.add_argument("--heldout-eval-games", type=int, default=1000,
                    help="games of the held-out set the evaluate stage scores (value MSE and ECE, policy CE and top-1 "
-                        "against the full searches' targets), the candidate and the champion")
+                        "against the full searches' targets, the value by the seat's deck), the candidate and the champion")
     a.add_argument("--no-heldout-eval", action="store_true", help="skip the evaluate stage even when a held-out set exists")
     a.add_argument("--ladder-every", type=int, default=0,
-                   help="every N generations, after promotion, the champion against the fixed --ladder-anchors, "
-                        "recorded in ROOT/ladder.json and ladder.md (0: off)")
+                   help="after every N-th promotion (1: every new champion), the new champion against the fixed "
+                        "--ladder-anchors, recorded in ROOT/ladder.json and ladder.md; a generation that promoted "
+                        "nothing plays none (0: off)")
     a.add_argument("--ladder-anchors", default="gen0,tactical",
                    help="the ladder's anchors, by commas: a champion or model by name (gen0), a model directory, or a "
                         "BotLab seat (tactical)")
@@ -1181,7 +1218,6 @@ def main(argv=None):
     if args.tiny:
         args.games, args.simulations, args.train_steps, args.gate_games, args.warmup = 4, 8, 4, 4, 1
         args.accept = "ahead" if args.accept in ("sprt", "sprt-paired") else args.accept
-        args.net_duel_games = min(args.net_duel_games, 4)
         args.ladder_games = min(args.ladder_games, 4)
         args.heldout_eval_games = min(args.heldout_eval_games, 4)
 
@@ -1946,14 +1982,17 @@ def main(argv=None):
         log(f"  mined targets: {json.dumps(kept)}; report {p.report}")
         return dict(kept=kept, targets=str(p.targets), heldout=str(p.heldout), report=str(p.report))
 
-    def netduel():
-        # The networks alone: no search, so tens of thousands of games an hour, by pair. A measurement beside the gate.
-        name = seat_name(args.mode, None)
-        result = duel("netduel", name, name, [model_dir, champ], args.net_duel_games, seed + 6_000_000, [], champ)
-        if result is None:
-            return
-        log(f"  the networks alone: {duel_text(result)}")
-        return dict(result, champion=champ.name, decks=dealt_text())
+    def by_matchup(name: str) -> dict | None:
+        """Duel `name` by matchup (`reports.matchups`), from its results file (one machine's, or the hosts' merged), its
+        table logged and anything flagged said; None where there is no file (a duel played before BotLab kept one)."""
+        results = gen_dir / "logs" / f"{name}-results.tsv"
+        table = reports.matchups([results]) if results.exists() else None
+        if table is not None:
+            for line in reports.matchup_table(table):
+                log(f"  {line}")
+            for f in reports.matchup_flags(table):
+                log(f"  WARNING: {name}, {f}")
+        return table
 
     def evaluate():
         # The permanent held-out set: value MSE and ECE over its games, policy CE and top-1 against its full searches'
@@ -1969,8 +2008,17 @@ def main(argv=None):
             return
         results = json.loads(out.read_text(encoding="utf-8"))
         keys = ("value_mse", "ece", "sign", "policy_ce", "top1", "top1_played", "choices", "positions")
+        # By the seat's deck, and the candidate less the champion by game (`reports.py`; the games' own rows stay in
+        # heldout-eval.json).
+        seats, paired = reports.heldout_seats(results), reports.heldout_pairs(results)
+        for line in reports.seat_table(seats) if seats else []:
+            log(f"  {line}")
+        if paired:
+            log(f"  {reports.pairs_text(paired)}")
+        for f in reports.seat_flags(seats):
+            log(f"  WARNING: {f}")
         return dict(directory=str(held), games=results[0]["games"], positions=results[0]["positions"],
-                    networks={r["name"]: {k: r.get(k) for k in keys} for r in results})
+                    networks={r["name"]: {k: r.get(k) for k in keys} for r in results}, seats=seats, paired=paired)
 
     def gate():
         gate_sims = args.gate_simulations or args.simulations
@@ -1997,7 +2045,8 @@ def main(argv=None):
                 else:
                     log(f"[gate] reusing the finished gate in {gate_log} "
                         f"({recovered['wins']} to {recovered['losses']}, {recovered['verdict']})")
-                    return dict(recovered, champion=champ.name, simulations=gate_sims, decks=decks)
+                    return dict(recovered, champion=champ.name, simulations=gate_sims, decks=decks,
+                                matchups=by_matchup("gate"))
         extra = []
         tested = ["--sprt-h0", args.gate_h0, "--sprt-h1", args.gate_h1, "--sprt-alpha", args.gate_alpha, "--sprt-beta", args.gate_beta]
         if args.accept == "sprt":
@@ -2013,7 +2062,7 @@ def main(argv=None):
         if result is None:
             return
         return dict(result, champion=champ.name, simulations=gate_sims, decks=decks, h0=args.gate_h0, h1=args.gate_h1,
-                    measured_only=args.accept == "always")
+                    measured_only=args.accept == "always", matchups=by_matchup("gate"))
 
     def promote():
         if args.dry_run:
@@ -2044,13 +2093,20 @@ def main(argv=None):
                 return d
         return None
 
+    def promoted() -> int:
+        """Which promotion this generation's is (the count of them up to it), or 0 where it promoted nothing; a dry run
+        shows the stages of one that does."""
+        if args.dry_run:
+            return promotions(root, gen - 1) + 1
+        return promotions(root, gen) if rec.data["stages"].get("promote", {}).get("accepted") else 0
+
     def ladder():
-        # The champion now (the candidate, if it was just promoted) against fixed anchors: a strength scale that does
-        # not move with the champion, which candidate against champion alone cannot give.
+        # The new champion against fixed anchors: a strength scale that does not move with the champion, which
+        # candidate against champion alone cannot give. Only a generation that promoted plays it (`ladder_due`).
         now_champ = (champion(root) if not args.dry_run else None) or champ
-        _, play = ladder_due(gen, args.ladder_every, args.ladder_play_every)
+        _, play = ladder_due(promoted(), args.ladder_every, args.ladder_play_every)
         budgets = [args.ladder_budget or args.simulations] + ([args.ladder_play_budget] if play else [])
-        rows = []
+        rows, tables = [], []
         for k, anchor in enumerate(x.strip() for x in args.ladder_anchors.split(",") if x.strip()):
             model = anchor_model(anchor)
             if model is not None and (model.name == now_champ.name or model.resolve() == now_champ.resolve()):
@@ -2069,33 +2125,35 @@ def main(argv=None):
                 rows.append(dict(generation=gen, champion=now_champ.name, anchor=anchor, budget=f"@{budget}",
                                  mode=args.mode, decks=dealt_text(), at=now(), **{x: result.get(x) for x in keys}))
                 log(f"  {now_champ.name} against {anchor} at @{budget}: {duel_text(result)}")
+                tables.append(by_matchup(label))
         if args.dry_run:
             return
         ladder_record(root, rows, gen)
-        return dict(rows=rows)
+        # By matchup in this generation's record alone: `ladder.json` keeps the duels' totals.
+        return dict(rows=[dict(r, matchups=m) for r, m in zip(rows, tables)])
 
     def retire():
         doomed = retention.retire(root, args.keep, dry_run=args.dry_run, log=log)
         return dict(deleted=len(doomed), keep=args.keep)
 
-    # The optional stages: the held-out set is chosen once, the network duel and the ladder run when asked for, and the
-    # held-out set is scored whenever there is one.
+    # The optional stages: the held-out set is chosen once and scored whenever there is one, and the ladder runs when
+    # asked for and the generation promoted (asked once the promotion is known: a callable).
     choose = args.heldout_games > 0 and not rec.done("heldout") and not heldout_ready(held) and not (held / HELDOUT_RECORD).exists()
     if args.heldout_games > 0 and not choose and not rec.done("heldout"):
         log(f"held-out set: {held} is chosen already, and kept")
     enabled = dict(
         build=not args.no_build,
         heldout=choose or rec.done("heldout"),
-        netduel=args.net_duel_games > 0 or rec.done("netduel"),
         evaluate=not args.no_heldout_eval and (heldout_ready(held) or choose or rec.done("evaluate")),
-        ladder=ladder_due(gen, args.ladder_every, args.ladder_play_every)[0] or rec.done("ladder"),
+        ladder=lambda: rec.done("ladder") or ladder_due(promoted(), args.ladder_every, args.ladder_play_every)[0],
         # Pair mining needs a gate played in pairs whose games were kept (`--results`).
         mine=(not args.no_mine and args.accept != "always") or rec.done("mine"),
         mined=(not args.no_mine and args.accept != "always") or rec.done("mined"),
     )
-    fns = (build, selfplay, heldout, train, export, parity, gate, promote, mine, netduel, evaluate, ladder, mined, retire)
+    fns = (build, selfplay, heldout, train, export, parity, gate, promote, mine, evaluate, ladder, mined, retire)
     for name, fn in zip(STAGES, fns):
-        if enabled.get(name, True):
+        on = enabled.get(name, True)
+        if on() if callable(on) else on:
             stage(name, fn)
         if name == args.stop_after:
             log(f"stopped after {name}, as asked")

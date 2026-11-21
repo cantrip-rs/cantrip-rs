@@ -246,15 +246,17 @@ own, started and stopped by the driver; the ones marked optional run only when a
 | train | fine-tunes the champion on the window of recent generations (`--window`, `--older-weight`, `--imitation-weight`); the window never holds the held-out set |
 | export | ONNX models and the manifest, to `models/genN` |
 | parity | the Rust evaluators against PyTorch on held-out positions, and with the GPU server, the server too (it checks the references itself as it starts) |
-| gate | the candidate against the champion in BotLab on self-play's metagame pairings, scored by pair, by `--accept` (below) over at most `--gate-games` (6,000); with `--workers`, on other machines too ("Distributed duels"), as are the network duel, the ladder and the miner's replays |
+| gate | the candidate against the champion in BotLab on self-play's metagame pairings, scored by pair, by `--accept` (below) over at most `--gate-games` (6,000); with `--workers`, on other machines too ("Distributed duels"), as are the ladder and the miner's replays; recorded by matchup too ("Reading a generation") |
 | promote | an accepted candidate goes to `champions/genN` and becomes `champions/current` |
-| netduel (optional) | `--net-duel-games N`: the candidate's network against the champion's, no search, by pair: a measurement |
-| evaluate (when a held-out set exists) | `value_eval` on the held-out set, candidate and champion: value MSE and ECE, policy CE and top-1 against its full searches' targets |
-| ladder (optional) | `--ladder-every N`: the champion against fixed anchors, recorded in `ROOT/ladder.json` and `ladder.md` (a generation run again replaces its rows) |
+| evaluate (when a held-out set exists) | `value_eval` on the held-out set, candidate and champion: value MSE and ECE, policy CE and top-1 against its full searches' targets; the two paired by game, and each network's mean value by the seat's deck ("Reading a generation") |
+| ladder (optional, after a promotion) | `--ladder-every N`: after every N-th promotion, the new champion against fixed anchors, recorded in `ROOT/ladder.json` and `ladder.md` (a generation run again replaces its rows) and by matchup in the generation's record; a generation that promoted nothing plays none |
 | retire | deletes the shards and models of all but the last `--keep` generations (gen0 and pinned ones are kept) |
 
-The measurements (netduel, evaluate, ladder) run after the promotion and decide nothing: one that fails is recorded as
-failed (`"failed"` in `generation.json`, a row of the README) and the generation goes on to the next stage.
+The measurements (evaluate, ladder) run after the promotion and decide nothing: one that fails is recorded as
+failed (`"failed"` in `generation.json`, a row of the README) and the generation goes on to the next stage. The driver
+runs no network-only duel (it did, as a `netduel` stage, until 2026-11-21: it decided nothing and no reading of a
+generation came to rest on it); an older generation's record that holds one still prints it, and "A network-only
+duel" below plays one by hand.
 
 A rerun skips the stages `genN/generation.json` records as done, so an interrupted generation resumes. Self-play keeps
 the shards it closed and plays only the games they don't hold. Training continues from its last checkpoint (every 200
@@ -270,15 +272,48 @@ while python -m cantrip_ai.generation --root ../../ai-data --device auto; do :; 
 
 What a generation leaves in `ai-data/`:
 
-- `genN/README.md`: the stage table and its numbers (the first thing to read);
+- `genN/README.md`: what is flagged, the stage table and its numbers, then the gate by matchup and the held-out set
+  by seat (the first thing to read: "Reading a generation", below);
 - `genN/logs/{selfplay,train,export,parity,gate}.log`: the full output (`tail -f` them to watch), and with the GPU
-  server `server-{selfplay,parity,gate}.log`, its throughput; `netduel.log`, `evaluate.log` and `ladder-*.log` for the
-  measurements that ran, and `genN/*-pairings.txt` the matchups each duel played;
+  server `server-{selfplay,parity,gate}.log`, its throughput; `evaluate.log` and `ladder-*.log` for the
+  measurements that ran, `genN/*-pairings.txt` the matchups each duel played, and `logs/*-results.tsv` every game
+  of each duel;
 - `genN/generation.json`: the same numbers, machine-readable;
 - `models/genN/`: the exported ONNX model and its `manifest.json`;
 - `champions/current`, a symlink to the champion in force, and `champions/history.json`, every gate (paired fields
   included);
 - `heldout/` (once chosen) and `ladder.json` / `ladder.md` (when the ladder runs).
+
+### Reading a generation
+
+A generation's totals can all look level while it is going wrong. Three candidates in a row once lost their gates at
+47 to 49% with level held-out numbers, because the value head had collapsed for one deck's seat: it valued a seat
+that wins two games in three at log-odds near -5. Two readings showed it, and the driver now makes both every
+generation (`ai/cantrip_ai/reports.py`), in the stage's record in `generation.json`, in the driver's log, and in the
+README:
+
+- **The gate by matchup** (and each ladder duel): from the duel's results file (`genN/logs/gate-results.tsv`, one
+  machine's or the hosts' merged), the candidate's paired share in each pairing of decks, whichever seat holds which
+  (the candidate plays both sides of a pair's deal), in the mirrors together and in the rest together: the pairs, the
+  share and its 95% half-width, its z against a half, and the pairs lost outright, split and won outright. A pair is
+  one observation, so the error is the pairs' own spread. A matchup more than 3 standard errors below a half is
+  flagged (`LOW`); where every pair of a matchup ended alike there is no spread, and it is flagged from 10 pairs
+  below a half. In the regression above the collapsed deck's mirror stood at 34 to 42% while everything else was
+  level.
+- **The held-out set by seat** (the evaluate stage): over the positions each deck's seat answered, the mean outcome
+  for that seat and each network's mean value (both from -1 to 1), and for a network with a heuristic head
+  (`train.py --residual`) that head's mean log-odds and the residual's. A network whose mean value for a seat is more
+  than 0.15 from the seat's mean outcome is flagged (`OFF`). The evaluate row also gives the candidate less the
+  champion on the same games, **paired by game**, for the value's MSE (every position) and the policy's CE (the
+  full-search targets), each with a 95% half-width from the games' own differences (a game's positions are not
+  independent): below zero the candidate is the better. `genN/heldout-eval.json` keeps each game's totals
+  (`by_game`), and `python -m cantrip_ai.value_eval` prints the same tables for any checkpoints.
+
+Whatever is flagged is listed first in the README, above the stage table, under `WARNING`, and logged as `WARNING:`
+lines as the stage ends; the tables are below the stage table. A flag is a reading, not a verdict: it stops nothing
+and promotes nothing. Read a flagged matchup beside that deck's seat in the held-out table: a seat valued far below
+its outcomes plays its games as if they were lost. Neither reading costs a game: the first is arithmetic on the
+gate's results, the second comes out of the pass over the held-out set the evaluate stage makes anyway.
 
 ### Distributed self-play
 
@@ -478,7 +513,7 @@ python -m cantrip_ai.generation --root ../../ai-data --stop     # from another t
 
 ### Distributed duels
 
-With `--workers`, the gate, the network duel, the ladder's duels and the pair miner's replays are split across this
+With `--workers`, the gate, the ladder's duels and the pair miner's replays are split across this
 machine and the workers too (`ai/cantrip_ai/duels.py`; `--no-dist-duels` keeps them here, `--no-duel-local` leaves this
 machine out of them). A duel's game is a function of its number and the duel's settings (its deal from `--seed` and
 the number, its seats and decks from the number, its searches seeded by the number), so a duel is split as self-play
@@ -597,8 +632,6 @@ pairs with 4 won are 52.0% +/- 1.9% at 95%, which would otherwise stop and promo
 
 The gate compares a candidate with its champion. These say more, more cheaply:
 
-- `--net-duel-games N`: the two networks with no search, paired; tens of thousands of games an hour, which resolves
-  steps of about 1%.
 - The permanent held-out set: choose it once, with `--heldout-games 1000` on the generation whose self-play it should
   come from (whole shards are moved, so the set is at least that many games); from then on every generation's
   `evaluate` stage scores the candidate and the champion on the same positions (`genN/heldout-eval.json`, the README's
@@ -606,11 +639,34 @@ The gate compares a candidate with its champion. These say more, more cheaply:
   of shards still in a generation's `selfplay` would be trained on, so move them, as the driver does. To have
   `train.py` score the set during training as well, pass it through `--train-args '--eval-data ROOT/heldout'` (in
   place of `pi/eval`: `--eval-data` takes one list).
-- The anchor ladder: `--ladder-every 2` plays the champion after promotion against `--ladder-anchors` (gen0 and the
+- The anchor ladder: `--ladder-every 1` plays every new champion against `--ladder-anchors` (gen0 and the
   tactical bot by default; any champion or model by name, a model directory, or a BotLab seat) for `--ladder-games`
   (1,000) at `--ladder-budget` (the self-play budget), and every `--ladder-play-every`-th time also at
   `--ladder-play-budget` (250ms, the play budget). The rows go to `ROOT/ladder.json` and `ladder.md`: a scale that
-  does not move with the champion.
+  does not move with the champion. Only a generation that promoted its candidate plays it: a rejected one would
+  measure the champion an earlier ladder measured. `--ladder-every N` counts promotions (`champions/history.json`),
+  not generations: the ladder after every N-th new champion. A resumed generation whose ladder is recorded keeps it.
+  Each duel is also recorded by matchup ("Reading a generation").
+
+#### A network-only duel
+
+The two networks with no search, by pair: tens of thousands of games an hour, which resolves steps of about 1%. It
+says how the networks' own answers compare, apart from what search makes of them. No stage plays it; when a
+diagnosis wants one, play it by hand with BotLab (a seat named with no budget answers from the network alone;
+`tools/bot-duel.sh` is `tools\bot-duel.cmd` on Windows):
+
+```bash
+tools/bot-duel.sh --a neural:decklist --b neural:decklist \
+  --model ../ai-data/models/gen12 --model-b ../ai-data/champions/gen9 \
+  --decks decks/standard --ai-prior decks/standard --pairings ../ai-data/gen12/gate-pairings.txt \
+  --games 20000 --parallel 16 --seed 126000000 --results netduel-results.tsv
+```
+
+`--a` plays `--model` and `--b` `--model-b`; the seat is the generation's information mode (`neural` for full,
+`neural:decklist`, `neural:hidden`), the same for both. `--pairings` makes each pair of games one deal with the
+players exchanged, as the gate's are; any pairings file serves (the gate's is as long as the gate, and BotLab goes
+round it again), or leave it out with `--mirrors` for a pool of mirrors. The summary's `Paired:` line is the result,
+and `--results` keeps every game.
 
 The fixed evaluation set `train.py` scores (`--eval-data`, which the fingerprint line points at `pi/eval`: the
 tactical bot's games) measures the policy's distance from the tactical bot. Its policy CE is expected to rise as the
@@ -648,9 +704,8 @@ forces it when piped.
 --accept sprt                      # the unpaired SPRT (the default before 2026-11-13)
 --accept sprt-paired --gate-h1 0.51     # the pentanomial SPRT
 --accept always --gate-measure     # promote every candidate; the gate as a measurement only
---net-duel-games 20000             # the networks alone, by pair, every generation
 --heldout-games 1000               # choose the permanent held-out set from this generation's self-play (once)
---ladder-every 2 --ladder-play-every 3   # the champion against gen0 and the tactical bot; at 250ms every 6th generation
+--ladder-every 1 --ladder-play-every 3   # each new champion against gen0 and the tactical bot; at 250ms every 3rd of them
 --target-uses 4 --search-target-repeat 8   # steps by the search targets' exposure (Training options, below)
 --schedule constant --carry-optimizer      # continuous training from the champion's optimizer state
 --train-args '--anchor {champion} --anchor-kl 0.05'   # {champion} is the champion's checkpoint

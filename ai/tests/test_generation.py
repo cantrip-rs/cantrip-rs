@@ -174,12 +174,19 @@ class GenerationTest(unittest.TestCase):
             self.assertEqual([d.parent.name for d, _ in w if d.name == "selfplay"], ["gen2"])
             self.assertEqual(len(generation.window(root, 2, 8, 0.5, 0.2, exclude=[dest])), 4)
 
-    def test_the_ladder_is_due_every_n_generations_and_kept_under_the_root(self):
-        self.assertEqual([generation.ladder_due(g, 2, 3) for g in (1, 2, 4, 6)],
+    def test_the_ladder_is_due_every_nth_promotion_and_kept_under_the_root(self):
+        self.assertEqual([generation.ladder_due(k, 2, 3) for k in (1, 2, 4, 6)],
                          [(False, False), (True, False), (True, False), (True, True)])
         self.assertEqual(generation.ladder_due(5, 0, 1), (False, False))
+        self.assertEqual(generation.ladder_due(0, 1, 1), (False, False), "a generation that promoted nothing")
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
+            # The promotions are the history's: a generation retrained (rejected, then accepted) is one.
+            self.assertEqual(generation.promotions(root, 9), 0)
+            for n, ok in ((1, True), (2, False), (3, False), (3, True), (4, True)):
+                (root / "champions").mkdir(exist_ok=True)
+                generation.history(root, dict(generation=n, accepted=ok))
+            self.assertEqual([generation.promotions(root, n) for n in (1, 2, 3, 4)], [1, 1, 2, 3])
             duel = generation.parse_gate(PAIRED_GATE)
             generation.ladder_record(root, [dict(duel, generation=2, champion="gen2", anchor="gen0", budget="@64")])
             generation.ladder_record(root, [dict(duel, generation=4, champion="gen3", anchor="tactical", budget="@250ms")])
@@ -196,22 +203,21 @@ class GenerationTest(unittest.TestCase):
             out = io.StringIO()
             with contextlib.redirect_stdout(out):
                 generation.main(["--root", str(root), "--dry-run", "--games", "100", "--simulations", "32", "--decks-dir", str(decks),
-                                 "--mode", "decklist", "--accept", "sprt-paired", "--gate-h1", "0.51", "--net-duel-games", "2000",
-                                 "--heldout-games", "1000", "--ladder-every", "2", "--ladder-play-every", "1"])
+                                 "--mode", "decklist", "--accept", "sprt-paired", "--gate-h1", "0.51",
+                                 "--heldout-games", "1000", "--ladder-every", "1", "--ladder-play-every", "1"])
             text = out.getvalue()
             self.assertEqual(sorted(p for p in root.rglob("*")), before, "a dry run writes nothing")
             self.assertRegex(text, r"would move whole shards of \S+gen2[/\\]selfplay holding at least 1000 games to \S+heldout")
             self.assertRegex(text, r"--data \S+gen2[/\\]selfplay:1 ")
-            self.assertRegex(text, r"duel --a neural:decklist --b neural:decklist --model \S+models[/\\]gen2 --model-b \S+champions[/\\]gen0 "
-                                   r"--decks \S+ --ai-prior \S+ --pairings \S+gen2[/\\]netduel-pairings.txt --games 2000 ")
+            self.assertNotIn("netduel", text, "the network-only duel is no stage")
             self.assertRegex(text, r"cantrip_ai.value_eval --data \S+heldout --every-game --policy --games 1000 .*--checkpoint "
                                    r"gen2=\S+ gen0=\S+ --out \S+heldout-eval.json")
             self.assertRegex(text, r"duel --a neural:decklist@32 --b neural:decklist@32 --model \S+models[/\\]gen2 --model-b \S+champions[/\\]gen0 "
                                    r".*--pairings \S+gen2[/\\]gate-pairings.txt --games 6000 .* --sprt-paired --sprt-h0 0.5 --sprt-h1 0.51 "
                                    r"--sprt-alpha 0.05 --sprt-beta 0.05")
             self.assertNotRegex(text, r"--mirrors")
-            # The ladder (generation 2 of every 2nd, at the play budget too): gen0 is the champion in a dry run, so only
-            # the tactical bot is an anchor.
+            # The ladder (a dry run shows a generation that promotes: the first promotion, at the play budget too): gen0
+            # is the champion in a dry run, so only the tactical bot is an anchor.
             self.assertIn("gen0 is the champion: no ladder duel against itself", text)
             self.assertRegex(text, r"duel --a neural:decklist@32 --b tactical --model \S+champions[/\\]gen0 .*ladder-tactical-32-pairings.txt")
             self.assertRegex(text, r"duel --a neural:decklist@128 --b tactical --model \S+champions[/\\]gen0 ")
@@ -235,8 +241,8 @@ class GenerationTest(unittest.TestCase):
                          {"name": "w2", "host": "192.0.2.2", "user": "u", "root": "/root/compute", "os": "linux"}), \
                     contextlib.redirect_stdout(out):
                 generation.main(["--root", str(root), "--dry-run", "--decks-dir", str(decks), "--workers", "all",
-                                 "--accept", "above-half", "--gate-early-stop", "--no-mine", "--net-duel-games", "200",
-                                 "--ladder-every", "2"])
+                                 "--accept", "above-half", "--gate-early-stop", "--no-mine",
+                                 "--ladder-every", "1"])
             text = out.getvalue()
             self.assertEqual(sorted(p for p in root.rglob("*")), before, "a dry run writes nothing")
             # BotLab published for both kinds of worker.
@@ -245,7 +251,6 @@ class GenerationTest(unittest.TestCase):
             # The gate across the hosts, its early stop the driver's (after the duel's own arguments).
             self.assertRegex(text, r"would play gate across this machine and the workers: BotLab duel --a neural@64 .*--games 6000 "
                                    r"--seed 25000000 --interval-z 2.58 .* --interval-stop")
-            self.assertRegex(text, r"would play netduel across this machine and the workers")
             self.assertRegex(text, r"would play ladder-tactical-64 across this machine and the workers")
         with tempfile.TemporaryDirectory() as tmp:
             root = root_with(Path(tmp), gens=(1,))
@@ -648,7 +653,8 @@ class GenerationTest(unittest.TestCase):
             stages["parity"].update(summary="ok")
             stages["gate"] = dict(done=True, seconds=1.0, wins=6, losses=4, draws=0, games=10, share=0.6, margin=0.3,
                                   champion="gen0", simulations=8, decks="rw-aggro", pentanomial=[0, 0, 3, 0, 2])
-            stages["promote"] = dict(done=True, seconds=1.0, accepted=False, champion="gen0", rule="above-half")
+            stages["promote"] = dict(done=True, seconds=1.0, accepted=True, champion="gen0", rule="above-half")
+            generation.history(root, dict(generation=2, accepted=True))
             rec = generation.Record(root / "gen2", 2, False)
             rec.data.update(stages=stages, champion="gen0")
             rec.save()
@@ -661,17 +667,133 @@ class GenerationTest(unittest.TestCase):
             out = io.StringIO()
             with unittest.mock.patch.object(generation, "run", failing), contextlib.redirect_stdout(out):
                 generation.main(["--root", str(root), "--generation", "2", "--no-build", "--decks-dir", "",
-                                 "--net-duel-games", "10", "--ladder-every", "1", "--ladder-anchors", "tactical",
+                                 "--ladder-every", "1", "--ladder-anchors", "tactical",
                                  "--gpu-server", "off", "--device", "cpu"])
-            self.assertEqual(len(ran), 2, "the network duel and the ladder were tried")
+            self.assertEqual(len(ran), 1, "the ladder was tried")
             record = json.loads((root / "gen2" / "generation.json").read_text())
-            for name in ("netduel", "ladder"):
+            for name in ("ladder",):
                 self.assertFalse(record["stages"][name]["done"])
                 self.assertIn("botlab duel", record["stages"][name]["failed"])
             self.assertTrue(record["stages"]["retire"]["done"], "the stages after it ran")
             self.assertIn("finished", record)
             self.assertIn("failed, recorded and passed over", out.getvalue())
-            self.assertRegex((root / "gen2" / "README.md").read_text(), r"\| netduel \|.*failed, and passed over")
+            self.assertRegex((root / "gen2" / "README.md").read_text(), r"\| ladder \|.*failed, and passed over")
+
+    def measured(self, root: Path, accepted: bool, ladder: dict | None = None) -> tuple[list, dict]:
+        """Generation 2 of `root` run from after its promotion (`accepted` or not), with `--ladder-every 1`: the duels
+        it tried (each fails), and its record."""
+        champion = root / "champions" / "gen0"
+        (champion / "train").mkdir(parents=True)
+        (champion / "manifest.json").write_text("{}")
+        (root / "champions" / "current").symlink_to("gen0")
+        stages = {n: dict(done=True, seconds=1.0) for n in ("build", "selfplay", "train", "export", "parity")}
+        stages["selfplay"].update(games=4, simulations=8, lanes=1, games_per_hour=4.0, samples=40, visit_samples=8,
+                                  capped=0, dropped=0, fallbacks=0, first_player=0.5, seeds="1..5")
+        stages["train"].update(steps=10, seen=2560, init="gen0", window=[], value_mix=0.0, held_out=dict(value_mse=0.5))
+        stages["export"].update(model="models/gen2")
+        stages["parity"].update(summary="ok")
+        stages["gate"] = dict(done=True, seconds=1.0, wins=6, losses=4, draws=0, games=10, share=0.6, margin=0.3,
+                              champion="gen0", simulations=8, decks="rw-aggro", pentanomial=[0, 0, 3, 0, 2])
+        stages["promote"] = dict(done=True, seconds=1.0, accepted=accepted, champion="gen0", rule="above-half")
+        if ladder is not None:
+            stages["ladder"] = ladder
+        generation.history(root, dict(generation=2, accepted=accepted))
+        rec = generation.Record(root / "gen2", 2, False)
+        rec.data.update(stages=stages, champion="gen0")
+        rec.save()
+        ran = []
+
+        def failing(cmd, *a, **k):
+            ran.append(" ".join(map(str, cmd)))
+            raise SystemExit("failed (1): botlab duel")
+
+        with unittest.mock.patch.object(generation, "run", failing), contextlib.redirect_stdout(io.StringIO()):
+            generation.main(["--root", str(root), "--generation", "2", "--no-build", "--decks-dir", "", "--no-mine",
+                             "--ladder-every", "1", "--ladder-anchors", "tactical", "--gpu-server", "off", "--device", "cpu"])
+        return ran, json.loads((root / "gen2" / "generation.json").read_text())
+
+    def test_only_a_generation_that_promoted_plays_the_ladder(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            # Rejected: the champion is the one an earlier ladder measured, and no duel is played.
+            ran, record = self.measured(root_with(Path(tmp), gens=(1,)), accepted=False)
+            self.assertEqual(ran, [])
+            self.assertNotIn("ladder", record["stages"])
+            self.assertIn("finished", record)
+        with tempfile.TemporaryDirectory() as tmp:
+            ran, record = self.measured(root_with(Path(tmp), gens=(1,)), accepted=True)
+            self.assertEqual(len(ran), 1)
+            self.assertRegex(ran[0], r"duel --a neural@64 --b tactical ")
+            self.assertIn("ladder", record["stages"])
+        with tempfile.TemporaryDirectory() as tmp:
+            # A resumed generation whose ladder is recorded keeps it, promoted or not, and plays nothing.
+            duel = generation.parse_gate(PAIRED_GATE)
+            kept = dict(done=True, seconds=5.0, rows=[dict(duel, champion="gen0", anchor="tactical", budget="@64")])
+            ran, record = self.measured(root_with(Path(tmp), gens=(1,)), accepted=False, ladder=kept)
+            self.assertEqual(ran, [])
+            self.assertEqual(record["stages"]["ladder"]["rows"][0]["anchor"], "tactical")
+            self.assertRegex((Path(tmp) / "gen2" / "README.md").read_text(), r"\| ladder \|.*gen0 against tactical at @64")
+
+    def test_the_network_only_duel_is_no_stage(self):
+        self.assertNotIn("netduel", generation.STAGES)
+        self.assertNotIn("netduel", generation.MEASUREMENTS)
+        with tempfile.TemporaryDirectory() as tmp, contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+            generation.main(["--root", tmp, "--dry-run", "--net-duel-games", "10"])
+        # An older generation's record that holds one still loads and prints (and a retrain sets it aside: below).
+        duel = generation.parse_gate(PAIRED_GATE)
+        readme = generation.readme(dict(generation=3, started="then", stages=dict(
+            netduel=dict(done=True, seconds=60.0, champion="gen2", decks="3 decks", **duel))))
+        self.assertRegex(readme, r"\| netduel \|.*candidate gen3 against gen2.*by pair 50\.6%")
+
+    def test_the_gate_is_recorded_by_matchup_and_a_low_matchup_is_flagged(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = root_with(Path(tmp), gens=(1,))
+            champion = root / "champions" / "gen0"
+            (champion / "train").mkdir(parents=True)
+            (champion / "manifest.json").write_text("{}")
+            (root / "champions" / "current").symlink_to("gen0")
+            model = root / "models" / "gen2"
+            model.mkdir(parents=True)
+            (model / "manifest.json").write_text("{}")
+            stages = {n: dict(done=True, seconds=1.0) for n in ("build", "selfplay", "train", "export", "parity")}
+            stages["selfplay"].update(games=4, simulations=8, lanes=1, games_per_hour=4.0, samples=40, visit_samples=8,
+                                      capped=0, dropped=0, fallbacks=0, first_player=0.5, seeds="1..5")
+            stages["train"].update(steps=10, seen=2560, init="gen0", window=[], value_mix=0.0, held_out=dict(value_mse=0.5))
+            stages["export"].update(model="models/gen2")
+            stages["parity"].update(summary="ok")
+            rec = generation.Record(root / "gen2", 2, False)
+            rec.data.update(stages=stages, champion="gen0")
+            rec.save()
+            logs = root / "gen2" / "logs"
+            logs.mkdir()
+            (logs / "gate.log").write_text(
+                "neural@64 against neural@64, 1200 games, rw-aggro vs ub-reanimator, shuffles from 20000001.\n" + GATE +
+                "\nneural@64/gen0: the network's 1 answers\nneural@64/gen2: the network's 1 answers\n")
+            # The gate's games, as BotLab's --results keeps them: the mirror of `red` lost (30 of 40 pairs lost both
+            # games, 10 split), every other pair split.
+            rows, game = [], 0
+            for decks, pairs, lost in ((("red", "red"), 40, 30), (("red", "blue"), 40, 0), (("blue", "blue"), 40, 0)):
+                for k in range(pairs):
+                    for seat, points in ((1, 0 if k < lost else 1), (2, 0)):
+                        rows.append("\t".join(map(str, (game, game // 2, 7, seat, *decks, 2, points, 1, 9))))
+                        game += 1
+            (logs / "gate-results.tsv").write_text(generation.duels.COLUMNS + "\n" + "\n".join(rows) + "\n")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                generation.main(["--root", str(root), "--generation", "2", "--no-build", "--decks-dir", "", "--accept", "sprt",
+                                 "--no-mine"])
+            table = json.loads((root / "gen2" / "generation.json").read_text())["stages"]["gate"]["matchups"]
+            by = {r["matchup"]: r for r in table["rows"]}
+            self.assertEqual([r["matchup"] for r in table["rows"]],
+                             ["all", "mirrors", "non-mirrors", "blue vs blue", "blue vs red", "red vs red"])
+            self.assertEqual((by["red vs red"]["pairs"], by["red vs red"]["share"], by["red vs red"]["flagged"]), (40, 0.125, True))
+            self.assertEqual((by["blue vs red"]["share"], by["blue vs red"]["flagged"]), (0.5, False))
+            self.assertIn("WARNING: gate, red vs red: 12.5% +/- 6.8% by pair over 40 pairs (z -10.8)", out.getvalue())
+            readme = (root / "gen2" / "README.md").read_text()
+            self.assertLess(readme.index("WARNING"), readme.index("| stage |"), "what is flagged comes first")
+            self.assertIn("> - **gate, red vs red: 12.5% +/- 6.8% by pair over 40 pairs (z -10.8)**", readme)
+            self.assertIn("## gate by matchup", readme)
+            self.assertIn("| red vs red | 40 | 12.5% +/- 6.8% | -10.8 | 30 / 10 / 0 | **LOW** |", readme)
+            self.assertIn("| blue vs red | 40 | 50.0% +/- 0.0% | - | 0 / 40 / 0 |  |", readme)
 
     def test_retrain_sets_a_rejected_attempt_aside(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -682,7 +804,7 @@ class GenerationTest(unittest.TestCase):
                 (gen1 / "logs" / f"{stage}.log").write_text(stage)
             (root / "models" / "gen1" / "train").mkdir(parents=True)
             (root / "models" / "gen1" / "train" / "metrics.json").write_text("{}")
-            stages = {n: dict(done=True, seconds=60.0) for n in generation.STAGES}
+            stages = {n: dict(done=True, seconds=60.0) for n in generation.STAGES + generation.RETIRED}
             stages["selfplay"].update(games=4, simulations=8, lanes=1, games_per_hour=4.0, samples=40, visit_samples=8, capped=0,
                                       dropped=0, fallbacks=0, first_player=0.5, seeds="1..5")
             stages["heldout"].update(directory="heldout", games=1000, shards=10, source="gen1")
@@ -693,7 +815,13 @@ class GenerationTest(unittest.TestCase):
             duel = generation.parse_gate(PAIRED_GATE)
             stages["netduel"].update(duel, champion="gen0", decks="3 decks")
             stages["evaluate"].update(directory="heldout", games=1000, positions=470000,
-                                      networks=dict(gen1=dict(value_mse=0.6, ece=0.02, policy_ce=0.5, top1=0.89, choices=18000)))
+                                      networks=dict(gen1=dict(value_mse=0.6, ece=0.02, policy_ce=0.5, top1=0.89, choices=18000)),
+                                      seats=[dict(deck="red", positions=900, games=40, outcome=0.3, flagged=["gen1"],
+                                                  networks=dict(gen1=dict(value=-0.9, heuristic=-5.1, residual=0.4),
+                                                                gen0=dict(value=0.25, heuristic=0.4, residual=0.1)))],
+                                      paired=dict(of="gen1", against="gen0",
+                                                  value_mse=dict(diff=0.021, half=0.004, games=40, n=900),
+                                                  policy_ce=dict(diff=-0.003, half=0.002, games=40, n=300)))
             stages["gate"].update(wins=6, losses=4, draws=0, games=10, share=0.6, margin=0.3, llr=0.1, sprt="no verdict",
                                   champion="gen0", simulations=8, decks="rw-aggro")
             stages["promote"].update(accepted=False, champion="gen0", rule="sprt")
@@ -707,6 +835,10 @@ class GenerationTest(unittest.TestCase):
             self.assertRegex(readme, r"\| netduel \|.*by pair 50\.6% \+/- 0\.3% over 3000 pairs \(0 / 0\.5 / 1 / 1\.5 / 2: 12 / 30 / 2900 / 40 / 18")
             self.assertRegex(readme, r"\| evaluate \|.*gen1: value MSE 0\.6000, ECE 0\.0200, policy CE 0\.5000, top-1 0\.890 on 18000 targets")
             self.assertRegex(readme, r"\| ladder \|.*gen0 against tactical at @64")
+            self.assertRegex(readme, r"\| evaluate \|.*gen1 less gen0, paired by game \(40 games; below zero is better\): "
+                                     r"value MSE \+0\.0210 \+/- 0\.0040, policy CE -0\.0030 \+/- 0\.0020; by seat below")
+            self.assertIn("> - **red's seat: gen1 values it -0.90 on average where its outcomes average +0.30 (900 positions)**", readme)
+            self.assertIn("| red | 900 | +0.30 | -0.90 (-5.10 / +0.40) | +0.25 (+0.40 / +0.10) | **OFF: gen1** |", readme)
 
             class Args:
                 retrain, dry_run = "value overfit", False
