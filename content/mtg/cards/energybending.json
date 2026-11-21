@@ -1,0 +1,6 @@
+{
+  "name": "Energybending",
+  "manaCost": "{2}",
+  "type": "Instant — Lesson",
+  "oracleText": "Lands you control gain all basic land types until end of turn.\nDraw a card."
+}

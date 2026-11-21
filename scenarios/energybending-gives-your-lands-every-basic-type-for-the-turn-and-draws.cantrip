@@ -1,0 +1,44 @@
+# Energybending: "Lands you control gain all basic land types until end of turn. Draw a card." (CR 305.6, 611.2c, 514.2). Bot1 has a Mountain from turn 1. On turn 3, with the
+# Mountain untapped, Energybending ({2}, two Moxes) makes it every basic land type, so it taps for blue mana (an Island's ability) though a Mountain only makes red; one card is
+# drawn. A Forest played afterwards that turn was not affected (the set of lands was fixed as it resolved, CR 611.2c): it is just a Forest, and Bot2's Island is just an Island. Mox Pearl
+# is not a land, so it gains no type. At turn 5 the Mountain is only a Mountain again.
+
+[Bot1 Deck]
+Mountain
+Mox Pearl
+Mox Jet
+Energybending
+Forest
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Mountain.Subtypes.Count = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Energybending.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mountain.Subtypes.Count = 5
+? Bot2.Battlefield.Island.Subtypes.Count = 1
+? Bot1.Battlefield.Mox Pearl.Subtypes = (absent)
+? Bot1.Library.Count = 11
+Bot1.Battlefield.Mountain.Activate(Ability: {T}: Add {U})
+? Bot1.Mana = {U}
+Bot1.Hand.Forest.Play
+? Bot1.Battlefield.Forest.Subtypes.Count = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Mountain.Subtypes.Count = 1
+
+[Expect]
+Bot1.Graveyard = Energybending
