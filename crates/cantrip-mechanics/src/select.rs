@@ -481,6 +481,37 @@ fn most_apart(sets: &[(Vec<usize>, usize)], names: usize) -> Vec<usize> {
     chosen
 }
 
+/// Whether some one creature type is among `types` of every object (none chosen share every type): "share a creature type".
+fn shares_a_creature_type(selected: &[SubtypeSet]) -> bool {
+    Subtype::CREATURE_TYPES.iter().any(|&t| selected.iter().all(|s| s.has(t)))
+}
+
+/// An object with `candidate` for subtypes may be added to `selected`: it has a creature type all of them have.
+fn may_join(selected: &[SubtypeSet], candidate: SubtypeSet) -> bool {
+    Subtype::CREATURE_TYPES.iter().any(|&t| selected.iter().all(|s| s.has(t)) && candidate.has(t))
+}
+
+fn share_a_creature_type(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
+    let selected: Vec<SubtypeSet> = choice.selected.iter().map(|&c| q.chars(c).subtypes).collect();
+    let complete = shares_a_creature_type(&selected);
+    let addable = Bits::of(choice.candidates.len(), |i| may_join(&selected, q.chars(choice.candidates[i]).subtypes));
+    Verdict { complete, addable }
+}
+
+/// A largest set that shares a creature type: the candidates of the creature type the most of them have.
+fn largest_sharing_a_creature_type(q: &dyn Query, choice: &Choice, _: u32) -> Vec<ObjectId> {
+    let with = |t: Subtype| choice.candidates.iter().copied().filter(|&c| q.chars(c).subtypes.has(t)).collect::<Vec<_>>();
+    Subtype::CREATURE_TYPES.iter().map(|&t| with(t)).max_by_key(Vec::len).unwrap_or_default()
+}
+
+/// "That share a creature type" (CR 205.3m, 205.2): some one creature type is a type of every object chosen, each read where it
+/// is (a changeling has them all, CR 702.73a). A single object shares a type with itself, any of the objects of a set that
+/// shares one share it too, and with nothing chosen yet every type is shared, so only a creature type of its own is wanted of
+/// an object. Unbury's "two target creature cards that share a creature type" and Secret Tunnel's "two target creatures you
+/// control that share a creature type" print it of targets.
+pub const SHARE_A_CREATURE_TYPE: Part =
+    set_part(&(share_a_creature_type as SelectFn), &(largest_sharing_a_creature_type as LargestFn), 0, "that share a creature type");
+
 fn different_mana_values(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
     let chosen: Vec<u32> = choice.selected.iter().map(|&c| q.mana_value(c)).collect();
     let complete = chosen.iter().enumerate().all(|(i, v)| !chosen[..i].contains(v));
@@ -686,5 +717,25 @@ mod name_set_tests {
             vec![],
         ];
         assert_eq!(largest_name_set(&names), vec![1, 2, 3]);
+    }
+}
+
+#[cfg(test)]
+mod share_a_creature_type_tests {
+    use super::{may_join, shares_a_creature_type};
+    use cantrip_api::{Subtype, SubtypeSet};
+
+    /// With a Goblin and an Elf chosen no type is shared, so no object may join them; with only the Goblin chosen a Goblin
+    /// may join and an Elf may not; with nothing chosen any creature may.
+    #[test]
+    fn an_object_may_join_only_if_it_has_a_type_every_chosen_object_has() {
+        let goblin = SubtypeSet::of(&[Subtype::Goblin]);
+        let elf = SubtypeSet::of(&[Subtype::Elf]);
+        let goblin_elf = SubtypeSet::of(&[Subtype::Goblin, Subtype::Elf]);
+        assert!(may_join(&[], elf));
+        assert!(may_join(&[goblin], goblin) && may_join(&[goblin], goblin_elf));
+        assert!(!may_join(&[goblin], elf), "an Elf shares nothing with a Goblin");
+        assert!(!may_join(&[goblin, elf], goblin_elf), "no type is on both chosen objects");
+        assert!(shares_a_creature_type(&[goblin, goblin_elf]) && !shares_a_creature_type(&[goblin, elf]));
     }
 }
