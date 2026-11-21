@@ -1,0 +1,58 @@
+# Browser
+# Fabrication Foundry at a table, Bot1 a browser page: "{2}{W}, {T}, Exile one or more other artifacts you control with total mana value X:
+# Return target artifact card with mana value X or less from your graveyard to the battlefield." X, set by no mana symbol, is announced with the
+# page's stepper as the ability is activated (CR 601.2b by way of 602.2b), the target is chosen next, after X (CR 601.2c), and the artifacts the
+# cost exiles are clicked as it is paid (CR 601.2h), their total mana value exactly X (CR 118.3).
+# Turn 1 Bot1 builds three Moxen, a Sol Ring (mana value 1) and the Foundry, and sacrifices a Mishra's Bauble (0) to its graveyard. On turn 3
+# the Sol Ring's {C}{C} and a Plains pay {2}{W}; X = 1 is announced, the Bauble targeted, and the tapped Sol Ring alone is exiled for the
+# total of 1. The Bauble returns.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Sol Ring
+Mishra's Bauble
+Fabrication Foundry
+Plains
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mishra's Bauble.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mishra's Bauble.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fabrication Foundry.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Mishra's Bauble
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Fabrication Foundry.Activate(Ability: Return; X: 1)
+Bot1.Target(Mishra's Bauble)
+Bot1.Choose(Sol Ring)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Fabrication Foundry; Mishra's Bauble; Mox Jet; Mox Pearl; Mox Ruby; Plains
+Bot1.Graveyard =
+Exile = Sol Ring
+Stack.Count = 0

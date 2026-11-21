@@ -1,0 +1,84 @@
+# Fabrication Foundry: the cost exiles "one or more" artifacts, so X = 0 still takes one, a Mox with mana value 0 (CR 202.3): an empty choice does not pay
+# and the announcement is taken back (CR 733.1, 601.2h). The same setup as the X = 1 scenario: Bot1's graveyard holds a Fellwar Stone (2) and a
+# Mox Pearl (0). With X = 0 only the Pearl is a target (mana value 0 or less), and the Mox Ruby alone is exiled (mana value 0).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Sol Ring
+Fellwar Stone
+Fabrication Foundry
+Mox Emerald
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mana Vault
+Shatter
+Shatter
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Fellwar Stone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fabrication Foundry.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Mana Vault.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Fellwar Stone)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mana Vault.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Mox Pearl)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Mox Pearl; Fellwar Stone
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Fabrication Foundry.Activate(Ability: Return; X: 0)
+Bot1.Target(Mox Pearl)
+Bot1.Choose()
+? Bot1.Battlefield.Fabrication Foundry.Tapped = false
+? Bot1.Mana = {W}{C}{C}
+Bot1.Battlefield.Fabrication Foundry.Activate(Ability: Return; X: 0)
+! Bot1.Target(Fellwar Stone)
+Bot1.Target(Mox Pearl)
+Bot1.Choose(Mox Ruby)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Fabrication Foundry; Mox Jet; Mox Pearl; Plains; Sol Ring
+Bot1.Graveyard = Fellwar Stone
+Exile = Mox Ruby
+Stack.Count = 0

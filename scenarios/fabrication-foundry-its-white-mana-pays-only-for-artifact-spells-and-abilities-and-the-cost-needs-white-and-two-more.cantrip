@@ -1,0 +1,70 @@
+# Fabrication Foundry: "{T}: Add {W}. Spend this mana only to cast an artifact spell or activate an ability of an artifact source." and
+# "{2}{W}, {T}, Exile ...: Return ... Activate only as a sorcery." (CR 106.6, 602.5d).
+# Turn 1 Bot1 casts the Foundry (Mox Pearl's {W}, Mox Jet's {B}) and taps it for {W}: the Shatter (no artifact spell) cannot be paid with it though a
+# Mox Ruby stands untapped, the Sol Ring (an artifact spell) can; the Sol Ring's {C}{C} pay a Mind Stone. Turn 2 Bot2 destroys the Mox Pearl. On turn 3
+# Bot1 has {C}{C} (the Sol Ring) in the pool and no {W} (a Plains is still in hand): the ability is refused; with the Plains played and tapped, {2}{W} is
+# paid exactly, X = 2 on the Mind Stone, and the Pearl (mana value 0 or less than 2) returns. Exiling the Mind Stone leaves the Sol Ring.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Fabrication Foundry
+Mind Stone
+Shatter
+Sol Ring
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Shatter
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fabrication Foundry.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Fabrication Foundry.Activate
+? Bot1.Mana = {W} (ArtifactSpellsOrAbilities)
+! Bot1.Hand.Shatter.Cast(Mana: short)
+? Bot1.Mana = {W} (ArtifactSpellsOrAbilities)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Mox Pearl)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Mox Pearl
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.Battlefield.Fabrication Foundry.Activate(Ability: Return; X: 2; Mana: short)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Fabrication Foundry.Activate(Ability: Return; X: 2)
+Bot1.Target(Mox Pearl)
+Bot1.Choose(Mind Stone)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Fabrication Foundry; Mox Jet; Mox Pearl; Mox Ruby; Plains; Sol Ring
+Exile = Mind Stone
+Stack.Count = 0

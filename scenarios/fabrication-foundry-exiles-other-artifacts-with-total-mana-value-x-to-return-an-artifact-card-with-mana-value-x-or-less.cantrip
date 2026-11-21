@@ -1,0 +1,100 @@
+# Fabrication Foundry: "{2}{W}, {T}, Exile one or more other artifacts you control with total mana value X: Return target artifact card with mana
+# value X or less from your graveyard to the battlefield. Activate only as a sorcery." X is announced first (CR 601.2b, 602.2b), then the
+# target chosen (CR 601.2c) and the cost paid: the artifacts exiled come to exactly X in mana value (CR 118.3, 202.3).
+# Turn 1 Bot1 builds Mox Pearl, Mox Jet, Mox Ruby, Sol Ring (mana value 1), Fellwar Stone (2) and the Foundry (2). Turn 2 Bot2 casts a Mana
+# Vault (1) and two Shatters: one destroys Bot1's Fellwar Stone, the other Bot2's own Mox Jet. Turn 3 Bot1 casts a Mind Stone (2).
+# X = 2 is announced. The Foundry itself (mana value 2, "other") and Bot2's Mana Vault ("you control") are not what is exiled; Sol Ring (1) alone
+# does not come to 2. Bot2's Mox Jet in its own graveyard is no target (mana value 0, and "your graveyard"); the Fellwar Stone, with mana value
+# 2 exactly at the limit, is. The Mind Stone is exiled; the Sol Ring and the Foundry stay, and the Fellwar Stone returns.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Sol Ring
+Fellwar Stone
+Fabrication Foundry
+Mind Stone
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mana Vault
+Shatter
+Shatter
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Fellwar Stone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fabrication Foundry.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Mana Vault.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Fellwar Stone)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mana Vault.Activate
+Bot2.Hand.Shatter.Cast(Bot2.Battlefield.Mox Jet)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Fellwar Stone
+? Bot2.Graveyard = Shatter; Mox Jet; Shatter
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Fabrication Foundry.Activate(Ability: Return; X: 2)
+! Bot1.Target(Bot2.Graveyard.Mox Jet)
+Bot1.Target(Fellwar Stone)
+Bot1.Choose(Sol Ring)
+? Bot1.Battlefield.Fabrication Foundry.Tapped = false
+? Bot1.Mana = {W}{B}{R}
+Bot1.Battlefield.Fabrication Foundry.Activate(Ability: Return; X: 2)
+Bot1.Target(Fellwar Stone)
+! Bot1.Choose(Fabrication Foundry)
+! Bot1.Choose(Mana Vault)
+Bot1.Choose(Mind Stone)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Fabrication Foundry; Fellwar Stone; Mox Jet; Mox Pearl; Mox Ruby; Plains; Sol Ring
+Bot1.Graveyard =
+Bot2.Graveyard = Shatter; Mox Jet; Shatter
+Bot2.Battlefield.Mana Vault.Tapped = true
+Exile = Mind Stone
+Stack.Count = 0
