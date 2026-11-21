@@ -1,0 +1,42 @@
+# Suki, Kyoshi Warrior: "Suki's power is equal to the number of creatures you control", a characteristic-defining ability (CR 604.3)
+# over a printed */4. Alone she is a 1/4 (the control). Bot2's The Wondrous Wasp takes it away on turn 2, and the star is worth 0
+# (CR 208.2a, 208.5): a 0/4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Suki, Kyoshi Warrior
+Plains x17
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Mox Jet
+The Wondrous Wasp
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Suki, Kyoshi Warrior.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Suki, Kyoshi Warrior.Power = 1
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.The Wondrous Wasp.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Target(Suki, Kyoshi Warrior)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Suki, Kyoshi Warrior.Power = 0
+Bot1.Battlefield.Suki, Kyoshi Warrior.Toughness = 4

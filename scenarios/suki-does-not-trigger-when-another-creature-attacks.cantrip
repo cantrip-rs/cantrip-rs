@@ -1,0 +1,32 @@
+# Suki, Kyoshi Warrior: "Whenever Suki attacks" is her own attack only. Bot1's Ornithopter (0 power) attacks alone on turn 3 while Suki stays
+# home: no Ally is made, Suki is a 2/4 (herself and the Ornithopter) and Bot2 stays at 20.
+[Bot1 Deck]
+
+Black Lotus
+Mox Pearl
+Suki, Kyoshi Warrior
+Ornithopter
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Suki, Kyoshi Warrior.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Combat.Attackers = Ornithopter > Bot2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Suki, Kyoshi Warrior.Power = 2
+Bot1.Battlefield = Mox Pearl; Ornithopter; Suki, Kyoshi Warrior
+Bot2.Life = 20

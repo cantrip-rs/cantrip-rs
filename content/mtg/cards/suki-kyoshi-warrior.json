@@ -1,0 +1,8 @@
+{
+  "name": "Suki, Kyoshi Warrior",
+  "manaCost": "{2}{G/W}{G/W}",
+  "type": "Legendary Creature — Human Warrior Ally",
+  "power": "*",
+  "toughness": 4,
+  "oracleText": "Suki's power is equal to the number of creatures you control.\nWhenever Suki attacks, create a 1/1 white Ally creature token that's tapped and attacking."
+}
