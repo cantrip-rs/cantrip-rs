@@ -1,0 +1,56 @@
+# The Lion-Turtle: "can't ... block unless there are three or more Lesson cards in your graveyard" (CR 509.1b). Bot1 has two Lessons
+# (Octopus Forms cast with Mox Sapphire's {U} and the Turtle's own "{T}: Add one mana of any color") when Bot2's Memnite attacks on
+# turn 4: the block is refused (Bot1 takes 1, 23 -> 22). A third Form, cast at instant speed with the Turtle's mana, makes three,
+# and on turn 6 the Turtle blocks the Memnite and kills it (the positive control; the Island is Bot2's hand-size discard).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+The Lion-Turtle
+Octopus Form
+Octopus Form
+Octopus Form
+Plains x14
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Lion-Turtle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Octopus Form.Cast(The Lion-Turtle)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.The Lion-Turtle.Activate(Color: Blue)
+Bot1.Hand.Octopus Form.Cast(The Lion-Turtle)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+! Bot1.Block(The Lion-Turtle > Memnite)
+[T4 Bot2.Main2]
+Bot1.Battlefield.The Lion-Turtle.Activate(Color: Blue)
+Bot1.Hand.Octopus Form.Cast(The Lion-Turtle)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+[T6 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Block(The Lion-Turtle > Memnite)
+[T6 Bot2.Main2]
+
+[Expect]
+Bot2.Graveyard = Memnite; Island
+Bot1.Life = 22

@@ -1,0 +1,62 @@
+# The Lion-Turtle ({1}{G}{U}, 3/6 reach, vigilance): "When The Lion-Turtle enters, you gain 3 life" (Bot1 20 -> 23). "{T}: Add one mana of any
+# color" pays for Bot1's Octopus Forms (U, instant Lessons that untap their target): the Turtle taps for {U} and casts a Form on itself (exactly one {U} is added).
+# "Can't attack ... unless there are three or more Lesson cards in your graveyard" (CR 508.1c): the attack is refused with 0, 1 and 2
+# Lessons, one on each of turns 3, 5 and 7 (a refusal spends its turn; Black Lotus in the graveyard is no Lesson), and allowed on turn 9
+# with 3: the Turtle deals 3 and, with vigilance, stays untapped. Bot1's Memnite is on the battlefield so that attacking is on offer at
+# all (the refusals need a prompt); it stays home.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+The Lion-Turtle
+Memnite
+Octopus Form
+Octopus Form
+Octopus Form
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Lion-Turtle.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Life = 23
+! Bot1.Attack(The Lion-Turtle > Bot2)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Octopus Form.Cast(The Lion-Turtle)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Octopus Form; Black Lotus
+! Bot1.Attack(The Lion-Turtle > Bot2)
+Bot1.Battlefield.The Lion-Turtle.Activate(Color: Blue)
+? Bot1.Mana = {U}
+Bot1.Hand.Octopus Form.Cast(The Lion-Turtle)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Octopus Form; Octopus Form; Black Lotus
+! Bot1.Attack(The Lion-Turtle > Bot2)
+Bot1.Battlefield.The Lion-Turtle.Activate(Color: Blue)
+Bot1.Hand.Octopus Form.Cast(The Lion-Turtle)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(The Lion-Turtle > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.The Lion-Turtle.Tapped = False
+Bot1.Battlefield.The Lion-Turtle.Keywords = Reach; Vigilance
