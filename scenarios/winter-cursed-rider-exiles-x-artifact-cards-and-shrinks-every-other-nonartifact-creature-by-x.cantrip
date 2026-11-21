@@ -1,0 +1,120 @@
+# Winter, Cursed Rider: "Exhaust - {2}{U}{B}, {T}, Exile X artifact cards from your graveyard: Each other nonartifact creature gets -X/-X
+# until end of turn." X is announced as the ability is activated, with no {X} in its cost (CR 107.3a, 602.2b), and the cost exiles that many
+# cards (CR 602.2b, 601.2h).
+# Turn 1 Bot1 casts Winter and sacrifices three Mishra's Baubles (three artifact cards in its graveyard). Turn 2 Bot2 casts a Wall of
+# Wood (0/3) and a Steel Wall (0/4, an artifact) and sacrifices a Bauble of its own. Turn 3 Bot1 casts its own Kraken Hatchling (0/4) and
+# a Dark Ritual (a nonartifact card, now in its graveyard too).
+# The cost is refused for want of {U} while only an untapped Mox Emerald stands beside the {B}{B}{B} in the pool. Then X = 2 is announced,
+# X = 4 is refused (three artifact cards), the Ritual is not a card the cost takes, and the pool ({B}{B}{B} and the Island's {U}) pays
+# {2}{U}{B} exactly: two of the three Baubles are exiled, the third stays, and Bot2's Bauble stays too ("your graveyard").
+# Bot2's Wall of Wood and the Hatchling become -2/1 and -2/2 (each creature, both players'), Steel Wall (an artifact) and Winter itself
+# (other) are untouched. On turn 4 they are 0/3 and 0/4 again. On turn 5 the ability, used once, cannot be activated again (exhaust).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Winter, Cursed Rider
+Mishra's Bauble
+Mishra's Bauble
+Mishra's Bauble
+Dark Ritual
+Mox Emerald
+Kraken Hatchling
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Wall of Wood
+Steel Wall
+Mishra's Bauble
+Island x2
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Winter, Cursed Rider.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mishra's Bauble.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mishra's Bauble.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mishra's Bauble.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mishra's Bauble#1.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mishra's Bauble#1.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mishra's Bauble.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Mishra's Bauble; Mishra's Bauble; Mishra's Bauble
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mishra's Bauble.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Wall of Wood.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Steel Wall.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mishra's Bauble.Activate(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Mishra's Bauble
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kraken Hatchling.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Winter, Cursed Rider.Activate(Ability: Exhaust; Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Winter, Cursed Rider.Activate(Ability: Exhaust; X: 2)
+! Bot1.Battlefield.Winter, Cursed Rider.Activate(Ability: Exhaust; X: 4)
+! Bot1.Choose(Dark Ritual)
+Bot1.Choose(Mishra's Bauble; Mishra's Bauble)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kraken Hatchling.Power = -2
+? Bot1.Battlefield.Kraken Hatchling.Toughness = 2
+? Bot2.Battlefield.Wall of Wood.Power = -2
+? Bot2.Battlefield.Wall of Wood.Toughness = 1
+? Bot2.Battlefield.Steel Wall.Toughness = 4
+? Bot1.Battlefield.Winter, Cursed Rider.Toughness = 2
+? Bot1.Graveyard = Dark Ritual; Mishra's Bauble
+? Bot2.Graveyard = Mishra's Bauble
+[T4 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Winter, Cursed Rider.Activate(Ability: Exhaust; X: 1)
+
+[Expect]
+Exile = Mishra's Bauble; Mishra's Bauble
+Bot1.Battlefield.Kraken Hatchling.Toughness = 4
+Bot2.Battlefield.Wall of Wood.Toughness = 3
+Bot1.Battlefield.Winter, Cursed Rider.Tapped = false

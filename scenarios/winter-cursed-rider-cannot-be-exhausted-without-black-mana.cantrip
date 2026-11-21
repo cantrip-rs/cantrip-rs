@@ -1,0 +1,43 @@
+# Winter, Cursed Rider: the exhaust cost "{2}{U}{B}, {T}, ..." needs one {B} of its own (CR 202.1, 601.2h), so four other mana is not
+# enough. Turn 1 Bot1 casts Winter with Mox Sapphire and Mox Jet. On turn 3 Bot1 spends Mox Jet's {B} on Darkness (the only black
+# source), and with Mox Sapphire ({U}), Mox Emerald, Mox Ruby and an Island untapped - four mana, one of them {U} - the ability is refused.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Winter, Cursed Rider
+Darkness
+Mox Emerald
+Mox Ruby
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Winter, Cursed Rider.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Darkness.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+! Bot1.Battlefield.Winter, Cursed Rider.Activate(Ability: Exhaust; Mana: short)
+
+[Expect]
+Bot1.Battlefield.Winter, Cursed Rider.Tapped = false
+Bot1.Graveyard = Darkness
