@@ -1,0 +1,41 @@
+# Trusty Boomerang: "Tap target creature" is any creature (CR 115.1, 601.2c), the activating player's own included. Bot1's equipped
+# Memnite taps Bot1's own Ornithopter, and the Boomerang returns to Bot1's hand.
+
+[Bot1 Deck]
+Memnite
+Ornithopter
+Mox Jet
+Mox Pearl
+Mox Ruby
+Trusty Boomerang
+Plains x15
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Trusty Boomerang.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Trusty Boomerang.Activate(Ability: Equip; Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Memnite.Activate(Ability: Tap target; Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Memnite.Tapped = true
+Bot1.Battlefield.Trusty Boomerang = (absent)
+Bot1.Hand.Trusty Boomerang.Colors.Count = 0

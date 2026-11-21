@@ -1,0 +1,61 @@
+# CR 400.7, 113.7a: Bot1 activates the Boomerang's granted ability; Bot2 destroys the Equipment in response with Shatter. The
+# Equipment is a new object in Bot1's graveyard, with no relation to the one that gave the ability, so "Return Trusty Boomerang to
+# its owner's hand" finds nothing: the Ornithopter is still tapped, and the Boomerang stays in the graveyard.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Mox Pearl
+Mox Ruby
+Trusty Boomerang
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Mox Jet
+Shatter
+Plains x16
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Trusty Boomerang.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Trusty Boomerang.Activate(Ability: Equip; Memnite)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Memnite.Activate(Ability: Tap target; Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Trusty Boomerang)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Trusty Boomerang = (absent)
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot1.Graveyard.Trusty Boomerang.Colors.Count = 0
+Bot1.Hand.Trusty Boomerang = (absent)
