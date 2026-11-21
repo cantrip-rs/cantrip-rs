@@ -1,0 +1,79 @@
+# Bitter Work: "Exhaust -- {4}: Earthbend 4. Activate only during your turn." Bot1 cannot activate it on Bot2's turn 2 though
+# five mana are available (CR 602.5b). On turn 3 four Moxen pay: the Mountain is a 4/4 land creature with haste and four +1/+1
+# counters, and attacking Bot2 with it draws a card (power 4, CR 508.1): library 12 after the draw step, 11 after the trigger.
+# On turn 4 Bot2's Terror kills it (an Island is discarded to Bot2's hand size) and it returns to the battlefield tapped, a
+# plain land (CR 701.66a). On turn 5 the exhaust ability cannot be activated again (CR 702.177a).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Black Lotus
+Bitter Work
+Island x13
+
+[Bot2 Deck]
+Mox Jet
+Terror
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bitter Work.Cast(Spend: R, G, B)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Battlefield.Bitter Work.Activate(Bot1.Battlefield.Mountain)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Bitter Work.Activate(Bot1.Battlefield.Mountain)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mountain.Power = 4
+? Bot1.Battlefield.Mountain.Toughness = 4
+? Bot1.Battlefield.Mountain.Types = Land; Creature
+? Bot1.Battlefield.Mountain.Counters.PlusOnePlusOne = 4
+? Bot1.Battlefield.Mountain.Keywords = Haste
+? Bot1.Library.Count = 12
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Mountain > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Library.Count = 11
+? Bot2.Life = 16
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Terror.Cast(Bot1.Battlefield.Mountain)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Mountain.Types = Land
+? Bot1.Battlefield.Mountain.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Bitter Work.Activate(Bot1.Battlefield.Mountain)
+
+[Expect]
+Bot1.Battlefield.Mountain.Types = Land
+Bot2.Graveyard = Terror; Island

@@ -1,0 +1,55 @@
+# Bitter Work: "attack a player" (CR 508.1): attacking a planeswalker does not count. Bot1's Alpine Grizzly (4/2) attacks Bot2's
+# Ral Zarek, Guest Lecturer ({1}{B}{B} from Black Lotus) on turn 3: no card (library 13 after the draw step, still 13 after
+# combat). On turn 5 the Grizzly attacks Bot2 itself: the draw (12 after the draw step, 11 after the trigger).
+
+[Bot1 Deck]
+Alpine Grizzly
+Mountain
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Bitter Work
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Ral Zarek, Guest Lecturer
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Alpine Grizzly.Cast(Spend: R, G, B)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Ral Zarek, Guest Lecturer.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bitter Work.Cast(Spend: R, G, B)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Alpine Grizzly > Ral Zarek, Guest Lecturer)
+[T3 Bot1.Main2]
+? Bot1.Library.Count = 13
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Alpine Grizzly > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Library.Count = 11
+Bot2.Life = 16

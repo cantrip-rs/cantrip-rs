@@ -1,0 +1,50 @@
+# Bitter Work: "Whenever you attack a player with one or more creatures with power 4 or greater, draw a card." (CR 508.1, 603.2c)
+# Leopard-Spotted Jiao (3/1) attacks Bot2 alone on turn 3, a power under 4: nothing is drawn.
+# Bot1's library stays 16 after the draw step, and Bot2 takes 3 (17).
+
+[Bot1 Deck]
+Alpine Grizzly
+Leopard-Spotted Jiao
+Mountain
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Bitter Work
+Mountain
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Alpine Grizzly.Cast(Spend: R, G, B)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Leopard-Spotted Jiao.Cast(Spend: R, U)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bitter Work.Cast(Spend: R, G, B)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 16
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Leopard-Spotted Jiao > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Library.Count = 16
+Bot1.Hand.Count = 0
