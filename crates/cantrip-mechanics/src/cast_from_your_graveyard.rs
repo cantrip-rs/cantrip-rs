@@ -44,3 +44,20 @@ pub fn enters_with_counter_if_cast_by_it(g: &mut dyn Game, entering: &mut Enteri
     }
     Ok(())
 }
+
+/// "You may cast [type] spells from your graveyard" (CR 601.3, 604.1) as the `cost` of a `GrantedWay` that is a permission
+/// (`GrantedWay::permission`), so an alternative cost may be paid instead of the mana cost it names: the card, if it is a card of
+/// type `TYPE` as it would be cast (`chars`, so a creature that is a land too, Dryad Arbor, is no creature spell: CR 305.9)
+/// and its controller's own graveyard only. A card with no mana cost can't be cast for it (CR 118.6). Osteomancer Adept, Tarrian's
+/// Journal's Tomb of Aclazotz (creature), Noctis, Prince of Lucis (artifact).
+pub fn card_of_type<const TYPE: u8>(q: &dyn Query, asker: &Asker, card: ObjectId, player: PlayerId) -> Option<Cost> {
+    if player != asker.controller {
+        return None;
+    }
+    let c = q.chars(card);
+    if !CardType::ALL.iter().any(|&t| t as u8 == TYPE && c.is(t)) {
+        return None;
+    }
+    let def = q.card(c.card);
+    def.has_cost.then(|| Cost::mana(def.cost))
+}
