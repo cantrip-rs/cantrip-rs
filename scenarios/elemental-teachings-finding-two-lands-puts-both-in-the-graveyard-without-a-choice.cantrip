@@ -1,0 +1,37 @@
+# Elemental Teachings {4}{G}: Bot1 searches for only two lands, Forest and Island (up to four, CR 701.23b), reveals them, and since
+# there are no more than two, the opponent's choice of "two" takes both (CR 608.2d): both go to Bot1's graveyard and nothing enters the
+# battlefield. Bot2 has no choice to make (Bot2.Choose would be refused) and the lands in Bot2's library are not touched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Elemental Teachings
+Llanowar Elves x3
+Forest
+Island
+Plains x8
+
+[Bot2 Deck]
+Forest
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: G)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elemental Teachings.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Forest; Island)
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Elemental Teachings; Island; Forest; Black Lotus
+Bot1.Battlefield = Mox Emerald; Mox Pearl
+Bot2.Library.Count = 13
+Bot1.Shuffles = 1
+Bot1.Revealed = Forest; Island
