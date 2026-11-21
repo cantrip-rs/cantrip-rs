@@ -1,0 +1,47 @@
+# Haru's earthbend 1 comes with the return clause ("When it dies or is exiled, return it to the battlefield tapped"): Bot1's
+# Forest is earthbent twice (a 2/2 land creature) by Invasion Reinforcements and its Ally token, then Bot2's Go for the Throat
+# destroys it. The delayed trigger Haru's earthbend created returns it tapped as a plain land again, no longer a creature (CR 701.66a,
+# 603.7, 400.7).
+
+[Bot1 Deck]
+Forest
+Mox Pearl
+Black Lotus
+Haru, Hidden Talent
+Invasion Reinforcements
+Forest x15
+
+[Bot2 Deck]
+Black Lotus
+Go for the Throat
+Swamp x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Haru, Hidden Talent.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Types = Land
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Invasion Reinforcements.Cast
+Bot1.Pass
+Bot2.Pass
+
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Go for the Throat.Cast(Bot1.Battlefield.Forest)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Forest.Types = Land
+Bot1.Battlefield.Forest.Power = (absent)
+Bot2.Graveyard = Go for the Throat; Black Lotus

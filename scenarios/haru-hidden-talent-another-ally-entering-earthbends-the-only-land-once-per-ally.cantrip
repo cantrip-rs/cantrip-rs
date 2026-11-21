@@ -1,0 +1,39 @@
+# Haru, Hidden Talent {1}{G}: "Whenever another Ally you control enters, earthbend 1." Haru is itself an Ally, but "another" keeps its
+# own entering from triggering. Invasion Reinforcements enters as an Ally (one earthbend), and its Ally token enters too (a second).
+# Bot1's only land is a Forest, so both targets are it: a land that is already a creature is a legal target and gets another +1/+1
+# counter, so the Forest ends a 2/2 haste land creature (0/0 and two counters).
+
+[Bot1 Deck]
+Forest
+Mox Pearl
+Black Lotus
+Haru, Hidden Talent
+Invasion Reinforcements
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Haru, Hidden Talent.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Types = Land
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Invasion Reinforcements.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Ally Token; Forest; Haru, Hidden Talent; Invasion Reinforcements; Mox Pearl
+Bot1.Battlefield.Forest.Types = Land; Creature
+Bot1.Battlefield.Forest.Power = 2
+Bot1.Battlefield.Forest.Toughness = 2
+Bot1.Battlefield.Forest.Keywords = Haste
+Bot1.Battlefield.Forest.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Haru, Hidden Talent.Types = Creature
