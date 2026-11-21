@@ -2,7 +2,8 @@
 //! Bloodthorn Flail's "Equip—Pay {3} or discard a card"), over test cards. The way is chosen as the ability is announced
 //! (CR 601.2b by way of 602.2b); its mana is part of the total then determined, with what increases or reduces it (CR
 //! 601.2f), and paid after mana abilities (CR 601.2g-h). The ability is offered only where some way could be paid (CR
-//! 118.3), and an alternative cost is paid rather than the whole cost, so no way is chosen (CR 118.9).
+//! 118.3), and an alternative cost is paid rather than the whole cost, so no way is chosen (CR 118.9). A mana ability
+//! names a choice too (Thornvault Forager's "{T}, Forage"): it is activated by the same rules (CR 605.3a, 602.2b).
 
 use crate::actions::priority_options;
 use crate::{Cx, Game, Setup};
@@ -74,6 +75,34 @@ fn less_if_yours(q: &dyn Query, _: ObjectId, player: PlayerId, costed: Costed, t
 
 static LURE: CardDef = CardDef { name: "Way Test Lure", cost_changes: &[less_if_yours], ..TAX };
 
+fn is_bear(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
+    q.chars(id).name == "Way Test Bear"
+}
+
+static BEAR: CardDef = CardDef { name: "Way Test Bear", types: TypeSet::of(&[CardType::Creature]), power: Some(2), toughness: Some(2), ..CardDef::BLANK };
+
+const MANA_WAYS: &[ExtraCost] = &[
+    ExtraCost { text: "Discard a card", cost: Cost { discard: Discards::one(1, None), ..Cost::NONE } },
+    ExtraCost { text: "Sacrifice a Bear", cost: Cost::sacrifice(1, is_bear) },
+];
+
+/// "{T}, Discard a card or sacrifice a Bear: Add {G}{G}."
+static WELL: CardDef = CardDef {
+    name: "Way Test Well",
+    types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[mana_ability(TAP, add_n(Mana::G, 2), "{T}, Discard a card or sacrifice a Bear: Add {G}{G}.").pay_one_of(MANA_WAYS)],
+    ..CardDef::BLANK
+};
+
+/// "{T}, Pay {1} or discard a card: Add {G}{G}." One way is mana, paid beside the ability's own cost.
+static MINT: CardDef = CardDef {
+    name: "Way Test Mint",
+    types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[mana_ability(TAP, add_n(Mana::G, 2), "{T}, Pay {1} or discard a card: Add {G}{G}.")
+        .pay_one_of(&[ExtraCost { text: "Pay {1}", cost: cost("{1}") }, ExtraCost { text: "Discard a card", cost: Cost { discard: Discards::one(1, None), ..Cost::NONE } }])],
+    ..CardDef::BLANK
+};
+
 /// Your precombat main phase with priority, the Flail on the battlefield, `cards` cards in your hand and `mana` colorless
 /// mana in your pool.
 fn game(cards: usize, mana: u32) -> (Game, ObjectId) {
@@ -82,7 +111,7 @@ fn game(cards: usize, mana: u32) -> (Game, ObjectId) {
 
 /// `game`, with `def` on the battlefield in place of the Flail.
 fn game_with(def: &'static CardDef, cards: usize, mana: u32) -> (Game, ObjectId) {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &FLAIL, &TAX, &DISCOUNT, &SMITH, &HOOK, &LURE])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &FLAIL, &TAX, &DISCOUNT, &SMITH, &HOOK, &LURE, &BEAR, &WELL, &MINT])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     g.verify = true;
@@ -320,4 +349,83 @@ fn with_a_cost_change_in_play_each_target_is_judged_with_each_way() {
     let offered = candidates(&mut g, hook).expect("offered for a permanent of yours");
     assert!(offered.contains(&Target::Object(hook)) && offered.contains(&Target::Object(lure)), "{offered:?}");
     assert!(!offered.contains(&Target::Object(theirs)), "{{3}} for the opponent's land can't be paid: {offered:?}");
+}
+
+fn green(g: &Game) -> u32 {
+    g.state.player(YOU).pool.get(Mana::G)
+}
+
+#[test]
+fn a_mana_ability_is_offered_only_where_some_way_could_be_paid() {
+    let (mut g, well) = game_with(&WELL, 0, 0);
+    assert!(offered(&mut g, well).is_empty(), "no card to discard and no Bear");
+    let (mut g, well) = game_with(&WELL, 1, 0);
+    assert_eq!(offered(&mut g, well), vec![None], "a card pays the discard way");
+    let (mut g, well) = game_with(&WELL, 0, 0);
+    put(&mut g, &BEAR, Zone::BATTLEFIELD);
+    assert_eq!(offered(&mut g, well), vec![None], "a Bear pays the sacrifice way");
+    // Its own {T} is part of the cost whichever way is taken (CR 602.2b).
+    let (mut g, well) = game_with(&WELL, 1, 0);
+    g.state.update_obj(well, |o| o.tapped = true);
+    assert!(offered(&mut g, well).is_empty(), "tapped");
+}
+
+#[test]
+fn a_mana_ability_asks_which_way_pays_it_and_uses_no_stack() {
+    // Discarding: the Bear stays.
+    let (mut g, well) = game_with(&WELL, 1, 0);
+    let bear = put(&mut g, &BEAR, Zone::BATTLEFIELD);
+    let r = activate(&mut g, well, false);
+    let RequestKind::ChooseModes { modes, eligible, .. } = &r.kind else { panic!("expected the choice of way, got {:?}", r.kind) };
+    assert_eq!((modes.len(), eligible.clone()), (2, vec![0, 1]));
+    g.answer(r.id, r.player, Answer::Modes(vec![0])).expect("a legal answer");
+    let r = next(&mut g);
+    pay(&mut g, r);
+    assert_eq!((green(&g), hand(&g), g.state.obj(bear).became.is_some()), (2, 0, false));
+    assert!(g.state.stack.is_empty(), "a mana ability doesn't use the stack (CR 605.3b)");
+    assert!(g.state.obj(well).tapped, "{{T}} is paid with either way");
+
+    // Sacrificing: the card stays.
+    let (mut g, well) = game_with(&WELL, 1, 0);
+    let bear = put(&mut g, &BEAR, Zone::BATTLEFIELD);
+    let r = activate(&mut g, well, false);
+    g.answer(r.id, r.player, Answer::Modes(vec![1])).expect("a legal answer");
+    let r = next(&mut g);
+    pay(&mut g, r);
+    assert_eq!((green(&g), hand(&g)), (2, 1));
+    assert!(g.state.obj(bear).became.is_some(), "the Bear was sacrificed");
+}
+
+#[test]
+fn a_lone_way_of_a_mana_ability_is_taken_without_asking() {
+    let (mut g, well) = game_with(&WELL, 1, 0);
+    let r = activate(&mut g, well, false);
+    assert!(!matches!(r.kind, RequestKind::ChooseModes { .. }), "only the discard could be paid: {:?}", r.kind);
+    pay(&mut g, r);
+    assert_eq!((green(&g), hand(&g)), (2, 0));
+}
+
+#[test]
+fn a_way_of_a_mana_ability_in_mana_is_paid_from_the_pool_with_its_own_cost() {
+    // One mana in the pool and no card: only "Pay {1}", taken without asking, and paid from the pool.
+    let (mut g, mint) = game_with(&MINT, 0, 1);
+    let r = activate(&mut g, mint, false);
+    assert!(!matches!(r.kind, RequestKind::ChooseModes { .. }), "{:?}", r.kind);
+    pay(&mut g, r);
+    assert_eq!((green(&g), g.state.player(YOU).pool.get(Mana::C)), (2, 0));
+    assert!(g.state.obj(mint).tapped);
+
+    // With the card as well both ways are asked: discarding leaves the mana.
+    let (mut g, mint) = game_with(&MINT, 1, 1);
+    let r = activate(&mut g, mint, false);
+    let RequestKind::ChooseModes { eligible, .. } = &r.kind else { panic!("expected the choice of way, got {:?}", r.kind) };
+    assert_eq!(eligible.clone(), vec![0, 1]);
+    g.answer(r.id, r.player, Answer::Modes(vec![1])).expect("a legal answer");
+    let r = next(&mut g);
+    pay(&mut g, r);
+    assert_eq!((green(&g), g.state.player(YOU).pool.get(Mana::C), hand(&g)), (2, 1, 0));
+
+    // Neither: not offered.
+    let (mut g, mint) = game_with(&MINT, 0, 0);
+    assert!(offered(&mut g, mint).is_empty());
 }

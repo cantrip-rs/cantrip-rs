@@ -3789,7 +3789,7 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, window: ManaWindow, option
             }
             let costed = Costed::Ability(id, ability, by);
             let cost = mana_activation_cost(cx, &changers, player, costed, def);
-            if !can_pay_other_as(cx, id, player, &cost, judged, Some(CostFor::ManaAbility), by) {
+            if !mana_ability_payable(cx, id, player, def, &cost, judged, by) {
                 continue;
             }
             // The additional costs static abilities apply to it (CR 118.8, 605.3a), judged where its cost changes are.
@@ -3805,14 +3805,23 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, window: ManaWindow, option
             // A mana ability with a mana cost of its own (Sunken Ruins' {U/B}) is not offered when that cost cannot be
             // paid by the other sources, its own {T} not among them (CR 605.3a, 602.2b, 609.4b) - unless it is judged
             // for what mana abilities could tap (`Judged::Nested`), where asking what the player can pay would ask it again.
-            if def.cost.mana.x == 0 && cost.mana != ManaCost::ZERO && judged != Judged::Nested {
+            // Where it names a choice of ways, it is offered if the cost with some way that could be paid could be (CR 118.3).
+            // The mana of each way that could be paid, worked out as it is asked (no list kept per decision).
+            let ways = || {
+                def.cost_choice.iter()
+                    .filter(|way| can_pay_both(cx, id, player, &cost, &way.cost, judged, Some(CostFor::ManaAbility), by))
+                    .map(|way| way.cost.mana)
+            };
+            if def.cost.mana.x == 0 && judged != Judged::Nested && (cost.mana != ManaCost::ZERO || ways().any(|m| m != ManaCost::ZERO)) {
                 let a = available_without(cx, player, def.cost.tap.then_some(id), ManaWindow::Payment);
                 let any = static_rules::spend_any_mana_for(cx, player, id, SpendingFor::Activating);
-                if !change_any(cx, &changers, player, costed, def.cost.mana, None, &[], None, &mut |cost, least| {
+                let payer = ability_payment(cx, id, chars.types, chars.subtypes, false);
+                let covers = |way: ManaCost| change_any(cx, &changers, player, costed, def.cost.mana.plus(&way), None, &[], None, &mut |cost, least| {
                     let cost = at_least(cost, least);
                     let cost = any.view(&cost);
-                    a.covers_for(&cost, &ability_payment(cx, id, chars.types, chars.subtypes, false))
-                }) {
+                    a.covers_for(&cost, &payer)
+                });
+                if !(if def.cost_choice.is_empty() { covers(ManaCost::ZERO) } else { ways().any(covers) }) {
                     continue;
                 }
             }
@@ -6597,7 +6606,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
             }
             let costed = Costed::Ability(id, ability, by);
             let cost = mana_activation_cost(cx, &changers, player, costed, def);
-            if !can_pay_activation(cx, id, player, &cost, Some(CostFor::ManaAbility), by) {
+            if !mana_ability_payable(cx, id, player, def, &cost, Judged::Activation, by) {
                 continue;
             }
             // The additional costs static abilities apply to it (CR 118.8, 605.3a), judged where its cost changes are.
@@ -6622,6 +6631,8 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
                 || cost.mana.phyrexian != [0; 5]
                 || cost.mana.twobrid != [0; 5]
                 || def.cost.permanents.is_some_and(|p| p.tapped)
+                // A way of paying chosen as it is activated may add mana or tapped permanents to what is judged here.
+                || !def.cost_choice.is_empty()
                 // A reduction may give the payer several distinct totals. As with a yield not stated, leave advice
                 // open rather than treating its first hybrid announcement as the only payable one.
                 || (!changers.is_empty() || def.cost_change.is_some()) && change_any(cx, &changers, player, costed, def.cost.mana, None, &[], None,
@@ -10396,7 +10407,7 @@ fn has_mana_source(cx: &Cx, id: ObjectId, player: PlayerId) -> bool {
             def.is_mana_ability()
                 && ManaWindow::Payment.allows(def)
                 && !limit_reached(cx, id, &chars, index, def)
-                && can_pay_activation(cx, id, player, &def.cost, Some(CostFor::ManaAbility), by)
+                && mana_ability_payable(cx, id, player, def, &def.cost, Judged::Activation, by)
                 && !static_rules::activation_barred(cx, &forbidders, player, id, def)
         })
     })
@@ -13243,6 +13254,16 @@ fn can_pay_activation_parts(cx: &Cx, source: ObjectId, player: PlayerId, base: &
     can_pay_both(cx, source, player, base, chosen, Judged::Activation, paid, by)
 }
 
+/// Whether a mana ability's cost `cost` (its own, as changed) could be paid by `player`: with some way of paying it where it
+/// names a choice (`ActivatedDef::cost_choice`, CR 602.2b, 605.3a), which `activate_mana_as` asks.
+fn mana_ability_payable(cx: &Cx, source: ObjectId, player: PlayerId, def: &ActivatedDef, cost: &Cost, judged: Judged, by: Option<Linked>) -> bool {
+    let paid = Some(CostFor::ManaAbility);
+    if def.cost_choice.is_empty() {
+        return can_pay_other_as(cx, source, player, cost, judged, paid, by);
+    }
+    def.cost_choice.iter().any(|way| can_pay_both(cx, source, player, cost, &way.cost, judged, paid, by))
+}
+
 /// Whether a spell's way of being cast and what a permission adds to it could both be paid.
 fn can_pay_cast_parts(cx: &Cx, source: ObjectId, player: PlayerId, way: &Cost, permission: &Cost) -> bool {
     can_pay_both(cx, source, player, way, permission, Judged::Cast, Some(CostFor::Spell), None)
@@ -14079,6 +14100,10 @@ fn activate_mana_as(
     let chars = cx.chars(source);
     let paying = ability_payment(cx, source, chars.types, chars.subtypes, false);
 
+    // CR 601.2b by way of 602.2b, 605.3a: the way of paying a cost that names a choice ("{T}, Forage") is chosen first, as
+    // for any activated ability; its mana joins the total below and its other parts are paid with the rest of the cost.
+    let chosen_cost = choose_cost_way(cx, player, source, ability, def, def.cost.mana, Some(CostFor::ManaAbility), by)?;
+    let whole = chosen_cost.map_or(def.cost, |part| add_extra_totals(def.cost, part));
     // "Sacrifice a creature: Add ..." (Phyrexian Altar): the permanents come with the activation, as its option's
     // candidates (a mana ability never targets, CR 605.1a, so the slots are free for them), and are judged again as they
     // are paid. Tapped ones ("return a tapped creature you control") are chosen once the ability's own mana is paid, as a
@@ -14104,6 +14129,7 @@ fn activate_mana_as(
     // Mana and a variable counter cost refer to this activation's one X (CR 107.3k, 602.2b, 605.3a).
     // Its source retains the independent X chosen when it was cast, even if the cost moves it.
     let mut mana = def.cost.mana;
+    if let Some(part) = chosen_cost { mana = mana.plus(&part.mana); }
     let removes = match def.cost.variable {
         Some(VariableCost::RemoveAnyNumberOfCounters(kind)) => {
             let Some(cap) = source_counter_x_limit(cx, source, kind, &def.cost) else { return Err(Stop::Cancel) };
@@ -14139,16 +14165,17 @@ fn activate_mana_as(
     let (total, added_life, least) = change_parts_split(cx, &changers, player, costed, mana, None, &[], &split);
     mana = at_least(total, least);
     let life = life + added_life;
-    if !can_pay_life_for(cx, player, life + def.cost.life, paid) {
+    if !can_pay_life_for(cx, player, life + whole.life, paid) {
         return Err(Stop::Cancel);
     }
     // CR 118.8, 605.3a: the additional costs static abilities apply to it, part of the total (CR 601.2f, 602.2b).
-    let imposed = cost_additions(cx, &changers, player, costed);
+    let mut imposed: Vec<_> = chosen_cost.into_iter().map(|part| (CostOrigin::CastingWay, part)).collect();
+    imposed.extend(cost_additions(cx, &changers, player, costed));
     note_activation(cx, source, index as usize, def);
     // How it was given, read before any cost moves the source (CR 113.7a).
     let granted = Grant::of(granted_by(cx, source, None, index as usize, ability, &std::cell::OnceCell::new()));
-    let granter = granted.some().map(|grant| grant.object).filter(|&id| granter_pays(cx, &def.cost, player, id));
-    if (def.cost.sacrifice_granter || def.cost.exile_granter) && granter.is_none() { return Err(Stop::Cancel); }
+    let granter = granted.some().map(|grant| grant.object).filter(|&id| granter_pays(cx, &whole, player, id));
+    if (whole.sacrifice_granter || whole.exile_granter) && granter.is_none() { return Err(Stop::Cancel); }
     let colors = if def.colors_from_sacrifice && dynamic { color_component.map(|which| (which, color, colorless)) } else { None };
     let scope = PaymentScope::ManaAbility { linked: Linked { object: source, text: cx.g.cards.linked_card(ability.card), acquired }, by, granter, colors };
     let mut helpers = Helpers { purpose: Paying::Activating(paying), mana_ability: true, ..Helpers::NONE };

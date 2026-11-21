@@ -1865,9 +1865,9 @@ pub struct ActivatedDef {
     /// it (CR 601.2f), paid with the rest after mana abilities (CR 601.2g-h). The ability is offered only where some way
     /// could be paid, its mana included; a way whose parts other than mana can't be paid is not offered, and a lone one is
     /// taken without asking. An alternative cost (`CardDef::ability_alternatives`, CR 118.9) is paid rather than the whole
-    /// cost, so no way is chosen. A way has no {X} and no X life (`cantrip-engine`'s tests refuse one), and a mana ability
-    /// or special action names no choice (`cantrip-cards/tests/no_cost_choice_on_mana_abilities.rs`). Empty when the cost
-    /// names no choice. A spell's is `CardDef::additional_choice`.
+    /// cost, so no way is chosen. A way has no {X} and no X life (`cantrip-engine`'s tests refuse one). A mana ability names one as any
+    /// ability does (CR 605.3a, `activate_mana_as`; Thornvault Forager's "{T}, Forage"), but a special action names none
+    /// (`cantrip-cards/tests/no_cost_choice_on_special_actions.rs`). Empty when the cost names no choice. A spell's is `CardDef::additional_choice`.
     pub cost_choice: &'static [ExtraCost],
     /// "X can't be 0" (CR 107.3a, 601.2b by way of 602.2b): the X of its activation cost is announced as 1 or more, and it is
     /// offered only where it could be paid with X as 1 (Lair of the Hydra, Helm of Obedience, Aladdin's Lamp).
