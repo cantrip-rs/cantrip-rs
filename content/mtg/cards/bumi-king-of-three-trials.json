@@ -1,0 +1,8 @@
+{
+  "name": "Bumi, King of Three Trials",
+  "manaCost": "{5}{G}",
+  "type": "Legendary Creature — Human Noble Ally",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When Bumi enters, choose up to X, where X is the number of Lesson cards in your graveyard —\n• Put three +1/+1 counters on Bumi.\n• Target player scries 3.\n• Earthbend 3. (Target land you control becomes a 0/0 creature with haste that's still a land. Put three +1/+1 counters on it. When it dies or is exiled, return it to the battlefield tapped.)"
+}
