@@ -1,0 +1,40 @@
+# Leaves from the Vine: with no creature you control, chapter II goes on the stack with no target and does nothing (up to two: even none is fine), and chapter III draws
+# nothing when there is neither a creature nor a Lesson card in your graveyard: three milled Forests and the Mox that is not there are not enough.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Leaves from the Vine
+Forest
+Forest
+Forest
+Forest
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Leaves from the Vine.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 3
+[T3 Bot1.Main1]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Leaves from the Vine.Counters.Lore = 2
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Library.Count = 8
+Bot1.Graveyard.Count = 4

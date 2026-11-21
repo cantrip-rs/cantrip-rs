@@ -1,0 +1,42 @@
+# Leaves from the Vine: "creature or Lesson card" - Earthbending Lesson, a Lesson card that is no creature, is milled by chapter I, so chapter III draws. Chapter II,
+# with one creature (Ornithopter), puts a counter on it and may stop at one target.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Leaves from the Vine
+Ornithopter
+Forest
+Forest
+Forest
+Earthbending Lesson
+Forest
+Forest
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Leaves from the Vine.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Earthbending Lesson.Colors.Count = 1
+[T3 Bot1.Main1]
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Library.Count = 7
