@@ -1,0 +1,52 @@
+# Avatar Destiny: "mill cards equal to its power." Bot1's Ornithopter (0/2) wears it with no creature card in Bot1's graveyard, so it is
+# still 0/2. Bot2 casts Stab on it on turn 4: it dies as a -2/0, its last power less than 0, and a negative number of cards is no cards
+# (CR 107.1b, 608.2h, 701.17), so nothing is milled; the Aura still returns to Bot1's hand: Bot1's library keeps all 14 cards, its
+# graveyard holds only the Ornithopter.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Ornithopter
+Island
+Island
+Avatar Destiny
+Giant Spider
+Island x13
+
+[Bot2 Deck]
+Mox Jet
+Stab
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Avatar Destiny.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Subtypes = Avatar; Thopter
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Stab.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Hand = Avatar Destiny; Island; Island
+Bot1.Graveyard = Ornithopter
+Bot1.Library.Count = 14

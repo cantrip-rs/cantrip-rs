@@ -1,0 +1,73 @@
+# Avatar Destiny {2}{G}{G}: "Enchanted creature gets +1/+1 for each creature card in your graveyard and is an Avatar in addition to its
+# other types." Bot2 Bolts Bot1's first Grizzly Bears on turn 2 (one creature card in Bot1's graveyard) and its own Llanowar Elves (a
+# creature card in Bot2's graveyard that must not count: "your graveyard"). On turn 3 Bot1 puts the Aura on its second Bears: 2/2 + 1 = 3/3,
+# an Avatar Bear (CR 613.1d, 613.4c). The Aura costs exactly {2}{G}{G}: every mana is spent.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Grizzly Bears
+Grizzly Bears
+Island
+Avatar Destiny
+Giant Spider
+Forest
+Hill Giant
+Island x11
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island
+Island
+Lightning Bolt
+Island x13
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Grizzly Bears#1.Cast
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears#1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Grizzly Bears
+? Bot2.Graveyard = Lightning Bolt; Llanowar Elves; Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Avatar Destiny.Cast(Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Grizzly Bears.Toughness = 3
+Bot1.Battlefield.Grizzly Bears.Subtypes = Avatar; Bear
+Bot1.Graveyard = Grizzly Bears
