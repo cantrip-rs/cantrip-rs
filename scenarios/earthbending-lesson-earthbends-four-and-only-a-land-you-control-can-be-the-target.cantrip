@@ -1,0 +1,38 @@
+# Earthbending Lesson {3}{G}: "Earthbend 4." Only a land Bot1 controls can be the target (Bot2's Island is refused). The chosen Forest
+# becomes a 4/4 land creature with haste (four +1/+1 counters on a 0/0) that is still a land (CR 701.66a, 205.1b, 122.1).
+
+[Bot1 Deck]
+Forest
+Forest
+Black Lotus
+Earthbending Lesson
+Forest x16
+
+[Bot2 Deck]
+Island
+Island x19
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Hand.Earthbending Lesson.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Earthbending Lesson.Cast(Bot1.Battlefield.Forest)
+Bot1.Battlefield.Forest.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Forest.Power = 4
+Bot1.Battlefield.Forest.Toughness = 4
+Bot1.Battlefield.Forest.Types = Land; Creature
+Bot1.Battlefield.Forest.Keywords = Haste
+Bot1.Battlefield.Forest.Counters.PlusOnePlusOne = 4
+Bot1.Graveyard = Earthbending Lesson; Black Lotus
+Bot2.Battlefield.Island.Types = Land
