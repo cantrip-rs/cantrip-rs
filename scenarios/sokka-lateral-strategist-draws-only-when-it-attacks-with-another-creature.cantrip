@@ -1,0 +1,50 @@
+# Sokka, Lateral Strategist {1}{W/U}{W/U}, 2/4 vigilance: "Whenever Sokka and at least one other creature attack, draw a card." Sokka attacking alone on turn 3 draws
+# nothing (hand 3, the turn's draw); on turn 5 Sokka and a Memnite attack together and one card is drawn (4 -> 5), Sokka staying untapped (vigilance); on turn 7 the
+# Memnite attacks without Sokka and draws nothing (hand 6 after the draw for the turn).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Sokka, Lateral Strategist
+Memnite
+Plains x2
+Island x20
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sokka, Lateral Strategist.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot1.Attack(Sokka, Lateral Strategist > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Hand.Count = 3
+[T5 Bot1.Main1]
+? Bot1.Hand.Count = 4
+Bot1.Attack(Sokka, Lateral Strategist > Bot2; Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sokka, Lateral Strategist.Tapped = false
+? Bot1.Hand.Count = 5
+[T7 Bot1.Main1]
+? Bot1.Hand.Count = 6
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand.Count = 6

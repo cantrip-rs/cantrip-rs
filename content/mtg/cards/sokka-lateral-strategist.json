@@ -1,0 +1,11 @@
+{
+  "name": "Sokka, Lateral Strategist",
+  "manaCost": "{1}{W/U}{W/U}",
+  "type": "Legendary Creature — Human Warrior Ally",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Vigilance\nWhenever Sokka and at least one other creature attack, draw a card.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
