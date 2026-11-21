@@ -1,0 +1,63 @@
+# Earth Rumble Wrestlers: "... as long as you control a land creature ..." Turn 1: Bot1 casts it and plays Mutavault (a land
+# entering, so it is already a 4/4 trampler this turn). Turn 2: Bot2's Mutavault entering is neither. Turn 3: back to a 3/4; Bot1
+# animates its Mutavault, a land creature, and Wrestlers is a 4/4 with trample again. Turn 4: Bot2 animates its own Mutavault, a
+# land creature under the opponent's control, which does not count, while Bot1's has stopped being a creature.
+
+[Bot1 Deck]
+Mox Ruby x4
+Earth Rumble Wrestlers
+Mutavault
+Mountain x10
+
+[Bot2 Deck]
+Mutavault
+Mountain
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Earth Rumble Wrestlers.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Earth Rumble Wrestlers.Power = 3
+Bot1.Hand.Mutavault.Play
+? Bot1.Battlefield.Earth Rumble Wrestlers.Power = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Mutavault.Play
+? Bot1.Battlefield.Earth Rumble Wrestlers.Power = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mutavault.Activate(Ability: {1})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mutavault.Types = Land; Creature
+? Bot1.Battlefield.Earth Rumble Wrestlers.Power = 4
+? Bot1.Battlefield.Earth Rumble Wrestlers.Keywords = Reach; Trample
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mutavault.Activate(Ability: {1})
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Mutavault.Types = Land; Creature
+? Bot1.Battlefield.Mutavault.Types = Land
+? Bot1.Battlefield.Earth Rumble Wrestlers.Power = 3
+? Bot1.Battlefield.Earth Rumble Wrestlers.Keywords = Reach
+
+[Expect]
+Bot1.Battlefield.Earth Rumble Wrestlers.Power = 3

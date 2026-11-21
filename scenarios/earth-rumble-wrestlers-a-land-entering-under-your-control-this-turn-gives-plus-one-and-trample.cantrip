@@ -1,0 +1,62 @@
+# Earth Rumble Wrestlers, a 3/4 with reach: "This creature gets +1/+0 and has trample as long as you control a land creature or a
+# land entered the battlefield under your control this turn." Turn 1: cast with four Mox Rubies it is a plain 3/4 until Bot1 plays
+# a Mountain, which makes it a 4/4 with trample. Turn 2: Bot2's own land entering does nothing for Bot1's Wrestlers. Turn 3: the
+# Mountain came in on an earlier turn, so it is a 3/4 again; a second Mountain played then turns it back on. Bot1's Ornithopter,
+# cast while Wrestlers is pumped, stays a plain 0/2 flier: the bonus is for Wrestlers alone.
+
+[Bot1 Deck]
+Mox Ruby x4
+Earth Rumble Wrestlers
+Ornithopter
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Earth Rumble Wrestlers.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Earth Rumble Wrestlers.Power = 3
+? Bot1.Battlefield.Earth Rumble Wrestlers.Toughness = 4
+? Bot1.Battlefield.Earth Rumble Wrestlers.Keywords = Reach
+Bot1.Hand.Mountain.Play
+? Bot1.Battlefield.Earth Rumble Wrestlers.Power = 4
+? Bot1.Battlefield.Earth Rumble Wrestlers.Toughness = 4
+? Bot1.Battlefield.Earth Rumble Wrestlers.Keywords = Reach; Trample
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+? Bot1.Battlefield.Earth Rumble Wrestlers.Power = 3
+? Bot1.Battlefield.Earth Rumble Wrestlers.Keywords = Reach
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Earth Rumble Wrestlers.Power = 3
+? Bot1.Battlefield.Earth Rumble Wrestlers.Keywords = Reach
+Bot1.Hand.Mountain.Play
+? Bot1.Battlefield.Earth Rumble Wrestlers.Power = 4
+? Bot1.Battlefield.Earth Rumble Wrestlers.Keywords = Reach; Trample
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Earth Rumble Wrestlers.Power = 4

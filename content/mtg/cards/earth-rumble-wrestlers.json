@@ -1,0 +1,11 @@
+{
+  "name": "Earth Rumble Wrestlers",
+  "manaCost": "{3}{R/G}",
+  "type": "Creature — Human Warrior Performer",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Reach\nThis creature gets +1/+0 and has trample as long as you control a land creature or a land entered the battlefield under your control this turn.",
+  "keywords": [
+    "Reach"
+  ]
+}
