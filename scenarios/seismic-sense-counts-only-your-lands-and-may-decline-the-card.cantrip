@@ -1,0 +1,53 @@
+# Seismic Sense: X is the number of lands "you control" and the card is a "may" (CR 701.20a). Bot1 has one Forest while Bot2
+# has two lands (Rampant Growth fetched the second), so X is one and Bot1 looks only at the Island on top: it declines to take it
+# and it goes to the bottom, so Bot1's hand does not grow. Bot2's library is untouched.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Seismic Sense
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Island
+Grizzly Bears
+Elvish Mystic x10
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Rampant Growth
+Elvish Mystic x5
+Forest
+Elvish Mystic x11
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Rampant Growth.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Search(Forest)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Seismic Sense.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Island)
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Looked = Island
+Bot1.Library.Count = 12
+Bot1.Graveyard = Seismic Sense
+Bot2.Battlefield.Count = 3
