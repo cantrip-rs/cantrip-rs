@@ -1,0 +1,59 @@
+# Toph, the First Metalbender: "Nontoken artifacts you control are lands in addition to their other types." Bot1's four Moxen are
+# artifact lands once Toph is on the battlefield (they keep Artifact: CR 205.1b "in addition"). Bot1's Clue token (from Thraben
+# Inspector) is an artifact but a token, so it is no land; Bot2's Mox Jet is a nontoken artifact but not under Bot1's control, so
+# it is no land either. At Bot1's end step Toph earthbends 2 (a land it controls: a Mox, there being nothing else): the Mox is then
+# a 2/2 haste artifact land creature.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Toph, the First Metalbender
+Thraben Inspector
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mox Jet
+Swamp x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Toph, the First Metalbender.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Ruby.Types = Artifact; Land
+? Bot1.Battlefield.Mox Pearl.Types = Artifact; Land
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Mox Ruby.Types = Artifact; Land; Creature
+? Bot1.Battlefield.Mox Ruby.Power = 2
+? Bot1.Battlefield.Mox Ruby.Toughness = 2
+? Bot1.Battlefield.Mox Emerald.Types = Artifact; Land
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Mox Jet.Types = Artifact
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Mox Ruby.Power = 2
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Thraben Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Clue Token.Types = Artifact
+Bot1.Battlefield.Mox Sapphire.Types = Artifact; Land
+Bot2.Battlefield.Mox Jet.Types = Artifact

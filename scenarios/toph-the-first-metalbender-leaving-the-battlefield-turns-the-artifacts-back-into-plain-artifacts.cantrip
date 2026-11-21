@@ -1,0 +1,43 @@
+# Toph, the First Metalbender's static ability lasts only while he is on the battlefield (CR 611.3a, 613): Bot1's Mox Emerald is an
+# artifact land while he is there, and a plain artifact again once Bot2's Lightning Bolt kills him. The Mox earthbent at the end step
+# of turn 1 stays a creature (its earthbend is its own effect), but is no longer a land.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Toph, the First Metalbender
+Plains x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Toph, the First Metalbender.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Emerald.Types = Artifact; Land
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Toph, the First Metalbender)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Toph, the First Metalbender
+Bot1.Battlefield.Mox Emerald.Types = Artifact
+Bot1.Battlefield.Mox Pearl.Types = Artifact
