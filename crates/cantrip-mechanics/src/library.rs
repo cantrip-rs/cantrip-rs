@@ -1109,6 +1109,17 @@ pub fn mill_then_may_take_into_hand(
     Ok(g.return_to_hand(&chosen))
 }
 
+/// "Mill `count` cards. You may put a land card from among them into your hand. If you don't, put a +1/+1 counter on this
+/// creature" (CR 701.17, 608.2c): declining, or no land among the milled cards, puts nothing into the hand and so gives the
+/// counter, on the ability's source (nothing if it has left the battlefield, CR 400.7). Ainok Wayfarer and Ostrich-Horse print it.
+pub fn mill_then_may_take_land_or_grow(g: &mut dyn Game, item: &StackItem, count: u32) -> Result<(), Suspend> {
+    let taken = mill_then_may_take_into_hand(g, item.controller, item.object, count, "land", |c| c.is(CardType::Land))?;
+    if taken.is_empty() {
+        g.add_counters(item.object, CounterKind::PlusOne, 1);
+    }
+    Ok(())
+}
+
 /// "Mill `count` cards. Then put a [`wanted`] card from among the milled cards onto the battlefield" (CR 701.17, 701.17c): the
 /// card is not optional, one is chosen whenever any milled card qualifies, and the milled cards are found where they went (a
 /// graveyard, or exile by a replacement effect). An Aura chooses what it enchants as it enters (CR 303.4f). Fetch Quest
