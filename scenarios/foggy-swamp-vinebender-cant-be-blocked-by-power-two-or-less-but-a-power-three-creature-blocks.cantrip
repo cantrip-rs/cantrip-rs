@@ -1,0 +1,55 @@
+# Foggy Swamp Vinebender {3}{G}, 4/3: "This creature can't be blocked by creatures with power 2 or less" (CR 509.1b). Bot1 casts it on turn 1 (three
+# Moxen and a Forest) and attacks on turn 3. Bot2 has Grizzly Bears (power 2, exactly the limit) and Hill Giant (power 3, one past it): the Bears may not
+# block it (the refusal) but Hill Giant may, and they kill each other (4 damage against toughness 3, 3 against toughness 3).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Forest
+Foggy Swamp Vinebender
+Forest x15
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Hill Giant
+Grizzly Bears
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Foggy Swamp Vinebender.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Foggy Swamp Vinebender > Bot2)
+! Bot2.Block(Grizzly Bears > Foggy Swamp Vinebender)
+Bot2.Block(Hill Giant > Foggy Swamp Vinebender)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Foggy Swamp Vinebender
+Bot2.Graveyard = Hill Giant; Black Lotus
+Bot2.Life = 20
