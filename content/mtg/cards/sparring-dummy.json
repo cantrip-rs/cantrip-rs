@@ -1,0 +1,11 @@
+{
+  "name": "Sparring Dummy",
+  "manaCost": "{1}{G}",
+  "type": "Artifact Creature — Scarecrow",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Defender\n{T}: Mill a card. You may put a land card milled this way into your hand. You gain 2 life if a Lesson card is milled this way. (To mill a card, put the top card of your library into your graveyard.)",
+  "keywords": [
+    "Defender"
+  ]
+}
