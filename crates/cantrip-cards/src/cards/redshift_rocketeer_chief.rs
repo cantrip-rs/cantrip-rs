@@ -1,15 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{choose, targets};
+use cantrip_mechanics::{choose, mana, targets};
 use cantrip_oracle as oracle;
-
-/// "Add X mana of any one color, where X is Redshift's power. Spend this mana only to activate abilities." (CR 106.5,
-/// 106.6): the power as the ability resolves, at once (CR 605.3b); none for a power of 0 or less. The color is always
-/// named, the ability offering all five.
-fn power_in_mana(g: &mut dyn Game, asker: &Asker, color: Option<Color>) -> Result<(), Suspend> {
-    let power = g.chars(asker.source).power.unwrap_or(0).max(0) as u32;
-    g.add_restricted_mana(asker.controller, color.unwrap_or(Color::White).mana(), power, ManaRestriction::ABILITIES);
-    Ok(())
-}
 
 /// "Put any number of permanent cards from your hand onto the battlefield." Chosen as it resolves, and put there together
 /// (CR 101.4); an Aura chooses what it enchants as it enters (CR 303.4f).
@@ -25,7 +16,7 @@ fn put_permanents(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        mana_ability(TAP, add_by(power_in_mana).choose_color().only_for(ManaRestriction::ABILITIES), "{T}: Add X mana of any one color, where X is Redshift's power. Spend this mana only to activate abilities."),
+        mana_ability(TAP, mana::current_power_of_one_color().only_for(ManaRestriction::ABILITIES), "{T}: Add X mana of any one color, where X is Redshift's power. Spend this mana only to activate abilities."),
         ability(cost("{10}{R}{G}"), put_permanents, "Exhaust \u{2014} {10}{R}{G}: Put any number of permanent cards from your hand onto the battlefield. (Activate each exhaust ability only once.)")
             .exhaust(),
     ],

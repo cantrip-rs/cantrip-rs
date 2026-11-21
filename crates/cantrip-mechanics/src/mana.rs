@@ -422,6 +422,21 @@ pub const fn announced_x_in_any_combination<const COLORS: u8>() -> Adds {
         ..add_by(add_announced_x::<COLORS>) }
 }
 
+fn add_current_power_of_one_color(g: &mut dyn Game, asker: &Asker, color: Option<Color>) -> Result<(), Suspend> {
+    let count = g.chars(asker.source).power.unwrap_or(0).max(0) as u32;
+    if let Some(color) = color { g.add_mana(asker.controller, color.mana(), count); }
+    Ok(())
+}
+
+/// "Add X mana of any one color, where X is this creature's power." (CR 106.5, 605.3b, 107.1b): the power as the ability
+/// resolves, through layers (CR 208.2); none for a power of 0 or less. The activation names the color, any of the five. An
+/// `only_for` restriction on it holds its mana as the ability's own (CR 106.6), and what the player has to pay with counts
+/// it (`ManaCapability::CurrentPowerOneColor`). Redshift, Rocketeer Chief, Woodland Weavemaster and Helga, Skittish Seer
+/// print it.
+pub const fn current_power_of_one_color() -> Adds {
+    Adds { capability: Some(ManaCapability::CurrentPowerOneColor), ..add_by(add_current_power_of_one_color).choose_color() }
+}
+
 /// Vivi Ornitier's current-power variant of the same color-combination procedure used by
 /// Wizard's Rockets. A negative or undetermined amount adds none (CR 107.1b, 107.2).
 pub const fn current_power_in_any_combination<const COLORS: u8>() -> Adds {
