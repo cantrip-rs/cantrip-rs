@@ -1,0 +1,43 @@
+# Earth Rumble {3}{G}: "Earthbend 2. When you do, up to one target creature you control fights target creature an opponent controls."
+# Bot1's only land, a Forest, becomes a 2/2 haste land creature, and the reflexive trigger chooses it to fight Bot2's Elvish Mystic
+# (1/1): the Mystic dies, the Forest is left with 1 damage (CR 603.12, 701.14a, 701.66a).
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Earth Rumble
+Forest x17
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Earth Rumble.Cast(Bot1.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Forest)
+Bot1.Target(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Elvish Mystic = (absent)
+Bot2.Graveyard = Elvish Mystic
+Bot1.Battlefield.Forest.Types = Land; Creature
+Bot1.Battlefield.Forest.Power = 2
+Bot1.Battlefield.Forest.Toughness = 2
+Bot1.Battlefield.Forest.Damage = 1
+Bot1.Battlefield.Forest.Counters.PlusOnePlusOne = 2
