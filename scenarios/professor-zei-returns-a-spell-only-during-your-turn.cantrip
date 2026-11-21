@@ -1,0 +1,37 @@
+# Professor Zei, Anthropologist: "Activate only during your turn." With Bot1's Lightning Bolt in the graveyard (cast at Bot2 on
+# turn 1) and a Mox Ruby untapped for the {1}, the return is refused on Bot2's turn 4 (Zei is no longer summoning sick, so only the
+# timing stops it), and works on Bot1's own turn 5, returning the Bolt.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Sapphire
+Professor Zei, Anthropologist
+Lightning Bolt
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Professor Zei, Anthropologist.Cast
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+! Bot1.Battlefield.Professor Zei, Anthropologist.Activate(Bot1.Graveyard.Lightning Bolt; Ability: Return)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Professor Zei, Anthropologist.Activate(Bot1.Graveyard.Lightning Bolt; Ability: Return)
+
+[Expect]
+Bot1.Hand = Lightning Bolt; Plains; Plains; Plains; Plains

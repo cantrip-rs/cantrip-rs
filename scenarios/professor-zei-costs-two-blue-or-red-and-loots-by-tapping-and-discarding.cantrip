@@ -1,0 +1,44 @@
+# Professor Zei, Anthropologist ({U/R}{U/R}, 0/3): each hybrid symbol is payable with {U} or {R}. With Mox Jet's {B} and Mox Ruby's {R}
+# only one symbol can be paid: the cast is refused (short). Adding Mox Sapphire's {U} pays both and leaves the {B} (Zei costs exactly
+# two). "{T}, Discard a card: Draw a card." On turn 3 Zei taps and discards the Lightning Bolt (chosen) as the cost, then draws: the
+# hand is the same size as before; it can't loot again while tapped.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Professor Zei, Anthropologist
+Lightning Bolt
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Professor Zei, Anthropologist.Cast(Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Professor Zei, Anthropologist.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {B}
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 4
+Bot1.Battlefield.Professor Zei, Anthropologist.Activate(Ability: Discard)
+Bot1.Choose(Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Professor Zei, Anthropologist.Activate(Ability: Discard)
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt
+Bot1.Hand.Count = 4
+Bot1.Battlefield.Professor Zei, Anthropologist.Tapped = true

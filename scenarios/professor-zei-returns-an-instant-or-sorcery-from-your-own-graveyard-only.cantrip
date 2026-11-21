@@ -1,0 +1,51 @@
+# Professor Zei, Anthropologist: "{1}, {T}, Sacrifice Professor Zei: Return target instant or sorcery card from your graveyard to your
+# hand." Bot1's graveyard holds a Lightning Bolt (cast at Bot2 on turn 1) and an Ornithopter (Bot2's Bolt killed it on turn 2): the
+# Ornithopter is not an instant or sorcery and Bot2's own Bolt in Bot2's graveyard is not in Bot1's (refusals, CR 115.1). The ability
+# returns Bot1's Bolt, costs {1} and sacrifices Zei: it ends up in Bot1's graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Sapphire
+Professor Zei, Anthropologist
+Lightning Bolt
+Ornithopter
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Professor Zei, Anthropologist.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+! Bot1.Battlefield.Professor Zei, Anthropologist.Activate(Bot1.Graveyard.Ornithopter; Ability: Return)
+! Bot1.Battlefield.Professor Zei, Anthropologist.Activate(Bot2.Graveyard.Lightning Bolt; Ability: Return)
+Bot1.Battlefield.Professor Zei, Anthropologist.Activate(Bot1.Graveyard.Lightning Bolt; Ability: Return)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Lightning Bolt; Plains; Plains
+Bot1.Graveyard = Professor Zei, Anthropologist; Ornithopter
+Bot2.Graveyard = Lightning Bolt
