@@ -48,24 +48,25 @@ static OTHER: CardDef = CardDef {
     spell: spell(&[], other),
     ..CardDef::BLANK
 };
+fn grant_itself_rebound(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), Suspend> {
+    g.gain_life(item.controller, 1);
+    g.add_effect(item.object, item.object, EffectKind::AddKeywords(Keywords::of(&[Keyword::Rebound])), Duration::Indefinite);
+    Ok(())
+}
+static GRANTED: CardDef = CardDef {
+    name: "Hand Test Granted",
+    types: TypeSet::of(&[CardType::Sorcery]),
+    spell: spell(&[], grant_itself_rebound),
+    ..CardDef::BLANK
+};
 
-fn resolved(owner: PlayerId) -> Game {
-    let table = Box::leak(Box::new(CardTable::new([&REBOUND, &FILLER, &OWN, &OTHER])));
-    let cast = if owner == YOU { &OWN } else { &OTHER };
-    let mut decks = vec![vec![table.id_of(&FILLER); 35]; 2];
-    decks[0][0] = table.id_of(cast);
-    decks[owner.0 as usize][1] = table.id_of(&REBOUND);
-    let mut g = Game::new(table, &Setup { decks, ..Setup::default() });
+/// Answers `g`'s questions - casting `cast` from the first player's hand once, passing otherwise - until `done`.
+fn drive(g: &mut Game, table: &CardTable, cast: &'static CardDef, done: &dyn Fn(&Game) -> bool) {
     let mut announced = false;
     for _ in 0..1000 {
         g.run();
-        if g.state.player(YOU).life == 21 && g.state.stack.is_empty() {
-            let history = g.history();
-            let cast = history.casts().find(|c| g.state.obj(c.spell).card == table.id_of(&REBOUND)).expect("rebound really cast");
-            assert_eq!(cast.player, YOU);
-            assert_eq!(cast.from, ZoneKind::Hand);
-            assert_eq!(g.state.obj(cast.spell).owner, owner);
-            return g;
+        if done(g) {
+            return;
         }
         let r = g.pending().cloned().expect("question");
         let answer = match &r.kind {
@@ -83,7 +84,23 @@ fn resolved(owner: PlayerId) -> Game {
         };
         g.answer(r.id, r.player, answer).unwrap();
     }
-    panic!("the rebound spell never resolved");
+    panic!("the spell never resolved");
+}
+
+fn resolved(owner: PlayerId) -> Game {
+    let table = Box::leak(Box::new(CardTable::new([&REBOUND, &FILLER, &OWN, &OTHER])));
+    let cast = if owner == YOU { &OWN } else { &OTHER };
+    let mut decks = vec![vec![table.id_of(&FILLER); 35]; 2];
+    decks[0][0] = table.id_of(cast);
+    decks[owner.0 as usize][1] = table.id_of(&REBOUND);
+    let mut g = Game::new(table, &Setup { decks, ..Setup::default() });
+    drive(&mut g, table, cast, &|g| g.state.player(YOU).life == 21 && g.state.stack.is_empty());
+    let history = g.history();
+    let cast = history.casts().find(|c| g.state.obj(c.spell).card == table.id_of(&REBOUND)).expect("rebound really cast");
+    assert_eq!(cast.player, YOU);
+    assert_eq!(cast.from, ZoneKind::Hand);
+    assert_eq!(g.state.obj(cast.spell).owner, owner);
+    g
 }
 
 #[test]
@@ -100,4 +117,19 @@ fn foreign_hand_cast_resolves_to_owner_graveyard_without_rebound() {
     assert!(g.state.zone(Zone::exile(THEM)).is_empty(), "foreign-hand cast must not rebound");
     assert!(g.state.delayed.is_empty(), "no next-upkeep cast offer");
     assert_eq!(g.state.zone(Zone::graveyard(THEM)).len(), 1);
+}
+
+/// "Gains rebound" (CR 702.88a, 613.1f): a spell with no rebound of its own is given it by an effect while it is on the stack
+/// - the spell here gives it to itself as it resolves - and, cast from its controller's hand, it is exiled instead of put into
+/// the graveyard, with the delayed ability to cast it at the next upkeep.
+#[test]
+fn granted_rebound_exiles_the_spell_cast_from_hand() {
+    let table = Box::leak(Box::new(CardTable::new([&FILLER, &GRANTED])));
+    let mut decks = vec![vec![table.id_of(&FILLER); 35]; 2];
+    decks[0][0] = table.id_of(&GRANTED);
+    let mut g = Game::new(table, &Setup { decks, ..Setup::default() });
+    drive(&mut g, table, &GRANTED, &|g| g.state.player(YOU).life == 21 && g.state.stack.is_empty());
+    assert_eq!(g.state.zone(Zone::exile(YOU)).len(), 1, "exiled with the rebound it was given");
+    assert_eq!(g.state.delayed.len(), 1, "its next-upkeep cast offer");
+    assert!(g.state.zone(Zone::graveyard(YOU)).is_empty());
 }

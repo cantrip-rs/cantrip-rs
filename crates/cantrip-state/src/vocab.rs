@@ -1461,6 +1461,10 @@ pub enum Keyword {
     /// can't attack" - it is `EffectKind::CantAttack`, a `LastingRuleKind::CantAttack` or another permanent's
     /// `CardDef::attack_rules`, which hold whatever abilities it loses.
     CantAttack = 92,
+    /// Rebound (CR 702.88a): a spell has it by the rebound it prints (`CardDef::rebound`, which `CardDef::printed_keywords` turns into
+    /// this) or gains it - Ojer Pakpatiq's "it gains rebound" - so whether the resolving spell is exiled instead of put into its
+    /// owner's graveyard reads its characteristics, not its card (`resolve::leave_stack`). Instances are redundant (CR 702.88c).
+    Rebound = 93,
 }
 
 impl Keyword {

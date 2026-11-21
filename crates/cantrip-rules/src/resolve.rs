@@ -525,7 +525,7 @@ fn leave_stack(cx: &mut Cx, items: &[StackItem], reason: ZoneReason) {
             omen: resolving && item.way == WAY_OMEN,
             // "If this spell was cast from your hand" (CR 702.88a, 109.5): "your" is this spell's controller.
             // Hands belong to their cards' owners (CR 400.3), including a card another player casts from that hand.
-            rebound: resolving && def.rebound && obj.cast_from == Some(ZoneKind::Hand) && obj.owner == item.controller,
+            rebound: resolving && cx.chars(item.object).keywords.has(Keyword::Rebound) && obj.cast_from == Some(ZoneKind::Hand) && obj.owner == item.controller,
             ..ops::Moving::to(item.object, Zone::graveyard(obj.owner))
         };
         moves.push(its_own_exile(cx, item, moving, reason));

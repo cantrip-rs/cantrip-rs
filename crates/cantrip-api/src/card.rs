@@ -4082,7 +4082,8 @@ pub struct CardDef {
     /// has it: one that ceases to be mutating (CR 702.140b) or merges (CR 702.140c) is its card again.
     pub mutating: bool,
     /// Rebound (CR 702.88a): cast from its caster's hand and resolving, it is exiled instead of put into the
-    /// graveyard, and its controller may cast it from exile at the beginning of their next upkeep (`REBOUND_ABILITY`).
+    /// graveyard, and its controller may cast it from exile at the beginning of their next upkeep (`REBOUND_ABILITY`). That it has
+    /// rebound is a keyword of its characteristics (`Keyword::Rebound`, from `printed_keywords`), which an effect can give a spell.
     pub rebound: bool,
     /// Paradigm (CR 702.192a): its two spell abilities. The one given here (`cantrip_mechanics::paradigm::SPELL_ABILITY`) runs
     /// after the card's own effect and makes the delayed triggered ability; the core does the other, "exile this spell", as it
@@ -4812,12 +4813,16 @@ impl CardDef {
 
     /// The keywords the card prints: those it lists, morph or disguise where it prints a way of that keyword (CR 702.37a,
     /// 702.168a; `WayKind::Morph`, `Megamorph`, `Disguise`), which the way holds the cost of, and suspend where it prints one
-    /// (CR 702.62a; `suspend`, which holds its number and cost). What the layers start an object of this card from (CR
-    /// 613.1f takes them as it takes any ability).
+    /// (CR 702.62a; `suspend`, which holds its number and cost),
+    /// and rebound where it prints that (CR 702.88a; `rebound`). What the layers start an object of this card from (CR 613.1f
+    /// takes them as it takes any ability).
     pub fn printed_keywords(&self) -> Keywords {
         let mut keywords = self.keywords;
         if self.suspend.is_some() {
             keywords = keywords.with(Keyword::Suspend);
+        }
+        if self.rebound {
+            keywords = keywords.with(Keyword::Rebound);
         }
         for way in self.ways {
             if way.kind.morph() {

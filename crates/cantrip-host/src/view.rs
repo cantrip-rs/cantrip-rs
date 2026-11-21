@@ -371,7 +371,7 @@ pub fn hexproof_from_text(qualities: HexproofFrom) -> String {
 }
 
 /// The keywords as a card's text words them, for the ones an effect gave an object or took from it.
-const KEYWORD_WORDS: [(Keyword, &str); 86] = [
+const KEYWORD_WORDS: [(Keyword, &str); 87] = [
     (Keyword::Flying, "Flying"),
     (Keyword::Haste, "Haste"),
     (Keyword::Vigilance, "Vigilance"),
@@ -458,6 +458,7 @@ const KEYWORD_WORDS: [(Keyword, &str); 86] = [
     (Keyword::ReadAhead, "Read ahead"),
     (Keyword::AssignsDamageByToughness, "This creature assigns combat damage equal to its toughness rather than its power."),
     (Keyword::Suspend, "Suspend"),
+    (Keyword::Rebound, "Rebound"),
 ];
 
 /// A rules line without its parenthesized reminder text, trimmed.
