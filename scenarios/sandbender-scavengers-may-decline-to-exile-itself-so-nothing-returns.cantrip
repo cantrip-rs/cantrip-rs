@@ -1,0 +1,45 @@
+# "You may exile it. When you do, ..." (CR 603.12): Bot1 declines when Sandbender Scavengers dies, so it stays in the graveyard and the reflexive ability never triggers: Memnite stays in the graveyard too.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Sandbender Scavengers
+Faithless Looting
+Memnite
+Grizzly Bears
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sandbender Scavengers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Grizzly Bears; Memnite)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Sandbender Scavengers)
+Bot2.Pass
+Bot1.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Graveyard = Sandbender Scavengers; Faithless Looting; Memnite; Grizzly Bears

@@ -1,0 +1,8 @@
+{
+  "name": "Sandbender Scavengers",
+  "manaCost": "{W}{B}",
+  "type": "Creature — Human Rogue",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Whenever you sacrifice another permanent, put a +1/+1 counter on this creature.\nWhen this creature dies, you may exile it. When you do, return target creature card with mana value less than or equal to this creature's power from your graveyard to the battlefield."
+}

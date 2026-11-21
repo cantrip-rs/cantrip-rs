@@ -1,0 +1,42 @@
+# Sandbender Scavengers: "Whenever you sacrifice ANOTHER permanent, put a +1/+1 counter on this creature" (CR 701.21a). Bot1 sacrifices the
+# Scavengers themselves to Ashnod's Altar: only the dies trigger goes on the stack (one item, no counter trigger), and Bot1 declines to exile.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Sandbender Scavengers
+Ashnod's Altar
+Plains x20
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sandbender Scavengers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ashnod's Altar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Sandbender Scavengers)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Sandbender Scavengers

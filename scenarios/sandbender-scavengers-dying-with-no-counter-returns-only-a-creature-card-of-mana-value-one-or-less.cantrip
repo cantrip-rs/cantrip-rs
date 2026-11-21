@@ -1,0 +1,46 @@
+# Sandbender Scavengers (1/1 with no counter): "return target creature card with mana value less than or equal to this creature's power". Bot2's Lightning Bolt kills it and Bot1 exiles it. Memnite (mana
+# value 0) is the only legal target: Grizzly Bears (mana value 2 > power 1) is not, so Memnite is chosen for Bot1 (a prompt would be left unanswered if the Bears were legal) and returns, the Bears staying in the graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Sandbender Scavengers
+Faithless Looting
+Memnite
+Grizzly Bears
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sandbender Scavengers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Grizzly Bears; Memnite)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Sandbender Scavengers)
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Sandbender Scavengers
+Bot1.Battlefield = Memnite; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Graveyard = Faithless Looting; Grizzly Bears
