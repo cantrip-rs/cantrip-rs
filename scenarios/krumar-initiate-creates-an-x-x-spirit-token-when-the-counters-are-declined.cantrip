@@ -1,0 +1,44 @@
+# Krumar Initiate: X = 3 ({3}{B} from the pool, 3 life) endures 3 and Bot1 declines the counters, so Krumar stays a 2/2 and a 3/3 white Spirit
+# token is created (CR 701.63a, 111.4): the Spirit is sized by the announced X. 20 - 3 = 17 life.
+
+[Bot1 Deck]
+Swamp
+Swamp
+Mox Jet
+Mox Ruby
+Krumar Initiate
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Krumar Initiate.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Krumar Initiate.Activate(X: 3)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Battlefield.Spirit Token.Power = 3
+? Bot1.Battlefield.Spirit Token.Toughness = 3
+? Bot1.Battlefield.Spirit Token.Colors = White
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Krumar Initiate.Power = 2
+Bot1.Battlefield.Krumar Initiate.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Krumar Initiate.Tapped = true
+Bot1.Battlefield.Mox Ruby.Tapped = true
+Stack.Count = 0

@@ -1,0 +1,50 @@
+# Krumar Initiate: the cost is paid on activation (X = 1: {1}{B} and 1 life, CR 602.2b) and Bot2 Bolts Krumar in response. The ability
+# still resolves (CR 113.7a) with the X it announced; Krumar has left the battlefield, so it can't take counters and Bot1 is not asked:
+# a 1/1 white Spirit token is created (CR 701.63a, ruling 2025-04-04).
+
+[Bot1 Deck]
+Swamp
+Swamp
+Mox Jet
+Mox Ruby
+Krumar Initiate
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Krumar Initiate.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Krumar Initiate.Activate(X: 1)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Krumar Initiate)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Spirit Token.Power = 1
+? Bot1.Battlefield.Spirit Token.Toughness = 1
+
+[Expect]
+Bot1.Life = 19
+Bot1.Graveyard = Krumar Initiate
+Bot1.Battlefield.Count = 5
+Stack.Count = 0

@@ -1,0 +1,52 @@
+# Krumar Initiate: "{X}{B}, {T}, Pay X life: This creature endures X. Activate only as a sorcery." X is announced as the ability is
+# activated (CR 107.3a, 602.2b) and sizes the mana ({X}{B}), the life (CR 119.4) and the endure (CR 701.63a). Turn 1 Bot1 casts
+# Krumar. On turn 3 Bot1 puts {B}{B}{B} in its pool, casts a Mishra's Bauble and finds the ability refused while the Bauble is on the
+# stack (sorcery speed, CR 307.1), activates it for X = 2 (the pool is empty afterwards: {2}{B} exactly, and the untapped Mox Ruby
+# was not needed) and chooses the counters: a 4/4 with two +1/+1 counters, 18 life (20 - 2), Krumar tapped and no Spirit token.
+
+[Bot1 Deck]
+Swamp
+Swamp
+Mox Jet
+Mox Ruby
+Krumar Initiate
+Mishra's Bauble
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Krumar Initiate.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mishra's Bauble.Cast
+! Bot1.Battlefield.Krumar Initiate.Activate(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Krumar Initiate.Activate(X: 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Mana =
+? Bot1.Life = 18
+? Bot1.Battlefield.Krumar Initiate.Power = 4
+? Bot1.Battlefield.Krumar Initiate.Toughness = 4
+? Bot1.Battlefield.Krumar Initiate.Counters.PlusOnePlusOne = 2
+
+[Expect]
+Bot1.Life = 18
+Bot1.Battlefield.Krumar Initiate.Tapped = true
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot1.Battlefield.Count = 6
+Stack.Count = 0
