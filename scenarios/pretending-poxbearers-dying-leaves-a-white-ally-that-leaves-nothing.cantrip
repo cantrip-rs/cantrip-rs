@@ -1,0 +1,50 @@
+# Pretending Poxbearers {1}{W/B}, 2/1: "When this creature dies, create a 1/1 white Ally creature token" (CR 700.4). Bot2's Lightning Bolt
+# kills it on turn 2 and Bot1 gets a 1/1 white Ally token. The token has no ability: Bot2's second Bolt on turn 4 kills it and nothing follows.
+# Until then Bot1's Poxbearers is a 2/1 with no token.
+
+[Bot1 Deck]
+Pretending Poxbearers
+Mox Pearl
+Plains x18
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Pretending Poxbearers.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Pearl; Plains; Pretending Poxbearers
+? Bot1.Battlefield.Pretending Poxbearers.Power = 2
+? Bot1.Battlefield.Pretending Poxbearers.Toughness = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Pretending Poxbearers)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Pretending Poxbearers
+? Bot1.Battlefield = Ally Token; Mox Pearl; Plains
+? Bot1.Battlefield.Ally Token.Power = 1
+? Bot1.Battlefield.Ally Token.Toughness = 1
+? Bot1.Battlefield.Ally Token.Colors = White
+? Bot1.Battlefield.Ally Token.Subtypes = Ally
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ally Token)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Plains
+Bot1.Graveyard = Pretending Poxbearers
