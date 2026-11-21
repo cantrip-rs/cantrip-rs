@@ -1,0 +1,56 @@
+# Elemental Teachings {4}{G}: Bot1 (Black Lotus for GGG, Mox Emerald and Mox Pearl) searches for up to four land cards with different names:
+# a second Forest or Island (same name), a fifth land (Plains) and a nonland card (Llanowar Elves) are refused (CR 701.23, 201.2b). It finds
+# Forest, Island, Mountain and Swamp and reveals them; Bot2 chooses two, Island and Swamp, which go to Bot1's graveyard, and the other
+# two, Forest and Mountain, enter tapped under Bot1's control (CR 608.2d, 701.20a). Bot2's own library, with lands of the same names, is
+# not searched and keeps its 15 cards (22 less the 7 drawn), and Bot1's library, shuffled, has the 11 left.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Elemental Teachings
+Plains
+Plains
+Plains
+Forest
+Forest
+Island
+Island
+Mountain
+Swamp
+Llanowar Elves
+Plains x8
+
+[Bot2 Deck]
+Forest
+Mountain
+Swamp
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: G)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elemental Teachings.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Forest#1; Forest#2)
+! Bot1.Search(Forest; Island; Mountain; Swamp; Plains)
+! Bot1.Search(Llanowar Elves)
+Bot1.Search(Forest; Island; Mountain; Swamp)
+Bot2.Choose(Island; Swamp)
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Elemental Teachings; Swamp; Island; Black Lotus
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Mountain.Tapped = true
+Bot1.Battlefield.Count = 4
+Bot1.Library.Count = 11
+Bot1.Shuffles = 1
+Bot1.Revealed = Forest; Island; Mountain; Swamp
+Bot2.Library.Count = 15
+Bot2.Battlefield.Count = 0

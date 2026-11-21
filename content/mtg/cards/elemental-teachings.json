@@ -1,0 +1,6 @@
+{
+  "name": "Elemental Teachings",
+  "manaCost": "{4}{G}",
+  "type": "Instant — Lesson",
+  "oracleText": "Search your library for up to four land cards with different names and reveal them. An opponent chooses two of those cards. Put the chosen cards into your graveyard and the rest onto the battlefield tapped, then shuffle."
+}
