@@ -1,0 +1,44 @@
+# Cycle of Renewal: "Sacrifice a land." and the search are separate sentences (CR 701.21a, 701.23): with no land to sacrifice,
+# nothing is sacrificed and the search still happens. Bot1 pays with the three Moxen only and has no land; it finds two basic
+# lands, tapped, and the Moxen are not sacrificed in their place.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Cycle of Renewal
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Plains
+Forest
+Mountain
+Elvish Mystic x7
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cycle of Renewal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Plains; Forest)
+? Bot1.Battlefield.Plains.Tapped = true
+? Bot1.Battlefield.Forest.Tapped = true
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Forest; Mox Emerald; Mox Jet; Mox Ruby; Plains
+Bot1.Graveyard = Cycle of Renewal
