@@ -1,0 +1,37 @@
+# Seismic Sense: with only noncreature, nonland cards among the top X (here a Lightning Bolt and a Mox Ruby for two Forests),
+# nothing may be taken: the cards are looked at and go to the bottom of the library (CR 701.20a).
+
+[Bot1 Deck]
+Forest
+Forest
+Mox Emerald
+Seismic Sense
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Lightning Bolt
+Mox Ruby
+Grizzly Bears
+Elvish Mystic x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Seismic Sense.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Lightning Bolt | Mox Ruby)
+Bot1.Arrange( | Lightning Bolt; Mox Ruby)
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Looked = Lightning Bolt; Mox Ruby
+Bot1.Library.Count = 12

@@ -1,0 +1,39 @@
+# Seismic Sense: "You may reveal a creature or land card from among them" (CR 701.20a): one card, not every one that qualifies.
+# Bot1 controls two Forests, so it looks at the Island and the Grizzly Bears on top and may take only one of them: both are
+# refused, it takes the Island (a land card), revealing it, and the Bears go to the bottom. The Mystic under them is unseen.
+
+[Bot1 Deck]
+Forest
+Forest
+Mox Emerald
+Seismic Sense
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Island
+Grizzly Bears
+Elvish Mystic
+Elvish Mystic x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Seismic Sense.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Island; Grizzly Bears | )
+Bot1.Arrange(Island | Grizzly Bears)
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Revealed = Island
+Bot1.Looked = Island; Grizzly Bears
+Bot1.Library.Count = 12
