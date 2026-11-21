@@ -1,0 +1,6 @@
+{
+  "name": "Zuko's Exile",
+  "manaCost": "{5}",
+  "type": "Instant — Lesson",
+  "oracleText": "Exile target artifact, creature, or enchantment. Its controller creates a Clue token. (It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")"
+}

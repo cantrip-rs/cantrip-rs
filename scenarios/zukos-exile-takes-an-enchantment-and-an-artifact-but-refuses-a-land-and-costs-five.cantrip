@@ -1,0 +1,61 @@
+# Zuko's Exile targets an artifact, creature or enchantment only (CR 115.1, 601.2c). Bot2 has a Bad Moon (an enchantment) and an
+# Island. Bot1, with four Moxen only, can't cast it ({5}, so exactly five is needed: Mana: short); with the fifth it is refused
+# on the Island (a land is none of the three) and takes Bad Moon: Bot2 creates the Clue. On turn 5 it exiles Bot1's own Mox Ruby
+# (an artifact, "target artifact" is any artifact, whoever controls it, CR 115.1): Bot1, its controller, makes the Clue.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Zuko's Exile
+Zuko's Exile
+Mox Emerald
+Island x14
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Bad Moon
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Bad Moon.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Zuko's Exile.Cast(Bot2.Battlefield.Bad Moon; Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Zuko's Exile.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Zuko's Exile.Cast(Bot2.Battlefield.Bad Moon)
+Bot1.Pass
+Bot2.Pass
+? Exile = Bad Moon
+? Bot2.Battlefield = Clue Token; Island; Mox Jet; Mox Pearl
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Zuko's Exile.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Bad Moon; Mox Ruby
+Bot1.Battlefield = Clue Token; Mox Emerald; Mox Jet; Mox Pearl; Mox Sapphire
+Bot1.Graveyard = Zuko's Exile; Zuko's Exile

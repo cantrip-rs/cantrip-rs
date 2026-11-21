@@ -1,0 +1,43 @@
+# "Its controller" is the permanent's controller as it was exiled (CR 608.2h), not its owner: Bot1 steals Bot2's Ornithopter
+# with Act of Treason (Mox Ruby, Mox Jet, Mox Pearl), then exiles it with Zuko's Exile (Mox Emerald, Mox Sapphire and Black
+# Lotus's three red). Bot1, the controller, creates the Clue; Bot2, the owner, does not.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Black Lotus
+Act of Treason
+Zuko's Exile
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Act of Treason.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Zuko's Exile.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Ornithopter
+Bot2.Battlefield.Count = 0
+Bot1.Battlefield = Clue Token; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
