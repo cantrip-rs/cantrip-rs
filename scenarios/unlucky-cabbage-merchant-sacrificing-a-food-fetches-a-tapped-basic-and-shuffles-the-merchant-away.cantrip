@@ -1,0 +1,53 @@
+# Unlucky Cabbage Merchant {1}{G}, 2/2: "When this creature enters, create a Food token." and "Whenever you sacrifice a Food, you may search
+# your library for a basic land card and put it onto the battlefield tapped. If you search your library this way, put this creature on the
+# bottom of its owner's library, then shuffle." Turn 1: Bot1 casts the Merchant (a Food enters) and sacrifices the Food to its own ability
+# ({2}, {T}: gain 3 life, the sacrifice a cost). Bot1 accepts and searches: Tropical Island, no basic land, is refused. A Mountain enters
+# tapped, the Merchant leaves the battlefield for the library, which now has one card more than before, and the 3 life still comes.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Unlucky Cabbage Merchant
+Forest
+Forest
+Mountain
+Tropical Island
+Forest x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Unlucky Cabbage Merchant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Food Token; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Unlucky Cabbage Merchant
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Food Token.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Search(Tropical Island)
+Bot1.Search(Mountain)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mountain; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Battlefield.Mountain.Tapped = true
+Bot1.Library.Count = 13
+Bot1.Life = 23
+Bot1.Shuffles = 1

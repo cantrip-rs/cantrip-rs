@@ -1,0 +1,40 @@
+# Unlucky Cabbage Merchant: "Whenever you sacrifice a Food". Bot1 sacrifices Black Lotus (an artifact, no Food) for mana: nothing is asked.
+# On turn 4 (after Bot1 drew for turn 3) Bot2 sacrifices a Food of its own to its Gilded Goose: not "you", so nothing is asked either, and Bot1's Merchant and Food
+# Token stay where they are, the library not changed.
+
+[Bot1 Deck]
+Black Lotus
+Unlucky Cabbage Merchant
+Forest
+Forest
+Forest
+Mountain
+Forest
+Forest x13
+
+[Bot2 Deck]
+Forest
+Gilded Goose
+Forest x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: G)
+Bot1.Hand.Unlucky Cabbage Merchant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Food Token; Unlucky Cabbage Merchant
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Gilded Goose.Cast
+Bot1.Pass
+Bot2.Battlefield.Gilded Goose.Activate(Ability: Sacrifice a Food; Sacrifice: Food Token; Color: G)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Food Token; Unlucky Cabbage Merchant
+Bot1.Library.Count = 12
+Bot2.Battlefield = Forest; Gilded Goose
