@@ -142,6 +142,15 @@ pub fn cast_from_graveyard_as_it_entered<'a>(history: History<'a>, permanent: Ob
         .and_then(|spell| cast_from_graveyard(history, spell))
 }
 
+/// "If one or more cards were put into exile this turn" (CR 603.4): asked of the history, by anyone, from any zone. A token is not a
+/// card (CR 108.2, 111.1). Ennis, Debate Moderator and Ashiok, Wicked Manipulator's Nightmare tokens print it, each checked as the
+/// ability would trigger and again as it resolves.
+pub fn a_card_was_put_into_exile_this_turn(q: &dyn Query, _: &Asker) -> bool {
+    q.history()
+        .select(EventQuery::kind(EventMask::ZONE_CHANGE).to(ZoneKind::Exile).this_turn())
+        .any(|r| matches!(r.event, Event::ZoneChange { new, .. } if !q.obj(new).token))
+}
+
 /// An opponent was dealt noncombat damage this turn (CR 120.2). Grim Repriser and Whiplash Wordsmith ask this
 /// same question, from an activated ability's condition and a static ability's layers respectively.
 pub fn opponent_dealt_noncombat_damage_this_turn(history: History<'_>, state: &GameState, player: PlayerId) -> bool {
