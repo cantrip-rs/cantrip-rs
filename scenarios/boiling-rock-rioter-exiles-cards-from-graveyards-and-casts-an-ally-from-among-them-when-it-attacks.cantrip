@@ -1,0 +1,82 @@
+# Boiling Rock Rioter {2}{B} (3/3): "Tap an untapped Ally you control: Exile target card from a graveyard" and "Whenever this creature attacks, you
+# may cast an Ally spell from among cards you own exiled with this creature". Turn 1 Bot1 casts the Rioter and an Earth Kingdom Protectors. Turn 3
+# it casts Gran-Gran and Lightning Bolts it, then taps the Protectors (an Ally) to exile the Bolt from its graveyard. The Rioter attacks: firebending 1
+# adds {R}, and its trigger finds only the Bolt exiled with it, which is not an Ally spell, so nothing is asked. Turn 5 the Protectors taps again to
+# exile Gran-Gran; the attack offers it and Bot1 casts it from exile for {U}.
+# Bot2 takes 3 from each attack.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Boiling Rock Rioter
+Earth Kingdom Protectors
+Lightning Bolt
+Gran-Gran
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Boiling Rock Rioter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Earth Kingdom Protectors.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Gran-Gran.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Gran-Gran)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Gran-Gran; Lightning Bolt
+Bot1.Battlefield.Boiling Rock Rioter.Activate(Ability: Tap an untapped Ally; Bot1.Graveyard.Lightning Bolt)
+Bot1.Choose(Earth Kingdom Protectors)
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt
+? Bot1.Battlefield.Earth Kingdom Protectors.Tapped = true
+? Bot1.Battlefield.Boiling Rock Rioter.Tapped = false
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Boiling Rock Rioter > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R} lasting {R}
+[T3 Bot1.Damage]
+? Bot2.Life = 17
+[T5 Bot1.Main1]
+Bot1.Battlefield.Boiling Rock Rioter.Activate(Ability: Tap an untapped Ally; Bot1.Graveyard.Gran-Gran)
+Bot1.Choose(Earth Kingdom Protectors)
+Bot1.Pass
+Bot2.Pass
+? Exile = Gran-Gran; Lightning Bolt
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Boiling Rock Rioter > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gran-Gran.Types = Creature
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R} lasting {R}
+[T5 Bot1.Damage]
+
+[Expect]
+Bot2.Life = 14
+Exile = Lightning Bolt
+Bot1.Graveyard =
+Bot1.Battlefield.Gran-Gran.Types = Creature

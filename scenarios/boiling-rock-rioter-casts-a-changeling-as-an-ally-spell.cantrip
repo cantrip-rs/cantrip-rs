@@ -1,0 +1,65 @@
+# "You may cast an Ally spell from among cards you own exiled with this creature." Changeling Wayfinder's changeling is a
+# characteristic-defining ability that works in every zone (CR 702.73a, 604.3), so the spell it would be is every creature type,
+# an Ally among them, and that is what is judged (CR 601.3e), not its printed type line (Shapeshifter). Bolted, it is exiled
+# from Bot1's graveyard with the Rioter by tapping Earth Kingdom Protectors; when the Rioter attacks, it is cast from exile
+# (the trigger's default answer takes it) and resolves onto the battlefield.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Boiling Rock Rioter
+Earth Kingdom Protectors
+Lightning Bolt
+Changeling Wayfinder
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Boiling Rock Rioter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Earth Kingdom Protectors.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Changeling Wayfinder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Changeling Wayfinder)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Boiling Rock Rioter.Activate(Ability: Tap an untapped Ally; Bot1.Graveyard.Changeling Wayfinder)
+Bot1.Choose(Earth Kingdom Protectors)
+Bot1.Pass
+Bot2.Pass
+? Exile = Changeling Wayfinder
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Boiling Rock Rioter > Bot2)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Damage]
+
+[Expect]
+Exile =
+Bot1.Battlefield.Changeling Wayfinder.Types = Creature
