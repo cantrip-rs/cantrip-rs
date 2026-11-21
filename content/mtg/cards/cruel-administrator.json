@@ -1,0 +1,8 @@
+{
+  "name": "Cruel Administrator",
+  "manaCost": "{3}{B}{R}",
+  "type": "Creature — Human Soldier",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Raid — This creature enters with a +1/+1 counter on it if you attacked this turn.\nWhenever this creature attacks, create a 2/2 red Soldier creature token with firebending 1. (Whenever it attacks, add {R}. This mana lasts until end of combat.)"
+}

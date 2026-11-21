@@ -1,0 +1,56 @@
+# Cruel Administrator, a 5/4: "Raid -- This creature enters with a +1/+1 counter on it if you attacked this turn." Turn 1: Bot1
+# attacks with a hasty Fanatical Firebrand, then casts Cruel Administrator in the second main phase: it enters with the counter, a
+# 6/5. Turn 3: "Whenever this creature attacks, create a 2/2 red Soldier creature token with firebending 1": the attack makes one
+# token (not tapped and attacking, so it does not attack itself) and nothing else.
+
+[Bot1 Deck]
+Mox Ruby x2
+Mox Jet
+Black Lotus
+Fanatical Firebrand
+Cruel Administrator
+Mountain x10
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Fanatical Firebrand > Bot2)
+[Bot1.Main2]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cruel Administrator.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cruel Administrator.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Cruel Administrator.Power = 6
+? Bot1.Battlefield.Cruel Administrator.Toughness = 5
+? Bot1.Battlefield.Soldier Token = (absent)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Cruel Administrator > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Soldier Token.Power = 2
+? Bot1.Battlefield.Soldier Token.Toughness = 2
+? Bot1.Battlefield.Soldier Token.Tapped = false
+? Bot1.Battlefield.Soldier Token#2 = (absent)
+
+[Expect]
+Bot1.Battlefield.Cruel Administrator.Power = 6

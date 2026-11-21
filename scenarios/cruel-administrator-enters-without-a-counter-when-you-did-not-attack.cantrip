@@ -1,0 +1,35 @@
+# Cruel Administrator: "Raid -- This creature enters with a +1/+1 counter on it if you attacked this turn." Cast before any attack
+# on turn 1 it enters a plain 5/4 with no counter.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Black Lotus
+Cruel Administrator
+Mountain x10
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cruel Administrator.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cruel Administrator.Counters.PlusOnePlusOne = (absent)
+? Bot1.Battlefield.Cruel Administrator.Power = 5
+? Bot1.Battlefield.Cruel Administrator.Toughness = 4
+
+[Expect]
+Bot1.Battlefield.Cruel Administrator.Toughness = 4
