@@ -21,14 +21,9 @@ fn draw_three_lose_three(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspe
     Ok(())
 }
 
-/// "If three or more creatures died this turn" (CR 603.4): checked as it triggers and again as it resolves.
-fn three_creatures_died(q: &dyn Query, _: &Asker) -> bool {
-    history::creatures_died_this_turn(q, None) >= 3
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(triggers::EACH_END_STEP, cantrip_mechanics::prepare::become_prepared, "At the beginning of each end step, if three or more creatures died this turn, this creature becomes prepared.")
-        .condition(three_creatures_died)],
+        .condition(history::n_or_more_creatures_died_this_turn::<3>)],
     prepare: Some(&ANCESTRAL_CRAVING),
     ..oracle::BLOODLINE_RECOLLECTOR
 };

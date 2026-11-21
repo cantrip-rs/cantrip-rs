@@ -445,6 +445,12 @@ pub fn a_creature_died_this_turn(q: &dyn Query, _: &Asker) -> bool {
     creatures_died_this_turn(q, None) > 0
 }
 
+/// "If N or more creatures died this turn" (CR 603.4, 700.4) as a condition: any creature's, a token's included, asked of the history as the
+/// trigger event happens and again as the ability resolves. Bloodline Recollector (three), Darklight Phoenix and Emeritus of Woe (two) print it.
+pub fn n_or_more_creatures_died_this_turn<const N: usize>(q: &dyn Query, _: &Asker) -> bool {
+    creatures_died_this_turn(q, None) >= N
+}
+
 /// "This creature enters with a +1/+1 counter on it if a creature died this turn" (CR 614.1c, 700.4): judged as it enters, from the
 /// event history; any creature's death this turn counts, the opponents' and tokens' too, and the entering permanent is not yet on the
 /// battlefield, so it is not one of them. Cackling Slasher and Blacksnag Buzzard print it.
