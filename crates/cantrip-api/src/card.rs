@@ -4901,6 +4901,9 @@ pub struct CardTable {
     pub face_down: CardId,
     /// What a cloaked permanent is (CR 701.58a): its copiable values.
     pub cloaked: CardId,
+    /// What a permanent put onto the battlefield face down otherwise is (CR 708.2a, `FaceDown::Bare`): a morph spell's
+    /// permanent's values (`intrinsic::MORPHED`).
+    pub morphed: CardId,
     /// What a face-down card outside the battlefield and the stack is (CR 406.3a): nothing.
     pub no_characteristics: CardId,
     /// A Room's two doors (CR 709.5), by the Room's id: the ids of its halves, whose abilities its permanent has while
@@ -5175,6 +5178,12 @@ pub fn looks_back(words: ZoneWords, event: &Event, seen_by_all: bool) -> bool {
 pub enum FaceDown {
     Manifested,
     Cloaked,
+    /// Put face down by an effect that neither manifests nor cloaks it: Yarus, Roar of the Old Gods's "return it to the
+    /// battlefield face down" (CR 708.2a), a 2/2 creature with no text, no name, no subtypes and no mana cost - what a morph
+    /// spell's permanent is (`intrinsic::MORPHED`). It is turned face up for its morph or disguise cost if its card has one
+    /// (CR 702.37e, 702.168d), never for its mana cost, which only a manifested or cloaked permanent may be (CR 701.40b,
+    /// 701.58b).
+    Bare,
 }
 
 /// What a face-down permanent is turned face up for by a special action (CR 116.2b): its card's mana cost, if it is a
@@ -5529,6 +5538,9 @@ impl CardTable {
         let cloaked = CardId(
             cards.iter().position(|c| std::ptr::eq(*c, &crate::intrinsic::CLOAKED)).expect("the cloaked values") as u16,
         );
+        let morphed = CardId(
+            cards.iter().position(|c| std::ptr::eq(*c, &crate::intrinsic::MORPHED)).expect("the morphed values") as u16,
+        );
         let no_characteristics = CardId(
             cards.iter().position(|c| std::ptr::eq(*c, &crate::intrinsic::NO_CHARACTERISTICS)).expect("no characteristics") as u16,
         );
@@ -5593,6 +5605,7 @@ impl CardTable {
             intrinsic,
             face_down,
             cloaked,
+            morphed,
             no_characteristics,
             undercity,
             backs: Vec::new(),
@@ -5744,6 +5757,7 @@ impl CardTable {
         match how {
             FaceDown::Manifested => self.face_down,
             FaceDown::Cloaked => self.cloaked,
+            FaceDown::Bare => self.morphed,
         }
     }
 
