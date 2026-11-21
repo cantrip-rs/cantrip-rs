@@ -1,0 +1,13 @@
+{
+  "name": "Lightning, Army of One",
+  "manaCost": "{1}{R}{W}",
+  "type": "Legendary Creature — Human Soldier",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "First strike, trample, lifelink\nStagger — Whenever Lightning deals combat damage to a player, until your next turn, if a source would deal damage to that player or a permanent that player controls, it deals double that damage instead.",
+  "keywords": [
+    "FirstStrike",
+    "Trample",
+    "Lifelink"
+  ]
+}

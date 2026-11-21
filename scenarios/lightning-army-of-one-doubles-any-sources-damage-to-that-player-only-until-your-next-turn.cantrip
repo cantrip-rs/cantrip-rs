@@ -1,0 +1,72 @@
+# "... until your next turn, if a source would deal damage to that player ..., it deals double that damage instead." Bot1's
+# Lightning hits Bot2 for 3 (Bot2 to 17, Bot1 to 23 by lifelink). After combat Bot1's Lightning Bolt deals 3 doubled to 6 (Bot2
+# to 11). On turn 4 any source counts, the opponent's too: Bot2's own Bolt at itself is doubled to 6 (Bot2 to 5), while its Bolt
+# at Bot1 is a plain 3 (Bot1 to 20): the effect is about Bot2 only, not about Lightning's controller. At Bot1's next turn the
+# effect ends: a Bolt on turn 5 deals 3 (Bot2 to 2).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Lightning, Army of One
+Lightning Bolt
+Lightning Bolt
+Island
+Island x14
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x3
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lightning, Army of One.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lightning, Army of One > Bot2)
+[T3 Bot1.Damage]
+? Bot2.Life = 17
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 11
+? Bot1.Life = 23
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 20
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 5
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 2
+Bot1.Life = 20

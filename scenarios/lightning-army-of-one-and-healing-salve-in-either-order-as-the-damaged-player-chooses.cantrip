@@ -1,0 +1,66 @@
+# The ruling (CR 616.1, 615.6): when damage meets Lightning's doubling and a prevention shield, the damaged player orders them;
+# if all of the damage is prevented, Lightning's effect no longer applies. Lightning hits Bot2 (to 17); Bot1 casts Lightning
+# Bolt, and Bot2 shields itself with Healing Salve in response. Bot2 has the Salve apply first: all 3 is prevented, nothing is
+# left to double, and Bot2 takes 0 (17). At the second Bolt, with a second Salve, Bot2 has Lightning's effect apply first: 3
+# doubled is 6, of which 3 are prevented, so Bot2 takes 3 (14).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Lightning, Army of One
+Lightning Bolt
+Lightning Bolt
+Mox Ruby
+Island x14
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Healing Salve
+Healing Salve
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lightning, Army of One.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lightning, Army of One > Bot2)
+[T3 Bot1.Damage]
+? Bot2.Life = 17
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(Prevent the next 3 damage)
+Bot2.Target(Bot2)
+Bot2.Replace(Healing Salve)
+? Bot2.Life = 17
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(Prevent the next 3 damage)
+Bot2.Target(Bot2)
+Bot2.Replace(Lightning, Army of One)
+
+[Expect]
+Bot2.Life = 14
+Prevented = 3 Lightning Bolt > Bot2 by Healing Salve; 3 Lightning Bolt > Bot2 by Healing Salve
+Bot2.Graveyard = Healing Salve; Healing Salve
