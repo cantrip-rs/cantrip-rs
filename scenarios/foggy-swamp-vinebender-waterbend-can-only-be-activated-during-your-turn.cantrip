@@ -1,0 +1,45 @@
+# Foggy Swamp Vinebender, "Waterbend {5}: ... Activate only during your turn" (CR 602.5b). Bot1 casts it on turn 1 with Black Lotus and a Forest, keeping four Moxen
+# untapped. On Bot2's turn 2, with Bot2's Ornithopter on the stack so Bot1 gets priority, the five taps (the four Moxen and the Vinebender) are all there but the
+# ability is not offered (the refusal). On Bot1's turn 3 the same five taps do it, and it is a 5/4 with one counter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Mox Jet
+Forest
+Foggy Swamp Vinebender
+Forest x15
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Foggy Swamp Vinebender.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+! Bot1.Battlefield.Foggy Swamp Vinebender.Activate(Convoke: Mox Emerald, Mox Pearl, Mox Ruby, Mox Jet, Foggy Swamp Vinebender)
+? Bot1.Battlefield.Foggy Swamp Vinebender.Power = 4
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Foggy Swamp Vinebender.Activate(Convoke: Mox Emerald, Mox Pearl, Mox Ruby, Mox Jet, Foggy Swamp Vinebender)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Foggy Swamp Vinebender.Power = 5
+Bot1.Battlefield.Foggy Swamp Vinebender.Counters.PlusOnePlusOne = 1
