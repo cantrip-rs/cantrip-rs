@@ -1,0 +1,61 @@
+# Fugitive Codebreaker: "Disguise {5}{R}. This cost is reduced by {1} for each instant and sorcery card in your graveyard" and
+# "When this creature is turned face up, discard your hand, then draw three cards" (CR 702.168a, 118.7, 116.2b, 603.6d). Turn 1:
+# Lightning Bolt (an instant) goes to the graveyard, and the Codebreaker is cast face down for {3}, which no graveyard changes.
+# Turn 3: with four Moxen tapped it is refused ({4}{R} still costs five); a fifth mana, Mountain, turns it face up for exactly
+# {4}{R}, a special action (CR 116.2b) the opponent cannot respond to. The trigger discards the Island in hand first, then draws
+# three: the hand ends at three cards, not none.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Fugitive Codebreaker
+Lightning Bolt
+Island
+Mountain
+Plains
+Swamp
+Forest
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fugitive Codebreaker.Cast(Ability: Disguise)
+? Stack..FaceDown = true
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Fugitive Codebreaker.FaceDown = (absent)
+Bot1.Battlefield.Fugitive Codebreaker.Power = 2
+Bot1.Battlefield.Fugitive Codebreaker.Toughness = 1
+Bot1.Hand.Count = 3
+Bot1.Graveyard.Count = 2
+Bot2.Life = 17

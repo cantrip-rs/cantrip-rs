@@ -1,0 +1,37 @@
+# Fugitive Codebreaker cast face up for {1}{R} (not reduced by the graveyard: its reduction is of the disguise cost alone; CR
+# 702.168a) has haste (CR 702.10a), so it attacks the turn it comes down, and prowess (CR 702.108a): casting Lightning Bolt, a
+# noncreature spell, gives it +1/+1 until end of turn. It
+# attacks as a 3/2 after the Bolt (3 damage) and deals 3 more: Bot2 goes from 20 to 14.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Fugitive Codebreaker
+Lightning Bolt
+Mountain
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fugitive Codebreaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fugitive Codebreaker.Power = 3
+? Bot1.Battlefield.Fugitive Codebreaker.Toughness = 2
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Fugitive Codebreaker > Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14

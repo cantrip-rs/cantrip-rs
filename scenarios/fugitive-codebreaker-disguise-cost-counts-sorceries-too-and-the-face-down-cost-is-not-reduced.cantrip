@@ -1,0 +1,55 @@
+# Fugitive Codebreaker's "reduced by {1} for each instant and sorcery card in your graveyard" (CR 702.168a, 118.7) counts both
+# kinds and reduces only the disguise cost it names: casting it face down still costs {3} (CR 702.168b) however many cards are
+# there. Turn 1: Lightning Bolt (an instant) and Chain Lightning (a sorcery) are cast, leaving one mana, Mox Pearl's: the face-down
+# cast is refused, though two off {3} would be {1}. Black Lotus then pays the {3}. Turn 3: Mox Ruby, Mox Pearl and the two
+# Mountains, four mana, turn it face up for {3}{R} (two off {5}{R}); with three it is refused.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Fugitive Codebreaker
+Lightning Bolt
+Chain Lightning
+Mountain
+Mountain
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Chain Lightning.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Fugitive Codebreaker.Cast(Ability: Disguise; Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Fugitive Codebreaker.Cast(Ability: Disguise)
+? Stack..FaceDown = true
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+? Bot1.Mana =
+
+[Expect]
+Turn = 3
+Bot2.Life = 14
+Bot1.Battlefield.Fugitive Codebreaker.FaceDown = (absent)
+Bot1.Hand.Count = 3
