@@ -1,0 +1,50 @@
+# Judith, Carnage Connoisseur: casting Lightning Bolt chooses the first mode, "That spell gains deathtouch and lifelink" (CR 702.2,
+# 702.15). The Bolt deals 3 damage to a 0/4 Steel Wall, which three damage alone would leave alive, so deathtouch (702.2b) destroys it,
+# and lifelink (702.15b) has the Bolt's controller gain 3 life as the damage is dealt. Judith's trigger resolves before the Bolt does.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Black Lotus
+Judith, Carnage Connoisseur
+Lightning Bolt
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Mox Pearl
+Steel Wall
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Judith, Carnage Connoisseur.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Steel Wall.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Steel Wall)
+Bot1.Modes(That spell gains deathtouch and lifelink.)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Steel Wall = (absent)
+Bot2.Graveyard = Steel Wall
+Bot1.Life = 23
+Bot1.Graveyard = Lightning Bolt; Black Lotus

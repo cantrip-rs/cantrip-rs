@@ -1,0 +1,56 @@
+# Judith, Carnage Connoisseur (ruling 2024-04-12): when a spell instructs another object to deal damage, the spell's deathtouch and
+# lifelink don't apply (CR 702.2b, 702.15b look at the source of the damage). Bot1 casts Rabid Bite, a sorcery, so Judith triggers
+# and the spell gains deathtouch and lifelink, but the damage comes from Judith herself (CR 120.3, 609.7): 3 damage to the 0/4 Steel
+# Wall, which survives, and Bot1 gains no life.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Black Lotus
+Judith, Carnage Connoisseur
+Mox Emerald
+Rabid Bite
+Mountain x10
+
+[Bot2 Deck]
+Mox Pearl
+Steel Wall
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Judith, Carnage Connoisseur.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Steel Wall.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Rabid Bite.Cast
+Bot1.Target(Bot1.Battlefield.Judith, Carnage Connoisseur)
+Bot1.Target(Bot2.Battlefield.Steel Wall)
+Bot1.Modes(That spell gains deathtouch and lifelink.)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot2.Battlefield.Steel Wall.Damage = 3
+Bot1.Life = 20
+Bot1.Graveyard = Rabid Bite; Black Lotus

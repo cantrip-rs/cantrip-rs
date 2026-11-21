@@ -1,0 +1,41 @@
+# Judith, Carnage Connoisseur: "Whenever you cast an instant or sorcery spell" (CR 603.2): casting a creature spell of your own, or an
+# opponent casting an instant, puts no trigger on the stack.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Black Lotus
+Judith, Carnage Connoisseur
+Monastery Swiftspear
+Mountain x12
+
+[Bot2 Deck]
+Opt
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Judith, Carnage Connoisseur.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Opt.Cast
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Monastery Swiftspear.Cast
+? Stack.Count = 1
+
+[Expect]
+Bot1.Life = 20

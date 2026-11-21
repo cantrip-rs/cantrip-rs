@@ -1,0 +1,62 @@
+# Judith, Carnage Connoisseur: the second mode creates a 2/2 red Imp (CR 111.1) and the spell gains nothing. Lightning Bolt deals 3 to a
+# 0/4 Steel Wall, which survives (no deathtouch, CR 702.2b), and Bot1 gains no life (no lifelink, CR 702.15b). A second Bolt, cast at
+# the Imp with the first mode, kills it with lifelink (CR 702.15b: 3 life) and the Imp's own trigger deals 2 damage to Bot2.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Black Lotus
+Judith, Carnage Connoisseur
+Lightning Bolt x2
+Mountain x11
+
+[Bot2 Deck]
+Mox Pearl
+Steel Wall
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Judith, Carnage Connoisseur.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Steel Wall.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Steel Wall)
+Bot1.Modes(Create a 2/2 red Imp creature token with "When this token dies, it deals 2 damage to each opponent.")
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Steel Wall.Damage = 3
+? Bot1.Battlefield.Imp Token.ManaValue = 0
+? Bot1.Battlefield.Imp Token.Power = 2
+? Bot1.Battlefield.Imp Token.Toughness = 2
+? Bot1.Life = 20
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Imp Token)
+Bot1.Modes(That spell gains deathtouch and lifelink.)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Imp Token = (absent)
+Bot1.Life = 23
+Bot2.Life = 18
