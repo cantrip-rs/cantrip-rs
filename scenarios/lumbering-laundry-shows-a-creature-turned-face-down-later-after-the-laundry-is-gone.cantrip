@@ -1,0 +1,79 @@
+# Lumbering Laundry: "{2}: Until end of turn, you may look at face-down creatures you don't control any time" (CR 611.2a,
+# 708.5). The permission is the player's for the turn: it outlasts the Laundry, and covers a creature turned face down after
+# the ability resolved. Turn 1 Bot1 casts the Laundry and two Moxen. Turn 2 Bot2 casts Shatter at it; in response Bot1 pays
+# {2} for the ability, which resolves first, and then the Laundry is destroyed. Bot2 then casts Vengeful Creeper face down,
+# and Bot1 knows it is the Creeper. On turn 3 it is hidden from Bot1 again (the ruling).
+
+[Bot1 Deck]
+Island
+Sol Ring
+Black Lotus
+Lumbering Laundry
+Mox Sapphire
+Mox Sapphire
+Island
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Black Lotus
+Shatter
+Vengeful Creeper
+Forest
+Forest x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Lumbering Laundry.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Lumbering Laundry)
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Lumbering Laundry.Activate
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Lumbering Laundry; Black Lotus
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Vengeful Creeper.Cast(Ability: Disguise)
+? Bot1.Sees.Bot2.FaceDown =
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield..FaceDown = true
+? Bot1.Sees.Bot2.FaceDown = Vengeful Creeper
+? Bot2.Sees.Bot1.FaceDown =
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Sees.Bot2.FaceDown =
+Bot2.Battlefield..FaceDown = true
