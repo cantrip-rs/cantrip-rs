@@ -1,0 +1,45 @@
+# The smallest damage still gets the extra X: Lava Dart deals 1, so with X = 1 it deals 2 (Bot2 at 18), and an X of 0 adds
+# nothing (a second Lava Dart, cast in a turn where Taii was activated for X = 0, deals just 1: Bot2 at 17). Taii is activated
+# once per turn here (it taps), so the X = 0 activation is on turn 5.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Taii Wakeen, Perfect Shot
+Lava Dart
+Lava Dart
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Taii Wakeen, Perfect Shot.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Taii Wakeen, Perfect Shot.Activate(X: 1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lava Dart.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+Bot1.Battlefield.Taii Wakeen, Perfect Shot.Activate(X: 0)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lava Dart.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+
+[Expect]
+Bot2.Life = 17

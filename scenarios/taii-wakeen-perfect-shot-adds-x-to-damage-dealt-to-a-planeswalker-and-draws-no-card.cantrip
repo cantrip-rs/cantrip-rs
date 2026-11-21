@@ -1,0 +1,49 @@
+# "... to a permanent or player": the extra X applies to any permanent, a planeswalker too. Bot2's Ajani, Caller of the Pride
+# is at 5 loyalty after its +1. Bot1 activates Taii for X = 1 and Bolts Ajani: 3 + 1 = 4 damage removes 4 loyalty counters (CR 120.3c),
+# leaving 1. A planeswalker is not a creature, so Taii's first ability does not trigger and Bot1 draws nothing (hand 5 before the Bolt, 4 after).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Taii Wakeen, Perfect Shot
+Lightning Bolt
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Ajani, Caller of the Pride
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Taii Wakeen, Perfect Shot.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Ajani, Caller of the Pride.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Ajani, Caller of the Pride.Activate(Ability: Put a +1/+1 counter)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ajani, Caller of the Pride.Counters.Loyalty = 5
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 5
+Bot1.Battlefield.Taii Wakeen, Perfect Shot.Activate(X: 1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ajani, Caller of the Pride)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ajani, Caller of the Pride.Counters.Loyalty = 1
+? Bot1.Hand.Count = 4
+
+[Expect]
+Bot1.Hand.Count = 4

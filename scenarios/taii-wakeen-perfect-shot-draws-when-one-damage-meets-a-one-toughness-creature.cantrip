@@ -1,0 +1,41 @@
+# The trigger compares the damage dealt with the creature's toughness, not with a fixed number: Lava Dart's 1 damage (X = 0)
+# to Bot2's 1/1 Memnite equals its toughness, so Bot1 draws (hand 5 before the Dart, then 5 after: Lava Dart cast and a card drawn).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Taii Wakeen, Perfect Shot
+Lava Dart
+Island x16
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Taii Wakeen, Perfect Shot.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 5
+Bot1.Battlefield.Taii Wakeen, Perfect Shot.Activate(X: 0)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lava Dart.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+
+[Expect]
+Bot1.Hand.Count = 5

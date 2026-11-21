@@ -1,0 +1,8 @@
+{
+  "name": "Taii Wakeen, Perfect Shot",
+  "manaCost": "{R}{W}",
+  "type": "Legendary Creature — Human Mercenary",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever a source you control deals noncombat damage to a creature equal to that creature's toughness, draw a card.\n{X}, {T}: If a source you control would deal noncombat damage to a permanent or player this turn, it deals that much damage plus X instead."
+}

@@ -1,0 +1,65 @@
+# Taii Wakeen's ruling (CR 616.1, 615.6): when damage meets Taii's "plus X" and a prevention shield, the player it would be
+# dealt to orders them; if all of it is prevented, Taii's effect no longer applies. Bot1 activates Taii for X = 2 and Bolts Bot2,
+# who shields itself with Healing Salve in response. Bot2 has the Salve apply first: 3 is prevented, nothing is left to add to,
+# and Bot2 takes 0. At the second Bolt, with a second Salve, Bot2 has Taii's effect apply first: 3 + 2 = 5, of which 3 are
+# prevented, so Bot2 takes 2 (18).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Taii Wakeen, Perfect Shot
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Healing Salve
+Healing Salve
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Taii Wakeen, Perfect Shot.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Taii Wakeen, Perfect Shot.Activate(X: 2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(Prevent the next 3 damage)
+Bot2.Target(Bot2)
+Bot2.Replace(Healing Salve)
+? Bot2.Life = 20
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(Prevent the next 3 damage)
+Bot2.Target(Bot2)
+Bot2.Replace(Taii Wakeen, Perfect Shot)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Prevented = 3 Lightning Bolt > Bot2 by Healing Salve; 3 Lightning Bolt > Bot2 by Healing Salve
+Bot2.Graveyard = Healing Salve; Healing Salve
