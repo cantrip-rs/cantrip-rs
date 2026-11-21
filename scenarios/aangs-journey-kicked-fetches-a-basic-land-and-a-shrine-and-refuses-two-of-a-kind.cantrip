@@ -1,0 +1,47 @@
+# Aang's Journey, kicked for {2} more (CR 702.33): "instead search your library for a basic land card and a Shrine card. Reveal those cards, put them into your hand,
+# then shuffle." The four Moxes pay {2}{2} exactly (the pool is empty afterwards). Two basic lands, two Shrines (The Spirit Oasis and Southern Air Temple), a nonland card
+# and three cards are refused; one basic land and one Shrine are taken and both revealed. Bot1 gains 2 life.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Aang's Journey
+Mountain
+Mountain
+The Spirit Oasis
+Southern Air Temple
+Lightning Bolt
+Forest
+Forest
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aang's Journey.Cast(Kicked: 1)
+Bot1.Pass
+! Bot1.Search(Forest#1; Forest#2)
+! Bot1.Search(The Spirit Oasis; Southern Air Temple)
+! Bot1.Search(Lightning Bolt)
+! Bot1.Search(Forest#1; The Spirit Oasis; Forest#2)
+Bot1.Search(Forest#1; The Spirit Oasis)
+? Bot1.Revealed = Forest; The Spirit Oasis
+? Bot1.Life = 22
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Mountain; Mountain; Forest; The Spirit Oasis
+Bot1.Library.Count = 11
+Bot1.Graveyard = Aang's Journey

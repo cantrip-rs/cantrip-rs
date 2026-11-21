@@ -1,0 +1,45 @@
+# Aang's Journey, unkicked (CR 702.33): "Search your library for a basic land card, reveal it, put it into your hand, then shuffle. You gain 2 life." Cast for {2}
+# with four Moxes untapped (so the {2} kicker could have been paid and is not). A Shrine card (The Spirit Oasis) and a nonland card are refused; the basic Forest
+# is taken and revealed, Bot1 gains 2 life (20 + 2), and Bot2's library is untouched.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Aang's Journey
+Mountain
+Mountain
+The Spirit Oasis
+Lightning Bolt
+Forest
+Forest
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Aang's Journey.Cast
+Bot1.Pass
+! Bot1.Search(The Spirit Oasis)
+! Bot1.Search(Lightning Bolt)
+! Bot1.Search(Forest#1; Forest#2)
+Bot1.Search(Forest#1)
+? Bot1.Revealed = Forest
+? Bot1.Life = 22
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Mountain; Mountain; Forest
+Bot1.Library.Count = 12
+Bot1.Graveyard = Aang's Journey
+Bot2.Library.Count = 13
+Bot2.Hand.Count = 7

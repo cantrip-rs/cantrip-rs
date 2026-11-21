@@ -1,0 +1,40 @@
+# Aang's Journey, kicked for {2} more (CR 702.33, 701.23): the search is for a basic land card and a Shrine card. A nonbasic land (Secret Tunnel) is not a
+# basic land card, so it is refused; the player may then find nothing at all (CR 701.23b) and gain 2 life.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Aang's Journey
+Mountain
+Mountain
+Secret Tunnel
+The Spirit Oasis
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aang's Journey.Cast(Kicked: 1)
+Bot1.Pass
+! Bot1.Search(Secret Tunnel)
+Bot1.Search()
+? Bot1.Life = 22
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Mountain; Mountain
+Bot1.Library.Count = 13
+Bot1.Graveyard = Aang's Journey
