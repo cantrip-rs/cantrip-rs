@@ -1,0 +1,163 @@
+# Avatar Aang: "Then if you've done all four this turn, transform Avatar Aang" counts the controller's own bends of this turn,
+# and each of the four kinds. On turn 5 Bot1 waterbends (Flexible Waterbender's {3}, CR 701.67c). On turn 7 Bot2 waterbends with its
+# own Flexible Waterbender, and Bot1 earthbends (Badgermole Cub, CR 701.66b), airbends (Airbending Lesson on Bot2's Mox Jet, CR
+# 701.65b) and firebends (Aang's firebending 2, CR 702.189b): Bot1's waterbend was on an earlier turn and this turn's was Bot2's,
+# so Aang stays Avatar Aang and deals 4. On turn 9 Bot1 airbends Bot2's Mox Pearl, waterbends and firebends, but does not
+# earthbend: still Avatar Aang, 4 more. Every one of Bot1's bends draws a card; Bot2's does not.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Avatar Aang
+Forest
+Flexible Waterbender
+Plains
+Badgermole Cub
+Airbending Lesson
+Airbending Lesson
+Plains x20
+
+[Bot2 Deck]
+Forest
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Flexible Waterbender
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Avatar Aang.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Flexible Waterbender.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flexible Waterbender.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+? Bot1.Hand.Count = 1
+Bot1.Battlefield.Flexible Waterbender.Activate(Convoke: Mox Ruby, Mox Pearl, Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+? Bot1.Battlefield.Avatar Aang.Power = 4
+[T7 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot2.Battlefield.Flexible Waterbender.Activate(Convoke: Mox Sapphire, Mox Emerald, Mox Pearl)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot2.Battlefield.Flexible Waterbender.Power = 5
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Badgermole Cub.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Airbending Lesson.Cast(Bot2.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Mox Jet = (absent)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+[T7 Bot1.BeginCombat]
+Bot1.Attack(Avatar Aang)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+? Bot1.Battlefield.Avatar Aang.Power = 4
+[T7 Bot1.Main2]
+? Bot2.Life = 16
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Airbending Lesson.Cast(Bot2.Battlefield.Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Mox Pearl = (absent)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Flexible Waterbender.Activate(Convoke: Flexible Waterbender, Badgermole Cub, Mox Emerald)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Avatar Aang.Power = 4
+[T9 Bot1.BeginCombat]
+Bot1.Attack(Avatar Aang)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Avatar Aang.Power = 4
+[T9 Bot1.Main2]
+
+[Expect]
+Turn = 9
+Bot2.Life = 12
+Bot1.Hand.Count = 9
+Bot1.Battlefield.Avatar Aang.Toughness = 4
+Bot1.Battlefield.Aang, Master of Elements = (absent)

@@ -1,0 +1,116 @@
+# Aang, Master of Elements: "At the beginning of each upkeep, you may transform Aang, Master of Elements. If you do, you gain 4 life,
+# draw four cards, put four +1/+1 counters on him, and he deals 4 damage to each opponent." Aang transforms in turn 7's combat (6
+# damage, Bot2 to 14); at Bot2's upkeep Bot1 accepts: Aang is Avatar Aang again with four counters (8/8), Bot1 gains 4 (24) and draws
+# four (5 -> 9), and Bot2 takes 4 (10).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Avatar Aang
+Forest
+Flexible Waterbender
+Badgermole Cub
+Airbending Lesson
+Brine Hag
+Plains x19
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Avatar Aang.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flexible Waterbender.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+? Bot1.Hand.Count = 2
+? Bot1.Battlefield.Avatar Aang.Power = 4
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Badgermole Cub.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Battlefield.Forest.Types = Land; Creature
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Airbending Lesson.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears = (absent)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Flexible Waterbender.Activate(Convoke: Mox Ruby, Mox Pearl, Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+? Bot1.Battlefield.Avatar Aang.Power = 4
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Flexible Waterbender.Power = 5
+[T7 Bot1.BeginCombat]
+Bot1.Attack(Avatar Aang)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+? Bot1.Battlefield.Aang, Master of Elements.Power = 6
+[T7 Bot1.Main2]
+[T8 Bot2.Upkeep]
+? Bot1.Life = 20
+Bot1.Accept
+? Bot1.Life = 24
+? Bot1.Hand.Count = 9
+? Bot2.Life = 10
+? Bot1.Battlefield.Avatar Aang.Power = 8
+
+[Expect]
+Turn = 8
+Bot1.Battlefield.Avatar Aang.Toughness = 8

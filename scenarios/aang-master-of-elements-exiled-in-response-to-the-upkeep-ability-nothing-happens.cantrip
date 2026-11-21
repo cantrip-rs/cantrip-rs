@@ -1,0 +1,117 @@
+# Aang, Master of Elements: "If you do" is the transformation having happened. With the upkeep ability on the stack Bot2 exiles
+# Aang (Swords to Plowshares, CR 400.7: the object that would transform is gone). Bot1 accepts the "may" when the ability
+# resolves, but nothing of "you gain 4 life, draw four cards, put four +1/+1 counters on him, and he deals 4 damage to each
+# opponent" happens: Bot1 has only the 6 life Swords gave (20 + 6), the same 5 cards in hand, and Bot2 is still at 14.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Avatar Aang
+Forest
+Flexible Waterbender
+Badgermole Cub
+Airbending Lesson
+Brine Hag
+Plains x19
+
+[Bot2 Deck]
+Plains
+Memnite
+Swords to Plowshares
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Avatar Aang.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flexible Waterbender.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+? Bot1.Hand.Count = 2
+? Bot1.Battlefield.Avatar Aang.Power = 4
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Badgermole Cub.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Battlefield.Forest.Types = Land; Creature
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Airbending Lesson.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite = (absent)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Flexible Waterbender.Activate(Convoke: Mox Ruby, Mox Pearl, Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+? Bot1.Battlefield.Avatar Aang.Power = 4
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Flexible Waterbender.Power = 5
+[T7 Bot1.BeginCombat]
+Bot1.Attack(Avatar Aang)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+? Bot1.Battlefield.Aang, Master of Elements.Power = 6
+[T7 Bot1.Main2]
+[T8 Bot2.Upkeep]
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Aang, Master of Elements)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Aang, Master of Elements = (absent)
+? Stack.Count = 1
+? Bot1.Life = 26
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Life = 26
+Bot1.Hand.Count = 5
+Bot2.Life = 14
+Bot2.Battlefield.Memnite = (absent)
