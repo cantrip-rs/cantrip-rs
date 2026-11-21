@@ -124,7 +124,7 @@ fn a_player_replacement_uses_its_creation_text_in_matching_applying_and_then() {
     change(&mut cx, source, Color::Red, Color::Blue);
     let card = cx.s().obj(source).card;
     cantrip_api::Game::add_player_effect(&mut cx, YOU, source,
-        EffectKind::ReplacementRule { card, index: 0, value: 0 }, Duration::EndOfTurn);
+        EffectKind::ReplacementRule { card, index: 0, value: 0, player: None }, Duration::EndOfTurn);
     cantrip_api::Game::end_sentence(&mut cx);
     change(&mut cx, source, Color::Blue, Color::Green);
     cantrip_api::Game::damage(&mut cx, blue, Target::Player(YOU), 3);

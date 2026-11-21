@@ -1983,8 +1983,10 @@ pub enum EffectKind {
     Replacement { card: CardId, index: u8, to: Target, into: Target, value: u32 },
     /// The same, about a player or the game and not an object ("if a card would be put into your graveyard from
     /// anywhere this turn, exile it instead"): its `affected` object is only the source, and it outlives it. `value` is
-    /// `Replacement`'s.
-    ReplacementRule { card: CardId, index: u8, value: u32 },
+    /// `Replacement`'s. `player` is the player the effect's words name as it is made (CR 608.2h), which its card's functions
+    /// read (`Query::replacement_player`): Lightning, Army of One's "that player", whom each of its effects is about. `None`
+    /// for every other replacement effect.
+    ReplacementRule { card: CardId, index: u8, value: u32, player: Option<PlayerId> },
     /// "You may play lands and cast spells from your graveyard" (CR 305.1, 601.3) for the effect's controller. About the
     /// player, and outlives its `affected` object, which is only the source.
     PlayFromGraveyard,

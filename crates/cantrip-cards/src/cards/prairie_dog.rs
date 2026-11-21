@@ -9,7 +9,7 @@ use cantrip_oracle as oracle;
 /// counters on it instead" (CR 614.1a, 611.2c): each resolution gives its controller a replacement effect about the game, so it
 /// outlasts Prairie Dog; each applies once (CR 614.5), so two resolutions add two.
 fn until_end_of_turn_one_more_plus_one_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.add_player_effect(item.controller, item.object, EffectKind::ReplacementRule { card: item.ability.card, index: 0, value: 0 }, Duration::EndOfTurn);
+    g.add_player_effect(item.controller, item.object, EffectKind::ReplacementRule { card: item.ability.card, index: 0, value: 0, player: None }, Duration::EndOfTurn);
     Ok(())
 }
 

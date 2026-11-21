@@ -3136,7 +3136,7 @@ mod tests {
             let frame = g.state.agenda.len() - 1;
             let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
             for value in [1, 3] {
-                cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value }, Duration::EndOfTurn);
+                cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value, player: None }, Duration::EndOfTurn);
             }
             let mut copied = g.clone();
             let before = g.state.clone();
@@ -3162,7 +3162,7 @@ mod tests {
         let frame = g.state.agenda.len() - 1;
         let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
         for value in [1, 3] {
-            cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value }, Duration::EndOfTurn);
+            cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value, player: None }, Duration::EndOfTurn);
         }
         crate::ops::draw_cards(&mut cx, ME, 1);
         let request = cx.s().agenda[frame].pending.as_ref().expect("replacement choice");
@@ -3183,7 +3183,7 @@ mod tests {
         let frame = g.state.agenda.len() - 1;
         let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
         for value in [1, 3] {
-            cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value }, Duration::EndOfTurn);
+            cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value, player: None }, Duration::EndOfTurn);
         }
         crate::ops::draw_cards(&mut cx, ME, 1);
         let request = cx.s().agenda[frame].pending.as_ref().expect("replacement choice");
@@ -3208,7 +3208,7 @@ mod tests {
         let card = g.cards.id_of(&CAPTURE_CHOICE);
         let frame = g.state.agenda.len() - 1;
         let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 3 }, Duration::EndOfTurn);
+        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 3, player: None }, Duration::EndOfTurn);
         let mark = g.state.mark();
         let log = g.log.len();
         let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
@@ -3243,7 +3243,7 @@ mod tests {
             let frame = g.state.agenda.len() - 1;
             let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
             for value in [1, 3] {
-                cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value }, Duration::EndOfTurn);
+                cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value, player: None }, Duration::EndOfTurn);
             }
             cx.st().update_obj(source, |o| o.controller = PlayerId(1));
             cantrip_api::Game::exile(&mut cx, source);
@@ -3269,7 +3269,7 @@ mod tests {
         let card = g.cards.id_of(&CAPTURE_MANA);
         let frame = g.state.agenda.len() - 1;
         let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 3 }, Duration::EndOfTurn);
+        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 3, player: None }, Duration::EndOfTurn);
         let mut mana = ManaPool::default();
         mana.0[Mana::G as usize] = 1;
         let production = ManaProduction { permanent: source, player: ME, to: ME, mana, restriction: None, lasts: ManaLasts::Step };
@@ -3299,12 +3299,42 @@ mod tests {
         let card = g.cards.id_of(&CAPTURE_DAMAGE);
         let frame = g.state.agenda.len() - 1;
         let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 3 }, Duration::EndOfTurn);
+        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 3, player: None }, Duration::EndOfTurn);
         let event = DamageEvent { source, target: Target::Player(ME), amount: 5, combat: false, heal_marked: false, shielded: None };
         let parts = damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
         assert!(cx.s().agenda[frame].pending.is_none());
         assert!(parts.iter().any(|p| p.event.target == Target::Player(ME) && p.event.amount == 2));
         assert!(parts.iter().any(|p| p.event.target == Target::Player(PlayerId(1)) && p.event.amount == 3));
+    }
+    fn named_player_damage_applies(q: &dyn Query, _: &Asker, _: ObjectId, p: &Proposal) -> bool {
+        matches!(p, Proposal::Damage(d) if q.replacement_player().is_some_and(|named| d.target == Target::Player(named)))
+    }
+    fn named_player_damage_apply(_: &dyn Query, _: &Asker, _: ObjectId, p: &mut Proposal) {
+        if let Proposal::Damage(d) = p { d.amount *= 2; }
+    }
+    static NAMED_PLAYER: CardDef = CardDef {
+        name: "Named player probe", types: TypeSet::of(&[CardType::Enchantment]),
+        granted_replacements: &[granted_replacement(ReplacementKind::Damage, named_player_damage_applies, named_player_damage_apply, "double damage to the named player")],
+        ..CardDef::BLANK
+    };
+    #[test]
+    fn a_replacement_rule_applies_to_the_player_it_names() {
+        let mut g = game(&[(&NAMED_PLAYER, Zone::BATTLEFIELD)], vec![]);
+        let source = g.state.battlefield()[0];
+        let card = g.cards.id_of(&NAMED_PLAYER);
+        let frame = g.state.agenda.len() - 1;
+        let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
+        let damage = |cx: &mut Cx, to: PlayerId| {
+            let event = DamageEvent { source, target: Target::Player(to), amount: 2, combat: false, heal_marked: false, shielded: None };
+            damage_event(cx, &[event], &mut Vec::new(), &mut Vec::new()).iter().map(|p| p.event.amount).sum::<u32>()
+        };
+        assert_eq!(damage(&mut cx, PlayerId(1)), 2, "no effect names a player yet");
+        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 0, player: Some(PlayerId(1)) }, Duration::EndOfTurn);
+        assert_eq!(damage(&mut cx, PlayerId(1)), 4, "the named player's damage is doubled");
+        assert_eq!(damage(&mut cx, ME), 2, "another player's is not");
+        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 0, player: Some(ME) }, Duration::EndOfTurn);
+        assert_eq!(damage(&mut cx, ME), 4, "a second effect names its own player");
+        assert_eq!(damage(&mut cx, PlayerId(1)), 4, "the second effect names another player, so only the first applies");
     }
     fn any_mana(_: &dyn Query, _: &Asker, _: ObjectId, p: &Proposal) -> bool {
         matches!(p, Proposal::ManaProduction(_))
@@ -3420,7 +3450,7 @@ mod tests {
         let table: &'static CardTable =
             Box::leak(Box::new(CardTable::new([&FILLER, &DOUBLER, &GAINER, &GRAVE_GAINER, &LIMITER, &DENIER, &PEACE, &LASTING_DENIER, &LASTING_ONCE, &LASTING_MANA, &PRINTED_DAMAGE, &LASTING_DAMAGE, &ONCE_DAMAGE, &LASTING_TOKENS,
                 &COUNT_BOOSTER, &COUNT_SAME, &COUNT_OPTIONAL, &FIRST_DOUBLER,
-                &CAPTURE, &PRIVATE, &CAPTURE_NESTED, &CAPTURE_MANA, &CAPTURE_DAMAGE, &CAPTURE_CHOICE])));
+                &CAPTURE, &PRIVATE, &CAPTURE_NESTED, &CAPTURE_MANA, &CAPTURE_DAMAGE, &NAMED_PLAYER, &CAPTURE_CHOICE])));
         let deck: Vec<CardId> = std::iter::repeat_n(table.id_of(&FILLER), 17).collect();
         let mut game = Game::new(table, &crate::Setup { decks: vec![deck, Vec::new()], ..Default::default() });
         for &(def, to) in cards {
@@ -3648,7 +3678,7 @@ mod tests {
             let frame = g.state.agenda.len() - 1;
             g.state.update_frame(frame, |f| f.answers = vec![(Some(controller), answer)]);
             let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-            cantrip_api::Game::add_player_effect(&mut cx, controller, source, EffectKind::ReplacementRule { card, index: 0, value: 0 }, Duration::EndOfTurn);
+            cantrip_api::Game::add_player_effect(&mut cx, controller, source, EffectKind::ReplacementRule { card, index: 0, value: 0, player: None }, Duration::EndOfTurn);
             assert_eq!(draw(&mut g, 1), (hand, library, 20));
         }
     }
@@ -3663,7 +3693,7 @@ mod tests {
             let frame = g.state.agenda.len() - 1;
             g.state.update_frame(frame, |f| f.answers = vec![(Some(ME), Answer::Index(1)), (Some(them), choice)]);
             let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-            cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0, value: 0 }, Duration::EndOfTurn);
+            cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0, value: 0, player: None }, Duration::EndOfTurn);
             assert_eq!(draw(&mut g, 1), expected);
         }
     }
@@ -3675,7 +3705,7 @@ mod tests {
         let card = g.cards.id_of(&LASTING_ONCE);
         let frame = g.state.agenda.len() - 1;
         let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 0 }, Duration::EndOfTurn);
+        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 0, player: None }, Duration::EndOfTurn);
         assert_eq!(draw(&mut g, 2), (8, 9, 20));
         assert!(!g.state.effects.iter().any(|e| matches!(e.kind, EffectKind::ReplacementRule { card: c, .. } if c == card)));
     }
@@ -3690,7 +3720,7 @@ mod tests {
             let frame = g.state.agenda.len() - 1;
             g.state.update_frame(frame, |f| f.answers = vec![(Some(ME), Answer::Index(1)), (Some(them), choice.clone())]);
             let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-            cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0, value: 0 }, Duration::EndOfTurn);
+            cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0, value: 0, player: None }, Duration::EndOfTurn);
             let event = DamageEvent { source, target: Target::Player(ME), amount: 2, combat: false, heal_marked: false, shielded: None };
             let parts = damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
             assert!(cx.s().agenda[frame].pending.is_none());
@@ -3708,7 +3738,7 @@ mod tests {
         let frame = g.state.agenda.len() - 1;
         g.state.update_frame(frame, |f| f.answers = vec![(Some(them), Answer::No), (Some(them), Answer::Yes)]);
         let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-        cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0, value: 0 }, Duration::EndOfTurn);
+        cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0, value: 0, player: None }, Duration::EndOfTurn);
         let event = DamageEvent { source, target: Target::Player(ME), amount: 2, combat: false, heal_marked: false, shielded: None };
         let first = damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
         let second = damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
@@ -3729,7 +3759,7 @@ mod tests {
         let them = PlayerId(1);
         let frame = g.state.agenda.len() - 1;
         let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-        cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0, value: 0 }, Duration::EndOfTurn);
+        cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0, value: 0, player: None }, Duration::EndOfTurn);
         cx.g.state.update_frame(frame, |f| { f.conceded.push((0, them)); f.answers = vec![(Some(PlayerId(2)), Answer::Yes)]; });
         assert_eq!(draw(&mut g, 1), (7, 10, 20));
         assert!(g.state.player(them).lost);
@@ -3747,7 +3777,7 @@ mod tests {
         let frame = g.state.agenda.len() - 1;
         g.state.update_frame(frame, |f| f.answers = vec![(Some(ME), Answer::Yes)]);
         let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 0 }, Duration::EndOfTurn);
+        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 0, player: None }, Duration::EndOfTurn);
         let event = DamageEvent { source, target: Target::Player(ME), amount: 2, combat: false, heal_marked: false, shielded: None };
         let parts = damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
         assert!(cx.s().agenda[frame].pending.is_none());
@@ -3766,7 +3796,7 @@ mod tests {
         let card = g.cards.id_of(&PARTIAL_OPTIONAL);
         let frame = g.state.agenda.len() - 1;
         let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 0 }, Duration::EndOfTurn);
+        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 0, player: None }, Duration::EndOfTurn);
         crate::ops::concede(&mut cx, PlayerId(1));
         let event = DamageEvent { source, target: Target::Player(ME), amount: 2, combat: false, heal_marked: false, shielded: None };
         let parts = damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
@@ -3786,7 +3816,7 @@ mod tests {
         let them = PlayerId(1);
         let frame = g.state.agenda.len() - 1;
         let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-        cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0, value: 0 }, Duration::EndOfTurn);
+        cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0, value: 0, player: None }, Duration::EndOfTurn);
         cx.g.state.update_frame(frame, |f| f.conceded.push((0, them)));
         let event = DamageEvent { source, target: Target::Player(ME), amount: 2, combat: false, heal_marked: false, shielded: None };
         let parts = damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
@@ -3806,7 +3836,7 @@ mod tests {
             let token = g.cards.id_of(&FILLER);
             let frame = g.state.agenda.len() - 1;
             let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-            cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 0 }, Duration::EndOfTurn);
+            cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 0, player: None }, Duration::EndOfTurn);
             let out = token_batch(&mut cx, &[(token, None, ME)]);
             assert_eq!(out.map_or(1, |(tokens, _)| tokens.len()), made);
         }
@@ -3842,7 +3872,7 @@ mod tests {
         let card = g.cards.id_of(&FIELD_DENIER);
         let frame = g.state.agenda.len() - 1;
         let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index, value: 0 }, Duration::EndOfTurn);
+        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index, value: 0, player: None }, Duration::EndOfTurn);
         g.state.update_frame(frame, |f| f.conceded.push((0, owner)));
         (g, owner)
     }
@@ -3888,7 +3918,7 @@ mod tests {
         // The damaged player puts the once-only redirection first; its controller concedes as they would be asked about it.
         g.state.update_frame(frame, |f| { f.answers = vec![(Some(ME), Answer::Index(1))]; f.conceded.push((1, them)); });
         let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-        cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0, value: 0 }, Duration::EndOfTurn);
+        cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0, value: 0, player: None }, Duration::EndOfTurn);
         let event = DamageEvent { source, target: Target::Player(ME), amount: 2, combat: false, heal_marked: false, shielded: None };
         let parts = damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
         assert!(cx.s().player(them).lost);
@@ -3917,7 +3947,7 @@ mod tests {
             let frame = g.state.agenda.len() - 1;
             let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
             if def.replacements.is_empty() {
-                cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0, value: 0 }, Duration::EndOfTurn);
+                cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0, value: 0, player: None }, Duration::EndOfTurn);
             }
             let event = DamageEvent { source, target: Target::Player(ME), amount: 2, combat: false, heal_marked: false, shielded: None };
             damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
@@ -3935,7 +3965,7 @@ mod tests {
         let card = g.cards.id_of(&LASTING_MANA);
         let frame = g.state.agenda.len() - 1;
         let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 0 }, Duration::EndOfTurn);
+        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0, value: 0, player: None }, Duration::EndOfTurn);
         let mut mana = ManaPool::default();
         mana.0[Mana::G as usize] = 1;
         let outcomes = mana_outcomes(&cx, ManaProduction { permanent: source, player: ME, to: ME, mana, restriction: None, lasts: ManaLasts::Step });

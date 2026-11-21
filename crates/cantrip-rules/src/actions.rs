@@ -355,6 +355,9 @@ pub(crate) struct WithWords<'a> {
     /// For a lasting replacement effect's functions, the number it fixed as it was made (`EffectKind::Replacement`'s
     /// `value`, CR 608.2h): what `Query::replacement_value` answers. 0 otherwise.
     pub(crate) value: u32,
+    /// For a lasting replacement rule's functions, the player it names (`EffectKind::ReplacementRule`'s `player`): what
+    /// `Query::replacement_player` answers. `None` otherwise.
+    pub(crate) player: Option<PlayerId>,
 }
 
 impl<'a> WithWords<'a> {
@@ -365,7 +368,11 @@ impl<'a> WithWords<'a> {
             EffectKind::Replacement { into, .. } => into,
             _ => Target::None,
         };
-        WithWords { q, source: e.source, words: e.words, into, value: e.kind.replacement_value() }
+        let player = match e.kind {
+            EffectKind::ReplacementRule { player, .. } => player,
+            _ => None,
+        };
+        WithWords { q, source: e.source, words: e.words, into, value: e.kind.replacement_value(), player }
     }
 }
 
@@ -376,6 +383,10 @@ impl Query for WithWords<'_> {
 
     fn replacement_value(&self) -> u32 {
         self.value
+    }
+
+    fn replacement_player(&self) -> Option<PlayerId> {
+        self.player
     }
 
     fn can_attach_to(&self, attachment: ObjectId, host: ObjectId) -> bool {
@@ -6157,7 +6168,7 @@ fn deltas_watched(
                 }
                 // A number the effect fixed as it was made (Rowan, Scion of War, CR 608.2h) is read through `Query::replacement_value`.
                 if value > 0 {
-                    let reads = WithWords { q, source: e.source, words: e.words, into: Target::None, value };
+                    let reads = WithWords { q, source: e.source, words: e.words, into: Target::None, value, player: None };
                     add((def.change)(&reads, e.source, player, costed, targets));
                 } else {
                     add((def.change)(q, e.source, player, costed, targets));
@@ -9538,7 +9549,7 @@ fn alternatives_for(
             continue;
         }
         // One a resolved spell or ability made reads its source's text through the words it was made with (CR 612.1, 608.2h).
-        let with_words = given.words.map(|words| WithWords { q: judged, source: given.source, words, into: Target::None, value: 0 });
+        let with_words = given.words.map(|words| WithWords { q: judged, source: given.source, words, into: Target::None, value: 0, player: None });
         let reads: &dyn Query = match &with_words {
             Some(view) => view,
             None => judged,
@@ -11162,7 +11173,7 @@ fn apply_next_spell_effects(cx: &mut Cx, player: PlayerId, spell: ObjectId) {
         // An alternative cost it gave the next spell is used up by the first it applies to, paid or not (CR 611.2c).
         EffectKind::SpellAlternative { card, index, player: whose, words } => {
             let asker = Asker { instance: None, source: e.source, controller: e.controller, by: None, spell: false };
-            let reads = WithWords { q: &*cx, source: e.source, words, into: Target::None, value: 0 };
+            let reads = WithWords { q: &*cx, source: e.source, words, into: Target::None, value: 0, player: None };
             whose == player && (cx.card(card).lasting_spell_alternatives[index as usize].applies)(&reads, &asker, spell, player)
         }
         _ => false,

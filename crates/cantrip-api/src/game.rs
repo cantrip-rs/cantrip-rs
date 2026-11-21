@@ -533,6 +533,13 @@ pub trait Query {
         0
     }
 
+    /// The player the lasting replacement effect whose function is being asked names (`EffectKind::ReplacementRule`'s
+    /// `player`, CR 608.2h): Lightning, Army of One's "that player", each of its effects its own. `None` outside such an
+    /// effect's functions.
+    fn replacement_player(&self) -> Option<PlayerId> {
+        None
+    }
+
     /// The subject of the event a triggered ability triggered on (`Fired::subject`), for the filter of its targets: "target
     /// planeswalker that player controls", where the player is the one the damage was dealt to (CR 603.3d). `Target::None`
     /// outside a trigger's target filter.

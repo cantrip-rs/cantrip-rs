@@ -40,6 +40,7 @@ fn activate(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
             card: item.ability.card,
             index: 0,
             value: item.x,
+            player: None,
         },
         Duration::EndOfTurn,
     );
