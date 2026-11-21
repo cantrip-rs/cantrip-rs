@@ -1,0 +1,8 @@
+{
+  "name": "Wandering Musicians",
+  "manaCost": "{3}{R/W}",
+  "type": "Creature — Human Bard Ally",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Whenever this creature attacks, creatures you control get +1/+0 until end of turn."
+}

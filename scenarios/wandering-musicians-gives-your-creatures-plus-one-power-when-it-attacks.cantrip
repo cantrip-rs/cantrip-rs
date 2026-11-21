@@ -1,0 +1,51 @@
+# Wandering Musicians {3}{R/W}, 2/5: "Whenever this creature attacks, creatures you control get +1/+0 until end of turn." Bot1 attacks with
+# the Musicians and a Memnite (1/1): both get +1/+0 (3 and 2), so Bot2 takes 5 (20 -> 15). Creatures Bot1 doesn't control are unaffected: Bot2's
+# own Memnite stays 1/1. The bonus is +1 power and no toughness (the Musicians stay x/5, Memnite x/1).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Wandering Musicians
+Memnite
+Plains x20
+
+[Bot2 Deck]
+Memnite
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wandering Musicians.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Wandering Musicians > Bot2; Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wandering Musicians.Power = 3
+? Bot1.Battlefield.Wandering Musicians.Toughness = 5
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot2.Battlefield.Memnite.Power = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
