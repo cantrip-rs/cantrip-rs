@@ -1,0 +1,46 @@
+# Earth Kingdom General: "you may gain that much life. Do this only once each turn." The once-each-turn is spent only by a yes.
+# Bot1 declines the life for its own earthbend 2 (20 stays), so Requisition Raid's counters the same turn still trigger it:
+# Bot1 accepts the first (one counter: 1 life, 21) and the second, queued behind it, is no longer offered.
+
+[Bot1 Deck]
+Forest
+Mox Pearl
+Mox Jet
+Black Lotus
+Earth Kingdom General
+Requisition Raid
+Forest x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Earth Kingdom General.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Life = 20
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Requisition Raid.Cast
+Bot1.Modes(3)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 21

@@ -1,0 +1,8 @@
+{
+  "name": "Earth Kingdom General",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Human Soldier Ally",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, earthbend 2. (Target land you control becomes a 0/0 creature with haste that's still a land. Put two +1/+1 counters on it. When it dies or is exiled, return it to the battlefield tapped.)\nWhenever you put one or more +1/+1 counters on a creature, you may gain that much life. Do this only once each turn."
+}
