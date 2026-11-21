@@ -1,0 +1,67 @@
+# Flopsie, Bumi's Buddy: the limit is Flopsie's ability and lasts only while she is on the battlefield (CR 113.1a, 611.3): Bot2 destroys her with Terror on
+# turn 2, so Giant Growth on turn 3 makes Llanowar Elves a 5/5 that both of Bot2's Ornithopters may block (the counter Flopsie put on it stays).
+# Bot1 casts Llanowar Elves then Flopsie on turn 1 (Forest for the Elves, Black Lotus and three Moxen for Flopsie).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Forest
+Llanowar Elves
+Flopsie, Bumi's Buddy
+Giant Growth
+Forest x10
+
+[Bot2 Deck]
+Black Lotus
+Terror
+Ornithopter
+Ornithopter
+Island x16
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Flopsie, Bumi's Buddy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 2
+? Bot1.Battlefield.Flopsie, Bumi's Buddy.Power = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Terror.Cast(Bot1.Battlefield.Flopsie, Bumi's Buddy)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Flopsie, Bumi's Buddy; Black Lotus
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 5
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Llanowar Elves > Bot2)
+Bot2.Block(Ornithopter#1 > Llanowar Elves; Ornithopter#2 > Llanowar Elves)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Ornithopter; Terror; Black Lotus
+Bot2.Battlefield.Count = 0
+Bot1.Battlefield.Llanowar Elves.Damage = 0

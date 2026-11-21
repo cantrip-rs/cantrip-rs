@@ -1,0 +1,59 @@
+# Flopsie, Bumi's Buddy: the limit is checked as blockers are declared (CR 509.1b, and the card's 2025-10-02 ruling): Llanowar Elves, a 2/2 with Flopsie's
+# counter, is blocked by both of Bot2's Ornithopters, and Giant Growth after the block makes it a 5/5 without undoing it: it stays blocked by both
+# and kills both. Bot1 casts Llanowar Elves then Flopsie on turn 1 (Forest for the Elves, Black Lotus and three Moxen for Flopsie).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Forest
+Llanowar Elves
+Flopsie, Bumi's Buddy
+Giant Growth
+Forest x10
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Flopsie, Bumi's Buddy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 2
+? Bot1.Battlefield.Flopsie, Bumi's Buddy.Power = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Llanowar Elves > Bot2)
+Bot2.Block(Ornithopter#1 > Llanowar Elves; Ornithopter#2 > Llanowar Elves)
+[T3 Bot1.DeclareBlockers]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 5
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Ornithopter
+Bot2.Battlefield.Count = 0
+Bot1.Battlefield.Llanowar Elves.Damage = 0

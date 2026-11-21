@@ -1,0 +1,63 @@
+# Flopsie, Bumi's Buddy: the limit is for creatures Flopsie's controller has (CR 509.1b): Bot2's Craw Wurm, a 6/4, can be blocked by two creatures. Bot1 casts Llanowar Elves then
+# Flopsie on turn 1 (Forest for the Elves, Black Lotus and three Moxen for Flopsie); Bot2 casts the Wurm on turn 2 with its own Black Lotus and Moxen, and on turn 4
+# attacks: Flopsie (5/5) and the Elves (2/2) both block it, which the opponent's creature does not stop, and the Wurm is dealt 7 and dies.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Forest
+Llanowar Elves
+Flopsie, Bumi's Buddy
+Giant Growth
+Forest x10
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Craw Wurm
+Island x15
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Flopsie, Bumi's Buddy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 2
+? Bot1.Battlefield.Flopsie, Bumi's Buddy.Power = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Craw Wurm.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Craw Wurm > Bot1)
+Bot1.Block(Flopsie, Bumi's Buddy > Craw Wurm; Llanowar Elves > Craw Wurm)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot2.Graveyard = Craw Wurm; Black Lotus
