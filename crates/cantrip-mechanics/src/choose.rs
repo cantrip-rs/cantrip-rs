@@ -380,7 +380,7 @@ pub fn cast_way(g: &mut dyn Game, player: PlayerId, card: ObjectId, ways: Vec<Ca
 }
 
 /// "You may cast a spell from your hand [that `fits`] without paying its mana cost" as an effect resolves (CR 608.2g, 118.9):
-/// the controller chooses a card in their hand with a way to cast it that `fits` the words (a mana value, a type of the face
+/// the controller chooses a card in their hand with a way to cast it that `fits` the words (a mana value, a type of the spell the card would be cast as,
 /// that would be cast, CR 709.3a, 715.3a), then the way if the card has several, and casts it for nothing. Nothing is asked when
 /// no card in hand qualifies; `kind` is how the question words the card ("artifact", or "" for any). The spell cast, for an
 /// effect that does something with "that spell" (Cmdr. Troi, Outgoing Empath copies it, CR 707.10), or nothing.
@@ -389,11 +389,11 @@ pub fn may_cast_from_hand_free_spell(
     player: PlayerId,
     source: ObjectId,
     kind: &'static str,
-    fits: impl Fn(&dyn Game, &CastWay) -> bool,
+    fits: impl Fn(&mut dyn Game, ObjectId, &CastWay) -> bool,
 ) -> Result<Option<ObjectId>, Suspend> {
     let ways_of = |g: &mut dyn Game, card: ObjectId| -> Vec<CastWay> {
         let ways = g.cast_ways_during_resolution_by(card, player);
-        ways.into_iter().filter(|w| fits(&*g, w)).collect()
+        ways.into_iter().filter(|w| fits(&mut *g, card, w)).collect()
     };
     let hand = g.state().zone(Zone::hand(player)).to_vec();
     let mut eligible: Vec<ObjectId> = Vec::new();
@@ -419,7 +419,7 @@ pub fn may_cast_from_hand_free(
     player: PlayerId,
     source: ObjectId,
     kind: &'static str,
-    fits: impl Fn(&dyn Game, &CastWay) -> bool,
+    fits: impl Fn(&mut dyn Game, ObjectId, &CastWay) -> bool,
 ) -> Result<(), Suspend> {
     may_cast_from_hand_free_spell(g, player, source, kind, fits).map(|_| ())
 }

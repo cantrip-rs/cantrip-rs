@@ -13,7 +13,7 @@ fn draw_then_cast(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
     let damage = item.matched_damage_amount();
     g.draw(you, 1);
-    choose::may_cast_from_hand_free(g, you, item.object, "", |_, w| w.mana_value <= damage)
+    choose::may_cast_from_hand_free(g, you, item.object, "", |_, _, w| w.mana_value <= damage)
 }
 
 pub static CARD: CardDef = CardDef {

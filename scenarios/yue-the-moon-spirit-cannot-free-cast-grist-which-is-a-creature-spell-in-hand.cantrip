@@ -1,0 +1,79 @@
+# Yue, the Moon Spirit: "You may cast a noncreature spell from your hand without paying its mana cost." Grist, the Hunger Tide is a planeswalker
+# card, but "as long as Grist isn't on the battlefield, it's a 1/1 Insect creature in addition to its other types" (a characteristic-defining
+# ability that works in every zone), so cast from hand it is a creature spell (CR 601.3e): the spell it would be is judged, not its printed
+# type line. Bot1 holds Lightning Bolt and Grist (drawn this turn); after combat Yue pays waterbend {5} and only the Bolt is offered.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Yue, the Moon Spirit
+Lightning Bolt
+Grist, the Hunger Tide
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Shock
+Island
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Yue, the Moon Spirit.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Yue, the Moon Spirit > Bot2)
+! Bot2.Block(Grizzly Bears > Bot1.Battlefield.Yue, the Moon Spirit)
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Battlefield.Yue, the Moon Spirit.Tapped = false
+Bot1.Battlefield.Yue, the Moon Spirit.Activate(Convoke: Mox Sapphire, Mox Jet, Mox Ruby, Mox Pearl, Mox Emerald)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Yue, the Moon Spirit.Tapped = true
+! Bot1.Choose(Shock)
+! Bot1.Choose(Grist, the Hunger Tide)
+Bot1.Choose(Lightning Bolt)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Bot1.Graveyard = Lightning Bolt
+Bot1.Hand.Grist, the Hunger Tide.Power = 1
+Bot1.Mana =

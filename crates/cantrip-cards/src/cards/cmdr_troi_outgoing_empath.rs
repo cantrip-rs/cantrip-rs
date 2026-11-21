@@ -12,7 +12,7 @@ use cantrip_oracle as oracle;
 /// The copy is not cast (CR 707.10) and is the controller's to retarget (CR 707.10c).
 fn troi(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(opponent) = targets::player(g, item, 0) else { return Ok(()) };
-    let Some(spell) = choose::may_cast_from_hand_free_spell(g, opponent, item.object, "", |_, _| true)? else {
+    let Some(spell) = choose::may_cast_from_hand_free_spell(g, opponent, item.object, "", |_, _, _| true)? else {
         g.draw(item.controller, 1);
         return Ok(());
     };

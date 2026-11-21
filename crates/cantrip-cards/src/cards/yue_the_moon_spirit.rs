@@ -6,8 +6,8 @@ pub static CARD: CardDef = CardDef {
     abilities: &[ability(
         cost("{5}, {T}"),
         |g, item| {
-            choose::may_cast_from_hand_free(g, item.controller, item.object, "noncreature spell", |g, way| {
-                !g.card(way.face).types.has(CardType::Creature)
+            choose::may_cast_from_hand_free(g, item.controller, item.object, "noncreature spell", |g, card, way| {
+                !g.chars_as_cast(card, way.way, item.controller).is(CardType::Creature)
             })
         },
         "Waterbend {5}, {T}: You may cast a noncreature spell from your hand without paying its mana cost. (While paying a waterbend cost, you can tap your artifacts and creatures to help. Each one pays for {1}.)",
