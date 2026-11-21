@@ -1,0 +1,48 @@
+# Overgrown Zealot's two mana may turn permanents face up (CR 106.6, 702.37e): a face-down permanent that is not a creature
+# takes it as well as one that is. Turn 1: Black Lotus and the Moxen pay for the Zealot ({1}{G}) and for Sidisi's Pet cast
+# face down ({3}). Turn 3: Swift Reconfiguration makes the face-down permanent a Vehicle artifact and no creature (CR 708.2,
+# 613.1d); the Zealot's {B}{B} pay the whole {1}{B} of the Pet's morph cost. Face up it is still a Vehicle artifact, no creature.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Overgrown Zealot
+Sidisi's Pet
+Swift Reconfiguration
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Overgrown Zealot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sidisi's Pet.Cast(Ability: Morph)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swift Reconfiguration.Cast(Bot1.Battlefield.#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..Types = Artifact
+Bot1.Battlefield.Overgrown Zealot.Activate(Ability: Add two mana; Color: Black)
+? Bot1.Mana = {B}{B} (TurnFaceUp)
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+? Bot1.Mana =
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Sidisi's Pet.FaceDown = (absent)
+Bot1.Battlefield.Sidisi's Pet.Types = Artifact
+Bot1.Battlefield.Sidisi's Pet.Subtypes = Vehicle

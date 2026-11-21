@@ -1,0 +1,29 @@
+# Overgrown Zealot's first ability, "{T}: Add one mana of any color", has no limit (CR 106.1b): chosen black on turn 3, the
+# mana casts Dark Ritual ({B}), which resolves for {B}{B}{B}. Turn 1: Black Lotus pays the Zealot ({1}{G}).
+
+[Bot1 Deck]
+Black Lotus
+Overgrown Zealot
+Dark Ritual
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Overgrown Zealot.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Overgrown Zealot.Activate(Ability: Add one mana; Color: Black)
+? Bot1.Mana = {B}
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Mana = {B}{B}{B}
+Bot1.Battlefield.Overgrown Zealot.Tapped = true

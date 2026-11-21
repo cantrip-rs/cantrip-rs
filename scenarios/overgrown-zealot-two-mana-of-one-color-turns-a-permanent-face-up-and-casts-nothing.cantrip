@@ -1,0 +1,47 @@
+# Overgrown Zealot's "{T}: Add two mana of any one color. Spend this mana only to turn permanents face up" (CR 106.6).
+# Turn 1: Black Lotus, Mox Ruby and Mox Pearl pay for the Zealot ({1}{G}) and for Sidisi's Pet cast face down ({3}), a
+# nameless 2/2. Turn 3: the Zealot's two mana, both black, are shown with the limit. They cannot cast Dark Ritual ({B}),
+# which is refused for the limit alone (the Zealot's other ability is not used), but pay the whole {1}{B} of Sidisi's Pet's
+# morph cost, one color for two: a special action (CR 116.2b), the pool ends empty, and it is face up, a 1/4 with Lifelink.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Overgrown Zealot
+Sidisi's Pet
+Dark Ritual
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Overgrown Zealot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sidisi's Pet.Cast(Ability: Morph)
+? Stack..FaceDown = true
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Overgrown Zealot.Activate(Ability: Add two mana; Color: Black)
+? Bot1.Mana = {B}{B} (TurnFaceUp)
+! Bot1.Hand.Dark Ritual.Cast(Mana: short)
+? Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+? Bot1.Mana =
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Sidisi's Pet.FaceDown = (absent)
+Bot1.Battlefield.Sidisi's Pet.Power = 1
+Bot1.Battlefield.Sidisi's Pet.Toughness = 4
+Bot1.Battlefield.Sidisi's Pet.Keywords = Lifelink; Morph

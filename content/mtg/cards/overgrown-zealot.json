@@ -1,0 +1,8 @@
+{
+  "name": "Overgrown Zealot",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Elf Druid",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": "{T}: Add one mana of any color.\n{T}: Add two mana of any one color. Spend this mana only to turn permanents face up."
+}
