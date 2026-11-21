@@ -1,0 +1,34 @@
+# Fire Nation Palace: "{1}{R}, {T}: Target creature you control gains firebending 4 until end of turn." Bot1 pays {R} and {B}
+# from two Moxen, targets its Ornithopter, and when it attacks the same turn Firebending 4 adds {R}{R}{R}{R} that lasts until
+# end of combat (CR 702.189a, 611.2a). It was cast on turn 1 so it can attack on turn 3.
+
+[Bot1 Deck]
+Mountain
+Ornithopter
+Mox Ruby
+Mox Jet
+Fire Nation Palace
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Fire Nation Palace.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Fire Nation Palace.Activate(Ability: firebending; Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Mana = {R}{R}{R}{R} lasting {R}{R}{R}{R}
+Bot1.Battlefield.Fire Nation Palace.Tapped = true

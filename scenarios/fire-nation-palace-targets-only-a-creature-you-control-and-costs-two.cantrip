@@ -1,0 +1,39 @@
+# Fire Nation Palace's second ability targets "creature you control" (CR 115.1, 601.2c) and costs {1}{R}: refused for want of
+# mana with one Mox's {R} only (Mox Jet and Mox Sapphire stay in hand until after the refusal); in the second main phase,
+# Mox Ruby tapped, refused again with Mox Jet's {B} and Mox Sapphire's {U} (two mana, but no {R}), and refused for an
+# opponent's Ornithopter as the target. The positive control (two Moxen, own creature) is
+# fire-nation-palace-gives-a-creature-you-control-firebending-4-until-end-of-turn.
+
+[Bot1 Deck]
+Fire Nation Palace
+Ornithopter
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Island x16
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Fire Nation Palace.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Fire Nation Palace.Activate(Ability: firebending; Bot1.Battlefield.Ornithopter; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Fire Nation Palace.Activate(Ability: firebending; Bot1.Battlefield.Ornithopter; Mana: short)
+! Bot1.Battlefield.Fire Nation Palace.Activate(Ability: firebending; Bot2.Battlefield.Ornithopter)
+
+[Expect]
+Stack.Count = 0
+Bot1.Mana = {U}{B}
+Bot1.Battlefield.Mox Ruby.Tapped = true

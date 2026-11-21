@@ -1,0 +1,22 @@
+# Fire Nation Palace: "This land enters tapped unless you control a basic land." Bot1's Palace is its first land, so it enters
+# tapped (checked as it enters, before Bot1's untap step); Bot2 plays a Mountain (a basic land) on turn 2 and its own Palace on
+# turn 4, which enters untapped (the positive control: the same land, but a basic land Bot2 controls, CR 614.1d, 205.4a).
+
+[Bot1 Deck]
+Fire Nation Palace
+Island x20
+
+[Bot2 Deck]
+Mountain
+Fire Nation Palace
+Island x20
+
+[Actions]
+Bot1.Hand.Fire Nation Palace.Play
+? Bot1.Battlefield.Fire Nation Palace.Tapped = true
+Bot2.Hand.Mountain.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Fire Nation Palace.Play
+
+[Expect]
+Bot2.Battlefield.Fire Nation Palace.Tapped = false

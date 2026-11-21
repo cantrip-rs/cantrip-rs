@@ -1,0 +1,36 @@
+# Fire Nation Palace gives firebending 4 only "until end of turn" (CR 611.2a, 514.2). Bot1 grants it on turn 3, and on turn 5
+# the Ornithopter attacks with no firebending and adds no mana. The positive control is
+# fire-nation-palace-gives-a-creature-you-control-firebending-4-until-end-of-turn.
+
+[Bot1 Deck]
+Mountain
+Ornithopter
+Mox Ruby
+Mox Jet
+Fire Nation Palace
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Fire Nation Palace.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Fire Nation Palace.Activate(Ability: firebending; Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = false
+[T5 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Mana = 
+Bot1.Battlefield.Ornithopter.Tapped = true

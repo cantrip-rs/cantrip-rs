@@ -1,0 +1,5 @@
+{
+  "name": "Fire Nation Palace",
+  "type": "Land",
+  "oracleText": "This land enters tapped unless you control a basic land.\n{T}: Add {R}.\n{1}{R}, {T}: Target creature you control gains firebending 4 until end of turn. (Whenever it attacks, add {R}{R}{R}{R}. This mana lasts until end of combat.)"
+}

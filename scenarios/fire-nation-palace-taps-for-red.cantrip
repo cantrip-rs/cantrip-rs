@@ -1,0 +1,19 @@
+# Fire Nation Palace: "{T}: Add {R}." Played untapped beside a Mountain, it taps for exactly one red mana (CR 605.1a).
+
+[Bot1 Deck]
+Mountain
+Fire Nation Palace
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Fire Nation Palace.Play
+Bot1.Battlefield.Fire Nation Palace.Activate(Ability: Add)
+
+[Expect]
+Bot1.Mana = {R}
+Bot1.Battlefield.Fire Nation Palace.Tapped = true
