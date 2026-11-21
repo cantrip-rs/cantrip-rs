@@ -1,6 +1,5 @@
 use cantrip_api::*;
 use cantrip_mechanics::targets;
-use cantrip_mechanics::triggers::YOUR_UPKEEP;
 use cantrip_oracle as oracle;
 
 /// "Vicious Verse deals 1 damage to target opponent": a target no longer legal is dealt nothing (CR 608.2b).
@@ -20,19 +19,8 @@ pub static VICIOUS_VERSE: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
-/// The intervening "if this creature isn't prepared" (CR 603.4), checked as the ability triggers and as it resolves.
-fn this_is_not_prepared(q: &dyn Query, me: &Asker) -> bool {
-    !q.obj(me.source).prepared
-}
-
-/// "It becomes prepared" (CR 722.3a): nothing if it left the battlefield, or already is prepared.
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(
-        YOUR_UPKEEP,
-        cantrip_mechanics::prepare::become_prepared,
-        "At the beginning of your upkeep, if this creature isn't prepared, it becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
-    )
-    .condition(this_is_not_prepared)],
+    abilities: &[cantrip_mechanics::prepare::AT_YOUR_UPKEEP_IF_NOT_PREPARED_BECOMES_PREPARED],
     prepare: Some(&VICIOUS_VERSE),
     ..oracle::STINGERQUILL_VOXMANCER
 };

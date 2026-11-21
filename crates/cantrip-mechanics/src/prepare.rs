@@ -49,3 +49,17 @@ pub fn is_prepare_spell(q: &dyn Query, mut object: ObjectId) -> bool {
     }
     false
 }
+
+/// The intervening "if this creature isn't prepared" (CR 603.4), checked as the ability triggers and again as it resolves.
+fn this_is_not_prepared(q: &dyn Query, asker: &Asker) -> bool {
+    !q.obj(asker.source).prepared
+}
+
+/// "At the beginning of your upkeep, if this creature isn't prepared, it becomes prepared." (CR 603.4, 722.3a). Paradox Shaper,
+/// Stingerquill Voxmancer and Woodwork Prodigy print it.
+pub const AT_YOUR_UPKEEP_IF_NOT_PREPARED_BECOMES_PREPARED: AbilityDef = triggered(
+    crate::triggers::YOUR_UPKEEP,
+    become_prepared,
+    "At the beginning of your upkeep, if this creature isn't prepared, it becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+)
+.condition(this_is_not_prepared);

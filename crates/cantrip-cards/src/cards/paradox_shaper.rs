@@ -1,6 +1,5 @@
 use cantrip_api::*;
 use cantrip_mechanics::{library, targets};
-use cantrip_mechanics::triggers::YOUR_UPKEEP;
 use cantrip_oracle as oracle;
 
 /// Omit Variables, the prepare spell (CR 722): "Mill three cards."
@@ -16,19 +15,9 @@ pub static OMIT_VARIABLES: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
-/// The intervening "if this creature isn't prepared" (CR 603.4), checked as the ability triggers and as it resolves.
-fn this_is_not_prepared(q: &dyn Query, me: &Asker) -> bool {
-    !q.obj(me.source).prepared
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(
-            YOUR_UPKEEP,
-            cantrip_mechanics::prepare::become_prepared,
-            "At the beginning of your upkeep, if this creature isn't prepared, it becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
-        )
-        .condition(this_is_not_prepared),
+        cantrip_mechanics::prepare::AT_YOUR_UPKEEP_IF_NOT_PREPARED_BECOMES_PREPARED,
         ability(cost("{2}"), library::put_first_target_on_the_bottom, "{2}: Put target card from your graveyard on the bottom of your library.")
             .targets(&[targets::CARD_IN_YOUR_GRAVEYARD]),
     ],
