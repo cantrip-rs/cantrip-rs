@@ -1,0 +1,62 @@
+# Grave Researcher: "At the beginning of your upkeep, surveil 1. Then if there are three or more creature cards in your graveyard,
+# this creature becomes prepared" (CR 701.25, 603.4, 722.3a). Turn 1 Bot1 Bolts its own Ornithopter (one creature card in the
+# graveyard). Turn 3's surveil puts an Ornithopter there too: two, not prepared. Turn 5's surveil puts a Grizzly Bears there:
+# three - the count is taken after the surveil - so it becomes prepared, a Reanimate copy in exile. Casting that copy (CR 722.3c)
+# returns the Bears under Bot1's control for 2 life, unprepares the Researcher and takes the copy with it.
+
+[Bot1 Deck]
+Black Lotus
+Grave Researcher
+Mox Ruby
+Mox Jet
+Ornithopter
+Lightning Bolt
+Island
+Ornithopter
+Island
+Grizzly Bears
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Grave Researcher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 3
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(| Ornithopter)
+? Bot1.Graveyard.Count = 4
+? Bot1.Battlefield.Grave Researcher.Prepared = (absent)
+? Exile.Count = 0
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(| Grizzly Bears)
+? Bot1.Graveyard.Count = 5
+? Bot1.Battlefield.Grave Researcher.Prepared = true
+? Exile = Reanimate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Exile.Reanimate.Cast(Bot1.Graveyard.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot1.Battlefield = Grave Researcher; Grizzly Bears; Mox Jet; Mox Ruby
+Bot1.Battlefield.Grave Researcher.Prepared = (absent)
+Exile.Count = 0
+Bot1.Graveyard.Count = 4

@@ -1,0 +1,50 @@
+# Grave Researcher counts the creature cards in "your graveyard" only: two Ornithopters Bot1 discards to Faithless Looting on
+# turn 1, and Bot2's own Ornithopter, Bolted on turn 2, in Bot2's graveyard. Three creature cards are in graveyards at turn 3's
+# upkeep, but only two in Bot1's (the surveilled Island is not a creature card), so the Researcher is not prepared.
+
+[Bot1 Deck]
+Black Lotus
+Grave Researcher
+Mox Ruby
+Mox Ruby
+Faithless Looting
+Lightning Bolt
+Island
+Ornithopter
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Grave Researcher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Ornithopter; Ornithopter)
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Ornithopter
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(| Island)
+
+[Expect]
+Bot1.Battlefield.Grave Researcher.Prepared = (absent)
+Exile.Count = 0
+Bot2.Graveyard = Ornithopter

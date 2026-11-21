@@ -1,0 +1,54 @@
+# Three creature cards in Bot1's graveyard (two Ornithopters discarded to Faithless Looting, a third Bolted on the battlefield)
+# are enough on their own (CR 603.4): turn 3's surveil keeps the Island on top, and the Researcher still becomes prepared, a
+# copy of Reanimate in exile; turn 5 surveils again while it is prepared, and there is still one copy (CR 722.3a).
+
+[Bot1 Deck]
+Black Lotus
+Grave Researcher
+Mox Ruby
+Mox Ruby
+Faithless Looting
+Ornithopter
+Lightning Bolt
+Ornithopter
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Grave Researcher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Ornithopter; Ornithopter)
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 6
+? Bot1.Battlefield.Grave Researcher.Prepared = (absent)
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+? Exile = Reanimate
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+
+[Expect]
+Bot1.Battlefield.Grave Researcher.Prepared = true
+Exile = Reanimate
+Exile.Count = 1
+Bot1.Graveyard.Count = 6

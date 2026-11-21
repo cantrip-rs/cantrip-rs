@@ -1,0 +1,38 @@
+# Two creature cards in the graveyard (the Ornithopters Faithless Looting discards) are short of three (CR 603.4), and the
+# Island the surveil puts into the graveyard is not a creature card: the Researcher stays unprepared, nothing in exile.
+
+[Bot1 Deck]
+Black Lotus
+Grave Researcher
+Mox Ruby
+Faithless Looting
+Island x3
+Ornithopter
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Grave Researcher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Ornithopter; Ornithopter)
+Bot2.Pass
+? Bot1.Graveyard.Count = 4
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(| Island)
+
+[Expect]
+Bot1.Battlefield.Grave Researcher.Prepared = (absent)
+Exile.Count = 0
+Bot1.Graveyard.Count = 5

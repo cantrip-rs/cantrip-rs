@@ -1,0 +1,14 @@
+{
+  "name": "Grave Researcher",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Troll Warlock",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "At the beginning of your upkeep, surveil 1. Then if there are three or more creature cards in your graveyard, this creature becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "prepare": {
+    "name": "Reanimate",
+    "manaCost": "{B}",
+    "type": "Sorcery",
+    "oracleText": "Put target creature card from a graveyard onto the battlefield under your control. You lose life equal to that card's mana value."
+  }
+}
