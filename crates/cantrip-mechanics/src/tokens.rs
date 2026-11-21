@@ -735,6 +735,17 @@ pub fn create_heartwood(g: &mut dyn Game, controller: PlayerId) -> Result<(), Su
     Ok(())
 }
 
+/// Soul Tether, the prepare spell (CR 722) of Heartwood Crafter, Konstrari Improviser and Woodwork Prodigy: not a card, only ever a
+/// copy cast from exile (CR 722.3c). "Create a Heartwood token."
+pub static SOUL_TETHER: CardDef = CardDef {
+    name: "Soul Tether",
+    cost: mana("{2}{R/G}"),
+    types: TypeSet::of(&[CardType::Sorcery]),
+    spell: spell(&[], |g, item| create_heartwood(g, item.controller)),
+    text: "Create a Heartwood token. (It's a red and green artifact with \"{T}: Add {R} or {G}.\")",
+    ..CardDef::BLANK
+};
+
 /// Creates `count` tokens of `def` under `controller` (CR 111.1), untapped: the card file lists `def` in its `EXTRA`. The
 /// tokens are created together (CR 101.4). Every card that makes a Soldier, a Servo or a Rebel calls it, as do those that
 /// make a token of their own.
