@@ -1,0 +1,50 @@
+# The Earth King: Giant Growth makes The Earth King 5/5 before attackers are declared, so it and the Bear attack as two creatures with power 4 or greater. They are
+# one batch, so one trigger: "up to that many", two basic lands, both tapped. Three is more than that many and is refused.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+The Earth King
+Giant Growth
+Forest
+Forest
+Forest
+Forest
+Forest x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.The Earth King.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.The Earth King)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Earth King.Power = 5
+Bot1.Attack(Bear Token > Bot2; The Earth King > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Forest; Forest; Forest)
+Bot1.Search(Forest; Forest)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 11
+Bot1.Shuffles = 1
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Forest#3.Tapped = true
+Bot1.Battlefield.Forest#4.Tapped = true

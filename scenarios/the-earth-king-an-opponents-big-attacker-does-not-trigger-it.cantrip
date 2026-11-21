@@ -1,0 +1,56 @@
+# The Earth King: "creatures you control" (CR 603.2): Bot2's Craw Wurm (6/4) attacks on turn 4, a creature with power 4 or greater but not one Bot1 controls,
+# so Bot1 fetches nothing and does not shuffle.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+The Earth King
+Forest
+Forest
+Forest
+Forest
+Forest x13
+
+[Bot2 Deck]
+Forest
+Black Lotus
+Mox Emerald
+Mox Jet
+Craw Wurm
+Island
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.The Earth King.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Craw Wurm.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Craw Wurm > Bot1)
+? Stack.Count = 0
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 14
+Bot1.Shuffles = 0

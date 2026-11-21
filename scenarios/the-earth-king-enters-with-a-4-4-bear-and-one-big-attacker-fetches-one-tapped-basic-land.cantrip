@@ -1,0 +1,51 @@
+# The Earth King {3}{G}, 2/2: "When The Earth King enters, create a 4/4 green Bear creature token." and "Whenever one or more creatures you control with
+# power 4 or greater attack, search your library for up to that many basic land cards, put them onto the battlefield tapped, then shuffle." Turn 1: the Bear
+# enters 4/4. Turn 3: The Earth King (power 2) and the Bear attack, one creature has power 4 or more, so one basic land is fetched; Tropical Island,
+# no basic land, is refused. It enters tapped, and the library is shuffled once.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+The Earth King
+Forest
+Forest
+Forest
+Forest
+Forest
+Tropical Island
+Forest x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.The Earth King.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bear Token.Power = 4
+? Bot1.Battlefield.Bear Token.Toughness = 4
+? Bot1.Battlefield.Bear Token.Colors = Green
+? Bot1.Shuffles = 0
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Attack(Bear Token > Bot2; The Earth King > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Tropical Island)
+Bot1.Search(Forest)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Shuffles = 1
+Bot1.Battlefield.Count = 5
+Bot1.Library.Count = 11
