@@ -1,0 +1,5 @@
+{
+  "name": "White Lotus Hideout",
+  "type": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add one mana of any color. Spend this mana only to cast a Lesson or Shrine spell.\n{1}, {T}: Add one mana of any color."
+}

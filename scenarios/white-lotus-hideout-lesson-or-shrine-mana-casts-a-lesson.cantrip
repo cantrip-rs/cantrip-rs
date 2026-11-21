@@ -1,0 +1,28 @@
+# White Lotus Hideout: "{T}: Add one mana of any color. Spend this mana only to cast a Lesson or Shrine spell" (CR 106.6, 205.3).
+# Turn 3 the Hideout's {R} casts Firebending Lesson ({R}, an instant Lesson) at Bot2's Ornithopter, dealing 2: the restricted
+# mana is spent on it and nothing is left in the pool.
+
+[Bot1 Deck]
+White Lotus Hideout
+Firebending Lesson
+Island x18
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.White Lotus Hideout.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.White Lotus Hideout.Activate(Ability: Spend; Color: Red)
+? Bot1.Mana = {R} (LessonOrShrineSpells)
+Bot1.Hand.Firebending Lesson.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Mana =
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = Firebending Lesson

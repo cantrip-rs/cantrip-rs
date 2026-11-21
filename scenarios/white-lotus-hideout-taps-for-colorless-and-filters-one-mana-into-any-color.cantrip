@@ -1,0 +1,25 @@
+# White Lotus Hideout: "{T}: Add {C}" and "{1}, {T}: Add one mana of any color" (CR 605.1a). Played on turn 1 the Hideout taps for
+# {C}. With no other mana the filter is refused (the Hideout's own {T} cannot also pay its {1}, `Mana: short`; the {C} ability is the positive control); an Island's {U} pays
+# the {1} and the Hideout adds {R}: the pool is {R} alone and both lands are tapped.
+
+[Bot1 Deck]
+White Lotus Hideout
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.White Lotus Hideout.Play
+! Bot1.Battlefield.White Lotus Hideout.Activate(Ability: {1}; Color: Red; Mana: short)
+Bot1.Battlefield.White Lotus Hideout.Activate(Ability: {T}: Add {C})
+? Bot1.Mana = {C}
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.White Lotus Hideout.Activate(Ability: {1}; Color: Red)
+? Bot1.Mana = {R}
+
+[Expect]
+Bot1.Battlefield.White Lotus Hideout.Tapped = true
+Bot1.Battlefield.Island.Tapped = true

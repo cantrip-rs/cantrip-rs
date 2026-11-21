@@ -1,0 +1,25 @@
+# White Lotus Hideout's restricted mana casts a Shrine spell too (CR 205.3): Northern Air Temple ({B}, a Legendary Enchantment
+# Shrine) is cast with the Hideout's {B}; its enters trigger drains Bot2 for one, the number of Shrines Bot1 controls.
+
+[Bot1 Deck]
+White Lotus Hideout
+Northern Air Temple
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.White Lotus Hideout.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.White Lotus Hideout.Activate(Ability: Spend; Color: Black)
+? Bot1.Mana = {B} (LessonOrShrineSpells)
+Bot1.Hand.Northern Air Temple.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Mana =
+Bot1.Battlefield.Northern Air Temple.Types = Enchantment
+Bot2.Life = 19
+Bot1.Life = 21

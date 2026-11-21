@@ -1,0 +1,30 @@
+# White Lotus Hideout's restricted {R} cannot cast Lightning Bolt (neither a Lesson nor a Shrine) and, as the 2025-10-02 ruling
+# says of a Shrine's abilities, pays for no ability at all (CR 106.6): Blazing Rootwalla's "{R}: +2/+0" is refused too, the
+# Hideout's mana alone in the pool. The positive controls are the sibling scenarios.
+
+[Bot1 Deck]
+White Lotus Hideout
+Black Lotus
+Blazing Rootwalla
+Lightning Bolt
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.White Lotus Hideout.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Blazing Rootwalla.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.White Lotus Hideout.Activate(Ability: Spend; Color: Red)
+? Bot1.Mana = {R} (LessonOrShrineSpells)
+! Bot1.Hand.Lightning Bolt.Cast(Mana: short)
+! Bot1.Battlefield.Blazing Rootwalla.Activate(Mana: short)
+
+[Expect]
+Bot1.Mana = {R} (LessonOrShrineSpells)
+Bot1.Battlefield.Blazing Rootwalla.Power = 1
