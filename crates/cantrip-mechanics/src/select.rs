@@ -119,6 +119,29 @@ pub fn is_basic_of_type(q: &dyn Query, card: ObjectId, wanted: Subtype) -> bool 
     chars.supertypes.basic && chars.has_subtype(wanted)
 }
 
+/// The verdict of a rule that takes "a [kind A] card and a [kind B] card", some of that (CR 701.23b: either may be left
+/// unfound): the cards chosen are none, one that is either kind, or two where one is each (a card of both kinds may fill
+/// either slot), and a card may be added while they still would be. A card's part of this kind calls it from its own
+/// `SelectFn` with the two tests, each read through the asking text's words (CR 612.2). Yasharn, Implacable Earth
+/// (a basic Forest card and a basic Plains card) and Aang's Journey (a basic land card and a Shrine card) use it.
+pub fn one_of_each(choice: &Choice, is_a: impl Fn(ObjectId) -> bool, is_b: impl Fn(ObjectId) -> bool) -> Verdict {
+    let fits = |cards: &[ObjectId]| match *cards {
+        [] => true,
+        [only] => is_a(only) || is_b(only),
+        [x, y] => is_a(x) && is_b(y) || is_b(x) && is_a(y),
+        _ => false,
+    };
+    let complete = fits(choice.selected);
+    let addable = Bits::of(choice.candidates.len(), |i| {
+        let card = choice.candidates[i];
+        !choice.selected.contains(&card) && {
+            let with: Vec<ObjectId> = choice.selected.iter().copied().chain([card]).collect();
+            fits(&with)
+        }
+    });
+    Verdict { complete, addable }
+}
+
 fn basic_land_of_type_rule(q: &dyn Query, choice: &Choice, word: u32) -> Verdict {
     let wanted = crate::lands::word(q, choice.source, u16::try_from(word).unwrap_or(u16::MAX));
     Verdict::each(choice, |card| is_basic_of_type(q, card, wanted))

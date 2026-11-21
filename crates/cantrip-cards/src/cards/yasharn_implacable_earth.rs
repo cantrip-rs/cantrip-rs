@@ -4,31 +4,12 @@ use cantrip_mechanics::select::{self, part, up_to};
 use cantrip_mechanics::triggers::THIS_ENTERS;
 use cantrip_oracle as oracle;
 
-/// Whether `cards` can be "a basic Forest card and a basic Plains card", or some of that (CR 701.23b: either may be left
-/// unfound): none, one that is either, or two that are one each. Forest and Plains are read through Yasharn's words (CR 612).
-fn one_of_each(q: &dyn Query, source: ObjectId, cards: &[ObjectId]) -> bool {
-    let words = q.words(source);
-    let (forest, plains) = (words.subtype(Subtype::Forest), words.subtype(Subtype::Plains));
-    match cards {
-        [] => true,
-        [a] => select::is_basic_of_type(q, *a, forest) || select::is_basic_of_type(q, *a, plains),
-        [a, b] => select::is_basic_of_type(q, *a, forest) && select::is_basic_of_type(q, *b, plains) || select::is_basic_of_type(q, *a, plains) && select::is_basic_of_type(q, *b, forest),
-        _ => false,
-    }
-}
-
-/// The selection rule of "a basic Forest card and a basic Plains card": the cards chosen are some of one each, and a card
-/// may be added while they still would be.
+/// The selection rule of "a basic Forest card and a basic Plains card": the cards chosen are some of one each (CR 701.23b),
+/// and a card may be added while they still would be. Forest and Plains are read through Yasharn's words (CR 612).
 fn forest_and_plains(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
-    let complete = one_of_each(q, choice.source, choice.selected);
-    let addable = Bits::of(choice.candidates.len(), |i| {
-        let card = choice.candidates[i];
-        !choice.selected.contains(&card) && {
-            let with: Vec<ObjectId> = choice.selected.iter().copied().chain([card]).collect();
-            one_of_each(q, choice.source, &with)
-        }
-    });
-    Verdict { complete, addable }
+    let words = q.words(choice.source);
+    let (forest, plains) = (words.subtype(Subtype::Forest), words.subtype(Subtype::Plains));
+    select::one_of_each(choice, |card| select::is_basic_of_type(q, card, forest), |card| select::is_basic_of_type(q, card, plains))
 }
 
 /// "When Yasharn enters, search your library for a basic Forest card and a basic Plains card, reveal those cards, put them
