@@ -1,0 +1,55 @@
+# Taigam, Master Opportunist: Bot2 counters the Lightning Bolt in response to the flurry trigger. The ability still resolves (CR 608.2b:
+# it is not the spell's) and copies the Bolt from its last known information (CR 608.2h, 707.10), so Bot2 takes 3 from the copy, but the
+# original is already in the graveyard, so it is not exiled and no time counters or suspend are given (CR 400.7).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Taigam, Master Opportunist
+Lightning Bolt
+Mox Ruby
+Island x12
+
+[Bot2 Deck]
+Mox Sapphire
+Counterspell
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Taigam, Master Opportunist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Counterspell.Cast(Stack.Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt

@@ -1,0 +1,64 @@
+# Taigam, Master Opportunist: Chronomantic Escape already has suspend (CR 702.62a), so "if it doesn't have suspend" gives it nothing, but it is
+# still exiled with four time counters (Taigam's number, not the card's three) and counts down at Bot1's upkeeps: three at turn five, two, one, and
+# at turn eleven's upkeep the last comes off and it is cast for free. The copy resolves first and, being a copy, ceases to exist when it exiles
+# itself (CR 707.10, 111.7); the original resolves from suspend and exiles itself again with the card's own three counters.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Taigam, Master Opportunist
+Chronomantic Escape
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Taigam, Master Opportunist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Chronomantic Escape.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Exile.Chronomantic Escape.Counters.Time = 4
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Exile.Chronomantic Escape.Counters.Time = 4
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+? Bot1.Exile.Chronomantic Escape.Counters.Time = 3
+[T7 Bot1.Main1]
+? Bot1.Exile.Chronomantic Escape.Counters.Time = 2
+[T9 Bot1.Main1]
+? Bot1.Exile.Chronomantic Escape.Counters.Time = 1
+[T11 Bot1.Upkeep]
+Bot1.Accept
+
+[Expect]
+Bot1.Exile.Chronomantic Escape.Counters.Time = 3
+Bot1.Life = 20

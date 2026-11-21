@@ -1,0 +1,59 @@
+# Taigam, Master Opportunist: on turn three Taigam is Bot1's first spell of the turn, so Lightning Bolt, cast once Taigam is in play,
+# is the second and flurry triggers (the Mox cast on turn one is a spell of that earlier turn). The copy is made first (CR 707.10)
+# and resolves before the original, dealing 3 to Bot2. Then the original is exiled with four time counters, so it never
+# resolves, and gains suspend (CR 702.62a): a counter comes off at each of Bot1's upkeeps (turns 5, 7, 9, 11) and when the last is gone
+# Bot1 may cast it without paying its mana cost, so the exiled Bolt itself deals 3 more.
+
+[Bot1 Deck]
+Mox Ruby
+Island
+Island
+Taigam, Master Opportunist
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Taigam, Master Opportunist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Exile.Lightning Bolt.Counters.Time = 4
+? Bot2.Life = 20
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Bot1.Graveyard.Count = 0
+? Bot1.Exile.Lightning Bolt.Counters.Time = 4
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+? Bot1.Exile.Lightning Bolt.Counters.Time = 3
+[T7 Bot1.Main1]
+? Bot1.Exile.Lightning Bolt.Counters.Time = 2
+[T9 Bot1.Main1]
+? Bot1.Exile.Lightning Bolt.Counters.Time = 1
+[T11 Bot1.Upkeep]
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Bot1.Graveyard = Lightning Bolt
