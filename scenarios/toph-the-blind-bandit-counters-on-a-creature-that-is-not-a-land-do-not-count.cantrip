@@ -1,0 +1,36 @@
+# Toph, the Blind Bandit: only +1/+1 counters on lands count towards its power (CR 604.3). Botanical Brawler enters with two +1/+1 counters, but it is no land, so Toph
+# stays at the 2 the earthbent Forest gives it.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Emerald
+Mox Pearl
+Toph, the Blind Bandit
+Botanical Brawler
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Toph, the Blind Bandit.Cast
+Bot1.Pass
+Bot1.Pass
+[T1 Bot1.Main2]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Botanical Brawler.Cast
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Botanical Brawler.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Toph, the Blind Bandit.Power = 2
+Bot1.Battlefield.Forest.Counters.PlusOnePlusOne = 2
+Stack.Count = 0

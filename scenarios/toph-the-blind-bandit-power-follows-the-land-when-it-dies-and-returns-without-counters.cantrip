@@ -1,0 +1,37 @@
+# Toph, the Blind Bandit: Bot2 kills the earthbent Forest with Lightning Bolt. The two counters leave with it, so Toph's power falls back to 0 (CR 604.3), and the
+# Forest returns tapped as a plain land with no counters (CR 701.66a).
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Toph, the Blind Bandit
+Forest x17
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island
+Island x17
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Toph, the Blind Bandit.Cast
+Bot1.Pass
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Toph, the Blind Bandit.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Forest)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Toph, the Blind Bandit.Power = 0
+Bot1.Battlefield.Toph, the Blind Bandit.Toughness = 3
+Bot1.Battlefield.Forest.Types = Land
+Bot1.Battlefield.Forest.Tapped = true
+Bot2.Graveyard = Lightning Bolt
