@@ -1,0 +1,11 @@
+{
+  "name": "Cat-Owl",
+  "manaCost": "{3}{W/U}",
+  "type": "Creature — Cat Bird",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nWhenever this creature attacks, untap target artifact or creature.",
+  "keywords": [
+    "Flying"
+  ]
+}

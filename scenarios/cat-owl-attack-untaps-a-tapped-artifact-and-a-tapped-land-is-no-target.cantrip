@@ -1,0 +1,38 @@
+# Cat-Owl: "Whenever this creature attacks, untap target artifact or creature." Bot1 casts it on turn 1 with Black Lotus and a Mox;
+# on turn 3 it attacks and untaps the Mox Jet tapped for mana (an artifact), while the tapped Plains is no legal target.
+
+[Bot1 Deck]
+Cat-Owl
+Black Lotus
+Mox Sapphire
+Mox Jet
+Plains
+Plains x20
+
+[Bot2 Deck]
+Forest x22
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Cat-Owl.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot1.Attack(Cat-Owl > Bot2)
+! Bot1.Target(Plains)
+Bot1.Target(Mox Jet)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield.Plains.Tapped = true
+Bot1.Battlefield.Cat-Owl.Tapped = true
