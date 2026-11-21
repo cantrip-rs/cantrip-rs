@@ -1,0 +1,66 @@
+# Foggy Swamp Spirit Keeper, a 2/4 with lifelink: "Whenever you draw your second card each turn, create a 1/1 colorless Spirit creature
+# token ..." (CR 121.1, 603.2). Cast on turn 1. Bot2's own second card on turn 2 (Opt) makes nothing. On turn 3 the draw step's card is
+# Bot1's first (no token), the first Opt's the second (one Spirit) and the second Opt's the third (no second Spirit). The Keeper then
+# attacks: lifelink gains Bot1 2 life as it deals 2 damage.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Foggy Swamp Spirit Keeper
+Opt
+Opt
+Island
+Island
+Island x3
+Swamp x14
+
+[Bot2 Deck]
+Island
+Opt
+Island x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Foggy Swamp Spirit Keeper.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Opt.Cast
+Bot2.Arrange(Island |)
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Spirit Token = (absent)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Spirit Token = (absent)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Arrange(Island |)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spirit Token.Power = 1
+? Bot1.Battlefield.Spirit Token.Toughness = 1
+? Bot1.Battlefield.Spirit Token.Colors = (absent)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Arrange(Island |)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spirit Token#2 = (absent)
+Bot1.Attack(Foggy Swamp Spirit Keeper > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Spirit Token.Power = 1
+Bot2.Life = 18
+Bot1.Life = 22
