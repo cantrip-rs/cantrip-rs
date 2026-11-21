@@ -3763,6 +3763,13 @@ pub enum PlayRule {
     /// The selected players play with their hands revealed: Enduring Renewal, Revelation, Zur's Weirding.
     /// The predicate is asked with the rule's source/controller and the player whose hand it opens.
     HandRevealed(fn(&dyn Query, &Asker, PlayerId) -> bool),
+    /// "You may look at face-down creatures [your opponents control / you don't control] any time" (CR 708.5): the rule's
+    /// controller may look at the face-down permanents on the battlefield the predicate passes, asked with the rule's
+    /// source/controller and the permanent. Its face is theirs to see while the rule applies - and only then, so one that
+    /// ends (Lumbering Laundry's "until end of turn") leaves nothing seen - and the predicate is asked as it is now, so a
+    /// creature turned face down after the rule began is seen too. Face-down spells on the stack stay hidden (the rulings
+    /// of Found Footage and Lumbering Laundry). Found Footage; Lumbering Laundry's activated ability grants it.
+    LookAtFaceDown(fn(&dyn Query, &Asker, ObjectId) -> bool),
     /// "As long as [condition], [rules]": the rules apply only while the condition holds, asked with the permanent as source
     /// and its controller. A Case's "Solved - [static ability]" means "As long as this Case is solved, [static ability]"
     /// (CR 702.169b): `cantrip_mechanics::solved::play_rules`.

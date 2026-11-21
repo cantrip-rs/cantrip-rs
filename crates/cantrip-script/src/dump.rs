@@ -449,6 +449,16 @@ impl StateDump {
                 if owner != p {
                     let seen: Vec<String> = s.zone(Zone::hand(owner)).iter().filter(|id| shown.contains(id)).map(|&id| game.known_name(id).to_string()).collect();
                     d.list(&format!("{b}.Sees.{owner_bot}.Hand"), seen, false);
+                    // The face-down permanents another player controls this player knows the faces of, by name (CR 708.5: a
+                    // rule that lets them look, Found Footage; the permanents of a player they control, CR 723.4): empty
+                    // while they know none.
+                    let faces: Vec<String> = s
+                        .battlefield()
+                        .iter()
+                        .filter(|&&id| s.obj(id).face_down && s.obj(id).controller == owner && visibility::knows_face(game, p, id))
+                        .map(|&id| game.cards.get(s.obj(id).card).name.to_string())
+                        .collect();
+                    d.list(&format!("{b}.Sees.{owner_bot}.FaceDown"), faces, false);
                 }
             }
             // How they lost (CR 104.3), from the history: absent for a player who has not, or who left another way.
@@ -1118,7 +1128,7 @@ fn writable(key: &str) -> bool {
         return true;
     }
     if let Some((owner, property)) = rest.strip_prefix("Sees.Bot").and_then(|r| r.split_once('.')) {
-        return owner.parse::<u8>().is_ok() && matches!(property, "LibraryTop" | "LibraryTopObject" | "Hand" | "Hand.Count");
+        return owner.parse::<u8>().is_ok() && matches!(property, "LibraryTop" | "LibraryTopObject" | "Hand" | "Hand.Count" | "FaceDown" | "FaceDown.Count");
     }
     if let Some(commander) = rest.strip_prefix("Commander.") {
         if let Some(name) = commander.strip_suffix(".CastCount") {
@@ -1249,6 +1259,8 @@ Bot1.Battlefield.Data probe.Counters.Corpse = (absent)
         assert!(writable("Bot2.Sees.Bot1.LibraryTopObject"));
         assert!(writable("Bot2.Sees.Bot1.Hand"));
         assert!(writable("Bot2.Sees.Bot1.Hand.Count"));
+        assert!(writable("Bot2.Sees.Bot1.FaceDown"));
+        assert!(writable("Bot2.Sees.Bot1.FaceDown.Count"));
         assert!(!writable("Bot2.Sees.Bot1.Hands"));
         assert!(!writable("Bot1.Sees.Bot2"));
         assert!(!writable("Bot1.Sees.BotX.LibraryTopObject"));
