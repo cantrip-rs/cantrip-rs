@@ -399,3 +399,15 @@ pub fn living_weapon(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
     }
     Ok(())
 }
+
+/// "Create [a token], then attach this Equipment to it" (CR 701.3a, 701.3b, 608.2c): the token is made first, then the Equipment
+/// attaches to it if it is still on the battlefield as this resolves and the token is still there. Dwarven Shortsword (a 2/2 red
+/// Dwarf) and Kyoshi Battle Fan (a 1/1 white Ally) print it.
+pub fn create_a_token_then_attach_this(g: &mut dyn Game, item: &StackItem, token: &'static CardDef) -> Result<(), Suspend> {
+    let made = crate::tokens::create(g, item.controller, token, 1)?;
+    g.end_sentence();
+    if let Some(&made) = made.first() {
+        g.attach(item.object, made);
+    }
+    Ok(())
+}
