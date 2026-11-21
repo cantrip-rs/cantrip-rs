@@ -1,0 +1,51 @@
+# Tolls of War: "Whenever you sacrifice a permanent during your turn". Bot1 sacrificing its Lotus Petal during Bot2's turn 2 makes no Ally; nor does Bot2
+# sacrificing its own Lotus Petal during Bot1's turn 3. Bot1 sacrificing its second Lotus Petal on its own turn 3 makes exactly one.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Tolls of War
+Lotus Petal
+Lotus Petal
+Memnite
+Plains x20
+
+[Bot2 Deck]
+Lotus Petal
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tolls of War.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Lotus Petal.Cast
+Bot2.Pass
+Bot1.Battlefield.Lotus Petal#1.Activate(Color: White)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Battlefield.Lotus Petal.Activate(Color: White)
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield = Clue Token; Lotus Petal; Memnite; Mox Jet; Mox Pearl; Tolls of War
+Bot1.Battlefield.Lotus Petal.Activate(Color: White)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Ally Token; Clue Token; Memnite; Mox Jet; Mox Pearl; Tolls of War
+Bot1.Graveyard = Lotus Petal; Lotus Petal

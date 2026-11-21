@@ -1,0 +1,45 @@
+# Tolls of War {W}{B}: "When this enchantment enters, create a Clue token." and "Whenever you sacrifice a permanent during your turn, create a 1/1 white Ally
+# creature token. This ability triggers only once each turn." Bot1 casts it (a Clue arrives), then sacrifices the Clue ({2}) on its own turn: one Ally token (and the
+# Clue's card is drawn). Sacrificing a Lotus Petal for mana afterwards, the same turn, is a second sacrifice that makes no further token.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Tolls of War
+Lotus Petal
+Plains x20
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tolls of War.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Clue Token; Lotus Petal; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Tolls of War
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Clue Token.Activate
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Ally Token; Lotus Petal; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Tolls of War
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Lotus Petal.Activate(Color: White)
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield = Ally Token; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Tolls of War
+Bot1.Graveyard = Lotus Petal
