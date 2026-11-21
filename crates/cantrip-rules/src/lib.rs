@@ -289,6 +289,8 @@ mod crewed_tests;
 #[cfg(test)]
 mod cycled_tests;
 #[cfg(test)]
+mod discover_event_tests;
+#[cfg(test)]
 mod explore_event_tests;
 #[cfg(test)]
 mod counters_putter_tests;
@@ -3164,6 +3166,10 @@ impl cantrip_api::Game for Cx<'_> {
 
     fn explored(&mut self, permanent: ObjectId, player: PlayerId, revealed: ExploreReveal) {
         self.emit(Event::Explored { permanent, player, revealed });
+    }
+
+    fn discovered(&mut self, player: PlayerId, n: u32) {
+        self.emit(Event::Discovered { player, n });
     }
 
     fn attach(&mut self, attachment: ObjectId, host: ObjectId) -> bool {

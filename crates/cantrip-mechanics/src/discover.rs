@@ -35,7 +35,8 @@ pub fn may_cast_free(g: &mut dyn Game, player: PlayerId, card: ObjectId, most: u
 /// put into hand if the library ran out first (CR 701.57b: it has still been discovered). The mana value of the "discovered card"
 /// (CR 701.57c: the last card exiled, which has mana value `n` or less, whether it was cast or put into a hand), taken as it was
 /// exiled, so that a card that has since left exile (cast, put into a hand) still has it; `None` if the library ran out without
-/// one. Hit the Mother Lode reads it.
+/// one. Hit the Mother Lode reads it. The discover is recorded as `Event::Discovered { player, n }` once the process is complete
+/// (the library running out included), for "whenever you discover" (`discover::YOU_DISCOVER`).
 pub fn discover(g: &mut dyn Game, player: PlayerId, n: u32) -> Result<Option<u32>, Suspend> {
     let (exiled, hit) = library::exile_until_nonland(g, player, None, &|q, card| q.mana_value(card) <= n);
     let discovered = hit.map(|card| g.mana_value(card));
@@ -43,5 +44,6 @@ pub fn discover(g: &mut dyn Game, player: PlayerId, n: u32) -> Result<Option<u32
         cast_free_if_at_most_else_hand(g, player, card, n)?;
     }
     library::rest_of_exiled_to_bottom_in_random_order(g, &exiled);
+    g.discovered(player, n);
     Ok(discovered)
 }

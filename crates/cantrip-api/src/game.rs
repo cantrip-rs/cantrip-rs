@@ -1618,6 +1618,9 @@ pub trait Game: Query {
     /// complete, even if some or all of it was impossible, naming the player who controlled the permanent (CR 701.44c: as it
     /// last did, if it has left the battlefield) and what the reveal showed.
     fn explored(&mut self, permanent: ObjectId, player: PlayerId, revealed: ExploreReveal);
+    /// Records that `player` discovered `n` (CR 701.57a): `cantrip_mechanics::discover` calls it once the process is complete, even
+    /// when the library ran out first (CR 701.57b).
+    fn discovered(&mut self, player: PlayerId, n: u32);
     /// `player` gave a gift to `to` (CR 702.174c): the gift triggered ability of a permanent they control resolved. (A
     /// spell's gift is announced by the core as the spell resolves.)
     fn gave_gift(&mut self, player: PlayerId, to: PlayerId, gift: Gift);

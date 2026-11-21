@@ -513,6 +513,10 @@ pub enum Event {
     /// is what the reveal showed, judged as the card was revealed whatever became of it after (Nicanzil, Current
     /// Conductor's ruling): a land card, a nonland card, or nothing for an empty library.
     Explored { permanent: ObjectId, player: PlayerId, revealed: ExploreReveal },
+    /// `player` discovered `n` (CR 701.57a), recorded once the process is complete (CR 701.57a-b): the card cast or put into the hand,
+    /// or none when the library ran out first (CR 701.57b: it has still been discovered). `n` is the discover value (Curator of Sun's
+    /// Creation's "for the same value").
+    Discovered { player: PlayerId, n: u32 },
     /// `player` foraged (CR 701.61a): paid a cost that is a way to forage (`Cost::forage`), as a cost of a spell or an
     /// ability or as a resolving one asks (CR 118.12), by `by`, the spell or ability's source. Recorded once the whole
     /// payment is made, for "whenever you forage".
@@ -653,6 +657,7 @@ impl Event {
             | Event::Surveilled { player, .. }
             | Event::ManifestedDread { player, .. }
             | Event::Explored { player, .. }
+            | Event::Discovered { player, .. }
             | Event::Foraged { player, .. }
             | Event::CollectedEvidence { player, .. }
             | Event::SpeedChanged { player, .. }
@@ -738,7 +743,7 @@ impl Event {
             Event::Convoked { creature, spell } | Event::TappedForTeamwork { creature, spell } => creature == object || spell == object,
             Event::Crewed { creature, vehicle } => creature == object || vehicle == object,
             Event::Saddled { creature, mount } => creature == object || mount == object,
-            Event::LifeChange { .. } | Event::Searched { .. } | Event::AttackersDeclared { .. } | Event::StepBegan { .. } | Event::BecameMonarch { .. } | Event::TookInitiative { .. } | Event::GaveGift { .. } | Event::ChosenAtRandom { .. } | Event::CoinFlipped { .. } | Event::DieRolled { .. } | Event::TurnEnded { .. } | Event::TurnBegan { .. } | Event::DungeonCompleted { .. } | Event::Scried { .. } | Event::Surveilled { .. } | Event::Foraged { .. } | Event::CollectedEvidence { .. } | Event::SpeedChanged { .. } | Event::GameLost { .. } | Event::GameDrawn { .. } | Event::Shuffled { .. } | Event::PlayerControlled { .. } => false,
+            Event::LifeChange { .. } | Event::Searched { .. } | Event::AttackersDeclared { .. } | Event::StepBegan { .. } | Event::BecameMonarch { .. } | Event::TookInitiative { .. } | Event::GaveGift { .. } | Event::ChosenAtRandom { .. } | Event::CoinFlipped { .. } | Event::DieRolled { .. } | Event::TurnEnded { .. } | Event::TurnBegan { .. } | Event::DungeonCompleted { .. } | Event::Scried { .. } | Event::Surveilled { .. } | Event::Discovered { .. } | Event::Foraged { .. } | Event::CollectedEvidence { .. } | Event::SpeedChanged { .. } | Event::GameLost { .. } | Event::GameDrawn { .. } | Event::Shuffled { .. } | Event::PlayerControlled { .. } => false,
         }
     }
 }
@@ -855,6 +860,8 @@ impl EventMask {
     pub const MANIFESTED_DREAD: EventMask = EventMask(1 << 67);
     /// A permanent explored (CR 701.44b).
     pub const EXPLORED: EventMask = EventMask(1 << 74);
+    /// A player discovered (CR 701.57a).
+    pub const DISCOVERED: EventMask = EventMask(1 << 75);
     /// A player collected evidence (CR 701.59a).
     pub const COLLECTED_EVIDENCE: EventMask = EventMask(1 << 71);
     /// A card became plotted (CR 702.170a).
@@ -968,6 +975,7 @@ impl EventMask {
             Event::Surveilled { .. } => EventMask::SURVEILLED,
             Event::ManifestedDread { .. } => EventMask::MANIFESTED_DREAD,
             Event::Explored { .. } => EventMask::EXPLORED,
+            Event::Discovered { .. } => EventMask::DISCOVERED,
             Event::Foraged { .. } => EventMask::FORAGED,
             Event::CollectedEvidence { .. } => EventMask::COLLECTED_EVIDENCE,
             Event::DamagePrevented { .. } => EventMask::DAMAGE_PREVENTED,

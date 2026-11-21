@@ -106,6 +106,9 @@ abilities: &[
   (CR 701.44b), the controller it had read as it last was if the permanent has left the battlefield (CR 701.44c), and
   `revealed` says which card it was - `ExploreReveal::Land`, `Nonland`, or `Nothing` for an empty library (CR 701.44a-b),
   so every explore goes through it.
+  "Whenever you discover" listens to `EventMask::DISCOVERED` (`discover::YOU_DISCOVER`): `cantrip_mechanics::discover::discover` records
+  `Event::Discovered { player, n }` once the process is complete (CR 701.57a), the library running out first included (CR
+  701.57b), so every discover goes through it; the trigger's `data[0]` is the discover value.
   "Whenever ... activate(s) an ability" listens to `EventMask::ABILITY_ACTIVATED` and reads the event with
   `triggers::activation` (the object, the activating player, the `ActivatedDef`: `is_loyalty_ability()`,
   `is_mana_ability()`, `from`); only abilities that use the stack are activations a trigger sees - a mana ability's is
