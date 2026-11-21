@@ -47,3 +47,13 @@ pub fn discover(g: &mut dyn Game, player: PlayerId, n: u32) -> Result<Option<u32
     g.discovered(player, n);
     Ok(discovered)
 }
+
+/// "Whenever you discover" (CR 701.57b, 603.2): its controller discovered, once the process was complete, the library running out
+/// first included. The discover value is the trigger's `data[0]` (Curator of Sun's Creation's "discover again for the same value").
+pub fn you_discover(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    let Event::Discovered { player, n } = *event else { return None };
+    (player == me.controller).then_some(Fired { subject: Target::None, data: [n, 0] })
+}
+
+/// "Whenever you discover".
+pub const YOU_DISCOVER: Trigger = when_asked(EventMask::DISCOVERED, you_discover);
