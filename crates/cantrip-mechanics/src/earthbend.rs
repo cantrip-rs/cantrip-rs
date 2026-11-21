@@ -26,10 +26,17 @@ pub fn effect<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Su
 /// same otherwise. Rockalanche (Forests you control), The Boulder, Ready to Rumble (creatures you control with power 4 or greater) and
 /// The Legend of Kyoshi (cards in your hand) print it.
 pub fn earthbend(g: &mut dyn Game, item: &StackItem, n: i32) -> Result<(), Suspend> {
-    if !g.target_legal(item, 0) {
+    earthbend_target(g, item, 0, n)
+}
+
+/// "Earthbend N" of the land chosen for target slot `slot` (CR 115.1, 608.2b): an ability that earthbends more than once names a
+/// "target land you control" for each (CR 115.3: the same land may be chosen for each), and each instruction does nothing if its
+/// own target is no longer legal. Dai Li Agents' "earthbend 1, then earthbend 1" is slots 0 and 1.
+pub fn earthbend_target(g: &mut dyn Game, item: &StackItem, slot: usize, n: i32) -> Result<(), Suspend> {
+    if !g.target_legal(item, slot) {
         return Ok(());
     }
-    let Target::Object(land) = item.target(0) else { return Ok(()) };
+    let Target::Object(land) = item.target(slot) else { return Ok(()) };
     // "It becomes a 0/0 land creature with haste": one instruction (`Game::one_instruction`).
     g.one_instruction(&mut |g| {
         g.add_effect(item.object, land, EffectKind::AddTypes(TypeSet::of(&[CardType::Creature])), Duration::Indefinite);
