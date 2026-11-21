@@ -1,0 +1,57 @@
+# Osteomancer Adept (CR 701.61a, 118.8): forage is exiling three cards from your graveyard or sacrificing a Food. Turn 1 Bot1 casts a Gilded Goose (a
+# Food token) and the Adept, and Faithless Looting discards Grizzly Bears and a Plains: the graveyard holds Black Lotus, Faithless Looting, the Bears and
+# the Plains, so either forage could be paid, and Bot1 is asked which. On turn 3 the Adept taps; the Bears are cast from the graveyard for {1}{G} and
+# Bot1 pays the forage by sacrificing the Food: the graveyard keeps its other three cards, nothing is exiled, and the Bears enter with a finality counter.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Osteomancer Adept
+Gilded Goose
+Faithless Looting
+Plains
+Grizzly Bears
+Plains
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Plains)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Gilded Goose.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Osteomancer Adept.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard.Count = 4
+? Bot1.Battlefield = Mox Jet; Mox Emerald; Gilded Goose; Food Token; Osteomancer Adept
+Bot1.Battlefield.Osteomancer Adept.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Grizzly Bears.Cast
+Bot1.Modes(Forage: sacrifice a Food)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Counters.Finality = 1
+Bot1.Battlefield = Mox Jet; Mox Emerald; Gilded Goose; Osteomancer Adept; Grizzly Bears
+Bot1.Graveyard.Count = 3
+Exile.Count = 0

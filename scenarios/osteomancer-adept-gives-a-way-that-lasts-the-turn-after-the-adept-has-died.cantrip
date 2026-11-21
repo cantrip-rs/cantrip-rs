@@ -1,0 +1,57 @@
+# Osteomancer Adept (CR 611.2a, 601.3): "Until end of turn, you may cast creature spells from your graveyard ..." is an effect of the
+# resolved ability, not a static ability of the Adept, so it lasts the turn whatever becomes of the Adept, its finality rider too. Turn 1
+# Bot1 casts the Adept, Mox Ruby and Faithless Looting (discarding Grizzly Bears and a Plains). On turn 3 the Adept taps, and once the
+# ability has resolved Bot1 kills it with a Lightning Bolt. The Bears are still cast from the graveyard, foraging three of the other cards
+# there, and enter with a finality counter.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Osteomancer Adept
+Faithless Looting
+Mox Ruby
+Lightning Bolt
+Grizzly Bears
+Plains
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Plains)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Osteomancer Adept.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Osteomancer Adept.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Osteomancer Adept)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 6
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Grizzly Bears.Cast
+Bot1.Choose(Black Lotus; Faithless Looting; Plains)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Counters.Finality = 1
+Bot1.Graveyard = Osteomancer Adept; Lightning Bolt
+Exile.Count = 3

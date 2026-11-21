@@ -1,0 +1,52 @@
+# Osteomancer Adept (CR 118.8, 601.2b, 701.61a, 611.2a): turn 1 Bot1 casts the Adept with a Mox and a Black Lotus, and Faithless Looting, which
+# draws and discards Grizzly Bears and a Plains, leaving Black Lotus, Faithless Looting, Grizzly Bears and the Plains in the graveyard. On
+# turn 3 the Adept taps: the Bears are cast from the graveyard by foraging - three cards of the graveyard exiled besides the Bears - paying
+# their mana cost {1}{G}, and they enter with a finality counter on it, so they would be exiled if they died.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Osteomancer Adept
+Faithless Looting
+Plains
+Plains
+Grizzly Bears
+Plains
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Plains)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Osteomancer Adept.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard.Count = 4
+! Bot1.Graveyard.Grizzly Bears.Cast
+Bot1.Battlefield.Osteomancer Adept.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Grizzly Bears.Cast
+Bot1.Choose(Black Lotus; Faithless Looting; Plains)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Counters.Finality = 1
+Bot1.Graveyard.Count = 0
+Exile.Count = 3

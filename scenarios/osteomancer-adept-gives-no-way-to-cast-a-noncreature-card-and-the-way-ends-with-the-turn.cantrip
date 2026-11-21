@@ -1,0 +1,50 @@
+# Osteomancer Adept (CR 611.2a, 601.3): "Until end of turn, you may cast creature spells from your graveyard". Turn 1 Bot1 casts the Adept and Faithless
+# Looting discards Grizzly Bears and a Plains: the graveyard holds Black Lotus, Faithless Looting, the Bears and the Plains. On turn 3 the Adept taps,
+# with mana to spare, the Black Lotus (an artifact, no creature) is refused. Bot1 casts nothing, and on turn 5, the
+# Adept untapped and mana to spare, the Bears are refused: the permission ended with turn 3.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Osteomancer Adept
+Faithless Looting
+Plains
+Plains
+Grizzly Bears
+Plains
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Plains)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Osteomancer Adept.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Graveyard.Grizzly Bears.Cast
+Bot1.Battlefield.Osteomancer Adept.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Graveyard.Black Lotus.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Graveyard.Grizzly Bears.Cast
+
+[Expect]
+Bot1.Graveyard.Count = 4

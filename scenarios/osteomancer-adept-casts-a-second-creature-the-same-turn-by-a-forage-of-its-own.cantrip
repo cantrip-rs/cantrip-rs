@@ -1,0 +1,63 @@
+# Osteomancer Adept (CR 611.2a, 118.8): the permission lasts all turn and is not used up by one cast, and each cast owes a forage of its own. Turn 1 Bot1
+# casts Gilded Goose (a Food), the Adept and a Lightning Bolt, and Faithless Looting discards Grizzly Bears and Memnite: the graveyard holds Black Lotus,
+# Faithless Looting, Lightning Bolt, the Bears and Memnite. On turn 3 Memnite is cast for the Food, then the Bears for {1}{G} and the three other cards
+# still there (the Food is gone, and Memnite has left the graveyard): both enter with a finality counter.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Osteomancer Adept
+Gilded Goose
+Faithless Looting
+Lightning Bolt
+Grizzly Bears
+Memnite
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Memnite)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Gilded Goose.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Osteomancer Adept.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard.Count = 5
+Bot1.Battlefield.Osteomancer Adept.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Graveyard.Memnite.Cast
+Bot1.Modes(Forage: sacrifice a Food)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Grizzly Bears.Cast
+Bot1.Choose(Black Lotus; Faithless Looting; Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Counters.Finality = 1
+Bot1.Battlefield.Grizzly Bears.Counters.Finality = 1
+Bot1.Graveyard.Count = 0
+Exile.Count = 3
