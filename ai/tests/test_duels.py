@@ -484,11 +484,13 @@ class ReviewFixes(DuelBase):
 
 
 def loopback(cmd, input=None, stdout=None, stderr=None, timeout=120.0):
-    """`SshHost`'s transport, run here: an ssh command's remote line run as a local process, scp a local copy."""
-    if cmd[0] == "ssh":
-        p = subprocess.run(cmd[-1], input=input, capture_output=True, timeout=timeout)
+    """`SshHost`'s transport, run here: a worker manager's exec's line run as a local process, a push or a pull a
+    local copy."""
+    words = cmd[len(dist.workers_cli()):]
+    if words[0] == "exec":
+        p = subprocess.run(words[-1], input=input, capture_output=True, timeout=timeout)
         return dist._Ran(p.returncode, p.stdout, p.stderr)
-    src, dst = (x.split(":", 1)[1] if "@" in x.split(":", 1)[0] else x for x in cmd[-2:])
+    src, dst = words[2:4]
     if Path(src).is_dir():
         shutil.copytree(src, dst)
     else:
@@ -527,7 +529,7 @@ class WholeAndSplitTest(unittest.TestCase):
                            capture_output=True, text=True, timeout=1800)
         self.assertEqual(p.returncode, 0, p.stdout + p.stderr)
 
-        worker = dict(name="loop", host="localhost", user="me", root=str(tmp / "worker").replace("\\", "/"), os="windows",
+        worker = dict(name="loop", lease="loopback", root=str(tmp / "worker").replace("\\", "/"), os="windows",
                       duel_parallel=1)
         gen_dir = tmp / "ai" / "gen1"
         (gen_dir / "logs").mkdir(parents=True)

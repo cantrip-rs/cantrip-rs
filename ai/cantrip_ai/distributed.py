@@ -1,5 +1,8 @@
 """Distributed self-play (docs/ai-training.md, "Distributed self-play"): one generation's self-play stage played by this
-machine and by worker machines over SSH, the driver (`generation.py --workers FILE`) the coordinator.
+machine and by worker machines, the driver (`generation.py --workers REQUEST`) the coordinator. The workers are
+machines leased from the worker manager (docs/workers.md; `Leases`), and every command run on one and every file
+copied to or from one is a call of its under that lease (`SshHost.answer`): this module knows a worker by its name
+and its root, never by an address or a key.
 
 The work split. Game i of a generation is dealt from `seed + i`, and its pairing, seats and first player come from i
 alone (`cantrip_ai_host::selfplay::schedule`), so a game is the same game wherever it is played; a different GPU can
@@ -893,7 +896,7 @@ class Coordinator:
         self.ledger.save()
 
     def strays(self):
-        """Attempts the ledger holds live on a host this run does not have (a worker left out of the workers file, or
+        """Attempts the ledger holds live on a host this run does not have (a worker the request no longer leases, or
         this machine with `--no-duel-local`): given up, their games to this run's hosts, what they send later rejected."""
         for a in self.live():
             if a["host"] not in self.hosts:
@@ -1282,7 +1285,7 @@ def runaway_indices(path: Path) -> list[int]:
     return out
 
 
-# --- Workers over SSH ---------------------------------------------------------------------------------------------
+# --- Workers, reached through the worker manager ------------------------------------------------------------------
 
 # Reads a script from stdin, up to its end line, and runs it: PowerShell's own `-Command -` runs stdin a line at a time,
 # which breaks blocks; and reading to the end of the stream waits on an EOF Windows' OpenSSH does not always pass on (a
@@ -1294,26 +1297,213 @@ _BOOTSTRAP = ("$ErrorActionPreference='Stop'; $ProgressPreference='SilentlyConti
 _ENCODED = base64.b64encode(_BOOTSTRAP.encode("utf-16-le")).decode()
 
 
-def load_workers(path: Path) -> list[dict]:
-    """The workers file (docs/ai-training.md, "Distributed self-play"): `{"key": PATH, "workers": [{"name", "host",
-    "user", "root", ...}]}`; a worker's own `key` wins, `"enabled": false` leaves it out."""
-    d = json.loads(Path(path).read_text(encoding="utf-8"))
+def workers_cli() -> list[str]:
+    """The worker manager's command (docs/workers.md): `CANTRIP_WORKERS_CLI` (a JSON list, or words), else the
+    repository's `tools/workers/cantrip-workers.py` under this interpreter."""
+    override = os.environ.get("CANTRIP_WORKERS_CLI", "").strip()
+    if override:
+        return [str(x) for x in json.loads(override)] if override.startswith("[") else override.split()
+    return [sys.executable, str(Path(__file__).resolve().parents[2] / "tools" / "workers" / "cantrip-workers.py")]
+
+
+# How long a machine stays this run's with nobody renewing it, and how often the run renews it.
+WORKER_LEASE = 900.0
+WORKER_RENEW = 240.0
+
+
+# What the worker manager writes on stderr, with exit 70, when a lease is not live (docs/workers.md, "Exit codes"): a
+# command run on a worker can exit 70 too, and only the manager writes this.
+LEASE_ENDED = "[lease-ended]"
+_REQUEST_FLAGS = ("all", "gpu", "rent", "remote", "local", "optional")
+
+
+def driver_request(request: str) -> tuple[str, list[str]]:
+    """A run's request as the driver asks it of the worker manager, and the machines it names. Every group is made
+    `optional`: a machine that is busy, or a box that could not be rented, is a stage played without it, never a
+    stage that fails - as a worker that could not be reached always was. A group that says what a machine has to
+    have is `remote`: this machine plays as itself (`LocalHost`), not as a worker of its own run."""
+    groups, names = [], []
+    for part in request.split("+"):
+        terms = [t.strip() for t in part.split(",") if t.strip()]
+        named = [t for t in terms if "=" not in t and t not in _REQUEST_FLAGS]
+        names += named
+        if not named and "all" not in terms and "remote" not in terms and "local" not in terms:
+            terms.append("remote")
+        if "optional" not in terms:
+            terms.append("optional")
+        groups.append(",".join(terms))
+    return "+".join(groups), names
+
+
+def checked_workers(workers: list[dict], where: str) -> list[dict]:
+    """The workers a lease names, as the hosts take them: each with a name, a root and a kind, no two of a name, and
+    none of them this machine (which plays as itself, `LocalHost`)."""
     out = []
-    for w in d.get("workers", []):
-        if w.get("enabled", True) is False:
+    for w in workers:
+        if w.get("local"):
             continue
-        for k in ("name", "host", "user", "root"):
+        for k in ("name", "root"):
             if not w.get(k):
-                raise SystemExit(f"{path}: a worker without {k}: {w}")
-        if w.get("os", "windows") not in ("windows", "linux"):
-            raise SystemExit(f"{path}: a worker's os is windows or linux: {w}")
-        w = dict(w)
-        w.setdefault("key", d.get("key"))
-        out.append(w)
+                raise SystemExit(f"{where}: a worker without {k}: {w}")
+        if w.get("os") not in ("windows", "linux"):
+            raise SystemExit(f"{where}: a worker's os is windows or linux: {w}")
+        out.append(dict(w))
     names = [w["name"] for w in out]
     if len(set(names)) != len(names):
-        raise SystemExit(f"{path}: two workers share a name")
+        raise SystemExit(f"{where}: two workers share a name")
     return out
+
+
+class Leases:
+    """The run's worker machines, held through the worker manager (docs/workers.md; `generation.py --workers
+    REQUEST`): leases taken for the stretch of a run that uses them (`held`), renewed while it lasts and released at
+    its end, so a machine is the run's only while it works on it - another holder can have it meanwhile, and a rented
+    one nobody holds is destroyed. `workers` is the list the hosts are made from, each `{"name", "os", "root",
+    "lease", ...}` with whatever the pool keeps for the driver (`lanes`, `server_args`, ...): never an address or a
+    key; it is filled in place, so whoever was handed the list sees who is held now. The same holder asking again
+    gets its own leases back, so a driver that was restarted finds its machines still its own.
+
+    A stage runs on what it is granted (`driver_request`): a machine someone else holds, or a box that was not
+    rented, is logged and done without. Each lease is renewed by itself: one that lapsed (this machine slept past
+    it) is asked for again, one that could not be renewed this time is tried again at the next beat, and only a
+    worker whose own lease is refused stops being the run's - its calls then fail, and its coordinator gives it up as
+    it gives up any worker it cannot reach.
+
+    The leases are taken with their sweep off: a worker's runs are detached and end by their own lease
+    (`--dist-lease`), and a coordinator that comes back re-attaches to them."""
+
+    def __init__(self, request: str, holder: str, purpose: str, log=print, run=None, renew: float = WORKER_RENEW):
+        self.given = request
+        self.request, self.named = driver_request(request)
+        self.holder, self.purpose, self.log = holder, purpose, log
+        self.run = run or (lambda cmd: subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8",
+                                                      errors="replace", stdin=subprocess.DEVNULL))
+        self.renew_every = renew
+        self.workers: list[dict] = []
+        self.depth = 0
+        self.stop = None
+        self.thread = None
+
+    def call(self, *words) -> dict:
+        try:
+            p = self.run([*workers_cli(), *words])
+        except OSError as e:
+            raise SystemExit(f"the worker manager did not run ({e}): docs/workers.md") from e
+        if p.returncode != 0:
+            raise SystemExit(f"cantrip-workers {words[0]} {self.given!r}: {(p.stderr or p.stdout or '').strip()[-600:]} "
+                             f"(exit {p.returncode}; docs/workers.md)")
+        try:
+            return json.loads(p.stdout)
+        except ValueError as e:
+            raise SystemExit(f"cantrip-workers {words[0]}: not JSON: {p.stdout[-300:]}") from e
+
+    def release(self, ids: list[str]):
+        if ids:
+            with contextlib.suppress(OSError):  # they expire by themselves
+                self.run([*workers_cli(), "release", *ids])
+
+    def candidates(self) -> list[dict]:
+        """The machines the request could be served by, nothing leased (a dry run's, and what the build stage
+        publishes for); a request that may rent a box counts a Linux one."""
+        r = self.call("machines", self.request, "--json")
+        out = checked_workers(r.get("workers") or [], "cantrip-workers machines")
+        if r.get("may_rent") and not any(w["os"] == "linux" for w in out):
+            out.append(dict(name="a rented box", os="linux", root="its root"))
+        return out
+
+    def lease(self) -> list[dict]:
+        """The request's machines that can be had now, leased; what the manager grants that is no worker (this
+        machine) is given straight back."""
+        r = self.call("lease", self.request, "--holder", self.holder, "--purpose", self.purpose, "--ttl",
+                      f"{WORKER_LEASE:g}", "--no-sweep", "--json")
+        granted = r.get("workers") or []
+        try:
+            out = checked_workers(granted, "cantrip-workers lease")
+        except SystemExit:
+            self.release([w["lease"] for w in granted if w.get("lease")])
+            raise
+        self.release([w["lease"] for w in granted if w.get("local") and w.get("lease")])
+        return out
+
+    def take(self):
+        self.workers[:] = self.lease()
+        have = {w["name"] for w in self.workers}
+        for name in self.named:
+            if name not in have:
+                self.log(f"  worker {name} is not free (or is disabled): this stage is played without it")
+        if not self.workers:
+            self.log(f"  no worker could be leased for {self.given!r}: this stage is played here alone")
+
+    def beat(self, stop):
+        """The renewals of one `held`, until its own `stop` is set (the next `held` has another)."""
+        while not stop.wait(self.renew_every):
+            try:
+                self.renew(stop)
+            except Exception as e:  # noqa: BLE001 - whatever went wrong, the next beat tries again
+                self.log(f"  the workers' leases were not renewed ({type(e).__name__}: {e}); tried again shortly")
+
+    def renew(self, stop=None):
+        """Each lease's end put off, each by itself. A lease the manager says has ended is asked for again with the
+        request (the others, still live, come back as they are); a renewal that failed some other way changes
+        nothing and is tried again at the next beat."""
+        stop = stop or self.stop
+        lapsed = [w for w in self.workers if not w.get("lease")]
+        for w in self.workers:
+            if not w.get("lease"):
+                continue
+            try:
+                p = self.run([*workers_cli(), "renew", w["lease"], "--ttl", f"{WORKER_LEASE:g}", "--json"])
+            except OSError as e:
+                self.log(f"  [{w['name']}] its lease was not renewed ({e}); tried again shortly")
+                continue
+            if p.returncode != 0:
+                if LEASE_ENDED in (p.stderr or ""):
+                    lapsed.append(w)
+                else:
+                    self.log(f"  [{w['name']}] its lease was not renewed (exit {p.returncode}: "
+                             f"{(p.stderr or '').strip()[-200:]}); tried again shortly")
+        if not lapsed or stop.is_set():
+            return
+        try:
+            again = self.lease()
+        except SystemExit as e:
+            self.log(f"  the workers' leases were not asked for again ({e}); tried again shortly")
+            again = []
+        by_name = {w["name"]: w["lease"] for w in again}
+        ours = {w["name"] for w in self.workers}
+        for w in lapsed:
+            had, w["lease"] = w.get("lease"), by_name.get(w["name"])
+            if w["lease"] is None and had:
+                self.log(f"  [{w['name']}] its lease ended and it is not free: no longer this stage's")
+            elif w["lease"] and not had:
+                self.log(f"  [{w['name']}] leased again")
+        # What the request granted beyond this stage's workers (a machine free since) is not this stage's to keep; nor
+        # is anything granted to a stage that ended meanwhile.
+        self.release([w["lease"] for w in again if w["name"] not in ours or stop.is_set()])
+
+    @contextlib.contextmanager
+    def held(self):
+        """The workers leased for as long as the block runs (a block within one shares its leases)."""
+        import threading  # noqa: PLC0415
+
+        if self.depth == 0:
+            self.take()
+            self.stop = threading.Event()
+            self.thread = threading.Thread(target=self.beat, args=(self.stop,), name="worker-leases", daemon=True)
+            self.thread.start()
+        self.depth += 1
+        try:
+            yield self.workers
+        finally:
+            self.depth -= 1
+            if self.depth == 0:
+                # The renewals stopped first, and waited for: one in the middle of asking again would otherwise take
+                # a lease after these were released (it gives back what it is granted once the stop is set).
+                self.stop.set()
+                self.thread.join(timeout=300)
+                self.release([w["lease"] for w in self.workers if w.get("lease")])
+                for w in self.workers:
+                    w["lease"] = None
 
 
 def worker_server_args(worker: dict, default: str) -> list[str]:
@@ -1463,6 +1653,18 @@ def b64(text: str) -> str:
     return base64.b64encode(text.encode("utf-8")).decode()
 
 
+def kill_tree(p):
+    """Ends a process and everything it started: the worker manager's call and the ssh under it (killing only the
+    first leaves the second running on Windows, holding its connection and its pipes)."""
+    with contextlib.suppress(OSError, subprocess.SubprocessError):
+        if os.name == "nt":
+            subprocess.run(["taskkill", "/T", "/F", "/PID", str(p.pid)], capture_output=True, timeout=30)
+        else:
+            os.killpg(p.pid, signal.SIGKILL)  # its own session (`shielded_run`), so its own group
+    with contextlib.suppress(OSError):
+        p.kill()
+
+
 def shielded_run(cmd: list[str], input: bytes | None = None, timeout: float = 120.0):
     """Runs `cmd` in a process group of its own, so a Ctrl-C at the console does not break it mid-transfer: an
     interrupt meanwhile waits for it to end, and is raised after. Returns (code, stdout, stderr)."""
@@ -1478,7 +1680,7 @@ def shielded_run(cmd: list[str], input: bytes | None = None, timeout: float = 12
         except KeyboardInterrupt:
             interrupted, input = True, None
         except subprocess.TimeoutExpired:
-            p.kill()
+            kill_tree(p)
             p.communicate()
             raise
     if interrupted:
@@ -1561,8 +1763,9 @@ function Same($w) {
 
 
 class SshHost:
-    """A Windows worker over SSH (OpenSSH Server, a key for a local administrator, cmd its default shell): PowerShell
-    scripts piped to it, files over scp, both in process groups of their own (`shielded_run`). Its tree under the
+    """A Windows worker over SSH (OpenSSH Server, a key for a local administrator, cmd its default shell), reached
+    through the worker manager under the worker's lease (`answer`): PowerShell scripts piped to it, files pushed and
+    pulled, each call in a process group of its own (`shielded_run`). Its tree under the
     worker's `root`: `blobs/<sha256>` (every file pushed once), `bundle/<hash>/` (a generation's binaries, libraries,
     model, decks and pairings, hard links to the blobs, its `MANIFEST.json` written last; the last two kept, and the
     blobs nothing names removed), and `gens/<root tag>/genN/<host>/<attempt>-<nonce>/` (a self-play run: `job.json`,
@@ -1585,30 +1788,34 @@ class SshHost:
 
     # Transport.
 
-    def ssh_base(self) -> list[str]:
-        # A host seen for the first time (a rented machine is new each time) is trusted and remembered; one whose key
-        # changed is still refused.
-        cmd = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=10", "-o", "ServerAliveInterval=15",
-               "-o", "ServerAliveCountMax=4", "-o", "StrictHostKeyChecking=accept-new"]
-        if self.w.get("key"):
-            cmd += ["-i", self.w["key"]]
-        if self.w.get("port"):
-            cmd += ["-p", str(self.w["port"])]
-        return cmd + [f"{self.w['user']}@{self.w['host']}"]
-
-    def ps(self, script: str, timeout: float = 120) -> str:
-        """Runs a PowerShell script on the worker; its stdout."""
-        cmd = self.ssh_base() + [f"powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand {_ENCODED}"]
+    def answer(self, cmd: list[str], what: str, input: bytes | None, timeout: float) -> str:
+        """One call of the worker manager's under this worker's lease (`cantrip-workers exec`, `push`, `pull`:
+        docs/workers.md), which runs ssh or scp with the address and key only it knows; its stdout. The call is told
+        its own time limit, so it ends its ssh itself; this process's limit is the backstop."""
+        if not self.w.get("lease"):
+            raise Unreachable(f"{self.name}: no lease on it")
         try:
-            r = self._run(cmd, input=(script + "\n" + _END + "\n").encode("utf-8"), stdout=subprocess.PIPE,
-                          stderr=subprocess.PIPE, timeout=timeout)
+            r = self._run(cmd, input=input, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout + 30)
         except subprocess.TimeoutExpired as e:
-            raise Unreachable(f"{self.name}: no answer in {timeout:.0f} s") from e
+            raise Unreachable(f"{self.name}: {what}: no answer in {timeout:.0f} s") from e
         except OSError as e:
             raise Unreachable(f"{self.name}: {e}") from e
         if r.returncode != 0:
-            raise Unreachable(f"{self.name}: exit {r.returncode}: {r.stderr.decode(errors='replace').strip()[-600:]}")
+            err = r.stderr.decode(errors="replace").strip()
+            if LEASE_ENDED in err:
+                raise Unreachable(f"{self.name}: its lease ended ({err[-300:]})")
+            raise Unreachable(f"{self.name}: {what} exit {r.returncode}: {err[-600:]}")
         return r.stdout.decode(errors="replace")
+
+    def remote(self, line: str, input: bytes, timeout: float) -> str:
+        """Runs a command line on the worker, `input` its stdin; its stdout."""
+        return self.answer([*workers_cli(), "exec", self.w.get("lease") or "", "--timeout", f"{timeout:g}", "--", line],
+                           "its command", input, timeout)
+
+    def ps(self, script: str, timeout: float = 120) -> str:
+        """Runs a PowerShell script on the worker; its stdout."""
+        return self.remote(f"powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand {_ENCODED}",
+                           (script + "\n" + _END + "\n").encode("utf-8"), timeout)
 
     def ps_json(self, script: str, timeout: float = 120):
         out = self.ps(script, timeout).strip()
@@ -1617,23 +1824,13 @@ class SshHost:
         except ValueError as e:
             raise Unreachable(f"{self.name}: not JSON: {out[-300:]}") from e
 
-    def scp(self, src: str, dst: str, timeout: float = 3600, recursive: bool = False):
-        cmd = ["scp", "-q", "-B", "-o", "ConnectTimeout=10", "-o", "StrictHostKeyChecking=accept-new"] + (["-r"] if recursive else [])
-        if self.w.get("key"):
-            cmd += ["-i", self.w["key"]]
-        if self.w.get("port"):
-            cmd += ["-P", str(self.w["port"])]
-        try:
-            r = self._run(cmd + [src, dst], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
-        except subprocess.TimeoutExpired as e:
-            raise Unreachable(f"{self.name}: scp timed out") from e
-        except OSError as e:
-            raise Unreachable(f"{self.name}: {e}") from e
-        if r.returncode != 0:
-            raise Unreachable(f"{self.name}: scp exit {r.returncode}: {r.stderr.decode(errors='replace').strip()[-400:]}")
+    def copy(self, way: str, src: str, dst: str, timeout: float = 3600, recursive: bool = False):
+        """A file pushed to the worker or pulled from it (`way`), the worker's side a path there."""
+        self.answer([*workers_cli(), way, self.w.get("lease") or "", src, dst, "--timeout", f"{timeout:g}",
+                     *(["-r"] if recursive else [])], way, None, timeout)
 
     def remote_path(self, rel: str) -> str:
-        return f"{self.w['user']}@{self.w['host']}:{self.root}/{rel}"
+        return f"{self.root}/{rel}"
 
     # The bundle.
 
@@ -1673,7 +1870,7 @@ Get-ChildItem -Path "$root/blobs" -File -ErrorAction SilentlyContinue | Where-Ob
 """, timeout=600)
 
     def push(self):
-        """The bundle, pushed once: the blobs the worker lacks over scp (each checked by its hash there), then the
+        """The bundle, pushed once: the blobs the worker lacks copied over (each checked by its hash there), then the
         bundle directory made of hard links to them, its manifest last."""
         if self.pushed:
             return
@@ -1695,7 +1892,7 @@ ConvertTo-Json -Compress -InputObject @{{ complete = $false; blobs = $names }}
             self.log(f"  [{self.name}] pushing {len(want)} files ({size / 2**20:.0f} MB) of bundle {self.hash}; "
                      f"{len(self.manifest) - len(want)} there already")
             for sha, p in want.items():
-                self.scp(str(p), self.remote_path(f"blobs/{sha}.tmp"))
+                self.copy("push", str(p), self.remote_path(f"blobs/{sha}.tmp"))
             checks = "\n".join(f"Check {ps_quote(sha)}" for sha in want)
             links = "\n".join(f"Link {ps_quote(rel)} {ps_quote(m['sha256'])}" for rel, m in self.manifest.items())
             self.ps(f"""
@@ -1808,7 +2005,7 @@ ConvertTo-Json -Compress -InputObject $o
 
     def fetch(self, a: dict, name: str, dest: Path):
         rel = f"{self.out_dir(a)[len(self.root) + 1:]}/{name}"
-        self.scp(self.remote_path(rel), str(dest), timeout=1800, recursive=self.kind.dirs)
+        self.copy("pull", self.remote_path(rel), str(dest), timeout=1800, recursive=self.kind.dirs)
 
     def fetch_logs(self, a: dict, dest: Path):
         """The attempt's logs, beside the generation's (best effort)."""
@@ -1816,7 +2013,7 @@ ConvertTo-Json -Compress -InputObject $o
         base = self.attempt_dir(a)[len(self.root) + 1:]
         for n in ("selfplay.log", "infer.log") if self.kind is SELFPLAY else ("selfplay.out.log", "selfplay.log", "infer.log"):
             try:
-                self.scp(self.remote_path(f"{base}/{n}"), str(dest / f"{a['id']}-{n}"), timeout=300)
+                self.copy("pull", self.remote_path(f"{base}/{n}"), str(dest / f"{a['id']}-{n}"), timeout=300)
             except Unreachable:
                 pass
 
@@ -2399,17 +2596,8 @@ class LinuxSshHost(SshHost):
         """Runs a Python script on the worker (after `_PY_PRELUDE`, `args` its `A`); its stdout."""
         args = dict(args, root=self.root)
         text = _PY_PRELUDE.replace("@ARGS@", b64(json.dumps(args))) + script
-        cmd = self.ssh_base() + ["command -v python3 >/dev/null || { apt-get -qq update && apt-get -qq install -y python3; } "
-                                 ">/dev/null 2>&1; exec python3 -"]
-        try:
-            r = self._run(cmd, input=text.encode("utf-8"), stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
-        except subprocess.TimeoutExpired as e:
-            raise Unreachable(f"{self.name}: no answer in {timeout:.0f} s") from e
-        except OSError as e:
-            raise Unreachable(f"{self.name}: {e}") from e
-        if r.returncode != 0:
-            raise Unreachable(f"{self.name}: exit {r.returncode}: {r.stderr.decode(errors='replace').strip()[-600:]}")
-        return r.stdout.decode(errors="replace")
+        return self.remote("command -v python3 >/dev/null || { apt-get -qq update && apt-get -qq install -y python3; } "
+                           ">/dev/null 2>&1; exec python3 -", text.encode("utf-8"), timeout)
 
     def py_json(self, script: str, timeout: float = 120, **args):
         # The last line: a login banner may come first.
@@ -2441,7 +2629,7 @@ class LinuxSshHost(SshHost):
                 self.log(f"  [{self.name}] pushing {len(want)} files ({size / 2**20:.0f} MB) of bundle {self.hash}; "
                          f"{len(self.manifest) - len(want)} there already")
             for sha, p in want.items():
-                self.scp(str(p), self.remote_path(f"blobs/{sha}.tmp"))
+                self.copy("push", str(p), self.remote_path(f"blobs/{sha}.tmp"))
             # What the bundle carries ready to run (a duel's BotLab, built here): executable there.
             executables = [rel for rel in self.manifest if rel.startswith("botlab/")]
             r = self.py_json(_LINUX_ASSEMBLE, timeout=1800, hash=self.hash, manifest=self.manifest, check=sorted(want),

@@ -13,6 +13,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 from pathlib import Path
 
@@ -475,7 +476,7 @@ class DistributedTest(unittest.TestCase):
             calls.append((cmd, kw.get("input")))
             return answers.pop(0)
 
-        w = dict(name="w", host="10.0.0.2", user="worker", root="D:/compute", key="k")
+        w = dict(name="w", root="D:/compute", os="windows", lease="L1")
         h = dist.SshHost(w, "fp-abc", 6, {}, {}, "h", None, log=lambda *_: None, run=run)
         a = dict(id="w-a1")
         status = json.dumps(dict(Pid=7, Taken=3))
@@ -486,12 +487,35 @@ class DistributedTest(unittest.TestCase):
         self.assertEqual((p.exit, p.alive, p.shards, p.runaways, p.status["Taken"]), (3, False, ["one.shard.zst"], [4], 3))
         self.assertEqual(a["pids"], dict(selfplay=7))
         cmd, script = calls[-1]
-        self.assertEqual(cmd[:2], ["ssh", "-o"])
-        self.assertIn("worker@10.0.0.2", cmd)
+        # A call of the worker manager's under the worker's lease: no address, no key, no ssh of the driver's own.
+        cli = dist.workers_cli()
+        self.assertEqual(cmd[:len(cli) + 5], [*cli, "exec", "L1", "--timeout", "120", "--"])
+        self.assertTrue(cmd[-1].startswith("powershell "))
+        self.assertFalse({"ssh", "scp", "-i"} & set(cmd))
         self.assertIn(b"D:/compute/gens/fp-abc/gen6/w/w-a1", script)
         answers.append(R(255, err=b"connection refused"))
         with self.assertRaises(Unreachable):
             h.poll(a)
+        # A lease that ended (the manager's exit 70) is a worker that cannot be reached; so is a worker with none.
+        answers.append(R(70, err=b"cantrip-workers: [lease-ended] no live lease L1"))
+        with self.assertRaisesRegex(Unreachable, "its lease ended"):
+            h.poll(a)
+        # A command of the worker's own that exits 70 is that command's failure, not a lease's end.
+        answers.append(R(70, err=b"sysexits: internal software error"))
+        with self.assertRaisesRegex(Unreachable, "exit 70"):
+            h.poll(a)
+        w["lease"] = None
+        with self.assertRaisesRegex(Unreachable, "no lease"):
+            h.poll(a)
+        w["lease"] = "L1"
+        # Files go the same way: pushed to a path on the worker, pulled from one.
+        answers.extend([R(0), R(0)])
+        h.copy("push", "C:/here/blob", h.remote_path("blobs/x.tmp"))
+        h.fetch(a, "one.shard.zst", Path("C:/there/one.shard.zst"))
+        push, pull = calls[-2][0], calls[-1][0]
+        self.assertEqual(push[len(cli):], ["push", "L1", "C:/here/blob", "D:/compute/blobs/x.tmp", "--timeout", "3600"])
+        self.assertEqual(pull[len(cli):len(cli) + 2], ["pull", "L1"])
+        self.assertRegex(pull[len(cli) + 2], r"^D:/compute/gens/fp-abc/gen6/w/w-a1\S*/selfplay/one\.shard\.zst$")
 
     def test_a_linux_workers_scripts_compile_and_its_answers_are_read_as_a_windows_ones(self):
         for script in (dist._LINUX_PRUNE, dist._LINUX_HAVE, dist._LINUX_ASSEMBLE, dist._LINUX_LAUNCH, dist._LINUX_POLL,
@@ -507,7 +531,7 @@ class DistributedTest(unittest.TestCase):
             calls.append((cmd, kw.get("input")))
             return answers.pop(0)
 
-        w = dict(name="v", host="1.2.3.4", port=2200, user="root", root="/workspace/compute", key="k", os="linux")
+        w = dict(name="v", root="/workspace/compute", os="linux", lease="L2")
         self.assertIs(dist.host_class(w), dist.LinuxSshHost)
         manifest = {"src.tar.gz": dict(sha256="ab" * 32, size=1)}
         h = dist.LinuxSshHost(w, "fp-abc", 6, {}, manifest, "h", None, log=lambda *_: None, run=run)
@@ -518,8 +542,7 @@ class DistributedTest(unittest.TestCase):
         p = h.poll(a)
         self.assertEqual((p.exit, p.alive, p.shards, p.status["Taken"], p.started, p.grant), (0, False, ["x.shard.zst"], 2, True, "0..4\nend\n"))
         cmd, script = calls[-1]
-        self.assertIn("-p", cmd)
-        self.assertIn("root@1.2.3.4", cmd)
+        self.assertEqual(cmd[len(dist.workers_cli()):-1], ["exec", "L2", "--timeout", "120", "--"])
         self.assertTrue(cmd[-1].endswith("exec python3 -"))
         self.assertIn(b"/workspace/compute/gens/fp-abc/gen6/v/v-a1-n", base64_args(script))
         # A worker still being set up or built is not ready: the coordinator asks again later.
@@ -597,7 +620,7 @@ class DistributedTest(unittest.TestCase):
                         infer_args=[], recover_args=[])
 
         for worker, want in ((dict(), (True, dist.LANES_PER_CORE)), (dict(lanes=60), (True, None)), (dict(pin=False), (False, dist.LANES_PER_CORE))):
-            w = dict(name="v", host="h", user="root", root="/w", os="linux", **worker)
+            w = dict(name="v", root="/w", os="linux", lease="L3", **worker)
             h = dist.LinuxSshHost(w, "fp-abc", 6, {}, {}, "h", job, log=lambda *_: None, run=run)
             h.pushed = True
             h.launch(dict(id="v-a1", nonce="n"), "0..9\nend\n")
@@ -605,14 +628,215 @@ class DistributedTest(unittest.TestCase):
             self.assertEqual((sent["pin"], sent["lanes_per_core"]), want, worker)
             self.assertEqual(sent["env"], {"CANTRIP_PROGRESS": "0", "MIMALLOC_PURGE_DELAY": "-1"})
 
-    def test_load_workers_reads_the_file(self):
+    def manager(self, grants: dict, renewals: dict | None = None):
+        """A worker manager's command, faked: `lease` grants `grants` (name -> record, a callable's result, or None
+        for a machine that is busy), `renew` answers from `renewals` (lease -> (code, stderr)). Returns (run, calls)."""
+        calls = []
+        renewals = renewals if renewals is not None else {}
+
+        class R:
+            def __init__(self, code, out="", err=""):
+                self.returncode, self.stdout, self.stderr = code, out, err
+
+        def run(cmd):
+            words = cmd[len(dist.workers_cli()):]
+            calls.append(words)
+            if words[0] == "lease":
+                n = sum(1 for c in calls if c[0] == "lease")
+                made = [dict(w(n) if callable(w) else w, name=name) for name, w in grants.items() if w is not None]
+                return R(0, json.dumps(dict(workers=made)))
+            if words[0] == "renew":
+                code, err = renewals.get(words[1], (0, ""))
+                return R(code, json.dumps(dict(leases=[])), err)
+            if words[0] == "machines":
+                return R(0, json.dumps(dict(workers=[dict(name="a", os="windows", root="D:/c", busy=True)], may_rent=True)))
+            return R(0, "")
+
+        return run, calls
+
+    def test_the_workers_are_leased_while_a_stage_runs_renewed_and_let_go(self):
+        run, calls = self.manager(dict(a=lambda n: dict(os="windows", root="D:/c", lease=f"La{n}", lanes=120),
+                                       b=lambda n: dict(os="linux", root="/w", lease=f"Lb{n}"),
+                                       here=dict(os="windows", root="D:/c", lease="Lh", local=True)))
+        leases = dist.Leases("all", "generation:fp-abc", "gen6", log=lambda *_: None, run=run, renew=3600)
+        handed = leases.workers  # what a setup made earlier holds: filled in place
+        self.assertEqual(handed, [])
+        with leases.held() as workers:
+            self.assertIs(workers, handed)
+            # This machine is no worker of its own run (its lease is given straight back); what the pool keeps for
+            # the driver comes with the lease.
+            self.assertEqual([(w["name"], w["lease"], w.get("lanes")) for w in handed], [("a", "La1", 120), ("b", "Lb1", None)])
+            self.assertEqual(calls, [["lease", "all,optional", "--holder", "generation:fp-abc", "--purpose", "gen6", "--ttl", "900",
+                                      "--no-sweep", "--json"], ["release", "Lh"]])
+            with leases.held():  # a stage within a stage shares the leases
+                self.assertEqual(len(calls), 2)
+            leases.renew()  # each lease by itself
+            self.assertEqual(calls[-2:], [["renew", "La1", "--ttl", "900", "--json"], ["renew", "Lb1", "--ttl", "900", "--json"]])
+        self.assertEqual(calls[-1], ["release", "La1", "Lb1"])
+        self.assertEqual([w["lease"] for w in handed], [None, None])
+        # Nothing is leased to see what a request could be served by; a box that may be rented counts as a Linux one.
+        self.assertEqual([(w["name"], w["os"]) for w in leases.candidates()], [("a", "windows"), ("a rented box", "linux")])
+
+    def test_one_renewal_that_fails_costs_no_other_worker_and_only_a_refused_lease_drops_its_own(self):
+        renewals = {}
+        grants = dict(a=lambda n: dict(os="windows", root="D:/c", lease=f"La{n}"),
+                      b=lambda n: dict(os="linux", root="/w", lease="Lb1"),      # still live: the same lease comes back
+                      c=lambda n: dict(os="linux", root="/w", lease="Lc1"))
+        run, calls = self.manager(grants, renewals)
+        said = []
+        leases = dist.Leases("a,b,c", "generation:fp-abc", "gen6", log=said.append, run=run, renew=3600)
+        with leases.held() as workers:
+            # A renewal that failed for no reason of the lease's (the manager's file was busy): nothing changes, nothing
+            # is asked for again, and it is tried again at the next beat.
+            renewals["Lb1"] = (1, "cantrip-workers: PermissionError: state.json")
+            leases.renew()
+            self.assertEqual([w["lease"] for w in workers], ["La1", "Lb1", "Lc1"])
+            self.assertEqual([c[0] for c in calls].count("lease"), 1)
+            self.assertTrue(any("[b] its lease was not renewed" in line for line in said))
+            # a's lease ended (this machine slept past it): asked for again, and the others keep theirs.
+            renewals.clear()
+            renewals["La1"] = (70, f"cantrip-workers: {dist.LEASE_ENDED} no live lease La1")
+            leases.renew()
+            self.assertEqual([w["lease"] for w in workers], ["La2", "Lb1", "Lc1"])
+            # c's ended and someone else has it now: c alone is no longer this stage's; it is asked for at every beat.
+            renewals["Lc1"] = (70, f"cantrip-workers: {dist.LEASE_ENDED} no live lease Lc1")
+            grants["c"] = None
+            leases.renew()
+            self.assertEqual([w["lease"] for w in workers], ["La2", "Lb1", None])
+            self.assertTrue(any("[c] its lease ended and it is not free" in line for line in said))
+            grants["c"] = lambda n: dict(os="linux", root="/w", lease="Lc9")
+            grants["d"] = dict(os="linux", root="/w", lease="Ld1")  # free since, but no worker of this stage: given back
+            leases.renew()
+            self.assertEqual([w["lease"] for w in workers], ["La2", "Lb1", "Lc9"])
+            self.assertEqual(calls[-1], ["release", "Ld1"])
+        self.assertEqual(calls[-1], ["release", "La2", "Lb1", "Lc9"])
+
+    def test_the_renewals_go_on_whatever_one_of_them_throws(self):
+        import threading  # noqa: PLC0415
+
+        beats, done = [], threading.Event()
+        run, _ = self.manager(dict(a=dict(os="windows", root="D:/c", lease="La1")))
+        said = []
+        leases = dist.Leases("a", "generation:fp-abc", "gen6", log=said.append, run=run, renew=0.01)
+
+        def renew(stop=None):
+            beats.append(1)
+            if len(beats) == 1:
+                raise UnicodeDecodeError("utf-8", b"\xff", 0, 1, "invalid start byte")
+            if len(beats) >= 3:
+                done.set()
+
+        leases.renew = renew
+        with leases.held():
+            self.assertTrue(done.wait(10), "the renewal thread died of its first error")
+        self.assertTrue(any("UnicodeDecodeError" in line for line in said))
+
+    def test_a_stages_renewals_end_by_their_own_stop_not_the_next_stages(self):
+        import threading  # noqa: PLC0415
+
+        run, calls = self.manager(dict(a=dict(os="windows", root="D:/c", lease="La1")))
+        leases = dist.Leases("a", "generation:fp-abc", "gen6", log=lambda *_: None, run=run, renew=3600)
+        with leases.held():
+            first = leases.stop
+        with leases.held():
+            # The stage before's thread was handed its own stop, which is set; this stage's is another.
+            self.assertTrue(first.is_set())
+            self.assertFalse(leases.stop.is_set())
+            leases.beat(first)  # returns at once: it does not wait on this stage's stop
+            calls.clear()
+            leases.workers[0]["lease"] = None  # as a lapsed lease leaves it
+            leases.renew(first)                # a renewal of the ended stage asks for nothing again
+            self.assertEqual(calls, [])
+
+    def test_a_stage_is_played_on_what_can_be_leased_never_failed_by_what_cannot(self):
+        # Every group optional; a group that says what a machine has to have is remote (this machine plays as itself).
+        self.assertEqual(dist.driver_request("w1,w2"), ("w1,w2,optional", ["w1", "w2"]))
+        self.assertEqual(dist.driver_request("all"), ("all,optional", []))
+        self.assertEqual(dist.driver_request("w1,cores=32 + os=linux,gpu=RTX_5090,rent"),
+                         ("w1,cores=32,optional+os=linux,gpu=RTX_5090,rent,remote,optional", ["w1"]))
+        self.assertEqual(dist.driver_request("gpu,remote,optional"), ("gpu,remote,optional", []))
+        # w1 is busy: the manager grants the rest, and the stage says what it is played without.
+        run, calls = self.manager(dict(w1=None, w2=dict(os="linux", root="/w", lease="L2")))
+        said = []
+        leases = dist.Leases("w1,w2", "generation:fp-abc", "gen6", log=said.append, run=run, renew=3600)
+        with leases.held() as workers:
+            self.assertEqual([w["name"] for w in workers], ["w2"])
+        self.assertTrue(any("worker w1 is not free" in line for line in said))
+        self.assertEqual(calls[0][1], "w1,w2,optional")
+        # Nothing at all: the stage is this machine's alone, said so.
+        run, _ = self.manager(dict(w1=None))
+        leases = dist.Leases("w1", "generation:fp-abc", "gen6", log=said.append, run=run, renew=3600)
+        with leases.held() as workers:
+            self.assertEqual(workers, [])
+        self.assertTrue(any("played here alone" in line for line in said))
+
+    def test_a_request_the_worker_manager_refuses_stops_the_run_with_its_words(self):
+        class R:
+            returncode, stdout, stderr = 73, "", "cantrip-workers: no machine is named w9"
+
+        leases = dist.Leases("w9", "generation:fp-abc", "gen6", log=lambda *_: None, run=lambda cmd: R())
+        with self.assertRaisesRegex(SystemExit, "no machine is named w9"), leases.held():
+            self.fail("held nothing")
+        self.assertEqual(leases.depth, 0)
+
+    def test_a_call_that_is_given_up_takes_everything_it_started_with_it(self):
+        """The backstop: a worker manager's call that does not end is killed with the ssh under it (a child left
+        running would hold its connection and its pipes)."""
         with tempfile.TemporaryDirectory() as tmp:
-            p = Path(tmp) / "workers.json"
-            p.write_text(json.dumps(dict(key="k", workers=[dict(name="a", host="h", user="u", root="D:/c"),
-                                                           dict(name="b", host="h2", user="u", root="D:/c", enabled=False)])))
-            w = dist.load_workers(p)
-            self.assertEqual([x["name"] for x in w], ["a"])
-            self.assertEqual(w[0]["key"], "k")
+            mark = Path(tmp) / "child.pid"
+            child = "import os, sys, time; open(sys.argv[1], 'w').write(str(os.getpid())); time.sleep(120)"
+            parent = ("import subprocess, sys, time; subprocess.Popen([sys.executable, '-c', sys.argv[1], sys.argv[2]]); "
+                      "time.sleep(120)")
+            started = time.monotonic()
+            with self.assertRaises(subprocess.TimeoutExpired):
+                dist.shielded_run([sys.executable, "-c", parent, child, str(mark)], timeout=3.0)
+            self.assertLess(time.monotonic() - started, 30)
+            pid = int(mark.read_text())
+            for _ in range(50):
+                if dist.process_start(pid) is None:
+                    break
+                time.sleep(0.1)
+            self.assertIsNone(dist.process_start(pid), "the call's child outlived it")
+
+    def test_a_hosts_scripts_and_files_go_through_the_real_worker_manager(self):
+        """The whole path but the wire: a lease on a pool machine that is this machine (the manager runs its commands
+        here, with no ssh), a host's script piped through `cantrip-workers exec` and answered, a file pushed and
+        pulled, and the lease's end an unreachable worker."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            kind = "windows" if os.name == "nt" else "linux"
+            (tmp / "home").mkdir()
+            (tmp / "home" / "pool.json").write_text(json.dumps(dict(machines=[
+                dict(name="loop", local=True, os=kind, root=str(tmp / "root").replace("\\", "/"), worker=dict(lanes=8))])))
+            old = {k: os.environ.get(k) for k in ("CANTRIP_WORKERS_HOME", "CANTRIP_WORKERS_CLI", "CANTRIP_WORKERS_NO_DAEMON")}
+            os.environ["CANTRIP_WORKERS_HOME"] = str(tmp / "home")
+            os.environ["CANTRIP_WORKERS_NO_DAEMON"] = "1"
+            os.environ.pop("CANTRIP_WORKERS_CLI", None)
+            try:
+                p = subprocess.run([*dist.workers_cli(), "lease", "loop", "--holder", "test", "--purpose", "loopback", "--json"],
+                                   capture_output=True, text=True)
+                self.assertEqual(p.returncode, 0, p.stderr)
+                (w,) = json.loads(p.stdout)["workers"]
+                self.assertEqual((w["name"], w["lanes"], w["local"]), ("loop", 8, True))
+                h = dist.host_class(w)(w, "fp-abc", 6, {}, {}, "h", None, log=lambda *_: None)
+                if kind == "windows":
+                    answer = h.ps_json("'banner'; @{ root = $root; n = 2 + 3 } | ConvertTo-Json -Compress".replace("$root", dist.ps_quote(h.root)))
+                else:
+                    answer = h.py_json("print('banner'); out(dict(root=ROOT, n=2 + 3))")
+                self.assertEqual(answer, dict(root=h.root, n=5))
+                (tmp / "blob").write_bytes(b"\x00\x01 a blob\r\n" * 1000)
+                h.copy("push", str(tmp / "blob"), str(tmp / "there"))
+                h.copy("pull", str(tmp / "there"), str(tmp / "back"))
+                self.assertEqual((tmp / "back").read_bytes(), (tmp / "blob").read_bytes())
+                subprocess.run([*dist.workers_cli(), "release", w["lease"]], capture_output=True, check=True)
+                with self.assertRaisesRegex(Unreachable, "its lease ended.*no live lease"):
+                    h.copy("pull", str(tmp / "there"), str(tmp / "again"))
+            finally:
+                for k, v in old.items():
+                    if v is None:
+                        os.environ.pop(k, None)
+                    else:
+                        os.environ[k] = v
 
     # After review.
 

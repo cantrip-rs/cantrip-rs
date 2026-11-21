@@ -282,30 +282,31 @@ What a generation leaves in `ai-data/`:
 
 ### Distributed self-play
 
-`--workers FILE` plays a generation's self-play on this machine and on other Windows or Linux machines over SSH, with
+`--workers REQUEST` plays a generation's self-play on this machine and on other Windows or Linux machines, with
 nothing run by hand on them (`ai/cantrip_ai/distributed.py`). Off by default; with it off, the driver runs self-play as above.
 
-**The workers file** (e.g. `ai-data/compute/workers.json`):
+**The workers** are machines of the worker manager's pool (docs/workers.md), and `REQUEST` is what the driver asks
+it for: `all` (every machine of the pool that is free), machines by name (`worker1,worker2`), or what a machine has to
+have (`os=linux,gpu,rent`). The driver leases them for each distributed stage - self-play, each duel, the judgements -
+as `generation:<root tag>`, renews the leases while the stage runs and releases them at its end
+(`distributed.Leases`), so between stages a machine is free for others and a rented box nobody holds is destroyed. A
+stage is played on what can be leased when it starts: a machine someone else holds, or a box that could not be
+rented, is logged and done without (only a machine the pool does not have at all stops the run). It
+knows a worker by its name and its root alone: every command it runs on one and every file it copies is a
+`cantrip-workers exec`, `push` or `pull` under the worker's lease, and the addresses, the key and the vast.ai account
+stay in the pool, outside the repository. A worker whose lease ended is one that cannot be reached (below).
 
-```json
-{
-  "key": "C:/Users/me/.ssh/cantrip_workers_ed25519",
-  "workers": [
-    {"name": "worker1", "host": "192.0.2.10", "user": "worker", "root": "D:/compute"}
-  ]
-}
-```
-
-`key` (top level, or a worker's own) is the SSH key; a worker has `name` (in the logs, the shards' names and
-`HOSTS.json`), `host`, `user`, `root` (where everything of the driver's goes on it), and optionally `port`, `lanes`
+A lease hands back the machine's `name` (in the logs, the shards' names and `HOSTS.json`), `os` (`windows` or `linux`:
+"A Linux worker" below) and `root` (where everything of the driver's goes on it), and whatever the pool keeps under
+the machine's `worker` for the driver: `lanes`
 (its lane ceiling, `--worker-lanes` 256 otherwise: its governor scales below it to its first limiter), `device` (its
 CUDA device, 0), `server_args` (its `cantrip-infer`'s; otherwise `--worker-server-args`, which defaults to
 `--server-args` with `--server-impl native` and else to `--precision fp16 --pipelines 1`, the native server's settings
 for self-play; `--shapes` is refused, since smaller batch shapes make a game depend on its batch companions),
 `duel_parallel` (its games at once in a distributed duel: "Distributed duels" below), `judge_lanes` (its lanes in the
 pair miner's judgements: "Distributed judgements"), `backend` (`gpu`, the default:
-`cantrip-infer` on its GPU; or `tract`/`ort`: no server, the CPU), `os` (`windows`, the default, or `linux`: "A Linux
-worker" below), `enabled: false` to leave it out, and anything else as notes.
+`cantrip-infer` on its GPU; or `tract`/`ort`: no server, the CPU). A workers file of before the pool is moved over
+once with `cantrip-workers import` (docs/workers.md, "Moving an old workers file over").
 
 **Setting up a worker, once** (Windows 10/11, as an administrator on it):
 
@@ -320,11 +321,13 @@ worker" below), `enabled: false` to leave it out, and anything else as notes.
    `C:\ProgramData\ssh\administrators_authorized_keys`, which sshd ignores unless only Administrators and SYSTEM can
    read it: put the public key there, then
    `icacls C:\ProgramData\ssh\administrators_authorized_keys /inheritance:r /grant "Administrators:F" /grant "SYSTEM:F"`.
-   Check from the driver's machine: `ssh -i KEY worker@HOST hostname`.
+   Then add the machine to the pool (docs/workers.md) and check from the driver's machine:
+   `cantrip-workers lease NAME --holder me --purpose check`, `cantrip-workers exec LEASE -- hostname`,
+   `cantrip-workers release LEASE`.
 4. An NVIDIA driver recent enough for CUDA 12 (the bundle carries CUDA's and cuDNN's libraries; nothing else is
    installed), and the Visual C++ runtime (`vcruntime140.dll`, `msvcp140.dll`; present on most machines).
 
-**What the driver pushes**, to `ROOT_REMOTE` (the worker's `root`), with `scp`, each file once: a bundle of what a worker
+**What the driver pushes**, to `ROOT_REMOTE` (the worker's `root`), with `cantrip-workers push`, each file once: a bundle of what a worker
 needs - `cantrip-selfplay.exe` and the DLLs beside it, `cantrip-infer.exe` (built with `--features gpu`; the build stage
 builds it whenever `--workers` is given), onnxruntime-gpu's three DLLs (beside `--ort-dylib`), the seven CUDA libraries
 `cantrip-infer` loads (`distributed.CUDA_DLLS`: cudart, cuBLAS, cuBLASLt, cuFFT, and cuDNN's front, graph and ops parts,
@@ -352,7 +355,7 @@ is killed, only when all three match: an id Windows reused is another process. A
 `exit.json` after, so a run that has just exited is never taken for a crash. Its logs are `infer.log` and
 `selfplay.log` there (copied to `genN/dist/logs` when the attempt ends).
 
-**A Linux worker** (`"os": "linux"` in the workers file; `distributed.LinuxSshHost`) is a GPU machine or container
+**A Linux worker** (`"os": "linux"` in the pool, and every rented box; `distributed.LinuxSshHost`) is a GPU machine or container
 reached over SSH as a user that can install packages (root on a rented container), with an NVIDIA driver for CUDA 12 and
 nothing else prepared: a fresh Ubuntu image will do. It keeps the same tree under its `root` and the same attempt files
 as a Windows worker; its scripts are Python, piped to `python3 -` (installed if missing). Its bundle carries the
@@ -440,14 +443,14 @@ finishes it on this machine alone (stop the workers first).
 A new attempt is granted one chunk to start with, and its backlog grows with its lanes as its governor scales them.
 
 **Collecting.** Every `--dist-poll` seconds (30) the driver reads each attempt's status (`selfplay-status.json`), its
-closed shards, runaways and exit; it pulls each new shard with `scp`, reads it whole (every game, its seed in the
+closed shards, runaways and exit; it pulls each new shard with `cantrip-workers pull`, reads it whole (every game, its seed in the
 generation's range, its header this self-play's), checks rule 2, and moves it into `genN/selfplay` as
 `<worker>-<name>`, where the training window reads it. Every few minutes it logs each host's games, games an hour,
 lanes allowed and running, its limiter and its backlog. `genN/selfplay/HOSTS.json` records which host (and GPU) played
 each shard's games: a different GPU can round fp16 differently, so a game replays exactly only on the machine that
 played it, and its server's arguments and precision with it. `generation.json`'s self-play stage gains `hosts` (each
 host's games, games an hour, lanes and limiter) and `attempts`, and the README's row names each host's part. A worker's
-shards are deleted there once accepted (at the next poll). ssh and scp run in process groups of their own, so a Ctrl-C
+shards are deleted there once accepted (at the next poll). The worker manager's calls run in process groups of their own, so a Ctrl-C
 never breaks a transfer: the interrupt waits for it, and a fetch or a stop that fails is tried again at the next poll.
 
 A game reaches the driver only when its lane's shard closes (`--selfplay-shard-games`, 25 at gen5's settings), so
@@ -469,7 +472,7 @@ done; run it again to resume. A second Ctrl-C (or `--stop-now`) stops the games 
 self-play. `--no-selfplay-local` leaves this machine out of the self-play.
 
 ```bash
-python -m cantrip_ai.generation --root ../../ai-data ... --workers ../../ai-data/compute/workers.json
+python -m cantrip_ai.generation --root ../../ai-data ... --workers all
 python -m cantrip_ai.generation --root ../../ai-data --stop     # from another terminal
 ```
 
@@ -507,7 +510,7 @@ line is the driver's.
 Stopping: `generation.py --stop` (or `--stop-now`) also writes `genN/dist/stop`, which the running duel's (or
 judgement's) driver reads, a file apart from each host's own stop file (which the driver writes to close a duel or to
 stop a host dropping games), so neither is taken for the other; the driver removes it when it starts a duel again. A
-duel's ledger that holds a live attempt of a host the run no longer has (a worker left out of the workers file, this
+duel's ledger that holds a live attempt of a host the run no longer has (a worker the request no longer leases, this
 machine with `--no-duel-local`) gives it up as it starts: its games go to the hosts there are, and what it sends later
 is rejected.
 

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# The worker manager: leases on compute machines, and every call made on one. See docs/workers.md.
+for py in python3 python; do
+  if "$py" -c '' >/dev/null 2>&1; then exec "$py" "$(dirname "$0")/workers/cantrip-workers.py" "$@"; fi
+done
+echo "cantrip-workers: no python3 or python on PATH" >&2; exit 127

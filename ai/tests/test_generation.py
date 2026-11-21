@@ -15,6 +15,20 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from cantrip_ai import generation  # noqa: E402
 
+
+@contextlib.contextmanager
+def pool_of(tmp: Path, *machines: dict):
+    """A worker manager's pool of these machines (docs/workers.md), in a directory of its own, for the block: the
+    driver asks the real `cantrip-workers` of it. Yields the directory."""
+    import os  # noqa: PLC0415
+
+    with tempfile.TemporaryDirectory() as home:  # apart from `tmp`, which may be the generation root
+        home = Path(home)
+        (home / "pool.json").write_text(json.dumps(dict(key="k", machines=list(machines))), encoding="utf-8")
+        with unittest.mock.patch.dict(os.environ, {"CANTRIP_WORKERS_HOME": str(home), "CANTRIP_WORKERS_NO_DAEMON": "1"}):
+            os.environ.pop("CANTRIP_WORKERS_CLI", None)
+            yield home
+
 GATE = """
 SPRT verdict after 412 games: LLR 2.951 (232 to 180, 0 drawn).
 
@@ -215,14 +229,12 @@ class GenerationTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = root_with(Path(tmp), gens=(1,))
             decks = decks_in(Path(tmp))
-            workers = Path(tmp) / "workers.json"
-            workers.write_text(json.dumps({"workers": [
-                {"name": "w1", "host": "192.0.2.1", "user": "u", "root": "D:/compute"},
-                {"name": "w2", "host": "192.0.2.2", "user": "u", "root": "/root/compute", "os": "linux"}]}))
             before = sorted(p for p in root.rglob("*"))
             out = io.StringIO()
-            with contextlib.redirect_stdout(out):
-                generation.main(["--root", str(root), "--dry-run", "--decks-dir", str(decks), "--workers", str(workers),
+            with pool_of(Path(tmp), {"name": "w1", "host": "192.0.2.1", "user": "u", "root": "D:/compute", "os": "windows"},
+                         {"name": "w2", "host": "192.0.2.2", "user": "u", "root": "/root/compute", "os": "linux"}), \
+                    contextlib.redirect_stdout(out):
+                generation.main(["--root", str(root), "--dry-run", "--decks-dir", str(decks), "--workers", "all",
                                  "--accept", "above-half", "--gate-early-stop", "--no-mine", "--net-duel-games", "200",
                                  "--ladder-every", "2"])
             text = out.getvalue()
@@ -238,11 +250,10 @@ class GenerationTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = root_with(Path(tmp), gens=(1,))
             decks = decks_in(Path(tmp))
-            workers = Path(tmp) / "workers.json"
-            workers.write_text(json.dumps({"workers": [{"name": "w1", "host": "192.0.2.1", "user": "u", "root": "D:/c"}]}))
             out = io.StringIO()
-            with contextlib.redirect_stdout(out):
-                generation.main(["--root", str(root), "--dry-run", "--decks-dir", str(decks), "--workers", str(workers)])
+            with pool_of(Path(tmp), {"name": "w1", "host": "192.0.2.1", "user": "u", "root": "D:/c", "os": "windows"}), \
+                    contextlib.redirect_stdout(out):
+                generation.main(["--root", str(root), "--dry-run", "--decks-dir", str(decks), "--workers", "w1"])
             self.assertIn("judged by gen0 across this machine and the workers", out.getvalue())
 
     def test_a_dry_run_of_above_half_with_its_early_stop_and_of_always(self):
@@ -441,27 +452,32 @@ class GenerationTest(unittest.TestCase):
     def test_a_dry_run_with_workers_plans_the_split_and_the_rest_unchanged(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = root_with(Path(tmp), gens=(1,))
-            workers = Path(tmp) / "workers.json"
-            workers.write_text(json.dumps(dict(key="k", workers=[dict(name="w1", host="10.0.0.2", user="worker", root="D:/compute")])))
             before = sorted(p for p in root.rglob("*"))
             out = io.StringIO()
-            with contextlib.redirect_stdout(out):
+            w1 = dict(name="w1", host="192.0.2.2", user="worker", root="D:/compute", os="windows")
+            with pool_of(Path(tmp), w1) as home, contextlib.redirect_stdout(out):
                 generation.main(["--root", str(root), "--dry-run", "--games", "100", "--simulations", "32", "--decks-dir", "",
-                                 "--workers", str(workers)])
+                                 "--workers", "all"])
+                # A dry run leases nothing, and is told no address.
+                self.assertFalse((home / "state.json").exists())
             text = out.getvalue()
             self.assertEqual(sorted(p for p in root.rglob("*")), before, "a dry run writes nothing")
             self.assertIn("distributed self-play: 1 worker(s) (w1) and this machine", text)
-            self.assertRegex(text, r"worker@10.0.0.2:D:/compute/bundle/<hash> and play in D:/compute/gens/\S+/gen2/w1/<attempt>")
+            self.assertRegex(text, r"to w1:D:/compute/bundle/<hash> and play in D:/compute/gens/\S+/gen2/w1/<attempt>")
+            self.assertNotIn("192.0.2.2", text)
             self.assertRegex(text, r"cantrip-selfplay(\.exe)? .*--resume --grant \S+gen2[/\\]dist[/\\]<attempt>.grant --host ")
             self.assertRegex(text, r"cantrip_ai.train ")
             # The workers' server: the native server's settings by default (the python one's are not its own).
             self.assertIn("cantrip-infer --precision fp16 --pipelines 1", text)
             self.assertRegex(text, r"--lease \S+<attempt>.heartbeat --lease-seconds 900")
-            workers.write_text(json.dumps(dict(workers=[dict(name="w1", host="h", user="u", root="D:/c",
-                                                             server_args="--precision fp16 --shapes 32,64")])))
-            with self.assertRaises(SystemExit) as refused, contextlib.redirect_stdout(io.StringIO()):
-                generation.main(["--root", str(root), "--dry-run", "--games", "100", "--decks-dir", "", "--workers", str(workers)])
+            shaped = dict(w1, worker=dict(server_args="--precision fp16 --shapes 32,64"))
+            with pool_of(Path(tmp), shaped), self.assertRaises(SystemExit) as refused, contextlib.redirect_stdout(io.StringIO()):
+                generation.main(["--root", str(root), "--dry-run", "--games", "100", "--decks-dir", "", "--workers", "all"])
             self.assertIn("--shapes", str(refused.exception))
+            # A request the pool cannot serve is the worker manager's refusal, said whole.
+            with pool_of(Path(tmp), w1), self.assertRaises(SystemExit) as refused, contextlib.redirect_stdout(io.StringIO()):
+                generation.main(["--root", str(root), "--dry-run", "--games", "100", "--decks-dir", "", "--workers", "w9"])
+            self.assertIn("no machine is named w9", str(refused.exception))
 
     def test_a_distributed_generation_is_not_finished_without_its_workers_unless_asked(self):
         with tempfile.TemporaryDirectory() as tmp:

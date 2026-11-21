@@ -112,4 +112,8 @@ is pushed from there. Card art never goes in: `content/*/images/` is gitignored 
   `draft-winston-vs-bot.cmd`, `draft-grid-vs-bot.cmd` and `draft-booster-vs-bots.cmd` (a draft against bots, then the
   games), `play-release-build.cmd` (the shipping build), and the bot labs. Generators are in `tools/maintenance/`
   (`new-card.py`); `tools/README.md` lists everything.
+- `tools/workers/` — the worker manager, `tools/cantrip-workers` (`docs/workers.md`): the one way code and agents get
+  and use a compute machine - this one, another on the network, a rented vast.ai box - through a lease (`lease`,
+  `exec`, `push`, `pull`, `release`). Never `ssh` or `scp` to a worker directly; the pool (addresses, keys, budgets) is
+  local to each machine and never in the repository.
 - `docs/engine-design.md` — the engine's design and plan; keep it current when it moves.

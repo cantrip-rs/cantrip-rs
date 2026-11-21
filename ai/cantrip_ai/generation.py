@@ -79,8 +79,9 @@ the warm-up and the champion's optimizer state (and its unaveraged weights, if i
 `--train-args` passes anything else to train.py; `{champion}` in it is the champion's checkpoint
 (`--train-args '--anchor {champion} --anchor-kl 0.05'`).
 
-Distributed self-play (docs/ai-training.md, "Distributed self-play"): `--workers FILE` plays the self-play stage on this
-machine and on the workers the file names, over SSH (`distributed.py`): each game index played exactly once across
+Distributed self-play (docs/ai-training.md, "Distributed self-play"): `--workers REQUEST` plays the self-play stage on
+this machine and on the machines the request leases from the worker manager (docs/workers.md; `distributed.py`), held
+for each distributed stage and let go after it: each game index played exactly once across
 them, handed out on demand, the shards pulled back into `genN/selfplay` as they close, checked, and recorded with the
 host that played them (`genN/selfplay/HOSTS.json`). Off by default, and with it off nothing changes.
 With `--workers` the duels are distributed too (docs/ai-training.md, "Distributed duels"; `duels.py`): the gate, the
@@ -135,7 +136,7 @@ EXPLORE = REPO / f"target/release/cantrip-explore{EXE}"
 # miner's replays (`mining.py`). The recorder changes nothing a game does.
 RECORD_NATIVE = REPO / f"target/record/cards/cantrip-native-host{EXE}"
 # BotLab published self-contained, one file, for a worker's duels (`duels.py`): by the build stage, for each kind of
-# worker the workers file names.
+# worker the request leases.
 BOTLAB_PUBLISH = REPO / "dotnet/tools/Cantrip.BotLab/bin/publish"
 BOTLAB_RIDS = {"windows": ("win-x64", "cantrip-botlab.exe"), "linux": ("linux-x64", "cantrip-botlab")}
 # BotLab's sequential stops: a distributed duel's are the driver's (`duels.sequential_stop`), not each host's.
@@ -1128,9 +1129,10 @@ def main(argv=None):
     a.add_argument("--keep", type=int, default=8)
     a.add_argument("--no-build", action="store_true")
     a.add_argument("--retrain", metavar="REASON", help="run a rejected generation again from its training, saying why")
-    a.add_argument("--workers", metavar="FILE",
-                   help="distributed self-play: the workers file (docs/ai-training.md, 'Distributed self-play'); this "
-                        "machine plays its share too unless --no-selfplay-local")
+    a.add_argument("--workers", metavar="REQUEST",
+                   help="distributed self-play: the machines to lease from the worker manager for each distributed stage "
+                        "(docs/workers.md: `all`, names, or what a machine has to have; docs/ai-training.md, 'Distributed "
+                        "self-play'); this machine plays its share too unless --no-selfplay-local")
     a.add_argument("--selfplay-local", action=argparse.BooleanOptionalAction, default=True,
                    help="with --workers: this machine plays self-play games too")
     a.add_argument("--worker-lanes", type=int, default=256, help="a worker's lane ceiling (its own `lanes` wins)")
@@ -1259,7 +1261,7 @@ def main(argv=None):
             gen_dir / "logs/build-botlab.log", args.dry_run, env=dict(DOTNET_ROLL_FORWARD="Major"), stream=show_progress)
         if duels_distributed():
             # BotLab for the workers: self-contained, one file, for each kind of worker there is.
-            for kind in sorted({w.get("os", "windows") for w in load_workers()}):
+            for kind in sorted({w["os"] for w in candidate_workers()}):
                 rid, _ = BOTLAB_RIDS[kind]
                 run([*dotnet(), "publish", "dotnet/tools/Cantrip.BotLab/Cantrip.BotLab.csproj", "-c", "Release", "-r", rid,
                      "--self-contained", "-p:PublishSingleFile=true", "-p:IncludeNativeLibrariesForSelfExtract=true",
@@ -1316,7 +1318,8 @@ def main(argv=None):
                 listed.write_text("".join(p + "\n" for p in metagame_pairings(pool, args.games, seed)), encoding="utf-8")
             cmd += ["--decks", decks_dir, "--prior", decks_dir, "--pairings", listed]
         if args.workers:
-            return distributed_selfplay(cmd, out, listed)
+            with workers_held():
+                return distributed_selfplay(cmd, out, listed)
         if (gen_dir / "dist" / "ledger.json").exists() and not args.abandon_workers and not args.dry_run:
             # Its workers may still be playing (or hold games it granted them), and its ledger is what keeps each game
             # once: finishing the stage here alone would play them twice, or leave them out.
@@ -1350,7 +1353,7 @@ def main(argv=None):
     def distributed_selfplay(cmd: list, out: Path, listed: Path | None) -> dict | None:
         """The self-play stage on this machine and the workers (`distributed.py`): run to the end, its numbers from the
         shards accepted and every host's part."""
-        workers = distributed.load_workers(Path(args.workers))
+        workers = load_workers()
         dist_dir = gen_dir / "dist"
         tag = distributed.root_tag(root)
         log(f"  distributed self-play: {len(workers)} worker(s) ({', '.join(w['name'] for w in workers) or 'none'})"
@@ -1362,7 +1365,7 @@ def main(argv=None):
         server_words = {w["name"]: distributed.worker_server_args(w, default_server) for w in workers}
         if args.dry_run:
             for w in workers:
-                log(f"  would push the bundle to {w['user']}@{w['host']}:{w['root']}/bundle/<hash> and play in "
+                log(f"  would push the bundle to {w['name']}:{w['root']}/bundle/<hash> and play in "
                     f"{w['root']}/gens/{tag}/gen{gen}/{w['name']}/<attempt>-<nonce>, cantrip-infer {' '.join(server_words[w['name']])}")
             log(f"$ {' '.join(str(c) for c in cmd)} --grant {dist_dir / '<attempt>.grant'} --host {distributed.local_name()} "
                 f"--lease {dist_dir / '<attempt>.heartbeat'} --lease-seconds {args.dist_lease:g}")
@@ -1626,8 +1629,28 @@ def main(argv=None):
             listed.write_text("".join(p + "\n" for p in metagame_pairings(pool, max(1, (games + 1) // 2), at)), encoding="utf-8")
         return ["--decks", decks_dir, "--ai-prior", decks_dir, "--pairings", listed]
 
+    # The run's worker machines (`distributed.Leases`): leased from the worker manager for each distributed stage.
+    leases = (distributed.Leases(args.workers, f"generation:{distributed.root_tag(root)}", f"gen{gen}", log)
+              if args.workers else None)
+    candidates_made: list = []
+
+    def candidate_workers() -> list[dict]:
+        """The machines the request could lease, none leased: what a dry run plans with and the build publishes for."""
+        if leases is None:
+            return []
+        if not candidates_made:
+            candidates_made.append(leases.candidates())
+        return candidates_made[0]
+
     def load_workers() -> list[dict]:
-        return distributed.load_workers(Path(args.workers)) if args.workers else []
+        """The workers held now (within `workers_held`); a dry run's are the request's candidates."""
+        if leases is None:
+            return []
+        return candidate_workers() if args.dry_run else leases.workers
+
+    def workers_held():
+        """The workers leased while a distributed stage runs; a dry run leases nothing."""
+        return leases.held() if leases is not None and not args.dry_run else contextlib.nullcontext()
 
     def duels_distributed() -> bool:
         return bool(args.workers) and args.dist_duels
@@ -1686,15 +1709,18 @@ def main(argv=None):
         """A duel across this machine and the workers (`duels.run`): its results merged into genN/logs/NAME-results.tsv,
         as one machine writes them, and BotLab's summary of them in genN/logs/NAME.log. Returns the summary's text,
         the ledger and the results directory; a game that did not finish fails it, as it fails one machine's."""
-        setup = duel_setup()
         pairings = next((Path(duel_args[k + 1]) for k in range(len(duel_args) - 1) if duel_args[k] == "--pairings"), None)
         unique = list(dict.fromkeys(Path(m) for m in models))
-        try:
-            ledger, out, rows, seconds = duels.run(setup, name, duel_args, unique, games, at, decks_dir, pairings, kind=kind,
-                                                   only=only, affinity=affinity, stops=stops, record=record, env=env,
-                                                   restart_stale=restart_stale)
-        finally:
-            save_hashes()
+        with workers_held():
+            setup = duel_setup()
+            # The machines held now may be of a kind the setup's first did not have (a box rented since).
+            duels.check_published(setup.botlab, setup.workers)
+            try:
+                ledger, out, rows, seconds = duels.run(setup, name, duel_args, unique, games, at, decks_dir, pairings,
+                                                       kind=kind, only=only, affinity=affinity, stops=stops, record=record,
+                                                       env=env, restart_stale=restart_stale)
+            finally:
+                save_hashes()
         results = gen_dir / "logs" / f"{name}-results.tsv"
         duels.write_results(rows, results)
         code, text = duels.summarize(setup, [str(x) for x in duel_args], results, seconds, stops)
@@ -1844,13 +1870,14 @@ def main(argv=None):
         where = "here"
         if args.workers:
             # Across this machine and the workers (`mining.judge_distributed`): each run's plan split by game.
-            setup = duel_setup()
-            setup = duels.Setup(**{**setup.__dict__, "local": args.judge_local})
-            try:
-                parts = mining.judge_distributed(setup, p, s, judge_model, decks_dir, EXPLORE, args.mine_local_lanes,
-                                                 args.worker_judge_lanes or 4 * args.mine_lanes)
-            finally:
-                save_hashes()
+            with workers_held():
+                setup = duel_setup()
+                setup = duels.Setup(**{**setup.__dict__, "local": args.judge_local})
+                try:
+                    parts = mining.judge_distributed(setup, p, s, judge_model, decks_dir, EXPLORE, args.mine_local_lanes,
+                                                     args.worker_judge_lanes or 4 * args.mine_lanes)
+                finally:
+                    save_hashes()
             p.job.write_text(json.dumps(dict(worker=None, distributed=parts, model=judge_model.name)), encoding="utf-8")
             where = ", ".join(sorted({h for r in parts.values() for h in r})) or "nowhere"
         else:
