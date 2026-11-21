@@ -1,0 +1,29 @@
+# Toph, the Blind Bandit: "When Toph enters, earthbend 2" puts two +1/+1 counters on the Forest, and Toph's power is the number of +1/+1 counters on lands
+# you control (CR 604.3): 2 now, with a toughness of 3. Toph itself is not a land, so a counter on Toph would not count.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Toph, the Blind Bandit
+Forest x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Toph, the Blind Bandit.Cast
+Bot1.Pass
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Battlefield.Toph, the Blind Bandit.Power = 2
+Bot1.Battlefield.Toph, the Blind Bandit.Toughness = 3
+Bot1.Battlefield.Forest.Power = 2
+Bot1.Battlefield.Forest.Types = Land; Creature
+Bot1.Battlefield.Forest.Counters.PlusOnePlusOne = 2

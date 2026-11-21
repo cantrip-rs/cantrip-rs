@@ -1,0 +1,85 @@
+# Avatar Destiny: "When enchanted creature dies, mill cards equal to its power. Return this card to its owner's hand and up to one creature
+# card milled this way to the battlefield under your control." The Bears wear it on turn 3 as 3/3 (one creature card in Bot1's graveyard).
+# On turn 4 Bot2 Bolts them; the Aura goes to the graveyard with them (CR 704.5m) and its trigger mills exactly three cards, the power the
+# Bears last had (CR 608.2h): Giant Spider, Forest and Hill Giant, with the next card (an Island) left on top. The Aura returns to Bot1's hand
+# (CR 400.7f) and Bot1 chooses Hill Giant of the two milled creature cards: it enters under Bot1's control; Giant Spider stays in the graveyard.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Grizzly Bears
+Grizzly Bears
+Island
+Avatar Destiny
+Giant Spider
+Forest
+Hill Giant
+Island x11
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island
+Island
+Lightning Bolt
+Island x13
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Grizzly Bears#1.Cast
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears#1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Grizzly Bears
+? Bot2.Graveyard = Lightning Bolt; Llanowar Elves; Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Avatar Destiny.Cast(Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+? Bot1.Battlefield.Grizzly Bears.Power = 3
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Library.Count = 14
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Graveyard.Hill Giant)
+
+[Expect]
+Bot1.Hand = Avatar Destiny; Island
+Bot1.Graveyard = Forest; Giant Spider; Grizzly Bears; Grizzly Bears
+Bot1.Battlefield.Hill Giant.Power = 3
+Bot1.Library.Count = 11

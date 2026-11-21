@@ -1,0 +1,56 @@
+# Cycle of Renewal: "Sacrifice a land. Search your library for up to two basic land cards, put them onto the battlefield tapped,
+# then shuffle." (CR 701.21a, 701.23, 701.24). Bot1 has a Forest and an Island and pays with the three Moxen: it chooses the Island
+# to sacrifice (the Mox Emerald is no land and the Forest is the other one), then finds two basic lands, which arrive tapped.
+# A third basic land, a nonbasic land and a creature are not allowed, and Bot2's library, with basic lands of its own, is untouched.
+
+[Bot1 Deck]
+Forest
+Island
+Mox Emerald
+Mox Jet
+Mox Ruby
+Cycle of Renewal
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Plains
+Mountain
+Swamp
+Tropical Island
+Elvish Mystic x6
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cycle of Renewal.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Mox Emerald)
+! Bot1.Choose(Forest; Island)
+Bot1.Choose(Island)
+! Bot1.Search(Elvish Mystic)
+! Bot1.Search(Tropical Island)
+! Bot1.Search(Plains; Mountain; Swamp)
+Bot1.Search(Plains; Swamp)
+? Bot1.Battlefield.Plains.Tapped = true
+? Bot1.Battlefield.Swamp.Tapped = true
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Forest; Mox Emerald; Mox Jet; Mox Ruby; Plains; Swamp
+Bot1.Graveyard = Cycle of Renewal; Island
+Bot1.Library.Count = 9
+Bot2.Library.Count = 12

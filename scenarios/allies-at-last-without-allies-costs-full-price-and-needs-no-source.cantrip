@@ -1,0 +1,42 @@
+# Allies at Last with no Ally (only Grizzly Bears, not an Ally) costs the full {2}{G}: two mana is refused, three paid
+# exactly. "Up to two" allows no source at all: only Bot2's Wall of Mist is targeted and nothing is dealt damage.
+
+[Bot1 Deck]
+Forest
+Forest
+Mox Emerald
+Grizzly Bears
+Allies at Last
+Island x12
+
+[Bot2 Deck]
+Island
+Black Lotus
+Wall of Mist
+Island x12
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wall of Mist.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Allies at Last.Cast
+Bot1.Target()
+Bot1.Target(Bot2.Battlefield.Wall of Mist)
+? Bot1.Mana =
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Wall of Mist.Damage = 0
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Graveyard = Allies at Last

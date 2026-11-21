@@ -1,0 +1,45 @@
+# Unlucky Cabbage Merchant: "If you search your library this way" - the search is what counts, not finding a land. Bot1's library holds
+# no basic land card (Tropical Island is not one), so nothing can be found, the search is answered with no card, and the Merchant still
+# goes to the bottom of the library, which is shuffled: the library has one card more, and the battlefield no new land.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Unlucky Cabbage Merchant
+Forest
+Forest
+Tropical Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Unlucky Cabbage Merchant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Food Token.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Search(Tropical Island)
+Bot1.Search()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Library.Count = 14
+Bot1.Life = 23
+Bot1.Shuffles = 1

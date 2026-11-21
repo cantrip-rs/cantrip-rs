@@ -1,0 +1,75 @@
+# Haru, Hidden Talent: "Whenever another Ally you control enters, earthbend 1." Bot2's Invasion Reinforcements (an Ally under the
+# other player) does not trigger it ("you control"), and neither does Bot1's own Ornithopter (no Ally). Bot1's own Reinforcements
+# does, twice (itself and its token); with a Forest and an Island to pick from, the first earthbend targets the Island (Bot2's Plains
+# is refused: "target land you control") and the second the Forest. Each ends a 1/1 haste land creature.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Haru, Hidden Talent
+Island
+Ornithopter
+Mox Pearl
+Invasion Reinforcements
+Forest x13
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Invasion Reinforcements
+Plains x17
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Haru, Hidden Talent.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Invasion Reinforcements.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Forest.Types = Land
+? Bot2.Battlefield.Plains.Types = Land
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Types = Land
+? Bot1.Battlefield.Island.Types = Land
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Invasion Reinforcements.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Plains)
+Bot1.Target(Bot1.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Island.Types = Land; Creature
+Bot1.Battlefield.Island.Power = 1
+Bot1.Battlefield.Island.Keywords = Haste
+Bot1.Battlefield.Forest.Types = Land; Creature
+Bot1.Battlefield.Forest.Power = 1
+Bot1.Battlefield.Forest.Keywords = Haste
+Bot2.Battlefield.Plains.Types = Land

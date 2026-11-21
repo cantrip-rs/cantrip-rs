@@ -1,0 +1,56 @@
+# Unlucky Cabbage Merchant: the trigger is on the stack when Bot2 kills the Merchant with Lightning Bolt in response. The ability still
+# resolves (CR 603.4 does not apply, it has no intervening "if"): Bot1 searches and a Mountain enters tapped, but the Merchant, already
+# in the graveyard, is a new object (CR 400.7) and is not put on the library; the library is still shuffled, one card shorter.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Unlucky Cabbage Merchant
+Forest
+Forest
+Forest
+Mountain
+Forest x11
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Unlucky Cabbage Merchant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Food Token.Activate
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Unlucky Cabbage Merchant)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Search(Mountain)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Unlucky Cabbage Merchant
+Bot1.Battlefield = Mountain; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Battlefield.Mountain.Tapped = true
+Bot2.Graveyard = Lightning Bolt
+Bot1.Shuffles = 1

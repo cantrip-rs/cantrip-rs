@@ -1,0 +1,31 @@
+# Elemental Teachings {4}{G}: with no land card in Bot1's library the search finds nothing (CR 701.23b); nothing is revealed, nothing goes to
+# the graveyard or battlefield, and the spell finishes into the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Elemental Teachings
+Llanowar Elves x10
+
+[Bot2 Deck]
+Forest
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: G)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elemental Teachings.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Elemental Teachings; Black Lotus
+Bot1.Battlefield = Mox Emerald; Mox Pearl
+Bot1.Library.Count = 7
+Bot1.Shuffles = 1

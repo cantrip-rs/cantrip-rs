@@ -1,0 +1,75 @@
+# Kyoshi Island Plaza: "Whenever another Shrine you control enters, search your library for a basic land card, put it onto the
+# battlefield tapped, then shuffle." Bot1 plays the Plaza in turn 1 (X is 1: a Forest). Bot2's own Southern Air Temple in turn 2 is a
+# Shrine Bot1 does not control and starts nothing for Bot1. In turn 3 Bot1's Southern Air Temple enters: one basic land, not two (two
+# are refused) and not the Tropical Island, put onto the battlefield tapped.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Kyoshi Island Plaza
+Southern Air Temple
+Island
+Forest
+Tropical Island
+Island x12
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Southern Air Temple
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kyoshi Island Plaza.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Forest)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.Battlefield.Mox Pearl#4.Activate
+Bot2.Hand.Southern Air Temple.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 6
+? Bot1.Library.Count = 13
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Southern Air Temple.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Island; Island)
+! Bot1.Search(Tropical Island)
+Bot1.Search(Island)
+
+[Expect]
+Bot1.Battlefield = Forest; Island; Kyoshi Island Plaza; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Southern Air Temple
+Bot1.Battlefield.Island.Tapped = true

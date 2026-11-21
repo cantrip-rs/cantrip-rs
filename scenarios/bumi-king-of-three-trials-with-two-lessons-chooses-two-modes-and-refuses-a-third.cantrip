@@ -1,0 +1,59 @@
+# Bumi, King of Three Trials: two Lesson cards in Bot1's graveyard (Abandon Attachments and the Boomerang Basics it discards) make X = 2
+# (CR 205.3k), so Bumi's ETB chooses up to two modes (CR 700.2, 603.3c) and a third is refused. Bot1 takes "Put three +1/+1 counters on
+# Bumi" and "Earthbend 3" on its Forest: Bumi is a 7/7 and the Forest a 3/3 haste land creature (CR 701.66a).
+# Turn 1: Moxen, Black Lotus kept, Abandon Attachments (R + 1) discards Boomerang Basics and draws Mox Pearl and Mox Jet. Turn 3: Bumi.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Abandon Attachments
+Boomerang Basics
+Forest
+Mox Pearl
+Mox Jet
+Bumi, King of Three Trials
+Forest x12
+
+[Bot2 Deck]
+Island x22
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Abandon Attachments.Cast
+Bot1.Choose(Boomerang Basics)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: G)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bumi, King of Three Trials.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Modes(1; 2; 3)
+Bot1.Modes(1; 3)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard.Count = 3
+Bot1.Battlefield.Bumi, King of Three Trials.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Bumi, King of Three Trials.Power = 7
+Bot1.Battlefield.Bumi, King of Three Trials.Toughness = 7
+Bot1.Battlefield.Forest.Power = 3
+Bot1.Battlefield.Forest.Toughness = 3
+Bot1.Battlefield.Forest.Counters.PlusOnePlusOne = 3

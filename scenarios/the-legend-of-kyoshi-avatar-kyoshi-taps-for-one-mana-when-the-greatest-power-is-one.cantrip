@@ -1,0 +1,72 @@
+# Avatar Kyoshi: "{T}: Add X mana of any one color, where X is the greatest power among creatures you control." Bot2's Strip Mine destroys the Forest
+# chapter II made a 2/2 creature on turn 4, before the Saga transforms. On turn 6 Bot2 enchants Avatar Kyoshi, Bot1's only creature, with two
+# Weaknesses (-2/-1 each): it is a 1/2. On turn 7 it taps for one green mana: X is 1, the greatest power, so it adds one mana and not none.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Mox Emerald
+The Legend of Kyoshi
+Forest
+Island
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Strip Mine
+Swamp
+Swamp
+Weakness
+Weakness
+Island
+Island
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.The Legend of Kyoshi.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Power = 2
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Strip Mine.Activate(Ability: Destroy target land; Bot1.Battlefield.Forest)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Forest; Black Lotus
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Avatar Kyoshi.Power = 5
+[T6 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp#1.Activate
+Bot2.Hand.Weakness.Cast(Bot1.Battlefield.Avatar Kyoshi)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Swamp#2.Activate
+Bot2.Hand.Weakness.Cast(Bot1.Battlefield.Avatar Kyoshi)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Avatar Kyoshi.Power = 1
+[T7 Bot1.Main1]
+Bot1.Battlefield.Avatar Kyoshi.Activate(Color: Green)
+? Bot1.Mana = {G}
+
+[Expect]
+Bot1.Battlefield.Avatar Kyoshi.Tapped = true
+Bot1.Battlefield.Avatar Kyoshi.Toughness = 2

@@ -1,0 +1,79 @@
+# Avatar Destiny: "Return this card to its owner's hand and up to one creature card milled this way to the battlefield under your control."
+# As in the Bolt scenario the Bears die on turn 4 wearing it (3/3, one creature card in Bot1's graveyard) and the trigger goes on the stack.
+# In response Bot2 exiles the Aura from Bot1's graveyard with Cling to Dust: it is a new object (CR 400.7), so the trigger returns nothing
+# (the 2011-09-22 Angelic Destiny ruling) while it still mills three cards. Bot1 chooses no creature card ("up to one"): Giant Spider and
+# Hill Giant stay in the graveyard, the Destiny stays in exile and Bot1's hand is only its Island.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Grizzly Bears
+Grizzly Bears
+Island
+Avatar Destiny
+Giant Spider
+Forest
+Hill Giant
+Island x11
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Lightning Bolt
+Cling to Dust
+Island
+Island
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Grizzly Bears#1.Cast
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears#1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Avatar Destiny.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 3
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Cling to Dust.Cast(Bot1.Graveyard.Avatar Destiny)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose()
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Island
+Bot1.Graveyard = Hill Giant; Forest; Giant Spider; Grizzly Bears; Grizzly Bears
+Exile = Avatar Destiny
+Bot1.Battlefield.Count = 4
+Bot1.Library.Count = 11

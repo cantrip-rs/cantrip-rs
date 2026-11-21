@@ -1,6 +1,7 @@
 //! Ferocious (CR 207.2c, an ability word with no rules meaning of its own): "if you control a creature with power 4 or
 //! greater". Stubborn Denial, Fanatic of Rhonas and Bolt Bend print it, the last without the word, and Nighthowl
-//! Pursuer and Ravening Warg as a trigger condition (`you_control_asked`); Temur Battlecrier and Dragonhawk, Fate's Tempest count such creatures.
+//! Pursuer and Ravening Warg as a trigger condition (`you_control_asked`); Temur Battlecrier, Dragonhawk, Fate's Tempest and The Boulder, Ready to Rumble count
+//! such creatures.
 
 use cantrip_api::*;
 

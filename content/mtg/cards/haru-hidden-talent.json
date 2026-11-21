@@ -1,0 +1,8 @@
+{
+  "name": "Haru, Hidden Talent",
+  "manaCost": "{1}{G}",
+  "type": "Legendary Creature — Human Peasant Ally",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Whenever another Ally you control enters, earthbend 1. (Target land you control becomes a 0/0 creature with haste that's still a land. Put a +1/+1 counter on it. When it dies or is exiled, return it to the battlefield tapped.)"
+}

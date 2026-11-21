@@ -1,0 +1,52 @@
+# Earth Rumble: the creature that fights is "up to one target creature you control", not necessarily the earthbent land. Bot1's
+# Grizzly Bears fights Bot2's Elvish Mystic while the earthbent Forest stays out of it (no damage on it). The second target must be an
+# opponent's creature: Bot1's own Bears and Forest are refused for it, and an opponent's creature is refused for the first (CR 603.12, 701.14a).
+
+[Bot1 Deck]
+Forest
+Forest
+Black Lotus
+Grizzly Bears
+Earth Rumble
+Forest x16
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Hand.Earth Rumble.Cast(Bot1.Battlefield.Forest#2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Elvish Mystic)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot1.Battlefield.Forest#2)
+Bot1.Target(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Elvish Mystic = (absent)
+Bot1.Battlefield.Grizzly Bears.Damage = 1
+Bot1.Battlefield.Forest#2.Types = Land; Creature
+Bot1.Battlefield.Forest#2.Damage = 0

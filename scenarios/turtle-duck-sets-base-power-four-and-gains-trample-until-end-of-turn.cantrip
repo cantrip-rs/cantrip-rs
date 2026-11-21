@@ -1,0 +1,40 @@
+# Turtle-Duck: "{3}: Until end of turn, this creature has base power 4 and gains trample." The 0/4 Duck is 4/4 with trample once the
+# ability resolves (Black Lotus pays the {3} exactly) and is a 0/4 with no trample again on the opponent's turn (CR 514.2, 611.2a, 613.4b).
+
+[Bot1 Deck]
+Mox Emerald
+Turtle-Duck
+Black Lotus
+Forest x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Turtle-Duck.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Turtle-Duck.Power = 0
+? Bot1.Battlefield.Turtle-Duck.Keywords = (absent)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Turtle-Duck.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Turtle-Duck.Power = 4
+? Bot1.Battlefield.Turtle-Duck.Toughness = 4
+? Bot1.Battlefield.Turtle-Duck.Keywords = Trample
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Turtle-Duck.Power = 0
+? Bot1.Battlefield.Turtle-Duck.Toughness = 4
+? Bot1.Battlefield.Turtle-Duck.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.Turtle-Duck.Power = 0

@@ -1,0 +1,59 @@
+# Leaves from the Vine {1}{G} (Bot1 also has a second Ornithopter: three creatures, but "up to two" refuses a third target): "I - Mill three cards, then create a Food token." "II - Put a +1/+1 counter on each of up to two target creatures you control."
+# "III - Draw a card if there's a creature or Lesson card in your graveyard." Turn 1: Bot1 casts an Elvish Mystic and an Ornithopter, then the Saga, and chapter I
+# mills Elvish Mystic and two Forests and makes the Food. Turn 3: chapter II puts a counter on each of the Mystic and the Ornithopter. Turn 5: chapter III finds the
+# creature card in the graveyard, draws a card, and the Saga is sacrificed.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Jet
+Elvish Mystic
+Ornithopter
+Leaves from the Vine
+Ornithopter
+Elvish Mystic
+Forest
+Forest
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Leaves from the Vine.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Leaves from the Vine.Counters.Lore = 1
+? Bot1.Library.Count = 10
+? Bot1.Graveyard.Count = 3
+? Bot1.Battlefield.Food Token.Types = Artifact
+[T3 Bot1.Main1]
+! Bot1.Target(Elvish Mystic; Ornithopter#1; Ornithopter#2)
+Bot1.Target(Elvish Mystic; Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Mystic.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Ornithopter#1.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Leaves from the Vine.Counters.Lore = 2
+? Bot1.Library.Count = 9
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Library.Count = 7
+Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Elvish Mystic.Counters.PlusOnePlusOne = 1

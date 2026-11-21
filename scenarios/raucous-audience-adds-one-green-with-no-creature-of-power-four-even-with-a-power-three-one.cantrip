@@ -1,0 +1,39 @@
+# "{T}: Add {G}. If you control a creature with power 4 or greater, add {G}{G} instead." Bot1 casts Raucous Audience on turn 1,
+# and on turn 3 a Bejeweled Warg (power 3: one short of the threshold) joins it. The Audience itself is a 2/1, so it does not
+# make its own mana ferocious: tapping it adds a single {G}, and the {T} cost taps it.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Raucous Audience
+Bejeweled Warg
+Forest
+Forest
+Forest
+Forest x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Raucous Audience.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Bejeweled Warg.Cast
+Bot1.Pass
+Bot1.Battlefield.Raucous Audience.Activate
+? Bot1.Mana = {G}
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Raucous Audience.Tapped = true
+Bot1.Battlefield.Raucous Audience.Power = 2
+Bot1.Battlefield.Bejeweled Warg.Power = 3

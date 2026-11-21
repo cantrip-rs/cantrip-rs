@@ -1,0 +1,38 @@
+# Toph, the Blind Bandit: its power is a characteristic-defining ability, so Dress Down ("creatures lose all abilities") takes it away and the star is worth 0 (CR 208.2a,
+# 208.5), leaving a 0/3, although the earthbent Forest still has its two counters.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Toph, the Blind Bandit
+Forest x17
+
+[Bot2 Deck]
+Mox Sapphire
+Dress Down
+Island
+Island x17
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Toph, the Blind Bandit.Cast
+Bot1.Pass
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Toph, the Blind Bandit.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Dress Down.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Toph, the Blind Bandit.Power = 0
+Bot1.Battlefield.Toph, the Blind Bandit.Toughness = 3
+Bot1.Battlefield.Forest.Counters.PlusOnePlusOne = 2
+Stack.Count = 0

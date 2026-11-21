@@ -1,0 +1,46 @@
+# The Earth King: only creatures with power 4 or greater as attackers are declared trigger the ability (CR 508.1m, 603.2). The Earth King attacks alone with
+# power 2 (the Bear stays home): no trigger. Giant Growth makes it 5/5 once it is attacking, which is too late: nothing is fetched and the library is not shuffled.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+The Earth King
+Giant Growth
+Forest
+Forest
+Forest
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.The Earth King.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Attack(The Earth King > Bot2)
+? Stack.Count = 0
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.The Earth King)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Earth King.Power = 5
+? Stack.Count = 0
+Bot1.Pass
+Bot2.Pass
+
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 15
+Bot1.Shuffles = 0
+Bot1.Battlefield.Count = 4

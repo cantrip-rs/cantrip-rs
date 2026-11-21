@@ -1,0 +1,71 @@
+# Diligent Zookeeper: "+1/+1 for each of its creature types, to a maximum of 10" (CR 613.4c). Bot1 begins the game with seven Leylines of
+# Transformation (CR 103.6a) and later casts two Arcane Adaptations, each naming a creature type (CR 614.12a, 613.1d): its Llanowar Elves is an
+# Elf Druid with nine types more, eleven creature types and no Human among them. The Zookeeper gives it +10/+10, not +11/+11: an 11/11. The
+# Zookeeper is a Human (with the nine added types too) and gets nothing.
+
+[Bot1 Deck]
+Leyline of Transformation x7
+Black Lotus
+Arcane Adaptation
+Black Lotus
+Arcane Adaptation
+Forest
+Llanowar Elves
+Black Lotus
+Diligent Zookeeper
+Island x12
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Accept
+Bot1.Modes(Merfolk)
+Bot1.Accept
+Bot1.Modes(Goblin)
+Bot1.Accept
+Bot1.Modes(Zombie)
+Bot1.Accept
+Bot1.Modes(Wizard)
+Bot1.Accept
+Bot1.Modes(Soldier)
+Bot1.Accept
+Bot1.Modes(Knight)
+Bot1.Accept
+Bot1.Modes(Cleric)
+? Bot1.Battlefield.Count = 7
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Arcane Adaptation.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Warrior)
+[T9 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Arcane Adaptation.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Shaman)
+[T13 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Subtypes = Cleric; Druid; Elf; Goblin; Knight; Merfolk; Shaman; Soldier; Warrior; Wizard; Zombie
+? Bot1.Battlefield.Llanowar Elves.Power = 1
+[T17 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Diligent Zookeeper.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Power = 11
+Bot1.Battlefield.Llanowar Elves.Toughness = 11
+Bot1.Battlefield.Diligent Zookeeper.Power = 4
+Bot1.Battlefield.Diligent Zookeeper.Toughness = 4

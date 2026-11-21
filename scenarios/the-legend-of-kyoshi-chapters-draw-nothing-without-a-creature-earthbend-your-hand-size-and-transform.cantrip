@@ -1,0 +1,53 @@
+# The Legend of Kyoshi: chapter I draws nothing with no creature (greatest power 0); chapter II on turn 3 earthbends X where X is the number of cards in
+# Bot1's hand - two (the Island and the Swamp it just drew) - so the Forest becomes a 2/2 haste land creature that is an Island in addition to its other
+# types; chapter III on turn 5 exiles the Saga and returns it transformed as Avatar Kyoshi, a 5/4 legendary Avatar creature.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Mox Emerald
+The Legend of Kyoshi
+Forest
+Island
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.The Legend of Kyoshi.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 1
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Forest.Power = 2
+? Bot1.Battlefield.Forest.Types = Land; Creature
+? Bot1.Battlefield.Forest.Subtypes = Forest; Island
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Avatar Kyoshi.Power = 5
+Bot1.Battlefield.Avatar Kyoshi.Toughness = 4
+Bot1.Battlefield.Avatar Kyoshi.Types = Creature
+Bot1.Battlefield.Avatar Kyoshi.Subtypes = Avatar
+Bot1.Battlefield.Avatar Kyoshi.SummoningSick = true
+Bot1.Battlefield.The Legend of Kyoshi = (absent)

@@ -1,0 +1,68 @@
+# Invasion Tactics {4}{G}: "When this enchantment enters, creatures you control get +2/+2 until end of turn" (CR 611.2c, 514.2) and "Whenever one or more Allies
+# you control deal combat damage to a player, draw a card" (CR 510.2, 603.2c). Bot1 casts Stonework Puma (a 2/2 Ally) on turn 1 and, on turn 3, Expedition Envoy
+# (a 2/1 Ally) and then Invasion Tactics (Black Lotus and two Moxen): both Allies get +2/+2 (the Puma a 4/4, the Envoy a 4/3), Bot2's Ornithopter (0/2) does not.
+# The Puma attacks and deals 4: Bot2 is at 16 and Bot1 draws one card. On turn 5 they are a 2/2 and a 2/1 again.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Stonework Puma
+Black Lotus
+Invasion Tactics
+Expedition Envoy
+Island
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stonework Puma.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Expedition Envoy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Invasion Tactics.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Stonework Puma.Power = 4
+? Bot1.Battlefield.Stonework Puma.Toughness = 4
+? Bot1.Battlefield.Expedition Envoy.Power = 4
+? Bot1.Battlefield.Expedition Envoy.Toughness = 3
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Hand.Count = 1
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Stonework Puma > Bot2)
+[T3 Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+? Bot1.Hand.Count = 2
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Stonework Puma.Power = 2
+Bot1.Battlefield.Stonework Puma.Toughness = 2
+Bot1.Battlefield.Expedition Envoy.Power = 2
+Bot1.Battlefield.Expedition Envoy.Toughness = 1

@@ -1,0 +1,59 @@
+# Rebellious Captives: the exhaust ability is on the stack, so it resolves without its source. Bot2 kills the Captives with Lightning Bolt in
+# response: the counters have nothing to go on, but the land still becomes a 2/2 land creature with haste (CR 701.66a, 608.2b).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Rebellious Captives
+Forest
+Forest
+Forest x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island
+Island x17
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rebellious Captives.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Rebellious Captives.Activate(Target: Bot1.Battlefield.Forest#2)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Rebellious Captives)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Rebellious Captives
+Bot1.Battlefield.Forest#2.Power = 2
+Bot1.Battlefield.Forest#2.Toughness = 2
+Bot1.Battlefield.Forest#2.Types = Land; Creature
+Bot1.Battlefield.Forest#2.Counters.PlusOnePlusOne = 2
+Bot2.Graveyard = Lightning Bolt

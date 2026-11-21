@@ -1,0 +1,45 @@
+# Allies at Last with one Ally (Earth Kingdom Protectors, 1/1) and a non-Ally creature (Grizzly Bears, 2/2): the spell costs
+# {1}{G} (CR 702.41a: {1} less for the one Ally, the Bears are no Ally), paid exactly by two Forests. Any creature you
+# control may be a source, and each deals damage equal to its own power: 1 + 2 = 3 to Bot2's Wall of Mist (toughness 5).
+
+[Bot1 Deck]
+Forest
+Forest
+Mox Pearl
+Mox Emerald
+Earth Kingdom Protectors
+Grizzly Bears
+Allies at Last
+Island x12
+
+[Bot2 Deck]
+Island
+Black Lotus
+Wall of Mist
+Island x12
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Earth Kingdom Protectors.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wall of Mist.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Allies at Last.Cast
+Bot1.Target(Bot1.Battlefield.Earth Kingdom Protectors; Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Wall of Mist)
+? Bot1.Mana =
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Wall of Mist.Damage = 3

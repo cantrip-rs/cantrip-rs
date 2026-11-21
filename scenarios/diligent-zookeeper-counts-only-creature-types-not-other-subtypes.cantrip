@@ -1,0 +1,40 @@
+# Diligent Zookeeper: "+1/+1 for each of its creature types". Gingerbrute is an Artifact Creature - Food Golem: Golem is a creature type but Food
+# is an artifact type, so it counts one and the 1/1 becomes 2/2 (CR 205.3g, 205.3m, 613.4c), not 3/3.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Gingerbrute
+Island
+Island
+Diligent Zookeeper
+Island x14
+
+[Bot2 Deck]
+Island x22
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Gingerbrute.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gingerbrute.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Diligent Zookeeper.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Gingerbrute.Power = 2
+Bot1.Battlefield.Gingerbrute.Toughness = 2
+Bot1.Battlefield.Diligent Zookeeper.Power = 4

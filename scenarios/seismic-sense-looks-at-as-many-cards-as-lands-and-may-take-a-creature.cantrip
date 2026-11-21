@@ -1,0 +1,42 @@
+# Seismic Sense: "Look at the top X cards of your library, where X is the number of lands you control. You may reveal a creature
+# or land card from among them and put it into your hand. Put the rest on the bottom of your library in a random order."
+# (CR 701.20a). Bot1 controls two Forests, so X is two: it looks at the Lightning Bolt and the Grizzly Bears and not at the Island
+# under them, may take only the creature (not the Bolt, nor both), and the Bolt goes to the bottom of its library.
+
+[Bot1 Deck]
+Forest
+Forest
+Mox Emerald
+Seismic Sense
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Elvish Mystic
+Lightning Bolt
+Grizzly Bears
+Island
+Elvish Mystic x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Seismic Sense.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Lightning Bolt | Grizzly Bears)
+! Bot1.Arrange(Grizzly Bears; Lightning Bolt | )
+Bot1.Arrange(Grizzly Bears | Lightning Bolt)
+
+[Expect]
+Bot1.Hand.Grizzly Bears.Power = 2
+Bot1.Revealed = Grizzly Bears
+Bot1.Looked = Lightning Bolt; Grizzly Bears
+Bot1.Library.Count = 11
+Bot1.Graveyard = Seismic Sense

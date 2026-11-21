@@ -1,0 +1,8 @@
+{
+  "name": "Boiling Rock Rioter",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Human Rogue Ally",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Firebending 1 (Whenever this creature attacks, add {R}. This mana lasts until end of combat.)\nTap an untapped Ally you control: Exile target card from a graveyard.\nWhenever this creature attacks, you may cast an Ally spell from among cards you own exiled with this creature."
+}

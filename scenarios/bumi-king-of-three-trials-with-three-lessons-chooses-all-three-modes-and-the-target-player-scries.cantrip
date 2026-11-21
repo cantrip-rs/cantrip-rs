@@ -1,0 +1,73 @@
+# Bumi, King of Three Trials: three Lesson cards in Bot1's graveyard (Abandon Attachments, the Accumulate Wisdom it discards, and Boomerang
+# Basics cast on Bot1's own Mox Pearl) make X = 3 (CR 205.3k), so all three modes are chosen (CR 700.2): three +1/+1 counters on Bumi (7/7),
+# "Target player scries 3" aimed at Bot2, who looks at its own top three cards and puts one on the bottom (CR 701.22a), and "Earthbend 3"
+# on Bot1's Forest, a 3/3 haste land creature (CR 701.66a). The modes run in the order written.
+# (The fourth card in Bot1's graveyard is the sacrificed Black Lotus.)
+
+[Bot1 Deck]
+Forest
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Abandon Attachments
+Boomerang Basics
+Accumulate Wisdom
+Mox Pearl
+Mox Jet
+Black Lotus
+Bumi, King of Three Trials
+Forest x11
+
+[Bot2 Deck]
+Island x8
+Forest
+Mountain
+Swamp
+Island x11
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Abandon Attachments.Cast
+Bot1.Choose(Accumulate Wisdom)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Boomerang Basics.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: G)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bumi, King of Three Trials.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1; 2; 3)
+Bot1.Target(Bot2)
+Bot2.Pass
+Bot2.Arrange(Swamp; Forest | Mountain)
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Bumi, King of Three Trials.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Bumi, King of Three Trials.Power = 7
+Bot1.Battlefield.Forest.Power = 3
+Bot1.Battlefield.Forest.Toughness = 3
+Bot2.Library.Count = 14
+Bot2.Library.Top = Swamp
+Bot2.Library = Swamp; Forest; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Mountain

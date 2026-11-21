@@ -589,7 +589,7 @@ pub fn untapped_you_control<const TYPES: u16>(q: &dyn Query, asker: &Asker, id: 
 /// controller's with the creature type `SUBTYPE` (`lands::sub`) as the layers made it, a changeling included, the source itself among them
 /// if it has the type, and one that came under their control this turn too (CR 302.6 limits only a creature's own {T} ability). The type
 /// is read through the words of the text of the object that asks (CR 612.2). High Perfect Morcant and Lathril, Blade of the Elves (Elves),
-/// Q, Your Illustrious Host (Faeries) and Villainous Syndication (Villains) print it.
+/// Q, Your Illustrious Host (Faeries), Villainous Syndication (Villains) and Boiling Rock Rioter (an Ally) print it.
 pub fn untapped_subtype_you_control<const SUBTYPE: u16>(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
     q.controller(id) == asker.controller && !q.obj(id).tapped && q.chars(id).has_subtype(lands::word(q, asker.source, SUBTYPE))
 }

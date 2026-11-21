@@ -1,0 +1,38 @@
+# "If you control a creature with power 4 or greater, add {G}{G} instead": Bot1 casts Surrak, Elusive Hunter (power 4, exactly
+# the threshold) on turn 3, and the Audience then taps for {G}{G}: two mana in place of one, not three.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Raucous Audience
+Surrak, Elusive Hunter
+Forest
+Forest
+Forest
+Forest x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Raucous Audience.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Surrak, Elusive Hunter.Cast
+Bot1.Pass
+Bot1.Battlefield.Raucous Audience.Activate
+? Bot1.Mana = {G}{G}
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Raucous Audience.Tapped = true
+Bot1.Battlefield.Surrak, Elusive Hunter.Power = 4

@@ -1,0 +1,68 @@
+# Fatal Fissure {1}{B}: "Choose target creature. When that creature dies this turn, you earthbend 4." Bot1 chooses Bot2's Elvish Mystic and
+# kills it with Lightning Bolt the same turn: the delayed ability triggers and its land is chosen then (Bot2's Mountain is refused: "target land you
+# control"), a 4/4 haste land creature. Bot2 then Bolts the land twice (6 damage): it dies and the earthbend's own delayed ability returns it
+# tapped as a plain land, with no counters (CR 603.7c, 701.66a).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Fatal Fissure
+Lightning Bolt
+Forest
+Forest
+Forest
+Forest x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mountain
+Elvish Mystic
+Lightning Bolt
+Lightning Bolt
+Forest
+Forest x13
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Hand.Fatal Fissure.Cast(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Elvish Mystic.Damage = 0
+? Bot1.Battlefield.Forest#2.Types = Land
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Mountain)
+Bot1.Target(Bot1.Battlefield.Forest#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest#2.Power = 4
+? Bot1.Battlefield.Forest#2.Counters.PlusOnePlusOne = 4
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Forest#2)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Forest#2)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt; Elvish Mystic
+Bot1.Graveyard = Lightning Bolt; Fatal Fissure
+Bot1.Battlefield.Forest#2.Types = Land
+Bot1.Battlefield.Forest#2.Tapped = true

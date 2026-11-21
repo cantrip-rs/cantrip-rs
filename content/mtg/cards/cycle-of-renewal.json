@@ -1,0 +1,6 @@
+{
+  "name": "Cycle of Renewal",
+  "manaCost": "{2}{G}",
+  "type": "Instant — Lesson",
+  "oracleText": "Sacrifice a land. Search your library for up to two basic land cards, put them onto the battlefield tapped, then shuffle."
+}

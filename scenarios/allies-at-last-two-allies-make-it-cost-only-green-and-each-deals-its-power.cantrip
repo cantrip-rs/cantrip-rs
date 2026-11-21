@@ -1,0 +1,50 @@
+# Allies at Last: "Affinity for Allies. Up to two target creatures you control each deal damage equal to their power to
+# target creature an opponent controls." Two Allies (Earth Kingdom Protectors, 1/1 each) cut the generic {2} to nothing
+# (CR 702.41a), so a lone Forest pays {G}. Both Allies are chosen as sources: 1 + 1 damage is dealt to Bot2's Wall of
+# Mist. Bot2's own creature is no source target and Bot1's creature no recipient.
+
+[Bot1 Deck]
+Forest
+Mox Pearl
+Mox Pearl
+Earth Kingdom Protectors
+Earth Kingdom Protectors
+Allies at Last
+Forest
+Island x12
+
+[Bot2 Deck]
+Island
+Black Lotus
+Wall of Mist
+Island x12
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Earth Kingdom Protectors.Cast
+Bot1.Hand.Earth Kingdom Protectors.Cast
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wall of Mist.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+? Bot1.Mana = {G}
+! Bot1.Hand.Allies at Last.Cast(Bot2.Battlefield.Wall of Mist; Bot2.Battlefield.Wall of Mist)
+Bot1.Hand.Allies at Last.Cast
+! Bot1.Target(Bot2.Battlefield.Wall of Mist)
+Bot1.Target(Bot1.Battlefield.Earth Kingdom Protectors#1; Bot1.Battlefield.Earth Kingdom Protectors#2)
+! Bot1.Target(Bot1.Battlefield.Earth Kingdom Protectors#1)
+Bot1.Target(Bot2.Battlefield.Wall of Mist)
+? Bot1.Mana =
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Wall of Mist.Damage = 2
+Bot1.Battlefield.Earth Kingdom Protectors#1.Damage = 0
+Bot1.Graveyard = Allies at Last

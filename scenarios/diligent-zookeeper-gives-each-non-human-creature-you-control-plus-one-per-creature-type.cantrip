@@ -1,0 +1,58 @@
+# Diligent Zookeeper {3}{G}: "Each non-Human creature you control gets +1/+1 for each of its creature types, to a maximum of 10."
+# Bot1 controls Llanowar Elves (Elf Druid, 1/1) and Elite Vanguard (Human Soldier, 2/1) when it casts the 4/4 Human Citizen Ally on turn 3:
+# the Elves get +2/+2 (two types, CR 205.3m, 613.4c) and are 3/3, while the Vanguard and the Zookeeper itself, Humans, are unchanged.
+# Bot2's Grizzly Bears (Bear, 2/2) are not "you control" and stay 2/2.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Mox Pearl
+Llanowar Elves
+Elite Vanguard
+Diligent Zookeeper
+Island x14
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Island x19
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elite Vanguard.Cast
+? Bot1.Battlefield.Llanowar Elves.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Diligent Zookeeper.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Power = 3
+Bot1.Battlefield.Llanowar Elves.Toughness = 3
+Bot1.Battlefield.Elite Vanguard.Power = 2
+Bot1.Battlefield.Elite Vanguard.Toughness = 1
+Bot1.Battlefield.Diligent Zookeeper.Power = 4
+Bot1.Battlefield.Diligent Zookeeper.Toughness = 4
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Grizzly Bears.Toughness = 2

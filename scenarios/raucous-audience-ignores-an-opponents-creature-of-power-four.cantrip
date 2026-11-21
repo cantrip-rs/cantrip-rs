@@ -1,0 +1,42 @@
+# "If you control a creature with power 4 or greater": Bot2's Sunset Saboteur (power 4) is not Bot1's, so on turn 5 the Audience
+# still taps for a single {G}.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Raucous Audience
+Forest
+Forest
+Forest
+Forest x14
+
+[Bot2 Deck]
+Swamp
+Swamp
+Sunset Saboteur
+Swamp x17
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Raucous Audience.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp#1.Activate
+Bot2.Battlefield.Swamp#2.Activate
+Bot2.Hand.Sunset Saboteur.Cast
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Raucous Audience.Activate
+? Bot1.Mana = {G}
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot2.Battlefield.Sunset Saboteur.Power = 4
+Bot1.Battlefield.Raucous Audience.Tapped = true

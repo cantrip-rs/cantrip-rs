@@ -1,0 +1,76 @@
+# Boiling Rock Rioter: "you may cast an Ally spell from among cards you own exiled with this creature": one spell, not one for each card, and the cards
+# were exiled for good, not only until the Rioter leaves (it is no Oblivion Ring). On turn 3 and turn 5 the Rioter taps itself, its only Ally then, to exile
+# an Earth Kingdom Protectors and a Gran-Gran that Bot1's own Lightning Bolts killed; it does not attack either turn. Turn 7 it attacks with Mox Pearl
+# and Mox Sapphire untapped, so both exiled Allies could be paid for: Bot1 chooses Gran-Gran, casts it for {U}, and is not offered the Protectors.
+# Turn 8 Bot2's Lightning Bolt kills the Rioter and the Protectors stays in exile.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Boiling Rock Rioter
+Earth Kingdom Protectors
+Gran-Gran
+Lightning Bolt
+Lightning Bolt
+Swamp x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Boiling Rock Rioter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Earth Kingdom Protectors.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Gran-Gran.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Earth Kingdom Protectors)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Boiling Rock Rioter.Activate(Ability: Tap an untapped Ally; Bot1.Graveyard.Earth Kingdom Protectors)
+Bot1.Choose(Boiling Rock Rioter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Earth Kingdom Protectors
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Gran-Gran)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Boiling Rock Rioter.Activate(Ability: Tap an untapped Ally; Bot1.Graveyard.Gran-Gran)
+Bot1.Pass
+Bot2.Pass
+? Exile = Earth Kingdom Protectors; Gran-Gran
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Boiling Rock Rioter > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Gran-Gran)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gran-Gran.Types = Creature
+? Exile = Earth Kingdom Protectors
+[T8 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Boiling Rock Rioter)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Boiling Rock Rioter; Lightning Bolt; Lightning Bolt
+Exile = Earth Kingdom Protectors
+Bot1.Battlefield.Mox Pearl.Tapped = false

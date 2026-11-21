@@ -1,0 +1,69 @@
+# Boiling Rock Rioter: "you may cast an Ally spell from among cards you own exiled with this creature". Bot2's Gran-Gran (an Ally) dies to Bot1's
+# Lightning Bolt on turn 3 and the Rioter exiles it, tapping Earth Kingdom Protectors. On turn 5 Bot1's own Bolt is exiled the same way. When the Rioter
+# attacks, with {U} (Mox Sapphire) and {R} (Mountain) both untapped, neither card is offered: Gran-Gran is an Ally but Bot2 owns it, the Bolt is Bot1's
+# but is not an Ally spell. Nothing is asked, both cards stay in exile, and the firebending {R} is still added.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Boiling Rock Rioter
+Earth Kingdom Protectors
+Lightning Bolt
+Mountain
+Swamp x14
+
+[Bot2 Deck]
+Mox Sapphire
+Gran-Gran
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Boiling Rock Rioter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Earth Kingdom Protectors.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Gran-Gran.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Gran-Gran)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Gran-Gran
+Bot1.Battlefield.Boiling Rock Rioter.Activate(Ability: Tap an untapped Ally; Bot2.Graveyard.Gran-Gran)
+Bot1.Choose(Earth Kingdom Protectors)
+Bot1.Pass
+Bot2.Pass
+? Exile = Gran-Gran
+[T5 Bot1.Main1]
+Bot1.Battlefield.Boiling Rock Rioter.Activate(Ability: Tap an untapped Ally; Bot1.Graveyard.Lightning Bolt)
+Bot1.Choose(Earth Kingdom Protectors)
+Bot1.Pass
+Bot2.Pass
+? Exile = Gran-Gran; Lightning Bolt
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Boiling Rock Rioter > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R} lasting {R}
+? Stack.Count = 0
+[T5 Bot1.Damage]
+
+[Expect]
+Bot2.Life = 17
+Exile = Gran-Gran; Lightning Bolt
+Bot1.Battlefield.Mountain.Tapped = false
+Bot1.Battlefield.Mox Sapphire.Tapped = false
