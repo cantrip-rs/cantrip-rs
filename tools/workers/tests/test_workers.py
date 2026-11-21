@@ -451,6 +451,17 @@ class Calls(Case):
         cmd = access.ssh_command(self.m.pool, m)
         self.assertIn("HostKeyAlias=cantrip-vast-7001", cmd)
 
+    def test_the_known_hosts_path_is_quoted_only_when_it_has_spaces(self):
+        # Windows' OpenSSH refuses UserKnownHostsFile="..." passed through the C runtime's escaped quotes.
+        m = dict(name="w", os="windows", host="192.0.2.5", user="u")
+        (known,) = [x for x in access.ssh_command(self.m.pool, m) if x.startswith("UserKnownHostsFile=")]
+        self.assertNotIn('"', known)
+        from types import SimpleNamespace  # noqa: PLC0415
+
+        spaced = SimpleNamespace(store=SimpleNamespace(known_hosts="C:\\a b\\known_hosts"), key_path=lambda _m: None)
+        (known,) = [x for x in access.ssh_command(spaced, m) if x.startswith("UserKnownHostsFile=")]
+        self.assertEqual(known, 'UserKnownHostsFile="C:/a b/known_hosts"')
+
 
 class Renting(Case):
     def setUp(self):

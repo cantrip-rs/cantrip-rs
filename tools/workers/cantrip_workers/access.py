@@ -31,7 +31,9 @@ def common_options(pool, m: dict) -> list[str]:
     remembered there; one whose key changed is refused), a rented box under a name of its own (its address may have
     been another box's), and the key."""
     known = str(pool.store.known_hosts).replace("\\", "/")
-    out = [*SSH_OPTIONS, "-o", f'UserKnownHostsFile="{known}"']
+    # Quoted only when it has to be: Windows' OpenSSH refuses a quoted value that reaches it through the C runtime's
+    # escaped quotes ("command-line line 0: invalid quotes"), and a path without spaces needs none.
+    out = [*SSH_OPTIONS, "-o", f'UserKnownHostsFile="{known}"' if any(c.isspace() for c in known) else f"UserKnownHostsFile={known}"]
     if m.get("alias"):
         out += ["-o", f"HostKeyAlias={m['alias']}"]
     key = pool.key_path(m)
