@@ -1,0 +1,11 @@
+{
+  "name": "Messenger Hawk",
+  "manaCost": "{2}{U/B}",
+  "type": "Creature — Bird Scout",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying\nWhen this creature enters, create a Clue token. (It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")\nThis creature gets +2/+0 as long as you've drawn two or more cards this turn.",
+  "keywords": [
+    "Flying"
+  ]
+}

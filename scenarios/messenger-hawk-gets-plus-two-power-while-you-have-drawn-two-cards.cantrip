@@ -1,0 +1,60 @@
+# Messenger Hawk {2}{U/B}, 1/2 flying: "When this creature enters, create a Clue token" and "This creature gets +2/+0 as long as you've
+# drawn two or more cards this turn" (CR 121.1, 611.3a). The Clue arrives on entering. Turn 3: the draw step is the first card (still 1/2),
+# cracking the Clue the second (3/2). Turn 4, Bot2's: no card of Bot1's this turn (1/2, and Bot2's own draw does not count); two Opts at
+# instant speed are Bot1's first and second cards (3/2 only after the second).
+
+[Bot1 Deck]
+Messenger Hawk
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Opt
+Opt
+Island
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Messenger Hawk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Clue Token; Messenger Hawk; Mox Jet; Mox Ruby; Mox Sapphire
+? Bot1.Battlefield.Messenger Hawk.Power = 1
+? Bot1.Battlefield.Messenger Hawk.Toughness = 2
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Messenger Hawk.Power = 1
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Clue Token.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Messenger Hawk.Power = 3
+? Bot1.Battlefield.Messenger Hawk.Toughness = 2
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Messenger Hawk.Power = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Arrange(Plains |)
+? Bot1.Battlefield.Messenger Hawk.Power = 1
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Arrange(Plains |)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Messenger Hawk.Power = 3
+Bot1.Battlefield.Messenger Hawk.Keywords = Flying
