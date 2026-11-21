@@ -102,8 +102,19 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-172](#ki-172-a-resolutions-unless-pays-question-for-a-tap-cost-reads-pay-0) | A resolution's "unless pays" question for a tap cost reads "pay {0}?" | Pri-2 | Open |
 | [KI-173](#ki-173-a-scenarios-casttap--key-is-ignored-for-an-additional-tap-cost) | A scenario's `Cast(Tap: ...)` key is ignored for an additional tap cost | Pri-2 | Open |
 | [KI-174](#ki-174-vizier-of-the-menageries-any-type-rule-has-no-scenario-that-tells-it-from-any-color) | Vizier of the Menagerie's any-type rule has no scenario that tells it from any-color | Pri-2 | Open |
+| [KI-175](#ki-175-the-x-announcement-never-says-when-x-is-paid-in-life) | The X announcement never says when X is paid in life | Pri-2 | Open |
 
 ## Issues
+
+### KI-175: The X announcement never says when X is paid in life
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-2 | Open | client | 2026-11-21, review of PR #3243 |
+
+**Notes.** `PayCostsPrompt.x_paid_in_life` exists on the wire but `crates/cantrip-host/src/prompt.rs` never sets it, so it
+is always false and the X announcement for an X paid in life (Krumar Initiate, Toxic Deluge, Fire Covenant) reads as if X
+were mana. The engine pays the right cost; the caption should say the X is life.
 
 ### KI-174: Vizier of the Menagerie's any-type rule has no scenario that tells it from any-color
 
