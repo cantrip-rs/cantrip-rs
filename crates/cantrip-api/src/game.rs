@@ -91,6 +91,9 @@ pub struct CastTerms {
     pub exile_instead: ExileInstead,
     /// Cast with flashback (CR 702.34a): exiled instead of put anywhere else any time it would leave the stack.
     pub flashback: bool,
+    /// Cast with harmonize (CR 702.180a): a creature may be tapped for its power off the generic mana of the cost, and the
+    /// spell is exiled instead of put anywhere else any time it would leave the stack.
+    pub harmonize: bool,
     /// Cast a copy of the card, which stays where it is (CR 707.12, 702.170a): the copy is a card_copy in the same zone, and
     /// ceases to exist when it leaves the stack or the cast is given up.
     pub copy: bool,

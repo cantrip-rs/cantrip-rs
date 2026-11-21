@@ -1528,6 +1528,9 @@ from your graveyard as an Adventure"): neither the card itself nor another face 
 A spell cast by a permission may be paid for with life equal to its mana value rather than its mana cost
 (`PlayGrant::life_for_mana_value`, CR 118.9, 119.4: Inside Information), as Bolas's Citadel's rule pays for the top of a library
 (`actions::life_for_mana_value`, the face cast, X as 0); no other alternative cost goes with it (CR 118.9a).
+A permission may give harmonize (`PlayGrant::harmonize`, CR 702.180a: Songcrafter Mage): the card's mana cost, or the one `instead` names, with
+the creature to tap for its power chosen as the cost is chosen (`Cost::tap_to_reduce`, as a printed harmonize way's is), and the spell
+exiled as it leaves the stack, as flashback is; it is an alternative cost, so no other goes with it.
 
 The cleanup step removes all marked damage (CR 514.2) except from a permanent a static ability keeps it on:
 `CardDef::damage_stays` (`DamageStaysRule`, asked of each damaged permanent by the permanents on the battlefield with their
@@ -2182,8 +2185,8 @@ offered whenever an instant could be cast, by a permission that does not say whe
 casting at such a time (Teferi, Time Raveler) still does (CR 101.2). Each face is judged alone (CR 709.3a, 715.3a, 712.8a), in
 the zone it is cast from; one that two permanents of a player give is one choice. It is offered whether or not the mana cost
 could be paid, and for a card with no mana cost (CR 118.6a). It is the one alternative cost of the cast (CR 118.9a), so it is
-not offered with a route that names one: a permission's "without paying" or "rather than" (`PlayGrant::instead`), flashback a
-permission gives, life for its mana value (Inside Information, Bolas's Citadel), a card's own ways, or a way a permanent gives
+not offered with a route that names one: a permission's "without paying" or "rather than" (`PlayGrant::instead`), flashback or
+harmonize a permission gives, life for its mana value (Inside Information, Bolas's Citadel), a card's own ways, or a way a permanent gives
 that is its cost. Additional costs (kicker, a permission's `more`, an `ExileCast`'s, retrace's discard) are still paid (CR
 118.9d), what changes the total applies to it (CR 601.2f: Thalia, Trinisphere, Terror of the Peaks), and X is 0 (CR 107.3b).
 A cast an effect makes as it resolves paying its costs (`cast_during_resolution` with no `instead`, CR 608.2g: Chandra, Torch

@@ -1478,6 +1478,9 @@ impl<'a> Projector<'a> {
         if grant.flashback {
             text.push_str(", then exiled");
         }
+        if grant.harmonize {
+            text.push_str(", for its harmonize cost, then exiled");
+        }
         if grant.exile_instead != ExileInstead::Never {
             text.push_str(", exiled instead of put into the graveyard");
         }

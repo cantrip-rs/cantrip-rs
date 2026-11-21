@@ -2263,6 +2263,11 @@ pub struct PlayGrant {
     /// cast this way is exiled instead of put anywhere else any time it would leave the stack. A flashback granted by
     /// Snapcaster Mage or Flashback.
     pub flashback: bool,
+    /// It is harmonize (CR 702.180a): an alternative cost, the card's mana cost unless `instead` names another, of which an
+    /// untapped creature the caster controls may be tapped for its power off the generic mana (CR 702.180b), and a spell cast
+    /// this way is exiled instead of put anywhere else any time it would leave the stack (CR 702.180a). Songcrafter Mage's
+    /// "target instant or sorcery card in your graveyard gains harmonize until end of turn".
+    pub harmonize: bool,
     /// "If that spell would be put into your graveyard, exile it instead" (CR 614.1a): no alternative cost, and only a move
     /// to the graveyard is replaced (`ExileInstead`). Jace, Telepath Unbound's "you may cast target instant or sorcery card
     /// from your graveyard this turn".
@@ -2383,7 +2388,7 @@ impl PlayGrant {
     /// "It becomes plotted" (CR 702.170a, 702.170d): its owner may cast it without paying its mana cost, as a sorcery, on a later turn.
     pub const PLOT: PlayGrant = PlayGrant { instead: Some(ManaCost::ZERO), later_turns: true, sorcery_speed: true, ..PlayGrant::CAST };
     /// "You may cast it": for as long as it stays where it is, for its mana cost.
-    pub const CAST: PlayGrant = PlayGrant { instead: None, lands: false, expiry: Expiry::Never, any_type: false, any_color: false, more: 0, later_turns: false, flashback: false, exile_instead: ExileInstead::Never, when: None, sorcery_speed: false, enters_tapped: false, adventure_only: false, life_for_mana_value: false };
+    pub const CAST: PlayGrant = PlayGrant { instead: None, lands: false, expiry: Expiry::Never, any_type: false, any_color: false, more: 0, later_turns: false, flashback: false, harmonize: false, exile_instead: ExileInstead::Never, when: None, sorcery_speed: false, enters_tapped: false, adventure_only: false, life_for_mana_value: false };
 }
 
 /// A standing permission to play or cast one card from a zone it could not be played from (CR 601.3, 305.1): "until

@@ -369,6 +369,9 @@ static CREATURE_TAP_EXTRA: CardDef = CardDef {
 };
 
 /// A creature whose mana ability doesn't tap it ("Pay 1 life: Add {C}"): no tap for mana (CR 106.12).
+/// A creature with power 2 and nothing else: what a harmonize cost taps (CR 702.180a).
+static BEAR: CardDef = CardDef { name: "Route Bear", types: TypeSet::of(&[CardType::Creature]), power: Some(2), toughness: Some(2), ..CardDef::BLANK };
+
 static UNTAPPED_MANA_CREATURE: CardDef = CardDef {
     name: "Route Untapped Mana Creature",
     types: TypeSet::of(&[CardType::Creature]),
@@ -478,6 +481,7 @@ fn table() -> &'static CardTable {
             &ENERGY_SPELL,
             &ENERGY_GAIN,
             &CREATURE_TAP_EXTRA,
+            &BEAR,
             &UNTAPPED_MANA_CREATURE,
             &TAPPED_MANA_CREATURE,
             &GREEN_SPELL,
@@ -565,6 +569,8 @@ fn resolve(game: &mut RulesGame) {
                 let picked = eligible.iter().copied().find(|&i| matches!(modes[i as usize], Label::Way(..) | Label::AlternativeCost(..) | Label::LastingAlternativeCost(..)));
                 Answer::Modes(vec![picked.or(eligible.first().copied()).expect("a mode")])
             }
+            // The creature a harmonize cost taps (CR 702.180a, 601.2b): the first.
+            RequestKind::TapForPower { cards, .. } => Answer::Cards(vec![cards[0]]),
             RequestKind::PayCosts { options, .. } => {
                 let confirm = options
                     .iter()
@@ -1314,4 +1320,38 @@ fn alternate_way_discard_can_feed_permission_graveyard_exile() {
     assert_eq!(item.kind, StackKind::Spell);
     assert_eq!(game.history().spell_cost_objects(item.object, CostOrigin::CastingWay, 0, CostPart::Discard(0)).collect::<Vec<_>>(), vec![card]);
     assert_eq!(game.history().spell_cost_objects(item.object, CostOrigin::PermissionAdditional, 0, CostPart::GraveyardExile).collect::<Vec<_>>(), vec![discarded]);
+}
+
+/// CR 702.180a, 601.2b-f: harmonize a permission gives (Songcrafter Mage) is an alternative cost - the card's mana cost - that
+/// an untapped creature's power comes off, the creature tapped as the cost is chosen, and the spell cast by it is exiled
+/// instead of put anywhere else as it leaves the stack. It is offered only where some creature's power covers what the mana
+/// in the pool does not; the same permission without harmonize is not offered at all.
+#[test]
+fn a_harmonize_a_permission_gives_taps_a_creature_for_its_power_and_exiles_the_spell() {
+    let harmonize = PlayGrant { harmonize: true, ..PlayGrant::CAST };
+    // The mana cost is {2}: no creature does not cover it, one with power 1 does not, one with power 2 does, and a cast
+    // without harmonize is not paid by it.
+    for (creature, grant, offered) in [
+        (None, harmonize, false),
+        (Some("Route Untapped Mana Creature"), harmonize, false),
+        (Some("Route Bear"), PlayGrant::CAST, false),
+        (Some("Route Bear"), harmonize, true),
+    ] {
+        let (mut game, spell) = game_with("Route Probe", Zone::graveyard, 0);
+        let source = put(&mut game, "Route Permission Source", ME);
+        let tapper = creature.map(|name| put(&mut game, name, ME));
+        game.state.permission_push(permission(spell, source, grant));
+        game.run();
+        let options = casts_of(&game, spell);
+        assert_eq!(options.iter().any(|o| by(o) == Some(source)), offered, "{creature:?} {grant:?}");
+        if !offered {
+            continue;
+        }
+        take(&mut game, &options[0]);
+        resolve(&mut game);
+        let probe = game.cards.find("Route Probe").unwrap();
+        assert!(game.state.obj(tapper.unwrap()).tapped, "the creature is tapped for the cost");
+        assert!(in_zone(&game, Zone::exile(ME), probe), "exiled as it leaves the stack");
+        assert!(!in_zone(&game, Zone::graveyard(ME), probe));
+    }
 }

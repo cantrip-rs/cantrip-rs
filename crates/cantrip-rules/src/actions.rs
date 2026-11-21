@@ -9566,7 +9566,7 @@ impl Route {
     /// (CR 118.9a). Flashback a permission gives is one too, though its cost is the mana cost (CR 702.34a; Snapcaster
     /// Mage's ruling).
     fn imposes(&self) -> bool {
-        self.terms.instead.is_some() || self.terms.life_for_mana_value || self.terms.flashback
+        self.terms.instead.is_some() || self.terms.life_for_mana_value || self.terms.flashback || self.terms.harmonize
     }
 
     /// The mana it has the face cast for, before what the cast adds: what it names instead, or the face's mana cost.
@@ -9659,10 +9659,16 @@ impl<'a> Offer<'a> {
         let base = add_cost(base, route.additional.mana);
         let covered = |targets: &[Target], earlier: &Earlier| {
             // The permission that casts it says what mana may pay it (CR 609.4b).
-            least_cost(cx, a, player, card, face, base, targets, earlier, &mut |least| {
-                covers_total(cx, a, player, card, face, least, route.additional.exile_from_graveyard, route.any_mana())
-            })
-                && added_life_payable(cx, a, player, card, face, targets, earlier)
+            (if route.terms.harmonize {
+                // Harmonize (CR 702.180a): covered too once some untapped creature is tapped for its power, as a harmonize way of
+                // the card's own is.
+                let harmonize = Cost { tap_to_reduce: true, ..Cost::NONE };
+                way_covered(cx, a, player, card, face, &Cost { mana: base, exile_from_graveyard: route.additional.exile_from_graveyard, ..harmonize }, &harmonize, route.any_mana())
+            } else {
+                least_cost(cx, a, player, card, face, base, targets, earlier, &mut |least| {
+                    covers_total(cx, a, player, card, face, least, route.additional.exile_from_graveyard, route.any_mana())
+                })
+            }) && added_life_payable(cx, a, player, card, face, targets, earlier)
         };
         let mut option = ActionOption { granted_by: route.by, paid_by: paid_by.map(|alt| alt.grant), ..ActionOption::on(ActionKind::CastSpell, card, way) };
         // The cost of the card's own "you may cast this spell as though it had flash if you pay {2} more" (CR 601.2b), owed where
@@ -10611,11 +10617,13 @@ fn describe_cast(cards: &'static CardTable, state: &GameState, log: &[Record], o
                     _ => format!("{face_label}: cast by paying {life} life instead").into(),
                 };
             }
-            if option.index == 0 && (route.terms.instead.is_some() || route.terms.flashback) {
-                // A flashback granted costs the card's own mana cost unless the grant names another.
+            if option.index == 0 && (route.terms.instead.is_some() || route.terms.flashback || route.terms.harmonize) {
+                // A flashback or harmonize granted costs the card's own mana cost unless the grant names another.
                 let cost = route.terms.instead.unwrap_or(whole.cost);
                 return if route.terms.flashback {
                     format!("Flashback {cost}").into()
+                } else if route.terms.harmonize {
+                    format!("Harmonize {cost}").into()
                 } else if cost == ManaCost::ZERO {
                     "Cast without paying its mana cost".into()
                 } else {
@@ -10756,6 +10764,8 @@ pub fn act(cx: &mut Cx, player: PlayerId) -> R<Flow> {
                 more: u32::from(route.terms.more),
                 // A flashback a permission gives (Snapcaster Mage, CR 702.34a).
                 flashback: route.terms.flashback,
+                // A harmonize a permission gives (Songcrafter Mage, CR 702.180a).
+                harmonize: route.terms.harmonize,
                 // "If that spell would be put into your graveyard, exile it instead" (Jace, Telepath Unbound's).
                 exile_instead: route.terms.exile_instead,
                 ..CastTerms::default()
@@ -11013,7 +11023,7 @@ fn cast(
     by: CastBy,
     resolving: bool,
 ) -> R<()> {
-    let CastTerms { instead, any_type, any_color, exile_instead, flashback, life, discard: _, more, less, copy: _, way: _, caster: _ } = terms;
+    let CastTerms { instead, any_type, any_color, exile_instead, flashback, harmonize, life, discard: _, more, less, copy: _, way: _, caster: _ } = terms;
     let any = AnyMana::of(any_type, any_color);
     // CR 406.3a: a card exiled face down is turned face up just before it is announced.
     ops::turn_up_to_play(cx, card);
@@ -11044,7 +11054,8 @@ fn cast(
     let (instead, life) = if by.life_for_mana_value { (Some(ManaCost::ZERO), u8::try_from(life_for_mana_value(def).life).unwrap_or(u8::MAX)) } else { (instead, life) };
     // Flashback (CR 702.34a) a permission or a permanent gave, or aftermath (CR 702.127a): exiled instead of put anywhere
     // else as it leaves the stack. The way a permanent gave is read now: the spell keeps it if the permanent leaves.
-    let flashback = flashback || def.aftermath || granted.is_some_and(|w| w.what.flashback);
+    // Harmonize (CR 702.180a) exiles it as flashback does, and its cost taps a creature to reduce its mana (CR 702.180b).
+    let flashback = flashback || harmonize || def.aftermath || granted.is_some_and(|w| w.what.flashback);
     let mut cost = match (way, instead) {
         (_, Some(instead)) => Cost { mana: instead, ..by.alternative.unwrap_or(Cost::NONE) },
         _ if let Some(granted) = granted => {
@@ -11066,6 +11077,7 @@ fn cast(
         (WAY_OVERLOAD, _) => Cost::mana(whole.overload.unwrap_or(def.cost)),
         _ => whole.ways[way as usize - 1].cost,
     };
+    cost.tap_to_reduce |= harmonize;
     // The {X} a granted way's cost has: the card's, where the cost is or includes its mana cost; none where it is cast
     // without paying its mana cost (CR 107.3b).
     let granted_x = granted.map(|_| cost.mana.x);
