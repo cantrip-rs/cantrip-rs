@@ -1,0 +1,36 @@
+# Ostrich-Horse ({2}{G}, 3/1): "When this creature enters, mill three cards. You may put a land card from among them into your hand.
+# If you don't, put a +1/+1 counter on this creature." None of the three milled cards is a land, so nothing is asked (! Choose) and the
+# Ostrich-Horse becomes a 4/2. Its bird and horse types are those printed.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Ostrich-Horse
+Ornithopter x3
+Ornithopter
+Memnite
+Memnite
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ostrich-Horse.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+
+[Expect]
+Bot1.Battlefield.Ostrich-Horse.Power = 4
+Bot1.Battlefield.Ostrich-Horse.Toughness = 2
+Bot1.Battlefield.Ostrich-Horse.Subtypes = Bird; Horse
+Bot1.Battlefield.Ostrich-Horse.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = Memnite; Memnite; Ornithopter

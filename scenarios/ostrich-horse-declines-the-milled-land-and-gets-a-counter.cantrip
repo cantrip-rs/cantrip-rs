@@ -1,0 +1,35 @@
+# Ostrich-Horse ({2}{G}, 3/1): "When this creature enters, mill three cards. You may put a land card from among them into your hand.
+# If you don't, put a +1/+1 counter on this creature." Bot1 declines the Island, which stays in the graveyard, and the Ostrich-Horse becomes a 4/2.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Ostrich-Horse
+Ornithopter x3
+Island
+Ornithopter
+Memnite
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ostrich-Horse.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+
+[Expect]
+Bot1.Hand = Ornithopter; Ornithopter; Ornithopter
+Bot1.Graveyard = Memnite; Ornithopter; Island
+Bot1.Battlefield.Ostrich-Horse.Power = 4
+Bot1.Battlefield.Ostrich-Horse.Toughness = 2
+Bot1.Battlefield.Ostrich-Horse.Counters.PlusOnePlusOne = 1
