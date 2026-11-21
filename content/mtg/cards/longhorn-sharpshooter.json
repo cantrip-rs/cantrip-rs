@@ -1,0 +1,11 @@
+{
+  "name": "Longhorn Sharpshooter",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Minotaur Rogue",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Reach\nWhen this card becomes plotted, it deals 2 damage to any target.\nPlot {3}{R} (You may pay {3}{R} and exile this card from your hand. Cast it as a sorcery on a later turn without paying its mana cost. Plot only as a sorcery.)",
+  "keywords": [
+    "Reach"
+  ]
+}

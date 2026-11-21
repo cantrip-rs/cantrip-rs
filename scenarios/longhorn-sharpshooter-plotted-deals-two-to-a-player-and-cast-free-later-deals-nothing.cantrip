@@ -1,0 +1,48 @@
+# Longhorn Sharpshooter: "When this card becomes plotted, it deals 2 damage to any target" (CR 702.170a, 603.6, 120.3). Five Mox Rubies pay Plot {3}{R}: one R is left in the pool,
+# so the cost was {3}{R} and no more. The trigger works from exile (CR 113.6k) and the Sharpshooter itself deals 2 to Bot2 (20 -> 18). On turn 3 it is cast for free from
+# exile (CR 702.170d): no plotting, no trigger, no target is asked and Bot2 stays at 18. It is a 3/3 with reach.
+
+[Bot1 Deck]
+Mox Ruby x5
+Longhorn Sharpshooter
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Battlefield.Mox Ruby#5.Activate
+Bot1.Hand.Longhorn Sharpshooter.Activate(Ability: Plot)
+? Bot1.Mana = {R}
+Bot1.Target(Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Life = 18
+? Bot1.Life = 20
+? Exile = Longhorn Sharpshooter
+! Bot1.Exile.Longhorn Sharpshooter.Cast
+[T2 Bot2.Main1]
+[T3 Bot1.Main1]
+Bot1.Exile.Longhorn Sharpshooter.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Longhorn Sharpshooter.Power = 3
+? Bot1.Battlefield.Longhorn Sharpshooter.Toughness = 3
+? Bot1.Battlefield.Longhorn Sharpshooter.Keywords = Reach
+
+[Expect]
+Exile.Count = 0
+Bot2.Life = 18
+Bot1.Life = 20
