@@ -1,0 +1,65 @@
+# Curator of Sun's Creation: "Whenever you discover, discover again for the same value. This ability triggers only once each turn" (CR 701.57a, 603.2).
+# Turn 1: Black Lotus and Mox Ruby pay for the Curator and two Moxen for Buried Treasure. Turn 3: Buried Treasure ({5}, exile it) discovers 5: the library has Island,
+# a Hit the Mother Lode (mana value 6, over 5, passed over) and Ornithopter, which is found and put into the hand (declined). The Curator triggers and discovers 5 again, the same
+# value, so Hit the Mother Lode is passed over again and Chromatic Star (mana value 1, over the 0 a mis-read value would pass) is found. That second discover does not trigger it again (once each turn): Memnite is not
+# found, and stays on top of the library.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Curator of Sun's Creation
+Buried Treasure
+Mox Emerald
+Island
+Hit the Mother Lode
+Ornithopter
+Island
+Hit the Mother Lode
+Chromatic Star
+Memnite
+Island x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Curator of Sun's Creation.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Buried Treasure.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Buried Treasure.Activate(Color: Blue)
+Bot1.Graveyard.Buried Treasure.Activate(Ability: Discover)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Hand = Ornithopter
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand = Ornithopter; Chromatic Star
+Exile = Buried Treasure

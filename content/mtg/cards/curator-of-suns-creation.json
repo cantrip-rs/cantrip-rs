@@ -1,0 +1,8 @@
+{
+  "name": "Curator of Sun's Creation",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Human Artificer",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever you discover, discover again for the same value. This ability triggers only once each turn."
+}
