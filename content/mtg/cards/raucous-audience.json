@@ -1,0 +1,8 @@
+{
+  "name": "Raucous Audience",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Human Citizen",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "{T}: Add {G}. If you control a creature with power 4 or greater, add {G}{G} instead."
+}
