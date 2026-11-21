@@ -1,0 +1,11 @@
+{
+  "name": "White Lotus Reinforcements",
+  "manaCost": "{1}{G}{W}",
+  "type": "Creature — Human Soldier Ally",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Vigilance\nOther Allies you control get +1/+1.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
