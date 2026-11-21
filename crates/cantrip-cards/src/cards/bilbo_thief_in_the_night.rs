@@ -18,7 +18,8 @@ fn outside_hand_costs_one_less(q: &dyn Query, source: ObjectId, player: PlayerId
 fn recast(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
     let graveyard = g.state().zone(Zone::graveyard(you)).to_vec();
-    // "An artifact, instant, or sorcery spell": the face cast is the spell (CR 709.3b, 715.3b), so it is the face that is judged.
+    // "An artifact, instant, or sorcery spell": the spell the card would be cast as is judged, with every effect that would apply to
+    // it on the stack (CR 601.3e, `Game::chars_as_cast`).
     choose::cast_up_to_among(
         g,
         you,
@@ -27,9 +28,9 @@ fn recast(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         &graveyard,
         1,
         CastTerms { exile_instead: ExileInstead::InstantOrSorcery, ..CastTerms::default() },
-        |g, _, w| {
-            let face = g.card(w.face);
-            face.is(CardType::Artifact) || face.is(CardType::Instant) || face.is(CardType::Sorcery)
+        |g, card, w| {
+            let spell = g.chars_as_cast(card, w.way, you);
+            spell.is(CardType::Artifact) || spell.is(CardType::Instant) || spell.is(CardType::Sorcery)
         },
     )
 }
