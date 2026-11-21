@@ -13437,10 +13437,17 @@ fn unlocks_a_door(cx: &Cx, ability: AbilityRef) -> bool {
     ability.card == cx.cards().intrinsic && matches!(ability.index, cantrip_api::intrinsic::UNLOCK_LEFT | cantrip_api::intrinsic::UNLOCK_RIGHT)
 }
 
-/// What paying for the special action `ability` is, as far as restricted mana is concerned (CR 116.2, 106.6): unlocking a door,
-/// or any other special action.
+/// What paying for the special action `ability` is, as far as restricted mana is concerned (CR 116.2, 106.6): unlocking a
+/// door, turning a face-down permanent face up (its morph, disguise or mana cost: `Cards::turn_up`), or any other special
+/// action.
 fn special_action_paying(cx: &Cx, ability: AbilityRef) -> Paying {
-    if unlocks_a_door(cx, ability) { Paying::Unlocking } else { Paying::Other }
+    if unlocks_a_door(cx, ability) {
+        Paying::Unlocking
+    } else if cx.cards().turn_up(ability).is_some() {
+        Paying::TurningUp
+    } else {
+        Paying::Other
+    }
 }
 
 fn special_action_printed_cost(cx: &Cx, source: ObjectId, ability: AbilityRef, def: &ActivatedDef) -> ManaCost {
@@ -15239,6 +15246,8 @@ fn payment_for(cx: &Cx, player: PlayerId, source: ObjectId, purpose: Paying) -> 
         Paying::Activating(payment) => payment,
         Paying::CumulativeUpkeep => ManaPayment::CumulativeUpkeep,
         Paying::Unlocking => ManaPayment::UnlockDoor,
+        // The permanent is a creature as it is turned up (CR 116.2b, 708.2a), as "turn creatures face up" reads it.
+        Paying::TurningUp => ManaPayment::TurnFaceUp { creature: cx.chars(source).types.has(CardType::Creature) },
         _ => ManaPayment::Other,
     }
 }
@@ -15434,6 +15443,9 @@ pub(crate) enum Paying {
     CumulativeUpkeep,
     /// Unlocking a door (CR 709.5e), a special action (CR 116.2): only mana limited to unlocking doors is limited to it.
     Unlocking,
+    /// Turning a face-down permanent face up (CR 116.2b, 702.37e, 702.168d, 701.40b, 701.58b), a special action: only mana limited
+    /// to turning permanents face up is limited to it.
+    TurningUp,
     Other,
 }
 

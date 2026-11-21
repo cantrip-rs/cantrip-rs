@@ -478,6 +478,16 @@ public enum ManaSpendFilterView
     CumulativeUpkeep = 30,
     /// <summary>Only to cast a spell with one of the subtypes named beside it or unlock a door: "Room spells and unlock doors".</summary>
     SubtypeSpellsOrUnlockingDoors = 31,
+    /// <summary>Only to cast enchantment spells.</summary>
+    EnchantmentSpells = 32,
+    /// <summary>Only to unlock a door (CR 709.5e), a special action (CR 116.2).</summary>
+    UnlockingDoors = 33,
+    /// <summary>Only to turn a permanent face up (CR 116.2b, 702.37e, 708): a morph, disguise or mana cost.</summary>
+    TurningFaceUp = 34,
+    /// <summary>Only to turn a creature face up: the permanent is a creature as it is turned up (CR 708.2).</summary>
+    TurningCreaturesFaceUp = 35,
+    /// <summary>Only to cast an enchantment spell, unlock a door, or turn a permanent face up.</summary>
+    EnchantmentSpellsOrUnlockingDoorsOrTurningFaceUp = 36,
 }
 
 /// <summary>What spending some mana does to whatever it pays for (CR 106.6): the effect half of a restriction.</summary>

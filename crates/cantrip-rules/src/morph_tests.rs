@@ -1000,3 +1000,59 @@ fn a_cloaked_sorcery_that_cant_be_turned_face_up_is_not_revealed_by_an_effect() 
     assert!(g.state.obj(cloaked).face_down);
     assert!(revealed(&g));
 }
+
+/// `n` of `mana` in your pool that may be spent only as `restriction` says (CR 106.6).
+fn add_restricted(g: &mut Game, mana: Mana, n: u32, restriction: ManaRestriction) {
+    let source = g.state.zone(Zone::library(YOU))[0];
+    g.state.add_mana(YOU, mana, n, source, Some(restriction), ManaLasts::Step, false);
+    reoffer(g);
+}
+
+/// A Skywarden cast face down (for unrestricted {3}) and resolved: a face-down permanent that turns up for {3}{W}.
+fn face_down_skywarden() -> (Game, ObjectId) {
+    let mut g = game();
+    let card = put(&mut g, &SKYWARDEN, Zone::hand(YOU));
+    add(&mut g, Mana::C, 3);
+    let spell = cast_face_down(&mut g, card);
+    resolve_all(&mut g);
+    let permanent = g.state.obj(spell).became.expect("it resolved");
+    (g, permanent)
+}
+
+/// CR 106.6, 116.2b, 702.37e: mana to be spent only to turn permanents face up pays the morph cost of a face-down permanent,
+/// and "turn creatures face up" does too, since a face-down permanent is a creature (CR 708.2); the special action takes the
+/// pool exactly as unrestricted mana does.
+#[test]
+fn mana_for_turning_face_up_pays_a_morph_cost() {
+    for restriction in [ManaRestriction::TURN_FACE_UP, ManaRestriction::TURN_CREATURES_FACE_UP, ManaRestriction::ENCHANTMENT_SPELLS_OR_UNLOCKING_DOORS_OR_TURNING_UP] {
+        let (mut g, permanent) = face_down_skywarden();
+        add_restricted(&mut g, Mana::W, 1, restriction);
+        add_restricted(&mut g, Mana::C, 3, restriction);
+        let option = turn_up_option(&mut g, permanent, TurnUp::Morph).unwrap_or_else(|| panic!("{} pays for turning it up", restriction.name()));
+        take(&mut g, &option);
+        assert!(!g.state.obj(permanent).face_down, "{}", restriction.name());
+        assert_eq!(g.state.player(YOU).pool.total() + g.state.restricted_of(YOU).map(|(_, pool)| pool.total()).sum::<u32>(), 0, "{}", restriction.name());
+    }
+}
+
+/// CR 106.6: mana that names other things is no help to turning a permanent face up: not that for enchantment spells, nor
+/// that for unlocking doors, nor that for creature spells.
+#[test]
+fn mana_for_something_else_does_not_pay_for_turning_face_up() {
+    for restriction in [ManaRestriction::ENCHANTMENT_SPELLS, ManaRestriction::UNLOCK_DOORS, ManaRestriction::CREATURE_SPELLS, ManaRestriction::ABILITIES] {
+        let (mut g, permanent) = face_down_skywarden();
+        add_restricted(&mut g, Mana::W, 1, restriction);
+        add_restricted(&mut g, Mana::C, 3, restriction);
+        assert!(turn_up_option(&mut g, permanent, TurnUp::Morph).is_none(), "{} does not pay for turning it up", restriction.name());
+    }
+}
+
+/// CR 106.6: mana to be spent only to turn permanents face up pays for nothing else: not the {1} of a creature spell, with
+/// the face-down permanent on the battlefield.
+#[test]
+fn mana_for_turning_face_up_casts_no_spell() {
+    let (mut g, _) = face_down_skywarden();
+    let bear = put(&mut g, &BEAR, Zone::hand(YOU));
+    add_restricted(&mut g, Mana::C, 3, ManaRestriction::TURN_FACE_UP);
+    assert!(!options(&mut g).iter().any(|o| o.kind == ActionKind::CastSpell && o.source == Some(bear)));
+}

@@ -766,6 +766,11 @@ public sealed partial class MainPage
         (ManaSpendFilterView.ArtifactSpellsOrAbilitiesOfArtifacts, _) => "artifacts & battlefield artifact abilities",
         (ManaSpendFilterView.ArtifactSpellsOrAbilities, _) => "artifact spells & source abilities",
         (ManaSpendFilterView.ArtifactSpellsOrAnyAbility, _) => "artifacts & abilities",
+        (ManaSpendFilterView.EnchantmentSpells, _) => "enchantments",
+        (ManaSpendFilterView.UnlockingDoors, _) => "unlocking doors",
+        (ManaSpendFilterView.TurningFaceUp, _) => "turning face up",
+        (ManaSpendFilterView.TurningCreaturesFaceUp, _) => "turning creatures face up",
+        (ManaSpendFilterView.EnchantmentSpellsOrUnlockingDoorsOrTurningFaceUp, _) => "enchantments, doors & turning face up",
         (_, ManaSpendEffectView.GainsHaste) => "haste",
         (_, ManaSpendEffectView.CantBeCountered) => "uncounterable",
         _ => "restricted",
@@ -841,6 +846,12 @@ public sealed partial class MainPage
             ManaSpendFilterView.ArtifactSpellsOrAbilities =>
                 "Spend this mana only to cast artifact spells or activate abilities of artifact sources.",
             ManaSpendFilterView.ArtifactSpellsOrAnyAbility => "Spend this mana only to cast an artifact spell or to activate an ability.",
+            ManaSpendFilterView.EnchantmentSpells => "Spend this mana only to cast enchantment spells.",
+            ManaSpendFilterView.UnlockingDoors => "Spend this mana only to unlock doors.",
+            ManaSpendFilterView.TurningFaceUp => "Spend this mana only to turn permanents face up.",
+            ManaSpendFilterView.TurningCreaturesFaceUp => "Spend this mana only to turn creatures face up.",
+            ManaSpendFilterView.EnchantmentSpellsOrUnlockingDoorsOrTurningFaceUp =>
+                "Spend this mana only to cast an enchantment spell, unlock a door, or turn a permanent face up.",
             _ => "This mana may only be spent on certain things.",
         };
 

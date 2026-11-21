@@ -389,6 +389,17 @@ pub enum ManaSpendFilterView {
     /// Spells with one of the subtypes named beside it, or the special action of unlocking a door: "Room spells and unlock
     /// doors" (CR 709.5e).
     SubtypeSpellsOrUnlockingDoors,
+    /// Enchantment spells.
+    EnchantmentSpells,
+    /// Only to unlock a door (CR 709.5e), a special action (CR 116.2).
+    UnlockingDoors,
+    /// Only to turn a permanent face up (CR 116.2b, 702.37e, 708), a special action: a morph, disguise or mana cost.
+    TurningFaceUp,
+    /// Only to turn a creature face up: the permanent is a creature as it is turned up (CR 708.2).
+    TurningCreaturesFaceUp,
+    /// Enchantment spells, unlocking doors, or turning a permanent face up: "an enchantment spell, unlock a door, or turn a
+    /// permanent face up" (`ManaRestriction::AnyOf`).
+    EnchantmentSpellsOrUnlockingDoorsOrTurningFaceUp,
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Serialize, Deserialize)]

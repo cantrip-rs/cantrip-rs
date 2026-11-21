@@ -2848,6 +2848,17 @@ pub enum ManaRestriction {
     /// gave it or took away counts); where it says so, also on activating an ability of a source with one of them. See
     /// `SubtypeSpells`.
     Subtypes(SubtypeSpells),
+    /// "Spend this mana only to unlock doors" (CR 106.6, 709.5e): only on the special action of unlocking a door (CR 116.2),
+    /// whatever the Room - never on a spell, an ability, nor any other special action. On its own it is a part of a union
+    /// (`ANY_OF`): Creeping Peeper's.
+    UnlockDoors,
+    /// "Spend this mana only to turn [permanents | creatures] face up" (CR 106.6, 116.2b, 702.37e, 702.168d, 701.40b, 701.58b): only on the
+    /// special action of turning a face-down permanent face up (CR 116.2) - the mana of its morph or disguise cost or of the
+    /// mana cost of a manifested or cloaked creature card (the rulings of Creeping Peeper and Overgrown Zealot) - never on a
+    /// spell, an ability, nor any other special action, and not on "unless ... pays" (CR 118.12). With `creature`, only a
+    /// permanent that is a creature as it is turned up (Tin Street Gossip: "turn creatures face up"); without, any.
+    /// Permanents: Overgrown Zealot.
+    TurnFaceUp { creature: bool },
     /// "Spend this mana only to cast [a] non[type] spell[s]" (CR 106.6, 205.2a): only on casting a spell (CR 601.2g) that
     /// has none of these card types as it is on the stack - an artifact creature spell is a creature spell, so no
     /// noncreature spell. Never on an ability. Noncreature: Chandra, Chill of Compliance, Narset of the Ancient Way, The
@@ -3041,6 +3052,11 @@ pub enum ManaPayment {
     /// Unlocking a door (CR 709.5e): a special action (CR 116.2), so no activation, which only restricted mana that says
     /// "unlock doors" may pay.
     UnlockDoor,
+    /// Turning a face-down permanent face up (CR 116.2b, 702.37e, 702.168d, 701.40b, 701.58b), a special action: its morph, disguise or
+    /// mana cost, which only restricted mana that says "turn face up" may pay. `creature`: whether the permanent is a creature
+    /// as it is turned up (CR 708.2: a face-down permanent is a 2/2 creature, until an effect says it is not), which "turn
+    /// creatures face up" reads.
+    TurnFaceUp { creature: bool },
     /// Anything else: a special action, "unless ... pays", a cost a resolving effect asks for.
     Other,
     /// Paying the cost of cumulative upkeep (CR 702.24a).
@@ -3065,6 +3081,10 @@ impl ManaRestriction {
         ManaRestriction::Abilities(TypeSet::of(&[CardType::Artifact]), AbilitiesOf::Permanents);
     pub const NONCREATURE_SPELLS: ManaRestriction = ManaRestriction::NonSpells(TypeSet::of(&[CardType::Creature]));
     pub const CREATURE_SPELLS: ManaRestriction = ManaRestriction::Spells(TypeSet::of(&[CardType::Creature]));
+    pub const ENCHANTMENT_SPELLS: ManaRestriction = ManaRestriction::Spells(TypeSet::of(&[CardType::Enchantment]));
+    pub const UNLOCK_DOORS: ManaRestriction = ManaRestriction::UnlockDoors;
+    pub const TURN_FACE_UP: ManaRestriction = ManaRestriction::TurnFaceUp { creature: false };
+    pub const TURN_CREATURES_FACE_UP: ManaRestriction = ManaRestriction::TurnFaceUp { creature: true };
     pub const CREATURE_ABILITIES: ManaRestriction = ManaRestriction::Abilities(TypeSet::of(&[CardType::Creature]), AbilitiesOf::Sources);
     /// "Spend this mana only to cast creature spells or activate abilities of creatures" (Castle Garenbrig, Lukka, Bound to
     /// Ruin): creature permanents' abilities only (CR 109.2).
@@ -3087,8 +3107,15 @@ impl ManaRestriction {
     pub const ARTIFACT_SPELLS_OR_ANY_ABILITY: ManaRestriction =
         ManaRestriction::AnyOf(&[ManaRestriction::ARTIFACT_SPELLS, ManaRestriction::ABILITIES]);
 
+    /// "Spend this mana only to cast an enchantment spell, unlock a door, or turn a permanent face up" (Creeping Peeper).
+    pub const ENCHANTMENT_SPELLS_OR_UNLOCKING_DOORS_OR_TURNING_UP: ManaRestriction =
+        ManaRestriction::AnyOf(&[ManaRestriction::ENCHANTMENT_SPELLS, ManaRestriction::UNLOCK_DOORS, ManaRestriction::TURN_FACE_UP]);
+
     /// The unions the wire has a word for, by their parts (`AnyOf`).
-    pub const ANY_OF: [&'static [ManaRestriction]; 1] = [&[ManaRestriction::ARTIFACT_SPELLS, ManaRestriction::ABILITIES]];
+    pub const ANY_OF: [&'static [ManaRestriction]; 2] = [
+        &[ManaRestriction::ARTIFACT_SPELLS, ManaRestriction::ABILITIES],
+        &[ManaRestriction::ENCHANTMENT_SPELLS, ManaRestriction::UNLOCK_DOORS, ManaRestriction::TURN_FACE_UP],
+    ];
 
     /// "Spend this mana only to cast spells with mana value `n` or greater."
     pub const fn mana_value_at_least(n: u8) -> ManaRestriction {
@@ -3104,7 +3131,7 @@ impl ManaRestriction {
     /// of `Subtypes` are named for their subtypes and those of `ManaValue` for their number (`name`). A card naming a
     /// restriction of card types not here fails the build (`Adds::only_for` is checked at compile time), since the host
     /// has no word for it on the wire.
-    pub const NAMED: [(ManaRestriction, &'static str); 22] = [
+    pub const NAMED: [(ManaRestriction, &'static str); 26] = [
         (ManaRestriction::CumulativeUpkeep, "CumulativeUpkeep"),
         (ManaRestriction::NotNonartifactSpells, "NotNonartifactSpells"),
         (ManaRestriction::GainsHaste, "GainsHaste"),
@@ -3119,6 +3146,10 @@ impl ManaRestriction {
         (ManaRestriction::ARTIFACT_ABILITIES, "ArtifactAbilities"),
         (ManaRestriction::NONCREATURE_SPELLS, "NoncreatureSpells"),
         (ManaRestriction::CREATURE_SPELLS, "CreatureSpells"),
+        (ManaRestriction::ENCHANTMENT_SPELLS, "EnchantmentSpells"),
+        (ManaRestriction::UNLOCK_DOORS, "UnlockDoors"),
+        (ManaRestriction::TURN_FACE_UP, "TurnFaceUp"),
+        (ManaRestriction::TURN_CREATURES_FACE_UP, "TurnCreaturesFaceUp"),
         (ManaRestriction::CREATURE_ABILITIES, "CreatureAbilities"),
         (ManaRestriction::SPELLS_FROM_EXILE, "SpellsFromExile"),
         (ManaRestriction::NOT_SPELLS_FROM_HAND, "NotSpellsFromHand"),
@@ -3136,7 +3167,9 @@ impl ManaRestriction {
             | (ManaRestriction::GainsHaste, ManaRestriction::GainsHaste)
             | (ManaRestriction::LegendaryUncounterable, ManaRestriction::LegendaryUncounterable)
             | (ManaRestriction::LegendarySpells, ManaRestriction::LegendarySpells)
-            | (ManaRestriction::YourCommander, ManaRestriction::YourCommander) => true,
+            | (ManaRestriction::YourCommander, ManaRestriction::YourCommander)
+            | (ManaRestriction::UnlockDoors, ManaRestriction::UnlockDoors) => true,
+            (ManaRestriction::TurnFaceUp { creature: a }, ManaRestriction::TurnFaceUp { creature: b }) => a == b,
             (ManaRestriction::Spells(a), ManaRestriction::Spells(b)) | (ManaRestriction::NonSpells(a), ManaRestriction::NonSpells(b)) => {
                 a.0 == b.0
             }
@@ -3264,6 +3297,8 @@ impl ManaRestriction {
                         && s.subtypes.intersects(*subtypes))
             }
             (ManaRestriction::Subtypes(s), ManaPayment::UnlockDoor) => s.unlock,
+            (ManaRestriction::UnlockDoors, ManaPayment::UnlockDoor) => true,
+            (ManaRestriction::TurnFaceUp { creature }, ManaPayment::TurnFaceUp { creature: is }) => is || !creature,
             _ => false,
         }
     }
@@ -3793,6 +3828,34 @@ mod tests {
         assert!(emblem.links_an_object());
     }
 
+    /// Mana for turning a permanent face up, or for unlocking a door, is no help to anything else, and the other way round:
+    /// "turn creatures face up" is no help to a permanent that is not a creature as it is turned up (CR 708.2).
+    #[test]
+    fn special_action_restrictions_pay_only_their_own_action() {
+        let turn = |creature| ManaPayment::TurnFaceUp { creature };
+        let spell = ManaPayment::Spell {
+            types: TypeSet::of(&[CardType::Enchantment]),
+            subtypes: SubtypeSet::NONE,
+            legendary: false,
+            mana_value: 2,
+            x: false,
+            from: ZoneKind::Hand,
+            commander: false,
+            card: ObjectId::NONE,
+        };
+        let ability = ManaPayment::Ability { source: TypeSet::NONE, subtypes: SubtypeSet::NONE, on_battlefield: true, equip: false };
+        assert!(ManaRestriction::TURN_FACE_UP.may_pay(&turn(true)) && ManaRestriction::TURN_FACE_UP.may_pay(&turn(false)));
+        assert!(ManaRestriction::TURN_CREATURES_FACE_UP.may_pay(&turn(true)) && !ManaRestriction::TURN_CREATURES_FACE_UP.may_pay(&turn(false)));
+        assert!(ManaRestriction::UNLOCK_DOORS.may_pay(&ManaPayment::UnlockDoor));
+        for restriction in [ManaRestriction::TURN_FACE_UP, ManaRestriction::TURN_CREATURES_FACE_UP, ManaRestriction::UNLOCK_DOORS] {
+            assert!(!restriction.may_pay(&spell) && !restriction.may_pay(&ability) && !restriction.may_pay(&ManaPayment::Other), "{}", restriction.name());
+        }
+        assert!(!ManaRestriction::TURN_FACE_UP.may_pay(&ManaPayment::UnlockDoor) && !ManaRestriction::UNLOCK_DOORS.may_pay(&turn(true)));
+        let union = ManaRestriction::ENCHANTMENT_SPELLS_OR_UNLOCKING_DOORS_OR_TURNING_UP;
+        assert!(union.may_pay(&spell) && union.may_pay(&ManaPayment::UnlockDoor) && union.may_pay(&turn(false)));
+        assert!(!union.may_pay(&ability) && !union.may_pay(&ManaPayment::Other));
+    }
+
     /// A subtype restriction's name reads back as the same restriction, whatever its subtypes hold: "or" inside a name
     /// (Orc, Warrior, Horror) and spaces (Time Lord) included.
     #[test]
@@ -3816,8 +3879,8 @@ mod tests {
         all.push(ManaRestriction::mana_value_at_least(4));
         all.push(ManaRestriction::mana_value_at_least_or_x(5));
         all.push(ManaRestriction::mana_value_at_least(12));
-        all.push(ManaRestriction::ARTIFACT_SPELLS_OR_ANY_ABILITY);
         all.extend(ManaRestriction::NAMED.map(|(r, _)| r));
+        all.extend(ManaRestriction::ANY_OF.map(ManaRestriction::AnyOf));
         for r in all {
             let name = r.name();
             assert_eq!(ManaRestriction::parse(name.split_whitespace()), Some(r), "{name}");

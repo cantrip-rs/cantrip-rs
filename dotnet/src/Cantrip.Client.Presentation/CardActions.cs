@@ -702,6 +702,11 @@ public sealed class CardActions
         ManaSpendFilterView.SubtypeSpellsOrAbilitiesOfPermanents => $"{Subtypes(subtypes)} spells and abilities of {Subtypes(subtypes)} permanents",
         ManaSpendFilterView.SubtypeSpellsOrEquipAbilities => $"{Subtypes(subtypes)} spells and equip abilities",
         ManaSpendFilterView.SubtypeSpellsOrUnlockingDoors => $"{Subtypes(subtypes)} spells and unlocking doors",
+        ManaSpendFilterView.EnchantmentSpells => "enchantment spells",
+        ManaSpendFilterView.UnlockingDoors => "unlocking doors",
+        ManaSpendFilterView.TurningFaceUp => "turning permanents face up",
+        ManaSpendFilterView.TurningCreaturesFaceUp => "turning creatures face up",
+        ManaSpendFilterView.EnchantmentSpellsOrUnlockingDoorsOrTurningFaceUp => "enchantment spells, unlocking doors and turning permanents face up",
         ManaSpendFilterView.SubtypeCreatureSpellsOrAbilities =>
             $"{Subtypes(subtypes)} creature spells and abilities of {Subtypes(subtypes)} creature sources",
         ManaSpendFilterView.CreatureSpells => "creature spells",
