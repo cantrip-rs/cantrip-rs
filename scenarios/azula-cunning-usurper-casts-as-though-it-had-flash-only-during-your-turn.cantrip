@@ -1,0 +1,55 @@
+# Azula's controller may cast a card exiled with Azula during their own turn and as though it had flash (CR 601.3b, 117.1a),
+# but not on an opponent's turn. Ornithopter (a creature, so normally sorcery-speed) is cast from exile in Bot1's end step; on
+# Bot2's turn Lightning Bolt - an instant, so only the "during your turn" limit stops it - is refused even with mana available.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Azula, Cunning Usurper
+Swamp
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Azula, Cunning Usurper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Ornithopter)
+[T5 Bot1.End]
+Bot1.Exile.Ornithopter.Cast(Ability: Cast from exile)
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Exile.Lightning Bolt.Cast(Ability: Cast from exile; Bot2)
+
+[Expect]
+Bot1.Battlefield = Azula, Cunning Usurper; Mox Emerald; Mox Jet; Mox Pearl; Mox Sapphire; Ornithopter; Swamp
+Exile = Lightning Bolt

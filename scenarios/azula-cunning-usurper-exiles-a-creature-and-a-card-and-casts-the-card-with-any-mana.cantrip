@@ -1,0 +1,57 @@
+# When Azula enters, target opponent exiles a nontoken creature they control, then a nonland card from their graveyard, both
+# exiled with Azula (CR 607.2a). Bot2 has Ornithopter and, in the graveyard, Lightning Bolt (cast on turn 2). On turn 5, in
+# Bot1's turn, Azula's controller casts the exiled Lightning Bolt paying {R} with Mox Pearl's {W}: mana of any type can be spent
+# (CR 609.4b). It resolves, its 3 damage dealt to Bot2, and it goes to the graveyard, leaving Ornithopter the only card exiled.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Azula, Cunning Usurper
+Swamp
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Azula, Cunning Usurper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Ornithopter)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Exile.Lightning Bolt.Cast(Ability: Cast from exile; Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 17
+Exile = Ornithopter
+Bot2.Graveyard = Lightning Bolt
+Bot2.Battlefield.Count = 1

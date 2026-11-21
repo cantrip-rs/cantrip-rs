@@ -1,0 +1,39 @@
+# The exile is "a nontoken creature they control, then a nonland card from their graveyard": with no creature and no card in
+# the graveyard, nothing is exiled and nothing becomes castable (CR 608.2c).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Azula, Cunning Usurper
+Swamp
+Island x14
+
+[Bot2 Deck]
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Azula, Cunning Usurper.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield = Azula, Cunning Usurper; Mox Emerald; Mox Jet; Mox Pearl; Mox Sapphire; Swamp

@@ -1,0 +1,67 @@
+# The opponent exiles one nontoken creature and one nonland card, no more (Bot2 has two Ornithopters and two Lightning Bolts in
+# the graveyard), and the cards stay exiled when Azula leaves (not "until it leaves", CR 610.3): afterwards only Azula's
+# controller could have cast them, so with Azula dead nobody may, and Bot2 never could (CR 607.2a).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Azula, Cunning Usurper
+Swamp
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mountain
+Ornithopter x2
+Lightning Bolt x4
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Azula, Cunning Usurper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Ornithopter)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mountain.Activate
+! Bot2.Exile.Lightning Bolt.Cast(Bot1)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Azula, Cunning Usurper)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Azula, Cunning Usurper)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Exile.Lightning Bolt.Cast(Ability: Cast from exile; Bot2)
+
+[Expect]
+Exile = Lightning Bolt; Ornithopter
+Bot2.Battlefield = Mountain; Mox Ruby; Ornithopter
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Sapphire; Swamp

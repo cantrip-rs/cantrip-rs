@@ -1,0 +1,42 @@
+# "You may cast cards exiled with Azula": a land exiled with it (Dryad Arbor, a land creature, CR 205.4b) is not cast, and playing
+# a land is not casting a spell (CR 305.1, 601.2a), so it cannot be played from exile.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Azula, Cunning Usurper
+Swamp
+Island x14
+
+[Bot2 Deck]
+Dryad Arbor
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Dryad Arbor.Play
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Azula, Cunning Usurper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+! Bot1.Exile.Dryad Arbor.Play
+
+[Expect]
+Exile = Dryad Arbor

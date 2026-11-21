@@ -1,0 +1,11 @@
+{
+  "name": "Azula, Cunning Usurper",
+  "manaCost": "{2}{U}{B}{B}",
+  "type": "Legendary Creature — Human Noble Rogue",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Firebending 2 (Whenever this creature attacks, add {R}{R}. This mana lasts until end of combat.)\nWhen Azula enters, target opponent exiles a nontoken creature they control, then they exile a nonland card from their graveyard.\nDuring your turn, you may cast cards exiled with Azula and you may cast them as though they had flash. Mana of any type can be spent to cast those spells.",
+  "keywords": [
+    "Firebending"
+  ]
+}
