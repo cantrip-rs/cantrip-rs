@@ -1,0 +1,56 @@
+# Anti-Venom, Horrifying Healer: "When Anti-Venom enters, if he was cast, return target creature card from your graveyard to the battlefield." (CR 603.4, 400.3)
+# Bot1 Entombs a Memnite on turn 1 and an Ornithopter on turn 3, and Bot2 Entombs a Memnite of its own on turn 2. Then Bot1 casts Anti-Venom for
+# {W}{W}{W}{W}{W}: its own Entomb (not a creature card) and Bot2's Memnite (not in Bot1's graveyard) are refused as targets, Bot1's Ornithopter comes
+# back, and its Memnite and Bot2's stay where they are.
+[Bot1 Deck]
+Anti-Venom, Horrifying Healer
+Black Lotus
+Mox Pearl
+Mox Pearl
+Mox Jet
+Entomb
+Entomb
+Memnite
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mox Jet
+Entomb
+Island x5
+Island
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Memnite)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Ornithopter)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Anti-Venom, Horrifying Healer.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Graveyard.Entomb)
+! Bot1.Target(Bot2.Graveyard.Memnite)
+Bot1.Target(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Pearl; Anti-Venom, Horrifying Healer; Ornithopter
+Bot1.Graveyard = Black Lotus; Entomb; Entomb; Memnite
+Bot2.Graveyard = Entomb; Memnite

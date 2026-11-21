@@ -1,0 +1,35 @@
+# Anti-Venom, Horrifying Healer (CR 615.12): damage that can't be prevented still meets the prevention effects that apply to it: this one prevents none of
+# it, but its additional effect takes place. Bot2's Lava Burst with X 2 deals 2 damage that can't be prevented to him: it is dealt (2 marked) and he still
+# gets 2 counters, a 7/7 with 2 damage.
+[Bot1 Deck]
+Anti-Venom, Horrifying Healer
+Black Lotus
+Mox Pearl
+Mox Pearl
+Island x24
+[Bot2 Deck]
+Lava Burst
+Mox Jet
+Mox Ruby
+Mountain x20
+Mountain
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Anti-Venom, Horrifying Healer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lava Burst.Cast(Bot1.Battlefield.Anti-Venom, Horrifying Healer; X: 2)
+[Expect]
+Bot1.Battlefield.Anti-Venom, Horrifying Healer.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Anti-Venom, Horrifying Healer.Damage = 2
+Prevented = (absent)

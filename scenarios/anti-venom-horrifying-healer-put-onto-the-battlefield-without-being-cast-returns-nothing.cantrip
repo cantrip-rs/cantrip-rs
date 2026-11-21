@@ -1,0 +1,34 @@
+# Anti-Venom, Horrifying Healer (CR 603.4): returned to the battlefield by Zombify, it was not cast, so its enters trigger does nothing and the Memnite,
+# a creature card that could have been returned, stays in the graveyard.
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Entomb
+Entomb
+Zombify
+Anti-Venom, Horrifying Healer
+Memnite
+Island x20
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Anti-Venom, Horrifying Healer)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Hand.Zombify.Cast(Bot1.Graveyard.Anti-Venom, Horrifying Healer)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Anti-Venom, Horrifying Healer
+Bot1.Graveyard = Zombify; Entomb; Memnite; Entomb; Black Lotus

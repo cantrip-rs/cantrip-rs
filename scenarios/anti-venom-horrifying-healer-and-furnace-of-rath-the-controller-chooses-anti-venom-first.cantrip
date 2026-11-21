@@ -1,0 +1,47 @@
+# Anti-Venom, Horrifying Healer and Bot2's Furnace of Rath both apply to Bot1's Shock at him: the controller of the damaged permanent orders them (CR 616.1).
+# Anti-Venom first: the 2 is prevented and becomes 2 counters; with no damage left, Furnace doubles nothing (CR 615.6).
+[Bot1 Deck]
+Anti-Venom, Horrifying Healer
+Black Lotus
+Mox Pearl
+Mox Pearl
+Shock
+Mox Ruby
+Island x12
+[Bot2 Deck]
+Furnace of Rath
+Black Lotus
+Mox Ruby
+Mox Jet
+Island x26
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Anti-Venom, Horrifying Healer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Furnace of Rath.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Anti-Venom, Horrifying Healer)
+Bot1.Pass
+Bot2.Pass
+Bot1.Replace(Anti-Venom, Horrifying Healer)
+[Expect]
+Bot1.Battlefield.Anti-Venom, Horrifying Healer.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Anti-Venom, Horrifying Healer.Damage = 0
+Prevented = 2 Shock > Anti-Venom, Horrifying Healer by Anti-Venom, Horrifying Healer

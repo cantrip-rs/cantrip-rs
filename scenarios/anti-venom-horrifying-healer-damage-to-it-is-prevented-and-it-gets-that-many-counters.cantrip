@@ -1,0 +1,40 @@
+# Anti-Venom, Horrifying Healer: "If damage would be dealt to Anti-Venom, prevent that damage and put that many +1/+1 counters on him." (CR 615.1, 615.5)
+# Bot2's Lightning Bolt deals 3 to Anti-Venom: all of it is prevented (none marked) and he gets 3 counters (an 8/8). Bot2's second Bolt at Bot1 is not
+# damage to him: it is dealt, and no counters come of it.
+[Bot1 Deck]
+Anti-Venom, Horrifying Healer
+Black Lotus
+Mox Pearl
+Mox Pearl
+Island x24
+[Bot2 Deck]
+Mox Ruby
+Mountain
+Lightning Bolt
+Lightning Bolt
+Mountain x22
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Anti-Venom, Horrifying Healer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Anti-Venom, Horrifying Healer)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Anti-Venom, Horrifying Healer.Damage = 0
+? Bot1.Battlefield.Anti-Venom, Horrifying Healer.Counters.PlusOnePlusOne = 3
+? Bot1.Battlefield.Anti-Venom, Horrifying Healer.Power = 8
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Anti-Venom, Horrifying Healer.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Anti-Venom, Horrifying Healer.Toughness = 8
+Prevented = 3 Lightning Bolt > Anti-Venom, Horrifying Healer by Anti-Venom, Horrifying Healer

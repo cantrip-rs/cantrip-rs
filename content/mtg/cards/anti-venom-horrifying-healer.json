@@ -1,0 +1,8 @@
+{
+  "name": "Anti-Venom, Horrifying Healer",
+  "manaCost": "{W}{W}{W}{W}{W}",
+  "type": "Legendary Creature — Symbiote Hero",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "When Anti-Venom enters, if he was cast, return target creature card from your graveyard to the battlefield.\nIf damage would be dealt to Anti-Venom, prevent that damage and put that many +1/+1 counters on him."
+}

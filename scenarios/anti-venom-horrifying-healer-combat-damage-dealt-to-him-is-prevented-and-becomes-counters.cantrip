@@ -1,0 +1,37 @@
+# Anti-Venom, Horrifying Healer (CR 510.2, 615.1): he attacks and Bot2's Grizzly Bears block. The Bears' 2 combat damage to him is prevented and he gets
+# 2 counters, while his own 5 damage (dealt at the same time, with the power he has then) kills the Bears: a 7/7 with no damage marked.
+[Bot1 Deck]
+Anti-Venom, Horrifying Healer
+Black Lotus
+Mox Pearl
+Mox Pearl
+Island x24
+[Bot2 Deck]
+Mox Emerald
+Forest
+Grizzly Bears
+Forest x24
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Anti-Venom, Horrifying Healer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Anti-Venom, Horrifying Healer > Bot2)
+Bot2.Block(Grizzly Bears > Anti-Venom, Horrifying Healer)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Anti-Venom, Horrifying Healer.Damage = 0
+Bot1.Battlefield.Anti-Venom, Horrifying Healer.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Anti-Venom, Horrifying Healer.Power = 7
+Bot2.Battlefield.Grizzly Bears = (absent)
+Prevented = 2 Grizzly Bears > Anti-Venom, Horrifying Healer by Anti-Venom, Horrifying Healer
