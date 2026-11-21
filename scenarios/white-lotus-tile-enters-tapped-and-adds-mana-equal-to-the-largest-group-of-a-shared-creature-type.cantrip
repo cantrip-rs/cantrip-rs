@@ -1,0 +1,54 @@
+# White Lotus Tile: "This artifact enters tapped." and "{T}: Add X mana of any one color, where X is the greatest number of creatures you control that have a creature type in common."
+# Turn 1 Bot1 casts one Zephyr Sprite (a Faerie), turn 3 a second and the Tile ({4}): the Tile is tapped and refused when activated at once. Turn 5 it makes two mana of one chosen color (the two Faeries, X = 2),
+# all blue. Bot2's own Zephyr Sprite does not count.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+White Lotus Tile
+Zephyr Sprite
+Zephyr Sprite
+Island x12
+
+[Bot2 Deck]
+Mox Sapphire
+Zephyr Sprite
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Zephyr Sprite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.White Lotus Tile.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.White Lotus Tile.Tapped = true
+! Bot1.Battlefield.White Lotus Tile.Activate(Color: Blue)
+[T5 Bot1.Main1]
+Bot1.Battlefield.White Lotus Tile.Activate(Color: Blue)
+? Bot1.Mana = {U}{U}
+
+[Expect]
+Bot2.Battlefield.Zephyr Sprite.Tapped = false

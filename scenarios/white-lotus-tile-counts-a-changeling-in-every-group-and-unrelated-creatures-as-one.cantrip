@@ -1,0 +1,53 @@
+# White Lotus Tile, "X is the greatest number of creatures you control that have a creature type in common" (CR 205.3m, 702.73a). Turn 3 Bot1 controls a Zephyr Sprite (Faerie) and an Ornithopter
+# (Thopter), which share no type: X = 1, so one red mana. On turn 5 a Woodland Changeling (every creature type) joins them: it is a Faerie with the Sprite and a Thopter with the Ornithopter, so
+# the greatest group is 2, and two red mana are added (the Tile untapped, the {1}{G} of the Changeling paid by Mox Emerald and Mox Pearl).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+White Lotus Tile
+Zephyr Sprite
+Ornithopter
+Woodland Changeling
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.White Lotus Tile.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.White Lotus Tile.Activate(Color: Red)
+? Bot1.Mana = {R}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Woodland Changeling.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.White Lotus Tile.Activate(Color: Red)
+? Bot1.Mana = {R}{R}
+
+[Expect]
+Bot1.Battlefield.Woodland Changeling.Tapped = false
