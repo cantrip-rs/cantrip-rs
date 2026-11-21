@@ -2685,6 +2685,11 @@ pub struct GrantedWay {
     /// their other costs"). Added to the spell's total cost as the cast is made, beside any alternative cost the card is cast
     /// for; a total its caster can't pay is not offered (CR 119.4, 601.2h). `Cost::NONE` for none.
     pub additional: Cost,
+    /// What is owed on top of the cost, as `additional` is, where it is one of several ways of paying (CR 601.2b, 118.8): "by
+    /// foraging in addition to paying their other costs" (Osteomancer Adept; forage is exiling three cards from a graveyard or
+    /// sacrificing a Food, CR 701.61a). The caster chooses one they can pay as the spell is announced, as for
+    /// `CardDef::additional_choice`; a cast where none can be paid is not offered. Empty for none.
+    pub additional_choice: &'static [ExtraCost],
 }
 
 impl GrantedWay {
@@ -2704,6 +2709,7 @@ impl GrantedWay {
         enters_attacking: false,
         end_step_rider: None,
         additional: Cost::NONE,
+        additional_choice: &[],
     };
 }
 
@@ -6052,6 +6058,17 @@ impl CardTable {
             AbilityDef::Activated(a) => a.modal,
             AbilityDef::Triggered(t) => t.modal,
             AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => None,
+        }
+    }
+
+    /// The way of casting cards a `Grant`'s ability names: a permanent's static `granted_ways` entry or a resolved ability's
+    /// `lasting_ways` entry.
+    pub fn way_of(&self, way: AbilityRef) -> Option<&'static GrantedWay> {
+        let def = self.get(way.card);
+        match (way.as_granted_way(), way.as_lasting_way()) {
+            (Some(k), _) => def.granted_ways.get(k),
+            (_, Some(k)) => def.lasting_ways.get(k),
+            _ => None,
         }
     }
 

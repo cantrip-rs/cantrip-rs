@@ -1821,6 +1821,9 @@ pub enum Label {
     Extra(CardId, u8),
     /// The nth way of paying the part of an activated ability's cost that names a choice (`ActivatedDef::cost_choice`).
     AbilityExtra(AbilityRef, u8),
+    /// The nth way of paying the additional cost a way of casting gives that names a choice (`GrantedWay::additional_choice`),
+    /// the way named by its `Grant`'s ability.
+    WayExtra(AbilityRef, u8),
     /// "Pay 2 life for {W/P}": one Phyrexian symbol paid with life (CR 107.4f).
     PayLife(Color),
     /// "Pay {2} for {2/W}": one monocolored hybrid symbol paid with two generic mana rather than its color (CR 107.4e).

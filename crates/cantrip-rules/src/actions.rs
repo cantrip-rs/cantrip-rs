@@ -9537,6 +9537,21 @@ impl Route {
         Route { by: Some(Grant { object: card, ability: AbilityRef::retrace(printed) }), additional: RETRACE, ..Route::RULES }
     }
 
+    /// The ways of paying what a way a permanent or an effect gives adds, of which the caster chooses one (CR 601.2b,
+    /// 118.8): Osteomancer Adept's forage.
+    fn choice(&self) -> &'static [ExtraCost] {
+        match self.allows {
+            Allows::Way(_, way) => way.additional_choice,
+            Allows::Any | Allows::Exile(..) | Allows::Top(..) => &[],
+        }
+    }
+
+    /// Whether what the permission adds could be paid: its cost, and one of its ways of paying where it names a choice.
+    fn owed_payable(&self, cx: &Cx, card: ObjectId, player: PlayerId) -> bool {
+        (self.by.is_none() || can_pay_other(cx, card, player, &self.additional))
+            && (self.choice().is_empty() || self.choice().iter().any(|c| can_pay_other(cx, card, player, &c.cost)))
+    }
+
     /// What mana may pay for a cast by this route (CR 609.4b).
     fn any_mana(&self) -> AnyMana {
         AnyMana::of(self.terms.any_type, self.terms.any_color)
@@ -9685,7 +9700,7 @@ impl<'a> Offer<'a> {
         // What a permission adds is owed with the mana cost (CR 118.8): a cast that can't pay it is not offered.
         if instant == self.instants
             && let Some(base) = route.base(face)
-            && (route.by.is_none() || can_pay_other(self.cx, card, self.player, &route.additional))
+            && route.owed_payable(self.cx, card, self.player)
         {
             self.offer(card, face, way, route, base, None, options);
         }
@@ -9967,7 +9982,7 @@ impl<'a> Offer<'a> {
         }
         let (cx, player) = (self.cx, self.player);
         let instant = self.speed(card).face(bestow) && !route.terms.sorcery_speed;
-        if instant != self.instants || !extra_payable(cx, card, player, bestow) || (route.by.is_some() && !can_pay_other(cx, card, player, &route.additional)) {
+        if instant != self.instants || !extra_payable(cx, card, player, bestow) || !route.owed_payable(cx, card, player) {
             return;
         }
         if !matches!(route.allows, Allows::Any) && !route.allows.face(&AsFace { cx, spell: card, face: cx.card_id(bestow) }, card, player) {
@@ -10749,6 +10764,7 @@ pub fn act(cx: &mut Cx, player: PlayerId) -> R<Flow> {
                 by: action.granted_by,
                 way,
                 additional: route.additional,
+                additional_choice: route.choice(),
                 life_for_mana_value: route.life(),
                 alternative,
                 paid_by: paid_by.map(|a| a.grant),
@@ -10899,6 +10915,8 @@ struct CastBy {
     way: Option<Given<GrantedWay>>,
     /// What the permission adds to every cast by it (CR 118.8): a permanent's permission's, retrace's discard.
     additional: Cost,
+    /// The ways of paying what that adds where it is one of several (`GrantedWay::additional_choice`): the caster chooses one.
+    additional_choice: &'static [ExtraCost],
     /// Life equal to the face's mana value rather than its mana cost (CR 118.9, 119.4): Inside Information, Bolas's Citadel.
     life_for_mana_value: bool,
     /// What an alternative cost another object gives has paid rather than the mana cost (CR 118.9, `ActionOption::paid_by`).
@@ -10912,7 +10930,7 @@ struct CastBy {
 
 impl Default for CastBy {
     fn default() -> CastBy {
-        CastBy { by: None, way: None, additional: Cost::NONE, life_for_mana_value: false, alternative: None, paid_by: None, flash_alternative: None }
+        CastBy { by: None, way: None, additional: Cost::NONE, additional_choice: &[], life_for_mana_value: false, alternative: None, paid_by: None, flash_alternative: None }
     }
 }
 
@@ -11179,6 +11197,14 @@ fn cast(
         let (picked, pick) = choose_additional(cx, player, spell, face, def)?;
         extra_parts.push((CostOrigin::AdditionalChoice(picked), pick));
         // With what is owed already (a permission's additional cost, CR 118.8), not instead of it.
+        extra = add_extra_totals(extra, pick);
+        cost.mana = add_cost(cost.mana, pick.mana);
+    }
+    // The same for what a way of casting it adds (CR 118.8): Osteomancer Adept's forage.
+    if let (false, Some(grant)) = (by.additional_choice.is_empty(), by.by) {
+        let labels: Vec<Label> = (0..by.additional_choice.len() as u8).map(|i| Label::WayExtra(grant.ability, i)).collect();
+        let (picked, pick) = choose_one_additional(cx, player, spell, by.additional_choice, &labels)?;
+        extra_parts.push((CostOrigin::AdditionalChoice(picked), pick));
         extra = add_extra_totals(extra, pick);
         cost.mana = add_cost(cost.mana, pick.mana);
     }
@@ -13186,15 +13212,21 @@ fn choose_cost_way(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abi
 /// Chooses which additional cost is paid (CR 601.2b): only the ones that can be paid are offered, and a lone one is
 /// taken without asking, as the C# engine does.
 fn choose_additional(cx: &mut Cx, player: PlayerId, spell: ObjectId, face: CardId, def: &'static CardDef) -> R<(usize, Cost)> {
-    let payable: Vec<u8> = (0..def.additional_choice.len() as u8)
-        .filter(|&i| can_pay_other(cx, spell, player, &def.additional_choice[i as usize].cost))
+    let labels: Vec<Label> = (0..def.additional_choice.len() as u8).map(|i| Label::Extra(face, i)).collect();
+    choose_one_additional(cx, player, spell, def.additional_choice, &labels)
+}
+
+/// `choose_additional` for any list of ways, each named by its label.
+fn choose_one_additional(cx: &mut Cx, player: PlayerId, spell: ObjectId, choice: &'static [ExtraCost], labels: &[Label]) -> R<(usize, Cost)> {
+    let payable: Vec<u8> = (0..choice.len() as u8)
+        .filter(|&i| can_pay_other(cx, spell, player, &choice[i as usize].cost))
         .collect();
     let Some(&first) = payable.first() else { return Err(Stop::Cancel) };
     let mut picked = first;
     if payable.len() > 1 {
         let ask = RequestKind::ChooseModes {
             source: spell,
-            modes: (0..def.additional_choice.len() as u8).map(|i| Label::Extra(face, i)).collect(),
+            modes: labels.to_vec(),
             eligible: payable,
             count: 1,
             at_most: 0,
@@ -13208,7 +13240,7 @@ fn choose_additional(cx: &mut Cx, player: PlayerId, spell: ObjectId, face: CardI
             _ => return Err(Stop::Cancel),
         }
     }
-    Ok((picked as usize, def.additional_choice[picked as usize].cost))
+    Ok((picked as usize, choice[picked as usize].cost))
 }
 
 /// Announcing X or the number of times a spell is kicked (CR 601.2b), as the C# engine asks it: a pay-costs

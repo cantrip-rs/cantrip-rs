@@ -150,6 +150,7 @@ fn printed_label_text_in(table: &'static CardTable, label: &Label) -> &'static s
         Label::Mode(ability, i) => cards().modal_of(ability).and_then(|m| m.modes.get(i as usize)).map_or("", |m| m.text),
         Label::Extra(card, i) => cards().get(card).additional_choice.get(i as usize).map_or("", |c| c.text),
         Label::AbilityExtra(ability, i) => cards().cost_choice_of(ability).get(i as usize).map_or("", |c| c.text),
+        Label::WayExtra(way, i) => cards().way_of(way).and_then(|w| w.additional_choice.get(i as usize)).map_or("", |c| c.text),
         Label::PayLife(Color::White) => "Pay 2 life for {W/P}",
         Label::PayLife(Color::Blue) => "Pay 2 life for {U/P}",
         Label::PayLife(Color::Black) => "Pay 2 life for {B/P}",

@@ -182,7 +182,7 @@ fn cx(game: &mut Game) -> Cx<'_> {
 
 /// Your main phase with priority and an empty stack.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &SQUIRREL, &NOTHING, &PLAIN, &LEONARDO, &KESS, &MIKEY, &HORDE, &PALEONTOLOGIST, &OSTEO])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &SQUIRREL, &NOTHING, &PLAIN, &LEONARDO, &KESS, &MIKEY, &HORDE, &PALEONTOLOGIST, &OSTEO, &OSTEO_COSTED])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -624,4 +624,101 @@ fn a_way_for_the_turn_is_not_used_up_by_a_cast() {
     cast(&mut g, first, true);
     resolve_all(&mut g);
     assert_eq!(offered(&mut g, second), [Some(giver)]);
+}
+
+/// "Until end of turn, you may cast creature spells from your graveyard by exiling a card from your graveyard or paying 2 life
+/// in addition to paying their other costs" (Osteomancer Adept's forage, as a choice of costs): way 0 offers both, way 1 only
+/// the exile.
+static OSTEO_COSTED: CardDef = CardDef {
+    name: "Rider Test Osteo Costed",
+    types: TypeSet::of(&[CardType::Sorcery]),
+    lasting_ways: &[
+        GrantedWay {
+            text: "Cast a creature spell from your graveyard by exiling a card or paying 2 life.",
+            cost: creature_card,
+            permission: true,
+            additional_choice: &[EXILE_A_CARD, PAY_TWO_LIFE],
+            ..GrantedWay::CAST
+        },
+        GrantedWay { text: "Cast a creature spell from your graveyard by exiling a card.", cost: creature_card, permission: true, additional_choice: &[EXILE_A_CARD], ..GrantedWay::CAST },
+    ],
+    ..CardDef::BLANK
+};
+
+const EXILE_A_CARD: ExtraCost = ExtraCost { text: "Exile a card from your graveyard", cost: Cost { exile_from_graveyard: 1, ..Cost::NONE } };
+const PAY_TWO_LIFE: ExtraCost = ExtraCost { text: "Pay 2 life", cost: life(2) };
+
+fn give_costed_way(g: &mut Game, giver: ObjectId, index: u8) {
+    let kind = EffectKind::LastingWay { card: g.cards.id_of(&OSTEO_COSTED), index, player: YOU, words: Words::NONE, once: false };
+    between(g, |cx| cantrip_api::Game::add_player_effect(cx, YOU, giver, kind, Duration::EndOfTurn));
+}
+
+/// Casts `card` by its granted way, answering the question of which cost is paid with `choice`; whether it was asked is returned.
+fn cast_choosing(g: &mut Game, card: ObjectId, choice: u8) -> bool {
+    let r = next(g);
+    let RequestKind::Priority { options } = &r.kind else { panic!("expected priority, got {:?}", r.kind) };
+    let option = options.iter().find(|o| o.kind == ActionKind::CastSpell && o.source == Some(card) && o.granted_by.is_some()).expect("the cast is offered").clone();
+    g.answer(r.id, r.player, Answer::Act(Action::of(&option))).expect("a legal answer");
+    let mut asked = false;
+    loop {
+        let r = next(g);
+        match &r.kind {
+            RequestKind::ChooseModes { additional_cost: true, eligible, modes, .. } => {
+                asked = true;
+                assert_eq!(modes.len(), 2);
+                assert_eq!(eligible, &[0, 1]);
+                g.answer(r.id, r.player, Answer::Modes(vec![choice])).expect("a way");
+            }
+            RequestKind::ChooseCards { cards, .. } => {
+                let one = cards[..1].to_vec();
+                g.answer(r.id, r.player, Answer::Cards(one)).expect("a card");
+            }
+            RequestKind::PayCosts { options, .. } => {
+                let pay = options.iter().find(|o| matches!(o.kind, ActionKind::ConfirmCasting | ActionKind::AssignMana)).expect("the pool pays").clone();
+                g.answer(r.id, r.player, Answer::Act(Action::of(&pay))).expect("a legal answer");
+            }
+            _ => break,
+        }
+    }
+    asked
+}
+
+/// CR 601.2b, 118.8: what a way adds, where it is one of several ways of paying, is chosen as the spell is announced from the
+/// ones that can be paid, and only that is paid - exiling a card exiles it and costs no life, paying life exiles nothing.
+#[test]
+fn a_way_that_names_a_choice_of_additional_costs_asks_for_one_and_pays_only_it() {
+    for (choice, exiled, life) in [(0u8, 1usize, 20i32), (1, 0, 18)] {
+        let mut g = game();
+        let giver = put(&mut g, &OSTEO_COSTED, Zone::exile(YOU));
+        let card = put(&mut g, &SQUIRREL, Zone::graveyard(YOU));
+        put(&mut g, &FILLER, Zone::graveyard(YOU));
+        add(&mut g, Mana::G, 1);
+        give_costed_way(&mut g, giver, 0);
+        assert!(cast_choosing(&mut g, card, choice), "both can be paid: asked which");
+        assert_eq!(g.state.zone(Zone::exile(YOU)).len(), 1 + exiled, "choice {choice}");
+        assert_eq!(g.state.zone(Zone::graveyard(YOU)).len(), 1 - exiled, "choice {choice}");
+        assert_eq!(g.state.player(YOU).life, life, "choice {choice}");
+        let spell = g.state.stack.last().expect("the spell is on the stack").object;
+        resolve_all(&mut g);
+        assert!(g.state.obj(g.state.obj(spell).became.expect("it resolved")).zone.is(ZoneKind::Battlefield));
+    }
+}
+
+/// A way whose every way of paying can't be is not offered (CR 601.2b, 118.3), one with a way that can is: with the creature
+/// card alone in the graveyard (the spell is not a card there to exile) there is nothing to exile; the way that also offers
+/// life is offered, and asks nothing as it has one way left.
+#[test]
+fn a_way_with_no_payable_additional_cost_is_not_offered() {
+    let mut g = game();
+    let giver = put(&mut g, &OSTEO_COSTED, Zone::exile(YOU));
+    let card = put(&mut g, &SQUIRREL, Zone::graveyard(YOU));
+    add(&mut g, Mana::G, 1);
+    give_costed_way(&mut g, giver, 1);
+    assert_eq!(offered(&mut g, card), Vec::<Option<ObjectId>>::new(), "nothing to exile");
+    let mut g = game();
+    let giver = put(&mut g, &OSTEO_COSTED, Zone::exile(YOU));
+    let card = put(&mut g, &SQUIRREL, Zone::graveyard(YOU));
+    add(&mut g, Mana::G, 1);
+    give_costed_way(&mut g, giver, 0);
+    assert_eq!(offered(&mut g, card), [Some(giver)], "life can be paid");
 }
