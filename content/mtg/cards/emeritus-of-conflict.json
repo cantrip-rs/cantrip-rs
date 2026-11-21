@@ -1,0 +1,17 @@
+{
+  "name": "Emeritus of Conflict",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Wizard",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "First strike\nWhenever you cast your third spell each turn, this creature becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "keywords": [
+    "FirstStrike"
+  ],
+  "prepare": {
+    "name": "Lightning Bolt",
+    "manaCost": "{R}",
+    "type": "Instant",
+    "oracleText": "Lightning Bolt deals 3 damage to any target."
+  }
+}

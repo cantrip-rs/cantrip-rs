@@ -1,0 +1,55 @@
+# Emeritus of Conflict: "Whenever you cast your third spell each turn, this creature becomes prepared" (CR 603.2, 722.3a). On
+# turn 1 it is cast as Bot1's third spell, but it is not on the battlefield then, so it is not prepared. On turn 3 two Moxen
+# are spells one and two (still unprepared), Lightning Bolt from hand is the third and prepares it, and the copy of Lightning
+# Bolt cast from exile (CR 722.3c) is the fourth spell: it unprepares the creature, and the fourth spell prepares nothing again.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Emeritus of Conflict
+Lightning Bolt
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Emeritus of Conflict.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Emeritus of Conflict.Prepared = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Emeritus of Conflict.Prepared = (absent)
+? Stack.Count = 0
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Emeritus of Conflict.Prepared = true
+? Exile = Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Emeritus of Conflict.Prepared = (absent)
+Exile.Count = 0
+Stack.Count = 0
+Bot1.Graveyard = Lightning Bolt

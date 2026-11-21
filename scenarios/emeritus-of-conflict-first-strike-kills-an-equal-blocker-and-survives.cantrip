@@ -1,0 +1,40 @@
+# Emeritus of Conflict is a 2/2 with first strike (CR 702.7): attacking into Bot2's Grizzly Bears it deals its 2 damage in the
+# first-strike step, so the Bears die before dealing any damage and the Emeritus is undamaged.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Emeritus of Conflict
+Island x4
+Island x16
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Emeritus of Conflict.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Emeritus of Conflict.Power = 2
+? Bot1.Battlefield.Emeritus of Conflict.Toughness = 2
+? Bot1.Battlefield.Emeritus of Conflict.Keywords = FirstStrike
+Bot1.Attack(Emeritus of Conflict > Bot2)
+Bot2.Block(Grizzly Bears > Emeritus of Conflict)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Emeritus of Conflict.Damage = 0
+Bot2.Life = 20
