@@ -22,7 +22,7 @@ fn strange_new_worlds(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
     let top = top_of_library(g, opponent, count);
     let exiled: Vec<ObjectId> = g.exile_all(&top).into_iter().filter(|&card| g.obj(card).zone.is(ZoneKind::Exile)).collect();
     g.end_sentence();
-    // "An instant or sorcery spell": the face that would be cast is the spell (CR 709.3a, 715.3a), so an Adventure's instant half counts.
+    // "An instant or sorcery spell": the spell the card would be cast as is judged (CR 601.3e, `Game::chars_as_cast`), so an Adventure's instant half counts.
     choose::cast_up_to_among(
         g,
         you,
@@ -31,9 +31,9 @@ fn strange_new_worlds(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
         &exiled,
         1,
         CastTerms { instead: Some(ManaCost::ZERO), ..CastTerms::default() },
-        |g, _, w| {
-            let face = g.card(w.face);
-            face.is(CardType::Instant) || face.is(CardType::Sorcery)
+        |g, card, w| {
+            let spell = g.chars_as_cast(card, w.way, you);
+            spell.is(CardType::Instant) || spell.is(CardType::Sorcery)
         },
     )?;
     g.end_sentence();
