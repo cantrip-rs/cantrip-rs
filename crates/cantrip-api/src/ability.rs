@@ -457,6 +457,9 @@ pub enum ManaCapability {
     /// Exactly the source's current nonnegative power mana, independently in these colors.
     /// Power is read through layers at resolution (Vivi Ornitier, CR 208.2, 608.2h).
     CurrentPowerCombination(ColorSet),
+    /// Exactly the source's current nonnegative power mana, all of the one color the activation names (CR 106.5): "Add X
+    /// mana of any one color, where X is this creature's power." Power is read through layers as it resolves (CR 208.2).
+    CurrentPowerOneColor,
     /// A finite choice of complete mana bundles, chosen during resolution.
     FiniteBundles(&'static [ManaPool], u8),
 }

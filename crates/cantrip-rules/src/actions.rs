@@ -6475,7 +6475,13 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
             }
             // A yield not stated, a cost in mana paid in a way announced (Phyrexian, {2/W}), or a cost of tapped permanents
             // (chosen once its mana is paid, and paid again for each, CR 601.2g-h), is not judged.
-            if def.adds.0.iter().all(|&n| n == 0) && def.adds_any == 0 && !matches!(def.mana_capability, Some(ManaCapability::FiniteBundles(..)))
+            // Its mana of one color named: so many (`Adds::any`), or the power of its source (`ManaCapability::CurrentPowerOneColor`).
+            let one_color = match def.mana_capability {
+                Some(ManaCapability::CurrentPowerOneColor) => chars.power.unwrap_or(0).max(0) as u32,
+                _ => u32::from(def.adds_any),
+            };
+            if def.adds.0.iter().all(|&n| n == 0) && one_color == 0
+                && !matches!(def.mana_capability, Some(ManaCapability::FiniteBundles(..) | ManaCapability::CurrentPowerOneColor))
                 || cost.mana.phyrexian != [0; 5]
                 || cost.mana.twobrid != [0; 5]
                 || def.cost.permanents.is_some_and(|p| p.tapped)
@@ -6505,8 +6511,8 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
             let mut alternative = Alternative {
                 snow: chars.supertypes.snow, extra_snow: [0; 6], produced_snow: 0,
                 fixed: def.adds.0,
-                k: u32::from(def.adds_any),
-                types: if def.adds_any > 0 { any_types(cx, id, player, def, by) } else { 0 },
+                k: one_color,
+                types: if one_color > 0 { any_types(cx, id, player, def, by) } else { 0 },
                 restriction: def.restricted.filter(|r| r.limits()).map(|r| restriction_from(cx, id, r, by)),
                 cost: ManaCost { x: 0, ..cost.mana },
                 source: ability_payment(cx, id, chars.types, chars.subtypes, false),
@@ -14235,8 +14241,9 @@ pub(crate) fn producible_types(cx: &Cx, land: ObjectId) -> (ColorSet, bool) {
         }
         // A shared recipe can describe its entire unbounded-X output family. This proves all types
         // without selecting guessed X values or using affordability (CR 106.7). Opaque quantity-dependent
-        // replacement callbacks still require a symbolic contract, rather than sampling their guards.
-        if let Some(capability) = def.mana_capability {
+        // replacement callbacks still require a symbolic contract, rather than sampling their guards. Power in one named
+        // color is its effect run for each color, below.
+        if let Some(capability) = def.mana_capability.filter(|c| !matches!(c, ManaCapability::CurrentPowerOneColor)) {
             if let ManaCapability::FiniteBundles(bundles, _) = capability {
                 let restriction = def.restricted.map(|r| restriction_from(cx, land, r, by));
                 for bundle in bundles {
@@ -14251,7 +14258,7 @@ pub(crate) fn producible_types(cx: &Cx, land: ObjectId) -> (ColorSet, bool) {
                 continue;
             }
             let (colors, total) = match capability {
-                ManaCapability::FiniteBundles(..) => unreachable!(),
+                ManaCapability::FiniteBundles(..) | ManaCapability::CurrentPowerOneColor => unreachable!(),
                 ManaCapability::AnnouncedXCombination(colors) => (colors, None),
                 ManaCapability::CurrentPowerCombination(colors) =>
                     (colors, Some(chars.power.unwrap_or(0).max(0) as u32)),
