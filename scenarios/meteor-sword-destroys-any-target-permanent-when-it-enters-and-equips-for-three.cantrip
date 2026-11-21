@@ -1,0 +1,55 @@
+# Meteor Sword: "When this Equipment enters, destroy target permanent." and "Equip {3}" for +3/+3. Turn 3 Bot1 casts it for {7}: four Moxes and a Black Lotus' three (a sixth mana short, with the fourth Mox
+# untapped, is refused). The trigger can take any permanent, not just a creature: Bot2's Mox Jet is destroyed, and Bot2's Ornithopter is left. On turn 5 the Sword is moved onto Bot1's Ornithopter
+# for exactly {3}: 3/5.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Meteor Sword
+Ornithopter
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Mox Jet
+Island x18
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+! Bot1.Hand.Meteor Sword.Cast(Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Meteor Sword.Cast
+Bot1.Pass
+Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Mox Jet
+? Bot2.Battlefield = Ornithopter
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Meteor Sword.Activate(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T5 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Meteor Sword.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 3
+Bot1.Battlefield.Ornithopter.Toughness = 5

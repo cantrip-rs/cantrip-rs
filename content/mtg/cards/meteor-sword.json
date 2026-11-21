@@ -1,0 +1,6 @@
+{
+  "name": "Meteor Sword",
+  "manaCost": "{7}",
+  "type": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, destroy target permanent.\nEquipped creature gets +3/+3.\nEquip {3} ({3}: Attach to target creature you control. Equip only as a sorcery.)"
+}
