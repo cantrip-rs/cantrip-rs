@@ -1,0 +1,45 @@
+# The Boulder, Ready to Rumble: only creatures count. A Jibbirik Omnivore (3/2, power 3) and an uncrewed Veloheart Bike (a 4/2 Vehicle, not a
+# creature while it isn't crewed) do not count, so with The Boulder (4/4) X = 1 and the chosen Forest becomes a 1/1 haste land creature
+# (CR 701.66a, 301.7). The Bike is cast on the turn of the attack, so it is counted, if at all, as the ability resolves (CR 608.2h).
+
+[Bot1 Deck]
+Forest
+Black Lotus
+The Boulder, Ready to Rumble
+Jibbirik Omnivore
+Mox Emerald
+Mox Emerald
+Veloheart Bike
+Forest
+Forest x12
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.The Boulder, Ready to Rumble.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Jibbirik Omnivore.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Veloheart Bike.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(The Boulder, Ready to Rumble)
+Bot1.Target(Bot1.Battlefield.Forest#2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Forest#2.Power = 1
+Bot1.Battlefield.Forest#2.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Jibbirik Omnivore.Power = 3
+Bot1.Battlefield.Veloheart Bike.Types = Artifact

@@ -1,0 +1,57 @@
+# The Boulder, Ready to Rumble {3}{G}: "Whenever The Boulder attacks, earthbend X, where X is the number of creatures you control with
+# power 4 or greater." On turn 3 Bot1 attacks with The Boulder (4/4) beside its own Alpine Grizzly (4/2, summoning sick but counted) while Bot2
+# controls an Alpine Grizzly too (not counted, "you control"): X = 2, so the chosen Forest becomes a 2/2 haste land creature (CR 701.66a, 107.3).
+
+[Bot1 Deck]
+Forest
+Black Lotus
+The Boulder, Ready to Rumble
+Alpine Grizzly
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Forest
+Forest x12
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Alpine Grizzly
+Forest x16
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.The Boulder, Ready to Rumble.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Alpine Grizzly.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(The Boulder, Ready to Rumble)
+Bot1.Target(Bot1.Battlefield.Forest#2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Forest#2.Types = Land; Creature
+Bot1.Battlefield.Forest#2.Power = 2
+Bot1.Battlefield.Forest#2.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Forest#2.Keywords = Haste
+Bot1.Battlefield.Forest#1.Types = Land
+Bot2.Life = 16
