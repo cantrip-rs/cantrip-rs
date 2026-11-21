@@ -3162,6 +3162,14 @@ pub fn damage_each_creature_not_of_subtype(g: &mut dyn Game, item: &StackItem, s
 /// Cave-In): one damage event for every creature and planeswalker on the battlefield as the effect is carried out (CR 608.2c),
 /// each permanent once even when it is both, all dealt together. Damage to a planeswalker removes loyalty counters (CR 306.8).
 pub fn damage_each_creature_and_planeswalker(g: &mut dyn Game, item: &StackItem, n: u32) {
+    damage_each_creature_and_planeswalker_where(g, item, n, |_, _| true);
+}
+
+/// "[This] deals `n` damage to each creature and planeswalker [some players] control": `damage_each_creature_and_planeswalker`
+/// over the creatures and planeswalkers `counts` accepts as the effect is carried out (CR 608.2c), all dealt together (CR
+/// 120.3). Fulminous Forte ("each creature and planeswalker your opponents control") and Incinerator of the Guilty ("each
+/// creature and planeswalker that player controls") print it.
+pub fn damage_each_creature_and_planeswalker_where(g: &mut dyn Game, item: &StackItem, n: u32, counts: impl Fn(&dyn Game, ObjectId) -> bool) {
     let hits: Vec<(ObjectId, Target, u32)> = g
         .state()
         .battlefield()
@@ -3169,7 +3177,7 @@ pub fn damage_each_creature_and_planeswalker(g: &mut dyn Game, item: &StackItem,
         .copied()
         .filter(|&id| {
             let chars = g.chars(id);
-            chars.is(CardType::Creature) || chars.is(CardType::Planeswalker)
+            (chars.is(CardType::Creature) || chars.is(CardType::Planeswalker)) && counts(g, id)
         })
         .map(|id| (item.object, Target::Object(id), n))
         .collect();
