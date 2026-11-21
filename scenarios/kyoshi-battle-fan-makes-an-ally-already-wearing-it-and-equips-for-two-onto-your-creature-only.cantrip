@@ -1,0 +1,57 @@
+# Kyoshi Battle Fan: "When this Equipment enters, create a 1/1 white Ally creature token, then attach this Equipment to it." (CR 701.3a): the Ally is 2/1 (+1/+0), white, an Ally.
+# "Equip {2}" (CR 702.6a): at sorcery speed only, to a creature you control only. On turn 3 Bot1's Ornithopter (0/2) is refused in the beginning of combat step, in the second main phase
+# Bot2's Ornithopter is refused; then Bot1's own Ornithopter takes it (paid with exactly two Moxes): it is 1/2 and the Ally token is 1/1 again.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Kyoshi Battle Fan
+Ornithopter
+Plains
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kyoshi Battle Fan.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ally Token.Power = 2
+? Bot1.Battlefield.Ally Token.Toughness = 1
+? Bot1.Battlefield.Ally Token.Colors = White
+? Bot1.Battlefield.Ally Token.Subtypes = Ally
+? Bot1.Battlefield.Kyoshi Battle Fan.AttachedTo = Ally Token
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Kyoshi Battle Fan.Activate(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Kyoshi Battle Fan.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Kyoshi Battle Fan.Activate(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Kyoshi Battle Fan.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ally Token.Power = 1
+Bot1.Battlefield.Ally Token.Toughness = 1
