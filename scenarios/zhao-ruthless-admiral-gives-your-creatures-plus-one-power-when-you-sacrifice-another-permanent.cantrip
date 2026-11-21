@@ -1,0 +1,70 @@
+# Zhao, Ruthless Admiral: "Whenever you sacrifice another permanent, creatures you control get +1/+0 until end of turn." Bot2 sacrificing its own Lotus Petal
+# changes nothing. Bot1 sacrificing its Lotus Petal gives Zhao (3/4 -> 4/4) and Bot1's Memnite (1/1 -> 2/1) +1/+0 and not Bot2's Memnite (1/1).
+# "Another": Bot1 then sacrifices Zhao itself to Ashnod's Altar, and nothing triggers (the stack stays empty, Memnite stays 2/1).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Zhao, Ruthless Admiral
+Memnite
+Lotus Petal
+Ashnod's Altar
+Plains x19
+
+[Bot2 Deck]
+Lotus Petal
+Memnite
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zhao, Ruthless Admiral.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Lotus Petal.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Lotus Petal.Activate(Color: White)
+? Bot1.Battlefield.Zhao, Ruthless Admiral.Power = 3
+? Stack.Count = 0
+[T3 Bot1.Main1]
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Lotus Petal.Activate(Color: Black)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Zhao, Ruthless Admiral.Power = 4
+? Bot1.Battlefield.Zhao, Ruthless Admiral.Toughness = 4
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ashnod's Altar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Zhao, Ruthless Admiral)
+? Stack.Count = 0
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+
+[Expect]
+Bot1.Graveyard = Zhao, Ruthless Admiral; Lotus Petal

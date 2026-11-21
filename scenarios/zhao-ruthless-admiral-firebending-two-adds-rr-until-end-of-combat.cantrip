@@ -1,0 +1,37 @@
+# Zhao, Ruthless Admiral {2}{B/R}{B/R}, 3/4: "Firebending 2": attacking adds exactly {R}{R} (not {R}), lasting until end of combat; the unblocked 3/4 deals 3.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Zhao, Ruthless Admiral
+Plains x20
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zhao, Ruthless Admiral.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Zhao, Ruthless Admiral > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R} lasting {R}{R}
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Mana =
+Bot2.Life = 17

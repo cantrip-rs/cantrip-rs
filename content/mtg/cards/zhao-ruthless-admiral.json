@@ -1,0 +1,8 @@
+{
+  "name": "Zhao, Ruthless Admiral",
+  "manaCost": "{2}{B/R}{B/R}",
+  "type": "Legendary Creature — Human Soldier",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Firebending 2 (Whenever this creature attacks, add {R}{R}. This mana lasts until end of combat.)\nWhenever you sacrifice another permanent, creatures you control get +1/+0 until end of turn."
+}
