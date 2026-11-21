@@ -1,0 +1,37 @@
+# Zuko, Conflicted's fourth mode: "Exile Zuko, then return him to the battlefield under an opponent's control." Bot1 loses 2 life (18)
+# and Zuko comes back under Bot2's control, a new object that has chosen nothing (CR 400.7): in Bot2's own first main phase (turn 4) his
+# trigger is Bot2's, who makes all the choices - Bot2 draws (loses 2 life, 18) while Bot1 draws and loses nothing.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Zuko, Conflicted
+Swamp x20
+
+[Bot2 Deck]
+Island x23
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Zuko, Conflicted.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Modes(Exile Zuko)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+? Bot1.Battlefield = Mox Jet; Mox Ruby
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Zuko, Conflicted.Types = Creature
+Bot2.Modes(Draw a card)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 18
+Bot2.Battlefield.Zuko, Conflicted.ChosenModes = 1

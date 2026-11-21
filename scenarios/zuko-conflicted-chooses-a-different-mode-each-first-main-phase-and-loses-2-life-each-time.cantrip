@@ -1,0 +1,51 @@
+# Zuko, Conflicted {B}{R}, 2/3: "At the beginning of your first main phase, choose one that hasn't been chosen and you lose 2 life". Turn 3:
+# draw a card (Bot1 20 -> 18 life, one more card in hand). Turn 5: {R} added (it is in the pool; 16 life), the drawing refused as already
+# chosen. Turn 7: the +1/+1 counter (14 life), the red mana and the draw refused. The three chosen modes are recorded on Zuko (ChosenModes
+# 1, 2, 3).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Zuko, Conflicted
+Swamp x20
+
+[Bot2 Deck]
+Island x23
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Zuko, Conflicted.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Modes(Draw a card)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+? Bot1.Hand.Count = 6
+[T5 Bot1.Main1]
+! Bot1.Modes(Draw a card)
+Bot1.Modes(Add {R})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 16
+? Bot1.Mana = {R}
+? Bot1.Hand.Count = 7
+[T7 Bot1.Main1]
+! Bot1.Modes(Draw a card)
+! Bot1.Modes(Add {R})
+Bot1.Modes(Put a +1/+1 counter)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 14
+Bot1.Mana =
+Bot1.Hand.Count = 8
+Bot1.Battlefield.Zuko, Conflicted.ChosenModes = 1, 2, 3
+Bot1.Battlefield.Zuko, Conflicted.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Zuko, Conflicted.Power = 3

@@ -1,0 +1,56 @@
+# Zuko, Conflicted's fourth mode on a token copy: "Exile Zuko, then return him to the battlefield under an opponent's control." A token
+# that has left the battlefield can't come back (CR 111.7, 111.8), so the token is just gone. Bot1's Zuko exiles himself on turn 3 and
+# comes back under Bot2's control; Bot1 then copies him with Rite of Replication (no legend rule: a different controller). Bot2's Zuko
+# draws on turn 4. On turn 5 the token's own trigger chooses the exile mode (nothing chosen yet: it is a new object): Bot1 loses 2
+# life again (16) and the token is not returned to Bot2, who keeps only the Zuko it already had.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Zuko, Conflicted
+Black Lotus
+Mox Sapphire
+Rite of Replication
+Swamp x17
+
+[Bot2 Deck]
+Island x23
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Zuko, Conflicted.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Modes(Exile Zuko)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Zuko, Conflicted
+Bot1.Hand.Rite of Replication.Cast(Bot2.Battlefield.Zuko, Conflicted)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Zuko, Conflicted.Token = true
+[T4 Bot2.Main1]
+Bot2.Modes(Draw a card)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Modes(Exile Zuko)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 16
+Bot2.Life = 18
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire
+Bot2.Battlefield = Zuko, Conflicted
+Bot1.Graveyard = Rite of Replication; Black Lotus
+Exile.Count = 0

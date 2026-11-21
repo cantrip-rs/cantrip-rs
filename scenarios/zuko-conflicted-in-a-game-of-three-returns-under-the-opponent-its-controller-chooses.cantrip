@@ -1,0 +1,38 @@
+# Zuko, Conflicted in a game of three: "Exile Zuko, then return him to the battlefield under an opponent's control." With two
+# opponents Bot1 chooses which one (CR 110.2a): Bot3, not the next player. Bot1 loses 2 life (18) and Zuko comes back under
+# Bot3's control, a new object (CR 400.7); Bot2 gets nothing.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Zuko, Conflicted
+Swamp x20
+
+[Bot2 Deck]
+Island x23
+
+[Bot3 Deck]
+Island x23
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Zuko, Conflicted.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T4 Bot1.Main1]
+Bot1.Modes(Exile Zuko)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.ChoosePlayer(Bot3)
+? Bot1.Life = 18
+[T4 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby
+Bot2.Battlefield.Count = 0
+Bot3.Battlefield = Zuko, Conflicted

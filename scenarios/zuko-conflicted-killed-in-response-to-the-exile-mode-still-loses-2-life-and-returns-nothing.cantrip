@@ -1,0 +1,41 @@
+# Zuko, Conflicted: with the fourth mode's trigger on the stack Bot2's Lightning Bolt kills Zuko. The trigger resolves anyway - Bot1 still loses
+# 2 life (18) - but there is no Zuko left to exile, and the card in the graveyard is a new object (CR 400.7): nothing comes back, under either
+# player's control.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Zuko, Conflicted
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x21
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Zuko, Conflicted.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Modes(Exile Zuko)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Zuko, Conflicted)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Zuko, Conflicted
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot1.Graveyard = Zuko, Conflicted
+Bot1.Battlefield = Mox Jet; Mox Ruby
+Bot2.Battlefield = Mox Ruby
