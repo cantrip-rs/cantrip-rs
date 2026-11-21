@@ -1,0 +1,27 @@
+# Rumble Arena: "{1}, {T}: Add one mana of any color": with no other mana the colored ability is refused (the Arena's own {T}
+# cannot also pay its {1}), the plain colorless ability being the positive control. On turn 3 an Island's {U} pays the {1}
+# and the Arena adds {R}: the pool is {R} alone and both lands are tapped (CR 605.1a).
+
+[Bot1 Deck]
+Rumble Arena
+Island x6
+Lightning Bolt
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Rumble Arena.Play
+Bot1.Arrange(Lightning Bolt | )
+! Bot1.Battlefield.Rumble Arena.Activate(Ability: any color; Color: Red; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Rumble Arena.Activate(Ability: any color; Color: Red)
+? Bot1.Mana = {R}
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Rumble Arena.Tapped = true
+Bot1.Battlefield.Island.Tapped = true

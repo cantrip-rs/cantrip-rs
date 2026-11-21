@@ -1,0 +1,20 @@
+# Rumble Arena's "scry 1" lets the player keep the card on top (CR 701.22a): Bot1 leaves Lightning Bolt where it is, so the
+# library is unchanged. The sibling scenario rumble-arena-scries-1-as-it-enters-has-vigilance-and-taps-for-colorless sends it
+# to the bottom.
+
+[Bot1 Deck]
+Rumble Arena
+Island x6
+Lightning Bolt
+Black Lotus
+Counterspell
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Rumble Arena.Play
+Bot1.Arrange(Lightning Bolt | )
+
+[Expect]
+Bot1.Library = Lightning Bolt; Black Lotus; Counterspell
