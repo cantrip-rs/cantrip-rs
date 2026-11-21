@@ -1,0 +1,59 @@
+# Walltop Sentries: the "if" is checked as the ability would trigger and again as it resolves (CR 603.4; the 2025-10-02 ruling).
+# Bot1 has Accumulate Wisdom (a Lesson) in its graveyard when its Lightning Bolt kills the Sentries, so the trigger goes on the
+# stack; in response Tormod's Crypt exiles the graveyard, no Lesson is left on resolution and Bot1 gains nothing.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Walltop Sentries
+Entomb
+Lightning Bolt
+Tormod's Crypt
+Accumulate Wisdom
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Walltop Sentries.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Accumulate Wisdom)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Walltop Sentries)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Life = 20
+Bot1.Battlefield.Tormod's Crypt.Activate(Target: Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot1.Graveyard.Count = 0

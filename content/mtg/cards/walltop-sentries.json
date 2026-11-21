@@ -1,0 +1,12 @@
+{
+  "name": "Walltop Sentries",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Human Soldier Ally",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Reach, deathtouch\nWhen this creature dies, if there's a Lesson card in your graveyard, you gain 2 life.",
+  "keywords": [
+    "Reach",
+    "Deathtouch"
+  ]
+}

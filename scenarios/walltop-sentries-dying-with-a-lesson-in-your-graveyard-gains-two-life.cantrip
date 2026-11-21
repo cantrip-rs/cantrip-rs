@@ -1,0 +1,52 @@
+# Walltop Sentries: "When this creature dies, if there's a Lesson card in your graveyard, you gain 2 life" (CR 603.4, 205.3k). It
+# is a 2/3 with reach and deathtouch. Entomb puts Accumulate Wisdom (a Lesson) into Bot1's graveyard, then Bot1's own Lightning Bolt
+# kills the Sentries and Bot1 gains exactly 2 life.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Walltop Sentries
+Entomb
+Lightning Bolt
+Accumulate Wisdom
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Walltop Sentries.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Walltop Sentries.Power = 2
+? Bot1.Battlefield.Walltop Sentries.Toughness = 3
+? Bot1.Battlefield.Walltop Sentries.Keywords = Deathtouch; Reach
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Accumulate Wisdom)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Walltop Sentries)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot1.Graveyard = Walltop Sentries; Lightning Bolt; Entomb; Accumulate Wisdom
