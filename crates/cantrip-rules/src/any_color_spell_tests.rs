@@ -35,15 +35,19 @@ static FRONT: CardDef = CardDef {
 };
 
 /// Oath of Nissa's rule.
-fn planeswalker_spells(q: &dyn Query, asker: &Asker, spending: &Spending) -> bool {
-    spending.player == asker.controller
+fn planeswalker_spells(q: &dyn Query, asker: &Asker, spending: &Spending) -> AnyMana {
+    if spending.player == asker.controller
         && spending.purpose == SpendingFor::Casting
-        && spending.source.is_some_and(|source| q.chars(source).is(CardType::Planeswalker))
+        && spending.source.is_some_and(|source| q.chars(source).is(CardType::Planeswalker)) {
+        AnyMana::Color
+    } else {
+        AnyMana::No
+    }
 }
 static OATH: CardDef = CardDef {
     name: "Any Color Test Oath",
     types: TypeSet::of(&[CardType::Enchantment]),
-    spend_any_color: &[planeswalker_spells],
+    spend_any_mana: &[planeswalker_spells],
     ..CardDef::BLANK
 };
 
@@ -119,4 +123,64 @@ fn a_permission_to_spend_mana_as_any_color_pays_no_colorless_symbol() {
     assert!(offered_from_exile(any_color, COLORLESS_COLORLESS), "colorless mana is spent as though it were any color");
     assert!(offered_from_exile(PlayGrant { any_type: true, ..PlayGrant::CAST }, RED_RED), "any type pays {{C}}");
     assert!(!offered_from_exile(PlayGrant::CAST, RED_COLORLESS), "the permission alone changed what pays {{U}}");
+}
+
+/// A creature spell with {C} in its mana cost: {U}{C}.
+static COLORLESS_CREATURE: CardDef = CardDef {
+    name: "Any Type Test Drone",
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    cost: ManaCost { symbols: [0, 1, 0, 0, 0, 1], ..ManaCost::ZERO },
+    ..CardDef::BLANK
+};
+
+/// Vizier of the Menagerie's rule: mana of any type for the controller's creature spells.
+fn creature_spells_any_type(q: &dyn Query, asker: &Asker, spending: &Spending) -> AnyMana {
+    if spending.player == asker.controller
+        && spending.purpose == SpendingFor::Casting
+        && spending.source.is_some_and(|source| q.chars(source).is(CardType::Creature)) {
+        AnyMana::Type
+    } else {
+        AnyMana::No
+    }
+}
+/// The same, but only any color: the rule's answer is what widens, not a second rule.
+fn creature_spells_any_color(q: &dyn Query, asker: &Asker, spending: &Spending) -> AnyMana {
+    creature_spells_any_type(q, asker, spending).min(AnyMana::Color)
+}
+static VIZIER: CardDef = CardDef { name: "Any Type Test Vizier", spend_any_mana: &[creature_spells_any_type], ..CardDef::BLANK };
+static VIZIER_COLOR: CardDef = CardDef { name: "Any Type Test Lesser Vizier", spend_any_mana: &[creature_spells_any_color], ..CardDef::BLANK };
+
+/// Whether `spell` is offered to you from your hand with `pool` and the permanents `on_battlefield`.
+fn offered_from_hand(spell: &'static CardDef, on_battlefield: &[&'static CardDef], pool: [u32; 6]) -> bool {
+    let table: &'static CardTable =
+        Box::leak(Box::new(CardTable::new([spell, &COLORLESS_SYMBOL, &COLORLESS_CREATURE, &VIZIER, &VIZIER_COLOR])));
+    let mut game = Game::new(table, &Setup { decks: vec![Vec::new(), Vec::new()], ..Default::default() });
+    let card = game.state.push_obj(Obj::new(table.id_of(spell), YOU, Zone::hand(YOU)));
+    game.state.zone_push(Zone::hand(YOU), card);
+    for def in on_battlefield {
+        let id = game.state.push_obj(Obj::new(table.id_of(def), YOU, Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, id);
+    }
+    game.state.update_player(YOU, |p| p.pool = ManaPool(pool));
+    game.state.update_turn(|t| {
+        t.active = YOU;
+        t.priority = YOU;
+        t.set_step(Step::PrecombatMain);
+    });
+    priority_options(&mut cx(&mut game), YOU).iter().any(|o| o.kind == ActionKind::CastSpell && o.source == Some(card))
+}
+
+/// CR 609.4b: "mana of any type can be spent to cast creature spells" (Vizier of the Menagerie): red mana pays {U} and {C}
+/// of a creature spell, which as though of any color it would not ({C} is no color); another spell stays as it was, and
+/// the widest of two rules wins.
+#[test]
+fn a_static_rule_for_mana_of_any_type_pays_a_creature_spells_colorless_symbol() {
+    const RED_RED: [u32; 6] = [0, 0, 0, 2, 0, 0];
+    assert!(!offered_from_hand(&COLORLESS_CREATURE, &[], RED_RED), "red mana paid {{U}}{{C}} with no rule");
+    assert!(offered_from_hand(&COLORLESS_CREATURE, &[&VIZIER], RED_RED), "any type did not pay {{U}}{{C}} of a creature spell");
+    assert!(!offered_from_hand(&COLORLESS_CREATURE, &[&VIZIER_COLOR], RED_RED), "any color paid {{C}}");
+    assert!(offered_from_hand(&COLORLESS_CREATURE, &[&VIZIER_COLOR, &VIZIER], RED_RED), "the widest rule did not win");
+    assert!(!offered_from_hand(&COLORLESS_SYMBOL, &[&VIZIER], RED_RED), "a noncreature spell was paid as any type");
 }

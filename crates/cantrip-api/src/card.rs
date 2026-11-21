@@ -3658,11 +3658,44 @@ pub enum SpendingFor {
     Other,
 }
 
-/// Whether a static ability lets a player spend mana as though it were mana of any color for a payment (CR 609.4b), given
-/// the rule's own asker and the payment: Agatha's Soul Cauldron's "you may ... to activate abilities of creatures you
-/// control", Mycosynth Lattice's "players may ...". It changes how the cost may be paid, not the cost
-/// (`ManaCost::paid_with_any_color`).
-pub type SpendAnyColorRule = fn(&dyn Query, &Asker, &Spending) -> bool;
+/// What a payment may spend on a cost's symbols (CR 609.4b): only the mana each asks for, mana as though it were of any
+/// color (Mycosynth Lattice: a colored or hybrid symbol; {C} is no color), or mana of any type (Cruelclaw's Heist,
+/// Vizier of the Menagerie: {C} too). Ordered by what each lets be spent, so the widest of several rules wins.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
+pub enum AnyMana {
+    No,
+    Color,
+    Type,
+}
+
+impl AnyMana {
+    /// What a permission's terms let be spent (`PlayGrant`, `CastTerms`): any type, the wider, where it says both.
+    pub fn of(any_type: bool, any_color: bool) -> AnyMana {
+        match (any_type, any_color) {
+            (true, _) => AnyMana::Type,
+            (false, true) => AnyMana::Color,
+            (false, false) => AnyMana::No,
+        }
+    }
+
+    /// The mana a payer is asked for: `owed` with every symbol any mana may pay as generic. The cost itself is not changed
+    /// (CR 609.4b): this is the payment's view of it.
+    pub fn view(self, owed: &ManaCost) -> ManaCost {
+        match self {
+            AnyMana::No => *owed,
+            AnyMana::Color => owed.paid_with_any_color(),
+            AnyMana::Type => owed.paid_with_any_type(),
+        }
+    }
+}
+
+/// What a static ability lets a player spend as though it were mana of another kind for a payment (CR 609.4b), given the
+/// rule's own asker and the payment: "as though it were mana of any color" (`AnyMana::Color`: Agatha's Soul Cauldron's "you
+/// may ... to activate abilities of creatures you control", Oath of Nissa's "to cast planeswalker spells", Mycosynth
+/// Lattice's "players may ...") or "mana of any type can be spent" (`AnyMana::Type`: Vizier of the Menagerie's "to cast
+/// creature spells"); `AnyMana::No` where it does not apply. It changes how the cost may be paid, not the cost
+/// (`AnyMana::view`).
+pub type SpendAnyManaRule = fn(&dyn Query, &Asker, &Spending) -> AnyMana;
 
 /// Whether a static ability lets its controller activate the abilities of this creature as though it had haste (CR 302.6):
 /// given the rule's own asker and the creature whose ability is activated.
@@ -4286,8 +4319,9 @@ pub struct CardDef {
     pub legend_rule_exempt: &'static [LegendRuleExemption],
     /// "You may spend mana as though it were mana of any color to activate abilities of creatures you control" (CR 609.4b):
     /// Agatha's Soul Cauldron; "... to cast planeswalker spells": Oath of Nissa; "Players may spend mana as though it were
-    /// mana of any color": Mycosynth Lattice.
-    pub spend_any_color: &'static [SpendAnyColorRule],
+    /// mana of any color": Mycosynth Lattice. "You can spend mana of any type to cast creature spells" (`AnyMana::Type`, {C}
+    /// too): Vizier of the Menagerie. One rule, answering none, color or type, for a payment (`SpendAnyManaRule`).
+    pub spend_any_mana: &'static [SpendAnyManaRule],
     /// "You may activate each of those abilities only once each turn" (CR 602.5b): how many of a permanent's instances of
     /// an activated ability are ones its static ability gave it with that limit (Locus of Enlightenment's of the exiled
     /// cards used to craft it, Mairsil, the Pretender's of the caged cards), asked of the permanent of this card as the
@@ -4518,7 +4552,7 @@ impl CardDef {
         mana_told_apart: &[],
         zero_loyalty_stays: &[],
         legend_rule_exempt: &[],
-        spend_any_color: &[],
+        spend_any_mana: &[],
         granted_once_each_turn: None,
         extra_power_up_activations: 0,
         exhaust_as_though_unactivated: false,

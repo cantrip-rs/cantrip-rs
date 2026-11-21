@@ -17,8 +17,8 @@ fn everything(_: &dyn LayerQuery, _: ObjectId, _: ObjectId, _: &Chars) -> bool {
 /// "Players may spend mana as though it were mana of any color." (CR 609.4b): every player, for every payment - a spell, an
 /// ability, any other mana cost - and colorless mana too (the ruling). It changes no cost, and no restriction on the mana
 /// (the ruling: mana that may be spent only on artifact spells still may not pay for another spell).
-fn any_payment(_: &dyn Query, _: &Asker, _: &Spending) -> bool {
-    true
+fn any_payment(_: &dyn Query, _: &Asker, _: &Spending) -> AnyMana {
+    AnyMana::Color
 }
 
 pub static CARD: CardDef = CardDef {
@@ -27,6 +27,6 @@ pub static CARD: CardDef = CardDef {
         static_ability(Layer::Color, everything, colorless, "All cards that aren't on the battlefield, spells, and permanents are colorless.")
             .everywhere(),
     ],
-    spend_any_color: &[any_payment],
+    spend_any_mana: &[any_payment],
     ..oracle::MYCOSYNTH_LATTICE
 };

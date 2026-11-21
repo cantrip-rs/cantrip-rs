@@ -717,7 +717,7 @@ color" apart from how much of it the ability adds, or the outcomes listed per co
 | Pri-2 | Open | engine (display) | 2026-10-24, review of Oath of Nissa |
 
 **Notes.** Whether an "unless pays" cost is offered as payable is right: `pay_during_resolution` asks
-`spend_any_color_for(.., SpendingFor::Other)` and `pool_pays` converts the cost to any color after its Phyrexian and {2/C}
+`spend_any_mana_for(.., SpendingFor::Other)` and `pool_pays` converts the cost to any color after its Phyrexian and {2/C}
 symbols are announced (CR 609.4b, 118.12). But the prompt's `remaining` hint, the mana still owed that the client and bots
 read, is built with `paid_with_any_color`, which leaves Phyrexian symbols alone, so under Mycosynth Lattice a {B/P} is still
 listed as needing black. A fix converts the Phyrexian symbols' colored halves too when any color may pay them.

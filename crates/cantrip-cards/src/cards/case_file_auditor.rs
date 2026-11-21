@@ -20,10 +20,14 @@ fn look(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// "You may spend mana as though it were mana of any color to cast Case spells." (CR 609.4b, 601.2h): the controller's own casting of a
 /// Case spell - not an ability's activation, nor any other payment for one.
-fn case_spells(q: &dyn Query, asker: &Asker, spending: &Spending) -> bool {
-    spending.player == asker.controller
+fn case_spells(q: &dyn Query, asker: &Asker, spending: &Spending) -> AnyMana {
+    if spending.player == asker.controller
         && spending.purpose == SpendingFor::Casting
-        && spending.source.is_some_and(|source| q.chars(source).has_subtype(Subtype::Case))
+        && spending.source.is_some_and(|source| q.chars(source).has_subtype(Subtype::Case)) {
+        AnyMana::Color
+    } else {
+        AnyMana::No
+    }
 }
 
 pub static CARD: CardDef = CardDef {
@@ -32,6 +36,6 @@ pub static CARD: CardDef = CardDef {
         look,
         "When this creature enters and whenever you solve a Case, look at the top six cards of your library. You may reveal an enchantment card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.",
     )],
-    spend_any_color: &[case_spells],
+    spend_any_mana: &[case_spells],
     ..oracle::CASE_FILE_AUDITOR
 };

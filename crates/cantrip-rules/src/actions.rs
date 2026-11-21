@@ -3670,10 +3670,10 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, window: ManaWindow, option
             // for what mana abilities could tap (`Judged::Nested`), where asking what the player can pay would ask it again.
             if def.cost.mana.x == 0 && cost.mana != ManaCost::ZERO && judged != Judged::Nested {
                 let a = available_without(cx, player, def.cost.tap.then_some(id), ManaWindow::Payment);
-                let any = static_rules::spend_any_color_for(cx, player, id, SpendingFor::Activating);
+                let any = static_rules::spend_any_mana_for(cx, player, id, SpendingFor::Activating);
                 if !change_any(cx, &changers, player, costed, def.cost.mana, None, &[], None, &mut |cost, least| {
                     let cost = at_least(cost, least);
-                    let cost = if any { cost.paid_with_any_color() } else { cost };
+                    let cost = any.view(&cost);
                     a.covers_for(&cost, &ability_payment(cx, id, chars.types, chars.subtypes, false))
                 }) {
                     continue;
@@ -3776,10 +3776,10 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, window: ManaWindow, option
             if cost.mana.x == 0 && cost.mana != ManaCost::ZERO && judged != Judged::Nested {
                 let available = available_without(cx, player, None, ManaWindow::Payment);
                 let chars = cx.chars(id);
-                let any = static_rules::spend_any_color_for(cx, player, id, SpendingFor::Activating);
+                let any = static_rules::spend_any_mana_for(cx, player, id, SpendingFor::Activating);
                 if !change_any(cx, &changers, player, costed, a.cost.mana, None, &[], None, &mut |cost, least| {
                     let cost = at_least(cost, least);
-                    let cost = if any { cost.paid_with_any_color() } else { cost };
+                    let cost = any.view(&cost);
                     available.covers_for(&cost, &ability_payment(cx, id, chars.types, chars.subtypes, false))
                 }) {
                     continue;
@@ -6184,10 +6184,12 @@ fn affordable_with(cx: &Cx, a: &Available, player: PlayerId, source: ObjectId, c
     }
     let chars = cx.chars(source);
     if cx.s().obj(source).zone.is(ZoneKind::Stack) {
-        let any_color = !a.any_color
-            && !a.spenders.is_empty()
-            && static_rules::lets_spend_any_color(cx, &a.spenders, &Spending { player, source: Some(source), purpose: SpendingFor::Casting });
-        a.covers_for(&if any_color { cost.paid_with_any_color() } else { *cost }, &spell_payment(cx, player, source, a.names_subtypes()))
+        let any = if a.spenders.is_empty() || a.any == AnyMana::Type {
+            AnyMana::No
+        } else {
+            static_rules::lets_spend_any_mana(cx, &a.spenders, &Spending { player, source: Some(source), purpose: SpendingFor::Casting })
+        };
+        a.covers_for(&any.view(cost), &spell_payment(cx, player, source, a.names_subtypes()))
     } else {
         a.covers_for(cost, &ability_payment(cx, source, chars.types, chars.subtypes, false))
     }
@@ -6211,8 +6213,8 @@ pub struct Available {
     /// and its mana of any one color a mana ability adds (Great Hall of the Biblioplex, Delighted Halfling). Each pays
     /// only what `Available::covers_for` says it may. Mana that pays anything (`ManaRestriction::limits`) is in `fixed`.
     restricted: Vec<(ManaRestriction, [u32; 6], u32)>,
-    /// The player may spend mana as though it were mana of any color for every payment (CR 609.4b: Mycosynth Lattice).
-    any_color: bool,
+    /// What the player may spend as though it were mana of another kind for every payment (CR 609.4b: Mycosynth Lattice).
+    any: AnyMana,
     /// The permanents whose static abilities may let the player spend mana as though it were mana of any color for some
     /// payments (CR 609.4b: Oath of Nissa's planeswalker spells), asked of each spell judged (`spell_covers`). Empty in nearly
     /// every game.
@@ -6488,7 +6490,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
                     changers,
                     grantors: pay_with_grantors(cx),
                     restricted,
-                    any_color: false,
+                    any: AnyMana::No,
                     spenders: Vec::new(),
                     linked,
                     complex: Vec::new(),
@@ -6717,7 +6719,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
             tapped[colors.0 as usize] += 1;
         }
     }
-    let spenders = static_rules::any_color_spenders(cx);
+    let spenders = static_rules::any_mana_spenders(cx);
     Available {
         snow,
         fixed,
@@ -6726,7 +6728,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
         changers,
         grantors: pay_with_grantors(cx),
         restricted,
-        any_color: static_rules::spend_any_color_always(cx, &spenders, player),
+        any: static_rules::spend_any_mana_always(cx, &spenders, player),
         spenders,
         linked,
         complex,
@@ -7002,24 +7004,24 @@ fn spell_kind(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &Ca
     ManaPayment::Spell { types, subtypes, legendary, mana_value, x, from, commander, card }
 }
 
-/// Whether a static ability lets `player` spend mana as though it were mana of any color to cast `card` as `def` (CR
-/// 609.4b: Oath of Nissa's "to cast planeswalker spells"), asked before it is cast: the rule reads the card as the spell it
-/// would be, the face it would be cast as (CR 712.11c, 709.3a, 715.4, `AsFace`). Mana spent so for every payment
-/// (`Available::any_color`) is not asked again.
-fn casts_with_any_color(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &CardDef) -> bool {
-    if a.spenders.is_empty() || a.any_color {
-        return false;
+/// What a static ability lets `player` spend as though it were mana of another kind to cast `card` as `def` (CR 609.4b:
+/// Oath of Nissa's "mana of any color ... to cast planeswalker spells", Vizier of the Menagerie's "mana of any type ... to
+/// cast creature spells"), asked before it is cast: the rule reads the card as the spell it would be, the face it would be
+/// cast as (CR 712.11c, 709.3a, 715.4, `AsFace`). Mana spent so for every payment (`Available::any`) is not asked again.
+fn casts_with_any_mana(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &CardDef) -> AnyMana {
+    if a.spenders.is_empty() || a.any == AnyMana::Type {
+        return AnyMana::No;
     }
     let spending = Spending { player, source: Some(card), purpose: SpendingFor::Casting };
     match face_of(cx, card, def) {
-        Some(face) => static_rules::lets_spend_any_color(&AsFace { cx, spell: card, face }, &a.spenders, &spending),
-        None => static_rules::lets_spend_any_color(cx, &a.spenders, &spending),
+        Some(face) => static_rules::lets_spend_any_mana(&AsFace { cx, spell: card, face }, &a.spenders, &spending),
+        None => static_rules::lets_spend_any_mana(cx, &a.spenders, &spending),
     }
 }
 
 /// Whether `cost` could be paid to cast `card` as `def` (advice, CR 601.2g-h): by the mana at hand that may pay for that
-/// spell (`spell_kind`), spent as though it were mana of any color where a static ability lets `player` do so for it
-/// (`casts_with_any_color`, CR 609.4b).
+/// spell (`spell_kind`), spent as though it were mana of any color or type where a static ability lets `player` do so for it
+/// (`casts_with_any_mana`, CR 609.4b).
 fn spell_covers(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &CardDef, cost: &ManaCost) -> bool {
     let bending;
     let a = match waterbend_tap(def) {
@@ -7030,7 +7032,7 @@ fn spell_covers(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &
         None => a,
     };
     let payment = spell_kind(cx, a, player, card, def);
-    if casts_with_any_color(cx, a, player, card, def) { a.covers_for(&cost.paid_with_any_color(), &payment) } else { a.covers_for(cost, &payment) }
+    a.covers_for(&casts_with_any_mana(cx, a, player, card, def).view(cost), &payment)
 }
 
 impl Available {
@@ -7052,10 +7054,11 @@ impl Available {
                 self.covers_for(&cost.with_twobrids_paid(&generic), payment)
             });
         }
-        // CR 609.4b: a player who may spend mana as though it were mana of any color pays a colored symbol with any mana.
+        // CR 609.4b: a player who may spend mana as though it were mana of any color pays a colored symbol with any mana, one
+        // who may spend mana of any type every symbol.
         let as_paid;
-        let cost = if self.any_color {
-            as_paid = cost.paid_with_any_color();
+        let cost = if self.any != AnyMana::No {
+            as_paid = self.any.view(cost);
             &as_paid
         } else {
             cost
@@ -7100,7 +7103,7 @@ impl Available {
             changers: Vec::new(),
             grantors: Vec::new(),
             restricted: Vec::new(),
-            any_color: false,
+            any: AnyMana::No,
             spenders: Vec::new(),
             linked: self.linked.clone(),
             complex: Vec::new(),
@@ -7266,7 +7269,7 @@ impl Available {
             changers: Vec::new(),
             grantors: Vec::new(),
             restricted: self.restricted.clone(),
-            any_color: self.any_color,
+            any: self.any,
             spenders: Vec::new(),
             linked: self.linked.clone(),
             complex: Vec::new(),
@@ -7668,7 +7671,7 @@ impl Search<'_> {
         for (step, &i) in order.iter().enumerate() {
             let stage = if at_once { 0 } else { step as u32 + 1 };
             let (a, chosen, _) = leaf.costed[i];
-            let cost = if leaf.with.any_color { a.cost.paid_with_any_color() } else { a.cost };
+            let cost = leaf.with.any.view(&a.cost);
             Demand::of(&cost, if at_once { 1 } else { stage }, Some(a.source), &mut demand);
             let made = a.made(chosen);
             for m in 0..6 {
@@ -8013,13 +8016,13 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
                 // A special action is no activated ability (CR 116.2): what changes the cost of activating abilities does not
                 // touch it; what changes its own cost is already in `owed` (`special_action_cost`), which `special_action`
                 // pays. A cost of nothing is judged too: an increase still applies to it (CR 118.9d, 601.2f).
-                // Mana of any color pays for it (CR 609.4b): every symbol is paid as generic mana.
-                let any_color = static_rules::spend_any_color_for(cx, player, id, if def.special_action { SpendingFor::Other } else { SpendingFor::Activating });
+                // Mana of any color or type pays for it (CR 609.4b): every symbol it may pay is paid as generic mana.
+                let any = static_rules::spend_any_mana_for(cx, player, id, if def.special_action { SpendingFor::Other } else { SpendingFor::Activating });
                 // Its Phyrexian symbols paid with life where the life total allows, beside the life the cost pays
                 // (CR 107.4f, 601.2b by way of 602.2b, 116.2b), as the activation announces them (`announce_life`).
                 let judge = |cost: ManaCost, life: u32| {
                     let cost = phyrexian_with_life(cx, player, cost, life, activating(def));
-                    a.covers_for(&if any_color { cost.paid_with_any_color() } else { cost }, &payment)
+                    a.covers_for(&any.view(&cost), &payment)
                 };
                 if def.special_action {
                     // Its own cost changes, each way a reduction by hybrid mana could be split (CR 118.7e) and the hybrid
@@ -10235,7 +10238,7 @@ fn covers_total(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &
         }
         None => a,
     };
-    let any = if any == AnyMana::No && casts_with_any_color(cx, a, player, card, def) { AnyMana::Color } else { any };
+    let any = any.max(casts_with_any_mana(cx, a, player, card, def));
     let as_paid = |cost: ManaCost| any.view(&cost);
     // Assist (CR 702.132a): another player may pay generic mana of it - as much as the one who could pay the most.
     let cost = if with.assist && !no_mana && cost.generic > 0 { ManaCost { generic: cost.generic - assist_could_pay(cx, player, card, def, cost.generic), ..cost } } else { cost };
@@ -12505,9 +12508,7 @@ fn announce_twobrids(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &mut
 fn announcement_affordable(cx: &Cx, player: PlayerId, source: ObjectId, cost: &ManaCost, purpose: Option<Paying>) -> bool {
     match purpose {
         Some(purpose) => {
-            let cost = if static_rules::spend_any_color_for(cx, player, source, spending_for(cx, source, purpose)) {
-                cost.paid_with_any_color()
-            } else { *cost };
+            let cost = static_rules::spend_any_mana_for(cx, player, source, spending_for(cx, source, purpose)).view(cost);
             available(cx, player).covers_for(&cost, &payment_for(cx, player, source, purpose))
         }
         None => can_afford(cx, player, source, cost),
@@ -13615,7 +13616,7 @@ fn player_special_action_options(cx: &Cx, player: PlayerId, options: &mut Vec<Ac
         // An {X} is judged at the least it may be announced as (CR 107.3a); mana of any color pays for it where an effect
         // says so (CR 609.4b). A special action is no ability, so mana limited to abilities can't pay for it (CR 106.6).
         let owed = at_least_x(special_action_cost(cx, player, effect.source, ability, def), def.x_cant_be_zero);
-        let owed = if static_rules::spend_any_color_for(cx, player, effect.source, SpendingFor::Other) { owed.paid_with_any_color() } else { owed };
+        let owed = static_rules::spend_any_mana_for(cx, player, effect.source, SpendingFor::Other).view(&owed);
         if !owed.is_zero() && !available.get_or_insert_with(|| self::available(cx, player)).covers_for(&owed, &ManaPayment::Other) {
             continue;
         }
@@ -14820,7 +14821,7 @@ fn spend(owed: &mut ManaCost, mana: Mana) {
 /// improvise, waterbend) and the creatures tapped for convoke have paid theirs (`convoked`), which take X's part first.
 fn spend_noting_x(any: AnyMana, owed: &mut ManaCost, mana: Mana, generic_paid: u32, convoking: &[ColorSet], on_x: &mut [u32; 6]) {
     if owed.x_mana.is_any() {
-        return any.spend(owed, mana);
+        return spend_as(any, owed, mana);
     }
     let x_left = |owed: &ManaCost| {
         let mut cost = *owed;
@@ -14828,7 +14829,7 @@ fn spend_noting_x(any: AnyMana, owed: &mut ManaCost, mana: Mana, generic_paid: u
         convoked(&cost, convoking).x_part()
     };
     let before = x_left(owed);
-    any.spend(owed, mana);
+    spend_as(any, owed, mana);
     if x_left(owed) < before {
         on_x[mana as usize] += 1;
     }
@@ -14854,51 +14855,22 @@ fn x_paid_one_way(due: &ManaCost, pays: impl Fn(&ManaCost) -> bool) -> Option<[u
     one
 }
 
-/// What a payment may spend on a cost's symbols (CR 609.4b): only the mana each asks for, mana as though it were of any
-/// color (Mycosynth Lattice: a colored or hybrid symbol), or mana of any type (Cruelclaw's Heist: {C} too).
-#[derive(Clone, Copy, PartialEq, Eq)]
-pub(crate) enum AnyMana {
-    No,
-    Color,
-    Type,
-}
-
-impl AnyMana {
-    /// What a permission's terms let be spent (`PlayGrant`, `CastTerms`): any type, the wider, where it says both.
-    fn of(any_type: bool, any_color: bool) -> AnyMana {
-        match (any_type, any_color) {
-            (true, _) => AnyMana::Type,
-            (false, true) => AnyMana::Color,
-            (false, false) => AnyMana::No,
-        }
+/// `spend`, where a unit may also pay a symbol of another type (`any`, CR 609.4b): its own symbol first, then another it may
+/// pay, the generic mana last, which leaves what pays only generic mana (delve, improvise) the most to pay.
+fn spend_as(any: AnyMana, owed: &mut ManaCost, mana: Mana) {
+    let own = owed.symbols[mana as usize] > 0 || owed.hybrid.iter().flatten().any(|&(a, b)| a == mana || b == mana);
+    if any == AnyMana::No || own {
+        return spend(owed, mana);
     }
-
-    /// The mana a payer is asked for: `owed` with every symbol any mana may pay as generic.
-    fn view(self, owed: &ManaCost) -> ManaCost {
-        match self {
-            AnyMana::No => *owed,
-            AnyMana::Color => owed.paid_with_any_color(),
-            AnyMana::Type => owed.paid_with_any_type(),
-        }
-    }
-
-    /// `spend`, where a unit may also pay a symbol of another type: its own symbol first, then another it may pay, the
-    /// generic mana last, which leaves what pays only generic mana (delve, improvise) the most to pay.
-    fn spend(self, owed: &mut ManaCost, mana: Mana) {
-        let own = owed.symbols[mana as usize] > 0 || owed.hybrid.iter().flatten().any(|&(a, b)| a == mana || b == mana);
-        if self == AnyMana::No || own {
-            return spend(owed, mana);
-        }
-        // Mana as though of any color pays no {C}, which no color stands for.
-        let types = if self == AnyMana::Type { 6 } else { 5 };
-        if let Some(i) = (0..types).find(|&i| owed.symbols[i] > 0) {
-            owed.symbols[i] -= 1;
-        } else if let Some(slot) = owed.hybrid.iter().position(Option::is_some) {
-            owed.hybrid[slot] = None;
-        } else if !owed.spend_x_as_any(mana) {
-            // X's part as though it were mana that may pay it (CR 609.4b), else the rest.
-            owed.spend_generic(mana);
-        }
+    // Mana as though of any color pays no {C}, which no color stands for.
+    let types = if any == AnyMana::Type { 6 } else { 5 };
+    if let Some(i) = (0..types).find(|&i| owed.symbols[i] > 0) {
+        owed.symbols[i] -= 1;
+    } else if let Some(slot) = owed.hybrid.iter().position(Option::is_some) {
+        owed.hybrid[slot] = None;
+    } else if !owed.spend_x_as_any(mana) {
+        // X's part as though it were mana that may pay it (CR 609.4b), else the rest.
+        owed.spend_generic(mana);
     }
 }
 
@@ -14979,7 +14951,7 @@ pub(crate) fn ways(pool: &ManaPool, owed: &ManaCost) -> Ways {
         *mana += n;
     }
     if owed.twobrid != [0; 5] {
-        return if pool_pays(pool, &owed, 0, false) { Ways::Many } else { Ways::None };
+        return if pool_pays(pool, &owed, 0, AnyMana::No) { Ways::Many } else { Ways::None };
     }
     let owed = &owed;
     let mut left = pool.0;
@@ -15684,10 +15656,7 @@ fn checkpoint_mana(cx: &mut Cx, player: PlayerId, source: ObjectId, purpose: Pay
 fn mana_activation_window(cx: &mut Cx, player: PlayerId, source: ObjectId, total: ManaCost, helpers: &Helpers, life: u32, record: bool) -> R<()> {
     loop {
         // Advice for what more mana could help. This does not spend the pool or close the window.
-        let any = match helpers.any {
-            AnyMana::No if static_rules::spend_any_color_for(cx, player, source, spending_for(cx, source, helpers.purpose)) => AnyMana::Color,
-            any => any,
-        };
+        let any = helpers.any.max(static_rules::spend_any_mana_for(cx, player, source, spending_for(cx, source, helpers.purpose)));
         let due = any.view(&total);
         let remaining = if helpers.no_mana { due } else if due.snow > 0 {
             quality_uncovered(&quality_groups(cx, player, source, helpers.purpose, &[]), &due)
@@ -15740,10 +15709,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
     // What is owed keeps the cost's symbols, since what pays instead of mana pays only some of them (delve and improvise
     // generic mana, convoke a symbol of its creature's color, CR 702.66a, 702.126a, 702.51a); the mana is asked for as the
     // payment's view of what is left.
-    let any = match helpers.any {
-        AnyMana::No if static_rules::spend_any_color_for(cx, player, source, spending_for(cx, source, helpers.purpose)) => AnyMana::Color,
-        any => any,
-    };
+    let any = helpers.any.max(static_rules::spend_any_mana_for(cx, player, source, spending_for(cx, source, helpers.purpose)));
     let mut owed = total;
     let mut paid = ManaPool::default();
     let mut used = 0u8;
@@ -16273,25 +16239,25 @@ fn pay_during_resolution_inner(
         let pool = spendable(cx, payer, source, purpose);
         // Mana spent as though it were mana of any color where a rule lets the payer for this payment (CR 609.4b), as the
         // payment itself asks (`pay_mana_used`, `spending_for`): no spell is cast and no ability activated by it.
-        let any_color = static_rules::spend_any_color_for(cx, payer, source, SpendingFor::Other);
+        let any = static_rules::spend_any_mana_for(cx, payer, source, SpendingFor::Other);
         // Waterbend's taps pay only its generic component; the remainder still observes snow provenance.
         let bent = bendable(cx, payer, cost.waterbend.generic);
         let judged = ManaCost { generic: total.generic - bent.min(total.generic), ..total };
         let life_room = payable_life(cx, payer) - life_paid(life);
         let pool_covers = if judged.snow > 0 {
             let groups = quality_groups(cx, payer, source, purpose, &[]);
-            pool_announcements_pay(&judged, life_room, any_color, &|cost| quality_plan(&groups, cost).is_some())
-        } else { pool_pays(&pool, &judged, life_room, any_color) };
+            pool_announcements_pay(&judged, life_room, any, &|cost| quality_plan(&groups, cost).is_some())
+        } else { pool_pays(&pool, &judged, life_room, any) };
         let remaining = if judged.snow > 0 {
             let groups = quality_groups(cx, payer, source, purpose, &[]);
             let best = std::cell::Cell::new(judged);
-            pool_announcements_pay(&judged, life_room, any_color, &|cost| {
+            pool_announcements_pay(&judged, life_room, any, &|cost| {
                 let left = quality_uncovered(&groups, cost);
                 if left.mana_value() < best.get().mana_value() { best.set(left); }
                 false // Examine every legal hybrid/Phyrexian announcement for the best pool coverage.
             });
             best.get()
-        } else { uncovered(&pool, &if any_color { judged.paid_with_any_color() } else { judged }) };
+        } else { uncovered(&pool, &any.view(&judged)) };
         let life_payable = can_pay_life(cx, payer, life);
         // Paying is judged exactly, on what is there now: the mana abilities have had their chance by the time the payer
         // asks to pay (CR 605.3a, 601.2g-h). Only the mana abilities themselves are offered on what they could feed the rest of
@@ -16397,17 +16363,16 @@ fn pay_during_resolution_inner(
 /// Whether `pool` pays `owed` now, however its symbols that can be paid in more than one way are paid (CR 118.13): each
 /// Phyrexian symbol with its color or 2 life, at most `life_room` life between them (CR 107.4f), and each monocolored hybrid
 /// symbol with its color or {2} (CR 107.4e). Symbols of one kind and color are alike, so each choice is how many of them
-/// are paid each way. `any_color`: the payer may spend mana as though it were mana of any color for it (CR 609.4b), so once
-/// those symbols are announced each colored one is paid with any mana (`ManaCost::paid_with_any_color`), as `pay_mana_used`
-/// pays it.
-pub(crate) fn pool_pays(pool: &ManaPool, owed: &ManaCost, life_room: i32, any_color: bool) -> bool {
-    pool_announcements_pay(owed, life_room, any_color, &|cost| !matches!(ways(pool, cost), Ways::None))
+/// are paid each way. `any`: the payer may spend mana as though it were mana of any color or type for it (CR 609.4b), so once
+/// those symbols are announced each one it covers is paid with any mana (`AnyMana::view`), as `pay_mana_used` pays it.
+pub(crate) fn pool_pays(pool: &ManaPool, owed: &ManaCost, life_room: i32, any: AnyMana) -> bool {
+    pool_announcements_pay(owed, life_room, any, &|cost| !matches!(ways(pool, cost), Ways::None))
 }
 
-fn pool_announcements_pay(owed: &ManaCost, life_room: i32, any_color: bool, pays: &impl Fn(&ManaCost) -> bool) -> bool {
-    fn go(rest: ManaCost, life_room: i32, any_color: bool, at: usize, pays: &impl Fn(&ManaCost) -> bool) -> bool {
+fn pool_announcements_pay(owed: &ManaCost, life_room: i32, any: AnyMana, pays: &impl Fn(&ManaCost) -> bool) -> bool {
+    fn go(rest: ManaCost, life_room: i32, any: AnyMana, at: usize, pays: &impl Fn(&ManaCost) -> bool) -> bool {
         if at == 10 {
-            return pays(&if any_color { rest.paid_with_any_color() } else { rest });
+            return pays(&any.view(&rest));
         }
         let (color, phyrexian) = (at % 5, at < 5);
         let n = if phyrexian { rest.phyrexian[color] } else { rest.twobrid[color] };
@@ -16424,10 +16389,10 @@ fn pool_announcements_pay(owed: &ManaCost, life_room: i32, any_color: bool, pays
                 next.add_generic(2 * other);
                 life_room
             };
-            room >= 0 && go(next, room, any_color, at + 1, pays)
+            room >= 0 && go(next, room, any, at + 1, pays)
         })
     }
-    go(*owed, life_room, any_color, 0, pays)
+    go(*owed, life_room, any, 0, pays)
 }
 
 /// Pays a resolution's cost with `total` its mana and `life` its life: its Phyrexian symbols are announced first, each
@@ -17070,15 +17035,22 @@ mod tests {
         // last, which is left for delve or improvise (CR 702.66a, 702.126a).
         let mut owed = mana("{1}{U}{C}");
         assert_eq!(AnyMana::Type.view(&owed), mana("{3}"));
-        AnyMana::Type.spend(&mut owed, Mana::C);
+        spend_as(AnyMana::Type, &mut owed, Mana::C);
         assert_eq!(owed, mana("{1}{U}"));
-        AnyMana::Type.spend(&mut owed, Mana::R);
+        spend_as(AnyMana::Type, &mut owed, Mana::R);
         assert_eq!(owed, mana("{1}"));
+        // A unit of another type pays {C} itself, which as though of any color it does not.
+        let mut owed = mana("{C}");
+        spend_as(AnyMana::Type, &mut owed, Mana::R);
+        assert_eq!(owed, ManaCost::ZERO);
+        let mut owed = mana("{C}");
+        spend_as(AnyMana::Color, &mut owed, Mana::R);
+        assert_eq!(owed, mana("{C}"));
         // As though of any color, mana pays no {C} (Mycosynth Lattice's ruling): red pays the {U} and then the generic.
         let mut owed = mana("{1}{U}{C}");
         assert_eq!(AnyMana::Color.view(&owed), mana("{2}{C}"));
-        AnyMana::Color.spend(&mut owed, Mana::R);
-        AnyMana::Color.spend(&mut owed, Mana::R);
+        spend_as(AnyMana::Color, &mut owed, Mana::R);
+        spend_as(AnyMana::Color, &mut owed, Mana::R);
         assert_eq!(owed, mana("{C}"));
     }
 
@@ -17123,7 +17095,7 @@ mod tests {
             changers: Vec::new(),
             grantors: Vec::new(),
             restricted: Vec::new(),
-            any_color: false,
+            any: AnyMana::No,
             spenders: Vec::new(),
             linked: Vec::new(),
             complex,

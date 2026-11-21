@@ -3,12 +3,16 @@ use cantrip_mechanics::targets;
 use cantrip_oracle as oracle;
 
 /// "You may spend mana as though it were mana of any color to activate abilities of creatures you control" (CR 609.4b).
-fn creature_you_control(q: &dyn Query, asker: &Asker, spending: &Spending) -> bool {
-    spending.player == asker.controller
+fn creature_you_control(q: &dyn Query, asker: &Asker, spending: &Spending) -> AnyMana {
+    if spending.player == asker.controller
         && spending.purpose == SpendingFor::Activating
         && spending.source.is_some_and(|source| {
             q.controller(source) == asker.controller && q.is_on_battlefield(source) && q.chars(source).is(CardType::Creature)
-        })
+        }) {
+        AnyMana::Color
+    } else {
+        AnyMana::No
+    }
 }
 
 /// The creature cards exiled with this permanent (CR 607.2a), in exile order.
@@ -47,6 +51,6 @@ pub static CARD: CardDef = CardDef {
     delayed: &[delayed_trigger(put_counter, "When a creature card is exiled this way, put a +1/+1 counter on target creature you control.")
         .targets(&[targets::CREATURE_YOU_CONTROL])],
     statics: &[static_ability(Layer::Ability, cantrip_mechanics::statics::your_creatures_with_plus_one_counters, grant_abilities, "Creatures you control with +1/+1 counters on them have all activated abilities of all creature cards exiled with Agatha's Soul Cauldron.")],
-    spend_any_color: &[creature_you_control],
+    spend_any_mana: &[creature_you_control],
     ..oracle::AGATHAS_SOUL_CAULDRON
 };

@@ -2743,11 +2743,11 @@ us - within the noise.
 
 ### Mana spent as though it were of any color
 
-"Spend mana as though it were mana of any color" (CR 609.4b) is a `CardDef::spend_any_color` rule, asked of a payment
+"Spend mana as though it were mana of any color" (CR 609.4b) is a `CardDef::spend_any_mana` rule, which answers `AnyMana` - none, color or type (Vizier of the Menagerie's "mana of any type can be spent to cast creature spells"), the widest of the rules that apply winning - asked of a payment
 (`Spending`: the player, what it is for, and whether it is casting that spell, activating an ability of it or another
 payment, `SpendingFor`): Agatha's Soul Cauldron's for its controller's creatures' abilities, Oath of Nissa's for its
 controller's planeswalker spells, Mycosynth Lattice's for every player and payment. Where one says yes, the cost is paid
-as `ManaCost::paid_with_any_color` has it - each colored and hybrid symbol by any mana, colorless included, a {C} symbol by
+as `ManaCost::paid_with_any_color` (`AnyMana::view`) has it - each colored and hybrid symbol by any mana, colorless included, a {C} symbol by
 colorless only - by the payment itself (`pay_mana_used`) and by the advice (`Available::covers_for`, which asks once per
 player whether the rule holds for every payment; whether a card can be cast, which asks for that spell, read as the face
 it would be cast as, CR 712.11c, 709.3a, 715.4 - `spell_covers`, `covers_total`; and the activation offers, which

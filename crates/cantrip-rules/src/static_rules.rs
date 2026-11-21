@@ -602,32 +602,35 @@ pub(crate) fn attack_sacrifices(cx: &Cx, eligible: &[ObjectId], targets: &[Targe
     out
 }
 
-/// Whether `player` may spend mana as though it were of any color to pay a cost for `source` (CR 609.4b): to activate an
-/// ability of it, to cast it (a spell on the stack), or anything else (`purpose`).
-pub fn spend_any_color_for(cx: &Cx, player: PlayerId, source: ObjectId, purpose: SpendingFor) -> bool {
-    lets_spend_any_color(cx, &any_color_spenders(cx), &Spending { player, source: Some(source), purpose })
+/// What `player` may spend as though it were mana of another kind to pay a cost for `source` (CR 609.4b): mana of any color,
+/// or of any type, to activate an ability of it, to cast it (a spell on the stack), or anything else (`purpose`).
+pub fn spend_any_mana_for(cx: &Cx, player: PlayerId, source: ObjectId, purpose: SpendingFor) -> AnyMana {
+    lets_spend_any_mana(cx, &any_mana_spenders(cx), &Spending { player, source: Some(source), purpose })
 }
 
-/// Whether `player` may spend mana as though it were of any color for every payment, whatever it is for (CR 609.4b:
-/// Mycosynth Lattice), of the `spenders` (from `any_color_spenders`): what the advice of what can be paid reads once
+/// What `player` may spend as though it were mana of another kind for every payment, whatever it is for (CR 609.4b:
+/// Mycosynth Lattice), of the `spenders` (from `any_mana_spenders`): what the advice of what can be paid reads once
 /// (`Available`).
-pub fn spend_any_color_always(cx: &Cx, spenders: &[(ObjectId, PlayerId, &'static CardDef, Option<Linked>)], player: PlayerId) -> bool {
-    lets_spend_any_color(cx, spenders, &Spending { player, source: None, purpose: SpendingFor::Other })
+pub fn spend_any_mana_always(cx: &Cx, spenders: &[(ObjectId, PlayerId, &'static CardDef, Option<Linked>)], player: PlayerId) -> AnyMana {
+    lets_spend_any_mana(cx, spenders, &Spending { player, source: None, purpose: SpendingFor::Other })
 }
 
-/// The permanents whose static abilities may let a player spend mana as though it were mana of any color (CR 609.4b): found
-/// from the battlefield, and empty (so unallocated) in nearly every game. Asked once, then `lets_spend_any_color` per payment.
-pub fn any_color_spenders(cx: &Cx) -> Vec<(ObjectId, PlayerId, &'static CardDef, Option<Linked>)> {
-    sources(cx, |d| !d.spend_any_color.is_empty()).collect()
+/// The permanents whose static abilities may let a player spend mana as though it were mana of another kind (CR 609.4b): found
+/// from the battlefield, and empty (so unallocated) in nearly every game. Asked once, then `lets_spend_any_mana` per payment.
+pub fn any_mana_spenders(cx: &Cx) -> Vec<(ObjectId, PlayerId, &'static CardDef, Option<Linked>)> {
+    sources(cx, |d| !d.spend_any_mana.is_empty()).collect()
 }
 
-/// Whether one of the `spenders` (from `any_color_spenders`) lets the payment `spending` be made with mana spent as though it
-/// were mana of any color (CR 609.4b). `q` is what the rule reads the payment's source through: a view of the face a card
-/// would be cast as, where its castability is judged as a face other than the card itself (CR 712.11c, 709.3a, 715.4).
-pub fn lets_spend_any_color(q: &dyn Query, spenders: &[(ObjectId, PlayerId, &'static CardDef, Option<Linked>)], spending: &Spending) -> bool {
+/// What the `spenders` (from `any_mana_spenders`) let the payment `spending` be made with, as though the mana spent were of
+/// another kind (CR 609.4b): the widest any rule gives - mana of any type over any color over none. `q` is what the rule
+/// reads the payment's source through: a view of the face a card would be cast as, where its castability is judged as a
+/// face other than the card itself (CR 712.11c, 709.3a, 715.4).
+pub fn lets_spend_any_mana(q: &dyn Query, spenders: &[(ObjectId, PlayerId, &'static CardDef, Option<Linked>)], spending: &Spending) -> AnyMana {
     spenders
         .iter()
-        .any(|&(id, controller, def, by)| def.spend_any_color.iter().any(|rule| rule(q, &Asker { instance: None, source: id, controller, by, spell: false }, spending)))
+        .flat_map(|&(id, controller, def, by)| def.spend_any_mana.iter().map(move |rule| rule(q, &Asker { instance: None, source: id, controller, by, spell: false }, spending)))
+        .max()
+        .unwrap_or(AnyMana::No)
 }
 
 /// Whether `player` may activate the abilities of `creature` as though it had haste (CR 302.6): a static ability of a

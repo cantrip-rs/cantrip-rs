@@ -204,17 +204,17 @@ fn paying_three_times_may_choose_every_mode() {
 fn the_pool_pays_a_cost_of_symbols_paid_more_than_one_way_only_with_enough_of_some_way() {
     let pool = |c: u32, g: u32| ManaPool([0, 0, 0, 0, g, c]);
     let twice = mana("{2/G}").times(2).expect("fits");
-    assert!(crate::actions::pool_pays(&pool(4, 0), &twice, 0, false), "{{2}}{{2}}");
-    assert!(crate::actions::pool_pays(&pool(2, 1), &twice, 0, false), "{{G}}{{2}}");
-    assert!(crate::actions::pool_pays(&pool(0, 2), &twice, 0, false), "{{G}}{{G}}");
-    assert!(!crate::actions::pool_pays(&pool(3, 0), &twice, 0, false), "three colorless pay neither way");
-    assert!(!crate::actions::pool_pays(&pool(1, 0), &mana("{G/P}"), 1, false), "no {{G}} and no 2 life");
-    assert!(crate::actions::pool_pays(&pool(0, 0), &mana("{G/P}"), 2, false), "2 life");
-    assert!(crate::actions::pool_pays(&pool(0, 1), &mana("{G/P}"), 0, false), "{{G}}");
+    assert!(crate::actions::pool_pays(&pool(4, 0), &twice, 0, cantrip_api::AnyMana::No), "{{2}}{{2}}");
+    assert!(crate::actions::pool_pays(&pool(2, 1), &twice, 0, cantrip_api::AnyMana::No), "{{G}}{{2}}");
+    assert!(crate::actions::pool_pays(&pool(0, 2), &twice, 0, cantrip_api::AnyMana::No), "{{G}}{{G}}");
+    assert!(!crate::actions::pool_pays(&pool(3, 0), &twice, 0, cantrip_api::AnyMana::No), "three colorless pay neither way");
+    assert!(!crate::actions::pool_pays(&pool(1, 0), &mana("{G/P}"), 1, cantrip_api::AnyMana::No), "no {{G}} and no 2 life");
+    assert!(crate::actions::pool_pays(&pool(0, 0), &mana("{G/P}"), 2, cantrip_api::AnyMana::No), "2 life");
+    assert!(crate::actions::pool_pays(&pool(0, 1), &mana("{G/P}"), 0, cantrip_api::AnyMana::No), "{{G}}");
     // Mana spent as though it were mana of any color (CR 609.4b): colorless pays a {G}, and a {G/P} announced as its {G}.
-    assert!(crate::actions::pool_pays(&pool(1, 0), &mana("{G}"), 0, true), "colorless as {{G}}");
-    assert!(crate::actions::pool_pays(&pool(1, 0), &mana("{G/P}"), 1, true), "colorless as the {{G}} of {{G/P}}");
-    assert!(!crate::actions::pool_pays(&pool(1, 0), &mana("{G}{G}"), 0, true), "one mana for two symbols");
+    assert!(crate::actions::pool_pays(&pool(1, 0), &mana("{G}"), 0, cantrip_api::AnyMana::Color), "colorless as {{G}}");
+    assert!(crate::actions::pool_pays(&pool(1, 0), &mana("{G/P}"), 1, cantrip_api::AnyMana::Color), "colorless as the {{G}} of {{G/P}}");
+    assert!(!crate::actions::pool_pays(&pool(1, 0), &mana("{G}{G}"), 0, cantrip_api::AnyMana::Color), "one mana for two symbols");
 }
 
 /// How the pool pays a cost with a symbol nobody has said how to pay (CR 107.4e, 107.4f): never as if it were free. A {W/P}
