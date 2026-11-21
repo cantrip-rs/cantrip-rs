@@ -1,0 +1,66 @@
+# Fire Nation Warship: Reach, "Crew 2" and "When this Vehicle dies, create a Clue token." Bot1 casts it turn 1 and a second Zephyr Sprite turn 3. Bot2, holding two Lightning Bolts, cannot Bolt it while it is
+# not a creature (refusal); Bot1 crews it with both Sprites (total power 2, exactly; one Sprite, power 1, is refused), it is a 4/4 Reach artifact creature, and the two Bolts (3 + 3) kill it: it dies, and Bot1 creates a Clue.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Fire Nation Warship
+Zephyr Sprite
+Zephyr Sprite
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Mountain
+Lightning Bolt
+Lightning Bolt
+Mountain x16
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Fire Nation Warship.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Fire Nation Warship)
+Bot2.Pass
+Bot1.Battlefield.Fire Nation Warship.Activate(Ability: Crew)
+! Bot1.Choose(Zephyr Sprite#1)
+Bot1.Choose(Zephyr Sprite#1; Zephyr Sprite#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fire Nation Warship.Power = 4
+? Bot1.Battlefield.Fire Nation Warship.Toughness = 4
+? Bot1.Battlefield.Fire Nation Warship.Keywords = Reach
+? Bot1.Battlefield.Fire Nation Warship.Types.Count = 2
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Fire Nation Warship)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Fire Nation Warship)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Fire Nation Warship
+Bot1.Battlefield = Clue Token; Island; Mox Jet; Mox Pearl; Mox Sapphire; Zephyr Sprite; Zephyr Sprite

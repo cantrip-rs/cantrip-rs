@@ -1,0 +1,11 @@
+{
+  "name": "Fire Nation Warship",
+  "manaCost": "{3}",
+  "type": "Artifact — Vehicle",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Reach\nWhen this Vehicle dies, create a Clue token. (It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")\nCrew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)",
+  "keywords": [
+    "Reach"
+  ]
+}
