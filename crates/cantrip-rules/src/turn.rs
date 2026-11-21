@@ -112,8 +112,10 @@ pub fn next_step(game: &mut Game) {
     // CR 511.3, 724.1d, 724.2d: combat durations end before another combat begins.
     // Settle the effects ending at this boundary while event watchers still exist, just as at cleanup.
     if turn.number > 0 && combat_ends {
-        if game.state.effects.iter().any(|e| e.duration == Duration::EndOfCombat) {
-            game.state.effects_retain(|e| e.duration != Duration::EndOfCombat);
+        // So does "during that combat phase", with the phase it is about (`Duration::DuringCombatPhase`).
+        let ended = |e: &ContinuousEffect| e.duration == Duration::EndOfCombat || e.duration == Duration::DuringCombatPhase(turn.phase_id);
+        if game.state.effects.iter().any(ended) {
+            game.state.effects_retain(|e| !ended(e));
         }
         let mut cx = Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
         expire_combat_watchers(&mut cx);
@@ -964,8 +966,9 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
                 // CR 508.1c, 113.1a: its own ability saying it can't attack, which losing its abilities takes.
                 && !chars.has(Keyword::CantAttack)
                 // CR 508.1c: a resolved rule about an open set that says it, or those who control it, can't attack this turn
-                // (`LastingRuleKind::CantAttack`: Peace in Our Time).
-                && crate::static_rules::lasting_rules_on(cx, cx.cards(), id, LastingRuleKind::CantAttack).next().is_none()
+                // (`LastingRuleKind::CantAttack`: Peace in Our Time), or during this combat phase (Bumi, Unleashed).
+                && !crate::static_rules::lasting_rules_on(cx, cx.cards(), id, LastingRuleKind::CantAttack)
+                    .any(|e| !matches!(e.duration, Duration::DuringCombatPhase(phase) if phase != cx.s().turn.phase_id))
                 && (!summoning_sick(cx.cards(), cx.s(), &cx.g.log, id)
                     || !attack_haste.get_or_init(|| crate::static_rules::attack_haste_sources(cx)).is_empty())
                 // CR 702.3b: defender, unless an effect or a static ability lets it attack as though it didn't have it
@@ -2229,9 +2232,11 @@ pub(crate) fn cleanup(cx: &mut Cx) -> R<()> {
             });
         }
     }
-    // "This combat" ends with its combat phase (`next_step`); one made outside combat ends with the turn at the latest.
-    if cx.s().effects.iter().any(|e| e.duration == Duration::EndOfCombat) {
-        cx.st().effects_retain(|e| e.duration != Duration::EndOfCombat);
+    // "This combat" ends with its combat phase (`next_step`); one made outside combat ends with the turn at the latest, as does
+    // one about a combat phase the turn never reached.
+    let combat = |e: &ContinuousEffect| e.duration == Duration::EndOfCombat || matches!(e.duration, Duration::DuringCombatPhase(_));
+    if cx.s().effects.iter().any(combat) {
+        cx.st().effects_retain(|e| !combat(e));
     }
     // "During its controller's next turn" ends with that turn (`spend_next_turn_effects`), however long it waits for it: a
     // change of control before then moves it to the new controller's next turn, so no earlier moment says it never comes.

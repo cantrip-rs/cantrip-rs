@@ -2110,6 +2110,13 @@ pub enum Duration {
     /// so: `EffectKind::CantActivatePowerUp`, in `activation_barred`. Kang the Conqueror's "during that turn, power-up abilities
     /// can't be activated".
     EndOfExtraTurn(u32),
+    /// "During that combat phase" (CR 500.8, 611.2a): an effect made before an additional combat phase that is about that phase
+    /// only, the one with this id (`Turn::phase_id`, as `Game::add_phases` returned it). It applies to nothing before that phase
+    /// begins, and ends as that combat phase ends, or with the turn if the phase never comes (CR 514.2). Only a reader that asks
+    /// whether that phase is the current one makes the effect wait for it, so only an effect such a reader reads may last so:
+    /// `LastingRuleKind::CantAttack`, as attackers are declared (CR 508.1c). Bumi, Unleashed's "only land creatures can attack
+    /// during that combat phase".
+    DuringCombatPhase(u32),
     /// "During its controller's next turn" (CR 611.2a): the effect does something only during the first turn the affected
     /// object's controller - whoever controls it then - begins after both the turn they gained it and the turn the effect
     /// began in, `began`, which the core
