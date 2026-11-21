@@ -1,0 +1,50 @@
+# Sparring Dummy ({1}{G}, 1/3 defender): "{T}: Mill a card. You may put a land card milled this way into your hand." It cannot attack
+# (defender; the Ornithopter, which can, is asked about and attacks). In turn 3 the card milled is an Island: Bot1 may take it (the first answer is refused, no Memnite is offered), it goes to
+# the hand, and the Dummy is tapped so a second activation is refused. In turn 5 the card milled is an Ornithopter: nothing is asked
+# (! Choose), it stays in the graveyard, and no life is gained (it is no Lesson card). Only one card is milled each time.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Sparring Dummy
+Ornithopter x4
+Memnite
+Island
+Memnite
+Ornithopter
+Forest x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sparring Dummy.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Sparring Dummy > Bot2)
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Sparring Dummy.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Memnite)
+Bot1.Choose(Island)
+? Bot1.Graveyard.Count = 0
+? Bot1.Hand = Island; Memnite; Ornithopter; Ornithopter; Ornithopter
+! Bot1.Battlefield.Sparring Dummy.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sparring Dummy.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+
+[Expect]
+Bot1.Graveyard = Ornithopter
+Bot1.Life = 20
+Bot1.Library.Count = 9

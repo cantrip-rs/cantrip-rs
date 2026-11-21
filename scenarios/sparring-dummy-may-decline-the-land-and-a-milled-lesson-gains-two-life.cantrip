@@ -1,0 +1,50 @@
+# Sparring Dummy: "You may put a land card milled this way into your hand. You gain 2 life if a Lesson card is milled this way." In
+# turn 3 Bot1 declines the milled Island, which stays in the graveyard (no life: it is no Lesson card). In turn 5 the card milled is an
+# Earthbending Lesson: nothing is asked (it is no land), Bot1 gains 2 life and the Lesson is in the graveyard. The Lesson that is in the
+# graveyard already gains nothing on its own: in turn 7 an Ornithopter is milled and Bot1's life stays at 22.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Sparring Dummy
+Ornithopter x4
+Memnite
+Island
+Memnite
+Earthbending Lesson
+Memnite
+Ornithopter
+Forest x7
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sparring Dummy.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sparring Dummy.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot1.Graveyard = Island
+? Bot1.Life = 20
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sparring Dummy.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+? Bot1.Graveyard = Earthbending Lesson; Island
+[T7 Bot1.Main1]
+Bot1.Battlefield.Sparring Dummy.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot1.Graveyard = Ornithopter; Earthbending Lesson; Island
