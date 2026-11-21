@@ -1862,12 +1862,13 @@ def main(argv=None):
                     replay_args = ["duel", "--a", name, "--b", name, "--model", model_dir, "--model-b", champ, *decks,
                                    "--games", args.gate_games, "--seed", seed + 5_000_000, "--ai-record", "record",
                                    "--ai-record-mode", "decklist", "--ai-record-pairs"]
-                    _, ledger, results = distributed_duel(f"replay-{half}", replay_args, [], [model_dir, champ],
-                                                          args.gate_games, seed + 5_000_000, kind=duels.REPLAY,
-                                                          only=wanted, affinity=played_on, record="record",
-                                                          env={"CANTRIP_AI_TRACES": "1"}, restart_stale=True)
+                    # Not `results`: that is the gate's results file, which `verify` below compares the replays with.
+                    _, ledger, replay_results = distributed_duel(f"replay-{half}", replay_args, [], [model_dir, champ],
+                                                                 args.gate_games, seed + 5_000_000, kind=duels.REPLAY,
+                                                                 only=wanted, affinity=played_on, record="record",
+                                                                 env={"CANTRIP_AI_TRACES": "1"}, restart_stale=True)
                     shutil.copy2(gen_dir / "logs" / f"replay-{half}-results.tsv", out)
-                    shards = duels.recordings(ledger, results, "record", p.recorded / half)
+                    shards = duels.recordings(ledger, replay_results, "record", p.recorded / half)
                     moved = sum(1 for g in wanted if played_on.get(g) and ledger.shards.get(ledger.done.get(g, ""), {}).get("host") != played_on[g])
                     log(f"  replayed {len(ledger.done)} of {len(wanted)} {half} games across the hosts ({shards} recorded shards)"
                         + (f"; {moved} on another host than the gate's (their pairs are checked as every replay is)" if moved else ""))
