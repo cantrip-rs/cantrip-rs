@@ -3543,6 +3543,10 @@ impl cantrip_api::Game for Cx<'_> {
         actions::cast_ways_during_resolution(self, card, player)
     }
 
+    fn chars_as_cast(&mut self, card: ObjectId, way: u8, player: PlayerId) -> Chars {
+        actions::spell_chars_as_cast(self, card, way, player)
+    }
+
     fn cast_during_resolution_as(&mut self, card: ObjectId, terms: CastTerms) -> Result<bool, Suspend> {
         actions::cast_during_resolution(self, card, terms).map_err(|_| Suspend)
     }

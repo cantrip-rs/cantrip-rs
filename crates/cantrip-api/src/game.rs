@@ -2055,6 +2055,12 @@ pub trait Game: Query {
     fn cast_ways_during_resolution(&mut self, card: ObjectId) -> Vec<CastWay>;
     /// `cast_ways_during_resolution` for `player`, who the effect has cast it (`CastTerms::caster`; CR 608.2g).
     fn cast_ways_during_resolution_by(&mut self, card: ObjectId, player: PlayerId) -> Vec<CastWay>;
+    /// The characteristics `card` cast by `player` its way `way` (`CastWay::way`) would have as the spell on the stack (CR
+    /// 601.3e): the face it would be cast as - face-down values for a way that casts it face down (CR 708.4) - with the
+    /// continuous effects that would apply to it there, its own characteristic-defining abilities included (changeling, CR
+    /// 702.73a; Maskwood Nexus's "creature spells you control"). What "cast an [Ally / creature / artifact] spell from among
+    /// [cards]" reads: Boiling Rock Rioter, and Serpent's Soul-Jar and Idol of Endurance print the same permission.
+    fn chars_as_cast(&mut self, card: ObjectId, way: u8, player: PlayerId) -> Chars;
     /// `player` may play or cast `card` from where it is (CR 601.3, 305.1) under `grant`: a card in exile or a
     /// graveyard, a new object after a move (CR 400.7), so the permission is for this object only.
     fn allow_play(&mut self, card: ObjectId, player: PlayerId, grant: PlayGrant);

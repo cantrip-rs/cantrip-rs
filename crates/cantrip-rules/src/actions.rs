@@ -54,6 +54,13 @@ fn cast_face_id(cx: &Cx, card: ObjectId, way: u8) -> Option<CardId> {
     (!std::ptr::eq(face, whole)).then(|| cx.card_id(face))
 }
 
+/// The characteristics `card` cast by `player` its way `way` would have as the spell on the stack (CR 601.3e, `ops::as_cast`):
+/// the face that way casts, with every continuous effect that would apply to it there (`Game::chars_as_cast`).
+pub(crate) fn spell_chars_as_cast(cx: &mut Cx, card: ObjectId, way: u8, player: PlayerId) -> Chars {
+    let face = cast_face_id(cx, card, way);
+    ops::as_cast(cx, card, face, player, |cx| cx.chars(card))
+}
+
 /// What the offer of `priority_options` asks of the spells the cards `player` could cast would be (CR 601.2a, 601.3e): a
 /// spell is put on the stack before anything about it is announced, as the face it is cast as alone, under its caster, and a
 /// permission, an alternative cost or a cost change that reads it reads that spell - with the effects that apply to it there,
