@@ -1,18 +1,12 @@
 use cantrip_api::*;
 use cantrip_mechanics::attach::equip;
 use cantrip_mechanics::for_mirrodin;
+use cantrip_mechanics::triggers::creature_attacks_with_another;
 use cantrip_oracle as oracle;
 
-/// "Whenever equipped creature and at least one other creature attack": one declaration of two or more attackers with
-/// the equipped creature among them (CR 508.1). A creature put onto the battlefield attacking afterwards is no part of it.
+/// "Whenever equipped creature and at least one other creature attack".
 fn equipped_and_another_attack(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
-    match event {
-        Event::AttackersDeclared { count, .. } if *count >= 2 => {
-            let equipped = q.attached_to(source)?;
-            q.is_attacking(equipped).then_some(Fired::PLAIN).flatten()
-        }
-        _ => None,
-    }
+    creature_attacks_with_another(q, q.attached_to(source)?, event)
 }
 
 pub static CARD: CardDef = CardDef {

@@ -966,6 +966,17 @@ pub fn you_attack_with_at_least<const N: u32>(_: &dyn Query, me: &Asker, event: 
     }
 }
 
+/// "Whenever `creature` and at least one other creature attack" (CR 508.1, 603.2): one declaration of two or more attackers with
+/// `creature` among them; a creature put onto the battlefield attacking afterwards (CR 508.4) is no part of it. With the
+/// ability's own source as `creature` it is the trigger of Sokka, Lateral Strategist (use it as the `when` condition directly);
+/// Glimmer Lens passes the creature it equips.
+pub fn creature_attacks_with_another(q: &dyn Query, creature: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::AttackersDeclared { count, .. } if *count >= 2 && q.is_attacking(creature) => Fired::PLAIN,
+        _ => None,
+    }
+}
+
 fn annihilate<const N: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     annihilate_n(g, item, N)
 }
