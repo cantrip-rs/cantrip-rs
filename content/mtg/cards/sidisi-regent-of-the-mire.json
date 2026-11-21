@@ -1,0 +1,8 @@
+{
+  "name": "Sidisi, Regent of the Mire",
+  "manaCost": "{1}{B}",
+  "type": "Legendary Creature — Zombie Snake Warlock",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "{T}, Sacrifice a creature you control with mana value X other than Sidisi: Return target creature card with mana value X plus 1 from your graveyard to the battlefield. Activate only as a sorcery."
+}

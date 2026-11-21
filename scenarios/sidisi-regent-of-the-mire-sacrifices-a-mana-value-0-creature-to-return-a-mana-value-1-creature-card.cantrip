@@ -1,0 +1,70 @@
+# Sidisi, Regent of the Mire: X is the mana value of the creature sacrificed, so a Phyrexian Walker (mana value 0) makes X = 0 and the
+# target has mana value 0 plus 1 (CR 107.3a, 202.3). Bot2 Bolts Bog Rats on turn 2 and Child of Night on turn 3, so Bot1's graveyard holds a
+# creature card with mana value 1 and one with mana value 2: with X = 0 announced, the Child (mana value 2) is refused as a target and the
+# Rats are chosen. Sidisi (mana value 2) is not what X = 2 would sacrifice ("other than Sidisi"), and Walker is the only fodder.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Sidisi, Regent of the Mire
+Bog Rats
+Phyrexian Walker
+Child of Night
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Sidisi, Regent of the Mire.Cast
+Bot1.Hand.Bog Rats.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Bog Rats)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Bog Rats
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Child of Night.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Child of Night)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Child of Night; Bog Rats
+Bot1.Battlefield.Sidisi, Regent of the Mire.Activate(X: 0)
+! Bot1.Battlefield.Sidisi, Regent of the Mire.Activate(X: 2)
+! Bot1.Target(Child of Night)
+Bot1.Target(Bog Rats)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Bog Rats.Power = 1
+Bot1.Battlefield.Sidisi, Regent of the Mire.Tapped = true
+Bot1.Graveyard = Phyrexian Walker; Child of Night
+Stack.Count = 0

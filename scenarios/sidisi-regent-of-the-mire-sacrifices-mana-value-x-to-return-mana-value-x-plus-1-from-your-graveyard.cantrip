@@ -1,0 +1,87 @@
+# Sidisi, Regent of the Mire: "{T}, Sacrifice a creature you control with mana value X other than Sidisi: Return target creature card with
+# mana value X plus 1 from your graveyard to the battlefield. Activate only as a sorcery." X is announced first (CR 107.3a, 601.2b) and is
+# the mana value of the creature sacrificed; the target is chosen after it (CR 601.2c) and must have mana value X + 1 (CR 202.3).
+# Turn 1 Bot1 casts Sidisi (mana value 2) and Bog Rats (1). Turn 2 Bot2 casts its own Child of Night (2) and Bolts it. On turn 3 Bot1 casts
+# Child of Night, which Bot2 Bolts: each player has a Child of Night (mana value 2) in its graveyard. With a Mishra's Bauble on the stack the
+# ability is refused (sorcery speed, CR 307.1). X = 2 is refused (the only creature with mana value 2 is Sidisi herself: "other than
+# Sidisi"). X = 1: the Child in Bot2's graveyard is refused ("your graveyard"), Bot1's own is chosen, and Bog Rats is sacrificed.
+# Sidisi taps (it is her own {T}), and the Child comes back untapped.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Sidisi, Regent of the Mire
+Bog Rats
+Child of Night
+Mishra's Bauble
+Swamp x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Child of Night
+Lightning Bolt
+Lightning Bolt
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sidisi, Regent of the Mire.Cast
+Bot1.Hand.Bog Rats.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Child of Night.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Child of Night)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Child of Night; Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Child of Night.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Child of Night)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Child of Night
+Bot1.Hand.Mishra's Bauble.Cast
+! Bot1.Battlefield.Sidisi, Regent of the Mire.Activate(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sidisi, Regent of the Mire.Activate(X: 1)
+! Bot1.Battlefield.Sidisi, Regent of the Mire.Activate(X: 2)
+! Bot1.Target(Bot2.Graveyard.Child of Night)
+Bot1.Target(Bot1.Graveyard.Child of Night)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Child of Night.Tapped = false
+
+[Expect]
+Bot1.Battlefield.Child of Night.Power = 2
+Bot1.Battlefield.Sidisi, Regent of the Mire.Tapped = true
+Bot1.Graveyard = Bog Rats
+Bot2.Graveyard = Lightning Bolt; Child of Night; Lightning Bolt
+Stack.Count = 0
