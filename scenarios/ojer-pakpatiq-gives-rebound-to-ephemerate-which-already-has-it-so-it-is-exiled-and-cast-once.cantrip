@@ -1,0 +1,48 @@
+# CR 702.88c: instances of rebound on one spell are redundant - one exile, one delayed trigger. Bot1 casts Ojer Pakpatiq on turn 1,
+# then Ephemerate (rebound printed) on it on turn 3 with Mox Pearl: the trigger gives it a second instance. It is exiled once and,
+# at the next upkeep (turn 5), Bot1 is offered one cast from exile for nothing. That cast was not from a hand, so Ephemerate goes
+# to the graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Island
+Mox Pearl
+Mox Jet
+Ojer Pakpatiq, Deepest Epoch
+Ephemerate
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Hand.Ojer Pakpatiq, Deepest Epoch.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ephemerate.Cast(Ojer Pakpatiq, Deepest Epoch)
+Bot1.Battlefield.Mox Pearl.Activate
+[T3 Bot1.Main2]
+? Exile.Count = 1
+? Bot1.Graveyard.Count = 0
+? Delayed.Count = 1
+[T5 Bot1.Upkeep]
+Bot1.Accept
+Bot1.Target(Ojer Pakpatiq, Deepest Epoch)
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Exile.Count = 0
+Delayed.Count = 0
+Bot1.Graveyard = Ephemerate

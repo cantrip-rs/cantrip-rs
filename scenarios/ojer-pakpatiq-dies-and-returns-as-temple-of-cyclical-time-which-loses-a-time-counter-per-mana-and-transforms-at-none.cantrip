@@ -1,0 +1,80 @@
+# "When Ojer Pakpatiq dies, return it to the battlefield tapped and transformed under its owner's control with three time
+# counters on it" (CR 712.14a, 122.6), and Temple of Cyclical Time: "{T}: Add {U}. Remove a time counter from this land." and
+# "{2}{U}, {T}: Transform this land. Activate only if it has no time counters on it and only as a sorcery."
+# Bot1 casts Ojer Pakpatiq on turn 1 (Mox Sapphire, Island, Mox Pearl, Mox Jet) and Bot2 kills it with a Lightning Bolt on turn
+# 2: it returns as a new object (CR 400.7), the Temple, tapped, with three time counters. Bot1 taps it for {U} on turns 3, 5 and
+# 7, each time one counter fewer (2, 1, 0). Turn 5 and turn 7: refused, with the Moxen's mana to pay, while it has a counter on it
+# (turn 5) and, at none, while it is tapped (turn 7); in the turn 9 upkeep, untapped and at none, refused again: only as a
+# sorcery (CR 602.5d). Turn 9, main phase: transformed, paid with the three Moxen, back into Ojer
+# Pakpatiq (CR 701.27c: the same permanent), tapped by the cost.
+
+[Bot1 Deck]
+Mox Sapphire
+Island
+Mox Pearl
+Mox Jet
+Ojer Pakpatiq, Deepest Epoch
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Hand.Ojer Pakpatiq, Deepest Epoch.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Lightning Bolt.Cast(Ojer Pakpatiq, Deepest Epoch)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Temple of Cyclical Time.Tapped = true
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Temple of Cyclical Time.Counters.Time = 3
+? Bot1.Battlefield.Temple of Cyclical Time.Tapped = false
+Bot1.Battlefield.Temple of Cyclical Time.Activate
+? Bot1.Mana = {U}
+? Bot1.Battlefield.Temple of Cyclical Time.Counters.Time = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Temple of Cyclical Time.Activate
+? Bot1.Battlefield.Temple of Cyclical Time.Counters.Time = 1
+[T7 Bot1.Main1]
+! Bot1.Battlefield.Temple of Cyclical Time.Activate(Ability: Transform)
+Bot1.Battlefield.Temple of Cyclical Time.Activate
+? Bot1.Battlefield.Temple of Cyclical Time.Counters.Time = (absent)
+! Bot1.Battlefield.Temple of Cyclical Time.Activate(Ability: Transform)
+[T9 Bot1.Upkeep]
+! Bot1.Battlefield.Temple of Cyclical Time.Activate(Ability: Transform)
+[T9 Bot1.Main1]
+Bot1.Battlefield.Temple of Cyclical Time.Activate(Ability: Transform)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Ojer Pakpatiq, Deepest Epoch.Types = Creature
+Bot1.Battlefield.Ojer Pakpatiq, Deepest Epoch.Tapped = true
+Bot1.Battlefield.Ojer Pakpatiq, Deepest Epoch.Power = 4
+Bot1.Battlefield.Ojer Pakpatiq, Deepest Epoch.Keywords = Flying
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard = Island; Island; Lightning Bolt

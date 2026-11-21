@@ -1,0 +1,63 @@
+# CR 400.7: the spell the trigger is about is a new object once it has left the stack. Bot1 casts Lightning Bolt from hand with
+# Ojer Pakpatiq out; Bot2 responds with Counterspell on the Bolt, which resolves first and counters it (CR 701.5a). Then the
+# trigger resolves for a spell that is gone: it does nothing - the Bolt sits in Bot1's graveyard, not exile, and is not cast at
+# the next upkeep.
+
+[Bot1 Deck]
+Mox Sapphire
+Island
+Mox Pearl
+Mox Jet
+Ojer Pakpatiq, Deepest Epoch
+Mox Ruby
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Counterspell
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Hand.Ojer Pakpatiq, Deepest Epoch.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Counterspell.Cast(Stack.Lightning Bolt)
+? Stack.Count = 3
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+[T5 Bot1.Upkeep]
+
+[Expect]
+Exile.Count = 0
+Bot2.Life = 20
+Bot1.Graveyard.Lightning Bolt.Colors.Count = 1

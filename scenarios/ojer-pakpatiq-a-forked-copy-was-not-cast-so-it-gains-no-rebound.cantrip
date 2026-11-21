@@ -1,0 +1,66 @@
+# Ojer Pakpatiq, Deepest Epoch: "Whenever you cast an instant spell from your hand, it gains rebound." Only spells cast trigger it
+# (CR 601.2i); a copy is created on the stack, not cast (CR 707.10), so it gets nothing. Bot1 casts Lightning Bolt at Bot2 (it gains
+# rebound), then Fork targeting the Bolt (Fork gains rebound too). Fork resolves and is exiled (CR 702.88a); its copy of the Bolt deals
+# 3 and ceases to exist (CR 704.5e); the original Bolt deals 3 and is exiled. Bot2 is at 14 with two cards in exile, none in Bot1's
+# graveyard but the Lotus.
+
+[Bot1 Deck]
+Mox Sapphire
+Island
+Mox Pearl
+Mox Jet
+Ojer Pakpatiq, Deepest Epoch
+Lightning Bolt
+Fork
+Black Lotus
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Hand.Ojer Pakpatiq, Deepest Epoch.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Mana = {R}{R}
+Bot1.Hand.Fork.Cast(Stack.Lightning Bolt)
+? Stack.Count = 3
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+? Exile.Count = 1
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot2.Life = 14
+Exile.Count = 2
+Bot1.Graveyard = Black Lotus
