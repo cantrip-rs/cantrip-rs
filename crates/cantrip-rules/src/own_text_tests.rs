@@ -210,7 +210,7 @@ fn a_state_trigger_is_asked_of_the_text_now() {
 fn a_replacement_applies_by_the_text_now() {
     let (mut g, id, frame) = resolving();
     let mut cx = own(&mut g, frame);
-    crate::replace::life_change(&mut cx, YOU, 1);
+    crate::replace::life_change(&mut cx, YOU, 1, false);
     assert_eq!(seen("life"), Some(Subtype::Elf));
     reads_its_own_text(&cx, id);
 }

@@ -2258,7 +2258,7 @@ fn pay_life_and_counters(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: 
         ops::change_energy(cx, player, -i32::from(cost.energy), player);
     }
     if cost.life > 0 {
-        ops::change_life(cx, player, -life_paid(cost.life));
+        ops::pay_life(cx, player, life_paid(cost.life));
     }
     if let Some((kind, n)) = cost.remove_counters {
         counters::remove(cx, source, kind, n as i32);
@@ -3492,7 +3492,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
         // What the other steps still to pay chose already (`reserved_by_others`), which this one may not take.
         let reserved: Vec<ObjectId> = reserved_by_others(remaining, usize::MAX);
         match step {
-            SpellPayment::Life { amount, .. } => { ops::change_life(cx, player, -life_paid(amount)); }
+            SpellPayment::Life { amount, .. } => { ops::pay_life(cx, player, life_paid(amount)); }
             SpellPayment::Energy { amount, .. } => { ops::change_energy(cx, player, -(amount as i32), player); }
             SpellPayment::CountersAmong { origin, component, cost, .. } => {
                 let taken = choose_counters_among_by(cx, player, spell, cost, scope.by())?;
@@ -14161,7 +14161,7 @@ fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abil
         return Err(Stop::Cancel);
     }
     if life > 0 {
-        ops::change_life(cx, player, -life_paid(life));
+        ops::pay_life(cx, player, life_paid(life));
     }
     let mut tapped = tap_source(cx, player, source, &whole, !tappers.is_empty());
     pay_blight(cx, player, &whole, blighted, 0);
@@ -16726,7 +16726,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
         return Err(Stop::Cancel);
     }
     if life > 0 {
-        ops::change_life(cx, player, -life_paid(life));
+        ops::pay_life(cx, player, life_paid(life));
     }
     if !taken.is_empty() {
         let cast = helpers.purpose == Paying::Casting && cx.s().obj(source).zone.is(ZoneKind::Stack);
@@ -17317,6 +17317,10 @@ fn is_live(cx: &Cx, id: ObjectId) -> bool {
 #[cfg(test)]
 #[path = "activation_players_tests.rs"]
 mod activation_players_tests;
+
+#[cfg(test)]
+#[path = "pay_life_replacement_tests.rs"]
+mod pay_life_replacement_tests;
 
 #[cfg(test)]
 #[path = "resolution_counter_cost_tests.rs"]

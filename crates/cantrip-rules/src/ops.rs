@@ -299,7 +299,7 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
 fn move_together_entering(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, attacking: Option<Target>) -> (Vec<ObjectId>, Vec<ObjectId>) {
     // A simultaneous move, including its replacement bookkeeping, is one rules
     // instruction (CR 614.6, 603.2c), not one instruction per saved permanent.
-    let (created, seen, _) = cx.instruction(|cx| move_together_entering_event(cx, moves, reason, attacking, &[], &[]), |_| true);
+    let (created, seen, _) = cx.instruction(|cx| move_together_entering_event(cx, moves, reason, attacking, &[], false, &[]), |_| true);
     (created, seen)
 }
 
@@ -371,12 +371,13 @@ fn move_together_entering_event(
     reason: ZoneReason,
     attacking: Option<Target>,
     life: &[(PlayerId, i64)],
+    paid: bool,
     with: &[Event],
 ) -> (Vec<ObjectId>, Vec<ObjectId>, i32) {
     // The replacement effects that apply to these moves with more of their modified events to do once the moves have
     // happened (CR 614.6), done at the end.
     let outer = replace::afterward_scope(cx);
-    let moved = move_together_entering_moves(cx, moves, reason, attacking, life, with);
+    let moved = move_together_entering_moves(cx, moves, reason, attacking, life, paid, with);
     let rest = replace::afterward_done(cx, outer);
     replace::rest_of_replacements(cx, rest);
     moved
@@ -388,6 +389,7 @@ fn move_together_entering_moves(
     reason: ZoneReason,
     attacking: Option<Target>,
     life: &[(PlayerId, i64)],
+    paid: bool,
     with: &[Event],
 ) -> (Vec<ObjectId>, Vec<ObjectId>, i32) {
     // An object moves once however many times the batch names it: a permanent a spell targets twice ("destroy target
@@ -470,7 +472,7 @@ fn move_together_entering_moves(
         proposals.extend(life.iter().filter_map(|&(player, amount)| {
             let delta = amount as i32;
             (delta != 0 && cx.s().in_game(player) && !blocked(cx, player, delta) && !life_total_cant_change(cx.s(), player))
-                .then_some(Proposal::LifeChange(LifeChange::of(player, delta)))
+                .then_some(Proposal::LifeChange(if paid { LifeChange::paying(player, delta) } else { LifeChange::of(player, delta) }))
         }));
         let replacements_possible = replace::mixed_life_and_zone(cx, &mut proposals, &dependencies);
         Some((proposals, component_indices, replacements_possible))
@@ -4843,14 +4845,14 @@ pub fn lose_life_together(cx: &mut Cx, losses: &[(PlayerId, i32)]) -> i32 {
             None => merged.push((player, -i64::from(n))),
         }
     }
-    life_together(cx, &merged)
+    life_together(cx, &merged, false)
 }
 
 /// The changes of life of one simultaneous event, each its own occurrence (CR 101.4, 119.3): replaced and judged allowed
 /// (`prepare_life_changes`, `retain_life_changes`) before any of them applies, then announced together (CR 603.2c). The life
 /// lost.
-fn life_together(cx: &mut Cx, life: &[(PlayerId, i64)]) -> i32 {
-    let mut changes = prepare_life_changes(cx, life);
+fn life_together(cx: &mut Cx, life: &[(PlayerId, i64)], paid: bool) -> i32 {
+    let mut changes = prepare_life_changes(cx, life, paid);
     retain_life_changes(cx, &mut changes);
     let mut events = Vec::with_capacity(changes.len());
     let total = apply_life_changes(cx, changes, &mut events);
@@ -4894,9 +4896,9 @@ pub fn pay_life_with_permanents(cx: &mut Cx, source: ObjectId, permanents: &[Obj
         .map(|id| Moving { reason: Some(ZoneReason::Destroy), ..Moving::to(id, Zone::graveyard(cx.s().obj(id).owner)) })
         .collect();
     if moves.is_empty() {
-        life_together(cx, &life);
+        life_together(cx, &life, true);
     } else {
-        cx.instruction(|cx| move_together_entering_event(cx, &moves, ZoneReason::Other, None, &life, &[]), |_| true);
+        cx.instruction(|cx| move_together_entering_event(cx, &moves, ZoneReason::Other, None, &life, true, &[]), |_| true);
     }
 }
 
@@ -4915,9 +4917,9 @@ pub fn together(cx: &mut Cx, parts: cantrip_api::Together) -> i32 {
     let hits: Vec<(ObjectId, Target, u32)> = parts.damage.iter().copied().filter(|&(_, _, amount)| amount != 0).collect();
     if hits.is_empty() {
         if moves.is_empty() {
-            return life_together(cx, &life);
+            return life_together(cx, &life, false);
         }
-        let (_, seen, lost) = cx.instruction(|cx| move_together_entering_event(cx, &moves, ZoneReason::Other, None, &life, &[]), |_| true);
+        let (_, seen, lost) = cx.instruction(|cx| move_together_entering_event(cx, &moves, ZoneReason::Other, None, &life, false, &[]), |_| true);
         let events = discarded_events(cx, &moves[..discarding], &seen);
         if !events.is_empty() {
             cx.emit_batch(&events, None);
@@ -4935,14 +4937,14 @@ pub fn together(cx: &mut Cx, parts: cantrip_api::Together) -> i32 {
             let (_, mut dealt, mut batch) = damage_formed(cx, &hits, false);
             let results = batch.dealt_events(cx, &mut dealt).map(|gains| batch.prepare_results(cx, gains));
             let lost = if moves.is_empty() {
-                let lost = life_together(cx, &life);
+                let lost = life_together(cx, &life, false);
                 if !dealt.is_empty() {
                     cx.record_batch(&dealt);
                     settle::collect_batch(cx, &dealt, None, start);
                 }
                 lost
             } else {
-                let (_, seen, lost) = move_together_entering_event(cx, &moves, ZoneReason::Other, None, &life, &dealt);
+                let (_, seen, lost) = move_together_entering_event(cx, &moves, ZoneReason::Other, None, &life, false, &dealt);
                 let events = discarded_events(cx, &moves[..discarding], &seen);
                 if !events.is_empty() {
                     cx.emit_batch(&events, None);
@@ -4966,7 +4968,7 @@ pub fn together(cx: &mut Cx, parts: cantrip_api::Together) -> i32 {
 /// results are one loss for each player merges them first (`lose_life_together`); damage's are one loss for each player and
 /// one lifelink gain for each source (CR 119.9-10, 702.15e). Replacements run in APNAP order, each player's results in the
 /// order given, before any original life update, including when a replacement changes a result's sign.
-fn prepare_life_changes(cx: &mut Cx, changes: &[(PlayerId, i64)]) -> Vec<(PlayerId, i32)> {
+fn prepare_life_changes(cx: &mut Cx, changes: &[(PlayerId, i64)], paid: bool) -> Vec<(PlayerId, i32)> {
     let mut prepared = Vec::with_capacity(changes.len());
     if changes.is_empty() {
         return prepared;
@@ -4976,7 +4978,7 @@ fn prepare_life_changes(cx: &mut Cx, changes: &[(PlayerId, i64)]) -> Vec<(Player
             if p != player {
                 continue;
             }
-            let delta = prepare_life_change(cx, player, amount);
+            let delta = prepare_life_change(cx, player, amount, paid);
             if delta != 0 {
                 prepared.push((player, delta));
             }
@@ -4998,7 +5000,7 @@ fn prepare_damage_life(cx: &mut Cx, player: PlayerId, results: &[(i64, bool)], c
     }
     let mut proposals: Vec<Proposal> = results.iter().filter_map(|&(amount, damage)| {
         let amount = amount as i32;
-        allowed(cx, amount).then_some(Proposal::LifeChange(LifeChange { player, amount, damage, alongside: 0 }))
+        allowed(cx, amount).then_some(Proposal::LifeChange(LifeChange { player, amount, damage, alongside: 0, paid: false }))
     }).collect();
     replace::damage_life_results(cx, &mut proposals);
     changes.extend(proposals.into_iter().filter_map(|p| match p {
@@ -5037,7 +5039,18 @@ pub fn life_total_cant_change(s: &GameState, player: PlayerId) -> bool {
 /// number (CR 119.5). Simultaneous losses and damage results use the same preparation through `prepare_life_changes`,
 /// deferring their updates and announcement until every player's change is prepared.
 pub fn change_life(cx: &mut Cx, player: PlayerId, delta: impl Into<i64>) {
-    let delta = prepare_life_change(cx, player, delta);
+    change_life_as(cx, player, delta, false);
+}
+
+/// `player` pays `amount` life (CR 119.4, 118.3): losing it (CR 119.4), as `change_life` does, but a change the effects that
+/// replace "paying life" can see (`LifeChange::paid`), and one an effect that leaves nothing of it pays in full - the cost is paid
+/// (Ashiok, Wicked Manipulator). Whether it can be paid is judged before it is made (`actions::can_pay_life`).
+pub fn pay_life(cx: &mut Cx, player: PlayerId, amount: i32) {
+    change_life_as(cx, player, -i64::from(amount), true);
+}
+
+fn change_life_as(cx: &mut Cx, player: PlayerId, delta: impl Into<i64>, paid: bool) {
+    let delta = prepare_life_change(cx, player, delta, paid);
     if delta == 0 {
         return;
     }
@@ -5049,7 +5062,7 @@ pub fn change_life(cx: &mut Cx, player: PlayerId, delta: impl Into<i64>) {
 
 /// The shared life-change pipeline before its update: single-player changes apply it at once; simultaneous losses and
 /// damage results prepare every player's changes first (CR 101.4, 120.4c, 614.1a, 616.1).
-fn prepare_life_change(cx: &mut Cx, player: PlayerId, delta: impl Into<i64>) -> i32 {
+fn prepare_life_change(cx: &mut Cx, player: PlayerId, delta: impl Into<i64>, paid: bool) -> i32 {
     let delta = delta.into() as i32;
     if delta == 0 || !cx.s().in_game(player) {
         return 0;
@@ -5067,7 +5080,7 @@ fn prepare_life_change(cx: &mut Cx, player: PlayerId, delta: impl Into<i64>) -> 
     // CR 614.1a, 616.1: "you gain that much life plus 1 instead", "they lose twice that much life instead". The event
     // history records the life that actually changed. A gain an effect turned into a loss, or a loss into a gain, the player
     // can't have is nothing (the Platinum Emperion rulings).
-    let delta = crate::replace::life_change(cx, player, delta);
+    let delta = crate::replace::life_change(cx, player, delta, paid);
     if delta == 0 || !cx.s().in_game(player) || blocked(cx, player, delta) {
         return 0;
     }

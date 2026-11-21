@@ -3016,12 +3016,12 @@ pub(crate) fn damage_event(
 /// Life `player` is about to gain (`amount` above zero) or lose (below zero) (CR 119.3, 614.1a): what remains of it once
 /// every effect has applied, in the order the player chooses (CR 616.1), each judged again on the event as the one
 /// before it left it (CR 616.1f), so a gain turned into a loss meets the effects on losing life. Zero is no event
-/// (CR 119.10).
-pub fn life_change(cx: &mut Cx, player: PlayerId, amount: i32) -> i32 {
+/// (CR 119.10). `paid`: it is life the player pays (CR 119.4, `LifeChange::paid`).
+pub fn life_change(cx: &mut Cx, player: PlayerId, amount: i32, paid: bool) -> i32 {
     if !possible(cx, None) {
         return amount;
     }
-    let mut proposal = Proposal::LifeChange(LifeChange::of(player, amount));
+    let mut proposal = Proposal::LifeChange(if paid { LifeChange::paying(player, amount) } else { LifeChange::of(player, amount) });
     apply(cx, &mut proposal);
     match proposal {
         Proposal::LifeChange(l) => l.amount,

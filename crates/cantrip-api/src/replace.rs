@@ -268,12 +268,21 @@ pub struct LifeChange {
     /// left them: a gain above zero, a loss below. Zero for a change that is no damage event's result. Set by the core
     /// each time the effects are asked, never by a replacement.
     pub alongside: i64,
+    /// This is life a player pays (CR 119.4, 118.3): a cost's life, in casting or activating, or one a resolving instruction
+    /// asks a player to pay - the loss "if you would pay life" is about. False for any other loss. Set by the core, never by
+    /// a replacement: an effect that turns it into another change leaves it a payment, as it was proposed.
+    pub paid: bool,
 }
 
 impl LifeChange {
-    /// A gain or loss of life that is no damage event's result: an effect's, a cost's, a life total set to a number.
+    /// A gain or loss of life that is no damage event's result and no payment: an effect's, a life total set to a number.
     pub const fn of(player: PlayerId, amount: i32) -> Self {
-        LifeChange { player, amount, damage: false, alongside: 0 }
+        LifeChange { player, amount, damage: false, alongside: 0, paid: false }
+    }
+
+    /// Life `player` pays (CR 119.4): `amount` is signed as any change of life is, below zero for what is paid.
+    pub const fn paying(player: PlayerId, amount: i32) -> Self {
+        LifeChange { paid: true, ..Self::of(player, amount) }
     }
 
     /// What the event would do to `player`'s life total in all: this change and the others of the same damage event.
