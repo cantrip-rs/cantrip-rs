@@ -1,0 +1,8 @@
+{
+  "name": "Lumbering Laundry",
+  "manaCost": "{5}",
+  "type": "Artifact Creature — Golem",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "{2}: Until end of turn, you may look at face-down creatures you don't control any time.\nDisguise {5} (You may cast this card face down for {3} as a 2/2 creature with ward {2}. Turn it face up any time for its disguise cost.)"
+}

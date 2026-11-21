@@ -1,0 +1,48 @@
+# Lumbering Laundry, Disguise {5} (CR 702.168): turn 1 Bot1 casts it face down for {3} off a Black Lotus, a nameless 2/2 with
+# ward {2}. Turn 3 Bot1 makes exactly five mana and turns it face up for its disguise cost (a special action), spending all
+# five: it is the 4/5 Golem.
+
+[Bot1 Deck]
+Island
+Sol Ring
+Black Lotus
+Lumbering Laundry
+Mox Sapphire
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Lumbering Laundry.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+
+[Expect]
+Bot1.Mana =
+Bot1.Battlefield.Lumbering Laundry.Power = 4
+Bot1.Battlefield.Lumbering Laundry.Toughness = 5
