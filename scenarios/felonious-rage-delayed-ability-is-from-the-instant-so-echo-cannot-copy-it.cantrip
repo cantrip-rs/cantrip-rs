@@ -1,0 +1,51 @@
+# "When that creature dies this turn, create a 2/2 white and blue Detective creature token." The delayed ability's source is
+# Felonious Rage, the instant that made it (CR 603.7d), not the creature it watches. So with it on the stack after the Memnite
+# (an artifact creature) dies to Lightning Bolt, Echo, Perceptive Prodigy - "copy target activated or triggered ability you
+# control from a creature source" - has nothing to target (a refusal, with the Mox Sapphire's mana for its {1}), and the one
+# Detective is made. The positive control, a creature's own trigger copied, is Echo's own scenarios.
+
+[Bot1 Deck]
+Black Lotus
+Echo, Perceptive Prodigy
+Mox Ruby
+Mox Sapphire
+Memnite
+Felonious Rage
+Lightning Bolt
+Mountain
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Echo, Perceptive Prodigy.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Felonious Rage.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+! Bot1.Battlefield.Echo, Perceptive Prodigy.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Echo, Perceptive Prodigy.Tapped = false
+Bot1.Battlefield.Detective Token.Power = 2

@@ -4,12 +4,12 @@ use cantrip_mechanics::{delayed, targets, triggers};
 use cantrip_oracle as oracle;
 
 /// "Put a +1/+1 counter on target creature. Whenever that creature attacks the monarch this turn, it gains double
-/// strike and trample until end of turn": the delayed ability (CR 603.7b) is fixed on that creature, which is its
-/// source, so its trigger asks only whether that creature attacked the monarch.
+/// strike and trample until end of turn": the delayed ability (CR 603.7b) watches that creature, so its trigger asks only
+/// whether that creature attacked the monarch - Okoye herself too, when she is the target; its source is Okoye (CR 603.7e).
 fn vigil(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
     g.add_counters(creature, CounterKind::PlusOne, 1);
-    delayed::this_turn(g, item, creature);
+    delayed::this_turn_watching(g, item, creature);
     Ok(())
 }
 
@@ -24,8 +24,9 @@ fn attacks_the_monarch(q: &dyn Query, source: ObjectId, event: &Event) -> Option
     }
 }
 
+/// "It gains double strike and trample until end of turn": "it" is the creature watched, the ability's subject.
 fn rally(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let creature = item.object;
+    let Some(creature) = item.subject.object() else { return Ok(()) };
     if targets::permanent(g, creature) {
         g.add_effect(
             item.object,

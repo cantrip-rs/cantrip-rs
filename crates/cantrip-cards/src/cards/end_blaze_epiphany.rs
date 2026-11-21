@@ -15,9 +15,11 @@ fn end_blaze_epiphany(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
 /// "... exile a number of cards from the top of your library equal to its power, then choose a card exiled this way. Until the
 /// end of your next turn, you may play that card." (CR 608.2h, 406): its power as it last was on the battlefield, and the one
 /// chosen is playable (a land too, under the ordinary land-play rules, CR 305.1) until the cleanup step of the controller's
-/// next turn (CR 514.2); the rest stay exiled. A creature of power 0 or less exiles nothing.
+/// next turn (CR 514.2); the rest stay exiled. A creature of power 0 or less exiles nothing. "Its" is the creature the delayed
+/// ability watches, its subject; its source is this spell (CR 603.7d).
 fn exile_and_choose(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let power = targets::power_or_last_known(g, item.object).max(0) as usize;
+    let Some(creature) = item.subject.object() else { return Ok(()) };
+    let power = targets::power_or_last_known(g, creature).max(0) as usize;
     let grant = PlayGrant { instead: None, lands: true, expiry: Expiry::EndOfYourNextTurn, ..PlayGrant::CAST };
     library::exile_top_choose_one_may_play(g, item.controller, item.object, power, grant)?;
     Ok(())

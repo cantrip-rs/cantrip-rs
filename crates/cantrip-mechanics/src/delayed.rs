@@ -103,15 +103,23 @@ pub fn exile_targets_then_return_at_next_end_step_0(g: &mut dyn Game, item: &Sta
 }
 
 /// Sets up the card's delayed ability number 0 to trigger "this turn" (CR 603.7b): each time its `listens`/`matches`
-/// accept an event, until the turn ends, controlled by the resolving ability's controller. `source` is the object the
-/// ability's `matches` is asked of: the spell for "whenever a creature you control dies this turn", the creature it
-/// is about for "when it dies this turn". A `matches` that says "you" is written `when_asked`: the ability's controller it
-/// is told is this resolving ability's controller (CR 603.7d-e), whoever controls `source` later. Forth Eorlingas!, Glimpse of Nature, Rite of Harmony, Showdown of the Skalds,
-/// Thunder of Unity, Warhost's Frenzy, Okoye and Turn Inside Out use it. The ability is the card's as the resolving ability has
-/// it, the card it copies for a copy.
-pub fn this_turn(g: &mut dyn Game, item: &StackItem, source: ObjectId) {
+/// accept an event, until the turn ends, controlled by the resolving ability's controller. `watched` is the object the
+/// ability's `matches` is asked of: the spell or ability's own source (`item.object`) for "whenever a creature you control
+/// dies this turn", the creature it is about for "when it dies this turn". Whichever it is, the delayed ability's source is
+/// the spell, or the source of the ability, that made it (CR 603.7d-e), never the object it watches: one watching another
+/// object is `this_turn_watching`, so what its source is - its types, its colors, whether it is a permanent - is judged
+/// of that spell or source (Echo, Perceptive Prodigy's "from a creature source", protection). A `matches` that says "you"
+/// is written `when_asked`: the ability's controller it is told is this resolving ability's controller (CR 603.7d-e),
+/// whoever controls `watched` later. An ability whose effect reads "that creature" as its subject calls `this_turn_watching`
+/// itself, since the creature may be its own source (Okoye's target). Forth Eorlingas!, Glimpse of Nature, Rite of Harmony, Showdown of the Skalds, Thunder
+/// of Unity, Warhost's Frenzy and Captain Howler use it. The ability is the card's as the resolving ability has it,
+/// the card it copies for a copy.
+pub fn this_turn(g: &mut dyn Game, item: &StackItem, watched: ObjectId) {
+    if watched != item.object {
+        return this_turn_watching(g, item, watched);
+    }
     let this = ability_card(g, item);
-    g.delayed_trigger(DelayedWhen::ThisTurn, source, item.controller, AbilityRef::delayed(this, 0), Target::None);
+    g.delayed_trigger(DelayedWhen::ThisTurn, item.object, item.controller, AbilityRef::delayed(this, 0), Target::None);
 }
 
 /// Sets up the card's delayed ability number `ability` to trigger "until the end of your next turn, whenever [event]"
@@ -125,9 +133,11 @@ pub fn through_your_next_turn(g: &mut dyn Game, item: &StackItem, ability: u8, s
 }
 
 /// Watch a particular object for events this turn while keeping the creating spell or ability as the source
-/// (CR 603.7b, 603.7d-e). A Good Day to Die and End Blaze Epiphany both watch a creature dying this turn.
-/// The trigger receives its event's `Fired` payload; when it supplies no subject, the watched object is the subject.
-/// The captured words belong to the creating ability.
+/// (CR 603.7b, 603.7d-e). A Good Day to Die and End-Blaze Epiphany both watch a creature dying this turn.
+/// The trigger receives its event's `Fired` payload; when it supplies no subject, the watched object is the subject
+/// (`item.subject`, what the ability's effect reads for "that creature": `item.object` is its source). Its `condition`
+/// is asked of that source, so an intervening "if" about the watched object is asked in its `matches` and again as it
+/// resolves (Stolen Uniform, CR 603.4). The captured words belong to the creating ability.
 pub fn this_turn_watching(g: &mut dyn Game, item: &StackItem, watched: ObjectId) {
     let card = ability_card(g, item);
     g.delayed_trigger(DelayedWhen::WatchingThisTurn, item.object, item.controller, AbilityRef::delayed(card, 0), Target::Object(watched));
@@ -206,9 +216,12 @@ pub fn at_next_end_step_about(g: &mut dyn Game, item: &StackItem, ability: u8, c
 /// "... at the beginning of the next end step" (CR 603.7) from a dies ability: sets up the card's delayed ability number `ABILITY`
 /// about the cards the dying permanent became in the graveyard, every card of it if it was a merged permanent (CR 730.3c, 603.7c). A
 /// token has ceased to exist by then (CR 111.7) and finds nothing, so nothing is set up. Leaving the graveyard before then makes
-/// it a different object (CR 400.7). Nine-Lives Familiar and Dr. Leonard "Bones" McCoy print it.
+/// it a different object (CR 400.7). The dying permanent is the ability's source for a permanent's own "when this dies"
+/// (Nine-Lives Familiar), and the object a delayed "when it dies this turn" watches, its subject, for one (Dr. Leonard "Bones"
+/// McCoy: its source is McCoy, CR 603.7e).
 pub fn at_next_end_step_about_what_it_became<const ABILITY: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let cards = g.found_all_after_move(item.object);
+    let died = item.subject.object().unwrap_or(item.object);
+    let cards = g.found_all_after_move(died);
     if !cards.is_empty() {
         at_next_end_step_about(g, item, ABILITY, &cards);
     }
@@ -400,11 +413,12 @@ pub fn at_your_next_main_phase(g: &mut dyn Game, item: &StackItem, ability: u8, 
 
 /// "Target creature gets +`P`/+0 until end of turn. When it dies this turn, [do something]" (CR 611.2a, 603.7c): the creature in
 /// target slot 0 gets +`P`/+0 and the card's delayed ability number 0 is set up fixed on that very object, so it triggers only
-/// when it dies (a creature that left and came back is a new object, CR 400.7). A target no longer legal as this resolves does
-/// nothing and sets up nothing (CR 608.2b). A Good Day to Die, Grim Javelineer and Turn Inside Out print it.
+/// when it dies (a creature that left and came back is a new object, CR 400.7); its source is this spell or ability's source
+/// (CR 603.7d-e). A target no longer legal as this resolves does nothing and sets up nothing (CR 608.2b). A Good Day to Die,
+/// Grim Javelineer and Turn Inside Out print it.
 pub fn target_creature_gets_plus_power_and_a_delayed_ability_for_when_it_dies<const P: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
     crate::pump(g, item.object, creature, P, 0);
-    this_turn(g, item, creature);
+    this_turn_watching(g, item, creature);
     Ok(())
 }

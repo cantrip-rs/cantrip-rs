@@ -7,13 +7,21 @@ const WARD: AbilityDef = ward::<1>("Ward {1} (Whenever this permanent becomes th
 
 /// "When this creature enters, target creature you control can't be blocked this turn. Whenever that creature deals combat damage
 /// this turn, you may exile it. If you do, return it to the battlefield under its owner's control." (CR 509.1b, 603.7): the
-/// unblockable effect, then a delayed trigger on that creature for the rest of the turn (the card's second delayed ability),
-/// once for each combat damage step it deals damage in (CR 510.2: its damage is one batch).
+/// unblockable effect, then a delayed trigger watching that creature for the rest of the turn (the card's second delayed
+/// ability), once for each combat damage step it deals damage in (CR 510.2: its damage is one batch). Its source is this
+/// creature, the source of the ability that made it (CR 603.7e), not the creature it watches.
 fn unblockable_and_watch(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
     effects::target_creature_cant_be_blocked_this_turn(g, item)?;
-    g.delayed_trigger(DelayedWhen::ThisTurn, creature, item.controller, AbilityRef::delayed(item.ability.card, 1), Target::None);
+    g.delayed_trigger(DelayedWhen::WatchingThisTurn, item.object, item.controller, AbilityRef::delayed(item.ability.card, 1), Target::Object(creature));
     Ok(())
+}
+
+/// "You may exile it. If you do, return it to the battlefield under its owner's control": "it" is the creature the delayed
+/// ability watches, its subject.
+fn may_exile_it_then_return_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = item.subject.object() else { return Ok(()) };
+    effects::may_exile_then_return(g, item, creature)
 }
 
 pub static CARD: CardDef = CardDef {
@@ -30,7 +38,7 @@ pub static CARD: CardDef = CardDef {
         WARD,
         triggered(
             THIS_DEALS_COMBAT_DAMAGE,
-            |g, item| effects::may_exile_then_return(g, item, item.object),
+            may_exile_it_then_return_it,
             "Whenever that creature deals combat damage this turn, you may exile it. If you do, return it to the battlefield under its owner's control.",
         )
         .once_per_batch(),

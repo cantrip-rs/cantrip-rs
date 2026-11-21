@@ -18,27 +18,37 @@ fn stolen_uniform(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "If it's attached to a creature you control" (CR 603.4): asked as it triggers and again as it resolves.
-fn attached_to_your_creature(q: &dyn Query, me: &Asker) -> bool {
+/// "If it's attached to a creature you control" (CR 603.4): whether `equipment` is attached to a creature `you` control.
+fn attached_to_your_creature(q: &dyn Query, equipment: ObjectId, you: PlayerId) -> bool {
     q.state()
-        .obj(me.source)
+        .obj(equipment)
         .attached_to
-        .is_some_and(|host| q.is_on_battlefield(host) && q.controller(host) == me.controller && q.chars(host).is(CardType::Creature))
+        .is_some_and(|host| q.is_on_battlefield(host) && q.controller(host) == you && q.chars(host).is(CardType::Creature))
 }
 
-/// "Unattach it" (CR 701.3d).
+/// "When you lose control of that Equipment this turn, if it's attached to a creature you control" (CR 603.4): the delayed
+/// ability watches the Equipment, whose events and attachment its trigger is asked of (`me.source`); its own source is this
+/// spell (CR 603.7d), so the intervening "if" is asked here as it triggers, and again as it resolves.
+fn you_lose_control_of_it_while_attached(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    triggers::you_lose_control_of_this(q, me, event).filter(|_| attached_to_your_creature(q, me.source, me.controller))
+}
+
+/// "Unattach it" (CR 701.3d), if it is still attached to a creature you control (CR 603.4): "it" is the Equipment watched,
+/// the ability's subject.
 fn unattach_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.unattach(item.object);
+    let Some(equipment) = item.subject.object() else { return Ok(()) };
+    if attached_to_your_creature(g, equipment, item.controller) {
+        g.unattach(equipment);
+    }
     Ok(())
 }
 
 pub static CARD: CardDef = CardDef {
     spell: spell(&[targets::CREATURE_YOU_CONTROL, targets::EQUIPMENT], stolen_uniform),
     delayed: &[triggered(
-        triggers::YOU_LOSE_CONTROL_OF_THIS,
+        when_asked(EventMask(EventMask::CONTROL_CHANGED.0 | EventMask::ZONE_CHANGE.0), you_lose_control_of_it_while_attached),
         unattach_it,
         "When you lose control of that Equipment this turn, if it's attached to a creature you control, unattach it.",
-    )
-    .condition(attached_to_your_creature)],
+    )],
     ..oracle::STOLEN_UNIFORM
 };
