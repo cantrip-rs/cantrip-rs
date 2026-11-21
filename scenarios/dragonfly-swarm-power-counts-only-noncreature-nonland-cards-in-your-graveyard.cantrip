@@ -1,0 +1,55 @@
+# Dragonfly Swarm's power is the number of noncreature, nonland cards in its controller's graveyard. Bot1 casts two Thought Scours with
+# Black Lotus: the first mills Bot2's Mox Pearl and Lightning Bolt (an opponent's graveyard is not counted), the second mills Bot1's own
+# Grizzly Bears (a creature card) and Island (a land card), neither counted. With the sacrificed Black Lotus (an artifact) and the two
+# Thought Scours counted, the Swarm is 3/3. On turn 3 Bot1 casts Lightning Bolt: the Swarm's power follows the graveyard up to 4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Dragonfly Swarm
+Thought Scour
+Thought Scour
+Lightning Bolt
+Island
+Grizzly Bears
+Island
+Island
+Island x9
+
+[Bot2 Deck]
+Island x7
+Mox Pearl
+Lightning Bolt
+Island x11
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thought Scour.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Lightning Bolt; Mox Pearl
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 5
+Bot1.Hand.Dragonfly Swarm.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dragonfly Swarm.Power = 3
+? Bot1.Battlefield.Dragonfly Swarm.Toughness = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Dragonfly Swarm.Power = 4
+Bot1.Battlefield.Dragonfly Swarm.Toughness = 3
+Bot2.Life = 17

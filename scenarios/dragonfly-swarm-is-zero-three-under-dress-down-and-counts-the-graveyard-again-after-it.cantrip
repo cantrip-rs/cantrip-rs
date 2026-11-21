@@ -1,0 +1,41 @@
+# Dragonfly Swarm's power comes from a characteristic-defining ability (CR 604.3), a static ability Dress Down's "Creatures lose
+# all abilities" takes away in layer 6 (CR 613.1f), so layer 7a has nothing to apply: its printed */3 is read with the star as 0
+# (CR 208.2a), a 0/3, though the sacrificed Black Lotus is a noncreature, nonland card in the graveyard (power 1 before and
+# after). Dress Down is sacrificed at the beginning of the end step, and the Swarm counts the graveyard again: with Dress Down
+# in it too, power 2.
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Dragonfly Swarm
+Dress Down
+Island x3
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Dragonfly Swarm.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dragonfly Swarm.Power = 1
+? Bot1.Battlefield.Dragonfly Swarm.Toughness = 3
+Bot1.Hand.Dress Down.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dragonfly Swarm.Power = 0
+? Bot1.Battlefield.Dragonfly Swarm.Toughness = 3
+[T2 Bot2.Main1]
+
+[Expect]
+Turn = 2
+Bot1.Graveyard = Dress Down; Black Lotus
+Bot1.Battlefield.Dragonfly Swarm.Power = 2
+Bot1.Battlefield.Dragonfly Swarm.Toughness = 3

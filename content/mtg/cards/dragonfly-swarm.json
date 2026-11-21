@@ -1,0 +1,11 @@
+{
+  "name": "Dragonfly Swarm",
+  "manaCost": "{1}{U}{R}",
+  "type": "Creature — Dragon Insect",
+  "power": "*",
+  "toughness": 3,
+  "oracleText": "Flying, ward {1} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {1}.)\nThis creature's power is equal to the number of noncreature, nonland cards in your graveyard.\nWhen this creature dies, if there's a Lesson card in your graveyard, draw a card.",
+  "keywords": [
+    "Flying"
+  ]
+}

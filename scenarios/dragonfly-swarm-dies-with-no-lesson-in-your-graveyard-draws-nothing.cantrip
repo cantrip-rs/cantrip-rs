@@ -1,0 +1,46 @@
+# Dragonfly Swarm dies to Bot2's Lightning Bolt (Ward {1} paid) with only a Lightning Bolt, not a Lesson, in Bot1's graveyard: the
+# intervening "if there's a Lesson card in your graveyard" is false, so nothing is drawn (library stays 13).
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Dragonfly Swarm
+Lightning Bolt
+Island x3
+Island x13
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Dragonfly Swarm.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dragonfly Swarm.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Dragonfly Swarm)
+Bot2.Pass
+Bot1.Pass
+Bot2.PayCost
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Dragonfly Swarm = (absent)
+Bot1.Graveyard = Dragonfly Swarm; Lightning Bolt; Black Lotus
+Bot1.Library.Count = 13
