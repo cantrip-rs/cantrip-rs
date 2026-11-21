@@ -4,7 +4,9 @@
 //! it need not still be on the battlefield (the Raid rulings). Fire Nation Raider, Mardu Hordechief, Skyship Buccaneer and
 //! Wingmate Roc print it.
 //!
-//! A card with a raid enters trigger lists `enters(effect, text)` among its `abilities`.
+//! A card with a raid enters trigger lists `enters(effect, text)` among its `abilities`. "Raid \u{2014} This creature enters with a
+//! +1/+1 counter on it if you attacked this turn" (Goblin Boarders, Cruel Administrator) is a replacement effect instead
+//! (CR 614.1c): such a card sets `enters: Some(raid::enters_with_a_plus_one_counter)`.
 
 use cantrip_api::*;
 
@@ -20,4 +22,13 @@ pub fn you_attacked_this_turn(q: &dyn Query, asker: &Asker) -> bool {
 /// "Raid \u{2014} When this creature enters, if you attacked this turn, [effect]." `text` is the ability's full text, as printed.
 pub const fn enters(effect: fn(&mut dyn Game, &StackItem) -> Result<(), Suspend>, text: &'static str) -> AbilityDef {
     triggered(THIS_ENTERS, effect, text).condition(you_attacked_this_turn)
+}
+
+/// "Raid \u{2014} This creature enters with a +1/+1 counter on it if you attacked this turn" (CR 614.1c, 207.2c, 508.1): a
+/// replacement effect, not a trigger, so it reads this turn's attacks as the creature enters under `entering.controller`.
+pub fn enters_with_a_plus_one_counter(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
+    if creatures_attacked_with(g, entering.controller) > 0 {
+        entering.counters[CounterKind::PlusOne as usize] += 1;
+    }
+    Ok(())
 }
