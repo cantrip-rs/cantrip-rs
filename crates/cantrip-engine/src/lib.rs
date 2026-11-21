@@ -367,15 +367,37 @@ mod tests {
     /// The ways of an activated ability's cost that names a choice (`ActivatedDef::cost_choice`) are chosen as it is
     /// announced (CR 601.2b by way of 602.2b), and a way's mana joins the total then (CR 601.2f) - but no way announces an X:
     /// whether the activation could be paid is judged with X at its least for the ability's own {X} only, and a way's
-    /// X life is not asked for. None carries an {X} or "pay X life" until a printed card needs one and the core judges it.
+    /// X life or measured X is not asked for. None carries an {X}, "pay X life" or a measured cost until a printed card needs
+    /// one and the core judges it.
     #[test]
     fn a_way_of_paying_an_ability_cost_announces_no_x() {
         for def in &cards().cards {
             for ability in def.abilities.iter().chain(def.delayed.iter()) {
                 if let AbilityDef::Activated(a) = ability {
                     for way in a.cost_choice {
-                        assert!(way.cost.mana.x == 0 && !way.cost.pay_x_life, "{}: a way of paying an ability's cost carries an X", def.name);
+                        assert!(way.cost.mana.x == 0 && !way.cost.pay_x_life && !matches!(way.cost.variable, Some(VariableCost::Measured(_))), "{}: a way of paying an ability's cost carries an X", def.name);
                     }
+                }
+            }
+        }
+    }
+
+    /// A measured cost (`VariableCost::Measured`: "Exile X creature cards from your graveyard", "Sacrifice a creature with mana
+    /// value X") is announced with an activated ability's own cost (CR 107.3a, 601.2b by way of 602.2b), and "collect evidence
+    /// X" (`Cost::collect_evidence_x`) is chosen only as a resolving payment is paid (CR 107.3f). A spell's additional or
+    /// optional cost does not announce a measured X, and no cost a card states carries collect evidence X: none does until a
+    /// printed card needs one and the core judges it.
+    #[test]
+    fn a_measured_cost_is_only_an_activation_cost_and_collect_evidence_x_only_a_resolution_payment() {
+        let measured = |c: &Cost| matches!(c.variable, Some(VariableCost::Measured(_)));
+        for def in &cards().cards {
+            for cost in def.additional_cost.iter().chain(def.optional_cost.iter().map(|o| &o.cost)) {
+                assert!(!measured(cost), "{}: a spell's additional or optional cost is a measured cost", def.name);
+                assert!(!cost.collect_evidence_x, "{}: a spell's cost collects evidence X", def.name);
+            }
+            for ability in def.abilities.iter().chain(def.delayed.iter()) {
+                if let AbilityDef::Activated(a) = ability {
+                    assert!(!a.cost.collect_evidence_x, "{}: an activated ability's cost collects evidence X", def.name);
                 }
             }
         }

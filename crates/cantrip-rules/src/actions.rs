@@ -2290,6 +2290,80 @@ fn variable_candidates(cx: &Cx, source: ObjectId, player: PlayerId, variable: Va
         }
         VariableCost::BlightX => blight_candidates(cx, player),
         VariableCost::TapX(filter) => tap_x_candidates(cx, source, player, filter, false, by),
+        VariableCost::Measured(measured) => measured_candidates(cx, source, player, measured, paid, by),
+    }
+}
+
+/// The objects a measured cost may take (CR 601.2h): `player`'s permanents or the other cards of their graveyard that pass its
+/// filter, a sacrifice a static ability forbids for `paid` none of them (CR 101.2, `may_sacrifice_for`).
+fn measured_candidates(cx: &Cx, source: ObjectId, player: PlayerId, measured: MeasuredCost, paid: Option<CostFor>, by: Option<Linked>) -> Vec<ObjectId> {
+    let asker = Asker { instance: None, source, controller: player, by, spell: false };
+    let filter = measured.filter;
+    match measured.take {
+        CostTake::Sacrifice => cx.permanents_of(player).into_iter().filter(|&id| filter(cx, &asker, id) && may_sacrifice_for(cx, player, id, paid)).collect(),
+        CostTake::ExilePermanents => cx.permanents_of(player).into_iter().filter(|&id| filter(cx, &asker, id)).collect(),
+        CostTake::ExileFromGraveyard => cx.s().zone(Zone::graveyard(player)).iter().copied().filter(|&c| c != source && filter(cx, &asker, c)).collect(),
+    }
+}
+
+/// The mana values of `objects` (CR 202.3).
+fn mana_values(cx: &Cx, objects: &[ObjectId]) -> Vec<u32> {
+    objects.iter().map(|&id| cx.mana_value(id)).collect()
+}
+
+/// Whether objects with the mana values `values` could be taken to measure `x` (`CostMeasure`): that many of them; one of them
+/// of that value; one or more of them of that total.
+fn measured_reaches(measure: CostMeasure, values: &[u32], x: u32) -> bool {
+    match measure {
+        CostMeasure::Count => values.len() >= x as usize,
+        CostMeasure::ManaValue => values.contains(&x),
+        CostMeasure::TotalManaValue => {
+            if x == 0 {
+                return values.contains(&0);
+            }
+            // Which totals up to x some of them make.
+            let mut makes = vec![false; x as usize + 1];
+            makes[0] = true;
+            for &v in values.iter().filter(|&&v| v > 0 && v <= x) {
+                for total in (v as usize..=x as usize).rev() {
+                    makes[total] |= makes[total - v as usize];
+                }
+            }
+            makes[x as usize]
+        }
+    }
+}
+
+/// The words for a measured cost at X = `x`, as the order its payment is asked in names it.
+fn measured_label(measured: MeasuredCost, x: u32) -> String {
+    let (verb, things) = match measured.take {
+        CostTake::Sacrifice => ("Sacrifice", "permanent"),
+        CostTake::ExilePermanents => ("Exile", "permanent"),
+        CostTake::ExileFromGraveyard => ("Exile", "card"),
+    };
+    match measured.measure {
+        CostMeasure::Count => format!("{verb} {x} {things}{}", if x == 1 { "" } else { "s" }),
+        CostMeasure::ManaValue => format!("{verb} a {things} with mana value {x}"),
+        CostMeasure::TotalManaValue => format!("{verb} {things}s with total mana value {x}"),
+    }
+}
+
+/// The most X a measured cost may be announced as (CR 601.2b): the most its candidates could measure, and 0 for a measure with
+/// no candidate to come to more (a mana value is none of theirs, CR 733.1: that is an announcement taken back).
+fn measured_most(measure: CostMeasure, values: &[u32]) -> u32 {
+    match measure {
+        CostMeasure::Count => count_u32(values.len()),
+        CostMeasure::ManaValue => values.iter().copied().max().unwrap_or(0),
+        CostMeasure::TotalManaValue => values.iter().fold(0u32, |sum, &v| sum.saturating_add(v)),
+    }
+}
+
+/// Whether some X could pay a measured cost: X may be 0 for a count (CR 107.3a), but a mana value or a total of X needs an
+/// object to take.
+fn measured_payable(measure: CostMeasure, values: &[u32]) -> bool {
+    match measure {
+        CostMeasure::Count => true,
+        CostMeasure::ManaValue | CostMeasure::TotalManaValue => !values.is_empty(),
     }
 }
 
@@ -2351,6 +2425,7 @@ fn variable_payable(cx: &Cx, source: ObjectId, player: PlayerId, variable: Varia
             let asker = Asker { instance: None, source, controller: player, by, spell: false };
             (spec.valid)(cx, &asker, &variable_candidates(cx, source, player, variable, paid, by))
         }
+        VariableCost::Measured(measured) => measured_payable(measured.measure, &mana_values(cx, &variable_candidates(cx, source, player, variable, paid, None))),
     }
 }
 
@@ -2442,6 +2517,33 @@ fn choose_variable_permanents(cx: &mut Cx, player: PlayerId, source: ObjectId, v
             let chosen = if count == 0 { Vec::new() } else { ask_cards(cx, player, source, Purpose::ExileToPay, candidates, count, true)? };
             if !(spec.valid)(cx, &asker, &chosen) { return Err(Stop::Cancel); }
             Ok((Vec::new(), chosen))
+        }
+        VariableCost::Measured(measured) => {
+            // The measure is read as the cost is paid (CR 601.2h), after the mana abilities of CR 601.2g that may have changed
+            // what the candidates are worth: X announced that they can no longer make is taken back (CR 733.1).
+            if !measured_reaches(measured.measure, &mana_values(cx, &candidates), x) {
+                return Err(Stop::Cancel);
+            }
+            let purpose = if measured.take == CostTake::Sacrifice { Purpose::SacrificeCost } else { Purpose::ExileToPay };
+            let chosen = match measured.measure {
+                CostMeasure::Count if x == 0 => Vec::new(),
+                CostMeasure::Count => ask_cards(cx, player, source, purpose, candidates, x as usize, false)?,
+                CostMeasure::ManaValue => {
+                    let eligible: Vec<ObjectId> = candidates.into_iter().filter(|&id| cx.mana_value(id) == x).collect();
+                    ask_cards(cx, player, source, purpose, eligible, 1, false)?
+                }
+                CostMeasure::TotalManaValue => {
+                    let count = candidates.len();
+                    let chosen = ask_cards(cx, player, source, purpose, candidates, count, true)?;
+                    let total: u64 = chosen.iter().map(|&id| u64::from(cx.mana_value(id))).sum();
+                    // A choice that doesn't come to X does not pay: the announcement is rewound.
+                    if total != u64::from(x) || chosen.is_empty() {
+                        return Err(Stop::Cancel);
+                    }
+                    chosen
+                }
+            };
+            if measured.take == CostTake::Sacrifice { Ok((chosen, Vec::new())) } else { Ok((Vec::new(), chosen)) }
         }
         VariableCost::ExileFromGraveyardWithTypes(n) => {
             if types_among(cx, &candidates) < n.max(1) as usize {
@@ -2673,7 +2775,10 @@ fn source_label(cx: &Cx, scope: PaymentScope, permission: Option<Grant>, name: &
         },
         SourceText::Granted(ability, giver) => format!("{}: {}", cx.chars(giver).name, cx.cards().ability(ability).text()),
         SourceText::ManaCost => format!("mana cost of {name}"),
-        SourceText::XLife => format!("additional cost of {name}"),
+        SourceText::XLife => match scope {
+            PaymentScope::Ability { .. } | PaymentScope::ManaAbility { .. } | PaymentScope::PlayerManaAbility => format!("activation cost of {name}"),
+            _ => format!("additional cost of {name}"),
+        },
         SourceText::Combat { source, attacker, .. } => format!("{} attacking — {}", cx.chars(attacker).name, cx.chars(source).name),
     }
 }
@@ -2781,6 +2886,8 @@ fn append_fixed_payments<'a>(out: &mut Vec<SpellPayment<'a>>, origin: CostOrigin
             let nonempty = match variable {
                 VariableCost::SacrificeX(_) | VariableCost::SacrificeAnyNumber { .. } => amount > 0,
                 VariableCost::TapX(_) => amount > 0,
+                // Taking none for X = 0 is no payment where X is a count; a mana value or a total of X takes one at least.
+                VariableCost::Measured(m) => m.measure != CostMeasure::Count || amount > 0,
                 VariableCost::BlightX | VariableCost::RemoveAnyNumberOfCounters(_) => false,
                 _ => true,
             };
@@ -2902,6 +3009,8 @@ fn footprint(cx: &Cx, player: PlayerId, spell: ObjectId, scope: PaymentScope, ta
             Some(VariableCost::TapX(filter)) => Footprint::of(tap_x_candidates(cx, spell, player, filter, cost.tap, scope.by()), FOOT_BATTLEFIELD, 0, Act::Tap),
             Some(VariableCost::ExileFromGraveyardWithTypes(_)) => Footprint::of(graveyard(), FOOT_GRAVEYARD, 0, Act::Removes),
             Some(VariableCost::DiscardOneOrMore(_)) => Footprint::of(hand(), FOOT_HAND, FOOT_GRAVEYARD, Act::Removes),
+            Some(variable @ VariableCost::Measured(MeasuredCost { take: CostTake::ExileFromGraveyard, .. })) => Footprint::of(variable_candidates(cx, spell, player, variable, scope.paid_for(), scope.by()), FOOT_GRAVEYARD, 0, Act::Removes),
+            Some(variable @ VariableCost::Measured(MeasuredCost { take: CostTake::ExilePermanents, .. })) => Footprint::of(variable_candidates(cx, spell, player, variable, scope.paid_for(), scope.by()), FOOT_BATTLEFIELD, 0, Act::Removes),
             Some(VariableCost::BlightX) => Footprint::of(blight_candidates(cx, player), FOOT_BATTLEFIELD, 0, Act::Counters),
             Some(variable) => Footprint::of(variable_candidates(cx, spell, player, variable, scope.paid_for(), scope.by()), FOOT_BATTLEFIELD, FOOT_GRAVEYARD, Act::Removes),
             None => Footprint::NONE,
@@ -3110,6 +3219,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                     VariableCost::SacrificeX(_) | VariableCost::SacrificeAnyNumber { .. } | VariableCost::TapX(_) => candidates.len() >= *amount as usize,
                     VariableCost::SacrificeWithPowerX(_) => candidates.iter().any(|id| power_at_least(cx, *id, *amount)),
                     VariableCost::SacrificeOneOrMore(_) | VariableCost::DiscardOneOrMore(_) => !candidates.is_empty(),
+                    VariableCost::Measured(m) => measured_reaches(m.measure, &mana_values(cx, &candidates), *amount),
                     VariableCost::ExileFromGraveyardWithTypes(n) => types_among(cx, &candidates) >= usize::from(n.max(1)),
                     VariableCost::ExileAnyNumber(spec) => {
                         let by = cx.resolving().map(|item| Query::linked(cx, item));
@@ -3230,6 +3340,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                         VariableCost::SacrificeOneOrMore(_) => ("Sacrifice one or more permanents".into(), CostPaymentKind::Sacrifice),
                         VariableCost::ExileFromGraveyardWithTypes(n) => (format!("Exile cards with {n} card types"), CostPaymentKind::Exile),
                         VariableCost::ExileAnyNumber(_) => ("Exile chosen objects".into(), CostPaymentKind::Exile),
+                        VariableCost::Measured(m) => (measured_label(m, *amount), if m.take == CostTake::Sacrifice { CostPaymentKind::Sacrifice } else { CostPaymentKind::Exile }),
                         VariableCost::DiscardOneOrMore(_) => ("Discard one or more cards".into(), CostPaymentKind::Discard),
                         _ => unreachable!("other variable costs are not scheduled here"),
                     };
@@ -3604,8 +3715,9 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
     for _ in 0..forages {
         cx.emit(Event::Foraged { player, by: spell });
     }
-    // Each cost to collect evidence paid is collecting evidence (CR 701.59a), recorded as the whole payment is made.
-    let collected = usize::from(cost.collect_evidence > 0) + extra.iter().filter(|(_, part)| part.collect_evidence > 0).count() + options.iter().filter(|part| part.collect_evidence > 0).count();
+    // Each cost to collect evidence paid is collecting evidence (CR 701.59a), recorded as the whole payment is made: collect
+    // evidence X too when X is 0 (Incinerator of the Guilty's ruling).
+    let collected = usize::from(cost.collect_evidence > 0 || cost.collect_evidence_x) + extra.iter().filter(|(_, part)| part.collect_evidence > 0).count() + options.iter().filter(|part| part.collect_evidence > 0).count();
     for _ in 0..collected {
         cx.emit(Event::CollectedEvidence { player, by: spell });
     }
@@ -13236,15 +13348,19 @@ fn activate(
             None => return Err(Stop::Cancel),
         }
     } else { None };
-    let tap_x = match whole.variable {
-        Some(VariableCost::TapX(filter)) => Some((filter, tap_x_candidates(cx, source, player, filter, whole.tap, by).len() as u32)),
+    // A cost sized by X (`VariableCost::TapX`, `Measured`): the most X may be announced as, what its candidates could pay.
+    let sized = match whole.variable {
+        Some(variable @ VariableCost::TapX(filter)) => Some((variable, tap_x_candidates(cx, source, player, filter, whole.tap, by).len() as u32)),
+        Some(variable @ VariableCost::Measured(measured)) => Some((variable, measured_most(measured.measure, &mana_values(cx, &measured_candidates(cx, source, player, measured, paid, by))))),
         _ => None,
     };
     // An X the text defines is not announced (CR 107.3c): it is determined with the total cost, below.
     if mana.x > 0 && def.x_defined.is_none() {
         // "X target lands" cannot be announced past the legal targets there are (CR 601.2c, 602.2b).
         let cap = x_target_cap(cx, &Asker { instance: None, source, controller: player, by, spell: false }, def);
-        let cap = tap_x.map_or(cap, |(_, most)| cap.min(most)).min(most_x(mana, u32::from(mana.x)));
+        let cap = sized.map_or(cap, |(_, most)| cap.min(most)).min(most_x(mana, u32::from(mana.x)));
+        // "Pay X life" (CR 107.3a, 119.4, 118.3): X is announced up to the life there is to pay beside the cost's other life.
+        let cap = if whole.pay_x_life { cap.min((payable_life_for(cx, player, paid) - i32::try_from(whole.life).unwrap_or(i32::MAX)).max(0) as u32) } else { cap };
         // "Spend only black mana on X" (CR 107.3, 601.2h by way of 602.2b): X's generic mana only that mana may pay.
         mana = mana.with_x_mana(def.x_mana);
         // What the total comes to at each X (`x_total`), with the targets still to be chosen and the cost changes they may
@@ -13288,10 +13404,12 @@ fn activate(
     }
     // CR 107.3a, 601.2b by way of 602.2b: "Tap X untapped [permanents] you control" announces X with the rest, once for every X
     // of the ability (CR 107.3i: an {X} in its mana cost has announced it already), and is then a cost that taps X of them,
-    // chosen as the cost is paid (CR 601.2h).
-    if let Some((filter, most)) = tap_x {
+    // chosen as the cost is paid (CR 601.2h). A measured cost ("Exile X artifact cards from your graveyard", "Sacrifice a creature
+    // with mana value X") announces X the same way and takes what measures it as the cost is paid, so the targets chosen
+    // next read the X announced (CR 601.2c).
+    if let Some((variable, most)) = sized {
         if mana.x == 0 {
-            item.x = announce_x(cx, player, source, mana, None, None, u32::from(least_x(def.x_cant_be_zero)), most, false, 0, VariableCost::TapX(filter).governs())?;
+            item.x = announce_x(cx, player, source, mana, None, None, u32::from(least_x(def.x_cant_be_zero)), most, false, 0, variable.governs())?;
         }
     }
     // CR 118.13a, 601.2b by way of 602.2b: how each symbol that can be paid in more than one way is paid is announced as the
@@ -13381,7 +13499,8 @@ fn activate(
     let mut extra: Vec<_> = chosen_cost.into_iter().map(|part| (CostOrigin::CastingWay, part)).collect();
     extra.extend(imposed);
     let extra_chosen = vec![Vec::new(); extra.len()];
-    let (chosen, symbol_exiles, attacking, _, _, _, _, _, _) = pay_scheduled_costs(cx, player, source, scope, &base, &[], &extra, &extra_chosen, &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(item.x), 0, false, None, &[])?;
+    let x_life = if whole.pay_x_life { u32::from(item.x) } else { 0 };
+    let (chosen, symbol_exiles, attacking, _, _, _, _, _, _) = pay_scheduled_costs(cx, player, source, scope, &base, &[], &extra, &extra_chosen, &[], &[], &[], &[], None, life, x_life, mana, &helpers, None, u32::from(item.x), 0, false, None, &[])?;
 
     let at = cx.s().stack.len() - 1;
     let mut with = cx.s().stack[at];
@@ -16263,6 +16382,14 @@ fn pay_during_resolution_inner(
     // Whether the payer has not been asked yet.
     let mut first = true;
     loop {
+        // "Collect evidence X" (CR 701.59a, 107.3f) is collect evidence of the X chosen so far.
+        let evidence;
+        let cost = if cost.collect_evidence_x {
+            evidence = Cost { collect_evidence: u8::try_from(x.unwrap_or(0)).unwrap_or(u8::MAX), ..*cost };
+            &evidence
+        } else {
+            cost
+        };
         // The cost as X now stands: each {X} is X generic mana (CR 107.3f).
         let total = match x {
             Some(_) if times.is_some() => times_total,
@@ -16333,6 +16460,8 @@ fn pay_during_resolution_inner(
             let more = match counter_limit {
                 Some(Some(limit)) => n < limit,
                 Some(None) => false,
+                // Collect evidence X no further than the graveyard could pay (CR 701.59b), counted as collect evidence is.
+                None if cost.collect_evidence_x => u8::try_from(n + 1).is_ok_and(|more| resolution_rest_payable(cx, payer, source, with, &Cost { collect_evidence: more, ..*cost }, n + 1, false)),
                 None => n < MOST_X_PAID,
             };
             if more {
@@ -16510,6 +16639,7 @@ fn resolution_parts(cost: &Cost) -> bool {
         variable: _,
         discard_hand: _,
         collect_evidence: _,
+        collect_evidence_x: _,
         exile_symbols: _,
         behold: _,
         behold_exile: _,
@@ -17444,3 +17574,7 @@ mod delayed_watched_mana_tests {
 #[cfg(test)]
 #[path = "random_discard_cost_tests.rs"]
 mod random_discard_cost_tests;
+
+#[cfg(test)]
+#[path = "collect_evidence_x_tests.rs"]
+mod collect_evidence_x_tests;

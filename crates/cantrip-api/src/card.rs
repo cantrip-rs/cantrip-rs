@@ -1006,6 +1006,10 @@ pub struct Cost {
     /// Collect evidence N (CR 701.59a): exile cards with total mana value N or more from your graveyard, other than the
     /// source, chosen as the cost is chosen.
     pub collect_evidence: u8,
+    /// "Collect evidence X" as a resolving payment asks it (CR 701.59a, 107.3f: "you may collect evidence X", `Game::may_pay_x`):
+    /// collect evidence of the X the payer chooses as they pay, `collect_evidence` then that X. Collecting evidence 0 exiles
+    /// nothing and is still collecting evidence (Incinerator of the Guilty's ruling). Not a spell's or an activated ability's.
+    pub collect_evidence_x: bool,
     /// "Exile any number of [color] cards from your graveyard with N or more [color] mana symbols among their mana costs"
     /// (Baron Helmut Zemo's boast): cards of the color, other than the source, chosen as the cost is chosen (CR 601.2h by way
     /// of 602.2b), their symbols counted as devotion counts them (CR 700.5). The same choice as collect evidence, whose total
@@ -1140,6 +1144,45 @@ pub enum VariableCost {
     /// tapped as a tap cost of X of them (`Cost::tap_untapped`). The filter names the untapped permanents. Secluded
     /// Starforge, Glacian, Merchant's Dockhand. Not a mana ability's (Hazel of the Rootbloom's): `mana_ability` refuses it.
     TapX(ObjectFilter),
+    /// An activated ability's cost that takes objects whose measure is X, X announced as the ability is activated (CR 107.3a,
+    /// 601.2b by way of 602.2b: "Exile X artifact cards from your graveyard", "Sacrifice a creature you control with mana value
+    /// X", "Exile one or more other artifacts you control with total mana value X"). X is the ability's X (`StackItem::x`, one
+    /// value for every X of it, CR 107.3i), which its effect and targets read. Which objects pay is chosen as the
+    /// cost is paid (CR 601.2h), the measure read then; X is announced up to what the candidates could measure, and a value
+    /// they can't make (no creature of that mana value) is an announcement that can't be paid, taken back (CR 733.1).
+    Measured(MeasuredCost),
+}
+
+/// What a [`VariableCost::Measured`] cost does with the objects it takes, and from where.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum CostTake {
+    /// "Sacrifice [permanents] you control" (CR 701.21).
+    Sacrifice,
+    /// "Exile [permanents] you control" (CR 118.3).
+    ExilePermanents,
+    /// "Exile [cards] from your graveyard" (CR 118.3).
+    ExileFromGraveyard,
+}
+
+/// What the objects a [`VariableCost::Measured`] cost takes must come to, X being what was announced or chosen.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum CostMeasure {
+    /// X objects (CR 107.3a): "Exile X artifact cards from your graveyard".
+    Count,
+    /// One object with mana value X (CR 202.3): "Sacrifice a creature you control with mana value X". An {X} in the mana cost of
+    /// an object that is not a spell is 0 (CR 107.3g), which `Query::chars` already has.
+    ManaValue,
+    /// One or more objects with total mana value X: "Exile one or more other artifacts you control with total mana value X".
+    TotalManaValue,
+}
+
+/// `VariableCost::Measured`: take objects of the payer's that pass `filter` (the source asking, `Asker::source`: "other than
+/// this creature" is the filter's), the way `take` says, to the total `measure` says.
+#[derive(Clone, Copy)]
+pub struct MeasuredCost {
+    pub take: CostTake,
+    pub filter: ObjectFilter,
+    pub measure: CostMeasure,
 }
 
 /// Candidate and complete-set rules for a resolving exile cost (CR 118.11, 118.12). Tetravus supplies its linked
@@ -1163,6 +1206,11 @@ impl VariableCost {
             VariableCost::BlightX => "the number of -1/-1 counters you put on a creature you control",
             VariableCost::TapX(_) => "the number of permanents you tap",
             VariableCost::SacrificeX(_) | VariableCost::SacrificeOneOrMore(_) => "the number of permanents you sacrifice",
+            VariableCost::Measured(m) => match m.measure {
+                CostMeasure::Count => "the number of objects you take",
+                CostMeasure::ManaValue => "the mana value of the object you take",
+                CostMeasure::TotalManaValue => "the total mana value of the objects you take",
+            },
             _ => "",
         }
     }
@@ -1275,6 +1323,7 @@ impl Cost {
             variable,
             discard_hand,
             collect_evidence,
+            collect_evidence_x,
             exile_symbols,
             behold,
             behold_exile,
@@ -1319,6 +1368,7 @@ impl Cost {
             && variable.is_none()
             && !discard_hand
             && collect_evidence == 0
+            && !collect_evidence_x
             && exile_symbols.is_none()
             && behold.is_none()
             && !behold_exile
@@ -1513,6 +1563,7 @@ impl Cost {
         }
         c.discard_hand |= other.discard_hand;
         c.collect_evidence += other.collect_evidence;
+        c.collect_evidence_x |= other.collect_evidence_x;
         c.exile_symbols = match (self.exile_symbols, other.exile_symbols) {
             (Some((a, n)), Some((b, m))) => {
                 assert!(a as u8 == b as u8, "two exiles counting symbols of different colors can't be combined");
@@ -1583,6 +1634,7 @@ impl Cost {
             variable: None,
             discard_hand: false,
             collect_evidence: 0,
+            collect_evidence_x: false,
             exile_symbols: None,
             behold: None,
             behold_exile: false,

@@ -86,6 +86,12 @@ pub const fn tap_x_untapped(filter: ObjectFilter) -> Cost {
     Cost { variable: Some(VariableCost::TapX(filter)), ..Cost::NONE }
 }
 
+/// An activated ability's cost taking objects whose measure is X (`VariableCost::Measured`): X announced as the ability is
+/// activated (CR 107.3a), and the ability's X (`StackItem::x`) for its effect and targets to read.
+pub const fn measured(take: CostTake, measure: CostMeasure, filter: ObjectFilter) -> Cost {
+    Cost { variable: Some(VariableCost::Measured(MeasuredCost { take, filter, measure })), ..Cost::NONE }
+}
+
 /// "Discard N cards" (CR 701.9): any cards of the hand.
 pub const fn discard_cards(n: u8) -> Cost {
     Cost { discard: Discards::one(n, None), ..Cost::NONE }
@@ -282,7 +288,7 @@ pub const fn ability(cost: Cost, effect: Effect, text: &'static str) -> AbilityD
 
 /// A mana ability (CR 605.1a): pay `cost`, and what `adds` says is added at once, never on the stack (CR 605.3).
 pub const fn mana_ability(cost: Cost, adds: Adds, text: &'static str) -> AbilityDef {
-    assert!(!matches!(cost.variable, Some(VariableCost::TapX(_))), "a mana ability's tap X cost is not supported yet");
+    assert!(!matches!(cost.variable, Some(VariableCost::TapX(_) | VariableCost::Measured(_))), "a mana ability's tap X or measured cost is not supported yet");
     if matches!(adds.capability, Some(ManaCapability::FiniteBundles(..))) {
         assert!(adds.effect.is_none() && adds.any == 0 && !adds.any_color, "bundle choices cannot combine with a separate mana effect or color choice");
     }
@@ -1457,6 +1463,7 @@ pub const fn multikicker_cost(cost: Cost) -> Option<Kicker> {
             && !cost.exert
             && !cost.discard_hand
             && cost.collect_evidence == 0
+            && !cost.collect_evidence_x
             && cost.exile_symbols.is_none()
             && cost.variable.is_none()
             && cost.loyalty.is_none()

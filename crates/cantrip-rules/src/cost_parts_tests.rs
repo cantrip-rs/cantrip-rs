@@ -370,6 +370,67 @@ static ABILITY_SACRIFICING_X: CardDef = CardDef {
     abilities: &[ability(Cost { variable: Some(VariableCost::SacrificeX(is_bear)), ..Cost::NONE }, gain_x, "Sacrifice X Bears: You gain X life. X can't be 0.").x_cant_be_zero()],
     ..CardDef::BLANK
 };
+/// A creature of mana value `generic`, to be taken by a measured cost.
+const fn measure_creature(name: &'static str, generic: u32) -> CardDef {
+    CardDef { name, types: TypeSet::of(&[CardType::Creature]), has_cost: true, cost: ManaCost { generic, ..ManaCost::ZERO }, power: Some(1), toughness: Some(1), ..CardDef::BLANK }
+}
+static MEASURE_0: CardDef = measure_creature("Cost Test Measure 0", 0);
+static MEASURE_1: CardDef = measure_creature("Cost Test Measure 1", 1);
+static MEASURE_2: CardDef = measure_creature("Cost Test Measure 2", 2);
+static MEASURE_3: CardDef = measure_creature("Cost Test Measure 3", 3);
+/// "Exile X creature cards from your graveyard: You gain X life." (Winter, Cursed Rider's cost.)
+static ABILITY_EXILING_X_FROM_GRAVEYARD: CardDef = CardDef {
+    name: "Cost Test Exile X", types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[ability(measured(CostTake::ExileFromGraveyard, CostMeasure::Count, is_creature), gain_x, "Exile X creature cards from your graveyard: You gain X life.")],
+    ..CardDef::BLANK
+};
+/// "Sacrifice a creature with mana value X: You gain X life." (Sidisi, Regent of the Mire's cost.)
+static ABILITY_SACRIFICING_MANA_VALUE_X: CardDef = CardDef {
+    name: "Cost Test Sacrifice Mana Value X", types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[ability(measured(CostTake::Sacrifice, CostMeasure::ManaValue, is_creature), gain_x, "Sacrifice a creature with mana value X: You gain X life.")],
+    ..CardDef::BLANK
+};
+/// "Exile one or more creatures you control with total mana value X: You gain X life." (Fabrication Foundry's cost.)
+static ABILITY_EXILING_TOTAL_X: CardDef = CardDef {
+    name: "Cost Test Exile Total X", types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[ability(measured(CostTake::ExilePermanents, CostMeasure::TotalManaValue, is_creature), gain_x, "Exile creatures you control with total mana value X: You gain X life.")],
+    ..CardDef::BLANK
+};
+/// "{X}, Pay X life: You gain X life." (Krumar Initiate's cost.)
+static ABILITY_PAYING_X_LIFE: CardDef = CardDef {
+    name: "Cost Test Pay X Life", types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[ability(Cost { mana: ManaCost { x: 1, ..ManaCost::ZERO }, pay_x_life: true, ..Cost::NONE }, gain_x, "{X}, Pay X life: You gain X life.")],
+    ..CardDef::BLANK
+};
+/// "{X}, Pay 1 life, Pay X life: You gain X life.": a fixed life payment beside the X life.
+static ABILITY_PAYING_ONE_AND_X_LIFE: CardDef = CardDef {
+    name: "Cost Test Pay One And X Life", types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[ability(Cost { mana: ManaCost { x: 1, ..ManaCost::ZERO }, life: 1, pay_x_life: true, ..Cost::NONE }, gain_x, "{X}, Pay 1 life, Pay X life: You gain X life.")],
+    ..CardDef::BLANK
+};
+/// "Discard a card, Exile X creature cards from your graveyard: You gain X life.": the card discarded may be exiled.
+static ABILITY_DISCARDING_AND_EXILING_X: CardDef = CardDef {
+    name: "Cost Test Discard And Exile X", types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[ability(Cost { discard: Discards::one(1, None), ..measured(CostTake::ExileFromGraveyard, CostMeasure::Count, is_creature) }, gain_x, "Discard a card, Exile X creature cards from your graveyard: You gain X life.")],
+    ..CardDef::BLANK
+};
+/// "Exile a creature card from your hand, Exile X creature cards from your graveyard: You gain X life."
+static ABILITY_EXILING_FROM_HAND_AND_GRAVEYARD_X: CardDef = CardDef {
+    name: "Cost Test Exile From Hand And Graveyard X", types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[ability(Cost { exile_from_hand: Some((1, is_creature)), ..measured(CostTake::ExileFromGraveyard, CostMeasure::Count, is_creature) }, gain_x, "Exile a creature card from your hand, Exile X creature cards from your graveyard: You gain X life.")],
+    ..CardDef::BLANK
+};
+/// "Exile a creature card from your hand, Exile creatures you control with total mana value X: You gain X life."
+static ABILITY_EXILING_FROM_HAND_AND_TOTAL_X: CardDef = CardDef {
+    name: "Cost Test Exile From Hand And Total X", types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[ability(Cost { exile_from_hand: Some((1, is_creature)), ..measured(CostTake::ExilePermanents, CostMeasure::TotalManaValue, is_creature) }, gain_x, "Exile a creature card from your hand, Exile creatures you control with total mana value X: You gain X life.")],
+    ..CardDef::BLANK
+};
+/// "Activated abilities cost 1 life more to activate": a life payment added to the total (CR 601.2f by way of 602.2b).
+fn ability_life_tax(_: &dyn Query, _: ObjectId, _: PlayerId, costed: Costed, _: &[Target]) -> CostDelta {
+    if matches!(costed, Costed::Ability(..)) { CostDelta::life(1) } else { CostDelta::NONE }
+}
+static ABILITY_LIFE_TAX: CardDef = CardDef { name: "Cost Test Ability Life Tax", types: TypeSet::of(&[CardType::Enchantment]), cost_changes: &[ability_life_tax], ..CardDef::BLANK };
 static ABILITY_WITH_LOYALTY_AND_SELF_SACRIFICE: CardDef = CardDef {
     name: "Cost Test Loyalty And Self Sacrifice", types: TypeSet::of(&[CardType::Planeswalker]),
     abilities: &[ability(Cost { loyalty: Some(1), sacrifice_self: true, ..Cost::NONE }, gain_three, "+1, Sacrifice this: gain 3 life.")], ..CardDef::BLANK
@@ -893,7 +954,7 @@ static ARCANE_CHOOSE_PAIR: CardDef = CardDef {
 
 /// Your precombat main phase with priority, nothing anywhere.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&CHOOSE_ONLY_SPELL, &LIFE_THEN_CHOOSE_SPELL, &GRANTED_CONTEXT_CHOOSE, &ARCANE_CHOOSE_PAIR, &FILLER, &BEAR, &DORK, &SEER, &GAZER, &RETURNER, &OFFER, &RECALL, &TITHE, &VOW, &RECOILER, &LIBRARIAN, &RITE, &GRAFT, &STOWER, &TOLL, &HOARD, &HIGH_LIFE, &IMPOSSIBLE_LIFE, &MASS_OFFER, &WITHERER, &RESOLUTION_LIFE_AND_SACRIFICE, &RESOLUTION_ONE_PAYMENT_ABILITY, &RESOLUTION_ONE_PAYMENT, &RESOLUTION_TWO_PAYMENTS, &TWO_DISTINCT_COSTS, &CHOSEN_DIFFERENT_COSTS, &MULTIKICK_DIFFERENT_COSTS, &MANA_FROM_PAID, &MANA_WITH_LIFE_AND_SACRIFICE, &MANA_WITH_LIFE_AND_DYNAMIC_SACRIFICE, &DYNAMIC_COLOR_STAR, &MANA_WITH_DYNAMIC_COLOR, &MANA_WITH_NESTED_DYNAMIC_SACRIFICE, &MANA_WITH_TAXED_DYNAMIC_SACRIFICE, &PLAYER_MANA_WITH_LIFE_AND_SACRIFICE, &TEMPORARY_PLAYER_GRANTER, &VANISHING_PLAYER_GRANTER, &GRANTED_COLOR_MANA, &SELF_COLOR_MANA, &RED_DORK, &TWO_SACRIFICE_COLOR_MANA, &RETURN_THEN_COLOR_MANA, &OVERLAPPING_COSTS, &MANA_AFTER_OTHER_SACRIFICE, &MANA_WITH_TWO_COSTS, &TAP_AND_SACRIFICE_COSTS, &SPELL_WITH_TWO_COSTS, &SPELL_WITH_TWO_ACTIONS, &OUTER_MANA_COST, &INNER_MANA_COST, &EXILE_SACRIFICES, &SPELL_WITH_OVERLAPPING_COSTS, &SPELL_WITH_TAP_AND_SACRIFICE, &PREVENT_SACRIFICES, &COLOR_MANA, &STATE_WATCHER, &PAYMENT_BOUNDARY, &LIFE_STAR, &SPELL_WITH_LIFE_AND_SACRIFICE, &REVERSE_LIFE_STAR, &SPELL_WITH_LIFE_AND_POWER_COST, &SPELL_WITH_MANA_AND_LIFE, &SPELL_WITH_TWO_MANA_AND_MIDPAYMENT_SACRIFICE, &SPELL_WITH_SNOW_MANA_AND_LIFE, &SPELL_WITH_MANA_RECEIPT_SACRIFICE, &SPELL_WITH_CONVOKE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_DELVE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_IMPROVISE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_WATERBEND_MIDPAYMENT_SACRIFICE, &TAP_BATCH_WATCHER, &SPELL_WITH_HARMONIZE, &SPELL_WITH_LIFE_AND_OPTIONAL_POWER, &LIFE_MANA_SOURCE, &SPELL_WITH_MANA_AND_OPTIONAL_POWER, &SPELL_WITH_MANA_AND_POWER_CHOICE, &SPELL_WITH_MANA_AND_DYNAMIC_BEHOLD, &SPELL_WITH_POWER_AND_OPTIONAL_LIFE, &ENERGY_STAR, &SPELL_WITH_ENERGY_AND_POWER_COST, &SPELL_WITH_COUNTER_AND_POWER_COST, &SPELL_WITH_BLIGHT_AND_POWER_COST, &SPELL_WITH_MANA_AND_GRAVEYARD_EXILE, &SPELL_WITH_MANA_AND_HAND_EXILE, &SPELL_WITH_MANA_AND_EVIDENCE, &SPELL_WITH_DISCARD_AND_GRAVEYARD_EXILE, &SPELL_WITH_DISCARD_AND_TARGET_EXILE, &SPELL_WITH_TARGET_EXILE_ONLY, &SPELL_WITH_DISCARD_AND_EXILE_CHOICE, &SPELL_WITH_LIFE_AND_EXILE_CHOICE, &SPELL_WITH_LIFE_AND_VARIABLE_SACRIFICE, &SPELL_WITH_BEHOLD_AND_DISCARD, &SPELL_WITH_SEVEN_DISCARDS, &SPELL_WITH_TEAMWORK_AND_SACRIFICE, &SPELL_WITH_CONVOKE_AND_SACRIFICE, &ABILITY_WITH_LIFE_AND_SACRIFICE, &ABILITY_WITH_TAP_AND_SELF_SACRIFICE, &ABILITY_WITH_TAP_AND_SELF_RETURN, &ABILITY_WITH_COUNTER_AND_SELF_SACRIFICE, &ABILITY_WITH_VARIABLE_COUNTER_AND_SELF_SACRIFICE, &ABILITY_SACRIFICING_ONE_OR_MORE, &ABILITY_SACRIFICING_X, &ABILITY_WITH_LOYALTY_AND_SELF_SACRIFICE, &ABILITY_WITH_EXERT_AND_SELF_SACRIFICE, &ABILITY_WITH_UNATTACH_AND_TAP, &ABILITY_WITH_CRAFT_AND_LIFE, &ABILITY_WITH_LIFE_AND_LIBRARY_TOP, &ABILITY_WITH_LIFE_AND_RANDOM_LIBRARY, &ABILITY_WITH_RANDOM_AND_DYNAMIC_SACRIFICE, &EVIDENCE_CARD, &SPELL_WITH_TWO_GRAVEYARD_EXILES, &FORAGE_WAY_ABILITY, &SPELL_WITH_OPTIONAL_FORAGE])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&CHOOSE_ONLY_SPELL, &LIFE_THEN_CHOOSE_SPELL, &GRANTED_CONTEXT_CHOOSE, &ARCANE_CHOOSE_PAIR, &FILLER, &BEAR, &DORK, &SEER, &GAZER, &RETURNER, &OFFER, &RECALL, &TITHE, &VOW, &RECOILER, &LIBRARIAN, &RITE, &GRAFT, &STOWER, &TOLL, &HOARD, &HIGH_LIFE, &IMPOSSIBLE_LIFE, &MASS_OFFER, &WITHERER, &RESOLUTION_LIFE_AND_SACRIFICE, &RESOLUTION_ONE_PAYMENT_ABILITY, &RESOLUTION_ONE_PAYMENT, &RESOLUTION_TWO_PAYMENTS, &TWO_DISTINCT_COSTS, &CHOSEN_DIFFERENT_COSTS, &MULTIKICK_DIFFERENT_COSTS, &MANA_FROM_PAID, &MANA_WITH_LIFE_AND_SACRIFICE, &MANA_WITH_LIFE_AND_DYNAMIC_SACRIFICE, &DYNAMIC_COLOR_STAR, &MANA_WITH_DYNAMIC_COLOR, &MANA_WITH_NESTED_DYNAMIC_SACRIFICE, &MANA_WITH_TAXED_DYNAMIC_SACRIFICE, &PLAYER_MANA_WITH_LIFE_AND_SACRIFICE, &TEMPORARY_PLAYER_GRANTER, &VANISHING_PLAYER_GRANTER, &GRANTED_COLOR_MANA, &SELF_COLOR_MANA, &RED_DORK, &TWO_SACRIFICE_COLOR_MANA, &RETURN_THEN_COLOR_MANA, &OVERLAPPING_COSTS, &MANA_AFTER_OTHER_SACRIFICE, &MANA_WITH_TWO_COSTS, &TAP_AND_SACRIFICE_COSTS, &SPELL_WITH_TWO_COSTS, &SPELL_WITH_TWO_ACTIONS, &OUTER_MANA_COST, &INNER_MANA_COST, &EXILE_SACRIFICES, &SPELL_WITH_OVERLAPPING_COSTS, &SPELL_WITH_TAP_AND_SACRIFICE, &PREVENT_SACRIFICES, &COLOR_MANA, &STATE_WATCHER, &PAYMENT_BOUNDARY, &LIFE_STAR, &SPELL_WITH_LIFE_AND_SACRIFICE, &REVERSE_LIFE_STAR, &SPELL_WITH_LIFE_AND_POWER_COST, &SPELL_WITH_MANA_AND_LIFE, &SPELL_WITH_TWO_MANA_AND_MIDPAYMENT_SACRIFICE, &SPELL_WITH_SNOW_MANA_AND_LIFE, &SPELL_WITH_MANA_RECEIPT_SACRIFICE, &SPELL_WITH_CONVOKE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_DELVE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_IMPROVISE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_WATERBEND_MIDPAYMENT_SACRIFICE, &TAP_BATCH_WATCHER, &SPELL_WITH_HARMONIZE, &SPELL_WITH_LIFE_AND_OPTIONAL_POWER, &LIFE_MANA_SOURCE, &SPELL_WITH_MANA_AND_OPTIONAL_POWER, &SPELL_WITH_MANA_AND_POWER_CHOICE, &SPELL_WITH_MANA_AND_DYNAMIC_BEHOLD, &SPELL_WITH_POWER_AND_OPTIONAL_LIFE, &ENERGY_STAR, &SPELL_WITH_ENERGY_AND_POWER_COST, &SPELL_WITH_COUNTER_AND_POWER_COST, &SPELL_WITH_BLIGHT_AND_POWER_COST, &SPELL_WITH_MANA_AND_GRAVEYARD_EXILE, &SPELL_WITH_MANA_AND_HAND_EXILE, &SPELL_WITH_MANA_AND_EVIDENCE, &SPELL_WITH_DISCARD_AND_GRAVEYARD_EXILE, &SPELL_WITH_DISCARD_AND_TARGET_EXILE, &SPELL_WITH_TARGET_EXILE_ONLY, &SPELL_WITH_DISCARD_AND_EXILE_CHOICE, &SPELL_WITH_LIFE_AND_EXILE_CHOICE, &SPELL_WITH_LIFE_AND_VARIABLE_SACRIFICE, &SPELL_WITH_BEHOLD_AND_DISCARD, &SPELL_WITH_SEVEN_DISCARDS, &SPELL_WITH_TEAMWORK_AND_SACRIFICE, &SPELL_WITH_CONVOKE_AND_SACRIFICE, &ABILITY_WITH_LIFE_AND_SACRIFICE, &ABILITY_WITH_TAP_AND_SELF_SACRIFICE, &ABILITY_WITH_TAP_AND_SELF_RETURN, &ABILITY_WITH_COUNTER_AND_SELF_SACRIFICE, &ABILITY_WITH_VARIABLE_COUNTER_AND_SELF_SACRIFICE, &ABILITY_SACRIFICING_ONE_OR_MORE, &ABILITY_SACRIFICING_X, &MEASURE_0, &MEASURE_1, &MEASURE_2, &MEASURE_3, &ABILITY_EXILING_X_FROM_GRAVEYARD, &ABILITY_SACRIFICING_MANA_VALUE_X, &ABILITY_EXILING_TOTAL_X, &ABILITY_PAYING_X_LIFE, &ABILITY_PAYING_ONE_AND_X_LIFE, &ABILITY_LIFE_TAX, &ABILITY_DISCARDING_AND_EXILING_X, &ABILITY_EXILING_FROM_HAND_AND_GRAVEYARD_X, &ABILITY_EXILING_FROM_HAND_AND_TOTAL_X, &ABILITY_WITH_LOYALTY_AND_SELF_SACRIFICE, &ABILITY_WITH_EXERT_AND_SELF_SACRIFICE, &ABILITY_WITH_UNATTACH_AND_TAP, &ABILITY_WITH_CRAFT_AND_LIFE, &ABILITY_WITH_LIFE_AND_LIBRARY_TOP, &ABILITY_WITH_LIFE_AND_RANDOM_LIBRARY, &ABILITY_WITH_RANDOM_AND_DYNAMIC_SACRIFICE, &EVIDENCE_CARD, &SPELL_WITH_TWO_GRAVEYARD_EXILES, &FORAGE_WAY_ABILITY, &SPELL_WITH_OPTIONAL_FORAGE])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -3241,6 +3302,286 @@ fn an_abilitys_sacrifice_x_announces_x_up_to_the_permanents_there_are_and_not_ze
     activate_variable_sacrifice(&mut g, source, 1, 2, 2, &bears);
     assert!(bears.iter().all(|&b| g.state.obj(b).became.is_some()), "both are sacrificed");
     assert_eq!(g.state.player(YOU).life, life + 2);
+}
+
+/// Activates `source` and reads the announcement of a measured cost's X (CR 107.3a, 601.2b by way of 602.2b): its bounds and
+/// what it counts, which is answered with `announce`; the question that comes next.
+fn announce_measured(g: &mut Game, source: ObjectId, bounds: (u32, u32), governs: &str, announce: u32) -> Request {
+    let r = next(g);
+    let ability = option_of(g, &r, source).expect("the ability is offered");
+    answer(g, &r, Answer::Act(Action::of(&ability)));
+    let r = next(g);
+    match &r.kind {
+        RequestKind::PayCosts { announcing: true, least, most, governs: what, .. } => {
+            assert_eq!((*least, *most), bounds, "the bounds of the announcement");
+            assert_eq!(*what, governs);
+        }
+        other => panic!("X is announced as the ability is activated: {other:?}"),
+    }
+    answer(g, &r, Answer::Announce(announce));
+    next(g)
+}
+
+/// A payment that can't be made is an illegal action, taken back (CR 733.1): nothing paid, nothing on the stack.
+fn assert_taken_back(g: &mut Game, source: ObjectId) {
+    let r = next(g);
+    assert!(matches!(r.kind, RequestKind::Priority { .. }), "back to priority: {:?}", r.kind);
+    assert!(g.state.stack.is_empty(), "the ability is not on the stack");
+    assert!(option_of(g, &r, source).is_some(), "it can be activated again");
+}
+
+#[test]
+fn an_abilitys_exile_x_cards_from_the_graveyard_announces_x_and_exiles_that_many() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_EXILING_X_FROM_GRAVEYARD, Zone::BATTLEFIELD);
+    let cards: Vec<ObjectId> = (0..3).map(|_| put(&mut g, &MEASURE_1, Zone::graveyard(YOU))).collect();
+    let life = g.state.player(YOU).life;
+    // CR 107.3a: any number from 0 up to the cards there are to exile (CR 118.3).
+    let r = announce_measured(&mut g, source, (0, 3), "the number of objects you take", 2);
+    assert!(matches!(&r.kind, RequestKind::ChooseCards { purpose: Purpose::ExileToPay, .. }), "the cards are chosen as the cost is paid: {:?}", r.kind);
+    answer(&mut g, &r, Answer::Cards(cards[..2].to_vec()));
+    resolve_all(&mut g);
+    assert!(cards[..2].iter().all(|&c| g.state.obj(c).became.is_some()), "the two chosen are exiled");
+    assert!(g.state.obj(cards[2]).became.is_none(), "the third stays");
+    assert_eq!(g.state.player(YOU).life, life + 2, "the effect reads the X announced");
+}
+
+#[test]
+fn an_abilitys_exile_x_is_not_announced_past_the_cards_there_are_and_x_of_zero_takes_nothing() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_EXILING_X_FROM_GRAVEYARD, Zone::BATTLEFIELD);
+    let card = put(&mut g, &MEASURE_1, Zone::graveyard(YOU));
+    let life = g.state.player(YOU).life;
+    // The one card there is: no more than 1; and the source itself (a card of the graveyard only when it is one) is no part of it.
+    announce_measured(&mut g, source, (0, 1), "the number of objects you take", 0);
+    resolve_all(&mut g);
+    assert!(g.state.obj(card).became.is_none(), "X = 0 exiles nothing");
+    assert_eq!(g.state.player(YOU).life, life);
+}
+
+#[test]
+fn an_abilitys_sacrifice_of_mana_value_x_takes_a_creature_of_that_mana_value_and_x_is_its_value() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_SACRIFICING_MANA_VALUE_X, Zone::BATTLEFIELD);
+    let one = put(&mut g, &MEASURE_1, Zone::BATTLEFIELD);
+    let three = put(&mut g, &MEASURE_3, Zone::BATTLEFIELD);
+    let life = g.state.player(YOU).life;
+    // Up to the greatest mana value there is (CR 107.3a, 601.2b); the creature is chosen as the cost is paid (CR 601.2h).
+    let r = announce_measured(&mut g, source, (0, 3), "the mana value of the object you take", 3);
+    assert!(matches!(&r.kind, RequestKind::ChooseCards { purpose: Purpose::SacrificeCost, .. }), "the creature is chosen as the cost is paid: {:?}", r.kind);
+    answer(&mut g, &r, Answer::Cards(vec![three]));
+    resolve_all(&mut g);
+    assert!(g.state.obj(three).became.is_some(), "the creature of mana value 3 is sacrificed");
+    assert!(g.state.obj(one).became.is_none(), "the other stays");
+    assert_eq!(g.state.player(YOU).life, life + 3);
+}
+
+#[test]
+fn an_abilitys_sacrifice_of_a_mana_value_nothing_has_is_an_announcement_taken_back() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_SACRIFICING_MANA_VALUE_X, Zone::BATTLEFIELD);
+    let one = put(&mut g, &MEASURE_1, Zone::BATTLEFIELD);
+    let three = put(&mut g, &MEASURE_3, Zone::BATTLEFIELD);
+    // No creature has mana value 2, so X of 2 can't be paid (CR 118.3, 733.1).
+    announce_measured(&mut g, source, (0, 3), "the mana value of the object you take", 2);
+    assert_taken_back(&mut g, source);
+    assert!(g.state.obj(one).became.is_none() && g.state.obj(three).became.is_none(), "nothing was sacrificed");
+}
+
+#[test]
+fn an_abilitys_exile_of_total_mana_value_x_takes_creatures_that_add_up_to_x_and_no_other_total() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_EXILING_TOTAL_X, Zone::BATTLEFIELD);
+    let creatures: Vec<ObjectId> = [&MEASURE_1, &MEASURE_2, &MEASURE_3].into_iter().map(|d| put(&mut g, d, Zone::BATTLEFIELD)).collect();
+    let life = g.state.player(YOU).life;
+    // Up to the total of everything there is to exile (1 + 2 + 3).
+    let r = announce_measured(&mut g, source, (0, 6), "the total mana value of the objects you take", 3);
+    assert!(matches!(&r.kind, RequestKind::ChooseCards { purpose: Purpose::ExileToPay, .. }), "{:?}", r.kind);
+    // Mana values 1 and 2 total exactly 3.
+    answer(&mut g, &r, Answer::Cards(vec![creatures[0], creatures[1]]));
+    resolve_all(&mut g);
+    assert!(creatures[..2].iter().all(|&c| g.state.obj(c).became.is_some()), "both are exiled");
+    assert!(g.state.obj(creatures[2]).became.is_none());
+    assert_eq!(g.state.player(YOU).life, life + 3);
+}
+
+#[test]
+fn an_abilitys_exile_of_total_mana_value_x_refuses_a_total_that_is_not_x_and_takes_the_action_back() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_EXILING_TOTAL_X, Zone::BATTLEFIELD);
+    let creatures: Vec<ObjectId> = [&MEASURE_1, &MEASURE_2, &MEASURE_3].into_iter().map(|d| put(&mut g, d, Zone::BATTLEFIELD)).collect();
+    let r = announce_measured(&mut g, source, (0, 6), "the total mana value of the objects you take", 3);
+    // 2 and 3 total 5, not the 3 announced (CR 107.3a: "total mana value X" is exactly X).
+    answer(&mut g, &r, Answer::Cards(vec![creatures[1], creatures[2]]));
+    assert_taken_back(&mut g, source);
+    assert!(creatures.iter().all(|&c| g.state.obj(c).became.is_none()), "nothing was exiled");
+}
+
+#[test]
+fn an_abilitys_pay_x_life_announces_x_up_to_the_life_there_is_and_pays_it_with_the_mana() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_PAYING_X_LIFE, Zone::BATTLEFIELD);
+    add_mana(&mut g, 5);
+    g.state.update_player(YOU, |p| p.life = 3);
+    // Five mana could pay X = 5, but only 3 life could (CR 119.4, 118.3).
+    let r = announce_measured_x(&mut g, source, 3, 2);
+    close_window(&mut g, r);
+    resolve_all(&mut g);
+    // 3 - 2 paid, + 2 gained: the payment was made, not skipped (which would leave 5).
+    assert_eq!(g.state.player(YOU).life, 3);
+}
+
+#[test]
+fn an_abilitys_exile_x_of_one_exiles_the_one_card_chosen() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_EXILING_X_FROM_GRAVEYARD, Zone::BATTLEFIELD);
+    let cards: Vec<ObjectId> = (0..2).map(|_| put(&mut g, &MEASURE_1, Zone::graveyard(YOU))).collect();
+    let life = g.state.player(YOU).life;
+    let r = announce_measured(&mut g, source, (0, 2), "the number of objects you take", 1);
+    assert!(matches!(&r.kind, RequestKind::ChooseCards { purpose: Purpose::ExileToPay, .. }), "the card is chosen as the cost is paid: {:?}", r.kind);
+    answer(&mut g, &r, Answer::Cards(vec![cards[1]]));
+    resolve_all(&mut g);
+    assert!(g.state.obj(cards[1]).became.is_some(), "the one chosen is exiled");
+    assert!(g.state.obj(cards[0]).became.is_none());
+    assert_eq!(g.state.player(YOU).life, life + 1);
+}
+
+#[test]
+fn an_abilitys_sacrifice_of_mana_value_zero_still_sacrifices_a_creature_of_mana_value_zero() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_SACRIFICING_MANA_VALUE_X, Zone::BATTLEFIELD);
+    let zero = put(&mut g, &MEASURE_0, Zone::BATTLEFIELD);
+    // "Sacrifice a creature with mana value X" with X = 0 is still a sacrifice (CR 107.3a, 118.3): of a creature of mana value 0.
+    let r = announce_measured(&mut g, source, (0, 0), "the mana value of the object you take", 0);
+    assert!(matches!(&r.kind, RequestKind::ChooseCards { purpose: Purpose::SacrificeCost, .. }), "the creature is chosen: {:?}", r.kind);
+    answer(&mut g, &r, Answer::Cards(vec![zero]));
+    resolve_all(&mut g);
+    assert!(g.state.obj(zero).became.is_some(), "the creature of mana value 0 is sacrificed");
+}
+
+#[test]
+fn an_abilitys_sacrifice_of_mana_value_x_must_choose_a_creature() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_SACRIFICING_MANA_VALUE_X, Zone::BATTLEFIELD);
+    let three = put(&mut g, &MEASURE_3, Zone::BATTLEFIELD);
+    let r = announce_measured(&mut g, source, (0, 3), "the mana value of the object you take", 3);
+    // "a creature" is one, not up to one (CR 118.3).
+    assert!(g.answer(r.id, r.player, Answer::Cards(Vec::new())).is_err(), "no creature is not an answer");
+    answer(&mut g, &r, Answer::Cards(vec![three]));
+    resolve_all(&mut g);
+    assert!(g.state.obj(three).became.is_some());
+}
+
+#[test]
+fn a_discard_paid_before_an_exile_x_from_the_graveyard_lets_the_card_discarded_be_exiled() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_DISCARDING_AND_EXILING_X, Zone::BATTLEFIELD);
+    let in_hand = put(&mut g, &MEASURE_1, Zone::hand(YOU));
+    let there = put(&mut g, &MEASURE_2, Zone::graveyard(YOU));
+    let life = g.state.player(YOU).life;
+    // The discard may put a creature card in the graveyard before the exile is paid (CR 601.2h: the costs in any order).
+    let r = announce_measured(&mut g, source, (0, 1), "the number of objects you take", 1);
+    let RequestKind::ChooseCostPayment { choices, .. } = &r.kind else { panic!("which cost is paid first is asked: {:?}", r.kind) };
+    let kinds: Vec<CostPaymentKind> = choices.iter().map(|c| c.kind).collect();
+    assert!(kinds.contains(&CostPaymentKind::Discard) && kinds.contains(&CostPaymentKind::Exile), "a discard and an exile: {kinds:?}");
+    assert!(!kinds.contains(&CostPaymentKind::Sacrifice), "nothing is sacrificed: {kinds:?}");
+    let r = pay_first(&mut g, r, |choices| choices.iter().position(|c| c.kind == CostPaymentKind::Discard));
+    answer(&mut g, &r, Answer::Cards(vec![in_hand]));
+    let r = next(&mut g);
+    let r = pay_first(&mut g, r, |_| Some(0));
+    assert!(matches!(&r.kind, RequestKind::ChooseCards { purpose: Purpose::ExileToPay, .. }), "{:?}", r.kind);
+    // The card discarded is a new object in the graveyard (CR 400.7), offered beside the one there was.
+    let RequestKind::ChooseCards { cards, .. } = &r.kind else { unreachable!() };
+    let discarded = cards.iter().copied().find(|&c| c != there).filter(|_| cards.len() == 2 && cards.contains(&there)).expect("the card discarded may be exiled");
+    assert!(g.state.obj(in_hand).became.is_some(), "it was discarded");
+    answer(&mut g, &r, Answer::Cards(vec![discarded]));
+    resolve_all(&mut g);
+    assert!(g.state.obj(discarded).became.is_some(), "the card discarded is exiled");
+    assert!(g.state.obj(there).became.is_none(), "the other stays");
+    assert_eq!(g.state.player(YOU).life, life + 1);
+}
+
+/// An exile from the hand and a measured exile elsewhere take from different places and put nothing in the other's: the
+/// order cannot matter, and it is not asked.
+fn assert_order_not_asked(def: &'static CardDef, measure_zone: Zone, bounds: (u32, u32), governs: &str) {
+    let mut g = game();
+    let source = put(&mut g, def, Zone::BATTLEFIELD);
+    let in_hand = put(&mut g, &MEASURE_2, Zone::hand(YOU));
+    let measured = put(&mut g, &MEASURE_1, measure_zone);
+    let r = announce_measured(&mut g, source, bounds, governs, 1);
+    assert!(matches!(&r.kind, RequestKind::ChooseCards { .. }), "the cards are chosen, with no question of order: {:?}", r.kind);
+    answer_offered(&mut g, &r, &[in_hand, measured]);
+    let r = next(&mut g);
+    assert!(matches!(&r.kind, RequestKind::ChooseCards { .. }), "{:?}", r.kind);
+    answer_offered(&mut g, &r, &[in_hand, measured]);
+    resolve_all(&mut g);
+    assert!(g.state.obj(in_hand).became.is_some() && g.state.obj(measured).became.is_some(), "both are exiled");
+}
+
+#[test]
+fn an_exile_from_the_hand_beside_an_exile_x_from_the_graveyard_is_paid_without_asking_the_order() {
+    assert_order_not_asked(&ABILITY_EXILING_FROM_HAND_AND_GRAVEYARD_X, Zone::graveyard(YOU), (0, 1), "the number of objects you take");
+}
+
+#[test]
+fn an_exile_from_the_hand_beside_an_exile_of_total_mana_value_x_is_paid_without_asking_the_order() {
+    assert_order_not_asked(&ABILITY_EXILING_FROM_HAND_AND_TOTAL_X, Zone::BATTLEFIELD, (0, 1), "the total mana value of the objects you take");
+}
+
+#[test]
+fn an_abilitys_pay_x_life_is_announced_up_to_the_life_left_beside_its_other_life() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_PAYING_ONE_AND_X_LIFE, Zone::BATTLEFIELD);
+    add_mana(&mut g, 5);
+    g.state.update_player(YOU, |p| p.life = 4);
+    // 4 life, 1 of it owed besides: X no more than 3 (CR 119.4, 118.3).
+    let r = announce_measured_x(&mut g, source, 3, 2);
+    close_window(&mut g, r);
+    resolve_all(&mut g);
+    // 4 - 1 - 2 paid, + 2 gained.
+    assert_eq!(g.state.player(YOU).life, 3);
+}
+
+#[test]
+fn an_abilitys_pay_x_life_with_a_life_tax_it_cannot_pay_beside_is_taken_back() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_PAYING_X_LIFE, Zone::BATTLEFIELD);
+    put(&mut g, &ABILITY_LIFE_TAX, Zone::BATTLEFIELD);
+    add_mana(&mut g, 5);
+    g.state.update_player(YOU, |p| p.life = 4);
+    // X = 4 is all the life there is; the 1 life the tax adds to the total (CR 601.2f) can't be paid beside it (CR 119.4),
+    // so the activation is taken back (CR 733.1).
+    announce_measured_x(&mut g, source, 4, 4);
+    assert_taken_back(&mut g, source);
+    assert_eq!(g.state.player(YOU).life, 4, "no life was paid");
+}
+
+#[test]
+fn an_abilitys_pay_x_life_with_a_life_tax_pays_both() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_PAYING_X_LIFE, Zone::BATTLEFIELD);
+    put(&mut g, &ABILITY_LIFE_TAX, Zone::BATTLEFIELD);
+    add_mana(&mut g, 5);
+    g.state.update_player(YOU, |p| p.life = 4);
+    let r = announce_measured_x(&mut g, source, 4, 2);
+    close_window(&mut g, r);
+    resolve_all(&mut g);
+    // 4 - 2 - 1 paid, + 2 gained.
+    assert_eq!(g.state.player(YOU).life, 3);
+}
+
+/// Activates `source` whose X is in its mana cost, checks X may be announced up to `most`, and announces `announce`.
+fn announce_measured_x(g: &mut Game, source: ObjectId, most: u32, announce: u32) -> Request {
+    let r = next(g);
+    let ability = option_of(g, &r, source).expect("the ability is offered");
+    answer(g, &r, Answer::Act(Action::of(&ability)));
+    let r = next(g);
+    match &r.kind {
+        RequestKind::PayCosts { announcing: true, most: m, .. } => assert_eq!(*m, most, "X is announced up to the life there is"),
+        other => panic!("X is announced as the ability is activated: {other:?}"),
+    }
+    answer(g, &r, Answer::Announce(announce));
+    next(g)
 }
 
 /// The forages `YOU` made this turn: one `Event::Foraged` for each way to forage paid (CR 701.61a).
