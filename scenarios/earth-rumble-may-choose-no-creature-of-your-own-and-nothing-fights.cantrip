@@ -1,0 +1,38 @@
+# Earth Rumble: "up to one target creature you control" may be zero, but the opponent's creature is still a required target. With no
+# creature of its own chosen nothing fights: Bot2's Elvish Mystic lives and the earthbent Forest has no damage (CR 601.2c, 603.12).
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Earth Rumble
+Forest x17
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Earth Rumble.Cast(Bot1.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Target(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Elvish Mystic.Damage = 0
+Bot1.Battlefield.Forest.Damage = 0
+Bot1.Battlefield.Forest.Types = Land; Creature
