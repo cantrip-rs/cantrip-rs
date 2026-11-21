@@ -1,0 +1,64 @@
+# Rockalanche {2}{G}: "Earthbend X, where X is the number of Forests you control." Bot1 has one Forest when it casts the spell (X = 1: the
+# Forest becomes a 1/1 haste land creature), then plays a second Forest and, two turns later, a Wastes, and flashes the card back for {5}{G}
+# onto the Wastes while Bot2 also controls a Forest: X counts only Bot1's two Forests - not its Wastes, not Bot2's Forest - so the Wastes
+# gets exactly two counters (CR 701.66a, 702.34a, 608.2h). The flashed-back card is exiled.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Rockalanche
+Forest
+Wastes
+Forest x11
+
+[Bot2 Deck]
+Forest
+Island x19
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Rockalanche.Cast(Bot1.Battlefield.Forest)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Counters.PlusOnePlusOne = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Wastes.Play
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Battlefield.Mox Emerald#4.Activate
+Bot1.Battlefield.Mox Emerald#5.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Graveyard.Rockalanche.Cast(Bot1.Battlefield.Wastes; Ability: Flashback)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Forest#1.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Forest#1.Power = 1
+Bot1.Battlefield.Wastes.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Wastes.Power = 2
+Bot1.Battlefield.Wastes.Types = Land; Creature
+Bot1.Battlefield.Wastes.Keywords = Haste
+Bot1.Battlefield.Forest#2.Types = Land
+Bot2.Battlefield.Forest.Types = Land
+Exile = Rockalanche
+Bot1.Graveyard.Count = 0
