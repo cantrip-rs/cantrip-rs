@@ -1,0 +1,80 @@
+# Rebellious Captives: "Exhaust - {6}: Put two +1/+1 counters on this creature, then earthbend 2." The ability costs exactly {6}: five
+# Moxen are short, the sixth source (a Forest) pays it; only a land Bot1 controls can be the target (Bot2's Island is refused). The Captives
+# becomes a 4/4 and the second Forest a 2/2 land creature with haste (two +1/+1 counters on a 0/0, CR 701.66a). Bot2's Lightning Bolt kills
+# the land in turn 4 and the delayed return puts it back onto the battlefield tapped, a plain land again; in turn 5 the exhaust ability
+# cannot be activated a second time with seven sources untapped (CR 702.177a).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Rebellious Captives
+Forest
+Forest
+Forest x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island
+Island x17
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rebellious Captives.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+! Bot1.Battlefield.Rebellious Captives.Activate(Target: Bot1.Battlefield.Forest; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Forest.Play
+! Bot1.Battlefield.Rebellious Captives.Activate(Target: Bot2.Battlefield.Island)
+Bot1.Battlefield.Rebellious Captives.Activate(Target: Bot1.Battlefield.Forest#2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rebellious Captives.Power = 4
+? Bot1.Battlefield.Rebellious Captives.Toughness = 4
+? Bot1.Battlefield.Rebellious Captives.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Forest#2.Power = 2
+? Bot1.Battlefield.Forest#2.Toughness = 2
+? Bot1.Battlefield.Forest#2.Types = Land; Creature
+? Bot1.Battlefield.Forest#2.Keywords = Haste
+? Bot1.Battlefield.Forest#2.Counters.PlusOnePlusOne = 2
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Forest#2)
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Count = 8
+? Bot1.Battlefield.Forest#2.Types = Land
+? Bot1.Battlefield.Forest#2.Tapped = true
+? Bot1.Battlefield.Forest#2.Counters.PlusOnePlusOne = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest#1.Activate
+! Bot1.Battlefield.Rebellious Captives.Activate(Target: Bot1.Battlefield.Forest#1)
+
+[Expect]
+Bot1.Battlefield.Rebellious Captives.Power = 4
+Bot2.Graveyard = Lightning Bolt
