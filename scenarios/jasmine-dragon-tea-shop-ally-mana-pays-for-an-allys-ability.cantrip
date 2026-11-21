@@ -1,0 +1,46 @@
+# Jasmine Dragon Tea Shop's mana also pays to "activate an ability of an Ally source" (CR 106.6, 602.2b). Water Tribe Captain
+# (a Human Soldier Ally) is cast on turn 1; on turn 3 the Shop's mana and four Moxen pay its "{5}: Creatures you control get +1/+1
+# until end of turn", so the Captain is 4/4. With only three Moxen and the Shop's mana the {5} is refused for want of mana
+# (the fifth source is Mox Sapphire, still in hand), the positive control being the paid activation.
+
+[Bot1 Deck]
+Jasmine Dragon Tea Shop
+Mox Pearl
+Mox Ruby
+Mox Jet
+Water Tribe Captain
+Mox Emerald
+Island
+Mox Sapphire
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Jasmine Dragon Tea Shop.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Water Tribe Captain.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Jasmine Dragon Tea Shop.Activate(Ability: Spend; Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Water Tribe Captain.Activate(Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Water Tribe Captain.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Mana = 
+Bot1.Battlefield.Water Tribe Captain.Power = 4
+Bot1.Battlefield.Water Tribe Captain.Toughness = 4

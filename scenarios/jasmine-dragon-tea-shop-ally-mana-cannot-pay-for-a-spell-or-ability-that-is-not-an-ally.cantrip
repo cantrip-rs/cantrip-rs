@@ -1,0 +1,30 @@
+# Jasmine Dragon Tea Shop's restricted {R} cannot cast Lightning Bolt (not an Ally spell) nor pay Blazing Rootwalla's "{R}: +2/+0"
+# (a Lizard source, CR 106.6): with the Shop's mana alone in the pool both are refused (`Mana: short`). The positive
+# controls are the sibling scenarios.
+
+[Bot1 Deck]
+Jasmine Dragon Tea Shop
+Black Lotus
+Blazing Rootwalla
+Lightning Bolt
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Jasmine Dragon Tea Shop.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Blazing Rootwalla.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Jasmine Dragon Tea Shop.Activate(Ability: Spend; Color: Red)
+? Bot1.Mana = {R} (AllySpellsOrAbilities)
+! Bot1.Hand.Lightning Bolt.Cast(Mana: short)
+! Bot1.Battlefield.Blazing Rootwalla.Activate(Mana: short)
+
+[Expect]
+Bot1.Mana = {R} (AllySpellsOrAbilities)
+Bot1.Battlefield.Blazing Rootwalla.Power = 1

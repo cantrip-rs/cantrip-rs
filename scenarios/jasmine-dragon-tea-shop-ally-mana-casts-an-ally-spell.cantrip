@@ -1,0 +1,28 @@
+# Jasmine Dragon Tea Shop: "{T}: Add one mana of any color. Spend this mana only to cast an Ally spell or activate an ability of an
+# Ally source" (CR 106.6). Turn 3 the Shop's {W} (chosen any color) and Mox Jet's {B} cast Compassionate Healer ({1}{W}, a Human
+# Cleric Ally): the restricted mana is spent on it and nothing is left in the pool.
+
+[Bot1 Deck]
+Jasmine Dragon Tea Shop
+Mox Jet
+Compassionate Healer
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Jasmine Dragon Tea Shop.Play
+Bot1.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Jasmine Dragon Tea Shop.Activate(Ability: Spend; Color: White)
+? Bot1.Mana = {W} (AllySpellsOrAbilities)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Compassionate Healer.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Mana =
+Bot1.Battlefield.Compassionate Healer.Types = Creature
+Bot1.Battlefield.Jasmine Dragon Tea Shop.Tapped = true
