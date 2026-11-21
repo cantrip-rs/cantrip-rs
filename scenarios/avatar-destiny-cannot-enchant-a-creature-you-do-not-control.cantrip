@@ -1,0 +1,46 @@
+# Avatar Destiny: "Enchant creature you control". Bot2's Llanowar Elves is not a legal choice for Bot1 even with the mana to pay for the
+# spell (refused); the next line casts it on Bot1's own Grizzly Bears, which is legal and takes all of Bot1's mana (a positive control).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Grizzly Bears
+Island
+Island
+Avatar Destiny
+Island x14
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+! Bot1.Hand.Avatar Destiny.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Hand.Avatar Destiny.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Subtypes = Avatar; Bear
+Bot2.Battlefield.Llanowar Elves.Subtypes = Druid; Elf
+Bot1.Hand = Island; Island

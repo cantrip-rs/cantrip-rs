@@ -1,0 +1,76 @@
+# Avatar Destiny: "Enchant creature you control". Bot1's Bears wear it (3/3: one creature card in Bot1's graveyard). On turn 4 Bot2 steals
+# the Bears with Control Magic: the Aura is now attached to a creature its controller does not control, so it is put into its owner's
+# graveyard as a state-based action (CR 303.4d, 704.5m) - the creature did not die, so nothing triggers: no card is milled, the Aura is
+# not returned to Bot1's hand and Hill Giant stays in the library. The Bears are Bot2's, back to 2/2 with the Avatar type gone.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Grizzly Bears
+Grizzly Bears
+Island
+Avatar Destiny
+Giant Spider
+Forest
+Hill Giant
+Island x11
+
+[Bot2 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Lightning Bolt
+Lightning Bolt
+Control Magic
+Mox Sapphire
+Island x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Grizzly Bears#1.Cast
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears#1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Avatar Destiny.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 3
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Battlefield.Mox Sapphire#3.Activate
+Bot2.Battlefield.Mox Sapphire#4.Activate
+Bot2.Hand.Control Magic.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Grizzly Bears.Subtypes = Bear
+Bot1.Hand = Island
+Bot1.Graveyard = Avatar Destiny; Grizzly Bears
+Bot1.Library.Count = 14
