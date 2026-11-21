@@ -1,0 +1,46 @@
+# The Earth King: "power 4 or greater" (CR 508.1m, 603.2): The Earth King (power 2) and Centaur Courser (power 3) attack together at turn 3, neither reaches 4,
+# so nothing is fetched and the library is not shuffled.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+The Earth King
+Mox Emerald
+Mox Pearl
+Mox Jet
+Centaur Courser
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Centaur Courser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.The Earth King.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(The Earth King > Bot2; Centaur Courser > Bot2)
+? Stack.Count = 0
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 15
+Bot1.Shuffles = 0

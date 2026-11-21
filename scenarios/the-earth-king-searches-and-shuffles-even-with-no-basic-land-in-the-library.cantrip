@@ -1,0 +1,44 @@
+# The Earth King: "search your library for up to that many basic land cards ... then shuffle" (CR 701.23, 701.24): with only a non-basic land
+# left in the library the search finds nothing, the player cannot choose it, and the library is shuffled all the same.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+The Earth King
+Forest
+Forest
+Forest
+Forest
+Forest
+Tropical Island
+Tropical Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.The Earth King.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Attack(Bear Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Tropical Island)
+Bot1.Search()
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Shuffles = 1
+Bot1.Battlefield.Count = 4
+Bot1.Library.Count = 12
