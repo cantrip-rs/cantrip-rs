@@ -1,0 +1,71 @@
+# Boiling Rock Rioter: "Tap an untapped Ally you control: Exile target card from a graveyard" and "you may cast an Ally spell from among cards you own
+# exiled with this creature". Turn 3 Bot1's Lightning Bolt kills its own Earth Kingdom Protectors and the Rioter, the only Ally Bot1 controls (Bot2's
+# untapped Protectors may not pay), taps itself (summoning sickness does not matter, and it is not its {T}) to exile it. Tapped, with only a non-Ally
+# Ornithopter beside it, the Rioter cannot pay for a second activation. Turn 5 it attacks, the exiled Protectors is offered, affordable with Mox Pearl,
+# and Bot1 declines: it stays in exile, unplayed.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Boiling Rock Rioter
+Earth Kingdom Protectors
+Lightning Bolt
+Ornithopter
+Swamp x14
+
+[Bot2 Deck]
+Mox Pearl
+Earth Kingdom Protectors
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Boiling Rock Rioter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Earth Kingdom Protectors.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Earth Kingdom Protectors.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Earth Kingdom Protectors)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Earth Kingdom Protectors; Lightning Bolt
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Boiling Rock Rioter.Activate(Ability: Tap an untapped Ally; Bot1.Graveyard.Earth Kingdom Protectors)
+Bot1.Pass
+Bot2.Pass
+? Exile = Earth Kingdom Protectors
+? Bot1.Battlefield.Boiling Rock Rioter.Tapped = true
+? Bot1.Battlefield.Ornithopter.Tapped = false
+? Bot2.Battlefield.Earth Kingdom Protectors.Tapped = false
+? Stack.Count = 0
+! Bot1.Battlefield.Boiling Rock Rioter.Activate(Ability: Tap an untapped Ally; Bot1.Graveyard.Lightning Bolt)
+? Stack.Count = 0
+? Bot2.Battlefield.Earth Kingdom Protectors.Tapped = false
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Boiling Rock Rioter > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R} lasting {R}
+[T5 Bot1.Damage]
+
+[Expect]
+Bot2.Life = 17
+Exile = Earth Kingdom Protectors
+Bot1.Battlefield.Mox Pearl.Tapped = false
