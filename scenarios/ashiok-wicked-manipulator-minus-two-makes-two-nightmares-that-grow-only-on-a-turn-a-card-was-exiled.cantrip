@@ -1,0 +1,58 @@
+# -2: "Create two 1/1 black Nightmare creature tokens with 'At the beginning of combat on your turn, if a card was put into exile
+# this turn, put a +1/+1 counter on this token.'" (CR 603.4, 701.7a.) Bot1 casts Ashiok on turn 1 and -2s (loyalty 3): two 1/1 black
+# Nightmares. No card has been exiled on turn 1, so neither trigger is put on the stack at beginning of combat. On turn 3 Bot1 taps
+# Mana Confluence, whose life is paid as a card from the library with Ashiok in play: a card was put into exile, so each Nightmare gets
+# a counter at beginning of combat (2/2). On turn 5 nothing is exiled and they stay 2/2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Ashiok, Wicked Manipulator
+Mana Confluence
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ashiok, Wicked Manipulator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ashiok, Wicked Manipulator.Activate(Ability: Create two 1/1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ashiok, Wicked Manipulator.Counters.Loyalty = 3
+? Bot1.Battlefield.Nightmare Token#1.Power = 1
+? Bot1.Battlefield.Nightmare Token#2.Toughness = 1
+? Bot1.Battlefield.Nightmare Token#1.Colors = Black
+? Bot1.Battlefield.Nightmare Token#1.Subtypes = Nightmare
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mana Confluence.Play
+Bot1.Battlefield.Mana Confluence.Activate(Color: Black)
+? Bot1.Life = 20
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Nightmare Token#1.Power = 2
+? Bot1.Battlefield.Nightmare Token#2.Power = 2
+? Bot1.Battlefield.Nightmare Token#2.Toughness = 2
+[T5 Bot1.BeginCombat]
+Bot1.Pass
+? Bot1.Battlefield.Nightmare Token#1.Power = 2
+? Bot1.Battlefield.Nightmare Token#2.Power = 2
+
+[Expect]
+Bot1.Life = 20

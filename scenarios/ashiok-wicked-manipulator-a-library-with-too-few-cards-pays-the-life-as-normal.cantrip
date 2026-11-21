@@ -1,0 +1,35 @@
+# The 2023-09-01 ruling: with fewer cards in the library than the life, the life is paid as normal. Bot1's library holds 1 card
+# when Godless Shrine asks "you may pay 2 life": Bot1 pays, so life drops to 18 and the library is untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Ashiok, Wicked Manipulator
+Godless Shrine
+Island
+Island
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ashiok, Wicked Manipulator.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 1
+Bot1.Hand.Godless Shrine.Play
+Bot1.Accept
+? Bot1.Life = 18
+? Bot1.Library.Count = 1
+? Bot1.Battlefield.Godless Shrine.Tapped = false
+
+[Expect]
+Bot1.Life = 18

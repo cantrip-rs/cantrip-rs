@@ -1,0 +1,56 @@
+# -7: "Target player exiles the top X cards of their library, where X is the total mana value of cards you own in exile."
+# (CR 107.3, 202.3.) Bot1 +1s on turns 1 and 3 (loyalty 7), exiling Lightning Bolt (mana value 1) and Counterspell (2) and
+# taking the Islands: X = 3. On turn 5 the -7 makes Bot2 exile the top 3 cards of its library (11 -> 8); Ashiok, at 0 loyalty, goes
+# to the graveyard (CR 704.5i). Bot2's own exiled card does not count: it owns it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Ashiok, Wicked Manipulator
+Island
+Island
+Island
+Lightning Bolt
+Island
+Island
+Counterspell
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ashiok, Wicked Manipulator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ashiok, Wicked Manipulator.Activate(Ability: Look at the top two)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+? Bot1.Battlefield.Ashiok, Wicked Manipulator.Counters.Loyalty = 6
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ashiok, Wicked Manipulator.Activate(Ability: Look at the top two)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Counterspell)
+? Bot1.Battlefield.Ashiok, Wicked Manipulator.Counters.Loyalty = 7
+[T5 Bot1.Main1]
+? Bot2.Library.Count = 11
+Bot1.Battlefield.Ashiok, Wicked Manipulator.Activate(Bot2; Ability: Target player exiles)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Library.Count = 8
+? Exile.Count = 5
+? Bot1.Graveyard = Ashiok, Wicked Manipulator; Black Lotus
+
+[Expect]
+Bot2.Library.Count = 8
+Bot1.Graveyard = Ashiok, Wicked Manipulator; Black Lotus

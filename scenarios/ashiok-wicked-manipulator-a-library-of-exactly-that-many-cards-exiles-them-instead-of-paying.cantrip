@@ -1,0 +1,38 @@
+# "... while your library has at least that many cards in it": the boundary. Bot1's library holds exactly 2 cards when Godless
+# Shrine asks "you may pay 2 life". Bot1 pays, so both cards are exiled instead of 2 life (life stays 20, library 0) and the
+# Shrine still enters untapped, as a payment made.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Ashiok, Wicked Manipulator
+Godless Shrine
+Island
+Island
+Island x2
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ashiok, Wicked Manipulator.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 2
+Bot1.Hand.Godless Shrine.Play
+Bot1.Accept
+? Bot1.Life = 20
+? Bot1.Library.Count = 0
+? Bot1.Battlefield.Godless Shrine.Tapped = false
+
+[Expect]
+Bot1.Life = 20
+Bot1.Exile.Island#1.Colors.Count = 0
+Bot1.Exile.Island#2.Colors.Count = 0

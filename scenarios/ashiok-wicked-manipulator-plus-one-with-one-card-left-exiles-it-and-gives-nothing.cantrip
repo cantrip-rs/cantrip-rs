@@ -1,0 +1,37 @@
+# +1 on a one-card library: "Look at the top two cards" sees what is there (CR 609.3). Bot1 exiles the only card; nothing
+# remains for the hand (hand stays 3), the library is empty, and Ashiok is at 6 loyalty.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Ashiok, Wicked Manipulator
+Island
+Island
+Island
+Forest
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ashiok, Wicked Manipulator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ashiok, Wicked Manipulator.Activate(Ability: Look at the top two)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest)
+? Bot1.Looked = Forest
+? Bot1.Library.Count = 0
+? Bot1.Hand.Count = 3
+? Bot1.Battlefield.Ashiok, Wicked Manipulator.Counters.Loyalty = 6
+
+[Expect]
+Exile.Count = 1

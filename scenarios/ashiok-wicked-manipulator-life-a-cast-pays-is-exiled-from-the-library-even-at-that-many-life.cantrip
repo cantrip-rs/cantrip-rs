@@ -1,0 +1,50 @@
+# A cost's life is a payment too (CR 119.4, 601.2h). Bot1 is at 4 life and casts Dismember paying both {B/P} with life: with
+# Ashiok in play 4 cards leave the top of the library instead and Bot1 stays at 4 (without Ashiok the payment would leave 0).
+# Dismember (-3/-3) kills Bot2's Elvish Mystic.
+
+[Life]
+Bot1: 4
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Ashiok, Wicked Manipulator
+Dismember
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ashiok, Wicked Manipulator.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+? Bot1.Library.Count = 9
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dismember.Cast(Elvish Mystic)
+Bot1.Modes(1; 2)
+? Bot1.Life = 4
+? Bot1.Library.Count = 5
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Count = 1
+
+[Expect]
+Bot1.Life = 4
+Bot2.Graveyard = Elvish Mystic

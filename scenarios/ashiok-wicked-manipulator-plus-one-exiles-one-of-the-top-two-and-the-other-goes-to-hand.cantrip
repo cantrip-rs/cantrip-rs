@@ -1,0 +1,43 @@
+# +1: "Look at the top two cards of your library. Exile one of them and put the other into your hand." (CR 701.20e.) Bot1's top two
+# are Forest and Mountain; Bot1 sees both, may not choose a card from elsewhere (refusal), exiles the Mountain and gets the
+# Forest in hand. Ashiok goes to 6 loyalty.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Ashiok, Wicked Manipulator
+Island
+Island
+Island
+Forest
+Mountain
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ashiok, Wicked Manipulator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ashiok, Wicked Manipulator.Activate(Ability: Look at the top two)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Island)
+Bot1.Choose(Mountain)
+? Bot1.Looked = Forest; Mountain
+? Bot1.Battlefield.Ashiok, Wicked Manipulator.Counters.Loyalty = 6
+? Bot1.Library.Count = 8
+? Bot1.Hand.Forest.Colors.Count = 0
+? Exile.Count = 1
+
+[Expect]
+Bot1.Hand.Count = 4
+Exile.Count = 1

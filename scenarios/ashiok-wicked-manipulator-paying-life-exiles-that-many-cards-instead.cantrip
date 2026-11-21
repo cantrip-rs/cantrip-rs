@@ -1,0 +1,45 @@
+# "If you would pay life while your library has at least that many cards in it, exile that many cards from the top of your library
+# instead." Bot1 casts Ashiok on turn 1 (Black Lotus for BBB, Mox Jet, Mox Sapphire). Mana Confluence's one life is a payment, so it
+# stays at 20 life and the top card of the library is exiled instead (library 13 -> 12, exile 1). Bot2's own Mana Confluence is not
+# Ashiok's controller's payment: Bot2 pays the life as normal.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Ashiok, Wicked Manipulator
+Mana Confluence
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mana Confluence
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ashiok, Wicked Manipulator.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 13
+Bot1.Hand.Mana Confluence.Play
+Bot1.Battlefield.Mana Confluence.Activate(Color: Blue)
+? Bot1.Life = 20
+? Bot1.Library.Count = 12
+? Bot1.Exile.Island.Colors.Count = 0
+? Bot1.Mana = {U}
+[T2 Bot2.Main1]
+Bot2.Hand.Mana Confluence.Play
+Bot2.Battlefield.Mana Confluence.Activate(Color: Blue)
+? Bot2.Life = 19
+? Bot2.Library.Count = 12
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
