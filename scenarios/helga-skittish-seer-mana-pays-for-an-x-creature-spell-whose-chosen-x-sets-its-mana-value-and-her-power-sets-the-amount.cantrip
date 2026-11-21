@@ -1,0 +1,65 @@
+# Helga, Skittish Seer: her mana pays part of a creature spell with {X} in its mana cost whatever X is chosen (CR 106.6, 107.3),
+# and "Whenever you cast a creature spell with mana value 4 or greater, you draw a card, gain 1 life, and put a +1/+1 counter on
+# Helga" judges the spell by the mana value X gives it on the stack (CR 202.3e, 603.2). Turn 3: Walking Ballista for X=1 costs
+# {1}{1} (mana value 2): her {W} and a Lotus Petal's {R} pay it, and she is left alone. Turn 5: for X=2 (mana value 4) her {W}
+# and Black Lotus's {R}{R}{R} pay it and she triggers: a card, 1 life (21), and she is a 2/4. Turn 7: "X is Helga's power": she
+# taps for two {W}, both still limited to those spells.
+
+[Bot1 Deck]
+Lotus Petal
+Lotus Petal
+Lotus Petal
+Lotus Petal
+Helga, Skittish Seer
+Walking Ballista
+Walking Ballista
+Island
+Black Lotus
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Lotus Petal.Activate(Color: Green)
+Bot1.Battlefield.Lotus Petal.Activate(Color: White)
+Bot1.Battlefield.Lotus Petal.Activate(Color: Blue)
+Bot1.Hand.Helga, Skittish Seer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Helga, Skittish Seer.Activate(Color: White)
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Lotus Petal.Activate(Color: Red)
+Bot1.Hand.Walking Ballista.Cast(X: 1; Spend: W ManaValue4OrGreaterOrXCreatureSpells, R)
+Bot1.Choose(Confirm X)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Helga, Skittish Seer.Power = 1
+? Bot1.Life = 20
+[T5 Bot1.Main1]
+Bot1.Battlefield.Helga, Skittish Seer.Activate(Color: White)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Walking Ballista.Cast(X: 2; Spend: W ManaValue4OrGreaterOrXCreatureSpells, R, R, R)
+Bot1.Choose(Confirm X)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+? Bot1.Battlefield.Helga, Skittish Seer.Power = 2
+? Bot1.Battlefield.Helga, Skittish Seer.Toughness = 4
+[T7 Bot1.Main1]
+Bot1.Battlefield.Helga, Skittish Seer.Activate(Color: White)
+? Bot1.Mana = {W}{W} (ManaValue4OrGreaterOrXCreatureSpells)
+
+[Expect]
+Turn = 7
+Bot1.Life = 21

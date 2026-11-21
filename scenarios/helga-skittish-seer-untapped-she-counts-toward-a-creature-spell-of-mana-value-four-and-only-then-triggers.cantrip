@@ -1,0 +1,63 @@
+# Helga, Skittish Seer: her mana pays only creature spells with mana value 4 or greater (CR 106.6), and only such a spell triggers
+# her (CR 603.2). Turn 3: Mox Ruby and Mox Jet untapped and Helga with them, Gray Ogre ({2}{R}, a creature spell of mana
+# value 3) is not offered: her {W} can't pay for it (CR 601.2g). Turn 5: with Mox Pearl, the Moxen's three mana cast
+# the Ogre and she does not trigger. Turn 7: Clay Statue ({4}, mana value 4) takes the three Moxen and her {W}: she triggers,
+# a card, 1 life (21) and a +1/+1 counter (2/4).
+
+[Bot1 Deck]
+Lotus Petal
+Lotus Petal
+Lotus Petal
+Helga, Skittish Seer
+Mox Ruby
+Mox Jet
+Gray Ogre
+Mox Pearl
+Clay Statue
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Lotus Petal.Activate(Color: Green)
+Bot1.Battlefield.Lotus Petal.Activate(Color: White)
+Bot1.Battlefield.Lotus Petal.Activate(Color: Blue)
+Bot1.Hand.Helga, Skittish Seer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Gray Ogre.Cast(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gray Ogre.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gray Ogre.Power = 2
+? Bot1.Life = 20
+? Bot1.Battlefield.Helga, Skittish Seer.Power = 1
+[T7 Bot1.Main1]
+Bot1.Hand.Clay Statue.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Helga, Skittish Seer.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+? Bot1.Battlefield.Helga, Skittish Seer.Power = 2
+? Bot1.Battlefield.Helga, Skittish Seer.Toughness = 4
+
+[Expect]
+Turn = 7
+Bot1.Life = 21

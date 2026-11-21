@@ -1,0 +1,55 @@
+# Helga, Skittish Seer: "Add X mana ..., where X is Helga's power" with a power below zero adds none (CR 107.1b: a negative number is
+# 0 for X). Dead Weight (-2/-2) makes her -1/1, so she still lives, and her {T} adds nothing. Turn 7: three Moxen and Helga,
+# Clay Statue ({4}, a creature spell of mana value 4) is not offered: she adds nothing toward it (CR 601.2g); her {T} adds nothing.
+
+[Bot1 Deck]
+Lotus Petal
+Lotus Petal
+Lotus Petal
+Lotus Petal
+Helga, Skittish Seer
+Dead Weight
+Clay Statue
+Mox Ruby
+Mox Jet
+Mox Pearl
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Lotus Petal.Activate(Color: Green)
+Bot1.Battlefield.Lotus Petal.Activate(Color: White)
+Bot1.Battlefield.Lotus Petal.Activate(Color: Blue)
+Bot1.Hand.Helga, Skittish Seer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Lotus Petal.Activate(Color: Black)
+Bot1.Hand.Dead Weight.Cast(Bot1.Battlefield.Helga, Skittish Seer)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Helga, Skittish Seer.Power = -1
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Clay Statue.Cast(Mana: short)
+Bot1.Battlefield.Helga, Skittish Seer.Activate(Color: White)
+? Bot1.Mana =
+
+[Expect]
+Turn = 7
+Bot1.Battlefield.Helga, Skittish Seer.Power = -1

@@ -1,0 +1,51 @@
+# Helga, Skittish Seer: "{T}: Add X mana of any one color, where X is Helga's power. Spend this mana only to cast creature spells
+# with mana value 4 or greater or creature spells with {X} in their mana costs" (CR 106.6, 107.1b, 605.1a). Turn 1: three Lotus
+# Petals ({G}, {W}, {U}) cast her. Turn 3: her {W} and a fourth Petal's {R}, two mana, are not offered for Chrome Dome ({2}), a
+# creature spell of mana value 2: the restricted {W} is no use to it. Turn 5: her {W} and Black Lotus's {R}{R}{R} are not offered
+# for Dingus Egg ({4}), a noncreature spell of mana value 4 (the {R}{R}{R} alone are three), but they cast Clay Statue ({4}), a
+# creature spell of mana value 4: the {W} pays one of its generic mana and the pool ends empty.
+
+[Bot1 Deck]
+Lotus Petal
+Lotus Petal
+Lotus Petal
+Lotus Petal
+Helga, Skittish Seer
+Chrome Dome
+Clay Statue
+Dingus Egg
+Black Lotus
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Lotus Petal.Activate(Color: Green)
+Bot1.Battlefield.Lotus Petal.Activate(Color: White)
+Bot1.Battlefield.Lotus Petal.Activate(Color: Blue)
+Bot1.Hand.Helga, Skittish Seer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Helga, Skittish Seer.Activate(Color: White)
+? Bot1.Mana = {W} (ManaValue4OrGreaterOrXCreatureSpells)
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Lotus Petal.Activate(Color: Red)
+! Bot1.Hand.Chrome Dome.Cast(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Helga, Skittish Seer.Activate(Color: White)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+! Bot1.Hand.Dingus Egg.Cast(Mana: short)
+Bot1.Hand.Clay Statue.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 5
+Bot1.Battlefield.Clay Statue.Power = 3
