@@ -1,0 +1,47 @@
+# Allies at Last: "Up to two target creatures you control each deal damage equal to their power to target creature an opponent controls."
+# Bot1 controls three creatures (Earth Kingdom Protectors, Grizzly Bears, Memnite); naming all three as sources is refused (CR 115.1, 601.2c),
+# and the spell goes on with two: the Protectors (1) and the Bears (2) deal 3 to Bot2's Wall of Mist; Memnite deals nothing.
+
+[Bot1 Deck]
+Forest
+Forest
+Mox Pearl
+Mox Emerald
+Earth Kingdom Protectors
+Grizzly Bears
+Memnite
+Allies at Last
+Island x12
+
+[Bot2 Deck]
+Island
+Black Lotus
+Wall of Mist
+Island x12
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Earth Kingdom Protectors.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Memnite.Cast
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wall of Mist.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Allies at Last.Cast
+! Bot1.Target(Bot1.Battlefield.Earth Kingdom Protectors; Bot1.Battlefield.Grizzly Bears; Bot1.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Earth Kingdom Protectors; Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Wall of Mist)
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Wall of Mist.Damage = 3
