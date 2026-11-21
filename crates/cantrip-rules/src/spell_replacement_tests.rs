@@ -539,7 +539,12 @@ static OSTEO: CardDef = CardDef {
 
 /// The effect `player` has from `giver`, a resolved ability's: "until end of turn, you may cast creature spells from your graveyard".
 fn give_a_way(g: &mut Game, giver: ObjectId, player: PlayerId) {
-    let kind = EffectKind::LastingWay { card: g.cards.id_of(&OSTEO), index: 0, player, words: Words::NONE };
+    give_a_way_once(g, giver, player, false);
+}
+
+/// The same, a way to cast one card where `once`.
+fn give_a_way_once(g: &mut Game, giver: ObjectId, player: PlayerId, once: bool) {
+    let kind = EffectKind::LastingWay { card: g.cards.id_of(&OSTEO), index: 0, player, words: Words::NONE, once };
     between(g, |cx| cantrip_api::Game::add_player_effect(cx, player, giver, kind, Duration::EndOfTurn));
 }
 
@@ -583,4 +588,40 @@ fn a_lasting_way_is_its_players_and_ends_with_the_turn() {
     let effect = g.state.effects.iter().find(|e| matches!(e.kind, EffectKind::LastingWay { .. })).expect("the effect");
     assert_eq!(effect.duration, Duration::EndOfTurn);
     assert!(effect.kind.outlives_affected(), "it outlives its source");
+}
+
+/// CR 611.2a: a way made for one card is used up by the first cast by it - the second creature card is offered nothing -
+/// and each effect of the source makes one cast: two activations give two, offered as the one way, one at a time.
+#[test]
+fn a_way_for_one_card_is_used_up_by_its_cast_and_each_effect_gives_one() {
+    let mut g = game();
+    let giver = put(&mut g, &OSTEO, Zone::graveyard(YOU));
+    let first = put(&mut g, &SQUIRREL, Zone::graveyard(YOU));
+    let second = put(&mut g, &SQUIRREL, Zone::graveyard(YOU));
+    let third = put(&mut g, &SQUIRREL, Zone::graveyard(YOU));
+    add(&mut g, Mana::G, 3);
+    give_a_way_once(&mut g, giver, YOU, true);
+    give_a_way_once(&mut g, giver, YOU, true);
+    assert_eq!(offered(&mut g, first), [Some(giver)], "two effects are offered as one way");
+    cast(&mut g, first, true);
+    resolve_all(&mut g);
+    assert_eq!(offered(&mut g, second), [Some(giver)], "the second activation's permission stands");
+    cast(&mut g, second, true);
+    resolve_all(&mut g);
+    assert_eq!(offered(&mut g, third), Vec::<Option<ObjectId>>::new(), "both are used up");
+    assert!(g.state.effects.iter().all(|e| !matches!(e.kind, EffectKind::LastingWay { .. })));
+}
+
+/// A way that lasts the turn is not used up by a cast.
+#[test]
+fn a_way_for_the_turn_is_not_used_up_by_a_cast() {
+    let mut g = game();
+    let giver = put(&mut g, &OSTEO, Zone::graveyard(YOU));
+    let first = put(&mut g, &SQUIRREL, Zone::graveyard(YOU));
+    let second = put(&mut g, &SQUIRREL, Zone::graveyard(YOU));
+    add(&mut g, Mana::G, 2);
+    give_a_way(&mut g, giver, YOU);
+    cast(&mut g, first, true);
+    resolve_all(&mut g);
+    assert_eq!(offered(&mut g, second), [Some(giver)]);
 }

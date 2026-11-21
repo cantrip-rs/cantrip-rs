@@ -8925,10 +8925,14 @@ pub(crate) fn has_granted_way(q: &dyn Query, cards: &CardTable, card: ObjectId) 
 fn granted_ways_of(cards: &CardTable, s: &GameState, log: &[Record]) -> Vec<Given<GrantedWay>> {
     let mut all = given(cards, s, log, |d| d.granted_ways, AbilityRef::granted_way);
     for e in &s.effects {
-        if let EffectKind::LastingWay { card, index, player, words } = e.kind {
+        if let EffectKind::LastingWay { card, index, player, words, .. } = e.kind {
             let ability = AbilityRef::lasting_way(card, index as usize);
             let what = &cards.get(card).lasting_ways[index as usize];
-            all.push(Given { source: e.source, controller: player, grant: Grant { object: e.source, ability }, what, by: None, words: Some(words) });
+            let grant = Grant { object: e.source, ability };
+            // Each activation of an ability makes its own effect, and each is a way to cast one card: they are offered as one way.
+            if !all.iter().any(|w| w.grant == grant && w.controller == player) {
+                all.push(Given { source: e.source, controller: player, grant, what, by: None, words: Some(words) });
+            }
         }
     }
     all
@@ -8998,7 +9002,7 @@ fn named_way(s: &GameState, cards: &CardTable, g: Grant) -> Option<Given<Granted
     if let Some(k) = g.ability.as_lasting_way() {
         let what = cards.get(g.ability.card).lasting_ways.get(k)?;
         let (player, words) = s.effects.iter().find_map(|e| match e.kind {
-            EffectKind::LastingWay { card, index, player, words } if e.source == g.object && card == g.ability.card && usize::from(index) == k => Some((player, words)),
+            EffectKind::LastingWay { card, index, player, words, .. } if e.source == g.object && card == g.ability.card && usize::from(index) == k => Some((player, words)),
             _ => None,
         })?;
         return Some(Given { source: g.object, controller: player, grant: g, what, by: None, words: Some(words) });
@@ -11113,6 +11117,19 @@ fn cast(
         let kind = EffectKind::Replacement { card: g.ability.card, index, to: Target::None, into: Target::None, value: 0 };
         cx.st().effect_push(ContinuousEffect { source: g.object, controller, timestamp, affected: spell, kind, duration: Duration::Indefinite, words: Words::NONE });
         cx.state_changed();
+    }
+    // A way a resolved ability gave for one card is used up by the cast (CR 611.2a), one effect of the source's at a time.
+    if let Some(g) = by.by
+        && let Some(k) = g.ability.as_lasting_way()
+    {
+        let used = cx.s().effects.iter().position(|e| {
+            matches!(e.kind, EffectKind::LastingWay { card, index, once: true, .. } if card == g.ability.card && usize::from(index) == k) && e.source == g.object
+        });
+        if let Some(at) = used {
+            let keep: Vec<bool> = (0..cx.s().effects.len()).map(|i| i != at).collect();
+            cx.st().effects_keep(&keep);
+            cx.state_changed();
+        }
     }
     // A permission for the card is used up by the cast (CR 400.7: the card is a new object).
     if !cx.s().permissions.is_empty() {

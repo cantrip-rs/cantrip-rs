@@ -1539,8 +1539,9 @@ pub trait Game: Query {
     /// ability `item`: the `index`th of the `lasting_ways` of its card (the face that is up, for a permanent's ability) is a way
     /// `player` may cast cards by until the turn ends (CR 514.2), whether or not the source stays on the battlefield. The effect
     /// is controlled by `item`'s controller (CR 109.5), and reads the words of `item`'s text as it resolves (CR 612.1, 608.2h).
-    fn give_a_way_this_turn(&mut self, item: &StackItem, player: PlayerId, index: u8) {
-        let kind = EffectKind::LastingWay { card: item.ability.card, index, player, words: self.words(item.object) };
+    /// With `once`, it is a way to cast a single card: the first cast by it uses it up (Tarrian's Journal's "a creature spell").
+    fn give_a_way_this_turn(&mut self, item: &StackItem, player: PlayerId, index: u8, once: bool) {
+        let kind = EffectKind::LastingWay { card: item.ability.card, index, player, words: self.words(item.object), once };
         self.add_player_effect(item.controller, item.object, kind, Duration::EndOfTurn);
     }
     /// A rule about an open set of objects (CR 611.2c), made by the resolving spell or ability `item`: the `index`th of the
