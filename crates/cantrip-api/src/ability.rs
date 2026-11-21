@@ -1372,7 +1372,7 @@ impl crate::GrantedPreventionDef {
 
 /// An alternative way to cast the card (CR 118.9): for `cost`, from the zone `from`.
 pub const fn way(cost: Cost, from: ZoneKind, text: &'static str) -> WayDef {
-    WayDef { text, cost, from, only_from: false, exile_after: false, condition: None, instant_speed: false, enters_attacking: false, kind: WayKind::Other, turn_up: Cost::NONE }
+    WayDef { text, cost, from, only_from: false, exile_after: false, condition: None, instant_speed: false, enters_attacking: false, kind: WayKind::Other, turn_up: Cost::NONE, turn_up_change: None }
 }
 
 /// What casting a card face down costs by morph, megamorph or disguise: {3} rather than its mana cost (CR 702.37a, 702.168a).
@@ -1411,6 +1411,13 @@ impl WayDef {
     /// It may be cast this way whenever an instant could be (sneak, CR 702.190a).
     pub const fn instant_speed(self) -> WayDef {
         WayDef { instant_speed: true, ..self }
+    }
+
+    /// Its turn-up cost (`turn_up`) is changed by the card's own text, as "This cost is reduced by {1} for each instant and
+    /// sorcery card in your graveyard" (Fugitive Codebreaker's disguise, CR 702.168a, 118.7): `change` is asked as the
+    /// permanent is turned face up, and of nothing else.
+    pub const fn turn_up_change(self, change: CostChange) -> WayDef {
+        WayDef { turn_up_change: Some(change), ..self }
     }
 
     /// A permanent spell cast this way enters tapped and attacking what the creature its cost returned to its owner's hand

@@ -2316,6 +2316,11 @@ pub struct WayDef {
     /// The cost a face-down permanent of this card is turned face up for, as a special action, where its way casts it face
     /// down: the morph, megamorph or disguise cost (CR 702.37e, 702.168d). `Cost::NONE` for every other way.
     pub turn_up: Cost,
+    /// What changes `turn_up` where the card says so of its own cost: "This cost is reduced by {1} for each instant and sorcery
+    /// card in your graveyard" after Fugitive Codebreaker's disguise cost (CR 702.168a, 118.7), asked as a face-down permanent
+    /// of the card is turned face up (CR 702.37e, 702.168d) - the cost it states, which the special action pays - and for no
+    /// other cost of the permanent or the spell (`WayDef::turn_up_change`).
+    pub turn_up_change: Option<CostChange>,
 }
 
 #[derive(Clone, Copy)]

@@ -213,7 +213,7 @@ fn cx(game: &mut Game) -> Cx<'_> {
 
 /// Your main phase with priority and an empty stack.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &SKYWARDEN, &GROWER, &MASK, &CUTTHROAT, &SWELLER, &BIRD_FLASH, &CREATURE_FLASH, &COLORLESS_FROM_TOP, &WHITE_FROM_TOP, &NO_WHITE, &NO_COLORLESS, &CASTER, &BEAR, &HUMBLER, &SHROUDER, &WATCHER, &BUBBLER])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &SKYWARDEN, &GROWER, &MASK, &CUTTHROAT, &SWELLER, &BIRD_FLASH, &CREATURE_FLASH, &COLORLESS_FROM_TOP, &WHITE_FROM_TOP, &NO_WHITE, &NO_COLORLESS, &CASTER, &BEAR, &HUMBLER, &SHROUDER, &WATCHER, &BUBBLER, &REDUCER])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -1105,4 +1105,100 @@ fn mana_for_face_down_spells_or_turning_creatures_face_up_does_both() {
     let option = turn_up_option(&mut g, permanent, TurnUp::Morph).expect("it pays for turning the creature up");
     take(&mut g, &option);
     assert!(!g.state.obj(permanent).face_down);
+}
+
+/// "This cost is reduced by {1} for each instant and sorcery card in your graveyard" (Fugitive Codebreaker's disguise).
+fn less_per_instant_or_sorcery_in_your_graveyard(q: &dyn Query, _: ObjectId, player: PlayerId, _: Costed, _: &[Target]) -> CostDelta {
+    let n = q.state().zone(Zone::graveyard(player)).iter().filter(|&&id| q.chars(id).is(CardType::Instant) || q.chars(id).is(CardType::Sorcery)).count();
+    CostDelta::less(n as u32)
+}
+
+/// "Disguise {3}{W}. This cost is reduced by {1} for each instant and sorcery card in your graveyard": a 4/5 for {4}{W}.
+static REDUCER: CardDef = CardDef {
+    name: "Morph Test Reducer",
+    cost: mana("{4}{W}"),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(4),
+    toughness: Some(5),
+    text: "Disguise {3}{W}. This cost is reduced by {1} for each instant and sorcery card in your graveyard.",
+    ways: &[face_down_way(WayKind::Disguise, Cost::mana(mana("{3}{W}")), "Disguise {3}{W}").turn_up_change(less_per_instant_or_sorcery_in_your_graveyard)],
+    ..CardDef::BLANK
+};
+
+/// A reduced disguise cost's permanent, cast face down for {3} and resolved, with `spells` instants in its owner's graveyard.
+fn face_down_reducer(spells: usize) -> (Game, ObjectId) {
+    let mut g = game();
+    let card = put(&mut g, &REDUCER, Zone::hand(YOU));
+    add(&mut g, Mana::C, 3);
+    let spell = cast_face_down(&mut g, card);
+    resolve_all(&mut g);
+    let permanent = g.state.obj(spell).became.expect("it resolved");
+    for _ in 0..spells {
+        put(&mut g, &CASTER, Zone::graveyard(YOU));
+    }
+    (g, permanent)
+}
+
+/// CR 702.168a, 702.168d, 118.7a: the card's own reduction of its disguise cost applies as the face-down permanent is turned
+/// face up: with two instants or sorceries in the graveyard {3}{W} costs {1}{W}, and only the generic mana is reduced.
+#[test]
+fn a_cards_own_reduction_of_its_turn_up_cost_applies_when_it_is_turned_up() {
+    let (mut g, permanent) = face_down_reducer(2);
+    add(&mut g, Mana::W, 1);
+    add(&mut g, Mana::C, 1);
+    let option = turn_up_option(&mut g, permanent, TurnUp::Disguise).expect("{1}{W} turns it up after the reduction");
+    take(&mut g, &option);
+    assert!(!g.state.obj(permanent).face_down);
+    assert_eq!(g.state.player(YOU).pool.total(), 0, "it paid {{1}}{{W}} and no more");
+}
+
+/// CR 118.7a: the reduction never takes the colored {W} off, however many cards are in the graveyard (the cost is {W}, and a
+/// pool of generic mana alone does not pay it); and an unreduced cost is not paid with less.
+#[test]
+fn a_reduction_of_the_turn_up_cost_leaves_its_colored_mana() {
+    let (mut g, permanent) = face_down_reducer(5);
+    add(&mut g, Mana::C, 3);
+    assert!(turn_up_option(&mut g, permanent, TurnUp::Disguise).is_none());
+    add(&mut g, Mana::W, 1);
+    let option = turn_up_option(&mut g, permanent, TurnUp::Disguise).expect("{W} turns it up");
+    take(&mut g, &option);
+    assert!(!g.state.obj(permanent).face_down);
+    assert_eq!(g.state.player(YOU).pool.total(), 3, "five cards reduce {{3}}{{W}} to {{W}}: it paid one mana");
+}
+
+/// CR 702.168d: with no instants or sorceries the cost is the printed {3}{W}, and a pool of {1}{W} does not turn it up.
+#[test]
+fn a_turn_up_cost_nothing_reduces_is_the_printed_cost() {
+    let (mut g, permanent) = face_down_reducer(0);
+    add(&mut g, Mana::W, 1);
+    add(&mut g, Mana::C, 1);
+    assert!(turn_up_option(&mut g, permanent, TurnUp::Disguise).is_none());
+    add(&mut g, Mana::C, 2);
+    assert!(turn_up_option(&mut g, permanent, TurnUp::Disguise).is_some());
+}
+
+/// CR 702.168b, 601.2f: the reduction is of "this cost", the disguise cost to turn it up, and of nothing else of the card: not
+/// the {3} of casting it face down, nor the {4}{W} of casting it face up.
+#[test]
+fn a_reduction_of_the_turn_up_cost_leaves_casting_the_card_alone() {
+    let mut g = game();
+    let card = put(&mut g, &REDUCER, Zone::hand(YOU));
+    for _ in 0..3 {
+        put(&mut g, &CASTER, Zone::graveyard(YOU));
+    }
+    add(&mut g, Mana::W, 1);
+    add(&mut g, Mana::C, 1);
+    assert!(face_down_cast(&mut g, card).is_none(), "casting it face down is still {{3}}");
+    let options = options(&mut g);
+    assert!(!options.iter().any(|o| o.kind == ActionKind::CastSpell && o.source == Some(card)), "casting it face up is still {{4}}{{W}}");
+}
+
+/// CR 118.7, 116.2: the menu row for turning it up says what it costs now, once something changes it: {1}{W} for two cards.
+#[test]
+fn the_turn_up_row_says_what_the_reduced_cost_is() {
+    let (mut g, permanent) = face_down_reducer(2);
+    let option = turn_up_option(&mut g, permanent, TurnUp::Disguise);
+    assert!(option.is_none(), "nothing in the pool pays for it");
+    let ability = g.chars(permanent).abilities().position(|a| g.cards.turn_up(a) == Some(TurnUp::Disguise)).expect("the turn-up ability");
+    assert_eq!(crate::special_action_costs(&g, YOU, permanent, ability as u8), Some(mana("{1}{W}")));
 }

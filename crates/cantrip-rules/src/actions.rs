@@ -5816,9 +5816,11 @@ fn deltas_watched(
     // however it is cast (from exile once foretold or plotted, by an alternative cost), never for activating an ability of
     // it or of the permanent it becomes, granted or printed (CR 602.2b: an ability's own reduction is that ability's,
     // `ActivatedDef::cost_change`), and never for a special action (CR 116.1): plotting or foretelling the card is not
-    // made cheaper by what makes the spell cheaper.
+    // made cheaper by what makes the spell cheaper. The one cost a card states a change of is the cost of turning it face up
+    // (`turn_up_changes`), which is the way it is turned up by that keyword's and not the spell's.
     let own: &[CostChange] = match (face, costed) {
-        (_, Costed::SpecialAction(..) | Costed::Ability(..) | Costed::PlayerAbility(..)) => &[],
+        (_, Costed::SpecialAction(id, ability)) => turn_up_changes(cx, id, ability),
+        (_, Costed::Ability(..) | Costed::PlayerAbility(..)) => &[],
         (Some(face), Costed::Spell(_)) => cx.card(face).own_cost_changes,
         (None, Costed::Spell(_)) => own_cost_changes(cx, id),
     };
@@ -13479,6 +13481,17 @@ fn turn_up_cost(cx: &Cx, source: ObjectId, by: TurnUp) -> Cost {
     cx.turn_up_way(source, by).map_or(Cost::NONE, |w| w.turn_up)
 }
 
+/// What the card says changes the cost of turning the face-down permanent `source` face up by the special action `ability`
+/// (`WayDef::turn_up_change`): "Disguise {5}{R}. This cost is reduced by {1} for each instant and sorcery card in your
+/// graveyard" (CR 702.168a, 118.7). Asked of that cost alone, for the way the permanent would have if it were face up
+/// (`turn_up_way`); no other special action has a change of its own (CR 116.1).
+fn turn_up_changes(cx: &Cx, source: ObjectId, ability: AbilityRef) -> &'static [CostChange] {
+    match cx.cards().turn_up(ability) {
+        Some(by @ (TurnUp::Morph | TurnUp::Disguise)) => cx.turn_up_way(source, by).map_or(&[], |w| w.turn_up_change.as_slice()),
+        _ => &[],
+    }
+}
+
 /// The whole printed cost of a special action (CR 116.2): its mana (`special_action_printed_cost`), and for turning a
 /// face-down permanent up by morph or disguise whatever else that cost asks - "Morph—Pay 5 life", "Morph—Discard a Zombie
 /// card", "Morph—Return a Bird you control to its owner's hand" (CR 702.37e, 702.168d, 118.3). Paid as a cost is
@@ -13499,9 +13512,15 @@ pub fn special_action_costs(game: &crate::Game, player: PlayerId, source: Object
     if !def.special_action {
         return None;
     }
-    let changers = game.state.battlefield().iter().any(|&id| {
-        game.cards.texts(&game.state, game.state.obj(id)).any(|c| game.cards.cost_changes[c.0 as usize]) && !game.lost_all_abilities(id)
-    });
+    // Or the card says what changes its cost as it is turned face up (`turn_up_changes`).
+    let own = match game.cards.turn_up(ability) {
+        Some(by @ (TurnUp::Morph | TurnUp::Disguise)) => game.turn_up_way(source, by).is_some_and(|w| w.turn_up_change.is_some()),
+        _ => false,
+    };
+    let changers = own
+        || game.state.battlefield().iter().any(|&id| {
+            game.cards.texts(&game.state, game.state.obj(id)).any(|c| game.cards.cost_changes[c.0 as usize]) && !game.lost_all_abilities(id)
+        });
     if !changers {
         return None;
     }

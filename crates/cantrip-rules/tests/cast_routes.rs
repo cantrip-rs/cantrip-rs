@@ -33,6 +33,7 @@ static HAND_WAY: WayDef = WayDef {
     enters_attacking: false,
     kind: WayKind::Other,
     turn_up: Cost::NONE,
+    turn_up_change: None,
 };
 
 /// One that casts it from its owner's graveyard only.
@@ -47,6 +48,7 @@ static GRAVEYARD_WAY: WayDef = WayDef {
     enters_attacking: false,
     kind: WayKind::Other,
     turn_up: Cost::NONE,
+    turn_up_change: None,
 };
 
 static WAY_SPELL: CardDef = CardDef { name: "Route Way Probe", ways: &[HAND_WAY, GRAVEYARD_WAY], ..PROBE_SPELL };
