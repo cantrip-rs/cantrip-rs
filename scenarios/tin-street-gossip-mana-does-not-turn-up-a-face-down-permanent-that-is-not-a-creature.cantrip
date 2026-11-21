@@ -1,0 +1,51 @@
+# Tin Street Gossip's {R}{G} may turn creatures face up, and only creatures (CR 106.6, 702.168d): a face-down permanent that is
+# not a creature as it would be turned up gets no help from it. Turn 1: Black Lotus's {R}{R}{R} and Mox Emerald pay for the
+# Gossip ({2}{R}{G}), and three more Moxen for Pyrotechnic Performer cast face down ({3}, a nameless 2/2). Turn 3: Swift
+# Reconfiguration makes the face-down permanent a Vehicle artifact and no creature (CR 708.2, 613.1d). The Gossip's {R}{G}
+# are in the pool, and the Performer's disguise cost {R} is not offered for want of mana: no other {R} is to be had.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Tin Street Gossip
+Pyrotechnic Performer
+Swift Reconfiguration
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Tin Street Gossip.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Pyrotechnic Performer.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swift Reconfiguration.Cast(Bot1.Battlefield.#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Types = Artifact
+Bot1.Battlefield.Tin Street Gossip.Activate
+? Bot1.Mana = {R} (AnyOf(FaceDownSpells+TurnCreaturesFaceUp)) {G} (AnyOf(FaceDownSpells+TurnCreaturesFaceUp))
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+
+[Expect]
+Turn = 3
+Bot1.Battlefield..FaceDown = true

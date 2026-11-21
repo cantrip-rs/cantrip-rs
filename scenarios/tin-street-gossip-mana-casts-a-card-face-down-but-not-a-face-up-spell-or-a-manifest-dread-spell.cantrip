@@ -1,0 +1,45 @@
+# Tin Street Gossip's "{T}: Add {R}{G}. Spend this mana only to cast face-down spells or to turn creatures face up" (CR 106.6,
+# 708.4, 702.37a). Turn 1: Black Lotus ({G}{G}{G}) and Mox Ruby ({R}) pay for the Gossip ({2}{R}{G}). Turn 3: it taps for {R}{G}, shown with
+# its limit. That mana can't cast Llanowar Elves ({G}) face up, nor Manifest Dread ({1}{G}): a spell that tells you to
+# manifest is not itself face down, so both are refused (Scryfall's 2024-02-02 ruling on the card). With Mox Ruby's {R} it
+# casts Monastery Flock face down for {3}, a nameless 2/2 on the stack (CR 708.4), and the pool ends empty.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Tin Street Gossip
+Llanowar Elves
+Manifest Dread
+Monastery Flock
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tin Street Gossip.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Tin Street Gossip.Activate
+? Bot1.Mana = {R} (AnyOf(FaceDownSpells+TurnCreaturesFaceUp)) {G} (AnyOf(FaceDownSpells+TurnCreaturesFaceUp))
+! Bot1.Hand.Llanowar Elves.Cast(Mana: short)
+! Bot1.Hand.Manifest Dread.Cast(Mana: short)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Monastery Flock.Cast(Ability: Morph)
+? Stack..FaceDown = true
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Mana =
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..Power = 2
+Bot1.Battlefield..Toughness = 2

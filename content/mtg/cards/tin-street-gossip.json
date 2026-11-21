@@ -1,0 +1,11 @@
+{
+  "name": "Tin Street Gossip",
+  "manaCost": "{2}{R}{G}",
+  "type": "Creature — Lizard Advisor",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Vigilance\n{T}: Add {R}{G}. Spend this mana only to cast face-down spells or to turn creatures face up.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
