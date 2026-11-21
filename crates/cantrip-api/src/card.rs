@@ -4136,6 +4136,10 @@ pub struct CardDef {
     /// 118.9): `EffectKind::SpellAlternative` names the nth. Not standing abilities: they function only while such an effect
     /// lasts, and `applies` says which spells each is for, as for `spell_alternatives`.
     pub lasting_spell_alternatives: &'static [SpellAlternative],
+    /// The ways of casting cards that this card's resolved spells and abilities give a player for a duration (CR 611.2a, 601.3):
+    /// "Until end of turn, you may cast creature spells from your graveyard by foraging in addition to paying their other costs"
+    /// (Osteomancer Adept). Each is a `GrantedWay`, as a permanent's static ability gives it, made by `Game::give_a_way_this_turn`.
+    pub lasting_ways: &'static [GrantedWay],
     /// Its static abilities that let a player cast cards in exile (CR 601.3, 604.1), while it is on the battlefield with its
     /// abilities: "you may cast spells from among cards exiled with this".
     pub exile_casts: &'static [ExileCast],
@@ -4539,6 +4543,7 @@ impl CardDef {
         granted_ways: &[],
         spell_alternatives: &[],
         lasting_spell_alternatives: &[],
+        lasting_ways: &[],
         exile_casts: &[],
         granted_miracles: &[],
         opening_hand: None,

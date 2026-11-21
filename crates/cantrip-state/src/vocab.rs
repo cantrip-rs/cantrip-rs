@@ -2103,13 +2103,16 @@ impl AbilityRef {
     pub const EXILE_CAST: u8 = 72;
     pub const SPELL_ALTERNATIVE: u8 = 80;
     pub const PLAY_RULE: u8 = 88;
+    /// The kth of a card's `lasting_ways`: a way of casting cards a resolved spell or ability of it gave a player for a duration
+    /// (`EffectKind::LastingWay`, CR 611.2a, 601.3).
+    pub const LASTING_WAY: u8 = 96;
     /// The kth of a card's `ability_alternatives`: a cost it lets a player pay rather than an activated ability's (CR 118.9).
     pub const ABILITY_ALTERNATIVE: u8 = 104;
     /// The kth of a card's `lasting_spell_alternatives`: an alternative cost a resolved spell or ability of it gave the spells a
     /// player casts for a duration (`EffectKind::SpellAlternative`, CR 118.9).
     pub const LASTING_SPELL_ALTERNATIVE: u8 = 112;
     const BAND: u8 = 8;
-    const PLAY_RULES: u8 = 16;
+    const PLAY_RULES: u8 = 8;
     /// The history's marker of extra loyalty activations allowed this turn (`actions::EXTRA_LOYALTY_ALLOWED`).
     pub const EXTRA_LOYALTY_ALLOWED: u8 = 123;
     /// A spell itself, in the history's record that it resolved (`Event::Resolved`, CR 608.2): no ability of the card.
@@ -2143,6 +2146,15 @@ impl AbilityRef {
     pub fn lasting_spell_alternative(card: CardId, k: usize) -> AbilityRef {
         debug_assert!(k < Self::BAND as usize);
         AbilityRef { card, index: Self::LASTING_SPELL_ALTERNATIVE + k as u8 }
+    }
+
+    pub fn lasting_way(card: CardId, k: usize) -> AbilityRef {
+        debug_assert!(k < Self::BAND as usize);
+        AbilityRef { card, index: Self::LASTING_WAY + k as u8 }
+    }
+
+    pub fn as_lasting_way(self) -> Option<usize> {
+        self.band(Self::LASTING_WAY, Self::BAND)
     }
 
     pub fn as_lasting_spell_alternative(self) -> Option<usize> {

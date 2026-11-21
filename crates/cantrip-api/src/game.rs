@@ -1535,6 +1535,14 @@ pub trait Game: Query {
         let kind = EffectKind::SpellAlternative { card: item.ability.card, index, player, words: self.words(item.object) };
         self.add_player_effect(item.controller, item.object, kind, Duration::EndOfTurn);
     }
+    /// "Until end of turn, you may cast [cards] from your graveyard ..." (CR 611.2a, 601.3), made by the resolving spell or
+    /// ability `item`: the `index`th of the `lasting_ways` of its card (the face that is up, for a permanent's ability) is a way
+    /// `player` may cast cards by until the turn ends (CR 514.2), whether or not the source stays on the battlefield. The effect
+    /// is controlled by `item`'s controller (CR 109.5), and reads the words of `item`'s text as it resolves (CR 612.1, 608.2h).
+    fn give_a_way_this_turn(&mut self, item: &StackItem, player: PlayerId, index: u8) {
+        let kind = EffectKind::LastingWay { card: item.ability.card, index, player, words: self.words(item.object) };
+        self.add_player_effect(item.controller, item.object, kind, Duration::EndOfTurn);
+    }
     /// A rule about an open set of objects (CR 611.2c), made by the resolving spell or ability `item`: the `index`th of the
     /// `lasting_rules` of its card (the face that is up, for a permanent's ability) applies, for `duration`, to each permanent
     /// its set takes in each time the rule is read, those that arrive later too, whether or not the source stays on the

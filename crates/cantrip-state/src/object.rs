@@ -1995,6 +1995,13 @@ pub enum EffectKind {
     /// only the source. `words` are those of the text that made it as it resolved (CR 612.1, 608.2h): a text-changing effect
     /// on the source afterwards changes the source, not the effect already made ("red or green" stays so).
     SpellAlternative { card: CardId, index: u8, player: PlayerId, words: Words },
+    /// "Until end of turn, you may cast creature spells from your graveyard" (CR 611.2a, 601.3, 604): a way of casting cards that a
+    /// resolved spell or ability gave `player` for as long as it lasts, whether or not its source is still on the battlefield. It
+    /// is the `index`th of the `lasting_ways` of `card`, the card whose spell or ability made it, which says which cards it
+    /// casts, from where and for what, as a permanent's `granted_ways` do. About the player (its `GrantedWay::cost` is asked
+    /// with the effect's controller as "you"), so it reaches cards that arrive later and outlives its `affected` object, which is
+    /// only the source. `words` are those of the text that made it as it resolved (CR 612.1, 608.2h).
+    LastingWay { card: CardId, index: u8, player: PlayerId, words: Words },
     /// It has the enchant ability (CR 702.5a, layer 6) that `card` gives the objects its effects make Auras
     /// (`CardDef::becomes_aura_enchant`): what it may enchant as it enters (CR 303.4f) and for as long as it is attached
     /// (CR 303.4c, 704.5m). Necromancy's "it becomes an Aura with 'enchant creature put onto the battlefield with
@@ -2038,6 +2045,7 @@ impl EffectKind {
                 | EffectKind::NoLegendRule(_)
                 | EffectKind::SpellCostChange { .. }
                 | EffectKind::SpellAlternative { .. }
+                | EffectKind::LastingWay { .. }
                 | EffectKind::LastingRule { .. }
                 | EffectKind::BlockersInstead { .. }
                 | EffectKind::ChoosesBlocks

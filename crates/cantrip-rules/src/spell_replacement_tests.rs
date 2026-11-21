@@ -182,7 +182,7 @@ fn cx(game: &mut Game) -> Cx<'_> {
 
 /// Your main phase with priority and an empty stack.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &SQUIRREL, &NOTHING, &PLAIN, &LEONARDO, &KESS, &MIKEY, &HORDE, &PALEONTOLOGIST])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &SQUIRREL, &NOTHING, &PLAIN, &LEONARDO, &KESS, &MIKEY, &HORDE, &PALEONTOLOGIST, &OSTEO])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -525,4 +525,62 @@ fn a_creature_cast_from_the_hand_beside_the_rule_enters_without_it() {
     resolve_all(&mut g);
     let permanent = g.state.obj(spell).became.expect("it resolved");
     assert_eq!(plus_ones(&g, permanent), 0);
+}
+
+/// "Until end of turn, you may cast creature spells from your graveyard. If you cast a spell this way, that creature enters
+/// with a finality counter on it" (Osteomancer Adept's shape): a way a resolved ability gave, its source a sorcery long gone.
+static OSTEO: CardDef = CardDef {
+    name: "Rider Test Osteo",
+    types: TypeSet::of(&[CardType::Sorcery]),
+    lasting_ways: &[GrantedWay { text: "Cast a creature spell from your graveyard.", cost: creature_card, permission: true, spell_replacement: Some(0), ..GrantedWay::CAST }],
+    granted_replacements: &[granted_replacement(ReplacementKind::ZoneChange, spell_enters, add_a_finality_counter, "enters with a finality counter")],
+    ..CardDef::BLANK
+};
+
+/// The effect `player` has from `giver`, a resolved ability's: "until end of turn, you may cast creature spells from your graveyard".
+fn give_a_way(g: &mut Game, giver: ObjectId, player: PlayerId) {
+    let kind = EffectKind::LastingWay { card: g.cards.id_of(&OSTEO), index: 0, player, words: Words::NONE };
+    between(g, |cx| cantrip_api::Game::add_player_effect(cx, player, giver, kind, Duration::EndOfTurn));
+}
+
+fn offered(g: &mut Game, card: ObjectId) -> Vec<Option<ObjectId>> {
+    let r = next(g);
+    let RequestKind::Priority { options } = &r.kind else { panic!("expected priority, got {:?}", r.kind) };
+    options.iter().filter(|o| o.kind == ActionKind::CastSpell && o.source == Some(card)).map(|o| o.granted_by.map(|g| g.object)).collect()
+}
+
+/// CR 611.2a, 601.3: a way a resolved ability gave is offered for the cards it names from their zone, though its source is
+/// in a graveyard, not for a card in another zone or without mana to pay for it, and the spell cast by it carries the
+/// way's rider (CR 614.1c): the creature enters with a finality counter on it though nothing is on the battlefield to give it.
+#[test]
+fn a_way_a_resolved_ability_gave_casts_cards_and_carries_its_rider() {
+    let mut g = game();
+    let giver = put(&mut g, &OSTEO, Zone::graveyard(YOU));
+    let card = put(&mut g, &SQUIRREL, Zone::graveyard(YOU));
+    let in_hand = put(&mut g, &SQUIRREL, Zone::hand(YOU));
+    add(&mut g, Mana::G, 1);
+    assert_eq!(offered(&mut g, card), Vec::<Option<ObjectId>>::new(), "no way until it is given");
+    give_a_way(&mut g, giver, YOU);
+    assert_eq!(offered(&mut g, card), [Some(giver)]);
+    assert_eq!(offered(&mut g, in_hand), [None], "a card in the hand is cast as it always was");
+    let spell = cast(&mut g, card, true);
+    assert_eq!(riders(&g), 1, "the effect is made as the spell is cast");
+    resolve_all(&mut g);
+    let permanent = g.state.obj(spell).became.expect("it resolved");
+    assert!(g.state.obj(permanent).zone.is(ZoneKind::Battlefield));
+    assert_eq!(finality(&g, permanent), 1);
+}
+
+/// The way is the player's, not the source's (CR 611.2a): another player is not offered it, and it ends with the turn (CR 514.2).
+#[test]
+fn a_lasting_way_is_its_players_and_ends_with_the_turn() {
+    let mut g = game();
+    let giver = put(&mut g, &OSTEO, Zone::graveyard(YOU));
+    let card = put(&mut g, &SQUIRREL, Zone::graveyard(YOU));
+    add(&mut g, Mana::G, 1);
+    give_a_way(&mut g, giver, PlayerId(1));
+    assert_eq!(offered(&mut g, card), Vec::<Option<ObjectId>>::new(), "given to the other player, it is not offered to you");
+    let effect = g.state.effects.iter().find(|e| matches!(e.kind, EffectKind::LastingWay { .. })).expect("the effect");
+    assert_eq!(effect.duration, Duration::EndOfTurn);
+    assert!(effect.kind.outlives_affected(), "it outlives its source");
 }

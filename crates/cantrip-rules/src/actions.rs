@@ -8919,9 +8919,19 @@ pub(crate) fn has_granted_way(q: &dyn Query, cards: &CardTable, card: ObjectId) 
         .any(|w| !w.what.permission && w.what.from == zone && (w.what.cost)(q, &w.asker(), card, obj.owner).is_some())
 }
 
-/// The ways the permanents on the battlefield give cards in graveyards and hands to be cast (CR 604, 118.9).
+/// The ways the permanents on the battlefield give cards in graveyards and hands to be cast (CR 604, 118.9), and those a
+/// resolved spell or ability gave a player for a duration (`EffectKind::LastingWay`, CR 611.2a): the latter belong to the
+/// player, whatever has become of their source.
 fn granted_ways_of(cards: &CardTable, s: &GameState, log: &[Record]) -> Vec<Given<GrantedWay>> {
-    given(cards, s, log, |d| d.granted_ways, AbilityRef::granted_way)
+    let mut all = given(cards, s, log, |d| d.granted_ways, AbilityRef::granted_way);
+    for e in &s.effects {
+        if let EffectKind::LastingWay { card, index, player, words } = e.kind {
+            let ability = AbilityRef::lasting_way(card, index as usize);
+            let what = &cards.get(card).lasting_ways[index as usize];
+            all.push(Given { source: e.source, controller: player, grant: Grant { object: e.source, ability }, what, by: None, words: Some(words) });
+        }
+    }
+    all
 }
 
 /// The permissions the permanents on the battlefield give to cast cards in exile (CR 601.3, 604.1).
@@ -8984,6 +8994,15 @@ fn named<T>(s: &GameState, cards: &CardTable, g: Grant, list: fn(&'static CardDe
 }
 
 fn named_way(s: &GameState, cards: &CardTable, g: Grant) -> Option<Given<GrantedWay>> {
+    // One a resolved spell or ability gave a player is its effect's, whose player is "you" (CR 611.2a).
+    if let Some(k) = g.ability.as_lasting_way() {
+        let what = cards.get(g.ability.card).lasting_ways.get(k)?;
+        let (player, words) = s.effects.iter().find_map(|e| match e.kind {
+            EffectKind::LastingWay { card, index, player, words } if e.source == g.object && card == g.ability.card && usize::from(index) == k => Some((player, words)),
+            _ => None,
+        })?;
+        return Some(Given { source: g.object, controller: player, grant: g, what, by: None, words: Some(words) });
+    }
     named(s, cards, g, |d| d.granted_ways, g.ability.as_granted_way())
 }
 
