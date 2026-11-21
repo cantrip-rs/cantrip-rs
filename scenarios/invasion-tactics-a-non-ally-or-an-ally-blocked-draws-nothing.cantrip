@@ -1,0 +1,59 @@
+# Invasion Tactics, "Whenever one or more Allies you control deal combat damage to a player" (CR 510.2, 603.2): damage by a creature that is not an Ally, or by an Ally
+# to a creature, draws nothing. Bot1 has Stonework Puma (an Ally), Expedition Envoy (an Ally, kept home) and Memnite, and Invasion Tactics from turn 3. On turn 5 Memnite
+# attacks and is unblocked (Bot2 takes 1) while the Puma attacks and Bot2's Ornithopter blocks it: no card is drawn, Bot1 holding only the Island it drew.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Stonework Puma
+Black Lotus
+Invasion Tactics
+Expedition Envoy
+Memnite
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stonework Puma.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Expedition Envoy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Invasion Tactics.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T5 Bot1.DeclareAttackers]
+? Bot1.Hand.Count = 1
+Bot1.Attack(Stonework Puma > Bot2; Memnite > Bot2)
+Bot2.Block(Ornithopter > Stonework Puma)
+[T5 Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot1.Hand.Count = 1

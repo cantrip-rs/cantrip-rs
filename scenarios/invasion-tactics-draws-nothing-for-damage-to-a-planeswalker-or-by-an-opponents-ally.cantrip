@@ -1,0 +1,83 @@
+# Invasion Tactics, "Whenever one or more Allies you control deal combat damage to a player" (CR 510.2, 603.2): damage to a planeswalker draws nothing, and an opponent's
+# Ally draws nothing for Bot1. Bot1's Stonework Puma, a 4/4 under Invasion Tactics on turn 3, attacks Bot2's Liliana of the Veil (3 loyalty) and kills her:
+# Bot1 draws no card (it holds only the Island it drew). On turn 4 Bot2's own Stonework Puma hits Bot1 (Bot1 is at 18) and Bot1 still draws nothing.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Stonework Puma
+Black Lotus
+Invasion Tactics
+Expedition Envoy
+Island
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Mox Ruby
+Liliana of the Veil
+Stonework Puma
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stonework Puma.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Liliana of the Veil.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Stonework Puma.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Expedition Envoy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Invasion Tactics.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Stonework Puma.Power = 4
+? Bot1.Battlefield.Stonework Puma.Toughness = 4
+? Bot1.Battlefield.Expedition Envoy.Power = 4
+? Bot1.Battlefield.Expedition Envoy.Toughness = 3
+? Bot1.Hand.Count = 1
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Stonework Puma > Bot2.Battlefield.Liliana of the Veil)
+[T3 Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Liliana of the Veil.Loyalty = (absent)
+? Bot1.Hand.Count = 1
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Stonework Puma > Bot1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot1.Hand.Count = 1
