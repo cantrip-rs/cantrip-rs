@@ -1,0 +1,11 @@
+{
+  "name": "Sokka, Tenacious Tactician",
+  "manaCost": "{1}{U}{R}{W}",
+  "type": "Legendary Creature — Human Warrior Ally",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Menace, prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nOther Allies you control have menace and prowess.\nWhenever you cast a noncreature spell, create a 1/1 white Ally creature token.",
+  "keywords": [
+    "Menace"
+  ]
+}

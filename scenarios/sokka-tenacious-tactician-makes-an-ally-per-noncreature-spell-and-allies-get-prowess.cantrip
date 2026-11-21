@@ -1,0 +1,56 @@
+# Sokka, Tenacious Tactician ({1}{U}{R}{W}, 3/3 menace, prowess): "Whenever you cast a noncreature spell, create a 1/1 white Ally creature
+# token" and "Other Allies you control have menace and prowess". On turn 3 Bot1's first Lightning Bolt makes one Ally and Sokka's own
+# prowess (one instance, not two) makes it 4/4 until end of turn; the token has menace. The second Bolt makes a second Ally, pumps Sokka
+# to 5/5, and the first Ally's granted prowess triggers (2/2; the second token, made after the cast, is still 1/1).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Sokka, Tenacious Tactician
+Lightning Bolt
+Lightning Bolt
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Sokka, Tenacious Tactician.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sokka, Tenacious Tactician.Power = 4
+? Bot1.Battlefield.Ally Token.Keywords = Menace
+? Bot1.Battlefield.Ally Token.Power = 1
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Sokka, Tenacious Tactician.Power = 5
+Bot1.Battlefield.Ally Token#1.Power = 2
+Bot1.Battlefield.Ally Token#2.Power = 1
+Bot2.Life = 14
