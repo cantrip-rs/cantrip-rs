@@ -1,0 +1,50 @@
+# Noctis, Prince of Lucis (CR 604, 601.3, 118.8, 122.1): "You may cast artifact spells from your graveyard by paying 3 life in addition to paying their
+# other costs. If you cast a spell this way, that artifact enters with a finality counter on it." Turn 1 Bot1 casts three Moxen, Black Lotus - which pays
+# for Noctis (its generic mana) and a Lightning Bolt, then is sacrificed - and Noctis. On turn 3 a Lightning Bolt (no artifact) is refused with red mana
+# available, and Black Lotus is cast from the graveyard for {0} and 3 life (20 to 17). It enters with a finality counter, so sacrificing it for mana
+# exiles it instead of putting it into the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Noctis, Prince of Lucis
+Lightning Bolt
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Noctis, Prince of Lucis.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Graveyard.Lightning Bolt.Cast
+Bot1.Graveyard.Black Lotus.Cast(Ability: You may cast artifact spells)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Black Lotus.Counters.Finality = 1
+? Bot1.Life = 17
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt
+Exile = Black Lotus

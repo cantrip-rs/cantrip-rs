@@ -1,0 +1,11 @@
+{
+  "name": "Noctis, Prince of Lucis",
+  "manaCost": "{1}{W}{U}{B}",
+  "type": "Legendary Creature — Human Noble",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Lifelink\nYou may cast artifact spells from your graveyard by paying 3 life in addition to paying their other costs. If you cast a spell this way, that artifact enters with a finality counter on it. (If a permanent with a finality counter on it would be put into a graveyard from the battlefield, exile it instead.)",
+  "keywords": [
+    "Lifelink"
+  ]
+}

@@ -1,0 +1,40 @@
+# Noctis, Prince of Lucis (CR 109.5): "You may cast artifact spells from your graveyard" - "you" is Noctis's controller. Bot1 casts three Moxen, Black Lotus
+# and Noctis on turn 1. On turn 2 Bot2 casts their own Black Lotus and sacrifices it for mana, so it is in their graveyard, and on their own main phase,
+# with 20 life to pay for it, casting it from there is refused them.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Noctis, Prince of Lucis
+Plains x18
+
+[Bot2 Deck]
+Black Lotus
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Noctis, Prince of Lucis.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+[T4 Bot2.Main1]
+! Bot2.Graveyard.Black Lotus.Cast(Ability: You may cast artifact spells)
+
+[Expect]
+Bot2.Graveyard = Black Lotus
