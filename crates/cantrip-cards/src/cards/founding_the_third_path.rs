@@ -3,12 +3,12 @@ use cantrip_mechanics::{choose, copy, effects, targets};
 use cantrip_oracle as oracle;
 
 /// I: "You may cast an instant or sorcery spell with mana value 1 or 2 from your hand without paying its mana cost." The spell is
-/// cast as the chapter resolves, its timing waived (CR 608.2g), judged on the face that would be cast (CR 709.3a): its mana value
+/// cast as the chapter resolves, its timing waived (CR 608.2g), judged as the spell the card would be cast as (CR 601.3e, 709.3a): its mana value
 /// is the spell's, so 0 and 3 are both out (CR 202.3); X is 0 and additional costs are paid (CR 118.9, 107.3b).
 fn cast_from_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    choose::may_cast_from_hand_free(g, item.controller, item.object, "instant or sorcery", |g, way| {
-        let types = &g.card(way.face).types;
-        (types.has(CardType::Instant) || types.has(CardType::Sorcery)) && (1..=2).contains(&way.mana_value)
+    choose::may_cast_from_hand_free(g, item.controller, item.object, "instant or sorcery", |g, card, way| {
+        let spell = g.chars_as_cast(card, way.way, item.controller);
+        (spell.is(CardType::Instant) || spell.is(CardType::Sorcery)) && (1..=2).contains(&way.mana_value)
     })
 }
 
