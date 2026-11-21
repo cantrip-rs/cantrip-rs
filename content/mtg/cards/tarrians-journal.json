@@ -1,0 +1,11 @@
+{
+  "name": "Tarrian's Journal",
+  "manaCost": "{1}{B}",
+  "type": "Legendary Artifact — Book",
+  "oracleText": "{T}, Sacrifice another artifact or creature: Draw a card. Activate only as a sorcery.\n{2}, {T}, Discard your hand: Transform Tarrian's Journal.",
+  "backFace": {
+    "name": "The Tomb of Aclazotz",
+    "type": "Legendary Land — Cave",
+    "oracleText": "(Transforms from Tarrian's Journal.)\n{T}: Add {B}.\n{T}: You may cast a creature spell from your graveyard this turn. If you do, it enters with a finality counter on it and is a Vampire in addition to its other types. (If a creature with a finality counter on it would die, exile it instead.)"
+  }
+}

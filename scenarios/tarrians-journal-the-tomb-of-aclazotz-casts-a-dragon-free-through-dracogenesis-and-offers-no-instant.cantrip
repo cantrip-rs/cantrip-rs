@@ -1,0 +1,54 @@
+# The Tomb of Aclazotz (CR 601.3, 118.9, 601.2b): its way is a permission, not an alternative cost, so the Dracogenesis another permanent gives ("cast Dragon spells
+# without paying their mana costs") may be used for the creature it lets Bot1 cast from the graveyard. Dracogenesis comes first (turn 3: Show and Tell, paid with Black Lotus, puts it onto
+# the battlefield); the Journal is turned over on turn 5 and its hand - the Phyrexian Dragon Engine, a Lightning Bolt and a Plains - falls into the graveyard. On turn 7 the Tomb
+# gives the way: the Engine is cast for nothing and is a Vampire as well, and the Bolt - no creature - is not offered, though it has a mana cost.
+
+[Bot1 Deck]
+Tarrian's Journal
+Show and Tell
+Black Lotus
+Mox Jet
+Mox Pearl
+Phyrexian Dragon Engine
+Dracogenesis
+Lightning Bolt
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tarrian's Journal.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Dracogenesis)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Tarrian's Journal.Activate(Ability: Transform)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.The Tomb of Aclazotz.Activate(Ability: You may cast)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Graveyard.Lightning Bolt.Cast(Ability: You may cast)
+Bot1.Graveyard.Phyrexian Dragon Engine.Cast(Ability: Without paying)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Phyrexian Dragon Engine.Subtypes = Dragon; Phyrexian; Vampire
+Bot1.Battlefield.Phyrexian Dragon Engine.Counters.Finality = 1
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Graveyard = Plains; Lightning Bolt; Show and Tell; Black Lotus

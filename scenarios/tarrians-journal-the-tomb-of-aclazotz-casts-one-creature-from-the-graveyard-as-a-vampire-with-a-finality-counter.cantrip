@@ -1,0 +1,50 @@
+# Tarrian's Journal // The Tomb of Aclazotz (CR 611.2a, 205.1b, 122.1): the Journal transforms for {2} and the discarded hand (Grizzly Bears and Memnite) lands in the
+# graveyard. On turn 3 the Tomb's ability gives one creature spell from the graveyard for the turn: the Bears are cast for {1}{G}, enter as a Bear Vampire with a
+# finality counter, and the permission is used up - Memnite, cast for {0}, is not offered a second time.
+
+[Bot1 Deck]
+Tarrian's Journal
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Memnite
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tarrian's Journal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tarrian's Journal.Activate(Ability: Transform)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 2
+? Bot1.Battlefield.The Tomb of Aclazotz.Tapped = true
+[T3 Bot1.Main1]
+! Bot1.Graveyard.Grizzly Bears.Cast
+Bot1.Battlefield.The Tomb of Aclazotz.Activate(Ability: You may cast)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Grizzly Bears.Cast(Ability: You may cast)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Subtypes = Bear; Vampire
+! Bot1.Graveyard.Memnite.Cast(Ability: You may cast)
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Counters.Finality = 1
+Bot1.Graveyard = Memnite

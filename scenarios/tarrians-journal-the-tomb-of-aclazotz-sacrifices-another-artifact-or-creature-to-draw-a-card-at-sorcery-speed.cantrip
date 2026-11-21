@@ -1,0 +1,40 @@
+# Tarrian's Journal (CR 602.5d, 701.21): "{T}, Sacrifice another artifact or creature: Draw a card. Activate only as a sorcery." The Journal itself is not
+# the sacrifice (another), a land is not one (artifact or creature), and the ability is refused in the opponent's turn, when Bot2 holds priority.
+# Turn 1: Mox Jet and Mox Pearl pay for the Journal and a Plains is played; on turn 3 the Journal taps, sacrificing Mox Ruby, and draws a card.
+
+[Bot1 Deck]
+Tarrian's Journal
+Mox Jet
+Mox Pearl
+Mox Ruby
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tarrian's Journal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Pass
+! Bot1.Battlefield.Tarrian's Journal.Activate(Ability: Sacrifice another)
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Tarrian's Journal.Activate(Ability: Sacrifice another)
+! Bot1.Choose(Plains)
+! Bot1.Choose(Tarrian's Journal)
+Bot1.Choose(Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Graveyard = Mox Ruby
+Bot1.Battlefield.Tarrian's Journal.Tapped = true
