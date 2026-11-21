@@ -1,0 +1,22 @@
+# Serpent's Pass enters tapped (CR 614.1d), so the turn it is played it cannot be tapped for mana (the refusal); next turn it taps for either
+# {U} or {B}: Blue here (the other colour is taken by the sibling scenario), and never Red, which it does not make.
+
+[Bot1 Deck]
+Serpent's Pass
+Plains x19
+
+[Bot2 Deck]
+Swamp x15
+
+[Actions]
+Bot1.Hand.Serpent's Pass.Play
+? Bot1.Battlefield.Serpent's Pass.Tapped = true
+! Bot1.Battlefield.Serpent's Pass.Activate(Ability: Add; Color: Blue)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Serpent's Pass.Activate(Ability: Add; Color: Red)
+Bot1.Battlefield.Serpent's Pass.Activate(Ability: Add; Color: Blue)
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Serpent's Pass.Tapped = true
+Bot1.Mana = {U}
