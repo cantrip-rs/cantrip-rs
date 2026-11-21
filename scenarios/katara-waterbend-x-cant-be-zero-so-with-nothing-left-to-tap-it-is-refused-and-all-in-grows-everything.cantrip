@@ -1,0 +1,70 @@
+# Katara, Water Tribe's Hope: "Waterbend {X}: Creatures you control have base power and toughness X/X until end of turn. X can't be 0." (CR 107.3a,
+# 701.67). On turn 3 Bot1 pays X 1, the least, by tapping Memnite: Katara, her Ally token, Memnite and Ornithopter (0/2) are all 1/1. Then X 5 is
+# paid by Mox Pearl, Mox Sapphire and three taps (Katara, her token, Ornithopter): they are all 5/5, the later setting effect winning by timestamp,
+# and Bot2's Memnite is not touched. With every mana source and creature of Bot1's tapped, nothing pays even X 1, so it is not offered.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Katara, Water Tribe's Hope
+Memnite
+Ornithopter
+Island
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Katara, Water Tribe's Hope.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Katara, Water Tribe's Hope.Activate(X: 1; Convoke: Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Katara, Water Tribe's Hope.Power = 1
+? Bot1.Battlefield.Katara, Water Tribe's Hope.Toughness = 1
+? Bot1.Battlefield.Ally Token.Power = 1
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 1
+? Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Katara, Water Tribe's Hope.Activate(X: 5; Convoke: Katara, Water Tribe's Hope, Ally Token, Ornithopter)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Katara, Water Tribe's Hope.Activate(Mana: short)
+
+[Expect]
+Bot1.Battlefield.Katara, Water Tribe's Hope.Power = 5
+Bot1.Battlefield.Katara, Water Tribe's Hope.Toughness = 5
+Bot1.Battlefield.Ally Token.Power = 5
+Bot1.Battlefield.Ally Token.Toughness = 5
+Bot1.Battlefield.Ornithopter.Power = 5
+Bot1.Battlefield.Ornithopter.Toughness = 5
+Bot1.Battlefield.Memnite.Power = 5
+Bot1.Battlefield.Memnite.Toughness = 5
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Toughness = 1

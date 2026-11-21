@@ -1,0 +1,71 @@
+# Katara, Water Tribe's Hope (3/3 Ally, vigilance): "When Katara enters, create a 1/1 white Ally creature token." and "Waterbend {X}: Creatures you
+# control have base power and toughness X/X until end of turn. X can't be 0. Activate only during your turn." (CR 701.67, 613.4b, 611.2c, 107.3a).
+# Turn 1 Bot1 casts Katara with Mox Pearl, Mox Sapphire and Black Lotus, getting the 1/1 Ally token, and a Memnite and Ornithopter. It cannot
+# activate on Bot2's turn 2. On turn 3, with X 2 paid by tapping Memnite and Ornithopter, its creatures are 2/2 - Katara shrinks to
+# 2/2, the token and Memnite grow, Bot2's Memnite stays 1/1 and the Phyrexian Walker cast afterwards stays 0/3 - and the effect wears off on turn 4.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Katara, Water Tribe's Hope
+Memnite
+Ornithopter
+Island
+Phyrexian Walker
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Katara, Water Tribe's Hope.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+? Bot1.Battlefield.Ally Token.Power = 1
+? Bot1.Battlefield.Ally Token.Toughness = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot1.Battlefield.Katara, Water Tribe's Hope.Activate(X: 1; Convoke: Memnite)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Katara, Water Tribe's Hope.Activate(X: 2; Convoke: Memnite, Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Katara, Water Tribe's Hope.Power = 2
+? Bot1.Battlefield.Katara, Water Tribe's Hope.Toughness = 2
+? Bot1.Battlefield.Ally Token.Power = 2
+? Bot1.Battlefield.Ally Token.Toughness = 2
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot2.Battlefield.Memnite.Power = 1
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Phyrexian Walker.Power = 0
+? Bot1.Battlefield.Phyrexian Walker.Toughness = 3
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Katara, Water Tribe's Hope.Power = 3
+Bot1.Battlefield.Katara, Water Tribe's Hope.Toughness = 3
+Bot1.Battlefield.Ally Token.Power = 1
+Bot1.Battlefield.Ally Token.Toughness = 1
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
