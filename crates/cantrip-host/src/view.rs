@@ -123,7 +123,12 @@ pub fn restriction_view(restriction: ManaRestriction) -> (ManaSpendFilterView, M
     let filter = match restriction {
         ManaRestriction::ManaValue(m) => {
             mana_value = i32::from(m.at_least);
-            if m.or_x { ManaSpendFilterView::ManaValueOrXSpells } else { ManaSpendFilterView::ManaValueSpells }
+            match (m.creature, m.or_x) {
+                (false, false) => ManaSpendFilterView::ManaValueSpells,
+                (false, true) => ManaSpendFilterView::ManaValueOrXSpells,
+                (true, false) => panic!("a mana restriction the wire has no word for: {}", restriction.name()),
+                (true, true) => ManaSpendFilterView::CreatureManaValueOrXSpells,
+            }
         }
         r if r == ManaRestriction::NONCREATURE_SPELLS => ManaSpendFilterView::NoncreatureSpells,
         // Equipment spells or equip abilities: the equip abilities come with no other kind of ability or creature limit.
@@ -227,9 +232,15 @@ pub fn restriction_of(filter: ManaSpendFilterView, effect: ManaSpendEffectView, 
     if filter == ManaSpendFilterView::Card {
         return Some(ManaRestriction::Card(card));
     }
-    if matches!(filter, ManaSpendFilterView::ManaValueSpells | ManaSpendFilterView::ManaValueOrXSpells) {
+    let mana_value_filter = match filter {
+        ManaSpendFilterView::ManaValueSpells => Some((false, false)),
+        ManaSpendFilterView::ManaValueOrXSpells => Some((false, true)),
+        ManaSpendFilterView::CreatureManaValueOrXSpells => Some((true, true)),
+        _ => None,
+    };
+    if let Some((creature, or_x)) = mana_value_filter {
         let at_least = u8::try_from(mana_value).ok()?;
-        return Some(ManaRestriction::ManaValue(ManaValueSpells { at_least, or_x: filter == ManaSpendFilterView::ManaValueOrXSpells }));
+        return Some(ManaRestriction::ManaValue(ManaValueSpells { at_least, or_x, creature }));
     }
     if matches!(
         filter,

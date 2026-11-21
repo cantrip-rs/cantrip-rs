@@ -2922,19 +2922,23 @@ impl AbilitiesOf {
 
 /// "Spend this mana only to cast spells with mana value N or greater [or spells with {X} in their mana costs]"
 /// (CR 106.6, 202.3, 107.3). Mana value 4 or greater: Ashling, Rimebound. Mana value 5 or greater or {X}: Troyan, Gutsy
-/// Explorer. (Helga, Skittish Seer's is for creature spells only, which this does not say.)
+/// Explorer. Creature spells with mana value 4 or greater or with {X} in their mana costs: Helga, Skittish Seer.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct ManaValueSpells {
     /// The least mana value the spell may have.
     pub at_least: u8,
     /// "... or spells with {X} in their mana costs": a spell whose mana cost has an {X}, whatever its mana value.
     pub or_x: bool,
+    /// "... creature spells ...": only a creature spell (CR 302), as it is on the stack (CR 601.2g) - both the mana value and the
+    /// {X} are for creature spells alone (Helga, Skittish Seer).
+    pub creature: bool,
 }
 
 impl ManaValueSpells {
-    /// Whether a spell of this mana value, with or without {X} in its mana cost, may be paid for with the mana.
-    fn admits(self, mana_value: u32, x: bool) -> bool {
-        mana_value >= self.at_least as u32 || (self.or_x && x)
+    /// Whether a spell of these card types and this mana value, with or without {X} in its mana cost, may be paid for with the
+    /// mana.
+    fn admits(self, types: TypeSet, mana_value: u32, x: bool) -> bool {
+        (!self.creature || types.has(CardType::Creature)) && (mana_value >= self.at_least as u32 || (self.or_x && x))
     }
 }
 
@@ -3130,12 +3134,18 @@ impl ManaRestriction {
 
     /// "Spend this mana only to cast spells with mana value `n` or greater."
     pub const fn mana_value_at_least(n: u8) -> ManaRestriction {
-        ManaRestriction::ManaValue(ManaValueSpells { at_least: n, or_x: false })
+        ManaRestriction::ManaValue(ManaValueSpells { at_least: n, or_x: false, creature: false })
     }
 
     /// "Spend this mana only to cast spells with mana value `n` or greater or spells with {X} in their mana costs."
     pub const fn mana_value_at_least_or_x(n: u8) -> ManaRestriction {
-        ManaRestriction::ManaValue(ManaValueSpells { at_least: n, or_x: true })
+        ManaRestriction::ManaValue(ManaValueSpells { at_least: n, or_x: true, creature: false })
+    }
+
+    /// "Spend this mana only to cast creature spells with mana value `n` or greater or creature spells with {X} in their mana
+    /// costs" (Helga, Skittish Seer).
+    pub const fn creature_mana_value_at_least_or_x(n: u8) -> ManaRestriction {
+        ManaRestriction::ManaValue(ManaValueSpells { at_least: n, or_x: true, creature: true })
     }
 
     /// The restrictions with no subtype or number in them, each with the name a scenario and the dump write it by. Those
@@ -3280,7 +3290,7 @@ impl ManaRestriction {
             (ManaRestriction::CumulativeUpkeep, ManaPayment::CumulativeUpkeep) => true,
             (ManaRestriction::AnyOf(parts), _) => parts.iter().any(|r| r.may_pay(payment)),
             (ManaRestriction::NonSpells(barred), ManaPayment::Spell { types, .. }) => barred.0 & types.0 == 0,
-            (ManaRestriction::ManaValue(m), ManaPayment::Spell { mana_value, x, .. }) => m.admits(mana_value, x),
+            (ManaRestriction::ManaValue(m), ManaPayment::Spell { types, mana_value, x, .. }) => m.admits(types, mana_value, x),
             // "Can't be spent to cast nonartifact spells": everything but casting a nonartifact spell.
             (ManaRestriction::NotNonartifactSpells, ManaPayment::Spell { types, .. }) => types.has(CardType::Artifact),
             (ManaRestriction::NotNonartifactSpells, _) => true,
@@ -3355,7 +3365,7 @@ impl ManaRestriction {
             return format!("AnyOf({})", parts.iter().map(|r| r.name()).collect::<Vec<_>>().join("+"));
         }
         if let ManaRestriction::ManaValue(m) = self {
-            return format!("ManaValue{}OrGreater{}Spells", m.at_least, if m.or_x { "OrX" } else { "" });
+            return format!("ManaValue{}OrGreater{}{}Spells", m.at_least, if m.or_x { "OrX" } else { "" }, if m.creature { "Creature" } else { "" });
         }
         // The card is named by whoever can see it (the state dump: "Card Lightning Bolt").
         if let ManaRestriction::Card(_) = self {
@@ -3413,11 +3423,15 @@ impl ManaRestriction {
         if let [one] = text.as_slice()
             && let Some(rest) = one.strip_prefix("manavalue")
         {
-            let (n, or_x) = match rest.strip_suffix("orgreaterorxspells") {
-                Some(n) => (n, true),
-                None => (rest.strip_suffix("orgreaterspells")?, false),
+            let (rest, creature) = match rest.strip_suffix("creaturespells") {
+                Some(rest) => (rest, true),
+                None => (rest.strip_suffix("spells")?, false),
             };
-            return Some(ManaRestriction::ManaValue(ManaValueSpells { at_least: n.parse().ok()?, or_x }));
+            let (n, or_x) = match rest.strip_suffix("orgreaterorx") {
+                Some(n) => (n, true),
+                None => (rest.strip_suffix("orgreater")?, false),
+            };
+            return Some(ManaRestriction::ManaValue(ManaValueSpells { at_least: n.parse().ok()?, or_x, creature }));
         }
         // A subtype restriction: "DragonSpells", "DragonOrOmenSpells", "ElfCreatureSpells", with "CantBeCountered"; or the
         // haste of a subtype's creature spells: "DragonCreatureSpellsGainHaste".
@@ -3894,12 +3908,45 @@ mod tests {
         all.push(ManaRestriction::mana_value_at_least(4));
         all.push(ManaRestriction::mana_value_at_least_or_x(5));
         all.push(ManaRestriction::mana_value_at_least(12));
+        all.push(ManaRestriction::creature_mana_value_at_least_or_x(4));
         all.extend(ManaRestriction::NAMED.map(|(r, _)| r));
         all.extend(ManaRestriction::ANY_OF.map(ManaRestriction::AnyOf));
         for r in all {
             let name = r.name();
             assert_eq!(ManaRestriction::parse(name.split_whitespace()), Some(r), "{name}");
         }
+    }
+
+    /// "Spend this mana only to cast creature spells with mana value 4 or greater or creature spells with {X} in their mana costs"
+    /// (CR 106.6, 202.3; Helga, Skittish Seer): a creature spell, of any other card types too, with the mana value or the {X} - not a
+    /// noncreature spell of any mana value, with or without {X}, nor an ability.
+    #[test]
+    fn mana_for_creature_spells_of_a_mana_value_or_x_pays_for_only_those() {
+        let spell = |types, mana_value, x| ManaPayment::Spell {
+            types,
+            subtypes: SubtypeSet::NONE,
+            legendary: false,
+            mana_value,
+            x,
+            from: ZoneKind::Hand,
+            commander: false,
+            card: ObjectId::NONE,
+            face_down: false,
+        };
+        let creature = TypeSet::of(&[CardType::Creature]);
+        let artifact_creature = TypeSet::of(&[CardType::Artifact, CardType::Creature]);
+        let sorcery = TypeSet::of(&[CardType::Sorcery]);
+        let helga = ManaRestriction::creature_mana_value_at_least_or_x(4);
+        assert!(helga.may_pay(&spell(creature, 4, false)));
+        assert!(helga.may_pay(&spell(creature, 7, false)));
+        assert!(!helga.may_pay(&spell(creature, 3, false)));
+        assert!(helga.may_pay(&spell(creature, 0, true)), "{{X}} in the mana cost, whatever the mana value");
+        assert!(helga.may_pay(&spell(artifact_creature, 5, false)));
+        assert!(!helga.may_pay(&spell(sorcery, 6, false)));
+        assert!(!helga.may_pay(&spell(sorcery, 0, true)));
+        assert!(!helga.may_pay(&ManaPayment::Other));
+        let plain = ManaRestriction::mana_value_at_least_or_x(4);
+        assert!(plain.may_pay(&spell(sorcery, 6, false)) && plain.may_pay(&spell(sorcery, 0, true)), "the unlimited kind pays for any card type");
     }
 
     /// "Spend this mana only to cast a legendary spell" (CR 106.6; Plaza of Heroes): a legendary spell, of any card type,

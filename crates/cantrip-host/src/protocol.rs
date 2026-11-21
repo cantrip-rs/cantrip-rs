@@ -404,6 +404,9 @@ pub enum ManaSpendFilterView {
     FaceDownSpells,
     /// Face-down spells, or turning a creature face up: "cast a face-down spell or turn a creature face up".
     FaceDownSpellsOrTurningCreaturesFaceUp,
+    /// Creature spells with the mana value named beside it or greater, or with {X} in their mana costs: "creature spells with
+    /// mana value 4 or greater or creature spells with {X} in their mana costs" (Helga, Skittish Seer).
+    CreatureManaValueOrXSpells,
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -519,7 +522,7 @@ pub struct RestrictedManaView {
     /// chosen type never chosen, which no spell has. With no filter and `GainsHaste`: the subtypes a creature spell must
     /// have one of to gain haste ("a Dragon creature spell"); empty for any creature spell.
     pub spend_subtypes: Vec<String>,
-    /// For `ManaValueSpells` and `ManaValueOrXSpells`: the least mana value the spell may have; 0 otherwise.
+    /// For `ManaValueSpells`, `ManaValueOrXSpells` and `CreatureManaValueOrXSpells`: the least mana value the spell may have; 0 otherwise.
     pub spend_mana_value: i32,
     /// For `Card`: the card it may be spent to cast, as the viewer's handle for it or for the spell it became as it is cast
     /// (`view::restriction_card`); none otherwise.

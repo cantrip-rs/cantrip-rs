@@ -232,7 +232,8 @@ public sealed class RestrictedManaView
     public List<string> SpendSubtypes { get; set; } = [];
 
     /// <summary>
-    /// For <see cref="ManaSpendFilterView.ManaValueSpells"/> and <see cref="ManaSpendFilterView.ManaValueOrXSpells"/>: the
+    /// For <see cref="ManaSpendFilterView.ManaValueSpells"/>, <see cref="ManaSpendFilterView.ManaValueOrXSpells"/> and
+    /// <see cref="ManaSpendFilterView.CreatureManaValueOrXSpells"/>: the
     /// least mana value the spell may have ("mana value 4 or greater"). 0 otherwise.
     /// </summary>
     [Key(6)]

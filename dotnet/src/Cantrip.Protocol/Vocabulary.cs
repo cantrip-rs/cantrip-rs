@@ -492,6 +492,8 @@ public enum ManaSpendFilterView
     FaceDownSpells = 37,
     /// <summary>Only to cast a face-down spell or turn a creature face up.</summary>
     FaceDownSpellsOrTurningCreaturesFaceUp = 38,
+    /// <summary>Only to cast creature spells with the mana value named beside it or greater, or with {X} in their mana costs.</summary>
+    CreatureManaValueOrXSpells = 39,
 }
 
 /// <summary>What spending some mana does to whatever it pays for (CR 106.6): the effect half of a restriction.</summary>

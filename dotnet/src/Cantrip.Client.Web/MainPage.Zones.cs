@@ -733,6 +733,7 @@ public sealed partial class MainPage
         (ManaSpendFilterView.NoncreatureSpells, _) => "noncreature spells",
         (ManaSpendFilterView.ManaValueSpells, _) => $"mana value {manaValue}+",
         (ManaSpendFilterView.ManaValueOrXSpells, _) => $"mana value {manaValue}+ or X",
+        (ManaSpendFilterView.CreatureManaValueOrXSpells, _) => $"creatures, mana value {manaValue}+ or X",
         (ManaSpendFilterView.SubtypeSpells or ManaSpendFilterView.SubtypeCreatureSpells or ManaSpendFilterView.SubtypeSpellsOrAbilities
             or ManaSpendFilterView.SubtypeCreatureSpellsOrAbilities or ManaSpendFilterView.SubtypeSpellsOrAbilitiesOfPermanents, _)
             when subtypes.Count == 0 => "no type chosen",
@@ -800,6 +801,8 @@ public sealed partial class MainPage
             ManaSpendFilterView.ManaValueSpells => $"Spend this mana only to cast spells with mana value {manaValue} or greater.",
             ManaSpendFilterView.ManaValueOrXSpells =>
                 $"Spend this mana only to cast spells with mana value {manaValue} or greater or spells with {{X}} in their mana costs.",
+            ManaSpendFilterView.CreatureManaValueOrXSpells =>
+                $"Spend this mana only to cast creature spells with mana value {manaValue} or greater or creature spells with {{X}} in their mana costs.",
             ManaSpendFilterView.SubtypeSpells or ManaSpendFilterView.SubtypeCreatureSpells when subtypes.Count == 0 =>
                 "Spend this mana only to cast a spell of the chosen type. No type was chosen, so it can't be spent on any spell.",
             ManaSpendFilterView.SubtypeSpellsOrAbilities when subtypes.Count == 0 =>
