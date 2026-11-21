@@ -1,0 +1,71 @@
+# Avatar Kyoshi: "Lands you control have trample and hexproof" and "{T}: Add X mana of any one color, where X is the greatest power among creatures you
+# control." Chapter III returns the Saga as Avatar Kyoshi on turn 5. Bot2's Strip Mine can no longer target Bot1's Forest (the 2/2 land creature chapter
+# II made) - Bot1's lands have hexproof - and the Forest attacks with trample: Bot2's 0/1 Crimson Kobolds blocks, takes the one damage it needs and
+# one tramples over (Bot2 is at 19). On turn 7 Avatar Kyoshi, no longer summoning sick, taps for five mana of one color: its own power of 5, the
+# greatest among its creatures.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Mox Emerald
+The Legend of Kyoshi
+Forest
+Island
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Strip Mine
+Crimson Kobolds
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.The Legend of Kyoshi.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+Bot2.Hand.Crimson Kobolds.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Counters.PlusOnePlusOne = 2
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Avatar Kyoshi.Power = 5
+? Bot1.Battlefield.Forest.Keywords = Haste; Hexproof; Trample
+? Bot1.Battlefield.Forest.Subtypes = Forest; Island
+Bot1.Pass
+! Bot2.Battlefield.Strip Mine.Activate(Ability: Destroy target land; Bot1.Battlefield.Forest)
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Forest > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Block(Crimson Kobolds > Forest)
+Bot1.Pass
+Bot2.Pass
+Bot1.AssignDamage(Forest > Crimson Kobolds: 1; Forest > Bot2: 1)
+? Bot2.Life = 19
+? Bot2.Graveyard = Crimson Kobolds
+[T7 Bot1.Main1]
+Bot1.Battlefield.Avatar Kyoshi.Activate(Color: Red)
+? Bot1.Mana = {R}{R}{R}{R}{R}
+
+[Expect]
+Bot1.Battlefield.Avatar Kyoshi.Tapped = true

@@ -1,0 +1,52 @@
+# The Legend of Kyoshi, chapter II: "Earthbend X ... That land becomes an Island in addition to its other types." With the chapter on the stack targeting
+# Bot1's only land, Bot2 destroys it with Strip Mine: the chapter's target is illegal, so it does nothing (CR 608.2b) - Bot1's other cards are
+# unaffected and Bot2's Strip Mine (a land it controls) takes no counters, type or Island.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Mox Emerald
+The Legend of Kyoshi
+Forest
+Island
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Strip Mine
+Island x19
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.The Legend of Kyoshi.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Battlefield.Strip Mine.Activate(Ability: Destroy target land; Bot1.Battlefield.Forest)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Forest = (absent)
+Bot1.Graveyard = Forest; Black Lotus
+Bot2.Battlefield.Strip Mine = (absent)
+Bot2.Graveyard = Strip Mine
+Bot1.Hand.Count = 2
+Bot1.Battlefield.The Legend of Kyoshi.Counters.Lore = 2
+Stack.Count = 0

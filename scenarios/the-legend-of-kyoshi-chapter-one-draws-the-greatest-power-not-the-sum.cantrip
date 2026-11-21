@@ -1,0 +1,48 @@
+# The Legend of Kyoshi, chapter I: "Draw cards equal to the greatest power among creatures you control." Bot1 has Grizzly Bears (power 2) and Memnite
+# (power 1) when the Saga comes in on turn 3, so it draws two cards, not their sum (three) nor the least (one).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Grizzly Bears
+Memnite
+Black Lotus
+The Legend of Kyoshi
+Forest
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.The Legend of Kyoshi.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Battlefield.The Legend of Kyoshi.Counters.Lore = 1
