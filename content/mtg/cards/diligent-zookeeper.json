@@ -1,0 +1,8 @@
+{
+  "name": "Diligent Zookeeper",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Human Citizen Ally",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Each non-Human creature you control gets +1/+1 for each of its creature types, to a maximum of 10."
+}

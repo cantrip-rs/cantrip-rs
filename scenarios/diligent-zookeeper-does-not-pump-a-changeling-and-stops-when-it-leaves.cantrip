@@ -1,0 +1,58 @@
+# Diligent Zookeeper: a changeling is every creature type, Human among them, so Sizzling Changeling (Shapeshifter, 3/2) is not a
+# "non-Human creature" and keeps its size (CR 205.3m, 702.73a), while Llanowar Elves are 3/3 beside the Zookeeper. On turn 4 Bot2 destroys
+# the Zookeeper with Terror and the Elves are 1/1 again: the bonus lasts only while the Zookeeper is on the battlefield (CR 611.3a).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Mox Ruby
+Llanowar Elves
+Sizzling Changeling
+Diligent Zookeeper
+Island x14
+
+[Bot2 Deck]
+Mox Jet
+Terror
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sizzling Changeling.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Diligent Zookeeper.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 3
+? Bot1.Battlefield.Sizzling Changeling.Power = 3
+? Bot1.Battlefield.Sizzling Changeling.Toughness = 2
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Terror.Cast(Bot1.Battlefield.Diligent Zookeeper)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Diligent Zookeeper
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Llanowar Elves.Toughness = 1
+Bot1.Battlefield.Sizzling Changeling.Power = 3
