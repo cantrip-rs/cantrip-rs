@@ -1,0 +1,37 @@
+# Hermitic Herbalist: its second ability adds exactly two mana (CR 106.1b, 605.3), so that mana and a Mox Emerald's {G} are
+# the three an Airbending Lesson ({2}{W}) costs: the Lesson is offered with only these two sources untapped and paid for by
+# tapping both while it is cast (CR 601.2g, 605.3a): {W}{G} from the Herbalist, which only a Lesson may use, and the Mox's {G}.
+# A Waterbending Lesson ({3}{U}) needs one mana more than those two sources can make, so it is not offered (`Mana: short`).
+# Cast on turn 1 with Black Lotus ({U}{U}{U}) and the Mox Emerald.
+
+[Bot1 Deck]
+Hermitic Herbalist
+Mox Emerald
+Black Lotus
+Airbending Lesson
+Waterbending Lesson
+Island x2
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Hermitic Herbalist.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Hand.Waterbending Lesson.Cast(Mana: short)
+Bot1.Hand.Airbending Lesson.Cast(Mox Emerald)
+Bot1.Battlefield.Hermitic Herbalist.Activate(Ability: Add two mana in any combination of colors)
+Bot1.Colors(White; Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Mox Emerald

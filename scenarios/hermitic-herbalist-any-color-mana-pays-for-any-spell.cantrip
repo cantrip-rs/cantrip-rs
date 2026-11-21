@@ -1,0 +1,32 @@
+# Hermitic Herbalist: "{T}: Add one mana of any color." (CR 106.5, 605.1a). Cast on turn 1 with Mox Emerald and Mox Sapphire;
+# on turn 3 (no longer summoning sick, CR 302.6) it is tapped for {R} - the color named as the ability is activated - and
+# that unrestricted mana casts a Lightning Bolt at Bot2, a spell that is no Lesson.
+
+[Bot1 Deck]
+Hermitic Herbalist
+Mox Emerald
+Mox Sapphire
+Lightning Bolt
+Island x3
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hermitic Herbalist.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Hermitic Herbalist.Activate(Ability: Add one mana of any color; Color: Red)
+? Bot1.Mana = {R}
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17

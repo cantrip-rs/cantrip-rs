@@ -1,0 +1,40 @@
+# Hermitic Herbalist: "{T}: Add two mana in any combination of colors. Spend this mana only to cast Lesson spells" (CR
+# 106.1b, 106.6). On turn 3 it is tapped for {W}{W}, each a color of its own choosing, tagged as Lesson-only mana: a
+# Hinterland Sanctifier ({W}, a creature spell) is refused although the white mana would pay for it, and an Airbending
+# Lesson ({2}{W}) is paid with that {W}{W} and the {1} of a Mox Jet. The Lesson airbends the Mox Jet.
+
+[Bot1 Deck]
+Hermitic Herbalist
+Mox Emerald
+Mox Sapphire
+Hinterland Sanctifier
+Mox Jet
+Airbending Lesson
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hermitic Herbalist.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Hermitic Herbalist.Activate(Ability: Add two mana in any combination of colors)
+Bot1.Colors(White; White)
+? Bot1.Mana = {W}{W} (LessonSpells)
+! Bot1.Hand.Hinterland Sanctifier.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Airbending Lesson.Cast(Mox Jet)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Mox Jet
+Bot1.Hand = Hinterland Sanctifier; Island; Island; Island

@@ -1,0 +1,8 @@
+{
+  "name": "Hermitic Herbalist",
+  "manaCost": "{G}{U}",
+  "type": "Creature — Human Druid Ally",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "{T}: Add one mana of any color.\n{T}: Add two mana in any combination of colors. Spend this mana only to cast Lesson spells."
+}
