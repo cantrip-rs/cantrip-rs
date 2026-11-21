@@ -15,7 +15,7 @@ use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 
 use cantrip_ai::eval::reference::{
-    REDUCED_SWING, REDUCED_TV_MAX, REDUCED_TV_MEAN, REDUCED_TV_P99, REDUCED_VALUE, Reference, SAME_ARGMAX, TOLERANCE,
+    REDUCED_SWING, REDUCED_TV_MAX, REDUCED_TV_MEAN, REDUCED_TV_P99, Reference, SAME_ARGMAX, TOLERANCE,
     digest, parity,
 };
 use cantrip_ai::eval::{Evaluator, Manifest, Model, TractEvaluator, check};
@@ -414,7 +414,7 @@ fn model_parity() {
     // The inference server serving this model (`python -m cantrip_ai.serve --model DIR`, or the native one,
     // `cantrip-infer serve --model DIR`), when one is named. `CANTRIP_AI_SERVER_REDUCED=1`: a server below fp32 (fp16,
     // tf32), held instead to the bar the server holds itself to at startup (`reference::REDUCED_*`, `gpu::check`):
-    // value and dead-next-turn, the policy's total-variation distance (`PolicyDrift`), and the life swing relative to
+    // value and dead-next-turn by their 99th percentile and their largest (`ValueDrift`), the policy's total-variation distance (`PolicyDrift`), and the life swing relative to
     // its size. Raw logits are not held there: fp16's spacing on a logit of 10-20 is 1/128-1/64, and what search reads
     // is the probability.
     let reduced = std::env::var("CANTRIP_AI_SERVER_REDUCED").is_ok_and(|v| v == "1");
@@ -433,8 +433,7 @@ fn model_parity() {
             );
             if reduced && *name == "remote" {
                 assert!(
-                    p.value < REDUCED_VALUE
-                        && p.dead < REDUCED_VALUE
+                    p.value_within_reduced
                         && p.tv_mean < REDUCED_TV_MEAN
                         && p.tv_p99 < REDUCED_TV_P99
                         && p.tv_max < REDUCED_TV_MAX

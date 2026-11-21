@@ -92,7 +92,11 @@ SAME_ARGMAX = 0.995
 # a quarter point at 256, and a network that predicts a swing of hundreds holds it only to its relative precision; A'
 # predicts 329 on one reference and moves it by 0.7-1.2 under autocast, with no activation near fp16's range). Measured on gen0 (docs/ai-training.md): fp16 and tf32 hold to it, bf16
 # does not (its 8-bit mantissa moves logits by up to 1).
-REDUCED = dict(value=1e-2, dead=1e-2, swing=0.5, tv_mean=2e-4, tv_p99=5e-3, tv_max=5e-2, decided_flips=1)
+# The value and dead-next-turn by their 99th percentile within 1e-2 and their largest within 5e-2 (a broken graph, not
+# rounding: `eval::reference::ValueDrift`, the owner's decision 2026-11-21; the largest alone, the bar before, was set
+# by one or two references and flipped with rounding at fp16 - 0.006 to 0.020 by graph option, no best option changed).
+REDUCED = dict(value_p99=1e-2, dead_p99=1e-2, value=5e-2, dead=5e-2, swing=0.5, tv_mean=2e-4, tv_p99=5e-3, tv_max=5e-2,
+               decided_flips=1)
 TIE = 0.02  # a best option may change only where PyTorch's top two probabilities are closer than this
 SWING_RELATIVE = 50.0  # above this many points, the swing's drift is measured against 1% of it
 DEFAULT_PORT = 7710
@@ -880,6 +884,7 @@ def check(served: Served, runners: dict, log=print, precision: str = "fp32") -> 
     drift = dict(value=0.0, aux=0.0, policy=0.0)
     reduced = dict(swing=0.0, dead=0.0, probability=0.0)
     tv, decided_flips = [], 0
+    value_drifts, dead_drifts = [], []
     same = 0
     # Counted apart (the drifts' max skips a NaN), and any one fails: references with an output that is not finite, and
     # those with a legal option whose best option is none of them (`reference::parity`'s illegal_argmax).
@@ -910,6 +915,8 @@ def check(served: Served, runners: dict, log=print, precision: str = "fp32") -> 
                 got = runner.policy[j, first : first + options]
                 want = want_policy[offsets[i] : offsets[i] + options]
                 drift["value"] = max(drift["value"], float(abs(runner.value[j] - want_value[i])))
+                value_drifts.append(float(abs(runner.value[j] - want_value[i])))
+                dead_drifts.append(float(abs(runner.aux[j, 1] - want_aux[i, 1])))
                 # The swing in life points, held as below fp32 to its relative size above SWING_RELATIVE points.
                 swing_scale = max(1.0, abs(float(want_aux[i, 0])) / SWING_RELATIVE)
                 drift["aux"] = max(drift["aux"], float(abs(runner.aux[j, 0] - want_aux[i, 0])) / swing_scale,
@@ -941,6 +948,8 @@ def check(served: Served, runners: dict, log=print, precision: str = "fp32") -> 
         bar = f"tolerance {TOLERANCE}"
     else:
         tvs = np.array(tv or [0.0])
+        p99 = lambda xs: float(np.percentile(np.array([x for x in xs if np.isfinite(x)] or [0.0]), 99, method="inverted_cdf"))  # noqa: E731
+        out.update(value_p99=p99(value_drifts), dead_p99=p99(dead_drifts))
         out.update(reduced, tv_mean=float(tvs.mean()), tv_p99=float(np.percentile(tvs, 99, method="inverted_cdf")),
                    tv_max=float(tvs.max()), decided_flips=decided_flips)
         within = all(out[k] < limit for k, limit in REDUCED.items())

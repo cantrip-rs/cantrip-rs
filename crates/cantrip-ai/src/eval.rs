@@ -653,10 +653,17 @@ pub mod reference {
 
     use super::{EvalError, Evaluator, FeatureBatch, err};
 
-    /// What a precision below fp32 is held to (`serve.py`'s `REDUCED`): value and dead-next-turn within 1e-2, the policy
-    /// within `PolicyDrift::within_reduced`, the life swing within half a point (or 1% of it above `SWING_RELATIVE`
-    /// points: fp16's own spacing there is a quarter point and more); and the same best option on 99.5%.
+    /// What a precision below fp32 is held to (`serve.py`'s `REDUCED`): value and dead-next-turn by `ValueDrift` (their
+    /// 99th percentile within 1e-2, their largest within `REDUCED_VALUE_MAX`), the policy within
+    /// `PolicyDrift::within_reduced`, the life swing within half a point (or 1% of it above `SWING_RELATIVE` points:
+    /// fp16's own spacing there is a quarter point and more); and the same best option on 99.5%.
     pub const REDUCED_VALUE: f32 = 1e-2;
+    /// The largest value or dead-next-turn drift a reduced precision may show at all: a broken graph, not rounding.
+    /// (The owner's decision, 2026-11-21, as the policy's on 2026-11-13. The bar before, the largest drift over the
+    /// references held to 1e-2, was set by one or two positions and flipped with rounding: on the templates line's gen13
+    /// and gen14 at fp16 the largest drifts were 0.006-0.020 by graph option - gen13 passing `attention` at 0.0082 and
+    /// failing the more precise `attention` with tf32 inputs at 0.0129 - with no best option changed.)
+    pub const REDUCED_VALUE_MAX: f32 = 5e-2;
     pub const REDUCED_SWING: f32 = 0.5;
     /// The policy's reduced bar, over the references with two legal options or more: the total-variation distance
     /// between the evaluator's legal-option probabilities and PyTorch's, its mean, its 99th percentile (nearest rank)
@@ -735,6 +742,50 @@ pub mod reference {
                 && self.p99() < REDUCED_TV_P99
                 && self.max() < REDUCED_TV_MAX
                 && self.decided_flips == 0
+        }
+    }
+
+    /// The value's and dead-next-turn's drift from PyTorch's over the references, each held below fp32 by its 99th
+    /// percentile (to `REDUCED_VALUE`) and its largest (to `REDUCED_VALUE_MAX`). A drift that is not finite is counted
+    /// apart (`non_finite`), as `PolicyDrift` does.
+    #[derive(Clone, Debug, Default)]
+    pub struct ValueDrift {
+        value: Vec<f32>,
+        dead: Vec<f32>,
+    }
+
+    impl ValueDrift {
+        pub fn add(&mut self, value: f32, dead: f32) {
+            if value.is_finite() {
+                self.value.push(value);
+            }
+            if dead.is_finite() {
+                self.dead.push(dead);
+            }
+        }
+
+        /// The 99th percentile, nearest rank (as `PolicyDrift::p99`).
+        fn p99(xs: &[f32]) -> f32 {
+            let mut s = xs.to_vec();
+            s.sort_by(f32::total_cmp);
+            let n = s.len();
+            if n == 0 { 0.0 } else { s[((0.99 * n as f64).ceil() as usize).clamp(1, n) - 1] }
+        }
+
+        pub fn value_p99(&self) -> f32 {
+            Self::p99(&self.value)
+        }
+
+        pub fn dead_p99(&self) -> f32 {
+            Self::p99(&self.dead)
+        }
+
+        pub fn within_reduced(&self) -> bool {
+            let max = |xs: &[f32]| xs.iter().copied().fold(0.0, f32::max);
+            self.value_p99() < REDUCED_VALUE
+                && self.dead_p99() < REDUCED_VALUE
+                && max(&self.value) < REDUCED_VALUE_MAX
+                && max(&self.dead) < REDUCED_VALUE_MAX
         }
     }
 
@@ -853,6 +904,12 @@ pub mod reference {
         pub swing_reduced: f32,
         /// Dead next turn.
         pub dead: f32,
+        /// The value's and dead-next-turn's 99th percentiles (`ValueDrift`: what a reduced precision is held to, with
+        /// `value` and `dead` above, the largest, within `REDUCED_VALUE_MAX`).
+        pub value_p99: f32,
+        pub dead_p99: f32,
+        /// Within the reduced bar for the value and dead-next-turn (`ValueDrift::within_reduced`).
+        pub value_within_reduced: bool,
         /// Over the legal options' logits.
         pub policy: f32,
         /// Over the legal options' probabilities: the largest change of one (shown; the reduced bar is `tv_*`).
@@ -886,6 +943,7 @@ pub mod reference {
         let start = std::time::Instant::now();
         let mut same = 0;
         let mut drift = PolicyDrift::default();
+        let mut values = ValueDrift::default();
         for bucket in cantrip_obs::encode::BUCKETS {
             let rows: Vec<usize> = (0..r.positions.len())
                 .filter(|&i| r.positions[i].bucket == bucket)
@@ -902,6 +960,7 @@ pub mod reference {
                     p.aux = p.aux.max(swing_reduced).max(dead);
                     p.swing_reduced = p.swing_reduced.max(swing_reduced);
                     p.dead = p.dead.max(dead);
+                    values.add((out.value[j] - r.value[i]).abs(), dead);
                     let legal: Vec<usize> = (0..e.options)
                         .filter(|&k| e.legal[e.first_option + k])
                         .collect();
@@ -938,8 +997,36 @@ pub mod reference {
         }
         p.seconds = start.elapsed().as_secs_f64();
         p.same_argmax = same as f64 / p.positions.max(1) as f64;
+        (p.value_p99, p.dead_p99, p.value_within_reduced) =
+            (values.value_p99(), values.dead_p99(), values.within_reduced());
         (p.tv_mean, p.tv_p99, p.tv_max, p.decided_flips) =
             (drift.mean(), drift.p99(), drift.max(), drift.decided_flips);
         Ok(p)
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        /// One outlying reference no longer decides the bar (the 99th percentile, nearest rank, passes over it), two in
+        /// a hundred do, a drift past `REDUCED_VALUE_MAX` fails however rare, and a drift that is not finite is left to
+        /// `non_finite`.
+        #[test]
+        fn the_value_bar_is_a_percentile_under_a_ceiling() {
+            let drift = |outliers: &[f32]| {
+                let mut d = ValueDrift::default();
+                for k in 0..100 {
+                    let v = outliers.get(k).copied().unwrap_or(0.001);
+                    d.add(v, 0.001);
+                }
+                d
+            };
+            assert!(drift(&[]).within_reduced());
+            assert!(drift(&[0.02]).within_reduced(), "one reference in a hundred at 0.02");
+            assert!(!drift(&[0.02, 0.02]).within_reduced(), "two in a hundred");
+            assert!(!drift(&[0.06]).within_reduced(), "past the ceiling");
+            assert!(drift(&[f32::NAN]).within_reduced(), "a NaN is counted apart");
+            assert_eq!(drift(&[0.02, 0.02]).value_p99(), 0.02);
+        }
     }
 }

@@ -2295,8 +2295,8 @@ impl Evaluator for GpuEvaluator {
 // --- Checking the references ---------------------------------------------------------------------------------------
 
 pub use crate::eval::reference::{
-    PolicyDrift, REDUCED_SWING, REDUCED_TV_MAX, REDUCED_TV_MEAN, REDUCED_TV_P99, REDUCED_VALUE, SAME_ARGMAX,
-    SWING_RELATIVE, TIE, TOLERANCE, softmax,
+    PolicyDrift, REDUCED_SWING, REDUCED_TV_MAX, REDUCED_TV_MEAN, REDUCED_TV_P99, REDUCED_VALUE, REDUCED_VALUE_MAX,
+    SAME_ARGMAX, SWING_RELATIVE, TIE, TOLERANCE, ValueDrift, softmax,
 };
 
 #[derive(Clone, Debug, Default)]
@@ -2308,6 +2308,10 @@ pub struct Check {
     /// what `TOLERANCE` and `REDUCED_SWING` hold.
     pub swing_reduced: f32,
     pub dead: f32,
+    /// The value's and dead-next-turn's 99th percentiles (`ValueDrift`): below fp32 they are held to `REDUCED_VALUE`,
+    /// and `value` and `dead` above, the largest, to `REDUCED_VALUE_MAX`.
+    pub value_p99: f32,
+    pub dead_p99: f32,
     /// Over the legal options' logits.
     pub logits: f32,
     /// Over the legal options' probabilities: the largest change of one (shown; the reduced bar is `tv_*`).
@@ -2356,6 +2360,7 @@ pub fn score(r: &reference::Reference, out: &Outputs, precision: Precision) -> C
     };
     let mut same = 0usize;
     let mut drift = PolicyDrift::default();
+    let mut values = ValueDrift::default();
     for (i, p) in r.positions.iter().enumerate() {
         let legal: Vec<usize> = (0..p.options).filter(|&k| p.legal[p.first_option + k]).collect();
         let finite = out.value[i].is_finite()
@@ -2370,6 +2375,7 @@ pub fn score(r: &reference::Reference, out: &Outputs, precision: Precision) -> C
         c.swing = c.swing.max(d);
         c.swing_reduced = c.swing_reduced.max(d / (r.aux[i][0].abs() / SWING_RELATIVE).max(1.0));
         c.dead = c.dead.max((out.aux[i][1] - r.aux[i][1]).abs());
+        values.add((out.value[i] - r.value[i]).abs(), (out.aux[i][1] - r.aux[i][1]).abs());
         if legal.is_empty() {
             same += 1;
             continue;
@@ -2388,14 +2394,14 @@ pub fn score(r: &reference::Reference, out: &Outputs, precision: Precision) -> C
     }
     c.same_argmax = same as f64 / c.positions.max(1) as f64;
     (c.tv_mean, c.tv_p99, c.tv_max, c.decided_flips) = (drift.mean(), drift.p99(), drift.max(), drift.decided_flips);
+    (c.value_p99, c.dead_p99) = (values.value_p99(), values.dead_p99());
     c.pass = c.non_finite == 0
         && c.illegal_argmax == 0
         && c.same_argmax >= SAME_ARGMAX
         && if precision == Precision::Fp32 {
             c.value < TOLERANCE && c.swing_reduced < TOLERANCE && c.dead < TOLERANCE && c.logits < TOLERANCE
         } else {
-            c.value < REDUCED_VALUE
-                && c.dead < REDUCED_VALUE
+            values.within_reduced()
                 && drift.within_reduced()
                 && c.swing_reduced < REDUCED_SWING
         };
