@@ -1,0 +1,36 @@
+# Guru Pathik, cast on turn 1 with Black Lotus ({U}{U}{U}) and Mox Emerald, looks at the top five cards of the library: an Island, a
+# Northern Air Temple (a Shrine), a Firebending Lesson, a Kumano Faces Kakkazan (a Saga) and an Island. Only the Lesson, Saga and
+# Shrine may be revealed and taken, one of them: the Island is refused and so are two cards. Bot1 takes the Lesson and the other four
+# go to the bottom of the library (13 cards before, 12 after).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Guru Pathik
+Island x4
+Island
+Northern Air Temple
+Firebending Lesson
+Kumano Faces Kakkazan
+Island
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+? Bot1.Library.Count = 13
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Guru Pathik.Cast
+Bot1.Pass
+! Bot1.Arrange(Firebending Lesson; Northern Air Temple | Island; Island; Kumano Faces Kakkazan)
+Bot1.Arrange(Firebending Lesson | Island; Island; Northern Air Temple; Kumano Faces Kakkazan)
+? Bot1.Revealed = Firebending Lesson
+
+[Expect]
+Bot1.Library.Count = 12
+Bot1.Hand.Firebending Lesson.Colors = Red
+Bot1.Hand.Count = 5

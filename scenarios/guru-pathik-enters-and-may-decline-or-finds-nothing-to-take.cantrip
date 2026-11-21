@@ -1,0 +1,28 @@
+# Guru Pathik's reveal is optional ("you may"): with a Shrine (Northern Air Temple) among the top five Bot1 takes none, so all five
+# go to the bottom and the hand is the 4 cards left after casting three.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Guru Pathik
+Island x4
+Island
+Northern Air Temple
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Guru Pathik.Cast
+Bot1.Pass
+Bot1.Arrange( | Island; Island; Island; Island; Northern Air Temple)
+? Bot1.Library.Count = 13
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Hand.Northern Air Temple = (absent)

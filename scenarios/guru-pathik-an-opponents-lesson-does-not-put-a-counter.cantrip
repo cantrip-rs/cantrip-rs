@@ -1,0 +1,36 @@
+# Guru Pathik's trigger is for spells its controller casts: Bot2 casting Firebending Lesson (a Lesson) on turn 2, on Guru Pathik, puts
+# no counter on Bot1's Ornithopter (still 0/2) and Guru Pathik survives the 2 damage.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Guru Pathik
+Ornithopter
+Island x3
+Island x13
+
+[Bot2 Deck]
+Mountain
+Firebending Lesson
+Island x18
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Guru Pathik.Cast
+Bot1.Pass
+Bot1.Arrange( | Island; Island; Island; Island; Island)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Firebending Lesson.Cast(Guru Pathik)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Guru Pathik.Damage = 2
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2

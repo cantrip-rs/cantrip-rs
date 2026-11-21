@@ -1,0 +1,35 @@
+# Guru Pathik looks at the top five cards only: a Shrine (Northern Air Temple) and a Saga (Kumano Faces Kakkazan) among them, a Firebending
+# Lesson the sixth card, which is not looked at. At most one may be taken, so taking both is refused. Bot1 takes the Saga; the Shrine and the
+# others go to the bottom, and the Lesson stays in the library.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Guru Pathik
+Island x4
+Island
+Northern Air Temple
+Island
+Kumano Faces Kakkazan
+Island
+Firebending Lesson
+Island x7
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Guru Pathik.Cast
+Bot1.Pass
+! Bot1.Arrange(Northern Air Temple; Kumano Faces Kakkazan | Island; Island; Island)
+Bot1.Arrange(Kumano Faces Kakkazan | Island; Island; Island; Northern Air Temple)
+? Bot1.Hand.Kumano Faces Kakkazan.Colors = Red
+? Bot1.Library.Count = 12
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Hand.Northern Air Temple = (absent)

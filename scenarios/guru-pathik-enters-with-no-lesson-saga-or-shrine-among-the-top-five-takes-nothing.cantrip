@@ -1,0 +1,27 @@
+# Guru Pathik with a Firebending Lesson sixth in the library and only Islands above it: nothing among the five looked at qualifies, so the
+# hand destination takes none (min and max 0, the Lesson is not looked at) and all five go to the bottom.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Guru Pathik
+Island x4
+Island x5
+Firebending Lesson
+Island x7
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Guru Pathik.Cast
+Bot1.Pass
+Bot1.Arrange( | Island; Island; Island; Island; Island)
+? Bot1.Hand.Count = 4
+
+[Expect]
+Bot1.Library.Count = 13

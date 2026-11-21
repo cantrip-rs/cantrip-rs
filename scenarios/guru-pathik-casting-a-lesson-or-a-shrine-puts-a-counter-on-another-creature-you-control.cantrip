@@ -1,0 +1,52 @@
+# With Guru Pathik and an Ornithopter (0/2) in play, Bot1 casts Firebending Lesson (a Lesson, on Guru Pathik, 2 damage to a 2/4) and
+# Northern Air Temple (a Shrine) on turn 1. Each cast puts a +1/+1 counter on another creature Bot1 controls (the only legal target is
+# the Ornithopter, never Guru Pathik itself, so it is chosen without a prompt): the Ornithopter ends 2/4 and Guru Pathik stays 2/4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+Guru Pathik
+Ornithopter
+Firebending Lesson
+Northern Air Temple
+Island x4
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Guru Pathik.Cast
+Bot1.Pass
+Bot1.Arrange(Northern Air Temple | Island; Island; Island; Island)
+Bot1.Hand.Firebending Lesson.Cast(Guru Pathik)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Guru Pathik.Damage = 2
+Bot1.Hand.Northern Air Temple.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Guru Pathik.Power = 2
+Bot2.Life = 19
+Bot1.Life = 21
