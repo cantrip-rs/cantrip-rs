@@ -14,12 +14,13 @@ fn noncreature_spell_an_opponent_controls(q: &dyn Query, asker: &Asker, t: Targe
 /// choice (CR 608.2d, 608.2g, 118.9). The free cast uses an alternate cost, X is zero, and additional costs remain owed.
 fn bluff(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(spell) = targets::object(g, item, 0) else { return Ok(()) };
+    let you = item.controller;
     let player = g.controller(spell);
     if effects::ask_may(g, player, spell, Purpose::Exile)? {
         g.remove_spell(spell, CounterTo::Exile);
     } else {
-        choose::may_cast_from_hand_free(g, item.controller, item.object, "noncreature spell", |g, way| {
-            !g.card(way.face).types.has(CardType::Creature)
+        choose::may_cast_from_hand_free(g, item.controller, item.object, "noncreature spell", |g, card, way| {
+            !g.chars_as_cast(card, way.way, you).is(CardType::Creature)
         })?;
     }
     Ok(())

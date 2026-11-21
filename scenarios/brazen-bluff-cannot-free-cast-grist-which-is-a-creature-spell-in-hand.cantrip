@@ -1,0 +1,47 @@
+# Brazen Bluff: declining the exile lets its controller cast "a noncreature spell from your hand" for free. Grist, the Hunger Tide is a
+# planeswalker card, but while it is not on the battlefield it is a 1/1 Insect creature in addition (every zone), so as a spell it is a creature
+# spell (CR 601.3e): the spell it would be is judged, not its printed type line, so only Shock is offered and Grist stays in hand.
+
+[Bot1 Deck]
+Brazen Bluff
+Mox Ruby
+Gleemox
+Shock
+Grist, the Hunger Tide
+Mountain x20
+
+[Bot2 Deck]
+Black Lotus
+Shock
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Brazen Bluff.Cast(Shock)
+Bot1.Pass
+Bot2.Pass
+Bot2.Decline
+! Bot1.Choose(Grist, the Hunger Tide)
+Bot1.Choose(Shock)
+Bot1.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 18
+Exile.Count = 0
+Bot2.Graveyard = Shock; Black Lotus
+Bot1.Graveyard = Shock; Brazen Bluff
+Bot1.Hand.Grist, the Hunger Tide.Power = 1
