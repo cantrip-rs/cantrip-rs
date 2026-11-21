@@ -187,7 +187,11 @@ class GenerationTest(unittest.TestCase):
                 (root / "champions").mkdir(exist_ok=True)
                 generation.history(root, dict(generation=n, accepted=ok))
             self.assertEqual([generation.promotions(root, n) for n in (1, 2, 3, 4)], [1, 1, 2, 3])
-            duel = generation.parse_gate(PAIRED_GATE)
+            # A labelled variant of a generation (a real history holds "5-mined", "6-v4") is that generation.
+            for g in ("5-mined", "5", "6-v4"):
+                generation.history(root, dict(generation=g, accepted=True))
+            self.assertEqual([generation.promotions(root, n) for n in (4, 5, 6)], [3, 4, 5])
+            duel =generation.parse_gate(PAIRED_GATE)
             generation.ladder_record(root, [dict(duel, generation=2, champion="gen2", anchor="gen0", budget="@64")])
             generation.ladder_record(root, [dict(duel, generation=4, champion="gen3", anchor="tactical", budget="@250ms")])
             rows = generation.ladder_rows(root)

@@ -407,7 +407,13 @@ def promotions(root: Path, gen: int) -> int:
     one generation)."""
     path = root / "champions" / "history.json"
     rows = json.loads(path.read_text(encoding="utf-8")) if path.exists() else []
-    return len({r.get("generation") for r in rows if r.get("accepted") and (r.get("generation") or 0) <= gen})
+
+    def number(g) -> int | None:
+        # A history row's generation is a number, or a labelled variant of one ("5-mined", "6-v4"): that generation.
+        m = re.match(r"\d+", str(g)) if g is not None else None
+        return int(m.group()) if m else None
+
+    return len({n for r in rows if r.get("accepted") and (n := number(r.get("generation"))) is not None and n <= gen})
 
 
 def seat_name(mode: str, budget) -> str:
