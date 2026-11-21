@@ -13,7 +13,7 @@ fn attacks(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
 }
 
 fn firebend<const N: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.add_mana_until_end_of_combat(item.controller, Mana::R, u32::from(N));
+    add_x(g, item.controller, i64::from(N));
     Ok(())
 }
 
@@ -29,11 +29,13 @@ pub const fn trigger_x(firebend_x: Effect, text: &'static str) -> AbilityDef {
     triggered(when(EventMask::ATTACKS, attacks), firebend_x, text).produces_mana()
 }
 
-/// Adds X {R} until end of combat for `you`: nothing for an X of 0 or less.
+/// A firebending ability resolves (CR 702.189a-b): `you` add X {R} until end of combat, nothing for an X of 0 or less, and have
+/// firebent either way.
 pub fn add_x(g: &mut dyn Game, you: PlayerId, x: i64) {
     if x > 0 {
         g.add_mana_until_end_of_combat(you, Mana::R, x as u32);
     }
+    g.bent(you, Bending::Fire);
 }
 
 /// "Firebending X, where X is this creature's power": X is the creature's power as the ability resolves (CR 608.2h), as it last

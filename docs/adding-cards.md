@@ -109,6 +109,12 @@ abilities: &[
   "Whenever you discover" listens to `EventMask::DISCOVERED` (`discover::YOU_DISCOVER`): `cantrip_mechanics::discover::discover` records
   `Event::Discovered { player, n }` once the process is complete (CR 701.57a), the library running out first included (CR
   701.57b), so every discover goes through it; the trigger's `data[0]` is the discover value.
+  "Whenever you waterbend, earthbend, firebend, or airbend" listens to `EventMask::BENT` and reads `Event::Bent { player, bending }`
+  (`Bending::Water`/`Earth`/`Fire`/`Air`), so "if you've done all four this turn" is a history query on the same event. Each is
+  recorded where the rules say it is done: a waterbend cost's payment however it was paid, including an X of 0 (CR 701.67c,
+  `actions::pay_scheduled_costs`); an earthbend as its delayed trigger is created, even if the counters were impossible (CR
+  701.66b, `earthbend::earthbend_target`); an airbend only if it exiled something (CR 701.65b, `airbend_all`); a firebending ability as it
+  resolves (CR 702.189b, `firebending::add_x`). A new bending helper records through `Game::bent`.
   "Whenever ... activate(s) an ability" listens to `EventMask::ABILITY_ACTIVATED` and reads the event with
   `triggers::activation` (the object, the activating player, the `ActivatedDef`: `is_loyalty_ability()`,
   `is_mana_ability()`, `from`); only abilities that use the stack are activations a trigger sees - a mana ability's is

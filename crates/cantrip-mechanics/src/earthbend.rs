@@ -46,6 +46,8 @@ pub fn earthbend_target(g: &mut dyn Game, item: &StackItem, slot: usize, n: i32)
     })?;
     g.add_counters(land, CounterKind::PlusOne, n);
     g.delayed_trigger(DelayedWhen::WhenEvent, item.object, item.controller, AbilityRef::delayed(item.ability.card, 0), Target::Object(land));
+    // The player has earthbent as the delayed triggered ability is created (CR 701.66b), even if putting the counters was impossible.
+    g.bent(item.controller, Bending::Earth);
     Ok(())
 }
 

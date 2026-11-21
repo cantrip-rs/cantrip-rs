@@ -3742,6 +3742,10 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
     for _ in 0..collected {
         cx.emit(Event::CollectedEvidence { player, by: spell });
     }
+    // Each waterbend cost paid is a waterbend (CR 701.67c), however it was paid, tapping nothing included.
+    for _ in 0..helpers.waterbends {
+        cx.emit(Event::Bent { player, bending: Bending::Water });
+    }
     Ok((members, exiled, way_attacking, spent, restrictions, taken, variable_paid, beheld_type, mana_adds_nothing))
 }
 
@@ -11683,9 +11687,11 @@ fn cast(
     if let Some(a) = &assisted {
         owed.generic -= a.generic;
     }
+    let waterbends = u32::from(extra.waterbend.generic > 0 || extra.waterbend.x > 0) + if def.kicker.is_some_and(|k| k.waterbend) { u32::from(item.kicked) } else { 0 };
     let mut helpers = Helpers {
         with,
         waterbend,
+        waterbends,
         creatures: false,
         no_mana,
         purpose: Paying::Casting,
@@ -13655,6 +13661,7 @@ fn activate(
     let mut helpers = Helpers {
         // An alternative cost is paid rather than the waterbend cost (CR 118.9, 701.67a).
         waterbend: if def.waterbend && paid_by.is_none() { def.cost.mana.generic + u32::from(item.x) * u32::from(def.cost.mana.x) } else { 0 },
+        waterbends: u32::from(def.waterbend && paid_by.is_none()),
         creatures: def.tap_creatures_for_mana,
         purpose: Paying::Activating(paying),
         ..Helpers::NONE
@@ -15707,6 +15714,9 @@ pub(crate) struct Helpers<'a> {
     pub with: PayWith,
     /// Waterbend (CR 701.67a-b): how many of the generic mana an untapped artifact or creature tapped may pay {1} of.
     pub waterbend: u32,
+    /// How many waterbend costs the payment pays, whatever they come to (a waterbend {X} announced as 0 is still one): each is a
+    /// waterbend, recorded as the whole payment is made (CR 701.67c).
+    pub waterbends: u32,
     /// An untapped creature tapped pays {1} of the generic mana (Heirloom Epic).
     pub creatures: bool,
     pub no_mana: bool,
@@ -15746,7 +15756,7 @@ impl Helpers<'_> {
 
 impl Helpers<'static> {
     pub const NONE: Helpers<'static> =
-        Helpers { with: PayWith::NONE, waterbend: 0, creatures: false, no_mana: false, purpose: Paying::Other, attackers: &[], blockers: &[], life: 0, any: AnyMana::No, abilities_closed: false, assist: AssistStep::None, mana_ability: false, exiled_with_source: &[] };
+        Helpers { with: PayWith::NONE, waterbend: 0, waterbends: 0, creatures: false, no_mana: false, purpose: Paying::Other, attackers: &[], blockers: &[], life: 0, any: AnyMana::No, abilities_closed: false, assist: AssistStep::None, mana_ability: false, exiled_with_source: &[] };
 }
 
 /// What a mana payment is for, as far as restricted mana is concerned (CR 106.6): see `payment_for`.
@@ -16754,7 +16764,7 @@ fn pay_announced(cx: &mut Cx, payer: PlayerId, source: ObjectId, with: &[ObjectI
 fn pay_resolution_cost(cx: &mut Cx, payer: PlayerId, source: ObjectId, with: &[ObjectId], cost: &Cost, total: ManaCost, life: u32, x: u32, purpose: Paying) -> R<u32> {
     // The payer has already had the 605.3a mana-ability window in UnlessPays. All remaining operations, including
     // individual mana units, may be paid in any order; a failed payment is reversed by the enclosing payment journal.
-    let helpers = Helpers { waterbend: cost.waterbend.generic, abilities_closed: true, purpose, exiled_with_source: with, ..Helpers::NONE };
+    let helpers = Helpers { waterbend: cost.waterbend.generic, waterbends: u32::from(cost.waterbend.generic > 0 || cost.waterbend.x > 0), abilities_closed: true, purpose, exiled_with_source: with, ..Helpers::NONE };
     let extra_life = life - cost.life.min(life);
     let payment = cx.g.log.len() as u32;
     let resolving = if cx.g.mana_interval.is_none() {

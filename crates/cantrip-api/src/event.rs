@@ -517,6 +517,11 @@ pub enum Event {
     /// or none when the library ran out first (CR 701.57b: it has still been discovered). `n` is the discover value (Curator of Sun's
     /// Creation's "for the same value").
     Discovered { player: PlayerId, n: u32 },
+    /// `player` bent (CR 701.67c, 701.65b, 701.66b, 702.189b): paid a waterbend cost, however it was paid; exiled one or more
+    /// objects as an airbend; earthbent, once the earthbend's actions are done even if some were impossible; or had a
+    /// firebending ability resolve. Recorded as each is done, for "whenever you waterbend, earthbend, firebend, or airbend" and
+    /// for "if you've done all four this turn", which reads the turn's history.
+    Bent { player: PlayerId, bending: Bending },
     /// `player` foraged (CR 701.61a): paid a cost that is a way to forage (`Cost::forage`), as a cost of a spell or an
     /// ability or as a resolving one asks (CR 118.12), by `by`, the spell or ability's source. Recorded once the whole
     /// payment is made, for "whenever you forage".
@@ -566,6 +571,15 @@ pub enum Event {
     /// or an effect reselected what it attacks. Recorded only, never an attack trigger. Retains its defender after
     /// removal from combat, without making "whenever this creature attacks" see an undeclared attack.
     AttackAssigned { attacker: ObjectId, defender: Target, defending: PlayerId },
+}
+
+/// The four kinds of bending (CR 701.65-701.67, 702.189), each a way a player may bend: what a `Bent` event records.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Bending {
+    Water,
+    Earth,
+    Fire,
+    Air,
 }
 
 /// What an explore revealed (CR 701.44a): the top card of the library as it was revealed, a land card or a nonland card, or no
@@ -658,6 +672,7 @@ impl Event {
             | Event::ManifestedDread { player, .. }
             | Event::Explored { player, .. }
             | Event::Discovered { player, .. }
+            | Event::Bent { player, .. }
             | Event::Foraged { player, .. }
             | Event::CollectedEvidence { player, .. }
             | Event::SpeedChanged { player, .. }
@@ -743,7 +758,7 @@ impl Event {
             Event::Convoked { creature, spell } | Event::TappedForTeamwork { creature, spell } => creature == object || spell == object,
             Event::Crewed { creature, vehicle } => creature == object || vehicle == object,
             Event::Saddled { creature, mount } => creature == object || mount == object,
-            Event::LifeChange { .. } | Event::Searched { .. } | Event::AttackersDeclared { .. } | Event::StepBegan { .. } | Event::BecameMonarch { .. } | Event::TookInitiative { .. } | Event::GaveGift { .. } | Event::ChosenAtRandom { .. } | Event::CoinFlipped { .. } | Event::DieRolled { .. } | Event::TurnEnded { .. } | Event::TurnBegan { .. } | Event::DungeonCompleted { .. } | Event::Scried { .. } | Event::Surveilled { .. } | Event::Discovered { .. } | Event::Foraged { .. } | Event::CollectedEvidence { .. } | Event::SpeedChanged { .. } | Event::GameLost { .. } | Event::GameDrawn { .. } | Event::Shuffled { .. } | Event::PlayerControlled { .. } => false,
+            Event::LifeChange { .. } | Event::Searched { .. } | Event::AttackersDeclared { .. } | Event::StepBegan { .. } | Event::BecameMonarch { .. } | Event::TookInitiative { .. } | Event::GaveGift { .. } | Event::ChosenAtRandom { .. } | Event::CoinFlipped { .. } | Event::DieRolled { .. } | Event::TurnEnded { .. } | Event::TurnBegan { .. } | Event::DungeonCompleted { .. } | Event::Scried { .. } | Event::Surveilled { .. } | Event::Discovered { .. } | Event::Bent { .. } | Event::Foraged { .. } | Event::CollectedEvidence { .. } | Event::SpeedChanged { .. } | Event::GameLost { .. } | Event::GameDrawn { .. } | Event::Shuffled { .. } | Event::PlayerControlled { .. } => false,
         }
     }
 }
@@ -862,6 +877,8 @@ impl EventMask {
     pub const EXPLORED: EventMask = EventMask(1 << 74);
     /// A player discovered (CR 701.57a).
     pub const DISCOVERED: EventMask = EventMask(1 << 75);
+    /// A player waterbent, earthbent, firebent or airbent (CR 701.65b, 701.66b, 701.67c, 702.189b).
+    pub const BENT: EventMask = EventMask(1 << 76);
     /// A player collected evidence (CR 701.59a).
     pub const COLLECTED_EVIDENCE: EventMask = EventMask(1 << 71);
     /// A card became plotted (CR 702.170a).
@@ -981,6 +998,7 @@ impl EventMask {
             Event::ManifestedDread { .. } => EventMask::MANIFESTED_DREAD,
             Event::Explored { .. } => EventMask::EXPLORED,
             Event::Discovered { .. } => EventMask::DISCOVERED,
+            Event::Bent { .. } => EventMask::BENT,
             Event::Foraged { .. } => EventMask::FORAGED,
             Event::CollectedEvidence { .. } => EventMask::COLLECTED_EVIDENCE,
             Event::DamagePrevented { .. } => EventMask::DAMAGE_PREVENTED,

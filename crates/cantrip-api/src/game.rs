@@ -9,7 +9,7 @@ use crate::card::{AbilityDef, ActivatedDef, Asker, CardDef, CauseKind, PlayerCou
 use crate::chars::Chars;
 use crate::history::{History, Record};
 use crate::{DamageResult, LeftBattlefield, MillResult, Together};
-use crate::{Event, ExploreReveal};
+use crate::{Bending, Event, ExploreReveal};
 
 /// A die roll (CR 706.2): the face the die showed, and the result once the roll was modified (CR 706.4).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -1621,6 +1621,9 @@ pub trait Game: Query {
     /// Records that `player` discovered `n` (CR 701.57a): `cantrip_mechanics::discover` calls it once the process is complete, even
     /// when the library ran out first (CR 701.57b).
     fn discovered(&mut self, player: PlayerId, n: u32);
+    /// Records that `player` bent (CR 701.65b, 701.66b, 702.189b): the earthbend, airbend or firebending in `cantrip_mechanics`
+    /// calls it as the action is done. (A waterbend cost's payment records its own, CR 701.67c.)
+    fn bent(&mut self, player: PlayerId, bending: Bending);
     /// `player` gave a gift to `to` (CR 702.174c): the gift triggered ability of a permanent they control resolved. (A
     /// spell's gift is announced by the core as the spell resolves.)
     fn gave_gift(&mut self, player: PlayerId, to: PlayerId, gift: Gift);

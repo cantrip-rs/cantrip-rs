@@ -22,7 +22,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         .copied()
         .filter(|&id| Some(id) != spared && g.chars(id).is(CardType::Creature))
         .collect();
-    airbend_all(g, &others);
+    airbend_all(g, item.controller, &others);
     g.end_sentence();
     let opponents: Vec<PlayerId> = g.state().opponents(item.controller).collect();
     instruction(g, |g| {

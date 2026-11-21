@@ -920,7 +920,7 @@ pub const ENTERS_EXILE_UP_TO_ONE_NONLAND_PERMANENT_AN_OPPONENT_CONTROLS_UNTIL_LE
 pub fn airbend(g: &mut dyn Game, item: &StackItem) {
     let targets: Vec<ObjectId> =
         (0..item.target_count as usize).filter(|&slot| g.target_legal(item, slot)).filter_map(|slot| g.state().target(item, slot).object()).collect();
-    airbend_all(g, &targets);
+    airbend_all(g, item.controller, &targets);
 }
 
 /// The resolution of "airbend [target(s)]" as an ability's or spell's effect (`airbend`): Aang, Swift Savior, Airbender Ascension,
@@ -930,16 +930,21 @@ pub fn airbend_targets(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
     Ok(())
 }
 
-/// Airbend (CR 701.65a) these objects, targeted or not: they are exiled together, and each card exiled this way may be cast
+/// `player` airbends (CR 701.65a) these objects, targeted or not: they are exiled together, and each card exiled this way may be cast
 /// by its owner for {2} rather than its mana cost for as long as it stays exiled. A token or a copy is exiled and gone: only
 /// a card can be cast again. Avatar's Wrath ("airbend all other creatures") and Monk Gyatso ("you may airbend that
 /// creature") airbend what they name without targeting it; `airbend` is the targeted form.
-pub fn airbend_all(g: &mut dyn Game, objects: &[ObjectId]) {
-    for exiled in g.exile_all(objects) {
-        let obj = *g.obj(exiled);
+pub fn airbend_all(g: &mut dyn Game, player: PlayerId, objects: &[ObjectId]) {
+    let exiled = g.exile_all(objects);
+    for &object in &exiled {
+        let obj = *g.obj(object);
         if obj.zone.is(ZoneKind::Exile) && !obj.token && !obj.card_copy {
-            g.allow_play(exiled, obj.owner, PlayGrant { instead: Some(mana("{2}")), ..PlayGrant::CAST });
+            g.allow_play(object, obj.owner, PlayGrant { instead: Some(mana("{2}")), ..PlayGrant::CAST });
         }
+    }
+    // The player has airbent when they exile one or more objects as the instruction (CR 701.65b).
+    if !exiled.is_empty() {
+        g.bent(player, Bending::Air);
     }
 }
 

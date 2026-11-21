@@ -291,6 +291,8 @@ mod cycled_tests;
 #[cfg(test)]
 mod control_look_back_tests;
 #[cfg(test)]
+mod bent_event_tests;
+#[cfg(test)]
 mod discover_event_tests;
 #[cfg(test)]
 mod explore_event_tests;
@@ -3172,6 +3174,10 @@ impl cantrip_api::Game for Cx<'_> {
 
     fn discovered(&mut self, player: PlayerId, n: u32) {
         self.emit(Event::Discovered { player, n });
+    }
+
+    fn bent(&mut self, player: PlayerId, bending: Bending) {
+        self.emit(Event::Bent { player, bending });
     }
 
     fn attach(&mut self, attachment: ObjectId, host: ObjectId) -> bool {
