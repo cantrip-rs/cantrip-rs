@@ -1,0 +1,38 @@
+# Dai Li Agents with no land to target: the enters trigger has no target and does nothing (CR 603.3d), and attacking with no creature of Bot1's
+# carrying a +1/+1 counter makes X = 0, so neither life total changes (CR 119.3).
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Dai Li Agents
+Memnite
+Forest x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Dai Li Agents.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Dai Li Agents)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20

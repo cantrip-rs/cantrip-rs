@@ -1,0 +1,52 @@
+# Dai Li Agents: "X is the number of creatures you control with +1/+1 counters on them". Ozolith, the Shattered Spire is an artifact, not a
+# creature, and puts two +1/+1 counters on itself (its own replacement effect), so it is not counted: attacking leaves both life totals alone.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Dai Li Agents
+Ozolith, the Shattered Spire
+Mox Ruby
+Forest
+Forest x19
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Dai Li Agents.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Ozolith, the Shattered Spire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ozolith, the Shattered Spire.Activate(Bot1.Battlefield.Ozolith, the Shattered Spire)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ozolith, the Shattered Spire.Counters.PlusOnePlusOne = 2
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Dai Li Agents)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
