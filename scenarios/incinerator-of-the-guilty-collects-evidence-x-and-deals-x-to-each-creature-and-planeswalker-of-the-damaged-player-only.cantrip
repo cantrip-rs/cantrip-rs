@@ -1,0 +1,92 @@
+# Incinerator of the Guilty: "Whenever this creature deals combat damage to a player, you may collect evidence X. When you do,
+# this creature deals X damage to each creature and planeswalker that player controls." X is chosen as the ability resolves
+# (CR 107.3f), and the cards exiled from your graveyard must have total mana value X or greater (CR 701.59a).
+# Turn 1: Black Lotus, Mox Ruby, Mox Pearl and a Mountain make {R}{R}{R}{R}{R}{W} for the Dragon. Turn 2: Bot2 casts Ajani
+# Resolute (loyalty 2), Savannah Lions (2/1) and a Lightning Bolt at Bot1, so its graveyard holds a Bolt too. Turn 3: Bot1 casts
+# its own Ajani and bolts Bot2, so its graveyard holds Black Lotus (0) and Lightning Bolt (1): X = 2 is refused (Bot2's Bolt is not
+# its evidence), X = 1 exiles the Bolt. Each of Bot2's creatures and planeswalkers takes exactly 1: the Lions die and its Ajani
+# is left at loyalty 1, while Bot1's own Ajani and Incinerator are not touched. Bot2 took 6 and the Bolt.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mountain
+Incinerator of the Guilty
+Ajani Resolute
+Lightning Bolt
+Mountain x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Plains
+Ajani Resolute
+Savannah Lions
+Lightning Bolt
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Incinerator of the Guilty.Cast
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Ajani Resolute.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ajani Resolute.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Incinerator of the Guilty > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+! Bot1.PayCost(X: 2)
+Bot1.PayCost(X: 1)
+Bot1.Choose(Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 11
+Bot1.Life = 17
+Bot2.Battlefield = Mox Pearl; Mox Ruby; Mox Jet; Plains; Ajani Resolute
+Bot2.Battlefield.Ajani Resolute.Counters.Loyalty = 1
+Bot2.Graveyard = Savannah Lions; Lightning Bolt
+Bot1.Battlefield.Ajani Resolute.Counters.Loyalty = 2
+Bot1.Battlefield.Incinerator of the Guilty.Damage = 0
+Bot1.Graveyard = Black Lotus

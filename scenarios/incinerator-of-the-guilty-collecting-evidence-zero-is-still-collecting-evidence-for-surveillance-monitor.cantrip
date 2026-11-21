@@ -1,0 +1,59 @@
+# Incinerator of the Guilty: collecting evidence 0 is still collecting evidence (CR 701.59a; the card's ruling: "abilities that
+# trigger 'whenever you collect evidence' will trigger"), so Bot1's Surveillance Monitor makes a Thopter though nothing is exiled.
+# The same game as the X = 1 one: Bot1's graveyard holds Black Lotus and Lightning Bolt, and both stay.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mountain
+Incinerator of the Guilty
+Lightning Bolt
+Surveillance Monitor
+Mountain x20
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Incinerator of the Guilty.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Surveillance Monitor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Incinerator of the Guilty > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot1.PayCost(X: 0)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 11
+Bot1.Battlefield = Incinerator of the Guilty; Mountain; Mox Jet; Mox Ruby; Mox Sapphire; Surveillance Monitor; Thopter Token
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Exile.Count = 0

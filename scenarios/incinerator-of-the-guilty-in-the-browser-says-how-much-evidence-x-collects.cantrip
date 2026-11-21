@@ -1,0 +1,47 @@
+# Browser
+# Incinerator of the Guilty at a table, Bot1 a browser page: its combat damage trigger's X is collect evidence X (CR 701.59a,
+# 107.3f) - the total mana value of the cards exiled from Bot1's graveyard - not mana, and the dock says so: "collect evidence 1"
+# once Bot1 raises X to 1 with the stepper, never "{0}". Turn 1: Black Lotus, Mox Ruby, Mox Pearl and a Mountain cast it.
+# Turn 3: Bot1 bolts Bot2, so its graveyard holds Black Lotus (0) and Lightning Bolt (1), attacks, and collects evidence 1,
+# exiling the Bolt. Bot2 took 3 and 6, and has no creature or planeswalker for the reflexive ability to damage.
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mountain
+Incinerator of the Guilty
+Lightning Bolt
+Mountain x20
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Incinerator of the Guilty.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Attack(Incinerator of the Guilty > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+? Client.Bot1.Prompt.Title = Incinerator of the Guilty: collect evidence X?
+? Client.Bot1.Prompt.Detail = When you do, Incinerator of the Guilty deals X damage to each creature and planeswalker that player controls  ·  X = 1, so collect evidence 1  ·  − and + change X
+Bot1.PayCost(X: 1)
+Bot1.Choose(Lightning Bolt)
+Bot1.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 11
+Bot1.Graveyard = Black Lotus
+Exile = Lightning Bolt

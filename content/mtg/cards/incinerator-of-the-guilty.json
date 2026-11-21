@@ -1,0 +1,12 @@
+{
+  "name": "Incinerator of the Guilty",
+  "manaCost": "{4}{R}{R}",
+  "type": "Creature — Dragon",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Flying, trample\nWhenever this creature deals combat damage to a player, you may collect evidence X. When you do, this creature deals X damage to each creature and planeswalker that player controls. (To collect evidence X, exile cards with total mana value X or greater from your graveyard.)",
+  "keywords": [
+    "Flying",
+    "Trample"
+  ]
+}

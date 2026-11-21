@@ -1,0 +1,87 @@
+# Incinerator of the Guilty: collect evidence X exiles cards from YOUR graveyard with total mana value X or greater (CR 701.59a),
+# and X is chosen as the ability resolves (CR 107.3f). Bot1's graveyard holds Black Lotus (0), Lightning Bolt (1) and Lightning
+# Helix (2), so the most X could be is 3: 4 is refused. X = 2 is paid with the Helix and the Bolt (total 3, more than X is fine) and
+# the Lotus stays. Two damage kills Bot2's Savannah Lions and its Ajani Resolute (loyalty 2); Bot2 is at 20 - 3 - 3 - 6 = 8.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mountain
+Incinerator of the Guilty
+Lightning Helix
+Lightning Bolt
+Mountain x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Plains
+Ajani Resolute
+Savannah Lions
+Lightning Bolt
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Incinerator of the Guilty.Cast
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Ajani Resolute.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Incinerator of the Guilty > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+! Bot1.PayCost(X: 4)
+Bot1.PayCost(X: 2)
+Bot1.Choose(Lightning Helix; Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 8
+Bot1.Life = 20
+Bot2.Battlefield = Mox Pearl; Mox Ruby; Mox Jet; Plains
+Bot2.Graveyard = Savannah Lions; Ajani Resolute; Lightning Bolt
+Bot1.Graveyard = Black Lotus
+Exile.Count = 2
+Bot1.Battlefield.Incinerator of the Guilty.Damage = 0
