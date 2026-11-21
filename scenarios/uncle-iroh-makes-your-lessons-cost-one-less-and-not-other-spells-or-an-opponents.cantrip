@@ -1,0 +1,58 @@
+# Uncle Iroh {1}{R/G}{R/G}, 4/2: "Lesson spells you cast cost {1} less to cast" (CR 601.2f). Bot1's Environmental Sciences ({2}, a Lesson) is cast on
+# turn 3 with one Mox Sapphire's mana: the {1} comes off. Nothing else is cheaper: Bot1's Sol Ring ({1}, not a Lesson) then takes all of one
+# Mox Ruby's mana (the pool is empty after). Bot2's own Environmental Sciences is not "you cast": with one Mox Jet's mana it can't be cast on turn 2 (the refusal), and with two it
+# can (the control), gaining 2 life.
+
+[Bot1 Deck]
+Uncle Iroh
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Environmental Sciences
+Sol Ring
+Plains
+Plains x14
+
+[Bot2 Deck]
+Mox Jet
+Mox Jet
+Environmental Sciences
+Swamp x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Uncle Iroh.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+! Bot2.Hand.Environmental Sciences.Cast(Mana: short)
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Hand.Environmental Sciences.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Search()
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Environmental Sciences.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Search()
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+? Bot1.Mana =
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 22

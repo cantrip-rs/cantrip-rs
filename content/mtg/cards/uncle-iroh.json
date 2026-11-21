@@ -1,0 +1,8 @@
+{
+  "name": "Uncle Iroh",
+  "manaCost": "{1}{R/G}{R/G}",
+  "type": "Legendary Creature — Human Noble Ally",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Firebending 1 (Whenever this creature attacks, add {R}. This mana lasts until end of combat.)\nLesson spells you cast cost {1} less to cast."
+}
