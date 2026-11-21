@@ -610,10 +610,21 @@ fn add_two_of<const COLORS: u8>(g: &mut dyn Game, asker: &Asker, _: Option<Color
     Ok(())
 }
 
-/// A horizon land's other ability: "{1}, {T}, Sacrifice this land: Draw a card." (`text` is its full text, with the land's
-/// name). Horizon Canopy, Fiery Islet and Cryptic Caves (with its own restriction) print it.
-pub const fn sacrifice_to_draw(text: &'static str) -> AbilityDef {
-    ability(cost("{1}, {T}").and(SACRIFICE_THIS), |g, item| effects::draw(g, item, 1), text)
+/// A land's "{N}, {T}, Sacrifice this land: Draw a card." (CR 602.2, 118.3): `mana_and_tap` is the cost before the sacrifice,
+/// `text` the full text, with the land's name when it prints one. The horizon lands (`{1}`: Horizon Canopy, Fiery Islet, Cryptic
+/// Caves with its own restriction) and the lands of `sacrifice_draw_land` (`{4}`) print it.
+pub const fn sacrifice_to_draw(mana_and_tap: Cost, text: &'static str) -> AbilityDef {
+    ability(mana_and_tap.and(SACRIFICE_THIS), |g, item| effects::draw(g, item, 1), text)
+}
+
+/// A sacrifice-draw land's two abilities: "{T}: Add {A} or {B}." (`text` is its full text) and "{4}, {T}, Sacrifice this land:
+/// Draw a card.". With `enters: Some(mana::enters_tapped)` it is Sun-Blessed Peak, Airship Engine Room, Boiling Rock Prison,
+/// Foggy Bottom Swamp, Kyoshi Village, Meditation Pools, Misty Palms Oasis, North Pole Gates, Omashu City and Serpent's Pass.
+pub const fn sacrifice_draw_land(a: Color, b: Color, text: &'static str) -> [AbilityDef; 2] {
+    [
+        mana_ability(TAP, add_one_of(&[a, b]), text),
+        sacrifice_to_draw(cost("{4}, {T}"), "{4}, {T}, Sacrifice this land: Draw a card."),
+    ]
 }
 
 fn controls_either<const A: u16, const B2: u16>(q: &dyn Query, asker: &Asker) -> bool {
