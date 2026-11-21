@@ -1,0 +1,53 @@
+# Rocky Rebuke: "Target creature you control deals damage equal to its power to target creature an opponent controls." The first
+# target must be Bot1's own creature and the second an opponent's (the refusals, one per slot). On T5 Bot1's Grizzly Bears (power 2)
+# deals 2 to Bot2's Grizzly Bears, which dies; the bite is one-sided, so Bot1's Bears has no damage marked (CR 120.3, 609.7).
+
+[Bot1 Deck]
+Forest
+Forest
+Forest
+Grizzly Bears
+Rocky Rebuke
+Forest x15
+
+[Bot2 Deck]
+Forest
+Forest
+Grizzly Bears
+Forest x17
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Battlefield.Forest#2.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Rocky Rebuke.Cast
+! Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears = (absent)
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Graveyard = Rocky Rebuke
