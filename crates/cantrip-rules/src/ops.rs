@@ -6241,6 +6241,9 @@ pub fn settle_control(cx: &mut Cx) -> bool {
     }
     let order = layers::control_order(cx.cards(), cx.s(), &cx.g.log);
     let start = cx.g.log.len();
+    // The board just before the changes, which an ability that triggers on losing control looks back on (CR 603.10d).
+    let moving = order.iter().any(|&(id, controller, _)| cx.s().obj(id).zone.is(ZoneKind::Battlefield) && cx.s().obj(id).controller != controller);
+    let before = moving.then(|| (cx.s().battlefield().to_vec(), crate::settle::Then::now(cx)));
     let mut changed = false;
     for (id, controller, by_effect) in order {
         if cx.s().obj(id).zone.is(ZoneKind::Battlefield) {
@@ -6252,7 +6255,8 @@ pub fn settle_control(cx: &mut Cx) -> bool {
         // control of [it]", CR 603.2) is looked for once every permanent's controller is settled.
         let events: Vec<Event> =
             cx.g.log[start..].iter().map(|r| r.event).filter(|e| matches!(e, Event::ControlChanged { .. })).collect();
-        crate::settle::collect_batch(cx, &events, None, start);
+        let before = before.as_ref().map(|(battlefield, then)| crate::settle::Before { battlefield, then, seen_by_all: &[] });
+        crate::settle::collect_batch(cx, &events, before, start);
     }
     changed
 }

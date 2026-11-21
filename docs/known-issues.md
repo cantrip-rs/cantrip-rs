@@ -632,8 +632,8 @@ whatever the report says - and find why the hand-back carries "placeholder" (the
 **Notes.** The text a card file gives a triggered ability (what the client shows on the stack and in prompts) differs
 from the card's Oracle text for 159 abilities: an old self-reference instead of "this creature", one Oracle sentence
 split into two abilities ("When X enters or dies"), modal bullets flattened into a line, reminder text, and granted or
-delayed abilities' texts. Look-back now reads "from anywhere" and "leaves a graveyard" from that text (CR 603.6c,
-603.10a); `crates/cantrip-cards/tests/zone_words_match_oracle.rs` holds those words to the Oracle text, so the rules
+delayed abilities' texts. Look-back now reads "from anywhere", "leaves a graveyard" and losing control (or an opponent
+gaining control "from you") from that text (CR 603.6c, 603.10a, 603.10d); `crates/cantrip-cards/tests/zone_words_match_oracle.rs` holds those words to the Oracle text, so the rules
 are safe. Whether a waiting delayed ability or granted effect refers to its own source (CR 609.7a) is read from its text
 too, and `crates/cantrip-cards/tests/waiting_texts_match_oracle.rs` already holds every delayed ability's and granted
 replacement and prevention effect's text to a passage of its card's Oracle text. A fix makes every other ability's text a

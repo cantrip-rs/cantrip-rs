@@ -5034,7 +5034,9 @@ pub fn read_zone_words(text: &str) -> ZoneWords {
     }
     let from_anywhere = condition.match_indices("from anywhere").any(|(at, w)| !condition[at + w.len()..].starts_with(" other than"));
     let leaves_graveyard = condition.match_indices("leave").any(|(at, _)| condition[at..].contains("graveyard"));
-    ZoneWords { from_anywhere, leaves_graveyard }
+    let control_lost = condition.contains("lose control of")
+        || (condition.contains("gains control of") && condition.ends_with(" from you"));
+    ZoneWords { from_anywhere, leaves_graveyard, control_lost }
 }
 
 /// Something that waits, made by a spell or ability, whose words may refer to the object that made it (CR 609.7a: "a source
@@ -5206,7 +5208,7 @@ fn word_spans(text: &str) -> impl Iterator<Item = (usize, &str)> {
     })
 }
 
-/// What a zone-change trigger condition says that its event can't show (`read_zone_words`).
+/// What a trigger condition says that its event can't show (`read_zone_words`).
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub struct ZoneWords {
     /// "Whenever [a card] is put into [a zone] from anywhere" (CR 603.6c): about where the object goes, so never a
@@ -5215,6 +5217,10 @@ pub struct ZoneWords {
     /// Its trigger event is a card leaving a graveyard (CR 603.10a): it looks back on a card put onto the battlefield from
     /// a graveyard too, which is otherwise an enters-the-battlefield event judged after it (CR 603.6a) (Hardened Academic).
     pub leaves_graveyard: bool,
+    /// Its trigger event is a player losing control of an object, or an opponent gaining control of one from that player
+    /// (CR 603.10d): it looks back on a change of control. "Whenever an opponent gains control of ..." without "from you"
+    /// does not (a trigger on an object coming under a player's control is judged after it, CR 603.2).
+    pub control_lost: bool,
 }
 
 /// Whether a triggered ability whose condition says `words` looks back in time (CR 603.10) as it triggers on `event`: it is
@@ -5232,7 +5238,8 @@ pub struct ZoneWords {
 ///   every player in the game may look at it (CR 406.3), or a card in a hand or a library while a reveal of it is in effect
 ///   (CR 400.2, 701.20a);
 /// - a permanent phasing out (CR 603.10b), a permanent becoming unattached (CR 603.10c), a spell countered (CR 603.10e) and
-///   a player losing the game (CR 603.10f).
+///   a player losing the game (CR 603.10f);
+/// - a player losing control of an object, or an opponent gaining control of one from that player (CR 603.10d): `words`.
 pub fn looks_back(words: ZoneWords, event: &Event, seen_by_all: bool) -> bool {
     match event {
         Event::ZoneChange { from, to, .. } => {
@@ -5241,6 +5248,7 @@ pub fn looks_back(words: ZoneWords, event: &Event, seen_by_all: bool) -> bool {
                     && (from.is(ZoneKind::Battlefield)
                         || (from.is(ZoneKind::Graveyard) && (!to.is(ZoneKind::Battlefield) || words.leaves_graveyard))))
         }
+        Event::ControlChanged { .. } => words.control_lost,
         Event::PhasedOut { .. } | Event::Unattached { .. } | Event::Countered { .. } | Event::GameLost { .. } => true,
         _ => false,
     }
@@ -6034,7 +6042,7 @@ impl CardTable {
     #[inline]
     pub fn looks_back(&self, ability: AbilityRef, event: &Event, seen_by_all: bool) -> bool {
         match event {
-            Event::ZoneChange { .. } => looks_back(self.zone_words(ability), event, seen_by_all),
+            Event::ZoneChange { .. } | Event::ControlChanged { .. } => looks_back(self.zone_words(ability), event, seen_by_all),
             _ => looks_back(ZoneWords::default(), event, false),
         }
     }
@@ -6230,13 +6238,21 @@ mod tests {
     /// is read, and "from anywhere other than ..." is about leaving the zones it doesn't name.
     #[test]
     fn zone_words_read_the_trigger_condition_only() {
-        let w = |from_anywhere, leaves_graveyard| ZoneWords { from_anywhere, leaves_graveyard };
+        let w = |from_anywhere, leaves_graveyard| ZoneWords { from_anywhere, leaves_graveyard, control_lost: false };
+        let lost = ZoneWords { from_anywhere: false, leaves_graveyard: false, control_lost: true };
         assert_eq!(zone_words("Whenever another card is put into a graveyard from anywhere, exile that card."), w(true, false));
         assert_eq!(zone_words("Whenever an artifact, creature, or enchantment card is put into a graveyard from anywhere, draw a card."), w(true, false));
         assert_eq!(zone_words("Whenever one or more cards leave your graveyard, put a +1/+1 counter on target creature you control."), w(false, true));
         assert_eq!(zone_words("When this creature enters, choose target permanent card in your graveyard that was put there from anywhere this turn."), w(false, false));
         assert_eq!(zone_words("When this creature enters from anywhere other than a graveyard or exile, roll a 20-sided die."), w(false, false));
         assert_eq!(zone_words("When this creature leaves the battlefield, return the exiled card to its owner's graveyard."), w(false, false));
+        // CR 603.10d: losing control, or an opponent gaining control from you, but not any other gaining of control.
+        assert_eq!(zone_words("When you lose control of this artifact, destroy it."), lost);
+        assert_eq!(zone_words("Whenever an opponent gains control of a permanent from you, you create a Treasure token."), lost);
+        assert_eq!(zone_words("Whenever you gain control of a creature, draw a card."), w(false, false));
+        assert_eq!(zone_words("Whenever an opponent gains control of a permanent, you draw a card from you."), w(false, false));
+        // "From you" alone is not a gain of control.
+        assert_eq!(zone_words("Whenever an opponent takes a card from you, you draw a card."), w(false, false));
     }
 
     /// CR 609.7a: the forms Oracle text refers to its own object by, read from the words (`names_its_source`).

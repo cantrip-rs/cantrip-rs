@@ -14,6 +14,8 @@ fn oracle_conditions(text: &str) -> Vec<String> {
         .flat_map(|part| part.split(". "))
         .map(|s| {
             let s = s.trim();
+            // A delayed ability's trigger condition may follow its instruction ("Sacrifice it when you lose control of this creature").
+            let s = s.find(" when you lose control").map_or(s, |at| &s[at + 1..]);
             match s.find(" - ") {
                 Some(at) if s[..at].split(' ').count() <= 3 => s[at + 3..].trim().to_string(),
                 _ => s.to_string(),
@@ -27,11 +29,12 @@ fn oracle_conditions(text: &str) -> Vec<String> {
 fn zone_words_are_read_from_the_oracle_text() {
     let table = CardTable::new(cantrip_cards::all());
     let mut wrong = Vec::new();
-    let (mut from_anywhere, mut leaves_graveyard) = (0, 0);
+    let (mut from_anywhere, mut leaves_graveyard, mut control_lost) = (0, 0, 0);
     for card in table.cards.iter().filter(|c| !c.text.is_empty()) {
         let oracle = oracle_conditions(card.text).iter().map(|c| read_zone_words(c)).fold(ZoneWords::default(), |a, w| ZoneWords {
             from_anywhere: a.from_anywhere || w.from_anywhere,
             leaves_graveyard: a.leaves_graveyard || w.leaves_graveyard,
+            control_lost: a.control_lost || w.control_lost,
         });
         // A Room's (or other split card's) Oracle text is both halves' text, and each half's abilities are its own (CR 709.5).
         let defs: Vec<&CardDef> = std::iter::once(*card).chain(card.split.into_iter().flat_map(|(left, right)| [left, right])).collect();
@@ -48,14 +51,16 @@ fn zone_words_are_read_from_the_oracle_text() {
             .fold(ZoneWords::default(), |a, w| ZoneWords {
                 from_anywhere: a.from_anywhere || w.from_anywhere,
                 leaves_graveyard: a.leaves_graveyard || w.leaves_graveyard,
+                control_lost: a.control_lost || w.control_lost,
             });
         from_anywhere += usize::from(oracle.from_anywhere);
         leaves_graveyard += usize::from(oracle.leaves_graveyard);
+        control_lost += usize::from(oracle.control_lost);
         if oracle != abilities {
             wrong.push(format!("{}: Oracle {oracle:?}, abilities {abilities:?}", card.name));
         }
     }
-    // The reading finds them at all: Planar Void says "from anywhere", Hardened Academic a card leaving a graveyard.
-    assert!(from_anywhere > 0 && leaves_graveyard > 0, "no Oracle text read as saying either");
+    // The reading finds them at all: Planar Void says "from anywhere", Hardened Academic a card leaving a graveyard, Gustha's Scepter losing control.
+    assert!(from_anywhere > 0 && leaves_graveyard > 0 && control_lost > 0, "no Oracle text read as saying one of them");
     assert!(wrong.is_empty(), "triggered abilities whose words differ from their card's Oracle text:\n{}", wrong.join("\n"));
 }

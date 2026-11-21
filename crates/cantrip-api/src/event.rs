@@ -906,7 +906,12 @@ impl EventMask {
     /// yes to, so an ability listening for one is among the permanents taken as they were before (`settle::Then`). Phasing
     /// out is filed in the history only (`of_history`); no ability triggers on it yet.
     pub const LOOKS_BACK: EventMask = EventMask(
-        EventMask::ZONE_CHANGE.0 | EventMask::UNATTACHED.0 | EventMask::COUNTERED.0 | EventMask::PHASED_OUT.0 | EventMask::GAME_OVER.0,
+        EventMask::ZONE_CHANGE.0
+            | EventMask::CONTROL_CHANGED.0
+            | EventMask::UNATTACHED.0
+            | EventMask::COUNTERED.0
+            | EventMask::PHASED_OUT.0
+            | EventMask::GAME_OVER.0,
     );
 
     pub fn of(event: &Event) -> EventMask {

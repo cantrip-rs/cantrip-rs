@@ -289,6 +289,8 @@ mod crewed_tests;
 #[cfg(test)]
 mod cycled_tests;
 #[cfg(test)]
+mod control_look_back_tests;
+#[cfg(test)]
 mod discover_event_tests;
 #[cfg(test)]
 mod explore_event_tests;
