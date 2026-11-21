@@ -3951,6 +3951,20 @@ pub fn pump_self<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem)
     this_gets::<P, T>(g, item)
 }
 
+/// "Creatures you control have base power and toughness X/X until end of turn" (CR 613.4b, 611.2c, 107.3a): the creatures the
+/// controller has as it resolves each get a layer 7b setting effect with the X of the spell or ability, and no creature that
+/// enters later does; counters and pumps still count on top. Biomass Mutation and Katara, Water Tribe's Hope print it.
+pub fn creatures_you_control_have_base_pt_x(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let x = item.x as i32;
+    let creatures: Vec<ObjectId> = g.permanents_of(item.controller).into_iter().filter(|&id| g.chars(id).is(CardType::Creature)).collect();
+    instruction(g, |g| {
+        for id in creatures {
+            g.add_effect(item.object, id, EffectKind::SetPt(x, x), Duration::EndOfTurn);
+        }
+    });
+    Ok(())
+}
+
 /// "Target creature has base power and toughness P/T until end of turn" (CR 613.4b, 611.2a): the first target,
 /// if still legal, gets a layer 7b setting effect. Sorceress Queen, Multiply by Zero, Perfected Theory and Quandrix Charm print it.
 pub fn set_first_target_base_pt<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
