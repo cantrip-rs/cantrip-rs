@@ -1,0 +1,39 @@
+# Hei Bai, Spirit of Balance (3/3) is cast on turn 1 with Black Lotus and Mox Pearl. As it enters Bot1 may sacrifice another
+# creature or artifact (Hei Bai itself is not offered): the Mox Pearl, an artifact, goes and two +1/+1 counters make it 5/5. On
+# turn 3, with an Ornithopter cast, it attacks and the second half of the same ability sacrifices the Ornithopter, a creature, for
+# two more: 7/7, which deals 7 to Bot2 (13).
+
+[Bot1 Deck]
+Mox Pearl
+Black Lotus
+Hei Bai, Spirit of Balance
+Ornithopter
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Hei Bai, Spirit of Balance.Cast
+Bot1.Pass
+! Bot1.Choose(Hei Bai, Spirit of Balance)
+Bot1.Choose(Mox Pearl)
+? Bot1.Battlefield.Mox Pearl = (absent)
+? Bot1.Battlefield.Hei Bai, Spirit of Balance.Power = 5
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Attack(Hei Bai, Spirit of Balance > Bot2)
+Bot1.Pass
+Bot1.Choose(Ornithopter)
+? Bot1.Battlefield.Hei Bai, Spirit of Balance.Power = 7
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Battlefield.Hei Bai, Spirit of Balance.Toughness = 7

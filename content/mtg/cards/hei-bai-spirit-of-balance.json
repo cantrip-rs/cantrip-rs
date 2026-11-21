@@ -1,0 +1,8 @@
+{
+  "name": "Hei Bai, Spirit of Balance",
+  "manaCost": "{2}{W/B}{W/B}",
+  "type": "Legendary Creature — Bear Spirit",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever Hei Bai enters or attacks, you may sacrifice another creature or artifact. If you do, put two +1/+1 counters on Hei Bai.\nWhen Hei Bai leaves the battlefield, put its counters on target creature you control."
+}

@@ -1,0 +1,47 @@
+# Hei Bai's sacrifice is optional ("you may", CR 608.2d) and the counters only come "if you do" (CR 608.2c). Cast on turn 1 with Black
+# Lotus and Mox Pearl, Bot1 declines as it enters (still 3/3, Mox Pearl kept) and again on turn 3 when it attacks with an Ornithopter
+# beside it (3 damage, Bot2 17). Bot2 then exiles it with Swords to Plowshares: its "leaves the battlefield" ability puts the (no) counters it had
+# on the Ornithopter, its one legal target: the Ornithopter is still 0/2.
+
+[Bot1 Deck]
+Mox Pearl
+Black Lotus
+Hei Bai, Spirit of Balance
+Ornithopter
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Plains
+Swords to Plowshares
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Hei Bai, Spirit of Balance.Cast
+Bot1.Pass
+Bot1.Choose()
+? Bot1.Battlefield.Mox Pearl.Types = Artifact
+? Bot1.Battlefield.Hei Bai, Spirit of Balance.Power = 3
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Attack(Hei Bai, Spirit of Balance > Bot2)
+Bot1.Pass
+Bot1.Choose()
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Hei Bai, Spirit of Balance)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Hei Bai, Spirit of Balance = (absent)
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Mox Pearl.Tapped = false

@@ -1,0 +1,40 @@
+# Hei Bai (5/5 with the two counters its enter ability put on it, sacrificing Mox Pearl; sacrificing a second permanent, the Ornithopter too, is refused: only one) is exiled by Swords to Plowshares on turn 4: the
+# "leaves the battlefield" ability reads the counters it had as it last was (CR 603.10a) and puts two on Bot1's Ornithopter, which is
+# 2/4 (the counters are put on, not moved, CR 122.6).
+
+[Bot1 Deck]
+Mox Pearl
+Black Lotus
+Hei Bai, Spirit of Balance
+Ornithopter
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Plains
+Swords to Plowshares
+Plains x18
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Hei Bai, Spirit of Balance.Cast
+Bot1.Pass
+! Bot1.Choose(Mox Pearl; Ornithopter)
+Bot1.Choose(Mox Pearl)
+? Bot1.Battlefield.Hei Bai, Spirit of Balance.Power = 5
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Hei Bai, Spirit of Balance)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Hei Bai, Spirit of Balance = (absent)
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 4
