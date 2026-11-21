@@ -1,0 +1,69 @@
+# Earth Kingdom General: "Whenever YOU put one or more +1/+1 counters on a creature" - any creature, not only yours. On turn 2
+# Bot2 casts Requisition Raid on itself, putting a counter on its Ornithopter: Bot2 put it, so nothing triggers for Bot1 (the
+# stack is empty, life unchanged at 22 after the general's own earthbend 2 on turn 1). On turn 3 Bot1's Requisition Raid puts a
+# counter on that Ornithopter, a creature Bot2 controls: Bot1 put it, so the once-each-turn has reset and it may gain 1 life (23).
+
+[Bot1 Deck]
+Forest
+Mox Pearl
+Mox Jet
+Black Lotus
+Earth Kingdom General
+Requisition Raid
+Forest x14
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Ornithopter
+Requisition Raid
+Plains x16
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Earth Kingdom General.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Life = 22
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Requisition Raid.Cast
+Bot2.Modes(3)
+Bot2.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+? Bot1.Life = 22
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Requisition Raid.Cast
+Bot1.Modes(3)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 23
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2
