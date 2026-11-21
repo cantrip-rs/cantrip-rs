@@ -1,0 +1,11 @@
+{
+  "name": "The Walls of Ba Sing Se",
+  "manaCost": "{8}",
+  "type": "Legendary Artifact Creature — Wall",
+  "power": 0,
+  "toughness": 30,
+  "oracleText": "Defender\nOther permanents you control have indestructible.",
+  "keywords": [
+    "Defender"
+  ]
+}

@@ -1,0 +1,79 @@
+# The Walls of Ba Sing Se: "Defender" and "Other permanents you control have indestructible." (CR 702.3, 702.12). Turn 1 Bot1 casts it for {8}: five Moxes and a Black Lotus. Turn 2 Bot2 casts a
+# Shatter on Mox Pearl: it is not destroyed, since the Walls give it indestructible; a second Shatter on the Walls themselves destroys them (they are not "other"). Turn 3 Bot1's own Shatter
+# destroys Bot2's Mox Jet (the ability affects only Bot1's permanents); on turn 4 with the Walls gone Bot2's third Shatter destroys Mox Pearl.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Black Lotus
+The Walls of Ba Sing Se
+Shatter
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mountain
+Shatter
+Shatter
+Shatter
+Mountain x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.The Walls of Ba Sing Se.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Walls of Ba Sing Se.Keywords = Defender
+? Bot1.Battlefield.The Walls of Ba Sing Se.Power = 0
+? Bot1.Battlefield.The Walls of Ba Sing Se.Toughness = 30
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Mox Pearl)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Mox Pearl.Types = Artifact
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.The Walls of Ba Sing Se)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = The Walls of Ba Sing Se; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Shatter.Cast(Bot2.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Mox Jet; Shatter; Shatter
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Mox Pearl)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Mox Pearl; Shatter; The Walls of Ba Sing Se; Black Lotus
+Bot1.Battlefield = Mox Sapphire; Mox Jet; Mox Ruby; Mox Emerald
