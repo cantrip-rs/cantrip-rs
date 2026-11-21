@@ -1,0 +1,56 @@
+# Bumi, King of Three Trials {5}{G}: "When Bumi enters, choose up to X, where X is the number of Lesson cards in your graveyard". Bot2
+# casts Abandon Attachments (a Lesson) on turn 2, so a Lesson sits in Bot2's graveyard, but none in Bot1's: X = 0 (CR 205.3k), no mode
+# is chosen and the ability is removed from the stack (CR 603.3c, 700.2b). Bumi stays a plain 4/4 with no counters.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Bumi, King of Three Trials
+Forest x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Abandon Attachments
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Abandon Attachments.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose()
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: G)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bumi, King of Three Trials.Cast
+Bot1.Pass
+! Bot1.Modes
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot2.Graveyard = Abandon Attachments
+Bot1.Battlefield.Bumi, King of Three Trials.Power = 4
+Bot1.Battlefield.Bumi, King of Three Trials.Toughness = 4
