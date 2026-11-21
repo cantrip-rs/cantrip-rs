@@ -182,7 +182,7 @@ pub fn determinize_owned(game: &mut Game, k: &Knowledge, seat: PlayerId, mode: I
         _ => HashSet::new(),
     };
     let visible = observable(game, seat, &extra);
-    let sees = |id: ObjectId| visible.contains(&id) && knows_face(s, seat, id);
+    let sees = |id: ObjectId| visible.contains(&id) && knows_face(game, seat, id);
     // What each row became from, and the rows the seat was shown at some point.
     let (from, merged_parts) = physical_card_links(game);
     // Separation creates component rows, never extra cards in the registered deck (CR 730.3).
@@ -209,7 +209,7 @@ pub fn determinize_owned(game: &mut Game, k: &Knowledge, seat: PlayerId, mode: I
     // A row that is no longer the object (it became another) was seen if it was shown, or was where the seat looks.
     let row_seen = |id: ObjectId| {
         let zone = s.obj(id).zone;
-        shown.contains(&id) || (looks_into(s, seat, zone) && knows_face(s, seat, id))
+        shown.contains(&id) || (looks_into(s, seat, zone) && knows_face(game, seat, id))
     };
 
     // The hidden objects, by zone slot then place in the zone (the unseen ones are dealt by their places once the

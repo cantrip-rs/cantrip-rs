@@ -1,0 +1,67 @@
+# Yarus, Roar of the Old Gods dying at the same time as a face-down creature you control triggers for it (the ruling; CR
+# 603.10a: a leaves-the-battlefield ability looks back). Turn 1 Bot1 casts Yarus and Vengeful Creeper face down. Turn 2 Bot2's
+# Wrath of God destroys both; the Creeper's card returns face down and is turned face up, a 5/5 Vengeful Creeper (its
+# turned-face-up trigger has no artifact or enchantment of Bot2's to target), now without haste: Yarus is in the graveyard.
+
+[Bot1 Deck]
+Forest
+Sol Ring
+Black Lotus
+Mox Ruby
+Mox Emerald
+Yarus, Roar of the Old Gods
+Vengeful Creeper
+Island x20
+
+[Bot2 Deck]
+Plains
+Black Lotus
+Wrath of God
+Plains x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Yarus, Roar of the Old Gods.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Vengeful Creeper.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Wrath of God.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Forest; Mox Emerald; Mox Ruby; Sol Ring; Vengeful Creeper
+Bot1.Battlefield.Vengeful Creeper.Power = 5
+Bot1.Battlefield.Vengeful Creeper.FaceDown = (absent)
+Bot1.Battlefield.Vengeful Creeper.Keywords = Disguise
+Bot1.Graveyard = Yarus, Roar of the Old Gods; Black Lotus

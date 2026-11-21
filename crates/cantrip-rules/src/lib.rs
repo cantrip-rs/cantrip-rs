@@ -1382,6 +1382,12 @@ impl Game {
         actions::may_look_at_library_top(self, self.cards, player)
     }
 
+    /// Whether `player` may look at `id`, a face-down permanent on the battlefield, as a rule says (CR 708.5): Found Footage,
+    /// Lumbering Laundry's ability. Their own they see anyway (`visibility::knows_face`).
+    pub fn may_look_at_face_down(&self, player: PlayerId, id: ObjectId) -> bool {
+        actions::may_look_at_face_down(self, self.cards, player, id)
+    }
+
     /// The top eligible for an authorized look/reveal, unless CR 401.5 keeps it hidden.
     /// This supplies timing, not permission; the caller must check the look/reveal rule.
     pub fn visible_library_top(&self, player: PlayerId) -> Option<ObjectId> {

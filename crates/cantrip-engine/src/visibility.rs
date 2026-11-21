@@ -132,13 +132,15 @@ pub fn observable(game: &Game, viewer: PlayerId, extra: &HashSet<ObjectId>) -> H
 }
 
 /// Whether `viewer` may see what a face-down object really is (CR 708.5, 406.3): its controller on the battlefield or on
-/// the stack (a face-down spell, CR 708.4), those who saw it go there anywhere else - and the player controlling any of them (CR 723.4). True of an object that is
+/// the stack (a face-down spell, CR 708.4), those who saw it go there anywhere else, a player a rule lets look at it on the
+/// battlefield (`Game::may_look_at_face_down`) - and the player controlling any of them (CR 723.4). True of an object that is
 /// face up. Every seat once the game is over, which reveals every face-down permanent and spell (CR 708.9, `ops::end_game`);
 /// one revealed as its owner left the game was seen by every seat as it ceased to exist (`ops::leave_game`).
 ///
 /// The public (`PUBLIC`) knows a face-down permanent or spell only once the game is over, and a face-down card elsewhere
 /// only when every player still in the game saw it (CR 406.3): what no player is hiding.
-pub fn knows_face(state: &GameState, viewer: PlayerId, id: ObjectId) -> bool {
+pub fn knows_face(game: &Game, viewer: PlayerId, id: ObjectId) -> bool {
+    let state = &game.state;
     if viewer == PUBLIC {
         let obj = state.obj(id);
         if !obj.face_down {
@@ -149,7 +151,10 @@ pub fn knows_face(state: &GameState, viewer: PlayerId, id: ObjectId) -> bool {
         }
         return state.apnap().all(|p| obj.seen_by & (1 << p.0) != 0);
     }
-    knows_face_as(state, id, |p| state.sees_as(viewer, p))
+    // Beside what the rules let every player see of their own, a rule may let a player look at others' face-down permanents
+    // (CR 708.5: Found Footage, Lumbering Laundry), and the player controlling them sees it too (CR 723.4). Only while the
+    // rule applies: it shows the face now, it doesn't reveal it, so nothing of it is remembered once the rule is gone.
+    knows_face_as(state, id, |p| state.sees_as(viewer, p)) || state.seats().any(|p| state.sees_as(viewer, p) && game.may_look_at_face_down(p, id))
 }
 
 /// `knows_face`, with whether the viewer sees what a player sees given (`sees_as`), as `looks_into_as` has it.

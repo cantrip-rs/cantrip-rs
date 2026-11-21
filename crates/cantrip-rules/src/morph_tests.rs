@@ -1202,3 +1202,37 @@ fn the_turn_up_row_says_what_the_reduced_cost_is() {
     let ability = g.chars(permanent).abilities().position(|a| g.cards.turn_up(a) == Some(TurnUp::Disguise)).expect("the turn-up ability");
     assert_eq!(crate::special_action_costs(&g, YOU, permanent, ability as u8), Some(mana("{1}{W}")));
 }
+
+/// CR 708.2a: put onto the battlefield face down neither manifested nor cloaked (`FaceDown::Bare`: Yarus, Roar of the Old
+/// Gods), a card is a 2/2 creature with no name and no text, turned face up for its morph cost (CR 702.37e) and never for
+/// its mana cost (CR 701.40b is a manifested permanent's); a card with no morph or disguise ability has no way up of its own,
+/// and an effect turns it up all the same.
+#[test]
+fn a_card_put_face_down_bare_turns_up_only_by_morph_or_an_effect() {
+    let mut g = game();
+    let card = put(&mut g, &SKYWARDEN, Zone::library(YOU));
+    let down = cantrip_api::Game::put_onto_battlefield_face_down(&mut cx(&mut g), card, YOU, FaceDown::Bare, false)
+        .expect("nothing is asked")
+        .expect("it enters face down");
+    let chars = g.chars(down);
+    assert_eq!((chars.name, chars.power, chars.toughness), ("", Some(2), Some(2)));
+    assert!(chars.is(CardType::Creature) && !chars.has(Keyword::Flying));
+    add(&mut g, Mana::W, 2);
+    add(&mut g, Mana::C, 4);
+    assert!(turn_up_option(&mut g, down, TurnUp::ManaCost).is_none(), "it was not manifested");
+    let option = turn_up_option(&mut g, down, TurnUp::Morph).expect("its morph cost is offered");
+    take(&mut g, &option);
+    assert_eq!(g.chars(down).name, "Morph Test Skywarden");
+
+    let mut g = game();
+    let card = put(&mut g, &BEAR, Zone::library(YOU));
+    let down = cantrip_api::Game::put_onto_battlefield_face_down(&mut cx(&mut g), card, YOU, FaceDown::Bare, false)
+        .expect("nothing is asked")
+        .expect("it enters face down");
+    add(&mut g, Mana::G, 4);
+    assert!(turn_up_option(&mut g, down, TurnUp::ManaCost).is_none());
+    assert!(turn_up_option(&mut g, down, TurnUp::Morph).is_none());
+    crate::ops::turn_face_up(&mut cx(&mut g), down, YOU);
+    assert!(!g.state.obj(down).face_down);
+    assert_eq!(g.chars(down).name, BEAR.name);
+}

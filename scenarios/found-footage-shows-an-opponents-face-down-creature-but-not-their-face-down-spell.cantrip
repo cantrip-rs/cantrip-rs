@@ -1,0 +1,49 @@
+# Found Footage: "You may look at face-down creatures your opponents control any time" (CR 708.5). Turn 1 Bot1 casts it. Turn 2
+# Bot2 casts Vengeful Creeper face down for its disguise: on the stack it stays hidden from Bot1 (the ruling: face-down spells
+# aren't covered), and once it resolves Bot1 knows it is Vengeful Creeper, as its client draws it; Bot2 sees no face of Bot1's.
+# Turn 3 Bot1 pays {2} and sacrifices Found Footage: surveil 2 (one Island to the graveyard), then draw a card - and with the
+# Clue gone the Creeper is hidden from Bot1 again.
+
+[Bot1 Deck]
+Found Footage
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Vengeful Creeper
+Forest x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Found Footage.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Vengeful Creeper.Cast(Ability: Disguise)
+? Stack..FaceDown = true
+? Bot1.Sees.Bot2.FaceDown =
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield..FaceDown = true
+? Bot1.Sees.Bot2.FaceDown = Vengeful Creeper
+? Bot2.Sees.Bot1.FaceDown =
+? Client.Bot1.OpponentBattlefield.Vengeful Creeper.FaceDownName = Vengeful Creeper
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Found Footage.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | Island)
+
+[Expect]
+Bot1.Sees.Bot2.FaceDown =
+Bot1.Graveyard = Island; Found Footage
+Bot1.Hand.Count = 6
+Bot2.Battlefield..FaceDown = true

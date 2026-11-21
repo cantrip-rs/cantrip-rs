@@ -1959,7 +1959,7 @@ impl<'a> Projector<'a> {
             // the stack (a spell cast face down by morph or disguise, CR 708.4) and no characteristics at all in exile; what it
             // really is only to a seat that may look at it, its controller for a permanent or a spell (CR 708.5) and those who
             // saw it go there for a card (CR 406.3), and to a seat it is being shown to (a reveal, CR 701.20a, 701.40g).
-            let looks = knows_face(s, self.viewer, id) || self.faces.contains(&id);
+            let looks = knows_face(game, self.viewer, id) || self.faces.contains(&id);
             if !on_battlefield && !zone.is(ZoneKind::Stack) {
                 view.name = String::new();
                 view.mana_cost = String::new();
