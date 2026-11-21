@@ -3111,6 +3111,19 @@ fn a_player_casts_their_second_spell(_: &dyn Query, _: ObjectId, event: &Event) 
 }
 
 pub const A_PLAYER_CASTS_THEIR_SECOND_SPELL: Trigger = when(EventMask::SPELL_CAST, a_player_casts_their_second_spell);
+
+/// "Whenever you cast your Nth spell each turn" (CR 601.2i, 603.2): the source's controller's, counted from the turn's start
+/// (`Event::SpellCast::nth`), so the spells cast before the permanent arrived count too. The spell is the subject, for "that
+/// spell". Flurry's second spell (Breeches, the Blastmaker, Cori-Steel Cutter) and Emeritus of Conflict's third print it.
+fn you_cast_your_nth_spell<const N: u32>(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::SpellCast { spell, player, nth, .. } if *nth == N && *player == q.controller(source) => Fired::about(Target::Object(*spell)),
+        _ => None,
+    }
+}
+
+pub const YOU_CAST_YOUR_SECOND_SPELL: Trigger = when(EventMask::SPELL_CAST, you_cast_your_nth_spell::<2>);
+pub const YOU_CAST_YOUR_THIRD_SPELL: Trigger = when(EventMask::SPELL_CAST, you_cast_your_nth_spell::<3>);
 pub const THIS_ENTERS_OR_YOU_SACRIFICE_IT: Trigger = when_asked(EventMask::ZONE_CHANGE, this_enters_or_you_sacrifice_it);
 pub const YOU_SACRIFICE_THIS: Trigger = when_asked(EventMask::ZONE_CHANGE, you_sacrifice_this);
 pub const THIS_ENTERS_OR_ATTACKS: Trigger = when(EventMask(EventMask::ZONE_CHANGE.0 | EventMask::ATTACKS.0), this_enters_or_attacks);
