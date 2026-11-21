@@ -101,8 +101,21 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-171](#ki-171-a-resolution-cost-that-exiles-a-merged-permanent-is-labelled-with-the-source-alone) | A resolution cost that exiles a merged permanent is labelled with the source alone | Pri-2 | Open |
 | [KI-172](#ki-172-a-resolutions-unless-pays-question-for-a-tap-cost-reads-pay-0) | A resolution's "unless pays" question for a tap cost reads "pay {0}?" | Pri-2 | Open |
 | [KI-173](#ki-173-a-scenarios-casttap--key-is-ignored-for-an-additional-tap-cost) | A scenario's `Cast(Tap: ...)` key is ignored for an additional tap cost | Pri-2 | Open |
+| [KI-174](#ki-174-vizier-of-the-menageries-any-type-rule-has-no-scenario-that-tells-it-from-any-color) | Vizier of the Menagerie's any-type rule has no scenario that tells it from any-color | Pri-2 | Open |
 
 ## Issues
+
+### KI-174: Vizier of the Menagerie's any-type rule has no scenario that tells it from any-color
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-2 | Open | coverage | 2026-11-21, review of PR #3242 |
+
+**Notes.** Vizier of the Menagerie lets its controller spend mana as though it were mana of any *type* to cast creature
+spells (CR 609.4b), which pays a {C} symbol; "any color" would not. Its file answers `AnyMana::Type`, but changing it to
+`AnyMana::Color` passes both of its scenarios, because no card in content has {C} in a creature's mana cost. The engine
+side is covered by the Rust test `a_static_rule_for_mana_of_any_type_pays_a_creature_spells_colorless_symbol`. When a {C}
+creature (Thought-Knot Seer, Matter Reshaper) is added, it gets a Vizier scenario and this closes.
 
 ### KI-173: A scenario's `Cast(Tap: ...)` key is ignored for an additional tap cost
 
