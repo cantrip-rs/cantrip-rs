@@ -1,0 +1,62 @@
+# "When that creature dies this turn, you earthbend 4." The delayed ability's source is Fatal Fissure, the spell that made it,
+# not the creature it watches (CR 603.7d). Toph earthbends Forest#1 into a 2/2; Mother of Runes gives it protection from white;
+# Fatal Fissure (black) chooses Mother of Runes and Lightning Bolt kills her. Forest#1 is still a legal target for "earthbend 4"
+# (CR 702.16b: protection from white stops only a white source's targeting), and gets four more counters: 6.
+
+[Bot1 Deck]
+Forest
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mother of Runes
+Toph, the Blind Bandit
+Forest
+Fatal Fissure
+Lightning Bolt
+Forest x10
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mother of Runes.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Toph, the Blind Bandit.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Forest#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest#1.Counters.PlusOnePlusOne = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mother of Runes.Activate(Bot1.Battlefield.Forest#1)
+Bot1.Colors(White)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Fatal Fissure.Cast(Bot1.Battlefield.Mother of Runes)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mother of Runes)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Forest#1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Mother of Runes; Lightning Bolt; Fatal Fissure
+Bot1.Battlefield.Forest#1.Counters.PlusOnePlusOne = 6

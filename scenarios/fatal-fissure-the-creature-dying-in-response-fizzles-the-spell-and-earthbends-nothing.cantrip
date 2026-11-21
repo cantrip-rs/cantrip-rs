@@ -1,0 +1,45 @@
+# Fatal Fissure: Bot1 chooses Bot2's Elvish Mystic and then kills it with Lightning Bolt in response. The spell's only target is gone, so it
+# does not resolve (CR 608.2b): no delayed ability is created, nothing is asked and no land becomes a creature.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Fatal Fissure
+Lightning Bolt
+Forest
+Forest
+Forest
+Forest x13
+
+[Bot2 Deck]
+Mox Emerald
+Elvish Mystic
+Forest
+Forest x16
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Hand.Fatal Fissure.Cast(Bot2.Battlefield.Elvish Mystic)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Elvish Mystic
+Bot1.Graveyard = Fatal Fissure; Lightning Bolt
+Bot1.Battlefield.Forest#2.Types = Land
+Delayed.Count = 0
