@@ -480,8 +480,9 @@ pub fn cast_up_to_free(g: &mut dyn Game, player: PlayerId, source: ObjectId, car
 /// spell (CR 709.3a, 715.3a), so an Adventure's instant half counts as an instant - then the way when the card has several, and
 /// casts it on `terms` (the cost paid, what happens to it afterward) with that way and `player` as its caster. Nothing is asked
 /// when nothing qualifies; a cast given up (CR 733.1) leaves the card where it was, does not count, and the player may redo it, cast another card or
-/// decline (CR 733.2). `purpose` words the
-/// question. Lieutenant Nyota Uhura (free, from among exiled cards) and Bilbo, Thief in the Night (paid, from a graveyard) print it.
+/// decline (CR 733.2). `purpose` words the question. `fits` is told the card and the way, so a quality of the spell is asked of
+/// the spell the card would be (`Game::chars_as_cast`, CR 601.3e: Boiling Rock Rioter's Ally spell). Lieutenant Nyota Uhura
+/// (free, from among exiled cards) and Bilbo, Thief in the Night (paid, from a graveyard) print it.
 pub fn cast_up_to_among(
     g: &mut dyn Game,
     player: PlayerId,
@@ -490,11 +491,11 @@ pub fn cast_up_to_among(
     cards: &[ObjectId],
     most: usize,
     terms: CastTerms,
-    fits: impl Fn(&dyn Game, &CastWay) -> bool,
+    fits: impl Fn(&mut dyn Game, ObjectId, &CastWay) -> bool,
 ) -> Result<(), Suspend> {
     let ways_of = |g: &mut dyn Game, card: ObjectId| -> Vec<CastWay> {
         let ways = g.cast_ways_during_resolution_by(card, player);
-        ways.into_iter().filter(|w| fits(&*g, w)).collect()
+        ways.into_iter().filter(|w| fits(&mut *g, card, w)).collect()
     };
     let mut cast = 0;
     while cast < most {

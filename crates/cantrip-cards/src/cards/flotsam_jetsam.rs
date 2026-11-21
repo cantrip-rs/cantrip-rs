@@ -24,7 +24,7 @@ fn jetsam(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
             &graveyard,
             1,
             CastTerms { instead: Some(ManaCost::ZERO), exile_instead: ExileInstead::Spell, ..CastTerms::default() },
-            |_, _| true,
+            |_, _, _| true,
         )?;
     }
     Ok(())

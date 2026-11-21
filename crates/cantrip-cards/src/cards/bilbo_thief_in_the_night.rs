@@ -27,7 +27,7 @@ fn recast(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         &graveyard,
         1,
         CastTerms { exile_instead: ExileInstead::InstantOrSorcery, ..CastTerms::default() },
-        |g, w| {
+        |g, _, w| {
             let face = g.card(w.face);
             face.is(CardType::Artifact) || face.is(CardType::Instant) || face.is(CardType::Sorcery)
         },

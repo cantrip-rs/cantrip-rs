@@ -28,7 +28,7 @@ fn sacrifice_then_exile_and_cast(g: &mut dyn Game, item: &StackItem) -> Result<(
         &exiled,
         usize::MAX,
         CastTerms { instead: Some(ManaCost::ZERO), ..CastTerms::default() },
-        |g, w| {
+        |g, _, w| {
             let face = g.card(w.face);
             face.is(CardType::Instant) || face.is(CardType::Sorcery)
         },

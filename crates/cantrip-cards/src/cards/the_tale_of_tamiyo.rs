@@ -38,7 +38,7 @@ fn exile_copy_and_cast(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
     g.end_sentence();
     let copies: Vec<ObjectId> = exiled.into_iter().map(|c| g.create_copy_in_exile(c, item.controller)).collect();
     g.end_sentence();
-    choose::cast_up_to_among(g, item.controller, item.object, Purpose::Cast, &copies, usize::MAX, CastTerms::default(), |_, _| true)
+    choose::cast_up_to_among(g, item.controller, item.object, Purpose::Cast, &copies, usize::MAX, CastTerms::default(), |_, _, _| true)
 }
 
 pub static CARD: CardDef = CardDef {

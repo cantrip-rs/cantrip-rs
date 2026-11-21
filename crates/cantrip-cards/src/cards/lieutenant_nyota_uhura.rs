@@ -31,7 +31,7 @@ fn strange_new_worlds(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
         &exiled,
         1,
         CastTerms { instead: Some(ManaCost::ZERO), ..CastTerms::default() },
-        |g, w| {
+        |g, _, w| {
             let face = g.card(w.face);
             face.is(CardType::Instant) || face.is(CardType::Sorcery)
         },
