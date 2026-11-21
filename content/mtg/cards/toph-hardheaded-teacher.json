@@ -1,0 +1,8 @@
+{
+  "name": "Toph, Hardheaded Teacher",
+  "manaCost": "{2}{R}{G}",
+  "type": "Legendary Creature — Human Warrior Ally",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "When Toph enters, you may discard a card. If you do, return target instant or sorcery card from your graveyard to your hand.\nWhenever you cast a spell, earthbend 1. If that spell is a Lesson, put an additional +1/+1 counter on that land. (Target land you control becomes a 0/0 creature with haste that's still a land. Put a +1/+1 counter on it. When it dies or is exiled, return it to the battlefield tapped.)"
+}

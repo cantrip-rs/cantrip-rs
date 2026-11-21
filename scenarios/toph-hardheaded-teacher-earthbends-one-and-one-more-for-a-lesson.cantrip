@@ -1,0 +1,53 @@
+# Toph, Hardheaded Teacher: "Whenever you cast a spell, earthbend 1. If that spell is a Lesson, put an additional +1/+1 counter on
+# that land." Bot1's Lightning Bolt (not a Lesson) earthbends Plains into a 1/1 haste land creature. Octopus Form (an instant Lesson, on
+# Toph) earthbends the same land again: its counter and the additional one, 3/3. The Plains is the only land.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Toph, Hardheaded Teacher
+Lightning Bolt
+Octopus Form
+Plains
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Toph, Hardheaded Teacher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Plains.Power = 1
+? Bot1.Battlefield.Plains.Toughness = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Octopus Form.Cast(Bot1.Battlefield.Toph, Hardheaded Teacher)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Plains.Power = 3
+Bot1.Battlefield.Plains.Toughness = 3
+Bot1.Battlefield.Toph, Hardheaded Teacher.Power = 4

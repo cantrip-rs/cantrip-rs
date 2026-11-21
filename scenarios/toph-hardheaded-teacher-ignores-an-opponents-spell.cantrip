@@ -1,0 +1,38 @@
+# Toph, Hardheaded Teacher: "Whenever YOU cast a spell". Bot2's Mox Jet on turn 2 earthbends nothing: Bot1's Plains is still just a land.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Toph, Hardheaded Teacher
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mox Jet
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Toph, Hardheaded Teacher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Plains.Types = Land

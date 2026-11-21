@@ -1,0 +1,51 @@
+# Toph, Hardheaded Teacher ({2}{R}{G}, 3/4): "When Toph enters, you may discard a card. If you do, return target instant or sorcery card from
+# your graveyard to your hand." Bot1's Lightning Bolt (cast on turn 1) is in its graveyard, and so is Bot2's own Bolt (cast on turn 2,
+# at Bot1): only Bot1's can be returned. Bot1 casts Toph on turn 3 and discards a Plains: the Bolt comes back to the hand (the Plains
+# in its place is in the graveyard), and Bot2's Bolt stays in Bot2's graveyard (with an Island from its hand-size discard).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Toph, Hardheaded Teacher
+Lightning Bolt
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Toph, Hardheaded Teacher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Plains
+Bot1.Hand = Lightning Bolt; Plains
+Bot2.Graveyard.Lightning Bolt.Colors = Red
