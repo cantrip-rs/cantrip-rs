@@ -1,0 +1,37 @@
+# Katara, the Fearless: only an Ally's triggered abilities trigger again. Bot1's Helpful Hunter (a Cat, not an Ally: "when this
+# creature enters, draw a card") draws one card, not two, with Katara on the battlefield, on the same turn-3 main phase as
+# the other Katara scenario: its library, 17 cards before the cast, ends at 16 (a double trigger would leave 15).
+
+[Bot1 Deck]
+Katara, the Fearless
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Helpful Hunter
+Plains x20
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Katara, the Fearless.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Helpful Hunter.Cast
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Helpful Hunter; Katara, the Fearless; Mox Emerald; Mox Pearl; Mox Sapphire
+Bot1.Library.Count = 16

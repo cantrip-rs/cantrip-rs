@@ -1,0 +1,8 @@
+{
+  "name": "Katara, the Fearless",
+  "manaCost": "{G}{W}{U}",
+  "type": "Legendary Creature — Human Warrior Ally",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "If a triggered ability of an Ally you control triggers, that ability triggers an additional time."
+}

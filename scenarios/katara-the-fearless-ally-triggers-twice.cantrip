@@ -1,0 +1,50 @@
+# Katara, the Fearless {G}{W}{U}: "If a triggered ability of an Ally you control triggers, that ability triggers an additional
+# time" (CR 603.2d). Bot1's Invasion Reinforcements (an Ally: "when this creature enters, create a 1/1 white Ally creature
+# token") triggers twice and makes two tokens; the Ally tokens have no triggers of their own. Bot2's own Invasion
+# Reinforcements, an Ally under the other player, triggers once and makes one token.
+
+[Bot1 Deck]
+Katara, the Fearless
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Invasion Reinforcements
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Invasion Reinforcements
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Katara, the Fearless.Cast
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Invasion Reinforcements.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Invasion Reinforcements.Cast
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Ally Token; Ally Token; Invasion Reinforcements; Katara, the Fearless; Mox Emerald; Mox Pearl; Mox Sapphire
+Bot2.Battlefield = Ally Token; Invasion Reinforcements; Mox Jet; Mox Pearl
