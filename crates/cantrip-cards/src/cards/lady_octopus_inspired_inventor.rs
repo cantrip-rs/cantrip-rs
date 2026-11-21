@@ -21,12 +21,12 @@ fn ingenuity(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// "You may cast an artifact spell from your hand with mana value less than or equal to the number of ingenuity counters
 /// on Lady Octopus without paying its mana cost." The spell is cast as the ability resolves or not at all (CR 608.2g, the
-/// rulings); what it is - an artifact, its mana value - is the face it would be cast as (CR 709.3b, 715.3b), X being 0
+/// rulings); what it is - an artifact, its mana value - is the spell the card would be cast as (CR 601.3e, 709.3b), X being 0
 /// (CR 107.3b, 118.9). The counters are counted as she is now, or as she last was on the battlefield (CR 608.2h).
 fn cast_artifact(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
     let most = g.obj(item.object).counters(CounterKind::Ingenuity).max(0) as u32;
-    choose::may_cast_from_hand_free(g, you, item.object, "artifact", |g, w| g.card(w.face).types.has(CardType::Artifact) && w.mana_value <= most)
+    choose::may_cast_from_hand_free(g, you, item.object, "artifact", |g, card, w| g.chars_as_cast(card, w.way, you).is(CardType::Artifact) && w.mana_value <= most)
 }
 
 pub static CARD: CardDef = CardDef {
