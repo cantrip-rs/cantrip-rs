@@ -1,0 +1,8 @@
+{
+  "name": "Fire Lord Azula",
+  "manaCost": "{1}{U}{B}{R}",
+  "type": "Legendary Creature — Human Noble",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Firebending 2 (Whenever this creature attacks, add {R}{R}. This mana lasts until end of combat.)\nWhenever you cast a spell while Fire Lord Azula is attacking, copy that spell. You may choose new targets for the copy. (A copy of a permanent spell becomes a token.)"
+}
