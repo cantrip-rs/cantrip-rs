@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{damage_target, effects, targets};
+use cantrip_mechanics::{damage_target, effects, noncreature_nonland_cards_in_graveyard, targets};
 use cantrip_oracle as oracle;
 
 /// "I — Judgment Bolt — This creature deals damage equal to the number of noncreature, nonland cards in your graveyard to
@@ -7,15 +7,7 @@ use cantrip_oracle as oracle;
 /// 2025-06-06); a card in a graveyard has the types of the card (CR 404.1), so an artifact creature or a land creature is not
 /// counted. The damage is dealt by the Saga creature, and not at all if the target is no longer legal (CR 608.2b).
 fn judgment_bolt(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let n = g
-        .state()
-        .zone(Zone::graveyard(item.controller))
-        .iter()
-        .filter(|&&id| {
-            let chars = g.chars(id);
-            !chars.is(CardType::Creature) && !chars.is(CardType::Land)
-        })
-        .count() as u32;
+    let n = noncreature_nonland_cards_in_graveyard(g, item.controller) as u32;
     damage_target(g, item, 0, n);
     Ok(())
 }

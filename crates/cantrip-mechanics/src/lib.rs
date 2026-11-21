@@ -613,6 +613,13 @@ pub fn creature_cards_in_graveyard(q: &dyn Query, player: PlayerId) -> usize {
     q.state().zone(Zone::graveyard(player)).iter().filter(|&&card| q.chars(card).is(CardType::Creature)).count()
 }
 
+/// How many noncreature, nonland cards are in `player`'s graveyard (CR 404.1, 205.2): cards only, never tokens, counted as it is
+/// asked, the types a card has there, so an artifact creature or a land creature does not count and a Kindred noncreature card does.
+/// Serpent of the Pass and Ravenous Cosmozoan reduce their cost by it and Summon: Esper Ramuh deals that much damage.
+pub fn noncreature_nonland_cards_in_graveyard(q: &dyn Query, player: PlayerId) -> usize {
+    q.state().zone(Zone::graveyard(player)).iter().filter(|&&card| !q.chars(card).is(CardType::Creature) && !q.chars(card).is(CardType::Land)).count()
+}
+
 /// How many cards in `player`'s graveyard are instant cards, sorcery cards, and/or have an Adventure (CR 715.1, 404.1): each counted
 /// once however many of those it is, as it is asked. A card that has an Adventure counts whether or not it was ever cast as one, and
 /// a card the graveyard holds counts as the card it is there, so a creature card with an Adventure is not an instant or a sorcery but
