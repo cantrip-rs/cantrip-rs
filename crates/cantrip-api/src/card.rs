@@ -1005,7 +1005,7 @@ pub struct Cost {
     pub discard_hand: bool,
     /// Collect evidence N (CR 701.59a): exile cards with total mana value N or more from your graveyard, other than the
     /// source, chosen as the cost is chosen.
-    pub collect_evidence: u8,
+    pub collect_evidence: u32,
     /// "Collect evidence X" as a resolving payment asks it (CR 701.59a, 107.3f: "you may collect evidence X", `Game::may_pay_x`):
     /// collect evidence of the X the payer chooses as they pay, `collect_evidence` then that X. Collecting evidence 0 exiles
     /// nothing and is still collecting evidence (Incinerator of the Guilty's ruling). Not a spell's or an activated ability's.

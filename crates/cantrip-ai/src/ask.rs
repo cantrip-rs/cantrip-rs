@@ -676,11 +676,14 @@ pub(crate) fn ask_of(
             ..
         } => {
             source = r(*s);
-            let (cards, values) = sorted_with(cards.iter().map(|&id| r(id)).collect(), values);
+            // The observation keeps its byte-wide features, as `Craft`'s do (a bot's input, not a rule: the request keeps the whole number).
+            let narrow = |v: u32| u8::try_from(v).unwrap_or(u8::MAX);
+            let values: Vec<u8> = values.iter().map(|&v| narrow(v)).collect();
+            let (cards, values) = sorted_with(cards.iter().map(|&id| r(id)).collect(), &values);
             AskKind::CollectEvidence {
                 cards,
                 values,
-                minimum: *minimum,
+                minimum: narrow(*minimum),
             }
         }
         RequestKind::Craft {

@@ -1443,10 +1443,10 @@ impl<'s> Run<'s> {
                 let mut total = 0u32;
                 let mut chosen = Vec::new();
                 for (&card, &value) in cards.iter().zip(values) {
-                    if total >= *minimum as u32 {
+                    if total >= *minimum {
                         break;
                     }
-                    total += value as u32;
+                    total += value;
                     chosen.push(card);
                 }
                 Answer::Cards(chosen)

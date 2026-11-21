@@ -1054,7 +1054,7 @@ fn can_pay_other_judged(cx: &Cx, source: ObjectId, controller: PlayerId, cost: &
     // ability could put more there.
     if cost.collect_evidence > 0 {
         let total: u32 = cx.s().zone(Zone::graveyard(controller)).iter().filter(|&&c| c != source).map(|&c| cx.mana_value(c)).sum();
-        if total < cost.collect_evidence as u32 && !fed().evidence_covers(total, cost.collect_evidence as u32) {
+        if total < cost.collect_evidence && !fed().evidence_covers(total, cost.collect_evidence) {
             return false;
         }
     }
@@ -1712,17 +1712,17 @@ fn choose_hand_exiles(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Co
 fn choose_evidence(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost, taken: &[ObjectId]) -> R<Vec<ObjectId>> {
     let (cards, values, minimum, symbols) = if let Some((color, n)) = cost.exile_symbols {
         let cards: Vec<ObjectId> = symbol_exiles(cx, player, source, color).into_iter().filter(|c| !taken.contains(c)).collect();
-        let values: Vec<u8> = cards.iter().map(|&c| cx.mana_symbols(c, color).min(255) as u8).collect();
-        (cards, values, n, Some(color))
+        let values: Vec<u32> = cards.iter().map(|&c| cx.mana_symbols(c, color)).collect();
+        (cards, values, u32::from(n), Some(color))
     } else if cost.collect_evidence > 0 {
         let cards: Vec<ObjectId> = cx.s().zone(Zone::graveyard(player)).iter().copied().filter(|&c| c != source && !taken.contains(&c)).collect();
-        let values: Vec<u8> = cards.iter().map(|&c| cx.mana_value(c).min(255) as u8).collect();
+        let values: Vec<u32> = cards.iter().map(|&c| cx.mana_value(c)).collect();
         (cards, values, cost.collect_evidence, None)
     } else {
         return Ok(Vec::new());
     };
     // Too little to exile is a cost that can't be paid (CR 601.2h, 701.59a): the cast or activation is taken back.
-    if values.iter().map(|&v| u32::from(v)).sum::<u32>() < u32::from(minimum) {
+    if values.iter().sum::<u32>() < minimum {
         return Err(Stop::Cancel);
     }
     let ask = RequestKind::CollectEvidence { source, cards, values, minimum, symbols };
@@ -3196,7 +3196,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                         if let Some((color, n)) = cost.exile_symbols {
                             symbol_exiles(cx, player, spell, color).into_iter().filter(|id| !taken.contains(id)).map(|id| cx.mana_symbols(id, color)).sum::<u32>() >= u32::from(n)
                         } else {
-                            cx.s().zone(Zone::graveyard(player)).iter().copied().filter(|id| *id != spell && !taken.contains(id)).map(|id| cx.mana_value(id)).sum::<u32>() >= u32::from(cost.collect_evidence)
+                            cx.s().zone(Zone::graveyard(player)).iter().copied().filter(|id| *id != spell && !taken.contains(id)).map(|id| cx.mana_value(id)).sum::<u32>() >= cost.collect_evidence
                         }
                     }
                     _ => false,
@@ -16385,7 +16385,7 @@ fn pay_during_resolution_inner(
         // "Collect evidence X" (CR 701.59a, 107.3f) is collect evidence of the X chosen so far.
         let evidence;
         let cost = if cost.collect_evidence_x {
-            evidence = Cost { collect_evidence: u8::try_from(x.unwrap_or(0)).unwrap_or(u8::MAX), ..*cost };
+            evidence = Cost { collect_evidence: x.unwrap_or(0), ..*cost };
             &evidence
         } else {
             cost
@@ -16461,7 +16461,7 @@ fn pay_during_resolution_inner(
                 Some(Some(limit)) => n < limit,
                 Some(None) => false,
                 // Collect evidence X no further than the graveyard could pay (CR 701.59b), counted as collect evidence is.
-                None if cost.collect_evidence_x => u8::try_from(n + 1).is_ok_and(|more| resolution_rest_payable(cx, payer, source, with, &Cost { collect_evidence: more, ..*cost }, n + 1, false)),
+                None if cost.collect_evidence_x => resolution_rest_payable(cx, payer, source, with, &Cost { collect_evidence: n + 1, ..*cost }, n + 1, false),
                 None => n < MOST_X_PAID,
             };
             if more {

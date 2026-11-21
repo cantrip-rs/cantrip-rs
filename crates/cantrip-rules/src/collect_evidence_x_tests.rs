@@ -66,10 +66,10 @@ fn x_is_raised_only_as_far_as_the_graveyard_could_pay() {
 }
 
 #[test]
-fn x_is_no_more_than_collect_evidence_counts() {
-    // 258 in the graveyard, but X stops at 255.
-    assert!(offers(&offered(&[3; 86], 254), ActionKind::IncreaseX));
-    let most = offered(&[3; 86], 255);
+fn x_goes_past_a_byte_to_what_the_graveyard_adds_up_to() {
+    // 258 in the graveyard: X is raised past 255, as far as 258 and no further (CR 701.59b; a total of mana values is 32-bit).
+    assert!(offers(&offered(&[3; 86], 255), ActionKind::IncreaseX));
+    let most = offered(&[3; 86], 258);
     assert!(offers(&most, ActionKind::PayCost) && !offers(&most, ActionKind::IncreaseX));
 }
 

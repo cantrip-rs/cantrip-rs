@@ -1209,8 +1209,8 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 // The total is mana value, or, for a cost counting a color's mana symbols (CR 700.5), those, which `kind` names
                 // for the caption ("black mana symbols"); empty for mana value.
                 kind: symbols.map_or_else(String::new, |color| format!("{} mana symbols", color.name().to_lowercase())),
-                minimum_mana_value: i32::from(*minimum),
-                mana_values: values.iter().map(|&v| i32::from(v)).collect(),
+                minimum_mana_value: wire(*minimum),
+                mana_values: values.iter().map(|&v| wire(v)).collect(),
                 ..Default::default()
             })
         }

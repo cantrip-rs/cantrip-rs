@@ -15,7 +15,7 @@ fn collect_evidence_of_the_targets(q: &dyn Query, _: &Asker, chosen: &[Target]) 
     permanents.sort_unstable();
     permanents.dedup();
     let total: u32 = permanents.iter().map(|&id| q.mana_value(id)).sum();
-    Cost { collect_evidence: total.min(255) as u8, ..Cost::NONE }
+    Cost { collect_evidence: total, ..Cost::NONE }
 }
 
 /// "Destroy up to one target artifact, up to one target creature, up to one target enchantment, and up to one target
