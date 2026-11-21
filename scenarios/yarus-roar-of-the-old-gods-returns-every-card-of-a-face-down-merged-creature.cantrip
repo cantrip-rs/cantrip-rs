@@ -1,0 +1,77 @@
+# Yarus, Roar of the Old Gods: a face-down merged creature that dies returns every card it was (CR 730.3c). Turn 1 Bot1 casts
+# Yarus, turn 3 Vengeful Creeper face down, and turn 5 Cubwarden mutates under the face-down Creeper, which stays face down. Turn 6
+# Bot2's Wrath of God destroys both; both the Creeper's and Cubwarden's cards return face down and are turned face up.
+
+[Bot1 Deck]
+Forest
+Sol Ring
+Black Lotus
+Mox Ruby
+Yarus, Roar of the Old Gods
+Vengeful Creeper
+Cubwarden
+Island
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Plains
+Black Lotus
+Wrath of God
+Plains x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Yarus, Roar of the Old Gods.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Vengeful Creeper.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Cubwarden.Cast(Bot1.Battlefield.#1; Ability: Mutate)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Vengeful Creeper
+[T6 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Wrath of God.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Cubwarden; Forest; Island; Mox Ruby; Sol Ring; Vengeful Creeper
+Bot1.Graveyard = Yarus, Roar of the Old Gods; Black Lotus; Black Lotus

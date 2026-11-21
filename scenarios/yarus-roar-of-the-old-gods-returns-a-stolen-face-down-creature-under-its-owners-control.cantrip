@@ -1,0 +1,67 @@
+# Yarus, Roar of the Old Gods: "return it to the battlefield face down under its owner's control" (CR 108.3). Turn 2 Bot2
+# casts Ainok Tracker face down for its morph. Turn 3 Bot1, with Yarus, takes the face-down creature with Control Magic and
+# kills it with Lightning Bolt: a face-down creature Bot1 controls died, so Yarus returns its card - under Bot2's control,
+# its owner, not Bot1's - and turns it face up.
+
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Mox Sapphire
+Black Lotus
+Yarus, Roar of the Old Gods
+Control Magic
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Ainok Tracker
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Yarus, Roar of the Old Gods.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Ainok Tracker.Cast(Ability: Morph)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Control Magic.Cast(Bot2.Battlefield.#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.#1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Ruby; Mox Sapphire; Yarus, Roar of the Old Gods
+Bot2.Battlefield = Ainok Tracker
+Bot2.Battlefield.Ainok Tracker.FaceDown = (absent)
+Bot1.Graveyard = Control Magic; Lightning Bolt; Black Lotus; Black Lotus

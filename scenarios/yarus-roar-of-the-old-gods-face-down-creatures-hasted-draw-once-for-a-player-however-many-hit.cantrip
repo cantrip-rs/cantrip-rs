@@ -1,0 +1,78 @@
+# Yarus, Roar of the Old Gods: "Other creatures you control have haste" and "Whenever one or more face-down creatures you
+# control deal combat damage to a player, draw a card" (CR 510.2, 708.2; the ruling: once for each player dealt damage, however
+# many creatures dealt it). Turn 1 Bot1 casts Yarus, then Vengeful Creeper face down for its disguise; the hasted face-down 2/2
+# attacks at once and Bot1 draws Basilica Stalker. Turn 3 Bot1 casts the Stalker face down too and attacks with both: four
+# damage to Bot2, one card drawn. Yarus itself, face up and not attacking, has no haste of its own. Turn 5 Yarus attacks
+# alone: a face-up creature's combat damage draws nothing.
+
+[Bot1 Deck]
+Forest
+Sol Ring
+Black Lotus
+Mox Ruby
+Mox Emerald
+Yarus, Roar of the Old Gods
+Vengeful Creeper
+Basilica Stalker
+Island
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Yarus, Roar of the Old Gods.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Vengeful Creeper.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Keywords = Haste
+? Bot1.Battlefield.Yarus, Roar of the Old Gods.Keywords = (absent)
+? Bot1.Hand.Count = 0
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(#1 > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 18
+? Bot1.Hand = Basilica Stalker
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Basilica Stalker.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(#1 > Bot2; #2 > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 14
+? Bot1.Hand.Count = 1
+? Bot1.Hand = Island
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Yarus, Roar of the Old Gods > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 10
+Bot1.Hand.Count = 2
+Bot1.Hand = Island; Island
