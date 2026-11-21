@@ -1,0 +1,78 @@
+# Bumi, Unleashed: "When Bumi enters, earthbend 4." (CR 701.66a): cast on turn 3 with Black Lotus (RRR), Mox Emerald and Mox Jet, it
+# makes Forest#1 a 4/4 haste land creature. On turn 5 Bot1 taps Forest#2 for mana and attacks with Bumi (5) and the Forest
+# creature (4), keeping Memnite (1/1) at home: Bot2 takes 9. "Untap all lands you control" untaps both Forests (the attacking
+# land creature too), and "after this phase, there is an additional combat phase. Only land creatures can attack during that
+# combat phase": made as the ability resolves, no trigger (CR 611.2a), so nothing is on the stack as that phase begins. Memnite is
+# refused, the Forest creature attacks again for 4 more: Bot2 is at 7.
+
+[Bot1 Deck]
+Forest
+Mox Jet
+Mox Emerald
+Black Lotus
+Bumi, Unleashed
+Memnite
+Forest
+Forest x18
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Bumi, Unleashed.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Forest#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest#1.Counters.PlusOnePlusOne = 4
+? Bot1.Battlefield.Forest#1.Power = 4
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest#2.Activate
+? Bot1.Battlefield.Forest#2.Tapped = true
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Bumi, Unleashed > Bot2; Forest#1 > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 11
+? Stack = Bumi, Unleashed
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest#2.Tapped = false
+? Bot1.Battlefield.Forest#1.Tapped = false
+? Bot1.Battlefield.Bumi, Unleashed.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Step = EndCombat
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+? Stack.Count = 0
+Bot1.Pass
+Bot2.Pass
+? Step = Attackers
+! Bot1.Attack(Memnite > Bot2)
+Bot1.Attack(Forest#1 > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 7
+Bot1.Battlefield.Forest#1.Tapped = true
