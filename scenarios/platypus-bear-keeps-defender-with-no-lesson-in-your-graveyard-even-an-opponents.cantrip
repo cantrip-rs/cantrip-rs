@@ -1,0 +1,43 @@
+# Platypus-Bear: with no Lesson card in your graveyard it keeps defender (CR 702.3b). Its enter trigger mills two Plains, so on turn 3 it can't
+# be declared as an attacker while Bot1's Memnite can (Bot2 20 -> 19). Bot2's Firebending Lesson, aimed at the Bear on turn 2, ends up in
+# Bot2's graveyard, not Bot1's, and the 2 damage doesn't kill the 2/3 Bear: it still can't attack. (The other half is in the scenario
+# where a milled Lesson lets it attack.)
+
+[Bot1 Deck]
+Platypus-Bear
+Memnite
+Mox Emerald
+Mox Ruby
+Plains x16
+
+[Bot2 Deck]
+Mox Ruby
+Firebending Lesson
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Platypus-Bear.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Plains; Plains
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Firebending Lesson.Cast(Bot1.Battlefield.Platypus-Bear)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+? Bot2.Graveyard = Firebending Lesson
+? Bot1.Battlefield = Memnite; Mox Emerald; Mox Ruby; Platypus-Bear
+! Bot1.Attack(Platypus-Bear > Bot2)
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19

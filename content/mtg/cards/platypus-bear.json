@@ -1,0 +1,11 @@
+{
+  "name": "Platypus-Bear",
+  "manaCost": "{1}{G/U}",
+  "type": "Creature — Platypus Bear",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Defender\nWhen this creature enters, mill two cards. (Put the top two cards of your library into your graveyard.)\nAs long as there is a Lesson card in your graveyard, this creature can attack as though it didn't have defender.",
+  "keywords": [
+    "Defender"
+  ]
+}
