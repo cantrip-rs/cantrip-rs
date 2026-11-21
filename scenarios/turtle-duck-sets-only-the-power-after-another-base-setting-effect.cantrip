@@ -1,0 +1,47 @@
+# Turtle-Duck: "base power 4" is a layer 7b setting effect that sets only the power (CR 613.4b), and a later one overrides an earlier
+# one by timestamp. Quandrix Charm first makes the 0/4 Duck a 5/5; the ability then sets base power 4 only, so it is a 4/5 with trample
+# (toughness 5 is kept, and the power is 4 and not 5+4).
+
+[Bot1 Deck]
+Turtle-Duck
+Quandrix Charm
+Black Lotus
+Mox Emerald
+Mox Emerald
+Mox Sapphire
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Turtle-Duck.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Quandrix Charm.Cast
+Bot1.Modes(Target creature has base power and toughness 5/5)
+Bot1.Target(Turtle-Duck)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Turtle-Duck.Power = 5
+? Bot1.Battlefield.Turtle-Duck.Toughness = 5
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Turtle-Duck.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Turtle-Duck.Power = 4
+Bot1.Battlefield.Turtle-Duck.Toughness = 5
+Bot1.Battlefield.Turtle-Duck.Keywords = Trample
