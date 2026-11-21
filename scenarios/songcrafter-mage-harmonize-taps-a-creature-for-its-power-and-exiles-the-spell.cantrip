@@ -1,0 +1,51 @@
+# Songcrafter Mage gives an instant or sorcery card in your graveyard harmonize until end of turn, its harmonize cost equal to its
+# mana cost (CR 702.180a). Think Twice ({1}{U}) is in the graveyard; on turn 3 Songcrafter Mage (summoning sick, but tapping it is
+# a cost of the harmonize cast, not a {T} ability, so that is allowed) is tapped to take its power, 3, off the generic part,
+# {1}, so the {U} an Island gives pays for the whole spell. Think Twice resolves, drawing a card, and is exiled, not put into the
+# graveyard (CR 702.180a) - where its own flashback would have put it.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Think Twice
+Songcrafter Mage
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Think Twice.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Songcrafter Mage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Graveyard.Think Twice.Cast(Ability: Harmonize)
+Bot1.Choose(Songcrafter Mage)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile = Think Twice
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Songcrafter Mage.Tapped = true
+Bot1.Battlefield.Island.Tapped = true

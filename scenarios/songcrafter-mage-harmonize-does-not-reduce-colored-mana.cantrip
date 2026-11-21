@@ -1,0 +1,45 @@
+# Harmonize's reduction takes generic mana off only (CR 702.180a, 601.2f): Lightning Bolt's harmonize cost is {R}, so tapping
+# Songcrafter Mage (power 3) takes nothing off it, and with no red mana left (Mox Ruby paid for Songcrafter Mage's {R}) the cast is refused. With a Mountain's {R} it is
+# cast, without a creature tapped, and exiled, its 3 damage dealt to Bot2 twice over (the hard cast on turn 1, then this one).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Lightning Bolt
+Songcrafter Mage
+Mountain
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Songcrafter Mage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Graveyard.Lightning Bolt.Cast(Ability: Harmonize; Bot2; Mana: short)
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Graveyard.Lightning Bolt.Cast(Ability: Harmonize; Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 14
+Exile = Lightning Bolt
+Bot1.Battlefield.Songcrafter Mage.Tapped = false

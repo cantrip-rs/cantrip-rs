@@ -1,0 +1,49 @@
+# Tapping a creature is the harmonize cost's option, not a requirement (CR 702.180a: "you may tap"). Turn 3: Think Twice
+# ({1}{U}) is harmonized with no creature tapped, paying the whole {1}{U} - Mox Pearl for the generic mana and an Island for the {U} -
+# and Songcrafter Mage stays untapped. The spell is still exiled (CR 702.180a).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Think Twice
+Songcrafter Mage
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Think Twice.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Songcrafter Mage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Graveyard.Think Twice.Cast(Ability: Harmonize)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile = Think Twice
+Bot1.Battlefield.Songcrafter Mage.Tapped = false
+Bot1.Battlefield.Mox Pearl.Tapped = true
+Bot1.Battlefield.Island.Tapped = true

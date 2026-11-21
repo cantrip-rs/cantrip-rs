@@ -1,0 +1,46 @@
+# The granted harmonize changes the cost and the zone, not the timing (CR 702.180a, 117.1a): Songcrafter Mage flashed in during
+# Bot2's end step on turn 4 gives Boltwave harmonize, but Boltwave is a sorcery, so Bot1 may not cast it then (refused, with the
+# {R} to pay for it floating). The grant lasts until end of turn (CR 514.2): in Bot1's main phase on turn 5 it is gone, and
+# Boltwave in the graveyard is refused again. Bot2 has taken Boltwave's 3 damage once only, from the hard cast on turn 1.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Boltwave
+Songcrafter Mage
+Mountain
+Mountain
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Boltwave.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T4 Bot2.End]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Songcrafter Mage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Graveyard.Boltwave.Cast(Ability: Harmonize)
+[T5 Bot1.Main1]
+! Bot1.Graveyard.Boltwave.Cast(Ability: Harmonize)
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Boltwave
+Bot1.Battlefield.Songcrafter Mage.Tapped = false

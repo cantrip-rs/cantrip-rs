@@ -1,0 +1,44 @@
+# A sorcery given harmonize can be cast in its controller's main phase with an empty stack (CR 117.1a, 702.180a). Boltwave
+# ({R}, 3 damage to each opponent) is cast from hand on turn 1; on turn 3 Songcrafter Mage enters in the main phase, gives the
+# graveyard Boltwave harmonize, and Bot1 casts it again for {R} from Mox Ruby - 3 more damage - and it is exiled.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Boltwave
+Songcrafter Mage
+Mountain
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Boltwave.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Songcrafter Mage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Boltwave.Cast(Ability: Harmonize)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 14
+Exile = Boltwave
+Bot1.Graveyard.Count = 0
