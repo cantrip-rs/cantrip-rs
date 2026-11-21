@@ -1,0 +1,35 @@
+# Woodwork Prodigy's upkeep ability has an intervening "if this creature isn't prepared" (CR 603.4): turn 3's upkeep prepares
+# it, Bot1 does not cast the copy, and at turn 5's upkeep it is prepared already, so nothing triggers and there is still one
+# copy of Soul Tether in exile (a creature cannot become prepared twice, CR 722.3a).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Woodwork Prodigy
+Island x3
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Woodwork Prodigy.Cast
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+[T3 Bot1.Main1]
+? Exile.Count = 1
+[T5 Bot1.Upkeep]
+? Stack.Count = 0
+[T5 Bot1.Main1]
+
+[Expect]
+Exile = Soul Tether
+Exile.Count = 1
+Bot1.Battlefield.Woodwork Prodigy.Prepared = true

@@ -1,0 +1,54 @@
+# Woodwork Prodigy: "At the beginning of your upkeep, if this creature isn't prepared, it becomes prepared" (CR 603.4, 722.3a).
+# Cast turn 1 (three Mox Rubies pay {2}{R/G}), it is not prepared until turn 3's upkeep, which puts a copy of Soul Tether in
+# exile. Casting the copy (CR 722.3c) unprepares it and takes the copy with it; it makes a Heartwood token. Turn 5's upkeep
+# prepares it again, a new copy of Soul Tether.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Woodwork Prodigy
+Island x3
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Woodwork Prodigy.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Woodwork Prodigy.Prepared = (absent)
+? Exile.Count = 0
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Woodwork Prodigy.Prepared = true
+? Exile = Soul Tether
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Exile.Soul Tether.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Woodwork Prodigy.Prepared = (absent)
+? Exile.Count = 0
+? Bot1.Battlefield.Heartwood Token.Colors = Green; Red
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Woodwork Prodigy.Prepared = true
+Bot1.Battlefield.Woodwork Prodigy.Power = 3
+Bot1.Battlefield.Woodwork Prodigy.Toughness = 3
+Exile = Soul Tether
+Exile.Count = 1
+Bot1.Battlefield = Mox Ruby; Mox Ruby; Mox Ruby; Woodwork Prodigy; Heartwood Token
+Bot1.Graveyard.Count = 0
