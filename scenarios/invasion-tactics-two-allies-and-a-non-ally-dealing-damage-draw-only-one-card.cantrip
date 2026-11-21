@@ -1,0 +1,56 @@
+# Invasion Tactics, "Whenever one or more Allies you control deal combat damage to a player, draw a card" (CR 510.2, 603.2c): one trigger for the
+# whole batch, however many Allies and whatever else deals damage. Bot1 has Stonework Puma (2/2) and Expedition Envoy (2/1), Allies, and Memnite (a 1/1 that is
+# none), and Invasion Tactics from turn 3. On turn 5 all three attack Bot2, unblocked: 5 damage (Bot2 is at 15) and Bot1 draws one card, not two or three (Bot1 holds the Island it drew).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Stonework Puma
+Black Lotus
+Invasion Tactics
+Expedition Envoy
+Memnite
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stonework Puma.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Expedition Envoy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Invasion Tactics.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+? Bot1.Hand.Count = 1
+Bot1.Attack(Stonework Puma > Bot2; Expedition Envoy > Bot2; Memnite > Bot2)
+[T5 Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 15
+Bot1.Hand.Count = 2
