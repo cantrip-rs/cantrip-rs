@@ -1,0 +1,85 @@
+# Yarus, Roar of the Old Gods: "Whenever a face-down creature you control dies, return it to the battlefield face down under its
+# owner's control if it's a permanent card, then turn it face up" (CR 708.2a, 708.8). Bot1 has Yarus and two face-down disguise
+# creatures, Vengeful Creeper and Basilica Stalker. Turn 4 Bot2's Pyroclasm kills both 2/2s together (Yarus, a 4/4, lives):
+# Yarus triggers for each. Each comes back face down and is turned face up - the Creeper's "When this creature is turned face
+# up" then destroys Bot2's Mox Jet - so Bot1 ends with the 5/5 Creeper and the 3/4 flying Stalker, both untapped, and nothing
+# in the graveyard but its Black Lotus.
+
+[Bot1 Deck]
+Forest
+Sol Ring
+Black Lotus
+Mox Ruby
+Mox Emerald
+Yarus, Roar of the Old Gods
+Vengeful Creeper
+Basilica Stalker
+Island
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Jet
+Black Lotus
+Pyroclasm
+Mountain x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Yarus, Roar of the Old Gods.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Vengeful Creeper.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Basilica Stalker.Cast(Ability: Disguise)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.#1.FaceDown = true
+? Bot1.Battlefield.#2.FaceDown = true
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Pyroclasm.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Vengeful Creeper.Power = 5
+Bot1.Battlefield.Vengeful Creeper.Tapped = false
+Bot1.Battlefield.Basilica Stalker.Tapped = false
+Bot1.Battlefield.Vengeful Creeper.FaceDown = (absent)
+Bot1.Battlefield.Basilica Stalker.FaceDown = (absent)
+Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Basilica Stalker.Power = 3
+Bot1.Battlefield.Basilica Stalker.Keywords = Disguise; Flying; Haste
+Bot1.Battlefield.Yarus, Roar of the Old Gods.Power = 4
+Bot1.Graveyard = Black Lotus
+Bot2.Graveyard = Mox Jet; Pyroclasm; Black Lotus

@@ -1,0 +1,68 @@
+# Yarus, Roar of the Old Gods returns a face-down creature that died only "if it's a permanent card" (CR 110.4a): Bot1 has
+# Yarus, and Reality Shift exiles its own Memnite so it manifests the Lightning Bolt on top of its library (CR 701.40a). Bot2
+# bolts the face-down 2/2; Yarus triggers for it, but the card it became is an instant, so it stays in Bot1's graveyard and
+# nothing returns.
+
+[Bot1 Deck]
+Forest
+Sol Ring
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Yarus, Roar of the Old Gods
+Memnite
+Reality Shift
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Yarus, Roar of the Old Gods.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Reality Shift.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Lightning Bolt
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.#1)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Forest; Mox Ruby; Mox Sapphire; Sol Ring; Yarus, Roar of the Old Gods
+Bot1.Graveyard = Lightning Bolt; Reality Shift; Black Lotus
+Bot2.Graveyard = Lightning Bolt

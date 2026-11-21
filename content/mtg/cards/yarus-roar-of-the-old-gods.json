@@ -1,0 +1,8 @@
+{
+  "name": "Yarus, Roar of the Old Gods",
+  "manaCost": "{2}{R}{G}",
+  "type": "Legendary Creature — Centaur Druid",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Other creatures you control have haste.\nWhenever one or more face-down creatures you control deal combat damage to a player, draw a card.\nWhenever a face-down creature you control dies, return it to the battlefield face down under its owner's control if it's a permanent card, then turn it face up."
+}
