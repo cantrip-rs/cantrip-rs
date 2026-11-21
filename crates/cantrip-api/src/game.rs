@@ -1705,8 +1705,9 @@ pub trait Game: Query {
     /// `player` looks at face-down cards in exile (CR 406.3), and may from now on.
     fn look_at(&mut self, player: PlayerId, cards: &[ObjectId]);
     /// Puts an object onto the battlefield face down under `controller`'s control (CR 708.3), tapped if `tapped`: what it is
-    /// face down is `how` it was put there (`FaceDown`: manifested, CR 701.40a; cloaked, CR 701.58a), and its controller
-    /// may turn it face up for its mana cost if it is a creature card (CR 701.40b, 701.58b). The permanent, or None if it
+    /// face down is `how` it was put there (`FaceDown`: manifested, CR 701.40a; cloaked, CR 701.58a; neither, CR 708.2a), and
+    /// its controller may turn a manifested or cloaked one face up for its mana cost if it is a creature card (CR 701.40b,
+    /// 701.58b), never a `FaceDown::Bare` one. The permanent, or None if it
     /// did not enter face down: a card that changed zones since it was chosen (CR 400.7), or one a rule or effect kept off
     /// the battlefield or sent elsewhere, which keeps its own characteristics (CR 701.40f, 701.58f).
     fn put_onto_battlefield_face_down(&mut self, object: ObjectId, controller: PlayerId, how: FaceDown, tapped: bool) -> Result<Option<ObjectId>, Suspend>;

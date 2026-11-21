@@ -400,7 +400,8 @@ pub static CLOAKED: CardDef = CardDef {
 
 /// What a card cast face down by morph is (CR 702.37a, 702.37c, 708.2): a 2/2 creature with no text, no name, no subtypes
 /// and no mana cost, as a spell and as the permanent it becomes. Turned face up for its morph cost, or its disguise cost
-/// (CR 702.37e, 702.168d), never for its mana cost: it was not manifested.
+/// (CR 702.37e, 702.168d), never for its mana cost: it was not manifested. What a permanent an effect puts onto the
+/// battlefield face down without manifesting or cloaking it is too (CR 708.2a, `FaceDown::Bare`: Yarus, Roar of the Old Gods).
 pub static MORPHED: CardDef = CardDef {
     name: "",
     has_cost: false,
