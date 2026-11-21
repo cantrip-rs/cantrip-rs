@@ -1,0 +1,61 @@
+# Barrels of Blasting Jelly: "{5}, {T}, Sacrifice this artifact: It deals 5 damage to target creature." Bot2 casts an Aberrant Manawurm (2/5) on turn 2. On turn 3 Bot1 has only four Moxes, short of the {5}
+# (the Barrels' own mana ability only turns {1} into {1}). On turn 5 the fifth Mox arrives: Bot2's Mox Ruby, not a creature, is refused, and the 5 damage (exactly lethal to the 2/5) destroys the
+# Manawurm, the Barrels sacrificed to pay.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Barrels of Blasting Jelly
+Island
+Island
+Island
+Mox Emerald
+Island x11
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Aberrant Manawurm
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Barrels of Blasting Jelly.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Aberrant Manawurm.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Barrels of Blasting Jelly.Activate(Ability: {5}, {T}, Sacrifice this artifact: It deals 5 damage to target creature; Bot2.Battlefield.Aberrant Manawurm; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Barrels of Blasting Jelly.Activate(Ability: {5}, {T}, Sacrifice this artifact: It deals 5 damage to target creature; Bot2.Battlefield.Mox Ruby)
+Bot1.Battlefield.Barrels of Blasting Jelly.Activate(Ability: {5}, {T}, Sacrifice this artifact: It deals 5 damage to target creature; Bot2.Battlefield.Aberrant Manawurm)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Aberrant Manawurm
+Bot1.Graveyard = Barrels of Blasting Jelly
+Bot1.Battlefield.Mox Emerald.Tapped = true

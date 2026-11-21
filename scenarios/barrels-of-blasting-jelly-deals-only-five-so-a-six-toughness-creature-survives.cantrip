@@ -1,0 +1,57 @@
+# Barrels of Blasting Jelly deals exactly 5 damage (CR 120.3, 704.5g): a Fortress Crab (1/6) is not destroyed by it, and the damage stays marked on the Crab while the Barrels, sacrificed to
+# pay, are in the graveyard. Bot2 casts the Crab on turn 2; Bot1 pays {5} with five Moxes on turn 5.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Barrels of Blasting Jelly
+Island
+Island
+Island
+Mox Emerald
+Island x11
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Fortress Crab
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Barrels of Blasting Jelly.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Fortress Crab.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Barrels of Blasting Jelly.Activate(Ability: {5}, {T}, Sacrifice this artifact: It deals 5 damage to target creature; Bot2.Battlefield.Fortress Crab)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Fortress Crab.Damage = 5
+
+[Expect]
+Bot2.Battlefield.Fortress Crab.Toughness = 6
+Bot1.Graveyard = Barrels of Blasting Jelly
