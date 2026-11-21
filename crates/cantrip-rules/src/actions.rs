@@ -11136,6 +11136,20 @@ fn cast(
         cx.st().effect_push(ContinuousEffect { source: g.object, controller, timestamp, affected: spell, kind, duration: Duration::Indefinite, words: Words::NONE });
         cx.state_changed();
     }
+    // "If you cast a spell this way, it is a [subtype] in addition to its other types" (`GrantedWay::spell_effects`, CR 613.1d,
+    // 611.2a): layer effects on the spell, a permanent spell's carried to the permanent it becomes (CR 400.7a), whether or not
+    // the permanent that gave the way is still there.
+    if let Some(g) = by.by
+        && let Some(way) = named_way(cx.s(), cx.cards(), g)
+    {
+        for &kind in way.what.spell_effects {
+            let timestamp = cx.st().timestamp();
+            cx.st().effect_push(ContinuousEffect { source: g.object, controller: player, timestamp, affected: spell, kind, duration: Duration::Indefinite, words: Words::NONE });
+        }
+        if !way.what.spell_effects.is_empty() {
+            cx.state_changed();
+        }
+    }
     // A way a resolved ability gave for one card is used up by the cast (CR 611.2a), one effect of the source's at a time.
     if let Some(g) = by.by
         && let Some(k) = g.ability.as_lasting_way()

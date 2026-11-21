@@ -182,7 +182,7 @@ fn cx(game: &mut Game) -> Cx<'_> {
 
 /// Your main phase with priority and an empty stack.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &SQUIRREL, &NOTHING, &PLAIN, &LEONARDO, &KESS, &MIKEY, &HORDE, &PALEONTOLOGIST, &OSTEO, &OSTEO_COSTED])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &SQUIRREL, &NOTHING, &PLAIN, &LEONARDO, &KESS, &MIKEY, &HORDE, &PALEONTOLOGIST, &OSTEO, &OSTEO_COSTED, &TOMB])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -721,4 +721,52 @@ fn a_way_with_no_payable_additional_cost_is_not_offered() {
     add(&mut g, Mana::G, 1);
     give_costed_way(&mut g, giver, 0);
     assert_eq!(offered(&mut g, card), [Some(giver)], "life can be paid");
+}
+
+/// "You may cast creature spells from your graveyard. If you cast a spell this way, it is a Vampire in addition to its other
+/// types" (The Tomb of Aclazotz's shape): the way's `spell_effects`, a lasting way's, its source a sorcery long gone.
+static TOMB: CardDef = CardDef {
+    name: "Rider Test Tomb",
+    types: TypeSet::of(&[CardType::Sorcery]),
+    lasting_ways: &[GrantedWay {
+        text: "Cast a creature spell from your graveyard.",
+        cost: creature_card,
+        permission: true,
+        spell_effects: &[EffectKind::AddSubtype(Subtype::Vampire)],
+        ..GrantedWay::CAST
+    }],
+    ..CardDef::BLANK
+};
+
+fn is_a_vampire(g: &Game, object: ObjectId) -> bool {
+    cantrip_api::Query::chars(g, object).subtypes.has(Subtype::Vampire)
+}
+
+/// CR 205.1b, 611.2a, 400.7a: the creature cast by the way is a Vampire in addition to its other types on the stack and as the
+/// permanent it becomes, with the way's source gone; one cast another way, or cast after it, is not.
+#[test]
+fn a_creature_cast_by_a_way_with_spell_effects_is_a_vampire_on_the_stack_and_on_the_battlefield() {
+    let mut g = game();
+    let giver = put(&mut g, &TOMB, Zone::graveyard(YOU));
+    let card = put(&mut g, &SQUIRREL, Zone::graveyard(YOU));
+    add(&mut g, Mana::G, 1);
+    let kind = EffectKind::LastingWay { card: g.cards.id_of(&TOMB), index: 0, player: YOU, words: Words::NONE, once: true };
+    between(&mut g, |cx| cantrip_api::Game::add_player_effect(cx, YOU, giver, kind, Duration::EndOfTurn));
+    let spell = cast(&mut g, card, true);
+    assert!(is_a_vampire(&g, spell), "a Vampire on the stack");
+    resolve_all(&mut g);
+    let permanent = g.state.obj(spell).became.expect("it resolved");
+    assert!(g.state.obj(permanent).zone.is(ZoneKind::Battlefield));
+    assert!(is_a_vampire(&g, permanent), "a Vampire on the battlefield");
+    assert!(cantrip_api::Query::chars(&g, permanent).is(CardType::Creature));
+}
+
+/// A creature cast from the hand beside the way is no Vampire: the effect is about the spell cast by the way alone.
+#[test]
+fn a_creature_cast_another_way_is_not_a_vampire() {
+    let mut g = game();
+    let card = put(&mut g, &SQUIRREL, Zone::hand(YOU));
+    add(&mut g, Mana::G, 1);
+    let spell = cast(&mut g, card, false);
+    assert!(!is_a_vampire(&g, spell));
 }

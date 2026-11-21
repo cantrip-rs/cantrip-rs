@@ -2690,6 +2690,12 @@ pub struct GrantedWay {
     /// sacrificing a Food, CR 701.61a). The caster chooses one they can pay as the spell is announced, as for
     /// `CardDef::additional_choice`; a cast where none can be paid is not offered. Empty for none.
     pub additional_choice: &'static [ExtraCost],
+    /// "If you cast a spell this way, it is a [subtype] in addition to its other types" (CR 205.1b, 613.1d, 611.2a): the layer
+    /// effects the core puts on the spell as it is cast by the way, for as long as it is that object and on the permanent it
+    /// becomes (CR 400.7a, `carry_effects`) - "the creature spell will be a Vampire in addition to its other types while on the
+    /// stack. The resulting creature will be a Vampire" (The Tomb of Aclazotz's ruling). A rule of how the spell was cast, as
+    /// `spell_replacement` is: it applies though the permanent that gave the way is gone. Empty for none.
+    pub spell_effects: &'static [EffectKind],
 }
 
 impl GrantedWay {
@@ -2710,6 +2716,7 @@ impl GrantedWay {
         end_step_rider: None,
         additional: Cost::NONE,
         additional_choice: &[],
+        spell_effects: &[],
     };
 }
 
