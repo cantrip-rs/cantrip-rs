@@ -1,0 +1,43 @@
+# Vizier of the Menagerie lets its controller spend mana of any type to cast creature spells (CR 609.4b), nothing else. Turn 1:
+# Black Lotus and Mox Pearl cast it. Turn 2 Bot2's {U} from an Island does not cast Llanowar Elves ({G}): it applies to
+# Bot1's spells only. Turn 3 Bot1's Mox Pearl {W} neither casts Giant Growth ({G}), a noncreature spell, nor cycles Vizier of
+# Tumbling Sands ({U}), an activated ability (CR 602.1, not casting a spell), and the Giant Growth on top of the library can't be
+# cast from there at all: only creature spells may be.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Vizier of the Menagerie
+Giant Growth
+Vizier of Tumbling Sands
+Island
+Island
+Island
+Giant Growth
+Island x11
+
+[Bot2 Deck]
+Llanowar Elves
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Vizier of the Menagerie.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+! Bot2.Hand.Llanowar Elves.Cast(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Giant Growth.Cast(Mana: short)
+! Bot1.Hand.Vizier of Tumbling Sands.Activate(Ability: Cycling; Mana: short)
+! Bot1.Library.Giant Growth.Cast
+
+[Expect]
+Turn = 3
+Bot1.Mana = {W}

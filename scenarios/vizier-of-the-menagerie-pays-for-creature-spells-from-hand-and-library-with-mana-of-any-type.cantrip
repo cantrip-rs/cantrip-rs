@@ -1,0 +1,52 @@
+# Vizier of the Menagerie: "You can spend mana of any type to cast creature spells" (CR 609.4b, 106.6) and "You may cast creature
+# spells from the top of your library". Turn 1: Black Lotus's {G}{G}{G} and Mox Emerald's {G} cast the Vizier, Mox Ruby's {R}
+# casts Sol Ring. Turn 3: Sol Ring's {C}{C} alone cast Elvish Mystic ({G}) from hand, mana of any type including colorless,
+# leaving {C}; then that {C} and Mox Pearl's {W} cast the Grizzly Bears ({1}{G}) on top of the library, the {G} paid with
+# white or colorless.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Vizier of the Menagerie
+Sol Ring
+Elvish Mystic
+Island
+Grizzly Bears
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Vizier of the Menagerie.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Elvish Mystic.Cast
+? Bot1.Mana = {C}
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Library.Grizzly Bears.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Mana =
+Bot1.Battlefield.Elvish Mystic.Power = 1
+Bot1.Battlefield.Grizzly Bears.Power = 2

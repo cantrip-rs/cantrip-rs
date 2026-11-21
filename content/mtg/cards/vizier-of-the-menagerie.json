@@ -1,0 +1,8 @@
+{
+  "name": "Vizier of the Menagerie",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Snake Cleric",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "You may look at the top card of your library any time.\nYou may cast creature spells from the top of your library.\nYou can spend mana of any type to cast creature spells."
+}
