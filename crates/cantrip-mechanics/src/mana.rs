@@ -444,3 +444,8 @@ pub const fn current_power_in_any_combination<const COLORS: u8>() -> Adds {
     Adds { capability: Some(ManaCapability::CurrentPowerCombination(ColorSet(COLORS))),
         ..add_by(add_current_power::<COLORS>) }
 }
+
+/// "{1}: Add one mana of any color. Activate only once each turn." (CR 605.1a, 602.5b): a mana ability paid from the pool that
+/// counts its activations each turn. Gravestone Strider, Scarecrow Guide, Three Tree Mascot and Barrels of Blasting Jelly print it.
+pub const ONE_FOR_ANY_COLOR_ONCE_EACH_TURN: AbilityDef =
+    mana_ability(cost("{1}"), add_any_color(1), "{1}: Add one mana of any color. Activate only once each turn.").once_each_turn();
