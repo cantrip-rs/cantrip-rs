@@ -1,0 +1,51 @@
+# Market Gnome's second ability needs a craft ability being activated. Bot1 exiles their own Gnome twice. On turn three City of
+# Shadows ("{T}, Exile a creature you control: Put a storage counter on this land") exiles it as a cost: an ability is being
+# activated, but it is not craft (CR 702.167a), so nothing triggers. On turn five a second Gnome is exiled by Swords to
+# Plowshares: no ability is being activated at all. Neither is a death, so the first ability stays quiet: Bot1's life is
+# 20 and their hand is only what they drew, both times.
+
+[Bot1 Deck]
+Mox Pearl
+Market Gnome
+Market Gnome
+City of Shadows
+Swords to Plowshares
+Plains
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Market Gnome.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.City of Shadows.Play
+Bot1.Battlefield.City of Shadows.Activate(Ability: Exile)
+Bot1.Choose(Bot1.Battlefield.Market Gnome)
+Bot1.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Exile = Market Gnome
+? Bot1.Life = 20
+? Bot1.Hand.Count = 5
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Market Gnome.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Market Gnome)
+Bot1.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Exile = Market Gnome; Market Gnome
+Bot1.Life = 20
+Bot1.Hand.Count = 3

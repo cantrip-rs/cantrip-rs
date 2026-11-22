@@ -1,0 +1,60 @@
+# Market Gnome's second ability is about exile, not about leaving the battlefield while a craft ability is activated (CR 603.2).
+# On turn three Bot1 crafts Dire Flail and pays for it partly with a Phyrexian Altar that sacrifices the Gnome as a mana
+# ability while the craft ability is being activated: the Gnome dies in the middle of the activation (CR 605.3a), so its first
+# ability triggers - once - and its second does not. Bot1 gains 1 life and draws one card, and the Mox Pearl chosen as the
+# material is the only card exiled besides the Flail.
+
+[Bot1 Deck]
+Mox Pearl
+Dire Flail
+Market Gnome
+Black Lotus
+Mox Ruby
+Mox Ruby
+Phyrexian Altar
+Island
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Dire Flail.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Market Gnome.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Phyrexian Altar.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Dire Flail.Activate(Ability: Craft)
+Bot1.Battlefield.Phyrexian Altar.Activate(Sacrifice: Market Gnome; Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Choose(Mox Pearl)
+? Stack.Count = 2
+? Exile = Dire Flail; Mox Pearl
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Life = 21
+? Bot1.Hand.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Island; Mox Ruby; Mox Ruby; Phyrexian Altar; Dire Blunderbuss
+Exile = Mox Pearl
+Bot1.Graveyard = Market Gnome; Black Lotus
+Bot1.Life = 21
+Bot1.Hand.Count = 1

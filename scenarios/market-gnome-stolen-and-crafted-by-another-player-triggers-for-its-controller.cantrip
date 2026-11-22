@@ -1,0 +1,62 @@
+# Market Gnome's "you" is its controller (CR 603.2, 109.5), not its owner or whoever's turn it is. Bot1 casts their Gnome on turn
+# one. On turn four Bot2 takes it with Act of Treason and crafts Dire Flail with it as the material, an artifact creature
+# they control until end of turn: the Gnome is exiled while Bot2 activates a craft ability, so Bot2 gains 1 life and draws
+# a card, and Bot1, its owner, does neither.
+
+[Bot1 Deck]
+Mox Pearl
+Market Gnome
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Dire Flail
+Act of Treason
+Mountain
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Market Gnome.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Dire Flail.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Act of Treason.Cast(Market Gnome)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Market Gnome.Power = 0
+Bot2.Battlefield.Dire Flail.Activate(Ability: Craft)
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Choose(Market Gnome)
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 21
+? Bot1.Life = 20
+
+[Expect]
+Bot2.Life = 21
+Bot1.Life = 20
+Exile = Market Gnome

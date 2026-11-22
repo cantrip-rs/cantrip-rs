@@ -1,0 +1,44 @@
+# Market Gnome's second ability is about the Gnome itself being exiled (CR 603.2): Bot1 crafts Dire Flail with an Ornithopter as
+# the material while the Gnome stays on the battlefield, so the craft ability exiles two other permanents and the Gnome
+# neither gains Bot1 life nor draws them a card: only the draw for the turn is in their hand.
+
+[Bot1 Deck]
+Mountain
+Dire Flail
+Ornithopter
+Market Gnome
+Black Lotus
+Mox Ruby
+Mox Pearl
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Dire Flail.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Market Gnome.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Dire Flail.Activate(Ability: Craft)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Choose(Ornithopter)
+? Stack.Count = 1
+? Exile = Dire Flail; Ornithopter
+Bot1.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield = Mountain; Mox Ruby; Mox Pearl; Market Gnome; Dire Blunderbuss
+Exile = Ornithopter
+Bot1.Life = 20
+Bot1.Hand.Count = 1

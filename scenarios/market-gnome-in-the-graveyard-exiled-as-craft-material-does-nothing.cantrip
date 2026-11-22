@@ -1,0 +1,57 @@
+# Market Gnome's second ability triggers on being exiled "from the battlefield" (CR 603.2, 603.6c): a Gnome card that is
+# exiled from the graveyard as craft material (CR 702.167a, an artifact card from your graveyard) has already left the
+# battlefield, so nothing triggers. On turn three Bot1 Lightning Bolts its own Gnome (it dies: one life, one card from its first
+# ability) and then crafts Dire Flail, choosing the Gnome card in the graveyard as the material. Bot1 ends at 21 life with
+# the two cards, not 22 with three: the exile from the graveyard changes nothing.
+
+[Bot1 Deck]
+Mox Pearl
+Dire Flail
+Market Gnome
+Black Lotus
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Island
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Dire Flail.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Market Gnome.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Market Gnome)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Market Gnome; Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Life = 21
+Bot1.Battlefield.Dire Flail.Activate(Ability: Craft)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Choose(Graveyard.Market Gnome)
+? Stack.Count = 1
+? Exile = Dire Flail; Market Gnome
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 21
+Exile = Market Gnome
+Bot1.Hand.Count = 2
+Bot1.Battlefield = Mox Ruby; Mox Ruby; Mox Pearl; Dire Blunderbuss
