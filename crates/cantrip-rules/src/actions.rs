@@ -3155,6 +3155,16 @@ fn order_matters(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: PaymentS
                 .map(|id| (id, cx.chars(id)))
                 .collect()
         };
+        // What a replacement effect makes of paying the life (Ashiok, Wicked Manipulator's exile in its place, CR 119.4,
+        // 614.1a) is no change of life this copy of the moment can show, and may change what another step chooses among
+        // (Cosmogoyf's power counts the cards its owner has in exile; Fling then deals it): the payer is asked, where
+        // another step acts on an object other than the source itself.
+        if life > 0
+            && crate::replace::paying_life_replaced(cx, player, life)
+            && eligible.iter().enumerate().any(|(j, &other)| j != k && footprint(cx, player, spell, scope, taken, &remaining[other]).objects.iter().any(|&o| o != spell))
+        {
+            return true;
+        }
         let before = seen(cx);
         let mark = cx.s().mark();
         cx.st().update_player(player, |p| {
@@ -3780,7 +3790,11 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
         Ok(false)
     };
     while !remaining.is_empty() {
-        if pay_next(cx, &mut remaining)? {
+        // What each step did that may not be reversed puts the action past taking back (`takeback::paid`, CR 733.1).
+        let from = cx.g.log.len();
+        let mana = pay_next(cx, &mut remaining)?;
+        crate::takeback::paid(cx.g, from);
+        if mana {
             if remaining.is_empty() {
                 (spent, restrictions) = pay_mana_used_scheduled(cx, player, spell, owed, helpers, scope, None, mana_script.take())?;
             } else {
@@ -3801,11 +3815,17 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                         }
                     }
                     remaining.push(SpellPayment::Mana);
-                    while !pay_next(cx, &mut remaining)? {}
+                    loop {
+                        let from = cx.g.log.len();
+                        let mana = pay_next(cx, &mut remaining)?;
+                        crate::takeback::paid(cx.g, from);
+                        if mana { break; }
+                    }
                     Ok(!remaining.is_empty())
                 };
                 (spent, restrictions) = pay_mana_used_scheduled(cx, player, spell, owed, helpers, scope, Some(&mut checkpoint), mana_script.take())?;
             }
+            crate::takeback::paid(cx.g, from);
         }
     }
     drop(pay_next);
@@ -12206,7 +12226,7 @@ fn assist_window(cx: &mut Cx, player: PlayerId, spell: ObjectId, owed: ManaCost,
         }
         options.push(ActionOption::simple(ActionKind::ConfirmCasting));
         let caster = step == AssistStep::CasterActivates;
-        if caster {
+        if caster && crate::takeback::may_take_back(cx.g) {
             options.push(ActionOption::simple(ActionKind::CancelCasting));
         }
         let ask = RequestKind::PayCosts {
@@ -12576,7 +12596,10 @@ fn cast_during_resolution_inner(cx: &mut Cx, card: ObjectId, terms: CastTerms) -
     let card = if terms.copy { ops::copy_card(cx, card, player) } else { card };
     let by = CastBy { alternative, paid_by, ..CastBy::default() };
     match cast(cx, player, card, way, &[], terms, by, true) {
-        Ok(()) => Ok(true),
+        Ok(()) => {
+            crate::takeback::finished(cx.g, since);
+            Ok(true)
+        }
         Err(Stop::Cancel) => {
             crate::takeback::take_back(cx, mark, log_mark, since);
             Ok(false)
@@ -12637,7 +12660,10 @@ pub fn cast_transformed_during_resolution(cx: &mut Cx, card: ObjectId) -> R<bool
     let log_mark = cx.g.log.len();
     let since = crate::takeback::since(cx.g);
     match cast(cx, player, card, WAY_TRANSFORMED, &[], CastTerms { instead: Some(ManaCost::ZERO), ..CastTerms::default() }, CastBy::default(), true) {
-        Ok(()) => Ok(true),
+        Ok(()) => {
+            crate::takeback::finished(cx.g, since);
+            Ok(true)
+        }
         Err(Stop::Cancel) => {
             crate::takeback::take_back(cx, mark, log_mark, since);
             Ok(false)
@@ -13681,7 +13707,9 @@ fn announce_x(cx: &mut Cx, player: PlayerId, spell: ObjectId, base: ManaCost, ki
             options.push(ActionOption::simple(ActionKind::DecreaseX));
         }
         options.push(ActionOption::simple(ActionKind::ConfirmCasting));
-        options.push(ActionOption::simple(ActionKind::CancelCasting));
+        if crate::takeback::may_take_back(cx.g) {
+            options.push(ActionOption::simple(ActionKind::CancelCasting));
+        }
         let x_cost = paid.map(|c| Box::new(c.clone()));
         let ask = RequestKind::PayCosts { source: spell, total, remaining: total, options, mana_abilities: false, announcing: true, x: n, most, least, loyalty, attackers: Vec::new(), blockers: None, life: 0, governs, assist: AssistStep::None, x_cost };
         match cx.ask_core(player, ask, true)? {
@@ -16417,7 +16445,10 @@ fn mana_activation_window(cx: &mut Cx, player: PlayerId, source: ObjectId, total
         if helpers.any() {
             options.push(ActionOption::simple(ActionKind::ConfirmCasting));
         }
-        options.push(ActionOption::simple(ActionKind::CancelCasting));
+        // An action whose payment has made hidden information known is not given up (`takeback::may_take_back`).
+        if crate::takeback::may_take_back(cx.g) {
+            options.push(ActionOption::simple(ActionKind::CancelCasting));
+        }
         let ask = RequestKind::PayCosts { source, total, remaining, options, mana_abilities: true, announcing: false, x: 0, most: 0, least: 0, loyalty: false, attackers: helpers.attackers.to_vec(), blockers: helpers.blockers_asked(), life: helpers.life + u32::from(life), governs: "", assist: helpers.assist, x_cost: None };
         let answer = cx.ask_core(player, ask, true)?;
         if record { crate::takeback::asked_paying(cx.g); }
@@ -16623,7 +16654,9 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
             });
         }
         options.extend(candidates);
-        if helpers.assist != AssistStep::HelperPays {
+        // An action whose payment has made hidden information known is not given up (`takeback::may_take_back`) - but for
+        // a payment left with no other way on, which can't be completed and so is taken back (CR 601.2h, 733.1).
+        if helpers.assist != AssistStep::HelperPays && (crate::takeback::may_take_back(cx.g) || options.is_empty()) {
             options.push(ActionOption::simple(ActionKind::CancelCasting));
         }
         let shown = if helpers.any() {
@@ -17101,7 +17134,10 @@ fn pay_during_resolution_inner(
                 let (mark, log_mark, asked, since) = (cx.s().mark(), cx.g.log.len(), cx.cursor, crate::takeback::since(cx.g));
                 match pay_announced(cx, payer, source, with, cost, total, life, x.unwrap_or(0), purpose) {
                     // Without an X, what was paid is how many the variable part took (`may_pay_counted`), if it has one.
-                    Ok(taken) => return Ok(Some(x.unwrap_or(taken))),
+                    Ok(taken) => {
+                        crate::takeback::finished(cx.g, since);
+                        return Ok(Some(x.unwrap_or(taken)));
+                    }
                     // A choice given up: nothing was paid, and the payer is asked again. A payment the engine refused
                     // without asking the payer anything would be refused again on the same position: paying is not offered
                     // again until something changes (a mana ability, X), so no seat that pays when it can loops.

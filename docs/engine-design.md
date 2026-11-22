@@ -1861,6 +1861,19 @@ mana ability still under way when the action was given up is part of the action,
 engine's to take for the player: what stays is what may not be reversed, and the player may activate again any of the rest.
 The table's courtesy undo of a mana ability (`cantrip_engine::undo`) was already offered only for one that showed nothing.
 
+The action's own payment is held to the same test. A step of it whose events reveal (`takeback::paid`, after each step
+`pay_scheduled_costs` pays) - the cards Ashiok, Wicked Manipulator exiles from the top of the library in place of the life a
+cost pays, a card discarded, exiled or revealed from a hand - may not be reversed, and it can be neither undone from under
+the rest of the action nor done again on its own as a kept mana ability is. So the action is past taking back from then
+on: `takeback::may_take_back` is false, `ask_core` asks its questions without a cancel and the payment offers no
+`CancelCasting`, and the player completes it. What a mana ability activated within the step revealed is that ability's,
+kept as above, and leaves the action free to be given up. The marks are scoped to the action: a take-back truncates
+them with the rest of the trail, and an action made during a resolution clears its own once it is made
+(`takeback::finished`). A payment left with no way on but giving it up (no mana, nothing else to pay with) still offers it,
+since no answer could complete it. Where paying a cost's life would be replaced (`replace::paying_life_replaced`), what the
+payment does is the replacement's, which `order_matters`' copy of the moment cannot show, so the order of the steps is
+asked wherever another step acts on an object other than the source.
+
 ### Costs that depend on the targets
 
 The total cost of a spell or ability is determined once its modes, X and targets are announced (CR 601.2b-c, 601.2f,

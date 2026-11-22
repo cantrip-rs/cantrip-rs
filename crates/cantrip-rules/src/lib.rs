@@ -1610,6 +1610,9 @@ impl<'a> Cx<'a> {
             }
             return Ok(answer);
         }
+        // An action whose payment has made hidden information known may not be taken back (`takeback::may_take_back`, CR
+        // 733.1): its player is offered no cancel.
+        let may_cancel = may_cancel && takeback::may_take_back(self.g);
         // A real choice, asked or answered on a re-run, ends a run of passes (`loops`; RX-4).
         // A player who conceded at this point of the run leaves the game here, on every replay (`Game::concede`).
         let any_conceded = !self.g.state.agenda[self.frame].conceded.is_empty();

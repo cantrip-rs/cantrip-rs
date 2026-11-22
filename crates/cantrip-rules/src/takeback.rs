@@ -20,6 +20,13 @@
 //!
 //! Which mana abilities stay is read from what they did, never from the card: each activation's events in the history
 //! (`reveals`), and the mana that paid for the ones that stay (`Step::Spend`).
+//!
+//! The action's own payment is held to the same: a step of it that made hidden information known (`reveals`: the cards
+//! Ashiok, Wicked Manipulator exiles from the top of a library in place of the life a cost pays, a card discarded or exiled
+//! from a hand, a card revealed) may not be reversed either, and the action is past taking back from then on: its player
+//! is offered no cancel after it (`may_take_back`, `paid`). The rest of the action can't be undone from under that step
+//! (the journal undoes in order only) and the step can't be done again on its own as a mana ability is, so the player
+//! goes on and completes it.
 
 use std::collections::VecDeque;
 
@@ -90,6 +97,9 @@ pub(crate) struct Trail {
     open: Vec<usize>,
     /// The payments under way, innermost last.
     paying: Vec<usize>,
+    /// The positions in the history of the events a step of an action's own payment made that no undo may hide again
+    /// (`reveals`, `paid`), in the order made.
+    fixed: Vec<usize>,
 }
 
 /// Where the trail stood: what an action begun then has added since.
@@ -99,6 +109,7 @@ pub(crate) struct Since {
     asks: usize,
     pays: usize,
     riders: usize,
+    fixed: usize,
     /// How many objects the game had.
     objects: usize,
 }
@@ -146,13 +157,40 @@ impl Takeback {
         t.riders.clear();
         t.open.clear();
         t.paying.clear();
+        t.fixed.clear();
     }
 }
 
 /// Where the trail stands now.
 pub(crate) fn since(g: &Game) -> Since {
     let t = &g.takeback.trail;
-    Since { runs: t.runs.len(), asks: t.asks.len(), pays: t.pays.len(), riders: t.riders.len(), objects: g.state.objects.len() }
+    Since { runs: t.runs.len(), asks: t.asks.len(), pays: t.pays.len(), riders: t.riders.len(), fixed: t.fixed.len(), objects: g.state.objects.len() }
+}
+
+/// A step of an action's own payment, begun at `from` in the history, is paid (CR 601.2h, 602.2b): what it did that made
+/// hidden information known (`reveals`) may not be reversed (CR 733.1 and the owner's ruling beside it), and the action may
+/// no longer be taken back by its player (`may_take_back`). What a mana ability activated within it did is that ability's,
+/// kept by a take-back as it is (`kept`).
+pub(crate) fn paid(g: &mut Game, from: usize) {
+    let end = g.log.len();
+    for i in from.min(end)..end {
+        if reveals(g, &g.log[i].event) && !g.takeback.trail.fixed.contains(&i) {
+            g.takeback.trail.fixed.push(i);
+        }
+    }
+}
+
+/// Whether the action under way may still be taken back by its player (CR 733.1): no step of its own payment, or of the
+/// payment of a mana ability still being activated for it, has made hidden information known (`paid`). A mana ability that
+/// did and was activated stays through a take-back (`kept`), so what it did leaves the action free to be given up.
+pub(crate) fn may_take_back(g: &Game) -> bool {
+    let t = &g.takeback.trail;
+    t.fixed.iter().all(|&i| t.runs.iter().any(|r| r.done && r.log.0 <= i && i < r.log.1))
+}
+
+/// The action begun at `since` was made: what its payment fixed (`paid`) is no part of whatever the run goes on to do.
+pub(crate) fn finished(g: &mut Game, since: Since) {
+    g.takeback.trail.fixed.truncate(since.fixed);
 }
 
 /// A mana ability's activation begins.
@@ -554,6 +592,7 @@ fn truncate(g: &mut Game, since: Since) {
     t.asks.truncate(since.asks);
     t.pays.truncate(since.pays);
     t.riders.truncate(since.riders);
+    t.fixed.truncate(since.fixed);
     t.open.retain(|&r| r < since.runs);
     t.paying.retain(|&p| p < since.pays);
 }

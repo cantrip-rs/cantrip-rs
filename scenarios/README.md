@@ -383,6 +383,9 @@ only fails after four turns, without saying why:
 ! Bot2.Block(Grizzly Bears > True-Name Nemesis)        protection from Bot2
 ```
 
+`! Bot1.Cancel` is checked at that player's next question: the spell or ability under way must not be offered to be
+taken back there (CR 733.1: a payment that made hidden information known may not be reversed).
+
 A play, cast or activation is checked the next time that player has priority (a refused mana ability sooner, at a
 payment that asks for mana, below), without answering it, and fails
 listing what was offered, written as script lines. It is matched as the line would be: the card in that zone, and

@@ -1,0 +1,58 @@
+# CR 733.1: a cast given up is reversed whole, its payments canceled, where nothing it did may not be reversed. Bolas's
+# Citadel casts Bone Splinters off the top of the library for 1 life; with no effect replacing that life, the payment
+# moved no card out of a hidden zone, so at the question of which creature to sacrifice the cast may still be cancelled:
+# the life comes back, Bone Splinters goes back on top of the library (a card moved from the library to the stack, which
+# may be reversed), and both creatures stay. Then Toxic Deluge is begun from the hand, a Swamp tapped for it - a mana ability
+# that only taps - and given up in the mana window: the Swamp untaps and its {B} is gone from the pool.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Mox Jet
+Sol Ring
+Bolas's Citadel
+Memnite
+Toxic Deluge
+Swamp
+Memnite
+Bone Splinters
+Island x5
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Bolas's Citadel.Cast
+Bot1.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Library.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Library.Bone Splinters.Cast(Memnite#2)
+? Bot1.Life = 19
+Bot1.Cancel
+? Bot1.Life = 20
+? Bot1.Library.Top = Bone Splinters
+? Stack.Count = 0
+Bot1.Hand.Toxic Deluge.Cast(X: 1)
+Bot1.Battlefield.Swamp#1.Activate
+? Bot1.Battlefield.Swamp#1.Tapped = true
+Bot1.Cancel
+
+[Expect]
+Bot1.Life = 20
+Bot1.Library.Top = Bone Splinters
+Bot1.Hand = Toxic Deluge
+Bot1.Battlefield.Swamp#1.Tapped = false
+Bot1.Mana =
+Bot1.Battlefield = Bolas's Citadel; Memnite; Memnite; Mox Jet; Sol Ring; Swamp; Swamp
+Stack.Count = 0

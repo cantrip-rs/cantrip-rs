@@ -867,6 +867,20 @@ impl<'s> Run<'s> {
                 continue;
             }
 
+            // `! Bot1.Cancel`: at the player's next question, the spell or ability under way may not be taken back (CR 733.1).
+            if let Some(ScriptStep::Refused { action, line, text }) = self.current()
+                && matches!(action.verb, ScriptVerb::Cancel)
+                && request.player == player_of(action.bot)
+            {
+                let offered = request.may_cancel
+                    || matches!(&request.kind, RequestKind::PayCosts { options, .. } if options.iter().any(|o| o.kind == ActionKind::CancelCasting));
+                if offered {
+                    return fail(format!("line {line} says {text}, but the question may be cancelled"));
+                }
+                self.next();
+                continue;
+            }
+
             if let Some(ScriptStep::Refused { action, line, text }) = self.current()
                 && request.player == player_of(action.bot)
                 && !(action.verb == ScriptVerb::PayCost && action.named("Delve").is_some())

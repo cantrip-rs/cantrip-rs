@@ -544,8 +544,8 @@ impl ScriptStep {
         if let Some(rest) = line.strip_prefix('!') {
             let action = ActionStep::parse(rest.trim(), number)?;
             let bare_replace = action.verb == ScriptVerb::Replace && action.positional().next().is_none() && !action.text.contains('(');
-            if !matches!(action.verb, ScriptVerb::Play | ScriptVerb::Cast | ScriptVerb::Activate | ScriptVerb::Foretell | ScriptVerb::Suspend | ScriptVerb::TakeCompanion | ScriptVerb::Block | ScriptVerb::Attack | ScriptVerb::Search | ScriptVerb::Accept | ScriptVerb::Modes | ScriptVerb::Target | ScriptVerb::Divide | ScriptVerb::Undo | ScriptVerb::PayCost | ScriptVerb::RemoveCounters) && !action.verb.is_question() && !bare_replace {
-                return Err(ParseError("a refusal (!) names a Play, Cast, Activate, Foretell, Suspend, TakeCompanion, Block, Attack, Search, Accept, Modes, Number, Target, Divide, Undo or PayCost that must not be offered, or a bare Replace".into()));
+            if !matches!(action.verb, ScriptVerb::Play | ScriptVerb::Cast | ScriptVerb::Activate | ScriptVerb::Foretell | ScriptVerb::Suspend | ScriptVerb::TakeCompanion | ScriptVerb::Block | ScriptVerb::Attack | ScriptVerb::Search | ScriptVerb::Accept | ScriptVerb::Modes | ScriptVerb::Target | ScriptVerb::Divide | ScriptVerb::Undo | ScriptVerb::Cancel | ScriptVerb::PayCost | ScriptVerb::RemoveCounters) && !action.verb.is_question() && !bare_replace {
+                return Err(ParseError("a refusal (!) names a Play, Cast, Activate, Foretell, Suspend, TakeCompanion, Block, Attack, Search, Accept, Modes, Number, Target, Divide, Undo, Cancel or PayCost that must not be offered, or a bare Replace".into()));
             }
             return Ok(ScriptStep::Refused { line: number, text: line.to_string(), action });
         }

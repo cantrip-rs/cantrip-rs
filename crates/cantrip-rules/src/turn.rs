@@ -1175,7 +1175,7 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
         if !total.is_zero() || !fixed.is_empty() {
             let source = locked.source.expect("a cost to attack has a source");
             match actions::pay_attack_costs(cx, active, source, total, &fixed, &locked.attackers) {
-                Ok(_) => {}
+                Ok(_) => crate::takeback::finished(cx.g, since),
                 Err(Stop::Cancel) => {
                     crate::takeback::take_back(cx, mark, log_mark, since);
                     taken_back(&mut kind);
@@ -1849,7 +1849,10 @@ fn declare_paid_blocks(cx: &mut Cx, declarer: PlayerId, defender: PlayerId, mut 
             }
         }
         match actions::pay_block_costs(cx, defender, source, total, &blockers) {
-            Ok(()) => return Ok(Some(blocks)),
+            Ok(()) => {
+                crate::takeback::finished(cx.g, since);
+                return Ok(Some(blocks));
+            }
             Err(Stop::Cancel) => {
                 crate::takeback::take_back(cx, mark, log_mark, since);
                 requirements.taken_back = true;

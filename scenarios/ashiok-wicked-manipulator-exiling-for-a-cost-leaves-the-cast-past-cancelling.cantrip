@@ -1,0 +1,60 @@
+# CR 733.1: "Players may not reverse actions that ... moved cards from a library to any zone other than the stack", with
+# the owner's ruling that an undo never reveals information. Bolas's Citadel casts Bone Splinters off the top of the
+# library for 1 life, and Ashiok, Wicked Manipulator exiles the next card, Lightning Bolt, in place of that life (CR 119.4,
+# 614.1a). Since the exile could change what the sacrifice chooses among, the order of the payment's steps is asked (CR
+# 601.2h), and the life is paid first. That step of the payment may not be reversed and the rest of the cast can't be undone from under it, so from
+# then on the cast is past taking back: at the question of which creature to sacrifice, no cancel is offered. The player
+# completes the cast, Bone Splinters destroys its target, and the Bolt stays in exile with the life still 20.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Mox Jet
+Sol Ring
+Bolas's Citadel
+Memnite
+Ashiok, Wicked Manipulator
+Swamp
+Memnite
+Bone Splinters
+Lightning Bolt
+Island x5
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Bolas's Citadel.Cast
+Bot1.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Ashiok, Wicked Manipulator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Library.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Library.Bone Splinters.Cast(Memnite#2)
+Bot1.Choose(Pay 1 life)
+? Exile = Lightning Bolt
+! Bot1.Cancel
+Bot1.Choose(Memnite#1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Lightning Bolt
+Bot1.Life = 20
+Bot1.Graveyard = Bone Splinters; Memnite; Memnite; Black Lotus
