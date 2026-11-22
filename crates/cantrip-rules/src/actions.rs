@@ -14184,12 +14184,17 @@ pub fn own_special_actions(q: &dyn Query, cards: &CardTable, player: PlayerId) -
         let mut plots = false;
         each_play_rule(q, cards, player, false, |_, rule| plots |= matches!(rule, PlayRule::LibraryTopPlot));
         if plots && let Some(&top) = s.zone(Zone::library(player)).first() && !q.chars(top).is(CardType::Land) {
-            let ability = AbilityRef { card: cards.intrinsic, index: cantrip_api::intrinsic::PLOT_FROM_LIBRARY };
-            actions.push(OwnSpecialAction { source: top, ability, about: Target::None, effect: None });
+            // A card with no mana cost has no plot cost equal to it: a cost based on a mana cost there is not can't be paid
+            // (CR 118.6), so the rule's action is not offered for it (Lotus Bloom).
+            let def = cards.get(q.state().obj(top).card);
+            if def.has_cost {
+                let ability = AbilityRef { card: cards.intrinsic, index: cantrip_api::intrinsic::PLOT_FROM_LIBRARY };
+                actions.push(OwnSpecialAction { source: top, ability, about: Target::None, effect: None });
+            }
             // A card that has plot itself may be plotted for its own plot cost as well (the ruling on Fblthp): its plot ability
             // is the card's own in the hand only, so the library's action takes it up there, unless it asks what the rule's does.
-            let printed = ManaCost { x: 0, ..cards.get(q.state().obj(top).card).cost };
-            for own in q.chars(top).abilities().filter(|&a| matches!(cards.ability(a), AbilityDef::Activated(d) if d.plot && d.cost.mana != printed)) {
+            let printed = def.has_cost.then_some(ManaCost { x: 0, ..def.cost });
+            for own in q.chars(top).abilities().filter(|&a| matches!(cards.ability(a), AbilityDef::Activated(d) if d.plot && Some(d.cost.mana) != printed)) {
                 actions.push(OwnSpecialAction { source: top, ability: own, about: Target::None, effect: None });
             }
         }

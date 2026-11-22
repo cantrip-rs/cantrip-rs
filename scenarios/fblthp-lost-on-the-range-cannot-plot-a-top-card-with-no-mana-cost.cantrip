@@ -1,0 +1,32 @@
+# Fblthp, Lost on the Range: "The plot cost is equal to its mana cost" (CR 702.170a), and a cost based on the mana cost of an
+# object with no mana cost can't be paid (CR 118.6). Lotus Bloom, on top of Bot1's library, has no mana cost, so it can't be
+# plotted from there: the special action is not offered, though plotting asks no mana that Bot1 lacks, and Lotus Bloom stays
+# on top of the library.
+
+[Bot1 Deck]
+Black Lotus
+Fblthp, Lost on the Range
+Island
+Island
+Island
+Island
+Island
+Lotus Bloom
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Fblthp, Lost on the Range.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.MayLookAtLibraryTop = true
+! Bot1.Library.Lotus Bloom.Activate(Ability: Plot)
+
+[Expect]
+Exile.Count = 0
+Bot1.Library.Count = 11
