@@ -1,0 +1,11 @@
+{
+  "name": "Ureni, the Song Unending",
+  "manaCost": "{5}{G}{U}{R}",
+  "type": "Legendary Creature — Spirit Dragon",
+  "power": 10,
+  "toughness": 10,
+  "oracleText": "Flying, protection from white and from black\nWhen Ureni enters, it deals X damage divided as you choose among any number of target creatures and/or planeswalkers your opponents control, where X is the number of lands you control.",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,47 @@
+# Ureni, the Song Unending: the "any number of target creatures and/or planeswalkers your opponents control" trigger may have no
+# target at all (CR 601.2c, 115.1b): with Bot2 controlling nothing, it still goes on the stack, resolves and divides X = 2 damage among
+# nobody, and Bot1's own Memnite takes none (CR 120.3).
+
+[Bot1 Deck]
+Island
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Ureni, the Song Unending
+Memnite
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Ureni, the Song Unending.Cast
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Memnite.Damage = 0
+Bot1.Battlefield.Ureni, the Song Unending.Damage = 0

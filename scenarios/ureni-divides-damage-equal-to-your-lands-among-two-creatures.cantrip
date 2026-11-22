@@ -1,0 +1,50 @@
+# Ureni, the Song Unending: "it deals X damage divided as you choose among any number of target creatures and/or planeswalkers your
+# opponents control, where X is the number of lands you control" (CR 601.2d, 120.3). Bot1 casts Ureni on turn 3 (Mox Ruby, Mox Sapphire,
+# Mox Emerald, Sol Ring, Black Lotus) with two lands, so X is 2: one damage to Bot2's Memnite, which dies, and one to Ornithopter (0/2),
+# which survives with the damage marked.
+
+[Bot1 Deck]
+Island
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Sol Ring
+Black Lotus
+Ureni, the Song Unending
+Forest
+Island x12
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Ureni, the Song Unending.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Divide(Memnite: 1; Ornithopter: 1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Memnite
+Bot2.Battlefield.Ornithopter.Damage = 1
+Bot1.Battlefield.Ureni, the Song Unending.Keywords = Flying

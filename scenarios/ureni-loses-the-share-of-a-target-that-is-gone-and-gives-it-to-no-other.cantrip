@@ -1,0 +1,56 @@
+# Ureni, the Song Unending: the targets and their shares are fixed as the trigger goes on the stack (CR 601.2d), and a target that is gone
+# by the time it resolves is taken out with its share (CR 608.2b), the damage is not given to another. Bot1 has two lands on turn 5, so X is
+# 2 and is divided 1 to Bot2's Memnite and 1 to its Ornithopter (0/2); in response Bot1's Lightning Bolt (Mox Ruby) kills the Memnite, and the
+# Ornithopter still takes only its own 1.
+
+[Bot1 Deck]
+Island
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Mox Jet
+Lightning Bolt
+Ureni, the Song Unending
+Forest
+Island x12
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Ureni, the Song Unending.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Divide(Memnite: 1; Ornithopter: 1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Memnite
+Bot2.Battlefield.Ornithopter.Damage = 1
+Bot1.Graveyard = Lightning Bolt; Black Lotus
