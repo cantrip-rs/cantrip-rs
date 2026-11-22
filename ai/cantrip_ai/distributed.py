@@ -269,7 +269,7 @@ class Ledger:
                  fails={str(k): v for k, v in sorted(self.fails.items())})
         tmp = self.path.with_suffix(".tmp")
         tmp.write_text(json.dumps(d, indent=1), encoding="utf-8")
-        os.replace(tmp, self.path)
+        replace(tmp, self.path)
 
     def verify(self, selfplay: Path, incoming: Path | None = None, elsewhere=(), log=print) -> list[str]:
         """Every accepted shard is where it was put (or in one of `elsewhere`, the held-out set once chosen): one still
@@ -522,6 +522,63 @@ class Poll:
     grant: str | None = None
 
 
+def take_traces(a: dict, host, dest: Path, incoming: Path, log=print, tries: int = 3) -> str | None:
+    """An attempt's traces (`cantrip-selfplay --traces`), from its host into `dest` (the run's `traces/`), each file
+    named after its attempt (`<attempt>-<file>`: a lane's file there is one process's). Without them its games cannot
+    be stood in again (the reanalyse stage draws from the games that have one). Tried `tries` times; a copy or a
+    rename that fails is recorded on the attempt (`traces_failed`) and returned as why, never raised - no reason to
+    fail a self-play. None when they are home (`traces`: how many files)."""
+    pulling = incoming / f"{a['id']}-traces.pulling"
+    why = None
+    for _ in range(max(1, tries)):
+        try:
+            remove_path(pulling)
+            pulling.parent.mkdir(parents=True, exist_ok=True)
+            host.fetch_traces(a, pulling)
+            dest.mkdir(parents=True, exist_ok=True)
+            files = sorted(f for f in pulling.rglob("*.jsonl") if f.is_file()) if pulling.is_dir() else []
+            for f in files:
+                replace(f, dest / f"{a['id']}-{f.name}", seconds=2.0)
+            why = None
+            break
+        except (Unreachable, OSError) as e:
+            why = str(e) or type(e).__name__
+    try:
+        remove_path(pulling)
+    except OSError:
+        pass
+    if why is not None:
+        a["traces_failed"] = why[-300:]
+        log(f"  [{a['host']}] WARNING: {a['id']}'s traces were not fetched ({why[-200:]}): its games cannot be "
+            f"reanalysed unless they are fetched later or copied by hand from its output's traces/ into {dest}")
+        return why
+    a["traces"] = len(files)
+    a.pop("traces_failed", None)
+    log(f"  [{a['host']}] {a['id']}: {len(files)} trace file(s) into {dest}")
+    return None
+
+
+def retry_traces(ledger_path: Path, selfplay_dir: Path, dist_dir: Path, hosts: dict, log=print) -> dict:
+    """The traces a self-play's ledger still lacks, fetched now (the reanalyse stage's first step): of every attempt
+    whose fetch failed (`traces_failed`) and every one given up as lost (its traces were never asked for: it may have
+    played on, and its output is still on its host), where its host is one of `hosts` (by name: the workers held
+    now). The ledger's attempts are written back with what came. `fetched` and `failed`, the attempts' ids."""
+    d = read_json(ledger_path) if ledger_path.exists() else None
+    out = dict(fetched=[], failed=[])
+    if not isinstance(d, dict):
+        return out
+    for a in (d.get("attempts") or {}).values():
+        if not isinstance(a, dict) or a.get("host") not in hosts:
+            continue
+        if not (a.get("traces_failed") or (a.get("state") == "lost" and "traces" not in a)):
+            continue
+        why = take_traces(a, hosts[a["host"]], selfplay_dir / "traces", dist_dir / "incoming", log)
+        out["fetched" if why is None else "failed"].append(a.get("id"))
+    if out["fetched"] or out["failed"]:
+        write_atomic(ledger_path, json.dumps(d, indent=1))
+    return out
+
+
 class Coordinator:
     """Runs a generation's self-play across `hosts` to the end (see the module), or any other work of the same shape
     (`kind`: a duel's games, the pair miner's judgements): `run()` returns "done" or "stopped". Timeouts are on
@@ -538,9 +595,16 @@ class Coordinator:
                  initial: int = 16, poll_seconds: float = 30.0, timeout: float = 600.0, max_failures: int = 3,
                  report_every: float = 300.0, stop_file: Path | None = None, retry_seconds: float = 300.0,
                  heldout: Path | None = None, drop_limit: int = 3, drop_share: float = 0.2, kind: Kind = SELFPLAY,
-                 affinity: dict[int, str] | None = None, stop_check=None, ready_grace: float = 7200.0):
+                 affinity: dict[int, str] | None = None, stop_check=None, ready_grace: float = 7200.0,
+                 traces: bool = False, warn=None):
         self.ledger, self.hosts, self.dir, self.dist = ledger, {h.name: h for h in hosts}, selfplay_dir, dist_dir
         self.read = read
+        # Told what should be flagged beyond the log (a line of text): the driver's warnings.
+        self.warn = warn
+        # Self-play run with `--traces`: a worker's attempt writes its games' traces beside its shards
+        # (`OUT/traces/`, a file a lane, appended to for as long as it runs), and they are brought home when the
+        # attempt is over (`over`), into the run's own `traces/` - where a local run writes its own.
+        self.traces = traces
         self.kind, self.affinity, self.stop_check = kind, affinity or {}, stop_check
         self.log, self.clock, self.sleep, self.monotonic = log, clock, sleep, monotonic
         unit = max(1, kind.unit)
@@ -802,11 +866,22 @@ class Coordinator:
             self.log(f"  [{a['host']}] {a['id']} recovered; {len(left)} unplayed games go back to the rest")
         if host.remote:
             host.fetch_logs(a, self.dist / "logs")
+            if self.traces and hasattr(host, "fetch_traces"):
+                self.take_traces(a, host)
             # The shards it pulled since its last poll: deleted there now (no poll comes after its end).
             if a.get("to_delete") and hasattr(host, "delete"):
                 with contextlib.suppress(Unreachable):
                     host.delete(a, a["to_delete"])
                     a.pop("to_delete")
+
+    def take_traces(self, a: dict, host, tries: int = 3):
+        """A finished attempt's traces brought home (`take_traces`); one that could not be is flagged at once
+        (`warn`: the driver's README, its status and a notification), hours before a stage wants them."""
+        why = take_traces(a, host, self.dir / "traces", self.dist / "incoming", self.log, tries)
+        if why is not None and self.warn is not None:
+            self.warn(f"self-play: {a['id']}'s traces were not fetched from {a['host']} ({why[-160:]}): its games cannot "
+                      "be reanalysed until they are (the reanalyse stage tries again; or copy its output's traces/ "
+                      f"into {self.dir / 'traces'} by hand)")
 
     # Granting.
 
@@ -1208,10 +1283,25 @@ def process_alive(pid: int | None, start: int | None, heard: float | None = None
     return heard is None or (time.time() if now is None else now) - heard <= SILENT
 
 
+def replace(tmp: Path, path: Path, seconds: float = 10.0):
+    """`tmp` renamed over `path`, tried for `seconds`: on Windows a reader that has `path` open this instant refuses
+    the rename (the status file's keeper reads every ledger while their coordinators save them, `status.measure`),
+    and a save that fails for it would fail a stage. What still fails after that is raised."""
+    deadline = time.monotonic() + seconds
+    while True:
+        try:
+            os.replace(tmp, path)
+            return
+        except PermissionError:
+            if time.monotonic() >= deadline:
+                raise
+            time.sleep(0.05)
+
+
 def write_atomic(path: Path, text: str):
     tmp = path.with_name(path.name + ".tmp")
     tmp.write_text(text, encoding="utf-8", newline="\n")
-    os.replace(tmp, path)
+    replace(tmp, path)
 
 
 def read_json(path: Path):
@@ -2084,6 +2174,11 @@ ConvertTo-Json -Compress -InputObject $o
     def fetch(self, a: dict, name: str, dest: Path):
         rel = f"{self.out_dir(a)[len(self.root) + 1:]}/{name}"
         self.copy("pull", self.remote_path(rel), str(dest), timeout=1800, recursive=self.kind.dirs)
+
+    def fetch_traces(self, a: dict, dest: Path):
+        """The attempt's traces (its output's `traces/`, a directory), into `dest`."""
+        rel = f"{self.out_dir(a)[len(self.root) + 1:]}/traces"
+        self.copy("pull", self.remote_path(rel), str(dest), timeout=3600, recursive=True)
 
     def fetch_logs(self, a: dict, dest: Path):
         """The attempt's logs, beside the generation's (best effort)."""

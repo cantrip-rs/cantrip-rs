@@ -230,15 +230,26 @@ def with_arg(args: list[str], flag: str, value: str) -> list[str]:
 
 
 def judge_distributed(setup, p: Paths, s: Settings, judge_model: Path, decks: Path, explore: Path, local_lanes: int,
-                      worker_lanes: int, parts: int = 3) -> dict:
+                      worker_lanes: int, parts: int = 3, runs=None, data: dict[str, Path] | None = None,
+                      chunk: int | None = None, stop_check=None) -> dict:
     """The judgements across this machine and the workers (`setup`: a `duels.Setup`): each run of `judge_runs` in
     turn, its plan's games split among the hosts by the self-play coordinator (`JUDGE`), each host's part a
     `mine-judge --grant` beside an inference server of its own (every host's with the same arguments), a part about
     a `parts`-th of a host's share; a host lost or failing has its parts judged by the others. The accepted parts are
-    merged into `p.judge/<run>` as one machine writes them. Returns each run's hosts' parts."""
+    merged into `p.judge/<run>` as one machine writes them. Returns each run's hosts' parts.
+
+    Another caller's judgements than the pair miner's (`reanalyse.py`) are the same with their own `runs` (given the
+    model, the decklists, where the plans and recordings are and where the output goes, as `judge_runs` is: the runs
+    to make, in turn), their own `data` (a worker's bundle's `data/`, as `judge_data_files` names it), a part's size
+    in games (`chunk`) and a `stop_check` (the coordinator's: given the ledger after each poll, a reason to close the
+    run or None - a time budget: nothing more is granted, the parts in flight are finished and taken, and the games
+    not judged are skipped)."""
     log = setup.log
     tag = distributed.root_tag(setup.root)
-    data = judge_data_files(p)
+    data = judge_data_files(p) if data is None else data
+    if runs is None:
+        def runs(model, prior, here, judge_dir):
+            return judge_runs(p, s, model, prior, here, judge_dir)
     bundles: dict[str, tuple] = {}
     by_os = {w.get("os", "windows") for w in setup.workers}
     if "windows" in by_os:
@@ -251,7 +262,7 @@ def judge_distributed(setup, p: Paths, s: Settings, judge_model: Path, decks: Pa
                                                         else distributed.source_tar(setup.repo, setup.root / "dist" / "src"),
                                                   judge_model, decks, None, None), **data}
         bundles["linux"] = (files, *reversed(distributed.bundle_manifest(files, setup.cache)))
-    local_runs = {r["name"]: r["args"] for r in judge_runs(p, s, str(judge_model), str(decks), p.root, str(p.judge))}
+    local_runs = {r["name"]: r["args"] for r in runs(str(judge_model), str(decks), p.root, str(p.judge))}
     done = {}
     for name, local_args in local_runs.items():
         plan = Path(local_args[local_args.index("--plan") + 1])
@@ -274,8 +285,8 @@ def judge_distributed(setup, p: Paths, s: Settings, judge_model: Path, decks: Pa
             w, b = host.w, host.bundle_dir()
             linux = w.get("os") == "linux"
             exe = "" if linux else ".exe"
-            remote = {r["name"]: r["args"] for r in judge_runs(p, s, f"{b}/model/{judge_model.name}", f"{b}/decks",
-                                                                 f"{b}/data", f"{d}/judge")}[name]
+            remote = {r["name"]: r["args"] for r in runs(f"{b}/model/{judge_model.name}", f"{b}/decks", f"{b}/data",
+                                                           f"{d}/judge")}[name]
             remote = with_arg(remote, "--out", f"{d}/judge/{a['id']}.judged")
             remote = with_arg(remote, "--lanes", str(w.get("judge_lanes") or worker_lanes))
             remote += ["--grant", f"{d}/grant.txt"]
@@ -313,15 +324,15 @@ def judge_distributed(setup, p: Paths, s: Settings, judge_model: Path, decks: Pa
                           for w in setup.workers]
                 if not hosts:
                     raise SystemExit("the judgements: no host to judge on")
-                chunk = max(1, -(-games // (len(hosts) * max(1, parts))))
+                part = chunk or max(1, -(-games // (len(hosts) * max(1, parts))))
                 stop = setup.gen_dir / "dist" / "stop"
                 coordinator = distributed.Coordinator(
                     ledger, hosts, out, dist_dir, read=lambda path, games=games: read_judged(path, games), log=log,
-                    chunk=chunk, initial=chunk, lookahead=0.0, poll_seconds=setup.poll, timeout=setup.timeout, kind=JUDGE,
-                    stop_file=stop)
+                    chunk=part, initial=part, lookahead=0.0, poll_seconds=setup.poll, timeout=setup.timeout, kind=JUDGE,
+                    stop_file=stop, stop_check=stop_check)
                 if not ledger.complete():
                     stop.unlink(missing_ok=True)
-                    log(f"  {task}: {games} games' positions on {', '.join(h.name for h in hosts)}, parts of {chunk}")
+                    log(f"  {task}: {games} games' positions on {', '.join(h.name for h in hosts)}, parts of {part}")
                     if coordinator.run() == "stopped":
                         raise SystemExit(f"the judgements stopped: run the driver again to go on ({dist_dir / 'ledger.json'})")
         merge_judged(ledger, out, p.judge / name)

@@ -782,6 +782,9 @@ def main(argv=None):
                    help="leave out the combat damage assignments of every shard file modified before this time "
                         "(2026-11-11T11:48:13-08:00: until commit c50710e01 their Damage options meant one point, not "
                         "lethal damage to a blocker); kept in the checkpoint's args as POSIX seconds")
+    a.add_argument("--exclude-games", nargs="*", default=[], metavar="FILE",
+                   help="games never trained on, wherever they are in --data: each file a JSON list of game keys "
+                        "(dataset.source_key; the deep corpus's held-out games, ROOT/corpus/deep/genN/heldout-games.json)")
     a.add_argument("--chunks", type=int, default=1,
                    help="train on a set larger than memory: its shards in this many chunks, one loaded at a time, an epoch "
                         "each chunk once in a shuffled order; single-option positions are thinned at load (--trivial)")
@@ -877,7 +880,8 @@ def main(argv=None):
                             chunk=(part, chunks) if chunks > 1 else None, trivial=args.trivial if chunks > 1 else 1.0,
                             decks=deck_names(args.decks), drop_damage_before=args.drop_damage_before,
                             workers=args.load_workers, blob_file=bool(args.workers) and spawned,
-                            searched_policy=args.searched_policy, fast_policy=args.fast_policy)
+                            searched_policy=args.searched_policy, fast_policy=args.fast_policy,
+                            exclude=dataset.read_keys(args.exclude_games))
         log(dataset.describe(data), f"({time.time() - start:.0f} s)")
         if args.td_lambda is not None:
             from . import targets

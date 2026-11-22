@@ -440,7 +440,8 @@ def _searched(meta: dict) -> set[int] | None:
 
 def _read_shard(path: Path, d: int, weight: float, taken: int, *, seed: int, decks: set[str] | None,
                 max_games: int | None, drop_damage_before: float | None, want_decks: bool,
-                searched_policy: bool = False, fast_policy: bool = False) -> _Shard:
+                searched_policy: bool = False, fast_policy: bool = False,
+                exclude: frozenset[int] | None = None) -> _Shard:
     """Shard `path` of directory `d`, `taken` of the directory's games among the decks before it: the games `load`
     keeps of it, read as `load` reads them. Module level, so a spawned process can be handed it."""
     out = _Shard(path)
@@ -471,7 +472,7 @@ def _read_shard(path: Path, d: int, weight: float, taken: int, *, seed: int, dec
         for g in gs:
             if max_games is not None and taken >= max_games:
                 break
-            if decks is not None and not set(g.meta.get("decks") or ["?"]) <= decks:
+            if not _passed(g.meta, decks, exclude):
                 continue  # its samples are skipped unread
             taken += 1
             if not _keep(seed, d, taken, weight):
@@ -565,16 +566,34 @@ def _read_shard(path: Path, d: int, weight: float, taken: int, *, seed: int, dec
     return out
 
 
-def _count_games(path: Path, decks: set[str] | None) -> int | BaseException:
-    """How many of a shard's games are among `decks` (every game, for none), their samples skipped unread."""
+def read_keys(files) -> frozenset[int] | None:
+    """The games named by `files` (each a JSON list of `source_key`s: a corpus generation's held-out games,
+    `reanalyse.KEYS`), or None with none: what `load`'s `exclude` takes."""
+    keys: set[int] = set()
+    for f in files or ():
+        keys.update(int(k) for k in json.loads(Path(f).read_text(encoding="utf-8")))
+    return frozenset(keys) or None
+
+
+def _passed(meta: dict, decks: set[str] | None, exclude: frozenset[int] | None) -> bool:
+    """Whether a game is read at all: among `decks` (every game, for none) and not one of `exclude` (by its
+    `source_key`, so its reanalysed copies go with it)."""
+    if decks is not None and not set(meta.get("decks") or ["?"]) <= decks:
+        return False
+    return exclude is None or source_key(meta) not in exclude
+
+
+def _count_games(path: Path, decks: set[str] | None, exclude: frozenset[int] | None = None) -> int | BaseException:
+    """How many of a shard's games are read (`_passed`: among `decks`, not excluded), their samples skipped unread."""
     try:
         _, gs = shards.scan(path)
-        return sum(1 for g in gs if decks is None or set(g.meta.get("decks") or ["?"]) <= decks)
+        return sum(1 for g in gs if _passed(g.meta, decks, exclude))
     except (Exception, SystemExit) as e:
         return e
 
 
-def _shard_results(plan: list, read, max_games: int | None, decks: set[str] | None, workers: int):
+def _shard_results(plan: list, read, max_games: int | None, decks: set[str] | None, workers: int,
+                   exclude: frozenset[int] | None = None):
     """Each directory's shards read (`read`, a `_read_shard`), in order: a `_Shard` each, then None at each directory's
     end. With `workers` above 1 they are read by that many spawned processes, at most two each ahead of the one wanted.
     A directory whose games are counted in order (a weight below 1, or `max_games`) has each shard's start in that
@@ -591,7 +610,7 @@ def _shard_results(plan: list, read, max_games: int | None, decks: set[str] | No
             yield None
         return
     with multiprocessing.get_context("spawn").Pool(workers) as pool:
-        counts = {(d, i): pool.apply_async(_count_games, (path, decks))
+        counts = {(d, i): pool.apply_async(_count_games, (path, decks, exclude))
                   for d, _, weight, paths in plan if weight < 1.0 or max_games is not None
                   for i, path in enumerate(paths[:-1])}
 
@@ -692,7 +711,8 @@ def default_workers() -> int:
 def load(directories: list[str | Path], max_games: int | None = None, log=print, seed: int = 0, base: list = (),
          chunk: tuple[int, int] | None = None, trivial: float = 1.0, decks: set[str] | None = None,
          game_decks: list | None = None, drop_damage_before: float | None = None, workers: int | None = None,
-         blob_file: bool = False, searched_policy: bool = False, fast_policy: bool = False) -> Data:
+         blob_file: bool = False, searched_policy: bool = False, fast_policy: bool = False,
+         exclude: frozenset[int] | None = None) -> Data:
     """Every sample of every shard in `directories` (`DIR` or `DIR:WEIGHT`; at most `max_games` games from each), its
     card rows onto the training index: `base` (a checkpoint's names, whose rows it keeps), then each name the shards
     name that it lacks, in the order they first name it.
@@ -709,6 +729,10 @@ def load(directories: list[str | Path], max_games: int | None = None, log=print,
     `decks`: only the games whose decks (`GameMeta::decks`) are all among these names, a subset of a corpus recorded
     over more decks; a game it passes over does not count towards `max_games` or a directory's weight.
     `game_decks`: a list each loaded game's decks (`GameMeta::decks`, by seat) are appended to, in game order.
+    `exclude` (`source_key`s, `read_keys`): games never read, wherever they are and their reanalysed copies with
+    them - the deep corpus's held-out games, which stay in their generation's self-play and would otherwise be trained
+    on by every window that holds it; like a game of other decks, one counts towards nothing.
+
     `drop_damage_before` (POSIX seconds): a shard file modified before it loses its combat damage assignments, as if
     they had never been recorded (its games stay); a directory's `dropped_damage` counts them.
     `searched_policy`: in a self-played game (one with root values), only the decisions a search answered are policy
@@ -740,8 +764,8 @@ def load(directories: list[str | Path], max_games: int | None = None, log=print,
     workers = min(default_workers() if workers is None else workers, sum(len(paths) for *_, paths in plan))
     read = functools.partial(_read_shard, seed=seed, decks=decks, max_games=max_games,
                              drop_damage_before=drop_damage_before, want_decks=game_decks is not None,
-                             searched_policy=searched_policy, fast_policy=fast_policy)
-    results = _shard_results(plan, read, max_games, decks, workers)
+                             searched_policy=searched_policy, fast_policy=fast_policy, exclude=exclude)
+    results = _shard_results(plan, read, max_games, decks, workers, exclude)
     luts: list[np.ndarray] = []
     lut_of: dict[str, int] = {}
     header: dict | None = None

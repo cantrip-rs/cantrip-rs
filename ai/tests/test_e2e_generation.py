@@ -10,11 +10,13 @@ local`: ledgers, grants, hosts' results files with their `#` header lines, merge
 starts from a scrubbed copy of a real line's shape (`fixtures/line`: a champions history with labelled generations
 such as "5-mined", a distributed gate's results as its hosts wrote them).
 
-- Generation 1: build, preflight, self-play, the held-out set, training, export, parity, the gate, the promotion,
-  the pair miner's two stages (targets written), evaluate, retire; under the supervisor (`loop.py`), so its preflight,
-  its watching and its status file are run too.
-- Generation 2: trains with generation 1's mined targets, promotes (`--accept always`, the gate played as a
-  measurement) and plays the ladder, whose turn is counted from the history's labelled rows.
+- Generation 1: build, preflight, self-play (with its traces, brought home from the worker), the held-out set,
+  training, export, parity, the gate, the promotion, the pair miner's two stages (targets written), the deep
+  reanalysis of its self-play (`reanalyse.py`: the corpus written), evaluate, retire; under the supervisor
+  (`loop.py`), so its preflight, its watching and its status file are run too.
+- Generation 2: trains with generation 1's mined targets and its part of the deep corpus, promotes (`--accept
+  always`, the gate played as a measurement), reanalyses its own self-play, scores the corpus's held-out slice and
+  plays the ladder, whose turn is counted from the history's labelled rows.
 
 It needs cargo, dotnet and PyTorch, uses no GPU, and is skipped unless `CANTRIP_AI_E2E` is set: the build's first
 run takes many minutes (later ones a few), `CARGO_BUILD_JOBS` bounds its threads. The fixture's fast checks below it
@@ -36,7 +38,7 @@ AI = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(AI))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import quiet  # noqa: E402,F401
-from cantrip_ai import duels, generation, loop, mine, mining, notify, reports, status  # noqa: E402
+from cantrip_ai import duels, generation, loop, mine, mining, notify, reanalyse, reports, status  # noqa: E402
 
 REPO = AI.parent
 FIXTURE = Path(__file__).resolve().parent / "fixtures" / "line"
@@ -139,7 +141,10 @@ class EndToEndTest(unittest.TestCase):
                       "--gate-parallel", "2", "--worker-duel-parallel", "2", "--mine-lanes", "2", "--mine-local-lanes", "2",
                       "--mine-control", "2", "--ladder-every", "1", "--ladder-anchors", "tactical", "--ladder-games", "4",
                       "--window", "2", "--dist-poll", "2", "--train-args", "--workers 0 --batch 64 --held-out 0.4",
-                      "--progress", "off"]
+                      "--progress", "off",
+                      # The deep reanalysis, at --tiny's toy scale: self-play's games (their traces kept), half of
+                      # them held out, and the corpus in every later generation's training.
+                      "--selfplay-traces", "--reanalyse-positions", "6", "--reanalyse-heldout", "0.5", "--corpus-train"]
 
             # Generation 1 under the supervisor: its arguments from the file, its preflight, the generation watched.
             (root / loop.ARGS).write_text("# the tiny line\n" + " ".join(f'"{x}"' for x in map(str, common))
@@ -150,9 +155,9 @@ class EndToEndTest(unittest.TestCase):
             self.assertIn("finished", one, (root / "gen1-driver.log").read_text()[-3000:])
             ran = [n for n, s in one["stages"].items() if s.get("done")]
             self.assertEqual(ran, ["build", "selfplay", "heldout", "train", "export", "parity", "gate", "promote", "mine",
-                                   "evaluate", "mined", "retire"] if not one["stages"]["promote"]["accepted"] else
+                                   "reanalyse", "evaluate", "mined", "retire"] if not one["stages"]["promote"]["accepted"] else
                              ["build", "selfplay", "heldout", "train", "export", "parity", "gate", "promote", "mine",
-                              "evaluate", "ladder", "mined", "retire"])
+                              "reanalyse", "evaluate", "ladder", "mined", "retire"])
             self.assertFalse([n for n, s in one["stages"].items() if s.get("failed")], "no stage failed")
             # One engine, pinned, ran every stage.
             self.assertEqual({s.get("engine") for s in one["stages"].values()}, {one["engine"]["id"]})
@@ -171,6 +176,28 @@ class EndToEndTest(unittest.TestCase):
             paths = mining.Paths(root / "gen1")
             self.assertTrue(paths.report.exists())
             self.assertEqual(one["stages"]["evaluate"]["games"], 2)
+            # The deep reanalysis: self-play's traces came home, its positions were searched by the champion the gate
+            # left through the distributed judgements' ledger, and the corpus holds them, named by engine and judge.
+            self.assertTrue(list((root / "gen1" / "selfplay" / "traces").glob("*.jsonl")), "the traces are with the shards")
+            deep = one["stages"]["reanalyse"]
+            self.assertEqual((deep["source"], deep["mismatched"]), ("selfplay", 0))
+            self.assertGreater(deep["searched"], 0)
+            self.assertEqual(deep["positions"], deep["searched"], "every position searched is a target")
+            self.assertTrue((root / "gen1" / "dist" / "judge-deep-s1" / "ledger.json").exists())
+            made = json.loads((root / reanalyse.CORPUS / "gen1" / reanalyse.RECORD).read_text())
+            self.assertTrue(made["complete"])
+            self.assertEqual(made["engine"]["id"], one["engine"]["id"])
+            self.assertEqual(made["judge"], "gen1" if one["stages"]["promote"]["accepted"] else "gen0")
+            self.assertEqual((made["simulations"], made["worlds"]), (32, 2))
+            corpus_train = reanalyse.split_dirs(root / reanalyse.CORPUS / "gen1", "train")
+            corpus_held = reanalyse.split_dirs(root / reanalyse.CORPUS / "gen1", "heldout")
+            self.assertTrue(corpus_train and corpus_held, "three games, half held out: both sides have some")
+            # Its held-out games are named, for every later training to leave out of the self-play that holds them.
+            named = json.loads((root / reanalyse.CORPUS / "gen1" / reanalyse.KEYS).read_text())
+            self.assertEqual(len(named), made["heldout_games"])
+            self.assertGreater(len(named), 0)
+            for d in corpus_train + corpus_held:
+                self.assertEqual(json.loads((d / mining.EFFORT_FILE).read_text()), dict(simulations=32, worlds=2))
             # The status file's last word, the loop's, and what was told.
             said = status.read(root, 1)
             self.assertEqual((said["state"], status.judge(said)["state"]), ("finished", "finished"))
@@ -188,7 +215,8 @@ class EndToEndTest(unittest.TestCase):
             two = json.loads((root / "gen2" / "generation.json").read_text())
             self.assertIn("finished", two, out[-3000:])
             self.assertEqual([n for n, s in two["stages"].items() if s.get("done")],
-                             ["build", "selfplay", "train", "export", "parity", "gate", "promote", "evaluate", "ladder", "retire"])
+                             ["build", "selfplay", "train", "export", "parity", "gate", "promote", "reanalyse", "evaluate",
+                              "ladder", "retire"])
             self.assertTrue(two["stages"]["promote"]["accepted"])
             self.assertEqual(Path(os.path.realpath(root / "champions" / "current")).name, "gen2")
             self.assertEqual(two["stages"]["ladder"]["rows"][0]["anchor"], "tactical")
@@ -199,6 +227,19 @@ class EndToEndTest(unittest.TestCase):
             self.assertIn(same(root / "gen1" / "selfplay"), window)
             for d in mined_dirs:
                 self.assertIn(same(d), window, "generation 1's mined targets are trained on")
+            # The deep corpus: generation 1's part is trained on and its held-out slice scored; generation 2's own
+            # part (no gate was mined: its self-play again) is made beside it, and retention left generation 1's.
+            for d in corpus_train:
+                self.assertIn(same(d), window, "generation 1's deep targets are trained on")
+            self.assertIn("left out of every directory: the deep corpus's held-out games", out)
+            train_log = (root / "gen2" / "logs" / "train.log").read_text(encoding="utf-8", errors="replace")
+            self.assertNotIn("Traceback", train_log)
+            self.assertEqual(two["stages"]["train"]["corpus"], [f"{d}:4" for d in corpus_train], "by effort: 32 over --tiny's 8")
+            scored = two["stages"]["evaluate"]["corpus"]
+            self.assertEqual(sorted(scored["networks"]), sorted(["gen2", "gen1" if one["stages"]["promote"]["accepted"] else "gen0"]))
+            self.assertGreater(scored["choices"], 0)
+            self.assertEqual(two["stages"]["reanalyse"]["judge"], "gen2")
+            self.assertEqual([g for g, _, _ in reanalyse.corpus_records(root)], [1, 2])
             # The history kept its labelled rows and gained this root's.
             history = json.loads((root / "champions" / "history.json").read_text())
             self.assertEqual([r["generation"] for r in history][-2:], [1, 2])

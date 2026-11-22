@@ -250,9 +250,10 @@ own, started and stopped by the driver; the ones marked optional run only when a
 | gate | the candidate against the champion in BotLab on self-play's metagame pairings, scored by pair, by `--accept` (below) over at most `--gate-games` (6,000); with `--workers`, on other machines too ("Distributed duels"), as are the ladder and the miner's replays; recorded by matchup too ("Reading a generation") |
 | promote | an accepted candidate goes to `champions/genN` and becomes `champions/current` |
 | mine, mined (unless `--no-mine`) | the pair miner (`mining.py`): the gate's decisive pairs replayed, judged by deep searches and written as policy targets, `genN/mine/targets`, which the next generations train on. **Data-producing**: a failure stops the generation ("When a stage fails") |
-| evaluate (when a held-out set exists) | `value_eval` on the held-out set, candidate and champion: value MSE and ECE, policy CE and top-1 against its full searches' targets; the two paired by game, and each network's mean value by the seat's deck ("Reading a generation") |
+| reanalyse (with `--reanalyse-positions` or `--reanalyse-hours`) | the deep reanalysis (`reanalyse.py`): positions of this generation's recorded games searched again far deeper than self-play's full search, kept for good in `ROOT/corpus/deep/genN` ("The deep corpus"). **Data-producing** |
+| evaluate (when a held-out set exists, or the deep corpus has a held-out slice) | `value_eval` on the held-out set, candidate and champion: value MSE and ECE, policy CE and top-1 against its full searches' targets; the two paired by game, and each network's mean value by the seat's deck ("Reading a generation"); and both networks' policy against the deep corpus's held-out slices ("The deep corpus") |
 | ladder (optional, after a promotion) | `--ladder-every N`: after every N-th promotion, the new champion against fixed anchors, recorded in `ROOT/ladder.json` and `ladder.md` (a generation run again replaces its rows) and by matchup in the generation's record; a generation that promoted nothing plays none |
-| retire | deletes the shards and models of all but the last `--keep` generations (gen0 and pinned ones are kept) |
+| retire | deletes the shards and models of all but the last `--keep` generations (gen0 and pinned ones are kept; the deep corpus, `ROOT/corpus`, is never touched) |
 
 #### When a stage fails
 
@@ -266,7 +267,10 @@ own, started and stopped by the driver; the ones marked optional run only when a
   again. `--allow-data-failure` records the failure as a measurement's is and goes on; the README's WARNING block
   then says the targets are missing, and so does the README of each generation that trains without them. A
   generation whose mining window holds an earlier generation with a failed mine or mined stage refuses to run
-  without `--allow-data-failure` - at its preflight, before a game is played, and again at training. A failure
+  without `--allow-data-failure` - at its preflight, before a game is played, and again at training. The deep
+  reanalysis (reanalyse) is a data-producing stage too: one that fails stops the generation the same way (run again,
+  it goes on from the parts its ledger holds), and allowed to pass it is flagged; the corpus then lacks that
+  generation's part, which refuses no later generation. A failure
   recorded by a driver from before this one (a record with no `engine`) is past mending and refuses nothing: it is
   flagged in the README and told once ("gen13's mined targets were lost before the hardened driver; training without
   them"). (gen13 of the templates line failed `mine verify`, was "recorded and passed over", and gen14 trained
@@ -302,7 +306,8 @@ What a generation leaves in `ai-data/`:
 - `models/genN/`: the exported ONNX model and its `manifest.json`;
 - `champions/current`, a symlink to the champion in force, and `champions/history.json`, every gate (paired fields
   included);
-- `heldout/` (once chosen) and `ladder.json` / `ladder.md` (when the ladder runs).
+- `heldout/` (once chosen) and `ladder.json` / `ladder.md` (when the ladder runs);
+- `corpus/deep/genN/` (with the deep reanalysis): the generation's deep targets, kept for good ("The deep corpus").
 
 ### Watching a run
 
@@ -597,7 +602,8 @@ CANTRIP_AI_E2E=1 python -m unittest tests.test_e2e_generation     # minutes, CPU
 ```
 
 It records a few games, trains a toy generation 0, and runs two real `--tiny` generations with the real binaries:
-every stage, mining included, the distributed path through the worker manager's `local` machine (`--workers local`:
+every stage, mining and the deep reanalysis included (self-play's traces brought home, the corpus written, trained on
+and scored), the distributed path through the worker manager's `local` machine (`--workers local`:
 real ledgers, grants and hosts' results files), the first under the supervisor, on a root seeded with a scrubbed
 copy of a real line's shape (`ai/tests/fixtures/line`: a champions history with labelled generations, a distributed
 gate's results with their `#` header lines). It is skipped without `CANTRIP_AI_E2E` because it builds the engine;
@@ -797,6 +803,16 @@ finishes it on this machine alone (stop the workers first).
 
 A new attempt is granted one chunk to start with, and its backlog grows with its lanes as its governor scales them.
 
+**Traces.** With `--selfplay-traces` a self-play writes each game's trace beside its shards (`traces/`, a file a
+lane, appended to for as long as the run lasts). A worker's are brought home when its attempt is over (finished,
+stopped or recovered), into `genN/selfplay/traces/` as `<attempt>-<file>`, where this machine's own are written; an
+attempt given up as lost leaves its traces on its worker (its output's `traces/`), and a copy (or the rename into
+place) that fails three times is recorded in the ledger (`traces_failed`) and **flagged at once** - the README's
+WARNING block, the status file and a `warning` notification, while self-play still runs - never a reason to fail
+the self-play. The reanalyse stage asks again as it starts, for every attempt whose fetch failed and every one
+given up as lost whose worker is held then; the games still without a trace are only not drawn from. A trace line
+cut short (a run killed while it wrote) is no trace: it is skipped, with a warning, and loses no other game.
+
 **Collecting.** Every `--dist-poll` seconds (30) the driver reads each attempt's status (`selfplay-status.json`), its
 closed shards, runaways and exit; it pulls each new shard with `cantrip-workers pull`, reads it whole (every game, its seed in the
 generation's range, its header this self-play's), checks rule 2, and moves it into `genN/selfplay` as
@@ -912,7 +928,150 @@ on Linux the source it builds them from), the judge network, the decklists, and 
 traces) under `data/`; a worker judges with `--worker-judge-lanes` lanes (4 x `--mine-lanes`, the four runs' lanes
 when one worker made them all at once before), or its own `judge_lanes`; this machine with `--mine-local-lanes`. A
 run's ledger is `genN/dist/judge-<run>/ledger.json`; a ledger of another plan (the stage made again) is started over,
-as are the replays' of another selection. Without `--workers` the judgements are made here, as before.
+as are the replays' of another selection. A part holds only its own games' recordings (`mine::load_only`), and its
+report says what it cost: its lanes, wall time, peak memory, the memory free before it began and its CPUs. Without
+`--workers` the judgements are made here, as before.
+
+### The deep corpus
+
+A corpus of very deep searches that the line keeps: `ROOT/corpus/deep/genN/`, made by the `reanalyse` stage of each
+generation (`ai/cantrip_ai/reanalyse.py`), trained on by every later generation however old it is, and never pruned.
+It replaces playing self-play games at a deep budget: a deep game is a normal game with deep labels (the moves
+played are the fast searches'), and costs a game for a handful of them - measured 2026-11-22 on one worker (64
+cores, an RTX 4080) at 131,072 simulations over 16 worlds, 16 games an hour, about 430 deep targets; the same
+searches of recorded positions, about 380 an hour **each a target** from a different game, with nothing replayed
+but the game's trace. Two seeds of such a search chose the same move on 91% of positions and a move other than the
+network's on 19% (card choices 61%).
+
+```
+--reanalyse-positions 1500 --reanalyse-hours 4      # the stage: at most 1,500 positions, at most four hours of judging
+--corpus-train                                      # training: the whole corpus, every generation
+```
+
+| Flag | Default | Meaning |
+|---|---|---|
+| `--reanalyse-positions N` | 0 | at most this many positions a generation. With neither this nor `--reanalyse-hours`, no stage |
+| `--reanalyse-hours H` | 0 (none) | the judging's time budget: no more positions are planned than it buys at the probe's rate (and a fifth), and when it is spent the run is closed - nothing more is granted, the parts in flight finish and count, the rest is skipped. With no `--reanalyse-positions`, as many as it buys |
+| `--reanalyse-simulations N`, `--reanalyse-worlds N` | 131072, 16 | a search's simulations in all, shared by its worlds (self-play's full search on the fingerprint line: 8192 over 4) |
+| `--reanalyse-memory-mb M` | 64 KB a simulation: 8192 at 131072 | a search's memory bound (`MemoryMb`). A search that reaches it stops short of its budget; the largest tree measured was 66 KB a simulation, and a bound of 40 KB (5 GB) stopped 18% of the pilot's searches. The stage counts the searches that reached it and flags more than one in twenty |
+| `--reanalyse-seeds 1[,2..]` | 1 | each seed searches every position once, into a directory of its own (`seed-S`); a later seed searches what the first did, with no budget of its own |
+| `--reanalyse-model NAME` | the champion the gate leaves | the network that searches: a champion or a model by name, or a model directory |
+| `--reanalyse-source auto\|selfplay\|gate` | auto | the games the positions come from: this generation's self-play (it has to be played with `--selfplay-traces`), or the gate's games the mine stage recorded (`genN/mine/recorded`). `auto`: self-play when it kept its traces, else the gate. Both were recorded by the generation's pinned engine, the only one their games replay with; the stage refuses recordings of another, and a position whose replay is not the recording writes no target (`mismatched`, flagged) |
+| `--reanalyse-per-game N` | 2 | decisions drawn from a game: at random among every seat's decisions at which its search has a choice (`cantrip-explore mine-decisions`: payments and forced answers are none) |
+| `--reanalyse-heldout F` | 0.1 | the share of the games held out of training, for the evaluation: whole games, evenly through the plan (a tenth is every tenth game drawn) |
+| `--reanalyse-search KEY=VALUE` | | another setting of the search (repeatable); `RootShortcut=false` and `MemoryMb` are set |
+| `--reanalyse-lanes N` | 0: probed | every host's lanes, with no probe |
+| `--reanalyse-max-lanes N`, `--reanalyse-local-lanes N` | 0: what fits | the most lanes the probe may find for a worker, for this machine |
+| `--reanalyse-part-games N` | 0: a host's lanes | the games a part judges. A part is taken whole, so a run killed loses the parts in flight, and a budget spent waits for them (a part of a host's lanes of games is about eight minutes at the defaults) |
+| `--reanalyse-reprobe` | | probe every host again this generation |
+| `--no-judge-local` | | this machine searches nothing (the pair miner's flag: both are judgements). Without `--workers` it searches all the same; with `--workers` and no worker leased, the stage fails rather than search here |
+| `--corpus-train` | off | training takes the whole corpus: every earlier generation's `train` directories |
+| `--corpus-weight W` | 1 | the corpus's weight, times each directory's effort (below) |
+| `--corpus-decay D` | 0.85 | a corpus generation's weight times D for each generation of its age (1: none) |
+| `--corpus-share S` | 0.25 | the most of the policy-target weight the corpus makes beside the window's self-play; past it every corpus weight is scaled down alike (0: no cap) |
+
+**The positions.** The games that can be stood in again (a shard and a trace each; a game moved to the permanent
+held-out set has no shard and is never drawn) are put in one random order, seeded by the generation. The plan takes
+games from its front, `--reanalyse-per-game` decisions of each, until it has the positions asked for or bought
+(`genN/reanalyse/data/plan.jsonl`); the probe takes its own from its end. Only the recordings of the games drawn are
+laid out for the judges (`genN/reanalyse/data/recorded/`: the shards that hold one, hard links, and those games'
+traces in one file), here and in a worker's bundle - never a generation's whole self-play. A game played twice (an
+attempt lost, its game played again) keeps the trace of the process that wrote its shard.
+
+**The searches** are the pair miner's judgements of positions with no candidates (`mine-judge`, `--targets true`:
+each position searched alone, its target against the network's prior reported), distributed by
+`mining.judge_distributed` exactly as the miner's are ("Distributed judgements"): one run a seed, its ledger
+`genN/dist/judge-deep-s<seed>/ledger.json`, each host beside an inference server of its own with the duels' serving
+arguments, a part a host's lanes of games. A game's positions are seeded by the seed, the game and the decision, so
+a part judged anywhere is judged the same (on the same hardware).
+
+**Lanes: the probe.** A deep search holds gigabytes, and how many a host runs at once is found on the host, once a
+line (`ROOT/corpus/deep/probe.json`, kept while the searches are the same: their simulations, worlds, bound and
+batch): first one lane on the latest turns drawn - `mine-judge` reports the most memory its process held, the memory
+the machine had free and its CPUs, and the most lanes the host may run is `free x 0.7 / a lane's peak`, within its
+CPUs less the server's; then up a ladder of lanes below that (8, 16, 24, 32, 48, 64), three positions a lane a
+step, in simulations a second, stopping at the first step not a tenth faster than the best before: past it the GPU
+is the bound, and more lanes only hold more memory. A probe is about forty minutes a host at the defaults (the first
+generation's, and after a change of the searches); a host whose lanes held more over a whole part than the probe's
+did runs fewer from then on. A probe whose replays are not the recordings stops the stage. The record holds for
+what it was measured with - the searches, the lane caps, the network's size (its manifest's `parameters` and
+`config`: a new champion of the same size is the same network to a probe), the engine's id - and a host whose free
+memory has moved by an eighth since its probe is probed again the next time. A change of engine therefore probes
+again: where the loop updates the code every generation that is every generation's forty minutes, and
+`--reanalyse-lanes N` (the lanes the last probe found) is the way out of it. On Windows a machine of more than 64
+logical processors is several processor groups: the judge counts all of them (`governor::logical_processors`; Rust's
+`available_parallelism` counts the one group the process started in) and spreads its lanes over them.
+
+**What it costs.** Measured on the fingerprint line's worker (gen13 judging gen14's gate positions at 131,072
+simulations over 16 worlds, 24 lanes, fp16): 500 positions in 79 minutes - **9.5 seconds a position, about 380 an
+hour** (16,400 simulations a second at the probe's best step, 13,400 over the whole run with its parts' ends), a
+lane holding 4.4 GB under a 5 GB bound. With the default 8 GB bound the searches that stopped short spend their whole
+budget (2% more simulations) and a lane's peak is higher; the probe sizes the lanes for it.
+
+**When nothing can be searched.** A worker out after the gate - no host to judge on, every host's attempts failed,
+a probe that searched nothing, or no target written with no part accepted - is a failure the supervisor runs again
+after its wait (`status.TRANSIENT`'s `reanalyse-no-search`, `--retries` times), not one it holds the loop for:
+the ledger keeps what was accepted, and nothing is lost by trying again. Any other failure of the stage holds the
+loop as a data stage's does. A stop asked for while the searches run (`--stop`, Ctrl-C) is a stop, of this stage
+and of the miner's judgements alike: the driver's last word is `stopped`, not a failed data stage.
+
+**Watching it.** The ledger counts the plan's games (`games`), the accepted parts' and, closed by a budget, the
+skipped; its attempts are judgements' (`kind` `judge`: parts granted whole), so the status file's progress and the
+overrun projection ("Watching a run") read it as they read the miner's, and a generation's pace is compared with
+the earlier generations' ledger of the same name (`dist/judge-deep-s1/ledger.json`); `--expect reanalyse=HOURS` and
+`--allow-slow reanalyse` are the supervisor's as for any stage. With a time budget the run also writes what it has
+spent beside its ledger (`budget.json`), and the projection never reaches past the budget's end: searches slower
+than before are then fewer searches, not a stage held for overrunning. A budgeted run is expected to take its
+budget and 15% (what was left of the budget when this run of the stage began, and the grace), whoever plays it -
+never the hosts' earlier pace over the whole plan, so one host of two is not held while the budget lasts, and a
+first generation with no history is held all the same once it runs on long after its budget is spent. A stage run again keeps its plan, its accepted
+parts and the time it has spent (`genN/reanalyse/state.json`); other settings than it began with are refused once
+searches are in.
+
+**What is kept.** `ROOT/corpus/deep/genN/`:
+
+```
+CORPUS.json                 written last ("complete"): the judge network, the engine (id and commit), the source, the
+                            search (simulations, worlds, memory bound, settings, seeds), what was planned and made,
+                            what it cost (seconds a position, each run's hosts), the shards' encoding
+seed-1/train/*.shard.zst    policy-only shards (`reanalysed`), as the pair miner's targets are; producer
+seed-1/train/effort.json    `deep:<judge>@genN`, the search behind them ({"simulations", "worlds"})
+seed-1/heldout/...          the held-out games' positions, the same way
+```
+
+Retention (`retire`) deletes generations and their models; it never touches `ROOT/corpus`. A generation's working
+files (`genN/reanalyse`, its ledgers) go with the generation. A retrain (`--retrain`) keeps a generation's deep
+targets: they are made once.
+
+**Training** (`--corpus-train`): every finished corpus generation before this one, whole and whatever its age - not
+the window's two generations - each `train` directory as `DIR:WEIGHT` with the weight its search's simulations over
+self-play's full search's (`--full-simulations`, else `--simulations`; 131072 over 8192 is 16: each deep target is
+dealt 16 times an epoch, as a mined target of that effort is), times `--corpus-weight`, times `--corpus-decay` for
+each generation of age (0.85 by default). Then the whole corpus is **capped at `--corpus-share` (a quarter) of
+the policy-target weight**: its weighted targets over its own and the window's self-play's together, both counted by
+decision (a self-play's full searches' decisions, never its `visit_samples`, which count every sub-step of the fast
+searches too) - the mined floor's normalisation, as a ceiling. Past it every corpus weight is scaled down alike, so
+the generations keep their effort and age proportions; the training log gives each directory's effective weight and
+the corpus's share. Their samples are policy targets alone, as every reanalysed game's are. A corpus generation is
+read by the loader's own rule (this encoding, or an earlier one it only added to: `dataset.UPGRADABLE`); one of
+another encoding, or of another information mode than this generation's self-play, is left out and flagged, never
+a reason for training to fail. The mined targets' floor (`--mine-floor`) is counted against self-play's targets, as
+before.
+
+**The held-out games stay held out.** A held-out position's game is still in its generation's self-play, which the
+later windows train on. So each corpus generation names its held-out games (`heldout-games.json`, by the loader's
+game key, which a reanalysed game shares with its source), and every training from then on is given all of them
+(`train.py --exclude-games`): those games are read from no directory, with or without `--corpus-train`. The
+generation that played them trained on them before they were drawn (its network is the next one's champion, so the
+paired comparison errs against the candidate there, never for it).
+
+**Measuring it** (the evaluate stage): the candidate's and the champion's policy cross-entropy and top-1 against the
+deep targets of the corpus's held-out slices - of the corpus generations this generation trained beside, the games
+no training saw - and the candidate less the champion paired by game, in the stage's record (`corpus`), the README's
+evaluate row and `genN/corpus-eval.json`. A generation that learns the deep targets shows a lower CE there than its
+champion. A corpus generation made before its held-out games were named is no clean measure and is not scored. The
+corpus's scoring is by itself: if it fails, that is recorded (`corpus_failed`) and flagged, and the permanent
+held-out set's results stand.
 
 ### The gate, by pair
 
@@ -1026,6 +1185,8 @@ forces it when piped.
 --accept sprt-paired --gate-h1 0.51     # the pentanomial SPRT
 --accept always --gate-measure     # promote every candidate; the gate as a measurement only
 --heldout-games 1000               # choose the permanent held-out set from this generation's self-play (once)
+--selfplay-traces --reanalyse-hours 4 --corpus-train   # the deep corpus: four hours of deep searches of this
+                                   #   generation's self-play positions, kept, and trained on from the next one on
 --ladder-every 1 --ladder-play-every 3   # each new champion against gen0 and the tactical bot; at 250ms every 3rd of them
 --target-uses 4 --search-target-repeat 8   # steps by the search targets' exposure (Training options, below)
 --schedule constant --carry-optimizer      # continuous training from the champion's optimizer state
@@ -1094,7 +1255,9 @@ python -m cantrip_ai.generation --root /tmp/ai-tiny-data --tiny --no-build
 `cantrip-reanalyse` (`crates/cantrip-ai-host/src/reanalyse.rs`) searches chosen positions of self-played games again
 with the newest network, deeply and in bulk, and writes them as shards of search targets (MuZero's Reanalyse; the
 review of 2026-11-13, item 8). The games need their traces: run self-play with `--traces` (the driver's
-`--selfplay-traces`, off by default).
+`--selfplay-traces`, off by default). It is a tool run by hand, on one machine, that chooses positions by what the
+network and the games say of them; the driver's own deep reanalysis is the `reanalyse` stage ("The deep corpus",
+above), which draws positions at random and searches them across the workers.
 
 ```bash
 cantrip-reanalyse --selfplay ../../ai-data/gen4/selfplay --model ../../ai-data/models/gen4 --out ../../ai-data/gen4/reanalysed \

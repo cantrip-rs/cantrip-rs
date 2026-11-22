@@ -19,6 +19,9 @@
 //!     that the games are one game up to there (no network: `--model` is not asked for).
 //!   - `mine-values --dir DIR --games FILE --out FILE`: `FILE` a JSON line a game, `{"seed", "seat" (from 0), "model"}`:
 //!     that seat's network value at each of its decisions, by that model (each model's network on the `--server`).
+//!   - `mine-decisions --dir DIR --games FILE --out FILE [--mode M]`: `FILE` a JSON line a game, `{"seed"}`: the
+//!     decisions of that recorded game at which a seat's search has a choice (`mine::decisions`: `[decision, seat,
+//!     turn]` each), a line a game. No network: what the driver's `reanalyse` stage draws its positions from.
 //!   - `mine-filter --from DIR --keep FILE --out DIR`: of the target shards `mine-judge` wrote for one split
 //!     (`OUT/<split>`), the positions `FILE` names (a JSON line each, `{"dir", "seed", "decision"}`), into `DIR`.
 //!   - `mine-judge --plan FILE --dir NAME=DIR ... --model DIR --out DIR [--simulations N] [--worlds N] [--floor F]
@@ -48,6 +51,7 @@ const USAGE: &str = "usage: cantrip-explore audit --traces DIR --model DIR --out
        cantrip-explore verify --scenario FILE --action TEXT|#k --model DIR [--floor F] [--worlds N] [--simulations N] [--mode M] [--seed N] [--out FILE]
        cantrip-explore mine-forks --first DIR --second DIR --out FILE [--lanes N]
        cantrip-explore mine-values --dir DIR --games FILE --out FILE [--lanes N]
+       cantrip-explore mine-decisions --dir DIR --games FILE --out FILE [--lanes N] [--mode M]
        cantrip-explore mine-filter --from DIR --keep FILE --out DIR [--producer TEXT]
        cantrip-explore mine-judge --plan FILE --dir NAME=DIR ... --model DIR --out DIR [--simulations N] [--worlds N] [--floor F] [--batch N]
            [--seed N] [--lanes N] [--targets true|false] [--producer TEXT] [--mode M] [--search K=V,...] [--grant FILE]
@@ -169,6 +173,7 @@ fn mine(command: &str, flags: &BTreeMap<String, String>, dirs: BTreeMap<String, 
     let known: &[&str] = match command {
         "mine-forks" => &["--first", "--second", "--out", "--lanes"],
         "mine-filter" => &["--from", "--keep", "--out", "--producer"],
+        "mine-decisions" => &["--dir", "--games", "--out", "--lanes", "--mode"],
         "mine-values" => &["--dir", "--games", "--out", "--lanes", "--backend", "--server", "--threads", "--prior"],
         "mine-judge" => &[
             "--plan", "--model", "--out", "--simulations", "--worlds", "--floor", "--batch", "--seed", "--lanes", "--targets", "--producer", "--mode", "--backend",
@@ -204,6 +209,51 @@ fn mine(command: &str, flags: &BTreeMap<String, String>, dirs: BTreeMap<String, 
             let (games, decisions) = mine::filter(&from, &keep, &out, &producer)?;
             serde_json::json!({ "Games": games, "Decisions": decisions, "Asked": keep.len() })
         }
+        "mine-decisions" => {
+            #[derive(serde::Deserialize)]
+            struct Wanted {
+                seed: u64,
+            }
+            let dir = take("--dir").ok_or("no --dir")?;
+            let games_path = take("--games").ok_or("no --games")?;
+            let wanted: Vec<Wanted> = std::fs::read_to_string(&games_path)
+                .map_err(|e| format!("{games_path}: {e}"))?
+                .lines()
+                .filter(|l| !l.trim().is_empty())
+                .map(|l| serde_json::from_str(l).map_err(|e| format!("{games_path}: {e}")))
+                .collect::<Result<_, _>>()?;
+            // Only the games asked about are held, not the directory (a generation's self-play).
+            let rec = mine::load_only(Path::new(&dir), Some(&wanted.iter().map(|w| w.seed).collect()))?;
+            let mode = take("--mode").map(|m| parse_mode(&m).ok_or(format!("no mode {m}"))).transpose()?.unwrap_or(rec.mode);
+            let out = PathBuf::from(take("--out").ok_or("no --out")?);
+            let next = std::sync::atomic::AtomicUsize::new(0);
+            let lines = std::sync::Mutex::new(Vec::<serde_json::Value>::new());
+            std::thread::scope(|scope| {
+                for _ in 0..lanes {
+                    let (wanted, next, lines, rec) = (&wanted, &next, &lines, &rec);
+                    scope.spawn(move || {
+                        loop {
+                            let i = next.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+                            let Some(w) = wanted.get(i) else { break };
+                            let v = match (rec.games.get(&w.seed), rec.traces.get(&w.seed)) {
+                                (Some(g), Some(t)) => match mine::decisions(g, t, mode) {
+                                    Ok(decisions) => serde_json::json!({ "seed": w.seed, "decisions": decisions }),
+                                    Err(e) => serde_json::json!({ "seed": w.seed, "error": e }),
+                                },
+                                (None, _) => serde_json::json!({ "seed": w.seed, "error": "no recorded game" }),
+                                (_, None) => serde_json::json!({ "seed": w.seed, "error": "no trace" }),
+                            };
+                            lines.lock().unwrap_or_else(|e| e.into_inner()).push(v);
+                        }
+                    });
+                }
+            });
+            let mut lines = lines.into_inner().unwrap_or_else(|e| e.into_inner());
+            lines.sort_by_key(|v| v["seed"].as_u64());
+            std::fs::write(&out, lines.iter().map(|v| format!("{v}
+")).collect::<String>()).map_err(|e| format!("{}: {e}", out.display()))?;
+            serde_json::json!({ "Games": lines.len(), "Errors": lines.iter().filter(|v| v.get("error").is_some()).count() })
+        }
         "mine-forks" => {
             let first = mine::load(Path::new(&take("--first").ok_or("no --first")?))?;
             let second = mine::load(Path::new(&take("--second").ok_or("no --second")?))?;
@@ -220,7 +270,7 @@ fn mine(command: &str, flags: &BTreeMap<String, String>, dirs: BTreeMap<String, 
                 seat: u8,
                 model: String,
             }
-            let rec = mine::load(Path::new(&take("--dir").ok_or("no --dir")?))?;
+            let dir = take("--dir").ok_or("no --dir")?;
             let games_path = take("--games").ok_or("no --games")?;
             let wanted: Vec<Wanted> = std::fs::read_to_string(&games_path)
                 .map_err(|e| format!("{games_path}: {e}"))?
@@ -228,6 +278,8 @@ fn mine(command: &str, flags: &BTreeMap<String, String>, dirs: BTreeMap<String, 
                 .filter(|l| !l.trim().is_empty())
                 .map(|l| serde_json::from_str(l).map_err(|e| format!("{games_path}: {e}")))
                 .collect::<Result<_, _>>()?;
+            // Only the games asked about are held, not the directory.
+            let rec = mine::load_only(Path::new(&dir), Some(&wanted.iter().map(|w| w.seed).collect()))?;
             let out = PathBuf::from(take("--out").ok_or("no --out")?);
             let next = std::sync::atomic::AtomicUsize::new(0);
             let lines = std::sync::Mutex::new(Vec::<serde_json::Value>::new());

@@ -864,7 +864,8 @@ class GenerationTest(unittest.TestCase):
             self.assertTrue((gen1 / "dist" / "attempt1" / "gate" / "ledger.json").exists())
             self.assertTrue((gen1 / "dist" / "ledger.json").exists(), "self-play's ledger stays")
             self.assertTrue((gen1 / "dist" / "incoming").is_dir() and (gen1 / "dist" / "logs").is_dir())
-            self.assertEqual(sorted(rec.data["stages"]), ["build", "heldout", "selfplay"], "self-play and the held-out set are kept")
+            self.assertEqual(sorted(rec.data["stages"]), ["build", "heldout", "reanalyse", "selfplay"],
+                             "self-play and the held-out set are kept, and the deep targets made of its games")
             self.assertEqual(rec.data["attempts"][0]["reason"], "value overfit")
             self.assertTrue((gen1 / "logs" / "attempt1" / "gate.log").exists())
             self.assertTrue((gen1 / "logs" / "attempt1" / "metrics.json").exists())

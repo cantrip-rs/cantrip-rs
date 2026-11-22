@@ -98,6 +98,16 @@ generation's self-play directory and `genN/dist/stop`: self-play stops gracefull
 distributed driver (self-play's, a duel's, the judgements') stops its hosts the same way. The driver removes the files
 when it runs the stage again.
 
+The deep corpus (docs/ai-training.md, "The deep corpus"; `reanalyse.py`): with `--reanalyse-positions` or
+`--reanalyse-hours`, stage `reanalyse` (after `mine`; a data stage, and no part of a retrain) draws positions at
+random from the generation's recorded games - its self-play, played with `--selfplay-traces`, else the gate's games
+the miner recorded - and has the champion the gate leaves search each once at `--reanalyse-simulations` over
+`--reanalyse-worlds` (131,072 over 16), across the workers and (unless `--no-judge-local`) this machine, each host at
+the lanes a probe of its memory and throughput found, until the positions or the hours are spent. The searches are
+kept as policy targets in `ROOT/corpus/deep/genN`, which retention never prunes; `--corpus-train` adds the whole
+corpus to every generation's training, weighted by the searches' effort (`--corpus-weight`, `--corpus-decay`), and
+the evaluate stage scores the networks' policy against the corpus's held-out slices.
+
 While it runs, the driver keeps `genN/status.json` (`status.py`: the stage, its pid, a progress counter read from the
 ledgers, the shards and the logs), tells what happens (`notify.py`: a failure, a flagged warning, the verdict, the
 end), runs every stage with the engine the generation pinned when it began (`engine.py`, `ROOT/builds/<id>`), checks
@@ -127,14 +137,14 @@ import threading
 import time
 from pathlib import Path
 
-from . import distributed, duels, engine, mining, notify, reports, retention, status
+from . import distributed, duels, engine, mining, notify, reanalyse, reports, retention, status
 
 REPO = Path(__file__).resolve().parents[2]
 # heldout, evaluate and ladder run only when asked for (or, evaluate, when a held-out set exists; the ladder, when the
 # generation promoted). The measurements come after the promotion, and a failure of one is recorded and passed over
 # (`MEASUREMENTS`); the pair miner's two stop the generation when they fail (`DATA_STAGES`).
-STAGES = ("build", "selfplay", "heldout", "train", "export", "parity", "gate", "promote", "mine", "evaluate", "ladder",
-          "mined", "retire")
+STAGES = ("build", "selfplay", "heldout", "train", "export", "parity", "gate", "promote", "mine", "reanalyse", "evaluate",
+          "ladder", "mined", "retire")
 # The stages a retrain runs again (all but the build, the self-play and the held-out set's choice).
 LATER = ("train", "export", "parity", "gate", "promote", "mine", "evaluate", "ladder", "mined", "retire")
 # Stages the driver ran once and no longer does, which an older generation's record may hold: the network-only duel
@@ -144,10 +154,19 @@ RETIRED = ("netduel",)
 # The stages that decide nothing and make nothing a later stage reads: a failure is recorded, flagged at the top of
 # the README, told (`notify`), and the generation goes on.
 MEASUREMENTS = ("evaluate", "ladder")
-# The stages whose output is training data: the pair miner's two (`mining.py`) make the next generations' targets. A
+# The stages whose output is training data: the pair miner's two (`mining.py`) make the next generations' targets,
+# and the deep reanalysis (`reanalyse.py`) this generation's part of the corpus every later one trains on. A
 # failure stops the generation, loudly, so that no generation trains without them unnoticed; `--allow-data-failure`
 # records it as a measurement's is and goes on (the README, and the next generation's, then say what is missing).
-DATA_STAGES = ("mine", "mined")
+# The reanalysis is no part of a retrain (`LATER`): a generation's deep targets are made once and kept.
+MINE_STAGES = ("mine", "mined")
+DATA_STAGES = MINE_STAGES + ("reanalyse",)
+
+
+def data_lost(name: str, gen) -> str:
+    """What the generations after `gen` go without when its data stage `name` fails."""
+    return (f"gen{gen}'s mined targets" if name in MINE_STAGES else
+            f"gen{gen}'s deep targets (its part of the corpus, `{reanalyse.CORPUS.as_posix()}`)")
 # The serving options the parity check falls back through, in order, after the configured ones (docs/ai-training.md,
 # "Parity, and what a generation serves with"): each replaces the configured precision flags. Measured on gen14 (an
 # RTX 4080, T64): the default fp16 graph 32.3k rows/s, residual with TF32 inputs 34.7k, attention with TF32 inputs
@@ -745,10 +764,23 @@ def warnings(d: dict) -> list[str]:
     for name in DATA_STAGES + MEASUREMENTS:
         if s.get(name, {}).get("failed"):
             why = " ".join(str(s[name]["failed"]).split())
+            lost = "mined targets" if name in MINE_STAGES else "deep targets"
             flags.append(f"stage {name} failed and was passed over"
-                         + (", so the next generations train WITHOUT this generation's mined targets" if name in DATA_STAGES else "")
+                         + (f", so the next generations train WITHOUT this generation's {lost}" if name in DATA_STAGES else "")
                          + f": {why[:200]}")
     flags += list(d.get("missing_mined") or [])
+    flags += list(d.get("corpus_left_out") or [])
+    # What a stage flagged while it ran (self-play: a worker's traces that did not come home).
+    flags += list(d.get("flagged") or [])
+    if (c := s.get("evaluate", {}).get("corpus_failed")):
+        flags.append(f"evaluate: the deep corpus's held-out slice was not scored: {' '.join(str(c).split())[:200]}")
+    r = s.get("reanalyse") or {}
+    if r.get("done") and r.get("searched") and (r.get("memory_bound") or 0) > 0.05 * r["searched"]:
+        flags.append(f"reanalyse: {r['memory_bound']} of {r['searched']} deep searches stopped at their memory bound, "
+                     "their budget not spent (raise --reanalyse-memory-mb)")
+    if r.get("done") and r.get("mismatched"):
+        flags.append(f"reanalyse: {r['mismatched']} positions were stood in as another position than the recording's "
+                     "and gave no target (the engine that judged was not the recordings')")
     for when, pick in sorted((d.get("serving") or {}).items()):
         if pick.get("index"):
             failed = "; ".join(f"`{t['args'] or '(the default)'}`: {t['failed']}" for t in pick.get("tried", []))
@@ -842,6 +874,18 @@ def readme(d: dict) -> str:
         r = s["mined"]
         row("mined", f"mined targets kept: {json.dumps(r.get('kept'))} (`mine/targets`, the next generations' training; "
                      "`mine/REPORT.md`)")
+    if s.get("reanalyse", {}).get("done"):
+        r = s["reanalyse"]
+        each = r.get("seconds_a_position")
+        row("reanalyse", f"deep reanalysis: {r.get('searched')} of {r.get('planned')} positions of {r.get('source')} games "
+                         f"searched by {r.get('judge')} at {r.get('simulations')} simulations over {r.get('worlds')} worlds"
+                         + (f" (seeds {r.get('seeds')})" if len(r.get("seeds") or []) > 1 else "")
+                         + (f", {each:.1f} s a position" if each else "")
+                         + (f"; stopped: {r['closed']}" if r.get("closed") else "")
+                         + f"; the deep choice is not the network's in {r.get('disagree')}"
+                         + (f", KL median {_f(r.get('kl_median'))}" if r.get("kl_median") is not None else "")
+                         + (f"; {r['memory_bound']} stopped at their memory bound" if r.get("memory_bound") else "")
+                         + f"; {r.get('positions')} targets kept in `{r.get('corpus')}` ({json.dumps(r.get('directories'))})")
     if "netduel" in s and not s["netduel"].get("failed"):
         r = s["netduel"]
         row("netduel", f"the networks alone (no search), candidate gen{gen} against {r['champion']}, {r['decks']}: "
@@ -850,11 +894,22 @@ def readme(d: dict) -> str:
         r = s["evaluate"]
         parts = [f"{n}: value MSE {_f(e.get('value_mse'), '{:.4f}')}, ECE {_f(e.get('ece'), '{:.4f}')}, "
                  f"policy CE {_f(e.get('policy_ce'), '{:.4f}')}, top-1 {_f(e.get('top1'))} on {e.get('choices', '-')} targets"
-                 for n, e in r["networks"].items()]
+                 for n, e in (r.get("networks") or {}).items()]
         if text := reports.pairs_text(r.get("paired")):
             parts.append(text)
-        row("evaluate", f"the permanent held-out set ({r['games']} games, {r['positions']} positions; full-search policy "
-                        f"targets): " + "; ".join(parts) + ("; by seat below" if seats else ""))
+        text = ""
+        if r.get("networks"):
+            text = (f"the permanent held-out set ({r['games']} games, {r['positions']} positions; full-search policy "
+                    f"targets): " + "; ".join(parts) + ("; by seat below" if seats else ""))
+        if c := r.get("corpus"):
+            deep = [f"{n}: policy CE {_f(e.get('policy_ce'), '{:.4f}')}, top-1 {_f(e.get('top1'))}" for n, e in c["networks"].items()]
+            if pc := (c.get("paired") or {}).get("policy_ce"):
+                deep.append(f"{c['paired']['of']} less {c['paired']['against']}, paired by game: policy CE "
+                            f"{pc['diff']:+.4f} +/- {pc['half']:.4f}")
+            text += ("; " if text else "") + (f"the deep corpus's held-out slice ({c.get('choices')} deep targets of "
+                                             f"{c.get('games')} games, {len(c.get('directories') or [])} directories): "
+                                             + "; ".join(deep))
+        row("evaluate", text)
     if "ladder" in s and not s["ladder"].get("failed"):
         r = s["ladder"]
         row("ladder", "; ".join(f"{x['champion']} against {x['anchor']} at {x['budget']}: {duel_text(x)}" for x in r["rows"])
@@ -1303,10 +1358,61 @@ def main(argv=None):
     a.add_argument("--mine-timeout", type=float, default=8.0,
                    help="unused: the judgements are made within the mine stage now (kept so older command lines run)")
     a.add_argument("--judge-local", action=argparse.BooleanOptionalAction, default=True,
-                   help="with --workers: this machine judges its part of the pair miner's judgements")
+                   help="with --workers: this machine judges its part of the pair miner's judgements and of the deep "
+                        "reanalysis's searches")
     a.add_argument("--worker-judge-lanes", type=int,
                    help="a worker's judgement lanes, one run at a time (its own `judge_lanes` wins; default 4 x --mine-lanes, "
                         "the four runs at once on one worker before)")
+    a.add_argument("--reanalyse-positions", type=int, default=0,
+                   help="deep reanalysis (`reanalyse.py`; docs/ai-training.md, 'The deep corpus'): at most this many "
+                        "positions of this generation's recorded games searched again, deeply, after the mine stage, "
+                        "and kept for good in ROOT/corpus/deep/genN (0, with no --reanalyse-hours: no reanalysis)")
+    a.add_argument("--reanalyse-hours", type=float, default=0.0, metavar="H",
+                   help="the reanalysis's time budget: its judging stops when it is spent (the parts in flight finish), "
+                        "and no more positions are planned than it buys; a deep search's cost varies a lot (0: none)")
+    a.add_argument("--reanalyse-simulations", type=int, default=131072,
+                   help="a deep search's simulations in all, shared by its worlds (self-play's full search: --full-simulations)")
+    a.add_argument("--reanalyse-worlds", type=int, default=16, help="a deep search's worlds")
+    a.add_argument("--reanalyse-memory-mb", type=int, default=0,
+                   help="a deep search's memory bound (the search's MemoryMb; a search that reaches it stops short). "
+                        f"0: {reanalyse.SIMULATION_BYTES >> 10} KB a simulation, the largest tree measured: 8192 MB at 131072")
+    a.add_argument("--reanalyse-seeds", default="1",
+                   help="the deep searches' seeds, by commas: each seed searches every position once, into a directory "
+                        "of its own (one is enough: two seeds chose the same move on 91%% of positions)")
+    a.add_argument("--reanalyse-model",
+                   help="the network that searches: a champion or a model by name, or a model directory (default: the "
+                        "champion the gate leaves)")
+    a.add_argument("--reanalyse-source", choices=reanalyse.SOURCES, default="auto",
+                   help="where the positions come from: this generation's self-play (played with --selfplay-traces), or "
+                        "the gate's games the mine stage recorded; auto: self-play when it has traces, else the gate. "
+                        "Both are this generation's engine's, the only one their games replay with")
+    a.add_argument("--reanalyse-per-game", type=int, default=2, help="decisions drawn from a game")
+    a.add_argument("--reanalyse-heldout", type=float, default=0.1,
+                   help="the share of the reanalysed games held out of training: the evaluate stage scores the "
+                        "networks' policy against their deep targets")
+    a.add_argument("--reanalyse-search", action="append", default=[], metavar="KEY=VALUE",
+                   help="another setting of the deep search (repeatable); RootShortcut=false and MemoryMb are set")
+    a.add_argument("--reanalyse-batch", type=int, default=32, help="leaves a deep search sends to the network at once")
+    a.add_argument("--reanalyse-lanes", type=int, default=0,
+                   help="every host's lanes, with no probe (0: each host's own, from a probe of its memory and "
+                        "throughput, made once a line and kept in ROOT/corpus/deep/probe.json)")
+    a.add_argument("--reanalyse-max-lanes", type=int, default=0, help="the most lanes a worker's probe may find (0: what fits)")
+    a.add_argument("--reanalyse-local-lanes", type=int, default=0, help="the most lanes this machine's probe may find")
+    a.add_argument("--reanalyse-part-games", type=int, default=0,
+                   help="the games a part judges (0: a host's lanes); a part is taken whole, so a run killed loses the "
+                        "parts in flight, and a budget spent waits for them")
+    a.add_argument("--reanalyse-reprobe", action="store_true", help="probe every host again this generation")
+    a.add_argument("--corpus-train", action="store_true",
+                   help="train on the whole deep corpus (every earlier generation's ROOT/corpus/deep/genN, whatever "
+                        "its age), each directory weighted by its search's simulations over self-play's full search's")
+    a.add_argument("--corpus-weight", type=float, default=1.0, help="with --corpus-train: the corpus's weight, times the effort")
+    a.add_argument("--corpus-decay", type=float, default=0.85,
+                   help="with --corpus-train: a corpus generation's weight is multiplied by this for each generation "
+                        "of its age (1: never decays)")
+    a.add_argument("--corpus-share", type=float, default=0.25,
+                   help="with --corpus-train: the most of the policy-target weight the corpus makes beside the "
+                        "window's self-play (policy targets counted by decision on both sides, each times its "
+                        "weight): past it every corpus weight is scaled down alike (0: no cap)")
     a.add_argument("--extra-data", action="append", default=[], metavar="DIR[:WEIGHT]",
                    help="another directory of shards in the training window (repeatable), e.g. the pair miner's targets "
                         "(policy-only, `reanalysed`) at a weight above 1 to repeat them")
@@ -1425,7 +1531,8 @@ def main(argv=None):
     a.add_argument("--dry-run", action="store_true", help="print the plan and run nothing")
     a.add_argument("--tiny", action="store_true", help="a toy scale, for testing the driver")
     a.add_argument("--allow-data-failure", action="store_true",
-                   help="a data-producing stage that fails (mine, mined: the next generations' mined targets) is recorded "
+                   help="a data-producing stage that fails (mine, mined: the next generations' mined targets; "
+                        "reanalyse: this generation's deep targets) is recorded "
                         "and passed over as a measurement is, and a generation trains although an earlier one's mined "
                         "targets are missing; without it either stops the generation")
     a.add_argument("--repin-engine", action="store_true",
@@ -1553,6 +1660,17 @@ def main(argv=None):
         if new:
             rec.save()
 
+    def flag(text: str):
+        """Something a running stage flags (`warnings`: the README's WARNING block, the status and a notification),
+        at once - not when the stage ends, hours on."""
+        if args.dry_run:
+            return
+        flagged = rec.data.setdefault("flagged", [])
+        if text not in flagged:
+            flagged.append(text)
+            rec.save()
+        tell_warnings()
+
     def stage(name, fn):
         if rec.done(name) and name != "build":
             log(f"[{name}] done already ({rec.data['stages'][name]['seconds']:.0f} s)")
@@ -1570,11 +1688,15 @@ def main(argv=None):
             # data-producing stage's is passed over only when that was asked for: the next generations would train
             # without what it makes.
             passed_over = name in MEASUREMENTS or (name in DATA_STAGES and args.allow_data_failure)
+            if status.asked_to_stop(str(e)):
+                # Asked to stop (`--stop`, Ctrl-C) while the stage ran (the judgements', a duel's): no failure of
+                # the stage and nothing to pass over - the driver's last word is "stopped", and a run goes on.
+                raise
             if args.dry_run or not passed_over:
                 if name in DATA_STAGES and not args.dry_run:
                     raise SystemExit(
                         f"stage {name} failed, and its output is training data: the generations after this one would "
-                        f"train WITHOUT gen{gen}'s mined targets. The generation stops here; fix the cause and run the "
+                        f"train WITHOUT {data_lost(name, gen)}. The generation stops here; fix the cause and run the "
                         "driver again (the stage is tried again), or pass --allow-data-failure to record the failure "
                         f"and go on without them.\n{e}") from e
                 raise
@@ -1612,7 +1734,7 @@ def main(argv=None):
         if not args.no_mine:
             for g in range(gen - 1, max(gen - 1 - args.mine_window, 0), -1):
                 earlier = status.read_json(root / f"gen{g}" / "generation.json") or {}
-                failed = [n for n in DATA_STAGES if (earlier.get("stages") or {}).get(n, {}).get("failed")]
+                failed = [n for n in MINE_STAGES if (earlier.get("stages") or {}).get(n, {}).get("failed")]
                 if not failed:
                     continue
                 if "engine" in earlier:
@@ -1783,6 +1905,19 @@ def main(argv=None):
         if not rec.done("train"):
             try:
                 doubts += check_mined()
+            except SystemExit as e:
+                problems.append(str(e))
+        if reanalyse_settings().enabled() and not rec.done("reanalyse"):
+            # The deep reanalysis needs games that can be stood in again, and a network to search them with.
+            traced = args.selfplay_traces or (gen_dir / "selfplay" / "traces").is_dir()
+            mines = (not args.no_mine and args.accept != "always") or rec.done("mine")
+            wants = args.reanalyse_source
+            if not ((wants in ("auto", "selfplay") and traced) or (wants in ("auto", "gate") and mines)):
+                problems.append(f"reanalyse (--reanalyse-source {wants}): no games it could stand in again - self-play "
+                                "keeps its traces with --selfplay-traces, and the gate's games are recorded by the mine "
+                                "stage (not with --no-mine or --accept always)")
+            try:
+                reanalyse_model(check=real)
             except SystemExit as e:
                 problems.append(str(e))
         made = rec.data.setdefault("serving", {})
@@ -2067,7 +2202,7 @@ def main(argv=None):
                     ledger, hosts, out, dist_dir, read=lambda p: distributed.read_shard(p, seed, pairings), log=log,
                     chunk=args.dist_chunk or args.selfplay_shard_games, lookahead=args.dist_lookahead,
                     initial=args.dist_chunk or args.selfplay_shard_games, poll_seconds=args.dist_poll,
-                    timeout=args.worker_timeout, heldout=held)
+                    timeout=args.worker_timeout, heldout=held, traces=args.selfplay_traces, warn=flag)
                 result = coordinator.run()
             (out / distributed.HOSTS).write_text(json.dumps(distributed.hosts_manifest(ledger), indent=1), encoding="utf-8")
         if result == "stopped":
@@ -2080,6 +2215,14 @@ def main(argv=None):
             log(f"  {name}: {h['games']} games" + (f", {h['games_per_hour']:.0f} an hour" if h.get("games_per_hour") else "")
                 + (f", {h['lanes']} lanes, held by {h.get('limiter')}" if h.get("lanes") else ""))
         return n
+
+    def shard_header() -> dict | None:
+        """The header of this generation's own self-play shards: what a corpus generation has to be read beside."""
+        try:
+            first = next(iter(sorted((gen_dir / "selfplay").glob("*.shard.zst"))), None)
+            return reanalyse.shard_header(first) if first is not None else None
+        except OSError:
+            return None
 
     def heldout():
         return designate_heldout(gen_dir / "selfplay", held, args.heldout_games, gen, args.dry_run, log)
@@ -2115,6 +2258,22 @@ def main(argv=None):
                     targets += weight * sp.get("visit_samples", 0)
             extra += mining.weighted_dirs(root, gen, args.mine_window, args.full_simulations or args.simulations,
                                           args.mine_floor, targets, log)
+        corpus: list[str] = []
+        if args.corpus_train:
+            # The deep corpus, whole: every earlier generation's deep targets (`reanalyse.corpus_dirs`), by effort
+            # and age, at most --corpus-share of the policy-target weight beside the window's self-play: its policy
+            # targets counted by decision (`reanalyse.policy_targets`), times each directory's weight.
+            window_targets = sum(weight * reanalyse.policy_targets(d) for d, weight in w if d.name == "selfplay")
+            corpus, left = reanalyse.corpus_dirs(root, gen, args.full_simulations or args.simulations, args.corpus_weight,
+                                                 args.corpus_decay, shard_header(), log, share=args.corpus_share,
+                                                 window_targets=window_targets)
+            extra += corpus
+            if not args.dry_run and (left or rec.data.get("corpus_left_out")):
+                rec.data["corpus_left_out"] = left
+            for text in left:
+                log(f"  WARNING: {text}")
+            if not corpus:
+                log("  corpus: --corpus-train, and no earlier generation has made deep targets yet")
         for e in extra:
             log(f"  extra: {e}")
         # The mined targets an earlier generation of the mining window should have made (`check_mined`: refused here
@@ -2127,6 +2286,12 @@ def main(argv=None):
                "--device", args.device, "--progress", "on" if show_progress else "off"]
         if args.train_hours and not args.train_steps and uses is None:
             cmd += ["--hours", round(args.train_hours * 1.25, 3)]
+        # The deep corpus's held-out games (`reanalyse.exclusions`): they stay in their generation's self-play, and
+        # no window that holds it may train on them, or the held-out score is of games the network saw.
+        held_games = reanalyse.exclusions(root)
+        if held_games:
+            cmd += ["--exclude-games", *held_games]
+            log(f"  left out of every directory: the deep corpus's held-out games ({len(held_games)} generation(s))")
         for flag, value in (("--search-target-repeat", args.search_target_repeat),
                             ("--imitation-policy-weight", args.imitation_policy_weight),
                             ("--value-mix-full", args.value_mix_full), ("--value-mix-fast", args.value_mix_fast)):
@@ -2183,7 +2348,7 @@ def main(argv=None):
                     precision=ck["args"].get("precision", "fp32"),
                     init="resumed" if resuming else (str(init) if args.train_init else (init.parent.parent.name if init.exists() else "fresh")),
                     lr=args.lr, value_mix=args.value_mix, window=ck["data"]["directories"], samples=ck["data"]["samples"],
-                    **({"loader_recovered": recovered} if recovered else {}),
+                    **({"loader_recovered": recovered} if recovered else {}), **({"corpus": corpus} if corpus else {}),
                     **{k: v for k, v in dict(target_uses=args.target_uses, search_target_repeat=args.search_target_repeat,
                                              imitation_policy_weight=args.imitation_policy_weight,
                                              value_mix_full=args.value_mix_full, value_mix_fast=args.value_mix_fast,
@@ -2603,6 +2768,79 @@ def main(argv=None):
         log(f"  mined targets: {json.dumps(kept)}; report {p.report}")
         return dict(kept=kept, targets=str(p.targets), heldout=str(p.heldout), report=str(p.report))
 
+    def reanalyse_settings() -> reanalyse.Settings:
+        # --tiny: the searches at a toy scale too, on two lanes with no probe, so the whole stage runs in a test.
+        tiny = dict(simulations=32, worlds=2, batch=4, lanes=args.reanalyse_lanes or 2) if args.tiny else {}
+        seeds = tuple(int(x) for x in str(args.reanalyse_seeds).split(",") if x.strip()) or (1,)
+        given = dict(positions=args.reanalyse_positions, hours=args.reanalyse_hours, worlds=args.reanalyse_worlds,
+                     simulations=args.reanalyse_simulations, memory_mb=args.reanalyse_memory_mb, seeds=seeds,
+                     batch=args.reanalyse_batch, per_game=args.reanalyse_per_game, heldout=args.reanalyse_heldout,
+                     source=args.reanalyse_source, mode=args.mode, search=tuple(args.reanalyse_search),
+                     lanes=args.reanalyse_lanes, max_lanes=args.reanalyse_max_lanes, local_lanes=args.reanalyse_local_lanes,
+                     part_games=args.reanalyse_part_games, reprobe=args.reanalyse_reprobe, sample_seed=gen * 1000 + 11)
+        return reanalyse.Settings(**{**given, **tiny})
+
+    def reanalyse_model(check: bool = True) -> Path:
+        """The network that searches: the one named (`check`: it has to be there), else the champion the gate leaves."""
+        if args.reanalyse_model:
+            named = [Path(args.reanalyse_model), root / "champions" / args.reanalyse_model, root / "models" / args.reanalyse_model]
+            found = next((m for m in named if (m / "manifest.json").exists()), None)
+            if found is None and check:
+                raise SystemExit(f"--reanalyse-model {args.reanalyse_model}: no model there, nor a champion or a model of that name")
+            return (found or named[0]).resolve()
+        return model_dir if (rec.data["stages"].get("promote") or {}).get("accepted") else champ
+
+    def reanalyse_stage():
+        """The deep reanalysis (`reanalyse.py`): positions of this generation's recorded games, searched again far
+        deeper than self-play's full search across this machine and the workers, kept in the corpus."""
+        s = reanalyse_settings()
+        judge_model = reanalyse_model(check=not args.dry_run)
+        if args.dry_run:
+            log(f"  would search {'at most ' + str(s.positions) if s.positions else 'as many as the budget buys of the'} "
+                f"positions of gen{gen}'s recorded games ({s.source}) at {s.simulations} simulations over {s.worlds} worlds"
+                + (f", for {s.hours:g} h at most" if s.hours else "") + f", judged by {judge_model.name}"
+                + (" across the workers" + (" and this machine" if args.judge_local else "") if args.workers else " here")
+                + f", into {reanalyse.Paths(root, gen).corpus}")
+            return
+        def call(cmd, log_path):
+            return run(cmd, log_path, False)
+
+        with workers_held():
+            setup = duel_setup()
+            ledger_file = gen_dir / "dist" / "ledger.json"
+            if args.selfplay_traces and ledger_file.exists() and setup.workers:
+                # Self-play's traces that did not come home (a fetch that failed, an attempt given up as lost: its
+                # output is still on its worker): asked for again now that the workers are held.
+                tag = distributed.root_tag(root)
+                hosts = {w["name"]: distributed.host_class(w)(w, tag, gen, {}, {}, "", None, log) for w in setup.workers}
+                came = distributed.retry_traces(ledger_file, gen_dir / "selfplay", gen_dir / "dist", hosts, log)
+                if came["fetched"]:
+                    log(f"  traces fetched now: {', '.join(came['fetched'])}")
+                    kept = [f for f in rec.data.get("flagged") or [] if not any(f"{a}'s traces" in f for a in came["fetched"])]
+                    if kept != (rec.data.get("flagged") or []):
+                        rec.data["flagged"] = kept
+                        rec.save()
+                if came["failed"]:
+                    log(f"  traces still not fetched: {', '.join(came['failed'])} (their games are not drawn from)")
+            # A recording replays only with the engine that made it: the stage that made these games (self-play, or the
+            # mine stage's replays) must have run this generation's engine.
+            kind, _ = reanalyse.sources(gen_dir, s.source)
+            made_by = rec.data["stages"].get("selfplay" if kind == "selfplay" else "mine", {}).get("engine")
+            if made_by and eng.id and made_by != eng.id:
+                raise SystemExit(f"the {kind} games were recorded by engine {made_by} and this generation's engine is now "
+                                 f"{eng.id} ({engine.describe(eng.pinned)}): they do not replay on another engine. Give "
+                                 "--reanalyse-source the other recordings, or no --reanalyse-positions/--reanalyse-hours")
+            # This machine searches unless it is left out (`--no-judge-local`), and always where no workers were
+            # asked for. Left out, with workers asked for and none leased, nothing searches and the stage fails: a
+            # machine kept out of compute is never the fallback.
+            setup = duels.Setup(**{**setup.__dict__, "local": args.judge_local or not args.workers})
+            try:
+                return reanalyse.Reanalysis(root, gen, s, judge_model, decks_dir if decks_dir is not None else REPO / "decks",
+                                            eng.path("explore"), setup, call,
+                                            engine=dict(id=eng.id, commit=(eng.pinned or {}).get("commit")), log=log).run()
+            finally:
+                save_hashes()
+
     def by_matchup(name: str) -> dict | None:
         """Duel `name` by matchup (`reports.matchups`), from its results file (one machine's, or the hosts' merged), its
         table logged and anything flagged said; None where there is no file (a duel played before BotLab kept one)."""
@@ -2615,17 +2853,59 @@ def main(argv=None):
                 log(f"  WARNING: {name}, {f}")
         return table
 
+    def evaluate_corpus(networks: list[str]) -> dict | None:
+        """The networks' policy against the deep corpus's held-out slices (`reanalyse.heldout_dirs`: of the corpus
+        generations this one trained beside, the games no training saw): whether a generation learns the deep
+        targets. Cross-entropy and top-1 against the deep searches' targets, the candidate less the champion paired
+        by game."""
+        dirs = reanalyse.heldout_dirs(root, gen, shard_header())
+        if not dirs:
+            return None
+        out = gen_dir / "corpus-eval.json"
+        run([sys.executable, "-m", "cantrip_ai.value_eval", "--data", *dirs, "--every-game", "--policy", "--games", 1_000_000,
+             "--device", args.device, "--checkpoint", *networks, "--out", out],
+            gen_dir / "logs/evaluate-corpus.log", args.dry_run, env=dict(PYTHONPATH=str(REPO / "ai")), stream=show_progress)
+        if args.dry_run:
+            return None
+        results = json.loads(out.read_text(encoding="utf-8"))
+        paired = reports.heldout_pairs(results)
+        keys = ("policy_ce", "top1", "top1_played", "choices")
+        for r in results:
+            log(f"  the deep corpus's held-out slice, {r['name']}: policy CE {_f(r.get('policy_ce'), '{:.4f}')}, top-1 "
+                f"{_f(r.get('top1'))} on {r.get('choices')} deep targets")
+        return dict(directories=[str(d) for d in dirs], games=results[0]["games"], choices=results[0].get("choices"),
+                    networks={r["name"]: {k: r.get(k) for k in keys} for r in results},
+                    paired=dict(policy_ce=paired.get("policy_ce"), of=paired["of"], against=paired["against"])
+                    if paired and paired.get("policy_ce") else None)
+
+    def scored_corpus(networks: list[str]) -> dict:
+        """`evaluate_corpus` as a part of the evaluate stage's record (`corpus`), by itself: whatever fails in it is
+        recorded (`corpus_failed`), flagged and logged, and never fails the stage - the permanent held-out set's
+        results stand whatever becomes of the corpus's."""
+        try:
+            deep = evaluate_corpus(networks)
+        except (Exception, SystemExit) as e:
+            why = str(e) or type(e).__name__
+            log(f"  WARNING: the deep corpus's held-out slice was not scored: {why.splitlines()[0][:300] if why else ''}")
+            return dict(corpus_failed=why[-1500:])
+        return dict(corpus=deep) if deep else {}
+
     def evaluate():
         # The permanent held-out set: value MSE and ECE over its games, policy CE and top-1 against its full searches'
         # targets, for the candidate and the champion on the same positions.
         networks = [f"gen{gen}={model_dir / 'train' / 'checkpoint.pt'}"]
         if (champ / "train" / "checkpoint.pt").exists() or args.dry_run:
             networks.append(f"{champ.name}={champ / 'train' / 'checkpoint.pt'}")
+        if not (heldout_ready(held) or choose):
+            # No permanent held-out set: the corpus's held-out slice alone.
+            deep = scored_corpus(networks)
+            return None if args.dry_run else deep
         out = gen_dir / "heldout-eval.json"
         run([sys.executable, "-m", "cantrip_ai.value_eval", "--data", held, "--every-game", "--policy", "--games",
              args.heldout_eval_games, "--device", args.device, "--checkpoint", *networks, "--out", out],
             gen_dir / "logs/evaluate.log", args.dry_run, env=dict(PYTHONPATH=str(REPO / "ai")), stream=show_progress)
         if args.dry_run:
+            scored_corpus(networks)
             return
         results = json.loads(out.read_text(encoding="utf-8"))
         keys = ("value_mse", "ece", "sign", "policy_ce", "top1", "top1_played", "choices", "positions")
@@ -2639,7 +2919,8 @@ def main(argv=None):
         for f in reports.seat_flags(seats):
             log(f"  WARNING: {f}")
         return dict(directory=str(held), games=results[0]["games"], positions=results[0]["positions"],
-                    networks={r["name"]: {k: r.get(k) for k in keys} for r in results}, seats=seats, paired=paired)
+                    networks={r["name"]: {k: r.get(k) for k in keys} for r in results}, seats=seats, paired=paired,
+                    **scored_corpus(networks))
 
     def gate():
         gate_sims = args.gate_simulations or args.simulations
@@ -2767,13 +3048,17 @@ def main(argv=None):
     enabled = dict(
         build=not args.no_build,
         heldout=choose or rec.done("heldout"),
-        evaluate=not args.no_heldout_eval and (heldout_ready(held) or choose or rec.done("evaluate")),
+        evaluate=not args.no_heldout_eval and (heldout_ready(held) or choose or rec.done("evaluate")
+                                               or bool(reanalyse.heldout_dirs(root, gen))),
+        # The deep reanalysis: when asked for (positions, or a time budget).
+        reanalyse=reanalyse_settings().enabled() or rec.done("reanalyse"),
         ladder=lambda: rec.done("ladder") or ladder_due(promoted(), args.ladder_every, args.ladder_play_every)[0],
         # Pair mining needs a gate played in pairs whose games were kept (`--results`).
         mine=(not args.no_mine and args.accept != "always") or rec.done("mine"),
         mined=(not args.no_mine and args.accept != "always") or rec.done("mined"),
     )
-    fns = (build, selfplay, heldout, train, export, parity, gate, promote, mine, evaluate, ladder, mined, retire)
+    fns = (build, selfplay, heldout, train, export, parity, gate, promote, mine, reanalyse_stage, evaluate, ladder, mined,
+           retire)
 
     def stages() -> str:
         for name, fn in zip(STAGES, fns):

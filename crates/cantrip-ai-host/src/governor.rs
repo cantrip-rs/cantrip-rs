@@ -337,6 +337,90 @@ impl Probe for SystemProbe {
     }
 }
 
+/// The machine's logical processors that this process may run on. On Windows a machine with more than 64 is split
+/// into processor groups, and `std::thread::available_parallelism` counts only the group the process started in (64
+/// of a 128-thread machine's): every group's are counted here. Elsewhere it is `available_parallelism`.
+pub fn logical_processors() -> usize {
+    let seen = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(1);
+    #[cfg(windows)]
+    {
+        use windows_sys::Win32::System::Threading::{ALL_PROCESSOR_GROUPS, GetActiveProcessorCount};
+        // SAFETY: the call takes a group number and returns a count.
+        let all = unsafe { GetActiveProcessorCount(ALL_PROCESSOR_GROUPS) } as usize;
+        seen.max(all)
+    }
+    #[cfg(not(windows))]
+    {
+        seen
+    }
+}
+
+/// The calling thread, the `k`-th of a pool, put on its share of the machine where the process would otherwise keep to
+/// one processor group (Windows, more than 64 logical processors: `logical_processors` above what
+/// `available_parallelism` says): thread `k` runs on group `k` modulo the groups, on any processor of it. Nothing
+/// where the process already sees every processor, and nothing elsewhere; a failure leaves the thread where it was.
+pub fn spread_over_groups(k: usize) {
+    #[cfg(windows)]
+    {
+        use windows_sys::Win32::System::SystemInformation::GROUP_AFFINITY;
+        use windows_sys::Win32::System::Threading::{GetActiveProcessorCount, GetActiveProcessorGroupCount, GetCurrentThread, SetThreadGroupAffinity};
+        let seen = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(1);
+        if logical_processors() <= seen {
+            return;
+        }
+        // SAFETY: plain calls; the affinity structure is plain data, read by the call, and the handle is the calling
+        // thread's own pseudo-handle.
+        unsafe {
+            let groups = GetActiveProcessorGroupCount();
+            if groups < 2 {
+                return;
+            }
+            let group = (k % groups as usize) as u16;
+            let count = GetActiveProcessorCount(group);
+            if count == 0 {
+                return;
+            }
+            let mask = if count as usize >= usize::BITS as usize { usize::MAX } else { (1usize << count) - 1 };
+            let affinity = GROUP_AFFINITY { Mask: mask, Group: group, Reserved: [0; 3] };
+            SetThreadGroupAffinity(GetCurrentThread(), &affinity, std::ptr::null_mut());
+        }
+    }
+    #[cfg(not(windows))]
+    {
+        let _ = k;
+    }
+}
+
+/// The most memory this process has held so far, in bytes: Linux's peak resident set (`VmHWM`), Windows' peak commit
+/// (`PeakPagefileUsage`); `None` where it cannot be read. What a run reports of itself (`mine::run`), so that the lanes
+/// of the next are chosen from a measurement.
+pub fn peak_memory() -> Option<u64> {
+    #[cfg(target_os = "linux")]
+    {
+        let status = std::fs::read_to_string("/proc/self/status").ok()?;
+        let rest = status.lines().find_map(|l| l.strip_prefix("VmHWM:"))?;
+        rest.trim().trim_end_matches("kB").trim().parse::<u64>().ok().map(|k| k * 1024)
+    }
+    #[cfg(windows)]
+    {
+        use windows_sys::Win32::System::ProcessStatus::{GetProcessMemoryInfo, PROCESS_MEMORY_COUNTERS};
+        use windows_sys::Win32::System::Threading::GetCurrentProcess;
+        // SAFETY: the structure is plain data of the size given, and the call only writes into it.
+        unsafe {
+            let mut counters: PROCESS_MEMORY_COUNTERS = std::mem::zeroed();
+            counters.cb = size_of::<PROCESS_MEMORY_COUNTERS>() as u32;
+            if GetProcessMemoryInfo(GetCurrentProcess(), &mut counters, counters.cb) == 0 {
+                return None;
+            }
+            Some(counters.PeakPagefileUsage as u64)
+        }
+    }
+    #[cfg(not(any(windows, target_os = "linux")))]
+    {
+        None
+    }
+}
+
 /// The scaling controller's settings (`Scaler`).
 #[derive(Clone, Debug)]
 pub struct Scale {

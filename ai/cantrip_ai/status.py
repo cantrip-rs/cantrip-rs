@@ -102,6 +102,13 @@ PART_CREDIT = 0.9
 WHOLE_KINDS = ("judge",)
 # A host whose attempt ended this lately still counts among those playing: its next attempt is a moment away.
 HOST_GAP = 300.0
+# A run that ends itself when a time budget is spent (the deep reanalysis, `--reanalyse-hours`) says so beside its
+# ledger: `{"seconds": the budget, "spent": so far, "at": when that was written}`. Its coordinator then closes the
+# ledger and what is left is skipped, so the run is never projected past its budget's end (`budget_left`, `project`).
+BUDGET = "budget.json"
+# What a budgeted run is expected to take: its budget and this share of it (its parts in flight when the budget is
+# spent, its bundle's push).
+BUDGET_GRACE = 0.15
 PROJECTED = "overdue-projected"
 ALLOW_SLOW = "LOOP.allow-slow"
 # A sample of a stage's work is kept this often, this many of them (three hours).
@@ -115,11 +122,14 @@ TRANSIENT = (
     ("selfplay-memory", re.compile(r"stopped by its governor \(memory under the floor")),
     ("server-start", re.compile(r"the inference server did not start")),
     ("ledger-locked", re.compile(r"another driver \(pid \d+\) is running")),
+    # The deep reanalysis with nothing accepted yet and no host that answers (its worker out after the gate, a probe
+    # that searched nothing): the ledger keeps whatever comes, and a later run goes on (`reanalyse.NO_SEARCH`).
+    ("reanalyse-no-search", re.compile(r"the reanalysis could not search")),
 )
 
 
 # A stop somebody asked for (`generation.py --stop`, Ctrl-C): no failure, and nothing to run again unasked.
-ASKED = re.compile(r"stopped by its governor \((stop file|interrupted)|stopped on every host")
+ASKED = re.compile(r"stopped by its governor \((stop file|interrupted)|stopped on every host|the judgements stopped")
 
 
 def asked_to_stop(error: str) -> bool:
@@ -536,6 +546,13 @@ def active_ledger(gen_dir: Path, since: float) -> tuple[str, dict] | None:
     return newest[1].relative_to(gen_dir).as_posix(), d
 
 
+def budget_left(b, now: float) -> float | None:
+    """The seconds a run's time budget (`BUDGET`) has left at `now`; None where it has none (or says nothing usable)."""
+    if not isinstance(b, dict) or not all(isinstance(b.get(k), (int, float)) for k in ("seconds", "spent", "at")):
+        return None
+    return max(0.0, b["seconds"] - b["spent"] - max(0.0, now - b["at"]))
+
+
 def hours(seconds: float) -> str:
     if seconds < 5400:
         return f"{seconds / 60:.0f} min"
@@ -559,6 +576,15 @@ def expectation(s: dict, expect: dict | None = None) -> dict:
     work = max(0.0, w.get("total", 0) - w.get("start", 0))  # the games this run of the stage has to play
     if asked:
         return dict(seconds=asked * 3600.0, basis="as --expect says", known=True, wide=False)
+    b = w.get("budget")
+    if budget_left(b, 0.0) is not None:
+        # A run that ends with its time budget (`BUDGET`) is expected to take the budget and a grace, whoever plays
+        # it and however fast: what was left of the budget when this run was first seen, and `BUDGET_GRACE` of it
+        # all. Never the hosts' earlier pace over the whole plan - one host of two is no overrun while the budget
+        # lasts, and a first generation with no history is held all the same once it runs on past its budget.
+        spent = max(0.0, b["spent"] - max(0.0, b["at"] - w.get("since", b["at"])))
+        return dict(seconds=max(0.0, b["seconds"] - spent) + BUDGET_GRACE * b["seconds"], known=True, wide=False,
+                    basis=f"its time budget of {hours(b['seconds'])} and {BUDGET_GRACE:.0%}")
     if before.get("seconds_per_game"):
         gens = ", gen".join(str(g) for g in before.get("generations") or [])
         rates, hosts = before.get("rates") or {}, list(w.get("hosts") or [])
@@ -591,7 +617,12 @@ def project(s: dict, now: float, window: float = OVERRUN_WINDOW, expect: dict | 
     rate): the last window once there is one, so a stage that collapses is seen within about a window, and as far
     back as it takes to see three grains move otherwise. With no such stretch there is no rate, and nothing is
     projected - but that a stage which has already spent more than it should in all is projected at what it has
-    spent, the least it can take. None while there is nothing to say."""
+    spent, the least it can take. None while there is nothing to say.
+
+    A run with a time budget (`work.budget`, `BUDGET`) ends when it is spent, whatever is left of its games then: it
+    is projected to its budget's end at the latest (`budgeted`), and with no rate yet it is not projected at all
+    while its budget lasts - slow searches there are fewer searches, not a stage that overruns. Once the budget is
+    spent the run has only its parts in flight to wait for: time past that counts as any other."""
     w = s.get("work")
     if not isinstance(w, dict) or w.get("stage") != s.get("stage") or not isinstance(w.get("done"), (int, float)):
         return None
@@ -613,6 +644,9 @@ def project(s: dict, now: float, window: float = OVERRUN_WINDOW, expect: dict | 
             rate = (done - v) / (at - t)
             break
     common = dict(stage=stage, expected=expected, left=left, known=e["known"], wide=e["wide"])
+    cap = budget_left(w.get("budget"), now)
+    if rate is None and cap:
+        return None
     if rate is None:
         # Nothing to take a rate from (a part granted whole returns nothing until it is over). What it has spent is
         # the least it will take: past what it should with (nearly) nothing to show, that is its projection.
@@ -623,9 +657,19 @@ def project(s: dict, now: float, window: float = OVERRUN_WINDOW, expect: dict | 
                              f"({basis})")
         return None
     remaining = left / rate
+    # Capped at the budget's end while the budget lasts; once it is spent the run only waits for its parts in
+    # flight, and what they take at its rate is what is left.
+    budgeted = bool(cap) and cap < remaining
+    if budgeted:
+        remaining = cap
     total = watched + remaining
     out = dict(common, remaining=remaining, total=total, rate=rate * 3600.0, ratio=total / expected if expected else None)
-    if expected:
+    if budgeted:
+        out["budgeted"] = True
+        out["text"] = (f"{stage} ends with its time budget in {hours(remaining)} ({hours(total)} in all; {left:.0f} of "
+                       f"{w['total']} games left at {rate * 3600:.1f} an hour, of which what the budget does not reach "
+                       "is skipped)" + (f", expected {hours(expected)} ({basis})" if expected else ""))
+    elif expected:
         out["text"] = (f"{stage} projected to finish in {hours(remaining)} ({hours(total)} in all: {left:.0f} of "
                        f"{w['total']} games left at {rate * 3600:.1f} an hour), expected {hours(expected)} ({basis})")
     else:
@@ -770,8 +814,11 @@ class Heartbeat:
         samples = list(kept["samples"])
         if not samples or now - samples[-1][0] >= SAMPLE_EVERY:
             samples.append([now, done])
+        # A run that ends itself on a time budget says so beside its ledger (`BUDGET`).
+        budget = read_json(self.gen_dir / Path(rel).parent / BUDGET)
         return dict(kept, settings=settings, pace=before, total=w["total"] - w["skipped"], done=done,
                     finished=w["finished"], flight=w["flight"], grain=w["grain"], hosts=hosts,
+                    budget=budget if budget_left(budget, now) is not None else None,
                     at=now, samples=samples[-SAMPLES:])
 
     def begin(self, stage: str):

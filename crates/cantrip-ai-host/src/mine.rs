@@ -48,6 +48,14 @@ pub struct Recorded {
 }
 
 pub fn load(dir: &Path) -> Result<Recorded, String> {
+    load_only(dir, None)
+}
+
+/// `load`, keeping only the games (and traces) of the deals `wanted` names: a shard or a trace file is read and let
+/// go at a time, so what is held is what is wanted, not the directory (a gate's recordings are tens of megabytes a
+/// game once decoded: a judgement's part holds its own games', `run`).
+pub fn load_only(dir: &Path, wanted: Option<&std::collections::HashSet<u64>>) -> Result<Recorded, String> {
+    let want = |seed: u64| wanted.is_none_or(|w| w.contains(&seed));
     let mut games = HashMap::new();
     let mut mode = None;
     for path in shard::shards(dir).map_err(|e| format!("{}: {e}", dir.display()))? {
@@ -57,14 +65,48 @@ pub fn load(dir: &Path) -> Result<Recorded, String> {
             return Err(format!("{}: mode {}, not the other shards'", path.display(), header.mode));
         }
         mode = Some(m);
-        for g in records.into_iter().filter(|g| g.meta.answers > 0) {
+        for g in records.into_iter().filter(|g| g.meta.answers > 0 && want(g.meta.seed)) {
             if games.insert(g.meta.seed, g).is_some() {
                 return Err(format!("{}: two games of seed {} (a directory holds one game a deal)", dir.display(), path.display()));
             }
         }
     }
-    let traces = crate::regret::load_traces(&dir.join("traces"))?.into_iter().filter(|(_, t)| !t.steps.is_empty()).collect();
+    let traces = match wanted {
+        None => crate::regret::load_traces(&dir.join("traces"))?.into_iter().filter(|(_, t)| !t.steps.is_empty()).collect(),
+        Some(_) => wanted_traces(&dir.join("traces"), &want)?,
+    };
     Ok(Recorded { games, traces, mode: mode.ok_or(format!("{}: no shards", dir.display()))? })
+}
+
+/// The traces under `dir` (as `regret::load_traces` reads them) whose deals `want` names, a line read at a time and
+/// only a wanted one kept.
+fn wanted_traces(dir: &Path, want: &dyn Fn(u64) -> bool) -> Result<HashMap<u64, Trace>, String> {
+    use std::io::BufRead;
+    #[derive(Deserialize)]
+    struct Deal {
+        seed: u64,
+    }
+    let mut out = HashMap::new();
+    let mut files: Vec<_> = std::fs::read_dir(dir).map_err(|e| format!("{}: {e}", dir.display()))?.filter_map(Result::ok).map(|e| e.path()).filter(|p| p.extension().is_some_and(|x| x == "jsonl")).collect();
+    files.sort();
+    for f in files {
+        let file = std::fs::File::open(&f).map_err(|e| format!("{}: {e}", f.display()))?;
+        for line in std::io::BufReader::new(file).lines() {
+            let line = line.map_err(|e| format!("{}: {e}", f.display()))?;
+            if line.trim().is_empty() {
+                continue;
+            }
+            let deal: Deal = serde_json::from_str(&line).map_err(|e| format!("{}: {e}", f.display()))?;
+            if !want(deal.seed) {
+                continue;
+            }
+            let t: Trace = serde_json::from_str(&line).map_err(|e| format!("{}: {e}", f.display()))?;
+            if !t.steps.is_empty() {
+                out.insert(t.seed, t);
+            }
+        }
+    }
+    Ok(out)
 }
 
 /// The first sample with a choice of each decision of `game`, by decision.
@@ -291,6 +333,22 @@ pub fn values(game: &GameRecord, trace: Option<&Trace>, seat: u8, evaluator: &dy
         let o = evaluator.evaluate_positions(&chunk.iter().map(|(_, _, e)| e).collect::<Vec<_>>()).map_err(|e| e.0)?;
         out.extend(chunk.iter().zip(o.value).map(|((d, t, _), v)| (*d, *t, v)));
     }
+    Ok(out)
+}
+
+/// The decisions of a recorded game at which a seat's search has a choice (`choices`) and the recorder kept a position
+/// with one (`firsts`): `(decision, seat from 0, turn)`, by decision, for every seat the game recorded. No network is
+/// asked: what positions are drawn from when they are searched again for their own sake (the driver's `reanalyse`
+/// stage), whoever played them and however the game ended.
+pub fn decisions(game: &GameRecord, trace: &Trace, mode: InfoMode) -> Result<Vec<(u32, u8, u16)>, String> {
+    let firsts = firsts(game);
+    let seats: std::collections::BTreeSet<u8> = firsts.values().map(|s| s.seat).collect();
+    let mut out = Vec::new();
+    for seat in seats {
+        let wanted = choices(trace, seat, mode)?;
+        out.extend(firsts.iter().filter(|(d, s)| s.seat == seat && wanted.contains(d)).map(|(d, s)| (*d, seat, s.turn)));
+    }
+    out.sort_unstable();
     Ok(out)
 }
 
@@ -527,17 +585,12 @@ where
     if judged_path.exists() {
         return Err(format!("{} exists; remove it", judged_path.display()));
     }
-    let mut recorded: BTreeMap<String, Recorded> = BTreeMap::new();
-    for (name, dir) in &run.dirs {
-        let r = load_recorded(dir)?;
-        if r.mode != o.mode {
-            return Err(format!("{}: recorded in {} mode, judged in {}", dir.display(), shard::mode_name(r.mode), shard::mode_name(o.mode)));
-        }
-        recorded.insert(name.clone(), r);
-    }
+    let started = std::time::Instant::now();
+    // The machine before anything is loaded: what a lane count is chosen from (with `PeakBytes` below, the run's own).
+    let available = crate::governor::Probe::memory(&crate::governor::SystemProbe).map(|m| m.available);
     let mut work: BTreeMap<(String, u64), Vec<&Planned>> = BTreeMap::new();
     for p in plan {
-        if !recorded.contains_key(&p.dir) {
+        if !run.dirs.contains_key(&p.dir) {
             return Err(format!("{}: no directory {}", p.id, p.dir));
         }
         work.entry((p.dir.clone(), p.seed)).or_default().push(p);
@@ -559,6 +612,16 @@ where
         work = work.into_iter().enumerate().filter(|(i, _)| keep.next_if_eq(i).is_some()).map(|(_, w)| w).collect();
         items = Some(granted);
     }
+    // Only the games this run judges are held (its plan's; a part's, its grant's): never the whole directories.
+    let mut recorded: BTreeMap<String, Recorded> = BTreeMap::new();
+    for (name, dir) in &run.dirs {
+        let wanted: std::collections::HashSet<u64> = work.iter().filter(|((d, _), _)| d == name).map(|((_, seed), _)| *seed).collect();
+        let r = load_only(dir, Some(&wanted))?;
+        if r.mode != o.mode {
+            return Err(format!("{}: recorded in {} mode, judged in {}", dir.display(), shard::mode_name(r.mode), shard::mode_name(o.mode)));
+        }
+        recorded.insert(name.clone(), r);
+    }
     let mode = o.mode;
     let header = Header::new(table(), &run.producer, "mine", mode);
     let next = AtomicUsize::new(0);
@@ -569,6 +632,9 @@ where
         for lane in 0..run.lanes.max(1) {
             let (work, next, lines, totals, load, recorded, header) = (&work, &next, &lines, &totals, &load, &recorded, &header);
             let h = std::thread::Builder::new().name(format!("judge-{lane}")).stack_size(crate::STACK_SIZE).spawn_scoped(scope, move || -> Result<(), String> {
+                // A machine of several processor groups (Windows, more than 64 logical processors): the lanes over
+                // all of them, not the one group the process started in.
+                crate::governor::spread_over_groups(lane);
                 let evaluator = load()?;
                 let mut writers: BTreeMap<String, ShardWriter> = BTreeMap::new();
                 loop {
@@ -646,6 +712,14 @@ where
         "Seed": o.seed,
         "Producer": run.producer,
         "Targets": run.targets,
+        // What the run cost, for whoever sizes the next: its lanes and games, its wall time, the most memory the
+        // process held (`governor::peak_memory`), the memory the machine had free before it began, and its CPUs.
+        "Lanes": run.lanes.max(1),
+        "Games": work.len(),
+        "Seconds": started.elapsed().as_secs_f64(),
+        "PeakBytes": crate::governor::peak_memory(),
+        "AvailableBytes": available,
+        "Cpus": crate::governor::logical_processors(),
     });
     if let Some(items) = items {
         let path = run.out.join("items.txt");
@@ -653,10 +727,6 @@ where
     }
     let _ = std::fs::write(run.out.join("judge-report.json"), serde_json::to_string_pretty(&report).unwrap_or_default());
     Ok(report)
-}
-
-fn load_recorded(dir: &Path) -> Result<Recorded, String> {
-    load(dir)
 }
 
 /// One game's planned positions: each fork judged, each position searched again and written (with `targets`), and a

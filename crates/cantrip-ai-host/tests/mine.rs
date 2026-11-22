@@ -203,6 +203,26 @@ fn a_pairs_fork_is_its_first_differing_answer_and_the_games_are_one_before_it() 
         assert_eq!(rec.traces.len(), 2);
         let (&seed, trace) = rec.traces.iter().next().unwrap();
         let game = &rec.games[&seed];
+        // Only the deals asked for are held: the same game and trace, and nothing of the other.
+        let only = mine::load_only(&dir, Some(&[seed].into_iter().collect())).unwrap();
+        assert_eq!((only.games.len(), only.traces.len(), only.mode), (1, 1, rec.mode));
+        assert_eq!(&only.traces[&seed], trace);
+        assert_eq!(only.games[&seed].samples.len(), game.samples.len());
+        let none = mine::load_only(&dir, Some(&std::collections::HashSet::new())).unwrap();
+        assert!(none.games.is_empty() && none.traces.is_empty());
+        // The decisions a position may be drawn from (the reanalyse stage): each one a seat's own, with a choice in
+        // the recording, in order; both seats', and no network asked.
+        let drawn = mine::decisions(game, trace, rec.mode).unwrap();
+        assert!(!drawn.is_empty() && drawn.windows(2).all(|w| w[0] < w[1]), "{drawn:?}");
+        for &(d, seat, turn) in &drawn {
+            let s = game.samples.iter().find(|s| s.decision == d && from_choice(s)).expect("a recorded choice");
+            assert_eq!((s.seat, s.turn), (seat, turn));
+        }
+        assert_eq!(drawn.iter().map(|x| x.1).collect::<std::collections::BTreeSet<_>>().len(), 2, "{drawn:?}");
+        for seat in 0..2u8 {
+            let wanted = mine::choices(trace, seat, rec.mode).unwrap();
+            assert!(drawn.iter().filter(|x| x.1 == seat).all(|x| wanted.contains(&x.0)));
+        }
         // One game twice: no fork.
         let same = mine::fork((trace, game), (trace, game), rec.mode).unwrap();
         assert_eq!(same["status"], "identical", "{same}");
@@ -268,6 +288,16 @@ fn a_plans_positions_are_judged_and_written_as_reanalyse_targets() {
         let report = mine::run(&run, &plan, &o, &prior, load).unwrap();
         assert_eq!(report["MismatchedPositions"], 0, "{report}");
         assert!(report["Errors"].as_object().unwrap().is_empty(), "{report}");
+        // What the run cost (what the next run's lanes are sized from).
+        assert_eq!(report["Lanes"], 2, "{report}");
+        // Every processor group's processors (Windows counts one group's in `available_parallelism`): never fewer.
+        let seen = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(1);
+        assert!(report["Cpus"].as_u64().is_some_and(|c| c as usize >= seen), "{report}");
+        assert_eq!(report["Cpus"], cantrip_ai_host::governor::logical_processors());
+        cantrip_ai_host::governor::spread_over_groups(3); // nothing on a machine of one group, and never a failure
+        assert!(report["Seconds"].as_f64().is_some_and(|s| s > 0.0), "{report}");
+        #[cfg(any(windows, target_os = "linux"))]
+        assert!(report["PeakBytes"].as_u64().is_some_and(|b| b > 0) && report["AvailableBytes"].as_u64().is_some_and(|b| b > 0), "{report}");
         let lines: Vec<serde_json::Value> = std::fs::read_to_string(out.join("judged.jsonl")).unwrap().lines().map(|l| serde_json::from_str(l).unwrap()).collect();
         assert_eq!(lines.len(), plan.len());
         let f = lines.iter().find(|l| l["id"] == "f0").unwrap();
@@ -322,10 +352,11 @@ fn a_plans_positions_are_judged_and_written_as_reanalyse_targets() {
             std::fs::write(&file, grant).unwrap();
             let part = base.join(format!("part-{k}"));
             let r = JudgeRun { dirs: run.dirs.clone(), out: part.clone(), lanes: 1, producer: run.producer.clone(), targets: true, grant: Some(file) };
-            mine::run(&r, &plan, &o, &prior, load).unwrap();
+            let said = mine::run(&r, &plan, &o, &prior, load).unwrap();
             let items: Vec<usize> = std::fs::read_to_string(part.join("items.txt")).unwrap().lines().map(|l| l.parse().unwrap()).collect();
             let want: Vec<usize> = if k == 0 { (0..games / 2).collect() } else { (games / 2..games).collect() };
             assert_eq!(items, want);
+            assert_eq!(said["Games"], want.len(), "a part holds and judges its grant's games alone");
             parted.extend(std::fs::read_to_string(part.join("judged.jsonl")).unwrap().lines().map(|l| serde_json::from_str::<serde_json::Value>(l).unwrap()));
         }
         parted.sort_by(|a, b| a["id"].as_str().cmp(&b["id"].as_str()));
