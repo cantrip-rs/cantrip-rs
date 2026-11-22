@@ -26,7 +26,7 @@ pub const fn way(mana: ManaCost, exile: u8, text: &'static str) -> WayDef {
 /// Exile a land you control, Exile five other cards from your graveyard" (Lunar Hatchling). The permanent is chosen as the
 /// cost is chosen and exiled as it is paid (CR 601.2b, 601.2h). `text` is the way's full text.
 pub const fn way_exiling_permanent(mana: ManaCost, exile: u8, filter: ObjectFilter, text: &'static str) -> WayDef {
-    let permanents = Some(PermanentCost { count: 1, filter, action: PermanentAction::Exile, tapped: false, excluded: None });
+    let permanents = Some(PermanentCost { count: 1, filter, action: PermanentAction::Exile, tapped: false, excluded: None, together: None });
     cantrip_api::way(Cost { permanents, ..cost(mana, exile) }, ZoneKind::Graveyard, text).kind(WayKind::Escape)
 }
 

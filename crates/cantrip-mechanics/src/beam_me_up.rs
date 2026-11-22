@@ -17,7 +17,7 @@ use crate::targets::filters::creature;
 /// `Ability:` matches and the client shows.
 pub const fn way(cost: ManaCost, text: &'static str) -> WayDef {
     let returning = Cost {
-        permanents: Some(PermanentCost { count: 1, filter: creature, action: PermanentAction::BeamUp, tapped: false, excluded: None }),
+        permanents: Some(PermanentCost { count: 1, filter: creature, action: PermanentAction::BeamUp, tapped: false, excluded: None, together: None }),
         ..Cost::NONE
     };
     cantrip_api::way(Cost::mana(cost).and(returning), ZoneKind::Graveyard, text).exile_after()

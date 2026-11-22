@@ -1112,6 +1112,13 @@ fn can_pay_other_judged(cx: &Cx, source: ObjectId, controller: PlayerId, cost: &
         if candidates < p.count as usize {
             return false;
         }
+        // A rule of the group (CR 601.2h): some of the permanents that could pay are a set it allows.
+        if p.together.is_some() {
+            let eligible: Vec<ObjectId> = cx.permanents_of(controller).into_iter().filter(|&id| pays_permanents(cx, cost, &p, &asker, id, paid)).collect();
+            if !group_allows(cx, source, controller, &p, &eligible) {
+                return false;
+            }
+        }
     }
     let except = if judged == Judged::Cast { Some(source) } else { None };
     if let Some((n, _, _)) = cost.behold {
@@ -2092,6 +2099,13 @@ fn granter_pays(cx: &Cx, cost: &Cost, player: PlayerId, granter: ObjectId) -> bo
 
 }
 
+/// Whether `eligible` hold `p.count` permanents `p.together`, the cost's rule of the group (CR 601.2h), allows to be chosen
+/// together: exact, as a target slot's rule is (`select::first_targets`). A cost with no rule asks nothing of the group.
+fn group_allows(cx: &Cx, source: ObjectId, player: PlayerId, p: &PermanentCost, eligible: &[ObjectId]) -> bool {
+    let candidates: Vec<Target> = eligible.iter().copied().map(Target::Object).collect();
+    p.together.is_none() || select::first_targets(cx, p.together, player, source, &candidates, p.count as usize).is_some()
+}
+
 /// Chooses the permanents a cost names (CR 601.2h), always asked, even when the choice is forced. Too few to choose
 /// among (tapped ones, judged once the mana is paid) is a cost that can't be paid: the announcement is taken back. `paid` is
 /// what the cost is paid for (`permanent_allowed`).
@@ -2170,7 +2184,7 @@ fn choose_permanents_apart(cx: &mut Cx, player: PlayerId, source: ObjectId, cost
     let asker = Asker { instance: None, source, controller: player, by, spell: false };
     let eligible: Vec<ObjectId> =
         cx.permanents_of(player).into_iter().filter(|&id| !taken.contains(&id) && pays_permanents(cx, cost, &p, &asker, id, paid)).collect();
-    if eligible.len() < p.count as usize {
+    if eligible.len() < p.count as usize || !group_allows(cx, source, player, &p, &eligible) {
         return Err(Stop::Cancel);
     }
     let purpose = match p.action {
@@ -2189,7 +2203,12 @@ fn choose_permanents_apart(cx: &mut Cx, player: PlayerId, source: ObjectId, cost
         (false, PermanentAction::Exile) => "permanent",
         (false, _) => "",
     };
-    let ask = RequestKind::choose_cards(source, purpose, eligible.clone(), eligible, p.count, false, kind);
+    // A rule of the group ("with different names") rides the question, which the core checks every answer by (CR 601.2h).
+    let mut rule = Selection::listed(Count::Exactly(p.count), &eligible, eligible.clone()).called(kind);
+    if let Some(together) = p.together {
+        rule = rule.with(*together);
+    }
+    let ask = RequestKind::ChooseCards { source, purpose, cards: eligible, rule: Box::new(rule) };
     match cx.ask_core(player, ask, true)? {
         Answer::Cards(cards) => Ok(cards),
         _ => Err(Stop::Cancel),

@@ -16,7 +16,7 @@ fn beam_me_up_in_your_main_phase(q: &dyn Query, asker: &Asker, card: ObjectId, p
     }
     let chars = q.chars(card);
     // GrantedWay::flashback already restricts eligible faces to instant or sorcery spells.
-    let returning = PermanentCost { count: 1, filter: creature, action: PermanentAction::BeamUp, tapped: false, excluded: Some(asker.source) };
+    let returning = PermanentCost { count: 1, filter: creature, action: PermanentAction::BeamUp, tapped: false, excluded: Some(asker.source), together: None };
     Some(Cost::mana(q.card(chars.card).cost).and(Cost { permanents: Some(returning), ..Cost::NONE }))
 }
 

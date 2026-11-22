@@ -1269,6 +1269,12 @@ pub struct PermanentCost {
     /// chosen once the mana is paid, so one tapped for mana while paying may be among them (Spider-Sense's ruling,
     /// 2025-09-19).
     pub tapped: bool,
+    /// A rule of the permanents chosen together (CR 601.2h, 118.3): "sacrifice three artifact tokens with different names" is
+    /// `select::DIFFERENT_NAMES`, the set rule target slots and searches use. The permanents are chosen as one group in a
+    /// question that carries the rule (`RequestKind::ChooseCards`), and the cost is payable only when its eligible permanents
+    /// hold a group it allows. Only a cost of one atomic part (no `components`), not of tapped permanents, has one. Held by
+    /// reference, a `const` part promoted to a static, so a `Cost`, copied with every payment, stays the size it was.
+    pub together: Option<&'static Part>,
 }
 
 impl Cost {
@@ -1438,6 +1444,9 @@ impl Cost {
         let mut i = 0;
         while i < components.len() {
             let mut part = components[i];
+            // A permanents cost chosen under a rule of the group (`PermanentCost::together`) is one atomic part: the
+            // components' payment chooses each of their permanents apart and would not see it.
+            if let Some(p) = part.permanents { assert!(p.together.is_none(), "a permanents cost under a rule of the group is a cost of one part"); }
             // Permanent components are intentionally kept separately: combining their counts would discard their
             // filters and the identity of each payment. Other costs still contribute to their shared totals.
             part.permanents = None;
@@ -1546,6 +1555,7 @@ impl Cost {
                 }, "two permanent costs exclude different objects");
                 // Nor are permanents sacrificed and permanents exiled.
                 assert!(a.action as u8 == b.action as u8, "two permanent costs that do different things with them");
+                assert!(a.together.is_none() && b.together.is_none(), "two permanent costs, one of them chosen under a rule of the group");
                 Some(PermanentCost { count: a.count + b.count, ..a })
             }
             (None, b) => b,
@@ -1662,27 +1672,33 @@ impl Cost {
     }
 
     pub const fn sacrifice(count: u32, filter: ObjectFilter) -> Cost {
-        Cost { permanents: Some(PermanentCost { count, filter, action: PermanentAction::Sacrifice, tapped: false, excluded: None }), ..Cost::NONE }
+        Cost { permanents: Some(PermanentCost { count, filter, action: PermanentAction::Sacrifice, tapped: false, excluded: None, together: None }), ..Cost::NONE }
+    }
+
+    /// Sacrifice `count` permanents you control that pass the filter and, together, `rule` (CR 601.2h, 118.3): "Sacrifice three
+    /// artifact tokens with different names" is `Cost::sacrifice_together(3, artifact_token, &DIFFERENT_NAMES)`.
+    pub const fn sacrifice_together(count: u32, filter: ObjectFilter, rule: &'static Part) -> Cost {
+        Cost { permanents: Some(PermanentCost { count, filter, action: PermanentAction::Sacrifice, tapped: false, excluded: None, together: Some(rule) }), ..Cost::NONE }
     }
 
     /// Tap `count` untapped permanents you control that pass the filter, as a cost (CR 118.3).
     pub const fn tap_untapped(count: u32, filter: ObjectFilter) -> Cost {
-        Cost { permanents: Some(PermanentCost { count, filter, action: PermanentAction::Sacrifice, tapped: false, excluded: None }), tap_permanents: true, ..Cost::NONE }
+        Cost { permanents: Some(PermanentCost { count, filter, action: PermanentAction::Sacrifice, tapped: false, excluded: None, together: None }), tap_permanents: true, ..Cost::NONE }
     }
 
     pub const fn return_to_hand(count: u32, filter: ObjectFilter) -> Cost {
-        Cost { permanents: Some(PermanentCost { count, filter, action: PermanentAction::ReturnToHand, tapped: false, excluded: None }), ..Cost::NONE }
+        Cost { permanents: Some(PermanentCost { count, filter, action: PermanentAction::ReturnToHand, tapped: false, excluded: None, together: None }), ..Cost::NONE }
     }
 
     /// Return `count` tapped permanents you control that pass the filter to their owners' hands (web-slinging, CR
     /// 702.188a): chosen once the mana is paid (`PermanentCost::tapped`).
     pub const fn return_tapped_to_hand(count: u32, filter: ObjectFilter) -> Cost {
-        Cost { permanents: Some(PermanentCost { count, filter, action: PermanentAction::ReturnToHand, tapped: true, excluded: None }), ..Cost::NONE }
+        Cost { permanents: Some(PermanentCost { count, filter, action: PermanentAction::ReturnToHand, tapped: true, excluded: None, together: None }), ..Cost::NONE }
     }
 
     /// Exile `count` permanents you control that pass the filter, as a cost (CR 118.3): "Exile a creature you control".
     pub const fn exile_permanents(count: u32, filter: ObjectFilter) -> Cost {
-        Cost { permanents: Some(PermanentCost { count, filter, action: PermanentAction::Exile, tapped: false, excluded: None }), ..Cost::NONE }
+        Cost { permanents: Some(PermanentCost { count, filter, action: PermanentAction::Exile, tapped: false, excluded: None, together: None }), ..Cost::NONE }
     }
 
     pub const fn mana(mana: ManaCost) -> Cost {

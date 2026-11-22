@@ -56,6 +56,12 @@ pub const fn sacrifice(n: u32, filter: ObjectFilter) -> Cost {
     Cost::sacrifice(n, filter)
 }
 
+/// "Sacrifice N [permanents] with different names" and the like (CR 701.21, 601.2h): the group chosen must pass `rule`, a part of a
+/// selection (`select::DIFFERENT_NAMES`), as well as each pass the filter.
+pub const fn sacrifice_together(n: u32, filter: ObjectFilter, rule: &'static Part) -> Cost {
+    Cost::sacrifice_together(n, filter, rule)
+}
+
 /// "Return N [permanents] you control to their owner's hand".
 pub const fn return_to_hand(n: u32, filter: ObjectFilter) -> Cost {
     Cost::return_to_hand(n, filter)
