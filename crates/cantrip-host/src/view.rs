@@ -986,6 +986,7 @@ impl<'a> Projector<'a> {
             let text = match e.kind {
                 EffectKind::PlayerProtectionFromEverything if e.controller == p => format!("{you} have protection from everything"),
                 EffectKind::PlayerHexproof if e.controller == p => format!("{you} have hexproof"),
+                EffectKind::ManaKept(mana) if e.controller == p => format!("{you} don't lose unspent {} mana as steps and phases end", mana.color().map_or("colorless", |c| c.name()).to_lowercase()),
                 EffectKind::CantActivatePowerUp => "Power-up abilities can't be activated".to_string(),
                 EffectKind::CreaturesAssignDamageByToughness if e.controller == p => {
                     format!("{} creatures with toughness greater than power assign combat damage equal to toughness", if p == self.viewer { "Your" } else { "Their" })

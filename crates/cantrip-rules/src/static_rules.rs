@@ -64,24 +64,28 @@ pub fn exhaust_as_though_unactivated(cx: &Cx, player: PlayerId) -> bool {
 }
 
 /// The players whose unspent mana of some types a static ability keeps in their pool as steps and phases end (CR 500.5,
-/// `CardDef::mana_kept`): each with those types, indexed by `Mana`. Empty while no permanent with its abilities has one
-/// (CR 613.1f).
+/// `CardDef::mana_kept`), or a resolved effect does for as long as it lasts (`EffectKind::ManaKept`): each with those types,
+/// indexed by `Mana`. Empty while no permanent with its abilities has one and no such effect lasts (CR 613.1f).
 pub fn mana_kept(cx: &Cx) -> Vec<(PlayerId, [bool; 6])> {
-    let mut kept: Vec<(PlayerId, [bool; 6])> = Vec::new();
+    let mut keeps: Vec<(PlayerId, Mana)> = Vec::new();
     for (id, controller, def, by) in sources(cx, |d| !d.mana_kept.is_empty()) {
         let asker = Asker { instance: None, source: id, controller, by, spell: false };
         for player in cx.s().seats() {
-            for mana in Mana::ALL {
-                if def.mana_kept.iter().any(|rule| rule(cx, &asker, player, mana)) {
-                    match kept.iter_mut().find(|(p, _)| *p == player) {
-                        Some((_, k)) => k[mana as usize] = true,
-                        None => {
-                            let mut k = [false; 6];
-                            k[mana as usize] = true;
-                            kept.push((player, k));
-                        }
-                    }
-                }
+            keeps.extend(Mana::ALL.into_iter().filter(|&mana| def.mana_kept.iter().any(|rule| rule(cx, &asker, player, mana))).map(|mana| (player, mana)));
+        }
+    }
+    keeps.extend(cx.s().effects.iter().filter_map(|e| match e.kind {
+        EffectKind::ManaKept(mana) => Some((e.controller, mana)),
+        _ => None,
+    }));
+    let mut kept: Vec<(PlayerId, [bool; 6])> = Vec::new();
+    for (player, mana) in keeps {
+        match kept.iter_mut().find(|(p, _)| *p == player) {
+            Some((_, k)) => k[mana as usize] = true,
+            None => {
+                let mut k = [false; 6];
+                k[mana as usize] = true;
+                kept.push((player, k));
             }
         }
     }

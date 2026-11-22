@@ -42,3 +42,31 @@ fn rollback_restores_pool_restrictions_snow_and_lifetimes_then_later_mana_still_
     cx(&mut g).empty_mana_pool(YOU);cx(&mut g).add_mana(YOU,Mana::R,1);
     assert_eq!(g.state.player(YOU).pool.get(Mana::R),1);assert_eq!(g.state.mana_from_of(YOU).count(),1);
 }
+static BARE:CardDef=CardDef {name:"Resolved-effect probe",types:TypeSet::of(&[CardType::Enchantment]),..CardDef::BLANK};
+#[test]
+fn a_resolved_keep_effect_keeps_one_type_for_its_controller_until_it_ends() {
+    // The Last Agni Kai (CR 106.4, 500.5): "until end of turn, you don't lose unspent red mana as steps and phases end".
+    let cards=Box::leak(Box::new(CardTable::new([&BARE])));
+    let mut g=Game::new(cards,&Setup {decks:vec![vec![],vec![]],..Default::default()});
+    let source=g.state.push_obj(Obj::new(cards.id_of(&BARE),YOU,Zone::BATTLEFIELD));g.state.zone_push(Zone::BATTLEFIELD,source);g.state.see_statics();
+    assert!(crate::static_rules::mana_kept(&cx(&mut g)).is_empty(),"nothing keeps mana before the effect resolves");
+    cx(&mut g).add_player_effect(YOU,source,EffectKind::ManaKept(Mana::R),Duration::EndOfTurn);
+    let kept=crate::static_rules::mana_kept(&cx(&mut g));
+    assert_eq!(kept.len(),1);assert_eq!(kept[0].0,YOU);assert_eq!(kept[0].1,[false,false,false,true,false,false],"only the controller's red");
+    g.state.add_mana(YOU,Mana::R,2,source,None,ManaLasts::Step,false);g.state.add_mana(YOU,Mana::U,3,source,None,ManaLasts::Step,false);
+    g.state.empty_mana_keeping(YOU,ManaLasts::Step,kept[0].1);
+    assert_eq!(g.state.player(YOU).pool.get(Mana::R),2);assert_eq!(g.state.player(YOU).pool.get(Mana::U),0);
+}
+#[test]
+fn resolved_keep_effects_of_one_player_are_merged_and_those_of_another_are_kept_apart() {
+    let cards=Box::leak(Box::new(CardTable::new([&BARE])));
+    let mut g=Game::new(cards,&Setup {decks:vec![vec![],vec![]],..Default::default()});
+    let source=g.state.push_obj(Obj::new(cards.id_of(&BARE),YOU,Zone::BATTLEFIELD));g.state.zone_push(Zone::BATTLEFIELD,source);g.state.see_statics();
+    cx(&mut g).add_player_effect(YOU,source,EffectKind::ManaKept(Mana::R),Duration::EndOfTurn);
+    cx(&mut g).add_player_effect(YOU,source,EffectKind::ManaKept(Mana::G),Duration::EndOfTurn);
+    cx(&mut g).add_player_effect(THEM,source,EffectKind::ManaKept(Mana::U),Duration::EndOfTurn);
+    let kept=crate::static_rules::mana_kept(&cx(&mut g));
+    assert_eq!(kept.len(),2,"one entry a player");
+    assert_eq!(kept.iter().find(|k|k.0==YOU).unwrap().1,[false,false,false,true,true,false],"red and green for the one who has both");
+    assert_eq!(kept.iter().find(|k|k.0==THEM).unwrap().1,[false,true,false,false,false,false],"blue for the other");
+}

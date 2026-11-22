@@ -1814,6 +1814,11 @@ pub enum EffectKind {
     /// The effect's controller has protection from everything (CR 702.16j): nothing can target them, whoever controls it,
     /// and damage from any source is prevented. About the player, not its `affected` object, which is only the source.
     PlayerProtectionFromEverything,
+    /// "You don't lose unspent [type] mana as steps and phases end" (CR 106.4, 500.5) for as long as the effect lasts: the
+    /// effect's controller's mana of that type, restricted or not, stays in their pool as `CardDef::mana_kept` keeps it for a
+    /// permanent's static ability (`static_rules::mana_kept`). About the player, not its `affected` object, which is only the
+    /// source. The Last Agni Kai's "until end of turn, you don't lose unspent red mana".
+    ManaKept(Mana),
     /// "You may cast [spells of these types] as though they had flash" (CR 307.5, 702.8): the effect's controller may
     /// cast them whenever they could cast an instant. Outlives its `affected` object, the source.
     CastAsThoughFlash(TypeSet),
@@ -2034,6 +2039,7 @@ impl EffectKind {
                 | EffectKind::PlayerHexproof
                 | EffectKind::CantActivatePowerUp
                 | EffectKind::PlayerProtectionFromEverything
+                | EffectKind::ManaKept(_)
                 | EffectKind::CastAsThoughFlash(_)
                 | EffectKind::InstantLoyalty(_)
                 | EffectKind::MaximumHandSize(_)
