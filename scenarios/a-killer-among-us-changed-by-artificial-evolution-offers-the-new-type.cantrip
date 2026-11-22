@@ -1,0 +1,41 @@
+# A Killer Among Us: "create ... a 1/1 red Goblin creature token. Then secretly choose Human, Merfolk, or Goblin." While it is
+# a spell, Artificial Evolution replaces Goblin with Elf in its text (CR 612.1, 612.2), and the changed text stays with the
+# permanent it becomes (CR 400.7a): its enters trigger makes an Elf token and offers Elf, not Goblin, to choose.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Black Lotus
+Mox Sapphire
+A Killer Among Us
+Artificial Evolution
+Forest x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.A Killer Among Us.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artificial Evolution.Cast(A Killer Among Us)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Goblin)
+Bot1.Modes(Elf)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Elf)
+
+[Expect]
+Bot1.Battlefield.Elf Token.Colors = Red
+Bot1.Battlefield.A Killer Among Us.SecretSubtype = Elf

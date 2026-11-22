@@ -1,0 +1,56 @@
+# A Killer Among Us: only the player who secretly chose may reveal the type (ruling 2024-02-02: if another player gains control
+# of the enchantment, they can't activate it; CR 607.2d, 602.2). Bot1 chose Goblin on turn 1; on turn 2 Bot2 takes the enchantment
+# with Confiscate ({4}{U}{U}: Black Lotus {U}{U}{U}, Mox Sapphire, Jet and Ruby). Bot1 chose, Bot2 controls: the cost is not
+# offered to Bot2 even with a token of Bot1's attacking, and Bot1 no longer controls it to pay the cost either.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Black Lotus
+A Killer Among Us
+Forest x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Confiscate
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.A Killer Among Us.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Goblin)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Confiscate.Cast(Bot1.Battlefield.A Killer Among Us)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.A Killer Among Us.SecretSubtypeChooser = Bot1
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Token > Bot2)
+! Bot1.Battlefield.A Killer Among Us.Activate(Target: Bot1.Battlefield.Goblin Token)
+Bot1.Pass
+! Bot2.Battlefield.A Killer Among Us.Activate(Target: Bot1.Battlefield.Goblin Token)
+
+[Expect]
+Bot2.Battlefield.A Killer Among Us.SecretSubtype = Goblin
+Bot2.Battlefield.A Killer Among Us.SecretSubtypeChooser = Bot1
+Bot1.Battlefield.Goblin Token.Power = 1

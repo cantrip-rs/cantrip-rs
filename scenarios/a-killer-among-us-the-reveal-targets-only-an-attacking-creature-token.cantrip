@@ -1,0 +1,46 @@
+# A Killer Among Us: "target attacking creature token" (CR 115.1, 601.2c): a token that is not attacking (Human) and an attacking
+# creature that is not a token (Llanowar Elves) are not legal targets, so the activation is refused and the enchantment is not
+# sacrificed; the attacking Goblin token is legal. Bot2's attacking token would be legal too (any controller): see the Old Hob scenario.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Jet
+Black Lotus
+A Killer Among Us
+Llanowar Elves
+Forest x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.A Killer Among Us.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Goblin)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Token > Bot2; Llanowar Elves > Bot2)
+! Bot1.Battlefield.A Killer Among Us.Activate(Target: Bot1.Battlefield.Human Token)
+! Bot1.Battlefield.A Killer Among Us.Activate(Target: Bot1.Battlefield.Llanowar Elves)
+? Bot1.Battlefield.A Killer Among Us.SecretSubtype = Goblin
+Bot1.Battlefield.A Killer Among Us.Activate(Target: Bot1.Battlefield.Goblin Token)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.A Killer Among Us = (absent)
+Bot1.Battlefield.Goblin Token.Power = 4
+Bot1.Battlefield.Human Token.Power = 1
+Bot1.Battlefield.Llanowar Elves.Power = 1

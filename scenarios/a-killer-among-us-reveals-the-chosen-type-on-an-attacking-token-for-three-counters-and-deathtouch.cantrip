@@ -1,0 +1,51 @@
+# A Killer Among Us: "Sacrifice this enchantment, Reveal the creature type you chose: If target attacking creature token is the
+# chosen type, put three +1/+1 counters on it and it gains deathtouch until end of turn." Bot1 chose Goblin in secret on turn 1
+# (the tokens are three 1/1s). On turn 3 the Goblin token attacks; paying the cost sacrifices the enchantment and reveals Goblin,
+# which is public on the ability on the stack (CR 608.2b: the type is the one revealed, the enchantment is gone). The Goblin is
+# 4/4 with deathtouch, hits for 4 (Bot2 at 16) and the other tokens are untouched. At turn 5 the deathtouch is gone, the counters stay.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Black Lotus
+A Killer Among Us
+Forest x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.A Killer Among Us.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Goblin)
+[T3 Bot1.DeclareAttackers]
+? Bot1.Battlefield.A Killer Among Us.SecretSubtype = Goblin
+Bot1.Attack(Goblin Token > Bot2)
+Bot1.Battlefield.A Killer Among Us.Activate(Target: Bot1.Battlefield.Goblin Token)
+? Bot1.Battlefield.A Killer Among Us = (absent)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Token.Power = 4
+? Bot1.Battlefield.Goblin Token.Toughness = 4
+? Bot1.Battlefield.Goblin Token.Counters.PlusOnePlusOne = 3
+? Bot1.Battlefield.Goblin Token.Keywords = Deathtouch
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Goblin Token.Power = 4
+Bot1.Battlefield.Goblin Token.Keywords = (absent)
+Bot1.Battlefield.Human Token.Power = 1
+Bot1.Battlefield.Merfolk Token.Power = 1
+Bot1.Battlefield.A Killer Among Us = (absent)

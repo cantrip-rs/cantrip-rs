@@ -1,0 +1,63 @@
+# A Killer Among Us: each copy has its own choice, the same or not (ruling 2024-02-02; CR 607.2d). Bot1 casts one on turn 1 and
+# chooses Human; on turn 3 casts a second (Ancient Tomb and three Moxen) and chooses Goblin. Both enchantments are then on the
+# battlefield with their own choice. The turn 1 tokens attack (the turn 3 ones are summoning sick): the first copy (Human) is
+# revealed on the Human token and the second (Goblin) on the Goblin token, each giving its own type's token +3/+3; the Merfolk,
+# which neither names, stays 1/1.
+
+[Bot1 Deck]
+Ancient Tomb
+Black Lotus
+A Killer Among Us
+A Killer Among Us
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ancient Tomb.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Ancient Tomb.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.A Killer Among Us.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Human)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ancient Tomb.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.A Killer Among Us.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Goblin)
+? Bot1.Battlefield.A Killer Among Us#1.SecretSubtype = Human
+? Bot1.Battlefield.A Killer Among Us#2.SecretSubtype = Goblin
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Human Token#1 > Bot2; Goblin Token#1 > Bot2)
+Bot1.Battlefield.A Killer Among Us#2.Activate(Target: Bot1.Battlefield.Goblin Token#1)
+Bot1.Battlefield.A Killer Among Us.Activate(Target: Bot1.Battlefield.Human Token#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Human Token#1.Power = 4
+Bot1.Battlefield.Goblin Token#1.Power = 4
+Bot1.Battlefield.Human Token#2.Power = 1
+Bot1.Battlefield.Goblin Token#2.Power = 1
+Bot1.Battlefield.Merfolk Token#1.Power = 1
+Bot1.Battlefield.Merfolk Token#2.Power = 1
+Bot1.Battlefield.A Killer Among Us = (absent)

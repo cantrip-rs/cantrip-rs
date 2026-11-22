@@ -1,0 +1,6 @@
+{
+  "name": "A Killer Among Us",
+  "manaCost": "{4}{G}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, create a 1/1 white Human creature token, a 1/1 blue Merfolk creature token, and a 1/1 red Goblin creature token. Then secretly choose Human, Merfolk, or Goblin.\nSacrifice this enchantment, Reveal the creature type you chose: If target attacking creature token is the chosen type, put three +1/+1 counters on it and it gains deathtouch until end of turn."
+}

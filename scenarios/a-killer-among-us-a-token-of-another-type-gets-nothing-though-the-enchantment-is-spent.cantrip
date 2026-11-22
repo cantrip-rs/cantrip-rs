@@ -1,0 +1,40 @@
+# A Killer Among Us: only a token of the chosen type gets the bonuses ("if target attacking creature token is the chosen type").
+# Bot1 chose Human but targets the attacking Goblin token: the cost is paid (the enchantment is sacrificed, Human revealed), and on
+# resolution the Goblin is not a Human, so it gets no counters and no deathtouch; the ability does nothing else (CR 608.2b).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Black Lotus
+A Killer Among Us
+Forest x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.A Killer Among Us.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Human)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Token > Bot2)
+Bot1.Battlefield.A Killer Among Us.Activate(Target: Bot1.Battlefield.Goblin Token)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.A Killer Among Us = (absent)
+Bot1.Battlefield.Goblin Token.Power = 1
+Bot1.Battlefield.Goblin Token.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Goblin Token.Keywords = (absent)
+Bot2.Life = 19

@@ -1,0 +1,67 @@
+# A Killer Among Us: the choice stays with the player who made it, not with whoever controls the enchantment (ruling 2024-02-02:
+# "Only the player who secretly chose the creature type can reveal the creature type they chose"; CR 607.2d). Bot1 chose Goblin
+# on turn 1; on turn 2 Bot2 takes the enchantment with Confiscate and cannot reveal. On turn 3 Bot1 destroys Confiscate with
+# Disenchant, so the enchantment returns to Bot1, who chose: the Goblin token attacks and Bot1 reveals Goblin for it.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Black Lotus
+A Killer Among Us
+Mox Pearl
+Disenchant
+Forest x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Confiscate
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.A Killer Among Us.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Goblin)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Confiscate.Cast(Bot1.Battlefield.A Killer Among Us)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Disenchant.Cast(Bot2.Battlefield.Confiscate)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.A Killer Among Us.SecretSubtypeChooser = Bot1
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Token > Bot2)
+Bot1.Battlefield.A Killer Among Us.Activate(Target: Bot1.Battlefield.Goblin Token)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.A Killer Among Us = (absent)
+Bot2.Battlefield.Confiscate = (absent)
+Bot1.Battlefield.Goblin Token.Power = 4
+Bot1.Battlefield.Goblin Token.Keywords = Deathtouch
