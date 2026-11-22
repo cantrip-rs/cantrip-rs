@@ -2196,9 +2196,11 @@ fn search_speed() {
 /// unhashed.
 #[test]
 fn a_board_not_hashed_is_a_board_the_guard_does_not_hold() {
+    // Each game is played until this many of its searches are compared, so the count is set here rather than by how many
+    // searches the game happens to ask for, which the evaluator's table of every card and the draws decide.
+    const COMPARED_EACH: usize = 6;
     let evaluator = Hashed::new();
     let mut unhashed = 0u64;
-    let mut compared = 0usize;
     for (mode, worlds) in [(InfoMode::Full, 1usize), (InfoMode::Decklist, 3)] {
         for reuse in ["None", "TopUp"] {
             let (mut game, _) = handed(STRIKE_SHOCK_OPT, "board print");
@@ -2206,10 +2208,8 @@ fn a_board_not_hashed_is_a_board_the_guard_does_not_hold() {
             let mut payments = vec![cantrip_ai::net::Payment::default(); 2];
             let mut kept_whole: Vec<Option<search::Kept>> = vec![None, None];
             let mut kept_print: Vec<Option<search::Kept>> = vec![None, None];
-            for _ in 0..80 {
-                if game.is_over() || game.state.turn.number > 8 {
-                    break;
-                }
+            let mut compared = 0usize;
+            while compared < COMPARED_EACH && !game.is_over() {
                 let Some(request) = game.pending().cloned() else { break };
                 let p = request.player.index();
                 ks[p].update(&game);
@@ -2244,8 +2244,8 @@ fn a_board_not_hashed_is_a_board_the_guard_does_not_hold() {
                 payments[p].played(&game, board, &request, &a.answer);
                 game.answer(request.id, request.player, a.answer).expect("the answer is taken");
             }
+            assert_eq!(compared, COMPARED_EACH, "{mode:?} reuse {reuse}: the game ended before its searches were compared");
         }
     }
-    assert!(compared > 20, "too few searches compared: {compared}");
     assert!(unhashed > 1000, "too few boards went unhashed to show anything: {unhashed}");
 }
