@@ -1,0 +1,77 @@
+# Transmutation Font: "{3}, {T}, Sacrifice three artifact tokens with different names: Search your library for an artifact card, put it onto the battlefield, then shuffle. Activate
+# only as a sorcery." The Font makes a Blood on turn 1, a Clue on turn 3 and a Food on turn 5 - three artifact tokens with three names. On turn 7, with Lightning Bolt on the
+# stack, the ability isn't offered (CR 307.1, 602.5d). Once the Bolt has resolved it is, paid with {3} from three Moxen, the Font's {T} and all three tokens. Sol Ring is
+# found and enters untapped; Lightning Bolt and an Island, which are no artifact card, are refused, and so are two artifact cards (one is found); the Ornithopter stays in the library. The library is Bot1's own: Bot2's isn't searched.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Transmutation Font
+Lightning Bolt
+Island x10
+Lightning Bolt
+Sol Ring
+Ornithopter
+Island x3
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Transmutation Font.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Transmutation Font.Activate(Ability: Create your choice)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Blood)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Transmutation Font.Activate(Ability: Create your choice)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Clue)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Transmutation Font.Activate(Ability: Create your choice)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Food)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+! Bot1.Battlefield.Transmutation Font.Activate(Ability: Sacrifice three)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Battlefield.Transmutation Font.Activate(Ability: Sacrifice three)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Blood Token; Clue Token; Food Token)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Lightning Bolt)
+! Bot1.Search(Island)
+! Bot1.Search(Sol Ring; Ornithopter)
+Bot1.Search(Sol Ring)
+? Bot1.Battlefield.Sol Ring.Tapped = false
+? Bot1.Shuffles = 1
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Transmutation Font; Sol Ring
+Bot1.Graveyard = Lightning Bolt
+Bot1.Library.Count = 12
+Bot2.Library.Count = 10
+Stack.Count = 0

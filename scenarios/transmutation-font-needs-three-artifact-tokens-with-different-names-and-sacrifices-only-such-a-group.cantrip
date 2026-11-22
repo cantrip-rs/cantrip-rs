@@ -1,0 +1,67 @@
+# Transmutation Font: "Sacrifice three artifact tokens with different names" (CR 118.3, 601.2h): the three are chosen as a group whose names all differ, so two Bloods and a Clue
+# are not enough. The Font makes a Blood on turn 1, another on turn 3 and a Clue on turn 5; on turn 7 the ability isn't offered, though three artifact tokens are there. The Font
+# then makes a Food, and on turn 9, with two Bloods, a Clue and a Food, Bot1 pays: two Bloods and a Clue are refused by the cost's own question; a Blood, the Clue and the Food are
+# sacrificed, and the other Blood stays. No artifact card is in the library, so nothing is found, and the library is shuffled all the same (CR 701.23b).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Transmutation Font
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Transmutation Font.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Transmutation Font.Activate(Ability: Create your choice)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Blood)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Transmutation Font.Activate(Ability: Create your choice)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Blood)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Transmutation Font.Activate(Ability: Create your choice)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Clue)
+[T7 Bot1.Main1]
+? Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Transmutation Font; Blood Token; Blood Token; Clue Token
+! Bot1.Battlefield.Transmutation Font.Activate(Ability: Sacrifice three)
+Bot1.Battlefield.Transmutation Font.Activate(Ability: Create your choice)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Food)
+[T9 Bot1.Main1]
+Bot1.Battlefield.Transmutation Font.Activate(Ability: Sacrifice three)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Choose(Blood Token; Blood Token#2; Clue Token)
+Bot1.Choose(Blood Token; Clue Token; Food Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Search()
+? Bot1.Shuffles = 1
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Transmutation Font; Blood Token
+Stack.Count = 0
