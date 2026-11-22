@@ -1,0 +1,80 @@
+# Memory Vessel: "{T}, Exile this artifact: Each player exiles the top seven cards of their library. Until your next turn, players may
+# play cards they exiled this way, and they can't play cards from their hand. Activate only as a sorcery." (CR 406, 305.1, 601.3,
+# 611.2a, 101.2). Bot1 casts it on turn 1 and activates it: both libraries lose seven cards to exile, nothing in either hand can be
+# played (not Bot1's Mountain, and on turn 2 neither Bot2's Mox Ruby nor the Mountain it drew), while the exiled cards can: Bot1 plays
+# a Mountain from exile as its land drop and casts the exiled Mox Jet and taps it for mana, and on Bot2's turn the exiled Mox
+# Emerald, Mox Jet, Forest and Grizzly Bears are played the same way. Once Bot1's turn 3 begins the permission is gone (Bot2's Island
+# left in exile can't be played on turn 4, Bot1's exiled Mountain can't), and the hand rule is gone too (a Mountain from hand is played).
+
+[Bot1 Deck]
+Mox Ruby
+Sol Ring
+Black Lotus
+Memory Vessel
+Mountain
+Mountain
+Mountain
+Mountain
+Mox Jet
+Memnite
+Mountain x25
+
+[Bot2 Deck]
+Mox Ruby
+Mountain
+Mountain
+Mountain
+Mountain
+Mountain
+Mountain
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Forest
+Island
+Island
+Island
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Memory Vessel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Memory Vessel.Activate
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 15
+! Bot1.Hand.Mountain.Play
+! Bot1.Hand.Mox Ruby.Cast
+Bot1.Exile.Mountain.Play
+Bot1.Exile.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+! Bot2.Hand.Mox Ruby.Cast
+! Bot2.Hand.Mountain.Play
+Bot2.Exile.Mox Emerald.Cast
+Bot2.Exile.Mox Jet.Cast
+Bot2.Exile.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Exile.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Exile.Mountain.Play
+Bot1.Hand.Mountain.Play
+[T4 Bot2.Main1]
+! Bot2.Exile.Island.Play
+Bot2.Hand.Mountain.Play
+
+[Expect]
+Turn = 4
+Bot2.Battlefield = Mox Emerald; Mox Jet; Forest; Grizzly Bears; Mountain
