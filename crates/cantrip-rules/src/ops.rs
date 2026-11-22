@@ -1958,9 +1958,11 @@ pub(crate) fn as_it_would_exist(cx: &mut Cx, entering: &Entering) -> WouldExist 
 /// it is cast as alone (CR 709.3 a split card's half, 715.3 an Adventure, 712.8 a double-faced card's back, 720.3 an Omen)
 /// and under its caster's control, so what may be targeted is judged on it there: with every effect that applies to it on
 /// the stack - static abilities that read the zone or the controller among them - and none of those on the card where it is
-/// (CR 400.7). Worked out by putting it there for the moment of the question, as the cast does, and taking that back.
-/// The object is the card's own (no new object), so what `f` asks of `card` it asks of the spell.
-pub(crate) fn as_cast<T>(cx: &mut Cx, card: ObjectId, face: Option<CardId>, player: PlayerId, f: impl FnOnce(&mut Cx) -> T) -> T {
+/// (CR 400.7) - but those the way it is cast by (`by`) gives the spell as it is cast (`GrantedWay::spell_effects`, The Tomb
+/// of Aclazotz's "is a Vampire in addition to its other types"). Worked out by putting it there for the moment of the
+/// question, as the cast does, and taking that back. The object is the card's own (no new object), so what `f` asks of
+/// `card` it asks of the spell.
+pub(crate) fn as_cast<T>(cx: &mut Cx, card: ObjectId, face: Option<CardId>, by: Option<Grant>, player: PlayerId, f: impl FnOnce(&mut Cx) -> T) -> T {
     // The position is the same after: what the layers worked out for it is still good (`GameState::set_derived_aside`).
     let aside = cx.s().set_derived_aside();
     let mark = cx.s().mark();
@@ -1982,6 +1984,7 @@ pub(crate) fn as_cast<T>(cx: &mut Cx, card: ObjectId, face: Option<CardId>, play
     }
     let ability = AbilityRef { card: face.unwrap_or(cx.s().obj(card).card), index: u8::MAX };
     cx.st().stack_push(crate::actions::stack_item(StackKind::Spell, card, ability, player, &[]));
+    crate::actions::give_way_spell_effects(cx, by, player, card);
     note_statics(cx, card);
     let done = f(cx);
     cx.st().revert(mark);

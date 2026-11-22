@@ -1,0 +1,60 @@
+# Herald's Horn names Vampire: "creature spells you cast of the chosen type cost {1} less" reads the spell as it would be on the
+# stack (CR 601.2f), and The Tomb of Aclazotz's way makes the creature spell it casts a Vampire there (the ruling: "a Vampire in
+# addition to its other types while on the stack"). With Mox Emerald the only untapped source, Grizzly Bears ({1}{G}) is offered
+# from the graveyard for {G} alone, a Bear Vampire on the stack and on the battlefield.
+
+[Bot1 Deck]
+Tarrian's Journal
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Plains
+Herald's Horn
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tarrian's Journal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tarrian's Journal.Activate(Ability: Transform)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Plains; Grizzly Bears
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Herald's Horn.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Vampire)
+? Bot1.Battlefield.Herald's Horn.ChosenSubtype = Vampire
+Bot1.Battlefield.The Tomb of Aclazotz.Activate(Ability: You may cast)
+Bot1.Pass
+Bot2.Pass
+Bot1.Graveyard.Grizzly Bears.Cast(Ability: You may cast)
+Bot1.Battlefield.Mox Emerald.Activate
+? Stack.Grizzly Bears.Subtypes = Bear; Vampire
+? Stack.Grizzly Bears.ManaValue = 2
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Subtypes = Bear; Vampire
+Bot1.Battlefield.Grizzly Bears.Counters.Finality = 1
+Bot1.Battlefield.Mox Emerald.Tapped = true
+Bot1.Mana =
+Bot1.Graveyard = Plains

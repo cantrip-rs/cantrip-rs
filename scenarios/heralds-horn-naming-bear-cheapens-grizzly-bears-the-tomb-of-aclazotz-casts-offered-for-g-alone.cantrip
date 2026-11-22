@@ -1,0 +1,54 @@
+# Herald's Horn names Bear, the control: Grizzly Bears is a Bear in the graveyard and on the stack, so cast by The Tomb of
+# Aclazotz's way it costs {G} (CR 601.2f) - offered with Mox Emerald the only untapped source, as by its own type.
+
+[Bot1 Deck]
+Tarrian's Journal
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Plains
+Herald's Horn
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tarrian's Journal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tarrian's Journal.Activate(Ability: Transform)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Plains; Grizzly Bears
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Herald's Horn.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Bear)
+? Bot1.Battlefield.Herald's Horn.ChosenSubtype = Bear
+Bot1.Battlefield.The Tomb of Aclazotz.Activate(Ability: You may cast)
+Bot1.Pass
+Bot2.Pass
+Bot1.Graveyard.Grizzly Bears.Cast(Ability: You may cast)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Subtypes = Bear; Vampire
+Bot1.Battlefield.Mox Emerald.Tapped = true
+Bot1.Mana =

@@ -1,0 +1,50 @@
+# Herald's Horn names Goblin, the control: Grizzly Bears cast by The Tomb of Aclazotz's way is a Bear Vampire on the stack, no
+# Goblin, so it costs its full {1}{G} (CR 601.2f) - with Mox Emerald the only untapped source it is not offered (CR 601.2g).
+
+[Bot1 Deck]
+Tarrian's Journal
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Plains
+Herald's Horn
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tarrian's Journal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tarrian's Journal.Activate(Ability: Transform)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Plains; Grizzly Bears
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Herald's Horn.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Goblin)
+? Bot1.Battlefield.Herald's Horn.ChosenSubtype = Goblin
+Bot1.Battlefield.The Tomb of Aclazotz.Activate(Ability: You may cast)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Graveyard.Grizzly Bears.Cast(Ability: You may cast; Mana: short)
+
+[Expect]
+Bot1.Graveyard = Plains; Grizzly Bears
+Bot1.Battlefield.Mox Emerald.Tapped = false

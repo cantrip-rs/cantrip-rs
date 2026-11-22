@@ -1,0 +1,56 @@
+# Herald's Horn names Goblin, the control with mana to spare: Grizzly Bears cast by The Tomb of Aclazotz's way is a Bear Vampire,
+# no Goblin, so the cast charges its full {1}{G} (CR 601.2f): Mox Emerald's {G} leaves {1} owed, which Mox Ruby pays.
+
+[Bot1 Deck]
+Tarrian's Journal
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Herald's Horn
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tarrian's Journal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tarrian's Journal.Activate(Ability: Transform)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Grizzly Bears
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Herald's Horn.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Goblin)
+? Bot1.Battlefield.Herald's Horn.ChosenSubtype = Goblin
+Bot1.Battlefield.The Tomb of Aclazotz.Activate(Ability: You may cast)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Grizzly Bears.Cast(Ability: You may cast)
+Bot1.Battlefield.Mox Ruby.Activate
+? Stack.Grizzly Bears.Subtypes = Bear; Vampire
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Subtypes = Bear; Vampire
+Bot1.Battlefield.Mox Ruby.Tapped = true
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Mana =

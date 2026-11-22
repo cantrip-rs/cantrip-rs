@@ -1,0 +1,68 @@
+# Cavern of Souls names Vampire: "spend this mana only to cast a creature spell of the chosen type, and that spell can't be
+# countered" (CR 106.6) reads the spell as it is cast, and The Tomb of Aclazotz's way makes the creature spell it casts a Vampire
+# on the stack (the ruling). The Cavern's {G} is the only green there is, so Grizzly Bears ({1}{G}) is offered from the
+# graveyard only as the Vampire it would be; cast with it and Mox Jet, it is a Bear Vampire on the stack, Bot2's Counterspell
+# does nothing, and it enters with a finality counter.
+
+[Bot1 Deck]
+Tarrian's Journal
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Grizzly Bears
+Cavern of Souls
+Plains x18
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Counterspell
+Island x18
+
+[Actions]
+Bot1.Hand.Cavern of Souls.Play
+Bot1.Modes(Vampire)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tarrian's Journal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Tarrian's Journal.Activate(Ability: Transform)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Grizzly Bears
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.The Tomb of Aclazotz.Activate(Ability: You may cast)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Cavern of Souls.Activate(Ability: any color; Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Graveyard.Grizzly Bears.Cast(Ability: You may cast)
+? Stack.Grizzly Bears.Subtypes = Bear; Vampire
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Counterspell.Cast(Stack.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+? Stack = Grizzly Bears
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Grizzly Bears.Subtypes = Bear; Vampire
+Bot1.Battlefield.Grizzly Bears.Counters.Finality = 1
+Bot1.Battlefield.Cavern of Souls.Tapped = true
+Bot1.Mana =
+Bot2.Graveyard = Counterspell
