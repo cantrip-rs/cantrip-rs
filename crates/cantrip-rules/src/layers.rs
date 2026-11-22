@@ -2944,19 +2944,31 @@ pub fn apply_contract_check(cards: &'static CardTable) -> ApplyContract {
     ApplyContract { breaches, inert }
 }
 
-/// Whether an object could now have a play rule it was given (`AbilityDef::PlayRule`, CR 613.1f): a resolved effect gave one,
-/// or a static ability whose card lists one to give functions (or a granted static ability could give one). The guard of
+/// Whether an object could now have a play rule it was given (`AbilityDef::PlayRule`, CR 613.1f). The guard of
 /// `actions::each_play_rule`'s look at what each permanent has: with none, only printed play rules are read.
 pub(crate) fn play_rules_given_possible(cards: &CardTable, state: &GameState) -> bool {
-    cards.any_granted_play_rules
-        && (state.effects.iter().any(|e| matches!(e.kind, EffectKind::AddAbility(a) if a.is_delayed() && matches!(cards.ability(a), AbilityDef::PlayRule(_))))
-            || (state.statics_seen && {
-                let found = static_sources(cards, state);
-                !found.granted.is_empty()
-                    || found.list.iter().any(|&(source, _, _)| {
-                        cards.texts(state, state.obj(source)).any(|card| cards.ability_statics[card.0 as usize] && cards.grants_play_rules[card.0 as usize])
-                    })
-            }))
+    cards.any_granted_play_rules && given_possible(cards, state, &cards.grants_play_rules, |a| matches!(a, AbilityDef::PlayRule(_)))
+}
+
+/// Whether an object could now have a rule it was given that makes abilities trigger again (`AbilityDef::TriggersAgain`, CR
+/// 603.2d, 613.1f). The guard of `settle::TriggerStatics::additional`'s look at what each permanent has: with none, only
+/// printed rules are read.
+pub(crate) fn trigger_rules_given_possible(cards: &CardTable, state: &GameState) -> bool {
+    cards.any_granted_additional_triggers && given_possible(cards, state, &cards.grants_additional_triggers, |a| matches!(a, AbilityDef::TriggersAgain(_)))
+}
+
+/// Whether an object could now have one of the abilities of kind `kind` a card lists to give (`CardDef::delayed`, CR
+/// 613.1f): a resolved effect gave one, or a static ability whose card (`grants`) lists one to give functions, or a granted
+/// static ability could give one.
+fn given_possible(cards: &CardTable, state: &GameState, grants: &[bool], kind: fn(&AbilityDef) -> bool) -> bool {
+    state.effects.iter().any(|e| matches!(e.kind, EffectKind::AddAbility(a) if a.is_delayed() && kind(cards.ability(a))))
+        || (state.statics_seen && {
+            let found = static_sources(cards, state);
+            !found.granted.is_empty()
+                || found.list.iter().any(|&(source, _, _)| {
+                    cards.texts(state, state.obj(source)).any(|card| cards.ability_statics[card.0 as usize] && grants[card.0 as usize])
+                })
+        })
 }
 
 /// Whether a static ability that could give an object an ability functions anywhere now (CR 613.1f): one of layer 6 that

@@ -560,7 +560,7 @@ fn check_once(cx: &mut Cx) -> R<bool> {
 fn triggered(cx: &Cx, ability: AbilityRef) -> &'static TriggeredDef {
     match cx.cards().ability(ability) {
         AbilityDef::Triggered(t) => t,
-        AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => unreachable!("a triggered ability"),
+        AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) | AbilityDef::TriggersAgain(_) => unreachable!("a triggered ability"),
     }
 }
 
@@ -1268,13 +1268,16 @@ pub(crate) struct TriggerStatics<'a> {
     now: Option<Vec<ObjectId>>,
     then: Option<Vec<ObjectId>>,
     before_effects: Option<&'a [ContinuousEffect]>,
+    /// The battlefield as it was before the events, with each permanent's characteristics then: where the abilities an object
+    /// was given (`AbilityDef::TriggersAgain`) are read for a trigger that looks back.
+    before_then: Option<&'a Then>,
     /// Whether anything could have given an object an ability (`layers::acquisition_possible`), found once for the look.
     acquisition: Option<bool>,
 }
 
 impl<'a> TriggerStatics<'a> {
     pub(crate) fn new(before: Option<&'a [ObjectId]>) -> Self {
-        TriggerStatics { before, now: None, then: None, before_effects: None, acquisition: None }
+        TriggerStatics { before, now: None, then: None, before_effects: None, before_then: None, acquisition: None }
     }
 
     /// `layers::acquisition_possible`, asked once for the look: where nothing could have given an ability, every ability is
@@ -1318,6 +1321,30 @@ impl<'a> TriggerStatics<'a> {
                 }
             }
         }
+        // A rule an object was given (CR 613.1f) is asked of the objects that have it: those on the battlefield, as they were
+        // before the event for an ability that looks back (CR 603.10a), each as its own source and its controller then.
+        if layers::trigger_rules_given_possible(cx.cards(), cx.s()) {
+            let then = if triggering.looks_back { self.before_then } else { None };
+            let holders: &[ObjectId] = match (then, self.before) {
+                (Some(_), Some(before)) if triggering.looks_back => before,
+                _ => cx.s().battlefield(),
+            };
+            for &id in holders {
+                let (chars, controller) = match then.and_then(|t| t.on_board(id)) {
+                    Some(&(_, chars, controller, _)) => (chars, controller),
+                    None => (cx.chars(id), cx.s().obj(id).controller),
+                };
+                for (n, ability) in chars.abilities.into_iter().flatten().filter(|a| a.is_delayed()).enumerate() {
+                    if let AbilityDef::TriggersAgain(given) = cx.cards().ability(ability) {
+                        let asker = Asker { instance: None, source: id, controller, by: None, spell: false };
+                        let key = AdditionalTrigger::Static(id, GIVEN + n as u8);
+                        if (given.rule)(cx, &asker, event, triggering) && !again.contains(&key) {
+                            again.push(key);
+                        }
+                    }
+                }
+            }
+        }
         // A resolved effect works after its source loses its abilities (CR 611.2a). Each activation is independent;
         // a look-back trigger uses the continuous effects before the event (CR 603.10a).
         if triggering.permanent {
@@ -1333,6 +1360,10 @@ impl<'a> TriggerStatics<'a> {
         }
     }
 }
+
+/// Where the numbering of the rules an object was given starts in the key of a repeat (`AdditionalTrigger::Static`), above any
+/// rule its own definitions print.
+const GIVEN: u8 = 128;
 
 /// Those of `ids` whose card has a rule that stops abilities from triggering or makes them trigger again, and has not lost
 /// its abilities (CR 613.1f).
@@ -1792,6 +1823,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
         let mut found: Found = Vec::new();
         let mut statics = TriggerStatics::new(before);
         statics.before_effects = then.filter(|t| t.taken).map(|t| t.trigger_effects.as_slice());
+        statics.before_then = then.filter(|t| t.taken);
         for event in events {
             let mask = EventMask::of(event);
             if mask.0 == 0 {

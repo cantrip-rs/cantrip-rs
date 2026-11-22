@@ -205,6 +205,8 @@ mod together_damage_tests;
 #[cfg(test)]
 mod land_play_rules_tests;
 #[cfg(test)]
+mod given_additional_trigger_tests;
+#[cfg(test)]
 mod given_play_rule_tests;
 #[cfg(test)]
 mod exiled_with_permission_tests;

@@ -2256,6 +2256,13 @@ pub enum AbilityDef {
     BlockAllowance(BlockAllowanceDef),
     /// Parameterized banding keyword (CR 702.22), held in the ordinary ability slots.
     BandsWithOthers(BandsWithOthersDef),
+    /// A static ability an effect or another static ability gives an object that makes triggered abilities trigger an additional
+    /// time (CR 603.2d, 613.1f): "Equipped creature has 'If a creature dying causes a triggered ability of this creature or an
+    /// emblem you own to trigger, that ability triggers an additional time.'" It is one of a card's `delayed` list
+    /// (`granted_additional_trigger`), and applies while the object has it among its abilities on the battlefield, with that
+    /// object as its source and its controller as the rule's "you": a later "loses all abilities" takes it (CR 613.7). A
+    /// holder leaving the battlefield with the event still has it for an ability that looks back (CR 603.10a).
+    TriggersAgain(TriggersAgainDef),
 }
 
 /// The named quality of "bands with other [quality]". The quality describes
@@ -2293,6 +2300,14 @@ pub struct RegenerationBanDef {
     pub text: &'static str,
 }
 
+/// A rule that makes abilities trigger again, as an ability an object is given (`AbilityDef::TriggersAgain`): the rule, asked as a
+/// printed `CardDef::additional_triggers` entry is, and the quoted text that gives it.
+#[derive(Clone, Copy)]
+pub struct TriggersAgainDef {
+    pub rule: AdditionalTrigger,
+    pub text: &'static str,
+}
+
 /// A play rule as an ability an object is given (`AbilityDef::PlayRule`): the rule, and the quoted text that gives it.
 #[derive(Clone, Copy)]
 pub struct PlayRuleDef {
@@ -2310,6 +2325,7 @@ impl AbilityDef {
             AbilityDef::RegenerationBan(ban) => ban.text,
             AbilityDef::BlockAllowance(allowance) => allowance.text,
             AbilityDef::BandsWithOthers(bands) => bands.text,
+            AbilityDef::TriggersAgain(again) => again.text,
         }
     }
 }
@@ -4933,6 +4949,10 @@ pub struct CardTable {
     /// given is looked for only when one might have been.
     pub grants_play_rules: Vec<bool>,
     pub any_granted_play_rules: bool,
+    /// Which cards list a rule that makes abilities trigger again to give (`AbilityDef::TriggersAgain` in `delayed`), and whether
+    /// any does: what objects were given is looked for only when one might have been.
+    pub grants_additional_triggers: Vec<bool>,
+    pub any_granted_additional_triggers: bool,
     /// Which cards have replacement or prevention effects of static abilities (CR 614, 615), and whether any does: events
     /// look for sources only when one might be.
     pub replaces: Vec<bool>,
@@ -5585,6 +5605,8 @@ impl CardTable {
             || c.delayed.iter().any(|a| matches!(a, AbilityDef::PlayRule(d) if opens_hand(&d.rule)))).collect();
         let grants_play_rules: Vec<bool> = cards.iter().map(|c| c.delayed.iter().any(|a| matches!(a, AbilityDef::PlayRule(_)))).collect();
         let any_granted_play_rules = grants_play_rules.iter().any(|&g| g);
+        let grants_additional_triggers: Vec<bool> = cards.iter().map(|c| c.delayed.iter().any(|a| matches!(a, AbilityDef::TriggersAgain(_)))).collect();
+        let any_granted_additional_triggers = grants_additional_triggers.iter().any(|&g| g);
         let replaces: Vec<bool> = cards.iter().map(|c| !c.replacements.is_empty() || !c.preventions.is_empty()).collect();
         let any_replaces = replaces.iter().any(|&r| r);
         let mana_replaces: Vec<bool> =
@@ -5690,6 +5712,8 @@ impl CardTable {
             hand_visibility,
             grants_play_rules,
             any_granted_play_rules,
+            grants_additional_triggers,
+            any_granted_additional_triggers,
             replaces,
             any_replaces,
             mana_replaces,
@@ -6106,7 +6130,7 @@ impl CardTable {
         match self.ability(ability) {
             AbilityDef::Activated(a) => a.modal,
             AbilityDef::Triggered(t) => t.modal,
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => None,
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) | AbilityDef::TriggersAgain(_) => None,
         }
     }
 
@@ -6126,7 +6150,7 @@ impl CardTable {
     pub fn cost_choice_of(&self, ability: AbilityRef) -> &'static [ExtraCost] {
         match self.ability(ability) {
             AbilityDef::Activated(a) => a.cost_choice,
-            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => &[],
+            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) | AbilityDef::TriggersAgain(_) => &[],
         }
     }
 
