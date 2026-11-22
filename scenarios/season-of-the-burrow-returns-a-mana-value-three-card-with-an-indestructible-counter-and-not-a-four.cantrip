@@ -1,0 +1,64 @@
+# Season of the Burrow with {P}, {P} and {P}{P}{P}: two 1/1 white Rabbits, and a permanent card with mana value 3 or less comes back
+# from Bot1's graveyard to the battlefield with an indestructible counter on it (CR 614.1c, 122.6). Pyroclasm has killed Burnished
+# Hart (mana value 3) and Clay Statue (4) on turn 5; the Statue is not a legal target (CR 115.1, 202.3), the Hart is and returns.
+# The pawprints chosen may add up to five (CR 700.2i): six one-pawprint modes, or two three-pawprint ones, are refused.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Burnished Hart
+Clay Statue
+Pyroclasm
+Season of the Burrow
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Burnished Hart.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Clay Statue.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pyroclasm.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Clay Statue; Burnished Hart; Pyroclasm
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Season of the Burrow.Cast
+! Bot1.Modes(1; 1; 1; 1; 1; 1)
+! Bot1.Modes(3; 3)
+Bot1.Modes(1; 1; 3)
+! Bot1.Target(Clay Statue)
+Bot1.Target(Burnished Hart)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+? Bot1.Battlefield.Burnished Hart.Counters.Indestructible = 1
+? Bot1.Battlefield.Burnished Hart.Tapped = false
+? Bot1.Battlefield = Burnished Hart; Mox Jet; Mox Pearl; Mox Pearl; Mox Ruby; Mox Sapphire; Rabbit Token; Rabbit Token
+
+[Expect]
+Bot1.Graveyard = Season of the Burrow; Clay Statue; Pyroclasm
