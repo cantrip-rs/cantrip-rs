@@ -1302,13 +1302,17 @@ fn choose_behold(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost) -
 /// `choose_behold`, and the creature type chosen first where the cost names one (`Cost::behold_type`, CR 601.2b-c): of the
 /// types `n` of the cards it may behold share, always asked. The cards beheld all have it.
 fn choose_behold_of(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost) -> R<(Vec<ObjectId>, Option<Subtype>)> {
-    choose_behold_apart(cx, player, source, cost, &[], None)
+    choose_behold_apart(cx, player, source, cost, &[], &[], None)
 }
 
-fn choose_behold_apart(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost, taken: &[ObjectId], by: Option<Linked>) -> R<(Vec<ObjectId>, Option<Subtype>)> {
+/// `choose_behold_of` within a payment: none of `taken`, what the payment's other parts paid with, is exiled again (CR 118.3),
+/// and none of `moving`, what its parts still to be carried out at the commit will move (`Deferred::moving`), is there to
+/// behold.
+fn choose_behold_apart(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost, taken: &[ObjectId], moving: &[ObjectId], by: Option<Linked>) -> R<(Vec<ObjectId>, Option<Subtype>)> {
     let Some((n, _, _)) = cost.behold else { return Ok((Vec::new(), None)) };
     let mut eligible = behold_candidates(cx, None, player, cost, source, by);
     if cost.behold_exile { eligible.retain(|id| !taken.contains(id)); }
+    eligible.retain(|id| !moving.contains(id));
     let mut announced = None;
     if cost.behold_type {
         let choices = behold_types(cx, &eligible, n);
@@ -3155,15 +3159,17 @@ fn order_matters(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: PaymentS
                 .map(|id| (id, cx.chars(id)))
                 .collect()
         };
-        // What a replacement effect makes of paying the life (Ashiok, Wicked Manipulator's exile in its place, CR 119.4,
-        // 614.1a) is no change of life this copy of the moment can show, and may change what another step chooses among
-        // (Cosmogoyf's power counts the cards its owner has in exile; Fling then deals it): the payer is asked, where
-        // another step acts on an object other than the source itself.
-        if life > 0
-            && crate::replace::paying_life_replaced(cx, player, life)
-            && eligible.iter().enumerate().any(|(j, &other)| j != k && footprint(cx, player, spell, scope, taken, &remaining[other]).objects.iter().any(|&o| o != spell))
-        {
-            return true;
+        // What a replacement effect makes of paying the life (Ashiok, Wicked Manipulator's exile of the top of the library in
+        // its place, CR 119.4, 614.1a) is no change of life this copy of the moment can show. It is carried out as the action
+        // is committed (`Later`), after the other steps, so its order matters only where another step could read what it
+        // does (`blocks`: Cosmogoyf's power counts the cards its owner has in exile, and Fling then deals it). There the
+        // payer is asked.
+        if life > 0 {
+            let by = crate::replace::paying_life_replacers(cx, player, life);
+            let moves = Moves::replaced_life(by);
+            if !moves.needs.is_empty() && eligible.iter().enumerate().any(|(j, &other)| j != k && blocks(cx, player, spell, scope, taken, &moves, &remaining[other], 0)) {
+                return true;
+            }
         }
         let before = seen(cx);
         let mark = cx.s().mark();
@@ -3200,10 +3206,302 @@ fn canonical_step(remaining: &[SpellPayment<'_>], eligible: &[usize]) -> usize {
     (0..eligible.len()).min_by_key(|&k| (rank(&remaining[eligible[k]]), k)).unwrap_or(0)
 }
 
+const FOOT_LIBRARY: u8 = 8;
+const FOOT_EXILE: u8 = 16;
+
+/// What a part of a payment carried out at the commit (`Later`) does, as far as a step paid before it could read it: the
+/// zones whose contents it reads as it is carried out, and the zones it changes.
+struct Moves {
+    reads: u8,
+    writes: u8,
+    /// The objects that must still be where they are for it to do what it would: the sources of the replacement effects
+    /// that make it another event.
+    needs: Vec<ObjectId>,
+}
+
+impl Moves {
+    /// Life paid that a replacement effect of `by` makes another event (Ashiok, Wicked Manipulator's exile of the top cards of
+    /// the library, CR 119.4, 614.1a): what it does is the replacement's, a library read and changed and cards put into exile.
+    fn replaced_life(by: Vec<ObjectId>) -> Moves {
+        Moves { reads: FOOT_LIBRARY, writes: FOOT_LIBRARY | FOOT_EXILE, needs: by }
+    }
+
+    /// Cards taken from where they are and put into `to` (`FOOT_*`).
+    fn of(cx: &Cx, objects: &[ObjectId], to: u8) -> Moves {
+        let from = objects.iter().fold(0, |zones, &id| zones | foot_of(cx.s().obj(id).zone));
+        Moves { reads: 0, writes: from | to, needs: Vec::new() }
+    }
+}
+
+/// The footprint bit of a zone (`FOOT_*`): none for the stack or the command zone, which no step chooses from.
+fn foot_of(zone: Zone) -> u8 {
+    match zone.kind() {
+        ZoneKind::Hand => FOOT_HAND,
+        ZoneKind::Graveyard => FOOT_GRAVEYARD,
+        ZoneKind::Battlefield => FOOT_BATTLEFIELD,
+        ZoneKind::Library => FOOT_LIBRARY,
+        ZoneKind::Exile => FOOT_EXILE,
+        _ => 0,
+    }
+}
+
+/// The zones a step chooses from, or reads as it is paid (`footprint`), where what a part carried out at the commit puts
+/// there could be among them: a card discarded is a new object in the graveyard (CR 400.7), which a cost that exiles from
+/// the graveyard may take. A hand is not one: the cards a part takes from it are the ones every step choosing from a hand
+/// leaves out (`taken`, `Deferred::moving`). The object a cost chooses may be in exile (`choose_candidates`). `mana` is what
+/// the mana's step reads (`mana_reads`).
+fn untracked_reads(step: &SpellPayment<'_>, print: &Footprint, mana: u8) -> u8 {
+    match step {
+        SpellPayment::Mana => mana,
+        SpellPayment::ChooseObject { .. } => (print.reads & !FOOT_HAND) | FOOT_EXILE,
+        _ => print.reads & !FOOT_HAND,
+    }
+}
+
+/// What the mana's step of a payment reads (`untracked_reads`): the graveyard delve exiles from (CR 702.66a), the creatures
+/// and artifacts convoke, improvise and waterbend tap (CR 702.51a, 702.126a, 701.67b), and anything at all while the mana
+/// abilities' window is still to come (CR 601.2g: Lion's Eye Diamond discards the hand).
+fn mana_reads(helpers: &Helpers) -> u8 {
+    if !helpers.abilities_closed {
+        return u8::MAX;
+    }
+    (if helpers.with.delve { FOOT_GRAVEYARD } else { 0 }) | (if helpers.with.convoke || helpers.with.improvise || helpers.waterbend > 0 { FOOT_BATTLEFIELD } else { 0 })
+}
+
+/// Whether `step`, paid before the part `moves` is carried out at the commit although the payer paid it after (CR 601.2h),
+/// could tell the difference: it chooses from or reads a zone the part changes, without leaving out what the part moves
+/// (`untracked_reads`); it changes a zone the part reads; or the part changes a zone and what the step may choose among is
+/// an object whose characteristics the board decides (a characteristic-defining ability, CR 604.3, or another permanent's
+/// static ability, CR 613: Cosmogoyf's power counts the cards its owner has in exile, and Fling then deals it); or the step
+/// may take away what the part needs to do what it would (the permanent whose replacement effect it is).
+fn blocks(cx: &Cx, player: PlayerId, spell: ObjectId, scope: PaymentScope, taken: &[ObjectId], moves: &Moves, step: &SpellPayment<'_>, mana: u8) -> bool {
+    let print = footprint(cx, player, spell, scope, taken, step);
+    if moves.writes & untracked_reads(step, &print, mana) != 0
+        || print.writes & moves.reads != 0
+        || print.act == Act::Removes && moves.needs.iter().any(|o| print.objects.contains(o))
+    {
+        return true;
+    }
+    moves.writes != 0
+        && !print.objects.is_empty()
+        && (print.objects.iter().any(|&o| layers::statics_reach_itself(cx.cards(), cx.s(), &cx.g.log, o))
+            || cx.s().battlefield().iter().any(|&p| layers::statics_reach(cx.cards(), cx.s(), &cx.g.log, p, &print.objects)))
+}
+
+/// A part of a payment that would make hidden information known as it is carried out - a card discarded, exiled or
+/// revealed from a hand, a card put into a library, a face-down permanent moved, the top of a library exiled in place of
+/// life paid - chosen as the payer pays it and carried out when the action is committed (`commit`), all such parts
+/// together, in the order they were paid. The owner's ruling of 2026-11-21 (`docs/engine-design.md`): nothing hidden is
+/// revealed for anything that can still be undone, as Magic Online reveals nothing until the spell or ability is on the
+/// stack and the cancel window has closed. Until then the action may be given up, and nothing hidden has moved or been
+/// shown to anyone.
+enum Later {
+    /// The card an ability is activated from, in a hand or a library (CR 602.2a).
+    Reveal { player: PlayerId, source: ObjectId },
+    /// The creature type chosen in secret, revealed as a cost (A Killer Among Us): read as it is paid, before the permanent
+    /// that keeps it may be sacrificed by a later step, and told with the ability on the stack (`StackItem::announce_type`).
+    RevealSecret { serial: u32, revealed: Subtype },
+    Life { player: PlayerId, amount: u32 },
+    Discard { spell: ObjectId, scope: PaymentScope, cards: Discarding, origin: CostOrigin, component: usize, part: CostPart },
+    Exile { spell: ObjectId, scope: PaymentScope, cards: Vec<ObjectId>, origin: CostOrigin, component: usize, part: CostPart },
+    Behold { player: PlayerId, spell: ObjectId, scope: PaymentScope, exile: bool, cards: Vec<ObjectId>, origin: CostOrigin, component: usize },
+    Variable { player: PlayerId, spell: ObjectId, scope: PaymentScope, sacrifices: Vec<ObjectId>, exiles: Vec<ObjectId>, discards: Discarding, origin: CostOrigin, component: usize },
+    SacrificeSelf { player: PlayerId, spell: ObjectId, scope: PaymentScope, object: ObjectId, origin: CostOrigin, component: usize, part: CostPart },
+    MoveSelf { player: PlayerId, spell: ObjectId, scope: PaymentScope, action: MoveSelf, with: Vec<ObjectId>, origin: CostOrigin, component: usize },
+    Permanents { player: PlayerId, spell: ObjectId, cost: Cost, chosen: Vec<ObjectId>, exiled_by: Option<Linked>, origin: CostOrigin, component: usize, scopes: Vec<PaymentScope> },
+}
+
+impl Later {
+    /// The objects it takes from where they are.
+    fn moving(&self) -> Vec<ObjectId> {
+        match self {
+            Later::Reveal { .. } | Later::RevealSecret { .. } | Later::Life { .. } => Vec::new(),
+            Later::Discard { cards, .. } => cards.cards.clone(),
+            Later::Exile { cards, .. } | Later::Permanents { chosen: cards, .. } => cards.clone(),
+            Later::Behold { exile, cards, .. } => if *exile { cards.clone() } else { Vec::new() },
+            Later::Variable { sacrifices, exiles, discards, .. } => sacrifices.iter().chain(exiles).chain(&discards.cards).copied().collect(),
+            Later::SacrificeSelf { object, .. } => vec![*object],
+            Later::MoveSelf { spell, action, with, .. } => match action {
+                MoveSelf::ExileGranter(object) => vec![*object],
+                MoveSelf::Exile => std::iter::once(*spell).chain(with.iter().copied()).collect(),
+                _ => vec![*spell],
+            },
+        }
+    }
+
+    /// The objects it acts on, which must be where they were when it was paid as it is carried out.
+    fn objects(&self) -> Vec<ObjectId> {
+        match self {
+            Later::Behold { cards, .. } => cards.clone(),
+            _ => self.moving(),
+        }
+    }
+
+    /// Carries it out, and records what it paid with (`PaymentScope::record`), as the step would have been paid.
+    fn run(self, cx: &mut Cx) -> R<()> {
+        match self {
+            Later::Reveal { player, source } => reveal_if_hidden(cx, player, source),
+            Later::RevealSecret { serial, revealed } => {
+                let at = cx.s().stack.iter().rposition(|item| item.serial == serial).ok_or(Stop::Cancel)?;
+                let mut item = cx.s().stack[at];
+                item.choice = StackItem::announce_type(revealed);
+                cx.st().stack_set(at, item);
+            }
+            Later::Life { player, amount } => ops::pay_life(cx, player, life_paid(amount)),
+            Later::Discard { spell, scope, cards, origin, component, part } => {
+                pay_discards(cx, &cards);
+                for object in cards.cards { scope.record(cx, spell, object, origin, component, part); }
+            }
+            Later::Exile { spell, scope, cards, origin, component, part } => {
+                // An ability's cost exiles with the object whose ability it is (CR 607.2a), as the step paid at once does.
+                match scope.linked() {
+                    Some(by) => { ops::exile_with(cx, &cards, by, false); }
+                    None => { pay_exiles(cx, &cards); }
+                }
+                for object in cards { scope.record(cx, spell, object, origin, component, part); }
+            }
+            Later::Behold { player, spell, scope, exile, cards, origin, component } => pay_beheld(cx, player, spell, scope, exile, &cards, origin, component),
+            Later::Variable { player, spell, scope, sacrifices, exiles, discards, origin, component } => {
+                let moved = ops::sacrifice(cx, player, &sacrifices);
+                if sacrifices.iter().any(|id| !cx.s().obj(*id).became.is_some_and(|new| moved.contains(&new))) { return Err(Stop::Cancel); }
+                pay_exiles(cx, &exiles);
+                pay_discards(cx, &discards);
+                for object in sacrifices.into_iter().chain(exiles).chain(discards.cards) {
+                    scope.record(cx, spell, object, origin, component, CostPart::Variable);
+                }
+            }
+            Later::SacrificeSelf { player, spell, scope, object, origin, component, part } => {
+                let moved = ops::sacrifice(cx, player, &[object]);
+                if !cx.s().obj(object).became.is_some_and(|id| moved.contains(&id)) { return Err(Stop::Cancel); }
+                scope.record(cx, spell, object, origin, component, part);
+            }
+            Later::MoveSelf { player, spell, scope, action, with, origin, component } => move_self(cx, player, spell, scope, action, &with, origin, component),
+            Later::Permanents { player, spell, cost, chosen, exiled_by, origin, component, scopes } => {
+                let paid = pay_permanents(cx, player, &cost, &chosen, exiled_by, &mut Vec::new());
+                if paid.len() != chosen.len() { return Err(Stop::Cancel); }
+                for ((_, object), scope) in paid.into_iter().zip(scopes) {
+                    scope.record(cx, spell, object, origin, component, CostPart::Permanents);
+                }
+            }
+        }
+        Ok(())
+    }
+}
+
+/// The parts of a payment chosen and still to be carried out at the commit (`Later`), each with where its objects were as it
+/// was paid.
+#[derive(Default)]
+pub(crate) struct Deferred {
+    parts: Vec<(Later, Vec<(ObjectId, Zone)>)>,
+}
+
+impl Deferred {
+    /// The objects the parts still to be carried out will take from where they are: none of them pays another part of the
+    /// cost (CR 118.3), nor is it there for one to choose.
+    fn moving(&self) -> Vec<ObjectId> {
+        self.parts.iter().flat_map(|(part, _)| part.moving()).collect()
+    }
+
+    fn defer(&mut self, cx: &Cx, part: Later) {
+        let at = part.objects().into_iter().map(|id| (id, cx.s().obj(id).zone)).collect();
+        self.parts.push((part, at));
+    }
+}
+
+/// Carries out the parts of a payment chosen to be carried out at the commit (`Later`), in the order they were paid: as the
+/// action is committed (CR 601.2h-i, 602.2b), or before a part that can't wait (`pay_or_defer`). Nothing of them is done
+/// unless every object each acts on is still where it was when it was chosen; then they are done, and no question they ask
+/// may give the action up (`takeback::committing`).
+pub(crate) fn commit(cx: &mut Cx, later: &mut Deferred) -> R<()> {
+    if later.parts.is_empty() {
+        return Ok(());
+    }
+    if later.parts.iter().flat_map(|(_, at)| at).any(|&(id, zone)| !live(cx.s(), id) || cx.s().obj(id).zone != zone) {
+        return Err(Stop::Cancel);
+    }
+    crate::takeback::committing(cx.g, true);
+    let mut out = Ok(());
+    for (part, _) in std::mem::take(&mut later.parts) {
+        out = part.run(cx);
+        if out.is_err() {
+            break;
+        }
+    }
+    crate::takeback::committing(cx.g, false);
+    out
+}
+
+/// A part of a payment that would make hidden information known (`Later`): carried out at the commit where `wait`, so that
+/// nothing hidden is shown before the action can no longer be given up; otherwise, where a step paid after it could read
+/// what it does (`blocks`), carried out now, after the parts paid before it, and the action is past giving up
+/// (`takeback::paid`).
+fn pay_or_defer(cx: &mut Cx, later: &mut Deferred, part: Later, wait: bool) -> R<()> {
+    if wait {
+        later.defer(cx, part);
+        return Ok(());
+    }
+    commit(cx, later)?;
+    crate::takeback::committing(cx.g, true);
+    let out = part.run(cx);
+    crate::takeback::committing(cx.g, false);
+    out
+}
+
+/// Whether moving `id` makes hidden information known (`takeback::reveals`): a card in a hand or a library, or anything face
+/// down (CR 406.3, 708.9).
+fn hidden(cx: &Cx, id: ObjectId) -> bool {
+    let obj = cx.s().obj(id);
+    obj.zone.kind().is_hidden() || obj.face_down
+}
+
+/// Pays a behold (CR 701.4a): the cards from the hand revealed, and exiled where the cost says (`pay_behold`); the cards
+/// revealed are kept on the spell or ability on the stack (`add_revealed_to_item`).
+#[allow(clippy::too_many_arguments)]
+fn pay_beheld(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: PaymentScope, exile: bool, cards: &[ObjectId], origin: CostOrigin, component: usize) {
+    let revealed = pay_behold(cx, player, spell, exile, cards);
+    if let Some(at) = cx.s().stack.iter().rposition(|item| match scope {
+        PaymentScope::Spell => item.kind == StackKind::Spell && item.object == spell,
+        PaymentScope::Ability { serial, .. } => item.kind == StackKind::Activated && item.serial == serial,
+        PaymentScope::ManaAbility { .. } | PaymentScope::PlayerManaAbility | PaymentScope::Resolution { .. } | PaymentScope::Combat { .. } => false,
+    }) {
+        add_revealed_to_item(cx, at, &revealed);
+    }
+    let part = if exile { CostPart::BeholdExile } else { CostPart::Behold };
+    for &object in cards {
+        scope.record(cx, spell, object, origin, component, part);
+    }
+}
+
+/// Pays a cost that moves its source, or the permanent that gave it the ability (CR 602.2b, 118.3): `with`, the objects
+/// "exile it" takes along.
+#[allow(clippy::too_many_arguments)]
+fn move_self(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: PaymentScope, action: MoveSelf, with: &[ObjectId], origin: CostOrigin, component: usize) {
+    let part = match action {
+        MoveSelf::Return => { ops::return_to_hand(cx, &[spell]); CostPart::ReturnSelf }
+        MoveSelf::Exile => {
+            let it: Vec<ObjectId> = std::iter::once(spell).chain(with.iter().copied()).collect();
+            ops::exile_all(cx, &it);
+            CostPart::ExileSelf
+        }
+        MoveSelf::ExileGranter(object) => {
+            ops::move_to_for(cx, object, Zone::exile(cx.s().obj(object).owner), ZoneReason::Exile);
+            scope.record(cx, spell, object, origin, component, CostPart::Granter);
+            return;
+        }
+        MoveSelf::Discard => {
+            if matches!(scope, PaymentScope::Ability { cycling: true, .. }) { ops::cycle(cx, player, spell); }
+            else { ops::discard(cx, spell); }
+            CostPart::DiscardSelf
+        }
+        MoveSelf::Library(place) => { ops::put_into_library(cx, &[spell], place); CostPart::LibrarySelf }
+    };
+    scope.record(cx, spell, spell, origin, component, part);
+}
+
 /// Pays the parts of a total cost in the order the payer chooses (CR 601.2h): every kind of cost a spell's, an ability's or
 /// a resolving payment's total holds is one step, its mana one step paid from the pool once the mana abilities have had
 /// their window (CR 601.2g), and the order is asked only where it could matter (`order_matters`).
-fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: PaymentScope, cost: &Cost, chosen: &[ObjectId], extra: &[(CostOrigin, Cost)], extra_chosen: &[Vec<ObjectId>], options: &[Cost], option_chosen: &[Vec<ObjectId>], option_origins: &[CostOrigin], paid_options: &[(AbilityRef, ObjectId)], permission: Option<Grant>, phyrexian_life: u32, x_life: u32, owed: ManaCost, helpers: &Helpers, reducer: Option<ObjectId>, x: u32, sacrificed_any_number: u32, teamwork: bool, mut mana_script: Option<Option<Vec<crate::takeback::Step>>>, combat: &[static_rules::LockedAttackPayment]) -> R<(Vec<ObjectId>, Vec<ObjectId>, Option<Target>, ManaPool, u8, Vec<ObjectId>, Option<u32>, Option<Subtype>, Option<bool>)> {
+fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: PaymentScope, cost: &Cost, chosen: &[ObjectId], extra: &[(CostOrigin, Cost)], extra_chosen: &[Vec<ObjectId>], options: &[Cost], option_chosen: &[Vec<ObjectId>], option_origins: &[CostOrigin], paid_options: &[(AbilityRef, ObjectId)], permission: Option<Grant>, phyrexian_life: u32, x_life: u32, owed: ManaCost, helpers: &Helpers, reducer: Option<ObjectId>, x: u32, sacrificed_any_number: u32, teamwork: bool, mut mana_script: Option<Option<Vec<crate::takeback::Step>>>, combat: &[static_rules::LockedAttackPayment], later: &mut Deferred) -> R<(Vec<ObjectId>, Vec<ObjectId>, Option<Target>, ManaPool, u8, Vec<ObjectId>, Option<u32>, Option<Subtype>, Option<bool>)> {
     let mut remaining = Vec::new();
     let crafting = cost.materials.is_some();
     append_fixed_payments(&mut remaining, CostOrigin::CastingWay, cost, chosen, SourceText::Own, x, sacrificed_any_number, scope, spell, crafting, 0);
@@ -3251,7 +3549,14 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
     let mut beheld_type = None;
     let mut chosen_object_members: Vec<(usize, ObjectId)> = Vec::new();
     let mut mana_adds_nothing = None;
+    // What would make hidden information known is carried out as the action is committed (`Later`): a cast's, an
+    // activation's, a resolution's or a declaration's payment. A mana ability's own payment is no part of what is committed:
+    // a mana ability that reveals stays activated through a take-back (`takeback::kept`).
+    let defers = !matches!(scope, PaymentScope::ManaAbility { .. } | PaymentScope::PlayerManaAbility);
+    let mana = mana_reads(helpers);
     let mut pay_next = |cx: &mut Cx, remaining: &mut Vec<SpellPayment<'_>>| -> R<bool> {
+        // The objects the parts still to be carried out will move, as gone from where they are (`Deferred::moving`).
+        let moving = later.moving();
         // CR 601.2h: every cost with a random element is paid after all other costs.
         let has_nonrandom = remaining.iter().any(|step| !step.has_random_element());
         let source_tap_pending = remaining.iter().any(|step| matches!(step, SpellPayment::TapSelf { .. }));
@@ -3295,7 +3600,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             }
             SpellPayment::Discard { cost, .. } => {
                 let hand: Vec<ObjectId> = cx.s().zone(Zone::hand(player)).iter().copied().filter(|id| *id != spell && !taken.contains(id)).collect();
-                let available = if cost.discard_hand { cx.s().zone(Zone::hand(player)).iter().all(|id| !taken.contains(id)) }
+                let available = if cost.discard_hand { cx.s().zone(Zone::hand(player)).iter().all(|id| !taken.contains(id) || moving.contains(id)) }
                     else { hand.len() >= usize::from(cost.discard_at_random) && discards_payable(cx, &asker, &hand, &cost.discard) };
                 (available && !(step.has_random_element() && has_nonrandom)).then_some(i)
             }
@@ -3323,7 +3628,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             SpellPayment::ChooseObject { cost, .. } => (!choose_candidates(cx, player, cost, spell, scope.by(), matches!(scope, PaymentScope::Spell)).is_empty()).then_some(i),
             SpellPayment::Behold { cost, .. } => {
                 let n = cost.behold.expect("behold component").0;
-                let have: Vec<ObjectId> = behold_candidates(cx, None, player, cost, spell, scope.by()).into_iter().filter(|id| !cost.behold_exile || !taken.contains(id)).collect();
+                let have: Vec<ObjectId> = behold_candidates(cx, None, player, cost, spell, scope.by()).into_iter().filter(|id| (!cost.behold_exile || !taken.contains(id)) && !moving.contains(id)).collect();
                 let available = if cost.behold_type { !behold_types(cx, &have, n).is_empty() } else { have.len() >= usize::from(n) };
                 available.then_some(i)
             }
@@ -3392,9 +3697,13 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             }
         }}).collect();
         if eligible.is_empty() { return Err(Stop::Cancel); }
+        // Whether the payer chose this step to be paid before the others still to pay (CR 601.2h), or the order was left
+        // to the engine as one that cannot matter.
+        let mut asked = false;
         let position = if eligible.len() == 1 { 0 } else if !order_matters(cx, player, spell, scope, &taken, remaining, &eligible) {
             canonical_step(remaining, &eligible)
         } else {
+            asked = true;
             let choices = eligible.iter().map(|&i| { let (spell, scope) = remaining[i].context(spell, scope); let name = cx.chars(spell).name; let source_text = source_label(cx, scope, permission, name, remaining[i].source_text()); match &remaining[i] {
                 SpellPayment::Life { amount, .. } => CostPaymentChoice { label: format!("Pay {amount} life — {source_text}"), objects: Vec::new(), kind: CostPaymentKind::Life },
                 SpellPayment::Energy { amount, .. } => CostPaymentChoice { label: format!("Pay {amount} energy — {source_text}"), objects: Vec::new(), kind: CostPaymentKind::Energy },
@@ -3512,7 +3821,23 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
         let (spell, scope) = step.context(spell, scope);
         // What the other steps still to pay chose already (`reserved_by_others`), which this one may not take.
         let reserved: Vec<ObjectId> = reserved_by_others(remaining, usize::MAX);
+        // Whether a part that would make hidden information known may wait for the commit (`Later`): nothing still to be paid
+        // after it could tell (`blocks`).
+        // A step the payer chose to pay first is not paid after one still to pay that puts cards into a graveyard or a
+        // library it puts cards into too: the order they arrive in is theirs (CR 404.2, 401.1). Where the engine chose the
+        // order, it pays this part last.
+        let wait = |cx: &Cx, taken: &[ObjectId], remaining: &[SpellPayment<'_>], moves: &Moves| {
+            let ordered = if asked { moves.writes & (FOOT_GRAVEYARD | FOOT_LIBRARY) } else { 0 };
+            defers && !remaining.iter().any(|r| blocks(cx, player, spell, scope, taken, moves, r, mana)
+                || ordered != 0 && footprint(cx, player, spell, scope, taken, r).writes & ordered != 0)
+        };
         match step {
+            // Life a replacement effect would make another event (Ashiok, Wicked Manipulator's exile of the top of the
+            // library, CR 119.4, 614.1a) is paid as the rest is committed.
+            SpellPayment::Life { amount, .. } if defers && !crate::replace::paying_life_replacers(cx, player, amount).is_empty() => {
+                let wait = wait(cx, &taken, remaining, &Moves::replaced_life(crate::replace::paying_life_replacers(cx, player, amount)));
+                pay_or_defer(cx, later, Later::Life { player, amount }, wait)?;
+            }
             SpellPayment::Life { amount, .. } => { ops::pay_life(cx, player, life_paid(amount)); }
             SpellPayment::Energy { amount, .. } => { ops::change_energy(cx, player, -(amount as i32), player); }
             SpellPayment::CountersAmong { origin, component, cost, .. } => {
@@ -3530,6 +3855,12 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 let chosen = choose_blight(cx, player, spell, cost, x)?;
                 pay_blight(cx, player, cost, chosen, x);
                 if let Some(object) = chosen { scope.record(cx, spell, object, origin, component, CostPart::Blight); }
+            }
+            SpellPayment::ZoneExile { origin, component, cost, part, .. } if defers && part == CostPart::HandExile => {
+                let selected = choose_hand_exiles(cx, player, spell, &cost, scope.by(), &taken)?;
+                taken.extend_from_slice(&selected);
+                let wait = wait(cx, &taken, remaining, &Moves::of(cx, &selected, FOOT_EXILE));
+                pay_or_defer(cx, later, Later::Exile { spell, scope, cards: selected, origin, component, part }, wait)?;
             }
             SpellPayment::ZoneExile { origin, component, cost, part, .. } => {
                 let selected = if part == CostPart::HandExile { choose_hand_exiles(cx, player, spell, &cost, scope.by(), &taken)? }
@@ -3549,11 +3880,19 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 }
             }
             SpellPayment::Discard { origin, component, cost, part, .. } => {
-                let discarded = choose_discards_apart(cx, player, spell, &cost, scope.by(), &taken)?;
-                pay_discards(cx, &discarded);
-                for object in discarded.cards {
-                    taken.push(object);
-                    scope.record(cx, spell, object, origin, component, part);
+                // "Discard your hand" discards what the parts still to be carried out leave of it (CR 601.2h: paid after them).
+                let apart: Vec<ObjectId> = if cost.discard_hand { taken.iter().copied().filter(|id| !moving.contains(id)).collect() } else { taken.clone() };
+                let mut discarded = choose_discards_apart(cx, player, spell, &cost, scope.by(), &apart)?;
+                discarded.cards.retain(|id| !moving.contains(id));
+                taken.extend_from_slice(&discarded.cards);
+                if defers {
+                    let wait = wait(cx, &taken, remaining, &Moves::of(cx, &discarded.cards, FOOT_GRAVEYARD));
+                    pay_or_defer(cx, later, Later::Discard { spell, scope, cards: discarded, origin, component, part }, wait)?;
+                } else {
+                    pay_discards(cx, &discarded);
+                    for object in discarded.cards {
+                        scope.record(cx, spell, object, origin, component, part);
+                    }
                 }
             }
             SpellPayment::Variable { origin, component, cost, amount, .. } => {
@@ -3574,16 +3913,18 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 if matches!(scope, PaymentScope::Resolution { .. }) {
                     variable_paid = Some(count_u32(sacrifices.len() + exiles.len() + discards.cards.len()));
                 }
-                let moved = ops::sacrifice(cx, player, &sacrifices);
-                if sacrifices.iter().any(|id| !cx.s().obj(*id).became.is_some_and(|new| moved.contains(&new))) { return Err(Stop::Cancel); }
-                pay_exiles(cx, &exiles);
-                pay_discards(cx, &discards);
                 if origin != CostOrigin::CastingWay && matches!(cost.variable, Some(VariableCost::SacrificeOneOrMore(_))) {
                     variable_paid = Some(count_u32(sacrifices.len()));
                 }
-                for object in sacrifices.into_iter().chain(exiles).chain(discards.cards) {
-                    taken.push(object);
-                    scope.record(cx, spell, object, origin, component, CostPart::Variable);
+                let all: Vec<ObjectId> = sacrifices.iter().chain(&exiles).chain(&discards.cards).copied().collect();
+                taken.extend_from_slice(&all);
+                let part = Later::Variable { player, spell, scope, sacrifices, exiles, discards, origin, component };
+                if defers && all.iter().any(|&id| hidden(cx, id)) {
+                    let to = match cost.variable { Some(VariableCost::DiscardOneOrMore(_)) => FOOT_GRAVEYARD, _ => FOOT_GRAVEYARD | FOOT_EXILE };
+                    let wait = wait(cx, &taken, remaining, &Moves::of(cx, &all, to));
+                    pay_or_defer(cx, later, part, wait)?;
+                } else {
+                    part.run(cx)?;
                 }
             }
             SpellPayment::ChooseObject { origin, component, declaration, cost, .. } => {
@@ -3611,7 +3952,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 scope.record(cx, spell, object, origin, component, CostPart::Choose);
             }
             SpellPayment::Behold { origin, component, cost, .. } => {
-                let (selected, announced) = choose_behold_apart(cx, player, spell, cost, &taken, scope.by())?;
+                let (selected, announced) = choose_behold_apart(cx, player, spell, cost, &taken, &moving, scope.by())?;
                 if let Some(announced) = announced && !matches!(scope, PaymentScope::ManaAbility { .. } | PaymentScope::PlayerManaAbility | PaymentScope::Resolution { .. }) {
                     beheld_type = Some(announced);
                     let at = cx.s().stack.len() - 1;
@@ -3619,18 +3960,15 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                     item.choice = StackItem::announce_type(announced);
                     cx.st().stack_set(at, item);
                 }
-                let revealed = pay_behold(cx, player, spell, cost.behold_exile, &selected);
-                if let Some(at) = cx.s().stack.iter().rposition(|item| match scope {
-                    PaymentScope::Spell => item.kind == StackKind::Spell && item.object == spell,
-                    PaymentScope::Ability { serial, .. } => item.kind == StackKind::Activated && item.serial == serial,
-                    PaymentScope::ManaAbility { .. } | PaymentScope::PlayerManaAbility | PaymentScope::Resolution { .. } | PaymentScope::Combat { .. } => false,
-                }) {
-                    add_revealed_to_item(cx, at, &revealed);
-                }
-                let part = if cost.behold_exile { CostPart::BeholdExile } else { CostPart::Behold };
-                for object in selected {
-                    if cost.behold_exile { taken.push(object); }
-                    scope.record(cx, spell, object, origin, component, part);
+                if cost.behold_exile { taken.extend_from_slice(&selected); }
+                let hides = selected.iter().any(|&id| hidden(cx, id));
+                let moves = if cost.behold_exile { Moves::of(cx, &selected, FOOT_EXILE) } else { Moves { reads: 0, writes: 0, needs: Vec::new() } };
+                let part = Later::Behold { player, spell, scope, exile: cost.behold_exile, cards: selected, origin, component };
+                if defers && hides {
+                    let wait = wait(cx, &taken, remaining, &moves);
+                    pay_or_defer(cx, later, part, wait)?;
+                } else {
+                    part.run(cx)?;
                 }
             }
             SpellPayment::TapCreatures { origin, component, cost, .. } => {
@@ -3684,13 +4022,13 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             }
             SpellPayment::RevealSecret { .. } => {
                 // The type is told to everyone with the ability put on the stack (CR 601.2h): it goes with the ability, which the
-                // permanent's sacrifice, paid after it, no longer reads it from (CR 400.7, 608.2h).
+                // permanent's sacrifice, paid after it, no longer reads it from (CR 400.7, 608.2h). It is read now and told as
+                // the activation is committed (`Later`, the owner's ruling of 2026-11-21): a hidden choice is not shown while
+                // the activation may still be given up. No step reads what it tells, so it always waits.
                 let (revealed, _) = secret_type_of(cx, spell, scope.by()).ok_or(Stop::Cancel)?;
                 let PaymentScope::Ability { serial, .. } = scope else { return Err(Stop::Cancel) };
-                let at = cx.s().stack.iter().rposition(|item| item.serial == serial).ok_or(Stop::Cancel)?;
-                let mut item = cx.s().stack[at];
-                item.choice = StackItem::announce_type(revealed);
-                cx.st().stack_set(at, item);
+                let wait = wait(cx, &taken, remaining, &Moves { reads: 0, writes: 0, needs: Vec::new() });
+                pay_or_defer(cx, later, Later::RevealSecret { serial, revealed }, wait)?;
             }
             SpellPayment::UnattachSelf { origin, component, .. } => {
                 ops::unattach(cx, spell);
@@ -3721,31 +4059,32 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 if let PaymentScope::ManaAbility { colors: Some((which, color, colorless)), .. } = scope && which == component {
                     mana_adds_nothing = Some(sacrificed_names(cx, &[object], color, colorless)?);
                 }
-                let moved = ops::sacrifice(cx, player, &[object]);
-                if !cx.s().obj(object).became.is_some_and(|id| moved.contains(&id)) { return Err(Stop::Cancel); }
-                scope.record(cx, spell, object, origin, component, part);
+                let part = Later::SacrificeSelf { player, spell, scope, object, origin, component, part };
+                // A face-down permanent is revealed as it leaves the battlefield (CR 708.9).
+                if defers && hidden(cx, object) {
+                    let wait = wait(cx, &taken, remaining, &Moves::of(cx, &[object], FOOT_GRAVEYARD));
+                    pay_or_defer(cx, later, part, wait)?;
+                } else {
+                    part.run(cx)?;
+                }
             }
             SpellPayment::MoveSelf { origin, component, action, .. } => {
-                let part = match action {
-                    MoveSelf::Return => { ops::return_to_hand(cx, &[spell]); CostPart::ReturnSelf }
-                    MoveSelf::Exile => {
-                        let it: Vec<ObjectId> = std::iter::once(spell).chain(helpers.exiled_with_source.iter().copied()).collect();
-                        ops::exile_all(cx, &it);
-                        CostPart::ExileSelf
-                    }
-                    MoveSelf::ExileGranter(object) => {
-                        ops::move_to_for(cx, object, Zone::exile(cx.s().obj(object).owner), ZoneReason::Exile);
-                        scope.record(cx, spell, object, origin, component, CostPart::Granter);
-                        return Ok(false);
-                    }
-                    MoveSelf::Discard => {
-                        if matches!(scope, PaymentScope::Ability { cycling: true, .. }) { ops::cycle(cx, player, spell); }
-                        else { ops::discard(cx, spell); }
-                        CostPart::DiscardSelf
-                    }
-                    MoveSelf::Library(place) => { ops::put_into_library(cx, &[spell], place); CostPart::LibrarySelf }
-                };
-                scope.record(cx, spell, spell, origin, component, part);
+                let with = if matches!(action, MoveSelf::Exile) { helpers.exiled_with_source.to_vec() } else { Vec::new() };
+                let part = Later::MoveSelf { player, spell, scope, action, with, origin, component };
+                // A card leaving a hand or a library, or face down, or put into a library (CR 733.1), shows what it is.
+                let moved = part.moving();
+                if defers && (matches!(action, MoveSelf::Library(_)) || moved.iter().any(|&id| hidden(cx, id))) {
+                    let to = match action {
+                        MoveSelf::Return => FOOT_HAND,
+                        MoveSelf::Exile | MoveSelf::ExileGranter(_) => FOOT_EXILE,
+                        MoveSelf::Discard => FOOT_GRAVEYARD,
+                        MoveSelf::Library(_) => FOOT_LIBRARY,
+                    };
+                    let wait = wait(cx, &taken, remaining, &Moves::of(cx, &moved, to));
+                    pay_or_defer(cx, later, part, wait)?;
+                } else {
+                    part.run(cx)?;
+                }
             }
             SpellPayment::Mana => return Ok(true),
             SpellPayment::Reducer(object) => {
@@ -3775,15 +4114,19 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                     }
                     _ => scope.linked(),
                 };
-                let paid = pay_permanents(cx, player, cost, &selected, exiled_by, &mut Vec::new());
-                if paid.len() != selected.len() { return Err(Stop::Cancel); }
-                let paid: Vec<(usize, ObjectId)> = paid.into_iter().map(|(_, object)| (component, object)).collect();
-                for (index, (component, object)) in paid.into_iter().enumerate() {
-                    let receipt_scope = match (scope, combat_attackers.and_then(|a| a.get(index)).copied()) {
-                        (PaymentScope::Combat { payment, payer, by, .. }, Some(attacker)) => PaymentScope::Combat { payment, payer, attacker, by },
-                        _ => scope,
-                    };
-                    receipt_scope.record(cx, spell, object, origin, component, CostPart::Permanents);
+                let scopes: Vec<PaymentScope> = (0..selected.len()).map(|index| match (scope, combat_attackers.and_then(|a| a.get(index)).copied()) {
+                    (PaymentScope::Combat { payment, payer, by, .. }, Some(attacker)) => PaymentScope::Combat { payment, payer, attacker, by },
+                    _ => scope,
+                }).collect();
+                // A face-down permanent sacrificed, exiled or returned is revealed as it leaves the battlefield (CR 708.9).
+                let hides = !cost.tap_permanents && selected.iter().any(|&id| hidden(cx, id));
+                let moves = Moves::of(cx, &selected, FOOT_GRAVEYARD | FOOT_EXILE | FOOT_HAND);
+                let part = Later::Permanents { player, spell, cost: *cost, chosen: selected, exiled_by, origin, component, scopes };
+                if defers && hides {
+                    let wait = wait(cx, &taken, remaining, &moves);
+                    pay_or_defer(cx, later, part, wait)?;
+                } else {
+                    part.run(cx)?;
                 }
             }
         }
@@ -11979,7 +12322,9 @@ fn cast(
     let extra_selected: Vec<Vec<ObjectId>> = vec![Vec::new(); extra_parts.len()];
     let option_chosen: Vec<Vec<ObjectId>> = vec![Vec::new(); option_costs.len()];
     let teamwork = item.paid > 0 && def.optional_cost.is_some_and(|o| o.cost.tap_creatures.is_some());
-    let (_way_paid, _exiled, way_attacking, mut spent, mut restrictions, taken, variable_paid, beheld_type, _) = pay_scheduled_costs(cx, player, spell, PaymentScope::Spell, &cost, &chosen, &extra_parts, &extra_selected, &option_costs, &option_chosen, &option_origins, &paid_options, by.by, life, u32::from(x_life), owed, &helpers, reducer, u32::from(item.x), sacrificed_any_number, teamwork, None, &[])?;
+    // What the payment chose that would make hidden information known, carried out once nothing more may give the cast up.
+    let mut later = Deferred::default();
+    let (_way_paid, _exiled, way_attacking, mut spent, mut restrictions, taken, variable_paid, beheld_type, _) = pay_scheduled_costs(cx, player, spell, PaymentScope::Spell, &cost, &chosen, &extra_parts, &extra_selected, &option_costs, &option_chosen, &option_origins, &paid_options, by.by, life, u32::from(x_life), owed, &helpers, reducer, u32::from(item.x), sacrificed_any_number, teamwork, None, &[], &mut later)?;
     if let Some(announced) = beheld_type { item.choice = StackItem::announce_type(announced); }
     // The mana the assisting player spent was spent to cast it too (CR 601.2h, 106.6).
     if let Some(a) = assisted {
@@ -12016,6 +12361,9 @@ fn cast(
         Some(for_less) => confirm_hand_exiles(cx, player, spell, for_less, &hand_chosen, &hand_could, &taken)?,
         None => Vec::new(),
     };
+    // The cast is committed (CR 601.2h): nothing asked from here on gives it up, so what its payment chose to discard,
+    // exile or reveal from a hidden zone is carried out now, all of it, in the order it was paid.
+    commit(cx, &mut later)?;
     // Sneak (CR 702.190b): the permanent the spell becomes attacks what the creature its cost returns to hand is attacking
     // as the cost is paid, kept on the spell for its resolution. An instant or sorcery becomes no permanent, and keeps none.
     // The way is the card's own, or one a permanent gave it (Ninja Teen's).
@@ -13753,8 +14101,14 @@ fn activate(
     let def = activated(cx, ability).expect("activated");
     if !activation_permitted(cx, source, player, ability, index as usize, def, by) { return Err(Stop::Cancel); }
     let paid = activating(def);
-    // CR 602.2a: announced, its card revealed if it is in a hand or a library, before any choice or cost.
-    reveal_if_hidden(cx, player, source);
+    // CR 602.2a: announced, its card revealed if it is in a hand or a library, before any choice or cost - shown as the
+    // activation is committed, first of what its payment would make known (`Later`), so that nothing is revealed of an
+    // activation given up (the owner's ruling of 2026-11-21).
+    let mut later = Deferred::default();
+    let zone = cx.s().obj(source).zone;
+    if zone.is(ZoneKind::Hand) || zone.is(ZoneKind::Library) {
+        later.defer(cx, Later::Reveal { player, source });
+    }
     // What gave the source this ability (CR 113.2c, 613.1f): the option names it; read now, before any cost moves it (a cost
     // may sacrifice the very permanent that gave it).
     let granted = granted.or_else(|| granted_by(cx, source, None, index as usize, ability, &std::cell::OnceCell::new()));
@@ -13964,7 +14318,9 @@ fn activate(
     extra.extend(imposed);
     let extra_chosen = vec![Vec::new(); extra.len()];
     let x_life = if whole.pay_x_life { u32::from(item.x) } else { 0 };
-    let (chosen, symbol_exiles, attacking, _, _, _, _, _, _) = pay_scheduled_costs(cx, player, source, scope, &base, &[], &extra, &extra_chosen, &[], &[], &[], &[], None, life, x_life, mana, &helpers, None, u32::from(item.x), 0, false, None, &[])?;
+    let (chosen, symbol_exiles, attacking, _, _, _, _, _, _) = pay_scheduled_costs(cx, player, source, scope, &base, &[], &extra, &extra_chosen, &[], &[], &[], &[], None, life, x_life, mana, &helpers, None, u32::from(item.x), 0, false, None, &[], &mut later)?;
+    // The activation is committed (CR 602.2b, 601.2h-i).
+    commit(cx, &mut later)?;
 
     let at = cx.s().stack.len() - 1;
     let mut with = cx.s().stack[at];
@@ -14000,9 +14356,10 @@ fn own_ways_of_paying(cx: &Cx, player: PlayerId, source: ObjectId, ability: Abil
 }
 
 /// The first step of activating an ability (CR 602.2a): the player announces it, and if `source` is a card in a hidden zone
-/// (a hand or a library, CR 400.2) that card is revealed (CR 701.20a) - once, by the player activating it, as the ability is
-/// announced and put on the stack, before any choice or cost of CR 602.2b, so a cost that discards or exiles the card
-/// (cycling, channel, a Spirit Guide's) is paid after it is shown. The reveal is this one event: the card is not kept
+/// (a hand or a library, CR 400.2) that card is revealed (CR 701.20a) - once, by the player activating it. A mana ability's
+/// card is revealed as it is announced; any other ability's as the activation is committed (`Later::Reveal`, the owner's
+/// ruling of 2026-11-21), first of what its payment makes known, so a cost that discards or exiles the card (cycling,
+/// channel, a Spirit Guide's) is paid after it is shown. The reveal is this one event: the card is not kept
 /// revealed while the ability is on the stack (CR 701.20a's lasting reveal is RX-7 in `docs/rules-exceptions.md`).
 /// A special action is no activation (CR 116.2: foretell, plot, suspend reveal nothing by this rule), and a spell cast from a
 /// hand is moved to the stack (CR 601.2a), where all see it.
@@ -14199,29 +14556,41 @@ fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abil
     if !rest_payable(cx, player, u32::from(whole.energy), life + whole.life, None) || whole.sacrifice_self && !may_sacrifice_for(cx, player, source, None) {
         return Err(Stop::Cancel);
     }
-    if life > 0 {
-        ops::pay_life(cx, player, life_paid(life));
-    }
+    // Everything is chosen: the rest is paid at once, with nothing more asked (CR 601.2h by way of 602.2b). The one payment
+    // that may yet fail, the permanents', goes before the life, which a replacement effect may make an exile of the top
+    // of the library (Ashiok, Wicked Manipulator; CR 119.4, 614.1a) that no take-back may show and then hide again.
     let mut tapped = tap_source(cx, player, source, &whole, !tappers.is_empty());
     pay_blight(cx, player, &whole, blighted, 0);
     pay_counters_among(cx, &removed);
     if pay_permanents(cx, player, &whole, &chosen, None, &mut tapped).len() != chosen.len() { return Err(Stop::Cancel); }
-    pay_behold(cx, player, source, false, &beheld);
-    pay_discards(cx, &discards);
-    pay_exiles(cx, &exiles);
-    pay_life_and_counters(cx, player, source, &whole);
-    if let Some(kind) = counter {
-        counters::remove(cx, source, kind, 1);
-    }
-    pay_exert_and_tappers(cx, player, source, &whole, &tappers, &mut tapped);
-    ops::tap_together_with(cx, &mut tapped, &[], player);
-    if whole.sacrifice_self {
-        ops::sacrifice(cx, player, &[source]);
-    }
-    if whole.discard_at_random > 0 {
-        let random = choose_discards_mode(cx, player, source, &whole, None, &[], false, true)?;
-        pay_discards(cx, &random);
-    }
+    // From here the action is committed (the owner's ruling of 2026-11-21, as `commit` carries out a cast's or an
+    // activation's deferred parts): the life, the behold, the discards and the hand exiles chosen above are carried out,
+    // and no question they raise (a madness card's exile instead of the graveyard, CR 702.35a) may give the action up.
+    crate::takeback::committing(cx.g, true);
+    let paid = (|| -> R<()> {
+        if life > 0 {
+            ops::pay_life(cx, player, life_paid(life));
+        }
+        pay_behold(cx, player, source, false, &beheld);
+        pay_discards(cx, &discards);
+        pay_exiles(cx, &exiles);
+        pay_life_and_counters(cx, player, source, &whole);
+        if let Some(kind) = counter {
+            counters::remove(cx, source, kind, 1);
+        }
+        pay_exert_and_tappers(cx, player, source, &whole, &tappers, &mut tapped);
+        ops::tap_together_with(cx, &mut tapped, &[], player);
+        if whole.sacrifice_self {
+            ops::sacrifice(cx, player, &[source]);
+        }
+        if whole.discard_at_random > 0 {
+            let random = choose_discards_mode(cx, player, source, &whole, None, &[], false, true)?;
+            pay_discards(cx, &random);
+        }
+        Ok(())
+    })();
+    crate::takeback::committing(cx.g, false);
+    paid?;
     if let Some(n) = x {
         cx.st().update_obj(source, |o| o.x = n);
     }
@@ -14541,7 +14910,7 @@ fn activate_mana_as(
         }
 
         helpers.abilities_closed = true;
-        pay_scheduled_costs(cx, player, source, scope, &def.cost, &chosen, &imposed, &vec![Vec::new(); imposed.len()], &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(x.unwrap_or(0)), 0, false, script, &[])
+        pay_scheduled_costs(cx, player, source, scope, &def.cost, &chosen, &imposed, &vec![Vec::new(); imposed.len()], &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(x.unwrap_or(0)), 0, false, script, &[], &mut Deferred::default())
     })();
     if !mana.is_zero() { crate::takeback::end_paying(cx.g); }
     let (_, _, _, _, _, _, _, _, pending_color) = payment?;
@@ -14825,7 +15194,7 @@ fn activate_player_mana_effect(cx: &mut Cx, player: PlayerId, source: ObjectId, 
             mana_activation_window(cx, player, source, mana, &helpers, 0, true)?;
         }
         helpers.abilities_closed = true;
-        pay_scheduled_costs(cx, player, source, PaymentScope::PlayerManaAbility, &def.cost, &[], &imposed, &vec![Vec::new(); imposed.len()], &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(x.unwrap_or(0)), sacrificed_any_number, false, script, &[])
+        pay_scheduled_costs(cx, player, source, PaymentScope::PlayerManaAbility, &def.cost, &[], &imposed, &vec![Vec::new(); imposed.len()], &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(x.unwrap_or(0)), sacrificed_any_number, false, script, &[], &mut Deferred::default())
     })();
     if !mana.is_zero() { crate::takeback::end_paying(cx.g); }
     payment?;
@@ -16372,10 +16741,12 @@ pub(crate) fn pay_attack_costs(cx: &mut Cx, player: PlayerId, source: ObjectId, 
     let helpers = Helpers { abilities_closed: true, ..helpers };
     let payment = cx.g.log.len() as u32;
     cx.record(Event::CombatPaymentBegan { payment, payer: player });
+    let mut later = Deferred::default();
     pay_scheduled_costs(cx, player, source,
         PaymentScope::Combat { payment, payer: player, attacker: ObjectId::NONE, by: None },
-        &Cost::NONE, &[], &[], &[], &[], &[], &[], &[], None, life, 0, total, &helpers, None, 0, 0, false, None, fixed)?;
-    Ok(())
+        &Cost::NONE, &[], &[], &[], &[], &[], &[], &[], None, life, 0, total, &helpers, None, 0, 0, false, None, fixed, &mut later)?;
+    // The declaration's payment is committed (CR 508.1j).
+    commit(cx, &mut later)
 }
 
 /// Pays a declaration of blockers' locked-in total cost to block (CR 509.1d), as a cost to attack's mana is paid: the chance
@@ -17216,10 +17587,13 @@ fn pay_resolution_cost(cx: &mut Cx, payer: PlayerId, source: ObjectId, with: &[O
         cx.s().agenda.get(cx.frame).and_then(|frame| match frame.kind { cantrip_state::FrameKind::Resolve { serial } => Some(serial), _ => None })
     } else { None };
     cx.record(Event::ResolutionPaymentBegan { payment, source, payer, resolving });
+    let mut later = Deferred::default();
     let (_, _, _, _, _, _, variable_paid, _, _) = pay_scheduled_costs(
         cx, payer, source, PaymentScope::Resolution { payment, payer }, cost, &[], &[], &[], &[], &[], &[], &[], None,
-        extra_life, 0, total, &helpers, None, u32::from(x), 0, false, None, &[],
+        extra_life, 0, total, &helpers, None, u32::from(x), 0, false, None, &[], &mut later,
     )?;
+    // The payment is committed: what it chose from a hidden zone is carried out now.
+    commit(cx, &mut later)?;
     Ok(u32::try_from(variable_paid.unwrap_or(0)).unwrap_or(u32::MAX))
 }
 

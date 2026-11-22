@@ -1,10 +1,11 @@
-# CR 733.1: "Players may not reverse actions that ... moved cards from a library to any zone other than the stack", with
-# the owner's ruling that an undo never reveals information. Bolas's Citadel casts Bone Splinters off the top of the
-# library for 1 life, and Ashiok, Wicked Manipulator exiles the next card, Lightning Bolt, in place of that life (CR 119.4,
-# 614.1a). Since the exile could change what the sacrifice chooses among, the order of the payment's steps is asked (CR
-# 601.2h), and the life is paid first. That step of the payment may not be reversed and the rest of the cast can't be undone from under it, so from
-# then on the cast is past taking back: at the question of which creature to sacrifice, no cancel is offered. The player
-# completes the cast, Bone Splinters destroys its target, and the Bolt stays in exile with the life still 20.
+# The owner's ruling of 2026-11-21 (docs/engine-design.md, "Taking back an illegal action"): nothing hidden is revealed for
+# anything that can still be undone, so what a cost would make known is carried out as the cast is committed. Bolas's
+# Citadel casts Bone Splinters off the top of the library for 1 life, and Ashiok, Wicked Manipulator exiles the next card,
+# Lightning Bolt, in place of that life (CR 119.4, 614.1a). Nothing the sacrifice may choose reads the library or exile
+# (Memnite has no characteristic-defining ability), so the order of the payment's steps is not asked (CR 601.2h) and the
+# life is paid last: while the sacrifice is chosen, nothing is in exile and the Bolt is still on top of the library. Once
+# Memnite is chosen the cast is committed, and the Bolt is exiled with the life still 20. Bone Splinters destroys its
+# target.
 
 [Bot1 Deck]
 Swamp
@@ -47,10 +48,11 @@ Bot1.Library.Memnite.Cast
 Bot1.Pass
 Bot2.Pass
 Bot1.Library.Bone Splinters.Cast(Memnite#2)
-Bot1.Choose(Pay 1 life)
-? Exile = Lightning Bolt
-! Bot1.Cancel
+? Exile.Count = 0
+? Bot1.Library.Top = Lightning Bolt
 Bot1.Choose(Memnite#1)
+? Exile = Lightning Bolt
+? Bot1.Life = 20
 Bot1.Pass
 Bot2.Pass
 

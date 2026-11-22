@@ -47,4 +47,4 @@ Turn = 5
 Stack.Count = 0
 Exile.Count = 0
 Bot1.Hand = Ancestral Recall
-Bot1.Graveyard = Connecting the Dots; Island; Lightning Bolt; Island; Island
+Bot1.Graveyard = Island; Lightning Bolt; Island; Island; Connecting the Dots

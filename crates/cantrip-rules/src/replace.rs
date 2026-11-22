@@ -435,11 +435,14 @@ pub(crate) fn possible(cx: &Cx, subject: Option<ObjectId>) -> bool {
         || cx.s().battlefield().iter().any(|&id| cards.texts(cx.s(), cx.s().obj(id)).any(|c| cards.replaces[c.0 as usize]))
 }
 
-/// Whether an effect would apply to `player` paying `amount` life now (CR 119.4, 614.1a): judged on the payment as it would be
-/// made, nothing applied.
-pub(crate) fn paying_life_replaced(cx: &Cx, player: PlayerId, amount: u32) -> bool {
+/// The sources of the effects that would apply to `player` paying `amount` life now (CR 119.4, 614.1a): judged on the payment
+/// as it would be made, nothing applied. None where nothing would replace it.
+pub(crate) fn paying_life_replacers(cx: &Cx, player: PlayerId, amount: u32) -> Vec<ObjectId> {
     let amount = -i32::try_from(amount).unwrap_or(i32::MAX);
-    possible(cx, None) && !candidates(cx, &Proposal::LifeChange(LifeChange::paying(player, amount)), &[], None, [None; 8]).is_empty()
+    if !possible(cx, None) {
+        return Vec::new();
+    }
+    candidates(cx, &Proposal::LifeChange(LifeChange::paying(player, amount)), &[], None, [None; 8]).into_iter().map(|c| c.source).collect()
 }
 
 /// Whether a card in `player`'s graveyard has an ability that replaces their draws there (CR 702.52a: dredge).

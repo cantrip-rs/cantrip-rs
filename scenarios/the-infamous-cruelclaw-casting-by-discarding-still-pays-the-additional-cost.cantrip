@@ -46,12 +46,12 @@ Bot1.Choose(Memnite)
 ? Stack.Count = 1
 ? Bot1.Mana =
 ? Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Pearl; The Infamous Cruelclaw; Island
-? Bot1.Graveyard = Memnite; Swamp
+? Bot1.Graveyard = Swamp; Memnite
 Bot1.Pass
 Bot2.Pass
 ? Stack.Count = 0
 ? Bot1.Hand = Island; Mountain; Plains
-? Bot1.Graveyard = Village Rites; Memnite; Swamp
+? Bot1.Graveyard = Village Rites; Swamp; Memnite
 ? Bot1.Battlefield.Mox Ruby.Tapped = false
 ? Bot1.Battlefield.Mox Jet.Tapped = false
 ? Exile = Forest

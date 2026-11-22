@@ -1,0 +1,75 @@
+# The owner's ruling of 2026-11-21 (docs/engine-design.md, "Taking back an illegal action"): a part of a cost that would make
+# hidden information known is chosen as it is paid and carried out only as the spell is committed, so a cast given up shows
+# nothing. Force of Will's alternative cost is 1 life and a blue card exiled from the hand (CR 118.9); Silverquill, the
+# Disputant gives it casualty 1 (CR 702.153a), whose sacrifice is chosen after the exile (CR 601.2h), so there is a question
+# to give the cast up at once the blue card is chosen. Bot1 casts Memnite and, holding priority, Force of Will at it.
+# The first time Brainstorm is chosen and the cast is given up at the casualty's question: Brainstorm never left the hand -
+# nothing is in exile while the cast is under way - and the take-back leaves Bot1 on 20 with Force of Will in hand (CR 733.1).
+# The second time the cast is completed: the Elves are sacrificed and, as the cast is committed, Brainstorm is exiled and the
+# 1 life paid. Casualty's copy counters Memnite and Force of Will, its target gone, does nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Llanowar Elves
+Silverquill, the Disputant
+Force of Will
+Brainstorm
+Memnite
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Silverquill, the Disputant.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Force of Will.Cast(Memnite; Ability: exile a blue card)
+Bot1.Modes(Casualty 1)
+Bot1.Choose(Brainstorm)
+? Exile.Count = 0
+? Bot1.Hand = Brainstorm
+Bot1.Cancel
+? Stack = Memnite
+? Exile.Count = 0
+? Bot1.Life = 20
+? Bot1.Hand.Count = 2
+Bot1.Hand.Force of Will.Cast(Memnite; Ability: exile a blue card)
+Bot1.Modes(Casualty 1)
+Bot1.Choose(Brainstorm)
+Bot1.Choose(Llanowar Elves)
+? Exile = Brainstorm
+? Bot1.Life = 19
+? Bot1.Hand.Count = 0
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile = Brainstorm
+Bot1.Life = 19
+Bot1.Hand.Count = 0
+Bot1.Graveyard = Force of Will; Memnite; Llanowar Elves; Black Lotus

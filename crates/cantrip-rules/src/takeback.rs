@@ -21,12 +21,13 @@
 //! Which mana abilities stay is read from what they did, never from the card: each activation's events in the history
 //! (`reveals`), and the mana that paid for the ones that stay (`Step::Spend`).
 //!
-//! The action's own payment is held to the same: a step of it that made hidden information known (`reveals`: the cards
-//! Ashiok, Wicked Manipulator exiles from the top of a library in place of the life a cost pays, a card discarded or exiled
-//! from a hand, a card revealed) may not be reversed either, and the action is past taking back from then on: its player
-//! is offered no cancel after it (`may_take_back`, `paid`). The rest of the action can't be undone from under that step
-//! (the journal undoes in order only) and the step can't be done again on its own as a mana ability is, so the player
-//! goes on and completes it.
+//! The action's own payment never gets here with anything hidden shown: by the owner's ruling of 2026-11-21 a part of it
+//! that would make hidden information known - a card discarded, exiled or revealed from a hand, a card put into a library,
+//! the cards Ashiok, Wicked Manipulator exiles from the top of a library in place of the life a cost pays - is chosen as it
+//! is paid and carried out only as the action is committed, when nothing more may give it up (`actions::Later`,
+//! `committing`). A part that can't wait, because a step paid after it reads what it does, is carried out at once, and then
+//! the action is past taking back: its player is offered no cancel after it (`may_take_back`, `paid`). The rest of the
+//! action can't be undone from under that part (the journal undoes in order only), so the player goes on and completes it.
 
 use std::collections::VecDeque;
 
@@ -100,6 +101,9 @@ pub(crate) struct Trail {
     /// The positions in the history of the events a step of an action's own payment made that no undo may hide again
     /// (`reveals`, `paid`), in the order made.
     fixed: Vec<usize>,
+    /// The parts of an action's payment chosen to be carried out as it is committed are being carried out
+    /// (`actions::commit`): nothing asked meanwhile may give the action up (`may_take_back`).
+    committing: bool,
 }
 
 /// Where the trail stood: what an action begun then has added since.
@@ -158,6 +162,7 @@ impl Takeback {
         t.open.clear();
         t.paying.clear();
         t.fixed.clear();
+        t.committing = false;
     }
 }
 
@@ -185,7 +190,13 @@ pub(crate) fn paid(g: &mut Game, from: usize) {
 /// did and was activated stays through a take-back (`kept`), so what it did leaves the action free to be given up.
 pub(crate) fn may_take_back(g: &Game) -> bool {
     let t = &g.takeback.trail;
-    t.fixed.iter().all(|&i| t.runs.iter().any(|r| r.done && r.log.0 <= i && i < r.log.1))
+    !t.committing && t.fixed.iter().all(|&i| t.runs.iter().any(|r| r.done && r.log.0 <= i && i < r.log.1))
+}
+
+/// The parts of an action's payment chosen to be carried out as it is committed begin, or end, being carried out
+/// (`actions::commit`): while they are, the action may not be given up (`may_take_back`).
+pub(crate) fn committing(g: &mut Game, on: bool) {
+    g.takeback.trail.committing = on;
 }
 
 /// The action begun at `since` was made: what its payment fixed (`paid`) is no part of whatever the run goes on to do.

@@ -59,11 +59,25 @@ static LAND_PROBE: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+fn any_card(_: &dyn Query, _: &Asker, _: ObjectId) -> bool {
+    true
+}
+
+/// "Exile a card from your hand: Sacrifice this." The cost exiles from a hand, which is carried out as the activation is
+/// committed (`actions::Later`, the owner's ruling of 2026-11-21).
+static HAND_PROBE: CardDef = CardDef {
+    name: "Exile Cast Hand Probe",
+    oracle: true,
+    types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[ability(Cost { exile_from_hand: Some((1, any_card)), ..Cost::NONE }, sacrifice_this, "Exile a card from your hand: Sacrifice this.")],
+    ..CardDef::BLANK
+};
+
 static FILLER: CardDef = CardDef { name: "Exile Cast Filler", oracle: true, ..CardDef::BLANK };
 
 fn table() -> &'static CardTable {
     static TABLE: OnceLock<CardTable> = OnceLock::new();
-    TABLE.get_or_init(|| CardTable::new([&EVIDENCE_PROBE, &FODDER, &FILLER, &LAND_PROBE]))
+    TABLE.get_or_init(|| CardTable::new([&EVIDENCE_PROBE, &HAND_PROBE, &FODDER, &FILLER, &LAND_PROBE]))
 }
 
 /// A game in the first player's precombat main phase with priority.
@@ -127,6 +141,24 @@ fn the_cards_an_ability_collects_as_evidence_are_exiled_with_its_source() {
     }
     let exiled = game.state.zone(Zone::exile(ME)).to_vec();
     assert_eq!(exiled.len(), 1, "the card is exiled");
+    assert_eq!(exiled_with(&game, probe), exiled, "and exiled with the object whose ability it paid for");
+}
+
+/// A card an ability's cost exiles from a hand is chosen as the cost is paid and exiled as the activation is committed (the
+/// owner's ruling of 2026-11-21), and still exiled with the object whose ability it is (CR 607.2a), as a cost exiled at once is.
+#[test]
+fn a_card_an_abilitys_cost_exiles_from_the_hand_at_the_commit_is_exiled_with_its_source() {
+    let mut game = game();
+    let probe = put(&mut game, "Exile Cast Hand Probe", Zone::BATTLEFIELD);
+    let fodder = put(&mut game, "Exile Cast Fodder", Zone::hand(ME));
+    game.run();
+    activate(&mut game, probe);
+    match request(&game).kind {
+        RequestKind::ChooseCards { .. } => answer(&mut game, Answer::Cards(vec![fodder])),
+        other => panic!("expected the card to exile, got {other:?}"),
+    }
+    let exiled = game.state.zone(Zone::exile(ME)).to_vec();
+    assert_eq!(exiled.len(), 1, "the card is exiled once the activation is committed");
     assert_eq!(exiled_with(&game, probe), exiled, "and exiled with the object whose ability it paid for");
 }
 

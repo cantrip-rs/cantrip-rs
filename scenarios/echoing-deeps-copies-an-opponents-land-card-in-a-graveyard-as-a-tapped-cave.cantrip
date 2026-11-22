@@ -39,5 +39,5 @@ Bot1.Battlefield.Swamp.Tapped = true
 Bot1.Battlefield.Swamp.Subtypes = Cave; Swamp
 Bot1.Battlefield.Swamp.Types = Land
 Bot1.Battlefield.Swamp.Supertypes = Basic
-Bot1.Graveyard = Masked Meower; Island
+Bot1.Graveyard = Island; Masked Meower
 Bot2.Graveyard = Plains; Swamp

@@ -37,4 +37,4 @@ Bot1.Battlefield.Island#1.Subtypes = Cave; Island
 Bot1.Battlefield.Island#1.Tapped = false
 Bot1.Battlefield.Island#2.Subtypes = Cave; Island
 Bot1.Battlefield.Island#2.Tapped = true
-Bot1.Graveyard = Masked Meower; Island
+Bot1.Graveyard = Island; Masked Meower

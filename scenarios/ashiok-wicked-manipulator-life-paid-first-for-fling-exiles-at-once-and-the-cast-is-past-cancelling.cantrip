@@ -1,0 +1,70 @@
+# A part of a cost that would make hidden information known waits for the cast's commit unless a step paid after it could
+# read what it does (the owner's ruling of 2026-11-21, docs/engine-design.md "Taking back an illegal action"). Then it is
+# carried out at once, and the cast is past giving up. Bolas's Citadel casts Cosmogoyf and then Fling off the top of the
+# library for life equal to their mana values, and Ashiok, Wicked Manipulator exiles that many cards from the top of the
+# library instead (CR 119.4, 614.1a). Cosmogoyf's power is the number of cards Bot1 owns in exile (CR 604.3), and Fling
+# deals damage equal to the power of the creature sacrificed for it (CR 608.2h), so for Fling the order of the life and
+# the sacrifice matters and is asked (CR 601.2h). Cosmogoyf's own cast exiles Island and Plains as it is committed. For
+# Fling, Bot1 pays the life first: the exile of two more cards (Mountain, Forest) is done then, before the sacrifice
+# is chosen, and from then on no cancel is offered. Cosmogoyf, sacrificed with four cards in exile, is a 4/5 as it
+# goes, and Fling deals 4 to Bot2. The life stays 20.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Mox Jet
+Sol Ring
+Bolas's Citadel
+Mox Emerald
+Ashiok, Wicked Manipulator
+Swamp
+Cosmogoyf
+Island
+Plains
+Fling
+Mountain
+Forest
+Island x5
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Bolas's Citadel.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Ashiok, Wicked Manipulator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Library.Cosmogoyf.Cast
+? Exile = Island; Plains
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cosmogoyf.Power = 2
+Bot1.Library.Fling.Cast(Bot2)
+Bot1.Choose(Pay 2 life)
+? Exile.Count = 4
+! Bot1.Cancel
+Bot1.Choose(Cosmogoyf)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 4
+Bot1.Life = 20
+Bot2.Life = 16
+Bot1.Graveyard = Fling; Cosmogoyf; Black Lotus

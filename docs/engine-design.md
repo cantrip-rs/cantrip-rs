@@ -1861,18 +1861,54 @@ mana ability still under way when the action was given up is part of the action,
 engine's to take for the player: what stays is what may not be reversed, and the player may activate again any of the rest.
 The table's courtesy undo of a mana ability (`cantrip_engine::undo`) was already offered only for one that showed nothing.
 
-The action's own payment is held to the same test. A step of it whose events reveal (`takeback::paid`, after each step
-`pay_scheduled_costs` pays) - the cards Ashiok, Wicked Manipulator exiles from the top of the library in place of the life a
-cost pays, a card discarded, exiled or revealed from a hand - may not be reversed, and it can be neither undone from under
-the rest of the action nor done again on its own as a kept mana ability is. So the action is past taking back from then
-on: `takeback::may_take_back` is false, `ask_core` asks its questions without a cancel and the payment offers no
-`CancelCasting`, and the player completes it. What a mana ability activated within the step revealed is that ability's,
-kept as above, and leaves the action free to be given up. The marks are scoped to the action: a take-back truncates
+The action's own payment never shows anything hidden before the action is committed. The owner's ruling of 2026-11-21,
+binding and over CR 733.1 where they differ: no cost action that reveals hidden information is carried out until the
+cost is fully paid and the action can no longer be cancelled - the engine follows Magic Online, which reveals nothing
+until the cancel window has closed and the spell or ability is on the stack. A part of a cast's, an activation's, a
+resolution's or a declaration's payment that would make hidden information known as it is carried out (the events
+`takeback::reveals` names) is chosen as the payer pays it, with its choice fixed then, and carried out at the commit
+(`actions::Later`, kept in a `Deferred` that `pay_scheduled_costs` is handed): a card discarded (`Discard`, a variable
+discard, cycling's and channel's discard of the source), a card exiled from a hand (Force of Will), a card beheld from a
+hand (revealed, or revealed and exiled), a card put into a library, a card leaving a hand, a library or face down
+(a face-down permanent sacrificed, CR 708.9), life paid that a replacement effect would make another event (Ashiok, Wicked
+Manipulator's exile of the top of the library, CR 119.4, 614.1a: `replace::paying_life_replaced`), and the card an
+ability is activated from in a hand or a library, revealed as CR 602.2a has it (`Later::Reveal`, first of them), and a
+creature type chosen in secret, revealed as a cost (`Later::RevealSecret`, A Killer Among Us: read as it is paid, before
+the sacrifice paid after it, and told with the ability at the commit). A card an ability's cost exiles from a hand at the
+commit is exiled with the ability's object, as one exiled at once is (CR 607.2a, `ops::exile_with`). The
+commit is where nothing more may give the action up: for a cast after `confirm_hand_exiles`, the last question of
+`actions::cast`; for an activation, a resolution's payment and a declaration's cost once `pay_scheduled_costs` returns
+(`actions::commit`). There every part is carried out, in the order the payer paid them, once each object it acts on is
+found where it was when it was chosen (otherwise nothing is carried out and the action is taken back); no question asked
+while they are offers a cancel (`takeback::committing`). Until then the player may cancel, and the take-back has nothing
+hidden to keep: the card chosen is still in the hand, nobody has seen it, the history holds no event of it. A mana
+ability's own payment is not deferred: it is no part of the action committed, and one that reveals stays through a
+take-back as above (Lion's Eye Diamond's discarded hand). A special action chooses every part of its cost first and pays
+them together, with no question between (`actions::special_action`): once the one payment that may still fail (the
+permanents') is made it is committed, and the life, the behold, the discards and the hand exiles are carried out with no
+question offering a cancel (`takeback::committing`), as a cast's deferred parts are.
+
+Deferring is CR 601.2h's own freedom - the costs are paid in any order - only where no step paid after the part could tell
+that it was carried out later (`actions::blocks`): a step that chooses from, or reads, a zone the part changes where what it
+puts there could be chosen (a card discarded is a new object in the graveyard, CR 400.7, which a cost that exiles from the
+graveyard may take - but not a hand: the cards a part takes from it are left out of every later choice from a hand,
+`taken` and `Deferred::moving`); a step that changes a zone the part reads (the library Ashiok's exile takes from); a part
+that changes a zone while a later step may choose among objects whose characteristics the board decides (a
+characteristic-defining ability, which `layers::statics_reach_itself` counts, or another permanent's static ability:
+Cosmogoyf's power counts the cards its owner has in exile, and Fling deals it); the mana, where delve reads the graveyard or
+convoke, improvise and waterbend tap the battlefield; and, where the payer was asked the order (`order_matters`) and put the
+part first, a later step that puts cards into the graveyard or the library it puts cards into, since the order they arrive
+in is theirs (CR 404.2, 401.1). Where the engine chose the order because it cannot matter, a part that waits is paid last,
+after steps the payer was not asked to put it before (Masked Meower's sacrifice is in the graveyard under the card
+discarded with it). A part that can't wait is carried out at once, after the parts waiting before it (`pay_or_defer`), and
+the action is past giving up from then on (`takeback::paid`: `may_take_back` is false, `ask_core` asks without a cancel and
+the payment offers no `CancelCasting`); the player completes it. The marks are scoped to the action: a take-back truncates
 them with the rest of the trail, and an action made during a resolution clears its own once it is made
-(`takeback::finished`). A payment left with no way on but giving it up (no mana, nothing else to pay with) still offers it,
-since no answer could complete it. Where paying a cost's life would be replaced (`replace::paying_life_replaced`), what the
-payment does is the replacement's, which `order_matters`' copy of the moment cannot show, so the order of the steps is
-asked wherever another step acts on an object other than the source.
+(`takeback::finished`). A payment left with no way on but giving it up (no mana, nothing else to pay with) still offers
+it, since no answer could complete it, and an action the engine must take back because a later step can't be paid - the
+payer's own choice, made after such a part, left it unpayable - is taken back whole (CR 733.1), that part with it.
+Where paying a cost's life would be replaced, what the payment does is the replacement's, which `order_matters`' copy of
+the moment cannot show: the order of the steps is asked where another step could read it (`blocks`).
 
 ### Costs that depend on the targets
 

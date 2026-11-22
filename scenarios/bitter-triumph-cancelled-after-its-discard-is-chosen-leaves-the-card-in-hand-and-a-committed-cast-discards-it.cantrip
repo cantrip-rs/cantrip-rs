@@ -1,0 +1,73 @@
+# The owner's ruling of 2026-11-21 (docs/engine-design.md, "Taking back an illegal action"): a card a cost discards is
+# chosen as the cost is paid and discarded only as the spell is committed, so a cast given up moves nothing out of the
+# hand. Bitter Triumph's additional cost is a discard here (CR 601.2b, 118.8), and Bot2's Drought adds "Sacrifice a Swamp"
+# for its {B} (CR 601.2f), chosen after the discard (CR 601.2h). Bot1 floats {B}{B}, casts Bitter Triumph at Bot2's
+# Memnite and chooses an Island to discard; at the Swamp to sacrifice nothing is in the graveyard and all three Islands are
+# in the hand, and the cast is given up (CR 733.1): Bitter Triumph is back in hand, the {B}{B} in the pool. Cast again, the Swamp
+# is sacrificed and, as the cast is committed, the Island discarded - after the Swamp, the order the engine chose for
+# steps whose order cannot matter. Memnite is destroyed.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Swamp
+Bitter Triumph
+Island
+Island
+Plains
+Island x20
+
+[Bot2 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Drought
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Drought.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana = {B}{B}
+Bot1.Hand.Bitter Triumph.Cast(Bot2.Battlefield.Memnite)
+Bot1.Modes(Discard a card)
+Bot1.Choose(Island#1)
+? Bot1.Graveyard.Count = 0
+? Bot1.Hand = Island; Island; Island; Plains
+Bot1.Cancel
+? Stack.Count = 0
+? Bot1.Mana = {B}{B}
+? Bot1.Hand = Bitter Triumph; Island; Island; Island; Plains
+? Bot1.Graveyard.Count = 0
+Bot1.Hand.Bitter Triumph.Cast(Bot2.Battlefield.Memnite)
+Bot1.Modes(Discard a card)
+Bot1.Choose(Island#1)
+Bot1.Choose(Swamp#2)
+? Bot1.Graveyard = Island; Swamp
+? Bot1.Hand = Island; Island; Plains
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Island; Island; Plains
+Bot1.Graveyard = Bitter Triumph; Island; Swamp
+Bot2.Graveyard = Memnite; Black Lotus

@@ -1,0 +1,69 @@
+# A part of a cost that would make hidden information known is carried out as the cast is committed (the owner's ruling
+# of 2026-11-21, docs/engine-design.md "Taking back an illegal action"), and where the payer pays it after the other steps
+# nothing paid later could read it, so it waits. Bolas's Citadel casts Cosmogoyf and then Fling off the top of the
+# library for life equal to their mana values, and Ashiok, Wicked Manipulator exiles that many cards from the top of the
+# library instead (CR 119.4, 614.1a). Cosmogoyf's power is the number of cards Bot1 owns in exile (CR 604.3), and Fling
+# deals damage equal to the power of the creature sacrificed for it (CR 608.2h), so the order of Fling's life and
+# sacrifice is asked (CR 601.2h). Bot1 sacrifices first: Cosmogoyf goes with two cards in exile (Island and Plains, from
+# its own cast), and only then, as the cast is committed, are two more exiled for Fling's life. Fling deals 2 to Bot2,
+# the power Cosmogoyf last had on the battlefield.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Mox Jet
+Sol Ring
+Bolas's Citadel
+Mox Emerald
+Ashiok, Wicked Manipulator
+Swamp
+Cosmogoyf
+Island
+Plains
+Fling
+Mountain
+Forest
+Island x5
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Bolas's Citadel.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Ashiok, Wicked Manipulator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Library.Cosmogoyf.Cast
+? Exile = Island; Plains
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cosmogoyf.Power = 2
+Bot1.Library.Fling.Cast(Bot2)
+Bot1.Choose(Sacrifice 1 permanent)
+? Exile.Count = 2
+Bot1.Choose(Cosmogoyf)
+? Exile.Count = 4
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 4
+Bot1.Life = 20
+Bot2.Life = 18
+Bot1.Graveyard = Fling; Cosmogoyf; Black Lotus

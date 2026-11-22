@@ -196,9 +196,18 @@ static OVERLAP_OGRE: CardDef = CardDef {
     labels: &["Without optional cost", "Sacrifice a giant"], ..CardDef::BLANK
 };
 
+/// The Overlap Ogre with a card to discard as well, of its additional cost: the discard is a part of the payment that would
+/// make hidden information known, which waits for the commit unless it can't (`actions::Later`).
+static DISCARDING_OGRE: CardDef = CardDef {
+    name: "Takeback Test Discarding Ogre", cost: mana("{R}"), types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2), toughness: Some(2), additional_cost: Some(Cost { discard: Discards::one(1, None), ..Cost::sacrifice(1, any_creature) }),
+    optional_cost: Some(OptionalCost::new(Cost::sacrifice(1, giant_creature))),
+    labels: &["Without optional cost", "Sacrifice a giant"], ..CardDef::BLANK
+};
+
 fn game() -> Game {
     let table: &'static CardTable =
-        Box::leak(Box::new(CardTable::new([&FILLER, &MOUNTAIN, &FOREST, &OGRE, &COSTED_OGRE, &CONVOKE_OGRE, &OVERLAP_OGRE, &SPHERE, &LIFE_SPHERE, &PAID_SPHERE, &BOUNCER, &DIAMOND, &GUIDE, &SIGHT, &GIANT, &DEAR_SPHERE, &FILTER, &TITAN, &FICKLE_SPHERE])));
+        Box::leak(Box::new(CardTable::new([&FILLER, &MOUNTAIN, &FOREST, &OGRE, &COSTED_OGRE, &CONVOKE_OGRE, &OVERLAP_OGRE, &SPHERE, &LIFE_SPHERE, &PAID_SPHERE, &BOUNCER, &DIAMOND, &GUIDE, &SIGHT, &GIANT, &DEAR_SPHERE, &FILTER, &TITAN, &FICKLE_SPHERE, &DISCARDING_OGRE])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     g.verify = true;
@@ -681,4 +690,44 @@ fn what_paid_for_a_mana_ability_within_a_kept_one_is_kept() {
     assert!(g.state.obj(forest).tapped, "the Forest paid for the Filter");
     assert_eq!(pool(&g, Mana::R), 1, "the Sphere's {{R}}");
     assert_eq!(pool(&g, Mana::G), 0);
+}
+
+/// A discard the payer chooses to pay before sacrifices still to pay (CR 601.2h) is not left for the commit: the
+/// sacrifices put cards into the graveyard too, and the cards arrive in the order the payer chose (CR 404.2). So it is
+/// discarded at once, and the cast is past giving up from then on (the owner's ruling of 2026-11-21): the questions after
+/// it offer no cancel. The discarded card is the first in the graveyard, under the creatures sacrificed after it.
+#[test]
+fn a_discard_the_payer_pays_before_sacrifices_is_discarded_at_once_and_the_cast_is_past_cancelling() {
+    let mut g = game();
+    let spell = put(&mut g, &DISCARDING_OGRE, Zone::hand(YOU));
+    let card = put(&mut g, &FILLER, Zone::hand(YOU));
+    let giant = put(&mut g, &GIANT, Zone::BATTLEFIELD);
+    let ogre = put(&mut g, &OGRE, Zone::BATTLEFIELD);
+    let mountain = put(&mut g, &MOUNTAIN, Zone::BATTLEFIELD);
+    cast(&mut g, spell);
+    let r = next(&mut g);
+    g.answer(r.id, r.player, Answer::Modes(vec![1])).unwrap();
+    tap(&mut g, mountain);
+    let r = next(&mut g);
+    assert!(matches!(r.kind, RequestKind::ChooseCostPayment { .. }), "the overlapping sacrifices ask the order: {:?}", r.kind);
+    let r = pay_first(&mut g, r, |choices| choices.iter().position(|c| c.kind == CostPaymentKind::Discard));
+    g.answer(r.id, r.player, Answer::Cards(vec![card])).unwrap();
+    let r = next(&mut g);
+    assert!(!g.state.zone(Zone::hand(YOU)).contains(&card), "the card is discarded at once");
+    assert!(!r.may_cancel, "no cancel once the discard is done: {:?}", r.kind);
+    let r = pay_first(&mut g, r, |choices| choices.iter().position(|c| c.label.contains("optional cost of")));
+    assert!(!r.may_cancel);
+    g.answer(r.id, r.player, Answer::Cards(vec![giant])).unwrap();
+    let r = next(&mut g);
+    let r = pay_first(&mut g, r, |choices| choices.iter().position(|c| c.label.contains("additional cost of")));
+    assert!(!r.may_cancel);
+    g.answer(r.id, r.player, Answer::Cards(vec![ogre])).unwrap();
+    let mut r = next(&mut g);
+    while let RequestKind::ChooseCostPayment { .. } = r.kind {
+        r = pay_first(&mut g, r, |_| Some(0));
+    }
+    assert_eq!(g.state.stack.len(), 1, "the Ogre is cast");
+    let graveyard = g.state.zone(Zone::graveyard(YOU));
+    assert_eq!(graveyard.len(), 3);
+    assert_eq!(g.state.obj(graveyard[0]).card, g.cards.id_of(&FILLER), "the discarded card arrived first");
 }

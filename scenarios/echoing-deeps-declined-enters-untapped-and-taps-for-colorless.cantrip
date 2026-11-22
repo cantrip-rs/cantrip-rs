@@ -31,4 +31,4 @@ Bot1.Pass
 Bot1.Battlefield = Echoing Deeps; Mountain
 Bot1.Battlefield.Echoing Deeps.Subtypes = Cave
 Bot1.Battlefield.Echoing Deeps.Tapped = true
-Bot1.Graveyard = Masked Meower; Island
+Bot1.Graveyard = Island; Masked Meower
