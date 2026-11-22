@@ -2305,6 +2305,10 @@ pub struct PlayGrant {
     /// Information's "pay life equal to its mana value rather than pay its mana cost", as Bolas's Citadel's rule pays for the
     /// top of a library. An X in its cost is 0 (CR 107.3), and no other alternative cost may be used with it (CR 118.9a).
     pub life_for_mana_value: bool,
+    /// The generic mana of the cost it names instead (`instead`) is a waterbend cost (CR 701.67a-b): "you may cast it by
+    /// waterbending {X} rather than paying its mana cost" (Hama, the Bloodbender). It is the alternative cost (CR 118.9),
+    /// paid as a waterbend cost is, an untapped artifact or creature tapped for each of its generic mana and no other.
+    pub waterbend: bool,
 }
 
 /// "If [that spell] would be put into your graveyard, exile it instead" (CR 614.1a): the replacement effect an effect that
@@ -2405,13 +2409,15 @@ pub enum PlayCondition {
     /// came back is another object, and counters put on it do not count. Asked of this turn's history, so the counter
     /// being removed or the object leaving later that turn does not undo it.
     PutCounterOnThisTurn(ObjectId, CounterKind),
+    /// It is the permitted player's own turn (CR 500.1): Hama, the Bloodbender's "you may cast the exiled card during your turn".
+    DuringYourTurn,
 }
 
 impl PlayGrant {
     /// "It becomes plotted" (CR 702.170a, 702.170d): its owner may cast it without paying its mana cost, as a sorcery, on a later turn.
     pub const PLOT: PlayGrant = PlayGrant { instead: Some(ManaCost::ZERO), later_turns: true, sorcery_speed: true, ..PlayGrant::CAST };
     /// "You may cast it": for as long as it stays where it is, for its mana cost.
-    pub const CAST: PlayGrant = PlayGrant { instead: None, lands: false, expiry: Expiry::Never, any_type: false, any_color: false, more: 0, later_turns: false, flashback: false, harmonize: false, exile_instead: ExileInstead::Never, when: None, sorcery_speed: false, enters_tapped: false, adventure_only: false, life_for_mana_value: false };
+    pub const CAST: PlayGrant = PlayGrant { instead: None, lands: false, expiry: Expiry::Never, any_type: false, any_color: false, more: 0, later_turns: false, flashback: false, harmonize: false, exile_instead: ExileInstead::Never, when: None, sorcery_speed: false, enters_tapped: false, adventure_only: false, life_for_mana_value: false, waterbend: false };
 }
 
 /// A standing permission to play or cast one card from a zone it could not be played from (CR 601.3, 305.1): "until

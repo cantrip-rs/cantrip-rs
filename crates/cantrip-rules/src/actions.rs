@@ -7256,7 +7256,7 @@ fn casts_with_any_mana(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId,
 /// (`casts_with_any_mana`, CR 609.4b).
 fn spell_covers(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &CardDef, cost: &ManaCost) -> bool {
     let bending;
-    let a = match waterbend_tap(def) {
+    let a = match waterbend_tap(def, a.tap_cap) {
         Some(tap) => {
             bending = a.tapping(cx, player, tap);
             &bending
@@ -8503,6 +8503,8 @@ fn play_condition_holds(cx: &Cx, player: PlayerId, when: PlayCondition) -> bool 
             .history()
             .select(EventQuery::kind(EventMask::COUNTERS).object(object).this_turn())
             .any(|r| matches!(r.event, Event::CountersPut { object: o, kind: k, by, .. } if o == object && k == kind && by == player)),
+        // "During your turn" (CR 500.1): the player is the turn's active player, asked as the card would be cast.
+        PlayCondition::DuringYourTurn => cx.s().turn.active == player,
     }
 }
 
@@ -9811,6 +9813,15 @@ impl<'a> Offer<'a> {
     fn offer(&self, card: ObjectId, face: &'static CardDef, way: u8, route: &Route, base: ManaCost, paid_by: Option<&Given<SpellAlternative>>, options: &mut Vec<ActionOption>) {
         let (cx, player) = (self.cx, self.player);
         let a = self.available();
+        // A waterbend cost the route names instead of the mana cost (CR 701.67a-b, 118.9): an untapped artifact or creature may
+        // be tapped for each generic mana of it, and for no other mana (CR 701.67b).
+        let bending;
+        let a = if route.terms.waterbend {
+            bending = a.tapping(cx, player, TapFor { artifacts: true, creatures: true, convoke: false, cap: base.generic });
+            &bending
+        } else {
+            a
+        };
         // What the permission adds is part of the total before the cost changes apply, as the cast adds it (CR 118.8, 601.2f).
         let mut base = base;
         base.generic += u32::from(route.terms.more);
@@ -10565,10 +10576,11 @@ fn bendable(cx: &Cx, payer: PlayerId, generic: u32) -> u32 {
 /// The artifacts and creatures a spell's waterbend cost (CR 701.67a-b) may have tapped for it (advice, CR 601.2g-h): each pays {1}
 /// of the waterbend cost's generic mana and together no more than that, never a tax on it (CR 701.67b); one that could make
 /// mana is judged with being tapped for it as one more alternative (`TapFor`, `Available::tapping`). An X in the waterbend
-/// cost is judged at the least it may be announced as (CR 107.3a), as an activated ability's is.
-fn waterbend_tap(def: &CardDef) -> Option<TapFor> {
+/// cost is judged at the least it may be announced as (CR 107.3a), as an activated ability's is. `routed` is the waterbend cost
+/// the permission it is cast by names beside the card's own (`Available::tap_cap`, `Route::terms`): its alternative cost (Hama).
+fn waterbend_tap(def: &CardDef, routed: u32) -> Option<TapFor> {
     let w = def.additional_cost.map(|c| c.waterbend).filter(|w| w.generic > 0 || w.x > 0)?;
-    Some(TapFor { artifacts: true, creatures: true, convoke: false, cap: w.generic + u32::from(w.x) * u32::from(least_x(def.x_cant_be_zero)) })
+    Some(TapFor { artifacts: true, creatures: true, convoke: false, cap: w.generic + u32::from(w.x) * u32::from(least_x(def.x_cant_be_zero)) + routed })
 }
 
 /// Whether a spell's total cost could be paid (advice, CR 601.2g-h): by the mana at hand, with what else may pay for it
@@ -10583,7 +10595,7 @@ fn covers_total(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &
     let with = pay_with(cx, &a.grantors, player, card, def, face_of(cx, card, def));
     // A waterbend cost's taps (CR 701.67a-b), beside the mana: what a spell's convoke or improvise does is judged below.
     let bending;
-    let a = match waterbend_tap(def).filter(|_| !no_mana && !with.improvise && !with.convoke) {
+    let a = match waterbend_tap(def, a.tap_cap).filter(|_| !no_mana && !with.improvise && !with.convoke) {
         Some(tap) => {
             bending = a.tapping(cx, player, tap);
             &bending
@@ -10786,6 +10798,9 @@ fn describe_cast(cards: &'static CardTable, state: &GameState, log: &[Record], o
                     format!("Flashback {cost}").into()
                 } else if route.terms.harmonize {
                     format!("Harmonize {cost}").into()
+                } else if route.terms.waterbend {
+                    // Paid as a waterbend cost (CR 701.67a), even where it is {0}.
+                    format!("Cast by waterbending {cost} instead").into()
                 } else if cost == ManaCost::ZERO {
                     "Cast without paying its mana cost".into()
                 } else {
@@ -10928,6 +10943,8 @@ pub fn act(cx: &mut Cx, player: PlayerId) -> R<Flow> {
                 flashback: route.terms.flashback,
                 // A harmonize a permission gives (Songcrafter Mage, CR 702.180a).
                 harmonize: route.terms.harmonize,
+                // "By waterbending {X} rather than paying its mana cost" (Hama, the Bloodbender, CR 701.67a).
+                waterbend: route.terms.waterbend,
                 // "If that spell would be put into your graveyard, exile it instead" (Jace, Telepath Unbound's).
                 exile_instead: route.terms.exile_instead,
                 ..CastTerms::default()
@@ -11190,7 +11207,7 @@ fn cast(
     by: CastBy,
     resolving: bool,
 ) -> R<()> {
-    let CastTerms { instead, any_type, any_color, exile_instead, flashback, harmonize, life, discard: _, more, less, copy: _, way: _, caster: _ } = terms;
+    let CastTerms { instead, any_type, any_color, exile_instead, flashback, harmonize, life, discard: _, waterbend: bent, more, less, copy: _, way: _, caster: _ } = terms;
     let any = AnyMana::of(any_type, any_color);
     // CR 406.3a: a card exiled face down is turned face up just before it is announced.
     ops::turn_up_to_play(cx, card);
@@ -11245,6 +11262,10 @@ fn cast(
         _ => whole.ways[way as usize - 1].cost,
     };
     cost.tap_to_reduce |= harmonize;
+    // A waterbend cost an alternative cost is (CR 701.67a-b, 118.9: "by waterbending {X} rather than paying its mana cost") is
+    // paid as one is: its generic mana is the waterbend cost's, which an artifact or creature may be tapped for, set apart
+    // from the mana cost here and folded back into the total with the additional costs' (below).
+    let bent_generic = if bent { std::mem::take(&mut cost.mana.generic) } else { 0 };
     // The {X} a granted way's cost has: the card's, where the cost is or includes its mana cost; none where it is cast
     // without paying its mana cost (CR 107.3b).
     let granted_x = granted.map(|_| cost.mana.x);
@@ -11358,6 +11379,7 @@ fn cast(
     if let Some(printed) = def.additional_cost { extra_parts.push((CostOrigin::PrintedAdditional, printed)); }
     extra_parts.push((CostOrigin::PermissionAdditional, by.additional));
     let mut extra = add_extra_totals(def.additional_cost.unwrap_or(Cost::NONE), by.additional);
+    extra.waterbend.generic += bent_generic;
     cost.mana = add_cost(cost.mana, extra.mana);
     // CR 701.67a-b: a waterbend cost is mana paid with the rest, its taps helping with its generic mana (below); its {X} is
     // announced with the spell's own (CR 107.3a).
@@ -11793,7 +11815,9 @@ fn cast(
     if let Some(a) = &assisted {
         owed.generic -= a.generic;
     }
-    let waterbends = u32::from(extra.waterbend.generic > 0 || extra.waterbend.x > 0) + if def.kicker.is_some_and(|k| k.waterbend) { u32::from(item.kicked) } else { 0 };
+    // Each waterbend cost paid is one waterbend (CR 701.67c): the additional costs', a waterbend kicker's each time, and the alternative
+    // cost a permission names as a waterbend (Hama, the Bloodbender's) apart from them, its {0} included (CR 118.5).
+    let waterbends = u32::from(extra.waterbend.generic > bent_generic || extra.waterbend.x > 0) + u32::from(bent) + if def.kicker.is_some_and(|k| k.waterbend) { u32::from(item.kicked) } else { 0 };
     let mut helpers = Helpers {
         with,
         waterbend,

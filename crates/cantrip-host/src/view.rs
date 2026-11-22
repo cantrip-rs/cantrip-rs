@@ -1462,6 +1462,7 @@ impl<'a> Projector<'a> {
                 let name = self.game.cards.get(self.game.chars(object).card).name;
                 text.push_str(&format!(", during any turn {who} put a {} counter on {name}", kind.name()))
             }
+            Some(PlayCondition::DuringYourTurn) => text.push_str(&format!(", during {whose} turn")),
             None => {}
         }
         // "A card exiled with [it]" (CR 607.2a): one card of those it covers, then it is used up.
@@ -1500,6 +1501,10 @@ impl<'a> Projector<'a> {
         }
         if grant.life_for_mana_value && spell {
             text.push_str(", a spell for life equal to its mana value");
+        }
+        // What a spell cast by it is waterbent for, where that is the cost it names instead of its mana cost (CR 701.67a, 118.9).
+        if let Some(instead) = grant.instead.filter(|_| grant.waterbend && spell) {
+            text.push_str(&format!(", a spell by waterbending {{{}}}", instead.generic));
         }
         if grant.lands && grant.enters_tapped && land {
             text.push_str(", a land enters tapped");

@@ -21,6 +21,9 @@ static PROBE_SPELL: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+/// A spell with a waterbend cost of its own, "waterbend {1}" besides its mana cost of {2}.
+static BENDER_SPELL: CardDef = CardDef { name: "Route Bender", additional_cost: Some(Cost::waterbend(1, 0)), ..PROBE_SPELL };
+
 /// An alternative cost that names no zone (Force of Will's): open from wherever a permission has the card cast.
 static HAND_WAY: WayDef = WayDef {
     text: "hand-named cost",
@@ -370,6 +373,12 @@ static CREATURE_TAP_EXTRA: CardDef = CardDef {
 
 /// A creature whose mana ability doesn't tap it ("Pay 1 life: Add {C}"): no tap for mana (CR 106.12).
 /// A creature with power 2 and nothing else: what a harmonize cost taps (CR 702.180a).
+/// A spell with a waterbend cost of its own, "waterbend {1}", besides its mana cost of {1}{R}.
+static RED_BENDER_SPELL: CardDef = CardDef { name: "Route Red Bender", cost: ManaCost { generic: 1, symbols: [0, 0, 0, 1, 0, 0], ..ManaCost::ZERO }, ..BENDER_SPELL };
+
+/// A red creature, {R}: what convoke would let tap for a red symbol.
+static RED_BEAR: CardDef = CardDef { name: "Route Red Bear", cost: ManaCost { symbols: [0, 0, 0, 1, 0, 0], ..ManaCost::ZERO }, has_cost: true, ..BEAR };
+
 static BEAR: CardDef = CardDef { name: "Route Bear", types: TypeSet::of(&[CardType::Creature]), power: Some(2), toughness: Some(2), ..CardDef::BLANK };
 
 static UNTAPPED_MANA_CREATURE: CardDef = CardDef {
@@ -439,6 +448,9 @@ fn table() -> &'static CardTable {
     TABLE.get_or_init(|| {
         CardTable::new([
             &PROBE_SPELL,
+            &BENDER_SPELL,
+            &RED_BEAR,
+            &RED_BENDER_SPELL,
             &WAY_SPELL,
             &INTRINSIC_GRAVEYARD_SPELL,
             &GRAVEYARD_SILENCE,
@@ -1368,5 +1380,231 @@ fn a_harmonize_a_permission_gives_taps_a_creature_for_its_power_and_exiles_the_s
         assert!(game.state.obj(tapper.unwrap()).tapped, "the creature is tapped for the cost");
         assert!(in_zone(&game, Zone::exile(ME), probe), "exiled as it leaves the stack");
         assert!(!in_zone(&game, Zone::graveyard(ME), probe));
+    }
+}
+
+/// A permission whose alternative cost is a waterbend cost (Hama, the Bloodbender): `instead` generic mana, `more` extra.
+fn waterbending(generic: u32, more: u8, when: Option<PlayCondition>) -> PlayGrant {
+    PlayGrant { instead: Some(ManaCost { generic, ..ManaCost::ZERO }), waterbend: true, more, when, ..PlayGrant::CAST }
+}
+
+/// A game with the Probe ({2}, an instant) in exile, a permission source that is no artifact or creature to tap, `bears`
+/// Bears and `pool` colorless mana, with `grant` for the probe.
+fn waterbend_game(grant: PlayGrant, bears: usize, pool: u8) -> (RulesGame, ObjectId, ObjectId, Vec<ObjectId>) {
+    waterbend_game_on(grant, bears, pool, ME)
+}
+
+/// [`waterbend_game`] on `active`'s turn, with the first player holding priority.
+fn waterbend_game_on(grant: PlayGrant, bears: usize, pool: u8, active: PlayerId) -> (RulesGame, ObjectId, ObjectId, Vec<ObjectId>) {
+    let (mut game, spell) = game_with("Route Probe", Zone::exile, pool);
+    game.state.update_turn(|t| t.active = active);
+    let source = put(&mut game, "Route Permission Source", ME);
+    // The source is an artifact: tapped, so it pays nothing of the cost.
+    game.state.update_obj(source, |o| o.tapped = true);
+    let bears: Vec<ObjectId> = (0..bears).map(|_| put(&mut game, "Route Bear", ME)).collect();
+    game.state.permission_push(permission(spell, source, grant));
+    game.run();
+    (game, spell, source, bears)
+}
+
+fn offered_by(game: &RulesGame, spell: ObjectId, source: ObjectId) -> Option<ActionOption> {
+    casts_of(game, spell).into_iter().find(|o| by(o) == Some(source))
+}
+
+/// CR 701.67a-b, 118.9: a permission whose alternative cost is a waterbend cost lets an untapped creature be tapped for each
+/// of its generic mana: the card is offered where the taps pay it, by that permission, and not where they cannot; and the same
+/// permission that is no waterbend lets no creature pay.
+#[test]
+fn a_waterbend_alternative_cost_is_offered_where_the_taps_pay_it() {
+    for (bears, grant, offered) in [
+        (0, waterbending(2, 0, None), false),
+        (1, waterbending(2, 0, None), false),
+        (2, waterbending(2, 0, None), true),
+        (3, waterbending(2, 0, None), true),
+        (0, waterbending(0, 0, None), true),
+        // The Probe's own cost is {2}: the alternative cost of {1} is not paid with a creature where it is no waterbend.
+        (1, PlayGrant { waterbend: false, ..waterbending(1, 0, None) }, false),
+        (1, waterbending(1, 0, None), true),
+    ] {
+        let (game, spell, source, _) = waterbend_game(grant, bears, 0);
+        assert_eq!(offered_by(&game, spell, source).is_some(), offered, "{bears} Bears, {grant:?}");
+    }
+}
+
+/// CR 701.67a: an untapped artifact pays {1} of a waterbend cost as a creature does, and either alone or both together may pay.
+#[test]
+fn an_untapped_artifact_pays_the_waterbend_cost_too() {
+    for (cost, bears, artifacts, offered) in [(1, 0, 0, false), (1, 0, 1, true), (2, 1, 1, true), (2, 0, 1, false), (2, 1, 0, false), (2, 0, 2, true)] {
+        let (mut game, spell) = game_with("Route Probe", Zone::exile, 0);
+        let source = put(&mut game, "Route Permission Source", ME);
+        game.state.update_obj(source, |o| o.tapped = true);
+        for _ in 0..bears {
+            put(&mut game, "Route Bear", ME);
+        }
+        for _ in 0..artifacts {
+            put(&mut game, "Route Permission Source", ME);
+        }
+        game.state.permission_push(permission(spell, source, waterbending(cost, 0, None)));
+        game.run();
+        assert_eq!(offered_by(&game, spell, source).is_some(), offered, "{cost} to pay with {bears} Bears and {artifacts} artifacts");
+    }
+}
+
+/// CR 701.67a-b: a waterbend cost a card has of its own and the one a permission casts it by are two waterbend costs, and each
+/// pays {1} per tap: with the permission's {1} and the card's own {1}, two creatures are needed, and no more.
+#[test]
+fn a_waterbend_cost_of_the_card_and_the_permissions_are_both_paid_by_taps() {
+    for (bears, offered) in [(0, false), (1, false), (2, true), (3, true)] {
+        let (mut game, spell) = game_with("Route Bender", Zone::exile, 0);
+        let source = put(&mut game, "Route Permission Source", ME);
+        game.state.update_obj(source, |o| o.tapped = true);
+        for _ in 0..bears {
+            put(&mut game, "Route Bear", ME);
+        }
+        game.state.permission_push(permission(spell, source, waterbending(1, 0, None)));
+        game.run();
+        assert_eq!(offered_by(&game, spell, source).is_some(), offered, "{bears} Bears");
+    }
+}
+
+/// CR 701.67a: the card's own waterbend cost is paid by untapped artifacts as well as creatures (with the permission's {1} and
+/// the card's own {1}: any two of them).
+#[test]
+fn artifacts_pay_a_waterbend_cost_of_the_card_too() {
+    for (bears, artifacts, offered) in [(0, 1, false), (1, 1, true), (0, 2, true), (0, 3, true)] {
+        let (mut game, spell) = game_with("Route Bender", Zone::exile, 0);
+        let source = put(&mut game, "Route Permission Source", ME);
+        game.state.update_obj(source, |o| o.tapped = true);
+        for _ in 0..bears {
+            put(&mut game, "Route Bear", ME);
+        }
+        for _ in 0..artifacts {
+            put(&mut game, "Route Permission Source", ME);
+        }
+        game.state.permission_push(permission(spell, source, waterbending(1, 0, None)));
+        game.run();
+        assert_eq!(offered_by(&game, spell, source).is_some(), offered, "{bears} Bears and {artifacts} artifacts");
+    }
+}
+
+/// CR 701.67b: the taps of a waterbend pay generic mana only, not a symbol of the creature's color as convoke does: a red
+/// Bear taps for the {1} of a waterbend cost of {1}{R}, and a second red Bear does not pay the {R}.
+#[test]
+fn a_tap_for_a_waterbend_pays_no_colored_symbol() {
+    for (bears, pool, offered) in [(1, 0u8, false), (2, 0, false), (3, 0, false), (0, 1, false), (1, 1, true), (2, 1, true)] {
+        let (mut game, spell) = game_with("Route Probe", Zone::exile, 0);
+        let source = put(&mut game, "Route Permission Source", ME);
+        game.state.update_obj(source, |o| o.tapped = true);
+        for _ in 0..bears {
+            put(&mut game, "Route Red Bear", ME);
+        }
+        if pool > 0 {
+            game.state.add_mana(ME, Mana::R, u32::from(pool), ObjectId::NONE, None, ManaLasts::Step, false);
+        }
+        let grant = PlayGrant { instead: Some(ManaCost { generic: 1, symbols: [0, 0, 0, 1, 0, 0], ..ManaCost::ZERO }), waterbend: true, ..PlayGrant::CAST };
+        game.state.permission_push(permission(spell, source, grant));
+        game.run();
+        assert_eq!(offered_by(&game, spell, source).is_some(), offered, "{bears} red Bears and {pool} red mana");
+    }
+}
+
+/// CR 701.67b: the same of a card's own waterbend cost: a Bear taps for its waterbend {1} and no more, however many red Bears
+/// there are for the {1}{R} of its mana cost.
+#[test]
+fn the_taps_of_a_cards_own_waterbend_pay_no_colored_symbol() {
+    for (bears, red, colorless, offered) in [(1, 0u8, 0u8, false), (2, 0, 0, false), (3, 0, 0, false), (0, 1, 1, false), (1, 1, 1, true), (1, 2, 0, true)] {
+        let (mut game, spell) = game_with("Route Red Bender", Zone::exile, colorless);
+        let source = put(&mut game, "Route Permission Source", ME);
+        game.state.update_obj(source, |o| o.tapped = true);
+        for _ in 0..bears {
+            put(&mut game, "Route Red Bear", ME);
+        }
+        if red > 0 {
+            game.state.add_mana(ME, Mana::R, u32::from(red), ObjectId::NONE, None, ManaLasts::Step, false);
+        }
+        game.state.permission_push(permission(spell, source, PlayGrant::CAST));
+        game.run();
+        assert_eq!(offered_by(&game, spell, source).is_some(), offered, "{bears} red Bears, {red} red and {colorless} colorless mana");
+    }
+}
+
+/// CR 701.67b: the taps pay only the waterbend cost's generic mana, never mana that is added to the cost (Elite Spellbinder's
+/// "costs {2} more"): with one Bear for the waterbend {1} and a tax of {1}, the tax takes mana.
+#[test]
+fn a_creature_pays_the_waterbend_cost_and_not_the_tax_on_it() {
+    for (bears, pool, offered) in [(2, 0, false), (1, 0, false), (1, 1, true), (0, 1, false), (2, 1, true)] {
+        let (game, spell, source, _) = waterbend_game(waterbending(1, 1, None), bears, pool);
+        assert_eq!(offered_by(&game, spell, source).is_some(), offered, "{bears} Bears and {pool} mana");
+    }
+}
+
+/// CR 500.1: "during your turn" is asked as the card is cast: on the permitted player's turn the permission is offered, on
+/// another's it is not.
+#[test]
+fn a_permission_during_your_turn_is_offered_on_that_players_turn_only() {
+    for (active, when, offered) in [
+        (ME, Some(PlayCondition::DuringYourTurn), true),
+        (PlayerId(1), Some(PlayCondition::DuringYourTurn), false),
+        // Without the condition the instant is cast on the other's turn all the same.
+        (PlayerId(1), None, true),
+    ] {
+        let (game, spell, source, _) = waterbend_game_on(waterbending(1, 0, when), 1, 0, active);
+        assert_eq!(offered_by(&game, spell, source).is_some(), offered, "{active:?}'s turn, {when:?}");
+    }
+}
+
+/// CR 701.67a-c, 118.9: the cast pays the waterbend cost by tapping a creature for each of its generic mana, no more; the
+/// Bears tapped are the ones chosen, the spell is cast from exile, it is a waterbend (`Event::Bent`) and nothing else is paid.
+#[test]
+fn a_waterbend_alternative_cost_is_paid_by_tapping_creatures_and_is_a_waterbend() {
+    let (mut game, spell, source, bears) = waterbend_game(waterbending(2, 0, None), 3, 0);
+    let option = offered_by(&game, spell, source).expect("offered");
+    assert_eq!(describe(&game, &option), "Cast by waterbending {2} instead");
+    take(&mut game, &option);
+    let mut tapped = 0;
+    for _ in 0..8 {
+        let request = game.pending().cloned().expect("a payment");
+        let RequestKind::PayCosts { options, .. } = &request.kind else { break };
+        let pick = options.iter().find(|o| o.kind == ActionKind::TapToPay && o.index == PAY_WATERBEND).or_else(|| options.iter().find(|o| matches!(o.kind, ActionKind::ConfirmCasting | ActionKind::AssignMana)));
+        let pick = pick.expect("a way to go on").clone();
+        tapped += usize::from(pick.kind == ActionKind::TapToPay);
+        game.answer(request.id, request.player, Answer::Act(Action::of(&pick))).unwrap();
+        game.run();
+    }
+    assert_eq!(tapped, 2, "a Bear for each of the waterbend {{2}}, and a third pays no more");
+    assert_eq!(bears.iter().filter(|&&b| game.state.obj(b).tapped).count(), 2);
+    assert_eq!(game.state.stack.len(), 1, "the spell is on the stack");
+    assert!(game.log.iter().any(|r| matches!(r.event, Event::Bent { player: ME, bending: Bending::Water })), "paying it is waterbending");
+    assert_eq!(game.log.iter().filter(|r| matches!(r.event, Event::Bent { .. })).count(), 1);
+    assert!(game.log.iter().any(|r| matches!(r.event, Event::Cast(c) if c.from == ZoneKind::Exile && c.granted_by().is_some_and(|g| g.object == source))));
+    resolve(&mut game);
+}
+
+/// CR 701.67c, 118.5: each waterbend cost paid is a waterbend, however much of it is tapped for: a permission's waterbend {0}
+/// is one, tapping nothing; and with a card's own waterbend {1} besides the permission's {1}, the cast pays two waterbend
+/// costs and is two waterbends ("whenever you waterbend" triggers for each).
+#[test]
+fn each_waterbend_cost_a_cast_pays_is_a_waterbend_a_zero_one_included() {
+    for (name, generic, bears, bends) in [("Route Probe", 0, 0, 1), ("Route Bender", 1, 2, 2)] {
+        let (mut game, spell) = game_with(name, Zone::exile, 0);
+        let source = put(&mut game, "Route Permission Source", ME);
+        game.state.update_obj(source, |o| o.tapped = true);
+        for _ in 0..bears {
+            put(&mut game, "Route Bear", ME);
+        }
+        game.state.permission_push(permission(spell, source, waterbending(generic, 0, None)));
+        game.run();
+        let option = offered_by(&game, spell, source).expect("offered");
+        take(&mut game, &option);
+        for _ in 0..8 {
+            let request = game.pending().cloned().expect("a payment");
+            let RequestKind::PayCosts { options, .. } = &request.kind else { break };
+            let pick = options.iter().find(|o| o.kind == ActionKind::TapToPay && o.index == PAY_WATERBEND).or_else(|| options.iter().find(|o| matches!(o.kind, ActionKind::ConfirmCasting | ActionKind::AssignMana)));
+            let pick = pick.expect("a way to go on").clone();
+            game.answer(request.id, request.player, Answer::Act(Action::of(&pick))).unwrap();
+            game.run();
+        }
+        assert_eq!(game.state.stack.len(), 1, "{name}: the spell is on the stack");
+        assert_eq!(game.log.iter().filter(|r| matches!(r.event, Event::Bent { player: ME, bending: Bending::Water })).count(), bends, "{name}");
     }
 }

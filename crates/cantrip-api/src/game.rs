@@ -93,6 +93,10 @@ pub struct CastTerms {
     /// card rather than paying its mana cost" (The Infamous Cruelclaw). It is the one alternative cost of the cast (CR 118.9a),
     /// its X is 0 (CR 107.3b) and additional costs are paid as usual (CR 118.8); a cast it cannot pay for is not made.
     pub discard: u8,
+    /// The generic mana of `instead` is a waterbend cost (CR 701.67a-b, 118.9): an untapped artifact or creature may be tapped
+    /// for each of it, and paying it is a waterbend (CR 701.67c). Hama, the Bloodbender's "by waterbending {X} rather than
+    /// paying its mana cost".
+    pub waterbend: bool,
     /// "If that spell would be put into your graveyard, exile it instead" (CR 614.1a), as the effect's text words it: of any
     /// spell (`ExileInstead::Spell`), or only of an instant or sorcery spell (`ExileInstead::InstantOrSorcery`). A move to a
     /// hand or a library is not replaced. Or "put it on the bottom of its owner's library instead" of a graveyard
