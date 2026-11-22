@@ -1186,6 +1186,20 @@ fn an_emblem_gives_an_alternative_cost_and_a_way() {
     assert!(game.log.iter().any(|r| matches!(r.event, Event::Cast(c) if c.granted_by().is_some_and(|g| g.object == way))));
 }
 
+/// CR 118.9a: harmonize is an alternative cost, so a cast by a permission that gives it is not paid by another object's.
+#[test]
+fn a_harmonize_a_permission_gives_composes_with_no_other_alternative_cost() {
+    let (mut game, spell) = game_with("Route Probe", Zone::graveyard, 0);
+    let source = put(&mut game, "Route Permission Source", ME);
+    put(&mut game, "Route Bear", ME);
+    put(&mut game, "Route Free Alternative", ME);
+    game.state.permission_push(permission(spell, source, PlayGrant { harmonize: true, ..PlayGrant::CAST }));
+    game.run();
+    let options = casts_of(&game, spell);
+    assert!(options.iter().any(|o| by(o) == Some(source)), "the harmonize cast is offered");
+    assert!(!options.iter().any(|o| by(o) == Some(source) && o.paid_by.is_some()));
+}
+
 /// CR 601.3, 118.9: a permanent's permission to cast from exile and another's alternative cost compose; a permission that
 /// names its own cost composes with none (CR 118.9a). The cast is recorded as made by the permission.
 #[test]
@@ -1347,6 +1361,7 @@ fn a_harmonize_a_permission_gives_taps_a_creature_for_its_power_and_exiles_the_s
         if !offered {
             continue;
         }
+        assert_eq!(describe(&game, &options[0]), "Harmonize {2}", "named as the card's own harmonize would be");
         take(&mut game, &options[0]);
         resolve(&mut game);
         let probe = game.cards.find("Route Probe").unwrap();

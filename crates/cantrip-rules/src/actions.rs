@@ -8997,12 +8997,13 @@ fn named<T>(s: &GameState, cards: &CardTable, g: Grant, list: fn(&'static CardDe
     Some(Given { source: g.object, controller: s.obj(g.object).controller, grant: g, what, by: cards.link_of_text(s, g.object, g.ability.card), words: None })
 }
 
-fn named_way(s: &GameState, cards: &CardTable, g: Grant) -> Option<Given<GrantedWay>> {
-    // One a resolved spell or ability gave a player is its effect's, whose player is "you" (CR 611.2a).
+/// The way `g` names that `player` casts by. One a resolved spell or ability gave is the effect's that gave it to `player`
+/// (CR 611.2a): one source can have given the way to two players (The Tomb of Aclazotz activated by each of two controllers).
+fn named_way(s: &GameState, cards: &CardTable, g: Grant, player: PlayerId) -> Option<Given<GrantedWay>> {
     if let Some(k) = g.ability.as_lasting_way() {
         let what = cards.get(g.ability.card).lasting_ways.get(k)?;
-        let (player, words) = s.effects.iter().find_map(|e| match e.kind {
-            EffectKind::LastingWay { card, index, player, words, .. } if e.source == g.object && card == g.ability.card && usize::from(index) == k => Some((player, words)),
+        let words = s.effects.iter().find_map(|e| match e.kind {
+            EffectKind::LastingWay { card, index, player: p, words, .. } if e.source == g.object && card == g.ability.card && usize::from(index) == k && p == player => Some(words),
             _ => None,
         })?;
         return Some(Given { source: g.object, controller: player, grant: g, what, by: None, words: Some(words) });
@@ -10188,7 +10189,7 @@ fn through(q: &dyn Query, cards: &CardTable, player: PlayerId, card: ObjectId, b
     if g.ability.is_retrace() {
         return Some(Through::Route(Route::retrace(card, g.ability.card)));
     }
-    if let Some(way) = named_way(s, cards, g) {
+    if let Some(way) = named_way(s, cards, g, player) {
         return Some(if way.what.permission {
             Through::Route(Route { by, additional: way.what.additional, allows: Allows::Way(way.asker(), way.what), ..Route::RULES })
         } else {
@@ -10513,7 +10514,7 @@ pub fn describe(cards: &'static CardTable, state: &GameState, log: &[Record], op
         ActionKind::PlayLand => {
             let printed = describe_way(cards, state, log, option, source);
             match option.granted_by {
-                Some(g) if let Some(way) = named_way(state, cards, g) => way.what.text.into(),
+                Some(g) if let Some(way) = cards.way_of(g.ability) => way.text.into(),
                 Some(g) if permission_named(cards, state, source, g) => match printed {
                     "" => permission_name(cards, state, g).into(),
                     printed => format!("{printed} ({})", permission_name(cards, state, g)).into(),
@@ -10553,11 +10554,11 @@ fn permission_name(cards: &CardTable, state: &GameState, g: Grant) -> String {
 /// then the way's own words, which say which permission the row casts by, and so which type the card is cast as: two rows
 /// that differ only in that read apart ("Impending 4—{1}{G}{G} (... an enchantment spell from your graveyard.)").
 fn permission_label(cards: &CardTable, state: &GameState, g: Grant) -> String {
-    if let Some(way) = named_way(state, cards, g)
-        && way.what.permission
-        && cards.get(g.ability.card).granted_ways.iter().filter(|w| w.permission && w.from == way.what.from).count() > 1
+    if let Some(way) = cards.way_of(g.ability)
+        && way.permission
+        && cards.get(g.ability.card).granted_ways.iter().filter(|w| w.permission && w.from == way.from).count() > 1
     {
-        return way.what.text.to_string();
+        return way.text.to_string();
     }
     permission_name(cards, state, g)
 }
@@ -10719,7 +10720,7 @@ pub fn act(cx: &mut Cx, player: PlayerId) -> R<Flow> {
                 use_up_permission(cx, source, player, action.granted_by);
                 cx.st().permissions_retain(|p| p.what != Playable::Card(source) || Some(p.by) == action.granted_by);
             }
-            let way = action.granted_by.and_then(|g| named_way(cx.s(), cx.cards(), g));
+            let way = action.granted_by.and_then(|g| named_way(cx.s(), cx.cards(), g, player));
             let land = if action.index == WAY_BACK_FACE {
                 // A modal double-faced card played as its back face enters as that face (CR 712.14a).
                 Some(ops::put_onto_battlefield_as(cx, source, player, false, true, ZoneReason::PlayLand, &[])?)
@@ -10902,7 +10903,7 @@ fn apply_next_spell_effects(cx: &mut Cx, player: PlayerId, spell: ObjectId) {
 /// rule's (`PlayRule::LibraryTopSpells`), whose permission is only ever its caster's, controlled by `caster`. Read from the
 /// card table, so it is the one the cast was offered by even if the permanent has left while the spell was paid for.
 fn spell_replacement_by(cx: &Cx, g: Grant, caster: PlayerId) -> Option<(Grant, PlayerId, u8)> {
-    if let Some(way) = named_way(cx.s(), cx.cards(), g) {
+    if let Some(way) = named_way(cx.s(), cx.cards(), g, caster) {
         return way.what.spell_replacement.map(|index| (g, way.controller, index));
     }
     if let Some(cast) = named_exile_cast(cx.s(), cx.cards(), g) {
@@ -11132,7 +11133,7 @@ fn cast(
     // "If you do, it gains ...": the spell carries it to the permanent it becomes, from the way a permanent gives it was cast
     // by (Serra Paragon's, its permission or its cost).
     if let Some(g) = by.by
-        && let Some(n) = named_way(cx.s(), cx.cards(), g).and_then(|w| w.what.gains)
+        && let Some(n) = named_way(cx.s(), cx.cards(), g, player).and_then(|w| w.what.gains)
     {
         let ability = AbilityRef::delayed(g.ability.card, n);
         cx.st().update_obj(spell, |o| o.marks.gains = Some(ability));
@@ -11152,7 +11153,7 @@ fn cast(
     // 611.2a): layer effects on the spell, a permanent spell's carried to the permanent it becomes (CR 400.7a), whether or not
     // the permanent that gave the way is still there.
     if let Some(g) = by.by
-        && let Some(way) = named_way(cx.s(), cx.cards(), g)
+        && let Some(way) = named_way(cx.s(), cx.cards(), g, player)
     {
         for &kind in way.what.spell_effects {
             let timestamp = cx.st().timestamp();
@@ -11162,12 +11163,14 @@ fn cast(
             cx.state_changed();
         }
     }
-    // A way a resolved ability gave for one card is used up by the cast (CR 611.2a), one effect of the source's at a time.
+    // A way a resolved ability gave for one card is used up by the cast (CR 611.2a), one effect of the source's at a time, and
+    // only one that gave it to the caster.
     if let Some(g) = by.by
         && let Some(k) = g.ability.as_lasting_way()
     {
         let used = cx.s().effects.iter().position(|e| {
-            matches!(e.kind, EffectKind::LastingWay { card, index, once: true, .. } if card == g.ability.card && usize::from(index) == k) && e.source == g.object
+            matches!(e.kind, EffectKind::LastingWay { card, index, player: p, once: true, .. } if card == g.ability.card && usize::from(index) == k && p == player)
+                && e.source == g.object
         });
         if let Some(at) = used {
             let keep: Vec<bool> = (0..cx.s().effects.len()).map(|i| i != at).collect();

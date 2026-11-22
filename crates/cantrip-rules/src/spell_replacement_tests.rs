@@ -612,6 +612,46 @@ fn a_way_for_one_card_is_used_up_by_its_cast_and_each_effect_gives_one() {
     assert!(g.state.effects.iter().all(|e| !matches!(e.kind, EffectKind::LastingWay { .. })));
 }
 
+/// CR 611.2a: two sources' ways for one player are two ways, each offered.
+#[test]
+fn ways_two_sources_gave_one_player_are_each_offered() {
+    let mut g = game();
+    let a = put(&mut g, &OSTEO, Zone::graveyard(YOU));
+    let b = put(&mut g, &OSTEO, Zone::graveyard(YOU));
+    let card = put(&mut g, &SQUIRREL, Zone::graveyard(YOU));
+    add(&mut g, Mana::G, 1);
+    give_a_way(&mut g, a, YOU);
+    give_a_way(&mut g, b, YOU);
+    let mut by = offered(&mut g, card);
+    by.sort();
+    assert_eq!(by, [Some(a), Some(b)]);
+}
+
+/// CR 611.2a: one source can have given the way to two players (a permanent whose controller changed between activations):
+/// the cast is made by the effect that gave it to the caster - its rider and its cost read as theirs - and uses up only that
+/// one, so the other player's stands.
+#[test]
+fn a_way_one_source_gave_two_players_is_each_players_own() {
+    let mut g = game();
+    let giver = put(&mut g, &OSTEO, Zone::graveyard(YOU));
+    let first = put(&mut g, &SQUIRREL, Zone::graveyard(YOU));
+    let second = put(&mut g, &SQUIRREL, Zone::graveyard(YOU));
+    add(&mut g, Mana::G, 2);
+    give_a_way_once(&mut g, giver, PlayerId(1), true);
+    give_a_way_once(&mut g, giver, YOU, true);
+    assert_eq!(offered(&mut g, first), [Some(giver)]);
+    let spell = cast(&mut g, first, true);
+    resolve_all(&mut g);
+    let permanent = g.state.obj(spell).became.expect("it resolved");
+    assert_eq!(finality(&g, permanent), 1);
+    let left: Vec<PlayerId> = g.state.effects.iter().filter_map(|e| match e.kind {
+        EffectKind::LastingWay { player, .. } => Some(player),
+        _ => None,
+    }).collect();
+    assert_eq!(left, [PlayerId(1)], "the other player's way stands");
+    assert_eq!(offered(&mut g, second), Vec::<Option<ObjectId>>::new(), "yours is used up");
+}
+
 /// A way that lasts the turn is not used up by a cast.
 #[test]
 fn a_way_for_the_turn_is_not_used_up_by_a_cast() {
