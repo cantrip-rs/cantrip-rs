@@ -1,0 +1,71 @@
+# All-Out Assault: "When this enchantment enters, if it's your main phase, there is an additional combat phase after this phase
+# followed by an additional main phase. When you next attack this turn, untap each creature you control." (CR 500.8, 505.1, 603.7b).
+# Cast in the precombat main on turn 3, it puts a combat and a main phase before the turn's own combat. Fanatical Firebrand (1/1 haste,
+# +1/+1 from the enchantment) attacks in the additional combat, and the delayed ability untaps it as attackers are declared; it attacks
+# again in the turn's own combat, which does not untap it a second time (the ability was "next"). Bot2 goes 20 -> 18 -> 16.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Sol Ring
+Fanatical Firebrand
+All-Out Assault
+Mountain x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.All-Out Assault.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fanatical Firebrand.Power = 2
+? Bot1.Battlefield.Fanatical Firebrand.Keywords = Deathtouch; Haste
+? Delayed.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Fanatical Firebrand)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fanatical Firebrand.Tapped = false
+? Delayed.Count = 0
+[T3 Bot1.EndCombat]
+? Bot2.Life = 18
+Bot1.Pass
+Bot2.Pass
+? Step = Main2
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Fanatical Firebrand)
+? Stack.Count = 0
+[T3 Bot1.EndCombat]
+Bot1.Pass
+Bot2.Pass
+? Step = Main2
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Fanatical Firebrand.Tapped = true

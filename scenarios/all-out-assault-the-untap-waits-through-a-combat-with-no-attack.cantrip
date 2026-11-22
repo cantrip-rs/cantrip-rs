@@ -1,0 +1,62 @@
+# All-Out Assault: "when you next attack this turn" (CR 603.7b) is not used up by a combat in which you do not attack. Cast in the
+# precombat main, the added combat passes with no attackers (Delayed.Count stays 1); in the turn's own combat Bot1 attacks with
+# Fanatical Firebrand and Memnite, and the untap trigger untaps both. Then the delayed ability is gone.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Sol Ring
+Fanatical Firebrand
+Memnite
+All-Out Assault
+Mountain x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.All-Out Assault.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Count: 0)
+? Delayed.Count = 1
+[T3 Bot1.EndCombat]
+Bot1.Pass
+Bot2.Pass
+? Step = Main2
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Fanatical Firebrand > Bot2; Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fanatical Firebrand.Tapped = false
+? Bot1.Battlefield.Memnite.Tapped = false
+? Delayed.Count = 0
+[T3 Bot1.EndCombat]
+
+[Expect]
+Bot2.Life = 16

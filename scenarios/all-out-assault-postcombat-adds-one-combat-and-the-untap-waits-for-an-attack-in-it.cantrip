@@ -1,0 +1,68 @@
+# All-Out Assault cast in the second main phase (CR 500.8): the added combat and main follow it, there is no other combat left, and
+# "when you next attack this turn" is only the added combat. Bot1 attacks with Fanatical Firebrand in the turn's combat, casts the
+# enchantment afterwards (the Firebrand is tapped), then attacks with Memnite in the added combat: the Memnite is a 2/2 and the delayed
+# ability untaps both creatures. The turn then runs the added main phase and ends with no further combat: Bot2 goes 20 -> 19 (the
+# unpumped Firebrand) -> 17 (the 2/2 Memnite).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Sol Ring
+Fanatical Firebrand
+Memnite
+All-Out Assault
+Mountain x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Fanatical Firebrand)
+[T3 Bot1.EndCombat]
+? Bot2.Life = 19
+Bot1.Pass
+Bot2.Pass
+? Step = Main2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.All-Out Assault.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Delayed.Count = 1
+? Bot1.Battlefield.Fanatical Firebrand.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fanatical Firebrand.Tapped = false
+? Bot1.Battlefield.Memnite.Tapped = false
+[T3 Bot1.EndCombat]
+? Bot2.Life = 17
+Bot1.Pass
+Bot2.Pass
+? Step = Main2
+Bot1.Pass
+Bot2.Pass
+? Step = End
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Fanatical Firebrand.Tapped = false

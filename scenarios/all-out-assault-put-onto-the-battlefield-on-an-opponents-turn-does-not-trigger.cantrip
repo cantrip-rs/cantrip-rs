@@ -1,0 +1,40 @@
+# All-Out Assault: "if it's your main phase" is an intervening "if" (CR 603.4) about its controller's turn: Bot2's Show and Tell on
+# turn 2 puts it onto the battlefield under Bot1's control in Bot2's own main phase, so it does not trigger (no added phases, no
+# delayed ability), while its static ability still works: Bot1's Memnite is a 2/2 with deathtouch, Bot2's Grizzly Bears is untouched
+# (CR 613.1f, 613.4c).
+
+[Bot1 Deck]
+All-Out Assault
+Memnite
+Mox Jet
+Mountain x20
+
+[Bot2 Deck]
+Show and Tell
+Grizzly Bears
+Black Lotus
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Show and Tell.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Delayed.Count = 0
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Memnite.Keywords = Deathtouch
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+? Bot2.Battlefield.Grizzly Bears.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield = All-Out Assault; Memnite; Mox Jet

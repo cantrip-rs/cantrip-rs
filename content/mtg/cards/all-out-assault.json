@@ -1,0 +1,6 @@
+{
+  "name": "All-Out Assault",
+  "manaCost": "{2}{R}{W}{B}",
+  "type": "Enchantment",
+  "oracleText": "Creatures you control get +1/+1 and have deathtouch.\nWhen this enchantment enters, if it's your main phase, there is an additional combat phase after this phase followed by an additional main phase. When you next attack this turn, untap each creature you control."
+}
