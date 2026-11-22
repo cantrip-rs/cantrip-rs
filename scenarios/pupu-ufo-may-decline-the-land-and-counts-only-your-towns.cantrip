@@ -1,0 +1,56 @@
+# PuPu UFO: the land is optional ("you may"), so choosing nothing leaves it in hand, and only a land card may be chosen (the\n# Ornithopter in hand is refused); the {3} ability counts only the Towns its
+# controller controls - one here (Bot1's Adventurer's Inn), not the two Bot2 controls - so base power becomes 1.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+PuPu UFO
+Adventurer's Inn
+Adventurer's Inn
+Ornithopter
+Forest x13
+
+[Bot2 Deck]
+Adventurer's Inn
+Adventurer's Inn
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.PuPu UFO.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Adventurer's Inn.Play
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Adventurer's Inn.Play
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.PuPu UFO.Activate(Ability: {T}: You may put a land card from your hand onto the battlefield.)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Ornithopter)
+Bot1.Choose()
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.PuPu UFO.Activate(Ability: {3}: Until end of turn, this creature's base power becomes equal to the number of Towns you control.)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.PuPu UFO.Power = 1
+Bot1.Battlefield.PuPu UFO.Tapped = true
+Bot1.Battlefield = Adventurer's Inn; Mox Jet; Mox Pearl; Mox Ruby; PuPu UFO

@@ -1,0 +1,54 @@
+# PuPu UFO: "{T}: You may put a land card from your hand onto the battlefield" is no land play (the ruling), so it works after the
+# turn's land drop and the land comes in untapped. "{3}: Until end of turn, this creature's base power becomes equal to the number of
+# Towns you control" counts them as it resolves (2 Towns -> power 2, toughness stays 4) and the effect ends at end of turn.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+PuPu UFO
+Adventurer's Inn
+Adventurer's Inn
+Forest x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.PuPu UFO.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.PuPu UFO.Power = 0
+Bot1.Hand.Adventurer's Inn.Play
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.PuPu UFO.Activate(Ability: {T}: You may put a land card from your hand onto the battlefield.)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Adventurer's Inn)
+? Bot1.Battlefield.Adventurer's Inn#2.Tapped = false
+? Bot1.LandsPlayed = 0
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.PuPu UFO.Activate(Ability: {3}: Until end of turn, this creature's base power becomes equal to the number of Towns you control.)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.PuPu UFO.Power = 2
+? Bot1.Battlefield.PuPu UFO.Toughness = 4
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.PuPu UFO.Power = 0
+Bot1.Battlefield.PuPu UFO.Toughness = 4
+Bot1.Life = 24
