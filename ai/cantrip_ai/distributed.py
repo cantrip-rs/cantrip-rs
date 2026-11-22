@@ -174,7 +174,9 @@ class Ledger:
     """The generation's distributed bookkeeping (`genN/dist/ledger.json`): the run's identity and the header its shards
     must carry, its attempts and what each was granted, the shards accepted and the indices they hold, runaways,
     failed and dropped games, and the shards rejected. `owner` (an index to the attempt that owns it) is derived on
-    load: an attempt not released owns what it was granted that is not yet accounted for."""
+    load: an attempt not released owns what it was granted that is not yet accounted for. An attempt's record also
+    says what its coordinator last saw of it while it ran: `heard`, the time of the last poll that found its processes
+    alive, and `progress`, the games its status file counted then (`status_games`; absent where it writes none)."""
 
     def __init__(self, path: Path | None, games: int, seed: int, only=None):
         self.path, self.games, self.seed = path, games, seed
@@ -494,6 +496,17 @@ def read_shard(path: Path, seed: int, pairings: int) -> tuple[dict, list[int], d
 # --- The coordinator ----------------------------------------------------------------------------------------------
 
 
+# A run's status file's counts of games (self-play's and BotLab's grant mode's), each of which only grows as it plays.
+STATUS_GAMES = ("Taken", "GamesThisRun", "Dropped", "Runaways")
+
+
+def status_games(status: dict | None) -> int | None:
+    """The games a run's status file counts (taken, played, dropped, runaways, summed: a number that moves whenever one
+    of them does), or None where it counts none (no status yet, or a kind whose runs write none: the judgements)."""
+    counts = [status[k] for k in STATUS_GAMES if isinstance((status or {}).get(k), (int, float))]
+    return int(sum(counts)) if counts else None
+
+
 @dataclass
 class Poll:
     """What a host says of an attempt: its status file, its exit code once it exited, whether it lives (its supervisor
@@ -706,6 +719,13 @@ class Coordinator:
             a["status"] = p.status
             if a["state"] == "launching":
                 a["state"] = "running"
+        if p.alive and p.exit is None:
+            # What `status.measure` reads (a part granted whole returns nothing until it is over): when its processes
+            # were last found alive, and the games its status counts, where its kind's runs write one.
+            a["heard"] = self.clock()
+            games = status_games(p.status)
+            if games is not None:
+                a["progress"] = games
         # A grant file that is not the ledger's (a write that failed, or one interrupted): written again, whole.
         if p.grant is not None and p.exit is None and p.alive and p.grant != attempt_grant(a):
             self.write_grant(a)

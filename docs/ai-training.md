@@ -310,8 +310,13 @@ While it works, the driver keeps `ROOT/genN/status.json` (`status.py`): the stag
 when that process started (a pid is reused; the two together are one process) and host, how long the stage took in
 the generations before (whole runs only: a resumed stage's time is its last part's), a progress counter and when it
 last moved. The counter is read from what the stages write - the games in the distributed ledgers, self-play's
-closed shards, the bytes of the stage logs, training's files - never from the words of a log. A status that cannot
-be written never fails a run.
+closed shards, the bytes of the stage logs, training's files - never from the words of a log. A part granted whole
+to a host (a judgement's, a replay's) returns nothing until it is over, so each poll that finds an attempt's
+processes alive is written in its ledger record: `progress`, the games its status file counts, and `heard`, the
+time of that poll. An attempt that counts its games moves the counter by them (a run that lives and plays nothing is
+still a stall); one that counts none (the judgements write no status) moves it by being heard, and, on this machine,
+by its lease file - so a long part at work is never a stall, and one its coordinator has stopped hearing from is. A
+status that cannot be written never fails a run.
 
 ```bash
 python -m cantrip_ai.status --root ../../ai-data          # exit 0 running/finished, 1 failed, 2 stalled, 3 dead, 4 stopped

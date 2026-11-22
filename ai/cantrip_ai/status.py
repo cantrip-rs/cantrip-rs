@@ -7,8 +7,17 @@ The file (`Heartbeat`, a thread of the driver's): the stage and when it began, t
 the stage took in the generations before (`expected`, from their stage records in `generation.json`), a progress
 counter and when it last moved, and when the file was last written. The counter is read from what the stages already
 write, never from the words of a log: the games in the generation's distributed ledgers (self-play's and each
-duel's, `distributed.Ledger`), the closed shards of its self-play, the bytes of its stage logs (`genN/logs`, the
-inference servers' aside: they speak whether or not a game moves) and the files of its training directory.
+duel's, `distributed.Ledger`), what their coordinators last saw of each attempt (below), the closed shards of its
+self-play, the bytes of its stage logs (`genN/logs`, the inference servers' aside: they speak whether or not a game
+moves) and the files of its training directory.
+
+A part granted whole to a host (a judgement's, a replay's) returns nothing until it is over, so a ledger's games alone
+would call a long part a stall. Each poll that finds an attempt's processes alive is written in its ledger record
+(`distributed.Coordinator.check`): `progress`, the games its status file counts, and `heard`, the time of that poll.
+An attempt with a `progress` is counted by it (a run that lives and plays nothing is still a stall); one without (a
+kind whose runs write no status, a run that has written none yet) by its `heard` and, on this machine, its lease file
+(`<attempt>.heartbeat`, touched at each poll): alive is all that is known of it, and it stalls once its coordinator
+stops hearing from it.
 
 What the reading says (`judge`):
 
@@ -196,10 +205,11 @@ def driver_processes(root: Path, table=None, cwd: Path | None = None) -> list[in
 
 
 def measure(gen_dir: Path, model_dir: Path | None = None) -> dict:
-    """The generation's progress as numbers that only grow while it works: the games its distributed ledgers hold, its
-    self-play's closed shards, the bytes of its stage logs, and its training directory's files (their count and
-    newest time)."""
-    ledgers = 0
+    """The generation's progress as numbers that move while it works: the games its distributed ledgers hold, what
+    their attempts' runs were last seen to do (`attempt_progress`, the games their status files count; `attempts_heard`,
+    for those that count none, when they were last found alive), its self-play's closed shards, the bytes of its stage
+    logs, and its training directory's files (their count and newest time)."""
+    ledgers = progress = heard = 0
     dist = gen_dir / "dist"
     if dist.is_dir():
         for path in [dist / "ledger.json", *dist.glob("*/ledger.json")]:
@@ -209,7 +219,21 @@ def measure(gen_dir: Path, model_dir: Path | None = None) -> dict:
                 for shard in (d.get("shards") or {}).values():
                     for r in shard.get("indices") or []:
                         ledgers += (r[1] - r[0]) if isinstance(r, list) and len(r) == 2 else 1
-                ledgers += len(d.get("attempts") or {})
+                attempts = d.get("attempts") or {}
+                ledgers += len(attempts)
+                for name, a in attempts.items():
+                    if not isinstance(a, dict):
+                        continue
+                    if isinstance(a.get("progress"), (int, float)):
+                        progress += int(a["progress"])
+                        continue
+                    # No count of its own: the last poll that found it alive, and this machine's lease file.
+                    if isinstance(a.get("heard"), (int, float)):
+                        heard += int(a["heard"])
+                    try:
+                        heard += int(os.stat(path.with_name(f"{a.get('id') or name}.heartbeat")).st_mtime)
+                    except OSError:
+                        pass
     shards = 0
     selfplay = gen_dir / "selfplay"
     if selfplay.is_dir():
@@ -237,7 +261,8 @@ def measure(gen_dir: Path, model_dir: Path | None = None) -> dict:
                     training += (int(st.st_mtime) % 10_000_000) + st.st_size % 1_000_003
                 except OSError:
                     pass
-    return dict(ledger_games=ledgers, selfplay_shards=shards, log_bytes=logs, training=training)
+    return dict(ledger_games=ledgers, attempt_progress=progress, attempts_heard=heard, selfplay_shards=shards,
+                log_bytes=logs, training=training)
 
 
 def expected(root: Path, gen: int, stage: str, last: int = 5) -> float | None:

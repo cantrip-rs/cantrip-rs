@@ -147,7 +147,73 @@ class FakeJudgeHost:
         pass
 
 
+class SlowJudgeHost(FakeJudgeHost):
+    """A host whose part is judged at once and handed over only when `working` is cleared, as a worker's is: until then
+    its poll finds its process alive, with no status (the judgements write none) and nothing closed; `down`, it cannot
+    be reached."""
+
+    working, down = True, False
+
+    def poll(self, a):
+        from cantrip_ai.distributed import Unreachable  # noqa: PLC0415
+        if self.down:
+            raise Unreachable(f"{self.name} is down")
+        if self.working:
+            return self.Poll(status=None, exit=None, alive=True, shards=[], started=True, grant=None)
+        return super().poll(a)
+
+
 class DistributedJudgements(unittest.TestCase):
+    def test_a_part_judged_on_a_worker_is_no_stall_while_it_is_heard_and_one_once_it_is_not(self):
+        # One part holds every game and returns nothing until it is over: what moves is the ledger's word of the
+        # last poll that found it alive.
+        from cantrip_ai import distributed, status  # noqa: PLC0415
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            plan = self.plan(tmp)
+            games = len(mining.plan_games(plan))
+            header = mining.judge_header(games, ["mine-judge", "--simulations", "64", "--worlds", "2", "--seed", "1",
+                                                 "--targets", "true"])
+            host = SlowJudgeHost("a", tmp, plan, header)
+            # The stage took half an hour the generation before: 15 minutes with nothing moving is a stall.
+            (tmp / "gen1").mkdir()
+            (tmp / "gen1" / "generation.json").write_text(json.dumps(dict(stages={"mine-judge": dict(done=True, seconds=1800.0)})))
+            gen = tmp / "gen2"
+            dist = gen / "dist" / "judge-losers"
+            led = distributed.Ledger(dist / "ledger.json", games, 0)
+            led.header = header
+            (dist / "results").mkdir(parents=True)
+            now = [1000.0]
+            c = distributed.Coordinator(led, [host], dist / "results", dist, read=lambda path: mining.read_judged(path, games),
+                                        log=lambda *_: None, clock=lambda: now[0], monotonic=lambda: now[0],
+                                        sleep=lambda s: None, kind=mining.JUDGE, chunk=games, initial=games, timeout=1e9)
+            beat = status.Heartbeat(tmp, 2, clock=lambda: now[0])
+            beat.begin("mine-judge")
+
+            def minutes(n, read=lambda: status.judge(status.read(tmp, 2), now[0], alive=lambda s: True)["state"]):
+                states = set()
+                for _ in range(2 * n):
+                    now[0] += 30
+                    c.step()
+                    beat.beat()
+                    states.add(read())
+                return states
+
+            self.assertEqual(minutes(40), {"running"}, "40 minutes with no game in: heard at every poll")
+            a = led.attempts["a-a1"]
+            self.assertEqual((a["heard"], a.get("progress"), led.done), (now[0], None, {}))
+            self.assertEqual(json.loads(led.path.read_text())["attempts"]["a-a1"]["heard"], now[0], "in the ledger's file")
+            host.down = True
+            heard = a["heard"]
+            self.assertEqual(minutes(15), {"running"})
+            self.assertEqual(minutes(1), {"stalled"}, "not heard for the stall limit")
+            self.assertEqual(a["heard"], heard)
+            host.down = False
+            self.assertEqual(minutes(1), {"running"}, "heard again")
+            host.working = False
+            minutes(1)
+            self.assertEqual((a["state"], a["heard"], len(led.done)), ("finished", now[0] - 60, games), "heard when last found alive")
+
     def plan(self, tmp: Path) -> Path:
         lines = []
         for k, (d, seed) in enumerate([("second", 5), ("first", 9), ("first", 3), ("first", 9), ("second", 1)]):

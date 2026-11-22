@@ -309,6 +309,27 @@ class DistributedTest(unittest.TestCase):
             self.assertEqual(sum(len(dist.from_ranges(s["games"])) for s in manifest["shards"].values()), 300)
             self.assertTrue(all(s["host"] in ("here", "fast", "slow") for s in manifest["shards"].values()))
 
+    def test_each_poll_that_finds_an_attempt_alive_is_written_in_its_record_with_the_games_its_status_counts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            selfplay, d = setup(tmp, 40)
+            led, clock = ledger(d, 40), Clock()
+            c = coordinator(led, [FakeHost("w", tmp, 40, rate=2)], selfplay, d, clock)
+            seen = []
+            for _ in range(4):
+                c.step()
+                clock.sleep(30)
+                a = json.loads(led.path.read_text())["attempts"]["w-a1"]
+                seen.append((a.get("heard"), a.get("progress")))
+            self.assertEqual([h for h, _ in seen[1:]], [30.0, 60.0, 90.0], "the time of each poll, in the ledger's file")
+            games = [g for _, g in seen[1:]]
+            self.assertTrue(all(g is not None for g in games) and games == sorted(set(games)), games)
+            self.assertEqual(c.run(), "done")
+            a = led.attempts["w-a1"]
+            self.assertLess(a["heard"], a["ended"], "its last poll found it over: not heard alive then")
+            self.assertEqual(dist.status_games(dict(Pid=1, Seconds=3.0)), None)
+            self.assertEqual(dist.status_games(dict(Taken=5, GamesThisRun=3, Dropped=1)), 9)
+
     def test_a_worker_that_crashes_is_recovered_and_its_rest_played_by_the_others(self):
         with tempfile.TemporaryDirectory() as tmp:
             def hosts(t, sp):

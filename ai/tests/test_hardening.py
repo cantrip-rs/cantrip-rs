@@ -402,6 +402,34 @@ class StatusTest(unittest.TestCase):
             self.assertFalse(status.alive(dict(pid=4, pid_start=123)))
         self.assertFalse(distributed.process_unreadable(os.getpid()), "this process can be asked")
 
+    def test_an_attempt_counts_by_its_games_where_it_counts_them_and_by_being_heard_where_it_does_not(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            gen = Path(tmp) / "gen1"
+            d = gen / "dist" / "replay-first"
+            d.mkdir(parents=True)
+
+            def measured(**attempts):
+                (d / "ledger.json").write_text(json.dumps(dict(shards={}, attempts=attempts)))
+                return status.measure(gen)
+
+            # No status of its own (a judgement's part, a run not yet started): each poll that hears it moves it.
+            first = measured(a=dict(id="w-a1", heard=1000.0))
+            self.assertNotEqual(measured(a=dict(id="w-a1", heard=1030.0)), first)
+            # With games counted, the games are what moves: a run that lives and plays nothing is not progress.
+            playing = measured(a=dict(id="w-a1", heard=1060.0, progress=12))
+            self.assertEqual(measured(a=dict(id="w-a1", heard=1090.0, progress=12)), playing)
+            self.assertNotEqual(measured(a=dict(id="w-a1", heard=1120.0, progress=13)), playing)
+            # This machine's attempt: its lease file, touched at each poll, counts as being heard does.
+            lease = d / "here-a1.heartbeat"
+            lease.write_text("")
+            os.utime(lease, (1000, 1000))
+            local = measured(b=dict(id="here-a1"))
+            os.utime(lease, (1030, 1030))
+            self.assertNotEqual(measured(b=dict(id="here-a1")), local)
+            counted = measured(b=dict(id="here-a1", progress=4))
+            os.utime(lease, (1060, 1060))
+            self.assertEqual(measured(b=dict(id="here-a1", progress=4)), counted)
+
     def test_a_log_still_open_counts_as_progress(self):
         # On Windows a directory entry keeps the size an open file had when it was last closed: the size is asked of
         # the file itself, or a stage whose only evidence is its log reads as stalled.
