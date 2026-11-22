@@ -848,11 +848,22 @@ class GenerationTest(unittest.TestCase):
             self.assertIn("> - **red's seat: gen1 values it -0.90 on average where its outcomes average +0.30 (900 positions)**", readme)
             self.assertIn("| red | 900 | +0.30 | -0.90 (-5.10 / +0.40) | +0.25 (+0.40 / +0.10) | **OFF: gen1** |", readme)
 
+            # The distributed stages' ledgers beside self-play's: the gate's and the miner's go with the attempt.
+            for d in ("gate", "replay-first", "judge-forks-a", "incoming", "logs"):
+                (gen1 / "dist" / d).mkdir(parents=True)
+            (gen1 / "dist" / "ledger.json").write_text("{}")
+            (gen1 / "dist" / "gate" / "ledger.json").write_text("{}")
+
             class Args:
                 retrain, dry_run = "value overfit", False
 
             with contextlib.redirect_stdout(io.StringIO()):
                 generation.retrain(rec, gen1, root / "models" / "gen1", Args)
+            self.assertEqual(sorted(x.name for x in (gen1 / "dist" / "attempt1").iterdir()),
+                             ["gate", "judge-forks-a", "replay-first"])
+            self.assertTrue((gen1 / "dist" / "attempt1" / "gate" / "ledger.json").exists())
+            self.assertTrue((gen1 / "dist" / "ledger.json").exists(), "self-play's ledger stays")
+            self.assertTrue((gen1 / "dist" / "incoming").is_dir() and (gen1 / "dist" / "logs").is_dir())
             self.assertEqual(sorted(rec.data["stages"]), ["build", "heldout", "selfplay"], "self-play and the held-out set are kept")
             self.assertEqual(rec.data["attempts"][0]["reason"], "value overfit")
             self.assertTrue((gen1 / "logs" / "attempt1" / "gate.log").exists())

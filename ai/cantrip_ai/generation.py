@@ -902,6 +902,15 @@ def retrain(rec: Record, gen_dir: Path, model_dir: Path, args, log=print):
         p = gen_dir / "logs" / f"{stage}.log"
         if p.exists():
             p.rename(keep / p.name)
+    # The later stages' distributed ledgers (the gate's, the miner's replays and judgements, the ladder's: each its own
+    # directory under dist/; self-play's ledger, grants and logs are dist/'s own files) go with the attempt, or the next
+    # attempt's gate finds the last one's games under other settings and refuses to go on.
+    dist = gen_dir / "dist"
+    if dist.is_dir():
+        for d in sorted(dist.iterdir()):
+            if d.is_dir() and d.name not in ("incoming", "logs") and not d.name.startswith("attempt"):
+                (dist / f"attempt{k}").mkdir(exist_ok=True)
+                d.rename(dist / f"attempt{k}" / d.name)
     metrics = model_dir / "train" / "metrics.json"
     if metrics.exists():
         shutil.copy(metrics, keep / "metrics.json")
