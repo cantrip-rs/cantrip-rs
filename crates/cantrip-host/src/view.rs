@@ -1562,6 +1562,13 @@ impl<'a> Projector<'a> {
                 choices.push(ChoiceView { key: format!("{ordinal} {}", crate::text::subtype_kind(sub)), value: sub.name().to_string(), ..Default::default() });
             }
         }
+        // A type chosen in secret is shown only to the player who chose it, until it is revealed as a cost (CR 607.2d): then it is
+        // the announced type of the ability on the stack, below.
+        if let Some((sub, chooser)) = s.secret_subtype(text)
+            && chooser == self.viewer
+        {
+            choices.push(ChoiceView { key: "secret creature type".into(), value: sub.name().to_string(), ..Default::default() });
+        }
         if let Some(p) = s.chosen_player(text) {
             choices.push(ChoiceView { key: "player".into(), value: seat(p).to_string(), ..Default::default() });
         }

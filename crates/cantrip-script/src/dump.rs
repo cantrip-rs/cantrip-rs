@@ -959,6 +959,11 @@ impl StateDump {
                     if let Some(subtype) = s.chosen_subtype(own) {
                         d.set(format!("{key}.ChosenSubtype"), subtype.name());
                     }
+                    // A creature type chosen in secret (CR 607.2d): the dump is no player's view, so it holds it.
+                    if let Some((subtype, chooser)) = s.secret_subtype(own) {
+                        d.set(format!("{key}.SecretSubtype"), subtype.name());
+                        d.set(format!("{key}.SecretSubtypeChooser"), bot(chooser));
+                    }
                     if let Some([first, second]) = s.chosen_subtype_pair(own) {
                         d.set(format!("{key}.FirstChosenSubtype"), first.name());
                         d.set(format!("{key}.SecondChosenSubtype"), second.name());
@@ -1086,7 +1091,7 @@ const PERMANENT_KEYS: &[&str] = &[
     "Tapped", "Toxic", "Riot", "FaceDown", "FaceDownName", "Token", "Prototyped", "Transformed", "ManaValue", "X", "Doors", "Prepared", "AttachedTo", "Monstrous",
     "Solved", "Suspected", "Saddled", "Exerted", "GoadedBy", "MustAttack", "CantBeBlocked", "BlockRestriction", "DoesntUntap", "LastingRules", "ChosenPlayer", "ChosenOption", "ChosenNumber", "ChosenObject",
     "ChosenModes", "ChosenName", "ClassLevel", "Types", "Supertypes", "Subtypes", "Colors", "Keywords", "HexproofFrom",
-    "ProtectionFrom", "ProtectionFromSubtypes", "ProtectionFromManaValue", "ProtectionFromColoredSpells", "Power", "Toughness", "Damage", "SummoningSick", "ChosenColor", "ChosenSubtype", "FirstChosenSubtype", "SecondChosenSubtype",
+    "ProtectionFrom", "ProtectionFromSubtypes", "ProtectionFromManaValue", "ProtectionFromColoredSpells", "Power", "Toughness", "Damage", "SummoningSick", "ChosenColor", "ChosenSubtype", "FirstChosenSubtype", "SecondChosenSubtype", "SecretSubtype", "SecretSubtypeChooser",
 ];
 
 /// The keys the dump writes of a card in a hand, a graveyard, a library, a sideboard or exile, after `BotN.<zone>.<name>.`,

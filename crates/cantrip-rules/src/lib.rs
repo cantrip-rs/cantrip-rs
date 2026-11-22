@@ -215,6 +215,8 @@ mod exiled_with_permission_tests;
 #[cfg(test)]
 mod emblem_maker_tests;
 #[cfg(test)]
+mod secret_choice_tests;
+#[cfg(test)]
 mod instant_sorcery_entering_tests;
 #[cfg(test)]
 mod instructing_tests;
@@ -2786,6 +2788,10 @@ impl cantrip_api::Game for Cx<'_> {
 
     fn remember_chosen_player(&mut self, by: Linked, player: PlayerId) {
         ops::remember_chosen(self, by, cantrip_state::Kept::Player(player));
+    }
+
+    fn remember_secret_subtype(&mut self, by: Linked, subtype: Subtype, player: PlayerId) {
+        ops::remember_chosen(self, by, cantrip_state::Kept::SecretSubtype(subtype, player));
     }
 
     fn move_together(&mut self, moves: &[(ObjectId, Zone)], reason: MoveReason) -> Vec<ObjectId> {

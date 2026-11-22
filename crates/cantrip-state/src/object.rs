@@ -247,6 +247,9 @@ pub enum Kept {
     Number(u32),
     Object(ObjectId),
     Player(PlayerId),
+    /// A creature type chosen in secret (CR 607.2d), by the player who chose it: only that player is shown it, until it is
+    /// revealed (`Cost::reveal_secret_type`).
+    SecretSubtype(Subtype, PlayerId),
     /// On an emblem, no choice but what its text names: the object whose ability made it, as the object it was then (CR
     /// 114.2, 400.7), that ability being the `Chosen`'s text and way of acquiring it. Read with `Choices::maker`, by any
     /// ability of the emblem, whatever has become of that object.
@@ -437,6 +440,11 @@ impl Choices {
                 _ => None,
             })
         })
+    }
+
+    /// The creature type `by` chose in secret and the player who chose it (`Kept::SecretSubtype`).
+    pub fn secret_subtype(&self, by: Linked) -> Option<(Subtype, PlayerId)> {
+        self.kept_to(by, |k| match k { Kept::SecretSubtype(subtype, chooser) => Some((subtype, chooser)), _ => None })
     }
 
     /// The word chosen, to `by`.

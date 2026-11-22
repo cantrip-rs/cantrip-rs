@@ -1215,6 +1215,11 @@ impl GameState {
         self.obj(by.object).marks.choices.subtype_pair(by)
     }
 
+    /// The creature type chosen in secret for `by`'s object, to `by`, and who chose it: the only player who may reveal it.
+    pub fn secret_subtype(&self, by: Linked) -> Option<(Subtype, PlayerId)> {
+        self.obj(by.object).marks.choices.secret_subtype(by)
+    }
+
     /// The player chosen for `by`'s object, to `by` (`chosen_color`).
     pub fn chosen_player(&self, by: Linked) -> Option<PlayerId> {
         self.obj(by.object).marks.choices.player(by)

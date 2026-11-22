@@ -1807,6 +1807,12 @@ pub trait Game: Query {
     /// the chosen player loses the game". Kept as `remember_chosen_object` keeps an object; read with
     /// `GameState::chosen_player`. Nothing if the permanent is no longer on the battlefield.
     fn remember_chosen_player(&mut self, by: Linked, player: PlayerId);
+    /// A creature type `player` chose in secret as `by`, an ability of a permanent, resolved: "secretly choose Human, Merfolk, or
+    /// Goblin" (A Killer Among Us). Kept as `remember_chosen_name` keeps a name, and read with `GameState::secret_subtype`, but
+    /// no other player is shown it - not in their view of the permanent, nor in what they are asked or told - until it is
+    /// revealed as a cost is paid (`Cost::reveal_secret_type`). A later choice by the same ability replaces it. Nothing if the
+    /// permanent is no longer on the battlefield.
+    fn remember_secret_subtype(&mut self, by: Linked, subtype: Subtype, player: PlayerId);
     fn exile(&mut self, object: ObjectId) -> ObjectId {
         let owner = self.obj(object).owner;
         self.move_to(object, Zone::exile(owner))

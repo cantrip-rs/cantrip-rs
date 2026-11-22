@@ -604,6 +604,10 @@ in the world, and a seat's search could read them:
   So are the runs of the lower frames, and the answers `ask_again` replays may not fit the new cards.
 - What the opponent has looked at in its library (Ponder) is not kept as a constraint. The seat does not know it either,
   but the opponent's play in the world assumes a library it never looked at.
+- A creature type the opponent chose in secret (`Kept::SecretSubtype`, A Killer Among Us) stays the real one, so the seat's
+  search plays against the choice it was never shown. Dealing it again needs the types that were offered kept with it (one
+  of Human, Merfolk or Goblin, not any type), as `forget_companion_to_reveal` deals a hidden companion. Every host view hides
+  it; only the search reads it.
 - `loop_watch` keeps the hashes of the real positions, so a world catches only loops that begin after the fork.
 - Dead rows the seat never saw keep their real timestamps. On live objects, a timestamp whose move an event
   recorded is kept, and an unrecorded one becomes 0.
