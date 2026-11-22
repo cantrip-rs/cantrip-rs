@@ -870,14 +870,18 @@ impl GameState {
     /// Empties `player`'s pool as `ending` ends (CR 106.4, 500.5): a step, the combat phase or the turn - all of it but the
     /// mana that lasts past that (`ManaLasts`, CR 500.5a).
     pub fn empty_mana(&mut self, player: PlayerId, ending: ManaLasts) {
-        self.empty_mana_keeping(player, ending, [false; 6]);
+        self.empty_mana_keeping(player, ending, [false; 6], None);
     }
 
     /// `empty_mana`, except for the types of mana `kept` names (indexed by `Mana`). A static ability says the player doesn't
     /// lose that unspent mana as steps and phases end (CR 500.5: Electro, Assaulting Battery, Upwelling). That mana stays,
     /// restricted or not (CR 106.6). Kept mana whose own duration ran out with `ending` stays as ordinary mana. It is lost at
     /// the first ending after this that nothing keeps it through.
-    pub fn empty_mana_keeping(&mut self, player: PlayerId, ending: ManaLasts, kept: [bool; 6]) {
+    ///
+    /// With `becomes`, mana that would be lost is not: it becomes mana of that type instead and stays (CR 614.1a; Ozai, the
+    /// Phoenix King's "that mana becomes red instead"), with its source, restriction and rider, as ordinary mana from now on.
+    /// Mana already of that type becomes what it was, so it simply stays.
+    pub fn empty_mana_keeping(&mut self, player: PlayerId, ending: ManaLasts, kept: [bool; 6], becomes: Option<Mana>) {
         if !self.players[player.index()].pool.is_empty() || !self.players[player.index()].lasting.is_empty() {
             let mut lasting = ManaPool::default();
             for e in self.mana_from.iter().filter(|e| e.player == player && e.restriction.is_none() && e.lasts > ending) {
@@ -888,13 +892,17 @@ impl GameState {
             self.update_player(player, |pl| {
                 for (m, &keep) in kept.iter().enumerate() {
                     if !keep {
-                        pl.pool.0[m] = lasting.0[m];
+                        let lost = pl.pool.0[m].saturating_sub(lasting.0[m]);
+                        pl.pool.0[m] -= lost;
+                        if let Some(into) = becomes {
+                            pl.pool.0[into as usize] += lost;
+                        }
                     }
                 }
                 pl.lasting = lasting;
             });
         }
-        self.empty_restricted_mana(player, kept);
+        self.empty_restricted_mana(player, kept, becomes);
         if self.mana_from.iter().any(|e| e.player == player && e.lasts <= ending) {
             let old = self.mana_from.clone();
             let mut after: Vec<ManaFrom> = Vec::with_capacity(old.len());
@@ -906,7 +914,9 @@ impl GameState {
                 let mut pool = ManaPool::default();
                 for (m, &keep) in kept.iter().enumerate() {
                     if keep {
-                        pool.0[m] = e.pool.0[m];
+                        pool.0[m] += e.pool.0[m];
+                    } else if let Some(into) = becomes {
+                        pool.0[into as usize] += e.pool.0[m];
                     }
                 }
                 if pool.is_empty() {
@@ -965,17 +975,22 @@ impl GameState {
         take
     }
 
-    /// Empties `player`'s restricted mana (CR 106.4) but for the types `kept` names: the pool alone (`empty_mana_keeping`).
-    fn empty_restricted_mana(&mut self, player: PlayerId, kept: [bool; 6]) {
+    /// Empties `player`'s restricted mana (CR 106.4) but for the types `kept` names, the rest becoming `becomes` where it is
+    /// given: the pool alone (`empty_mana_keeping`).
+    fn empty_restricted_mana(&mut self, player: PlayerId, kept: [bool; 6], becomes: Option<Mana>) {
         if !self.has_restricted_mana(player) {
             return;
         }
         let old = self.restricted_mana.clone();
         for r in self.restricted_mana.iter_mut().filter(|r| r.player == player) {
+            let mut lost = 0;
             for (n, &keep) in r.pool.0.iter_mut().zip(kept.iter()) {
                 if !keep {
-                    *n = 0;
+                    lost += std::mem::take(n);
                 }
+            }
+            if let Some(into) = becomes {
+                r.pool.0[into as usize] += lost;
             }
         }
         self.restricted_mana.retain(|r| r.player != player || !r.pool.is_empty());
@@ -2968,20 +2983,20 @@ mod tests {
         s.add_mana(p, Mana::R, 1, src, Some(ManaRestriction::GainsHaste), ManaLasts::Step, false);
         s.add_mana(p, Mana::G, 1, src, Some(ManaRestriction::GainsHaste), ManaLasts::Step, false);
 
-        s.empty_mana_keeping(p, ManaLasts::Step, red);
+        s.empty_mana_keeping(p, ManaLasts::Step, red, None);
         assert_eq!((s.player(p).pool.get(Mana::R), s.player(p).pool.get(Mana::G)), (4, 0));
         assert_eq!(s.player(p).lasting.get(Mana::R), 2);
         assert!(s.has_restricted_mana(p));
 
         // The turn ends: the {R}{R} that lasted until then is kept as ordinary mana, its own duration over, joining the
         // ordinary {R} from the same source in one entry.
-        s.empty_mana_keeping(p, ManaLasts::Turn, red);
+        s.empty_mana_keeping(p, ManaLasts::Turn, red, None);
         assert_eq!(s.player(p).pool.get(Mana::R), 4);
         assert_eq!(s.player(p).lasting.get(Mana::R), 0);
         let mut ordinary: Vec<_> = s.mana_from_of(p).filter(|e| e.restriction.is_none()).map(|e| (e.source, e.lasts, e.pool.get(Mana::R))).collect();
         ordinary.sort_by_key(|e| e.0);
         assert_eq!(ordinary, vec![(src, ManaLasts::Step, 1), (ObjectId(2), ManaLasts::Step, 3)]);
-        s.empty_mana_keeping(p, ManaLasts::Step, red);
+        s.empty_mana_keeping(p, ManaLasts::Step, red, None);
         assert_eq!(s.mana_from_of(p).filter(|e| e.restriction.is_none()).count(), 2);
         let restricted: Vec<_> = s.mana_from_of(p).filter(|e| e.restriction.is_some()).map(|e| (e.pool.get(Mana::R), e.pool.get(Mana::G))).collect();
         assert_eq!(restricted, vec![(1, 0)]);

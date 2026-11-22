@@ -92,6 +92,23 @@ pub fn mana_kept(cx: &Cx) -> Vec<(PlayerId, [bool; 6])> {
     kept
 }
 
+/// The players whose unspent mana a static ability turns into mana of one type instead of letting them lose it (CR 106.4,
+/// 614.1a, `CardDef::mana_lost_becomes`), each with that type. Empty while no permanent with its abilities has one (CR 613.1f).
+pub fn mana_lost_becomes(cx: &Cx) -> Vec<(PlayerId, Mana)> {
+    let mut becomes: Vec<(PlayerId, Mana)> = Vec::new();
+    for (id, controller, def, by) in sources(cx, |d| !d.mana_lost_becomes.is_empty()) {
+        let asker = Asker { instance: None, source: id, controller, by, spell: false };
+        for player in cx.s().seats() {
+            if becomes.iter().all(|&(p, _)| p != player)
+                && let Some(mana) = def.mana_lost_becomes.iter().find_map(|rule| rule(cx, &asker, player))
+            {
+                becomes.push((player, mana));
+            }
+        }
+    }
+    becomes
+}
+
 /// The parts of the ordinary mana in `player`'s pool told apart for its payer (CR 106.3): mana its payer chooses to spend
 /// or keep (CR 601.2h, 118.3a). Each is a source with the delayed ability that rides its mana, 0 for none (`ManaPart`). A
 /// source's mana is told apart where an ability of a permanent on the battlefield says so (`CardDef::mana_told_apart`), or

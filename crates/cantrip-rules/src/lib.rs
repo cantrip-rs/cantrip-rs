@@ -3371,8 +3371,14 @@ impl cantrip_api::Game for Cx<'_> {
             for (total, amount) in lost.0.iter_mut().zip(restricted.0) { *total += amount; }
         }
         // `Turn` is the longest intrinsic mana lifetime. An explicit loss is unrelated to step/phase boundaries,
-        // so no static `mana_kept` rule applies. This also removes source, snow and restriction provenance.
-        self.g.state.empty_mana(player, ManaLasts::Turn);
+        // so no static `mana_kept` rule applies. This also removes source, snow and restriction provenance. A static ability
+        // that turns the mana that would be lost into other mana does apply (CR 614.1a, Ozai, the Phoenix King): that mana stays,
+        // and nothing is lost.
+        let becomes = static_rules::mana_lost_becomes(self).into_iter().find(|&(p, _)| p == player).map(|(_, mana)| mana);
+        self.g.state.empty_mana_keeping(player, ManaLasts::Turn, [false; 6], becomes);
+        if becomes.is_some() {
+            lost = ManaPool::default();
+        }
         lost
     }
 

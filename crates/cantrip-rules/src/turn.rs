@@ -88,15 +88,16 @@ pub fn next_step(game: &mut Game) {
         } else {
             ManaLasts::Step
         };
-        // Except what a static ability keeps (CR 500.5: Electro, Assaulting Battery), asked as the step ends.
-        let kept = {
+        // Except what a static ability keeps (CR 500.5: Electro, Assaulting Battery), asked as the step ends, and what one turns
+        // into other mana rather than let it be lost (CR 614.1a: Ozai, the Phoenix King).
+        let (kept, becomes) = {
             let cx = Cx { g: &mut *game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-            crate::static_rules::mana_kept(&cx)
+            (crate::static_rules::mana_kept(&cx), crate::static_rules::mana_lost_becomes(&cx))
         };
         let s = &mut game.state;
         for p in s.seats().collect::<Vec<_>>() {
             let keep = kept.iter().find(|&&(q, _)| q == p).map_or([false; 6], |&(_, k)| k);
-            s.empty_mana_keeping(p, ends, keep);
+            s.empty_mana_keeping(p, ends, keep, becomes.iter().find(|&&(q, _)| q == p).map(|&(_, mana)| mana));
         }
         // "When that mana is spent" waits only while some of that mana is left (`DelayedWhen::ThatMana`).
         s.drop_spent_mana_riders();

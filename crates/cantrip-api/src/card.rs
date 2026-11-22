@@ -3483,6 +3483,10 @@ pub type UncounterableAbilityRule = fn(&dyn Query, &Asker, &StackItem) -> bool;
 /// "... green mana ..." (Omnath, Locus of Mana), "Players don't lose unspent mana ..." (Upwelling).
 pub type ManaKeptRule = fn(&dyn Query, &Asker, PlayerId, Mana) -> bool;
 
+/// A static ability that says some unspent mana a player would lose becomes mana of one type instead (CR 106.4, 614.1a):
+/// the type for `player`'s mana, if any. "If you would lose unspent mana, that mana becomes red instead" (Ozai, the Phoenix King).
+pub type ManaLostBecomesRule = fn(&dyn Query, &Asker, PlayerId) -> Option<Mana>;
+
 /// A static ability that says a player can't gain life (CR 119.7): true for `player`. "Players can't gain life" (Sunspine
 /// Lynx), "Your opponents can't gain life" (Knight of Dusk's Shadow). `cantrip_mechanics::statics` has both.
 pub type LifeGainRule = fn(&dyn Query, &Asker, PlayerId) -> bool;
@@ -4311,6 +4315,9 @@ pub struct CardDef {
     /// Its static abilities that keep unspent mana in players' pools as steps and phases end (CR 500.5), while it is on the
     /// battlefield with its abilities.
     pub mana_kept: &'static [ManaKeptRule],
+    /// Its static abilities that turn the unspent mana a player would lose, as steps and phases end or to an effect, into mana
+    /// of one type that stays (CR 106.4, 614.1a), while it is on the battlefield with its abilities.
+    pub mana_lost_becomes: &'static [ManaLostBecomesRule],
     /// Its static abilities that stop players from gaining life (CR 119.7), while it is on the battlefield: the gain, the
     /// part of an exchange or a new life total that would raise the total, does not happen (CR 119.5).
     pub cant_gain_life: &'static [LifeGainRule],
@@ -4625,6 +4632,7 @@ impl CardDef {
         unredirectable_damage: &[],
         uncounterable_abilities: &[],
         mana_kept: &[],
+        mana_lost_becomes: &[],
         cant_gain_life: &[],
         cant_lose_life: &[],
         cant_draw: &[],
