@@ -1,0 +1,6 @@
+{
+  "name": "Fishing Pole",
+  "manaCost": "{1}",
+  "type": "Artifact — Equipment",
+  "oracleText": "Equipped creature has \"{1}, {T}, Tap Fishing Pole: Put a bait counter on Fishing Pole.\"\nWhenever equipped creature becomes untapped, remove a bait counter from this Equipment. If you do, create a 1/1 blue Fish creature token.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)"
+}

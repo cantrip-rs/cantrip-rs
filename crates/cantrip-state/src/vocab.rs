@@ -1780,6 +1780,7 @@ counter_kinds! {
     Skewer = 112, "skewer", "Skewer";
     Supply = 113, "supply", "Supply";
     Unlock = 114, "unlock", "Unlock";
+    Bait = 115, "bait", "Bait";
 }
 
 impl CounterKind {
@@ -2490,7 +2491,8 @@ mod carrion_counter_tests {
         assert_eq!(CounterKind::Skewer as usize, 112);
         assert_eq!(CounterKind::Supply as usize, 113);
         assert_eq!(CounterKind::Unlock as usize, 114);
-        assert_eq!(CounterKind::COUNT, 115);
+        assert_eq!(CounterKind::Bait as usize, 115);
+        assert_eq!(CounterKind::COUNT, 116);
         assert!(!CounterKind::POWER_TOUGHNESS.iter().any(|(kind, _, _)| *kind == carrion));
     }
     #[test]

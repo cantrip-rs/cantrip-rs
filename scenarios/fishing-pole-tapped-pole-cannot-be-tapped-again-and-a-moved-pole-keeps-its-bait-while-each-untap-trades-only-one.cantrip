@@ -1,0 +1,68 @@
+# "Tap Fishing Pole" needs the Pole untapped (CR 602.2b, 118.3, 701.26a). Bot1 activates the Memnite's ability on turn 3, which
+# taps the Pole. Moving the tapped Pole to the Ornithopter (CR 301.5c) gives that untapped creature the ability, but it cannot
+# be activated: its cost can't be paid. On turn 5 everything untaps, but the Ornithopter was never tapped, so the creature the
+# Pole is attached to does not "become untapped" (CR 701.26b): no Fish, and the bait counter stays on the Pole. The Pole is
+# untapped again, so the Ornithopter baits it a second time (two counters); on turn 7 the Ornithopter untaps and the trigger
+# removes "a bait counter", one, not both (CR 122.1): one Fish and a counter left.
+
+[Bot1 Deck]
+Memnite
+Ornithopter
+Mox Jet
+Mox Pearl
+Mox Ruby
+Fishing Pole
+Plains
+Plains x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fishing Pole.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Fishing Pole.Activate(Ability: Equip; Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Memnite.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fishing Pole.Counters.Bait = 1
+? Bot1.Battlefield.Fishing Pole.Tapped = true
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Fishing Pole.Activate(Ability: Equip; Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fishing Pole.AttachedTo = Ornithopter
+Bot1.Battlefield.Plains.Activate
+! Bot1.Battlefield.Ornithopter.Activate
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Fishing Pole.Counters.Bait = 1
+? Bot1.Battlefield.Fishing Pole.Tapped = false
+? Bot1.Battlefield.Fish Token = (absent)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Ornithopter.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fishing Pole.Counters.Bait = 2
+[T7 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Fishing Pole.Counters.Bait = 1
+Bot1.Battlefield.Fishing Pole.Tapped = false
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Fish Token.Token = true
+Bot1.Battlefield.Fish Token#2 = (absent)

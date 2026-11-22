@@ -1,0 +1,48 @@
+# Fishing Pole: the equipped Memnite has "{1}, {T}, Tap Fishing Pole: Put a bait counter on Fishing Pole" (CR 613.1f, 602.2,
+# 118.3). Bot1 activates it on turn 3: the Memnite and the Pole are both tapped and the Pole has a bait counter. On turn 5
+# both untap, and "whenever equipped creature becomes untapped, remove a bait counter ... If you do, create a 1/1 blue Fish"
+# (CR 701.26b, 603.2) removes the bait and makes the Fish.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Mox Pearl
+Mox Ruby
+Fishing Pole
+Plains x15
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fishing Pole.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Fishing Pole.Activate(Ability: Equip; Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Memnite.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fishing Pole.Counters.Bait = 1
+? Bot1.Battlefield.Fishing Pole.Tapped = true
+? Bot1.Battlefield.Memnite.Tapped = true
+? Bot1.Battlefield.Fish Token = (absent)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Fishing Pole.Counters.Bait = (absent)
+Bot1.Battlefield.Fishing Pole.Tapped = false
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Battlefield.Fish Token.Power = 1
+Bot1.Battlefield.Fish Token.Toughness = 1
+Bot1.Battlefield.Fish Token.Token = true
