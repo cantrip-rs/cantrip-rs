@@ -1,0 +1,48 @@
+# Skyward Spider, "ward {2}": Bot2's Lightning Bolt targets it with Mox Ruby's {R} spent on the Bolt and only Mox Jet's {B} left, so the
+# ward trigger counters the Bolt (CR 702.21a) unless Bot2 pays {2}: one mana short of it (a ward {1} could be paid); the 2/2 Spider
+# takes no damage.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Skyward Spider
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Skyward Spider.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Lightning Bolt.Cast(Skyward Spider)
+Bot2.Pass
+Bot1.Pass
+! Bot2.PayCost
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Skyward Spider.Damage = 0
+Bot2.Graveyard = Lightning Bolt

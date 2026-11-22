@@ -1,0 +1,61 @@
+# Skyward Spider: a +1/+1 counter modifies it (CR 700.9, 122.1), so it has flying for good, as long as the counter stays. Bot1 casts
+# the Spider and Honor (a +1/+1 counter on target creature) with Moxen on turn 1. On turn 3 the Spider attacks with flying, so Bot2's
+# Runeclaw Bear (no flying or reach) may not block it (CR 702.9b) and the 3/3 Spider deals 3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Skyward Spider
+Honor
+Plains x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Runeclaw Bear
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Skyward Spider.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skyward Spider.Keywords = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Runeclaw Bear.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Honor.Cast(Skyward Spider)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skyward Spider.Keywords = Flying
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Skyward Spider > Bot2)
+! Bot2.Block(Runeclaw Bear > Skyward Spider)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Skyward Spider.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Skyward Spider.Keywords = Flying

@@ -1,0 +1,77 @@
+# Skyward Spider: an Aura counts as a modification only if its controller also controls the enchanted creature (CR 700.9). Bot2
+# casts Holy Strength on Bot1's Spider on turn 2 (the ward {2} is paid with its other two Moxen): the Spider is enchanted but not
+# modified, so it has no flying, and when it attacks on turn 5 Bot2's Runeclaw Bear may block it. After combat Bot1 casts its own
+# Holy Strength on it, and it has flying (the Auras on it are Bot1's and Bot2's).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Skyward Spider
+Holy Strength
+Plains x2
+Plains x10
+
+[Bot2 Deck]
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Holy Strength
+Runeclaw Bear
+Island x4
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Skyward Spider.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Holy Strength.Cast(Bot1.Battlefield.Skyward Spider)
+Bot2.PayCost
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Skyward Spider.Keywords = (absent)
+? Bot1.Battlefield.Skyward Spider.Power = 3
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Runeclaw Bear.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Skyward Spider > Bot2)
+Bot2.Block(Runeclaw Bear > Skyward Spider)
+[T5 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Holy Strength.Cast(Bot1.Battlefield.Skyward Spider)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skyward Spider.Keywords = Flying
+
+[Expect]
+Bot1.Battlefield.Skyward Spider.Power = 4
+Bot2.Battlefield.Runeclaw Bear = (absent)

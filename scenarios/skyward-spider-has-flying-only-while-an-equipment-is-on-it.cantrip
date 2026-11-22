@@ -1,0 +1,57 @@
+# Skyward Spider: "This creature has flying as long as it's modified" (CR 700.9, 604.1, 613.1f). Bot1 casts the Spider and a Basilisk
+# Collar with Moxen; with no counter, Equipment or Aura it has no flying. On turn 3 Bot1 equips the Collar to the Spider, which is
+# modified now and has flying, then moves it to its Memnite, and the Spider loses flying again (the Memnite, equipped, does not gain it).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Skyward Spider
+Basilisk Collar
+Memnite
+Plains x12
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Skyward Spider.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Basilisk Collar.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skyward Spider.Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Basilisk Collar.Activate(Ability: Equip; Skyward Spider)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skyward Spider.Keywords = Deathtouch; Flying; Lifelink
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Basilisk Collar.Activate(Ability: Equip; Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skyward Spider.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.Skyward Spider.Keywords = (absent)
+Bot1.Battlefield.Memnite.Keywords = Deathtouch; Lifelink
