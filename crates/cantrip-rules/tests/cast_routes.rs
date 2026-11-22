@@ -438,6 +438,14 @@ static TAPPING_MANA_GIVER: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+/// An ability only a card in a graveyard has, written out to be given (Cursecloth Wrappings' embalm's kind): "{0}: Nothing."
+static GRAVEYARD_GIFT: CardDef = CardDef {
+    name: "Route Graveyard Gift",
+    types: TypeSet::of(&[CardType::Artifact]),
+    delayed: &[cantrip_api::ability(Cost::mana(ManaCost::ZERO), nothing_happens, "{0}: Nothing, from a graveyard.").from(ZoneKind::Graveyard)],
+    ..CardDef::BLANK
+};
+
 fn your_artifact(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
     q.chars(id).is(CardType::Artifact) && q.controller(id) == asker.controller
 }
@@ -516,6 +524,7 @@ fn table() -> &'static CardTable {
             &SACRIFICING_GIVER,
             &TAPPING_GIVER,
             &TAPPING_MANA_GIVER,
+            &GRAVEYARD_GIFT,
             &ENERGY_SOURCE,
             &ENERGY_SPELL,
             &ENERGY_GAIN,
@@ -1712,5 +1721,53 @@ fn each_waterbend_cost_a_cast_pays_is_a_waterbend_a_zero_one_included() {
         }
         assert_eq!(game.state.stack.len(), 1, "{name}: the spell is on the stack");
         assert_eq!(game.log.iter().filter(|r| matches!(r.event, Event::Bent { player: ME, bending: Bending::Water })).count(), bends, "{name}");
+    }
+}
+
+/// CR 113.6b, 613.1f, 611.2a: an ability an effect gives a card in a graveyard, which works from there, is the card's while
+/// the effect lasts (Cursecloth Wrappings: "Target creature card in your graveyard gains embalm until end of turn"), and is
+/// not before it is given or once it has ended.
+#[test]
+fn an_ability_an_effect_gives_a_card_in_a_graveyard_is_its_while_the_effect_lasts() {
+    for (given, ended) in [(false, false), (true, false), (true, true)] {
+        let (mut game, card) = game_with("Route Filler", Zone::graveyard, 0);
+        let gift = game.cards.find("Route Graveyard Gift").unwrap();
+        let source = put(&mut game, "Route Graveyard Gift", ME);
+        if given {
+            game.state.effect_push(ContinuousEffect {
+                source,
+                controller: ME,
+                timestamp: 1,
+                affected: card,
+                kind: EffectKind::AddAbility(AbilityRef::delayed(gift, 0)),
+                duration: Duration::EndOfTurn,
+                words: Words::NONE,
+            });
+        }
+        if ended {
+            game.state.effects_retain(|_| false);
+        }
+        game.state.see_statics();
+        game.run();
+        assert_eq!(activations_of(&game, card).len(), usize::from(given && !ended), "given {given}, ended {ended}");
+    }
+}
+
+/// CR 113.6b, 613.1f, 400.7: what an effect gives is given to a card in exile or a graveyard only - not to one in a hand or a
+/// library, which no effect reaches - and only an ability: the same effect's change to its types is not made there.
+#[test]
+fn an_effect_reaches_a_card_in_exile_or_a_graveyard_for_its_ability_only() {
+    for (zone, reached) in [(Zone::hand as fn(PlayerId) -> Zone, false), (Zone::library, false), (Zone::exile, true), (Zone::graveyard, true)] {
+        let (mut game, card) = game_with("Route Filler", zone, 0);
+        let gift = game.cards.find("Route Graveyard Gift").unwrap();
+        let source = put(&mut game, "Route Graveyard Gift", ME);
+        for kind in [EffectKind::AddAbility(AbilityRef::delayed(gift, 0)), EffectKind::AddTypes(TypeSet::of(&[CardType::Creature]))] {
+            game.state.effect_push(ContinuousEffect { source, controller: ME, timestamp: 1, affected: card, kind, duration: Duration::EndOfTurn, words: Words::NONE });
+        }
+        game.state.see_statics();
+        game.run();
+        let chars = game.chars(card);
+        assert_eq!(chars.abilities().count(), usize::from(reached), "its ability, in {zone:?}", zone = game.state.obj(card).zone);
+        assert!(!chars.is(CardType::Creature), "not its types, in {zone:?}", zone = game.state.obj(card).zone);
     }
 }

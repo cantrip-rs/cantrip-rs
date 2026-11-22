@@ -642,9 +642,9 @@ struct ObjCtx<'a> {
     room: bool,
     spell: bool,
     on_battlefield: bool,
-    /// A card in exile, read as itself (CR 400.7): no continuous effect reaches one there but a resolved effect's grant of an
-    /// ability (CR 113.6b, 613.1f), which is all that is applied to it.
-    in_exile: bool,
+    /// A card in exile or a graveyard, read as itself (CR 400.7): no continuous effect reaches one there but a resolved
+    /// effect's grant of an ability (CR 113.6b, 613.1f), which is all that is applied to it.
+    in_exile_or_graveyard: bool,
     has_counters: bool,
     has_hone: bool,
 }
@@ -728,7 +728,7 @@ fn object<'a>(cards: &CardTable, state: &'a GameState, id: ObjectId) -> Object<'
     let sources = crate::merge::sources(state, copy);
     // A copy effect that doesn't copy color leaves the colors of the values beneath it (CR 707.9c, 613.2a).
     let kept_colors = copy.filter(|c| c.color_uncopied()).map(|c| values_colors(cards, state, id, Some(c), u32::MAX));
-    let o = ObjCtx { id, obj, card, def, copy, kept_colors, sources, room, spell, on_battlefield: false, in_exile: false, has_counters: false, has_hone: false };
+    let o = ObjCtx { id, obj, card, def, copy, kept_colors, sources, room, spell, on_battlefield: false, in_exile_or_graveyard: false, has_counters: false, has_hone: false };
     // An object that has ceased to be itself - changed zones or ceased to exist - is as it last was (CR 400.7, 608.2h,
     // 603.10).
     if let Some(last) = state.last_known(id) {
@@ -737,16 +737,16 @@ fn object<'a>(cards: &CardTable, state: &'a GameState, id: ObjectId) -> Object<'
     // A phased-out permanent keeps its counters and the effects on it (CR 702.26d, 702.26f), so it is worked out as it is on
     // the battlefield, though no rule asks while it is phased out: what it shows, and what it is again as it phases in.
     let on_battlefield = (obj.zone.is(ZoneKind::Battlefield) || obj.zone.is(ZoneKind::PhasedOut)) && obj.became.is_none();
-    // A card in exile is as its card is, but for an ability an effect gave it there (CR 113.6b, 613.1f: Q, Stacking the
-    // Deck's; `given_in_exile`). The effects list holds only what is live, so the grant ends with its duration, and an object
-    // that has become another (CR 400.7) is read as it last was, before any of this (`last_known`), so nothing follows a card
-    // across zones.
-    let in_exile = obj.zone.is(ZoneKind::Exile) && obj.became.is_none();
-    let granted_in_exile = in_exile && state.effects.iter().any(|e| e.affected == id && given_in_exile(&e.kind));
+    // A card in exile or a graveyard is as its card is, but for an ability an effect gave it there (CR 113.6b, 613.1f: Q,
+    // Stacking the Deck's; Cursecloth Wrappings' embalm; `given_off_the_battlefield`). The effects list holds only what is live,
+    // so the grant ends with its duration, and an object that has become another (CR 400.7) is read as it last was, before
+    // any of this (`last_known`), so nothing follows a card across zones.
+    let in_exile_or_graveyard = (obj.zone.is(ZoneKind::Exile) || obj.zone.is(ZoneKind::Graveyard)) && obj.became.is_none();
+    let granted_off_the_battlefield = in_exile_or_graveyard && state.effects.iter().any(|e| e.affected == id && given_off_the_battlefield(&e.kind));
     // What could apply at all, found once: most objects have no effects, no statics touch them, and no counters.
     // A spell's text can be changed too (CR 612.1: "target spell or permanent").
     // The effects on a card do not follow it to the stack (CR 400.7): a card judged as a spell has none.
-    let has_effects = (on_battlefield || spell || granted_in_exile) && judged_as.is_none() && state.effects.iter().any(|e| e.affected == id);
+    let has_effects = (on_battlefield || spell || granted_off_the_battlefield) && judged_as.is_none() && state.effects.iter().any(|e| e.affected == id);
     // P/T counters also modify creature cards in other zones (CR 122.1a). A hypothetical spell is a new object, not
     // the card whose counters these are; departed objects use their last-known characteristics above.
     let has_counters = judged_as.is_none() && obj.became.is_none() && obj.has_counters();
@@ -767,12 +767,13 @@ fn object<'a>(cards: &CardTable, state: &'a GameState, id: ObjectId) -> Object<'
             return Object::Bare(card, true);
         }
     }
-    Object::Full(ObjCtx { on_battlefield, in_exile, has_counters, has_hone, ..o })
+    Object::Full(ObjCtx { on_battlefield, in_exile_or_graveyard, has_counters, has_hone, ..o })
 }
 
-/// The effects that apply to a card in exile: an ability an effect gave it there (CR 113.6b, 613.1f) - one written out (Q,
-/// Stacking the Deck's) or a keyword (Delay's and Epochrasite's "it gains suspend", CR 702.62a).
-fn given_in_exile(kind: &EffectKind) -> bool {
+/// The effects that apply to a card in exile or a graveyard: an ability an effect gave it there (CR 113.6b, 613.1f) - one
+/// written out (Q, Stacking the Deck's, Cursecloth Wrappings' embalm) or a
+/// keyword (Delay's and Epochrasite's "it gains suspend", CR 702.62a).
+fn given_off_the_battlefield(kind: &EffectKind) -> bool {
     matches!(kind, EffectKind::AddAbility(_) | EffectKind::AddKeywords(_))
 }
 
@@ -2021,7 +2022,7 @@ fn applies(view: &View, o: &ObjCtx, entry: &GEntry, snap: &Snap) -> bool {
         }
         GKind::Effect(e) => {
             e.affected == id
-                && (o.on_battlefield || o.spell || (o.in_exile && given_in_exile(&e.kind)))
+                && (o.on_battlefield || o.spell || (o.in_exile_or_graveyard && given_off_the_battlefield(&e.kind)))
                 && match e.kind {
                     EffectKind::ChangeText { from: Word::Subtype(from), .. } => {
                         let chars = &snap.chars;
