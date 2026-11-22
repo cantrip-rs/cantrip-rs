@@ -978,17 +978,17 @@ pub const fn spell(targets: &'static [TargetSpec], effect: Effect) -> Option<Spe
 
 /// One target that passes the filter (CR 115.1).
 pub const fn target(filter: TargetFilter) -> TargetSpec {
-    TargetSpec { min: 1, max: 1, filter, label: "", if_kicked: None, if_promised: None, together: None, opponent_chooses: false }
+    TargetSpec { min: 1, max: 1, filter, label: "", if_paid: None, if_promised: None, together: None, opponent_chooses: false }
 }
 
 /// "Up to one target" (CR 115.1d).
 pub const fn up_to_one(filter: TargetFilter) -> TargetSpec {
-    TargetSpec { min: 0, max: 1, filter, label: "", if_kicked: None, if_promised: None, together: None, opponent_chooses: false }
+    TargetSpec { min: 0, max: 1, filter, label: "", if_paid: None, if_promised: None, together: None, opponent_chooses: false }
 }
 
 /// "Up to N targets" (CR 115.1d).
 pub const fn up_to(n: u32, filter: TargetFilter) -> TargetSpec {
-    TargetSpec { min: 0, max: n, filter, label: "", if_kicked: None, if_promised: None, together: None, opponent_chooses: false }
+    TargetSpec { min: 0, max: n, filter, label: "", if_paid: None, if_promised: None, together: None, opponent_chooses: false }
 }
 
 impl TargetSpec {
@@ -1007,10 +1007,12 @@ impl TargetSpec {
         TargetSpec { min: TargetSpec::COUNTED, max: TargetSpec::COUNTED, ..self }
     }
 
-    /// "If this spell was kicked, instead choose between `min` and `max` of these targets" (CR 702.33a, 601.2c): The
-    /// Eagles Are Coming!'s and Divine Resilience's "instead choose any number of target creatures" is `if_kicked(0, n)`.
-    pub const fn if_kicked(self, min: u32, max: u32) -> TargetSpec {
-        TargetSpec { if_kicked: Some((min, max)), ..self }
+    /// "If this spell was kicked (or bargained), instead choose between `min` and `max` of these targets" (CR 702.33a,
+    /// 702.166a, 601.2c): the slot as the spell's optional additional cost, announced before its targets (CR 601.2b), makes
+    /// it. The Eagles Are Coming!'s and Divine Resilience's "instead choose any number of target creatures" is
+    /// `if_paid(0, n)`; Brave the Wilds's "if this spell was bargained, target land you control" is `between(0, 0).if_paid(1, 1)`.
+    pub const fn if_paid(self, min: u32, max: u32) -> TargetSpec {
+        TargetSpec { if_paid: Some((min, max)), ..self }
     }
 
     /// "If the gift was promised, instead choose between `min` and `max` of these targets" (CR 702.174a, 601.2c): Dewdrop

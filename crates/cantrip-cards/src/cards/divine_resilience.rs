@@ -17,7 +17,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     // One target creature you control; kicked, any number of them (CR 702.33a, 601.2c).
-    spell: spell(&[targets::CREATURE_YOU_CONTROL.if_kicked(0, TargetSpec::ANY_NUMBER)], effect),
+    spell: spell(&[targets::CREATURE_YOU_CONTROL.if_paid(0, TargetSpec::ANY_NUMBER)], effect),
     kicker: kicker(mana("{2}{W}")),
     ..oracle::DIVINE_RESILIENCE
 };

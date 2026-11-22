@@ -15,8 +15,8 @@ pub static CARD: CardDef = CardDef {
     kicker: kicker(mana("{1}{U}")),
     spell: spell(
         &[
-            target(targets::spell_with_mana_value_at_most::<2>).if_kicked(0, 0),
-            targets::SPELL.between(0, 0).if_kicked(1, 1),
+            target(targets::spell_with_mana_value_at_most::<2>).if_paid(0, 0),
+            targets::SPELL.between(0, 0).if_paid(1, 1),
         ],
         counter,
     ),

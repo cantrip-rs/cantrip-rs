@@ -628,7 +628,7 @@ fn choose_trigger_targets_after(
     // (`PendingTrigger::words`, CR 603.12, 113.7a).
     let text = trigger.words.map(|w| (trigger.source, w));
     for (spec, slot_player, at) in &slots {
-        let spec = &spec.when_kicked(kicked);
+        let spec = &spec.when_paid(kicked);
         let before = targets.len();
         'slot: {
             let candidates = crate::actions::target_candidates_with_text(

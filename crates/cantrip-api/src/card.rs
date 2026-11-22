@@ -791,10 +791,11 @@ pub struct TargetSpec {
     /// What the slot is for, said to the player choosing it: "Spell or permanent to return to its owner's hand". Empty when the card's one slot says
     /// it all. "{player}" stands for the opponent whose slot it is (`EACH_OPPONENT`).
     pub label: &'static str,
-    /// "If this spell was kicked, instead choose ..." (CR 702.33a, 601.2b-c): the slot's smallest and largest number of
-    /// targets when the spell or the ability's source was kicked, in place of `min` and `max`. The kicker is announced
-    /// before the targets are chosen, so the slot is asked once it is known (`TargetSpec::when_kicked`).
-    pub if_kicked: Option<(u32, u32)>,
+    /// "If this spell was kicked, instead choose ..." (CR 702.33a, 601.2b-c) or "If this spell was bargained, ..." (CR
+    /// 702.166a): the slot's smallest and largest number of targets when the spell was kicked or bargained (its optional
+    /// additional cost paid), or the ability's source was kicked, in place of `min` and `max`. The cost is announced before the
+    /// targets are chosen, so the slot is asked once it is known (`TargetSpec::when_paid`).
+    pub if_paid: Option<(u32, u32)>,
     /// "If the gift was promised, instead choose ..." (CR 702.174a, 601.2b-c): the slot's smallest and largest number of
     /// targets when the spell's gift was promised, in place of `min` and `max`. The gift is announced before the targets
     /// are chosen (CR 702.174m), so the slot is asked once it is known (`TargetSpec::when_promised`).
@@ -870,11 +871,12 @@ impl TargetSpec {
         self.min > 0 && self.min != TargetSpec::COUNTED
     }
 
-    /// The slot as it is chosen for a spell or source kicked `kicked` times: with the bounds `if_kicked` gives when it
-    /// was kicked (CR 702.33a, 601.2c), otherwise as printed.
-    pub const fn when_kicked(self, kicked: u8) -> TargetSpec {
-        match self.if_kicked {
-            Some((min, max)) if kicked > 0 => TargetSpec { min, max, if_kicked: None, ..self },
+    /// The slot as it is chosen for a spell or source whose optional additional cost was paid `paid` times (a kicker's
+    /// times kicked, or 1 for a bargain): with the bounds `if_paid` gives when it was (CR 702.33a, 702.166a, 601.2c),
+    /// otherwise as printed.
+    pub const fn when_paid(self, paid: u8) -> TargetSpec {
+        match self.if_paid {
+            Some((min, max)) if paid > 0 => TargetSpec { min, max, if_paid: None, ..self },
             _ => self,
         }
     }

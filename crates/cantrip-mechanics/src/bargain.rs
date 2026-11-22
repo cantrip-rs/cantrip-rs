@@ -2,7 +2,8 @@
 //! token." Beseech the Mirror prints it.
 //!
 //! A card with bargain gives `OPTIONAL_COST` as its `optional_cost` and `LABELS` as its `labels`; "if this spell was
-//! bargained" is `bargained` of the resolving spell (CR 702.166b).
+//! bargained" is `bargained` of the resolving spell (CR 702.166b); "if this spell was bargained, target ..." is a slot
+//! `TargetSpec::if_paid` asks for once the bargain is announced (CR 601.2b-c).
 
 use cantrip_api::*;
 

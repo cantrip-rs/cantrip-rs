@@ -159,7 +159,7 @@ static STRIKE: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
-static ONE_OR_KICKED_TWO: [TargetSpec; 1] = [TargetSpec { if_kicked: Some((2, 2)), ..target(permanent) }];
+static ONE_OR_KICKED_TWO: [TargetSpec; 1] = [TargetSpec { if_paid: Some((2, 2)), ..target(permanent) }];
 
 /// {4} sorcery, kicker {1}: "This spell costs {4} less to cast if it has two or more targets. Target permanent, or if this
 /// spell was kicked, two target permanents: you gain 3 life."
@@ -194,6 +194,37 @@ static PROMISE: CardDef = CardDef {
     spell: spell(&[target(theirs_unless_promised)], gain_three),
     gift: Some(GiftDef { kind: Gift::Card, give: give_nothing }),
     own_cost_changes: &[less_if_yours],
+    ..CardDef::BLANK
+};
+
+static BARGAINED_TARGET: [TargetSpec; 1] = [target(permanent).between(0, 0).if_paid(1, 1)];
+
+/// {4} sorcery, bargain (here: pay 1 life): "This spell costs {3} less to cast if it targets a permanent you control. If this
+/// spell was bargained, target permanent: you gain 3 life."
+static BARGAIN: CardDef = CardDef {
+    name: "Slot Test Bargain",
+    cost: FOUR,
+    has_cost: true,
+    types: TypeSet::of(&[CardType::Sorcery]),
+    spell: spell(&BARGAINED_TARGET, gain_three),
+    optional_cost: Some(OptionalCost::new(Cost { life: 1, ..Cost::NONE })),
+    labels: &["Cast without bargain", "Bargain: pay 1 life"],
+    own_cost_changes: &[less_if_yours],
+    ..CardDef::BLANK
+};
+
+static TARGET_OR_BARGAINED_NONE: [TargetSpec; 1] = [target(permanent).if_paid(0, 1)];
+
+/// {4} sorcery, bargain (here: pay 1 life): "Target permanent, or if this spell was bargained, up to one target permanent:
+/// you gain 3 life."
+static BARGAIN_UP_TO: CardDef = CardDef {
+    name: "Slot Test Bargain Up To",
+    cost: FOUR,
+    has_cost: true,
+    types: TypeSet::of(&[CardType::Sorcery]),
+    spell: spell(&TARGET_OR_BARGAINED_NONE, gain_three),
+    optional_cost: Some(OptionalCost::new(Cost { life: 1, ..Cost::NONE })),
+    labels: &["Cast without bargain", "Bargain: pay 1 life"],
     ..CardDef::BLANK
 };
 
@@ -444,7 +475,7 @@ static GRID: CardDef = CardDef {
 
 /// Your precombat main phase with priority, nothing anywhere.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&SPLIT_AND_PAIR, &SPLIT_AND_PAIR_TRIGGER, &FILLER, &BEAR, &TOWN, &PAIR, &SINGLE, &ENGINE, &CHOICE, &SWARM, &STRIKE, &DOUBLE, &PROMISE, &PAIR_PROMISED, &SPLIT, &RITE, &GRAFT, &SURGE, &WINGS, &WINGS_AURA, &DIAL, &HIVE, &BULK, &VOLLEY, &PAIRS, &COVENANT, &GRID])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&SPLIT_AND_PAIR, &SPLIT_AND_PAIR_TRIGGER, &FILLER, &BEAR, &TOWN, &PAIR, &SINGLE, &ENGINE, &CHOICE, &SWARM, &STRIKE, &DOUBLE, &BARGAIN, &BARGAIN_UP_TO, &PROMISE, &PAIR_PROMISED, &SPLIT, &RITE, &GRAFT, &SURGE, &WINGS, &WINGS_AURA, &DIAL, &HIVE, &BULK, &VOLLEY, &PAIRS, &COVENANT, &GRID])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -660,6 +691,54 @@ fn a_spell_whose_kicker_adds_a_target_is_offered_kicked_where_two_targets_make_i
     let double = put(&mut g, &DOUBLE, YOU, Zone::hand(YOU));
     add_mana(&mut g, 1);
     assert!(offered(&mut g, double).is_none(), "one permanent: no two different targets, so {{4}}");
+}
+
+#[test]
+fn a_spell_whose_bargain_adds_a_target_is_offered_bargained_where_the_target_makes_it_affordable() {
+    let (mut g, bargain, _, _) = board(&BARGAIN, true);
+    assert!(offered(&mut g, bargain).is_some(), "bargained at the caster's Bear it costs {{1}} (CR 702.166a, 601.2b-c, 601.2f)");
+    let mut g = game();
+    put(&mut g, &BEAR, THEM, Zone::BATTLEFIELD);
+    let bargain = put(&mut g, &BARGAIN, YOU, Zone::hand(YOU));
+    add_mana(&mut g, 1);
+    assert!(offered(&mut g, bargain).is_none(), "only the opponent's Bear: {{4}}");
+}
+
+#[test]
+fn a_bargained_spell_chooses_its_target_and_one_not_bargained_has_none() {
+    let (mut g, bargain, yours, _) = board(&BARGAIN, true);
+    let option = offered(&mut g, bargain).expect("offered");
+    let r = next(&mut g);
+    answer(&mut g, &r, Answer::Act(Action::of(&option)));
+    let r = next(&mut g);
+    let RequestKind::ChooseModes { additional_cost: true, .. } = &r.kind else { panic!("the bargain is asked first, not {:?}", r.kind) };
+    answer(&mut g, &r, Answer::Modes(vec![1]));
+    let r = next(&mut g);
+    let RequestKind::ChooseTarget { candidates, .. } = &r.kind else { panic!("bargained, its target is asked (CR 601.2c), not {:?}", r.kind) };
+    assert!(candidates.contains(&Target::Object(yours)));
+    answer(&mut g, &r, Answer::Targets(vec![Target::Object(yours)]));
+    let r = next(&mut g);
+    pay_and_resolve(&mut g, r);
+    assert_eq!(g.state.player(YOU).life, 22, "paid 1 life for the bargain, gained 3");
+    let (mut g, bargain, _, _) = board(&BARGAIN, true);
+    add_mana(&mut g, 3);
+    let option = offered(&mut g, bargain).expect("offered");
+    let r = next(&mut g);
+    answer(&mut g, &r, Answer::Act(Action::of(&option)));
+    let r = next(&mut g);
+    answer(&mut g, &r, Answer::Modes(vec![0]));
+    let r = next(&mut g);
+    assert!(!matches!(r.kind, RequestKind::ChooseTarget { .. }), "not bargained, it has no target (CR 601.2c), got {:?}", r.kind);
+    pay_and_resolve(&mut g, r);
+    assert_eq!(g.state.player(YOU).life, 23);
+}
+
+#[test]
+fn a_spell_with_no_target_to_choose_unless_bargained_is_offered_for_its_bargained_announcement() {
+    let mut g = game();
+    let spell = put(&mut g, &BARGAIN_UP_TO, YOU, Zone::hand(YOU));
+    add_mana(&mut g, 4);
+    assert!(offered(&mut g, spell).is_some(), "no permanent to target, but bargained it needs none (CR 702.166a, 601.2b-c)");
 }
 
 #[test]

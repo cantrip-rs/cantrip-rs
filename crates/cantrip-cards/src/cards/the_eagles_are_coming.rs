@@ -41,7 +41,7 @@ static BIRD_SOLDIER: CardDef = CardDef {
 
 pub static CARD: CardDef = CardDef {
     // One target creature you own; kicked, any number of them (CR 702.33a, 601.2c).
-    spell: spell(&[targets::CREATURE_YOU_OWN.if_kicked(0, TargetSpec::ANY_NUMBER)], effect),
+    spell: spell(&[targets::CREATURE_YOU_OWN.if_paid(0, TargetSpec::ANY_NUMBER)], effect),
     kicker: kicker(mana("{2}{W}{W}")),
     delayed: &[delayed_trigger(
         create_birds,

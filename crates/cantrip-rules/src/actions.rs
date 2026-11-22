@@ -4174,7 +4174,7 @@ fn modes_possible(cx: &Cx, asker: &Asker, modal: &ModalDef) -> bool {
 /// does not choose its target after its kicker or X (CR 601.2b-c), nor how many by its kicker.
 fn targets_with_cast(cards: &CardTable, def: &'static CardDef) -> bool {
     let specs = cards.spell_targets_of(def);
-    def.modal.is_none() && !def.late_targets && def.gift.is_none() && def.divide.is_none() && targets_with_action(specs) && specs[0].if_kicked.is_none()
+    def.modal.is_none() && !def.late_targets && def.gift.is_none() && def.divide.is_none() && targets_with_action(specs) && specs[0].if_paid.is_none()
 }
 
 /// Fills in a spell option's targets, or checks that its modes and targets could be announced: a modal spell needs
@@ -4197,8 +4197,8 @@ fn offer_spell(cx: &Cx, asker: &Asker, def: &'static CardDef, option: &mut Actio
     }
     // "If this spell was kicked, instead choose ..." (CR 702.33a, 601.2c): the targets wait for the kicker, and it may be
     // cast if it could be announced either unkicked or, with a kicker to pay, kicked.
-    if def.has_kicker() && specs.iter().any(|spec| spec.if_kicked.is_some()) {
-        return slots_satisfiable(cx, asker, specs) || slots_satisfiable(cx, asker, &specs.iter().map(|spec| spec.when_kicked(1)).collect::<Vec<_>>());
+    if (def.has_kicker() || def.optional_cost.is_some()) && specs.iter().any(|spec| spec.if_paid.is_some()) {
+        return slots_satisfiable(cx, asker, specs) || slots_satisfiable(cx, asker, &specs.iter().map(|spec| spec.when_paid(1)).collect::<Vec<_>>());
     }
     with_targets(cx, asker, specs, option)
 }
@@ -4643,7 +4643,7 @@ impl<K: PartialEq> AnnouncementSearch<'_, K> {
 }
 
 /// Whether some legal announcement of the targets of `segments` after `prefix` (the target announced with the action, if
-/// any), with what was announced before them (`counted`, `kicked`, `gift`, and `q` reading them), has a total cost `covered`
+/// any), with what was announced before them (`counted`, `paid` - the times kicked or 1 if bargained -, `gift`, and `q` reading them), has a total cost `covered`
 /// holds for. `key` is what the cost changes make of an announcement (`deltas`), the only part of the cost the targets
 /// reach: `covered` is asked once for each different one.
 #[allow(clippy::too_many_arguments)]
@@ -4653,7 +4653,7 @@ fn some_announcement<K: PartialEq>(
     asker: &Asker,
     prefix: &[Target],
     segments: &[Vec<TargetSpec>],
-    (counted, kicked, gift): (u32, u8, bool),
+    (counted, paid, gift): (u32, u8, bool),
     budget: &mut u32,
     named: &[ObjectId],
     key: &dyn Fn(&[Target], &Watching) -> K,
@@ -4663,7 +4663,7 @@ fn some_announcement<K: PartialEq>(
     for (segment, specs) in segments.iter().enumerate() {
         let expanded = crate::resolve::expand_specs(cx.s(), asker.controller, specs);
         let n = expanded.len();
-        slots.extend(expanded.into_iter().map(|(spec, player, _)| (spec.when_kicked(kicked).when_promised(gift), player, segment, n)));
+        slots.extend(expanded.into_iter().map(|(spec, player, _)| (spec.when_paid(paid).when_promised(gift), player, segment, n)));
     }
     let watching = Watching { alike: std::cell::RefCell::new(Vec::new()), told: std::cell::Cell::new(false) };
     let mut search = AnnouncementSearch { q, asker, slots, counted, gift, key, covered, seen: Vec::new(), budget, named, watching };
@@ -4684,7 +4684,7 @@ fn named_by_changes(cx: &Cx, a: &Available, costed: ObjectId) -> Vec<ObjectId> {
 /// Whether a slot's number of targets, or a part of the rule of its targets together ("with total mana value X or less",
 /// "mana value X or less"), is counted by X or the kicker (CR 601.2b-c), unkicked or kicked.
 fn reads_count(spec: &TargetSpec) -> bool {
-    [*spec, spec.when_kicked(1)].iter().any(|s| s.min == TargetSpec::COUNTED || s.max == TargetSpec::COUNTED || s.together_counted())
+    [*spec, spec.when_paid(1)].iter().any(|s| s.min == TargetSpec::COUNTED || s.max == TargetSpec::COUNTED || s.together_counted())
 }
 
 /// The most X (or times kicked) that could make a difference to the targets of slots counted by it (`reads_count`): the
@@ -4694,7 +4694,7 @@ fn reads_count(spec: &TargetSpec) -> bool {
 fn count_bound<'a>(cx: &Cx, asker: &Asker, specs: impl Iterator<Item = &'a TargetSpec>) -> u32 {
     let mut bound = 0u32;
     for spec in specs.filter(|s| reads_count(s)) {
-        let candidates = target_candidates(cx, asker, &spec.when_kicked(1));
+        let candidates = target_candidates(cx, asker, &spec.when_paid(1));
         let n = if spec.together_counted() {
             candidates.iter().map(|&t| if let Target::Object(id) = t { cx.mana_value(id) } else { 0 }).sum::<u32>()
         } else {
@@ -4897,7 +4897,7 @@ fn some_cast(
                                 asker,
                                 prefix.unwrap_or(&[]),
                                 &segments,
-                                (counted, kicked, gift.is_some()),
+                                (counted, kicked.max(u8::from(paid)), gift.is_some()),
                                 budget,
                                 &named,
                                 &key,
@@ -5637,7 +5637,7 @@ fn x_payable(cx: &Cx, a: &Available, player: PlayerId, source: ObjectId, paid: &
             },
             (None, None) => own.to_vec(),
         };
-        let found = some_announcement(&view, cx, &asker, &[], &[specs], (counted, announced.kicked, false), &mut budget, &named, &key, &mut |t| covered(cost, t));
+        let found = some_announcement(&view, cx, &asker, &[], &[specs], (counted, announced.kicked.max(u8::from(announced.paid > 0)), false), &mut budget, &named, &key, &mut |t| covered(cost, t));
         if found == Found::Yes {
             return true;
         }
@@ -11637,14 +11637,14 @@ fn cast(
     let mut targets: Vec<Target> = targets.to_vec();
     let mut of: Vec<u8> = Vec::new();
     if let Some(modal) = def.modal {
-        (targets, of) = choose_slots(cx, player, spell, true, &mode_specs(modal, mask), counted, item.kicked, announced_x(&item), None)?;
+        (targets, of) = choose_slots(cx, player, spell, true, &mode_specs(modal, mask), counted, optional_cost_paid(&item), announced_x(&item), None)?;
         set_item_targets(cx, &targets, &of);
     } else if let Some(divide) = def.divide
         && !specs.is_empty()
     {
         (targets, of) = announce_divided(cx, player, spell, true, divide, specs, &item, counted, None)?;
     } else if (resolving || !targets_with_cast(cx.cards(), def)) && !specs.is_empty() {
-        (targets, of) = choose_slots(cx, player, spell, true, specs, counted, item.kicked, announced_x(&item), None)?;
+        (targets, of) = choose_slots(cx, player, spell, true, specs, counted, optional_cost_paid(&item), announced_x(&item), None)?;
         set_item_targets(cx, &targets, &of);
     }
 
@@ -11660,7 +11660,7 @@ fn cast(
         for spliced in spliced {
             let specs = cx.card(spliced).spell.map_or(&[][..], |s| s.targets);
             if !specs.is_empty() {
-                let (chosen, chosen_of) = choose_slots(cx, player, spell, true, specs, counted, item.kicked, announced_x(&item), None)?;
+                let (chosen, chosen_of) = choose_slots(cx, player, spell, true, specs, counted, optional_cost_paid(&item), announced_x(&item), None)?;
                 of.extend(chosen_of.iter().map(|&s| next + s));
                 all.extend(chosen);
             }
@@ -12494,19 +12494,25 @@ pub(crate) fn enough_together(q: &dyn Query, asker: &Asker, together: &Option<Pa
         && (together.is_none() || least == 0 || select::first_targets(q, together.as_ref(), asker.controller, asker.source, candidates, least as usize).is_some())
 }
 
+/// How many times the optional additional cost of a spell as announced was paid, as `TargetSpec::when_paid` reads it: the
+/// times kicked (CR 702.33a), or 1 if its `optional_cost` was paid (bargained, CR 702.166a).
+fn optional_cost_paid(item: &StackItem) -> u8 {
+    item.kicked.max(u8::from(item.paid > 0))
+}
+
 /// Each target slot's targets, asked in slot order (CR 601.2c), each a target of the slot's own (a player may be
 /// chosen for two slots). A slot that chose nothing ("up to") keeps its place with `Target::None` among the slots, so
 /// every target stays at the index of its slot (CR 601.2c, 115.1), as far as the last one that chose. Each target comes
 /// with the index of the spec it was chosen for (`StackItem::spec_of`), so a slot of several targets may stand anywhere.
 /// `x` is the X announced for the spell or ability (`resolve::announced_x`), which its filters read.
 #[allow(clippy::too_many_arguments)]
-fn choose_slots(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, specs: &[TargetSpec], counted: u32, kicked: u8, x: Option<u32>, by: Option<Linked>) -> R<(Vec<Target>, Vec<u8>)> {
-    choose_slots_after(cx, player, source, spell, specs, counted, kicked, x, by, &[], 0)
+fn choose_slots(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, specs: &[TargetSpec], counted: u32, paid: u8, x: Option<u32>, by: Option<Linked>) -> R<(Vec<Target>, Vec<u8>)> {
+    choose_slots_after(cx, player, source, spell, specs, counted, paid, x, by, &[], 0)
 }
 
 /// Announce slots after a divided slot, preserving the earlier targets for filters that read them.
 #[allow(clippy::too_many_arguments)]
-fn choose_slots_after(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, specs: &[TargetSpec], counted: u32, kicked: u8, x: Option<u32>, by: Option<Linked>, earlier: &[Target], first_spec: u8) -> R<(Vec<Target>, Vec<u8>)> {
+fn choose_slots_after(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, specs: &[TargetSpec], counted: u32, paid: u8, x: Option<u32>, by: Option<Linked>, earlier: &[Target], first_spec: u8) -> R<(Vec<Target>, Vec<u8>)> {
     let asker = Asker { instance: None, source, controller: player, by, spell };
     let slots = crate::resolve::expand_specs(cx.s(), player, specs);
     let mut targets = earlier.to_vec();
@@ -12515,7 +12521,7 @@ fn choose_slots_after(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bo
     for (spec, slot_player, at) in &slots {
         // CR 702.33a, 601.2c: "if this spell was kicked, instead choose ...", the kicker announced by now; CR 702.174a,
         // 601.2c: "if the gift was promised, instead choose ...", the gift announced before the targets (CR 702.174m).
-        let spec = &spec.when_kicked(kicked).when_promised(spell && cx.s().obj(source).gift.is_some());
+        let spec = &spec.when_paid(paid).when_promised(spell && cx.s().obj(source).gift.is_some());
         let before = targets.len();
         // "Of an opponent's choice" (CR 601.7, 602.3): the opponent who chooses is decided first, and the slot's filter asks
         // about them ("they control", Preacher).
@@ -12639,7 +12645,7 @@ fn announce_divided(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool
         Divided::Impossible => return Err(Stop::Cancel),
     }
     let mut of = vec![0; targets.len()];
-    let (later, later_of) = choose_slots_after(cx, player, source, spell, &specs[1..], counted, item.kicked, x, by, &targets, 1)?;
+    let (later, later_of) = choose_slots_after(cx, player, source, spell, &specs[1..], counted, optional_cost_paid(item), x, by, &targets, 1)?;
     targets.extend(later);
     of.extend(later_of);
     set_item_targets(cx, &targets, &of);

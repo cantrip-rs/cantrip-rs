@@ -20,8 +20,8 @@ fn copies(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 pub static CARD: CardDef = CardDef {
     kicker: kicker(mana("{4}{U}{B}")),
     spell: spell(&[
-        targets::CREATURE_AN_OPPONENT_CONTROLS.if_kicked(0, 0),
-        targets::OPPONENT.between(0, 0).if_kicked(1, 1),
+        targets::CREATURE_AN_OPPONENT_CONTROLS.if_paid(0, 0),
+        targets::OPPONENT.between(0, 0).if_paid(1, 1),
     ], copies),
     ..oracle::MIRROR_UNIVERSE_INTRUSION
 };
