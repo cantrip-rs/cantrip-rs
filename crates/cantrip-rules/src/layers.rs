@@ -3649,6 +3649,10 @@ fn statics_apply(cards: &CardTable, state: &GameState, log: &[Record], source: O
         return false;
     }
     defs.any(|def| {
+        // A characteristic-defining ability applies to its own object, which is all it applies to (CR 604.3).
+        if itself && def.own {
+            return true;
+        }
         let view = View::new(cards, state, log, def.layer);
         others.iter().any(|&other| (itself || other != source) && (def.affects)(&view, source, other, &chars(cards, state, log, other)))
     })
