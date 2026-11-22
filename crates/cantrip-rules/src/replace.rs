@@ -938,6 +938,7 @@ fn choose(cx: &mut Cx, proposal: &Proposal, found: &[Candidate]) -> Option<usize
             _ => Vec::new(),
         },
         draw: matches!(proposal, Proposal::Draw(_)),
+        mana: false,
     };
     match cx.ask_core(affected(cx, proposal), ask, false) {
         Ok(Answer::Index(i)) if (i as usize) < found.len() => Some(i as usize),

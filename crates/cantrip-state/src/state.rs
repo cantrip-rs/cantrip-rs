@@ -873,6 +873,27 @@ impl GameState {
         self.empty_mana_keeping(player, ending, [false; 6], None);
     }
 
+    /// The ordinary mana in `player`'s pool that lasts past `ending` (CR 500.5a): what emptying the pool as it ends leaves.
+    fn mana_lasting_past(&self, player: PlayerId, ending: ManaLasts) -> ManaPool {
+        let mut lasting = ManaPool::default();
+        for e in self.mana_from.iter().filter(|e| e.player == player && e.restriction.is_none() && e.lasts > ending) {
+            for (k, n) in lasting.0.iter_mut().zip(e.pool.0) {
+                *k += n;
+            }
+        }
+        lasting
+    }
+
+    /// Whether `player` would lose some unspent mana as `ending` ends, but for the types `kept` names: what
+    /// `empty_mana_keeping` empties or turns into other mana. An effect that would turn the mana lost into other mana
+    /// (CR 614.1a) has nothing to replace, and no one is asked which applies (CR 616.1), when this is false.
+    pub fn would_lose_mana(&self, player: PlayerId, ending: ManaLasts, kept: [bool; 6]) -> bool {
+        let pool = &self.players[player.index()].pool;
+        let lasting = if pool.is_empty() { ManaPool::default() } else { self.mana_lasting_past(player, ending) };
+        let ordinary = (0..6).any(|m| !kept[m] && pool.0[m] > lasting.0[m]);
+        ordinary || self.restricted_mana.iter().any(|r| r.player == player && (0..6).any(|m| !kept[m] && r.pool.0[m] > 0))
+    }
+
     /// `empty_mana`, except for the types of mana `kept` names (indexed by `Mana`). A static ability says the player doesn't
     /// lose that unspent mana as steps and phases end (CR 500.5: Electro, Assaulting Battery, Upwelling). That mana stays,
     /// restricted or not (CR 106.6). Kept mana whose own duration ran out with `ending` stays as ordinary mana. It is lost at
@@ -883,12 +904,7 @@ impl GameState {
     /// Mana already of that type becomes what it was, so it simply stays.
     pub fn empty_mana_keeping(&mut self, player: PlayerId, ending: ManaLasts, kept: [bool; 6], becomes: Option<Mana>) {
         if !self.players[player.index()].pool.is_empty() || !self.players[player.index()].lasting.is_empty() {
-            let mut lasting = ManaPool::default();
-            for e in self.mana_from.iter().filter(|e| e.player == player && e.restriction.is_none() && e.lasts > ending) {
-                for (k, n) in lasting.0.iter_mut().zip(e.pool.0) {
-                    *k += n;
-                }
-            }
+            let lasting = self.mana_lasting_past(player, ending);
             self.update_player(player, |pl| {
                 for (m, &keep) in kept.iter().enumerate() {
                     if !keep {

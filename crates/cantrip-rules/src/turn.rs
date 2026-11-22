@@ -1,7 +1,7 @@
 //! The turn (CR 500-514): steps and their turn-based actions, combat, cleanup, and the priority round of each step.
 
 use cantrip_api::*;
-use cantrip_state::{Frame, FrameKind};
+use cantrip_state::{Frame, FrameKind, Turn};
 
 use crate::layers::{self, live, summoning_sick};
 use crate::{Cx, Flow, Game, R, Stop, actions, ops};
@@ -68,40 +68,99 @@ pub fn permute<T>(state: &mut GameState, items: &mut [T]) {
     }
 }
 
-/// Moves the game on to its next step, or its first turn, and puts that step's work on the agenda.
+/// Whether the step ending now ends the combat phase: its end of combat step, or whatever step of it an effect ended the turn
+/// or the combat phase in (CR 724.1d, 724.2d), or the only step of a scheduled combat phase.
+fn combat_ends(turn: &Turn) -> bool {
+    let ending = turn.step();
+    ending == Step::EndOfCombat
+        || ((turn.ending || turn.combat_ending || turn.phase_only_step.is_some())
+            && matches!(ending, Step::BeginCombat | Step::DeclareAttackers | Step::DeclareBlockers | Step::CombatDamage))
+}
+
+/// What the mana pools empty of as the step ending now ends (CR 500.5): the mana that lasts until the end of combat is lost
+/// as the combat phase ends, and the mana that lasts until end of turn as the cleanup step does (CR 106.4, 500.5a).
+fn mana_ending(turn: &Turn) -> ManaLasts {
+    if turn.step() == Step::Cleanup {
+        ManaLasts::Turn
+    } else if combat_ends(turn) {
+        ManaLasts::Combat
+    } else {
+        ManaLasts::Step
+    }
+}
+
+/// What empties the pools as the step ending now ends: for each player, the types a static ability or a resolved effect
+/// keeps (CR 500.5: Electro, Assaulting Battery; `static_rules::mana_kept`), and the effects that would turn the mana they
+/// lose into other mana instead (CR 614.1a: Ozai, the Phoenix King; `static_rules::mana_lost_becomes`), asked as the step ends.
+#[allow(clippy::type_complexity)]
+fn mana_emptying(game: &mut Game) -> (ManaLasts, Vec<(PlayerId, [bool; 6])>, Vec<(PlayerId, Mana, ObjectId)>) {
+    let ends = mana_ending(&game.state.turn);
+    let cx = Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
+    (ends, crate::static_rules::mana_kept(&cx), crate::static_rules::mana_lost_becomes(&cx))
+}
+
+fn kept_of(kept: &[(PlayerId, [bool; 6])], player: PlayerId) -> [bool; 6] {
+    kept.iter().find(|&&(q, _)| q == player).map_or([false; 6], |&(_, k)| k)
+}
+
+/// Empties every player's pool as the step ends (CR 500.5), but for what `kept` keeps, the mana each would lose becoming
+/// what `becomes` names for them, if anything.
+fn empty_pools(s: &mut GameState, ends: ManaLasts, kept: &[(PlayerId, [bool; 6])], becomes: impl Fn(PlayerId) -> Option<Mana>) {
+    for p in s.seats().collect::<Vec<_>>() {
+        s.empty_mana_keeping(p, ends, kept_of(kept, p), becomes(p));
+    }
+    // "When that mana is spent" waits only while some of that mana is left (`DelayedWhen::ThatMana`).
+    s.drop_spent_mana_riders();
+}
+
+/// The players who choose which of several effects turns the mana they would lose as the step ends into other mana (CR
+/// 616.1), in APNAP order (CR 101.4): those still in the game with more than one such type and some mana to lose.
+fn mana_choosers(s: &GameState, ends: ManaLasts, kept: &[(PlayerId, [bool; 6])], becomes: &[(PlayerId, Mana, ObjectId)]) -> Vec<PlayerId> {
+    if becomes.len() < 2 {
+        return Vec::new();
+    }
+    s.apnap().filter(|&p| crate::static_rules::mana_lost_becomes_choice(becomes, p) && s.would_lose_mana(p, ends, kept_of(kept, p))).collect()
+}
+
+/// Moves the game on to its next step, or its first turn, and puts that step's work on the agenda. Mana empties as the step
+/// ends (CR 500.5); where a player chooses what their lost mana becomes (CR 616.1), that is a frame of its own
+/// (`FrameKind::EmptyMana`, `empty_mana_step`), which then moves the game on.
 pub fn next_step(game: &mut Game) {
+    if game.state.turn.number > 0 {
+        let (ends, kept, becomes) = mana_emptying(game);
+        if !mana_choosers(&game.state, ends, &kept, &becomes).is_empty() {
+            game.state.frame_push(Frame::new(FrameKind::EmptyMana));
+            return;
+        }
+        empty_pools(&mut game.state, ends, &kept, |p| crate::static_rules::only_mana_lost_becomes(&becomes, p));
+    }
+    advance(game);
+}
+
+/// The pools empty as the step ends (CR 500.5), each player who has more than one effect that would turn the mana they lose
+/// into other mana choosing which applies (CR 616.1), in APNAP order (CR 101.4); then the game moves on to the next step.
+/// Every question is asked before any pool empties, so a run replayed with its answers does the same.
+pub(crate) fn empty_mana_step(cx: &mut Cx) -> R<Flow> {
+    let (ends, kept, becomes) = mana_emptying(cx.g);
+    let mut chosen: Vec<(PlayerId, Mana)> = Vec::new();
+    for p in mana_choosers(cx.s(), ends, &kept, &becomes) {
+        if let Some(mana) = crate::static_rules::choose_mana_lost_becomes(cx, p, &becomes)? {
+            chosen.push((p, mana));
+        }
+    }
+    empty_pools(cx.st(), ends, &kept, |p| {
+        chosen.iter().find(|&&(q, _)| q == p).map(|&(_, m)| m).or_else(|| crate::static_rules::only_mana_lost_becomes(&becomes, p))
+    });
+    advance(cx.g);
+    Ok(Flow::Done)
+}
+
+/// Moves the game on to its next step, or its first turn, once the pools have emptied, and puts that step's work on the
+/// agenda.
+fn advance(game: &mut Game) {
     let turn = game.state.turn;
     let ending = turn.step();
-    // The combat phase ends with its end of combat step, or with whatever step of it an effect ended the turn or the
-    // combat phase in (CR 724.1d, 724.2d), or with the only step of a scheduled combat phase.
-    let combat_ends = ending == Step::EndOfCombat
-        || ((turn.ending || turn.combat_ending || turn.phase_only_step.is_some())
-            && matches!(ending, Step::BeginCombat | Step::DeclareAttackers | Step::DeclareBlockers | Step::CombatDamage));
-
-    // Mana empties as each step ends (CR 500.5), except the mana that lasts until the end of combat, which is lost as
-    // the combat phase ends, and the mana that lasts until end of turn, lost as the cleanup step does (CR 106.4, 500.5a).
-    if turn.number > 0 {
-        let ends = if ending == Step::Cleanup {
-            ManaLasts::Turn
-        } else if combat_ends {
-            ManaLasts::Combat
-        } else {
-            ManaLasts::Step
-        };
-        // Except what a static ability keeps (CR 500.5: Electro, Assaulting Battery), asked as the step ends, and what one turns
-        // into other mana rather than let it be lost (CR 614.1a: Ozai, the Phoenix King).
-        let (kept, becomes) = {
-            let cx = Cx { g: &mut *game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-            (crate::static_rules::mana_kept(&cx), crate::static_rules::mana_lost_becomes(&cx))
-        };
-        let s = &mut game.state;
-        for p in s.seats().collect::<Vec<_>>() {
-            let keep = kept.iter().find(|&&(q, _)| q == p).map_or([false; 6], |&(_, k)| k);
-            s.empty_mana_keeping(p, ends, keep, becomes.iter().find(|&&(q, _)| q == p).map(|&(_, mana)| mana));
-        }
-        // "When that mana is spent" waits only while some of that mana is left (`DelayedWhen::ThatMana`).
-        s.drop_spent_mana_riders();
-    }
+    let combat_ends = combat_ends(&turn);
     let main_seen = turn.scheduled && game.log.iter().rev().take_while(|r| r.turn == turn.number).any(|r| matches!(r.event, Event::StepBegan { step } if step.is_main()));
     // A duration through this step ends at its boundary, even when the step is ended early. Settle control before
     // the new step's beginning triggers inspect its permanents (CR 500.4, 611.2a).
@@ -771,7 +830,7 @@ fn skip_turn(cx: &mut Cx, player: PlayerId) -> R<bool> {
             sources.push(id);
             hints.push(rule.hint.into());
         }
-        let ask = RequestKind::ChooseReplacement { subject: None, life: None, sources, hints, damage: None, turn: true, counters: Vec::new(), draw: false };
+        let ask = RequestKind::ChooseReplacement { subject: None, life: None, sources, hints, damage: None, turn: true, counters: Vec::new(), draw: false, mana: false };
         if let Some(Answer::Index(i)) = cx.ask_rule(player, ask)?
             && i > 0
             && let Some(&(id, rule)) = optional.get(i as usize - 1)

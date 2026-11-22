@@ -773,6 +773,7 @@ impl Game {
                 let flow = match kind {
                     FrameKind::Opening => turn::opening(&mut cx),
                     FrameKind::BeginStep => turn::begin_step(&mut cx),
+                    FrameKind::EmptyMana => turn::empty_mana_step(&mut cx),
                     FrameKind::Priority => turn::priority(&mut cx),
                     FrameKind::Settle => settle::settle(&mut cx),
                     FrameKind::Act { player } => actions::act(&mut cx, player),
@@ -1978,7 +1979,7 @@ impl<'a> Cx<'a> {
         let Some(frame) = self.g.state.agenda.get(self.frame) else { return Cause::Rules };
         match frame.kind {
             FrameKind::Act { player } => Cause::Player(player),
-            FrameKind::BeginStep | FrameKind::Opening => Cause::Turn,
+            FrameKind::BeginStep | FrameKind::Opening | FrameKind::EmptyMana => Cause::Turn,
             FrameKind::Resolve { .. } => match self.resolving() {
                 Some(item) if item.kind == StackKind::Spell => Cause::Spell(item.object),
                 Some(item) => Cause::Ability { source: item.object, ability: item.ability },
@@ -3373,8 +3374,15 @@ impl cantrip_api::Game for Cx<'_> {
         // `Turn` is the longest intrinsic mana lifetime. An explicit loss is unrelated to step/phase boundaries,
         // so no static `mana_kept` rule applies. This also removes source, snow and restriction provenance. A static ability
         // that turns the mana that would be lost into other mana does apply (CR 614.1a, Ozai, the Phoenix King): that mana stays,
-        // and nothing is lost.
-        let becomes = static_rules::mana_lost_becomes(self).into_iter().find(|&(p, _)| p == player).map(|(_, mana)| mana);
+        // and nothing is lost. With more than one, the player chooses which applies (CR 616.1), and the others then have nothing
+        // to replace. This operation cannot stop at the question: until it is answered the run goes on with the first, and it is
+        // replayed with the answer (`Cx::ask_core`, as `replace::choose` is). Outside a frame no one can be asked.
+        let all = static_rules::mana_lost_becomes(self);
+        let mut becomes = static_rules::only_mana_lost_becomes(&all, player);
+        if static_rules::mana_lost_becomes_choice(&all, player) && self.g.state.would_lose_mana(player, ManaLasts::Turn, [false; 6]) {
+            let first = all.iter().find(|&&(p, _, _)| p == player).map(|&(_, mana, _)| mana);
+            becomes = if self.frame < self.g.state.agenda.len() { static_rules::choose_mana_lost_becomes(self, player, &all).unwrap_or(first) } else { first };
+        }
         self.g.state.empty_mana_keeping(player, ManaLasts::Turn, [false; 6], becomes);
         if becomes.is_some() {
             lost = ManaPool::default();

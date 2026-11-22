@@ -5,7 +5,7 @@
 use cantrip_api::*;
 use cantrip_state::{BlockCost, ManaPart};
 
-use crate::{Cx, actions::WithWords};
+use crate::{Cx, R, actions::WithWords};
 
 /// The permanents with a static ability of this kind, with the player who controls each, once for each definition it has
 /// one in: a merged permanent has its other components' (CR 702.140e, `CardTable::texts`).
@@ -92,21 +92,79 @@ pub fn mana_kept(cx: &Cx) -> Vec<(PlayerId, [bool; 6])> {
     kept
 }
 
-/// The players whose unspent mana a static ability turns into mana of one type instead of letting them lose it (CR 106.4,
-/// 614.1a, `CardDef::mana_lost_becomes`), each with that type. Empty while no permanent with its abilities has one (CR 613.1f).
-pub fn mana_lost_becomes(cx: &Cx) -> Vec<(PlayerId, Mana)> {
-    let mut becomes: Vec<(PlayerId, Mana)> = Vec::new();
+/// The static abilities that turn the unspent mana a player would lose into mana of one type instead (CR 106.4, 614.1a,
+/// `CardDef::mana_lost_becomes`): each player with each type one of them names for that player's mana, and the first
+/// permanent that names it. Two that name one type do the same, so it is listed once. Empty while no permanent with its
+/// abilities has one (CR 613.1f).
+pub fn mana_lost_becomes(cx: &Cx) -> Vec<(PlayerId, Mana, ObjectId)> {
+    let mut becomes: Vec<(PlayerId, Mana, ObjectId)> = Vec::new();
     for (id, controller, def, by) in sources(cx, |d| !d.mana_lost_becomes.is_empty()) {
         let asker = Asker { instance: None, source: id, controller, by, spell: false };
         for player in cx.s().seats() {
-            if becomes.iter().all(|&(p, _)| p != player)
-                && let Some(mana) = def.mana_lost_becomes.iter().find_map(|rule| rule(cx, &asker, player))
-            {
-                becomes.push((player, mana));
+            for mana in def.mana_lost_becomes.iter().filter_map(|rule| rule(cx, &asker, player)) {
+                if !becomes.iter().any(|&(p, m, _)| p == player && m == mana) {
+                    becomes.push((player, mana, id));
+                }
             }
         }
     }
     becomes
+}
+
+/// The one type `player`'s mana would become where `becomes` (`mana_lost_becomes`) names only one for them, None where it
+/// names none or more than one (`choose_mana_lost_becomes` asks then).
+pub(crate) fn only_mana_lost_becomes(becomes: &[(PlayerId, Mana, ObjectId)], player: PlayerId) -> Option<Mana> {
+    let mut theirs = becomes.iter().filter(|&&(p, _, _)| p == player);
+    match (theirs.next(), theirs.next()) {
+        (Some(&(_, mana, _)), None) => Some(mana),
+        _ => None,
+    }
+}
+
+/// Whether `player` has more than one type their lost mana would become (`mana_lost_becomes`): a choice of which effect
+/// applies (CR 616.1).
+pub(crate) fn mana_lost_becomes_choice(becomes: &[(PlayerId, Mana, ObjectId)], player: PlayerId) -> bool {
+    becomes.iter().filter(|&&(p, _, _)| p == player).nth(1).is_some()
+}
+
+/// What an effect turning unspent mana into mana of `mana` says it does, offered beside its source.
+fn becomes_hint(mana: Mana) -> &'static str {
+    match mana {
+        Mana::W => "That mana becomes white instead",
+        Mana::U => "That mana becomes blue instead",
+        Mana::B => "That mana becomes black instead",
+        Mana::R => "That mana becomes red instead",
+        Mana::G => "That mana becomes green instead",
+        Mana::C => "That mana becomes colorless instead",
+    }
+}
+
+/// The type the unspent mana `player` would lose becomes (`mana_lost_becomes`), None where nothing turns it: with more than
+/// one effect that would, the player chooses which applies (CR 616.1), and once it has the mana is no longer lost, so the
+/// others have nothing to replace (CR 616.1f). The caller asks only where some of the player's mana would be lost
+/// (`GameState::would_lose_mana`). A question that has no answer yet stops the run (`Cx::ask_core`).
+pub(crate) fn choose_mana_lost_becomes(cx: &mut Cx, player: PlayerId, becomes: &[(PlayerId, Mana, ObjectId)]) -> R<Option<Mana>> {
+    let theirs: Vec<(Mana, ObjectId)> = becomes.iter().filter(|&&(p, _, _)| p == player).map(|&(_, m, id)| (m, id)).collect();
+    if theirs.len() < 2 {
+        return Ok(theirs.first().map(|&(m, _)| m));
+    }
+    let ask = RequestKind::ChooseReplacement {
+        subject: None,
+        life: None,
+        sources: theirs.iter().map(|&(_, id)| id).collect(),
+        hints: theirs.iter().map(|&(m, _)| becomes_hint(m).into()).collect(),
+        damage: None,
+        turn: false,
+        counters: Vec::new(),
+        draw: false,
+        mana: true,
+    };
+    // The answer is checked against the offer (`validate`): it is one of them.
+    let chosen = match cx.ask_core(player, ask, false)? {
+        Answer::Index(i) => theirs.get(i as usize).copied(),
+        _ => None,
+    };
+    Ok(Some(chosen.unwrap_or(theirs[0]).0))
 }
 
 /// The parts of the ordinary mana in `player`'s pool told apart for its payer (CR 106.3): mana its payer chooses to spend

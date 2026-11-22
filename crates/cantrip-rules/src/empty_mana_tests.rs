@@ -1,5 +1,6 @@
 //! Explicit unspent-mana loss (Mana Short, Power Sink, Drain Power), separate from CR 500.5 step/phase emptying.
 use crate::{Cx,Game,Setup};
+use cantrip_state::{Frame,FrameKind};
 use cantrip_api::*;
 use cantrip_api::Game as Rules;
 const YOU:PlayerId=PlayerId(0);
@@ -82,7 +83,7 @@ fn mana_that_would_be_lost_becomes_red_for_the_controller_only() {
     // Ozai, the Phoenix King (CR 106.4, 614.1a): "If you would lose unspent mana, that mana becomes red instead."
     let (mut g,source)=ozai_board();
     let becomes=crate::static_rules::mana_lost_becomes(&cx(&mut g));
-    assert_eq!(becomes,vec![(YOU,Mana::R)],"only the controller's mana, and no one else's");
+    assert_eq!(becomes,vec![(YOU,Mana::R,source)],"only the controller's mana, and no one else's");
     g.state.add_mana(YOU,Mana::U,3,source,None,ManaLasts::Step,false);
     g.state.add_mana(YOU,Mana::R,1,source,None,ManaLasts::Step,false);
     g.state.add_mana(YOU,Mana::G,2,source,None,ManaLasts::Turn,false);
@@ -107,3 +108,88 @@ fn an_explicit_loss_of_unspent_mana_turns_it_red_instead_and_loses_nothing() {
     assert_eq!(g.state.player(YOU).pool.get(Mana::R),5);assert_eq!(g.state.player(YOU).pool.get(Mana::U),0);
     assert_eq!(cx(&mut g).empty_mana_pool(THEM).get(Mana::U),2,"another player's mana is lost as usual");
 }
+fn becomes_colorless(_: &dyn Query,asker:&Asker,player:PlayerId)->Option<Mana> {(player==asker.controller).then_some(Mana::C)}
+static STONE:CardDef=CardDef {name:"Mana-becomes-colorless probe",types:TypeSet::of(&[CardType::Artifact]),mana_lost_becomes:&[becomes_colorless],..CardDef::BLANK};
+/// A game in its first main phase, between steps, with the probes `defs` on YOU's battlefield and {U}{U}{U} in YOU's pool and
+/// {U} in THEM's.
+fn two_becomes(defs:&[&'static CardDef])->(Game,Vec<ObjectId>) {
+    let cards=Box::leak(Box::new(CardTable::new([&OZAI,&STONE])));
+    let mut g=Game::new(cards,&Setup {decks:vec![vec![],vec![]],..Default::default()});
+    while !g.state.agenda.is_empty(){g.state.frame_remove(0);}
+    g.state.update_turn(|t|{t.number=1;t.active=YOU;t.priority=YOU;t.set_step(Step::PrecombatMain);});
+    let ids=defs.iter().map(|d|{let id=g.state.push_obj(Obj::new(cards.id_of(d),YOU,Zone::BATTLEFIELD));g.state.zone_push(Zone::BATTLEFIELD,id);id}).collect::<Vec<_>>();
+    g.state.see_statics();
+    g.state.add_mana(YOU,Mana::U,3,ids[0],None,ManaLasts::Step,false);g.state.add_mana(THEM,Mana::U,1,ids[0],None,ManaLasts::Step,false);
+    g.verify=true;
+    (g,ids)
+}
+/// The main phase ends: the question of which effect applies, asked of YOU, and its sources.
+fn ends_asking(g:&mut Game)->(u32,Vec<ObjectId>,Vec<String>) {
+    crate::turn::next_step(g);g.run();
+    let r=g.pending().expect("a question as the step ends").clone();
+    assert_eq!(r.player,YOU);assert_eq!(g.state.turn.step(),Step::PrecombatMain,"asked as the step ends, before the next begins");
+    let RequestKind::ChooseReplacement {sources,hints,mana:true,..}=r.kind else {panic!("which effect applies: {:?}",r.kind)};
+    (r.id,sources,hints.iter().map(|h|h.to_string()).collect())
+}
+#[test]
+fn with_two_types_the_player_chooses_which_one_their_lost_mana_becomes() {
+    // Ozai, the Phoenix King beside Horizon Stone (CR 616.1): the affected player chooses which replacement effect applies;
+    // once one has, the mana is not lost and the other has nothing to replace (CR 616.1f).
+    let (mut g,ids)=two_becomes(&[&OZAI,&STONE]);
+    let (id,sources,hints)=ends_asking(&mut g);
+    assert_eq!(sources,ids,"each effect offered once, by its source");
+    assert_eq!(hints,vec!["That mana becomes red instead","That mana becomes colorless instead"]);
+    let asked=g.at;
+    // Each answer from the same position: going back to the question undoes the emptying exactly.
+    for (pick,mana) in [(0u8,Mana::R),(1,Mana::C)] {
+        g.goto(asked);
+        assert_eq!(g.pending().map(|r|r.id),Some(id));assert_eq!(g.state.player(YOU).pool.get(Mana::U),3);
+        g.answer(id,YOU,Answer::Index(pick)).unwrap();
+        assert_eq!(g.state.turn.step(),Step::BeginCombat,"the game goes on to the next step");
+        let pool=g.state.player(YOU).pool;
+        assert_eq!((pool.get(mana),pool.get(Mana::U),pool.total()),(3,0,3),"the {{U}}{{U}}{{U}} became {mana:?} only");
+        assert!(g.state.player(THEM).pool.is_empty(),"another player's mana is lost as usual");
+    }
+}
+#[test]
+fn one_type_or_nothing_to_lose_asks_nothing() {
+    // Two effects that turn it red do the same: nothing to choose.
+    let (mut g,_)=two_becomes(&[&OZAI,&OZAI]);
+    crate::turn::next_step(&mut g);g.run();
+    assert!(!matches!(g.pending().map(|r|&r.kind),Some(RequestKind::ChooseReplacement {..})));
+    assert_eq!(g.state.turn.step(),Step::BeginCombat);assert_eq!(g.state.player(YOU).pool.get(Mana::R),3);
+    // With both types but no mana to lose, there is no event to replace.
+    let (mut g,ids)=two_becomes(&[&OZAI,&STONE]);
+    g.state.empty_mana(YOU,ManaLasts::Turn);g.state.add_mana(YOU,Mana::G,2,ids[0],None,ManaLasts::Turn,false);
+    crate::turn::next_step(&mut g);g.run();
+    assert!(!matches!(g.pending().map(|r|&r.kind),Some(RequestKind::ChooseReplacement {..})),"mana that lasts the turn is not lost");
+    assert_eq!(g.state.turn.step(),Step::BeginCombat);assert_eq!(g.state.player(YOU).pool.get(Mana::G),2);
+}
+#[test]
+fn kept_mana_is_not_lost_and_is_never_turned() {
+    // Mana a static ability keeps is not lost (CR 500.5), so neither effect would replace anything: no question.
+    let cards=Box::leak(Box::new(CardTable::new([&HOLDER,&OZAI,&STONE])));
+    let mut g=Game::new(cards,&Setup {decks:vec![vec![],vec![]],..Default::default()});
+    while !g.state.agenda.is_empty(){g.state.frame_remove(0);}
+    g.state.update_turn(|t|{t.number=1;t.active=YOU;t.priority=YOU;t.set_step(Step::PrecombatMain);});
+    for d in [&HOLDER,&OZAI,&STONE] {let id=g.state.push_obj(Obj::new(cards.id_of(d),YOU,Zone::BATTLEFIELD));g.state.zone_push(Zone::BATTLEFIELD,id);}
+    g.state.see_statics();let source=g.state.battlefield()[0];
+    g.state.add_mana(YOU,Mana::U,3,source,None,ManaLasts::Step,false);
+    crate::turn::next_step(&mut g);g.run();
+    assert!(!matches!(g.pending().map(|r|&r.kind),Some(RequestKind::ChooseReplacement {..})));
+    assert_eq!(g.state.player(YOU).pool.get(Mana::U),3);
+}
+#[test]
+fn an_explicit_loss_with_two_types_asks_and_is_replayed_with_the_answer() {
+    let (mut g,_)=two_becomes(&[&OZAI,&STONE]);
+    g.state.frame_push(Frame::new(FrameKind::Settle));
+    let mark=g.state.mark();
+    assert!(cx_at(&mut g).empty_mana_pool(YOU).is_empty(),"nothing is lost either way");
+    let r=g.pending().expect("which effect applies").clone();
+    assert!(matches!(r.kind,RequestKind::ChooseReplacement {mana:true,..}));assert_eq!(r.player,YOU);
+    // Replayed with the answer, as the run loop does: colorless.
+    g.state.revert(mark);g.state.update_frame(0,|f|{f.pending=None;f.answers=vec![(Some(YOU),Answer::Index(1))];});
+    assert!(cx_at(&mut g).empty_mana_pool(YOU).is_empty());
+    assert!(g.pending().is_none());let pool=g.state.player(YOU).pool;assert_eq!((pool.get(Mana::C),pool.total()),(3,3));
+}
+fn cx_at(g:&mut Game)->Cx<'_>{Cx {g,frame:0,cursor:0,mana_source:None,entering:None,lineage:Vec::new(),damage:None,asked_at:None,doer:None,producing:None, reached:None}}

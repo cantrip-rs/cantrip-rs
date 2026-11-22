@@ -1736,7 +1736,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 occurrence_order: true,
             })
         }
-        RequestKind::ChooseReplacement { subject, life, sources, hints, damage, turn, counters, draw } => {
+        RequestKind::ChooseReplacement { subject, life, sources, hints, damage, turn, counters, draw, mana } => {
             PromptPayload::ChooseReplacementPromptMessage(ChooseReplacementPrompt {
                 player,
                 subject: subject.map_or(ViewHandle::NONE, |s| source_handle(game, handles, s)),
@@ -1752,6 +1752,8 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                     (None, None) if !counters.is_empty() => counter_words(game, *subject, counters),
                     // A card about to be drawn (CR 121.6), asked of the player who would draw it (CR 616.1).
                     (None, None) if *draw => "You would draw a card".to_string(),
+                    // Unspent mana about to be lost (CR 106.4, 500.5), asked of the player whose it is (CR 616.1).
+                    (None, None) if *mana => "You would lose unspent mana".to_string(),
                     (None, None) => String::new(),
                 },
                 sources: sources.iter().map(|&s| source_handle(game, handles, s)).collect(),
@@ -2590,7 +2592,7 @@ mod tests {
         let request = Request { id: 1, player, may_cancel: false, kind: RequestKind::ChooseReplacement {
             subject: None, life: None, sources: vec![hand[0], hand[0]],
             hints: vec!["draw instead (value: 1)".into(), "draw instead (value: 3)".into()],
-            damage: None, turn: false, counters: Vec::new(), draw: true,
+            damage: None, turn: false, counters: Vec::new(), draw: true, mana: false,
         }};
         let (payload, _) = prompt(&game, &request, &mut HandleSpace::new()).unwrap();
         let json = serde_json::to_value(&payload).unwrap();
@@ -2621,6 +2623,7 @@ mod tests {
                     turn: true,
                     counters: Vec::new(),
                     draw: false,
+                    mana: false,
                 },
                 may_cancel: false,
             };

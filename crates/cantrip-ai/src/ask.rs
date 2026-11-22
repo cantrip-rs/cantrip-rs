@@ -965,6 +965,7 @@ pub(crate) fn ask_of(
             turn,
             counters,
             draw,
+            mana: _,
         } => {
             let mut all: Vec<((Ref, String), usize)> = sources
                 .iter()

@@ -90,6 +90,7 @@ fn a_rules_choice_of_a_player_who_left_is_made_by_the_next_player_in_turn_order(
         turn: false,
         counters: Vec::new(),
         draw: false,
+        mana: false,
     };
     assert!(cx(&mut g, at).ask_core(B, which.clone(), false).is_err());
     assert_eq!(pending(&g, at), (C, which));

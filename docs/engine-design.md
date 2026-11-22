@@ -2710,6 +2710,17 @@ asks `static_rules::mana_kept` once over the battlefield, which leaves out perma
 mana with its rider too (Electro's rulings). Kept mana whose own duration has run out stays on as ordinary mana. Once the
 ability is gone, the mana is lost at the next ending, as any mana is.
 
+A static ability may instead say that unspent mana a player would lose becomes mana of one type (CR 614.1a: Ozai, the Phoenix
+King's red, Horizon Stone's colorless). It is a `CardDef::mana_lost_becomes` rule; `static_rules::mana_lost_becomes` lists each
+player's types, one entry for each type with its first source. It applies as steps and phases end, and to an effect that makes
+a player lose their unspent mana (`Game::empty_mana_pool`). Kept mana is not lost, so it is never turned. With more than one
+type for a player who would lose some mana (`GameState::would_lose_mana`), the player chooses which applies (CR 616.1) with a
+`RequestKind::ChooseReplacement` whose `mana` is set. Once one applies the mana is no longer lost, so the others do nothing
+(CR 616.1f). Between steps there is no frame to ask in, so `turn::next_step` pushes `FrameKind::EmptyMana` only when such a
+choice exists. That frame asks each such player in APNAP order before any pool empties, empties the pools, and moves the game
+on to the next step. Without a choice the pools empty with no frame, as before. An explicit loss asks from the frame resolving
+it, and is replayed with the answer (`Cx::ask_core`).
+
 A mana ability without {T} may be activated again for as long as its cost can be paid (CR 602.2, 605): where that cost is
 one permanent sacrificed or counters removed from its source (`actions::Repeat`), the advice counts it once for each thing
 it can spend. Each permanent it could sacrifice is a source of its own for `Available`, whose alternatives are the

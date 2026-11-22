@@ -120,6 +120,10 @@ pub enum FrameKind {
     Opening,
     /// The current step's turn-based actions (CR 500.2), then priority if the step has it.
     BeginStep,
+    /// The mana pools emptying as a step or phase ends (CR 500.5), when a player whose mana would be lost has more than one
+    /// effect that would turn it into mana of another type and chooses which applies (CR 616.1); then the next step begins.
+    /// Without such a choice the pools empty between steps, with no frame.
+    EmptyMana,
     /// A player has priority (CR 117).
     Priority,
     /// State-based actions until none apply, then triggered abilities onto the stack (CR 117.5).
@@ -676,7 +680,8 @@ pub enum RequestKind {
     /// what it is as the effects applied so far have left it (whom it would now be dealt to, CR 614.6); `turn`, whether the
     /// event is the beginning of the asked player's turn, which effects would skip (CR 614.10); `counters`, for counters
     /// about to be put on `subject` (CR 122.6), how many of each kind as the effects so far have left them; `draw`, whether
-    /// the event is a card the asked player would draw (CR 121.6).
+    /// the event is a card the asked player would draw (CR 121.6); mana, whether the event is the asked player losing their
+    /// unspent mana (CR 106.4, 500.5).
     /// Which simultaneous event's replacement choice to make next; `CostPayment` is the full-width occurrence index.
     OrderReplacementOccurrences { occurrences: Vec<ReplacementOccurrence> },
     ChooseReplacement {
@@ -688,6 +693,7 @@ pub enum RequestKind {
         turn: bool,
         counters: Vec<(CounterKind, i32)>,
         draw: bool,
+        mana: bool,
     },
 }
 
