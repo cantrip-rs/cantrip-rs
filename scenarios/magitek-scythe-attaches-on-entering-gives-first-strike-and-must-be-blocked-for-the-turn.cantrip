@@ -1,0 +1,73 @@
+# Magitek Scythe: entering, it attaches (its controller's choice) to Memnite, which becomes 3/2 with first strike and must be blocked
+# this turn if able (CR 509.1c). Bot2's refusal to block is rejected; blocking with one Grizzly Bears is accepted and the first striker
+# kills it unharmed. The requirement and first strike end with the turn: on turn 5 the Memnite (still equipped) is unblocked.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Memnite
+Magitek Scythe
+Forest x14
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Grizzly Bears
+Grizzly Bears
+Forest x15
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Magitek Scythe.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Memnite.Keywords = FirstStrike
+Bot1.Attack(Memnite > Bot2)
+! Bot2.Block(Count: 0)
+Bot2.Block(Grizzly Bears#1 > Memnite)
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Count: 0)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Memnite.Power = 3
+Bot2.Graveyard = Grizzly Bears
