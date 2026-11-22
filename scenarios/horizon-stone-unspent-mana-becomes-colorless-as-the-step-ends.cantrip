@@ -1,0 +1,42 @@
+# Horizon Stone: "If you would lose unspent mana, that mana becomes colorless instead" (CR 106.4, 614.1a). Black Lotus's
+# {U}{U}{U} is not lost when the main phase ends: it is {C}{C}{C} in its controller's pool, and with one such effect nothing
+# is asked (CR 616.1). Bot2, who has no Horizon Stone, loses its {G} as usual.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby x2
+Horizon Stone
+Black Lotus
+Mountain x17
+
+[Bot2 Deck]
+Mox Emerald x2
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Mox Ruby#1.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Horizon Stone.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald#1.Cast
+Bot2.Battlefield.Mox Emerald#1.Activate
+? Bot2.Mana = {G}
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+? Bot1.Mana = {U}{U}{U}
+Bot1.Pass
+Bot2.Pass
+! Bot1.Replace
+
+[Expect]
+Bot1.Mana = {C}{C}{C}
+Bot2.Mana =

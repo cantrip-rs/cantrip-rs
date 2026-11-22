@@ -1,0 +1,6 @@
+{
+  "name": "Horizon Stone",
+  "manaCost": "{5}",
+  "type": "Artifact",
+  "oracleText": "If you would lose unspent mana, that mana becomes colorless instead."
+}
