@@ -592,7 +592,7 @@ fn a_card_an_ability_on_the_stack_was_activated_from_is_hidden_as_it_moves() {
 fn a_card_revealed_for_miracle_is_looked_back_on_while_its_trigger_waits() {
     let (mut game, librarian, in_hand) = librarian_game();
     let card = game.state.obj(in_hand).card;
-    game.state.trigger_push(PendingTrigger { event_amount: None,
+    game.state.trigger_push(PendingTrigger { chosen: None, event_amount: None,
         source: in_hand,
         ability: AbilityRef::miracle(card),
         controller: PlayerId(0),

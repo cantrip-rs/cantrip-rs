@@ -1527,6 +1527,9 @@ pub struct StackItem {
     /// are followed). A copy of it has the same (CR 707.10). `Words::NONE` for a spell, which is itself the object a text
     /// change affects, and reads its own words.
     pub words: Words,
+    /// For a delayed triggered ability, the value the resolution that created it chose for it (`Delayed::chosen`, CR 607.2d):
+    /// what its effect reads. A copy of it has the same (CR 707.10). None for any other.
+    pub chosen: Option<ChosenValue>,
 }
 
 impl StackItem {
@@ -2438,6 +2441,37 @@ impl Playable {
     }
 }
 
+/// A value chosen as a spell or ability resolved (CR 607.2d): a card name (CR 201.3), a color or a number. A permanent's
+/// resolving ability remembers it on the permanent with the ability that chose it (`Game::remember_chosen`, kept as a
+/// `Kept`), for that permanent's linked abilities; a delayed triggered ability the same resolution creates carries the one
+/// that resolution chose with it (`Delayed::chosen`, `Game::delayed_trigger_carrying`), being no ability of the permanent
+/// and existing apart from it (CR 603.7, 113.7a). Chromatic Armor's "choose a color", Shapeshifter's "you may choose a
+/// number between 0 and 7", The Clone Saga's "Choose a card name. Whenever a creature with the chosen name ...". Choosing
+/// it does not make it copiable.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum ChosenValue {
+    Color(Color),
+    Number(u32),
+    Name(CardId),
+}
+
+impl ChosenValue {
+    /// The card name it is, if it is one.
+    pub fn card(self) -> Option<CardId> {
+        match self { ChosenValue::Name(card) => Some(card), _ => None }
+    }
+
+    /// The color it is, if it is one.
+    pub fn color(self) -> Option<Color> {
+        match self { ChosenValue::Color(color) => Some(color), _ => None }
+    }
+
+    /// The number it is, if it is one.
+    pub fn number(self) -> Option<u32> {
+        match self { ChosenValue::Number(number) => Some(number), _ => None }
+    }
+}
+
 /// A triggered ability that has triggered and waits to be put on the stack (CR 603.3).
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct PendingTrigger {
@@ -2463,6 +2497,8 @@ pub struct PendingTrigger {
     /// ability's are those of the resolving ability that made it trigger (CR 603.12, 113.7a), a delayed ability's those of
     /// the text that created it (`Delayed::words`, CR 603.7). Its stack item's `words`; None for the source's then.
     pub words: Option<Words>,
+    /// For a delayed triggered ability, the value it carries (`Delayed::chosen`), which its stack item keeps; none for any other.
+    pub chosen: Option<ChosenValue>,
 }
 
 /// A run of `GameState::members`: object identities kept for a batch's triggered ability (CR 603.2c),
@@ -2500,6 +2536,12 @@ pub struct Delayed {
     /// effect with it. None for one nothing stops. Nafs Asp's "that player loses 1 life at the beginning of their next
     /// draw step unless they pay {1} before that draw step".
     pub unless: Option<u32>,
+    /// The value the resolution that created it chose for it to refer to (CR 607.2d, 603.7): "Choose a card name. Whenever a
+    /// creature with the chosen name deals combat damage to a player this turn, draw a card" (The Clone Saga). It is that
+    /// resolution's alone - a copy of the creating ability makes its own choice and its own delayed ability (CR 707.10) - and
+    /// is kept here, not on the source, which may be gone or have chosen again by then (CR 113.7a). Its matcher reads it
+    /// (`Query::delayed_chosen`), and its stack item once it triggers (`StackItem::chosen`). None for one that carries none.
+    pub chosen: Option<ChosenValue>,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]

@@ -1894,9 +1894,18 @@ pub fn reveal_top_and_draw_if_artifact(g: &mut dyn Game, item: &StackItem, may: 
 /// 607.2d), for the rest of its text to refer to (`GameState::chosen_card`). The name chosen, if one was; if the source has left
 /// the battlefield by then the choice is made and nothing keeps it. Medomai's Prophecy and Petrified Hamlet print it.
 pub fn choose_a_card_name(g: &mut dyn Game, item: &StackItem, kind: NameKind, suggestion: Option<CardId>) -> Result<Option<CardId>, Suspend> {
+    let Some(name) = name_a_card(g, item, kind, suggestion)? else { return Ok(None) };
+    g.remember_chosen_name(g.linked(item), name);
+    Ok(Some(name))
+}
+
+/// "Choose a card name" (CR 201.4) as a spell or ability resolves, the name remembered by nothing: the controller names a
+/// card of `kind` (an unscripted player the `suggestion`). For a choice the resolution hands on itself - to the delayed
+/// ability it creates (`Game::delayed_trigger_carrying`: The Clone Saga's chapter III) - rather than one its source keeps
+/// (`choose_a_card_name`). The name chosen, if one was.
+pub fn name_a_card(g: &mut dyn Game, item: &StackItem, kind: NameKind, suggestion: Option<CardId>) -> Result<Option<CardId>, Suspend> {
     let ask = RequestKind::ChooseName { source: item.object, looked_at: Vec::new(), suggestion, kind };
     let Answer::Name(Some(name)) = g.ask(item.controller, ask)? else { return Ok(None) };
-    g.remember_chosen_name(g.linked(item), name);
     Ok(Some(name))
 }
 

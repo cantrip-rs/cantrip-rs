@@ -467,7 +467,7 @@ fn the_rules_own_delayed_abilities_offer_their_source_only_where_they_name_it() 
         id
     };
     let (rebounding, untimely) = (put(&mut game, Zone::exile(YOU)), put(&mut game, Zone::graveyard(YOU)));
-    let waiting = |when, source, ability, subject| cantrip_state::Delayed {
+    let waiting = |when, source, ability, subject| cantrip_state::Delayed { chosen: None,
         when,
         source,
         controller: YOU,

@@ -1999,7 +1999,7 @@ fn printed_metropolis_reformer_gains_life_from_large_damage() {
         let trigger = *g.state.triggers.iter().find(|t| t.source == creature).unwrap();
         assert_eq!(trigger.event_amount, Some(amount));
         // Invoke the printed ability with the engine's captured trigger payload.
-        let item = StackItem {
+        let item = StackItem { chosen: None,
             instance: AbilityAcquisition::OWN, event_amount: trigger.event_amount,
             kind: StackKind::Triggered, object: trigger.source, ability: trigger.ability,
             controller: trigger.controller, inline_targets: [Target::None; cantrip_state::INLINE_TARGETS],
@@ -2029,7 +2029,7 @@ fn printed_bloodthirsty_conqueror_gains_life_from_opponents_loss() {
         let trigger = *g.state.triggers.iter().find(|t| t.source == creature).unwrap();
         assert_eq!(trigger.data[0], amount);
         // Invoke the printed ability with the engine's captured trigger payload.
-        let item = StackItem {
+        let item = StackItem { chosen: None,
             instance: AbilityAcquisition::OWN, event_amount: trigger.event_amount,
             kind: StackKind::Triggered, object: trigger.source, ability: trigger.ability,
             controller: trigger.controller, inline_targets: [Target::None; cantrip_state::INLINE_TARGETS],

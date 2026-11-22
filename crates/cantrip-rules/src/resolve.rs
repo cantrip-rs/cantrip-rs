@@ -224,11 +224,11 @@ pub fn target_legal(cards: &'static CardTable, state: &GameState, events: &[Reco
     let earlier = if item.target_count > 1 { &state.targets(item)[..slot] } else { &[][..] };
     // An ability's targets are judged by its own text, as it was put on the stack (CR 113.7a, `StackItem::words`).
     let text = item_text(item);
-    let given = Given { q: &q, earlier, subject: item.subject, slot_player, gift: false, x: announced_x(item), data: item.data, text };
+    let given = Given { q: &q, earlier, subject: item.subject, slot_player, gift: false, x: announced_x(item), data: item.data, text, chosen: item.chosen };
     (spec.filter)(&given, &asker, target)
         && layers::can_target(cards, state, events, &asker, target)
         && (spec.together.is_none()
-            || together_legal(&Given { q: &q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, data: [u32::MAX; 2], text }, state, item, slot, &spec))
+            || together_legal(&Given { q: &q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, data: [u32::MAX; 2], text, chosen: item.chosen }, state, item, slot, &spec))
 }
 
 /// Whether the targets of the slot target `slot` of `item` was chosen for are still allowed together by `spec`'s rule
@@ -248,7 +248,7 @@ pub fn item_text(item: &StackItem) -> Option<(ObjectId, Words)> {
 /// `q` reading `item`'s source's words as `item`'s own text has them (`item_text`): what the rule of its targets together is
 /// judged with as they are changed or chosen anew (CR 115.7, 601.2c).
 pub fn as_item<'a>(q: &'a dyn Query, item: &StackItem) -> Given<'a> {
-    Given { q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, data: [u32::MAX; 2], text: item_text(item) }
+    Given { q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, data: [u32::MAX; 2], text: item_text(item), chosen: item.chosen }
 }
 
 /// The X announced for a spell or an activated ability on the stack (CR 107.3a, 601.2b, 602.2b), its own (CR 107.3k): what
@@ -274,6 +274,8 @@ pub struct Given<'a> {
     /// For an ability on the stack, its source and the words of its text as it was put there (`StackItem::words`): what
     /// `Query::words` of that source answers, the source's text since notwithstanding (CR 113.7a). None otherwise.
     pub text: Option<(ObjectId, Words)>,
+    /// For a delayed triggered ability, the value it carries (`Delayed::chosen`, `Query::delayed_chosen`). None otherwise.
+    pub chosen: Option<ChosenValue>,
 }
 
 impl Query for Given<'_> {
@@ -371,6 +373,10 @@ impl Query for Given<'_> {
 
     fn event_subject(&self) -> Target {
         self.subject
+    }
+
+    fn delayed_chosen(&self) -> Option<ChosenValue> {
+        self.chosen
     }
 
     fn slot_opponent(&self) -> Option<PlayerId> {
@@ -749,7 +755,7 @@ fn resolve_inner(cx: &mut Cx, summarize_terminal_mana: bool) -> R<Flow> {
                     {
                         let since = cx.g.log.len() as u32;
                         let ability = AbilityRef { card: cx.cards().intrinsic, index: cantrip_api::intrinsic::UNTIMELY_SACRIFICE };
-                        cx.st().delayed_push(cantrip_state::Delayed {
+                        cx.st().delayed_push(cantrip_state::Delayed { chosen: None,
                             when: DelayedWhen::Step { step: Step::Cleanup, on_turn_of: None },
                             source: item.object,
                             controller: item.controller,

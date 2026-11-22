@@ -868,7 +868,7 @@ fn move_together_entering_moves(
         }
         if madness {
             // "When you do" (CR 702.35a, 603.12): a reflexive trigger of the exiled card, its owner's.
-            cx.st().trigger_push(PendingTrigger { event_amount: None,
+            cx.st().trigger_push(PendingTrigger { chosen: None, event_amount: None,
                 source: new_id,
                 ability: AbilityRef::madness(old.card),
                 controller: old.owner,
@@ -969,7 +969,7 @@ fn move_together_entering_moves(
     // "At the beginning of your next upkeep, you may cast this card from exile without paying its mana cost" (CR 702.88a).
     for (card, controller, printed) in rebounds {
         let since = cx.g.log.len() as u32;
-        cx.st().delayed_push(cantrip_state::Delayed {
+        cx.st().delayed_push(cantrip_state::Delayed { chosen: None,
             when: DelayedWhen::Step { step: Step::Upkeep, on_turn_of: Some(controller) },
             source: card,
             controller,
@@ -3927,7 +3927,7 @@ fn draw_with_receipt(cx: &mut Cx, player: PlayerId) -> Option<ObjectId> {
         {
             cx.emit(Event::Revealed { player, card });
             let ability = AbilityRef::miracle(cx.s().obj(card).card);
-            cx.st().trigger_push(PendingTrigger { event_amount: None,
+            cx.st().trigger_push(PendingTrigger { chosen: None, event_amount: None,
                 source: card,
                 ability,
                 controller: player,

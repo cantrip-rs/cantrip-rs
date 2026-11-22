@@ -2106,7 +2106,7 @@ mod tests {
         let source = game.state.push_obj(Obj::new(cards.id_of(&SOURCE), PlayerId(0), Zone::BATTLEFIELD));
         game.state.zone_push(Zone::BATTLEFIELD, source);
         let members = game.state.members_push(&[source]);
-        game.state.delayed_push(cantrip_state::Delayed { when: DelayedWhen::AnyOfObjectsLeaves, source, controller: PlayerId(0),
+        game.state.delayed_push(cantrip_state::Delayed { chosen: None, when: DelayedWhen::AnyOfObjectsLeaves, source, controller: PlayerId(0),
             ability: AbilityRef::delayed(cards.id_of(&SOURCE), 0), subject: Target::None, members, since: 0,
             acquired: Acquired::OWN, words: None, unless: None });
         let names = vec!["A".to_string(), "B".to_string()]; let faces = HashSet::new();
@@ -2641,7 +2641,7 @@ mod tests {
         let deck = vec![cards.find("Celestial Reunion").expect("the card"); 20];
         let game = cantrip_engine::Game::new(cards, &Setup { decks: vec![deck.clone(), deck], ..Default::default() });
         let id = game.state.zone(Zone::library(PlayerId(0)))[0];
-        let item = StackItem { event_amount: None,
+        let item = StackItem { chosen: None, event_amount: None,
             kind: StackKind::Spell,
             object: id,
             ability: AbilityRef { card: game.chars(id).card, index: 0 },

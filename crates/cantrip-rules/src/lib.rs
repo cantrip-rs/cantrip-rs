@@ -1655,6 +1655,14 @@ impl<'a> Cx<'a> {
         }
     }
 
+    /// A delayed triggered ability is created (CR 603.7) about `subject`, carrying `chosen` (`Delayed::chosen`).
+    fn delayed(&mut self, when: DelayedWhen, source: ObjectId, controller: PlayerId, ability: AbilityRef, subject: Target, chosen: Option<ChosenValue>) {
+        let since = self.g.log.len() as u32;
+        let acquired = self.resolving_acquired(source);
+        let words = Some(Query::words(&*self, source));
+        self.g.state.delayed_push(cantrip_state::Delayed { when, source, controller, ability, subject, members: cantrip_state::Span::default(), since, acquired, words, unless: None, chosen });
+    }
+
     /// A reflexive triggered ability triggers (CR 603.12): `count` is the number its "that many" counts, if it has one.
     fn reflexive(&mut self, source: ObjectId, controller: PlayerId, ability: AbilityRef, subject: Target, count: Option<u32>, objects: &[ObjectId]) {
         // A reflexive triggered ability is an ordinary one (CR 603.12): its intervening "if" must hold for it to trigger at all
@@ -1667,7 +1675,7 @@ impl<'a> Cx<'a> {
             return;
         }
         let members = self.g.state.members_push(objects);
-        self.g.state.trigger_push(cantrip_state::PendingTrigger { event_amount: None,
+        self.g.state.trigger_push(cantrip_state::PendingTrigger { chosen: None, event_amount: None,
             source,
             ability,
             controller,
@@ -2749,6 +2757,7 @@ impl cantrip_api::Game for Cx<'_> {
         let value = match value {
             ChosenValue::Color(color) => cantrip_state::Kept::Color(color),
             ChosenValue::Number(number) => cantrip_state::Kept::Number(number),
+            ChosenValue::Name(name) => cantrip_state::Kept::Name(name),
         };
         ops::remember_chosen(self, by, value);
     }
@@ -2993,14 +3002,15 @@ impl cantrip_api::Game for Cx<'_> {
         let acquired = self.resolving_acquired(source);
         // The creating text's words as it is now (CR 603.7, 113.7a): a resolving ability's as it was put on the stack.
         let words = Some(Query::words(&*self, source));
-        self.g.state.delayed_push(cantrip_state::Delayed { when, source, controller, ability, subject: Target::None, members, since, acquired, words, unless: None });
+        self.g.state.delayed_push(cantrip_state::Delayed { when, source, controller, ability, subject: Target::None, members, since, acquired, words, unless: None, chosen: None });
     }
 
     fn delayed_trigger(&mut self, when: DelayedWhen, source: ObjectId, controller: PlayerId, ability: AbilityRef, subject: Target) {
-        let since = self.g.log.len() as u32;
-        let acquired = self.resolving_acquired(source);
-        let words = Some(Query::words(&*self, source));
-        self.g.state.delayed_push(cantrip_state::Delayed { when, source, controller, ability, subject, members: cantrip_state::Span::default(), since, acquired, words, unless: None });
+        self.delayed(when, source, controller, ability, subject, None);
+    }
+
+    fn delayed_trigger_carrying(&mut self, when: DelayedWhen, source: ObjectId, controller: PlayerId, ability: AbilityRef, subject: Target, chosen: ChosenValue) {
+        self.delayed(when, source, controller, ability, subject, Some(chosen));
     }
 
     fn delayed_trigger_unless(&mut self, when: DelayedWhen, source: ObjectId, controller: PlayerId, ability: AbilityRef, subject: Target, payer: PlayerId, action: AbilityRef, until: Duration) {
@@ -3015,7 +3025,7 @@ impl cantrip_api::Game for Cx<'_> {
         let acquired = self.resolving_acquired(source);
         let words = Some(Query::words(&*self, source));
         let members = cantrip_state::Span::default();
-        self.g.state.delayed_push(cantrip_state::Delayed { when, source, controller, ability, subject, members, since, acquired, words, unless: Some(timestamp) });
+        self.g.state.delayed_push(cantrip_state::Delayed { when, source, controller, ability, subject, members, since, acquired, words, unless: Some(timestamp), chosen: None });
     }
 
     fn delayed_trigger_with(&mut self, when: DelayedWhen, source: ObjectId, controller: PlayerId, ability: AbilityRef, subject: Target, objects: &[ObjectId]) {
@@ -3024,7 +3034,7 @@ impl cantrip_api::Game for Cx<'_> {
         let since = self.g.log.len() as u32;
         let acquired = self.resolving_acquired(source);
         let words = Some(Query::words(&*self, source));
-        self.g.state.delayed_push(cantrip_state::Delayed { when, source, controller, ability, subject, members, since, acquired, words, unless: None });
+        self.g.state.delayed_push(cantrip_state::Delayed { when, source, controller, ability, subject, members, since, acquired, words, unless: None, chosen: None });
     }
 
     fn reflexive_trigger(&mut self, source: ObjectId, controller: PlayerId, ability: AbilityRef, subject: Target) {

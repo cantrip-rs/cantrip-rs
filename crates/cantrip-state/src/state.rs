@@ -2637,7 +2637,7 @@ mod tests {
     use super::*;
 
     fn item() -> StackItem {
-        StackItem { event_amount: None,
+        StackItem { chosen: None, event_amount: None,
             kind: StackKind::Spell,
             object: ObjectId(1),
             ability: AbilityRef { card: CardId(0), index: 0 },

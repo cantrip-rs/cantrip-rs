@@ -534,6 +534,13 @@ pub trait Query {
         [u32::MAX; 2]
     }
 
+    /// The value the delayed triggered ability being asked carries (`Game::delayed_trigger_carrying`, CR 607.2d, 603.7), for
+    /// its trigger event and condition: the card name its creating resolution chose. None for any other ability, and for one
+    /// that carries none. Its effect reads its stack item's (`StackItem::chosen`).
+    fn delayed_chosen(&self) -> Option<ChosenValue> {
+        None
+    }
+
     /// The X announced for the spell or activated ability whose target is being chosen or checked (CR 107.3a, 601.2b,
     /// 602.2b), for the filter of a target "with mana value X": that spell's or ability's own, as it is announced, as it is
     /// judged again on resolution (CR 608.2b) and as its targets are changed or chosen anew (CR 115.7), never another
@@ -931,14 +938,6 @@ impl From<MoveReason> for ZoneReason {
     }
 }
 
-/// A color or number reselected by a permanent's resolving ability (CR 607.2d): Chromatic Armor's "choose a color",
-/// Shapeshifter's "you may choose a number between 0 and 7". Kept with the choosing ability's link; this does not make the
-/// value copiable.
-#[derive(Clone, Copy, Debug)]
-pub enum ChosenValue {
-    Color(Color),
-    Number(u32),
-}
 
 pub trait Game: Query {
     /// Asks `player` a question. The first time, the effect stops here (`Err(Suspend)`); once answered, the effect
@@ -1341,6 +1340,13 @@ pub trait Game: Query {
     fn create_tokens_with_counters(&mut self, def: CardId, controller: PlayerId, count: u32, tapped: bool, counters: &[(CounterKind, i32)], words: Words) -> Result<Vec<ObjectId>, Suspend>;
     /// Creates a delayed triggered ability (CR 603.7), controlled by `controller`, about `subject`.
     fn delayed_trigger(&mut self, when: DelayedWhen, source: ObjectId, controller: PlayerId, ability: AbilityRef, subject: Target);
+    /// `delayed_trigger`, carrying `chosen`, a value the resolving spell or ability chose for the delayed ability to refer to
+    /// (CR 607.2d, 603.7): "Choose a card name. Whenever a creature with the chosen name deals combat damage to a player this
+    /// turn, draw a card" (The Clone Saga). The value is the delayed ability's own (`Delayed::chosen`), not its source's: the
+    /// ability exists apart from its source (CR 113.7a), so it keeps the value whatever the source becomes or chooses later,
+    /// and a copy of the creating ability, making its own choice, makes its own delayed ability with it (CR 707.10). Its
+    /// trigger event and condition read it with `Query::delayed_chosen`, its effect with `StackItem::chosen`.
+    fn delayed_trigger_carrying(&mut self, when: DelayedWhen, source: ObjectId, controller: PlayerId, ability: AbilityRef, subject: Target, chosen: ChosenValue);
     /// `delayed_trigger`, carrying the objects the ability is about to the moment it triggers (`event_objects` of its
     /// stack item): every Warrior a mobilize ability created, which it sacrifices together (CR 603.7c).
     /// `AnyOfObjectsLeaves` watches these exact objects for one battlefield departure (CR 603.7b, 603.10a).

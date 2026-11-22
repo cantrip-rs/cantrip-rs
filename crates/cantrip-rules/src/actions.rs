@@ -4041,7 +4041,7 @@ fn candidates(
         return out;
     }
     let s = q.state();
-    let cx = &crate::resolve::Given { q, earlier, subject, slot_player, gift, x, data, text };
+    let cx = &crate::resolve::Given { q, earlier, subject, slot_player, gift, x, data, text, chosen: None };
     let mut out = Vec::new();
     for p in s.seats() {
         let t = Target::Player(p);
@@ -10943,7 +10943,7 @@ pub fn act(cx: &mut Cx, player: PlayerId) -> R<Flow> {
 }
 
 pub(crate) fn stack_item(kind: StackKind, object: ObjectId, ability: AbilityRef, controller: PlayerId, targets: &[Target]) -> StackItem {
-    let mut item = StackItem { instance: AbilityAcquisition::OWN, event_amount: None,
+    let mut item = StackItem { chosen: None, instance: AbilityAcquisition::OWN, event_amount: None,
         kind,
         object,
         ability,
@@ -11855,7 +11855,7 @@ fn cast(
         .map(|&(_, n)| AbilityRef::delayed(face, n));
     for ability in given.into_iter().chain(own) {
         let since = cx.g.log.len() as u32;
-        cx.st().delayed_push(cantrip_state::Delayed {
+        cx.st().delayed_push(cantrip_state::Delayed { chosen: None,
             when: DelayedWhen::Step { step: Step::End, on_turn_of: None },
             source: spell,
             controller: player,
@@ -14343,7 +14343,7 @@ fn activate_mana_as(
     // wait for. Its source is the mana ability's, its controller the player who activated it (CR 603.7e).
     if let (Some(index), true) = (def.mana_rider, rider != 0 && cx.s().mana_from.iter().any(|e| e.rider == rider)) {
         let since = cx.g.log.len() as u32;
-        cx.st().delayed_push(cantrip_state::Delayed {
+        cx.st().delayed_push(cantrip_state::Delayed { chosen: None,
             when: DelayedWhen::ThatMana(rider),
             source,
             controller: player,
@@ -14813,7 +14813,7 @@ fn effect_productions(cx: &Cx, id: ObjectId, player: PlayerId, definition: &Abil
             .filter(|t| t.source == id && t.ability == ability && t.controller == player && t.acquired == acquired).collect();
         contexts.extend(cx.s().stack.iter()
             .filter(|t| t.kind == StackKind::Triggered && t.object == id && t.ability == ability && t.controller == player && t.acquired == acquired)
-            .map(|t| cantrip_state::PendingTrigger { source: id, ability, controller: player, subject: t.subject,
+            .map(|t| cantrip_state::PendingTrigger { chosen: None, source: id, ability, controller: player, subject: t.subject,
                 data: t.data, event_amount: t.event_amount, members: t.members, count: Some(t.x), since: Some(t.since), acquired, words: Some(t.words) }));
         contexts
     } else {
@@ -14825,7 +14825,7 @@ fn effect_productions(cx: &Cx, id: ObjectId, player: PlayerId, definition: &Abil
         }
         // No triggering is invented to fill missing references. An undetermined numerical amount is zero
         // (CR 107.2), and no object/player or batch members are supplied by an absent real triggering.
-        contexts.push(cantrip_state::PendingTrigger { source: id, ability, controller: player, subject: Target::None,
+        contexts.push(cantrip_state::PendingTrigger { chosen: None, source: id, ability, controller: player, subject: Target::None,
             data: [0; 2], event_amount: None, members: Default::default(), count: None, since: None, acquired, words: Some(words) });
     }
     let named: Vec<Option<Color>> = if let Some(def) = def.filter(|d| d.any_color) {
@@ -17853,7 +17853,7 @@ mod delayed_watched_mana_tests {
         let words = Some(Words::NONE.changed(Word::Subtype(Subtype::Goblin), Word::Subtype(Subtype::Elf)));
         // This deliberately pairs the fixed departure mode with a mana definition whose matcher accepts the tap.
         // A wrong route through the ordinary matcher would add mana, so the existing delay is a positive control.
-        let group = cantrip_state::Delayed { when: DelayedWhen::AnyOfObjectsLeaves, source, controller: you,
+        let group = cantrip_state::Delayed { chosen: None, when: DelayedWhen::AnyOfObjectsLeaves, source, controller: you,
             ability, subject: Target::None, members, since: 0, acquired: Acquired::OWN, words, unless: None };
         let ordinary = cantrip_state::Delayed { when: DelayedWhen::WatchingThisTurn, subject: Target::Object(source), ..group };
         g.state.delayed_push(group); g.state.delayed_push(ordinary);
@@ -17886,7 +17886,7 @@ mod delayed_watched_mana_tests {
         g.state.zone_push(Zone::graveyard(you), source);
         let watched = g.state.push_obj(Obj::new(cards.id_of(&WATCHED), you, Zone::BATTLEFIELD));
         g.state.zone_push(Zone::BATTLEFIELD, watched);
-        g.state.delayed_push(cantrip_state::Delayed {
+        g.state.delayed_push(cantrip_state::Delayed { chosen: None,
             when: DelayedWhen::WatchingThisTurn, source, controller: you,
             ability: AbilityRef::delayed(cards.id_of(&SOURCE), 0), subject: Target::Object(watched),
             members: Span::default(), since: 0, acquired: Acquired::OWN,

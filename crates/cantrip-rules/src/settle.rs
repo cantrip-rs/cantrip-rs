@@ -642,7 +642,7 @@ fn choose_trigger_targets_after(
                 text,
             );
             let counted = u32::from(trigger_counted(cx, trigger));
-            let own = crate::resolve::Given { q: &*cx, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, data: [u32::MAX; 2], text };
+            let own = crate::resolve::Given { q: &*cx, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, data: [u32::MAX; 2], text, chosen: None };
             let (candidates, together) = crate::actions::within_together(&own, &asker, spec, counted, candidates);
             let (least, most) = spec.bounds(counted);
             if !crate::actions::enough_together(&own, &asker, &together, &candidates, least) {
@@ -876,6 +876,7 @@ pub(crate) fn announce_trigger(cx: &mut Cx, trigger: PendingTrigger, by: Option<
         cast_known: u32::MAX,
         acquired: trigger.acquired,
         words,
+        chosen: trigger.chosen,
     };
     // Its controller left as one of its choices was asked (CR 800.4d).
     if cx.s().player(trigger.controller).lost {
@@ -973,6 +974,7 @@ fn consider(
             x: None,
             data: [u32::MAX; 2],
             text: words.map(|w| (source, w)),
+            chosen: None,
         };
         // Asked through the game itself where its text is its object's own, which is nearly always.
         let own: &dyn Query = if words.is_some() { &given_text } else { cx };
@@ -1037,7 +1039,7 @@ fn consider(
                 _ => &mut *found,
             };
             into.push((
-                PendingTrigger { event_amount: matched_damage_amount(t, event),
+                PendingTrigger { chosen: None, event_amount: matched_damage_amount(t, event),
                     source,
                     ability,
                     controller,
@@ -1085,7 +1087,7 @@ fn inherent(cx: &mut Cx, index: u8, controller: PlayerId, subject: Target, event
     if index == cantrip_api::intrinsic::SPEED_UP {
         cx.record(Event::Triggered { source, ability });
     }
-    found.push((PendingTrigger { event_amount: None, source, ability, controller, subject, data: [0; 2], members: Span::default(), count: None, since: None, acquired: Acquired::OWN, words: None }, t, again));
+    found.push((PendingTrigger { chosen: None, event_amount: None, source, ability, controller, subject, data: [0; 2], members: Span::default(), count: None, since: None, acquired: Acquired::OWN, words: None }, t, again));
 }
 
 /// The slot of `chars`'s abilities that the `nth` of `Chars::abilities()` is in.
@@ -1101,7 +1103,7 @@ fn delayed_link(cx: &Cx, d: &cantrip_state::Delayed) -> Option<Linked> {
 
 /// The triggering of a state trigger (CR 603.8): about no event, so nothing is its subject.
 fn state_trigger(source: ObjectId, ability: AbilityRef, controller: PlayerId, acquired: Acquired) -> PendingTrigger {
-    PendingTrigger { event_amount: None, source, ability, controller, subject: Target::None, data: [0; 2], members: Span::default(), count: None, since: None, acquired, words: None }
+    PendingTrigger { chosen: None, event_amount: None, source, ability, controller, subject: Target::None, data: [0; 2], members: Span::default(), count: None, since: None, acquired, words: None }
 }
 
 /// Whether a state trigger of `source` has triggered and not yet left the stack (CR 603.8): found for this batch, waiting
@@ -1572,6 +1574,10 @@ impl Query for BoardThen<'_> {
         self.q.event_data()
     }
 
+    fn delayed_chosen(&self) -> Option<ChosenValue> {
+        self.q.delayed_chosen()
+    }
+
     fn slot_opponent(&self) -> Option<PlayerId> {
         self.q.slot_opponent()
     }
@@ -1716,7 +1722,7 @@ fn that_mana_spent(cx: &Cx, rider: u32, event: &Event) -> u32 {
 pub(crate) fn delayed_fires(q: &dyn Query, d: &cantrip_state::Delayed, t: &TriggeredDef, asker: &Asker, event: &Event) -> Option<Fired> {
     let about = if d.when == DelayedWhen::ThisTurn { d.subject } else { Target::None };
     let own = crate::resolve::Given { q, earlier: &[], subject: about, slot_player: None, gift: false, x: None, data: [u32::MAX; 2],
-        text: d.words.map(|w| (d.watched(), w)) };
+        text: d.words.map(|w| (d.watched(), w)), chosen: d.chosen };
     if d.when == DelayedWhen::WatchingThisTurn {
         let source_asker = Asker { source: d.source, ..*asker };
         let source_text = crate::resolve::Given { text: d.words.map(|w| (d.source, w)), ..own };
@@ -1839,6 +1845,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                         x: None,
                         data: [u32::MAX; 2],
                         text: d.words.map(|w| (d.source, w)),
+                        chosen: d.chosen,
                     };
                     // One that looks back is asked of the game as it was just before the events (CR 603.10a, `BoardThen`).
                     let group_leaves = d.when == DelayedWhen::AnyOfObjectsLeaves;
@@ -1893,7 +1900,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                             found.push((
                                 PendingTrigger { event_amount: None, source: d.source, ability: d.ability, controller: d.controller,
                                     subject: fired.subject, data: fired.data, members: d.members, count: None, since: Some(d.since),
-                                    acquired: d.acquired, words: d.words },
+                                    acquired: d.acquired, words: d.words, chosen: d.chosen },
                                 t,
                                 Again::new(),
                             ));
@@ -1921,6 +1928,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                                 since: Some(d.since),
                                 acquired: d.acquired,
                                 words: d.words,
+                                chosen: d.chosen,
                             },
                             t,
                             Again::new(),
@@ -2021,7 +2029,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                         let mut again = Again::new();
                         statics.additional(cx, event, &triggering, &mut again);
                         found.push((
-                            PendingTrigger { event_amount: matched_damage_amount(t, event),
+                            PendingTrigger { chosen: None, event_amount: matched_damage_amount(t, event),
                                 source: id,
                                 ability,
                                 controller,
@@ -2255,7 +2263,7 @@ pub fn step_began(cx: &mut Cx, step: Step) {
             } else {
                 at += 1;
             }
-            cx.st().trigger_push(PendingTrigger { event_amount: None, source: d.source, ability: d.ability, controller: d.controller, subject: d.subject, data: [0; 2], members: d.members, count: None, since: Some(d.since), acquired: d.acquired, words: d.words });
+            cx.st().trigger_push(PendingTrigger { event_amount: None, source: d.source, ability: d.ability, controller: d.controller, subject: d.subject, data: [0; 2], members: d.members, count: None, since: Some(d.since), acquired: d.acquired, words: d.words, chosen: d.chosen });
         } else {
             at += 1;
         }

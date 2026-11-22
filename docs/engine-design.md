@@ -1168,6 +1168,16 @@ of the creating ability (CR 603.7c-e). No object IDs delimit groups, and no extr
 constructor accepts step variants only; event-delayed subject/list retention remains a separate procedure. The
 existing subject-only and list-only constructors keep their previous behavior.
 
+`Game::delayed_trigger_carrying` gives a delayed ability a value the resolution that created it chose for it to refer to
+(`Delayed::chosen`, a `ChosenValue`: a card name, a color or a number; CR 607.2d, 603.7): The Clone Saga's "Choose a card
+name. Whenever a creature with the chosen name deals combat damage to a player this turn". The value is the delayed
+ability's, not its source's: the ability exists apart from the source (CR 113.7a), so a source that has left or chosen
+again changes nothing, and a copy of the creating ability makes its own choice and its own delayed ability (CR 707.10).
+Its trigger event and condition read it as `Query::delayed_chosen`; it rides its pending trigger to its stack item
+(`StackItem::chosen`), which its effect and target filters read, and a copy of that item keeps it. A choice a permanent
+keeps for its own linked abilities (`Game::remember_chosen`, Medomai's Prophecy's chapter II read by chapter III) stays on
+the permanent.
+
 An explicit step of the next turn (`DelayedWhen::StepOfNextTurn { step, of }`, Mishra's Bauble and Urza's Bauble)
 waits for the first actual `TurnBegan` after the ability was created, optionally for a named player. It reads those
 events after `Delayed::since`; extra phases and steps in the creation turn cannot satisfy it, and an extra turn

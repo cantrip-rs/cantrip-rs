@@ -212,7 +212,7 @@ fn run(probe: &'static CardDef) {
         .push_obj(Obj::new(cards.id_of(&SPELL), THEM, Zone::STACK));
     game.state.zone_push(Zone::STACK, spell);
     let members = game.state.members_push(&[sacrificed]);
-    game.state.stack_push(StackItem {
+    game.state.stack_push(StackItem { chosen: None,
         instance: AbilityAcquisition::OWN,
         event_amount: None,
         kind: StackKind::Triggered,

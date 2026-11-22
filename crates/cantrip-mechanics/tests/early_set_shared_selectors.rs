@@ -86,7 +86,7 @@ fn wall_targets_and_named_landwalk_exceptions_preserve_their_rules() {
     for def in [&WALL, &ELF, &NONCREATURE_WALL, &WALKER, &NONCREATURE_WALKER] { put(def, YOU, Zone::BATTLEFIELD); }
     put(&WALL, THEM, Zone::BATTLEFIELD);
     put(&WALL, YOU, Zone::graveyard(YOU));
-    game.state.stack_push(StackItem { instance: AbilityAcquisition::OWN, event_amount: None,
+    game.state.stack_push(StackItem { chosen: None, instance: AbilityAcquisition::OWN, event_amount: None,
         kind: StackKind::Triggered, object: source, ability: AbilityRef::delayed(cards.id_of(&SOURCE), 0), controller: YOU,
         inline_targets: [Target::None; INLINE_TARGETS], target_count: 0, inline_spec_of: [0; INLINE_TARGETS],
         x: 0, kicked: 0, counted: 0, paid: 0, modes: 0, way: 0, choice: 0,

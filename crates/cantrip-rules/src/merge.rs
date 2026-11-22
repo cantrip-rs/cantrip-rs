@@ -402,6 +402,10 @@ impl Query for AsText<'_> {
         self.q.event_data()
     }
 
+    fn delayed_chosen(&self) -> Option<ChosenValue> {
+        self.q.delayed_chosen()
+    }
+
     fn slot_opponent(&self) -> Option<PlayerId> {
         self.q.slot_opponent()
     }
