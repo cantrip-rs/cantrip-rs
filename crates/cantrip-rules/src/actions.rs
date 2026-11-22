@@ -3480,7 +3480,12 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             SpellPayment::ZoneExile { origin, component, cost, part, .. } => {
                 let selected = if part == CostPart::HandExile { choose_hand_exiles(cx, player, spell, &cost, scope.by(), &taken)? }
                     else { choose_exiles_by(cx, player, spell, &cost, &taken, scope.by())? };
-                let exiled = pay_exiles(cx, &selected);
+                // What an ability's cost exiles is exiled with the object whose ability it is (CR 607.2a: collect evidence is an
+                // instruction to exile, CR 701.59a), where a linked ability that says "exiled with it" finds it.
+                let exiled = match scope.linked() {
+                    Some(by) => ops::exile_with(cx, &selected, by, false),
+                    None => pay_exiles(cx, &selected),
+                };
                 if matches!(scope, PaymentScope::Ability { .. }) && part == CostPart::ExileSymbols {
                     ability_symbol_exiles.extend(exiled.into_iter().map(|id| (component, id)));
                 }
