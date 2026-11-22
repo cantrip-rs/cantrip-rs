@@ -1,0 +1,56 @@
+# Kylox's Voltstrider: "Collect evidence 6" exiles cards from the graveyard as a cost, and they are exiled with it (CR 607.2a,
+# 701.59a). The graveyard holds Lightning Bolt (1), Hill Giant (4), Grizzly Bears (2) and Faithless Looting (1); Bot1 exiles the
+# Giant, the Bolt and the Looting, exactly 6, and keeps the Bears. The Vehicle is an artifact creature until end of turn and
+# attacks; its trigger offers the instant and the sorcery among the exiled cards (not the Giant), Bot1 casts the Bolt for {R} and
+# it resolves, and with that the Bolt, not the graveyard's, goes to the bottom of Bot1's library (CR 614.1a, 401.4). The Looting stays
+# exiled, uncast, and the Bears stay in the graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Kylox's Voltstrider
+Faithless Looting
+Lightning Bolt
+Island
+Hill Giant
+Grizzly Bears
+Island x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Kylox's Voltstrider.Cast
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hill Giant; Grizzly Bears)
+? Bot1.Graveyard = Faithless Looting; Grizzly Bears; Hill Giant; Lightning Bolt; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Battlefield.Kylox's Voltstrider.Activate(Ability: evidence)
+Bot1.Choose(Hill Giant; Lightning Bolt; Faithless Looting)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kylox's Voltstrider.Types = Artifact; Creature
+? Exile = Faithless Looting; Hill Giant; Lightning Bolt
+Bot1.Attack(Kylox's Voltstrider > Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose(Lightning Bolt)
+Bot1.Target(Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 10
+Exile = Faithless Looting; Hill Giant
+Bot1.Graveyard = Grizzly Bears; Black Lotus
+Bot1.Library = Island; Island; Island; Island; Lightning Bolt

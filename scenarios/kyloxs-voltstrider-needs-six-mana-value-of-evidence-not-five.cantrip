@@ -1,0 +1,38 @@
+# Kylox's Voltstrider: "Collect evidence 6" (CR 701.59a) needs cards with total mana value 6 or more in the graveyard. After Faithless
+# Looting, Bot1's graveyard holds Faithless Looting (1), Hill Giant (4), an Island (0) and the Black Lotus (0): worth 5, so the
+# activation is refused and the Vehicle stays what it was, with nothing exiled.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Kylox's Voltstrider
+Faithless Looting
+Island
+Island
+Hill Giant
+Island
+Island x4
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Kylox's Voltstrider.Cast
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hill Giant; Island)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Kylox's Voltstrider.Activate(Ability: evidence)
+? Bot1.Battlefield.Kylox's Voltstrider.Types = Artifact
+
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard.Count = 4

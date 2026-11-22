@@ -1,0 +1,49 @@
+# Kylox's Voltstrider: only an instant or sorcery card can be cast from among the cards exiled with it. Bot1 collects evidence by
+# exiling Hill Giant and Grizzly Bears (4 + 2 = 6) from the graveyard, so no card among them can be cast and the attack trigger asks
+# for nothing: Bot2 takes the Vehicle's 4 on top of the Bolt, and both creatures stay exiled.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Kylox's Voltstrider
+Faithless Looting
+Lightning Bolt
+Island
+Hill Giant
+Grizzly Bears
+Island x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Kylox's Voltstrider.Cast
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hill Giant; Grizzly Bears)
+? Bot1.Graveyard = Faithless Looting; Grizzly Bears; Hill Giant; Lightning Bolt; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Battlefield.Kylox's Voltstrider.Activate(Ability: evidence)
+Bot1.Choose(Hill Giant; Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Kylox's Voltstrider > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Exile = Grizzly Bears; Hill Giant
+Bot1.Graveyard = Faithless Looting; Lightning Bolt; Black Lotus
