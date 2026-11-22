@@ -3,9 +3,12 @@
 //! card in its controller's graveyard (CR 113.6).
 //!
 //! A card with mayhem lists `way(cost, text)` among its `ways`. A card that grants it lists `GRANTED` among its
-//! `granted_ways`, the cost being each card's own mana cost.
+//! `granted_ways`, the cost being each card's own mana cost. Mayhem without a cost (CR 702.187c), a land's (Oscorp
+//! Industries), is `PLAY` among its `exile_casts`.
 
 use cantrip_api::*;
+
+use crate::cast_from_your_graveyard;
 
 /// Whether the card was discarded this turn: asked of the event history.
 pub fn discarded_this_turn(q: &dyn Query, asker: &Asker) -> bool {
@@ -48,3 +51,14 @@ pub const GRANTED: GrantedWay =
 pub fn paid(q: &dyn Query, id: ObjectId) -> bool {
     crate::history::cast_way_kind(q, id) == Some(WayKind::Mayhem)
 }
+
+/// Mayhem without a cost (CR 702.187c): "you may play this card from your graveyard if you discarded it this turn" - the card,
+/// by its owner, discarded this turn as the event history says.
+fn played_discarded_this_turn(q: &dyn Query, asker: &Asker, card: ObjectId, player: PlayerId) -> bool {
+    cast_from_your_graveyard::this_card_by_its_owner(q, asker, card, player) && discarded_this_turn(q, asker)
+}
+
+/// Mayhem without a cost (CR 702.187c), as a land prints it (Oscorp Industries): the card's own permission to play it from its
+/// graveyard if it was discarded this turn (CR 113.6e). A land is played and not cast, so no cost is paid: a land play, within
+/// the turn's land plays and at the times a land may be played (CR 305.1).
+pub const PLAY: ExileCast = ExileCast { text: "Mayhem", allows: played_discarded_this_turn, lands: true, ..cast_from_your_graveyard::PERMISSION };
