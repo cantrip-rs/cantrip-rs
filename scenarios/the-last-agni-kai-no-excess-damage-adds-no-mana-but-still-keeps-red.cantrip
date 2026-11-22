@@ -1,0 +1,45 @@
+# The Last Agni Kai: Grizzly Bears (2/2) fights Phyrexian Walker (0/3): 2 damage is less than lethal, so there is no excess damage and
+# no mana is added, and the Walker survives with 2 damage. The unspent {R} Black Lotus left over is still kept into the next step by the
+# second sentence's effect, which does not depend on the fight.
+
+[Bot1 Deck]
+Mox Emerald x2
+Grizzly Bears
+Black Lotus
+The Last Agni Kai
+Plains x2
+Plains x20
+
+[Bot2 Deck]
+Phyrexian Walker
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald#1.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.The Last Agni Kai.Cast
+Bot1.Target(Grizzly Bears)
+Bot1.Target(Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}
+? Bot2.Battlefield.Phyrexian Walker.Damage = 2
+[T3 Bot1.BeginCombat]
+? Bot1.Mana = {R}
+[T4 Bot2.Upkeep]
+? Bot1.Mana =
+
+[Expect]
+Bot2.Battlefield = Phyrexian Walker
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Stack.Count = 0

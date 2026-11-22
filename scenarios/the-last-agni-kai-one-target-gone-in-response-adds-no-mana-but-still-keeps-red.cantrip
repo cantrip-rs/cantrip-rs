@@ -1,0 +1,52 @@
+# The Last Agni Kai with one of its two targets gone: Bot2 Lightning Bolts its own Llanowar Elves in response. The spell still resolves for
+# the target that remains (CR 608.2b), but a fight needs both creatures (CR 701.14b), so nobody fights and no {R} is added for excess
+# damage; the second sentence does not depend on the fight, so the {R} Black Lotus left over is still kept into the next step.
+
+[Bot1 Deck]
+Mox Emerald x2
+Grizzly Bears
+Black Lotus
+The Last Agni Kai
+Plains x2
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Forest
+Llanowar Elves
+Lightning Bolt
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald#1.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.The Last Agni Kai.Cast
+Bot1.Target(Grizzly Bears)
+Bot1.Target(Llanowar Elves)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}
+? Bot1.Battlefield.Grizzly Bears.Damage = 0
+[T3 Bot1.BeginCombat]
+? Bot1.Mana = {R}
+
+[Expect]
+Bot2.Graveyard = Llanowar Elves; Lightning Bolt
+Stack.Count = 0

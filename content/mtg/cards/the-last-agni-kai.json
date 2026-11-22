@@ -1,0 +1,6 @@
+{
+  "name": "The Last Agni Kai",
+  "manaCost": "{1}{R}",
+  "type": "Instant",
+  "oracleText": "Target creature you control fights target creature an opponent controls. If the creature the opponent controls is dealt excess damage this way, add that much {R}.\nUntil end of turn, you don't lose unspent red mana as steps and phases end."
+}

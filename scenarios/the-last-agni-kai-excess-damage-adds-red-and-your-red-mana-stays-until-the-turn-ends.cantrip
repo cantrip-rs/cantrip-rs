@@ -1,0 +1,52 @@
+# The Last Agni Kai: Grizzly Bears (2/2) fights Llanowar Elves (1/1), dealing 1 excess damage (CR 120.10), so {R} is added. Black Lotus's
+# {R}{R}{R} pays {1}{R} and leaves one {R} unspent. "Until end of turn, you don't lose unspent red mana as steps and phases end": the
+# two {R} stay through the next step, and a {G} from a Mox Emerald activated afterwards is lost with it; at the end of the turn the
+# keeping ends and the red mana is lost with the cleanup step.
+
+[Bot1 Deck]
+Mox Emerald x2
+Grizzly Bears
+Black Lotus
+The Last Agni Kai
+Plains x2
+Plains x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald#1.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.The Last Agni Kai.Cast
+Bot1.Target(Grizzly Bears)
+Bot1.Target(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R}
+Bot1.Battlefield.Mox Emerald#1.Activate
+? Bot1.Mana = {R}{R}{G}
+[T3 Bot1.BeginCombat]
+? Bot1.Mana = {R}{R}
+[T3 Bot1.Main2]
+? Bot1.Mana = {R}{R}
+[T4 Bot2.Upkeep]
+? Bot1.Mana =
+
+[Expect]
+Bot2.Graveyard = Llanowar Elves
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Stack.Count = 0
