@@ -1,0 +1,42 @@
+# Ultima can target any land: Bot2's Darksteel Citadel (an artifact land with indestructible and no mana ability) gets the blight
+# counter, loses its land types and abilities (the indestructible) and has "{T}: Add {C}", but keeps its other card types (the ruling),
+# so it is still an artifact. Bot2 taps it for a single {C}: "whenever you tap a land for {C}" is Ultima's controller's, not theirs.
+
+[Bot1 Deck]
+Mox Ruby
+Sol Ring
+Black Lotus
+Ultima, Origin of Oblivion
+Mountain x16
+
+[Bot2 Deck]
+Darksteel Citadel
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Ultima, Origin of Oblivion.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Darksteel Citadel.Play
+? Bot2.Battlefield.Darksteel Citadel.Keywords = Indestructible
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ultima, Origin of Oblivion)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Darksteel Citadel.Counters.Blight = 1
+? Bot2.Battlefield.Darksteel Citadel.Keywords = (absent)
+? Bot2.Battlefield.Darksteel Citadel.Types = Artifact; Land
+Bot2.Battlefield.Darksteel Citadel.Activate
+
+[Expect]
+Turn = 3
+Bot2.Mana = {C}
+Bot1.Mana =
+Bot2.Battlefield.Darksteel Citadel.Counters.Blight = 1

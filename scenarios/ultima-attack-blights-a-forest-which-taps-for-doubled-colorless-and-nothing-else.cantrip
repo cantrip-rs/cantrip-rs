@@ -1,0 +1,49 @@
+# Ultima's attack trigger puts a blight counter on target land, which for as long as it has it loses all land types and
+# abilities and has "{T}: Add {C}" (CR 611.2b, 305.7, 613.1d, 613.1f). Bot1's blighted Forest is no longer a Forest (no type,
+# no {G}), taps for {C}, and "whenever you tap a land for {C}, add an additional {C}" makes it {C}{C}. A Mountain, tapped for {R},
+# is not doubled. Cast turn 1 (Mox Ruby, Sol Ring from the Mox, Black Lotus for {3}, Sol Ring {2}), the attack is on turn 3.
+
+[Bot1 Deck]
+Mox Ruby
+Sol Ring
+Black Lotus
+Ultima, Origin of Oblivion
+Forest
+Mountain
+Forest
+Mountain
+Forest x12
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Ultima, Origin of Oblivion.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ultima, Origin of Oblivion)
+Bot1.Target(Bot1.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Counters.Blight = 1
+? Bot1.Battlefield.Forest.Subtypes = (absent)
+! Bot1.Battlefield.Forest.Activate(Ability: {G})
+Bot1.Battlefield.Forest.Activate
+? Bot1.Mana = {C}{C}
+Bot1.Battlefield.Mountain.Activate
+? Bot1.Mana = {R}{C}{C}
+
+[Expect]
+Turn = 3
+Bot1.Mana = {R}{C}{C}
+Bot1.Battlefield.Forest.Counters.Blight = 1

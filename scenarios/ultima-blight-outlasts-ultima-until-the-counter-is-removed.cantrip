@@ -1,0 +1,66 @@
+# The land has the blight effect "for as long as that land has a blight counter on it" (CR 611.2b), not as long as Ultima is around:
+# Bot2's Swords to Plowshares exiles Ultima and Bot1's Forest is still no Forest, with no {G}. Then Vampire Hexmage removes all counters
+# from the Forest, and the moment its blight counter is gone it is a Forest alone again, with {T}: Add {G} and without the {C} ability.
+
+[Bot1 Deck]
+Swamp
+Mox Ruby
+Sol Ring
+Black Lotus
+Ultima, Origin of Oblivion
+Forest
+Mox Jet
+Vampire Hexmage
+Forest x12
+
+[Bot2 Deck]
+Plains
+Swords to Plowshares
+Plains x18
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Ultima, Origin of Oblivion.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ultima, Origin of Oblivion)
+Bot1.Target(Bot1.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Counters.Blight = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Ultima, Origin of Oblivion)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ultima, Origin of Oblivion = (absent)
+? Bot1.Battlefield.Forest.Subtypes = (absent)
+! Bot1.Battlefield.Forest.Activate(Ability: {G})
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Vampire Hexmage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Vampire Hexmage.Activate(Bot1.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Forest.Activate(Ability: {C})
+Bot1.Battlefield.Forest.Activate(Ability: {G})
+
+[Expect]
+Turn = 5
+Bot1.Battlefield.Forest.Subtypes = Forest
+Bot1.Battlefield.Forest.Counters.Blight = (absent)
+Bot1.Mana = {G}

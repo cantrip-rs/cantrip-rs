@@ -1,0 +1,37 @@
+# "Whenever you tap a land for {C}, add an additional {C}" (CR 605.1b, 106.12a) is a triggered mana ability: it resolves at once,
+# without the stack, and only for a land tapped for {C}. Wastes gives {C}{C}; Sol Ring (not a land) gives its {C}{C} undoubled.
+# Mox Ruby pays for Sol Ring; Black Lotus and Sol Ring pay for Ultima on turn 1 (a tapped Mountain gives an undoubled {R}: see the first Ultima scenario).
+
+[Bot1 Deck]
+Mox Ruby
+Sol Ring
+Black Lotus
+Ultima, Origin of Oblivion
+Wastes
+Mountain x15
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Ultima, Origin of Oblivion.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Wastes.Play
+Bot1.Battlefield.Wastes.Activate
+? Bot1.Mana = {C}{C}
+? Stack.Count = 0
+Bot1.Battlefield.Sol Ring.Activate
+? Bot1.Mana = {C}{C}{C}{C}
+? Stack.Count = 0
+
+[Expect]
+Turn = 3
+Bot1.Mana = {C}{C}{C}{C}
