@@ -1,0 +1,6 @@
+{
+  "name": "The Clone Saga",
+  "manaCost": "{3}{U}",
+  "type": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Surveil 3.\nII — When you next cast a creature spell this turn, copy it, except the copy isn't legendary.\nIII — Choose a card name. Whenever a creature with the chosen name deals combat damage to a player this turn, draw a card."
+}

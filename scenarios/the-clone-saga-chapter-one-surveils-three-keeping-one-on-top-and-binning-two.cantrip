@@ -1,0 +1,38 @@
+# The Clone Saga I: "Surveil 3" (CR 701.25a): the top THREE cards are looked at, so the third (Giant Growth) can go to the
+# graveyard along with the second (Counterspell) while the first (Lightning Bolt) stays on top; a surveil 2 or 4 could not
+# arrange exactly these three.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+The Clone Saga
+Island x2
+Plains
+Lightning Bolt
+Counterspell
+Giant Growth
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Clone Saga.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt | Counterspell; Giant Growth)
+
+[Expect]
+Bot1.Graveyard = Giant Growth; Counterspell
+Bot1.Library.Count = 15

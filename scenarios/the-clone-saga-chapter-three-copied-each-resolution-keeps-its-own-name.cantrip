@@ -1,0 +1,63 @@
+# Peter Parker's Camera copies The Clone Saga's chapter III. The copy names Memnite, then the original names Isamaru, Hound of
+# Konda. Each resolution's delayed ability refers to the name that resolution chose (CR 607.2d, 707.10): the later choice
+# replaces nothing, so Memnite alone connecting draws a card for the copy's ability, and none for the original's.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Peter Parker's Camera
+The Clone Saga
+Memnite
+Isamaru, Hound of Konda
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Peter Parker's Camera.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Clone Saga.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Peter Parker's Camera.Activate(Stack.The Clone Saga)
+Bot1.Pass
+Bot2.Pass
+Bot1.Name(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Name(Isamaru, Hound of Konda)
+? Bot1.Library.Count = 15
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T7 Bot1.Main2]
+? Bot2.Life = 19
+
+[Expect]
+Bot1.Library.Count = 14

@@ -1,0 +1,73 @@
+# The Clone Saga II: a creature spell cast for its mutate cost has a target (CR 702.140a), and "copy it" gives the copy that target
+# with no chance to choose a new one (CR 707.10c), so no target prompt appears, though Memnite is another non-Human creature Bot1 owns. Cubwarden is mutated onto Alpine Grizzly on turn 5:
+# the copy resolves first and mutates onto the Grizzly (two Cats), then the original onto that merged creature, which now has the
+# mutate trigger of both Cubwardens (CR 702.140e, 603.2): four more Cats, six in all, and one merged creature. Memnite is left alone.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Memnite
+The Clone Saga
+Alpine Grizzly
+Plains
+Cubwarden
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Clone Saga.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Delayed = The Clone Saga
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cubwarden.Cast(Alpine Grizzly; Ability: Mutate)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 14
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Cubwarden.Power = 3
+Stack.Count = 0
+Delayed.Count = 0

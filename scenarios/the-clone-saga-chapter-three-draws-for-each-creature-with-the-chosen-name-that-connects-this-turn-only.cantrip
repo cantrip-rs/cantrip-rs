@@ -1,0 +1,66 @@
+# The Clone Saga III: "Choose a card name. Whenever a creature with the chosen name deals combat damage to a player this turn,
+# draw a card." Bot1 names Memnite on turn 7 and attacks with two Memnites and Isamaru, Hound of Konda. Bot2's Ornithopter blocks
+# one Memnite (its damage goes to a creature, CR 510.2), so only the unblocked Memnite draws: Isamaru has another name. The Saga is
+# sacrificed after III (CR 714.4) before combat, and the name is still the one chosen for it (CR 607.2d). On turn 9 the ability
+# has ended (CR 603.7b): a Memnite connecting again draws nothing.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+The Clone Saga
+Memnite
+Memnite
+Isamaru, Hound of Konda
+Plains x17
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Clone Saga.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Name(Memnite)
+? Delayed = The Clone Saga
+? LeftBattlefield = The Clone Saga
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2; Memnite > Bot2; Isamaru, Hound of Konda > Bot2)
+Bot2.Block(Ornithopter > Memnite)
+[T7 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Hand.Count = 3
+[T9 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T9 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Hand.Count = 4

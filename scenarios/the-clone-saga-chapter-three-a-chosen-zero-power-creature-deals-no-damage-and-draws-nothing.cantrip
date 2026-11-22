@@ -1,0 +1,48 @@
+# The Clone Saga III: a creature with the chosen name that deals no damage draws nothing: Bot1 names Ornithopter (0/2) and it
+# attacks unblocked on turn 7, but a creature with power 0 deals no combat damage (CR 510.1a), so no damage event is a trigger
+# event (CR 603.2). Bot1's hand stays at the count it had before combat.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+The Clone Saga
+Ornithopter
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Clone Saga.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Name(Ornithopter)
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+[T7 Bot1.Main2]
+? Bot2.Life = 20
+? Bot1.Hand.Count = 4
+
+[Expect]
+Bot2.Life = 20
+Bot1.Hand.Count = 4
