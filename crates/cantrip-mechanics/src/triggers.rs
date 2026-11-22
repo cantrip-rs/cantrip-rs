@@ -2813,6 +2813,16 @@ pub fn creature_you_control_with_a_counter_deals_combat_damage_to_player(q: &dyn
     }
 }
 
+/// "Whenever a modified creature you control deals combat damage to a player" (CR 510.2, 603.2, 700.9): modified (a counter, an
+/// Equipment, or an Aura its controller controls) as it dealt the damage. Araña, Heart of the Spider and SP//dr, Piloted by Peni
+/// print it.
+pub fn modified_creature_you_control_deals_combat_damage_to_player(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::Damage { source: from, .. } if crate::modified::is_modified(q, *from) => creature_you_control_deals_combat_damage_to_player(q, me, event),
+        _ => None,
+    }
+}
+
 /// "Whenever one or more [subtype]s you control deal combat damage to a player" (CR 510.2, 603.2c): the subtype is the
 /// number `lands::sub` gives, read as a word of the source's own text (CR 612.2), so a text-changing effect changes it. One
 /// trigger for each player the batch damaged, with that player the trigger's subject (the ability uses `sums_per_subject`).

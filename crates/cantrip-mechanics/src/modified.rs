@@ -13,12 +13,23 @@ use crate::targets;
 /// what `permanents_of` and `attached_to` say then - an Equipment or Aura that left with it (a "destroy all nonland permanents")
 /// included, one that left earlier not.
 pub fn is_modified(q: &dyn Query, id: ObjectId) -> bool {
-    q.obj(id).counter_array().iter().any(|&n| n > 0)
-        || q.state().seats().flat_map(|p| q.permanents_of(p)).any(|attachment| {
-            q.attached_to(attachment) == Some(id)
-                && (q.chars(attachment).has_subtype(Subtype::Equipment)
-                    || q.chars(attachment).has_subtype(Subtype::Aura) && q.controller(attachment) == q.controller(id))
-        })
+    let attachments = q.state().seats().flat_map(|p| q.permanents_of(p)).filter(|&a| q.attached_to(a) == Some(id));
+    modified(q.obj(id).counter_array(), attachments.map(|a| (q.chars(a), q.controller(a))), q.controller(id))
+}
+
+/// `is_modified` for a layer-6 static ability's condition ("has flying as long as it's modified", CR 604.1, 613.1f), where
+/// the Equipment and Auras are judged on what the layers before the one being applied made them and the controller is as the
+/// layers stand (`LayerQuery::chars`, `LayerQuery::controller`). Skyward Spider asks it.
+pub fn is_modified_in_layers(view: &dyn LayerQuery, id: ObjectId) -> bool {
+    let attachments = view.state().battlefield().iter().copied().filter(|&a| view.state().obj(a).attached_to == Some(id));
+    modified(view.state().obj(id).counter_array(), attachments.map(|a| (view.chars(a), view.controller(a))), view.controller(id))
+}
+
+/// CR 700.9: a counter of any kind, an Equipment, or an Aura the permanent's `controller` controls, each attachment given with
+/// its characteristics and controller.
+fn modified(counters: [i32; CounterKind::COUNT], mut attachments: impl Iterator<Item = (Chars, PlayerId)>, controller: PlayerId) -> bool {
+    counters.iter().any(|&n| n > 0)
+        || attachments.any(|(chars, by)| chars.has_subtype(Subtype::Equipment) || chars.has_subtype(Subtype::Aura) && by == controller)
 }
 
 fn modified_creature_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
