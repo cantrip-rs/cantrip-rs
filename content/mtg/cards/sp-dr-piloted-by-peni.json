@@ -1,0 +1,11 @@
+{
+  "name": "SP//dr, Piloted by Peni",
+  "manaCost": "{3}{W}{U}",
+  "type": "Legendary Artifact Creature — Spider Hero",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Vigilance\nWhen SP//dr enters, put a +1/+1 counter on target creature.\nWhenever a modified creature you control deals combat damage to a player, draw a card. (Equipment, Auras you control, and counters are modifications.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}

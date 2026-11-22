@@ -1,0 +1,59 @@
+# SP//dr, Piloted by Peni: "When SP//dr enters, put a +1/+1 counter on target creature" and "whenever a modified creature you control
+# deals combat damage to a player, draw a card" (CR 700.9, 510.2). Bot1 casts SP//dr and a Memnite with five Moxen on turn 1 and puts
+# the counter on the Memnite. On turn 3 both attack: the Memnite (2/2, modified) draws a card; SP//dr (4/4, nothing on it) draws none
+# and, with vigilance (CR 702.20), is still untapped. Bot1 draws one card for the turn and one from the Memnite: two in hand.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+SP//dr, Piloted by Peni
+Memnite
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.SP//dr, Piloted by Peni.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(SP//dr, Piloted by Peni > Bot2; Memnite > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Hand.Count = 2
+Bot1.Battlefield.SP//dr, Piloted by Peni.Tapped = false
+Bot1.Battlefield.Memnite.Tapped = true
+Bot1.Battlefield.SP//dr, Piloted by Peni.Counters.PlusOnePlusOne = (absent)
