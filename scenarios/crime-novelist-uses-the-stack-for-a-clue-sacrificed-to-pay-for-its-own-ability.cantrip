@@ -1,0 +1,51 @@
+# Crime Novelist: a Clue sacrificed to pay for its own ability is not the cost of a mana ability, so the trigger uses the stack as any
+# triggered ability does (CR 603.3b, 605.1b). Turn 1: three Mox Rubies pay for Crime Novelist, a fourth and Mox Pearl pay Auspicious Arrival
+# on the Novelist, which investigates. Turn 3: {2} and the Clue's sacrifice put the draw on the stack with the Novelist's trigger above
+# it; the trigger resolves first (its counter and {R}), then the Clue's draw.
+
+[Bot1 Deck]
+Crime Novelist
+Auspicious Arrival
+Mox Pearl
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Crime Novelist.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Auspicious Arrival.Cast(Bot1.Battlefield.Crime Novelist)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clue Token.Subtypes = Clue
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Clue Token.Activate
+? Stack.Count = 2
+? Bot1.Battlefield.Crime Novelist.Power = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Mana = {R}
+? Bot1.Battlefield.Crime Novelist.Power = 2
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot1.Battlefield.Crime Novelist.Counters.PlusOnePlusOne = 1

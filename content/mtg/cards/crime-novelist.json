@@ -1,0 +1,8 @@
+{
+  "name": "Crime Novelist",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goblin Bard",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Whenever you sacrifice an artifact, put a +1/+1 counter on this creature and add {R}."
+}
