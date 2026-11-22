@@ -1,0 +1,6 @@
+{
+  "name": "Brave the Wilds",
+  "manaCost": "{G}",
+  "type": "Sorcery",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nIf this spell was bargained, target land you control becomes a 3/3 Elemental creature with haste that's still a land.\nSearch your library for a basic land card, reveal it, put it into your hand, then shuffle."
+}

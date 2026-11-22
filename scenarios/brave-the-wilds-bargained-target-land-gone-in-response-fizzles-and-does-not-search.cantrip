@@ -1,0 +1,37 @@
+# Brave the Wilds, bargained, targeting a Forest that Bot2 returns to its owner's hand with Boomerang in response: its only target is
+# illegal, so the spell does not resolve (CR 608.2b) and no basic land is searched for (the hand holds the bounced Forest but no Mountain).
+[Bot1 Deck]
+Forest x2
+Black Lotus
+Brave the Wilds
+Island x2
+Mountain x14
+[Bot2 Deck]
+Mox Sapphire x2
+Boomerang
+Island x17
+[Actions]
+Bot1.Hand.Forest#1.Play
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire#1.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Brave the Wilds.Cast
+Bot1.Modes(Bargain:)
+Bot1.Target(Bot1.Battlefield.Forest#2)
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Choose(Black Lotus)
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Boomerang.Cast(Bot1.Battlefield.Forest#2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Brave the Wilds; Black Lotus
+Bot1.Hand = Forest; Island; Island; Mountain; Mountain
+Bot1.Library.Count = 12
+Stack.Count = 0

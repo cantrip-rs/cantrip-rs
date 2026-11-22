@@ -1,0 +1,48 @@
+# Brave the Wilds, bargained, on a land that is already a creature: "becomes a 3/3 Elemental creature with haste that's still a land"
+# adds the type and subtype without taking away the ones it has (CR 205.1b, 613.1d). Mishra's Factory, animated into a 2/2
+# Assembly-Worker artifact creature until end of turn, becomes a 3/3 (the later timestamp, CR 613.7) that is both an Assembly-Worker
+# and an Elemental; once the Factory's own change ends at cleanup it is a 3/3 Elemental land creature, no longer an artifact.
+
+[Bot1 Deck]
+Mishra's Factory
+Mox Ruby
+Mox Emerald
+Mox Jet
+Brave the Wilds
+Island x2
+Mountain x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mishra's Factory.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mishra's Factory.Activate(Ability: {1})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mishra's Factory.Subtypes = Assembly-Worker
+Bot1.Hand.Brave the Wilds.Cast
+Bot1.Modes(Bargain:)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Choose(Mox Jet)
+Bot1.Search(Mountain)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mishra's Factory.Types = Land; Artifact; Creature
+? Bot1.Battlefield.Mishra's Factory.Subtypes = Assembly-Worker; Elemental
+? Bot1.Battlefield.Mishra's Factory.Power = 3
+? Bot1.Battlefield.Mishra's Factory.Toughness = 3
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Mishra's Factory.Types = Land; Creature
+? Bot1.Battlefield.Mishra's Factory.Subtypes = Elemental
+? Bot1.Battlefield.Mishra's Factory.Power = 3
+
+[Expect]
+Bot1.Graveyard = Brave the Wilds; Mox Jet
+Turn = 2

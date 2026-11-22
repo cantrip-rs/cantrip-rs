@@ -1,0 +1,31 @@
+# Brave the Wilds, bargained, with two lands to choose from: the target slot exists because the spell was bargained (CR 601.2b-c) and is
+# chosen from the lands Bot1 controls; the slot holds one land, so naming both is refused.
+# Only the chosen Forest becomes a 3/3 haste Elemental creature; the other stays a plain land.
+[Bot1 Deck]
+Forest x2
+Black Lotus
+Brave the Wilds
+Island x2
+Mountain x14
+[Bot2 Deck]
+Swamp x20
+[Actions]
+Bot1.Hand.Forest#1.Play
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Brave the Wilds.Cast
+Bot1.Modes(Bargain:)
+! Bot1.Target(Bot1.Battlefield.Forest#1; Bot1.Battlefield.Forest#2)
+Bot1.Target(Bot1.Battlefield.Forest#2)
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Choose(Black Lotus)
+Bot1.Search(Mountain)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest#2.Types = Land; Creature
+? Bot1.Battlefield.Forest#2.Power = 3
+? Bot1.Battlefield.Forest#1.Types = Land
+[Expect]
+Bot1.Graveyard = Brave the Wilds; Black Lotus
+Stack.Count = 0

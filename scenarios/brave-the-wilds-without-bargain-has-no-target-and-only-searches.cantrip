@@ -1,0 +1,30 @@
+# Brave the Wilds, not bargained: no sacrifice and no target (the land slot exists only if the spell was bargained, CR 601.2b-c).
+# The Forest stays a plain land, and the basic land (a Mountain) is put into the hand.
+
+[Bot1 Deck]
+Forest
+Mox Jet
+Brave the Wilds
+Island x4
+Mountain x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Brave the Wilds.Cast
+Bot1.Modes(Cast without bargain)
+Bot1.Battlefield.Forest.Activate
+Bot1.Search(Mountain)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Types = Land
+? Bot1.Battlefield.Forest.Subtypes = Forest
+
+[Expect]
+Bot1.Graveyard = Brave the Wilds
+Bot1.Battlefield = Forest; Mox Jet
+Bot1.Hand.Count = 5
+Stack.Count = 0

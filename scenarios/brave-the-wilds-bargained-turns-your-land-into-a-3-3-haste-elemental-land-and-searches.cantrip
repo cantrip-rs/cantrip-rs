@@ -1,0 +1,36 @@
+# Brave the Wilds, bargained (CR 702.166a): the sacrifice (Mox Jet, tapped for {B} no more than it is needed: the Forest pays {G}) is
+# an additional cost, and the spell has a target only because it was bargained (CR 601.2b-c). The Forest, its only land and so the
+# only legal target, becomes a 3/3 Elemental creature with haste that is still a land (CR 205.1b), keeping its subtype Forest, and
+# a basic land card (a Mountain) is searched out, revealed and put into the hand.
+
+[Bot1 Deck]
+Forest
+Mox Jet
+Brave the Wilds
+Island x4
+Mountain x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Brave the Wilds.Cast
+Bot1.Modes(Bargain:)
+Bot1.Battlefield.Forest.Activate
+Bot1.Choose(Mox Jet)
+Bot1.Search(Mountain)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Types = Land; Creature
+? Bot1.Battlefield.Forest.Subtypes = Elemental; Forest
+? Bot1.Battlefield.Forest.Power = 3
+? Bot1.Battlefield.Forest.Toughness = 3
+? Bot1.Battlefield.Forest.Keywords = Haste
+
+[Expect]
+Bot1.Graveyard = Brave the Wilds; Mox Jet
+Bot1.Battlefield = Forest
+Bot1.Hand.Count = 5
+Stack.Count = 0
