@@ -1,0 +1,51 @@
+# Hama, the Bloodbender: the exiled card is cast "by waterbending {X} rather than paying its mana cost" (CR 118.9a, 701.67a): the waterbend
+# cost is {1}, generic, for the Shock whose mana cost is {R}, and is paid like any cost, with mana, with taps of artifacts and creatures, or both
+# (CR 701.67a-b). In the second main phase of turn 3 Hama has attacked and is tapped and the Moxen were tapped for mana (and spent): no untapped
+# artifact or creature, and only an Island, whose blue mana could never pay {R}, but does pay the waterbend {1}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Hama, the Bloodbender
+Island
+Island x3
+Island
+Island x20
+
+[Bot2 Deck]
+Island x7
+Island
+Ornithopter
+Shock
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hama, the Bloodbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Shock)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Hama, the Bloodbender)
+[T3 Bot1.Main2]
+? Bot1.Taps = Hama, the Bloodbender; Mox Jet; Mox Sapphire
+Bot1.Battlefield.Island.Activate
+Bot1.Exile.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile =
+Bot2.Life = 15

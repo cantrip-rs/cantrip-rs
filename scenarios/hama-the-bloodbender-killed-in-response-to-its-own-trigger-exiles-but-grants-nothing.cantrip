@@ -1,0 +1,51 @@
+# Hama, the Bloodbender: "For as long as you control Hama" (CR 611.2b). Bot2 answers the enter trigger with Lightning Bolt on Hama, so Hama is
+# gone when the trigger resolves: Bot2 still mills three (CR 608.2b: the trigger does as much as it can) and the Shock is still exiled, but
+# Bot1 no longer controls Hama, so no one is given the right to cast it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Hama, the Bloodbender
+Island x20
+
+[Bot2 Deck]
+Lightning Bolt
+Mountain x6
+Island
+Island
+Ornithopter
+Shock
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hama, the Bloodbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Hama, the Bloodbender)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Hama, the Bloodbender; Black Lotus
+Bot2.Pass
+Bot1.Choose(Shock)
+? Exile = Shock
+? Bot2.Graveyard = Ornithopter; Island; Lightning Bolt
+! Bot1.Exile.Shock.Cast(Bot2)
+
+[Expect]
+Exile = Shock

@@ -1,0 +1,47 @@
+# Hama, the Bloodbender: "you may cast the exiled card ... by waterbending {X}" (CR 701.67a). The exiled Harmonize has mana value 4, so the waterbend
+# cost is {4}: with only Mox Jet, Mox Sapphire and Hama to tap for it and no mana, on turn 3 the cast is not offered, and an Ornithopter makes the
+# fourth tap. "May": Bot1 passes the turn without casting it, the Harmonize stays in exile, and on turn 5 Bot1 casts it by tapping the four,
+# drawing three.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Hama, the Bloodbender
+Ornithopter
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x7
+Island
+Ornithopter
+Harmonize
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hama, the Bloodbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Harmonize)
+[T3 Bot1.Main1]
+! Bot1.Exile.Harmonize.Cast(Mana: short)
+Bot1.Hand.Ornithopter.Cast
+[T5 Bot1.Main1]
+? Exile = Harmonize
+Bot1.Exile.Harmonize.Cast(Convoke: Mox Jet, Mox Sapphire, Ornithopter, Hama, the Bloodbender)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile =
+Bot1.Hand.Count = 7

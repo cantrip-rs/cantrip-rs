@@ -1,0 +1,38 @@
+# Hama, the Bloodbender: "target opponent mills three cards. Exile up to one noncreature, nonland card from that player's graveyard."
+# Bot2 mills exactly three (the fourth card stays on the library, CR 701.17a): Island, Ornithopter and Island. A land and a creature card are
+# not noncreature, nonland cards, so there is nothing to choose, nothing is exiled, and there is nothing to cast later.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Hama, the Bloodbender
+Island x20
+
+[Bot2 Deck]
+Island x7
+Island
+Ornithopter
+Island
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hama, the Bloodbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Island; Ornithopter; Island
+? Bot2.Library.Count = 21
+? Exile.Count = 0
+
+[Expect]
+Exile =
+Bot2.Graveyard = Island; Ornithopter; Island

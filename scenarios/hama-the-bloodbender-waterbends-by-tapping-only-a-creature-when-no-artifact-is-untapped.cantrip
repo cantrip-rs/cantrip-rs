@@ -1,0 +1,42 @@
+# Hama, the Bloodbender: the waterbend {1} for the exiled Shock may be paid by tapping an untapped creature, though no artifact is untapped
+# (CR 701.67a). On turn 3 Bot1 taps Mox Jet and Mox Sapphire for mana it does not use, so Hama (not summoning sick, and waterbend is no {T}
+# cost anyway, CR 701.67b) is the only thing to tap; it pays, and the Shock deals 2 to Bot2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Hama, the Bloodbender
+Island x20
+
+[Bot2 Deck]
+Island x7
+Island
+Ornithopter
+Shock
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hama, the Bloodbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Shock)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Taps = Mox Jet; Mox Sapphire
+Bot1.Exile.Shock.Cast(Bot2; Convoke: Hama, the Bloodbender)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile =
+Bot2.Life = 18

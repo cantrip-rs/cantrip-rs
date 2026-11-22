@@ -1,0 +1,63 @@
+# Hama, the Bloodbender: the exiled Mox Jet has mana value 0, so Hama's waterbend {X} is waterbend {0}. Paying it taps nothing, yet it
+# is paying a waterbend cost (CR 118.5), so it is a waterbend (CR 701.67c: "whenever that player pays a waterbend cost, regardless of
+# how they paid that cost"): Avatar Aang's "Whenever you waterbend" triggers on top of the Mox, and Bot1 draws a card. On turn one Bot1 casts Hama and
+# exiles the Mox Jet Bot2 milled; on turn three it draws a Mox Pearl, casts it and Aang, then casts Bot2's Mox Jet from exile.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Hama, the Bloodbender
+Avatar Aang
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Island x7
+Mox Jet
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hama, the Bloodbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mox Jet)
+? Exile = Mox Jet
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Avatar Aang.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 0
+Bot1.Exile.Mox Jet.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 1
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Exile =
+Bot1.Hand = Island
+Bot1.Battlefield = Avatar Aang; Hama, the Bloodbender; Mox Emerald; Mox Jet; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire

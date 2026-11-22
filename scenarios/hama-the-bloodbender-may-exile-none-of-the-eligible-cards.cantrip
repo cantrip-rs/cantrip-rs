@@ -1,0 +1,36 @@
+# Hama, the Bloodbender: "Exile up to one" is a choice of zero or one (CR 608.2d). Bot2 mills Shock, Lightning Bolt and Island with two eligible
+# cards, and Bot1 chooses none: nothing is exiled, the milled cards stay in the graveyard, and nothing can be cast from it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Hama, the Bloodbender
+Island x20
+
+[Bot2 Deck]
+Island x7
+Shock
+Lightning Bolt
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hama, the Bloodbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Exile =
+? Bot2.Graveyard = Island; Lightning Bolt; Shock
+
+[Expect]
+Exile =
+Bot2.Graveyard = Island; Lightning Bolt; Shock

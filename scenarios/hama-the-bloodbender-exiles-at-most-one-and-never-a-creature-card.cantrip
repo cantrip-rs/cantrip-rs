@@ -1,0 +1,44 @@
+# Hama, the Bloodbender: "Exile up to one noncreature, nonland card from that player's graveyard." Bot2 mills Shock, Ornithopter and
+# Lightning Bolt: two noncreature, nonland cards and a creature card. The Ornithopter cannot be chosen, nor can more than one card, and
+# choosing only the Shock leaves the Bolt in the graveyard (fewer than the most is not the same as all). Only the exiled card is cast.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Hama, the Bloodbender
+Island x20
+
+[Bot2 Deck]
+Island x7
+Shock
+Ornithopter
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hama, the Bloodbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Shock; Lightning Bolt)
+Bot1.Choose(Shock)
+? Exile = Shock
+? Bot2.Graveyard = Lightning Bolt; Ornithopter
+[T3 Bot1.Main1]
+Bot1.Exile.Shock.Cast(Bot2; Convoke: Mox Jet)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile =
+Bot2.Graveyard = Shock; Island; Lightning Bolt; Ornithopter
+Bot2.Life = 18

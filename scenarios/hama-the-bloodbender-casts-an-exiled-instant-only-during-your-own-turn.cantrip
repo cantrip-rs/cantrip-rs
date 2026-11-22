@@ -1,0 +1,48 @@
+# Hama, the Bloodbender: "you may cast the exiled card during your turn" (CR 500.1). Bot1 exiles Bot2's Lightning Bolt, an instant that an
+# ordinary cast could make at any time. While Bot2 has a spell on the stack in turn 2 Bot1 has priority and an untapped Ornithopter to tap for
+# the waterbend {1}, but it may not cast the Bolt: it is not Bot1's turn. In turn 3 it may, with the same Ornithopter, and Bot2 loses 3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Hama, the Bloodbender
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x6
+Island
+Island
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hama, the Bloodbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+? Exile = Lightning Bolt
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Exile.Lightning Bolt.Cast(Bot2; Convoke: Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile =
+Bot2.Life = 17

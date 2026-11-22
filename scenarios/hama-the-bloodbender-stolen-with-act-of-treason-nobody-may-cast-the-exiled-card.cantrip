@@ -1,0 +1,53 @@
+# Hama, the Bloodbender: "for as long as you control Hama" (CR 611.2b). Bot1 exiles Bot2's Shock with Hama, and Bot2 takes Hama with Act of
+# Treason on turn 2. The permission was Bot1's and Bot1 no longer controls Hama, while Bot2, who never was "you", has none: Bot2 may not cast the
+# Shock in its own turn although Mox Ruby is untapped and it controls Hama. The duration ended for good: when Hama goes back to Bot1 at end of
+# turn, Bot1 may not cast the Shock either, though Mox Jet is untapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Hama, the Bloodbender
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Act of Treason
+Mox Ruby
+Mountain x4
+Island
+Ornithopter
+Shock
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hama, the Bloodbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Shock)
+? Exile = Shock
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: R)
+Bot2.Hand.Act of Treason.Cast(Bot1.Battlefield.Hama, the Bloodbender)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Hama, the Bloodbender.Power = 3
+! Bot2.Exile.Shock.Cast(Bot1)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Hama, the Bloodbender.Power = 3
+! Bot1.Exile.Shock.Cast(Bot2)
+
+[Expect]
+Exile = Shock
+Bot1.Life = 20
+Bot2.Life = 20

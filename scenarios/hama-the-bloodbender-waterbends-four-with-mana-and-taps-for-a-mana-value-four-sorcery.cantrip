@@ -1,0 +1,50 @@
+# Hama, the Bloodbender: the exiled Harmonize ({2}{G}{G}, mana value 4) is cast by waterbending {4}, "where X is its mana value" (CR 701.67a).
+# Bot2 mills Island, Ornithopter, Harmonize and Bot1 exiles the Harmonize. On turn 3 it pays the waterbend {4} with mana and taps together
+# (CR 701.67a): an Island for one {1}, and Mox Jet, Mox Sapphire and Hama itself (waterbend is no {T} cost, CR 701.67b) for the other three;
+# the Ornithopter stays untapped. Bot1 draws three cards: a sorcery cast at sorcery timing from exile, the pool empty after.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Hama, the Bloodbender
+Ornithopter
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x7
+Island
+Ornithopter
+Harmonize
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hama, the Bloodbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Harmonize)
+? Exile = Harmonize
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Exile.Harmonize.Cast(Convoke: Mox Jet, Mox Sapphire, Hama, the Bloodbender)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Hand.Count = 5
+Exile =
+Bot2.Graveyard = Harmonize; Island; Ornithopter; Island

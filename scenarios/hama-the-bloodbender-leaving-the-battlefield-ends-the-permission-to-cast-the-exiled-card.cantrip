@@ -1,0 +1,46 @@
+# Hama, the Bloodbender: the exiled card may be cast "for as long as you control Hama" (CR 611.2b). Bot2 mills Island, Ornithopter and Shock and
+# Bot1 exiles the Shock. On turn 2 Bot2 kills Hama (3/3) with Lightning Bolt: on turn 3 Bot1 has Mox Jet and Mox Sapphire to tap but the Shock stays
+# in exile and nobody may cast it (the permission was Bot1's, and it ended when Hama left the battlefield).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Hama, the Bloodbender
+Island x20
+
+[Bot2 Deck]
+Lightning Bolt
+Mountain x6
+Island
+Ornithopter
+Shock
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hama, the Bloodbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Shock)
+? Exile = Shock
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Hama, the Bloodbender)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Exile.Shock.Cast(Bot2)
+! Bot2.Exile.Shock.Cast(Bot1)
+
+[Expect]
+Exile = Shock
+Bot1.Graveyard = Hama, the Bloodbender; Black Lotus

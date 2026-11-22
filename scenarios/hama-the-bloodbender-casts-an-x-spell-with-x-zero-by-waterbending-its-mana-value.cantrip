@@ -1,0 +1,49 @@
+# Hama, the Bloodbender, on the ruling "If you cast a spell with {X} in its mana cost this way, the only legal choice for X is 0" (CR
+# 107.3b, 118.9): the exiled Fireball ({X}{R}) has mana value 1 in exile (CR 202.3e), so the waterbend is {1}, paid by tapping
+# Mox Jet. X is not announced at all (CR 601.2b) although Bot1 has a Mox Sapphire's {U} to spare: on the stack the Fireball has
+# mana value 1, X 0 (CR 202.3e), and it deals no damage.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Hama, the Bloodbender
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x7
+Fireball
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hama, the Bloodbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fireball)
+? Exile = Fireball
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Fireball.Cast(Convoke: Mox Jet)
+? Stack.Fireball.ManaValue = 1
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot2.Life = 20
+Bot1.Mana = {U}
+Bot2.Graveyard = Fireball; Island; Island; Island
