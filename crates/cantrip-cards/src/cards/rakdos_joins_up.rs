@@ -30,7 +30,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
             THIS_ENTERS,
-            effects::return_first_target_to_battlefield_with_two_plus_one_counters,
+            effects::return_first_target_to_battlefield_with_counters::<{ CounterKind::PlusOne as usize }, 2>,
             "When Rakdos Joins Up enters, return target creature card from your graveyard to the battlefield with two additional +1/+1 counters on it.",
         )
         .targets(&[targets::CREATURE_CARD_IN_YOUR_GRAVEYARD]),

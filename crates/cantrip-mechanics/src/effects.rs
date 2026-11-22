@@ -2832,17 +2832,6 @@ pub fn put_a_creature_card_from_a_graveyard_onto_the_battlefield(g: &mut dyn Gam
     Ok(Some(g.put_onto_battlefield(card, you, false)?))
 }
 
-/// "Return target card from your graveyard to the battlefield with a finality counter on it" (CR 400.7, 122.6, 614.1c): the
-/// first target, put onto the battlefield under its controller's control with the counter already on it, so it is exiled
-/// instead of dying (CR 122.1h). Nothing if the target is gone (CR 608.2b), which also reads "up to one target" with none
-/// chosen. Rite of the Moth and Yuna, Hope of Spira print it.
-pub fn return_target_card_with_finality(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(card) = crate::targets::object(g, item, 0) {
-        g.put_onto_battlefield_with_counters(card, item.controller, false, &[(CounterKind::Finality, 1)])?;
-    }
-    Ok(())
-}
-
 /// "Return this card from your graveyard to the battlefield tapped" (CR 400.7): `return_this_card_to_battlefield`, entering
 /// tapped. Otharri, Suns' Glory and Teacher's Pest print it.
 pub fn return_this_card_to_battlefield_tapped(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -3013,12 +3002,15 @@ pub fn return_first_target_to_battlefield(g: &mut dyn Game, item: &StackItem) ->
     Ok(())
 }
 
-/// "Return target [card] from your graveyard to the battlefield with two additional +1/+1 counters on it" (CR 614.1c, 122.6): the
-/// first target, under the controller of the spell or ability, entering with the counters, so it is never on the battlefield without
-/// them; nothing if it is no longer a legal target (CR 608.2b). Evil Reawakened and Rakdos Joins Up print it.
-pub fn return_first_target_to_battlefield_with_two_plus_one_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+/// "Return target [card] from your graveyard to the battlefield with N [kind] counters on it" (CR 614.1c, 122.6), where KIND is
+/// `CounterKind::X as usize`: the first target, under the controller of the spell or ability, untapped and entering with the counters,
+/// so it is never on the battlefield without them (a finality counter then exiles it instead of letting it die, CR 122.1h); nothing if
+/// it is no longer a legal target (CR 608.2b), which also reads "up to one target" with none chosen. Rite of the Moth and Yuna, Hope
+/// of Spira (a finality counter), Evil Reawakened (two +1/+1 counters), Prison Break (one), Metamorphosis Fanatic (a lifelink counter)
+/// and Season of the Burrow (an indestructible counter) print it.
+pub fn return_first_target_to_battlefield_with_counters<const KIND: usize, const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(card) = crate::targets::object(g, item, 0) {
-        g.put_onto_battlefield_with_counters(card, item.controller, false, &[(CounterKind::PlusOne, 2)])?;
+        g.put_onto_battlefield_with_counters(card, item.controller, false, &[(CounterKind::ALL[KIND], N)])?;
     }
     Ok(())
 }

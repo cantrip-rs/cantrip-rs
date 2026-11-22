@@ -25,7 +25,7 @@ fn have_trample_lifelink_and_ward(view: &dyn LayerQuery, source: ObjectId, chars
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         YOUR_END_STEP,
-        effects::return_target_card_with_finality,
+        effects::return_first_target_to_battlefield_with_counters::<{ CounterKind::Finality as usize }, 1>,
         "At the beginning of your end step, return up to one target enchantment card from your graveyard to the battlefield with a finality counter on it.",
     )
     .targets(&[targets::ENCHANTMENT_CARD_IN_YOUR_GRAVEYARD.between(0, 1)])],

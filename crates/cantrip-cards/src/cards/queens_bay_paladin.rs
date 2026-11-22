@@ -12,7 +12,7 @@ fn vampire_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target) -> bo
 fn return_the_vampire_with_finality_and_lose_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(card) = targets::object(g, item, 0) else { return Ok(()) };
     let value = g.mana_value(card) as i32;
-    effects::return_target_card_with_finality(g, item)?;
+    effects::return_first_target_to_battlefield_with_counters::<{ CounterKind::Finality as usize }, 1>(g, item)?;
     g.lose_life(item.controller, value);
     Ok(())
 }
