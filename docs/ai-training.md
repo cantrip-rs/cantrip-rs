@@ -319,22 +319,79 @@ by its lease file - so a long part at work is never a stall, and one its coordin
 status that cannot be written never fails a run.
 
 ```bash
-python -m cantrip_ai.status --root ../../ai-data          # exit 0 running/finished, 1 failed, 2 stalled, 3 dead, 4 stopped
+python -m cantrip_ai.status --root ../../ai-data          # exit 0 running/finished, 1 failed, 2 stalled, 3 dead, 4 stopped,
+                                                          #      5 nothing to read, 6 overdue-projected
 ```
 
 says **running**; **stalled** (the process lives and nothing has moved for a quarter of the stage's usual time, at
 least 15 minutes - `--stall-factor`, `--stall-floor` - or for an hour with no earlier generation to go by; or the
 driver has stopped writing the file); **dead** (the file says running and that process is gone - a process that
-exists and may not be asked about counts as alive); **failed**, with
+exists and may not be asked about counts as alive); **overdue-projected** (below); **failed**, with
 the error; **stopped** (asked to: Ctrl-C, `--stop`); or **finished**; then the supervisor's own state and the tail of
 the stage's log. `--json` for code.
+
+**Where a stage is going.** A run can be alive, moving, and a twentieth as fast as it should be: neither stalled nor
+dead, and at the end of the night nearly nothing is done. So a stage that plays its games through a distributed
+ledger (self-play, each duel, the judgements) is projected. The status file carries its work (`work`): the ledger it
+plays, the games done of how many, where that stood when this run of the stage first saw it, a sample a minute, the
+hosts playing it, and what it cost before (`pace`).
+
+- **Done** is the games the ledger accounts for, those its live attempts count finished on their hosts and have not
+  sent yet, half of each game in flight, and - a judgement's part is granted whole to a host and says nothing until it
+  is over - the share of its part a live attempt's time so far is (against what a game took in the parts its host has
+  already delivered of this ledger, else its host's earlier record; nine tenths of the part at most). Only a
+  judgement's part is one: a self-play or a duel that has written no status yet counts for nothing.
+- **The rate** is that of the last `--overrun-window` seconds (1800; between 1 and 10800, the three hours of samples
+  kept), once the work has been watched that long: a stage that collapses half way is seen within about a window,
+  not hours later when the whole run's average has followed. A rate wants three games behind it - three parts'
+  worth where parts are granted whole (a ledger of three parts never has that, and is not projected from a rate at
+  all) - and where the window holds less, the stretch reaches back until it does.
+- **What is expected** is, nearest first: an owner's word, `--expect STAGE=HOURS`; the earlier generations whose
+  ledger of the same name was made **with the same settings** (the ledger's identity less what every generation
+  changes: the model, the seeds, the pairings, the number of games, the serving option's flags), each played to its
+  end, the last five; the last generation that played that ledger at all, whatever its settings; the stage's usual
+  time. From the generations it is **what the hosts playing now made then**, each host's games a second (the median
+  of the generations it played in with the backend and precision it has now), summed, over the games this run has to
+  play: one host of two is held to what that host made, not to what the two made together. A host with no record
+  there adds nothing to what is expected, and the factor is then one and a half times itself (3 for 2) rather than
+  a guess of what it adds; so it is when no host playing has one.
+- It is **overdue-projected** when the projection is more than `--overrun-factor` (2) times what is expected. With no
+  rate to go by, a stage that has spent more than that in all, with nothing to show, is overdue too.
+
+**No stage runs unheld for want of history.** With no generation of the same settings - searches four times deeper -
+the stage is held against the last generation that played that ledger at all, over this run's games; the supervisor
+also tells the projection once (`projected`), since what it is held against is then a guess. A stage meant to cost
+more than the last one did is given `--expect STAGE=HOURS` or allowed to be slow before it starts; only a stage
+nothing ever ran before is told and not held. `--allow-slow STAGE` (repeatable; `all`), or the stage's name in
+`ROOT/LOOP.allow-slow`, lets a stage be slow on purpose. `status` judges with the limits the supervisor wrote into
+`ROOT/loop.json` unless it is given its own, and says overdue-projected at the first reading that is; the supervisor
+acts only on one that lasts ("The loop"). A stage with no ledger (training, a self-play on this machine alone with
+no `--workers`) is not projected: it has `overdue`, a warning once it has run twice its usual time.
+
+What this does not do, on purpose or not yet:
+
+- `--expect STAGE=HOURS` and the stage's usual time are held against **each ledger** the stage plays, as they are
+  given: a stage that plays several (the mine's replays and judgements) has each of them held to the whole stage's
+  hours, which is lenient; the generations' pace is each ledger's own.
+- A **resumed** stage is judged over the games left to it, from when this run of the driver first saw the ledger:
+  what an earlier run of the stage spent is not counted against it.
+- The watch **begins again with the driver**: a driver run again (after a hold, a retry) watches for a whole window
+  before anything is projected, and the samples of the run before are not carried over.
+- It begins again, too, **when the hosts playing change** (a worker that joins hours late, one that is lost; a host
+  between two attempts for less than five minutes still plays): the games left are held to what the hosts now
+  playing make of them, from that moment, over a new window. A host that keeps coming and going keeps the watch
+  from ever completing a window; the stall and the dropped-games guards are what see that.
 
 **Notifications** (`notify.py`). The driver tells a stage that failed (`stage-failed`), a measurement or an allowed
 data stage that failed and was passed over (`measurement-failed`, `data-failed`), anything the README's WARNING block
 flags (`warning`: a matchup far below a half, a seat misvalued, missing mined targets, a serving fallback, a worker
 not reached), a failure it got past (`recovered`), the gate's `verdict`, and a `finished` generation. The supervisor
-tells what the driver cannot: `stalled`, `resumed`, `dead`, `retry`, `held`, `stopped`. Each is one short message and a
-JSON payload:
+tells what the driver cannot: `stalled`, `resumed`, `dead`, `retry`, `held`, `stopped`, and of a stage's projection
+`overrun` ("gen15: selfplay projected to finish in 41 h (...), expected 2.7 h (at gen14, gen13's pace): more than 2
+times over. Its work is being stopped ...", followed by the loop's `held`) and `projected` ("gen15: selfplay
+projected 150 h at the current rate ...; no earlier generation played dist/ledger.json with these settings on these
+hosts", once a ledger, where no generation of the same settings says what to expect - held or not). These two are
+sent whatever a notify file's `events` lists. Each is one short message and a JSON payload:
 
 ```json
 {"event": "stage-failed", "message": "gen14 FAILED at parity: parity (candidate): no serving option passes for gen14, gen13; tried ...",
@@ -350,7 +407,7 @@ Where they go is this machine's business and never the repository's:
   Discord webhook URL works as it is;
 - or both in a file, `{"hook": "...", "webhook": "...", "events": ["stage-failed", "dead", ...]}`: `notify.json` in
   `%LOCALAPPDATA%\cantrip-ai` (Windows) or `~/.config/cantrip-ai`, or wherever `CANTRIP_AI_NOTIFY` says. `events`
-  limits what is sent.
+  limits what is sent, `overrun` and `projected` apart: they are always sent.
 
 Every notification is also a line of `ROOT/notifications.jsonl`, sent or not, with what each channel answered.
 `python -m cantrip_ai.notify --root ROOT --test "hello"` sends one and says where it went. A notification never
@@ -377,7 +434,20 @@ supervisor a root (`ROOT/loop.lock`: a second one refuses to start). At each tur
    finished - fetches and fast-forwards the working tree to it: never a merge, never over local changes; without
    `--update` the code is never touched;
 4. runs the driver's `--preflight` ("Preflight"), which builds and checks everything the generation needs;
-5. runs the generation and watches it.
+5. runs the generation and watches it: a stall and a stage far past its usual time are told; a stage **projected
+   to overrun** ("Watching a run": more than `--overrun-factor` times what it should take, after
+   `--overrun-window` seconds), **at every look for `--overrun-persist` seconds** (600: one reading stops nothing - a
+   part delivered late, a sample at a bad moment - and a look that is not over starts the count again), is told
+   (`overrun`), its work stopped the way `generation.py --stop` stops it - the games in play finish, everything
+   played is kept, the driver ends `stopped` - and the loop **held** with the projection in `LOOP.pause` ("gen15:
+   selfplay projected to finish in 41 h (...), expected 2.7 h (...)"). A driver that has not ended
+   `--overrun-stop-timeout` seconds (1200) after it was asked - its games in play are hours long, a host does not
+   answer - has its games in flight stopped too, as `--stop-now` stops them, and that is told. A stop once asked is
+   not withdrawn: a reading that recovers while the stage is stopping (or during that wait) changes nothing, the
+   stage ends stopped and the loop is held. Removing
+   the file resumes the stage, and it is stopped again if it is as slow: fix what slows it, or allow it - the
+   stage's name on a line of `ROOT/LOOP.allow-slow` (read at every look: no restart), or the supervisor's
+   `--allow-slow STAGE` or `--expect STAGE=HOURS`.
 
 Nothing the supervisor runs can hang it unnoticed: a git command is given up after two minutes (a fetch after ten;
 the code then stays as it is) and a preflight after `--preflight-timeout` (two hours; the loop is then held), each
@@ -942,6 +1012,7 @@ forces it when piped.
                                    #   flight, three times kills it), and the inference server, in a process group
                                    #   of its own, keeps serving them meanwhile
 --selfplay-scale-window 45 --selfplay-scale-min-gain 0.2 --selfplay-cpu-ceiling 0.95   # how it scales its lanes
+--selfplay-scale-floor 48          # the lanes no fall in throughput backs it off below (default: half the most it held)
 --gpu-server on|off                # the inference server for self-play, parity and the gate (default: on with an NVIDIA GPU)
 --server-args '--flush-ms 1'       # anything else for serve.py
 --train-steps 8000                 # more training (default from --train-hours at --train-rate)
@@ -1135,6 +1206,10 @@ CPU.
 - **A run went quiet.** `python -m cantrip_ai.status --root ROOT` says whether it is running, stalled, dead or
   failed, with the error and the stage's log ("Watching a run"). Under the supervisor, `ROOT/LOOP.pause` holds the
   reason the loop was held; remove it to go on.
+- **The loop was held for a projected overrun.** The stage was moving, far too slowly ("Watching a run", "Where a
+  stage is going"); its work was stopped and is kept. Look at why before removing `LOOP.pause` - the workers' lanes
+  in the stage's log (`N of M lanes ..., held by ...`), a worker not reached, a server serving slowly - or, if the
+  stage is meant to take that long, write its name into `ROOT/LOOP.allow-slow` first.
 - **`... was made with other settings`.** A distributed stage's ledger was started with other settings than this
   run's (another `--server-args`, say). A ledger that holds no games yet is replaced by itself, with a log line; one
   that holds games is kept and refused: run with the settings it began with, or remove that stage's `genN/dist/NAME`

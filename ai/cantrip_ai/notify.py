@@ -10,7 +10,8 @@ named in the environment or in a file outside the repository.
   Discord webhook takes it as it is; so does anything that reads `content`).
 - `CANTRIP_AI_NOTIFY`: a JSON file `{"hook": ..., "webhook": ..., "events": [...]}` (default: `notify.json` in
   `%LOCALAPPDATA%\\cantrip-ai` on Windows, `~/.config/cantrip-ai` elsewhere); the two variables above win over it.
-  `events`, when given, names the only events sent (see `EVENTS`).
+  `events`, when given, names the only events sent (see `EVENTS`) - but `ALWAYS`'s, which a list written before
+  them would otherwise never be sent.
 
 Every notification is also appended to `ROOT/notifications.jsonl`, sent anywhere or not, with what each channel
 answered. Sending never raises and never holds a run up for more than `TIMEOUT` seconds a channel.
@@ -41,9 +42,14 @@ TIMEOUT = 30.0
 # What is told: `stage-failed` (a stage ended a generation), `measurement-failed` (one failed and was passed over),
 # `data-failed` (a data-producing stage failed and was allowed to), `warning` (a report's flag, a preflight's doubt),
 # `recovered` (a known failure the driver got past by itself), `verdict` (the gate's), `finished` (a generation),
-# `stalled`, `dead` (the supervisor's, of a driver), `retry`, `held`, `stopped`, `resumed` (the loop's own), `test`.
+# `stalled`, `dead` (the supervisor's, of a driver), `overrun` (a stage projected to take far longer than it should:
+# its work is stopped and the loop held), `projected` (a stage's projected time, where nothing says what it should
+# be), `retry`, `held`, `stopped`, `resumed` (the loop's own), `test`.
 EVENTS = ("stage-failed", "measurement-failed", "data-failed", "warning", "recovered", "verdict", "finished", "stalled",
-          "dead", "retry", "held", "stopped", "resumed", "test")
+          "dead", "overrun", "projected", "retry", "held", "stopped", "resumed", "test")
+# Sent whatever a configuration's `events` lists: a stage stopped for its projected time, and a projection nothing of
+# the same settings stands behind, are never missed for want of a name in a list.
+ALWAYS = ("overrun", "projected")
 
 
 def config_file() -> Path:
@@ -138,7 +144,7 @@ def send(event: str, message: str, root=None, generation=None, stage=None, log=N
 def _send(event, message, root, generation, stage, log, details: dict, sent: dict):
     body = payload(event, str(message), root, generation, stage, **details)
     cfg = config()
-    if not cfg.get("events") or event in cfg["events"]:
+    if not cfg.get("events") or event in cfg["events"] or event in ALWAYS:
         for name, call in (("hook", _hook), ("webhook", _webhook)):
             if cfg.get(name):
                 try:

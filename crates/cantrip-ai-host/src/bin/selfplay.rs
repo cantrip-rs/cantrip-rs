@@ -34,7 +34,7 @@ const USAGE: &str = "usage: cantrip-selfplay --model DIR --out DIR [--games N] [
     [--opponents DIR[:SHARE] ...] [--starts DIR[:SHARE]] [--belief-deal] [--belief-model DIR]
     [--resume] [--recover] [--print-header] [--grant FILE] [--host NAME] [--lease FILE] [--lease-seconds S] [--shard-games N] [--precision fp32|tf32|fp16] [--gpu-batch N|32:N,64:N,96:N,128:N] [--gpu-shapes N,N,...|T:N/N,...|none] [--pipelines N] [--flush-ms MS] [--device N]
     [--memory-budget GB] [--memory-reserve GB] [--commit-reserve GB] [--memory-floor GB] [--memory-per-game GB]
-    [--autoscale | --no-autoscale] [--scale-start N] [--scale-step N] [--scale-window S] [--scale-min-gain F] [--cpu-ceiling F]
+    [--autoscale | --no-autoscale] [--scale-start N] [--scale-step N] [--scale-window S] [--scale-min-gain F] [--scale-floor N] [--cpu-ceiling F]
 exit codes: 0 done, 2 failed, 3 stopped by the governor (memory floor, Ctrl-C or OUT/selfplay.stop): rerun with --resume";
 
 fn main() {
@@ -200,6 +200,7 @@ fn go(args: &[String]) -> Result<i32, String> {
             "--scale-step" => scale.step = (num(&v)? as usize).max(1),
             "--scale-window" => scale.window = Duration::from_secs_f64(num(&v)?.max(1.0)),
             "--scale-min-gain" => scale.min_gain = num(&v)?,
+            "--scale-floor" => scale.floor = Some((num(&v)? as usize).max(1)),
             "--cpu-ceiling" => scale.cpu_ceiling = num(&v)?,
             other => return Err(format!("unknown argument {other}")),
         }

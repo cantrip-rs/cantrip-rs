@@ -50,7 +50,7 @@ use cantrip_script::{Advance, GameScript, Scripted};
 use serde_json::{Value, json};
 
 use crate::STACK_SIZE;
-use crate::governor::{self, Govern, Governor, Meter};
+use crate::governor::{self, Govern, Governor, Meter, Metered};
 
 /// Two decklists played against each other, by name.
 #[derive(Clone, Debug)]
@@ -317,7 +317,8 @@ pub struct Players<'a> {
     pub beliefs: [Option<&'a dyn Belief>; 2],
     /// Set, the game stops at its next decision with `governor::STOPPED` (the governor's graceful stop).
     pub abort: Option<&'a AtomicBool>,
-    /// Counts the searches' work as the game goes (the governor's throughput).
+    /// Counts the searches' work as the game goes (the governor's throughput): each evaluation as it is answered
+    /// (`governor::Metered`), each search as it ends.
     pub meter: Option<&'a Meter>,
 }
 
@@ -582,7 +583,12 @@ pub fn play_with(
             continue;
         }
         let p = request.player.index();
-        let evaluator = players.evaluators[p];
+        // Counted as it answers (the governor's throughput is the work done, however long a search takes).
+        let metered = players.meter.map(|meter| Metered { inner: players.evaluators[p], meter });
+        let evaluator: &dyn Evaluator = match &metered {
+            Some(m) => m,
+            None => players.evaluators[p],
+        };
         let learner = players.learner[p];
         knowledge[p].update(&game);
         let at = game.at;
@@ -684,7 +690,6 @@ pub fn play_with(
             simulations += s.simulations as u64;
             evaluations += s.evaluations as u64;
             if let Some(m) = players.meter {
-                m.evaluations.fetch_add(s.evaluations as u64, Ordering::Relaxed);
                 m.searched.fetch_add(1, Ordering::Relaxed);
             }
             if !s.visits.is_empty() && !learner {

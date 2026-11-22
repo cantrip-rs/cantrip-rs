@@ -343,7 +343,7 @@ cantrip-selfplay --model DIR --out DIR [--games N] [--hours H] [--simulations N]
     [--flush-ms MS] [--device N] [--opponents DIR[:SHARE] ...] [--starts DIR[:SHARE]] [--belief-deal]
     [--belief-model DIR] [--memory-budget GB] [--memory-reserve GB] [--commit-reserve GB] [--memory-floor GB]
     [--memory-per-game GB] [--autoscale | --no-autoscale] [--scale-start N] [--scale-step N] [--scale-window S]
-    [--scale-min-gain F] [--cpu-ceiling F]
+    [--scale-min-gain F] [--scale-floor N] [--cpu-ceiling F]
 ```
 
 - It runs in process, not as a table with an AI host beside it. Each lane is a thread with its own evaluator and
@@ -468,6 +468,7 @@ index alone, so a game's record is the same bytes whatever the lanes, the schedu
 | `--scale-start N`, `--scale-step N` | 4, 2 | lanes allowed at first, and added at a time |
 | `--scale-window S` | 45 | seconds of throughput each scaling decision measures |
 | `--scale-min-gain F` | 0.2 | the least marginal gain worth another lane (below) |
+| `--scale-floor N` | half the most lanes held, at least 4 | the lanes no fall in throughput backs off below (below); memory still holds games back at any level |
 | `--cpu-ceiling F` | 0.95 | the system's busy CPU share past which no lane is added |
 
 GB is 2^30 bytes. The readings are Windows' `GlobalMemoryStatusEx` (`ullAvailPhys`, and `ullAvailPageFile` for the
@@ -500,6 +501,22 @@ allows (a rented GPU machine is usually such a slice of a larger host); elsewher
   `--cpu-ceiling` or memory admission deferred a game in the window, and resumes after two clear windows; a plateau is
   probed again after ten windows held. A level held is watched: two windows in a row more than 15% under it back the
   lanes off a step. A lane switched off finishes its game and then idles. Each decision is logged with its reason.
+  **How long a game or a search takes changes nothing the scaler reads**, and it never gives up lanes because games
+  got long:
+  - the throughput is the evaluations the evaluator answered in the window, counted as each batch is answered
+    (`governor::Metered`), not the evaluations of the searches that ended in it. A full search of 131,072
+    simulations ends once in several windows; counted at its end, every window read a whole number of searches -
+    nothing, then everything - and each pair of empty windows was a "drop";
+  - a drop is a fall against a throughput made with as many lanes busy. Lanes switched off play their game to its
+    end first - with long games, many windows later - and the throughput then falls with them: that is the scaler's
+    own doing, the window becomes the level held, and it is never a reason to switch off more (which, each back-off
+    feeding the next, took a run from its lanes to one);
+  - no drop backs the lanes off below a floor: `--scale-floor`, or half the most lanes a whole window was ever
+    measured at (at least 4). A throughput that really fell around a plateau - wherever the plateau is under the
+    ceiling - still backs the lanes off a step at a time; at the floor a level that fell for two windows is measured
+    afresh and no lane is switched off, so nothing a window reads takes the lanes under half of where they stood. A probe that did not pay is still taken back
+    (to the level held before it, never lower), and memory - admission, the floor's stop - is not the scaler's and
+    holds games back at any level.
 - **Graceful stop.** Available memory or commit headroom under `--memory-floor` for four readings in a row, or Ctrl-C
   (Ctrl-Break, a console's close, SIGINT, SIGTERM), stops admission. After an interrupt the games in flight finish; a
   second interrupt stops them at their current decision, and a third exits at once (code 130; the shards it leaves open

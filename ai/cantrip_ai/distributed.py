@@ -873,6 +873,8 @@ class Coordinator:
             if not pend:
                 continue
             a = self.ledger.new_attempt(name, started=self.clock())
+            # What it runs (`status.ledger_work`: a judgement's part is granted whole and writes no status).
+            a["kind"] = self.kind.name
             self.ledger.grant(a, self.first(pend, self.rounded(self.initial)))
             self.ledger.save()
             try:

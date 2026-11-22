@@ -15,6 +15,15 @@
 //!   saturated), the system's CPU busy past a ceiling, or memory admission deferring. A later drop backs it off. A lane
 //!   switched off finishes its game and then idles. The gain is a lane's, as a share of an average lane's throughput
 //!   (`Scale::min_gain`), not the throughput's own rise, which shrinks with the lanes even when they scale perfectly.
+//!   **Throughput is work done, never games or searches finished**, and how long a game or a search takes changes
+//!   nothing the scaler reads: the evaluations are counted as the evaluator answers them (`Metered`), not when the
+//!   search that asked for them ends (a search of 131,072 simulations ends once in several windows, and a count taken
+//!   at its end reads as windows of nothing and windows of everything); a drop is a fall against a level measured
+//!   with as many lanes busy (lanes the scaler switched off drain a long game at a time, and the throughput that falls
+//!   with them is its own doing, not a reason to switch off more); and no drop takes the lanes under a floor
+//!   (`Scale::floor`, or half the most lanes a window was ever measured at: a throughput that really fell around a
+//!   plateau still backs the lanes off, and nothing a window reads halves where they stood). Only memory takes lanes
+//!   below it: admission, and the floor's stop.
 //! - **Graceful stop.** Available memory or commit headroom under the floor for `Govern::floor_ticks` readings in a row
 //!   (`Govern::floor`), or an interrupt (Ctrl-C, a console close, SIGINT or SIGTERM: `install_signal_handlers`), stops
 //!   admission; the games in flight finish, except that while memory stays under the floor the youngest is stopped at
@@ -32,6 +41,8 @@ use std::sync::atomic::{AtomicBool, AtomicU32, AtomicU64, Ordering};
 use std::sync::{Arc, Condvar, Mutex, MutexGuard};
 use std::time::{Duration, Instant};
 
+use cantrip_ai::{EvalError, Evaluator, FeatureBatch, Outputs};
+use cantrip_obs::encode::Encoded;
 use serde_json::{Value, json};
 
 /// A gigabyte as the flags count it: 2^30 bytes.
@@ -344,6 +355,12 @@ pub struct Scale {
     pub drop: f64,
     /// Windows held at a plateau before growth is tried again.
     pub reprobe: u32,
+    /// The lanes no fall in throughput backs off below. None: half the most lanes a whole window was measured at so
+    /// far, rounded up, and at least `MIN_FLOOR` (the ceiling, if that is less) - so the lanes back off around a
+    /// plateau wherever it is under the ceiling, and are never taken under half of where they stood. The lanes still
+    /// start at `start` and grow by what they measure; memory admission is not the scaler's and holds games back at
+    /// any level.
+    pub floor: Option<usize>,
 }
 
 impl Default for Scale {
@@ -356,9 +373,13 @@ impl Default for Scale {
             cpu_ceiling: 0.95,
             drop: 0.15,
             reprobe: 10,
+            floor: None,
         }
     }
 }
+
+/// The least floor a scaler gives itself (`Scale::floor` none).
+pub const MIN_FLOOR: usize = 4;
 
 /// What stopped the lanes growing.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -413,8 +434,8 @@ pub struct Decision {
 struct Hold {
     limiter: Limiter,
     windows: u32,
-    /// The throughput held at, followed slowly; none until a window at this level is measured.
-    reference: Option<f64>,
+    /// The lanes busy and the throughput held at, followed slowly; none until a window at this level is measured.
+    reference: Option<(f64, f64)>,
     /// Windows in a row under the reference by more than `Scale::drop`.
     low: u32,
     /// Windows in a row the CPU or memory limiter was clear.
@@ -424,9 +445,12 @@ struct Hold {
 /// The feedback controller on the lanes allowed to play (see the module). It grows by `Scale::step` each window while
 /// the marginal gain holds; a gain under `Scale::min_gain` is measured again for a second window before it counts, and
 /// a level held is watched for a drop over two windows, so one noisy window neither stops growth nor backs it off.
+/// A drop is a fall against a throughput made by as many busy lanes, and backs off no further than the floor.
 pub struct Scaler {
     cfg: Scale,
     ceiling: usize,
+    /// The most lanes a whole window was measured at: allowed throughout it, and as many busy.
+    peak: usize,
     target: usize,
     /// (lanes allowed, lanes busy, throughput) of each level measured while growing.
     history: Vec<(usize, f64, f64)>,
@@ -441,7 +465,12 @@ impl Scaler {
     pub fn new(cfg: Scale, ceiling: usize) -> Scaler {
         let ceiling = ceiling.max(1);
         let target = cfg.start.clamp(1, ceiling);
-        Scaler { cfg, ceiling, target, history: Vec::new(), doubt: None, hold: None, limiter: None }
+        Scaler { cfg, ceiling, peak: 0, target, history: Vec::new(), doubt: None, hold: None, limiter: None }
+    }
+
+    /// The lanes no fall in throughput backs off below now (`Scale::floor`).
+    pub fn floor(&self) -> usize {
+        self.cfg.floor.unwrap_or(self.peak.div_ceil(2).max(MIN_FLOOR)).clamp(1, self.ceiling)
     }
 
     pub fn target(&self) -> usize {
@@ -498,6 +527,9 @@ impl Scaler {
         if w.lanes < 0.5 || w.seconds <= 0.0 {
             return self.keep("no game ran".into());
         }
+        // A level held for the whole window: allowed throughout (the target changes only here), and as many busy.
+        self.peak = self.peak.max(target.min((w.lanes + 0.5) as usize));
+        let floor = self.floor();
         if w.memory_deferred {
             return self.hold_at(Limiter::Memory, "memory admission deferred a game: no lane added".into());
         }
@@ -523,27 +555,43 @@ impl Scaler {
                 }
                 Limiter::Plateau | Limiter::Drop | Limiter::Ceiling => {
                     match h.reference {
-                        None => h.reference = Some(w.throughput),
-                        Some(r) if w.throughput < r * (1.0 - self.cfg.drop) => {
+                        None => h.reference = Some((w.lanes, w.throughput)),
+                        // Fewer lanes busy than made the reference: lanes switched off that have since finished their
+                        // games (a long game holds its lane long after it is switched off), a run's tail, lanes with
+                        // no game to take. What they no longer make is no drop: this window is the level now.
+                        Some((lanes, _)) if w.lanes < lanes * 0.9 => {
+                            h.low = 0;
+                            h.reference = Some((w.lanes, w.throughput));
+                        }
+                        Some((_, r)) if w.throughput < r * (1.0 - self.cfg.drop) => {
+                            let fell = 1.0 - w.throughput / r;
                             h.low += 1;
-                            if h.low >= 2 && target > 1 {
-                                let fell = 1.0 - w.throughput / r;
+                            if h.low >= 2 && target > floor {
                                 h.reference = None;
                                 h.low = 0;
                                 h.windows = 0;
                                 h.limiter = Limiter::Drop;
                                 self.limiter = Some(Limiter::Drop);
-                                let back = target.saturating_sub(self.cfg.step).max(1);
+                                let back = target.saturating_sub(self.cfg.step).max(floor);
                                 return self.set(
                                     back,
                                     format!("throughput {:.0}% under the level held for two windows: backing off", fell * 100.0),
                                 );
                             }
-                            return self.keep(format!("throughput {:.0}% under the level held: watching", (1.0 - w.throughput / r) * 100.0));
+                            if h.low >= 2 {
+                                // At or under the floor: the level is measured afresh, and no lane is switched off.
+                                h.reference = None;
+                                h.low = 0;
+                                return self.keep(format!(
+                                    "throughput {:.0}% under the level held for two windows: no lane is backed off under the floor of {floor}",
+                                    fell * 100.0
+                                ));
+                            }
+                            return self.keep(format!("throughput {:.0}% under the level held: watching", fell * 100.0));
                         }
-                        Some(r) => {
+                        Some((lanes, r)) => {
                             h.low = 0;
-                            h.reference = Some(0.8 * r + 0.2 * w.throughput);
+                            h.reference = Some((0.8 * lanes + 0.2 * w.lanes, 0.8 * r + 0.2 * w.throughput));
                         }
                     }
                     if h.limiter != Limiter::Ceiling && h.windows >= self.cfg.reprobe && target < self.ceiling {
@@ -715,11 +763,37 @@ pub fn room(g: &Govern, m: Memory, need: u64) -> Result<(), String> {
     Ok(())
 }
 
-/// The work done so far, counted by the games as they search (`selfplay::Players::meter`).
+/// The work done so far, counted by the games as they search (`selfplay::Players::meter`): the evaluations as the
+/// evaluator answers them (`Metered`), the searches as they end.
 #[derive(Default)]
 pub struct Meter {
     pub evaluations: AtomicU64,
     pub searched: AtomicU64,
+}
+
+/// An evaluator whose answers are counted on a `Meter` as they come: the scaler's throughput is then the work the
+/// lanes do each window, however long the searches that ask for it take. It changes no answer.
+pub struct Metered<'a> {
+    pub inner: &'a dyn Evaluator,
+    pub meter: &'a Meter,
+}
+
+impl Evaluator for Metered<'_> {
+    fn evaluate(&self, batch: &FeatureBatch) -> Result<Outputs, EvalError> {
+        let out = self.inner.evaluate(batch)?;
+        self.meter.evaluations.fetch_add(batch.rows as u64, Ordering::Relaxed);
+        Ok(out)
+    }
+
+    fn evaluate_positions(&self, positions: &[&Encoded]) -> Result<Outputs, EvalError> {
+        let out = self.inner.evaluate_positions(positions)?;
+        self.meter.evaluations.fetch_add(positions.len() as u64, Ordering::Relaxed);
+        Ok(out)
+    }
+
+    fn idle(&self) {
+        self.inner.idle()
+    }
 }
 
 #[derive(Clone, Copy)]
@@ -1460,6 +1534,7 @@ impl Governor {
                 "WindowSeconds": c.window.as_secs_f64(),
                 "MinGain": c.min_gain,
                 "CpuCeiling": c.cpu_ceiling,
+                "Floor": s.scaler.as_ref().map(Scaler::floor),
                 "Lanes": s.target,
                 "Limiter": s.scaler.as_ref().and_then(|x| x.limiter).map(Limiter::name),
                 "Windows": s.windows,
@@ -1782,7 +1857,7 @@ mod tests {
 
     #[test]
     fn the_scaler_backs_off_on_a_drop_and_not_on_one_noisy_window() {
-        let mut s = Scaler::new(Scale { reprobe: 100, ..Scale::default() }, 96);
+        let mut s = Scaler::new(Scale { reprobe: 100, floor: Some(1), ..Scale::default() }, 96);
         drive(&mut s, 30, |l| window(l as f64, 100.0 * l.min(16) as f64));
         let held = s.target();
         assert_eq!(s.limiter, Some(Limiter::Plateau));
@@ -1796,6 +1871,137 @@ mod tests {
         let d = s.step(&window(held as f64, 1100.0));
         assert_eq!(d.change, -2, "{d:?}");
         assert_eq!(s.limiter, Some(Limiter::Drop));
+    }
+
+    #[test]
+    fn a_drop_backs_off_no_further_than_the_floor() {
+        // The floor by default: half the most lanes a window was measured at, and at least four (or the ceiling).
+        assert_eq!(Scaler::new(Scale::default(), 128).floor(), MIN_FLOOR);
+        assert_eq!(Scaler::new(Scale::default(), 1).floor(), 1);
+        assert_eq!(Scaler::new(Scale { floor: Some(500), ..Scale::default() }, 96).floor(), 96);
+        let mut s = Scaler::new(Scale { reprobe: 1000, ..Scale::default() }, 256);
+        drive(&mut s, 80, |l| window(l as f64, 100.0 * l.min(100) as f64));
+        // A plateau at a hundred lanes under a ceiling of 256: the floor is half of what was held, not of the ceiling,
+        // and a throughput that keeps falling there backs the lanes off, a step at a time, down to it and no further.
+        let (held, floor) = (s.target(), s.floor());
+        assert!((100..=130).contains(&held) && (held.div_ceil(2)..=held.div_ceil(2) + 3).contains(&floor), "{held} lanes, floor {floor}");
+        let mut throughput = 10_000.0;
+        let decisions = drive(&mut s, 400, |l| {
+            throughput *= 0.8;
+            window(l as f64, throughput)
+        });
+        assert!(decisions.iter().filter(|d| d.change < 0).count() >= 20, "{decisions:#?}");
+        assert_eq!((s.target(), s.floor()), (floor, floor), "the floor is of the most ever held, and does not follow the lanes down");
+        // Held at 16 to 18 lanes with a floor of 15: a drop that lasts backs off to 15 and never under it.
+        let mut s = Scaler::new(Scale { reprobe: 1000, floor: Some(15), ..Scale::default() }, 96);
+        drive(&mut s, 30, |l| window(l as f64, 100.0 * l.min(16) as f64));
+        let held = s.target();
+        assert!(held > 15, "{held}");
+        // Each window a fifth under the one before.
+        let mut throughput = 1600.0;
+        let decisions = drive(&mut s, 60, |l| {
+            throughput *= 0.8;
+            window(l as f64, throughput)
+        });
+        assert_eq!(s.target(), 15, "{decisions:#?}");
+        assert!(decisions.iter().all(|d| d.target >= 15), "{decisions:#?}");
+        assert!(decisions.iter().any(|d| d.reason.contains("under the floor of 15")), "{decisions:#?}");
+        // Whatever the windows read, the lanes are never taken under half of where they stood.
+        let mut s = Scaler::new(Scale { reprobe: 1000, ..Scale::default() }, 96);
+        drive(&mut s, 30, |l| window(l as f64, 100.0 * l.min(16) as f64));
+        let held = s.target();
+        let mut k = 0;
+        let decisions = drive(&mut s, 200, |l| {
+            k += 1;
+            window(l as f64, [1600.0, 0.0, 300.0, 0.0, 0.0, 2900.0][k % 6])
+        });
+        assert!(decisions.iter().all(|d| d.target >= held.div_ceil(2)), "{held} held: {decisions:#?}");
+        assert_eq!(s.target(), held.div_ceil(2).max(s.floor()), "{decisions:#?}");
+    }
+
+    /// The windows of a deep self-play that went from its first lanes to one and stayed there (131,072 simulations a
+    /// full search, counted when each search ended: every window read a whole number of searches, 0 to 5 of them, at
+    /// 2,912 evaluations a second each), fed to the scaler as they were read.
+    #[test]
+    fn windows_that_read_whole_searches_never_take_the_lanes_down() {
+        let bursts = [
+            17.0, 12.0, 2907.0, 11653.0, 2945.0, 2912.0, 14585.0, 11644.0, 0.0, 11648.0, 8594.0, 8668.0, 5861.0, 12992.0,
+            5803.0, 2906.0, 12812.0, 2920.0, 5210.0, 8525.0, 5828.0, 2887.0, 8404.0, 5810.0, 2912.0, 5813.0, 5792.0,
+            8674.0, 0.0, 8745.0, 5801.0, 5519.0, 2892.0, 11515.0, 2588.0, 5807.0, 7761.0, 2778.0, 5813.0, 2910.0, 8341.0,
+            2914.0, 8731.0, 0.0, 5822.0, 8708.0, 2.0, 2905.0, 5801.0, 8764.0, 2898.0, 5668.0, 8637.0, 5804.0, 0.0,
+            14302.0, 2892.0, 1624.0, 5815.0, 8625.0,
+        ];
+        let mut s = Scaler::new(Scale::default(), 128);
+        let mut k = 0;
+        let mut lowest = usize::MAX;
+        let mut reached = 0;
+        // Ten times over: 7.5 hours of such windows.
+        let decisions = drive(&mut s, bursts.len() * 10, |l| {
+            reached = reached.max(l);
+            if k >= bursts.len() {
+                lowest = lowest.min(l);
+            }
+            k += 1;
+            window(l as f64, bursts[(k - 1) % bursts.len()])
+        });
+        // As the governor was, these windows took it to one lane within twenty minutes, and it stayed there. Now
+        // (and these are the windows as they were misread: `Metered` no longer reads them so) the lanes are never
+        // under half of the most they stood at, and each probe from there stands on a higher floor.
+        let mut peak = 0;
+        for d in &decisions {
+            peak = peak.max(d.target);
+            assert!(d.target >= (peak / 2).saturating_sub(1).max(MIN_FLOOR), "{} lanes after {peak}: {decisions:#?}", d.target);
+        }
+        assert!(decisions.iter().any(|d| d.reason.contains("under the floor of")), "{decisions:#?}");
+        assert!(lowest >= 5 && s.target() >= reached / 2, "lowest {lowest}, reached {reached}, now {}", s.target());
+    }
+
+    /// Lanes switched off finish their games first - with long games, many windows later. The throughput that falls
+    /// as they drain is the scaler's own doing and never a second drop.
+    #[test]
+    fn lanes_draining_after_a_back_off_are_not_another_drop() {
+        let mut s = Scaler::new(Scale { reprobe: 1000, floor: Some(1), ..Scale::default() }, 96);
+        drive(&mut s, 30, |l| window(l as f64, 100.0 * l.min(16) as f64));
+        let held = s.target();
+        // A real drop, with every lane busy: one step back.
+        s.step(&window(held as f64, 1000.0));
+        let d = s.step(&window(held as f64, 1000.0));
+        assert_eq!(d.change, -2, "{d:?}");
+        let after = s.target();
+        // The two lanes switched off play on for ten windows, then end one after the other: the throughput follows
+        // the busy lanes down, 62.5 a lane throughout.
+        let mut busy = held as f64;
+        let mut decisions = Vec::new();
+        for w in 0..40 {
+            if w >= 10 && busy > after as f64 {
+                busy -= 0.5;
+            }
+            decisions.push(s.step(&window(busy, 62.5 * busy)));
+        }
+        assert_eq!(s.target(), after, "{decisions:#?}");
+        assert!(decisions.iter().all(|d| d.change == 0), "{decisions:#?}");
+    }
+
+    #[test]
+    fn evaluations_are_counted_as_they_are_answered() {
+        struct Fixed;
+        impl Evaluator for Fixed {
+            fn evaluate(&self, batch: &FeatureBatch) -> Result<Outputs, EvalError> {
+                if batch.rows > 100 { Err(EvalError("too many".into())) } else { Ok(Outputs::default()) }
+            }
+        }
+        let meter = Meter::default();
+        let metered = Metered { inner: &Fixed, meter: &meter };
+        // A search under way: its evaluations are on the meter before it ends, a batch at a time.
+        for done in 1..=5u64 {
+            metered.evaluate(&FeatureBatch { rows: 16, ..FeatureBatch::default() }).unwrap();
+            assert_eq!(meter.evaluations.load(Ordering::Relaxed), 16 * done);
+        }
+        metered.evaluate_positions(&[]).unwrap();
+        // One that failed evaluated nothing.
+        assert!(metered.evaluate(&FeatureBatch { rows: 101, ..FeatureBatch::default() }).is_err());
+        assert_eq!(meter.evaluations.load(Ordering::Relaxed), 80);
+        assert_eq!(meter.searched.load(Ordering::Relaxed), 0);
     }
 
     #[test]

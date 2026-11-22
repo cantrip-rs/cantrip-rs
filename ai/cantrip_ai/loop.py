@@ -16,7 +16,15 @@ and at each turn
    knows, a build that broke, stops the loop here and not three hours into a generation;
 5. runs the generation, its output in `ROOT/genN-driver.log`, and watches it (`status.py`): a stage that stalls and a
    stage far past its usual time are told (`notify.py`) while it runs; a driver that dies, fails or is stopped is told
-   when it does.
+   when it does. A stage that lives and moves, and at the rate it moves is projected to take `--overrun-factor` (2)
+   times what it should (`status.project`: watched for `--overrun-window` seconds, against the earlier generations'
+   pace with the same settings, or `--expect STAGE=HOURS`) at every look for `--overrun-persist` seconds (600), is
+   not let run on: it is told (`overrun`), its work stopped as `generation.py --stop` stops it (resumable; as
+   `--stop-now` if the driver has not ended `--overrun-stop-timeout` seconds later), and the loop held with the
+   projection. `--allow-slow STAGE`
+   - or the stage's name in `ROOT/LOOP.allow-slow`, read at every look, so no restart - lets a stage be slow on
+   purpose. With no generation of the same settings to go by, the stage is held against the last that played its
+   ledger at all (over this run's games), and its projection is told once besides (`projected`).
 
 One supervisor a root (`ROOT/loop.lock`). Nothing it runs hangs it unnoticed: a git command and the preflight have
 time limits, past which they are killed with what they started, and told.
@@ -56,6 +64,9 @@ LOCK = "loop.lock"
 # How long the supervisor waits on a git command (a fetch from a remote that does not answer) and on the driver's
 # preflight (it builds) before it gives it up: neither may hang the loop unnoticed.
 GIT_TIMEOUT, FETCH_TIMEOUT = 120.0, 600.0
+# A stage is stopped for its projection once the reading has held this long, and its games in flight are stopped too
+# once its driver has not ended this long after.
+PERSIST, STOP_TIMEOUT = 600.0, 1200.0
 
 
 def unquoted_backslashes(text: str) -> list[str]:
@@ -117,9 +128,20 @@ class Loop:
         try:
             status.write_atomic(self.root / status.LOOP, dict(
                 state=state, why=why, pid=self.supervisor, pid_start=distributed.process_start(self.supervisor),
-                host=socket.gethostname(), since=time.strftime("%Y-%m-%d %H:%M:%S"), **more))
+                host=socket.gethostname(), since=time.strftime("%Y-%m-%d %H:%M:%S"), watch=self.limits(), **more))
         except Exception as e:  # noqa: BLE001
             self.log(f"the loop's state was not written ({type(e).__name__}: {e})")
+
+    def limits(self) -> dict:
+        """What a stage's projection is judged with (`status.judge`): written into the loop's state, so that
+        `status` says what the supervisor would."""
+        a = self.args
+        # (How long a reading must last before the stage is stopped, and how long its stop is waited for, are the
+        # supervisor's own: `--overrun-persist`, `--overrun-stop-timeout`.)
+        return dict(overrun_factor=getattr(a, "overrun_factor", status.OVERRUN_FACTOR),
+                    overrun_window=getattr(a, "overrun_window", status.OVERRUN_WINDOW),
+                    expect=status.parse_expect(getattr(a, "expect", None)),
+                    allow_slow=sorted(set(getattr(a, "allow_slow", None) or ())))
 
     def tell(self, event: str, message: str, generation=None, stage=None, **details):
         notify.send(event, message, root=self.root, generation=generation, stage=stage, log=self.log, **details)
@@ -311,12 +333,57 @@ class Loop:
 
     def watch(self, gen: int, alive, told: dict):
         """One look at a running generation: a stall, a stage far past its time and their end are told, each once
-        (a stall again every `--renotify` seconds while it lasts)."""
+        (a stall again every `--renotify` seconds while it lasts); a stage projected to overrun is told and its work
+        stopped (`told["overrun"]`: why, for the hold that follows its stop); a projection no generation of the same
+        settings stands behind is told once, held or not."""
         s = status.read(self.root, gen)
         if not s or s.get("state") != "running":
             return
-        j = status.judge(s, self.clock(), self.args.stall_factor, self.args.stall_floor, alive=lambda pid: alive())
+        asked = told.get("overrun")
+        wait = getattr(self.args, "overrun_stop_timeout", STOP_TIMEOUT)
+        if asked and not asked.get("now") and self.clock() - asked["at"] >= wait:
+            # Asked to stop, and still running (its games in play are long, or a host does not answer): its games
+            # in flight are stopped too, as `--stop-now` stops them. What was finished is kept either way.
+            # (A stop once asked is not taken back: a reading that recovers while the stage is stopping changes nothing.)
+            asked["now"] = True
+            self.tell("overrun", f"gen{gen}: stage {asked['stage']} was asked to stop {wait / 60:.0f} min ago and its "
+                                 f"driver has not ended: its games in flight are stopped too (as --stop-now does; what "
+                                 f"was finished is kept)", gen, asked["stage"])
+            self.stop_stage(gen, now=True)
+        limits = self.limits()
+        limits["allow_slow"] = status.allowed_slow(self.root, limits["allow_slow"])
+        j = status.judge(s, self.clock(), self.args.stall_factor, self.args.stall_floor, alive=lambda pid: alive(), **limits)
         stage = s.get("stage")
+        projection = j.get("projection")
+        if projection and not projection.get("known"):
+            # Nothing of these settings to go by: where it is going is told once, held or not.
+            key = (stage, (s.get("work") or {}).get("ledger"))
+            if key not in told.setdefault("projected", set()):
+                told["projected"].add(key)
+                self.tell("projected", f"gen{gen}: {projection['text']}", gen, stage, projection=projection)
+        if j["state"] == status.PROJECTED:
+            # One look is no reason to stop a stage: a part delivered late, a sample at a bad moment. The reading
+            # has to hold at every look for `--overrun-persist` seconds.
+            persist = getattr(self.args, "overrun_persist", PERSIST)
+            # The same watch throughout: a ledger seen anew (other hosts playing it, the next ledger of the stage)
+            # begins the count again, as a look that is not over does.
+            work = s.get("work") or {}
+            key = (stage, work.get("ledger"), work.get("since"))
+            if told.get("over_key") != key and "overrun" not in told:
+                told["over_key"] = key
+                told.pop("over_since", None)
+            since = told.setdefault("over_since", self.clock())
+            if "overrun" not in told and self.clock() - since >= persist:
+                told["overrun"] = dict(stage=stage, why=projection["text"], at=self.clock())
+                self.tell("overrun", f"gen{gen}: {j['why']}"
+                                     + (f", at every look for {(self.clock() - since) / 60:.0f} min" if persist else "")
+                                     + f". Its work is being stopped (as --stop does: what is played is kept; if its "
+                                       f"driver has not ended in {wait / 60:.0f} min its games in flight are stopped "
+                                       f"too) and the loop will be held", gen, stage, projection=projection)
+                self.stop_stage(gen)
+            return
+        if "overrun" not in told:
+            told.pop("over_since", None)
         if j["state"] == "stalled":
             last = told.get("stalled")
             if last is None or self.clock() - last >= self.args.renotify:
@@ -329,6 +396,13 @@ class Loop:
         if j.get("overdue") and told.get("overdue") != stage:
             told["overdue"] = stage
             self.tell("warning", f"gen{gen}: {j['overdue']}", gen, stage)
+
+    def stop_stage(self, gen: int, now: bool = False):
+        """The running stage's work stopped as `generation.py --stop` stops it: its games in play end and are kept,
+        and the driver ends `stopped`, to be resumed. With `now`, as `--stop-now`: its games in flight stop too."""
+        from . import generation  # noqa: PLC0415 (the driver's own reading of a root; it imports no torch)
+
+        generation.request_stop(self.root, gen, now=now, log=self.log)
 
     def run_once(self, gen: int) -> tuple[str, dict]:
         """The generation's driver run (or, one already running, attached to) and watched to its end: how it ended
@@ -354,6 +428,7 @@ class Loop:
             alive, code = (lambda: p.poll() is None), (lambda: p.returncode)
         self.state("running", f"gen{gen}", generation=gen, driver_log=str(log_path))
         told: dict = {}
+        self.told = told
         while alive():
             self.sleep(self.args.poll)
             try:
@@ -417,6 +492,14 @@ class Loop:
                 return self.hold(f"gen{gen} failed at stage {s.get('stage')}: {first}"
                                  + (f" (after {retries} retries)" if retries else "") + f" (log: {log_path})", gen,
                                  stage=s.get("stage"), log_tail=tail)
+            overrun = getattr(self, "told", {}).get("overrun")
+            if ended == "stopped" and overrun:
+                return self.hold(f"gen{gen}: {overrun['why']}. Its work was stopped (what was played is kept) and "
+                                 f"resumes when this file is removed - and is stopped again if it is as slow: fix "
+                                 f"what slows it, or let it be slow on purpose with the line `{overrun['stage']}` in "
+                                 f"{self.root / status.ALLOW_SLOW} (or the supervisor's --allow-slow "
+                                 f"{overrun['stage']}, or --expect {overrun['stage']}=HOURS)", gen,
+                                 stage=overrun["stage"], log_tail=tail)
             if ended == "stopped":
                 return self.hold(f"gen{gen} was stopped at stage {s.get('stage')}, as asked: {first}", gen, event="stopped")
             if ended == "dead":
@@ -440,6 +523,22 @@ def parser() -> argparse.ArgumentParser:
                    help="a stage with no progress for this share of its usual time is stalled")
     a.add_argument("--stall-floor", type=float, default=status.STALL_FLOOR, metavar="S", help="and for at least this long")
     a.add_argument("--renotify", type=float, default=3600.0, metavar="S", help="a stall that lasts is told again this often")
+    a.add_argument("--overrun-factor", type=float, default=status.OVERRUN_FACTOR, metavar="X",
+                   help="a stage projected, at the rate it goes, to take this many times what it should is stopped "
+                        "(resumable) and the loop held")
+    a.add_argument("--overrun-window", type=float, default=status.OVERRUN_WINDOW, metavar="S",
+                   help="a stage's rate is watched this long before it is projected")
+    a.add_argument("--overrun-persist", type=float, default=PERSIST, metavar="S",
+                   help="and stopped only once that reading has held at every look for this long")
+    a.add_argument("--overrun-stop-timeout", type=float, default=STOP_TIMEOUT, metavar="S",
+                   help="a stage asked to stop whose driver has not ended after this long has its games in flight "
+                        "stopped too (as --stop-now)")
+    a.add_argument("--expect", action="append", default=[], metavar="STAGE=HOURS",
+                   help="what a stage should take - each ledger it plays - in place of the earlier generations' pace "
+                        "(repeatable): for a stage meant to cost more than the last generation's did")
+    a.add_argument("--allow-slow", action="append", default=[], metavar="STAGE",
+                   help=f"a stage that may be slow on purpose: never stopped for its projection (repeatable; 'all'; "
+                        f"also the words of ROOT/{status.ALLOW_SLOW}, read at every look)")
     a.add_argument("--no-preflight", action="store_true", help="no --preflight before a generation (not advised)")
     a.add_argument("--preflight-timeout", type=float, default=7200.0, metavar="S",
                    help="a preflight (it builds) that has not ended after this long is killed, and the loop held")
@@ -455,6 +554,8 @@ def main(argv=None):
         at = argv.index("--")
         argv, extra = argv[:at], argv[at + 1:]
     args = parser().parse_args(argv)
+    status.parse_expect(args.expect)  # refused here, not at the first look at a generation
+    status.check_window(args.overrun_window)
     root = Path(args.root).resolve()
     root.mkdir(parents=True, exist_ok=True)
     file = Path(args.args_file) if args.args_file else root / ARGS

@@ -1110,16 +1110,24 @@ class InferenceServer:
 def request_stop(root: Path, gen: int | None, now: bool, log=print) -> Path:
     """`--stop`: `selfplay.stop` in the generation's self-play directory (the current one: started, not finished), which
     its self-play reads each tick (and a distributed driver passes on to its workers), and `genN/dist/stop`, which a
-    distributed duel's or judgement's driver reads."""
+    distributed driver - self-play's, a duel's, a judgement's - reads. Only the running stage's: where the status file
+    says a driver is at another stage than self-play, no stop is left in the self-play directory (nothing there
+    would read it); with no status to go by, both."""
     gen = gen or next_generation(root)
-    out = root / f"gen{gen}" / "selfplay"
-    out.mkdir(parents=True, exist_ok=True)
-    path = out / distributed.STOP_FILE
-    path.write_text("now\n" if now else "", encoding="utf-8")
-    # And its distributed duels and judgements, whichever is running (`duels.stop_file`).
-    (root / f"gen{gen}" / "dist").mkdir(parents=True, exist_ok=True)
-    (root / f"gen{gen}" / "dist" / "stop").write_text("now\n" if now else "", encoding="utf-8")
-    log(f"asked gen{gen}'s self-play, duels and judgements to stop{' now (their games in flight too)' if now else ''}: {path}")
+    running = status.read(root, gen) or {}
+    stage = running.get("stage") if running.get("state") == "running" else None
+    whole = root / f"gen{gen}" / "dist" / "stop"
+    path = whole
+    if stage in (None, "selfplay"):
+        out = root / f"gen{gen}" / "selfplay"
+        out.mkdir(parents=True, exist_ok=True)
+        path = out / distributed.STOP_FILE
+        path.write_text("now\n" if now else "", encoding="utf-8")
+    # The whole distributed run's, whichever stage's it is (`duels.stop_file`).
+    whole.parent.mkdir(parents=True, exist_ok=True)
+    whole.write_text("now\n" if now else "", encoding="utf-8")
+    log(f"asked gen{gen}'s {stage or 'self-play, duels and judgements'} to stop"
+        f"{' now (its games in flight too)' if now else ''}: {path}")
     return path
 
 
@@ -1253,6 +1261,9 @@ def main(argv=None):
     a.add_argument("--selfplay-scale-min-gain", type=float, metavar="F",
                    help="the least marginal gain a lane added must bring, as a share of an average lane's throughput "
                         "(cantrip-selfplay --scale-min-gain; default 0.2)")
+    a.add_argument("--selfplay-scale-floor", type=int, metavar="N",
+                   help="the lanes no fall in throughput backs self-play off below (cantrip-selfplay --scale-floor; "
+                        "default half the most lanes it has held, at least 4). Memory still holds games back at any level")
     a.add_argument("--selfplay-cpu-ceiling", type=float, metavar="F",
                    help="the system's busy CPU share past which self-play adds no lane (cantrip-selfplay --cpu-ceiling; "
                         "default 0.95)")
@@ -1861,7 +1872,7 @@ def main(argv=None):
         if not args.selfplay_autoscale:
             cmd.append("--no-autoscale")
         for flag, value in (("--scale-window", args.selfplay_scale_window), ("--scale-min-gain", args.selfplay_scale_min_gain),
-                            ("--cpu-ceiling", args.selfplay_cpu_ceiling)):
+                            ("--scale-floor", args.selfplay_scale_floor), ("--cpu-ceiling", args.selfplay_cpu_ceiling)):
             if value is not None:
                 cmd += [flag, value]
         return cmd
