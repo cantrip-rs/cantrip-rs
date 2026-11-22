@@ -205,6 +205,10 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
         {
             m.description = players_own_text(game, asked, ability, about);
             m.cost_text = cost_text_of(&d.cost, name);
+            // The plot action a rule gives for the top card of the library costs that card's mana cost, changes included.
+            if let Some(cost) = own_special_action_cost(game, asked, o.index) {
+                m.cost_text = cost.to_string();
+            }
             m.life_cost = i32::try_from(d.cost.life).unwrap_or(i32::MAX);
             for mana in Mana::ALL.into_iter().filter(|_| o.mana.is_none()) {
                 for _ in 0..d.adds.get(mana) {
@@ -464,19 +468,17 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
 /// The ability or action of `player`'s own an option numbered `index` takes (`PLAYER_MANA_ABILITY + n`, `PLAYER_SPECIAL_ACTION
 /// + n`): the nth effect that gave them one of that kind, and what it is about (an action's "that permanent or player").
 pub(crate) fn players_own(game: &Game, player: PlayerId, index: u8) -> Option<(AbilityRef, Target)> {
-    let mine = game.state.effects.iter().filter(|e| e.controller == player);
     if index >= PLAYER_MANA_ABILITY {
+        let mine = game.state.effects.iter().filter(|e| e.controller == player);
         mine.filter_map(|e| match e.kind {
             EffectKind::PlayerManaAbility(a) => Some((a, Target::None)),
             _ => None,
         })
         .nth(usize::from(index - PLAYER_MANA_ABILITY))
     } else {
-        mine.filter_map(|e| match e.kind {
-            EffectKind::PlayerSpecialAction { ability, about } => Some((ability, about)),
-            _ => None,
-        })
-        .nth(usize::from(index.checked_sub(PLAYER_SPECIAL_ACTION)?))
+        let own = own_special_actions(game, &game.cards, player);
+        let action = own.get(usize::from(index.checked_sub(PLAYER_SPECIAL_ACTION)?))?;
+        Some((action.ability, action.about))
     }
 }
 

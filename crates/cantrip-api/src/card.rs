@@ -3859,6 +3859,12 @@ pub enum PlayRule {
     /// "You may play lands from the top of your library" (CR 305.1): Case of the Locked Hothouse, solved. Bolas's Citadel's
     /// `LibraryTop` includes it.
     LibraryTopLands,
+    /// "The top card of your library has plot. The plot cost is equal to its mana cost. You may plot nonland cards from the
+    /// top of your library" (CR 702.170a, 116.2k): Fblthp, Lost on the Range. Plot's special action is taken from the top
+    /// card of its controller's library, not only from a hand: for the card's mana cost (X as 0, CR 107.3g-h), and for the
+    /// plot cost the card prints too, each its own option (the card's rulings: "using its own plot cost or the plot cost given
+    /// to it by Fblthp"). Offered as the player's own special actions are (`PLAYER_SPECIAL_ACTION`), at sorcery timing.
+    LibraryTopPlot,
     /// "You may look at the top card of your library any time" (CR 401.2): the player sees it whenever they could look, which
     /// the host shows them. Bolas's Citadel, Mystic Forge, Case of the Locked Hothouse (solved).
     LookAtLibraryTop,

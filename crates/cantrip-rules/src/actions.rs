@@ -8676,7 +8676,7 @@ fn land_rules(cx: &Cx, player: PlayerId) -> LandRules {
         PlayRule::LibraryTop | PlayRule::LibraryTopLands => {
             rules.top_lands.push(Grant { object: source, ability });
         }
-        PlayRule::HandRevealed(_) | PlayRule::LibraryTopSpells(..) | PlayRule::MaximumHandSize(_) | PlayRule::MaximumHandSizeOf(..) | PlayRule::LookAtLibraryTop | PlayRule::LookAtFaceDown(_) | PlayRule::RevealLibraryTop | PlayRule::While(..) => {}
+        PlayRule::HandRevealed(_) | PlayRule::LibraryTopSpells(..) | PlayRule::MaximumHandSize(_) | PlayRule::MaximumHandSizeOf(..) | PlayRule::LookAtLibraryTop | PlayRule::LibraryTopPlot | PlayRule::LookAtFaceDown(_) | PlayRule::RevealLibraryTop | PlayRule::While(..) => {}
     });
     // "You may play an additional land this turn" (CR 305.2, 611.2c): an effect a resolved spell or ability made, added to
     // the rest - the number a player can play is the sum of everything that increases it.
@@ -10834,7 +10834,7 @@ fn lowercase_first(text: &str) -> String {
     chars.next().map_or_else(String::new, |c| c.to_lowercase().chain(chars).collect())
 }
 
-fn describe_way(cards: &CardTable, state: &GameState, log: &[Record], option: &ActionOption, source: ObjectId) -> &'static str {
+fn describe_way(cards: &'static CardTable, state: &GameState, log: &[Record], option: &ActionOption, source: ObjectId) -> &'static str {
     match option.kind {
         ActionKind::CastSpell if matches!(option.index, WAY_ADVENTURE | WAY_OMEN) => {
             cards.get(state.obj(source).card).inset_face(option.index).map_or("", |a| a.name)
@@ -10864,6 +10864,12 @@ fn describe_way(cards: &CardTable, state: &GameState, log: &[Record], option: &A
             .find_map(|e| match e.kind {
                 EffectKind::PlayerSpecialAction { ability, .. } if e.source == source => Some(cards.ability(ability).text()),
                 _ => None,
+            })
+            // Else a plot action a rule gives the card on top of its owner's library: the one `own_special_actions` numbers so.
+            .or_else(|| {
+                let reader = crate::resolve::Reader { cards, state, events: log };
+                let own = own_special_actions(&reader, cards, state.obj(source).owner);
+                own.get(usize::from(option.index - PLAYER_SPECIAL_ACTION)).filter(|a| a.source == source).map(|a| cards.ability(a.ability).text())
             })
             .unwrap_or(""),
         ActionKind::ActivateAbility => {
@@ -13909,6 +13915,10 @@ fn special_action_printed_cost(cx: &Cx, source: ObjectId, ability: AbilityRef, d
         Some(by) => return turn_up_cost(cx, source, by).mana,
         None => {}
     }
+    if ability.card == cx.cards().intrinsic && ability.index == cantrip_api::intrinsic::PLOT_FROM_LIBRARY {
+        // The plot cost is equal to the card's mana cost, X being 0 as in any zone but the stack (CR 107.3g-h, `PlayRule::LibraryTopPlot`).
+        return ManaCost { x: 0, ..cx.card(card).cost };
+    }
     if ability.card == cx.cards().intrinsic {
         // The Room the permanent is, which a copy of one is too (CR 709.5, 707.2).
         let room = cx.card(cx.chars(source).card);
@@ -13973,11 +13983,31 @@ pub fn special_action_costs(game: &crate::Game, player: PlayerId, source: Object
     if !changers {
         return None;
     }
+    with_a_copy(game, |cx| {
+        let printed = special_action_printed_cost(cx, source, ability, def);
+        let cost = special_action_cost(cx, player, source, ability, def);
+        (cost != printed).then_some(cost)
+    })
+}
+
+/// A throwaway copy of the game to read costs from, which are worked out with a `Cx` (`special_action_cost`) the host has none
+/// of.
+fn with_a_copy<T>(game: &crate::Game, f: impl FnOnce(&Cx) -> T) -> T {
     let mut copy = crate::Game { state: game.state.clone(), log: game.log.clone(), tree: crate::tree::Tree::new(), at: crate::tree::NodeId::ROOT, cards: game.cards, verify: false, max_events: game.max_events, history_end: None, check: crate::StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, activation: None, takeback: Default::default() };
     let cx = Cx { g: &mut copy, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-    let printed = special_action_printed_cost(&cx, source, ability, def);
-    let cost = special_action_cost(&cx, player, source, ability, def);
-    (cost != printed).then_some(cost)
+    f(&cx)
+}
+
+/// What the plot action a rule gives `player` (`PlayRule::LibraryTopPlot`), the option numbered `index`, costs them: the mana
+/// cost of the card it plots, with the static abilities that change the cost of plotting applied (CR 702.170a, 116.2k, 118.7).
+/// None for any other of the player's own actions, whose cost is the ability's own.
+pub fn own_special_action_cost(game: &crate::Game, player: PlayerId, index: u8) -> Option<ManaCost> {
+    let action = *own_special_actions(game, game.cards, player).get(usize::from(index.checked_sub(PLAYER_SPECIAL_ACTION)?))?;
+    let def = match game.cards.ability(action.ability) {
+        AbilityDef::Activated(def) if action.effect.is_none() => def,
+        _ => return None,
+    };
+    Some(with_a_copy(game, |cx| special_action_cost(cx, player, action.source, action.ability, def)))
 }
 
 /// A special action (CR 116.2) from an ability: its mana cost is paid, and its effect done at once with no stack. The
@@ -14067,48 +14097,90 @@ fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abil
     Ok(())
 }
 
-/// The effects that let `player` take an action at a later time (CR 116.2c), in the order they began: what the options
-/// `PLAYER_SPECIAL_ACTION + n` number.
-fn player_special_actions(state: &GameState, player: PlayerId) -> impl Iterator<Item = &ContinuousEffect> {
-    state.effects.iter().filter(move |e| matches!(e.kind, EffectKind::PlayerSpecialAction { .. }) && e.controller == player)
+/// A special action of the player's own (CR 116.2): one that is not an ability of an object they could take it from, but the
+/// player's, numbered `PLAYER_SPECIAL_ACTION + n` among their options (`own_special_actions`).
+#[derive(Clone, Copy)]
+pub struct OwnSpecialAction {
+    /// What the option is on, and what pays and acts as the action's source: the card whose effect allowed it, or the card
+    /// it is taken on.
+    pub source: ObjectId,
+    pub ability: AbilityRef,
+    /// What an effect that allows it named for it to act on (`EffectKind::PlayerSpecialAction`).
+    pub about: Target,
+    /// The effect that allows it, which taking it may end (CR 116.2c); none for one a rule gives (`PlayRule::LibraryTopPlot`).
+    effect: Option<ContinuousEffect>,
 }
 
-/// The actions effects let `player` take at a later time (CR 116.2c), offered any time they have priority while the effect
-/// lasts - with a spell with split second on the stack too, as every special action is (CR 702.61b) - where they could pay
-/// for it, as a special action whose cost they cannot meet is not (`activated_options`). Each is offered from the card whose
-/// effect it is, wherever that has gone, as a player's own mana ability is. As many as the options can number
-/// (`PLAYER_MANA_ABILITY - PLAYER_SPECIAL_ACTION`); a later one past them is not offered.
+/// The actions `player` may take that no object of theirs has (CR 116.2c, 116.2k), in the order options number them: first
+/// the effects that let them take an action at a later time (CR 116.2c), in the order they began; then the plot action a
+/// rule gives them for the top card of their library, where it is not a land (CR 702.170a, `PlayRule::LibraryTopPlot`: "You
+/// may plot nonland cards from the top of your library"), at sorcery timing, which no effect there gives its own timing.
+pub fn own_special_actions(q: &dyn Query, cards: &CardTable, player: PlayerId) -> Vec<OwnSpecialAction> {
+    let s = q.state();
+    let mut actions: Vec<OwnSpecialAction> = s
+        .effects
+        .iter()
+        .filter(|e| e.controller == player)
+        .filter_map(|&effect| match effect.kind {
+            EffectKind::PlayerSpecialAction { ability, about } => Some(OwnSpecialAction { source: effect.source, ability, about, effect: Some(effect) }),
+            _ => None,
+        })
+        .collect();
+    if cards.any_play_rules && s.turn.active == player && s.turn.step().is_main() && s.stack.is_empty() {
+        let mut plots = false;
+        each_play_rule(q, cards, player, false, |_, rule| plots |= matches!(rule, PlayRule::LibraryTopPlot));
+        if plots && let Some(&top) = s.zone(Zone::library(player)).first() && !q.chars(top).is(CardType::Land) {
+            let ability = AbilityRef { card: cards.intrinsic, index: cantrip_api::intrinsic::PLOT_FROM_LIBRARY };
+            actions.push(OwnSpecialAction { source: top, ability, about: Target::None, effect: None });
+            // A card that has plot itself may be plotted for its own plot cost as well (the ruling on Fblthp): its plot ability
+            // is the card's own in the hand only, so the library's action takes it up there, unless it asks what the rule's does.
+            let printed = ManaCost { x: 0, ..cards.get(q.state().obj(top).card).cost };
+            for own in q.chars(top).abilities().filter(|&a| matches!(cards.ability(a), AbilityDef::Activated(d) if d.plot && d.cost.mana != printed)) {
+                actions.push(OwnSpecialAction { source: top, ability: own, about: Target::None, effect: None });
+            }
+        }
+    }
+    actions
+}
+
+/// The actions effects let `player` take at a later time (CR 116.2c), and the rules give them (`own_special_actions`),
+/// offered any time they have priority while the effect lasts - with a spell with split second on the stack too, as every
+/// special action is (CR 702.61b) - where they could pay for it, as a special action whose cost they cannot meet is not
+/// (`activated_options`). Each is offered from the card whose effect it is, wherever that has gone, as a player's own mana
+/// ability is; the plot action, on the card plotted. As many as the options can number (`PLAYER_MANA_ABILITY -
+/// PLAYER_SPECIAL_ACTION`); a later one past them is not offered.
 fn player_special_action_options(cx: &Cx, player: PlayerId, options: &mut Vec<ActionOption>) {
     let mut available = None;
-    for (n, effect) in player_special_actions(cx.s(), player).enumerate() {
+    for (n, action) in own_special_actions(cx, cx.cards(), player).into_iter().enumerate() {
         let Some(index) = u8::try_from(n).ok().and_then(|n| PLAYER_SPECIAL_ACTION.checked_add(n)).filter(|&i| i < PLAYER_MANA_ABILITY) else { break };
-        let EffectKind::PlayerSpecialAction { ability, .. } = effect.kind else { continue };
+        let OwnSpecialAction { source, ability, .. } = action;
         let Some(def) = activated(cx, ability) else { continue };
-        let whole = special_action_whole_cost(cx, effect.source, ability, def);
-        if !can_pay_other_as(cx, effect.source, player, &whole, Judged::Activation, None, None) {
+        let whole = special_action_whole_cost(cx, source, ability, def);
+        if !can_pay_other_as(cx, source, player, &whole, Judged::Activation, None, None) {
             continue;
         }
         // An {X} is judged at the least it may be announced as (CR 107.3a); mana of any color pays for it where an effect
         // says so (CR 609.4b). A special action is no ability, so mana limited to abilities can't pay for it (CR 106.6).
-        let owed = at_least_x(special_action_cost(cx, player, effect.source, ability, def), def.x_cant_be_zero);
-        let owed = static_rules::spend_any_mana_for(cx, player, effect.source, SpendingFor::Other).view(&owed);
+        let owed = at_least_x(special_action_cost(cx, player, source, ability, def), def.x_cant_be_zero);
+        let owed = static_rules::spend_any_mana_for(cx, player, source, SpendingFor::Other).view(&owed);
         if !owed.is_zero() && !available.get_or_insert_with(|| self::available(cx, player)).covers_for(&owed, &ManaPayment::Other) {
             continue;
         }
-        options.push(ActionOption::on(ActionKind::ActivateAbility, effect.source, index));
+        options.push(ActionOption::on(ActionKind::ActivateAbility, source, index));
     }
 }
 
-/// Taking the action the `n`th effect that allows one lets `player` take (CR 116.2c): a special action, its cost paid and its
-/// effect done at once, about what the effect names (`EffectKind::PlayerSpecialAction`). An action that stops a delayed
+/// Taking the action the `n`th of `own_special_actions` lets `player` take (CR 116.2c): a special action, its cost paid and
+/// its effect done at once, about what the effect names (`EffectKind::PlayerSpecialAction`). An action that stops a delayed
 /// triggered ability from triggering (CR 116.2c, `Delayed::unless`) then does: that ability is gone, and the effect that
 /// allowed the action, having done what it allowed, ends with it.
 fn player_special_action(cx: &mut Cx, player: PlayerId, n: u8) -> R<()> {
-    let Some(&effect) = player_special_actions(cx.s(), player).nth(usize::from(n)) else { return Err(Stop::Cancel) };
-    let EffectKind::PlayerSpecialAction { ability, about } = effect.kind else { return Err(Stop::Cancel) };
+    let Some(&OwnSpecialAction { source, ability, about, effect }) = own_special_actions(cx, cx.cards(), player).get(usize::from(n)) else { return Err(Stop::Cancel) };
     let named = [about];
-    special_action(cx, player, effect.source, ability, None, if about == Target::None { &[] } else { &named })?;
-    if let Some(at) = cx.s().delayed.iter().position(|d| d.unless == Some(effect.timestamp)) {
+    special_action(cx, player, source, ability, None, if about == Target::None { &[] } else { &named })?;
+    if let Some(effect) = effect
+        && let Some(at) = cx.s().delayed.iter().position(|d| d.unless == Some(effect.timestamp))
+    {
         cx.st().delayed_remove(at);
         cx.st().effects_retain(|e| *e != effect);
     }

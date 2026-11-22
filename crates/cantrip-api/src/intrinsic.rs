@@ -60,6 +60,9 @@ pub const SPEED_UP: u8 = 16;
 /// "The controller of the permanent it becomes sacrifices it at the beginning of the next cleanup step": the delayed
 /// triggered ability `CardDef::untimely_cleanup_rider` creates (Necromancy's cycle).
 pub const UNTIMELY_SACRIFICE: u8 = 17;
+/// Plot (CR 702.170a, 116.2k) as a rule gives it to a card in a library (`PlayRule::LibraryTopPlot`): a special action whose
+/// cost is the card's mana cost, read off the card by the rules (`actions::special_action_printed_cost`).
+pub const PLOT_FROM_LIBRARY: u8 = 18;
 /// The highest speed, max speed (CR 702.179e): "once your speed reaches 4 ... [you] can't increase it any higher" (the
 /// Aetherdrift release notes).
 pub const MAX_SPEED: u8 = 4;
@@ -132,6 +135,13 @@ fn left_is_locked(q: &dyn Query, asker: &Asker) -> bool {
 
 fn right_is_locked(q: &dyn Query, asker: &Asker) -> bool {
     q.obj(asker.source).marks.doors & DOOR_RIGHT == 0
+}
+
+/// Exile the card plotted from a library and let its owner cast it later (CR 702.170a, 702.170d): plot's own effect.
+fn plot_from_library(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let exiled = g.exile(item.object);
+    g.become_plotted(exiled);
+    Ok(())
 }
 
 const fn unlock(text: &'static str, effect: Effect, condition: Condition) -> AbilityDef {
@@ -289,6 +299,7 @@ pub static INTRINSIC: CardDef = CardDef {
         )
         .condition(speed_below_max),
         inherent("At the beginning of the next cleanup step, the controller of the permanent it became sacrifices it.", untimely_sacrifice),
+        ability(Cost::NONE, plot_from_library, "Plot. The plot cost is equal to this card's mana cost.").sorcery_speed().from(ZoneKind::Library).plot(),
     ],
     lasting: &[Lasting { text: "you control {source}", holds: caster_controls }],
     labels: &["+1/+1 counter", "Haste"],
