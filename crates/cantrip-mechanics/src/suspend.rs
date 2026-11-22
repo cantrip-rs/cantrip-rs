@@ -15,12 +15,15 @@ use cantrip_api::*;
 /// "Exile [this card] with N time counters on it" (CR 702.62a, 122.1): the card is exiled and, only if it really is in exile
 /// afterwards (a replacement effect may have sent it elsewhere), the counters go on the object it became there. The special
 /// action of suspend and the resolving spells that print it - Chronomantic Escape and Rousing Refrain, Arc Blade, Cyclical
-/// Evolution - exile their own card this way.
-pub fn exile_with_time_counters(g: &mut dyn Game, card: ObjectId, count: u8) {
+/// Evolution - exile their own card this way, and so does Taigam's flurry for the spell it is about. The object in exile, or
+/// nothing if the card did not end up there.
+pub fn exile_with_time_counters(g: &mut dyn Game, card: ObjectId, count: u8) -> Option<ObjectId> {
     let exiled = g.exile(card);
-    if g.obj(exiled).zone.is(ZoneKind::Exile) {
-        g.add_counters(exiled, CounterKind::Time, i32::from(count));
+    if !g.obj(exiled).zone.is(ZoneKind::Exile) {
+        return None;
     }
+    g.add_counters(exiled, CounterKind::Time, i32::from(count));
+    Some(exiled)
 }
 
 fn suspend(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {

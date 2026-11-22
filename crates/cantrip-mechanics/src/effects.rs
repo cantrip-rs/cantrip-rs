@@ -2307,10 +2307,16 @@ pub fn transform_self(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
 /// has no back face and stays in the graveyard. The trigger looks back (CR 603.10a). Aclazotz, Deepest Betrayal and Ojer
 /// Axonil, Deepest Might print it.
 pub fn return_it_tapped_and_transformed(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    return_it_tapped_and_transformed_with_counters(g, item, &[])
+}
+
+/// `return_it_tapped_and_transformed`, each card entering with `counters` as well (CR 122.6, 614.1c): they are part of how it
+/// enters, so a replacement of counters applies to them. Ojer Pakpatiq, Deepest Epoch's "with three time counters on it".
+pub fn return_it_tapped_and_transformed_with_counters(g: &mut dyn Game, item: &StackItem, counters: &[(CounterKind, i32)]) -> Result<(), Suspend> {
     // Each card of a merged permanent (CR 730.3c), of which only a double-faced one returns (CR 712.14a).
     for card in g.found_all_after_move(item.object) {
         let owner = g.obj(card).owner;
-        g.put_onto_battlefield_transformed(card, owner, true)?;
+        g.put_onto_battlefield_transformed_with_counters(card, owner, true, counters)?;
     }
     Ok(())
 }
