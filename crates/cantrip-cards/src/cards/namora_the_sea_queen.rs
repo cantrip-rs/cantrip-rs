@@ -2,19 +2,10 @@ use cantrip_api::*;
 use cantrip_mechanics::{power_up, tokens};
 use cantrip_oracle as oracle;
 
-/// The 1/1 blue Merfolk creature token.
-pub static MERFOLK: CardDef = CardDef {
-    colors: Some(ColorSet::of(Color::Blue)),
-    types: TypeSet::of(&[CardType::Creature]),
-    power: Some(1),
-    toughness: Some(1),
-    ..token!(Merfolk)
-};
-
 /// "Put a +1/+1 counter on Namora. Create two 1/1 blue Merfolk creature tokens."
 fn counter_and_merfolk(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.add_counters(item.object, CounterKind::PlusOne, 1);
-    tokens::create(g, item.controller, &MERFOLK, 2)?;
+    tokens::create(g, item.controller, &tokens::MERFOLK, 2)?;
     Ok(())
 }
 
@@ -27,4 +18,4 @@ pub static CARD: CardDef = CardDef {
     ..oracle::NAMORA_THE_SEA_QUEEN
 };
 
-pub static EXTRA: &[&CardDef] = &[&MERFOLK];
+pub static EXTRA: &[&CardDef] = &[&tokens::MERFOLK];

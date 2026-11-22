@@ -3,15 +3,6 @@ use cantrip_mechanics::devotion::symbols_of;
 use cantrip_mechanics::{lands, tokens};
 use cantrip_oracle as oracle;
 
-/// The 1/1 blue Merfolk creature token.
-pub static MERFOLK: CardDef = CardDef {
-    colors: Some(ColorSet::of(Color::Blue)),
-    types: TypeSet::of(&[CardType::Creature]),
-    power: Some(1),
-    toughness: Some(1),
-    ..token!(Merfolk)
-};
-
 /// "Namor's power is equal to the number of Merfolk you control" (CR 604.3, layer 7a): a characteristic-defining ability,
 /// Namor himself among them, the type read through the words of his text (CR 612.2).
 fn power_is_merfolk_you_control(q: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
@@ -34,7 +25,7 @@ fn noncreature_spell_with_blue_symbols(q: &dyn Query, me: &Asker, event: &Event)
 
 /// "Create that many 1/1 blue Merfolk creature tokens", together.
 fn that_many_merfolk(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &MERFOLK, item.data[0])?;
+    tokens::create(g, item.controller, &tokens::MERFOLK, item.data[0])?;
     Ok(())
 }
 
@@ -49,4 +40,4 @@ pub static CARD: CardDef = CardDef {
     ..oracle::NAMOR_THE_SUB_MARINER
 };
 
-pub static EXTRA: &[&CardDef] = &[&MERFOLK];
+pub static EXTRA: &[&CardDef] = &[&tokens::MERFOLK];

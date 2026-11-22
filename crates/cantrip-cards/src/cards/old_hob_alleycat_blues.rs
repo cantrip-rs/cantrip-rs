@@ -16,10 +16,6 @@ fn create_mutant(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-fn attacking_creature_token(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    (targets::ATTACKING_CREATURE.filter)(q, asker, t) && matches!(t, Target::Object(id) if q.obj(id).token)
-}
-
 /// "Target attacking creature token gains indestructible until end of turn" (CR 611.2, 702.12).
 fn protect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(token) = targets::object(g, item, 0) else { return Ok(()) };
@@ -34,7 +30,7 @@ pub static CARD: CardDef = CardDef {
             create_mutant,
             "At the beginning of combat on your turn, create a 2/2 red Mutant creature token. It gains haste until end of turn. Destroy it at the beginning of the next end step.",
         ),
-        ability(cost("{1}{W}"), protect, "{1}{W}: Target attacking creature token gains indestructible until end of turn.").targets(&[target(attacking_creature_token)]),
+        ability(cost("{1}{W}"), protect, "{1}{W}: Target attacking creature token gains indestructible until end of turn.").targets(&[targets::ATTACKING_CREATURE_TOKEN]),
     ],
     delayed: &[delayed_trigger(delayed::destroy_carried, "Destroy it.")],
     ..oracle::OLD_HOB_ALLEYCAT_BLUES

@@ -267,6 +267,14 @@ pub fn attacking_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> boo
 /// still is as the ability resolves, or the target is illegal. Raffine, Scheming Seer and Raubahn, Bull of Ala Mhigo print it.
 pub const ATTACKING_CREATURE: TargetSpec = target(attacking_creature_filter);
 
+fn attacking_creature_token_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    attacking_creature_filter(q, asker, t) && matches!(t, Target::Object(id) if q.obj(id).token)
+}
+
+/// "Target attacking creature token" (CR 115.1, 111.1, 506.4): an attacking creature that is a token, any controller's. Old Hob,
+/// Alleycat Blues and A Killer Among Us print it.
+pub const ATTACKING_CREATURE_TOKEN: TargetSpec = target(attacking_creature_token_filter);
+
 fn another_attacking_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     attacking_creature_filter(q, asker, t) && t != Target::Object(asker.source)
 }

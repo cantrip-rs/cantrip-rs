@@ -1684,6 +1684,15 @@ pub static FAERIE_BLUE_BLACK: CardDef = CardDef {
     ..token!(Faerie)
 };
 
+/// The 1/1 blue Merfolk creature token. Namora, the Sea Queen, Namor, the Sub-Mariner and A Killer Among Us make it.
+pub static MERFOLK: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Blue)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Merfolk)
+};
+
 /// The 1/1 white and blue Merfolk creature token. Silvergill Mentor and Wanderwine Farewell make it.
 pub static MERFOLK_WHITE_BLUE: CardDef = CardDef {
     colors: Some(ColorSet(ColorSet::of(Color::White).0 | ColorSet::of(Color::Blue).0)),
