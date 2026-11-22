@@ -2098,13 +2098,13 @@ fn chosen_still_pay(cx: &Cx, cost: &Cost, chosen: &[ObjectId]) -> bool {
     })
 }
 
-/// Whether the permanent that gave an ability can pay its "Sacrifice [the card that gives this ability]" or "Exile [it]"
-/// cost (CR 201.5a): still the permanent it was, on the battlefield (`chosen_still_pay`, CR 400.7), and for a sacrifice
-/// the payer's (CR 701.21a); an exile has no such limit. Asked as the ability is activated and again once its mana is
-/// paid (CR 601.2g-h by way of 602.2b).
+/// Whether the permanent that gave an ability can pay its "Sacrifice [the card that gives this ability]", "Exile [it]" or
+/// "Tap [it]" cost (CR 201.5a): still the permanent it was, on the battlefield (`chosen_still_pay`, CR 400.7); for a
+/// sacrifice the payer's (CR 701.21a). An exile has no such limit, nor a tap here: that the giver is untapped is asked
+/// by the payment itself (`SpellPayment::TapGranter`), once the mana is paid, since tapping the giver for that mana
+/// leaves it unable to pay (CR 601.2g-h by way of 602.2b, 701.26a). Asked as the ability is activated.
 fn granter_pays(cx: &Cx, cost: &Cost, player: PlayerId, granter: ObjectId) -> bool {
-    chosen_still_pay(cx, &Cost::NONE, &[granter]) && (cost.exile_granter || cx.s().obj(granter).controller == player)
-
+    chosen_still_pay(cx, &Cost::NONE, &[granter]) && (!cost.sacrifice_granter || cx.s().obj(granter).controller == player)
 }
 
 /// Whether `eligible` hold `p.count` permanents `p.together`, the cost's rule of the group (CR 601.2h), allows to be chosen
@@ -2738,6 +2738,7 @@ enum SpellPayment<'a> {
     ExertSelf { origin: CostOrigin, component: usize, source_text: SourceText },
     UnattachSelf { origin: CostOrigin, component: usize, source_text: SourceText },
     TapSelf { origin: CostOrigin, component: usize, source_text: SourceText },
+    TapGranter { origin: CostOrigin, component: usize, object: ObjectId, source_text: SourceText },
     SacrificeSelf { origin: CostOrigin, component: usize, object: ObjectId, part: CostPart, source_text: SourceText },
     MoveSelf { origin: CostOrigin, component: usize, action: MoveSelf, source_text: SourceText },
     Mana,
@@ -2789,7 +2790,7 @@ impl SpellPayment<'_> {
             | Self::Discard { source_text, .. } | Self::Variable { source_text, .. } | Self::Behold { source_text, .. }
             | Self::ChooseObject { source_text, .. } | Self::TapCreatures { source_text, .. } | Self::SourceCounters { source_text, .. }
             | Self::Craft { source_text, .. } | Self::ExertSelf { source_text, .. } | Self::UnattachSelf { source_text, .. }
-            | Self::TapSelf { source_text, .. } | Self::SacrificeSelf { source_text, .. } | Self::MoveSelf { source_text, .. } => *source_text,
+            | Self::TapSelf { source_text, .. } | Self::TapGranter { source_text, .. } | Self::SacrificeSelf { source_text, .. } | Self::MoveSelf { source_text, .. } => *source_text,
             Self::Mana | Self::Reducer(_) => SourceText::Own,
         }
     }
@@ -2923,6 +2924,10 @@ fn append_fixed_payments<'a>(out: &mut Vec<SpellPayment<'a>>, origin: CostOrigin
             if part.exile_granter {
                 let object = granter.unwrap_or(ObjectId::NONE);
                 out.push(SpellPayment::MoveSelf { origin, component, action: MoveSelf::ExileGranter(object), source_text: source_text });
+            }
+            if part.tap_granter {
+                let object = granter.unwrap_or(ObjectId::NONE);
+                out.push(SpellPayment::TapGranter { origin, component, object, source_text: source_text });
             }
             if let Some(place) = part.put_self_into_library { out.push(SpellPayment::MoveSelf { origin, component, action: MoveSelf::Library(place), source_text: source_text }); }
             if part.return_self { out.push(SpellPayment::MoveSelf { origin, component, action: MoveSelf::Return, source_text: source_text }); }
@@ -3091,6 +3096,7 @@ fn footprint(cx: &Cx, player: PlayerId, spell: ObjectId, scope: PaymentScope, ta
         SpellPayment::SourceCounters { .. } | SpellPayment::ExertSelf { .. } | SpellPayment::UnattachSelf { .. } | SpellPayment::TapSelf { .. } => {
             Footprint::NONE
         }
+        SpellPayment::TapGranter { object, .. } => Footprint::of(vec![*object], FOOT_BATTLEFIELD, 0, Act::Tap),
         SpellPayment::SacrificeSelf { object, .. } => Footprint::of(vec![*object], 0, FOOT_GRAVEYARD, Act::Removes),
         SpellPayment::MoveSelf { action, .. } => match action {
             MoveSelf::Return => Footprint::of(vec![spell], 0, FOOT_HAND, Act::Removes),
@@ -3309,6 +3315,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             SpellPayment::UnattachSelf { .. } => (source_usable() && cx.s().obj(spell).attached_to.is_some_and(|id| live(cx.s(), id) && cx.s().obj(id).zone.is(ZoneKind::Battlefield))).then_some(i),
             SpellPayment::TapSelf { .. } => (source_usable() && !cx.s().obj(spell).tapped
                 && (!summoning_sick(cx.cards(), cx.s(), &cx.g.log, spell) || static_rules::activates_as_though_haste(cx, player, spell))).then_some(i),
+            SpellPayment::TapGranter { object, .. } => (live(cx.s(), *object) && cx.s().obj(*object).zone.is(ZoneKind::Battlefield) && !cx.s().obj(*object).tapped).then_some(i),
             SpellPayment::SacrificeSelf { object, .. } => {
                 // A successful sacrifice moves this exact object. It cannot later pay its own {T} cost (CR 400.7).
                 // Keep the independent mana/life/other-object choices available; no filter behavior is inferred here.
@@ -3417,6 +3424,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 SpellPayment::ExertSelf { .. } => CostPaymentChoice { label: format!("Exert {name} — {source_text}"), objects: vec![spell], kind: CostPaymentKind::Exert },
                 SpellPayment::UnattachSelf { .. } => CostPaymentChoice { label: format!("Unattach {name} — {source_text}"), objects: vec![spell], kind: CostPaymentKind::Unattach },
                 SpellPayment::TapSelf { .. } => CostPaymentChoice { label: format!("Tap {name} — {source_text}"), objects: vec![spell], kind: CostPaymentKind::Tap },
+                SpellPayment::TapGranter { object, .. } => CostPaymentChoice { label: format!("Tap {} — {source_text}", cx.chars(*object).name), objects: vec![*object], kind: CostPaymentKind::Tap },
                 SpellPayment::SacrificeSelf { object, .. } => CostPaymentChoice { label: format!("Sacrifice {} — {source_text}", cx.chars(*object).name), objects: vec![*object], kind: CostPaymentKind::Sacrifice },
                 SpellPayment::MoveSelf { action, .. } => {
                     let (description, kind) = match action {
@@ -3655,6 +3663,11 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 if !ops::tap_quietly(cx, spell) { return Err(Stop::Cancel); }
                 cx.emit(Event::Tapped { permanent: spell, player });
                 scope.record(cx, spell, spell, origin, component, CostPart::TapSelf);
+            }
+            SpellPayment::TapGranter { origin, component, object, .. } => {
+                if !ops::tap_quietly(cx, object) { return Err(Stop::Cancel); }
+                cx.emit(Event::Tapped { permanent: object, player });
+                scope.record(cx, spell, object, origin, component, CostPart::Granter);
             }
             SpellPayment::SacrificeSelf { origin, component, object, part, .. } => {
                 if let PaymentScope::ManaAbility { colors: Some((which, color, colorless)), .. } = scope && which == component {
@@ -8353,13 +8366,15 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             // "Sacrifice [the card that gives this ability]" (CR 201.5a, 701.21a): only with that permanent the player's, and
             // one a static ability lets them sacrifice for it (CR 101.2, `may_sacrifice_for`). "Exile [it]" needs only that
             // permanent, whoever controls it: no rule limits exiling to permanents the payer controls, as CR 701.21a does
-            // sacrificing (a Threatened creature's granted ability exiles its owner's Equipment). Part of its own cost, which
-            // an alternative cost is paid rather than (CR 118.9).
+            // sacrificing (a Threatened creature's granted ability exiles its owner's Equipment). "Tap [it]" likewise, and
+            // only while it is untapped (CR 701.26a). Part of its own cost, which an alternative cost is paid rather than
+            // (CR 118.9).
             let own_payable = own_payable
-                && (!(def.cost.sacrifice_granter || def.cost.exile_granter)
+                && (!def.cost.names_granter()
                     || granted_by(cx, id, Some(&chars), index, ability, &givers).is_some_and(|g| {
-                        !def.cost.sacrifice_granter
-                            || cx.s().obj(g.object).controller == player && may_sacrifice_for(cx, player, g.object, activating(def))
+                        (!def.cost.sacrifice_granter
+                            || cx.s().obj(g.object).controller == player && may_sacrifice_for(cx, player, g.object, activating(def)))
+                            && !(def.cost.tap_granter && cx.s().obj(g.object).tapped)
                     }));
             // Its own cost, each way of paying it that could be paid but for its mana, as the mana and the life it comes to
             // (what its Phyrexian symbols are judged beside): the way is chosen as the ability is announced (CR 601.2b by way
@@ -13723,7 +13738,7 @@ fn activate(
     let chosen_cost = if paid_by.is_some() { None } else { choose_cost_way(cx, player, source, ability, def, mana, paid, by)? };
     let whole = chosen_cost.map_or(base, |part| add_extra_totals(base, part));
     if let Some(part) = chosen_cost { mana = mana.plus(&part.mana); }
-    let granter = if whole.sacrifice_granter || whole.exile_granter {
+    let granter = if whole.names_granter() {
         match granted.map(|g| g.object).filter(|&g| granter_pays(cx, &whole, player, g)) {
             Some(g) => Some(g),
             None => return Err(Stop::Cancel),
@@ -14435,7 +14450,7 @@ fn activate_mana_as(
     // How it was given, read before any cost moves the source (CR 113.7a).
     let granted = Grant::of(granted_by(cx, source, None, index as usize, ability, &std::cell::OnceCell::new()));
     let granter = granted.some().map(|grant| grant.object).filter(|&id| granter_pays(cx, &whole, player, id));
-    if (whole.sacrifice_granter || whole.exile_granter) && granter.is_none() { return Err(Stop::Cancel); }
+    if whole.names_granter() && granter.is_none() { return Err(Stop::Cancel); }
     let colors = if def.colors_from_sacrifice && dynamic { color_component.map(|which| (which, color, colorless)) } else { None };
     let scope = PaymentScope::ManaAbility { linked: Linked { object: source, text: cx.g.cards.linked_card(ability.card), acquired }, by, granter, colors };
     let mut helpers = Helpers { purpose: Paying::Activating(paying), mana_ability: true, ..Helpers::NONE };
@@ -17149,6 +17164,7 @@ fn resolution_parts(cost: &Cost) -> bool {
         sacrifice_self: _,
         sacrifice_granter,
         exile_granter,
+        tap_granter,
         discard_self: _,
         permanents: _,
         loyalty,
@@ -17194,6 +17210,7 @@ fn resolution_parts(cost: &Cost) -> bool {
 
         && !sacrifice_granter
         && !exile_granter
+        && !tap_granter
         && loyalty.is_none()
         && !exert
         && !emerge

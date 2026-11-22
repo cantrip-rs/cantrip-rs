@@ -413,6 +413,31 @@ static SACRIFICING_GIVER: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+/// "Lands you control have 'Tap [this]: Nothing.'" (Fishing Pole's kind, CR 201.5a, 118.3): each instance taps the permanent
+/// that gave it.
+static TAPPING_GIVER: CardDef = CardDef {
+    name: "Route Tapping Giver",
+    types: TypeSet::of(&[CardType::Artifact]),
+    delayed: &[cantrip_api::ability(Cost { tap_granter: true, ..Cost::NONE }, nothing_happens, "Tap Route Tapping Giver: Nothing.")],
+    statics: &[static_ability(Layer::Ability, your_lands, grant_first_delayed, "Lands you control have \"Tap Route Tapping Giver: Nothing.\"")],
+    ..CardDef::BLANK
+};
+
+/// The same that is a source of mana, "{T}: Add {C}", and gives "{1}, Tap [this]: Nothing": its mana is no mana for the cost
+/// that taps it.
+static TAPPING_MANA_GIVER: CardDef = CardDef {
+    name: "Route Tapping Mana Giver",
+    types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[mana_ability(TAP, add(Mana::C), "{T}: Add {C}.")],
+    delayed: &[cantrip_api::ability(
+        Cost::mana(ManaCost { generic: 1, ..ManaCost::ZERO }).and(Cost { tap_granter: true, ..Cost::NONE }),
+        nothing_happens,
+        "{1}, Tap Route Tapping Mana Giver: Nothing.",
+    )],
+    statics: &[static_ability(Layer::Ability, your_lands, grant_first_delayed, "Lands you control have \"{1}, Tap Route Tapping Mana Giver: Nothing.\"")],
+    ..CardDef::BLANK
+};
+
 fn your_artifact(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
     q.chars(id).is(CardType::Artifact) && q.controller(id) == asker.controller
 }
@@ -489,6 +514,8 @@ fn table() -> &'static CardTable {
             &ROUTE_ARTIFACT,
             &CHOOSE_ONE,
             &SACRIFICING_GIVER,
+            &TAPPING_GIVER,
+            &TAPPING_MANA_GIVER,
             &ENERGY_SOURCE,
             &ENERGY_SPELL,
             &ENERGY_GAIN,
@@ -1062,6 +1089,85 @@ fn an_ability_that_sacrifices_what_gave_it_sacrifices_its_own_giver() {
         })
         .collect();
     assert_eq!(recorded, [Some(second)]);
+}
+
+/// CR 201.5a, 118.3, 701.26a: "Tap [the card that gives this ability]" in an ability two permanents give is each instance's
+/// own giver, which only an untapped giver pays. Activating the second instance taps the second giver and not the first,
+/// and the history records the tapped one as what gave it.
+#[test]
+fn an_ability_that_taps_what_gave_it_taps_its_own_untapped_giver() {
+    let (mut game, _) = game_with("Route Filler", Zone::hand, 0);
+    let land = put(&mut game, "Route Land", ME);
+    let (first, second) = (put(&mut game, "Route Tapping Giver", ME), put(&mut game, "Route Tapping Giver", ME));
+    game.state.see_statics();
+    game.run();
+    let options = activations_of(&game, land);
+    assert_eq!(options.iter().map(|o| o.granted_by.map(|g| g.object)).collect::<Vec<_>>(), [Some(first), Some(second)]);
+    let chosen = options[1].clone();
+    let request = game.pending().unwrap().clone();
+    game.answer(request.id, request.player, Answer::Act(Action::of(&chosen))).unwrap();
+    game.run();
+    assert!(!game.state.obj(first).tapped, "the other giver stays untapped");
+    assert!(game.state.obj(second).tapped, "its own giver is tapped");
+    assert!(!game.state.obj(land).tapped, "and the land is not");
+    assert!(game.state.battlefield().contains(&second), "tapped, not moved");
+    let recorded: Vec<Option<ObjectId>> = game
+        .log
+        .iter()
+        .filter_map(|r| match r.event {
+            Event::AbilityActivated { source, by, .. } if source == land => Some(by.some().map(|g| g.object)),
+            _ => None,
+        })
+        .collect();
+    assert_eq!(recorded, [Some(second)]);
+}
+
+/// CR 701.26a, 118.3: only an untapped permanent can be tapped, so an instance whose giver is tapped is not offered and one
+/// whose giver is untapped is - whoever controls the giver, the land that has the ability being no part of the cost.
+#[test]
+fn an_ability_that_taps_what_gave_it_is_offered_only_while_that_giver_is_untapped() {
+    for second_tapped in [false, true] {
+        let (mut game, _) = game_with("Route Filler", Zone::hand, 0);
+        let land = put(&mut game, "Route Land", ME);
+        let (first, second) = (put(&mut game, "Route Tapping Giver", ME), put(&mut game, "Route Tapping Giver", ME));
+        game.state.see_statics();
+        game.state.update_obj(first, |o| o.tapped = true);
+        game.state.update_obj(second, |o| o.tapped = second_tapped);
+        game.run();
+        let offered: Vec<Option<ObjectId>> = activations_of(&game, land).iter().map(|o| o.granted_by.map(|g| g.object)).collect();
+        assert_eq!(offered, if second_tapped { vec![] } else { vec![Some(second)] });
+    }
+}
+
+/// CR 601.2g-h, 118.3, 701.26a: the giver is tapped as a cost, so tapped for the mana of that cost it can no longer pay its tap:
+/// the payment is taken back, the giver untapped again. Another source's mana pays the {1}, and the giver is tapped for the
+/// cost alone.
+#[test]
+fn the_giver_tapped_for_the_mana_of_its_own_cost_cannot_be_tapped_as_that_cost() {
+    for other_source in [false, true] {
+        let (mut game, _) = game_with("Route Filler", Zone::hand, 0);
+        let land = put(&mut game, "Route Land", ME);
+        let giver = put(&mut game, "Route Tapping Mana Giver", ME);
+        let other = other_source.then(|| put(&mut game, "Route Tapped Mana Creature", ME));
+        // Under its controller's control since before their turn began: no summoning sickness (CR 302.6).
+        game.state.update_player(ME, |p| p.turn_began = 1);
+        if let Some(id) = other { game.state.update_obj(id, |o| o.controlled_since = 0); }
+        game.state.see_statics();
+        game.run();
+        let chosen = activations_of(&game, land).remove(0);
+        let request = game.pending().unwrap().clone();
+        game.answer(request.id, request.player, Answer::Act(Action::of(&chosen))).unwrap();
+        game.run();
+        let request = game.pending().unwrap().clone();
+        let RequestKind::PayCosts { options, .. } = &request.kind else { panic!("asked to pay") };
+        let mana = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source == Some(other.unwrap_or(giver))).expect("the mana ability");
+        game.answer(request.id, request.player, Answer::Act(Action::of(mana))).unwrap();
+        game.run();
+        let on_stack = game.state.stack.iter().any(|i| i.object == land);
+        assert_eq!(on_stack, other_source, "activated only where another source paid the {{1}}");
+        assert!(game.state.obj(giver).tapped == other_source, "tapped as the cost, or untapped again by the take-back");
+        assert_eq!(game.state.obj(other.unwrap_or(giver)).tapped, other_source);
+    }
 }
 
 /// CR 601.2b, 601.2f: "sacrifice any number of" is any number, past 255: 300 artifacts announced and sacrificed take {300}

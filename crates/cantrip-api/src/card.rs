@@ -928,6 +928,12 @@ pub struct Cost {
     /// whoever controls it, since only a sacrifice is limited to the payer's permanents (CR 701.21a); an ability no permanent
     /// gave can't pay it.
     pub exile_granter: bool,
+    /// "Tap [the card that gives this ability]" in an ability another permanent gives (CR 201.5a, 118.3, 701.26a): Fishing
+    /// Pole's "{1}, {T}, Tap Fishing Pole", which the Pole gives the equipped creature. Paid by tapping the permanent the
+    /// activation names as what gave the ability (`ActionOption::granted_by`), while it is on the battlefield and untapped -
+    /// whoever controls it, since only a sacrifice is limited to the payer's permanents - and with no summoning-sickness
+    /// limit, which only the {T} symbol has (CR 302.6); an ability no permanent gave can't pay it.
+    pub tap_granter: bool,
     /// Discard this card (cycling, CR 702.29a).
     pub discard_self: bool,
     /// Choose this many permanents you control that pass the filter, and sacrifice them, return them to their owners'
@@ -1280,6 +1286,12 @@ pub struct PermanentCost {
 }
 
 impl Cost {
+    /// Whether a part of the cost names the permanent that gave the ability (CR 201.5a): sacrificing, exiling or tapping it.
+    /// Such a cost can be paid only by an activation that names what gave it (`ActionOption::granted_by`).
+    pub const fn names_granter(&self) -> bool {
+        self.sacrifice_granter || self.exile_granter || self.tap_granter
+    }
+
     /// Whether the cost is mana and permanents to tap or remove and nothing else (CR 118.3): the parts a spell's optional cost
     /// an ability gave it (`TriggeredDef::cast_option`) pays. Judged by `is_tap_only`, which names every part of a cost.
     pub fn is_mana_and_permanents_only(&self) -> bool {
@@ -1303,6 +1315,7 @@ impl Cost {
             sacrifice_self,
             sacrifice_granter,
             exile_granter,
+            tap_granter,
             discard_self,
             permanents,
             loyalty,
@@ -1348,6 +1361,7 @@ impl Cost {
             && !sacrifice_self
             && !sacrifice_granter
             && !exile_granter
+            && !tap_granter
             && !discard_self
             && permanents.is_none()
             && loyalty.is_none()
@@ -1495,6 +1509,7 @@ impl Cost {
         c.sacrifice_self |= other.sacrifice_self;
         c.sacrifice_granter |= other.sacrifice_granter;
         c.exile_granter |= other.exile_granter;
+        c.tap_granter |= other.tap_granter;
         c.discard_self |= other.discard_self;
         c.exile_self |= other.exile_self;
         if c.put_self_into_library.is_none() {
@@ -1617,6 +1632,7 @@ impl Cost {
             sacrifice_self: false,
             sacrifice_granter: false,
             exile_granter: false,
+            tap_granter: false,
             discard_self: false,
             permanents: None,
             loyalty: None,

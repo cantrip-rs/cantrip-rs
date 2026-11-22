@@ -1476,6 +1476,7 @@ pub const fn multikicker_cost(cost: Cost) -> Option<Kicker> {
             && !cost.sacrifice_self
             && !cost.sacrifice_granter
             && !cost.exile_granter
+            && !cost.tap_granter
             && !cost.discard_self
             && !cost.exile_self
             && !cost.return_self
