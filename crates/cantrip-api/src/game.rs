@@ -1968,7 +1968,9 @@ pub trait Game: Query {
     fn end_sentence(&mut self);
     /// Counters a spell (CR 701.5): it leaves the stack for its owner's graveyard, or exile if it was flashed back.
     fn counter(&mut self, spell: ObjectId);
-    /// Counters a spell and puts it in its owner's hand, on top or bottom of their library, or in exile (CR 701.6a).
+    /// Counters a spell with "if that spell is countered this way, put it [`to`] instead of into that player's graveyard": its
+    /// owner's hand, the top or bottom of their library, or exile (CR 701.6a). The "instead" is a replacement of the move to the
+    /// graveyard (CR 614.1a), which the spell's controller orders with the spell's own and the others (CR 616.1).
     fn counter_to(&mut self, spell: ObjectId, to: CounterTo);
     /// A spell on the stack changes controllers (CR 112.2): it resolves for `player`, and "you" in it means them. Its
     /// targets, modes and X stay as they were chosen.

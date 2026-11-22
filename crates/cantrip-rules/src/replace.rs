@@ -34,6 +34,9 @@ pub(crate) enum Origin {
     /// "If that spell would be put into your graveyard, exile it instead" (CR 614.1a; `ZoneChange::exile_instead`): the
     /// replacement the effect that had the spell cast made, of the spell leaving the stack for its graveyard.
     ExileInstead,
+    /// A counterspell's "if that spell is countered this way, put it [there] instead of into that player's graveyard" (CR
+    /// 701.6a, 614.1a; `ZoneChange::countered_to`): of the countered spell leaving the stack for its graveyard.
+    CounteredTo,
     /// An Adventure spell's exile as it resolves (CR 715.3d; `ZoneChange::adventure`).
     Adventure,
     /// An Omen spell's shuffle into its owner's library as it resolves (CR 720.3d; `ZoneChange::omen`).
@@ -106,6 +109,17 @@ const PLOT_EXILE_HINT: &str = "exile it instead of putting it into the graveyard
 /// What the bottom-of-library rider of a spell says it does (Kylox's Voltstrider's cast; CR 616.1).
 const BOTTOM_OF_LIBRARY_HINT: &str = "put it on the bottom of its owner's library instead of the graveyard";
 
+/// What a counterspell's "put it [there] instead of into that player's graveyard" says it does (Remand, Memory Lapse, Force of
+/// Negation; CR 616.1), by where it puts the spell.
+fn countered_to_hint(to: Option<CounterTo>) -> &'static str {
+    match to {
+        Some(CounterTo::Hand) => "put it into its owner's hand instead of the graveyard, as the spell countering it says",
+        Some(CounterTo::LibraryTop) => "put it on top of its owner's library instead of the graveyard, as the spell countering it says",
+        Some(CounterTo::LibraryBottom) => "put it on the bottom of its owner's library instead of the graveyard, as the spell countering it says",
+        Some(CounterTo::Exile) | None => "exile it instead of putting it into the graveyard, as the spell countering it says",
+    }
+}
+
 /// What the rules' replacements of a spell resolving, a permanent leaving and a destruction say they do, for the player who
 /// orders them with others (CR 616.1).
 const ADVENTURE_HINT: &str = "exile it on an Adventure, to be cast later as itself";
@@ -168,6 +182,7 @@ pub(crate) fn says_how_it_enters(line: &str) -> bool {
 /// guard that keeps an entry with nothing to order free of the ordering.
 pub(crate) fn zone_change_possible(cx: &Cx, change: &ZoneChange) -> bool {
     possible(cx, Some(change.object)) || madness_applies(cx, change) || played_tapped_applies(cx, change) || flashback_applies(change) || change.exile_instead.iter().any(|e| exile_instead_applies(cx, change, e))
+        || countered_to_applies(change)
         || resolving_applies(change)
         || leaving_applies(cx, change)
 }
@@ -239,6 +254,13 @@ fn exile_instead_applies(cx: &Cx, z: &ZoneChange, e: ExileInstead) -> bool {
             chars.is(CardType::Instant) || chars.is(CardType::Sorcery)
         }
     }
+}
+
+/// A counterspell's "if that spell is countered this way, put it [there] instead of into that player's graveyard" (CR 701.6a,
+/// 614.1a): of the countered spell's move off the stack to its graveyard and nowhere else - once another effect has sent it
+/// elsewhere (its own "exile it instead", Rest in Peace's), it no longer applies (CR 616.1f).
+fn countered_to_applies(z: &ZoneChange) -> bool {
+    z.countered_to.is_some() && z.from.is(ZoneKind::Stack) && z.to.is(ZoneKind::Graveyard)
 }
 
 /// The rules' "instead of putting it into its owner's graveyard as it resolves" for the way a spell was cast: an Adventure's
@@ -724,6 +746,11 @@ fn candidates_for(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Opti
                 }
             }
         }
+        // The counterspell's "instead of into that player's graveyard" (CR 614.1a), of the spell itself, offered after the
+        // spell's own.
+        if !applied.contains(&(z.object, 0, Origin::CounteredTo)) && countered_to_applies(z) {
+            found.insert(0, Candidate { source: z.object, index: 0, origin: Origin::CounteredTo });
+        }
         // Each "exile it instead" its own (CR 616.1): Goliath Daydreamer's and Lilah's on one spell are both offered.
         for (index, &e) in ExileInsteads::ALL.iter().enumerate().rev() {
             if !applied.contains(&(z.object, index as u8, Origin::ExileInstead)) && exile_instead_applies(cx, z, e) {
@@ -832,6 +859,10 @@ fn hint_of(cx: &Cx, proposal: &Proposal, c: &Candidate) -> &'static str {
             Some(ExileInstead::BottomOfLibrary) => BOTTOM_OF_LIBRARY_HINT,
             _ => EXILE_INSTEAD_HINT,
         },
+        Origin::CounteredTo => countered_to_hint(match proposal {
+            Proposal::ZoneChange(z) => z.countered_to,
+            _ => None,
+        }),
         Origin::Adventure => ADVENTURE_HINT,
         Origin::Omen => OMEN_HINT,
         Origin::Rebound => REBOUND_HINT,
@@ -1207,6 +1238,21 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
                 if let Proposal::ZoneChange(z) = proposal {
                     z.to = Zone::library(cx.s().obj(z.object).owner);
                     z.bottom = true;
+                }
+            }
+            // CR 701.6a, 614.1a: put where the spell countering it says, its owner's (CR 400.3) - a library's top or bottom
+            // (CR 401.4).
+            Origin::CounteredTo => {
+                if let Proposal::ZoneChange(z) = proposal
+                    && let Some(to) = z.countered_to
+                {
+                    let owner = cx.s().obj(z.object).owner;
+                    z.to = match to {
+                        CounterTo::Hand => Zone::hand(owner),
+                        CounterTo::LibraryTop | CounterTo::LibraryBottom => Zone::library(owner),
+                        CounterTo::Exile => Zone::exile(owner),
+                    };
+                    z.bottom = to == CounterTo::LibraryBottom;
                 }
             }
             // CR 702.34a, 614.1a: exiled instead, in its owner's exile (CR 400.3).
@@ -3911,6 +3957,7 @@ mod tests {
             flashback: false,
             exile_instead: ExileInsteads::NONE,
             bottom: false,
+            countered_to: None,
             adventure: false,
             commander_components: [ObjectId::NONE; 8],
             omen: false,

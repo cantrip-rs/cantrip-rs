@@ -1,0 +1,65 @@
+# Kylox's Voltstrider's "if that spell would be put into a graveyard, put it on the bottom of its owner's library instead" and
+# Force of Negation's "if it's countered this way, exile it instead of putting it into its owner's graveyard" replace the same
+# move to the graveyard (CR 614.1a): the countered spell's controller chooses which applies (CR 616.1). Bot1 collects evidence 6
+# with Hill Giant, Lightning Bolt and Faithless Looting (4 + 1 + 1), attacks, and casts the Looting from among them for {R}.
+# Bot2 counters it with Force of Negation for its alternative cost (it is not Bot2's turn), exiling Brainstorm, and Bot1 takes
+# the rider first: the Looting goes to the bottom of Bot1's library, not into exile, and Force of Negation's exile no longer
+# applies (CR 616.1f). The Bolt stays exiled, uncast.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Kylox's Voltstrider
+Faithless Looting
+Lightning Bolt
+Island
+Hill Giant
+Grizzly Bears
+Island x5
+
+[Bot2 Deck]
+Island
+Force of Negation
+Brainstorm
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Kylox's Voltstrider.Cast
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hill Giant; Grizzly Bears)
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Kylox's Voltstrider.Activate(Ability: evidence)
+Bot1.Choose(Hill Giant; Lightning Bolt; Faithless Looting)
+Bot1.Pass
+Bot2.Pass
+? Exile = Faithless Looting; Hill Giant; Lightning Bolt
+Bot1.Attack(Kylox's Voltstrider > Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose(Faithless Looting)
+? Stack = Faithless Looting
+Bot1.Pass
+Bot2.Hand.Force of Negation.Cast(Faithless Looting; Ability: exile a blue card)
+Bot2.Choose(Brainstorm)
+Bot1.Pass
+Bot1.Replace(bottom)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Exile = Hill Giant; Lightning Bolt; Brainstorm
+Bot1.Graveyard = Grizzly Bears; Black Lotus
+Bot1.Library = Island; Island; Island; Island; Faithless Looting
+Bot2.Graveyard = Force of Negation

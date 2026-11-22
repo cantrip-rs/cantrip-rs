@@ -8,7 +8,7 @@
 
 use cantrip_state::*;
 
-use crate::card::Asker;
+use crate::card::{Asker, CounterTo};
 use crate::game::{Game, Query};
 
 /// An object about to change zones (CR 614.1a, 614.1c, 614.12), as the effects of other permanents see it.
@@ -71,6 +71,11 @@ pub struct ZoneChange {
     /// The card goes to the bottom of the library it is put into, not its top (CR 401.4): the move to the library a replacement
     /// made of a spell's move to the graveyard (`ExileInstead::BottomOfLibrary`) says so. Set by that replacement.
     pub bottom: bool,
+    /// A spell countered by an instruction that says where it goes instead: "if that spell is countered this way, put it
+    /// [there] instead of into that player's graveyard" (Remand, Memory Lapse, Force of Negation; CR 701.6a, 614.1a). The
+    /// counterspell's replacement of the move to the graveyard, ordered by the spell's controller with the spell's own and the
+    /// others that would change it (CR 616.1). Set by the move, never by a replacement.
+    pub countered_to: Option<CounterTo>,
     /// A spell cast as an Adventure, resolving (CR 715.3d): "instead of putting [it] into its owner's graveyard as it resolves,
     /// its controller exiles it", and may play the card from there. The core's replacement, ordered with the others (CR
     /// 616.1); `on_adventure` says it applied. Set by the move, never by a replacement.

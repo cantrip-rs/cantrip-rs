@@ -1,0 +1,64 @@
+# Jace, Telepath Unbound's -3: "You may cast target instant or sorcery card from your graveyard this turn. If that spell
+# would be put into your graveyard, exile it instead." Memory Lapse's "if that spell is countered this way, put it on top of
+# its owner's library instead of into that player's graveyard" replaces the same move to the graveyard (CR 614.1a), so the
+# spell's controller chooses which applies (CR 616.1). Turn 1 Bot1 sacrifices Black Lotus for three Lightning Bolts; Jace
+# loots on turn 5, flips with five cards in the graveyard, and his -3 lets a Bolt be cast from there at Bot2. Bot2 counters it
+# with Memory Lapse, and Bot1 takes Jace's exile first: the Bolt is exiled, not put on top of Bot1's library, and Memory
+# Lapse's no longer applies (CR 616.1f). Bot2 took the first three Bolts only: 20 - 9.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Jace, Vryn's Prodigy
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Memory Lapse
+Island
+Island x16
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Jace, Vryn's Prodigy.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Jace, Vryn's Prodigy.Activate
+Bot1.Choose(Island)
+Bot1.Battlefield.Jace, Telepath Unbound.Activate(Bot1.Graveyard.Lightning Bolt; Ability: #2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Lightning Bolt.Cast(Bot2)
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Memory Lapse.Cast(Lightning Bolt)
+Bot1.Pass
+Bot1.Replace(as the effect it was cast by)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 11
+Bot1.Hand = Island
+Exile = Lightning Bolt
+Bot1.Graveyard = Island; Lightning Bolt; Lightning Bolt; Black Lotus
+Bot2.Graveyard = Memory Lapse
+Bot1.Battlefield.Jace, Telepath Unbound.Counters.Loyalty = 2

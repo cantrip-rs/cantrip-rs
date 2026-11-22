@@ -2,8 +2,10 @@
 # would be put into your graveyard, exile it instead." Not flashback (the rulings): the replacement is of the move to the
 # graveyard alone (CR 614.1a), so a spell cast this way that leaves the stack for anywhere else goes there. Turn 1 Bot1
 # sacrifices Black Lotus for three Lightning Bolts; Jace loots on turn 5, flips with five cards in the graveyard, and his -3
-# lets a Bolt be cast from there at Bot2. Bot2's Remand returns it to Bot1's hand - not to exile, as Snapcaster Mage's
-# flashback would - and Bot2 draws a card. Bot2 took the first three Bolts only: 20 - 9.
+# lets a Bolt be cast from there at Bot2. Bot2's Remand counters it, and its "put it into its owner's hand instead of into
+# that player's graveyard" is a replacement of the same move as Jace's exile (CR 614.1a): Bot1, the spell's controller,
+# orders them (CR 616.1), and takes Remand's first. The Bolt returns to Bot1's hand - where Snapcaster Mage's flashback, of
+# any move, would exile it still - and Bot2 draws a card. Bot2 took the first three Bolts only: 20 - 9.
 
 [Bot1 Deck]
 Island
@@ -50,6 +52,8 @@ Bot1.Graveyard.Lightning Bolt.Cast(Bot2)
 Bot2.Battlefield.Island.Activate
 Bot2.Battlefield.Mox Sapphire.Activate
 Bot2.Hand.Remand.Cast(Lightning Bolt)
+Bot1.Pass
+Bot1.Replace(hand)
 [T5 Bot1.Main2]
 
 [Expect]

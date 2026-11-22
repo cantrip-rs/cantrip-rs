@@ -816,9 +816,12 @@ fn resolve_inner(cx: &mut Cx, summarize_terminal_mana: bool) -> R<Flow> {
     Ok(Flow::Done)
 }
 
-/// Counters a spell on the stack (CR 701.6): it leaves the stack for its owner's graveyard, or exile.
-/// Counters a spell and puts it somewhere other than its owner's graveyard (Remand's hand, Memory Lapse's library
-/// top: CR 701.6a, the move is part of the countering). A spell that can't be countered stays.
+/// Counters a spell (CR 701.6) with "if that spell is countered this way, put it [`to`] instead of into that player's graveyard"
+/// (Remand's hand, Memory Lapse's library top, Force of Negation's exile). The countered spell is put into its owner's
+/// graveyard (CR 701.6a), and the counterspell's "instead" is a replacement of that move (CR 614.1a,
+/// `ZoneChange::countered_to`): its controller orders it with the spell's own - a cast's "put it on the bottom of its owner's
+/// library instead", flashback's exile - and the others that would change the move (CR 616.1). A spell that can't be countered
+/// stays.
 pub fn counter_to(cx: &mut Cx, spell: ObjectId, to: CounterTo) {
     let Some(at) = cx.s().stack.iter().position(|i| i.kind == StackKind::Spell && i.object == spell) else {
         return;
@@ -827,7 +830,14 @@ pub fn counter_to(cx: &mut Cx, spell: ObjectId, to: CounterTo) {
         return;
     }
     cx.emit(Event::Countered { spell });
-    send_spell(cx, at, to, ZoneReason::Counter);
+    let item = cx.st().stack_remove(at);
+    let obj = *cx.s().obj(item.object);
+    if obj.card_copy {
+        ops::cease_to_exist(cx, Zone::STACK, item.object);
+        return;
+    }
+    let moving = ops::Moving { countered_to: Some(to), ..ops::Moving::to(item.object, Zone::graveyard(obj.owner)) };
+    ops::move_together(cx, &[its_own_exile(cx, &item, moving, ZoneReason::Counter)], ZoneReason::Counter);
 }
 
 /// A spell leaves the stack without being countered (CR 400.3): "return target spell to its owner's hand" (Sink

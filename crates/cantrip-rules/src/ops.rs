@@ -93,6 +93,9 @@ pub struct Moving {
     /// set by the spell's leaving (`resolve::leave_stack`, `resolve::send_spell`).
     pub flashback: bool,
     pub exile_instead: ExileInsteads,
+    /// A spell countered by an instruction that puts it elsewhere instead of its owner's graveyard (`ZoneChange::countered_to`):
+    /// set by `resolve::counter_to`, whose move is to the graveyard.
+    pub countered_to: Option<CounterTo>,
     /// A spell resolving, the rules' own "instead of putting it into its owner's graveyard as it resolves" that it is subject
     /// to (`ZoneChange::adventure`, `omen`, `rebound`): set by `resolve::leave_stack`.
     pub adventure: bool,
@@ -107,7 +110,7 @@ pub struct Moving {
 
 impl Moving {
     pub fn to(id: ObjectId, to: Zone) -> Moving {
-        Moving { id, to, entering: None, put_by: PutBy::Current, reason: None, revealed: false, pays_characteristic: false, flashback: false, exile_instead: ExileInsteads::NONE, adventure: false, omen: false, rebound: false, destroy: false, aura_host_left: None }
+        Moving { id, to, entering: None, put_by: PutBy::Current, reason: None, revealed: false, pays_characteristic: false, flashback: false, exile_instead: ExileInsteads::NONE, countered_to: None, adventure: false, omen: false, rebound: false, destroy: false, aura_host_left: None }
     }
 }
 
@@ -340,6 +343,7 @@ fn moving_proposal(cx: &Cx, mut m: Moving, reason: ZoneReason) -> (Moving, ZoneC
         flashback: m.flashback,
         exile_instead: m.exile_instead,
         bottom: false,
+        countered_to: m.countered_to,
         adventure: m.adventure,
         commander_components: [ObjectId::NONE; 8],
         omen: m.omen,
@@ -3232,6 +3236,7 @@ fn create_tokens_entering(
             flashback: false,
             exile_instead: ExileInsteads::NONE,
             bottom: false,
+            countered_to: None,
             adventure: false,
             commander_components: [ObjectId::NONE; 8],
             omen: false,
