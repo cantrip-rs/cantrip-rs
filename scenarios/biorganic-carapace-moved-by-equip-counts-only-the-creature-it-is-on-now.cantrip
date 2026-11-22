@@ -1,0 +1,61 @@
+# Biorganic Carapace: "Equip {2}" (CR 702.6) and a creature that is no longer equipped is no longer modified (CR 700.9). Bot1 casts the
+# Carapace on turn 1, attached to the Ornithopter by its enters trigger, with a Memnite beside it. On turn 3 it equips the Memnite:
+# the Ornithopter has neither the +2/+2 nor the ability, and the Memnite (3/3) attacks and deals 3. It draws one card for the one
+# modified creature, the Memnite, and none for the Ornithopter: with the turn's draw, two in hand.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains
+Biorganic Carapace
+Ornithopter
+Memnite
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Biorganic Carapace.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Biorganic Carapace.Activate(Ability: Equip; Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Hand.Count = 2
+Bot1.Battlefield.Memnite.Power = 3

@@ -1,0 +1,6 @@
+{
+  "name": "Biorganic Carapace",
+  "manaCost": "{2}{W}{U}",
+  "type": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, attach it to target creature you control.\nEquipped creature gets +2/+2 and has \"Whenever this creature deals combat damage to a player, draw a card for each modified creature you control.\" (Equipment, Auras you control, and counters are modifications.)\nEquip {2}"
+}

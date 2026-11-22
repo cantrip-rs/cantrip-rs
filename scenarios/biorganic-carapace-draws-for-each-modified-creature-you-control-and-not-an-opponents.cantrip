@@ -1,0 +1,89 @@
+# Biorganic Carapace: "When this Equipment enters, attach it to target creature you control", "Equipped creature gets +2/+2 and has
+# 'Whenever this creature deals combat damage to a player, draw a card for each modified creature you control'" (CR 700.9, 613.1f).
+# Bot1 casts it on turn 1 and attaches it to the Ornithopter (0/2 becomes 2/4); on turn 3 it casts Honor, putting a +1/+1 counter on
+# its Memnite. Bot2's Runeclaw Bear, with a counter from its own Honor, is modified too but is not Bot1's. The Ornithopter attacks
+# and deals 2 combat damage: it draws two cards for the equipped Ornithopter and the Memnite, not three (the Bear is Bot2's), and
+# Honor drew one: three in hand.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains
+Biorganic Carapace
+Ornithopter
+Memnite
+Honor
+Plains x14
+
+[Bot2 Deck]
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Runeclaw Bear
+Honor
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Biorganic Carapace.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+? Bot1.Battlefield.Memnite.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Runeclaw Bear.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Honor.Cast(Runeclaw Bear)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Honor.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Runeclaw Bear.Counters.PlusOnePlusOne = 1
