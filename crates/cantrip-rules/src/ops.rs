@@ -339,6 +339,7 @@ fn moving_proposal(cx: &Cx, mut m: Moving, reason: ZoneReason) -> (Moving, ZoneC
         exiled_with: None,
         flashback: m.flashback,
         exile_instead: m.exile_instead,
+        bottom: false,
         adventure: m.adventure,
         commander_components: [ObjectId::NONE; 8],
         omen: m.omen,
@@ -774,7 +775,8 @@ fn move_together_entering_moves(
         let mut put = Vec::new();
         counters::place_arrived(cx, new_id, counts, counts_by, &mut put);
         note_statics(cx, new_id);
-        if to.is(ZoneKind::Library) {
+        // A library is entered at its top (CR 401.4), unless the replacement that put it there says its bottom.
+        if to.is(ZoneKind::Library) && !change.bottom {
             cx.st().zone_insert(to, 0, new_id);
         } else {
             cx.st().zone_push(to, new_id);
@@ -3229,6 +3231,7 @@ fn create_tokens_entering(
             exiled_with: None,
             flashback: false,
             exile_instead: ExileInsteads::NONE,
+            bottom: false,
             adventure: false,
             commander_components: [ObjectId::NONE; 8],
             omen: false,

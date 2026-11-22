@@ -87,7 +87,8 @@ pub struct CastTerms {
     pub discard: u8,
     /// "If that spell would be put into your graveyard, exile it instead" (CR 614.1a), as the effect's text words it: of any
     /// spell (`ExileInstead::Spell`), or only of an instant or sorcery spell (`ExileInstead::InstantOrSorcery`). A move to a
-    /// hand or a library is not replaced.
+    /// hand or a library is not replaced. Or "put it on the bottom of its owner's library instead" of a graveyard
+    /// (`ExileInstead::BottomOfLibrary`), of the same move.
     pub exile_instead: ExileInstead,
     /// Cast with flashback (CR 702.34a): exiled instead of put anywhere else any time it would leave the stack.
     pub flashback: bool,

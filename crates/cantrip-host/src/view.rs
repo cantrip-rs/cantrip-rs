@@ -1482,8 +1482,10 @@ impl<'a> Projector<'a> {
         if grant.harmonize {
             text.push_str(", for its harmonize cost, then exiled");
         }
-        if grant.exile_instead != ExileInstead::Never {
-            text.push_str(", exiled instead of put into the graveyard");
+        match grant.exile_instead {
+            ExileInstead::Never => {}
+            ExileInstead::BottomOfLibrary => text.push_str(", put on the bottom of its owner's library instead of into the graveyard"),
+            _ => text.push_str(", exiled instead of put into the graveyard"),
         }
         // What the permission adds to playing it, for what the card can be played as: a spell's extra cost (CR 601.2f), a land's
         // entering tapped (CR 614.1c). A modal double-faced card may be either (CR 712.3, 712.12).
@@ -2599,6 +2601,35 @@ mod tests {
         let koloth = game.state.push_obj(Obj::new(cards.find("Koloth, Tribble Hunter").expect("the card"), PlayerId(0), Zone::BATTLEFIELD));
         game.state.zone_push(Zone::BATTLEFIELD, koloth);
         assert!(goaded(&game), "Koloth's static ability goads every Tribble");
+    }
+
+    /// A permission whose spell would go to the bottom of its owner's library instead of the graveyard says so, not "exiled"
+    /// (CR 614.1a, 401.4: `ExileInstead::BottomOfLibrary`, the rider of Kylox's Voltstrider's cast).
+    #[test]
+    fn a_bottom_of_library_rider_is_not_worded_as_an_exile() {
+        let cards = cantrip_engine::cards();
+        let mut game = cantrip_engine::Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        let you = PlayerId(0);
+        let bolt = game.state.push_obj(Obj::new(cards.find("Lightning Bolt").expect("the card"), you, Zone::exile(you)));
+        game.state.zone_push(Zone::exile(you), bolt);
+        let text = |game: &cantrip_engine::Game| {
+            let mut handles = HandleSpace::new();
+            let view = player_view(game, you, &mut handles, &["Alice".into(), "Bob".into()], &[false, false], &HashSet::new(), &HashSet::new(), &HashSet::new());
+            let bolt = view.objects.iter().find(|o| o.handle == handles.handle(bolt)).expect("the Bolt");
+            bolt.play_permissions.iter().map(|p| p.text.clone()).collect::<Vec<_>>()
+        };
+        for (exile_instead, words) in [
+            (ExileInstead::BottomOfLibrary, ", put on the bottom of its owner's library instead of into the graveyard"),
+            (ExileInstead::Spell, ", exiled instead of put into the graveyard"),
+        ] {
+            game.state.permissions.clear();
+            let grant = PlayGrant { exile_instead, expiry: Expiry::EndOfTurn, ..PlayGrant::CAST };
+            game.state.permission_push(PlayPermission { what: Playable::Card(bolt), player: you, grant, by: Grant { object: bolt, ability: AbilityRef::default() }, turn: 0 });
+            let lines = text(&game);
+            assert_eq!(lines.len(), 1, "{lines:?}");
+            assert!(lines[0].contains(words), "{lines:?}");
+            assert_eq!(lines[0].contains("exiled"), exile_instead == ExileInstead::Spell, "{lines:?}");
+        }
     }
 
     /// "Hexproof from [quality]" granted to a card is worded as printed cards word it (CR 702.11d, 702.11f-g).

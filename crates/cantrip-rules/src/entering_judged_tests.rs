@@ -244,6 +244,7 @@ fn it_is_judged_again_after_a_replacement_changes_how_it_enters() {
         exiled_with: None,
         flashback: false,
         exile_instead: ExileInsteads::NONE,
+        bottom: false,
         adventure: false,
         commander_components: [ObjectId::NONE; 8],
         omen: false,

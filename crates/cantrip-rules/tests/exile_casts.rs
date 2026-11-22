@@ -130,3 +130,108 @@ fn the_cards_collected_as_evidence_stay_exiled_when_their_source_leaves() {
     assert!(!game.state.zone(Zone::BATTLEFIELD).contains(&probe), "and the probe was sacrificed");
     assert_eq!(game.state.zone(Zone::exile(ME)).len(), 1, "the card the cost exiled is still exiled");
 }
+
+/// The first card of its controller's graveyard, cast for nothing with "if that spell would be put into a graveyard, put it on
+/// the bottom of its owner's library instead", then sent off the stack as `then` says (`None`: left to resolve; a counter
+/// when `counter`).
+fn cast_to_bottom(g: &mut dyn cantrip_api::Game, item: &StackItem, then: Option<CounterTo>, counter: bool) -> Result<(), Suspend> {
+    let Some(&card) = g.state().zone(Zone::graveyard(item.controller)).first() else { return Ok(()) };
+    g.cast_during_resolution_as(card, CastTerms { instead: Some(ManaCost::ZERO), exile_instead: ExileInstead::BottomOfLibrary, ..CastTerms::default() })?;
+    let Some(spell) = g.state().stack.last().map(|i| i.object).filter(|&s| s != item.object) else { return Ok(()) };
+    if counter {
+        g.counter(spell);
+    } else if let Some(to) = then {
+        g.remove_spell(spell, to);
+    }
+    Ok(())
+}
+
+fn cast_and_resolve(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), Suspend> {
+    cast_to_bottom(g, item, None, false)
+}
+
+fn cast_and_counter(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), Suspend> {
+    cast_to_bottom(g, item, None, true)
+}
+
+fn cast_and_bounce(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), Suspend> {
+    cast_to_bottom(g, item, Some(CounterTo::Hand), false)
+}
+
+macro_rules! stager {
+    ($name:literal, $effect:ident) => {
+        CardDef { name: $name, oracle: true, types: TypeSet::of(&[CardType::Instant]), spell: Some(SpellDef { targets: &[], effect: $effect }), ..CardDef::BLANK }
+    };
+}
+
+static RESOLVER: CardDef = stager!("Exile Cast Resolver", cast_and_resolve);
+static COUNTERER: CardDef = stager!("Exile Cast Counterer", cast_and_counter);
+static BOUNCER: CardDef = stager!("Exile Cast Bouncer", cast_and_bounce);
+
+/// A game in which `stager` is in the first player's hand and `Exile Cast Fodder` the only card of their graveyard, with the
+/// stager cast and the stack played out: the fodder's place afterward is what is judged.
+fn cast_the_fodder_by(stager: &'static CardDef) -> RulesGame {
+    let cards: &'static CardTable = Box::leak(Box::new(CardTable::new([&EVIDENCE_PROBE, &FODDER, &FILLER, stager])));
+    let filler = cards.find("Exile Cast Filler").unwrap();
+    let mut game = RulesGame::new(cards, &Setup { decks: vec![vec![filler; 20], vec![filler; 20]], seed: 1, ..Setup::default() });
+    game.state.update_turn(|t| {
+        t.number = 1;
+        t.active = ME;
+        t.priority = ME;
+        t.set_step(Step::PrecombatMain);
+        t.began = true;
+    });
+    game.state.frame_push(Frame::new(FrameKind::Priority));
+    let spell = put(&mut game, stager.name, Zone::hand(ME));
+    put(&mut game, "Exile Cast Fodder", Zone::graveyard(ME));
+    game.run();
+    let RequestKind::Priority { options } = request(&game).kind else { panic!("expected priority") };
+    let cast = options.iter().find(|o| o.kind == ActionKind::CastSpell && o.source == Some(spell)).expect("the stager is castable").clone();
+    answer(&mut game, Answer::Act(Action::of(&cast)));
+    for _ in 0..16 {
+        if game.state.stack.is_empty() && game.log.iter().any(|r| matches!(r.event, Event::SpellCast { player: ME, .. })) {
+            return game;
+        }
+        let answer_to = match request(&game).kind {
+            RequestKind::Priority { .. } => Answer::Pass,
+            RequestKind::PayCosts { options, .. } => {
+                let confirm = options.iter().find(|o| o.kind == ActionKind::ConfirmCasting).or_else(|| options.iter().find(|o| o.kind == ActionKind::AssignMana)).expect("a payment option");
+                Answer::Act(Action::of(confirm))
+            }
+            other => panic!("unexpected request: {other:?}"),
+        };
+        answer(&mut game, answer_to);
+    }
+    panic!("the stack did not empty");
+}
+
+/// The cards of the first player's library, top first, named.
+fn library(game: &RulesGame) -> Vec<&'static str> {
+    game.state.zone(Zone::library(ME)).iter().map(|&id| game.cards.get(game.state.obj(id).card).name).collect()
+}
+
+/// Kylox's Voltstrider: "if that spell would be put into a graveyard, put it on the bottom of its owner's library instead"
+/// (CR 614.1a, 401.4). Resolving, the spell goes beneath the cards of the library, and not on top.
+#[test]
+fn a_spell_that_would_resolve_into_the_graveyard_goes_to_the_bottom_of_its_owners_library() {
+    let game = cast_the_fodder_by(&RESOLVER);
+    let library = library(&game);
+    assert_eq!(library.last(), Some(&"Exile Cast Fodder"), "on the bottom");
+    assert_eq!(library.iter().filter(|&&n| n == "Exile Cast Fodder").count(), 1);
+    assert!(game.state.zone(Zone::graveyard(ME)).iter().all(|&id| game.cards.get(game.state.obj(id).card).name != "Exile Cast Fodder"), "not in the graveyard");
+}
+
+/// It replaces the move to the graveyard, however the spell comes to make it: a spell that is countered goes there too.
+#[test]
+fn a_countered_spell_goes_to_the_bottom_too() {
+    let game = cast_the_fodder_by(&COUNTERER);
+    assert_eq!(library(&game).last(), Some(&"Exile Cast Fodder"));
+}
+
+/// Only the move to the graveyard is replaced: a spell returned to its owner's hand goes there.
+#[test]
+fn a_spell_returned_to_hand_is_not_put_on_the_bottom() {
+    let game = cast_the_fodder_by(&BOUNCER);
+    assert!(!library(&game).contains(&"Exile Cast Fodder"));
+    assert!(game.state.zone(Zone::hand(ME)).iter().any(|&id| game.cards.get(game.state.obj(id).card).name == "Exile Cast Fodder"));
+}

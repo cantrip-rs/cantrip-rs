@@ -2323,6 +2323,10 @@ pub enum ExileInstead {
     /// Undefeated Slickshot): exiled in place of its move to the graveyard, and, once there, plotted (CR 702.170a, `PlayGrant::PLOT`).
     /// As the resolution alone (CR 701.6a), the way `Dream` is.
     Plot,
+    /// "If that spell would be put into a graveyard, put it on the bottom of its owner's library instead" (Kylox's Voltstrider): its
+    /// move to the graveyard is replaced by one to the bottom of its owner's library (CR 401.4), whatever the spell is. The name
+    /// is of the family: each "instead of the graveyard" rider of a spell's cast is one of these, ordered alike (CR 616.1).
+    BottomOfLibrary,
 }
 
 /// The "exile it instead" replacements a spell is subject to as it leaves the stack (`ExileInstead`), each its own effect:
@@ -2336,7 +2340,7 @@ impl ExileInsteads {
     /// No such effect.
     pub const NONE: ExileInsteads = ExileInsteads(0);
     /// Every effect there is: a replacement's index among a spell's is its place here (`replace`).
-    pub const ALL: [ExileInstead; 4] = [ExileInstead::Spell, ExileInstead::InstantOrSorcery, ExileInstead::Dream, ExileInstead::Plot];
+    pub const ALL: [ExileInstead; 5] = [ExileInstead::Spell, ExileInstead::InstantOrSorcery, ExileInstead::Dream, ExileInstead::Plot, ExileInstead::BottomOfLibrary];
 
     fn bit(e: ExileInstead) -> u8 {
         match e {
@@ -2345,6 +2349,7 @@ impl ExileInsteads {
             ExileInstead::InstantOrSorcery => 2,
             ExileInstead::Dream => 4,
             ExileInstead::Plot => 8,
+            ExileInstead::BottomOfLibrary => 16,
         }
     }
 

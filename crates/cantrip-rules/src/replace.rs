@@ -103,6 +103,9 @@ const DREAM_EXILE_HINT: &str = "exile it with a dream counter on it instead of p
 /// What the plotting exile of a spell says it does (Lilah, Undefeated Slickshot's trigger; CR 616.1).
 const PLOT_EXILE_HINT: &str = "exile it instead of putting it into the graveyard, and it becomes plotted";
 
+/// What the bottom-of-library rider of a spell says it does (Kylox's Voltstrider's cast; CR 616.1).
+const BOTTOM_OF_LIBRARY_HINT: &str = "put it on the bottom of its owner's library instead of the graveyard";
+
 /// What the rules' replacements of a spell resolving, a permanent leaving and a destruction say they do, for the player who
 /// orders them with others (CR 616.1).
 const ADVENTURE_HINT: &str = "exile it on an Adventure, to be cast later as itself";
@@ -230,7 +233,7 @@ fn exile_instead_applies(cx: &Cx, z: &ZoneChange, e: ExileInstead) -> bool {
     }
     match e {
         ExileInstead::Never => false,
-        ExileInstead::Spell | ExileInstead::Dream | ExileInstead::Plot => true,
+        ExileInstead::Spell | ExileInstead::Dream | ExileInstead::Plot | ExileInstead::BottomOfLibrary => true,
         ExileInstead::InstantOrSorcery => {
             let chars = cx.chars(z.object);
             chars.is(CardType::Instant) || chars.is(CardType::Sorcery)
@@ -826,6 +829,7 @@ fn hint_of(cx: &Cx, proposal: &Proposal, c: &Candidate) -> &'static str {
         Origin::ExileInstead => match ExileInsteads::ALL.get(c.index as usize) {
             Some(ExileInstead::Dream) => DREAM_EXILE_HINT,
             Some(ExileInstead::Plot) => PLOT_EXILE_HINT,
+            Some(ExileInstead::BottomOfLibrary) => BOTTOM_OF_LIBRARY_HINT,
             _ => EXILE_INSTEAD_HINT,
         },
         Origin::Adventure => ADVENTURE_HINT,
@@ -1196,6 +1200,13 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
                         *n += with;
                     }
                     cx.entering = Some(crate::ops::as_it_would_exist(cx, e));
+                }
+            }
+            // CR 614.1a, 401.4: put on the bottom of its owner's library instead, where a spell's own rider says so.
+            Origin::ExileInstead if matches!(ExileInsteads::ALL.get(index as usize), Some(ExileInstead::BottomOfLibrary)) => {
+                if let Proposal::ZoneChange(z) = proposal {
+                    z.to = Zone::library(cx.s().obj(z.object).owner);
+                    z.bottom = true;
                 }
             }
             // CR 702.34a, 614.1a: exiled instead, in its owner's exile (CR 400.3).
@@ -3899,6 +3910,7 @@ mod tests {
             exiled_with: Some(linked),
             flashback: false,
             exile_instead: ExileInsteads::NONE,
+            bottom: false,
             adventure: false,
             commander_components: [ObjectId::NONE; 8],
             omen: false,

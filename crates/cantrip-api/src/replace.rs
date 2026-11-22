@@ -68,6 +68,9 @@ pub struct ZoneChange {
     /// 614.1a, `StackItem::exile_instead`): the core's replacement of its move to the graveyard, ordered with the others (CR
     /// 616.1), each of them its own (`ExileInsteads`). Set by the move, never by a replacement.
     pub exile_instead: ExileInsteads,
+    /// The card goes to the bottom of the library it is put into, not its top (CR 401.4): the move to the library a replacement
+    /// made of a spell's move to the graveyard (`ExileInstead::BottomOfLibrary`) says so. Set by that replacement.
+    pub bottom: bool,
     /// A spell cast as an Adventure, resolving (CR 715.3d): "instead of putting [it] into its owner's graveyard as it resolves,
     /// its controller exiles it", and may play the card from there. The core's replacement, ordered with the others (CR
     /// 616.1); `on_adventure` says it applied. Set by the move, never by a replacement.
