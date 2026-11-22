@@ -1,0 +1,27 @@
+# Oscorp Industries: a land played by mayhem is the land play of the turn (CR 305.2), and so one made already refuses it: with an
+# Island played from the hand, Oscorp, discarded this turn, can't be played from the graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Island x5
+Oscorp Industries
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Oscorp Industries; Island)
+Bot1.Hand.Island.Play
+! Bot1.Graveyard.Oscorp Industries.Play
+
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Faithless Looting; Island; Oscorp Industries

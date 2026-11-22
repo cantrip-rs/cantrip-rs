@@ -1,0 +1,28 @@
+# Oscorp Industries: the mayhem permission needs the card discarded this turn (CR 702.187a). Discarded to Faithless Looting on
+# turn 1, it is still in the graveyard on turn 3, where it can't be played though the turn's land play is unused.
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Island x5
+Oscorp Industries
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Oscorp Industries; Island)
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Faithless Looting; Island; Oscorp Industries
+! Bot1.Graveyard.Oscorp Industries.Play
+
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Faithless Looting; Island; Oscorp Industries

@@ -1,0 +1,25 @@
+# Oscorp Industries: played from the hand it enters tapped and Bot1 loses no life, as it did not enter from a graveyard (CR 400.7).
+# On later turns it taps for blue, black or red, the colour chosen as it is activated, one mana for the tap.
+
+[Bot1 Deck]
+Oscorp Industries
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Oscorp Industries.Play
+? Bot1.Battlefield.Oscorp Industries.Tapped = true
+[T3 Bot1.Main1]
+Bot1.Battlefield.Oscorp Industries.Activate(Color: Blue)
+? Bot1.Mana = {U}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Oscorp Industries.Activate(Color: Black)
+? Bot1.Mana = {B}
+[T7 Bot1.Main1]
+Bot1.Battlefield.Oscorp Industries.Activate(Color: Red)
+? Bot1.Mana = {R}
+
+[Expect]
+Bot1.Life = 20
