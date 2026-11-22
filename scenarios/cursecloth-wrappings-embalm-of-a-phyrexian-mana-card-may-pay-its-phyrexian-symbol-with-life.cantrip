@@ -1,0 +1,56 @@
+# Cursecloth Wrappings: the embalm cost is the card's mana cost (CR 702.128a, 118.7) with its Phyrexian symbol kept, so it may be
+# paid with 2 life (CR 107.4f). Vault Skirge ({1}{B/P}) is cast for {G} and 2 life and dies to a Lightning Bolt; its embalm is then
+# paid with {G} from Mox Emerald and 2 more life, and Bot1 is at 16. The token is a Phyrexian Imp Zombie.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Cursecloth Wrappings
+Vault Skirge
+Swamp x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cursecloth Wrappings.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Vault Skirge.Cast
+Bot1.Modes(1)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Vault Skirge)
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Life = 18
+Bot1.Battlefield.Cursecloth Wrappings.Activate(Bot1.Graveyard.Vault Skirge)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Vault Skirge.Activate(Ability: Embalm)
+Bot1.Modes(1)
+Bot1.Pass
+
+[Expect]
+Exile = Vault Skirge
+Bot1.Battlefield.Vault Skirge.Subtypes = Imp; Phyrexian; Zombie
+Bot1.Battlefield.Vault Skirge.Colors = White
+Bot1.Life = 16

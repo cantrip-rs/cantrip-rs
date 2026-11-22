@@ -1,0 +1,67 @@
+# "Target creature card in your graveyard" (CR 115.1, 601.2c): Bot2's Memnite in Bot2's graveyard and Bot1's own Lightning Bolt,
+# which is no creature card, are refused; Bot1's Llanowar Elves is taken. The embalm it gains lasts until end of turn (CR 611.2a): on
+# Bot1's next turn, with the {G} to pay it, it can no longer be activated, and the card stays in the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Black Lotus
+Cursecloth Wrappings
+Llanowar Elves
+Lightning Bolt
+Swamp x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Memnite
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cursecloth Wrappings.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Cursecloth Wrappings.Activate(Bot2.Graveyard.Memnite)
+! Bot1.Battlefield.Cursecloth Wrappings.Activate(Bot1.Graveyard.Lightning Bolt)
+Bot1.Battlefield.Cursecloth Wrappings.Activate(Bot1.Graveyard.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Graveyard.Llanowar Elves.Activate(Ability: Embalm)
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt; Llanowar Elves; Black Lotus
+Bot2.Graveyard = Memnite; Lightning Bolt
+Exile.Count = 0

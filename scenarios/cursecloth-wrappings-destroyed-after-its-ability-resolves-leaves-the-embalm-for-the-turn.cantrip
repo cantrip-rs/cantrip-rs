@@ -1,0 +1,71 @@
+# Cursecloth Wrappings: the embalm its resolved ability gave lasts "until end of turn" whatever becomes of the Wrappings (CR 611.2a,
+# 610.3): in Bot1's upkeep the Wrappings gives the Llanowar Elves in Bot1's graveyard embalm, and Bot2 then Shatters the Wrappings.
+# In the main phase the Elves still embalm for {G}; the token is a Zombie Elf, a 1/1, since no Wrappings is left to pump it.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Cursecloth Wrappings
+Llanowar Elves
+Swamp x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mox Ruby
+Mox Jet
+Shatter
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cursecloth Wrappings.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Cursecloth Wrappings.Activate(Bot1.Graveyard.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Cursecloth Wrappings)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Cursecloth Wrappings = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Llanowar Elves.Activate(Ability: Embalm)
+Bot1.Pass
+
+[Expect]
+Exile = Llanowar Elves
+Bot1.Battlefield.Llanowar Elves.Subtypes = Druid; Elf; Zombie
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Llanowar Elves.Toughness = 1

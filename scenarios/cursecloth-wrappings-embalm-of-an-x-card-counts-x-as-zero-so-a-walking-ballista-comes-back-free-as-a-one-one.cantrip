@@ -1,0 +1,42 @@
+# The embalm cost is the card's mana cost (CR 702.128a), and an {X} in a mana cost is 0 anywhere but on the stack (CR 107.3g):
+# Walking Ballista ({X}{X}) cast for X=0 dies as a 0/0, the Wrappings gives it embalm, and that costs nothing. The token is a
+# copy with no mana cost and no counters, a Zombie in addition, so the Wrappings' +1/+1 makes it a 1/1 that survives.
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Cursecloth Wrappings
+Walking Ballista
+Swamp x15
+
+[Bot2 Deck]
+Mountain x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cursecloth Wrappings.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Walking Ballista.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Cursecloth Wrappings.Activate(Bot1.Graveyard.Walking Ballista)
+Bot1.Pass
+Bot2.Pass
+Bot1.Graveyard.Walking Ballista.Activate(Ability: Embalm)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Walking Ballista
+Bot1.Battlefield.Walking Ballista.ManaValue = 0
+Bot1.Battlefield.Walking Ballista.Subtypes = Construct; Zombie
+Bot1.Battlefield.Walking Ballista.Power = 1
+Bot1.Battlefield.Walking Ballista.Counters.+1/+1 = (absent)

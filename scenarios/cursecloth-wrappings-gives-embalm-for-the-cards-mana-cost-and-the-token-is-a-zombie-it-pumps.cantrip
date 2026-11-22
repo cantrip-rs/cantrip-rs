@@ -1,0 +1,58 @@
+# Cursecloth Wrappings: "{T}: Target creature card in your graveyard gains embalm until end of turn. The embalm cost is equal to
+# its mana cost" (CR 702.128a, 118.7, 611.2a). Bot1's Llanowar Elves ({G}, no embalm of its own) dies to a Lightning Bolt; the
+# Wrappings gives it embalm, whose cost is exactly {G}, paid from Mox Emerald alone (nothing is left in the pool). The token is a
+# white Druid Elf Zombie with no mana cost, and the Wrappings' "Zombies you control get +1/+1" makes it a 2/2.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Cursecloth Wrappings
+Llanowar Elves
+Swamp x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cursecloth Wrappings.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Cursecloth Wrappings.Activate(Bot1.Graveyard.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Llanowar Elves.Activate(Ability: Embalm)
+Bot1.Pass
+
+[Expect]
+Exile = Llanowar Elves
+Bot1.Battlefield.Llanowar Elves.Colors = White
+Bot1.Battlefield.Llanowar Elves.Subtypes = Druid; Elf; Zombie
+Bot1.Battlefield.Llanowar Elves.ManaValue = 0
+Bot1.Battlefield.Llanowar Elves.Power = 2
+Bot1.Battlefield.Llanowar Elves.Toughness = 2
+Bot1.Battlefield.Mox Emerald.Tapped = true
+Bot1.Battlefield.Mox Jet.Tapped = false

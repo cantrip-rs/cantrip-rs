@@ -1,0 +1,48 @@
+# The embalm cost keeps the hybrid symbol of the card's mana cost (CR 702.128a, 107.4e) rather than counting as generic mana:
+# Figure of Destiny's {R/W} is not paid with black mana. Bot1 casts Figure with Black Lotus's white mana and has no red or white
+# source after it; a Mox Jet and a Swamp are all it has to pay with, so the embalm Cursecloth Wrappings gave is not offered.
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Cursecloth Wrappings
+Figure of Destiny
+Swamp x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Figure of Destiny.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Cursecloth Wrappings.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Figure of Destiny)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Cursecloth Wrappings.Activate(Bot1.Graveyard.Figure of Destiny)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+! Bot1.Graveyard.Figure of Destiny.Activate(Ability: Embalm; Mana: short)
+
+[Expect]
+Bot1.Graveyard = Figure of Destiny; Black Lotus
+Exile.Count = 0

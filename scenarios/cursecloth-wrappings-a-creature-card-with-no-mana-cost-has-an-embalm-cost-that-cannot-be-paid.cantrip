@@ -1,0 +1,77 @@
+# Cursecloth Wrappings: "The embalm cost is equal to its mana cost" (CR 118.6): Dryad Arbor has no mana cost, so the embalm it
+# gains has an unpayable cost and cannot be activated, though the mana is there. Memnite's mana cost is {0}, which is a cost:
+# the embalm it gains is paid with no mana, and the token is a white Construct Zombie, 2/2 with the Wrappings.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Cursecloth Wrappings
+Dryad Arbor
+Memnite
+Swamp x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain
+Lightning Bolt
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cursecloth Wrappings.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Dryad Arbor)
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Cursecloth Wrappings.Activate(Bot1.Graveyard.Dryad Arbor)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Graveyard.Dryad Arbor.Activate(Ability: Embalm)
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Cursecloth Wrappings.Activate(Bot1.Graveyard.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Graveyard.Memnite.Activate(Ability: Embalm)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Dryad Arbor; Black Lotus
+Exile = Memnite
+Bot1.Battlefield.Memnite.Colors = White
+Bot1.Battlefield.Memnite.Subtypes = Construct; Zombie
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2

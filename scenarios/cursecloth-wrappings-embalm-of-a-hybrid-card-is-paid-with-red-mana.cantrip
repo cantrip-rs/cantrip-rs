@@ -1,0 +1,59 @@
+# The embalm cost is the card's mana cost with its hybrid symbol kept (CR 702.128a, 107.4e): Figure of Destiny's {R/W} is paid
+# with red mana as with white. Bot1 casts Figure with white, it dies to a Lightning Bolt, and the embalm is made with Mox Ruby's {R}.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Black Lotus
+Cursecloth Wrappings
+Figure of Destiny
+Swamp x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cursecloth Wrappings.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Figure of Destiny.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Figure of Destiny)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Cursecloth Wrappings.Activate(Bot1.Graveyard.Figure of Destiny)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Figure of Destiny.Activate(Ability: Embalm)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Figure of Destiny
+Bot1.Battlefield.Figure of Destiny.Colors = White
+Bot1.Battlefield.Figure of Destiny.ManaValue = 0
+Bot1.Battlefield.Figure of Destiny.Power = 2
+Bot1.Battlefield.Mox Ruby.Tapped = true
+Bot1.Battlefield.Mox Pearl.Tapped = false
