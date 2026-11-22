@@ -2490,6 +2490,10 @@ impl ChosenValue {
 /// A triggered ability that has triggered and waits to be put on the stack (CR 603.3).
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct PendingTrigger {
+    /// The event that triggered it: what "whenever a creature you control attacking causes a triggered ability of that
+    /// creature to trigger" reads (CR 603.2). None for an ability that no event triggered: a state trigger (CR 603.8) or a
+    /// reflexive one (CR 603.12).
+    pub cause: Option<TriggerCause>,
     pub source: ObjectId,
     pub ability: AbilityRef,
     pub controller: PlayerId,

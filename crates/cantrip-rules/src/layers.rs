@@ -2957,6 +2957,42 @@ pub(crate) fn trigger_rules_given_possible(cards: &CardTable, state: &GameState)
     cards.any_granted_additional_triggers && given_possible(cards, state, &cards.grants_additional_triggers, |a| matches!(a, AbilityDef::TriggersAgain(_)))
 }
 
+/// Whether an ability in the game could now trigger on a triggered ability being put on the stack (`Event::TriggerOnStack`,
+/// CR 603.2, 603.3b): the guard of that event, which is emitted and recorded only while one could, so a game with none (nearly
+/// every one) neither records it nor looks for what it triggers. Read of the game state as it is, so it follows undo and redo
+/// and every way an ability comes and goes: an object on the battlefield (a phased-out one is not there, CR 702.26b) or in the
+/// command zone whose texts print one (`CardTable::texts`: a copy has the copied card's, a face-down permanent none, CR 707.2,
+/// 708.2), a card in another zone it functions in (CR 113.6), a delayed one waiting for an event (CR 603.7), or one an effect
+/// gave or a static ability could give (CR 613.1f). An object that has lost its abilities (CR 613.1f) still counts here, which
+/// costs only a look for triggers that finds none. Firebender Ascension's is about the ability going on the stack now; no ability asks the history for earlier ones.
+pub(crate) fn trigger_on_stack_listened(cards: &CardTable, state: &GameState) -> bool {
+    if !cards.any_listens_trigger_on_stack {
+        return false;
+    }
+    let listens = |a: &AbilityDef| matches!(a, AbilityDef::Triggered(t) if t.listens.intersects(EventMask::TRIGGER_ON_STACK));
+    let zones = |c: CardId| cards.listens_trigger_on_stack[c.0 as usize];
+    let prints = |id: &ObjectId| cards.texts(state, state.obj(*id)).any(|c| zones(c).0 != 0);
+    let prints_here = |id: &ObjectId| {
+        let obj = state.obj(*id);
+        cards.texts(state, obj).any(|c| zones(c).contains(obj.zone.kind()))
+    };
+    let elsewhere = cards.trigger_on_stack_elsewhere;
+    state.battlefield().iter().any(prints)
+        || state.zone(Zone::COMMAND).iter().any(prints)
+        || (elsewhere.0 != 0
+            && state
+                .seats()
+                .flat_map(|p| [Zone::hand(p), Zone::graveyard(p), Zone::exile(p), Zone::library(p)])
+                .chain(std::iter::once(Zone::STACK))
+                .filter(|z| elsewhere.contains(z.kind()))
+                .any(|z| state.zone(z).iter().any(prints_here)))
+        || state.delayed.iter().any(|d| d.when.is_event() && listens(cards.ability(d.ability)))
+        || state.effects.iter().any(|e| matches!(e.kind, EffectKind::AddAbility(a) if listens(cards.ability(a))))
+        || given_possible(cards, state, &cards.grants_trigger_on_stack, |a| {
+            matches!(a, AbilityDef::Triggered(t) if t.listens.intersects(EventMask::TRIGGER_ON_STACK))
+        })
+}
+
 /// Whether an object could now have one of the abilities of kind `kind` a card lists to give (`CardDef::delayed`, CR
 /// 613.1f): a resolved effect gave one, or a static ability whose card (`grants`) lists one to give functions, or a granted
 /// static ability could give one.

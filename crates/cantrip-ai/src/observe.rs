@@ -425,7 +425,7 @@ impl View<'_> {
                         obs.objects = vec![o(object)];
                         obs.amount = amount << 8 | kind as i32;
                     }
-                    Event::AbilityActivated { source, .. } | Event::Triggered { source, .. } | Event::Resolved { source, .. } => obs.objects = vec![o(source)],
+                    Event::AbilityActivated { source, .. } | Event::Triggered { source, .. } | Event::TriggerOnStack { source, .. } | Event::Resolved { source, .. } => obs.objects = vec![o(source)],
                     _ => {}
                 }
                 obs

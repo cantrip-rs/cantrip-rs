@@ -106,6 +106,14 @@ impl Grant {
     }
 }
 
+/// What caused a triggered ability to trigger (CR 603.2): the kind of event, the number of its `EventMask` bit
+/// (`EventMask::bit`), and whether that event was about the ability's own source (a creature that attacked, not another one).
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub struct TriggerCause {
+    pub kind: u8,
+    pub about_source: bool,
+}
+
 /// One ability of one card: the card's definition and the ability's index in it. A copy of a card has the copied
 /// card's abilities, so a computed ability list is a list of these, never of the object's own card alone.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]

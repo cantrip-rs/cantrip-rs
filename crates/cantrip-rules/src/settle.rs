@@ -740,10 +740,18 @@ fn put_trigger(cx: &mut Cx, trigger: PendingTrigger) -> R<()> {
 }
 
 fn put_trigger_as(cx: &mut Cx, trigger: PendingTrigger, by: Option<Linked>) -> R<()> {
-    if let Some(targets) = announce_trigger(cx, trigger, by)? {
+    let placed = announce_trigger(cx, trigger, by)?;
+    if let Some(targets) = &placed {
         ops::became_targets(cx, targets.iter().copied(), trigger.source, trigger.controller, true);
         // Actual placement on the stack commits a crime (CR 603.3a, 700.13). A capability query does neither.
-        ops::commit_crime(cx, trigger.controller, trigger.source, &targets);
+        ops::commit_crime(cx, trigger.controller, trigger.source, targets);
+    }
+    // It is on the stack now (CR 603.3b), the top object there, for an ability that triggers on its being there to copy; or it
+    // was removed as it was put there (CR 603.3c-d), having triggered all the same. Its controller gone, it never was (CR 800.4a).
+    // Emitted, and recorded, only while an ability in the game could trigger on it (`layers::trigger_on_stack_listened`).
+    if layers::trigger_on_stack_listened(cx.cards(), cx.s()) && !left_the_game(cx, trigger.controller) {
+        let serial = placed.and_then(|_| cx.s().stack.last().map(|i| i.serial));
+        cx.emit(Event::TriggerOnStack { source: trigger.source, ability: trigger.ability, serial, cause: trigger.cause });
     }
     Ok(())
 }
@@ -1039,7 +1047,7 @@ fn consider(
                 _ => &mut *found,
             };
             into.push((
-                PendingTrigger { chosen: None, event_amount: matched_damage_amount(t, event),
+                PendingTrigger { chosen: None, cause: None, event_amount: matched_damage_amount(t, event),
                     source,
                     ability,
                     controller,
@@ -1087,7 +1095,7 @@ fn inherent(cx: &mut Cx, index: u8, controller: PlayerId, subject: Target, event
     if index == cantrip_api::intrinsic::SPEED_UP {
         cx.record(Event::Triggered { source, ability });
     }
-    found.push((PendingTrigger { chosen: None, event_amount: None, source, ability, controller, subject, data: [0; 2], members: Span::default(), count: None, since: None, acquired: Acquired::OWN, words: None }, t, again));
+    found.push((PendingTrigger { chosen: None, cause: None, event_amount: None, source, ability, controller, subject, data: [0; 2], members: Span::default(), count: None, since: None, acquired: Acquired::OWN, words: None }, t, again));
 }
 
 /// The slot of `chars`'s abilities that the `nth` of `Chars::abilities()` is in.
@@ -1103,7 +1111,7 @@ fn delayed_link(cx: &Cx, d: &cantrip_state::Delayed) -> Option<Linked> {
 
 /// The triggering of a state trigger (CR 603.8): about no event, so nothing is its subject.
 fn state_trigger(source: ObjectId, ability: AbilityRef, controller: PlayerId, acquired: Acquired) -> PendingTrigger {
-    PendingTrigger { chosen: None, event_amount: None, source, ability, controller, subject: Target::None, data: [0; 2], members: Span::default(), count: None, since: None, acquired, words: None }
+    PendingTrigger { chosen: None, cause: None, event_amount: None, source, ability, controller, subject: Target::None, data: [0; 2], members: Span::default(), count: None, since: None, acquired, words: None }
 }
 
 /// Whether a state trigger of `source` has triggered and not yet left the stack (CR 603.8): found for this batch, waiting
@@ -1829,6 +1837,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
             if mask.0 == 0 {
                 continue;
             }
+            let from = found.len();
             // Whether every player could see the object of a zone change as it moved (`looks_back`).
             let seen = matches!(event, Event::ZoneChange { old, .. } if seen_by_all.contains(old));
             // The players' inherent triggered abilities (CR 725.2, 726.2, 702.179d), which no object has.
@@ -1934,7 +1943,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                     {
                         for _ in 1..times {
                             found.push((
-                                PendingTrigger { event_amount: None, source: d.source, ability: d.ability, controller: d.controller,
+                                PendingTrigger { cause: None, event_amount: None, source: d.source, ability: d.ability, controller: d.controller,
                                     subject: fired.subject, data: fired.data, members: d.members, count: None, since: Some(d.since),
                                     acquired: d.acquired, words: d.words, chosen: d.chosen },
                                 t,
@@ -1942,7 +1951,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                             ));
                         }
                         found.push((
-                            PendingTrigger { event_amount: matched_damage_amount(t, event),
+                            PendingTrigger { cause: None, event_amount: matched_damage_amount(t, event),
                                 source: d.source,
                                 ability: d.ability,
                                 controller: d.controller,
@@ -2065,7 +2074,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                         let mut again = Again::new();
                         statics.additional(cx, event, &triggering, &mut again);
                         found.push((
-                            PendingTrigger { chosen: None, event_amount: matched_damage_amount(t, event),
+                            PendingTrigger { chosen: None, cause: None, event_amount: matched_damage_amount(t, event),
                                 source: id,
                                 ability,
                                 controller,
@@ -2082,6 +2091,10 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                         ));
                     }
                 }
+            }
+            // Each of these abilities triggered on this kind of event (`PendingTrigger::cause`).
+            for (trigger, _, _) in &mut found[from..] {
+                trigger.cause.get_or_insert(cantrip_state::TriggerCause { kind: mask.bit(), about_source: event.is_about(trigger.source) });
             }
         }
         found
@@ -2299,7 +2312,7 @@ pub fn step_began(cx: &mut Cx, step: Step) {
             } else {
                 at += 1;
             }
-            cx.st().trigger_push(PendingTrigger { event_amount: None, source: d.source, ability: d.ability, controller: d.controller, subject: d.subject, data: [0; 2], members: d.members, count: None, since: Some(d.since), acquired: d.acquired, words: d.words, chosen: d.chosen });
+            cx.st().trigger_push(PendingTrigger { cause: None, event_amount: None, source: d.source, ability: d.ability, controller: d.controller, subject: d.subject, data: [0; 2], members: d.members, count: None, since: Some(d.since), acquired: d.acquired, words: d.words, chosen: d.chosen });
         } else {
             at += 1;
         }

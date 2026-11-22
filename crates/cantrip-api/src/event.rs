@@ -473,6 +473,12 @@ pub enum Event {
     Resolved { source: ObjectId, ability: AbilityRef, serial: u32 },
     /// A triggered ability of this object triggered and was put on the stack: what "triggers only N times each turn" counts.
     Triggered { source: ObjectId, ability: AbilityRef },
+    /// A triggered ability of this object that triggered was put on the stack (CR 603.3b): the stack object it is (`serial`,
+    /// none where it was removed as it was put there, with no legal choice to make for it, CR 603.3c-d: it triggered all the
+    /// same), and the kind of event that triggered it (none for an ability no event triggered, CR 603.8, 603.12). What "whenever
+    /// a creature you control attacking causes a triggered ability of that creature to trigger" (Firebender Ascension) listens
+    /// for, the ability being on the stack as it does (CR 603.2, 707.10).
+    TriggerOnStack { source: ObjectId, ability: AbilityRef, serial: Option<u32>, cause: Option<TriggerCause> },
     /// `player` chose the modes of a modal spell or ability of this object (CR 601.2b, 602.2b, 603.3c, 700.2), as a
     /// `ModalDef` mask, none for a "choose up to" spell or ability that chose none: what "choose one that hasn't been
     /// chosen" asks of the history, and what "whenever you face a dilemma" triggers on
@@ -721,6 +727,7 @@ impl Event {
             Event::AbilityActivated { source, .. }
             | Event::Resolved { source, .. }
             | Event::Triggered { source, .. }
+            | Event::TriggerOnStack { source, .. }
             | Event::ModesChosen { source, .. }
             | Event::Done { source, .. } => source == object,
             Event::CrimeCommitted { by, .. } => by == object,
@@ -879,6 +886,8 @@ impl EventMask {
     pub const DISCOVERED: EventMask = EventMask(1 << 75);
     /// A player waterbent, earthbent, firebent or airbent (CR 701.65b, 701.66b, 701.67c, 702.189b).
     pub const BENT: EventMask = EventMask(1 << 76);
+    /// A triggered ability was put on the stack (CR 603.3b).
+    pub const TRIGGER_ON_STACK: EventMask = EventMask(1 << 77);
     /// A player collected evidence (CR 701.59a).
     pub const COLLECTED_EVIDENCE: EventMask = EventMask(1 << 71);
     /// A card became plotted (CR 702.170a).
@@ -901,6 +910,7 @@ impl EventMask {
             Event::LandPlayed { .. } => EventMask::LAND_PLAYED,
             Event::Resolved { .. } => EventMask::RESOLVED,
             Event::Triggered { .. } => EventMask::TRIGGERED,
+            Event::TriggerOnStack { .. } => EventMask::TRIGGER_ON_STACK,
             Event::ModesChosen { .. } => EventMask::MODES_CHOSEN,
             Event::Done { .. } => EventMask::DONE,
             Event::TurnEnded { .. } => EventMask::TURN_ENDED,
@@ -931,6 +941,11 @@ impl EventMask {
             | EventMask::GAME_OVER.0,
     );
 
+    /// The number of this kind's bit: a kind by itself, in a byte.
+    pub const fn bit(self) -> u8 {
+        self.0.trailing_zeros() as u8
+    }
+
     pub fn of(event: &Event) -> EventMask {
         match event {
             Event::SpellCast { .. } => EventMask::SPELL_CAST,
@@ -942,6 +957,7 @@ impl EventMask {
             Event::Discarded { .. } => EventMask::DISCARDED,
             Event::Cycled { .. } => EventMask::CYCLED,
             Event::Attacks { .. } => EventMask::ATTACKS,
+            Event::TriggerOnStack { .. } => EventMask::TRIGGER_ON_STACK,
             Event::PaidToAttack { .. } => EventMask::PAID_TO_ATTACK,
             Event::Exerted { .. } => EventMask::EXERTED,
             Event::ClassLevel { .. } => EventMask::CLASS_LEVEL,

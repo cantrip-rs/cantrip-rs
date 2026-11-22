@@ -4953,6 +4953,15 @@ pub struct CardTable {
     /// any does: what objects were given is looked for only when one might have been.
     pub grants_additional_triggers: Vec<bool>,
     pub any_granted_additional_triggers: bool,
+    /// Per card, the zones one of its printed triggered abilities that listens for a triggered ability being put on the stack
+    /// (`Event::TriggerOnStack`) functions in (`TriggeredDef::functions`); which cards list one to give (in `delayed`); the zones
+    /// other than the battlefield any card's functions in; and whether any card prints or gives one. Only what the guard on the
+    /// game state reads (`layers::trigger_on_stack_listened`): the event is emitted while an object in the game could have such
+    /// an ability, and `any_listens_trigger_on_stack` only spares that look in a table with none.
+    pub listens_trigger_on_stack: Vec<ZoneKinds>,
+    pub grants_trigger_on_stack: Vec<bool>,
+    pub trigger_on_stack_elsewhere: ZoneKinds,
+    pub any_listens_trigger_on_stack: bool,
     /// Which cards have replacement or prevention effects of static abilities (CR 614, 615), and whether any does: events
     /// look for sources only when one might be.
     pub replaces: Vec<bool>,
@@ -5607,6 +5616,15 @@ impl CardTable {
         let any_granted_play_rules = grants_play_rules.iter().any(|&g| g);
         let grants_additional_triggers: Vec<bool> = cards.iter().map(|c| c.delayed.iter().any(|a| matches!(a, AbilityDef::TriggersAgain(_)))).collect();
         let any_granted_additional_triggers = grants_additional_triggers.iter().any(|&g| g);
+        let on_stack = |a: &AbilityDef| match a {
+            AbilityDef::Triggered(t) if t.listens.intersects(EventMask::TRIGGER_ON_STACK) => t.functions,
+            _ => ZoneKinds::NONE,
+        };
+        let listens_trigger_on_stack: Vec<ZoneKinds> = cards.iter().map(|c| c.abilities.iter().fold(ZoneKinds::NONE, |z, a| z.union(on_stack(a)))).collect();
+        let grants_trigger_on_stack: Vec<bool> = cards.iter().map(|c| c.delayed.iter().any(|a| on_stack(a).0 != 0)).collect();
+        let trigger_on_stack_elsewhere =
+            ZoneKinds(listens_trigger_on_stack.iter().fold(0, |z, k| z | k.0) & !crate::ability::ON_THE_BATTLEFIELD.0);
+        let any_listens_trigger_on_stack = listens_trigger_on_stack.iter().any(|z| z.0 != 0) || grants_trigger_on_stack.iter().any(|&g| g);
         let replaces: Vec<bool> = cards.iter().map(|c| !c.replacements.is_empty() || !c.preventions.is_empty()).collect();
         let any_replaces = replaces.iter().any(|&r| r);
         let mana_replaces: Vec<bool> =
@@ -5714,6 +5732,10 @@ impl CardTable {
             any_granted_play_rules,
             grants_additional_triggers,
             any_granted_additional_triggers,
+            listens_trigger_on_stack,
+            grants_trigger_on_stack,
+            trigger_on_stack_elsewhere,
+            any_listens_trigger_on_stack,
             replaces,
             any_replaces,
             mana_replaces,

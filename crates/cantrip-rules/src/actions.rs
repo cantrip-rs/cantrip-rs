@@ -14866,7 +14866,7 @@ fn effect_productions(cx: &Cx, id: ObjectId, player: PlayerId, definition: &Abil
             .filter(|t| t.source == id && t.ability == ability && t.controller == player && t.acquired == acquired).collect();
         contexts.extend(cx.s().stack.iter()
             .filter(|t| t.kind == StackKind::Triggered && t.object == id && t.ability == ability && t.controller == player && t.acquired == acquired)
-            .map(|t| cantrip_state::PendingTrigger { chosen: None, source: id, ability, controller: player, subject: t.subject,
+            .map(|t| cantrip_state::PendingTrigger { chosen: None, cause: None, source: id, ability, controller: player, subject: t.subject,
                 data: t.data, event_amount: t.event_amount, members: t.members, count: Some(t.x), since: Some(t.since), acquired, words: Some(t.words) }));
         contexts
     } else {
@@ -14878,7 +14878,7 @@ fn effect_productions(cx: &Cx, id: ObjectId, player: PlayerId, definition: &Abil
         }
         // No triggering is invented to fill missing references. An undetermined numerical amount is zero
         // (CR 107.2), and no object/player or batch members are supplied by an absent real triggering.
-        contexts.push(cantrip_state::PendingTrigger { chosen: None, source: id, ability, controller: player, subject: Target::None,
+        contexts.push(cantrip_state::PendingTrigger { chosen: None, cause: None, source: id, ability, controller: player, subject: Target::None,
             data: [0; 2], event_amount: None, members: Default::default(), count: None, since: None, acquired, words: Some(words) });
     }
     let named: Vec<Option<Color>> = if let Some(def) = def.filter(|d| d.any_color) {

@@ -207,6 +207,8 @@ mod land_play_rules_tests;
 #[cfg(test)]
 mod given_additional_trigger_tests;
 #[cfg(test)]
+mod trigger_on_stack_tests;
+#[cfg(test)]
 mod given_play_rule_tests;
 #[cfg(test)]
 mod exiled_with_permission_tests;
@@ -1269,6 +1271,7 @@ impl Game {
                 Event::AbilityActivated { source, ability, .. }
                 | Event::Resolved { source, ability, .. }
                 | Event::Triggered { source, ability }
+                | Event::TriggerOnStack { source, ability, .. }
                 | Event::ModesChosen { source, ability, .. }
                 | Event::Done { source, ability, .. } => patch(*source, ability),
                 _ => {}
@@ -1682,7 +1685,7 @@ impl<'a> Cx<'a> {
             return;
         }
         let members = self.g.state.members_push(objects);
-        self.g.state.trigger_push(cantrip_state::PendingTrigger { chosen: None, event_amount: None,
+        self.g.state.trigger_push(cantrip_state::PendingTrigger { chosen: None, cause: None, event_amount: None,
             source,
             ability,
             controller,
