@@ -573,6 +573,8 @@ kind, place it where the action could otherwise be taken, with a wait or `BotN.P
   was cast with, absent where there was none; named and numbered as `Stack` lists them, top first. A spell cast face down
   (morph, disguise: CR 708.4) has no name, so it is listed as an empty name and keyed `Stack..ManaValue` (`Stack.#2.ManaValue`
   with two nameless spells, top first), with `Stack..FaceDown` (`true`) and `Stack..FaceDownName` (the card it is)
+- `Stack.<Name>.Subtypes` (with `.Count`) for each spell on the stack: its subtypes as the spell it is there, sorted, with what
+  an effect makes it on the stack (The Tomb of Aclazotz's "a Vampire in addition to its other types"); absent where it has none
 - `Delayed` (with `.Count`): the delayed triggered abilities still waiting (CR 603.7), each named for the object it came from:
   one used up or ended with its turn is gone from it
 - `Combat.AttackCost` (`{2}`), `.Remaining` and `.Attackers` (with `.Count`), while a declaration's cost to attack is being

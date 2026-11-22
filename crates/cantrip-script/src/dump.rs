@@ -239,6 +239,12 @@ impl StateDump {
             if game.cards.get(game.chars(item.object).card).prototyped {
                 d.set(format!("Stack.{label}.Prototyped"), true);
             }
+            // Its subtypes as the spell it is (CR 205.3): what an effect makes it on the stack too ("it is a Vampire in
+            // addition to its other types" while on the stack, The Tomb of Aclazotz), absent where it has none.
+            let subtypes = subtype_names(&game.chars(item.object));
+            if !subtypes.is_empty() {
+                d.list(&format!("Stack.{label}.Subtypes"), subtypes, true);
+            }
         }
 
         // The delayed triggered abilities waiting for their moment (CR 603.7), each named for the object it came from.
@@ -1119,7 +1125,7 @@ fn writable(key: &str) -> bool {
         return true;
     }
     if let Some(rest) = key.strip_prefix("Stack.") {
-        return rest.ends_with(".ManaValue") || rest.ends_with(".X") || rest.ends_with(".FaceDown") || rest.ends_with(".FaceDownName") || rest.ends_with(".Prototyped");
+        return rest.ends_with(".ManaValue") || rest.ends_with(".X") || rest.ends_with(".FaceDown") || rest.ends_with(".FaceDownName") || rest.ends_with(".Prototyped") || rest.ends_with(".Subtypes");
     }
     let Some(rest) = key.strip_prefix("Bot").and_then(|r| r.split_once('.')).filter(|(n, _)| n.parse::<u8>().is_ok()).map(|(_, r)| r) else {
         return false;
