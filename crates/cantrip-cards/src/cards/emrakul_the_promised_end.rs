@@ -15,7 +15,7 @@ fn control_then_extra_turn(g: &mut dyn Game, item: &StackItem) -> Result<(), Sus
     if g.target_legal(item, 0)
         && let Some(player) = item.target(0).player()
     {
-        g.control_next_turn_then_extra_turn(item, player);
+        g.control_next(item, player, ControlWindow::Turn { then_extra_turn: true });
     }
     Ok(())
 }

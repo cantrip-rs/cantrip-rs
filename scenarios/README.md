@@ -608,9 +608,9 @@ kind, place it where the action could otherwise be taken, with a wait or `BotN.P
 - `BotN.CitysBlessing` and `BotN.EnduringStory` (`true`), once the player has the designation (CR 702.131c, 702.195b) and
   absent until then
 - `BotN.TurnsToSkip` (`3`), the turns an effect still makes the player skip (CR 500.11, 614.10), absent when none
-- `BotN.ControlledBy` (`Bot1`), the player controlling them now (CR 723), absent while they make their own decisions; and
-  `BotN.NextTurnControlledBy` (`Bot1, Bot3+extra`), the effects waiting to control them during their next turn, oldest
-  first, the last the one that works (CR 723.1a), `+extra` on one that gives an extra turn after it; absent when none
+- `BotN.ControlledBy` (`Bot1`), the player controlling them now (CR 723), through a whole turn or only through one combat phase (it is absent again once that combat phase ends), absent while they make their own decisions; and
+  `BotN.NextTurnControlledBy` (`Bot1, Bot3+extra, Bot1+combat`), the effects waiting to control them during their next turn or combat phase, oldest
+  first, the last made the one that works wherever their windows overlap (CR 723.1a), `+extra` on one that gives an extra turn after it, `+combat` on one for only their next combat phase; absent when none
 - `BotN.Speed` (`1` to `4`), once the player has a speed (CR 702.179) and absent while they have none (CR 702.179b)
 - `BotN.Dungeon` (`Undercity: Forge`) while in a dungeon, and `BotN.DungeonsCompleted` once one is completed (CR 309.7)
 - `BotN.MayLookAtLibraryTop` (`true`) while the player may look at the top card of their library any time (CR 401.2; Bolas's

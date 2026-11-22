@@ -174,10 +174,17 @@ fn advance(game: &mut Game) {
     if turn.number > 0 && combat_ends {
         // So does "during that combat phase", with the phase it is about (`Duration::DuringCombatPhase`).
         let ended = |e: &ContinuousEffect| e.duration == Duration::EndOfCombat || e.duration == Duration::DuringCombatPhase(turn.phase_id);
+        // The control of a player for this combat phase ends with it (CR 723.1, `take_controlled`): what it ends is recorded.
+        let controllers: Option<Vec<PlayerId>> = game.state.effects.iter()
+            .any(|e| ended(e) && matches!(e.kind, EffectKind::ControlsPlayer(_)))
+            .then(|| (0..game.state.players.len()).map(|i| game.state.player_controller(PlayerId(i as u8))).collect());
         if game.state.effects.iter().any(ended) {
             game.state.effects_retain(|e| !ended(e));
         }
         let mut cx = Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
+        if let Some(controllers) = controllers {
+            ops::record_player_control(&mut cx, &controllers);
+        }
         expire_combat_watchers(&mut cx);
     }
     let s = &mut game.state;
@@ -271,6 +278,9 @@ fn advance(game: &mut Game) {
         t.passes = 0;
         t.ending = false;
         t.combat_ending = false;
+        if combat_ends {
+            t.combat_began = false;
+        }
         t.cleanup_again = false;
     });
     if (turn.ending || number != turn.number) && !s.phase_schedule.is_empty() {
@@ -620,6 +630,12 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
         {
             return Ok(Flow::Done);
         }
+        // The first step of a combat phase that is not skipped begins it (CR 507.1, 723.1b): the player is controlled during it
+        // from here, its beginning-of-combat triggers included. A control made once it has begun waits for the next one.
+        if turn.step().phase() == Phase::Combat && !turn.combat_began {
+            cx.st().update_turn(|t| t.combat_began = true);
+            take_controlled_combat(cx, active);
+        }
         crate::settle::step_began(cx, turn.step());
     }
     match turn.step() {
@@ -725,25 +741,49 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
 /// that player takes an extra turn" (Emrakul, the Promised End) gives that turn now, the overwritten ones and those of a
 /// controller who has left too: the newest extra turn is taken first (CR 500.7), so it comes right after this one.
 fn take_controlled_turn(cx: &mut Cx, player: PlayerId) {
-    let waiting = |e: &ContinuousEffect| matches!(e.kind, EffectKind::ControlNextTurn { player: p, .. } if p == player);
+    let pending = take_controlled(cx, player, |w| matches!(w, ControlWindow::Turn { .. }), Duration::Indefinite);
+    for e in &pending {
+        if matches!(e.kind, EffectKind::ControlNext { window: ControlWindow::Turn { then_extra_turn: true }, .. }) {
+            cantrip_api::Game::add_extra_turn(cx, player);
+        }
+    }
+}
+
+/// The combat phase `player` takes now is their "next combat phase" for every effect waiting to control them during it
+/// (CR 723.1, 723.1b, Secret of Bloodbending's rulings: a skipped combat phase is not it, and neither is a phase after the
+/// first one a turn takes that is already controlled). Each becomes the control of the player until the combat phase ends
+/// (`Duration::EndOfCombat`, in `next_step`), timestamped as it was created: the newest works (723.1a), and an older one
+/// whose window is the turn resumes after it. Called as the first step of the phase to begin does, so a skipped beginning of
+/// combat step leaves the control for the steps after it.
+fn take_controlled_combat(cx: &mut Cx, player: PlayerId) {
+    let waiting = |e: &ContinuousEffect| matches!(e.kind, EffectKind::ControlNext { player: p, window: ControlWindow::CombatPhase } if p == player);
     if !cx.s().effects.iter().any(waiting) {
         return;
+    }
+    let controllers: Vec<PlayerId> = (0..cx.s().players.len()).map(|i| cx.s().player_controller(PlayerId(i as u8))).collect();
+    take_controlled(cx, player, |w| w == ControlWindow::CombatPhase, Duration::EndOfCombat);
+    ops::record_player_control(cx, &controllers);
+}
+
+/// Uses up every effect waiting to control `player` for a window `of` accepts, each whose controller is still in the game
+/// becoming the control of `player` (`EffectKind::ControlsPlayer`) for `duration`, with the timestamp it was created with
+/// (what a later one overwrites, CR 723.1a). One whose controller has left the game gives no control (CR 800.4a). Returns
+/// the effects used up.
+fn take_controlled(cx: &mut Cx, player: PlayerId, of: impl Fn(ControlWindow) -> bool, duration: Duration) -> Vec<ContinuousEffect> {
+    let waiting = |e: &ContinuousEffect| matches!(e.kind, EffectKind::ControlNext { player: p, window } if p == player && of(window));
+    if !cx.s().effects.iter().any(waiting) {
+        return Vec::new();
     }
     let pending: Vec<ContinuousEffect> = cx.s().effects.iter().copied().filter(waiting).collect();
     cx.st().effects_retain(|e| !waiting(e));
     for e in &pending {
         if cx.s().in_game(e.controller) {
-            // Created when the effect it comes from was: what a later one overwrites (CR 723.1a).
-            cx.st().effect_push(ContinuousEffect { kind: EffectKind::ControlsPlayer(player), ..*e });
-        }
-    }
-    for e in &pending {
-        if matches!(e.kind, EffectKind::ControlNextTurn { then_extra_turn: true, .. }) {
-            cantrip_api::Game::add_extra_turn(cx, player);
+            cx.st().effect_push(ContinuousEffect { kind: EffectKind::ControlsPlayer(player), duration, ..*e });
         }
     }
     // An effect that begins changes the game with no event (CR 603.8).
     cx.state_changed();
+    pending
 }
 
 /// Whether the active player skips their draw step, about to begin, by a permanent's "if you would begin your draw step,

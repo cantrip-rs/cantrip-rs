@@ -1530,18 +1530,12 @@ pub trait Game: Query {
     }
     /// "You control target player during that player's next turn" (CR 723.1), made by the resolving spell or ability `item`:
     /// its controller makes every choice and decision `player` would make during the next turn `player` actually takes
-    /// (723.5; a skipped turn is not it, 723.1b), paying with `player`'s resources (723.5a) and seeing what `player` sees of
+    /// (723.5; a skipped turn is not it, 723.1b), or during the next combat phase they take (`ControlWindow::CombatPhase`,
+    /// Secret of Bloodbending), paying with `player`'s resources (723.5a) and seeing what `player` sees of
     /// the game (723.4). The last such effect created on a player is the one that works (723.1a); one on themselves gives
     /// no one else control (723.9). It waits on the player, not on `item`'s source. Mindslaver, Sorin Markov, Worst Fears.
-    fn control_next_turn(&mut self, item: &StackItem, player: PlayerId) {
-        let kind = EffectKind::ControlNextTurn { player, then_extra_turn: false };
-        self.add_player_effect(item.controller, item.object, kind, Duration::Indefinite);
-    }
-    /// The same, and "After that turn, that player takes an extra turn" (Emrakul, the Promised End): the extra turn comes
-    /// right after the controlled turn, however long that turn waits (its rulings), and is given even when a later effect
-    /// overwrites this one's control (723.1a).
-    fn control_next_turn_then_extra_turn(&mut self, item: &StackItem, player: PlayerId) {
-        let kind = EffectKind::ControlNextTurn { player, then_extra_turn: true };
+    fn control_next(&mut self, item: &StackItem, player: PlayerId, window: ControlWindow) {
+        let kind = EffectKind::ControlNext { player, window };
         self.add_player_effect(item.controller, item.object, kind, Duration::Indefinite);
     }
     /// "[Kind of] spells [player] casts this turn cost ... less / more to cast" (CR 611.2a/c, 601.2f), made by the resolving

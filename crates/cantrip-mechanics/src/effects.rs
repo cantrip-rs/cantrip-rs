@@ -4072,7 +4072,7 @@ pub fn may_pay_to_return_this_to_the_battlefield(
 /// longer legal as it resolves (CR 608.2b). Construct a Cosmic Cube and The Dominion Bracelet print it.
 pub fn control_target_player_next_turn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(player) = crate::targets::player(g, item, 0) else { return Ok(()) };
-    g.control_next_turn(item, player);
+    g.control_next(item, player, ControlWindow::Turn { then_extra_turn: false });
     Ok(())
 }
 

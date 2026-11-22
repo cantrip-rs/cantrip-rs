@@ -486,19 +486,21 @@ impl StateDump {
                 d.set(format!("{b}.TurnsToSkip"), skips);
             }
             // The control of a player (CR 723): who controls them now, and the effects waiting for their next turn, each
-            // its controller, oldest first ("Bot1+extra" for one that gives an extra turn after it).
+            // its controller, oldest first ("Bot1+extra" for one that gives an extra turn after it, "Bot1+combat" for one that
+            // controls only the next combat phase).
             let controller = s.player_controller(p);
             if controller != p {
                 d.set(format!("{b}.ControlledBy"), bot(controller));
             }
             let mut waiting: Vec<&ContinuousEffect> =
-                s.effects.iter().filter(|e| matches!(e.kind, EffectKind::ControlNextTurn { player, .. } if player == p)).collect();
+                s.effects.iter().filter(|e| matches!(e.kind, EffectKind::ControlNext { player, .. } if player == p)).collect();
             if !waiting.is_empty() {
                 waiting.sort_by_key(|e| e.timestamp);
                 let by: Vec<String> = waiting
                     .iter()
                     .map(|e| match e.kind {
-                        EffectKind::ControlNextTurn { then_extra_turn: true, .. } => format!("{}+extra", bot(e.controller)),
+                        EffectKind::ControlNext { window: ControlWindow::Turn { then_extra_turn: true }, .. } => format!("{}+extra", bot(e.controller)),
+                        EffectKind::ControlNext { window: ControlWindow::CombatPhase, .. } => format!("{}+combat", bot(e.controller)),
                         _ => bot(e.controller),
                     })
                     .collect();

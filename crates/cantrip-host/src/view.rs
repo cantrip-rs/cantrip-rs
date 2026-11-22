@@ -795,16 +795,28 @@ impl<'a> Projector<'a> {
             summary.controlled_by = seat(controller);
             let (who, whose) = if p == self.viewer { ("you", "your") } else { ("them", "their") };
             let verb = if controller == self.viewer { "control" } else { "controls" };
-            summary.pending_effects.push(format!("{} {verb} {who} during {whose} turn.", self.player_name(controller)));
+            // The control that works is the newest (723.1a): of a combat phase, or of the turn.
+            let in_combat = s.effects.iter()
+                .filter(|e| e.kind == EffectKind::ControlsPlayer(p) && s.in_game(e.controller))
+                .max_by_key(|e| e.timestamp)
+                .is_some_and(|e| e.duration == Duration::EndOfCombat);
+            let window = if in_combat { "combat phase" } else { "turn" };
+            summary.pending_effects.push(format!("{} {verb} {who} during {whose} {window}.", self.player_name(controller)));
         }
         for e in s.effects.iter() {
-            if let EffectKind::ControlNextTurn { player, then_extra_turn } = e.kind
+            if let EffectKind::ControlNext { player, window } = e.kind
                 && player == p
             {
                 let (who, whose, they) = if p == self.viewer { ("you", "your", "you take") } else { ("them", "their", "they take") };
                 let verb = if e.controller == self.viewer { "control" } else { "controls" };
-                let extra = if then_extra_turn { format!(" After that turn, {they} an extra turn.") } else { String::new() };
-                summary.pending_effects.push(format!("{} {verb} {who} during {whose} next turn.{extra}", self.player_name(e.controller)));
+                let (next, extra) = match window {
+                    ControlWindow::Turn { then_extra_turn } => (
+                        "turn",
+                        if then_extra_turn { format!(" After that turn, {they} an extra turn.") } else { String::new() },
+                    ),
+                    ControlWindow::CombatPhase => ("combat phase", String::new()),
+                };
+                summary.pending_effects.push(format!("{} {verb} {who} during {whose} next {next}.{extra}", self.player_name(e.controller)));
             }
         }
         // "The 'legend rule' doesn't apply to permanents you control this turn" (CR 704.5j, 611.2c): a rule about the player, on

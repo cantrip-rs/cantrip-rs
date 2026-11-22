@@ -1019,7 +1019,7 @@ mod tests {
                 controller: north,
                 timestamp,
                 affected: source,
-                kind: EffectKind::ControlNextTurn { player: south, then_extra_turn: false },
+                kind: EffectKind::ControlNext { player: south, window: ControlWindow::Turn { then_extra_turn: false } },
                 duration: Duration::Indefinite,
                 words: Words::NONE,
             });

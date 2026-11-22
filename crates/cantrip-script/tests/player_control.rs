@@ -11,7 +11,9 @@
 //!   and each of Emrakul's gives its extra turn after that turn, an overwritten one too (its ruling);
 //! - the controller sees what the controlled player sees of the game - their hand, a face-down permanent they control
 //!   (723.4) - and nothing of what they own outside the game, which they therefore can't have them choose (its ruling);
-//! - a controller who leaves the game gives control back at once (CR 800.4a).
+//! - a controller who leaves the game gives control back at once (CR 800.4a);
+//! - the control may be of a combat phase only (Secret of Bloodbending): the next one the player takes, from the first of its
+//!   steps that begins to its end, with the older control of the turn working again after it.
 
 use std::collections::{HashSet, VecDeque};
 use std::sync::OnceLock;
@@ -38,14 +40,26 @@ fn target_player(item: &StackItem) -> Option<PlayerId> {
 
 fn control(g: &mut dyn Rules, item: &StackItem) -> Result<(), Suspend> {
     if let Some(p) = target_player(item) {
-        g.control_next_turn(item, p);
+        g.control_next(item, p, ControlWindow::Turn { then_extra_turn: false });
     }
+    Ok(())
+}
+
+fn control_combat(g: &mut dyn Rules, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(p) = target_player(item) {
+        g.control_next(item, p, ControlWindow::CombatPhase);
+    }
+    Ok(())
+}
+
+fn assault(g: &mut dyn Rules, _: &StackItem) -> Result<(), Suspend> {
+    g.add_phases(PhaseAnchor::Current, &[PhaseSpec::Whole(Phase::Combat), PhaseSpec::Whole(Phase::Main)]);
     Ok(())
 }
 
 fn control_then_extra(g: &mut dyn Rules, item: &StackItem) -> Result<(), Suspend> {
     if let Some(p) = target_player(item) {
-        g.control_next_turn_then_extra_turn(item, p);
+        g.control_next(item, p, ControlWindow::Turn { then_extra_turn: true });
     }
     Ok(())
 }
@@ -79,6 +93,23 @@ static SLAVER: CardDef = CardDef {
     name: "Probe Slaver",
     types: TypeSet::of(&[CardType::Instant]),
     spell: spell(&[target(a_player)], control),
+    ..CardDef::BLANK
+};
+
+/// An instant for {0}: "You control target player during their next combat phase." (Secret of Bloodbending's.)
+static COMBAT_SLAVER: CardDef = CardDef {
+    name: "Probe Combat Slaver",
+    types: TypeSet::of(&[CardType::Instant]),
+    spell: spell(&[target(a_player)], control_combat),
+    ..CardDef::BLANK
+};
+
+/// An instant for {0}: "After this phase, there is an additional combat phase followed by an additional main phase."
+/// (Relentless Assault's, cast in a main phase.)
+static ASSAULT: CardDef = CardDef {
+    name: "Probe Assault",
+    types: TypeSet::of(&[CardType::Instant]),
+    spell: spell(&[], assault),
     ..CardDef::BLANK
 };
 
@@ -182,7 +213,7 @@ static FILLER: CardDef = CardDef {
 fn table() -> &'static CardTable {
     static TABLE: OnceLock<CardTable> = OnceLock::new();
     TABLE.get_or_init(|| {
-        CardTable::new([&SLAVER, &PROMISE, &SKIP, &DRAIN, &WISH, &MOUNTAIN, &FILLER, &EXTRA, &VAULT, &ENLISTER, &BEAR])
+        CardTable::new([&COMBAT_SLAVER, &ASSAULT, &SLAVER, &PROMISE, &SKIP, &DRAIN, &WISH, &MOUNTAIN, &FILLER, &EXTRA, &VAULT, &ENLISTER, &BEAR])
     })
 }
 
@@ -441,7 +472,7 @@ fn the_controller_answers_the_controlled_players_every_question_through_its_clea
     assert_eq!(game.state.player_controller(P2), P2);
     assert!(!game.state.effects.iter().any(|e| matches!(
         e.kind,
-        EffectKind::ControlNextTurn { .. } | EffectKind::ControlsPlayer(_)
+        EffectKind::ControlNext { .. } | EffectKind::ControlsPlayer(_)
     )));
     play(&mut game, &[], turn_is(4));
     assert_eq!(game.state.player_controller(P2), P2, "only the next turn");
@@ -587,7 +618,7 @@ fn the_controller_sees_what_the_controlled_player_sees_of_the_game() {
         g.state
             .effects
             .iter()
-            .any(|e| matches!(e.kind, EffectKind::ControlNextTurn { .. }))
+            .any(|e| matches!(e.kind, EffectKind::ControlNext { .. }))
     };
     play(&mut game, &[cast(P1, 1, "Probe Slaver", Some(P2))], waiting);
     let sees = |game: &Game| {
@@ -711,7 +742,7 @@ fn the_order_of_skips_as_the_next_turn_would_begin_is_the_controllers() {
 fn a_leavers_control_gives_way_to_the_one_before_it() {
     let mut game = deal(&[&["Probe Slaver"], &["Probe Slaver"], &[]], &[]);
     let moves = [cast(P1, 1, "Probe Slaver", Some(P3)), cast(P2, 1, "Probe Slaver", Some(P3))];
-    let both = |g: &Game| g.state.stack.is_empty() && g.state.effects.iter().filter(|e| matches!(e.kind, EffectKind::ControlNextTurn { .. })).count() == 2;
+    let both = |g: &Game| g.state.stack.is_empty() && g.state.effects.iter().filter(|e| matches!(e.kind, EffectKind::ControlNext { .. })).count() == 2;
     play(&mut game, &moves, both);
     game.concede(P2);
     play(&mut game, &[], |g| g.state.turn.active == P3 && g.state.turn.step() == Step::PrecombatMain);
@@ -742,7 +773,7 @@ fn a_controller_leaving_during_the_turn_leaves_it_to_the_one_before() {
 #[test]
 fn a_leavers_effect_gives_no_control_but_its_extra_turn() {
     let mut game = deal(&[&[], &["Probe Promise"], &[]], &[]);
-    let waiting = |g: &Game| g.state.stack.is_empty() && g.state.effects.iter().any(|e| matches!(e.kind, EffectKind::ControlNextTurn { .. }));
+    let waiting = |g: &Game| g.state.stack.is_empty() && g.state.effects.iter().any(|e| matches!(e.kind, EffectKind::ControlNext { .. }));
     play(&mut game, &[cast(P2, 1, "Probe Promise", Some(P3))], waiting);
     game.concede(P2);
     let asked = play(&mut game, &[], |g| g.state.turn.active == P1 && g.state.turn.number > 1);
@@ -769,4 +800,184 @@ fn a_controlled_players_enlist_is_the_controllers() {
     let enlist = asked.iter().find(|a| a.turn == 4 && a.kind == "ChooseCards" && a.player == P2).expect("Bot2 was asked whom to enlist");
     assert_eq!(enlist.by, P1);
     assert!(game.log.iter().any(|r| matches!(r.event, Event::PaidToAttack { option: AttackOption::Enlist, .. })), "the Bear was enlisted");
+}
+
+fn in_combat(step: Step) -> bool {
+    matches!(step, Step::BeginCombat | Step::DeclareAttackers | Step::DeclareBlockers | Step::CombatDamage | Step::EndOfCombat)
+}
+
+/// Who answered the questions asked of `player` in turn `turn`, in the combat phase and out of it.
+fn answerers_by_phase(asked: &[Asked], turn: u32, player: PlayerId) -> (HashSet<PlayerId>, HashSet<PlayerId>) {
+    let of = |combat: bool| -> HashSet<PlayerId> {
+        asked.iter().filter(|a| a.turn == turn && a.player == player && in_combat(a.step) == combat).map(|a| a.by).collect()
+    };
+    (of(true), of(false))
+}
+
+/// CR 723.1, 722, 507.1, 511.1: Bot1 controls Bot2 during Bot2's next combat phase, turn 2. Every question asked of Bot2 from
+/// the beginning of combat to the end of combat step Bot1 answers; Bot2 answers its own in its main phases, end step and
+/// cleanup, and from turn 3 on. The history says the control began and ended.
+#[test]
+fn a_combat_phase_control_covers_only_that_combat_phase() {
+    let mut game = deal(&[&["Probe Combat Slaver"], &[]], &[]);
+    let asked = play(&mut game, &[cast(P1, 1, "Probe Combat Slaver", Some(P2))], turn_is(3));
+    assert_eq!(takers(&asked, 3), [P1, P2, P1]);
+    assert_eq!(answerers(&asked, 1, P2), HashSet::from([P2]), "it waits through turn 1");
+    let (combat, outside) = answerers_by_phase(&asked, 2, P2);
+    assert_eq!(combat, HashSet::from([P1]), "the combat phase is the controller's");
+    assert_eq!(outside, HashSet::from([P2]), "the rest of the turn is Bot2's own");
+    assert!(
+        asked.iter().any(|a| a.turn == 2 && a.player == P2 && a.step == Step::BeginCombat && a.by == P1),
+        "from the beginning of combat step, whose triggers it is"
+    );
+    assert!(
+        asked.iter().any(|a| a.turn == 2 && a.player == P2 && a.step == Step::PostcombatMain && a.by == P2),
+        "Bot2 has its second main phase back"
+    );
+    assert_eq!(control_changes(&game), [(P2, P1), (P2, P2)], "the history says it began and ended");
+    assert_eq!(game.state.player_controller(P2), P2);
+    assert!(!game.state.effects.iter().any(|e| matches!(e.kind, EffectKind::ControlNext { .. } | EffectKind::ControlsPlayer(_))));
+    // Only that phase: the next turn of Bot2's is its own throughout.
+    let asked = play(&mut game, &[], turn_is(5));
+    assert_eq!(answerers(&asked, 4, P2), HashSet::from([P2]));
+}
+
+/// CR 723.1b: a skipped turn has no combat phase, so the control waits: turn 2 is Bot1's again, and Bot1 controls Bot2 in the
+/// combat phase of turn 3, the next one it takes.
+#[test]
+fn a_skipped_turn_leaves_the_combat_phase_control_waiting() {
+    let mut game = deal(&[&["Probe Combat Slaver", "Probe Skip"], &[]], &[]);
+    let moves = [cast(P1, 1, "Probe Combat Slaver", Some(P2)), cast(P1, 1, "Probe Skip", Some(P2))];
+    let asked = play(&mut game, &moves, turn_is(4));
+    assert_eq!(takers(&asked, 4), [P1, P1, P2, P1]);
+    assert_eq!(answerers(&asked, 2, P2), HashSet::from([P2]), "still waiting through the skipped turn");
+    let (combat, outside) = answerers_by_phase(&asked, 3, P2);
+    assert_eq!(combat, HashSet::from([P1]));
+    assert_eq!(outside, HashSet::from([P2]));
+    assert_eq!(answerers(&asked, 4, P2), HashSet::from([P2]));
+}
+
+/// CR 723.1a: the last effect created is the one that works, and the one it overwrote works again when it ends. In a game of
+/// three Bot1 controls Bot3 during its next turn and then Bot2 during its next combat phase: in Bot3's turn Bot1 answers
+/// for it before and after combat, and Bot2 during it.
+#[test]
+fn the_older_turn_control_works_again_after_the_combat_phase_control() {
+    let mut game = deal(&[&["Probe Slaver"], &["Probe Combat Slaver"], &[]], &[]);
+    let moves = [cast(P1, 1, "Probe Slaver", Some(P3)), cast(P2, 1, "Probe Combat Slaver", Some(P3))];
+    let asked = play(&mut game, &moves, turn_is(4));
+    let (combat, outside) = answerers_by_phase(&asked, 3, P3);
+    assert_eq!(combat, HashSet::from([P2]));
+    assert_eq!(outside, HashSet::from([P1]));
+    assert_eq!(
+        control_changes(&game),
+        [(P3, P1), (P3, P2), (P3, P1), (P3, P3)],
+        "the turn's control, the phase's, the turn's again, then neither"
+    );
+    // In the other order the turn's control is the newer, and works throughout.
+    let mut game = deal(&[&["Probe Slaver"], &["Probe Combat Slaver"], &[]], &[]);
+    let moves = [cast(P2, 1, "Probe Combat Slaver", Some(P3)), cast(P1, 1, "Probe Slaver", Some(P3))];
+    let asked = play(&mut game, &moves, turn_is(4));
+    let (combat, outside) = answerers_by_phase(&asked, 3, P3);
+    assert_eq!(combat, HashSet::from([P1]), "the newer control of the turn works in combat too");
+    assert_eq!(outside, HashSet::from([P1]));
+}
+
+/// CR 800.4a: a controller who has left the game gives no control of the combat phase it was to give, and one who leaves during
+/// it gives the player back at once.
+#[test]
+fn a_leaving_controller_gives_no_combat_phase_control() {
+    let mut game = deal(&[&["Probe Combat Slaver"], &[], &[]], &[]);
+    let waiting = |g: &Game| g.state.stack.is_empty() && g.state.effects.iter().any(|e| matches!(e.kind, EffectKind::ControlNext { .. }));
+    play(&mut game, &[cast(P1, 1, "Probe Combat Slaver", Some(P2))], waiting);
+    game.concede(P1);
+    let asked = play(&mut game, &[], turn_is(3));
+    assert_eq!(answerers(&asked, 2, P2), HashSet::from([P2]));
+    assert!(control_changes(&game).is_empty());
+    assert!(!game.state.effects.iter().any(|e| matches!(e.kind, EffectKind::ControlNext { .. })), "used up, though it gave nothing");
+
+    let mut game = deal(&[&["Probe Combat Slaver"], &[], &[]], &[]);
+    play(
+        &mut game,
+        &[cast(P1, 1, "Probe Combat Slaver", Some(P2))],
+        |g| g.state.turn.active == P2 && g.state.turn.step() == Step::BeginCombat,
+    );
+    assert_eq!(game.state.player_controller(P2), P1);
+    game.concede(P1);
+    assert_eq!(game.state.player_controller(P2), P2);
+    assert_eq!(control_changes(&game), [(P2, P1), (P2, P2)]);
+}
+
+/// CR 723.1, 723.1b: "their next combat phase" is one that has not begun. Bot1 casts the control in the beginning of combat
+/// step of Bot2's turn 2, so the combat phase under way is not it: Bot2 answers its own declarations that turn, and Bot1
+/// answers Bot2's in its combat phase of turn 4.
+#[test]
+fn a_combat_phase_control_made_during_a_combat_phase_waits_for_the_next() {
+    let mut game = deal(&[&["Probe Combat Slaver"], &[]], &[]);
+    play(&mut game, &[], |g| {
+        g.state.turn.number == 2 && g.state.turn.step() == Step::BeginCombat && g.pending().is_some_and(|r| r.player == P1)
+    });
+    let request = game.pending().cloned().expect("Bot1's priority");
+    let RequestKind::Priority { options } = &request.kind else { panic!("not priority: {request:?}") };
+    let option = options
+        .iter()
+        .find(|o| o.kind == ActionKind::CastSpell && o.source.is_some_and(|c| game.name(c) == "Probe Combat Slaver"))
+        .expect("the control is offered");
+    let mut action = Action::of(option);
+    action.targets = vec![Target::Player(P2)];
+    game.answer(request.id, P1, Answer::Act(action)).unwrap();
+    let asked = play(&mut game, &[], turn_is(5));
+    let (combat, _) = answerers_by_phase(&asked, 2, P2);
+    assert_eq!(combat, HashSet::from([P2]), "the combat phase under way is not the next one");
+    let (combat, outside) = answerers_by_phase(&asked, 4, P2);
+    assert_eq!(combat, HashSet::from([P1]), "the next combat phase Bot2 takes is Bot1's");
+    assert_eq!(outside, HashSet::from([P2]));
+}
+
+/// The answerers of the questions asked of `player` in turn `turn`, one set for each run of steps of a phase kind, in order:
+/// combat phases and the rest apart.
+fn answerers_by_run(asked: &[Asked], turn: u32, player: PlayerId) -> Vec<(bool, HashSet<PlayerId>)> {
+    let mut runs: Vec<(bool, HashSet<PlayerId>)> = Vec::new();
+    for a in asked.iter().filter(|a| a.turn == turn && a.player == player) {
+        let combat = in_combat(a.step);
+        match runs.last_mut() {
+            Some((c, set)) if *c == combat => {
+                set.insert(a.by);
+            }
+            _ => runs.push((combat, HashSet::from([a.by]))),
+        }
+    }
+    runs
+}
+
+/// CR 723.1, 500.8: the control is of the next combat phase only. Bot2 gives itself an additional combat phase in turn 2: Bot1
+/// answers Bot2's questions in the first combat phase, and Bot2 its own in the additional one.
+#[test]
+fn a_combat_phase_control_is_of_the_first_combat_phase_of_several() {
+    let mut game = deal(&[&["Probe Combat Slaver"], &["Probe Assault"]], &[]);
+    let moves = [cast(P1, 1, "Probe Combat Slaver", Some(P2)), cast(P2, 2, "Probe Assault", None)];
+    let asked = play(&mut game, &moves, turn_is(3));
+    let combats: Vec<HashSet<PlayerId>> = answerers_by_run(&asked, 2, P2).into_iter().filter(|r| r.0).map(|r| r.1).collect();
+    assert_eq!(combats, [HashSet::from([P1]), HashSet::from([P2])]);
+    assert_eq!(control_changes(&game), [(P2, P1), (P2, P2)]);
+}
+
+/// CR 723.1: made during the first of two combat phases, the control is of the second, the next one that begins.
+#[test]
+fn a_combat_phase_control_made_in_the_first_combat_is_of_the_additional_one() {
+    let mut game = deal(&[&["Probe Combat Slaver"], &["Probe Assault"]], &[]);
+    play(&mut game, &[cast(P2, 2, "Probe Assault", None)], |g| {
+        g.state.turn.number == 2 && g.state.turn.step() == Step::BeginCombat && g.pending().is_some_and(|r| r.player == P1)
+    });
+    let request = game.pending().cloned().expect("Bot1's priority");
+    let RequestKind::Priority { options } = &request.kind else { panic!("not priority: {request:?}") };
+    let option = options
+        .iter()
+        .find(|o| o.kind == ActionKind::CastSpell && o.source.is_some_and(|c| game.name(c) == "Probe Combat Slaver"))
+        .expect("the control is offered");
+    let mut action = Action::of(option);
+    action.targets = vec![Target::Player(P2)];
+    game.answer(request.id, P1, Answer::Act(action)).unwrap();
+    let asked = play(&mut game, &[], turn_is(3));
+    let combats: Vec<HashSet<PlayerId>> = answerers_by_run(&asked, 2, P2).into_iter().filter(|r| r.0).map(|r| r.1).collect();
+    assert_eq!(combats, [HashSet::from([P2]), HashSet::from([P1])]);
 }

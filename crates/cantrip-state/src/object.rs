@@ -2035,20 +2035,20 @@ pub enum EffectKind {
     /// the ones before it have not skipped (CR 614.10a). About the player, so it outlives its `affected` object, which is
     /// only the source.
     SkipNextTurn(PlayerId),
-    /// "[The effect's controller] controls [player] during that player's next turn" (CR 723.1), waiting for it: the next
-    /// turn `player` actually takes, so a skipped turn leaves it waiting (723.1b). As that turn begins every such effect on
-    /// the player is used up, each becoming the control of them for the turn (`ControlsPlayer`), the last created
-    /// whose controller is in the game the one that works (723.1a). `then_extra_turn` is "After that turn, that player
-    /// takes an extra turn" (Emrakul, the Promised End), which each such effect gives, an overwritten one too (Emrakul's
-    /// ruling), and one whose controller has left the game too. About the player, so it outlives its `affected` object,
-    /// which is only the source. Mindslaver, Sorin Markov, Worst Fears.
-    ControlNextTurn { player: PlayerId, then_extra_turn: bool },
+    /// "[The effect's controller] controls [player] during that player's next turn" (CR 723.1), or "during their next combat
+    /// phase" (`ControlWindow`), waiting for it: the next turn or combat phase `player` actually takes, so a skipped one
+    /// leaves it waiting (723.1b, Secret of Bloodbending's ruling). As it begins every such effect on the player for it is
+    /// used up, each becoming the control of them for the window (`ControlsPlayer`), the last created whose controller is in
+    /// the game the one that works (723.1a). About the player, so it outlives its `affected` object, which is only the
+    /// source. Mindslaver, Sorin Markov, Worst Fears; Secret of Bloodbending.
+    ControlNext { player: PlayerId, window: ControlWindow },
     /// The effect's controller controls `player` (CR 723): they make every choice and decision `player` is allowed or told
     /// to make (723.5), with `player`'s resources (723.5a), and see what `player` sees of the game (723.4); `player` is still
     /// the active player and controls their objects (723.3). Who is asked is unchanged - the request is `player`'s - and
-    /// the host routes it (`GameState::player_controller`). Made by `ControlNextTurn` as that turn begins, it lasts until
-    /// the next turn begins (723.1) - through any turn skipped meanwhile, which never begins - and ends at once if its
-    /// controller leaves the game (CR 800.4a).
+    /// the host routes it (`GameState::player_controller`). Made by `ControlNext` as its window begins. For a turn it lasts
+    /// until the next turn begins (723.1) - through any turn skipped meanwhile, which never begins - and for a combat phase
+    /// it has `Duration::EndOfCombat` and ends as the phase does; either ends at once if its
+    /// controller leaves the game (CR 800.4a). Of several, the newest works (723.1a), and the older resume when it ends.
     ControlsPlayer(PlayerId),
     /// "The 'legend rule' doesn't apply to permanents [this player] controls" (CR 704.5j, 611.2c) for as long as it lasts:
     /// Hall of Echoes's "this turn". About the player, so it reaches legends that arrive later and outlives its `affected`
@@ -2117,7 +2117,7 @@ impl EffectKind {
                 | EffectKind::PlayerSpecialAction { .. }
                 | EffectKind::NextSpellCantBeCountered
                 | EffectKind::SkipNextTurn(_)
-                | EffectKind::ControlNextTurn { .. }
+                | EffectKind::ControlNext { .. }
                 | EffectKind::ControlsPlayer(_)
                 | EffectKind::NoLegendRule(_)
                 | EffectKind::SpellCostChange { .. }
@@ -2155,6 +2155,18 @@ pub enum Shield {
     /// once that event has been dealt; later damage is dealt normally. Damage it prevents none of (damage that can't be
     /// prevented, CR 615.12; damage another effect has prevented in full first, CR 616.1f) does not use it up (CR 609.7b).
     NextTime,
+}
+
+/// What a waiting player-control effect (`EffectKind::ControlNext`) controls the player for, once it begins (CR 723.1, 722).
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum ControlWindow {
+    /// "During that player's next turn": the whole of it. `then_extra_turn` is "After that turn, that player takes an extra
+    /// turn" (Emrakul, the Promised End), which each such effect gives, an overwritten one too (Emrakul's ruling), and one
+    /// whose controller has left the game too.
+    Turn { then_extra_turn: bool },
+    /// "During their next combat phase": from the beginning of combat step to the end of combat step, an additional combat
+    /// phase included only if it is the next one taken (Secret of Bloodbending).
+    CombatPhase,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -3734,6 +3746,9 @@ pub struct Turn {
     /// An effect has ended the combat phase (CR 724.2d): the step under way ends with no player given priority again, and
     /// the game skips straight to the next phase, skipping the end of combat step (724.2e).
     pub combat_ending: bool,
+    /// A step of the combat phase under way has begun (CR 507.1, 723.1): a control of the active player "during their next
+    /// combat phase" made from here on waits for a later one. Cleared as the combat phase ends.
+    pub combat_began: bool,
     /// Players were given priority in this cleanup step (CR 514.3a), so another cleanup step follows it.
     pub cleanup_again: bool,
     /// The extra turn this turn is (CR 500.7), by its `ExtraTurn::id`: what "that turn" names in an ability that created it

@@ -1620,15 +1620,15 @@ the beginning of the end step on your next turn, sacrifice that token" is `cantr
 ### Controlling another player
 
 "You control target player during that player's next turn" (CR 723.1: Mindslaver, Sorin Markov, Worst Fears) is
-`Game::control_next_turn`, a player effect `EffectKind::ControlNextTurn` that waits on the player for the next turn they
-actually take: a skipped turn leaves it waiting (723.1b). As that turn begins (`turn::take_controlled_turn`, after the
+`Game::control_next`, a player effect `EffectKind::ControlNext { player, window }` that waits on the player for the next turn
+they actually take (`ControlWindow::Turn`): a skipped turn leaves it waiting (723.1b). As that turn begins (`turn::take_controlled_turn`, after the
 skip is judged) every such effect on the player is used up, each whose controller is still in the game becoming an
 `EffectKind::ControlsPlayer` with the timestamp it was created with; `GameState::player_controller` takes the newest
 whose controller is in the game (723.1a; one on a player themselves gives no one else control, 723.9), so when that
 controller leaves during the turn (CR 800.4a ends only theirs) the one it overwrote works on. The control lasts through
 the turn's cleanup and any turn skipped after it - a skip is decided as a turn would begin, which a skipped turn never
 does (CR 614.10, 500.11), so the controller answers it - and ends as the next turn actually begins (723.1). Emrakul, the Promised End's "after that turn, that player takes an extra turn" is
-`Game::control_next_turn_then_extra_turn`: each such effect gives its extra turn as the controlled turn begins, the newest
+`ControlWindow::Turn { then_extra_turn: true }`: each such effect gives its extra turn as the controlled turn begins, the newest
 extra turn being taken first (CR 500.7), so it comes right after that turn however long the turn waited, and an
 overwritten effect gives its turn too (its rulings).
 
@@ -1642,6 +1642,15 @@ their questions name - never the cards they own outside the game, which they the
 controlled (`Query::outside_the_game` is empty then). Conceding stays the seat's own (723.6). Word of Command and
 Opposition Agent (723.2) control a player for other durations and are not built; they would be a `ControlsPlayer` of their
 own duration.
+
+"...during their next combat phase" (Secret of Bloodbending) is the same effect with `ControlWindow::CombatPhase`: it waits
+on the player for the next combat phase they actually take, a skipped turn or combat phase leaving it waiting, and one
+made during a combat phase of theirs waiting for a later one (`Turn::combat_began`, set as that phase's first step begins
+and cleared as it ends). As the first
+step of that phase that is not skipped begins (`turn::take_controlled_combat`, before its beginning triggers) it becomes a
+`ControlsPlayer` with `Duration::EndOfCombat` and the timestamp it was created with, so it ends where every "this combat"
+effect does, as the combat phase does in `next_step` (also when an effect ends the combat phase or the turn early), and the
+control of the turn it overwrote works again. `Event::PlayerControlled` is recorded at both ends.
 
 ### Phasing
 
