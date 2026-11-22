@@ -106,6 +106,14 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 
 ## Issues
 
+### KI-176: A creature that can convoke or pay a waterbend shows two identical "tap to pay {1}" rows
+
+- **Severity:** pri-2 (display and harness; the rules are right).
+- **What happens:** paying a spell that has convoke and a waterbend cost (Hama, the Bloodbender casting a convoke card), each creature is offered twice: once for convoke and once for the waterbend, while waterbend mana is left. Both rows read "Tap X to pay {1}", so the player can't tell them apart.
+- **Harness gap:** the script's `Convoke:` key always takes the first option for a named permanent, so no scenario proves the second choice (tap the creature for the waterbend instead, CR 701.67b, 702.51c).
+- **Fix:** caption the two rows differently in the host prompt, and let the payment key name which one.
+- **Scenarios:** `hama-the-bloodbender-waterbends-for-a-convoke-spell-tapping-noncreature-artifacts` (the convoke path only).
+
 ### KI-175: The X announcement never says when X is paid in life
 
 | Priority | Status | Area | Found |
