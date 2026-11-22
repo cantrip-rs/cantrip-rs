@@ -1,0 +1,54 @@
+# Araña, Heart of the Spider: "Whenever you attack, put a +1/+1 counter on target attacking creature" (CR 508.1m, 603.2), and "whenever
+# a modified creature you control deals combat damage to a player, exile the top card of your library; you may play that card this
+# turn" (CR 700.9, 510.2). Bot1 casts Araña and a Memnite on turn 1. On turn 3 both attack, the counter goes on the Memnite (2/2), and
+# it deals 2 to Bot2: that exiles the top card of Bot1's library, a Mountain, which Bot1 plays from exile. Araña, with no counter,
+# Equipment or Aura, is not modified and deals her 3 without a trigger of her own (a second exile would leave a Plains there).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Araña, Heart of the Spider
+Memnite
+Plains
+Plains
+Plains
+Mountain
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Araña, Heart of the Spider.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Araña, Heart of the Spider > Bot2; Memnite > Bot2)
+Bot1.Target(Memnite)
+[T3 Bot1.Main2]
+Bot1.Exile.Mountain.Play
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Araña, Heart of the Spider.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Mountain.Tapped = false
+Bot1.Library.Top = Plains
+Exile.Count = 0

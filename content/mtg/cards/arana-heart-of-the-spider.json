@@ -1,0 +1,8 @@
+{
+  "name": "Araña, Heart of the Spider",
+  "manaCost": "{1}{R}{W}",
+  "type": "Legendary Creature — Spider Human Hero",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever you attack, put a +1/+1 counter on target attacking creature.\nWhenever a modified creature you control deals combat damage to a player, exile the top card of your library. You may play that card this turn. (Equipment, Auras you control, and counters are modifications.)"
+}

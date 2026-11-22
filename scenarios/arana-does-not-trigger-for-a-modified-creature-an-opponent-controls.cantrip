@@ -1,0 +1,63 @@
+# Araña, Heart of the Spider: "a modified creature you control" (CR 700.9, 603.2). Bot1 casts Araña on turn 1. Bot2's Runeclaw Bear,
+# with a +1/+1 counter from Honor, attacks on turn 4 and deals 3 to Bot1: Araña does not trigger for it, so nothing is exiled and
+# Bot1's library keeps its top card.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Araña, Heart of the Spider
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Runeclaw Bear
+Honor
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Araña, Heart of the Spider.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Runeclaw Bear.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Honor.Cast(Runeclaw Bear)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Runeclaw Bear > Bot1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Exile.Count = 0
+Bot1.Library.Count = 16

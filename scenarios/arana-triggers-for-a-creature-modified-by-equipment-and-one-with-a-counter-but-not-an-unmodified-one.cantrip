@@ -1,0 +1,68 @@
+# Araña, Heart of the Spider: an Equipment modifies a creature too (CR 700.9). Bot1 casts Araña, a Memnite and a Fugitive Wizard on
+# turn 1. On turn 3 it casts a Basilisk Collar and equips it to the Memnite, then attacks with all three; Araña's attack trigger puts
+# the counter on herself. Araña (counter) and the equipped Memnite are modified and each exiles a card as it deals combat damage to
+# Bot2; the Fugitive Wizard, with nothing on it, does not: two cards are exiled and the third from the top of the library stays.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Araña, Heart of the Spider
+Memnite
+Fugitive Wizard
+Basilisk Collar
+Mountain
+Plains
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Araña, Heart of the Spider.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fugitive Wizard.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Basilisk Collar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Basilisk Collar.Activate(Ability: Equip; Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Araña, Heart of the Spider > Bot2; Memnite > Bot2; Fugitive Wizard > Bot2)
+Bot1.Target(Araña, Heart of the Spider)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Araña, Heart of the Spider.Counters.PlusOnePlusOne = 1
+Exile.Count = 2
+Bot1.Library.Top = Island
