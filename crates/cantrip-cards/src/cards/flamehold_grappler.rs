@@ -5,7 +5,7 @@ use cantrip_oracle as oracle;
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         THIS_ENTERS,
-        delayed::watch_for_the_next,
+        delayed::watch_for_the_next::<0>,
         "When this creature enters, copy the next spell you cast this turn when you cast it. You may choose new targets for the copy. (A copy of a permanent spell becomes a token.)",
     )],
     delayed: &[triggered(

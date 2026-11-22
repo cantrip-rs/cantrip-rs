@@ -30,7 +30,7 @@ pub static CARD: CardDef = CardDef {
         ),
         ability(
             TAP.and(remove_counters(CounterKind::Charge, 3)),
-            delayed::watch_for_the_next,
+            delayed::watch_for_the_next::<0>,
             "{T}, Remove three charge counters from this artifact: When you next cast an instant or sorcery spell this turn, copy it. You may choose new targets for the copy.",
         ),
     ],

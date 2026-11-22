@@ -15,7 +15,7 @@ fn protection_from_instants_and_sorceries(view: &dyn LayerQuery, source: ObjectI
 /// `delayed` list, that triggers once on the next such spell its controller casts this turn.
 fn create_a_treasure_then_watch_for_the_next_spell(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     tokens::create_a_treasure(g, item)?;
-    delayed::watch_for_the_next(g, item)
+    delayed::watch_for_the_next::<0>(g, item)
 }
 
 pub static CARD: CardDef = CardDef {

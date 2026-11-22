@@ -16,7 +16,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         ability(
             cost("{1}").and(TAP),
-            delayed::watch_for_the_next,
+            delayed::watch_for_the_next::<0>,
             "{1}, {T}: When you next cast an instant or sorcery spell with mana value less than or equal to Loki's power this turn, copy that spell. You may choose new targets for the copy.",
         ),
         power_up::ability(

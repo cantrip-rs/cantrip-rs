@@ -176,11 +176,12 @@ pub fn about_target_at_this_turns_next_end_of_combat(g: &mut dyn Game, item: &St
 }
 
 /// The whole effect of "When you next [event] this turn, ..." (CR 603.7b) for a spell or ability that does nothing else: it sets up
-/// the card's delayed ability number 0 (`next_this_turn`), for an effect function of a `spell`, `ability`, loyalty or chapter. Flamehold
-/// Grappler, Pit Automaton, Rimefire Torque, Pigment Wrangler's Striking Palette, Loki Laufeyson, Summon: Brynhildr, Summon: G.F.
-/// Cerberus's chapter II and Teach by Example print it.
-pub fn watch_for_the_next(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    next_this_turn(g, item, 0, item.object);
+/// the card's delayed ability number ABILITY (`next_this_turn`), for an effect function of a `spell`, `ability`, loyalty or chapter.
+/// Flamehold Grappler, Pit Automaton, Rimefire Torque, Pigment Wrangler's Striking Palette, Loki Laufeyson, Summon: Brynhildr,
+/// Summon: G.F. Cerberus's chapter II and Teach by Example print it with number 0; Summon: G.F. Cerberus's chapter III, Way of the
+/// Cryomancer's [-3] and The Clone Saga's chapter II with number 1.
+pub fn watch_for_the_next<const ABILITY: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    next_this_turn(g, item, ABILITY, item.object);
     Ok(())
 }
 

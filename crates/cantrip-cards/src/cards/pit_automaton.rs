@@ -31,7 +31,7 @@ pub static CARD: CardDef = CardDef {
         mana_ability(TAP, add_n(Mana::C, 2).only_for(ManaRestriction::ABILITIES), "{T}: Add {C}{C}. Spend this mana only to activate abilities."),
         ability(
             cost("{2}, {T}"),
-            delayed::watch_for_the_next,
+            delayed::watch_for_the_next::<0>,
             "{2}, {T}: When you next activate an exhaust ability that isn't a mana ability this turn, copy it. You may choose new targets for the copy.",
         ),
     ],

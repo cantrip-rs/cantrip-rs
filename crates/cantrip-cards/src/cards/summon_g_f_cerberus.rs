@@ -7,13 +7,6 @@ fn surveil_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     effects::surveil(g, item, 1)
 }
 
-/// "III — Triple — When you next cast an instant or sorcery spell this turn, copy it twice. You may choose new targets for the
-/// copies." (CR 603.7, 707.10): sets up delayed ability 1, `COPY_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST_TWICE`.
-fn triple(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    delayed::next_this_turn(g, item, 1, item.object);
-    Ok(())
-}
-
 /// "Copy it twice. You may choose new targets for the copies" (CR 707.10, 707.10c) for a trigger about the spell that was cast.
 fn copy_the_cast_spell_twice(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     copy::copy_the_cast_spell_times(g, item, 2)
@@ -32,12 +25,13 @@ pub static CARD: CardDef = CardDef {
         chapter(1, surveil_one, "I \u{2014} Surveil 1."),
         chapter(
             2,
-            delayed::watch_for_the_next,
+            delayed::watch_for_the_next::<0>,
             "II \u{2014} Double \u{2014} When you next cast an instant or sorcery spell this turn, copy it. You may choose new targets for the copy.",
         ),
+        // Chapter III sets up delayed ability 1, `COPY_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST_TWICE` (CR 603.7, 707.10).
         chapter(
             3,
-            triple,
+            delayed::watch_for_the_next::<1>,
             "III \u{2014} Triple \u{2014} When you next cast an instant or sorcery spell this turn, copy it twice. You may choose new targets for the copies.",
         ),
     ],

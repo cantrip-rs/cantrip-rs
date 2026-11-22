@@ -27,7 +27,7 @@ pub static CARD: CardDef = CardDef {
         ),
         ability(
             TAP,
-            delayed::watch_for_the_next,
+            delayed::watch_for_the_next::<0>,
             "{T}: When you next cast an instant or sorcery spell this turn, copy that spell. You may choose new targets for the copy.",
         ),
     ],

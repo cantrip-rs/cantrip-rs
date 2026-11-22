@@ -36,7 +36,7 @@ pub static CARD: CardDef = CardDef {
         chapter(2, effects::scry_two, "II \u{2014} Scry 2."),
         chapter(
             3,
-            delayed::watch_for_the_next,
+            delayed::watch_for_the_next::<0>,
             "III \u{2014} When you next cast an instant or sorcery spell with mana value 3 or less this turn, copy that spell. You may choose new targets for the copy.",
         ),
     ],
