@@ -1,0 +1,78 @@
+# The Masamune: "If a creature dying causes a triggered ability of this creature or an emblem you own to trigger, that ability
+# triggers an additional time" (CR 603.2d, 114.4). Sephiroth's emblem, "Whenever a creature dies, target opponent loses 1 life
+# and you gain 1 life", is Bot1's (see the Sephiroth scenario for how it comes: four deaths on turn 3, 20 - 4 = 16 and 24).
+# Turn 5: Bot1 casts The Masamune and equips Sephiroth, One-Winged Angel, who attacks sacrificing the Ornithopter: the death
+# triggers the emblem twice, 14 and 26, then the Angel's 5 damage: Bot2 ends at 9. Without The Masamune it would be 15 and 25.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Sephiroth, Fabled SOLDIER
+Pyroclasm
+Ornithopter
+Ornithopter
+The Masamune
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sephiroth, Fabled SOLDIER.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pyroclasm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+? Bot1.Life = 24
+? Bot1.Battlefield.Sephiroth, One-Winged Angel.Types = Creature
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Sacrifice: X; Color: White)
+Bot1.Hand.The Masamune.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.The Masamune.Activate(Bot1.Battlefield.Sephiroth, One-Winged Angel; Ability: Equip)
+Bot1.Attack(Sephiroth, One-Winged Angel > Bot2)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 9
+Bot1.Life = 26

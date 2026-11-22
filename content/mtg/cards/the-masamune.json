@@ -1,0 +1,6 @@
+{
+  "name": "The Masamune",
+  "manaCost": "{3}",
+  "type": "Legendary Artifact — Equipment",
+  "oracleText": "As long as equipped creature is attacking, it has first strike and must be blocked if able.\nEquipped creature has \"If a creature dying causes a triggered ability of this creature or an emblem you own to trigger, that ability triggers an additional time.\"\nEquip {2}"
+}

@@ -1,0 +1,54 @@
+# The Masamune doubles the equipped creature's own abilities and no other creature's, though both die at once (CR 603.2d,
+# 603.10a). Turn 1: Bot1 casts a Market Gnome, The Masamune and equips the Gnome. Turn 3: a second Gnome is cast. Turn 5:
+# Deafening Clarion deals 3 damage to both: the equipped Gnome's dies ability triggers twice and the other's once - 20 + 3
+# life, three cards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Jet
+Market Gnome
+The Masamune
+Market Gnome
+Deafening Clarion
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Sacrifice: X; Color: White)
+Bot1.Hand.Market Gnome.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Masamune.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.The Masamune.Activate(Bot1.Battlefield.Market Gnome; Ability: Equip)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Market Gnome.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Deafening Clarion.Cast
+Bot1.Modes(1)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; The Masamune
+Bot1.Graveyard = Market Gnome; Market Gnome; Deafening Clarion; Black Lotus

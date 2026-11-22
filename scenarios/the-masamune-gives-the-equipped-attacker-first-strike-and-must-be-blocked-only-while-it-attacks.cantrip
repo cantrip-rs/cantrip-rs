@@ -1,0 +1,54 @@
+# The Masamune: "As long as equipped creature is attacking, it has first strike and must be blocked if able" (CR 702.7,
+# 509.1c, 613.1f). Turn 1: Bot1 casts a Savannah Lions (2/1), The Masamune with a Black Lotus and a Mox, and equips the Lions.
+# Turn 2: Bot2 casts Elvish Mystic (1/1) and an Ornithopter. Turn 3: the Lions attack; no first strike beforehand, and Bot2
+# may not decline to block: of the Mystic and the Ornithopter, able to block, one of them
+# must block. The Mystic blocks: the Lions have first strike and kill it before it deals damage, so the Lions survive, and
+# once combat is over they have no first strike.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Jet
+Savannah Lions
+The Masamune
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Elvish Mystic
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Sacrifice: X; Color: White)
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Masamune.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.The Masamune.Activate(Bot1.Battlefield.Savannah Lions; Ability: Equip)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Savannah Lions.Keywords = (absent)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Savannah Lions > Bot2)
+? Bot1.Battlefield.Savannah Lions.Keywords = FirstStrike
+! Bot2.Block(Count: 0)
+Bot2.Block(Elvish Mystic > Savannah Lions)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Savannah Lions.Keywords = (absent)
+
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield = Mox Emerald; Ornithopter
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Savannah Lions; The Masamune

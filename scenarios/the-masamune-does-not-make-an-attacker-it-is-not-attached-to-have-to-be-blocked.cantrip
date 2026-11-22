@@ -1,0 +1,45 @@
+# The Masamune: "must be blocked if able" is about the equipped creature only (CR 509.1c). Turn 1: Bot1 casts a Savannah Lions,
+# a Memnite and The Masamune with a Black Lotus and the Moxen, and equips the Lions, who stay home. Turn 2: Bot2 casts an
+# Elvish Mystic. Turn 3: the Memnite attacks alone; Bot2 may decline to block it - 20 - 1 life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Jet
+Savannah Lions
+The Masamune
+Memnite
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Elvish Mystic
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Sacrifice: X; Color: White)
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.The Masamune.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.The Masamune.Activate(Bot1.Battlefield.Savannah Lions; Ability: Equip)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Count: 0)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield = Elvish Mystic; Mox Emerald

@@ -1,0 +1,49 @@
+# The Masamune's rule is the equipped creature's only while it is equipped (CR 613.1f, 301.5c). Turn 1: Bot1 casts a Market
+# Gnome, The Masamune and equips the Gnome. Turn 3: a second Gnome is cast and The Masamune moved to it (equip {2}). Turn 5:
+# Lightning Bolt kills the first Gnome, no longer equipped: its dies ability triggers once - 20 + 1 life, one card.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Jet
+Market Gnome
+The Masamune
+Market Gnome
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Sacrifice: X; Color: White)
+Bot1.Hand.Market Gnome.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Masamune.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.The Masamune.Activate(Bot1.Battlefield.Market Gnome; Ability: Equip)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Market Gnome.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.The Masamune.Activate(Bot1.Battlefield.Market Gnome#2; Ability: Equip)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Market Gnome#1)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 21

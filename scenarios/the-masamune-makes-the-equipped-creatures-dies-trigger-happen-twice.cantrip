@@ -1,0 +1,51 @@
+# The Masamune: "Equipped creature has 'If a creature dying causes a triggered ability of this creature or an emblem you own
+# to trigger, that ability triggers an additional time'" (CR 603.2d, 613.1f). On turn 1 Bot1 casts a Market Gnome (0/3,
+# "When this creature dies, you gain 1 life and draw a card") and The Masamune with a Black Lotus and the Moxen, and equips
+# the Gnome with the Moxen. On turn 3 Lightning Bolt kills the equipped Gnome: its own dies ability, judged as it last existed
+# (CR 603.10a), triggers twice - 20 + 2 life, two cards - where an unequipped Gnome's would be one.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Jet
+Market Gnome
+The Masamune
+Lightning Bolt
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Sacrifice: X; Color: White)
+Bot1.Hand.Market Gnome.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Masamune.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.The Masamune.Activate(Bot1.Battlefield.Market Gnome; Ability: Equip)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Market Gnome)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot1.Life = 22
+? Bot1.Hand.Count = 3
+
+[Expect]
+Bot1.Life = 22
+Bot1.Hand.Count = 3
+Bot1.Graveyard = Market Gnome; Lightning Bolt; Black Lotus

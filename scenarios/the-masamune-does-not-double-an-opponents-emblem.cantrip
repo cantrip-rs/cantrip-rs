@@ -1,0 +1,86 @@
+# The Masamune: "an emblem you own" is the equipped creature's controller's, not any emblem (CR 603.2d, 114.4). Turn 1: Bot1
+# casts a Market Gnome, an Ornithopter and The Masamune with a Black Lotus and the Moxen, and equips the Gnome. Turn 2: Bot2
+# casts Sephiroth, Fabled SOLDIER with three Moxen, then three Ornithopters. Turn 3: Bot1's Pyroclasm kills the four Ornithopters,
+# the fourth transforms Sephiroth and Bot2 gets the emblem: 20 - 4 = 16 for Bot1, 24 for Bot2. Turn 5: Lightning Bolt kills the
+# equipped Gnome: its dies ability triggers twice (+2 life) and Bot2's emblem once, not twice (-1 life): 17 and 25.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Jet
+Market Gnome
+The Masamune
+Ornithopter
+Pyroclasm
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Sephiroth, Fabled SOLDIER
+Ornithopter
+Ornithopter
+Ornithopter
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Sacrifice: X; Color: White)
+Bot1.Hand.Market Gnome.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Masamune.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.The Masamune.Activate(Bot1.Battlefield.Market Gnome; Ability: Equip)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Sephiroth, Fabled SOLDIER.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pyroclasm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 16
+? Bot2.Life = 24
+? Bot2.Battlefield.Sephiroth, One-Winged Angel.Types = Creature
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Market Gnome)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 25
