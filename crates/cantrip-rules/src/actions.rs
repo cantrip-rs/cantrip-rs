@@ -6426,9 +6426,9 @@ impl TapFor {
 }
 
 /// One mana ability a source could be activated for, as the advice counts it: what it adds - fixed mana, and `k` mana of
-/// one type chosen from `types` - and what restricts it, the mana it costs (paid as activating an ability of `source`,
-/// CR 602.2b, 605.3a), and what the triggered mana abilities its tap would trigger add (`extra`, and `produced` mana of one
-/// of the types the activation produced, CR 106.12a).
+/// one type chosen from `types` (or of types chosen from them each apart, `combination`) - and what restricts it, the mana
+/// it costs (paid as activating an ability of `source`, CR 602.2b, 605.3a), and what the triggered mana abilities its tap
+/// would trigger add (`extra`, and `produced` mana of one of the types the activation produced, CR 106.12a).
 #[derive(Clone, Copy, PartialEq, Eq)]
 struct Alternative {
     snow: bool,
@@ -6437,6 +6437,9 @@ struct Alternative {
     fixed: [u32; 6],
     k: u32,
     types: u8,
+    /// Its `k` are "in any combination" of `types` (Orcish Lumberjack, `Adds::yields_any`) rather than all of one (Black
+    /// Lotus): {R}{G} as well as {R}{R}.
+    combination: bool,
     restriction: Option<ManaRestriction>,
     cost: ManaCost,
     source: ManaPayment,
@@ -6456,6 +6459,7 @@ impl Alternative {
             fixed: [0; 6],
             k: 0,
             types: 0,
+            combination: false,
             restriction: None,
             cost: ManaCost::ZERO,
             source: ManaPayment::Other,
@@ -6482,6 +6486,26 @@ impl Alternative {
             types |= 1 << m;
         }
         types
+    }
+}
+
+/// The choices of an ability whose `k` mana are in any combination of `types` (`Alternative::combination`): one for each way
+/// they split among the types, as so much fixed mana.
+fn combinations(types: &[usize], k: u32, made: [u32; 6], a: &Alternative, out: &mut Vec<Option<(Alternative, Option<usize>)>>) {
+    match types {
+        [] => {}
+        [last] => {
+            let mut made = made;
+            made[*last] = made[*last].saturating_add(k);
+            out.push(Some((Alternative { fixed: made, k: 0, types: 0, combination: false, ..*a }, None)));
+        }
+        [first, rest @ ..] => {
+            for n in 0..=k {
+                let mut made = made;
+                made[*first] = made[*first].saturating_add(n);
+                combinations(rest, k - n, made, a, out);
+            }
+        }
     }
 }
 
@@ -6662,6 +6686,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
                 fixed: def.adds.0,
                 k: one_color,
                 types: if one_color > 0 { any_types(cx, id, player, def, by) } else { 0 },
+                combination: one_color > 1 && !def.any_color && def.mana_capability.is_none(),
                 restriction: def.restricted.filter(|r| r.limits()).map(|r| restriction_from(cx, id, r, by)),
                 cost: ManaCost { x: 0, ..cost.mana },
                 source: ability_payment(cx, id, chars.types, chars.subtypes, false),
@@ -7360,7 +7385,12 @@ impl Available {
                 for a in alternatives {
                     if a.k > 0 {
                         let other = (0..6).find(|&m| a.types & !named & (1 << m) != 0);
-                        out.extend((0..6).filter(|&m| a.types & named & (1 << m) != 0 || Some(m) == other).map(|m| Some((*a, Some(m)))));
+                        let types = (0..6).filter(|&m| a.types & named & (1 << m) != 0 || Some(m) == other);
+                        if a.combination {
+                            combinations(&types.collect::<Vec<_>>(), a.k, a.fixed, a, &mut out);
+                            continue;
+                        }
+                        out.extend(types.map(|m| Some((*a, Some(m)))));
                     } else {
                         out.push(Some((*a, None)));
                     }
@@ -17517,7 +17547,7 @@ mod tests {
         }
     }
     fn adds(fixed: [u32; 6]) -> Alternative {
-        Alternative { snow: false, extra_snow: [0; 6], produced_snow: 0, fixed, k: 0, types: 0, restriction: None, cost: ManaCost::ZERO, source: ManaPayment::Other, extra: [0; 6], produced: 0, tapped: false, taps: None }
+        Alternative { snow: false, extra_snow: [0; 6], produced_snow: 0, fixed, k: 0, types: 0, combination: false, restriction: None, cost: ManaCost::ZERO, source: ManaPayment::Other, extra: [0; 6], produced: 0, tapped: false, taps: None }
     }
     fn one(mana: Mana, n: u32) -> [u32; 6] {
         let mut out = [0; 6];
@@ -17551,6 +17581,22 @@ mod tests {
         let two = pool([0; 6], vec![(vec![lotus], 2)]);
         assert!(two.covers(&mana("{U}{U}{U}{B}{B}{B}")));
         assert!(!two.covers(&mana("{W}{U}{B}")));
+    }
+
+    #[test]
+    fn mana_in_any_combination_of_colors_is_several_colors() {
+        // Thornvault Forager's forage: "Add two mana in any combination of colors" - {U}{R} as well as {R}{R} (CR 106.1b).
+        let forage = Alternative { k: 2, types: ANY_COLOR, combination: true, ..adds([0; 6]) };
+        let alone = pool([0; 6], vec![(vec![forage], 1)]);
+        assert!(alone.covers(&mana("{U}{R}")));
+        assert!(alone.covers(&mana("{R}{R}")));
+        assert!(alone.covers(&mana("{1}{W}")));
+        assert!(!alone.covers(&mana("{U}{R}{G}")));
+        assert!(!alone.covers(&mana("{3}")));
+        // Beside its "{T}: Add {G}", one of the two.
+        let forager = vec![adds(one(Mana::G, 1)), forage];
+        assert!(pool([0; 6], vec![(forager.clone(), 1)]).covers(&mana("{U}{R}")));
+        assert!(!pool([0; 6], vec![(forager, 1)]).covers(&mana("{G}{U}{R}")));
     }
 
     #[test]

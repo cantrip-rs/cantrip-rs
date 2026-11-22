@@ -518,8 +518,9 @@ impl Adds {
         Adds { any_color: true, ..self }
     }
 
-    /// For whoever asks before it is activated, it may add `n` mana of any color, chosen by its own effect: Orcish
-    /// Lumberjack's "three mana in any combination of {R} and/or {G}".
+    /// For whoever asks before it is activated, it may add `n` mana in any combination of colors, chosen by its own
+    /// effect: Orcish Lumberjack's "three mana in any combination of {R} and/or {G}" ({R}{G}{G} as well as {R}{R}{R}).
+    /// "N mana of any one color" is `add_any_color`.
     pub const fn yields_any(self, n: u8) -> Adds {
         Adds { any: n, ..self }
     }
