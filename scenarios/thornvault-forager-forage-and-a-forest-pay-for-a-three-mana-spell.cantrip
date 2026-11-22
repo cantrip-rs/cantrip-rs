@@ -1,0 +1,48 @@
+# Thornvault Forager: whether a spell may be cast is judged by what the mana abilities can add, forage's cost included (CR 601.2g,
+# 605.3a). Turn 3, three cards in the graveyard, Forager and a Forest untapped: forage's two mana and the Forest's one pay for Fiery
+# Temper {1}{R}{R}, so the cast is offered; the two reds chosen and the Forest's green pay it.
+
+[Bot1 Deck]
+Thornvault Forager
+Forest
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Fiery Temper
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Thornvault Forager.Cast
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot1.Hand.Fiery Temper.Cast(Bot2)
+Bot1.Battlefield.Thornvault Forager.Activate(Ability: Forage)
+Bot1.Colors(Red; Red)
+Bot1.Battlefield.Forest.Activate
+? Bot1.Mana = 
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 8
+Bot1.Graveyard = Fiery Temper

@@ -1,0 +1,50 @@
+# Thornvault Forager: "{T}, Forage: Add two mana in any combination of colors." A mana ability whose cost is a choice (CR 605.1a,
+# 601.2b). Turn 1: Bot1 casts Forager with a Forest and a Mox Ruby, and two Lightning Bolts at Bot2. Turn 3 a third Bolt makes a
+# graveyard of exactly three cards (no Food: forage by exiling is the only way, so nothing is asked, CR 701.61a): activating exiles all
+# three and adds one blue and one red, chosen as it resolves; Forager is tapped.
+
+[Bot1 Deck]
+Thornvault Forager
+Forest
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Thornvault Forager.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot1.Battlefield.Thornvault Forager.Activate(Ability: Forage)
+Bot1.Colors(Blue; Red)
+? Bot1.Graveyard = 
+? Exile.Count = 3
+? Bot1.Battlefield.Thornvault Forager.Tapped = true
+? Stack.Count = 0
+
+[Expect]
+Bot1.Mana = {U}{R}
+Bot2.Life = 11

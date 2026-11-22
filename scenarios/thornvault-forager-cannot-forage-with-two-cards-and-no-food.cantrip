@@ -1,0 +1,42 @@
+# Thornvault Forager: "{T}, Forage" can't be activated with a graveyard of two cards and no Food (CR 701.61a: three cards, or a
+# Food), but its other mana ability, "{T}: Add {G}", still can, and is the one a plain activation takes. Turn 1: Forager and two
+# Lightning Bolts; turn 3: the forage is not offered, and the {G} ability adds green.
+
+[Bot1 Deck]
+Thornvault Forager
+Forest
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Thornvault Forager.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Lightning Bolt; Lightning Bolt
+! Bot1.Battlefield.Thornvault Forager.Activate(Ability: Forage)
+Bot1.Battlefield.Thornvault Forager.Activate(Ability: Add {G})
+
+[Expect]
+Bot1.Mana = {G}
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt
+Bot1.Battlefield.Thornvault Forager.Tapped = true

@@ -1,0 +1,38 @@
+# Thornvault Forager: a way of paying that can't be paid is not offered (CR 601.2b, 701.61a). Bot1's graveyard is empty, so the only
+# forage is to sacrifice the Food Gilded Goose made: activating on turn 3 asks nothing about the way, takes the Food and adds two
+# mana, a white and a green, chosen as it resolves.
+
+[Bot1 Deck]
+Thornvault Forager
+Forest
+Mox Emerald
+Mox Ruby
+Gilded Goose
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Thornvault Forager.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Gilded Goose.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard = 
+Bot1.Battlefield.Thornvault Forager.Activate(Ability: Forage)
+Bot1.Colors(White; Green)
+? Bot1.Graveyard = 
+? Exile.Count = 0
+
+[Expect]
+Bot1.Mana = {W}{G}
+Bot1.Battlefield = Forest; Gilded Goose; Mox Emerald; Mox Ruby; Thornvault Forager

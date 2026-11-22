@@ -1,0 +1,47 @@
+# Thornvault Forager: with a Food and three cards in the graveyard, both ways of paying the forage cost are possible, so the player
+# is asked (CR 601.2b, 605.3a). Turn 1: Black Lotus (sacrificed), Forager, Gilded Goose with its Food and two Lightning Bolts, so the
+# graveyard holds three cards. Turn 3: the Food is sacrificed, not the cards, for two green mana; the Goose, the graveyard and the
+# exile are as they were.
+
+[Bot1 Deck]
+Thornvault Forager
+Forest
+Mox Emerald
+Black Lotus
+Gilded Goose
+Lightning Bolt
+Lightning Bolt
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: R)
+Bot1.Hand.Thornvault Forager.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Gilded Goose.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Black Lotus
+Bot1.Battlefield.Thornvault Forager.Activate(Ability: Forage)
+Bot1.Modes(Forage: sacrifice a Food)
+Bot1.Colors(Green; Green)
+? Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Black Lotus
+? Exile.Count = 0
+
+[Expect]
+Bot1.Mana = {G}{G}
+Bot1.Battlefield = Forest; Gilded Goose; Mox Emerald; Thornvault Forager
+Bot1.Battlefield.Thornvault Forager.Tapped = true

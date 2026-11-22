@@ -1,0 +1,52 @@
+# Thornvault Forager with Crime Novelist: the Food sacrificed to forage is the cost of a mana ability, so the Novelist's "whenever you
+# sacrifice an artifact" is a triggered mana ability (CR 605.1b) and resolves at once, with no stack (CR 605.4a): its counter and {R}
+# come with the Forager's two mana. Turn 1: Black Lotus pays for the Novelist, the Forest and a Mox Emerald for the Forager, the other
+# Mox for Gilded Goose and its Food. Turn 3: the Forager forages by sacrificing the Food (the graveyard holds only the Lotus, so that is
+# the only way) for {G}{G}, and the Novelist's {R} is already in the pool with nothing on the stack.
+
+[Bot1 Deck]
+Thornvault Forager
+Forest
+Mox Emerald
+Mox Emerald
+Black Lotus
+Gilded Goose
+Crime Novelist
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Crime Novelist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Thornvault Forager.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Gilded Goose.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Food Token.Subtypes = Food
+? Bot1.Battlefield.Crime Novelist.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Thornvault Forager.Activate(Ability: Forage)
+Bot1.Colors(Green; Green)
+? Stack.Count = 0
+? Bot1.Battlefield.Food Token = (absent)
+? Bot1.Battlefield.Crime Novelist.Power = 2
+
+[Expect]
+Bot1.Mana = {R}{G}{G}
+Bot1.Battlefield.Crime Novelist.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Thornvault Forager.Tapped = true

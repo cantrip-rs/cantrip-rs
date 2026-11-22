@@ -1,0 +1,49 @@
+# Thornvault Forager: a mana ability activated in the middle of casting a spell (CR 601.2g, 605.3a) takes its cost then. A fourth
+# Lightning Bolt is cast on turn 3 with a graveyard of three cards (two Bolts from turn 1 and 3 and one more): Forager's forage exiles
+# the three, adds a red and a green as it is activated, and the red pays the Bolt; the green is left floating.
+
+[Bot1 Deck]
+Thornvault Forager
+Forest
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Thornvault Forager.Cast
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Thornvault Forager.Activate(Ability: Forage)
+Bot1.Colors(Red; Green)
+? Bot1.Graveyard = 
+? Exile.Count = 3
+? Bot1.Mana = {G}
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 8
+Bot1.Graveyard = Lightning Bolt

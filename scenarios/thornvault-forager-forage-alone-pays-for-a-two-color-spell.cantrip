@@ -1,0 +1,49 @@
+# Thornvault Forager: forage adds two mana in any combination of colors, so the advice that judges whether a spell may be cast
+# counts a blue and a red, not only two of one color (CR 106.1b, 601.2g, 605.3a). Turn 3, three cards in the graveyard, the
+# Moxen spent: forage pays for Expressive Iteration {U}{R} (the Forest's green pays neither), so the cast is offered.
+
+[Bot1 Deck]
+Thornvault Forager
+Forest
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Expressive Iteration
+Lightning Bolt
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Thornvault Forager.Cast
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot1.Hand.Expressive Iteration.Cast
+? Turn = 3
+Bot1.Battlefield.Thornvault Forager.Activate(Ability: Forage)
+Bot1.Colors(Blue; Red)
+? Bot1.Mana = 
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Graveyard = Expressive Iteration
+Exile.Count = 4

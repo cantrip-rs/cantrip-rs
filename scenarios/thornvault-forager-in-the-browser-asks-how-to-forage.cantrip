@@ -1,0 +1,50 @@
+# Browser
+# Bot1 activates Thornvault Forager's "{T}, Forage: Add two mana in any combination of colors." in the browser, with a Food
+# and three cards in the graveyard, so both ways to forage could pay (CR 701.61a, 605.3a, 601.2b): the mana ability asks which
+# way to pay its cost, as any activated ability does, before the colors, and it adds its mana with no stack (CR 605.3b).
+# Bot1 sacrifices the Food and takes {G}{U}. Turn 1: Black Lotus (sacrificed), the Forager, Gilded Goose with its Food and two
+# Lightning Bolts, so the graveyard holds three cards.
+
+[Bot1 Deck]
+Thornvault Forager
+Forest
+Mox Emerald
+Black Lotus
+Gilded Goose
+Lightning Bolt
+Lightning Bolt
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: R)
+Bot1.Hand.Thornvault Forager.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Gilded Goose.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Thornvault Forager.Activate(Ability: Forage)
+? Client.Bot1.Prompt.Modes = Forage: exile three cards from your graveyard; Forage: sacrifice a Food
+Bot1.Modes(Forage: sacrifice a Food)
+Bot1.Colors(Green; Blue)
+? Stack.Count = 0
+? Exile.Count = 0
+
+[Expect]
+Bot1.Mana = {U}{G}
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Black Lotus
+Bot1.Battlefield = Forest; Gilded Goose; Mox Emerald; Thornvault Forager
+Bot1.Battlefield.Thornvault Forager.Tapped = true

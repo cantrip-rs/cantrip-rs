@@ -1,0 +1,43 @@
+# Thornvault Forager: "{3}{G}, {T}: Search your library for a Squirrel card, reveal it, put it into your hand, then shuffle." Woodland
+# Changeling is every creature type (CR 702.73a), a Squirrel among them; Lightning Bolt is not one, so a search naming it is refused.
+# Bot1 pays {3}{G} with a Forest and three Mox Rubies on turn 3 and takes the Changeling.
+
+[Bot1 Deck]
+Thornvault Forager
+Forest
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Forest x8
+Woodland Changeling
+Lightning Bolt
+Forest x6
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Thornvault Forager.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Thornvault Forager.Activate(Ability: Search)
+! Bot1.Search(Lightning Bolt)
+Bot1.Search(Woodland Changeling)
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Forest; Forest; Forest; Woodland Changeling
+Bot1.Revealed = Woodland Changeling
+Bot1.Library.Count = 12
+Bot1.Battlefield.Thornvault Forager.Tapped = true

@@ -1,0 +1,11 @@
+{
+  "name": "Thornvault Forager",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Squirrel Ranger",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{T}: Add {G}.\n{T}, Forage: Add two mana in any combination of colors. (To forage, exile three cards from your graveyard or sacrifice a Food.)\n{3}{G}, {T}: Search your library for a Squirrel card, reveal it, put it into your hand, then shuffle.",
+  "keywords": [
+    "Forage"
+  ]
+}
