@@ -1,0 +1,30 @@
+# Ozai, the Phoenix King: haste lets it attack the turn it is cast, and Firebending 4 adds {R}{R}{R}{R} that lasts until end of combat.
+# Black Lotus's {B}{B}{B}, two Mox Rubies and a Mox Emerald pay {2}{B}{B}{R}{R}.
+
+[Bot1 Deck]
+Mox Ruby x2
+Mox Emerald
+Black Lotus x3
+Ozai, the Phoenix King
+Mountain x16
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby#1.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Ozai, the Phoenix King.Cast
+Bot1.Pass
+Bot1.Attack(Ozai, the Phoenix King > Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Mana = {R}{R}{R}{R} lasting {R}{R}{R}{R}

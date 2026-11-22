@@ -1,0 +1,36 @@
+# Ozai, the Phoenix King: "has flying and indestructible as long as you have six or more unspent mana". Five unspent mana is not enough;
+# a sixth turns both keywords on, and spending mana turns them off again (CR 106.4, 604.2).
+
+[Bot1 Deck]
+Mox Ruby x2
+Mox Emerald
+Black Lotus x3
+Ozai, the Phoenix King
+Mountain x16
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby#1.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Ozai, the Phoenix King.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus#2.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {U}{U}{U}{R}{R}
+? Bot1.Battlefield.Ozai, the Phoenix King.Keywords = Haste; Trample
+Bot1.Battlefield.Mox Emerald.Activate
+
+[Expect]
+Bot1.Battlefield.Ozai, the Phoenix King.Keywords = Flying; Haste; Indestructible; Trample

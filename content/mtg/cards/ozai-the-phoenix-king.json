@@ -1,0 +1,12 @@
+{
+  "name": "Ozai, the Phoenix King",
+  "manaCost": "{2}{B}{B}{R}{R}",
+  "type": "Legendary Creature — Human Noble",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "Trample, firebending 4, haste\nIf you would lose unspent mana, that mana becomes red instead.\nOzai has flying and indestructible as long as you have six or more unspent mana.",
+  "keywords": [
+    "Trample",
+    "Haste"
+  ]
+}

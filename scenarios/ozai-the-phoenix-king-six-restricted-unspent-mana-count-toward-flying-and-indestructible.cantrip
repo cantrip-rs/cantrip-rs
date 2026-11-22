@@ -1,0 +1,40 @@
+# Ozai, the Phoenix King: "as long as you have six or more unspent mana" counts mana that can be spent only on some things as well
+# (CR 106.4, 106.6). Castle Garenbrig's six {G} for creature spells, the only mana in the pool, turn flying and indestructible on;
+# spending one on Basking Rootwalla leaves five, and they turn off again.
+
+[Bot1 Deck]
+Mox Ruby x2
+Mox Emerald
+Black Lotus x2
+Ozai, the Phoenix King
+Castle Garenbrig
+Basking Rootwalla
+Mountain x13
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Castle Garenbrig.Play
+Bot1.Hand.Mox Ruby#1.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Ozai, the Phoenix King.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+? Bot1.Battlefield.Ozai, the Phoenix King.Keywords = Haste; Trample
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Castle Garenbrig.Activate(Ability: six)
+? Bot1.Battlefield.Ozai, the Phoenix King.Keywords = Flying; Haste; Indestructible; Trample
+Bot1.Hand.Basking Rootwalla.Cast(Spend: G CreatureSpellsOrAbilitiesOfCreatures)
+
+[Expect]
+Bot1.Battlefield.Ozai, the Phoenix King.Keywords = Haste; Trample

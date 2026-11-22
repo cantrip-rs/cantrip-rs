@@ -1,0 +1,52 @@
+# Ozai, the Phoenix King: once Ozai leaves the battlefield, the mana it turned red stays only until the end of the current step or
+# phase (the ruling; CR 106.4, 500.4). Black Lotus's {U}{U}{U} becomes {R}{R}{R} as the main phase ends; in the beginning of combat
+# Bot2 exiles Ozai with Swords to Plowshares, the {R}{R}{R} is still there for the rest of that step, and it is lost as the step ends.
+
+[Bot1 Deck]
+Mox Ruby x2
+Mox Emerald
+Black Lotus x3
+Ozai, the Phoenix King
+Mountain x16
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby#1.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Ozai, the Phoenix King.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus#2.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+? Bot1.Mana = {R}{R}{R}
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Ozai, the Phoenix King)
+Bot2.Pass
+Bot1.Pass
+? Exile.Count = 1
+? Bot1.Mana = {R}{R}{R}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Mana =
+Bot1.Life = 27
