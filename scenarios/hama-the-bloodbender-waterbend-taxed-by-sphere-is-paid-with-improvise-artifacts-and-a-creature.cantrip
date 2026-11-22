@@ -1,0 +1,59 @@
+# Hama, the Bloodbender's waterbend {X} for a card with improvise, under a tax: Reverse Engineer (mana value 5) is exiled, and
+# Bot2's Sphere of Resistance makes the total {6}. A waterbend cost's taps pay only its own generic mana, never the tax
+# (CR 701.67b), while improvise's artifacts pay any of the generic mana (CR 702.126a), and each permanent is tapped for one
+# of them only (CR 601.2h). With no mana spent, Bot1 taps its five artifacts (two Moxen, two Mishra's Baubles and an
+# Ornithopter) and then Hama: the artifacts are tapped for improvise, so Hama, a creature improvise can't tap, may still pay
+# {1} of the waterbend after them. Reverse Engineer resolves and Bot1 draws three cards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Hama, the Bloodbender
+Mishra's Bauble
+Mishra's Bauble
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Sphere of Resistance
+Island x5
+Island
+Island
+Reverse Engineer
+Island x20
+
+[Actions]
+Bot1.Hand.Mishra's Bauble.Cast
+Bot1.Hand.Mishra's Bauble.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: U)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hama, the Bloodbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Reverse Engineer)
+? Exile = Reverse Engineer
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: U)
+Bot2.Hand.Sphere of Resistance.Cast
+[T3 Bot1.Main1]
+Bot1.Exile.Reverse Engineer.Cast(Convoke: Mox Sapphire, Mox Ruby, Mishra's Bauble, Mishra's Bauble, Ornithopter, Hama, the Bloodbender)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot2.Graveyard = Reverse Engineer; Black Lotus; Island; Island
+Bot1.Battlefield.Hama, the Bloodbender.Tapped = true
+Bot1.Battlefield.Mox Sapphire.Tapped = true
+Bot1.Battlefield.Mox Ruby.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = true

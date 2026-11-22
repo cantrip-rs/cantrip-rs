@@ -1,0 +1,54 @@
+# Hama, the Bloodbender's "you may cast the exiled card during your turn by waterbending {X} rather than paying its mana cost"
+# (CR 701.67a-b, 118.9) for a card with improvise (CR 702.126a): Metallic Rebuke, mana value 3, is exiled, and on turn three
+# Bot1 has {U}{U} floating (an Island and Mox Sapphire) and an untapped Hama, its Mox Ruby spent on a Lightning Bolt and no
+# artifact left untapped for improvise. The waterbend {3} is paid by the {U}{U} and tapping Hama, a creature, which improvise
+# could not tap: both may help pay, each permanent tapped for one of them (CR 601.2h). The Rebuke counters the Bolt, whose
+# controller has nothing left to pay {3} with, so Bot2 stays at 20.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Hama, the Bloodbender
+Lightning Bolt
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x7
+Island
+Ornithopter
+Metallic Rebuke
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: U)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hama, the Bloodbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Metallic Rebuke)
+? Exile = Metallic Rebuke
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Metallic Rebuke.Cast(Bot1.Stack.Lightning Bolt; Convoke: Hama, the Bloodbender)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Battlefield.Hama, the Bloodbender.Tapped = true

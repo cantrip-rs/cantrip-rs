@@ -6432,41 +6432,64 @@ pub struct Available {
     /// each `Color`, convoke's creatures): those that could make mana instead are `complex` sources, one of whose
     /// alternatives is being tapped for it (`Alternative::taps`). Empty but for a cost something may pay that way.
     tapped: [u32; 32],
-    /// The most generic mana of the cost the permanents tapped for it may pay together (`TapFor::cap`).
+    /// The artifacts and creatures sure to be tapped for a waterbend cost alone (`Tap::Bends`): each pays {1} of its generic
+    /// mana, together no more than `tap_cap`.
+    bent: u32,
+    /// The most generic mana of the cost the permanents tapped for a waterbend cost may pay together (`TapFor::bend`).
     tap_cap: u32,
 }
 
 /// What may be tapped to pay for part of the cost being judged rather than make mana for it (CR 601.2h): untapped artifacts
-/// for improvise (CR 702.126a) and waterbend (CR 701.67a), untapped creatures for convoke (CR 702.51a) and waterbend. Each
-/// pays {1}, or a convoke creature one mana of one of its colors, and together no more than `cap` of the generic mana:
-/// waterbend's taps only the waterbend cost's own, never a tax on it (CR 701.67b). A permanent tapped or sacrificed for mana
-/// can't then be tapped for it, mana abilities being activated before the cost is paid (CR 601.2g-h): one that could make
-/// mana is judged with being tapped for it as one more of its alternatives (`available_as`).
+/// for improvise (CR 702.126a), untapped creatures for convoke (CR 702.51a), each paying {1} of any of the generic mana or a
+/// convoke creature one mana of one of its colors; and untapped artifacts and creatures for a waterbend cost (CR 701.67a-b),
+/// each paying {1}, together no more than `bend` of the generic mana: the waterbend cost's own, never a tax on it. A spell
+/// with improvise or convoke cast by waterbending (Hama, the Bloodbender) has both: each permanent is tapped for one of them
+/// only (CR 601.2h), and one that improvise or convoke may tap pays at least what it would for the waterbend cost, so that is
+/// how it is judged (`payer`). A permanent tapped or sacrificed for mana can't then be tapped for it, mana abilities being
+/// activated before the cost is paid (CR 601.2g-h): one that could make mana is judged with being tapped for it as one more
+/// of its alternatives (`available_as`).
 #[derive(Clone, Copy)]
 struct TapFor {
     artifacts: bool,
     creatures: bool,
     convoke: bool,
-    cap: u32,
+    bend: u32,
+}
+
+/// What tapping a permanent for the cost judged pays (`TapFor::payer`).
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Tap {
+    /// Convoke's or improvise's: {1} of any of the generic mana, or a symbol of these colors (convoke's creature).
+    Pays(ColorSet),
+    /// A waterbend cost's: {1} of its generic mana (`TapFor::bend`).
+    Bends,
 }
 
 impl TapFor {
     /// A spell's own convoke and improvise, and those it is given (`pay_with`).
     fn spell(with: PayWith) -> TapFor {
-        TapFor { artifacts: with.improvise, creatures: with.convoke, convoke: with.convoke, cap: u32::MAX }
+        TapFor { artifacts: with.improvise, creatures: with.convoke, convoke: with.convoke, bend: 0 }
     }
 
-    /// What tapping `id` for it would pay: the colors whose symbols it may pay besides generic mana (a creature's own, for
-    /// convoke - an artifact creature is one too, which pays more than improvise would), or `None` where it can't be tapped
-    /// for it.
-    fn payer(&self, cx: &Cx, id: ObjectId, chars: &Chars) -> Option<ColorSet> {
+    /// A waterbend cost's alone, of `bend` generic mana (CR 701.67a-b).
+    fn bending(bend: u32) -> TapFor {
+        TapFor { artifacts: false, creatures: false, convoke: false, bend }
+    }
+
+    /// What tapping `id` for it would pay: what convoke or improvise would (a creature's own colors, for convoke - an
+    /// artifact creature is one too, which pays more than improvise would), or else {1} of the waterbend cost; `None` where
+    /// it can't be tapped for it.
+    fn payer(&self, cx: &Cx, id: ObjectId, chars: &Chars) -> Option<Tap> {
         if cx.s().obj(id).tapped {
             return None;
         }
         if self.creatures && chars.is(CardType::Creature) {
-            return Some(if self.convoke { chars.colors } else { ColorSet::NONE });
+            return Some(Tap::Pays(if self.convoke { chars.colors } else { ColorSet::NONE }));
         }
-        (self.artifacts && chars.is(CardType::Artifact)).then_some(ColorSet::NONE)
+        if self.artifacts && chars.is(CardType::Artifact) {
+            return Some(Tap::Pays(ColorSet::NONE));
+        }
+        (self.bend > 0 && (chars.is(CardType::Artifact) || chars.is(CardType::Creature))).then_some(Tap::Bends)
     }
 }
 
@@ -6492,13 +6515,13 @@ struct Alternative {
     produced: u32,
     /// Its cost has {T} (CR 107.5): it taps its source, as an ability that taps an untapped permanent would.
     tapped: bool,
-    /// Not mana: the source tapped for the cost being judged (`TapFor`), paying {1} of it or a symbol of these colors.
-    taps: Option<ColorSet>,
+    /// Not mana: the source tapped for the cost being judged (`TapFor`), paying what `Tap` says.
+    taps: Option<Tap>,
 }
 
 impl Alternative {
     /// The source tapped for the cost being judged (`TapFor::payer`) rather than making mana.
-    fn tapping(colors: ColorSet) -> Alternative {
+    fn tapping(colors: Tap) -> Alternative {
         Alternative {
             snow: false, extra_snow: [0; 6], produced_snow: 0,
             fixed: [0; 6],
@@ -6648,7 +6671,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
     let mut spent: Vec<ObjectId> = Vec::new();
     // The permanents that may be tapped for the cost (`tap`), with what each pays; and those whose tap is already one
     // alternative of a source's.
-    let mut payers: Vec<(ObjectId, ColorSet)> = Vec::new();
+    let mut payers: Vec<(ObjectId, Tap)> = Vec::new();
     let mut placed: Vec<ObjectId> = Vec::new();
     let given = layers::acquisition_possible(cx.cards(), cx.s());
     for &id in cx.s().battlefield() {
@@ -6723,6 +6746,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
                     spent: Vec::new(),
                     skip,
                     tapped: [0; 32],
+                    bent: 0,
                     tap_cap: 0,
                 };
             }
@@ -6940,10 +6964,13 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
         }
     }
     // The rest are tapped for the cost: nothing else would spend them.
-    let mut tapped = [0u32; 32];
-    for &(id, colors) in &payers {
+    let (mut tapped, mut bent) = ([0u32; 32], 0u32);
+    for &(id, pays) in &payers {
         if !placed.contains(&id) {
-            tapped[colors.0 as usize] += 1;
+            match pays {
+                Tap::Pays(colors) => tapped[colors.0 as usize] += 1,
+                Tap::Bends => bent += 1,
+            }
         }
     }
     let spenders = static_rules::any_mana_spenders(cx);
@@ -6962,7 +6989,8 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
         spent,
         skip,
         tapped,
-        tap_cap: tap.map_or(0, |t| t.cap),
+        bent,
+        tap_cap: tap.map_or(0, |t| t.bend),
     }
 }
 
@@ -7342,6 +7370,7 @@ impl Available {
             spent: Vec::new(),
             skip: None,
             tapped: [0; 32],
+            bent: 0,
             tap_cap: 0,
         };
         for (r, fixed, flex) in &self.restricted {
@@ -7364,16 +7393,19 @@ impl Available {
     /// generic mana, no more than `tap_cap` together, or a convoke creature a symbol of one of its colors, as many symbols
     /// as there can be (`convoked`). Mana pays the rest; it could pay whatever they did, so this is the best they can do.
     fn less_taps(&self, cost: &ManaCost) -> ManaCost {
+        // Those tapped for a waterbend cost pay only generic mana (CR 701.67b), so they pay it first: convoke's creatures then
+        // pay what they best may of the rest.
+        let mut left = *cost;
+        left.generic -= left.generic.min(self.bent).min(self.tap_cap);
         if self.tapped == [0; 32] {
-            return *cost;
+            return left;
         }
         if self.tapped[1..] == [0; 31] {
-            let mut left = *cost;
-            left.generic -= left.generic.min(self.tapped[0]).min(self.tap_cap);
+            left.generic -= left.generic.min(self.tapped[0]);
             return left;
         }
         let creatures: Vec<ColorSet> = (0..32u8).flat_map(|c| std::iter::repeat_n(ColorSet(c), self.tapped[c as usize] as usize)).collect();
-        convoked(cost, &creatures)
+        convoked(&left, &creatures)
     }
 
     /// How much mana of no restriction it could pay at most (advice): the pool's and what the mana abilities add, less
@@ -7513,6 +7545,7 @@ impl Available {
             spent: Vec::new(),
             skip: None,
             tapped: self.tapped,
+            bent: self.bent,
             tap_cap: self.tap_cap,
         }
     }
@@ -7691,8 +7724,10 @@ impl Search<'_> {
     fn within(&self, choice: Option<(Alternative, Option<usize>)>, types: u8) -> u32 {
         let Some((a, chosen)) = choice else { return 0 };
         // Tapped for the cost: {1} of its generic mana, or a symbol of the colors it may pay.
-        if let Some(colors) = a.taps {
-            return u32::from(types == 63 || types & colors.0 != 0);
+        match a.taps {
+            Some(Tap::Pays(colors)) => return u32::from(types == 63 || types & colors.0 != 0),
+            Some(Tap::Bends) => return u32::from(types == 63),
+            None => {}
         }
         let made = a.made(chosen);
         let own = if a.restriction.is_none_or(|r| self.may_pay(r) || (types == 63 && self.pays_activation(r))) {
@@ -7732,6 +7767,9 @@ impl Search<'_> {
                 if types == 63 || types & colors != 0 {
                     n = n.saturating_add(k);
                 }
+            }
+            if types == 63 {
+                n = n.saturating_add(with.bent.min(with.tap_cap));
             }
             *held = n;
         }
@@ -7786,8 +7824,11 @@ impl Search<'_> {
         for (types, held) in next.held.iter_mut().enumerate() {
             *held = held.saturating_add(self.within(choice, types as u8).saturating_mul(n));
         }
-        if let Some(colors) = a.taps {
-            next.with.tapped[colors.0 as usize] += n;
+        if let Some(pays) = a.taps {
+            match pays {
+                Tap::Pays(colors) => next.with.tapped[colors.0 as usize] += n,
+                Tap::Bends => next.with.bent += n,
+            }
             return next;
         }
         if !a.cost.is_zero() {
@@ -8432,7 +8473,7 @@ pub const EXTRA_LOYALTY_ALLOWED: u8 = AbilityRef::EXTRA_LOYALTY_ALLOWED;
 /// activation by it, and the advice of how much X could be paid judges X by it (`x_available`), so they never part.
 fn activation_available<'a>(cx: &Cx, player: PlayerId, id: ObjectId, def: &ActivatedDef, bend: u32, plain: impl FnOnce() -> &'a Available) -> Option<Available> {
     if def.waterbend {
-        let tap = TapFor { artifacts: true, creatures: true, convoke: false, cap: bend };
+        let tap = TapFor::bending(bend);
         return Some(available_as(cx, player, def.cost.tap.then_some(id), ManaWindow::Payment, false, Some(tap)));
     }
     (def.cost.tap && (has_mana_source(cx, id, player) || plain().spent.contains(&id))).then(|| available_without(cx, player, Some(id), ManaWindow::Payment))
@@ -9817,7 +9858,7 @@ impl<'a> Offer<'a> {
         // be tapped for each generic mana of it, and for no other mana (CR 701.67b).
         let bending;
         let a = if route.terms.waterbend {
-            bending = a.tapping(cx, player, TapFor { artifacts: true, creatures: true, convoke: false, cap: base.generic });
+            bending = a.tapping(cx, player, TapFor::bending(base.generic));
             &bending
         } else {
             a
@@ -10580,7 +10621,7 @@ fn bendable(cx: &Cx, payer: PlayerId, generic: u32) -> u32 {
 /// the permission it is cast by names beside the card's own (`Available::tap_cap`, `Route::terms`): its alternative cost (Hama).
 fn waterbend_tap(def: &CardDef, routed: u32) -> Option<TapFor> {
     let w = def.additional_cost.map(|c| c.waterbend).filter(|w| w.generic > 0 || w.x > 0)?;
-    Some(TapFor { artifacts: true, creatures: true, convoke: false, cap: w.generic + u32::from(w.x) * u32::from(least_x(def.x_cant_be_zero)) + routed })
+    Some(TapFor::bending(w.generic + u32::from(w.x) * u32::from(least_x(def.x_cant_be_zero)) + routed))
 }
 
 /// Whether a spell's total cost could be paid (advice, CR 601.2g-h): by the mana at hand, with what else may pay for it
@@ -10593,7 +10634,10 @@ fn waterbend_tap(def: &CardDef, routed: u32) -> Option<TapFor> {
 fn covers_total(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &CardDef, cost: ManaCost, exiled: u8, any: AnyMana) -> bool {
     let no_mana = def.keywords.has(Keyword::CantSpendManaToCast);
     let with = pay_with(cx, &a.grantors, player, card, def, face_of(cx, card, def));
-    // A waterbend cost's taps (CR 701.67a-b), beside the mana: what a spell's convoke or improvise does is judged below.
+    // How much of the generic mana waterbend's taps may pay (CR 701.67a-b): the card's own waterbend cost's and the one the
+    // permission it is cast by names instead of the mana cost (`a.tap_cap`, Hama's).
+    let bend = waterbend_tap(def, a.tap_cap).map_or(a.tap_cap, |t| t.bend);
+    // A waterbend cost's taps, beside the mana: with a spell's convoke or improvise they are judged together below.
     let bending;
     let a = match waterbend_tap(def, a.tap_cap).filter(|_| !no_mana && !with.improvise && !with.convoke) {
         Some(tap) => {
@@ -10616,11 +10660,21 @@ fn covers_total(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &
         generic += gy.saturating_sub(exiled as usize) as u32;
     }
     let tapping;
-    let a = if with.improvise || with.convoke {
-        let tap = TapFor::spell(with);
+    let a = if with.improvise || with.convoke || (no_mana && bend > 0) {
+        // Each artifact and creature is tapped for one of them only (CR 601.2h): for improvise or convoke where it may be, and
+        // otherwise for the waterbend cost, whose taps pay its generic mana alone (CR 701.67b).
+        let tap = TapFor { bend, ..TapFor::spell(with) };
         if no_mana {
             // No mana is made for it: every artifact and creature that may be is tapped for it.
-            let creatures: Vec<ColorSet> = cx.permanents_of(player).into_iter().filter_map(|id| tap.payer(cx, id, &cx.chars(id))).collect();
+            let (mut creatures, mut bent): (Vec<ColorSet>, u32) = (Vec::new(), 0);
+            for id in cx.permanents_of(player) {
+                match tap.payer(cx, id, &cx.chars(id)) {
+                    Some(Tap::Pays(colors)) => creatures.push(colors),
+                    Some(Tap::Bends) => bent += 1,
+                    None => {}
+                }
+            }
+            cost.generic -= cost.generic.min(bent).min(bend);
             cost = convoked(&cost, &creatures);
             a
         } else {
@@ -16183,18 +16237,28 @@ fn pay_candidates(
                 continue;
             }
             let chars = cx.chars(id);
-            if helpers.waterbend > bent && due.generic > 0 && (chars.is(CardType::Artifact) || chars.is(CardType::Creature)) {
+            // Each is tapped for one thing only (CR 601.2h), as the payer chooses. Improvise's artifact pays {1} of any of the
+            // generic mana, so it is offered for that rather than for a waterbend cost, whose taps pay only its own generic
+            // mana (CR 701.67b, 702.126a); convoke's creature is offered for convoke and, while a waterbend cost has generic
+            // mana left, for that too: it then convokes nothing (CR 702.51c).
+            let improvise = helpers.with.improvise && due.generic > 0 && chars.is(CardType::Artifact);
+            let mut convoke = false;
+            if helpers.with.convoke && chars.is(CardType::Creature) {
+                let mut with = tapped.to_vec();
+                with.push(chars.colors);
+                convoke = can_convoke(cost, &with);
+            }
+            if helpers.waterbend > bent && due.generic > 0 && !improvise && (chars.is(CardType::Artifact) || chars.is(CardType::Creature)) {
+                if convoke {
+                    out.push(ActionOption::on(ActionKind::TapToPay, id, PAY_CONVOKE));
+                }
                 out.push(ActionOption::on(ActionKind::TapToPay, id, PAY_WATERBEND));
             } else if helpers.creatures && due.generic > 0 && chars.is(CardType::Creature) {
                 out.push(ActionOption::on(ActionKind::TapToPay, id, PAY_WATERBEND));
-            } else if helpers.with.improvise && due.generic > 0 && chars.is(CardType::Artifact) {
+            } else if improvise {
                 out.push(ActionOption::on(ActionKind::TapToPay, id, PAY_IMPROVISE));
-            } else if helpers.with.convoke && chars.is(CardType::Creature) {
-                let mut with = tapped.to_vec();
-                with.push(chars.colors);
-                if can_convoke(cost, &with) {
-                    out.push(ActionOption::on(ActionKind::TapToPay, id, PAY_CONVOKE));
-                }
+            } else if convoke {
+                out.push(ActionOption::on(ActionKind::TapToPay, id, PAY_CONVOKE));
             }
         }
     }
@@ -17738,6 +17802,7 @@ mod tests {
             spent: Vec::new(),
             skip: None,
             tapped: [0; 32],
+            bent: 0,
             tap_cap: 0,
         }
     }

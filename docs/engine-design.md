@@ -1925,7 +1925,9 @@ Champion's "noncreature spells you cast have improvise", Chief Engineer's convok
 read by the cast's payment (`Helpers::with`) and by the advice (`covers_total`, with the grantors found once per decision in
 `Available::grantors`). The advice judges an artifact or creature that could make mana as either tapped for the cost or
 spent for its mana, never both (CR 601.2g-h): `TapFor` names what may be tapped (convoke's creatures, improvise's
-artifacts, and both for a waterbend cost, CR 701.67a, capped at the waterbend cost's own generic mana), and
+artifacts, and both for a waterbend cost, CR 701.67a, capped at the waterbend cost's own generic mana; a spell with
+improvise or convoke cast by waterbending, Hama's, has both, each permanent tapped for one of them, CR 601.2h: for improvise
+or convoke where it may be, which pays at least what the waterbend would, and otherwise for the waterbend, `Tap`), and
 `available_as` makes being tapped for it one more alternative of each such permanent's mana sources - its own abilities, an
 altar that would sacrifice it, Urza that would tap it - so the existing search over alternatives decides, alike
 permanents counted together; one nothing else would spend is sure to be tapped (`Available::tapped`, taken off the cost

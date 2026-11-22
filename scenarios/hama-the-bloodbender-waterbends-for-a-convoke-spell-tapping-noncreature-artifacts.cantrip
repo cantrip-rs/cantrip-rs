@@ -1,0 +1,51 @@
+# Hama, the Bloodbender's "you may cast the exiled card during your turn by waterbending {X} rather than paying its mana cost"
+# (CR 701.67a-b, 118.9) for a card with convoke (CR 702.51a): Sundering Vitae, mana value 3, is exiled, and on turn three Bot1
+# has no mana at all, only Hama and two Mishra's Baubles untapped. The waterbend {3} is paid by tapping Hama for convoke and
+# the two Baubles, artifacts that are no creatures, for the waterbend cost, which convoke could not tap: both may help pay,
+# each permanent tapped for one of them (CR 601.2h). The Vitae destroys Bot2's Ornithopter.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Hama, the Bloodbender
+Mishra's Bauble
+Mishra's Bauble
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x6
+Island
+Island
+Sundering Vitae
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mishra's Bauble.Cast
+Bot1.Hand.Mishra's Bauble.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: U)
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Hama, the Bloodbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Sundering Vitae)
+? Exile = Sundering Vitae
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Exile.Sundering Vitae.Cast(Bot2.Battlefield.Ornithopter; Convoke: Hama, the Bloodbender, Mishra's Bauble, Mishra's Bauble)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Graveyard = Sundering Vitae; Ornithopter; Island; Island
+Bot1.Battlefield.Hama, the Bloodbender.Tapped = true
+Bot1.Battlefield.Mishra's Bauble#1.Tapped = true
+Bot1.Battlefield.Mishra's Bauble#2.Tapped = true
