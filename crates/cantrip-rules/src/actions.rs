@@ -6631,8 +6631,9 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
                 || cost.mana.phyrexian != [0; 5]
                 || cost.mana.twobrid != [0; 5]
                 || def.cost.permanents.is_some_and(|p| p.tapped)
-                // A way of paying chosen as it is activated may add mana or tapped permanents to what is judged here.
-                || !def.cost_choice.is_empty()
+                // A way of paying chosen as it is activated that has mana of its own or taps permanents (as the cost's own does)
+                // adds what is judged here; one that does neither (forage) leaves the yield as stated.
+                || def.cost_choice.iter().any(|way| way.cost.mana != ManaCost::ZERO || way.cost.permanents.is_some_and(|p| p.tapped))
                 // A reduction may give the payer several distinct totals. As with a yield not stated, leave advice
                 // open rather than treating its first hybrid announcement as the only payable one.
                 || (!changers.is_empty() || def.cost_change.is_some()) && change_any(cx, &changers, player, costed, def.cost.mana, None, &[], None,

@@ -429,3 +429,16 @@ fn a_way_of_a_mana_ability_in_mana_is_paid_from_the_pool_with_its_own_cost() {
     let (mut g, mint) = game_with(&MINT, 0, 0);
     assert!(offered(&mut g, mint).is_empty());
 }
+
+#[test]
+fn the_advice_keeps_a_stated_yield_unless_a_way_adds_mana() {
+    // "{T}, Discard a card or sacrifice a Bear: Add {G}{G}": no way has mana, so the yield is still two green (CR 605.3a), and
+    // three green are not covered.
+    let (mut g, _) = game_with(&WELL, 1, 0);
+    let a = crate::actions::available(&cx(&mut g), YOU);
+    assert!(a.covers(&cost("{G}{G}").mana), "two green from the Well");
+    assert!(!a.covers(&cost("{G}{G}{G}").mana), "no more than two");
+    // "{T}, Pay {1} or discard a card: Add {G}{G}": a way has mana of its own, which the advice cannot say, so it stays open.
+    let (mut g, _) = game_with(&MINT, 1, 0);
+    assert!(crate::actions::available(&cx(&mut g), YOU).covers(&cost("{G}{G}{G}").mana), "left open");
+}
