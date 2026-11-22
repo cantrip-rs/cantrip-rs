@@ -1,0 +1,48 @@
+# Fblthp, "ward {2}": the positive control. Bot2's Black Lotus makes three red, so after the Bolt it can pay {2}, the ward
+# trigger's counter is paid off and the Bolt kills Fblthp. With Fblthp gone, "the top card of your library has plot" and "you
+# may plot nonland cards from the top of your library" are over (CR 611.3a, 113.6): on turn three, with Mox Ruby's {R} to pay
+# for it, the Lightning Bolt on top of Bot1's library is not offered for plot.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Fblthp, Lost on the Range
+Island
+Island
+Island
+Island
+Lightning Bolt
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Fblthp, Lost on the Range.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Fblthp, Lost on the Range)
+Bot2.PayCost
+? Bot2.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Library.Lightning Bolt.Activate(Ability: Plot)
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Fblthp, Lost on the Range = (absent)
+Bot1.Graveyard = Fblthp, Lost on the Range; Black Lotus
+Bot1.Library.Count = 13

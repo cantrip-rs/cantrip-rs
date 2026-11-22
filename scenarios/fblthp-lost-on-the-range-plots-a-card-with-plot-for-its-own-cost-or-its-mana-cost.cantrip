@@ -1,0 +1,39 @@
+# The ruling on Fblthp: a card that normally has plot may be plotted from the top for its own plot cost or for Fblthp's, its mana
+# cost. The Blacksnag Buzzard on top has Plot {1}{B} and costs {2}{B}: with Mox Jet and a Swamp only {B}{B} is there, so the
+# mana cost is refused (the first line, which is told by being short of mana) and its own plot cost is paid, exactly, leaving
+# the pool empty; the Buzzard is plotted. Turn one ends with the Fblthp on the table.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Swamp
+Fblthp, Lost on the Range
+Island
+Island
+Island
+Blacksnag Buzzard
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Fblthp, Lost on the Range.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Library.Blacksnag Buzzard.Activate(Ability: Plot. The plot cost is equal to this card's mana cost.; Mana: short)
+Bot1.Library.Blacksnag Buzzard.Activate(Ability: Plot {1}{B})
+? Bot1.Mana =
+
+[Expect]
+Turn = 1
+Exile = Blacksnag Buzzard
+Bot1.Library.Count = 12

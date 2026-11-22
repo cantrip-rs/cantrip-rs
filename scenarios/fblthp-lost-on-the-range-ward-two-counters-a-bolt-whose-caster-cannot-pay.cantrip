@@ -1,0 +1,32 @@
+# Fblthp, "ward {2}" (CR 702.21a): Bot2's only mana is a Mox Ruby, which pays for the Lightning Bolt, so the ward trigger
+# counters it and Fblthp, a 1/1, takes no damage. Fblthp came down on turn 1 off a Black Lotus.
+
+[Bot1 Deck]
+Black Lotus
+Fblthp, Lost on the Range
+Island x30
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Fblthp, Lost on the Range.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Fblthp, Lost on the Range)
+[T2 Bot2.Main2]
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Fblthp, Lost on the Range.Damage = 0
+Bot2.Graveyard = Lightning Bolt

@@ -1,0 +1,54 @@
+# Fblthp, "You may look at the top card of your library any time. The top card of your library has plot. The plot cost is equal
+# to its mana cost. You may plot nonland cards from the top of your library" (CR 702.170a, 116.2k, 401.2): on turn one Bot1
+# casts Fblthp off a Black Lotus, looks at the top card, and plots the Lightning Bolt on top for exactly its mana cost {R} (a
+# Mox Sapphire's {U} alone cannot pay it: the refusal, until a Mountain is played). The Bolt is exiled, so the Ornithopter under it is the new top card, and the
+# Bolt cannot be cast the turn it was plotted. Bot2 has no such rule: it looks at nothing. On turn three the Bolt is cast free
+# and Bot2 is at 17.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mountain
+Fblthp, Lost on the Range
+Island
+Island
+Island
+Lightning Bolt
+Ornithopter
+Island x10
+
+[Bot2 Deck]
+Island x7
+Lightning Bolt
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Fblthp, Lost on the Range.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.MayLookAtLibraryTop = true
+? Bot2.MayLookAtLibraryTop = (absent)
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Library.Lightning Bolt.Activate(Ability: Plot; Mana: short)
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Library.Lightning Bolt.Activate(Ability: Plot)
+? Bot1.Mana = {U}
+? Exile = Lightning Bolt
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+[T3 Bot1.Main1]
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Library.Count = 10
+Bot1.Hand = Island; Island; Island; Ornithopter

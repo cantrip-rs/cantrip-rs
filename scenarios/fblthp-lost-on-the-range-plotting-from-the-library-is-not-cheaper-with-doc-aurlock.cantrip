@@ -1,0 +1,42 @@
+# Doc Aurlock, "plotting cards from your hand costs {2} less" (CR 116.2k, 118.7) does not touch a card plotted from the top of the
+# library by Fblthp: the Blacksnag Buzzard's own plot cost {1}{B} stays {1}{B}. With Doc Aurlock out and only a Swamp's {B}
+# left, the Buzzard on top is not offered for plot (it would be, for {B}, from a hand).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Island
+Fblthp, Lost on the Range
+Doc Aurlock, Grizzled Genius
+Swamp
+Blacksnag Buzzard
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Fblthp, Lost on the Range.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Doc Aurlock, Grizzled Genius.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+! Bot1.Library.Blacksnag Buzzard.Activate(Ability: Plot {1}{B}; Mana: short)
+
+[Expect]
+Turn = 1
+Bot1.Library.Count = 13
+Bot1.Mana = {B}

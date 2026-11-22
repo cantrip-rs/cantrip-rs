@@ -1,0 +1,56 @@
+# Fblthp's "You may plot nonland cards from the top of your library" (CR 702.170a, 116.2k): a special action at sorcery timing
+# (any time its controller has priority in their main phase with the stack empty), for the top card of the controller's own
+# library, and for no land. Bot1 has Mox Ruby's {R} and Mox Sapphire's {U} all through: with an Ornithopter on the stack the
+# Lightning Bolt on top is not offered; on Bot2's turn, with Bot2's Mox Ruby on the stack, it is not either (it is not Bot1's
+# main phase); and Bot2, whose library also holds a Lightning Bolt on top and who has {R}, is never offered it (it is not "your
+# library" of Fblthp's controller, and Bot2 has no such rule). On turn three the Bolt is drawn and the Forest under it is a land.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Fblthp, Lost on the Range
+Ornithopter
+Island
+Island
+Lightning Bolt
+Forest
+Island x11
+
+[Bot2 Deck]
+Mox Ruby
+Island x6
+Lightning Bolt
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Fblthp, Lost on the Range.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Library.Lightning Bolt.Activate(Ability: Plot)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+! Bot1.Library.Lightning Bolt.Activate(Ability: Plot)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Library.Lightning Bolt.Activate(Ability: Plot)
+[T3 Bot1.Main1]
+? Bot1.Hand = Island; Island; Lightning Bolt
+! Bot1.Library.Forest.Activate(Ability: Plot)
+
+[Expect]
+Turn = 3
+Exile.Count = 0
+Bot1.Library.Count = 12
+Bot2.Library.Count = 12

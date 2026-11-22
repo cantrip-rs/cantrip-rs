@@ -1,0 +1,38 @@
+# Fblthp makes the plot cost equal to the card's mana cost, X being 0 (CR 107.3g-h, 702.170a): the Fireball on top ({X}{R}) is
+# plotted for {R} alone, a Mountain's mana, and no more is asked. Cast free from exile on turn three (CR 702.170d), X is
+# 0 (CR 107.3b), so it deals no damage: Bot2 stays at 20 and the Fireball is in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mountain
+Fblthp, Lost on the Range
+Island
+Island
+Island
+Island
+Fireball
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Fblthp, Lost on the Range.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Library.Fireball.Activate(Ability: Plot)
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Exile.Fireball.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot2.Life = 20
+Bot1.Graveyard = Fireball; Black Lotus

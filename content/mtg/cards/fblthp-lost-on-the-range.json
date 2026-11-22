@@ -1,0 +1,8 @@
+{
+  "name": "Fblthp, Lost on the Range",
+  "manaCost": "{1}{U}{U}",
+  "type": "Legendary Creature — Homunculus",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Ward {2}\nYou may look at the top card of your library any time.\nThe top card of your library has plot. The plot cost is equal to its mana cost.\nYou may plot nonland cards from the top of your library."
+}
