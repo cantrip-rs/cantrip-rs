@@ -453,7 +453,7 @@ pub struct CostPaymentChoice {
 
 /// The kind of operation, independently of its position in an unbounded list.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
-pub enum CostPaymentKind { Life, Tap, Sacrifice, Return, Exile, Mana, Energy, Counters, Discard, Behold, Exert, Unattach, Library, CommitHelpers, Choose }
+pub enum CostPaymentKind { Life, Tap, Sacrifice, Return, Exile, Mana, Energy, Counters, Discard, Behold, Exert, Unattach, Library, CommitHelpers, Choose, Reveal }
 
 /// One still-pending event whose replacement choices a player may order with their other choices (CR 101.4c).
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]

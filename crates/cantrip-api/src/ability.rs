@@ -1481,6 +1481,7 @@ pub const fn multikicker_cost(cost: Cost) -> Option<Kicker> {
             && !cost.exile_self
             && !cost.return_self
             && !cost.unattach_self
+            && !cost.reveal_secret_type
             && !cost.exert
             && !cost.discard_hand
             && cost.collect_evidence == 0

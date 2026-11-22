@@ -1003,6 +1003,12 @@ pub struct Cost {
     /// Unattach this Equipment (CR 701.3d, 118.3): payable only while it is attached to something, since a cost that
     /// changes nothing cannot be paid.
     pub unattach_self: bool,
+    /// "Reveal the creature type you chose" (CR 118.3, 701.20a): the creature type this permanent's ability chose in secret
+    /// (`Game::remember_secret_subtype`), shown to all as the ability is put on the stack. Payable only by the player who chose
+    /// it, and only while the permanent is the one that chose it. Kept on the ability (`StackItem::choice`, read with
+    /// `StackItem::announced_type`) for its resolution, which is no longer where the choice was kept if the cost sacrificed
+    /// the permanent (CR 608.2h, 400.7). A kind of cost that only an activated ability has.
+    pub reveal_secret_type: bool,
     /// Return this permanent to its owner's hand (CR 118.3): payable only while it is on the battlefield.
     pub return_self: bool,
     /// Put this card into its owner's library as a cost (CR 118.3): the source must still be present when the cost is paid.
@@ -1339,6 +1345,7 @@ impl Cost {
             exile_from_hand_for_less,
             tap_permanents,
             unattach_self,
+            reveal_secret_type,
             return_self,
             put_self_into_library,
             variable,
@@ -1385,6 +1392,7 @@ impl Cost {
             && exile_from_hand_for_less.is_none()
             && !tap_permanents
             && !unattach_self
+            && !reveal_secret_type
             && !return_self
             && put_self_into_library.is_none()
             && variable.is_none()
@@ -1584,6 +1592,7 @@ impl Cost {
         c.exert |= other.exert;
         c.forage |= other.forage;
         c.unattach_self |= other.unattach_self;
+        c.reveal_secret_type |= other.reveal_secret_type;
         c.return_self |= other.return_self;
         if c.variable.is_none() {
             c.variable = other.variable;
@@ -1657,6 +1666,7 @@ impl Cost {
             tap_permanents: false,
 
             unattach_self: false,
+            reveal_secret_type: false,
             return_self: false,
             put_self_into_library: None,
             variable: None,

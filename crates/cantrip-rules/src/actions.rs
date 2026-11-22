@@ -1044,6 +1044,10 @@ fn can_pay_other_judged(cx: &Cx, source: ObjectId, controller: PlayerId, cost: &
     {
         return false;
     }
+    // A type chosen in secret is revealed only by the player who chose it (CR 607.2d), and only by the permanent that chose it.
+    if cost.reveal_secret_type && !secret_type_of(cx, source, by).is_some_and(|(_, chooser)| chooser == controller) {
+        return false;
+    }
     if cost.unattach_self && !obj.attached_to.is_some_and(|h| cx.s().obj(h).zone.is(ZoneKind::Battlefield) && cx.s().obj(h).became.is_none()) {
         return false;
     }
@@ -1520,6 +1524,15 @@ fn tap_source(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost, othe
         return Vec::new();
     }
     if ops::tap_quietly(cx, source) { vec![source] } else { Vec::new() }
+}
+
+/// The creature type `source` chose in secret as the text `by` (its own, if none) and who chose it, while it is still the
+/// permanent that chose it, not one that has left the battlefield (CR 607.2d, 400.7).
+fn secret_type_of(cx: &Cx, source: ObjectId, by: Option<Linked>) -> Option<(Subtype, PlayerId)> {
+    if !live(cx.s(), source) {
+        return None;
+    }
+    cx.s().secret_subtype(by.unwrap_or_else(|| cx.text_linked(source)))
 }
 
 /// Pays the exert and tap-creatures parts of a cost.
@@ -2737,6 +2750,7 @@ enum SpellPayment<'a> {
     Craft { origin: CostOrigin, component: usize, cost: &'a Cost, source_text: SourceText },
     ExertSelf { origin: CostOrigin, component: usize, source_text: SourceText },
     UnattachSelf { origin: CostOrigin, component: usize, source_text: SourceText },
+    RevealSecret { source_text: SourceText },
     TapSelf { origin: CostOrigin, component: usize, source_text: SourceText },
     TapGranter { origin: CostOrigin, component: usize, object: ObjectId, source_text: SourceText },
     SacrificeSelf { origin: CostOrigin, component: usize, object: ObjectId, part: CostPart, source_text: SourceText },
@@ -2755,7 +2769,7 @@ impl SpellPayment<'_> {
     /// A step done to the source itself that leaves it where it is (`footprint`): paid before the other steps when their
     /// order cannot matter.
     fn self_first(&self) -> bool {
-        matches!(self, Self::SourceCounters { .. } | Self::ExertSelf { .. } | Self::UnattachSelf { .. } | Self::TapSelf { .. })
+        matches!(self, Self::SourceCounters { .. } | Self::ExertSelf { .. } | Self::UnattachSelf { .. } | Self::TapSelf { .. } | Self::RevealSecret { .. })
     }
 
     fn has_random_element(&self) -> bool {
@@ -2789,7 +2803,7 @@ impl SpellPayment<'_> {
             | Self::CountersAmong { source_text, .. } | Self::Blight { source_text, .. } | Self::ZoneExile { source_text, .. }
             | Self::Discard { source_text, .. } | Self::Variable { source_text, .. } | Self::Behold { source_text, .. }
             | Self::ChooseObject { source_text, .. } | Self::TapCreatures { source_text, .. } | Self::SourceCounters { source_text, .. }
-            | Self::Craft { source_text, .. } | Self::ExertSelf { source_text, .. } | Self::UnattachSelf { source_text, .. }
+            | Self::Craft { source_text, .. } | Self::ExertSelf { source_text, .. } | Self::UnattachSelf { source_text, .. } | Self::RevealSecret { source_text }
             | Self::TapSelf { source_text, .. } | Self::TapGranter { source_text, .. } | Self::SacrificeSelf { source_text, .. } | Self::MoveSelf { source_text, .. } => *source_text,
             Self::Mana | Self::Reducer(_) => SourceText::Own,
         }
@@ -2915,6 +2929,7 @@ fn append_fixed_payments<'a>(out: &mut Vec<SpellPayment<'a>>, origin: CostOrigin
             if part.materials.is_some() { out.push(SpellPayment::Craft { origin, component, cost: part, source_text: source_text }); }
             if part.exert { out.push(SpellPayment::ExertSelf { origin, component, source_text: source_text }); }
             if part.unattach_self { out.push(SpellPayment::UnattachSelf { origin, component, source_text: source_text }); }
+            if part.reveal_secret_type { out.push(SpellPayment::RevealSecret { source_text: source_text }); }
             if part.tap { out.push(SpellPayment::TapSelf { origin, component, source_text: source_text }); }
             if part.sacrifice_self { out.push(SpellPayment::SacrificeSelf { origin, component, object: source, part: CostPart::SelfPermanent, source_text: source_text }); }
             if part.sacrifice_granter {
@@ -3093,7 +3108,7 @@ fn footprint(cx: &Cx, player: PlayerId, spell: ObjectId, scope: PaymentScope, ta
         // What is done to the source itself without moving it is paid before the others (`SpellPayment::self_first`),
         // which only ever leaves them the more to choose from: a source tapped first may still be sacrificed, never the
         // other way round.
-        SpellPayment::SourceCounters { .. } | SpellPayment::ExertSelf { .. } | SpellPayment::UnattachSelf { .. } | SpellPayment::TapSelf { .. } => {
+        SpellPayment::SourceCounters { .. } | SpellPayment::ExertSelf { .. } | SpellPayment::UnattachSelf { .. } | SpellPayment::TapSelf { .. } | SpellPayment::RevealSecret { .. } => {
             Footprint::NONE
         }
         SpellPayment::TapGranter { object, .. } => Footprint::of(vec![*object], FOOT_BATTLEFIELD, 0, Act::Tap),
@@ -3312,6 +3327,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 (live(cx.s(), spell) && candidates.len() >= usize::from(m.count) && parts_can_be_matched(cx, spell, player, m, &candidates, scope.by())).then_some(i)
             }
             SpellPayment::ExertSelf { .. } => source_usable().then_some(i),
+            SpellPayment::RevealSecret { .. } => secret_type_of(cx, spell, scope.by()).is_some_and(|(_, chooser)| chooser == player).then_some(i),
             SpellPayment::UnattachSelf { .. } => (source_usable() && cx.s().obj(spell).attached_to.is_some_and(|id| live(cx.s(), id) && cx.s().obj(id).zone.is(ZoneKind::Battlefield))).then_some(i),
             SpellPayment::TapSelf { .. } => (source_usable() && !cx.s().obj(spell).tapped
                 && (!summoning_sick(cx.cards(), cx.s(), &cx.g.log, spell) || static_rules::activates_as_though_haste(cx, player, spell))).then_some(i),
@@ -3422,6 +3438,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 },
                 SpellPayment::Craft { .. } => CostPaymentChoice { label: format!("Exile {name} and craft materials — {source_text}"), objects: vec![spell], kind: CostPaymentKind::Exile },
                 SpellPayment::ExertSelf { .. } => CostPaymentChoice { label: format!("Exert {name} — {source_text}"), objects: vec![spell], kind: CostPaymentKind::Exert },
+                SpellPayment::RevealSecret { .. } => CostPaymentChoice { label: format!("Reveal the creature type you chose — {source_text}"), objects: Vec::new(), kind: CostPaymentKind::Reveal },
                 SpellPayment::UnattachSelf { .. } => CostPaymentChoice { label: format!("Unattach {name} — {source_text}"), objects: vec![spell], kind: CostPaymentKind::Unattach },
                 SpellPayment::TapSelf { .. } => CostPaymentChoice { label: format!("Tap {name} — {source_text}"), objects: vec![spell], kind: CostPaymentKind::Tap },
                 SpellPayment::TapGranter { object, .. } => CostPaymentChoice { label: format!("Tap {} — {source_text}", cx.chars(*object).name), objects: vec![*object], kind: CostPaymentKind::Tap },
@@ -3643,6 +3660,16 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             SpellPayment::ExertSelf { origin, component, .. } => {
                 ops::exert(cx, spell, player);
                 scope.record(cx, spell, spell, origin, component, CostPart::ExertSelf);
+            }
+            SpellPayment::RevealSecret { .. } => {
+                // The type is told to everyone with the ability put on the stack (CR 601.2h): it goes with the ability, which the
+                // permanent's sacrifice, paid after it, no longer reads it from (CR 400.7, 608.2h).
+                let (revealed, _) = secret_type_of(cx, spell, scope.by()).ok_or(Stop::Cancel)?;
+                let PaymentScope::Ability { serial, .. } = scope else { return Err(Stop::Cancel) };
+                let at = cx.s().stack.iter().rposition(|item| item.serial == serial).ok_or(Stop::Cancel)?;
+                let mut item = cx.s().stack[at];
+                item.choice = StackItem::announce_type(revealed);
+                cx.st().stack_set(at, item);
             }
             SpellPayment::UnattachSelf { origin, component, .. } => {
                 ops::unattach(cx, spell);
@@ -17186,6 +17213,7 @@ fn resolution_parts(cost: &Cost) -> bool {
         exile_from_hand_for_less: _,
         tap_permanents: _,
         unattach_self: _,
+        reveal_secret_type,
         return_self: _,
         put_self_into_library,
         variable: _,
@@ -17213,6 +17241,7 @@ fn resolution_parts(cost: &Cost) -> bool {
         && !tap_granter
         && loyalty.is_none()
         && !exert
+        && !reveal_secret_type
         && !emerge
         && !tap_to_reduce
         && materials.is_none()

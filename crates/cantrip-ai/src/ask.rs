@@ -433,6 +433,9 @@ pub(crate) fn ask_of(
                     CostPaymentKind::Library => CostPaymentKindObs::Library,
                     CostPaymentKind::CommitHelpers => CostPaymentKindObs::CommitHelpers,
                     CostPaymentKind::Choose => CostPaymentKindObs::Choose,
+                    // The model's input has a place for each kind of the observation: a reveal is read as the choice it makes of a
+                    // type, not given a place of its own, which would change what every trained model reads.
+                    CostPaymentKind::Reveal => CostPaymentKindObs::Choose,
                 },
             }).collect() }
         }

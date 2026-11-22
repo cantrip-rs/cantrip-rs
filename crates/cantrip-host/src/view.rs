@@ -1265,6 +1265,11 @@ impl<'a> Projector<'a> {
             oracle_text: text,
             ..Default::default()
         };
+        // The creature type revealed as its cost was paid (`Cost::reveal_secret_type`, CR 601.2h) is public, as the one a spell's
+        // cost announced is (`describe`): it decides what the ability does, and the permanent that chose it may be gone.
+        if let Some(sub) = item.announced_type() {
+            view.choices.push(ChoiceView { key: "creature type".into(), value: sub.name().to_string(), ..Default::default() });
+        }
         for t in self.game.state.targets(item) {
             if let Some(message) = target_view(game, handles, *t) {
                 view.targets.push(SpellTargetView {
