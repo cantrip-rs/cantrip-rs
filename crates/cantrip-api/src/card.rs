@@ -2845,8 +2845,9 @@ pub struct ExileCast {
     /// symbol of what a cast by it costs, and a {C} symbol still takes colorless mana (`ManaCost::paid_with_any_color`), as a
     /// play permission's `PlayGrant::any_color` pays. Tibalt, Cosmic Impostor's emblem.
     pub any_color: bool,
-    /// "You may play" rather than "cast" (CR 305.1): a land card it allows may be played from exile, as one of the player's
-    /// land plays, at the time the rules let them play a land. The Temporal Anchor, Nightveil Specter, Valgavoth, Terror Eater.
+    /// "You may play" rather than "cast" (CR 305.1): a land card it allows may be played from exile (or, for a card's own permission with `from` the graveyard, from
+    /// there), as one of the player's land plays, at the time the rules let them play a land. The Temporal Anchor, Nightveil
+    /// Specter, Valgavoth, Terror Eater; Oscorp Industries' mayhem from the graveyard.
     pub lands: bool,
     /// "If you cast a spell this way, pay life equal to its mana value rather than pay its mana cost" (CR 118.9, 119.4): the one
     /// alternative cost a cast by it may be made for (CR 118.9a); an X in its cost is 0 (CR 107.3), and additional costs are

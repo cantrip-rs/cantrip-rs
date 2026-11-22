@@ -8804,7 +8804,13 @@ fn land_plays(cx: &Cx, player: PlayerId, options: &mut Vec<ActionOption>) {
                     offer(id, Some(c.grant), options);
                 }
             }
-            // A card in exile its own static ability lets be played there (CR 113.6e, 305.1), as Valgavoth's lets a land card.
+        }
+    }
+    // A land card in exile or in the player's graveyard its own static ability lets be played there (CR 113.6e, 305.1):
+    // Valgavoth's lets a land card in exile, Oscorp Industries' mayhem "play this card from your graveyard if you discarded
+    // it this turn".
+    for zone in cx.s().seats().map(Zone::exile).chain([Zone::graveyard(player)]) {
+        for &id in cx.s().zone(zone) {
             for c in own_zone_casts(cx.cards(), cx.s(), &cx.g.log, id, player).iter() {
                 if c.what.lands && (c.what.allows)(cx, &c.asker(), id, player) {
                     offer(id, Some(c.grant), options);

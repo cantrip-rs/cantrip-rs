@@ -1,6 +1,6 @@
 //! Casting from among the cards an ability exiled (CR 607.2a, 601.3): what an activated ability's own cost exiles is exiled
 //! with it, and a spell cast by an effect can be put on the bottom of its owner's library in place of the graveyard (CR
-//! 614.1a). The cards here are small probes for the machinery, not card implementations.
+//! 614.1a); a land card in a graveyard may permit itself to be played from there (CR 113.6e, 305.1). The cards here are small probes for the machinery, not card implementations.
 
 use std::sync::OnceLock;
 
@@ -39,11 +39,31 @@ static FODDER: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+/// "You may play this card from your graveyard." A land that permits itself, as Oscorp Industries' mayhem does.
+static LAND_PROBE: CardDef = CardDef {
+    name: "Exile Cast Land Probe",
+    oracle: true,
+    types: TypeSet::of(&[CardType::Land]),
+    exile_casts: &[ExileCast {
+        text: "Play from your graveyard",
+        from: ZoneKind::Graveyard,
+        allows: |_, asker, card, player| card == asker.source && player == asker.controller,
+        additional: Cost::NONE,
+        any_type: false,
+        any_color: false,
+        lands: true,
+        life_for_mana_value: false,
+        instead: None,
+        spell_replacement: None,
+    }],
+    ..CardDef::BLANK
+};
+
 static FILLER: CardDef = CardDef { name: "Exile Cast Filler", oracle: true, ..CardDef::BLANK };
 
 fn table() -> &'static CardTable {
     static TABLE: OnceLock<CardTable> = OnceLock::new();
-    TABLE.get_or_init(|| CardTable::new([&EVIDENCE_PROBE, &FODDER, &FILLER]))
+    TABLE.get_or_init(|| CardTable::new([&EVIDENCE_PROBE, &FODDER, &FILLER, &LAND_PROBE]))
 }
 
 /// A game in the first player's precombat main phase with priority.
@@ -171,7 +191,7 @@ static BOUNCER: CardDef = stager!("Exile Cast Bouncer", cast_and_bounce);
 /// A game in which `stager` is in the first player's hand and `Exile Cast Fodder` the only card of their graveyard, with the
 /// stager cast and the stack played out: the fodder's place afterward is what is judged.
 fn cast_the_fodder_by(stager: &'static CardDef) -> RulesGame {
-    let cards: &'static CardTable = Box::leak(Box::new(CardTable::new([&EVIDENCE_PROBE, &FODDER, &FILLER, stager])));
+    let cards: &'static CardTable = Box::leak(Box::new(CardTable::new([&EVIDENCE_PROBE, &FODDER, &FILLER, &LAND_PROBE, stager])));
     let filler = cards.find("Exile Cast Filler").unwrap();
     let mut game = RulesGame::new(cards, &Setup { decks: vec![vec![filler; 20], vec![filler; 20]], seed: 1, ..Setup::default() });
     game.state.update_turn(|t| {
@@ -234,4 +254,36 @@ fn a_spell_returned_to_hand_is_not_put_on_the_bottom() {
     let game = cast_the_fodder_by(&BOUNCER);
     assert!(!library(&game).contains(&"Exile Cast Fodder"));
     assert!(game.state.zone(Zone::hand(ME)).iter().any(|&id| game.cards.get(game.state.obj(id).card).name == "Exile Cast Fodder"));
+}
+
+/// The land plays the first player is offered now, as the cards they are of.
+fn land_plays(game: &RulesGame) -> Vec<ObjectId> {
+    let RequestKind::Priority { options } = request(game).kind else { panic!("expected priority") };
+    options.iter().filter(|o| o.kind == ActionKind::PlayLand).filter_map(|o| o.source).collect()
+}
+
+/// A land card whose own static ability lets it be played from its owner's graveyard (CR 113.6e, 305.1) may be played from
+/// there as a land play, and it enters the battlefield (CR 305.1, 305.2).
+#[test]
+fn a_land_that_permits_itself_is_played_from_the_graveyard() {
+    let mut game = game();
+    let land = put(&mut game, "Exile Cast Land Probe", Zone::graveyard(ME));
+    game.run();
+    assert_eq!(land_plays(&game), vec![land], "offered from the graveyard");
+    let RequestKind::Priority { options } = request(&game).kind else { panic!("expected priority") };
+    let play = options.iter().find(|o| o.kind == ActionKind::PlayLand).unwrap().clone();
+    answer(&mut game, Answer::Act(Action::of(&play)));
+    assert!(game.state.battlefield().iter().any(|&id| game.cards.get(game.state.obj(id).card).name == "Exile Cast Land Probe"), "on the battlefield");
+    assert!(game.state.zone(Zone::graveyard(ME)).is_empty());
+    assert_eq!(game.state.player(ME).lands_played, 1, "it was the land play of the turn");
+}
+
+/// It is a land play like another (CR 305.2): with the turn's land play used, it is not offered.
+#[test]
+fn a_land_played_from_the_graveyard_uses_the_land_play_of_the_turn() {
+    let mut game = game();
+    put(&mut game, "Exile Cast Land Probe", Zone::graveyard(ME));
+    game.state.update_player(ME, |p| p.lands_played = 1);
+    game.run();
+    assert!(land_plays(&game).is_empty());
 }
