@@ -11,15 +11,6 @@ fn sacrifice_to_grow(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
     Ok(())
 }
 
-/// "Whenever another nontoken creature dies" (CR 700.4, 603.10a, 111.7): `triggers::another_creature_dies` for a creature that
-/// was not a token, looked back on as it last was on the battlefield.
-fn another_nontoken_creature_dies(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
-    match event {
-        Event::ZoneChange { old, .. } if q.obj(*old).token => None,
-        _ => triggers::another_creature_dies(q, source, event),
-    }
-}
-
 // Flying is the core's, read from the card's JSON.
 pub static CARD: CardDef = CardDef {
     abilities: &[
@@ -28,7 +19,7 @@ pub static CARD: CardDef = CardDef {
             sacrifice_to_grow,
             "Whenever this creature attacks, you may sacrifice another creature. If you do, put a +1/+1 counter on this creature.",
         ),
-        triggered(when(EventMask::ZONE_CHANGE, another_nontoken_creature_dies), |g, item| effects::draw(g, item, 1), "Whenever another nontoken creature dies, draw a card."),
+        triggered(when_asked(EventMask::ZONE_CHANGE, triggers::another_nontoken_creature_dies), |g, item| effects::draw(g, item, 1), "Whenever another nontoken creature dies, draw a card."),
     ],
     ..oracle::HIGH_SOCIETY_HUNTER
 };

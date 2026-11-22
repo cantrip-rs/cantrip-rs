@@ -2453,6 +2453,16 @@ pub fn another_creature_dies(q: &dyn Query, source: ObjectId, event: &Event) -> 
     }
 }
 
+/// "Whenever another nontoken creature dies" (CR 700.4, 603.10a, 111.7): `another_creature_dies` for a creature that was not a
+/// token, looked back on as it last was on the battlefield. The ability is about the creature that died, from which "it" finds
+/// the card it became (CR 400.7). High Society Hunter and Koh, the Face Stealer print it.
+pub fn another_nontoken_creature_dies(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { old, .. } if !q.obj(*old).token => another_creature_dies(q, me.source, event).and(Fired::about(Target::Object(*old))),
+        _ => None,
+    }
+}
+
 /// "Whenever a creature you control dies" (CR 700.4, 603.10a), looked back on: the creature as it last was on the
 /// battlefield, under the controller it last had, on a permanent or an emblem alike. Grave Venerations and Warhost's Frenzy
 /// print it.
