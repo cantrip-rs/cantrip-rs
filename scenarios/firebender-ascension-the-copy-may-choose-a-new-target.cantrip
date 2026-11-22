@@ -1,0 +1,86 @@
+# Firebender Ascension: "you may copy that ability. You may choose new targets for the copy." (CR 707.10, 707.10c) Turn 1 Bot1 casts
+# the Ascension (its Soldier token), Flesh Burrower and Memnite. Turn 3 the Burrower and the Soldier attack (two quest counters; the
+# Burrower's trigger targets Memnite) and turn 5 the Burrower attacks alone (the third). Turn 7 the Burrower's trigger caused the fourth
+# counter: Bot1 copies it and gives the copy a new target, Ornithopter. Memnite has deathtouch from the original, and Ornithopter
+# (cast on turn 3, still summoning sick but a legal target) from the copy.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mountain
+Firebender Ascension
+Flesh Burrower
+Memnite
+Ornithopter
+Mountain x12
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Flesh Burrower.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Firebender Ascension.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Flesh Burrower > Bot2; Soldier Token > Bot2)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firebender Ascension.Counters.Quest = 2
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Flesh Burrower > Bot2)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firebender Ascension.Counters.Quest = 3
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Flesh Burrower > Bot2)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Deathtouch
+? Bot1.Battlefield.Ornithopter.Keywords = Deathtouch; Flying
+
+[Expect]
+Bot1.Battlefield.Firebender Ascension.Counters.Quest = 4
+Bot1.Battlefield.Memnite.Keywords = Deathtouch

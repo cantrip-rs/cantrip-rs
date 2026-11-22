@@ -1,0 +1,76 @@
+# Firebender Ascension counts a "whenever you attack" ability of a creature that attacked, as Isshin's rule reads "a creature attacking
+# causes" (the rulings), and not one of a creature that stayed home. Turn 1 Bot1 casts the Ascension (its Soldier token) and Adeline,
+# Resplendent Cathar ("Whenever you attack, for each opponent, create a 1/1 white Human creature token that's tapped and attacking").
+# Turn 3 the Soldier attacks alone: its firebending counts, Adeline's trigger does not (one counter). Turn 5 Adeline and the Soldier attack:
+# both count (three). Turn 7 Adeline attacks alone: the fourth counter copies her trigger, two Humans this attack.
+
+[Bot1 Deck]
+Mox Ruby x2
+Black Lotus
+Firebender Ascension
+Adeline, Resplendent Cathar
+Mountain x2
+Mountain x10
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Firebender Ascension.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Adeline, Resplendent Cathar.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Soldier Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firebender Ascension.Counters.Quest = 1
+? Bot1.Battlefield.Count = 6
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Adeline, Resplendent Cathar > Bot2; Soldier Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firebender Ascension.Counters.Quest = 3
+? Bot1.Battlefield.Count = 7
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Adeline, Resplendent Cathar > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firebender Ascension.Counters.Quest = 4
+? Bot1.Battlefield.Count = 9
+
+[Expect]
+Bot1.Battlefield.Firebender Ascension.Counters.Quest = 4
+Bot1.Battlefield.Count = 9

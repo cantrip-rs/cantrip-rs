@@ -1,0 +1,48 @@
+# Firebender Ascension counts a creature attacking, not any triggered ability of a creature you control. Turn 3 Bot1 casts Helpful
+# Hunter (its enters trigger is its own ability, caused by it entering) and then attacks with the Soldier token: only the attack counts.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Firebender Ascension
+Helpful Hunter
+Mountain
+Mountain x15
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Firebender Ascension.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Helpful Hunter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Helpful Hunter.Power = 1
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Soldier Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Firebender Ascension.Counters.Quest = 1

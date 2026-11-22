@@ -1,0 +1,6 @@
+{
+  "name": "Firebender Ascension",
+  "manaCost": "{1}{R}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, create a 2/2 red Soldier creature token with firebending 1.\nWhenever a creature you control attacking causes a triggered ability of that creature to trigger, put a quest counter on this enchantment. Then if it has four or more quest counters on it, you may copy that ability. You may choose new targets for the copy."
+}

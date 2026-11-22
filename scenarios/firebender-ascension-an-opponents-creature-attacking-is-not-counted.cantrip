@@ -1,0 +1,61 @@
+# Firebender Ascension counts creatures its controller controls. Bot1's Soldier token attacks on turn 3 (one counter); on turn 4 Bot2's
+# Akrasan Squire attacks alone, causing its own exalted ability to trigger, which is not counted: still one counter.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Firebender Ascension
+Mountain
+Mountain x16
+
+[Bot2 Deck]
+Mox Pearl
+Akrasan Squire
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Firebender Ascension.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Akrasan Squire.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Soldier Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firebender Ascension.Counters.Quest = 1
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Akrasan Squire > Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Firebender Ascension.Counters.Quest = 1
+Bot1.Life = 18

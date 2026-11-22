@@ -1,0 +1,76 @@
+# Firebender Ascension: the copy is a "may". The setup is the other scenario's (seven mana, the Ascension, Cruel Administrator, the attacks on turns 3, 5 and 7);
+# at the fourth quest counter Bot1 declines, so the Administrator's trigger is not copied: four Soldiers, not five, and the counter is kept.
+
+[Bot1 Deck]
+Mox Ruby x2
+Mox Jet
+Black Lotus
+Firebender Ascension
+Cruel Administrator
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Firebender Ascension.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cruel Administrator.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Cruel Administrator > Bot2; Soldier Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firebender Ascension.Counters.Quest = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 8
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Cruel Administrator > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firebender Ascension.Counters.Quest = 3
+? Bot1.Battlefield.Count = 9
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Cruel Administrator > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firebender Ascension.Counters.Quest = 4
+? Bot1.Battlefield.Count = 10
+
+[Expect]
+Bot1.Battlefield.Firebender Ascension.Counters.Quest = 4

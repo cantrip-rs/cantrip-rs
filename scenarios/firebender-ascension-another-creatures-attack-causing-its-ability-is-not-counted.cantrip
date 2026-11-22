@@ -1,0 +1,50 @@
+# Firebender Ascension counts a creature's attack causing a triggered ability *of that creature*. Ingris Stingerquill ("Whenever a creature
+# you control attacks") is itself attacking alongside the Soldier token, so one attack-trigger of Ingris's is caused by the Soldier's attack
+# and not by Ingris's own: the Soldier's firebending and Ingris's trigger for Ingris count, Ingris's trigger for the Soldier does not.
+# Two quest counters, not three.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Black Lotus
+Firebender Ascension
+Ingris Stingerquill
+Mountain
+Mountain x15
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Ingris Stingerquill.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Firebender Ascension.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ingris Stingerquill; Soldier Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firebender Ascension.Counters.Quest = 2
+
+[Expect]
+Bot1.Battlefield.Firebender Ascension.Counters.Quest = 2

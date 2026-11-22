@@ -1,0 +1,82 @@
+# Firebender Ascension: "Whenever a creature you control attacking causes a triggered ability of that creature to trigger, put a quest
+# counter on this enchantment. Then if it has four or more quest counters on it, you may copy that ability." Turn 1 Bot1 makes seven mana
+# and casts the Ascension (its Soldier token) and Cruel Administrator, whose attack trigger makes a Soldier. Turn 3: the Administrator and
+# the first Soldier attack, each causing its own ability to trigger (two counters; the Administrator's makes the second Soldier). Turns 5 and 7
+# the Administrator attacks alone: the third counter and then the fourth. The fourth is offered the copy, and the copy of the Administrator's
+# trigger makes a second token of its own: five Soldiers, not four.
+
+[Bot1 Deck]
+Mox Ruby x2
+Mox Jet
+Black Lotus
+Firebender Ascension
+Cruel Administrator
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Firebender Ascension.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cruel Administrator.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Cruel Administrator > Bot2; Soldier Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firebender Ascension.Counters.Quest = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 8
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Cruel Administrator > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firebender Ascension.Counters.Quest = 3
+? Bot1.Battlefield.Count = 9
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Cruel Administrator > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firebender Ascension.Counters.Quest = 4
+? Bot1.Battlefield.Count = 11
+
+[Expect]
+Bot1.Battlefield.Firebender Ascension.Counters.Quest = 4

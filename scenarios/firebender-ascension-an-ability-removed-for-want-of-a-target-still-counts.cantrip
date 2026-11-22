@@ -1,0 +1,58 @@
+# Firebender Ascension: an ability that an attack set off still triggered when it is removed from the stack for want of a legal target
+# (CR 603.3d), so it is counted, and there is nothing to copy. Fervent Champion (haste) attacks alone each turn; its "another target
+# attacking Knight you control gets +1/+0" has no target and is removed. Turns 1, 3, 5 and 7: four quest counters, and at the fourth
+# no copy is offered.
+
+[Bot1 Deck]
+Mox Ruby x2
+Mountain
+Firebender Ascension
+Fervent Champion
+Mountain x2
+Mountain x10
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Firebender Ascension.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Fervent Champion.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Fervent Champion > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firebender Ascension.Counters.Quest = 1
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Fervent Champion > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Fervent Champion > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firebender Ascension.Counters.Quest = 3
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Fervent Champion > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+? Bot1.Battlefield.Firebender Ascension.Counters.Quest = 4
+
+[Expect]
+Bot1.Battlefield.Firebender Ascension.Counters.Quest = 4
