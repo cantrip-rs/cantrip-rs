@@ -471,6 +471,10 @@ const INERT: &[(&str, &str)] = &[
         "Marvin, Murderous Mimic",
         "its effect copies the activated abilities of the other creatures its controller controls, and the synthetic boards hold no creature with an activated ability; its scenarios show the abilities of its controller's creatures (a granted one too), none of an opponent's, and none from a creature with its own name",
     ),
+    (
+        "Koh, the Face Stealer",
+        "its effect grants the activated and triggered abilities of the last card chosen among those exiled with it, a chosen-object record and exile links no synthetic state holds; its scenarios show the tap ability and tapped trigger of the chosen card, a granted linked pair kept apart from Koh's own, the replacement by a later choice, and the loss when the card leaves exile",
+    ),
 ];
 
 /// The contract of every static ability's effect (`StaticApply`), across the whole card table: applied to synthetic objects

@@ -1,0 +1,65 @@
+# Koh, the Face Stealer (CR 603.10a, 607.2a): Bot2's Damnation destroys Koh and Bot2's Doomed Traveler at once. "Whenever another
+# nontoken creature dies" is a leaves-the-battlefield ability that looks back, so it triggers for the Traveler though Koh died with
+# it; Bot1 accepts and the card is exiled, with Koh gone. The Traveler's own trigger still makes Bot2 its Spirit.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Koh, the Face Stealer
+Island x14
+
+[Bot2 Deck]
+Doomed Traveler
+Damnation
+Mox Pearl
+Mox Jet
+Black Lotus
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Doomed Traveler.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Koh, the Face Stealer.Cast
+Bot1.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Damnation.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Exile = Doomed Traveler
+Bot1.Graveyard = Koh, the Face Stealer; Black Lotus
+Bot2.Battlefield = Mox Jet; Mox Pearl; Spirit Token

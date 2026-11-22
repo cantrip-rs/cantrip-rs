@@ -1,0 +1,90 @@
+# Koh, the Face Stealer (CR 607.2a, 607.5, 613.1f): Koh's enters trigger exiles Bot2's Emperor of Bones on turn 3, and on turn 5 Bot1
+# pays 1 life to choose it. Koh then has the Emperor's three abilities, linked to one another on Koh but not to Koh's own: at the
+# beginning of combat the granted trigger exiles the Llanowar Elves Bot2's Shock killed, and the granted adapt puts two +1/+1
+# counters on Koh, so the granted "put a creature card exiled with this creature onto the battlefield" finds the Elves (the lone
+# card that ability's partner exiled, no question) and not the Emperor, which Koh's own ability exiled and stays in exile.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Koh, the Face Stealer
+Island x14
+
+[Bot2 Deck]
+Emperor of Bones
+Llanowar Elves
+Shock
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Llanowar Elves; Shock
+[T2 Bot2.Main2]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Emperor of Bones.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Koh, the Face Stealer.Cast
+Bot1.Pass
+Bot1.Target(Emperor of Bones)
+Bot1.Pass
+Bot2.Pass
+? Exile = Emperor of Bones
+[T5 Bot1.Main1]
+Bot1.Battlefield.Koh, the Face Stealer.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+Bot1.Pass
+Bot1.Target(Bot2.Graveyard.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Exile = Emperor of Bones; Llanowar Elves
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Koh, the Face Stealer.Activate(Ability: Adapt)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Koh, the Face Stealer.Counters.PlusOnePlusOne = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Counters.Finality = 1
+? Bot1.Battlefield.Llanowar Elves.Keywords = Haste
+
+[Expect]
+Exile = Emperor of Bones
+Bot1.Life = 19

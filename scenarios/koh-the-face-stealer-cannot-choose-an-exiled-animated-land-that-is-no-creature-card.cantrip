@@ -1,0 +1,51 @@
+# Koh, the Face Stealer (CR 607.2a, 400.7, 608.2d): on turn 3 Bot1 animates its own Mutavault and Koh's enters trigger exiles it, a
+# creature on the battlefield; in exile it is a new object, a land card and no creature card. Paying 1 life then has no creature card
+# exiled with Koh to choose, so nothing is chosen and Koh has none of the Mutavault's abilities: its "{1}: becomes a 2/2" is refused.
+
+[Bot1 Deck]
+Mutavault
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Koh, the Face Stealer
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mutavault.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mutavault.Activate(Ability: {1})
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mutavault.Types = Land; Creature
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Koh, the Face Stealer.Cast
+Bot1.Pass
+Bot1.Target(Bot1.Battlefield.Mutavault)
+Bot1.Pass
+Bot2.Pass
+? Exile = Mutavault
+Bot1.Battlefield.Koh, the Face Stealer.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+! Bot1.Battlefield.Koh, the Face Stealer.Activate(Ability: {1})
+
+[Expect]
+Exile = Mutavault
+Bot1.Life = 19

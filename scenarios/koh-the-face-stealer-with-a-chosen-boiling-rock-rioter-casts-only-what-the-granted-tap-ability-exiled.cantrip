@@ -1,0 +1,87 @@
+# Koh, the Face Stealer (CR 607.2a, 607.5, 613.1f): Koh's enters trigger exiles Bot1's own Boiling Rock Rioter on turn 3, and Bot1
+# pays 1 life to choose it. Koh then has the Rioter's activated "Tap an untapped Ally you control: Exile target card from a graveyard"
+# and its triggered firebending and "Whenever this creature attacks, you may cast an Ally spell from among cards you own exiled with
+# this creature": an activated and a triggered ability of the one card, linked to each other on Koh (both lent by that card) and not
+# to Koh's own abilities. Bot2's Shock kills Bot1's Gran-Gran on turn 6; on turn 7 the granted ability taps the Earth Kingdom
+# Protectors to exile Gran-Gran, and when Koh attacks, firebending adds {R} and the granted trigger offers Gran-Gran, which Bot1
+# casts for {U}, and not the Rioter, an Ally card Bot1 owns that Koh's own enters trigger exiled and that stays in exile.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Boiling Rock Rioter
+Koh, the Face Stealer
+Earth Kingdom Protectors
+Gran-Gran
+Swamp x12
+
+[Bot2 Deck]
+Shock
+Mox Ruby
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Boiling Rock Rioter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Koh, the Face Stealer.Cast
+Bot1.Pass
+Bot1.Target(Bot1.Battlefield.Boiling Rock Rioter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Boiling Rock Rioter
+Bot1.Battlefield.Koh, the Face Stealer.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Earth Kingdom Protectors.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Gran-Gran.Cast
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Gran-Gran)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Gran-Gran; Black Lotus
+[T7 Bot1.Main1]
+Bot1.Battlefield.Koh, the Face Stealer.Activate(Ability: Tap an untapped Ally; Bot1.Graveyard.Gran-Gran)
+Bot1.Pass
+Bot2.Pass
+? Exile = Gran-Gran; Boiling Rock Rioter
+? Bot1.Battlefield.Earth Kingdom Protectors.Tapped = true
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Koh, the Face Stealer > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gran-Gran.Types = Creature
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R} lasting {R}
+[T7 Bot1.Damage]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Life = 19
+Exile = Boiling Rock Rioter
+Bot1.Battlefield.Gran-Gran.Types = Creature

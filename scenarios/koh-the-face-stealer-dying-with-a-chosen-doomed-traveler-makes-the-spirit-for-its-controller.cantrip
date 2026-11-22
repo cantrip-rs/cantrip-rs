@@ -1,0 +1,82 @@
+# Koh, the Face Stealer (CR 607.2a, 613.1f, 603.10a, 610.3): Bot2's Shock kills its own Doomed Traveler on turn 4 and Bot1 accepts Koh's
+# "you may exile it". On turn 5 Bot1 pays 1 life to choose it, and Koh has "When this creature dies, create a 1/1 white Spirit
+# creature token with flying" as its own. Bot2's Terminate kills Koh on turn 6: the granted ability triggers from Koh as it was (a
+# leaves-the-battlefield ability looks back), so Bot1, Koh's controller, gets the Spirit, not Bot2 (the Traveler's owner), and the
+# card stays exiled: Koh's exile of a dying creature lasts after Koh has gone.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Koh, the Face Stealer
+Island x14
+
+[Bot2 Deck]
+Doomed Traveler
+Shock
+Terminate
+Mox Pearl
+Mox Jet
+Mox Ruby
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Doomed Traveler.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Koh, the Face Stealer.Cast
+Bot1.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Doomed Traveler)
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+? Exile = Doomed Traveler
+[T5 Bot1.Main1]
+Bot1.Battlefield.Koh, the Face Stealer.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Terminate.Cast(Bot1.Battlefield.Koh, the Face Stealer)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Spirit Token
+Bot1.Battlefield.Spirit Token.Keywords = Flying
+Bot1.Life = 19
+Bot2.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Spirit Token
+Bot1.Graveyard = Koh, the Face Stealer; Black Lotus
+Exile = Doomed Traveler

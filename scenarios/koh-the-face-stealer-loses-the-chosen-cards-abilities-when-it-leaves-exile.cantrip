@@ -1,0 +1,68 @@
+# Koh, the Face Stealer (CR 607.2a, 607.2d, 400.7, 613.1f): Koh's enters trigger exiles Bot1's own Chrome Companion and Bot1 pays 1
+# life to choose it. On turn 4 Bot2's Binding Negotiation puts that face-up exiled card into Bot1's graveyard: it is a new object
+# there, not "the last chosen card" that is exiled with Koh, so on turn 5 Koh has neither its tap ability nor its trigger.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Chrome Companion
+Black Lotus
+Koh, the Face Stealer
+Island x14
+
+[Bot2 Deck]
+Binding Negotiation
+Mox Jet
+Mox Pearl
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Chrome Companion.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Koh, the Face Stealer.Cast
+Bot1.Pass
+Bot1.Target(Bot1.Battlefield.Chrome Companion)
+Bot1.Pass
+Bot2.Pass
+? Exile = Chrome Companion
+Bot1.Battlefield.Koh, the Face Stealer.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Binding Negotiation.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Chrome Companion)
+? Bot1.Graveyard = Chrome Companion; Black Lotus
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Koh, the Face Stealer.Activate(Bot1.Graveyard.Chrome Companion; Ability: {2})
+Bot1.Battlefield.Mox Jet.Activate
+
+[Expect]
+Exile.Count = 0
+Bot1.Life = 19

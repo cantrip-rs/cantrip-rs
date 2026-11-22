@@ -1,0 +1,83 @@
+# Koh, the Face Stealer (CR 607.2a, 613.1f): cast on turn 3, its enters trigger exiles Bot2's Chrome Companion (exiled with Koh). On turn 5
+# Bot1 pays 1 life to choose it (a lone card, no question), and Koh has both of its abilities as its own: "{2}, {T}: Put target card
+# from a graveyard on the bottom of its owner's library" puts Bot2's Shock card there, and Koh becoming tapped is "this creature becomes
+# tapped" of the Companion's trigger: Koh's controller gains 1 life. Before the choice (the refusal) Koh has neither ability.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Koh, the Face Stealer
+Island x14
+
+[Bot2 Deck]
+Chrome Companion
+Shock
+Mox Ruby
+Mox Jet
+Mox Pearl
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Chrome Companion.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Koh, the Face Stealer.Cast
+Bot1.Pass
+Bot1.Target(Chrome Companion)
+Bot1.Pass
+Bot2.Pass
+? Exile = Chrome Companion
+? Bot2.Battlefield.Chrome Companion = (absent)
+[T4 Bot2.Main1]
+? Bot1.Life = 20
+[T5 Bot1.Main1]
+? Bot2.Graveyard = Shock
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Koh, the Face Stealer.Activate(Bot2.Graveyard.Shock; Ability: {2})
+Bot1.Battlefield.Koh, the Face Stealer.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+Bot1.Battlefield.Koh, the Face Stealer.Activate(Bot2.Graveyard.Shock; Ability: {2})
+? Bot1.Battlefield.Koh, the Face Stealer.Tapped = true
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 0
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Exile.Count = 1

@@ -1,0 +1,93 @@
+# Koh, the Face Stealer (CR 607.2a, 607.2d, 613.1f): Koh's enters trigger exiles Bot2's Llanowar Elves, and on turn 4 Bot2's Shock
+# kills Chrome Companion, which Bot1 accepts to exile too (a card exiled with Koh, as the Elves is). On turn 5 Bot1 pays 1 life and
+# is asked which of the two to choose: Chrome Companion. It pays again and chooses the Elves: Koh has the Elves' ability and no
+# longer Chrome Companion's ("last chosen card"), so it taps for {G} and the Companion's tap ability is refused.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Koh, the Face Stealer
+Island x14
+
+[Bot2 Deck]
+Chrome Companion
+Llanowar Elves
+Shock
+Shock
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Mountain
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Chrome Companion.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Koh, the Face Stealer.Cast
+Bot1.Pass
+Bot1.Target(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Exile = Llanowar Elves
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Chrome Companion)
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+? Exile = Chrome Companion; Llanowar Elves
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Koh, the Face Stealer.Activate
+Bot1.Pass
+Bot1.Choose(Chrome Companion)
+Bot2.Pass
+? Bot1.Life = 19
+Bot1.Battlefield.Koh, the Face Stealer.Activate(Ability: Choose)
+Bot1.Pass
+Bot1.Choose(Llanowar Elves)
+Bot2.Pass
+? Bot1.Life = 18
+! Bot1.Battlefield.Koh, the Face Stealer.Activate(Bot2.Graveyard.Shock; Ability: {2})
+Bot1.Battlefield.Koh, the Face Stealer.Activate(Ability: {T})
+? Bot1.Mana = {G}
+? Bot1.Battlefield.Koh, the Face Stealer.Tapped = true
+
+[Expect]
+Bot1.Life = 18
+Exile.Count = 2
