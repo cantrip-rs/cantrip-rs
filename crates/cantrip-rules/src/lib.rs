@@ -414,6 +414,10 @@ pub struct Game {
     /// The current immediate mana ability's history anchors (CR 605.3, 611.2b), scoped with its activation X.
     /// Bookkeeping of this call, never per-card remembered state; nested abilities restore the enclosing interval.
     mana_interval: Option<ManaInterval>,
+    /// The activated ability being activated now (CR 602.2), from its announcement to the end of paying its costs, the mana
+    /// abilities that pay them included (`Query::activation_under_way`). Bookkeeping of this call, never per-card state;
+    /// restored as the activation ends, however it ends.
+    pub(crate) activation: Option<cantrip_api::ActivationUnderWay>,
     /// The permanent dependencies currently being read for CR 106.7. Bookkeeping of a query, not game state:
     /// a dependency with no independently defined output supplies no type (CR 106.5).
     pub(crate) producible_path: std::cell::RefCell<Vec<ObjectId>>,
@@ -507,7 +511,7 @@ impl Clone for Game {
             history_end: self.history_end,
             check: StateCheck::NONE,
             spells_as_cast: Default::default(),
-            own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None,
+            own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, activation: None,
             takeback: Default::default(),
         }
     }
@@ -529,7 +533,7 @@ impl Game {
             check: StateCheck::NONE,
             spells_as_cast: Default::default(),
             own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None,
-            effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None,
+            effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, activation: None,
             takeback: Default::default(),
         }
     }
@@ -668,7 +672,7 @@ impl Game {
             t.priority = chooser;
         });
 
-        let mut game = Game { state, log: Vec::new(), tree: tree::Tree::new(), at: tree::NodeId::ROOT, cards, verify: false, max_events: MAX_GAME_EVENTS, history_end: None, check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() };
+        let mut game = Game { state, log: Vec::new(), tree: tree::Tree::new(), at: tree::NodeId::ROOT, cards, verify: false, max_events: MAX_GAME_EVENTS, history_end: None, check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, activation: None, takeback: Default::default() };
         // CR 103.2b: the companion chosen as the deck was built is revealed once the starting player is known, if the starting
         // deck - the library as dealt - fulfils its condition; one that doesn't is a sideboard card, and nothing is said of it.
         for (p, id) in companions {
@@ -1140,7 +1144,7 @@ impl Game {
         let state = self.state.clone_with_journal_from(floor);
         let root = self.tree.next();
         let tree = tree::Tree::rooted(root, (state.mark(), self.log.len()));
-        Game { state, log: self.log.clone(), tree, at: root, cards: self.cards, verify: self.verify, max_events: self.max_events, history_end: None, check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() }
+        Game { state, log: self.log.clone(), tree, at: root, cards: self.cards, verify: self.verify, max_events: self.max_events, history_end: None, check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, activation: None, takeback: Default::default() }
     }
 
     /// Gives the game's generator another seed (`GameState::reseed`): a fork for search that must not shuffle or roll
@@ -2133,6 +2137,10 @@ impl Drop for OthersText<'_> {
 }
 
 impl Query for Game {
+    fn activation_under_way(&self) -> Option<ActivationUnderWay> {
+        self.activation
+    }
+
     fn can_attach_to(&self, attachment: ObjectId, host: ObjectId) -> bool {
         crate::attach::host_allows(self, attachment, host, true)
     }
@@ -2251,6 +2259,10 @@ impl Query for Cx<'_> {
 
     fn instructing(&self) -> Option<&StackItem> {
         Cx::instructing(self)
+    }
+
+    fn activation_under_way(&self) -> Option<ActivationUnderWay> {
+        self.g.activation
     }
 
     fn effect_controller(&self) -> Option<PlayerId> {

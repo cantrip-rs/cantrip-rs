@@ -952,9 +952,43 @@ static ARCANE_CHOOSE_PAIR: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+/// "When this is exiled from the battlefield while you are activating an ability, gain 3 life.": Market Gnome's condition, asked
+/// of a move that happens while an ability's costs are paid (CR 602.2, 603.2).
+fn exiled_while_activating(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { old, from, to, .. }
+            if *old == source && from.is(ZoneKind::Battlefield) && to.is(ZoneKind::Exile) && q.activation_under_way().is_some_and(|a| a.player == q.controller(source)) =>
+        {
+            Fired::PLAIN
+        }
+        _ => None,
+    }
+}
+static ACTIVATION_WATCHER: CardDef = CardDef {
+    name: "Cost Test Activation Watcher", types: TypeSet::of(&[CardType::Artifact, CardType::Creature]), power: Some(1), toughness: Some(1),
+    abilities: &[triggered(when(EventMask::ZONE_CHANGE, exiled_while_activating), gain_three, "When this is exiled from the battlefield while you are activating an ability, gain 3 life.")], ..CardDef::BLANK
+};
+/// "{1}, Exile this and an artifact: gain 3 life": a craft ability paid with mana.
+static CRAFT_FOR_MANA: CardDef = CardDef {
+    name: "Cost Test Craft For Mana", types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[ability(cost("{1}").and(Cost { exile_self: true, materials: Some(&cantrip_mechanics::craft::ARTIFACT), ..Cost::NONE }), gain_three, "Craft with an artifact {1}: gain 3 life.")], ..CardDef::BLANK
+};
+fn exile_watchers(g: &mut dyn cantrip_api::Game, asker: &Asker, _: Option<Color>) -> Result<(), Suspend> {
+    g.add_mana(asker.controller, Mana::C, 1);
+    let moves: Vec<(ObjectId, Zone)> =
+        g.state().battlefield().iter().copied().filter(|&id| g.chars(id).name == "Cost Test Activation Watcher").map(|id| (id, Zone::exile(asker.controller))).collect();
+    g.move_together(&moves, MoveReason::Exile);
+    Ok(())
+}
+/// "{T}: Add {C}. Exile each Activation Watcher you control."
+static EXILING_MANA: CardDef = CardDef {
+    name: "Cost Test Exiling Mana", types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[mana_ability(TAP, add(Mana::C).by(exile_watchers), "{T}: Add {C}. Exile each Activation Watcher you control.")], ..CardDef::BLANK
+};
+
 /// Your precombat main phase with priority, nothing anywhere.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&CHOOSE_ONLY_SPELL, &LIFE_THEN_CHOOSE_SPELL, &GRANTED_CONTEXT_CHOOSE, &ARCANE_CHOOSE_PAIR, &FILLER, &BEAR, &DORK, &SEER, &GAZER, &RETURNER, &OFFER, &RECALL, &TITHE, &VOW, &RECOILER, &LIBRARIAN, &RITE, &GRAFT, &STOWER, &TOLL, &HOARD, &HIGH_LIFE, &IMPOSSIBLE_LIFE, &MASS_OFFER, &WITHERER, &RESOLUTION_LIFE_AND_SACRIFICE, &RESOLUTION_ONE_PAYMENT_ABILITY, &RESOLUTION_ONE_PAYMENT, &RESOLUTION_TWO_PAYMENTS, &TWO_DISTINCT_COSTS, &CHOSEN_DIFFERENT_COSTS, &MULTIKICK_DIFFERENT_COSTS, &MANA_FROM_PAID, &MANA_WITH_LIFE_AND_SACRIFICE, &MANA_WITH_LIFE_AND_DYNAMIC_SACRIFICE, &DYNAMIC_COLOR_STAR, &MANA_WITH_DYNAMIC_COLOR, &MANA_WITH_NESTED_DYNAMIC_SACRIFICE, &MANA_WITH_TAXED_DYNAMIC_SACRIFICE, &PLAYER_MANA_WITH_LIFE_AND_SACRIFICE, &TEMPORARY_PLAYER_GRANTER, &VANISHING_PLAYER_GRANTER, &GRANTED_COLOR_MANA, &SELF_COLOR_MANA, &RED_DORK, &TWO_SACRIFICE_COLOR_MANA, &RETURN_THEN_COLOR_MANA, &OVERLAPPING_COSTS, &MANA_AFTER_OTHER_SACRIFICE, &MANA_WITH_TWO_COSTS, &TAP_AND_SACRIFICE_COSTS, &SPELL_WITH_TWO_COSTS, &SPELL_WITH_TWO_ACTIONS, &OUTER_MANA_COST, &INNER_MANA_COST, &EXILE_SACRIFICES, &SPELL_WITH_OVERLAPPING_COSTS, &SPELL_WITH_TAP_AND_SACRIFICE, &PREVENT_SACRIFICES, &COLOR_MANA, &STATE_WATCHER, &PAYMENT_BOUNDARY, &LIFE_STAR, &SPELL_WITH_LIFE_AND_SACRIFICE, &REVERSE_LIFE_STAR, &SPELL_WITH_LIFE_AND_POWER_COST, &SPELL_WITH_MANA_AND_LIFE, &SPELL_WITH_TWO_MANA_AND_MIDPAYMENT_SACRIFICE, &SPELL_WITH_SNOW_MANA_AND_LIFE, &SPELL_WITH_MANA_RECEIPT_SACRIFICE, &SPELL_WITH_CONVOKE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_DELVE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_IMPROVISE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_WATERBEND_MIDPAYMENT_SACRIFICE, &TAP_BATCH_WATCHER, &SPELL_WITH_HARMONIZE, &SPELL_WITH_LIFE_AND_OPTIONAL_POWER, &LIFE_MANA_SOURCE, &SPELL_WITH_MANA_AND_OPTIONAL_POWER, &SPELL_WITH_MANA_AND_POWER_CHOICE, &SPELL_WITH_MANA_AND_DYNAMIC_BEHOLD, &SPELL_WITH_POWER_AND_OPTIONAL_LIFE, &ENERGY_STAR, &SPELL_WITH_ENERGY_AND_POWER_COST, &SPELL_WITH_COUNTER_AND_POWER_COST, &SPELL_WITH_BLIGHT_AND_POWER_COST, &SPELL_WITH_MANA_AND_GRAVEYARD_EXILE, &SPELL_WITH_MANA_AND_HAND_EXILE, &SPELL_WITH_MANA_AND_EVIDENCE, &SPELL_WITH_DISCARD_AND_GRAVEYARD_EXILE, &SPELL_WITH_DISCARD_AND_TARGET_EXILE, &SPELL_WITH_TARGET_EXILE_ONLY, &SPELL_WITH_DISCARD_AND_EXILE_CHOICE, &SPELL_WITH_LIFE_AND_EXILE_CHOICE, &SPELL_WITH_LIFE_AND_VARIABLE_SACRIFICE, &SPELL_WITH_BEHOLD_AND_DISCARD, &SPELL_WITH_SEVEN_DISCARDS, &SPELL_WITH_TEAMWORK_AND_SACRIFICE, &SPELL_WITH_CONVOKE_AND_SACRIFICE, &ABILITY_WITH_LIFE_AND_SACRIFICE, &ABILITY_WITH_TAP_AND_SELF_SACRIFICE, &ABILITY_WITH_TAP_AND_SELF_RETURN, &ABILITY_WITH_COUNTER_AND_SELF_SACRIFICE, &ABILITY_WITH_VARIABLE_COUNTER_AND_SELF_SACRIFICE, &ABILITY_SACRIFICING_ONE_OR_MORE, &ABILITY_SACRIFICING_X, &MEASURE_0, &MEASURE_1, &MEASURE_2, &MEASURE_3, &ABILITY_EXILING_X_FROM_GRAVEYARD, &ABILITY_SACRIFICING_MANA_VALUE_X, &ABILITY_EXILING_TOTAL_X, &ABILITY_PAYING_X_LIFE, &ABILITY_PAYING_ONE_AND_X_LIFE, &ABILITY_LIFE_TAX, &ABILITY_DISCARDING_AND_EXILING_X, &ABILITY_EXILING_FROM_HAND_AND_GRAVEYARD_X, &ABILITY_EXILING_FROM_HAND_AND_TOTAL_X, &ABILITY_WITH_LOYALTY_AND_SELF_SACRIFICE, &ABILITY_WITH_EXERT_AND_SELF_SACRIFICE, &ABILITY_WITH_UNATTACH_AND_TAP, &ABILITY_WITH_CRAFT_AND_LIFE, &ABILITY_WITH_LIFE_AND_LIBRARY_TOP, &ABILITY_WITH_LIFE_AND_RANDOM_LIBRARY, &ABILITY_WITH_RANDOM_AND_DYNAMIC_SACRIFICE, &EVIDENCE_CARD, &SPELL_WITH_TWO_GRAVEYARD_EXILES, &FORAGE_WAY_ABILITY, &SPELL_WITH_OPTIONAL_FORAGE])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&CHOOSE_ONLY_SPELL, &LIFE_THEN_CHOOSE_SPELL, &GRANTED_CONTEXT_CHOOSE, &ARCANE_CHOOSE_PAIR, &FILLER, &BEAR, &DORK, &SEER, &GAZER, &RETURNER, &OFFER, &RECALL, &TITHE, &VOW, &RECOILER, &LIBRARIAN, &RITE, &GRAFT, &STOWER, &TOLL, &HOARD, &HIGH_LIFE, &IMPOSSIBLE_LIFE, &MASS_OFFER, &WITHERER, &RESOLUTION_LIFE_AND_SACRIFICE, &RESOLUTION_ONE_PAYMENT_ABILITY, &RESOLUTION_ONE_PAYMENT, &RESOLUTION_TWO_PAYMENTS, &TWO_DISTINCT_COSTS, &CHOSEN_DIFFERENT_COSTS, &MULTIKICK_DIFFERENT_COSTS, &MANA_FROM_PAID, &MANA_WITH_LIFE_AND_SACRIFICE, &MANA_WITH_LIFE_AND_DYNAMIC_SACRIFICE, &DYNAMIC_COLOR_STAR, &MANA_WITH_DYNAMIC_COLOR, &MANA_WITH_NESTED_DYNAMIC_SACRIFICE, &MANA_WITH_TAXED_DYNAMIC_SACRIFICE, &PLAYER_MANA_WITH_LIFE_AND_SACRIFICE, &TEMPORARY_PLAYER_GRANTER, &VANISHING_PLAYER_GRANTER, &GRANTED_COLOR_MANA, &SELF_COLOR_MANA, &RED_DORK, &TWO_SACRIFICE_COLOR_MANA, &RETURN_THEN_COLOR_MANA, &OVERLAPPING_COSTS, &MANA_AFTER_OTHER_SACRIFICE, &MANA_WITH_TWO_COSTS, &TAP_AND_SACRIFICE_COSTS, &SPELL_WITH_TWO_COSTS, &SPELL_WITH_TWO_ACTIONS, &OUTER_MANA_COST, &INNER_MANA_COST, &EXILE_SACRIFICES, &SPELL_WITH_OVERLAPPING_COSTS, &SPELL_WITH_TAP_AND_SACRIFICE, &PREVENT_SACRIFICES, &COLOR_MANA, &STATE_WATCHER, &PAYMENT_BOUNDARY, &LIFE_STAR, &SPELL_WITH_LIFE_AND_SACRIFICE, &REVERSE_LIFE_STAR, &SPELL_WITH_LIFE_AND_POWER_COST, &SPELL_WITH_MANA_AND_LIFE, &SPELL_WITH_TWO_MANA_AND_MIDPAYMENT_SACRIFICE, &SPELL_WITH_SNOW_MANA_AND_LIFE, &SPELL_WITH_MANA_RECEIPT_SACRIFICE, &SPELL_WITH_CONVOKE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_DELVE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_IMPROVISE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_WATERBEND_MIDPAYMENT_SACRIFICE, &TAP_BATCH_WATCHER, &SPELL_WITH_HARMONIZE, &SPELL_WITH_LIFE_AND_OPTIONAL_POWER, &LIFE_MANA_SOURCE, &SPELL_WITH_MANA_AND_OPTIONAL_POWER, &SPELL_WITH_MANA_AND_POWER_CHOICE, &SPELL_WITH_MANA_AND_DYNAMIC_BEHOLD, &SPELL_WITH_POWER_AND_OPTIONAL_LIFE, &ENERGY_STAR, &SPELL_WITH_ENERGY_AND_POWER_COST, &SPELL_WITH_COUNTER_AND_POWER_COST, &SPELL_WITH_BLIGHT_AND_POWER_COST, &SPELL_WITH_MANA_AND_GRAVEYARD_EXILE, &SPELL_WITH_MANA_AND_HAND_EXILE, &SPELL_WITH_MANA_AND_EVIDENCE, &SPELL_WITH_DISCARD_AND_GRAVEYARD_EXILE, &SPELL_WITH_DISCARD_AND_TARGET_EXILE, &SPELL_WITH_TARGET_EXILE_ONLY, &SPELL_WITH_DISCARD_AND_EXILE_CHOICE, &SPELL_WITH_LIFE_AND_EXILE_CHOICE, &SPELL_WITH_LIFE_AND_VARIABLE_SACRIFICE, &SPELL_WITH_BEHOLD_AND_DISCARD, &SPELL_WITH_SEVEN_DISCARDS, &SPELL_WITH_TEAMWORK_AND_SACRIFICE, &SPELL_WITH_CONVOKE_AND_SACRIFICE, &ABILITY_WITH_LIFE_AND_SACRIFICE, &ABILITY_WITH_TAP_AND_SELF_SACRIFICE, &ABILITY_WITH_TAP_AND_SELF_RETURN, &ABILITY_WITH_COUNTER_AND_SELF_SACRIFICE, &ABILITY_WITH_VARIABLE_COUNTER_AND_SELF_SACRIFICE, &ABILITY_SACRIFICING_ONE_OR_MORE, &ABILITY_SACRIFICING_X, &MEASURE_0, &MEASURE_1, &MEASURE_2, &MEASURE_3, &ABILITY_EXILING_X_FROM_GRAVEYARD, &ABILITY_SACRIFICING_MANA_VALUE_X, &ABILITY_EXILING_TOTAL_X, &ABILITY_PAYING_X_LIFE, &ABILITY_PAYING_ONE_AND_X_LIFE, &ABILITY_LIFE_TAX, &ABILITY_DISCARDING_AND_EXILING_X, &ABILITY_EXILING_FROM_HAND_AND_GRAVEYARD_X, &ABILITY_EXILING_FROM_HAND_AND_TOTAL_X, &ABILITY_WITH_LOYALTY_AND_SELF_SACRIFICE, &ABILITY_WITH_EXERT_AND_SELF_SACRIFICE, &ABILITY_WITH_UNATTACH_AND_TAP, &ABILITY_WITH_CRAFT_AND_LIFE, &ABILITY_WITH_LIFE_AND_LIBRARY_TOP, &ABILITY_WITH_LIFE_AND_RANDOM_LIBRARY, &ABILITY_WITH_RANDOM_AND_DYNAMIC_SACRIFICE, &EVIDENCE_CARD, &SPELL_WITH_TWO_GRAVEYARD_EXILES, &FORAGE_WAY_ABILITY, &SPELL_WITH_OPTIONAL_FORAGE, &ACTIVATION_WATCHER, &CRAFT_FOR_MANA, &EXILING_MANA])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -1953,6 +1987,60 @@ fn craft_can_be_paid_before_life() {
     let serial = g.state.stack.last().expect("the activation is on the stack").serial;
     assert_eq!(g.history().ability_cost_objects(serial, 0, CostPart::CraftSource).collect::<Vec<_>>(), vec![source]);
     assert_eq!(g.history().ability_cost_objects_of_part(serial, CostPart::CraftMaterial).collect::<Vec<_>>(), vec![material]);
+}
+
+fn watcher_triggered(g: &Game, watcher: ObjectId) -> bool {
+    g.state.triggers.iter().any(|t| t.source == watcher) || g.state.stack.iter().any(|i| i.kind == StackKind::Triggered && i.object == watcher)
+}
+
+/// A permanent exiled as a craft ability's material is exiled while that ability is activated (CR 602.2b, 601.2h): "when this is
+/// exiled from the battlefield while you are activating an ability" triggers (CR 603.2), and the activation is over once its costs
+/// are paid, so nothing later is asked as part of it (CR 602.2c).
+#[test]
+fn a_permanent_exiled_as_material_is_exiled_while_its_controller_activates() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_WITH_CRAFT_AND_LIFE, Zone::BATTLEFIELD);
+    let watcher = put(&mut g, &ACTIVATION_WATCHER, Zone::BATTLEFIELD);
+    assert_eq!(g.activation_under_way(), None);
+    let r = next(&mut g);
+    let ability = option_of(&g, &r, source).expect("the ability is offered");
+    answer(&mut g, &r, Answer::Act(Action::of(&ability)));
+    let r = next(&mut g);
+    let r = pay_first(&mut g, r, |choices| choices.iter().position(|c| c.kind == CostPaymentKind::Exile));
+    answer(&mut g, &r, Answer::Cards(vec![watcher]));
+    next(&mut g);
+    assert!(watcher_triggered(&g, watcher), "it was exiled while its controller was activating");
+    assert_eq!(g.activation_under_way(), None, "the costs are paid: no activation is under way");
+}
+
+/// A mana ability activated to pay a craft ability's cost is part of activating it (CR 605.3a, 602.2b): what it exiles is exiled
+/// while that ability is activated. The same ability paying a spell's cost is not an activation (CR 601.2g).
+#[test]
+fn a_mana_ability_exiling_while_an_ability_is_paid_for_is_exiled_while_activating_it() {
+    for activating in [true, false] {
+        let mut g = game();
+        let watcher = put(&mut g, &ACTIVATION_WATCHER, Zone::BATTLEFIELD);
+        let exiler = put(&mut g, &EXILING_MANA, Zone::BATTLEFIELD);
+        let costed = if activating { put(&mut g, &CRAFT_FOR_MANA, Zone::BATTLEFIELD) } else { put(&mut g, &SPELL_WITH_MANA_AND_LIFE, Zone::hand(YOU)) };
+        if activating {
+            put(&mut g, &ABILITY_WITH_COUNTER_AND_SELF_SACRIFICE, Zone::BATTLEFIELD);
+        }
+        let r = next(&mut g);
+        let start = option_of(&g, &r, costed).expect("it may be activated or cast");
+        answer(&mut g, &r, Answer::Act(Action::of(&start)));
+        let mut r = next(&mut g);
+        for _ in 0..6 {
+            if let Some(exile) = option_of(&g, &r, exiler) {
+                answer(&mut g, &r, Answer::Act(Action::of(&exile)));
+                break;
+            }
+            r = match &r.kind {
+                RequestKind::ChooseCostPayment { .. } => pay_first(&mut g, r, |_| Some(0)),
+                _ => panic!("expected the mana ability to be offered: {:?}", r.kind),
+            };
+        }
+        assert_eq!(watcher_triggered(&g, watcher), activating, "exiled while activating: {activating}");
+    }
 }
 
 #[test]

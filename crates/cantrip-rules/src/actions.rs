@@ -297,6 +297,10 @@ impl Query for AsSpell<'_> {
         self.q.instructing()
     }
 
+    fn activation_under_way(&self) -> Option<ActivationUnderWay> {
+        self.q.activation_under_way()
+    }
+
     fn effect_controller(&self) -> Option<PlayerId> {
         self.q.effect_controller()
     }
@@ -424,6 +428,10 @@ impl Query for WithWords<'_> {
 
     fn instructing(&self) -> Option<&StackItem> {
         self.q.instructing()
+    }
+
+    fn activation_under_way(&self) -> Option<ActivationUnderWay> {
+        self.q.activation_under_way()
     }
 
     fn effect_controller(&self) -> Option<PlayerId> {
@@ -4287,6 +4295,10 @@ impl Query for Announcing<'_> {
         self.q.instructing()
     }
 
+    fn activation_under_way(&self) -> Option<ActivationUnderWay> {
+        self.q.activation_under_way()
+    }
+
     fn effect_controller(&self) -> Option<PlayerId> {
         self.q.effect_controller()
     }
@@ -4420,6 +4432,11 @@ impl Query for Watch<'_> {
     fn instructing(&self) -> Option<&StackItem> {
         self.w.told.set(true);
         self.q.instructing()
+    }
+
+    fn activation_under_way(&self) -> Option<ActivationUnderWay> {
+        self.w.told.set(true);
+        self.q.activation_under_way()
     }
 
     /// A player, which names none of the candidates.
@@ -5216,6 +5233,10 @@ impl Query for AsFace<'_> {
         self.cx.instructing()
     }
 
+    fn activation_under_way(&self) -> Option<ActivationUnderWay> {
+        self.cx.activation_under_way()
+    }
+
     fn effect_controller(&self) -> Option<PlayerId> {
         self.cx.effect_controller()
     }
@@ -5297,7 +5318,7 @@ pub fn activation_costs(game: &crate::Game, player: PlayerId, source: ObjectId, 
         return Vec::new();
     }
     // The rules read the game through a frame's view; a copy of the position (no tree) is enough to ask it.
-    let mut copy = crate::Game { state: game.state.clone(), log: game.log.clone(), tree: crate::tree::Tree::new(), at: crate::tree::NodeId::ROOT, cards: game.cards, verify: false, max_events: game.max_events, history_end: None, check: crate::StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() };
+    let mut copy = crate::Game { state: game.state.clone(), log: game.log.clone(), tree: crate::tree::Tree::new(), at: crate::tree::NodeId::ROOT, cards: game.cards, verify: false, max_events: game.max_events, history_end: None, check: crate::StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, activation: None, takeback: Default::default() };
     let cx = Cx { g: &mut copy, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     // The ability asked as it is (CR 607.5): its own cost change reads its own links.
     let by = cx.link_of_nth(source, index as usize);
@@ -5379,7 +5400,7 @@ pub fn cast_face_of(game: &crate::Game, card: ObjectId, index: u8) -> &'static C
 
 /// A copy of the position (no tree) to ask the rules of, through a frame's view, for a menu row's advice.
 fn advice_game(game: &crate::Game) -> crate::Game {
-    crate::Game { state: game.state.clone(), log: game.log.clone(), tree: crate::tree::Tree::new(), at: crate::tree::NodeId::ROOT, cards: game.cards, verify: false, max_events: game.max_events, history_end: None, check: crate::StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: game.producible_path.clone(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() }
+    crate::Game { state: game.state.clone(), log: game.log.clone(), tree: crate::tree::Tree::new(), at: crate::tree::NodeId::ROOT, cards: game.cards, verify: false, max_events: game.max_events, history_end: None, check: crate::StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: game.producible_path.clone(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, activation: None, takeback: Default::default() }
 }
 
 /// What `player` would be offered at this priority with a thousand mana of every type in their pool: what a script's refusal
@@ -9350,6 +9371,10 @@ impl Query for QueryAsFace<'_> {
         self.q.instructing()
     }
 
+    fn activation_under_way(&self) -> Option<ActivationUnderWay> {
+        self.q.activation_under_way()
+    }
+
     fn effect_controller(&self) -> Option<PlayerId> {
         self.q.effect_controller()
     }
@@ -9551,6 +9576,10 @@ impl Query for WithX<'_> {
 
     fn instructing(&self) -> Option<&StackItem> {
         self.q.instructing()
+    }
+
+    fn activation_under_way(&self) -> Option<ActivationUnderWay> {
+        self.q.activation_under_way()
     }
 
     fn effect_controller(&self) -> Option<PlayerId> {
@@ -10935,7 +10964,12 @@ pub fn act(cx: &mut Cx, player: PlayerId) -> R<Flow> {
                 if def.special_action {
                     special_action(cx, player, source, ability, by, &[])?;
                 } else {
-                    activate(cx, player, source, ability, action.index, &action.targets, action.granted_by, action.paid_by, by)?;
+                    // CR 602.2: under way from its being put on the stack to its costs being paid, the mana abilities
+                    // activated to pay them among it (`Query::activation_under_way`), restored however it ends.
+                    let outer = cx.g.activation.replace(ActivationUnderWay { player, source, ability });
+                    let activated = activate(cx, player, source, ability, action.index, &action.targets, action.granted_by, action.paid_by, by);
+                    cx.g.activation = outer;
+                    activated?;
                 }
             }
         }
@@ -13777,6 +13811,8 @@ fn activate(
 
     note_activation(cx, source, index as usize, def);
 
+    // CR 602.2c: its costs paid, the ability is activated; what happens after is no longer while it is being activated.
+    cx.g.activation = None;
     cx.emit(Event::AbilityActivated { source, ability, player, by: Grant::of(granted) });
     if item.instance != AbilityAcquisition::OWN {
         cx.record(Event::ActivatedAs { instance: item.instance });
@@ -13913,7 +13949,7 @@ pub fn special_action_costs(game: &crate::Game, player: PlayerId, source: Object
     if !changers {
         return None;
     }
-    let mut copy = crate::Game { state: game.state.clone(), log: game.log.clone(), tree: crate::tree::Tree::new(), at: crate::tree::NodeId::ROOT, cards: game.cards, verify: false, max_events: game.max_events, history_end: None, check: crate::StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() };
+    let mut copy = crate::Game { state: game.state.clone(), log: game.log.clone(), tree: crate::tree::Tree::new(), at: crate::tree::NodeId::ROOT, cards: game.cards, verify: false, max_events: game.max_events, history_end: None, check: crate::StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, activation: None, takeback: Default::default() };
     let cx = Cx { g: &mut copy, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     let printed = special_action_printed_cost(&cx, source, ability, def);
     let cost = special_action_cost(&cx, player, source, ability, def);
@@ -14585,7 +14621,7 @@ pub(crate) fn producible_types_in(game: &crate::Game, permanent: ObjectId) -> (C
 
 /// A rules query over a read-only state, as target and cost checks outside a frame read it.
 pub(crate) fn producible_types_on(cards: &'static CardTable, state: &GameState, events: &[Record], permanent: ObjectId) -> (ColorSet, bool) {
-    let mut copy = crate::Game { state: state.clone(), log: events.to_vec(), tree: crate::tree::Tree::new(), at: crate::tree::NodeId::ROOT, cards, verify: false, max_events: crate::MAX_GAME_EVENTS, history_end: None, check: crate::StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() };
+    let mut copy = crate::Game { state: state.clone(), log: events.to_vec(), tree: crate::tree::Tree::new(), at: crate::tree::NodeId::ROOT, cards, verify: false, max_events: crate::MAX_GAME_EVENTS, history_end: None, check: crate::StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, activation: None, takeback: Default::default() };
     let cx = Cx { g: &mut copy, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     producible_types(&cx, permanent)
 }

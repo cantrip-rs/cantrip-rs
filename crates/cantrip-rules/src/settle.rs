@@ -1475,6 +1475,10 @@ impl Query for BoardThen<'_> {
         self.q.instructing()
     }
 
+    fn activation_under_way(&self) -> Option<ActivationUnderWay> {
+        self.q.activation_under_way()
+    }
+
     fn effect_controller(&self) -> Option<PlayerId> {
         self.q.effect_controller()
     }

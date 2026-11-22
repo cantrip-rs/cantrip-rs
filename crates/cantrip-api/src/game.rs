@@ -38,6 +38,14 @@ impl EntersAttacking {
     }
 }
 
+/// An activated ability being activated (`Query::activation_under_way`): `source`'s `ability`, by `player`.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct ActivationUnderWay {
+    pub player: PlayerId,
+    pub source: ObjectId,
+    pub ability: AbilityRef,
+}
+
 /// The effect has asked a question that has no answer yet. Returned with `?` all the way out of the card's code; the
 /// engine records the question and runs the effect again once it is answered.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -569,6 +577,18 @@ pub trait Query {
     /// replacement or prevention effect does besides changing the event (CR 614.1a, 615.5), that effect's own. Silhouette's
     /// "if a spell or ability that targets that creature would cause a source to deal damage to that creature".
     fn instructing(&self) -> Option<&StackItem> {
+        None
+    }
+
+    /// The activated ability being activated now (CR 602.2): from the moment it is put on the stack (CR 602.2a) until its
+    /// costs are paid and it is activated (CR 602.2b-c, 601.2h), the mana abilities activated to pay them (CR 605.3a) among
+    /// them. `None` outside an activation, while a spell is cast, and while an ability is on the stack or resolves. A
+    /// triggered ability's event is asked as it happens, so "while you're activating a craft ability" is asked of it: Market
+    /// Gnome's "when this creature is exiled from the battlefield while you're activating a craft ability". A mana ability
+    /// activated on its own, or a special action (CR 116.2), is none: a mana ability's own activation is the span its triggered
+    /// mana abilities look back over (CR 605.1b, 605.3a; the rules engine's mana interval), nested inside this one when it
+    /// pays this one's costs, and it names no ability on the stack.
+    fn activation_under_way(&self) -> Option<ActivationUnderWay> {
         None
     }
 
