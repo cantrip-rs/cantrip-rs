@@ -150,3 +150,25 @@ fn a_departed_players_through_next_turn_ability_ends_when_their_turn_would_have_
     assert_eq!(g.state.delayed.len(), 1);
     assert!(matches!(g.state.delayed[0].when, DelayedWhen::ThroughNextTurnOf { player: PlayerId(2), .. }));
 }
+
+/// A permission to play cards that lasts "until [a player's] next turn" (CR 611.2a, 800.4m): a departed player's ends where their
+/// turn would have begun, and another player's, still waiting for their own turn, is kept.
+#[test]
+fn a_departed_players_permission_until_their_next_turn_ends_when_that_turn_would_have_begun() {
+    let (mut g, source) = game_with(3);
+    for player in [THEM, PlayerId(2)] {
+        g.state.permission_push(PlayPermission {
+            what: Playable::Card(source),
+            player: YOU,
+            grant: PlayGrant { expiry: Expiry::UntilNextTurnOf(player), ..PlayGrant::CAST },
+            by: Grant { object: source, ability: AbilityRef::spell(g.state.obj(source).card) },
+            turn: 10,
+        });
+    }
+    g.state.update_player(THEM, |p| p.lost = true);
+    g.state.update_turn(|t| t.set_step(Step::Cleanup));
+    crate::turn::next_step(&mut g);
+    assert_eq!(g.state.turn.active, PlayerId(2));
+    let kept: Vec<Expiry> = g.state.permissions.iter().map(|p| p.grant.expiry).collect();
+    assert_eq!(kept, vec![Expiry::UntilNextTurnOf(PlayerId(2))], "only the departed player's permission ended");
+}

@@ -1439,6 +1439,7 @@ impl<'a> Projector<'a> {
             Expiry::EndOfYourNextTurn => format!("until {whose} next turn ends"),
             Expiry::UntilYourNextEndStep => format!("until {whose} next end step"),
             Expiry::UntilYourNextStep(step) => format!("until {whose} next {} begins", step.name()),
+            Expiry::UntilNextTurnOf(player) => format!("until {} next turn", if player == self.viewer { "your".to_string() } else { format!("{}'s", self.names.get(player.index()).cloned().unwrap_or_default()) }),
             // Named as the permanent is now: a transformed one by its other face (CR 712.18).
             Expiry::WhileControls(source) => {
                 let name = self.game.cards.get(self.game.chars(source).card).name;

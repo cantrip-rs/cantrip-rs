@@ -380,6 +380,8 @@ fn turn_would_have_begun(s: &mut GameState, p: PlayerId) {
     if s.effects.iter().any(waits) {
         s.effects_retain(|e| !waits(e));
     }
+    // A permission to play cards that lasts until their next turn too (`Expiry::UntilNextTurnOf`).
+    s.permissions_retain(|perm| perm.grant.expiry != Expiry::UntilNextTurnOf(p));
     for at in (0..s.delayed.len()).rev() {
         if matches!(s.delayed[at].when, DelayedWhen::UntilNextTurnOf(q) | DelayedWhen::NextTurnStep { player: q, .. } | DelayedWhen::ThroughNextTurnOf { player: q, .. } if q == p)
             || matches!(s.delayed[at].when, DelayedWhen::StepOfNextTurn { of: Some(player), .. } if player == p) {
@@ -602,6 +604,10 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
             if cx.s().effects.iter().any(|e| e.duration == Duration::UntilNextTurnOf(active)) {
                 cx.st().effects_retain(|e| e.duration != Duration::UntilNextTurnOf(active));
                 ops::settle_lasting_and_control(cx);
+            }
+            // The same for a permission to play cards that lasts until then, whoever holds it (CR 611.2a).
+            if cx.s().permissions.iter().any(|p| p.grant.expiry == Expiry::UntilNextTurnOf(active)) {
+                cx.st().permissions_retain(|p| p.grant.expiry != Expiry::UntilNextTurnOf(active));
             }
             // The same for a delayed ability that lasts until then (CR 603.7b).
             for at in (0..cx.s().delayed.len()).rev() {
@@ -2281,7 +2287,7 @@ pub(crate) fn cleanup(cx: &mut Cx) -> R<()> {
                     Expiry::Never => true,
                     Expiry::EndOfTurn => false,
                     Expiry::EndOfYourNextTurn => !(p.player == active && number > p.turn),
-                    Expiry::UntilYourNextEndStep | Expiry::UntilYourNextStep(_) | Expiry::WhileControls(_) | Expiry::UntilAnotherExiledWith(_) => true,
+                    Expiry::UntilYourNextEndStep | Expiry::UntilYourNextStep(_) | Expiry::UntilNextTurnOf(_) | Expiry::WhileControls(_) | Expiry::UntilAnotherExiledWith(_) => true,
                 }
         });
     }

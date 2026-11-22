@@ -2230,6 +2230,10 @@ pub enum Expiry {
     /// Lightning, Security Sergeant (exile the top card of your library, play it) print it; Victor Mancha, Runaway, Taster
     /// of Wares, Hama, the Bloodbender and Kotose, the Silent Spider word theirs about other cards they exile.
     WhileControls(ObjectId),
+    /// "Until [a player's] next turn" (CR 611.2a): it ends as that player's next turn begins, whoever holds it, as
+    /// `Duration::UntilNextTurnOf` ends an effect. The player is the one the effect's words name (its controller's "your"), which
+    /// is not always the holder: Memory Vessel lets each player play the cards they exiled until its controller's next turn.
+    UntilNextTurnOf(PlayerId),
     /// "Until you exile another card with [this]" (CR 611.2a): it lasts until its holder exiles another card with this same
     /// object, and so ends as that card's own permission of this kind is given (`Game::allow_play`), the two coming together
     /// from the one instruction. Nothing else ends it: not the object leaving the battlefield, and not a new object for its
