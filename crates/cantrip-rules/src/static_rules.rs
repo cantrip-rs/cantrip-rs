@@ -961,32 +961,6 @@ pub fn goaders(q: &dyn Query, cards: &CardTable, creature: ObjectId) -> Vec<Play
     goaders_among(q, &goad_sources(q, cards), creature)
 }
 
-/// The creatures among `creatures` that a static ability forbids to attack alone (CR 508.1c; `CardDef::attack_alone_rules`),
-/// each asked of a rule of the permanent that says so with that permanent's `Asker`. Pet Sehlat.
-pub fn attacks_alone_barred(q: &dyn Query, cards: &CardTable, creatures: &[ObjectId]) -> Vec<ObjectId> {
-    let restrictors: Vec<(Asker, &'static CardDef)> = q
-        .state()
-        .battlefield()
-        .iter()
-        .flat_map(|&id| {
-            let obj = q.state().obj(id);
-            cards
-                .texts_linked(q.state(), id)
-                .filter(move |(card, _)| cards.attack_alone_rules[card.0 as usize] && !q.lost_all_abilities(id))
-                .map(move |(card, by)| (Asker { instance: None, source: id, controller: obj.controller, by, spell: false }, cards.get(card)))
-        })
-        .collect();
-    creatures
-        .iter()
-        .copied()
-        .filter(|&creature| {
-            restrictors
-                .iter()
-                .any(|(asker, def)| def.attack_alone_rules.iter().any(|rule| !rule(q, asker, creature, Target::None)))
-        })
-        .collect()
-}
-
 /// Whether every restriction of `restrictors` lets `creature` attack `at` (CR 508.1c).
 fn restrictors_allow(q: &dyn Query, restrictors: &[(Asker, &'static CardDef)], creature: ObjectId, at: Target) -> bool {
     restrictors.iter().all(|(asker, def)| def.attack_rules.iter().all(|rule| rule(q, asker, creature, at)))

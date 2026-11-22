@@ -165,3 +165,22 @@ fn a_global_cap_with_many_required_attackers_keeps_the_search_bounded() {
     let nodes = crate::attacks::GROUP_ATTACK_SEARCH_NODES.with(|n| n.get());
     assert!(nodes < 1000, "global cap visited {nodes} nodes");
 }
+
+#[test]
+fn a_creature_that_cant_attack_alone_with_no_company_keeps_the_search_bounded() {
+    // The first creature can't attack alone (a group about it, at least two), and nothing else is a member that could join it:
+    // every declaration with it is too few, which the search must cut where it is chosen rather than under every subset of
+    // the forty that follow.
+    let ids: Vec<_> = (0..41).map(|n| ObjectId(1000 + n)).collect();
+    let r = AttackRules {
+        groups: vec![CombatGroup { subjects: vec![ids[0]], members: vec![ids[0]], at_least: 2, at_most: u32::MAX }],
+        required: ids.iter().map(|&attacker| RequiredAttack { attacker, aim: AttackAim::Anything }).collect(),
+        ..Default::default()
+    };
+    crate::attacks::GROUP_ATTACK_SEARCH_NODES.with(|n| n.set(0));
+    let (most, d) = r.solve(&ids, &TARGETS, &[]);
+    assert_eq!(most, 40);
+    assert!(!d.iter().any(|a| a.0 == ids[0]));
+    let nodes = crate::attacks::GROUP_ATTACK_SEARCH_NODES.with(|n| n.get());
+    assert!(nodes < 1000, "a lone creature's group visited {nodes} nodes");
+}

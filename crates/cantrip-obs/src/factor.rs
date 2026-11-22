@@ -9,11 +9,10 @@
 //! - blockers: a creature with menace (or "can't be blocked except by N") blocked by too few, and the block
 //!   requirements' maximum (CR 509.1c);
 //! - attackers: where a cap on how many may attack a defender (CR 508.1c) leaves a declaration short of the most
-//!   requirements it must obey (CR 508.1d); without a cap the mask carries the requirements exactly. A creature that
-//!   can't attack alone (CR 508.1c) is masked exactly: a lone attacker is left only where another can still join it. So
-//!   is a restriction on how many creatures a whole declaration of attackers or blockers has (CR 506.5, 508.1c, 509.1b:
-//!   Caverns of Despair, Errantry, Orcish Conscripts): a choice is left only where the creatures still to come can make
-//!   a declaration that obeys every one;
+//!   requirements it must obey (CR 508.1d); without a cap the mask carries the requirements exactly. A restriction on
+//!   how many creatures a whole declaration of attackers or blockers has is masked exactly (CR 506.5, 508.1c, 509.1b:
+//!   Caverns of Despair, Errantry, Orcish Conscripts, and a creature that can't attack or block alone: Pet Sehlat, Toby's
+//!   Beast): a choice is left only where the creatures still to come can make a declaration that obeys every one;
 //! - a band with more than one creature without banding (CR 702.22c);
 //! - targets that break their slot's rule together past a running total of mana value (different mana values: Agadeem's
 //!   Awakening), and cards that break a selection rule (CR 601.2c);
@@ -620,13 +619,11 @@ type To<'a> = dyn Fn(&[(Ref, Ref)], &[usize], Ref, usize) -> Option<Ref> + 'a;
 
 /// Whether the creatures still to come (`later`, each once at most) can complete `pairs` - each a creature and what it
 /// attacks or blocks, `counts` how many at each of `targets` targets - to a declaration that obeys every one of `groups`
-/// (CR 506.5, 508.1c, 509.1b: `cantrip_state::CombatGroup`, the validator's judgement, in the factoring's terms) and
-/// whose one attacker, where it has only one, is not forbidden to attack alone (`lone`, CR 508.1c). `to` says where a
-/// creature may go; a pair added never opens a place, so where the creatures to come can go now bounds where they may
+/// (CR 506.5, 508.1c, 509.1b: `cantrip_state::CombatGroup`, the validator's judgement, in the factoring's terms). `to`
+/// says where a creature may go; a pair added never opens a place, so where the creatures to come can go now bounds where they may
 /// later. One pair for each creature is enough: a creature blocking several is still one member.
 fn completes(
     groups: &[crate::CombatGroupObs],
-    lone: &[Ref],
     targets: usize,
     to: &To,
     pairs: &mut Vec<(Ref, Ref)>,
@@ -649,18 +646,18 @@ fn completes(
             return false;
         }
         if later.is_empty() {
-            return groups.iter().all(|g| g.allows(has)) && !matches!(pairs[..], [(a, _)] if lone.contains(&a));
+            return groups.iter().all(|g| g.allows(has));
         }
     }
     let (c, rest) = (later[0], &later[1..]);
-    if completes(groups, lone, targets, to, pairs, counts, rest) {
+    if completes(groups, targets, to, pairs, counts, rest) {
         return true;
     }
     for i in 0..targets {
         if let Some(t) = to(pairs, counts, c, i) {
             pairs.push((c, t));
             counts[i] += 1;
-            let done = completes(groups, lone, targets, to, pairs, counts, rest);
+            let done = completes(groups, targets, to, pairs, counts, rest);
             pairs.pop();
             counts[i] -= 1;
             if done {
@@ -1056,7 +1053,6 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
             most,
             max_attackers,
             barred,
-            alone,
             sacrifices,
             groups,
             ..
@@ -1082,10 +1078,6 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
             let mut obeyed = 0u32;
             let mut attacking = vec![0usize; defenders.len()];
             let mut attacks: Vec<(Ref, Ref)> = Vec::new();
-            // CR 508.1c: a declaration whose one attacker is forbidden to attack alone is illegal, whatever else it
-            // obeys - exactly, not as a bound. A choice that leaves such a lone attacker is offered only where a creature
-            // still to come can attack something with room beside it (the ones between staying home); one attacker
-            // beside it mends it, and no attack is ever taken back.
             let room = |attacking: &[usize], i: usize| cap(i) == u8::MAX || attacking[i] < usize::from(cap(i));
             // CR 508.1j, 118.3: an attack whose permanents to sacrifice the declaration with it can't spare is never
             // offered - exactly, as nothing added later pays for it, and staying home costs nothing.
@@ -1095,15 +1087,15 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
                 sacrifices_payable(sacrifices, &with)
             };
             // CR 506.5, 508.1c: a declaration with more or fewer creatures than a restriction on the whole declaration
-            // allows (Caverns of Despair, Errantry, Orcish Conscripts) is illegal, and so is a lone attacker forbidden to
-            // attack alone - both exactly: a choice is offered only where the creatures still to come can make a
-            // declaration that obeys them all, each attack open, with room and payable.
+            // allows (Caverns of Despair, Errantry, Orcish Conscripts, "can't attack alone") is illegal, exactly: a choice is
+            // offered only where the creatures still to come can make a declaration that obeys them all, each attack open,
+            // with room and payable; no attack is ever taken back.
             let to = |attacks: &[(Ref, Ref)], attacking: &[usize], c: Ref, i: usize| {
                 let d = defenders[i];
                 (open(c, d) && room(attacking, i) && payable(attacks, (c, d))).then_some(d)
             };
             let mended = |attacks: &[(Ref, Ref)], attacking: &[usize], later: &[Ref]| {
-                completes(groups, alone, defenders.len(), &to, &mut attacks.to_vec(), &mut attacking.to_vec(), later)
+                completes(groups, defenders.len(), &to, &mut attacks.to_vec(), &mut attacking.to_vec(), later)
             };
             for (j, &c) in eligible.iter().enumerate() {
                 rest -= best(c);
@@ -1163,7 +1155,7 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
             };
             let mended = |blocks: &[(Ref, Ref)], blocked: &[usize], later: &[Ref]| {
                 groups.is_empty()
-                    || completes(groups, &[], attackers.len(), &to, &mut blocks.to_vec(), &mut blocked.to_vec(), later)
+                    || completes(groups, attackers.len(), &to, &mut blocks.to_vec(), &mut blocked.to_vec(), later)
             };
             let mut blocked = vec![0usize; attackers.len()];
             let mut blocks = Vec::new();
@@ -1739,6 +1731,11 @@ mod tests {
         Ref::Object(i)
     }
 
+    /// "Can't attack alone" (CR 508.1c): `subject` attacks only with another of `members` beside it.
+    fn lone(subject: Ref, members: &[Ref]) -> crate::CombatGroupObs {
+        crate::CombatGroupObs { subjects: vec![subject], members: members.to_vec(), at_least: 2, at_most: u32::MAX }
+    }
+
     /// Choose the tokens equal to `tokens` in order; the answer.
     fn walk(ask: &Ask, tokens: &[Token]) -> Machine {
         let mut m = Machine::new(ask, &[]);
@@ -1955,7 +1952,6 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![u8::MAX, u8::MAX],
             barred: vec![],
-            alone: vec![],
             sacrifices: vec![],
             groups: vec![],
         });
@@ -1982,7 +1978,6 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![u8::MAX, u8::MAX],
             barred: vec![(o(1), Ref::Player(1))],
-            alone: vec![],
             sacrifices: vec![],
             groups: vec![],
         });
@@ -2004,7 +1999,6 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![1, 1],
             barred: vec![],
-            alone: vec![],
             sacrifices: vec![],
             groups: vec![],
         });
@@ -2032,7 +2026,6 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![u8::MAX, 1],
             barred: vec![],
-            alone: vec![],
             sacrifices: vec![],
             groups: vec![],
         });
@@ -2048,7 +2041,6 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![u8::MAX],
             barred: vec![],
-            alone: vec![],
             sacrifices: vec![],
             groups: vec![],
         });
@@ -2073,7 +2065,6 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![u8::MAX; 3],
             barred: vec![],
-            alone: vec![],
             sacrifices: vec![],
             groups: vec![],
         });
@@ -2091,7 +2082,6 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![u8::MAX],
             barred: vec![],
-            alone: vec![],
             sacrifices: vec![],
             groups: vec![],
         });
@@ -2110,7 +2100,6 @@ mod tests {
             can_pay: 3,
             max_attackers: vec![u8::MAX; 2],
             barred: vec![],
-            alone: vec![],
             sacrifices: vec![],
             groups: vec![],
         });
@@ -2133,9 +2122,8 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![u8::MAX, 1],
             barred: vec![(o(3), Ref::Player(1))],
-            alone: vec![o(1), o(2)],
             sacrifices: vec![],
-            groups: vec![],
+            groups: vec![lone(o(1), &[o(1), o(2), o(3)]), lone(o(2), &[o(1), o(2), o(3)])],
         });
         // Alone, the first may attack: either other creature can join it.
         let m = walk(&a, &[Token::of(Tok::Attack, o(1), o(9), 0)]);
@@ -2162,9 +2150,8 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![u8::MAX],
             barred: vec![],
-            alone: vec![o(1)],
             sacrifices: vec![],
-            groups: vec![],
+            groups: vec![lone(o(1), &[o(1)])],
         });
         assert!(!legal(&Machine::new(&lone, &[]), Token::of(Tok::Attack, o(1), Ref::Player(1), 0)));
         round_trip(&a, &FactoredAnswer::Attack(vec![(o(1), Ref::Player(1)), (o(2), Ref::Player(1))]));
@@ -2185,7 +2172,6 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![u8::MAX],
             barred: vec![],
-            alone: vec![],
             sacrifices: vec![land(o(1)), land(o(2))],
             groups: vec![],
         });
@@ -2207,9 +2193,8 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![u8::MAX],
             barred: vec![],
-            alone: vec![o(3)],
             sacrifices: vec![crate::AttackSacrificeObs { attacker: o(1), defender: Ref::Player(1), count: 1, candidates: vec![] }],
-            groups: vec![],
+            groups: vec![lone(o(3), &[o(3), o(1)])],
         });
         let m = Machine::new(&lone, &[]);
         assert!(!legal(&m, Token::of(Tok::Attack, o(3), Ref::Player(1), 0)));

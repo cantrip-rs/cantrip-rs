@@ -4322,9 +4322,6 @@ pub struct CardDef {
     /// Its static abilities that keep creatures from attacking, or from attacking a given player, planeswalker or battle
     /// (CR 508.1c), while it is on the battlefield.
     pub attack_rules: &'static [AttackRule],
-    /// Its static abilities that forbid a creature to attack alone (CR 508.1c): each rule is false of the creature it is
-    /// about, as Pet Sehlat's "This creature can't attack alone" is. Read as a declaration of exactly one attacker is judged.
-    pub attack_alone_rules: &'static [AttackRule],
     /// Count restrictions on complete attack/block declarations.
     pub combat_groups: &'static [CombatGroupRule],
     /// Its static abilities that make attacking cost something (CR 508.1d, 508.1h), while it is on the battlefield.
@@ -4665,7 +4662,6 @@ impl CardDef {
         must_be_blocked: &[],
         block_costs: &[],
         attack_rules: &[],
-        attack_alone_rules: &[],
         combat_groups: &[],
         attack_costs: &[],
         attack_cost_rules: &[],
@@ -5009,8 +5005,6 @@ pub struct CardTable {
     pub block_rules: Vec<bool>,
     /// Which cards have attack rules (CR 508.1c).
     pub attack_rules: Vec<bool>,
-    /// Which cards forbid attacking alone (CR 508.1c).
-    pub attack_alone_rules: Vec<bool>,
     /// Which cards goad creatures with a static ability (CR 701.15a).
     pub goads: Vec<bool>,
     /// Per card: it has a targeting rule. Read to find the few battlefield sources of one, never to ask the table.
@@ -5671,7 +5665,6 @@ impl CardTable {
         let block_rules: Vec<bool> =
             cards.iter().map(|c| !c.block_rules.is_empty() || !c.landwalk_exceptions.is_empty() || !c.blocker_limits.is_empty() || !c.block_capacities.is_empty() || !c.additional_blocks.is_empty()).collect();
         let attack_rules: Vec<bool> = cards.iter().map(|c| !c.attack_rules.is_empty()).collect();
-        let attack_alone_rules: Vec<bool> = cards.iter().map(|c| !c.attack_alone_rules.is_empty()).collect();
         let goads: Vec<bool> = cards.iter().map(|c| !c.goads.is_empty()).collect();
         let targeting_rules: Vec<bool> = cards.iter().map(|c| !c.targeting_rules.is_empty()).collect();
         let player_keywords: Vec<bool> = cards.iter().map(|c| !c.player_keywords.is_empty() || !c.player_protection.is_empty()).collect();
@@ -5774,7 +5767,6 @@ impl CardTable {
             any_cast_limit,
             block_rules,
             attack_rules,
-            attack_alone_rules,
             goads,
             targeting_rules,
             player_keywords,

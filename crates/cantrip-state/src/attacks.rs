@@ -48,9 +48,6 @@ pub struct AttackRules {
     /// forbids (CR 508.1c): "creatures with flying can't attack you" (Storm, Windrider) bars a flier's attack on that player
     /// and no other. A creature forbidden every attack is not eligible at all.
     pub barred: Vec<(ObjectId, Target)>,
-    /// The creatures that a static ability forbids to attack alone (CR 508.1c): a declaration whose only attacker is one
-    /// of these is illegal. Pet Sehlat's "This creature can't attack alone".
-    pub alone_barred: Vec<ObjectId>,
     /// The most creatures that may attack each capped player, planeswalker or battle (CR 508.1c), one entry each.
     pub limits: Vec<(Target, u32)>,
     /// Whole-declaration count restrictions (CR 508.1c), empty in ordinary games.
@@ -100,8 +97,7 @@ pub struct AttackVerdict {
     pub cost: ManaCost,
     /// What declaring it costs besides mana, in words ("sacrifice 2 lands"), empty when nothing (`AttackRules::sacrifices`).
     pub nonmana: String,
-    /// Nothing is required of the declaration (the most is 0), nothing caps how many may attack a target and nothing forbids
-    /// a creature to attack alone: any
+    /// Nothing is required of the declaration (the most is 0) and nothing caps how many may attack a target: any
     /// declaration of `addable` attacks, each creature attacking once, is legal, so a client need not ask about each one.
     pub free: bool,
 }
@@ -251,11 +247,7 @@ impl AttackRules {
         let rows: Vec<&[u32]> = gains.iter().map(|r| &r[..]).collect();
         let Some(mut best) = Assignment::new(self, &rows, eligible, targets, costs, true, &[]) else { return Default::default() };
         best.maximize();
-        let declaration = best.declaration(eligible, targets);
-        match declaration[..] {
-            [(a, t)] if self.alone_barred.contains(&a) => self.not_alone(eligible, targets, costs, &gains, best.total(), a, t),
-            _ => (best.total(), declaration),
-        }
+        (best.total(), best.declaration(eligible, targets))
     }
 
     /// Exact branch-and-bound only for live group restrictions. Ordinary games
@@ -330,8 +322,7 @@ impl AttackRules {
                 if self.rules.groups.iter().any(|g| g.exceeded(has) || short(g)) {
                     return;
                 }
-                let valid = self.rules.groups.iter().all(|g| g.allows(has))
-                    && !(self.chosen.len() == 1 && self.rules.alone_barred.contains(&self.chosen[0].0));
+                let valid = self.rules.groups.iter().all(|g| g.allows(has));
                 if valid && self.best.as_ref().is_none_or(|b| gain > b.0) && self.enough.is_none_or(|n| gain >= n) {
                     self.best = Some((gain, self.chosen.clone()));
                 }
@@ -435,38 +426,6 @@ impl AttackRules {
         verdict
     }
 
-    /// The most requirements a declaration obeys without paying a cost (CR 508.1d) where the best one of all, obeying
-    /// `most`, is `a` attacking `t` alone, which a static ability forbids (CR 508.1c: Pet Sehlat's "can't attack alone"): every
-    /// other declaration is allowed that one is not. Each attack in the best declaration obeys something, so nothing else
-    /// adds to it. Another creature attacking anything beside `a` for free obeys no fewer. Where none may, each other
-    /// creature may attack for free only `t`, in `a`'s place (a cap of one there): the best is one of them there - beside
-    /// `a` attacking elsewhere, or alone where it may attack alone - or no attack at all, which obeys none.
-    #[allow(clippy::too_many_arguments)]
-    fn not_alone(&self, eligible: &[ObjectId], targets: &[Target], costs: &[AttackCost], gains: &[Vec<u32>], most: u32, a: ObjectId, t: Target) -> (u32, Vec<(ObjectId, Target)>) {
-        let free = |c: ObjectId, u: Target| !self.bars(c, u) && AttackCost::free(costs, c, u);
-        if let Some((c, u)) = eligible
-            .iter()
-            .filter(|&&c| c != a)
-            .find_map(|&c| targets.iter().find(|&&u| free(c, u) && self.room(u, &[(a, t)])).map(|&u| (c, u)))
-        {
-            return (most, vec![(a, t), (c, u)]);
-        }
-        let (Some(ai), Some(ti)) = (eligible.iter().position(|&c| c == a), targets.iter().position(|&u| u == t)) else { return Default::default() };
-        let mut best: (u32, Vec<(ObjectId, Target)>) = (0, Vec::new());
-        for (ci, &c) in eligible.iter().enumerate().filter(|&(_, &c)| c != a && free(c, t)) {
-            let there = gains[ci][ti];
-            if !self.alone_barred.contains(&c) && there > best.0 {
-                best = (there, vec![(c, t)]);
-            }
-            for (ui, &u) in targets.iter().enumerate().filter(|&(_, &u)| u != t && free(a, u) && self.room(u, &[])) {
-                if gains[ai][ui] + there > best.0 {
-                    best = (gains[ai][ui] + there, vec![(a, u), (c, t)]);
-                }
-            }
-        }
-        best
-    }
-
     /// What the rules make of `attacks`, a declaration of `eligible` creatures attacking among `targets`, with what attacks
     /// cost (CR 508.1a-d); with `addable`, which attacks may be added on the way to a legal one too.
     pub fn judge(&self, eligible: &[ObjectId], targets: &[Target], costs: &[AttackCost], attacks: &[(ObjectId, Target)], addable: bool) -> AttackVerdict {
@@ -498,11 +457,6 @@ impl AttackRules {
                 }
             }
         }
-        // CR 508.1c: one creature declared attacking alone that a static ability forbids to attack alone is illegal, and
-        // another attacker beside it mends that.
-        if found.is_none() && attacks.len() == 1 && self.alone_barred.contains(&attacks[0].0) {
-            found = issue(attacks[0].0, "can't attack alone", None, "508.1c");
-        }
         // CR 508.1j, 118.3: permanents to sacrifice that aren't there to give make a declaration that can't be paid, which
         // is illegal, and no attack added to it pays for the rest.
         if found.is_none()
@@ -514,15 +468,6 @@ impl AttackRules {
         }
         let declared = self.obeyed(attacks);
         let short = found.is_none() && declared < self.most;
-        // CR 508.1c: an attack added to nothing by a creature a static ability forbids to attack alone is legal only with
-        // another attacker beside it, so some other creature must be able to attack something with room left. Where the
-        // best declaration with it has another attacker, that one can; where it has none, the others obey nothing, and one
-        // of them attacking anything loses nothing.
-        let lone = |a: ObjectId, at: Target| {
-            attacks.is_empty()
-                && self.alone_barred.contains(&a)
-                && !eligible.iter().any(|&d| d != a && targets.iter().any(|&v| !self.bars(d, v) && self.room(v, &[(a, at)])))
-        };
         let gains = if short || (addable && mendable) { self.gains(eligible, targets) } else { Vec::new() };
         if short {
             // An attacker obeying fewer than it could, and a requirement its best attack obeys that its attack does not.
@@ -557,7 +502,7 @@ impl AttackRules {
             let mut list = Vec::new();
             for &(i, best) in &rest {
                 for (t, &at) in targets.iter().enumerate() {
-                    if !self.bars(eligible[i], at) && !lone(eligible[i], at) && declared + gains[i][t] + all - best >= self.most {
+                    if !self.bars(eligible[i], at) && declared + gains[i][t] + all - best >= self.most {
                         list.push((eligible[i], at));
                     }
                 }
@@ -586,7 +531,7 @@ impl AttackRules {
                     let shed = best.shed(i);
                     let loads = best.loads();
                     for (t, &at) in targets.iter().enumerate() {
-                        if !room[t] || self.bars(a, at) || lone(a, at) {
+                        if !room[t] || self.bars(a, at) {
                             continue;
                         }
                         let lose = match best.capped.iter().position(|c| c.0 == t) {
@@ -607,8 +552,8 @@ impl AttackRules {
         } else {
             Vec::new()
         };
-        // Two attacks of `addable` may still be one too many for a capped target (CR 508.1c), and one of them alone may be an
-        // attack a static ability forbids alone, so neither declaration is free of asking.
+        // Two attacks of `addable` may still be one too many for a capped target (CR 508.1c), so the declaration is not free
+        // of asking.
         // CR 508.1j: an attack whose permanents to sacrifice the declaration with it can't spare is no step towards a legal
         // one, as nothing added pays for it.
         let mut addable = addable;
@@ -622,7 +567,7 @@ impl AttackRules {
             });
         }
         // Permanents to sacrifice are room the attacks share, as a cap is: two attacks addable alone may not be payable together.
-        let free = self.most == 0 && !self.capped(targets) && self.alone_barred.is_empty() && self.sacrifices.is_empty();
+        let free = self.most == 0 && !self.capped(targets) && self.sacrifices.is_empty();
         AttackVerdict { complete, addable, issue: found, cost: AttackCost::total(costs, attacks), nonmana: self.nonmana_words(attacks), free }
     }
 }
@@ -917,6 +862,12 @@ mod tests {
     /// A planeswalker of P2 that one creature at most may attack (Tomik, Orzhov Lawmage).
     const W: Target = Target::Object(ObjectId(7));
 
+    /// "Can't attack alone" (CR 508.1c): `subjects` attack only with at least one of `others` beside them, the group those
+    /// who may attack make, as `static_rules::combat_groups` builds it.
+    fn lone(subjects: &[ObjectId], members: &[ObjectId]) -> crate::CombatGroup {
+        crate::CombatGroup { subjects: subjects.to_vec(), members: members.to_vec(), at_least: 2, at_most: u32::MAX }
+    }
+
     /// CR 508.1h, 508.1j, 118.3: what attacks cost in permanents, added up in words, and payable only with a permanent of its
     /// own for each: two lands for two green attackers, an Island beside them named apart.
     #[test]
@@ -967,13 +918,13 @@ mod tests {
     #[test]
     fn a_lone_creature_that_cannot_attack_alone_is_required_nothing() {
         let targets = [Target::Player(P2)];
-        let mut r = AttackRules { required: vec![RequiredAttack { attacker: U, aim: AttackAim::Anything }], alone_barred: vec![U], ..Default::default() };
+        let mut r = AttackRules { required: vec![RequiredAttack { attacker: U, aim: AttackAim::Anything }], groups: vec![lone(&[U], &[U])], ..Default::default() };
         (r.most, r.suggested) = r.solve(&[U], &targets, &[]);
         assert_eq!((r.most, r.suggested.clone()), (0, Vec::new()));
         let none = r.judge(&[U], &targets, &[], &[], true);
         assert!(none.complete && none.addable.is_empty() && !none.free);
         let alone = r.judge(&[U], &targets, &[], &[(U, Target::Player(P2))], true);
-        assert_eq!(alone.issue.map(|i| (i.words, i.rule)), Some(("can't attack alone".to_string(), "508.1c")));
+        assert_eq!(alone.issue.map(|i| (i.words, i.rule)), Some(("can't attack with this group".to_string(), "508.1c")));
     }
 
     /// A creature that can't attack alone may be added to nothing only where another creature can attack beside it: alone
@@ -987,7 +938,7 @@ mod tests {
         check_every_declaration(&[U], &[b, W], &menu, &caps, &[&[]], &[&[U]], &[&[]], &[Vec::new()]);
         let partial = vec![Vec::new(), vec![(U, b)], vec![(U, W)], vec![(V, W)]];
         check_every_declaration(&[U, V], &[b, W], &menu, &caps, &[&[], &[(V, b)]], &[&[U], &[U, V]], &[&[]], &partial);
-        let r = AttackRules { limits: vec![(W, 1)], barred: vec![(V, b)], alone_barred: vec![U], ..Default::default() };
+        let r = AttackRules { limits: vec![(W, 1)], barred: vec![(V, b)], groups: vec![lone(&[U], &[U, V])], ..Default::default() };
         assert_eq!(r.judge(&[U, V], &[b, W], &[], &[], true).addable, vec![(U, b), (V, W)]);
     }
 
@@ -995,7 +946,7 @@ mod tests {
     #[test]
     fn two_creatures_that_cannot_attack_alone_may_attack_together() {
         let b = Target::Player(P2);
-        let r = AttackRules { alone_barred: vec![U, V], ..Default::default() };
+        let r = AttackRules { groups: vec![lone(&[U], &[U, V]), lone(&[V], &[U, V])], ..Default::default() };
         let none = r.judge(&[U, V], &[b], &[], &[], true);
         assert_eq!(none.addable, vec![(U, b), (V, b)]);
         assert!(!none.free);
@@ -1184,7 +1135,7 @@ mod tests {
                         .zip(&picks)
                         .flat_map(|(&attacker, &p)| menu[p].iter().map(move |&aim| RequiredAttack { attacker, aim }))
                         .collect();
-                    let mut r = AttackRules { required, limits: limits.to_vec(), barred: barred.to_vec(), alone_barred: alone.to_vec(), ..Default::default() };
+                    let mut r = AttackRules { required, limits: limits.to_vec(), barred: barred.to_vec(), groups: alone.iter().map(|&a| lone(&[a], creatures)).collect(), ..Default::default() };
                     let fits = |d: &[(ObjectId, Target)]| {
                         limits.iter().all(|&(t, n)| count_u32(d.iter().filter(|x| x.1 == t).count()) <= n) && !d.iter().any(|x| barred.contains(x))
                     };

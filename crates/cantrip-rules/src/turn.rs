@@ -1512,10 +1512,9 @@ fn attack_rules(cx: &Cx, eligible: &[ObjectId], targets: &[Target], barred: Vec<
             }
         }
     }
-    let alone = crate::static_rules::attacks_alone_barred(cx, cx.cards(), eligible);
     // CR 508.1h-j: the permanents attacks cost, which a declaration must be able to pay.
     let sacrifices = if costs.is_empty() { Vec::new() } else { crate::static_rules::attack_sacrifices(cx, eligible, targets) };
-    let mut rules = AttackRules { required, barred, alone_barred: alone, groups: crate::static_rules::combat_groups(cx, CombatRole::Attacker, eligible), limits: crate::static_rules::attack_limits(cx, targets), most: 0, suggested: Vec::new(), sacrifices, taken_back: false };
+    let mut rules = AttackRules { required, barred, groups: crate::static_rules::combat_groups(cx, CombatRole::Attacker, eligible), limits: crate::static_rules::attack_limits(cx, targets), most: 0, suggested: Vec::new(), sacrifices, taken_back: false };
     if !rules.required.is_empty() {
         (rules.most, rules.suggested) = rules.solve(eligible, targets, costs);
     }

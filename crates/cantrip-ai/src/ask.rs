@@ -800,8 +800,6 @@ pub(crate) fn ask_of(
             // CR 508.1c: the attacks a restriction forbids.
             let mut barred: Vec<(Ref, Ref)> = requirements.barred.iter().map(|&(a, d)| (r(a), t(d))).collect();
             barred.sort();
-            // CR 508.1c: the creatures forbidden to attack alone.
-            let alone = rs(&requirements.alone_barred);
             // CR 508.1h-j, 118.3: the permanents attacks cost, which a declaration must be able to pay.
             let mut sacrifices: Vec<AttackSacrificeObs> = requirements
                 .sacrifices
@@ -823,7 +821,6 @@ pub(crate) fn ask_of(
                 can_pay: *can_pay,
                 max_attackers,
                 barred,
-                alone,
                 sacrifices,
                 groups: groups_obs(&requirements.groups),
             }

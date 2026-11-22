@@ -413,11 +413,10 @@ pub enum AskKind {
     /// obeys `most`. `costs` what an attack costs (attacker, defender, mana value of the cost); `can_pay` the most the seat
     /// can pay. `max_attackers` the most creatures that may attack each defender (CR 508.1c), index for index with
     /// `defenders`; `u8::MAX` where nothing caps it. `barred` the attacks (attacker, defender; sorted) a restriction forbids
-    /// (CR 508.1c: "creatures with flying can't attack you"). `alone` the creatures (sorted) a static ability forbids to
-    /// attack alone (CR 508.1c: Pet Sehlat's "can't attack alone"): a declaration whose only attacker is one of them is
-    /// illegal. `sacrifices` the permanents attacks cost (sorted; Flooded Woodlands' lands): no permanent pays for two
+    /// (CR 508.1c: "creatures with flying can't attack you"). `sacrifices` the permanents attacks cost (sorted; Flooded Woodlands' lands): no permanent pays for two
     /// (CR 118.3), so a declaration whose parts can't each be given permanents of their own can't be paid, and is illegal
-    /// (CR 508.1j). `groups` the restrictions on how many creatures the whole declaration has (sorted; CR 506.5, 508.1c).
+    /// (CR 508.1j). `groups` the restrictions on how many creatures the whole declaration has (sorted; CR 506.5, 508.1c;
+    /// "can't attack alone" is one: the creature the subject, at least two members).
     DeclareAttackers {
         eligible: Vec<Ref>,
         defenders: Vec<Ref>,
@@ -428,8 +427,6 @@ pub enum AskKind {
         max_attackers: Vec<u8>,
         #[serde(default)]
         barred: Vec<(Ref, Ref)>,
-        #[serde(default)]
-        alone: Vec<Ref>,
         #[serde(default)]
         sacrifices: Vec<AttackSacrificeObs>,
         #[serde(default)]
