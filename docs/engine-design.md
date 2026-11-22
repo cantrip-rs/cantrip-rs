@@ -2530,7 +2530,11 @@ the history (CR 602.5b-c). An unlimited instance of the same ability keeps its i
 
 Activation identity is separate from the grouping of linked abilities. `AbilityAcquisition` records the actual grant
 entry, physical donor and equal occurrence within that grant; it is captured before costs on `StackItem::instance`
-and `Event::AbilityActivated::instance`. Availability conditions and mana callbacks receive the same exact definition
+and `Event::AbilityActivated::instance`. The acquisition also names the `granter`, the object whose text gave the ability
+(`ObjectId::NONE` for the object's own text), so an ability that refers to its source as "the Equipment that gave it"
+reads `StackItem::instance.granter`, which is the object's id as it was when the ability went on the stack: a granter
+that has since left the zone it was in is a new object (CR 400.7) and the instruction does nothing to it
+(Trusty Boomerang). Availability conditions and mana callbacks receive the same exact definition
 and acquisition through `Asker::instance`. Removing another donor may pack the displayed slots, but does not transfer
 its activation count. A fresh grant or copy has a fresh acquisition; changing control does not. A self-granted ability
 printed in the object's own text still shares its existing CR607 linked group while retaining its own activation

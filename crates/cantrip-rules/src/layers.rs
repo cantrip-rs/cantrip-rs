@@ -180,6 +180,7 @@ pub fn instance(cards: &CardTable, state: &GameState, log: &[Record], id: Object
         AbilityAcquisition {
             acquired: if giver.from == ObjectId::NONE { text } else { giver.activation },
             origin: giver.origin,
+            granter: giver.object,
             ordinal: 0,
             static_grant: giver.static_grant,
         }

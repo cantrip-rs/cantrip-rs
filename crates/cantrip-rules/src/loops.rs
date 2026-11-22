@@ -536,7 +536,7 @@ fn write_position<H: Hasher>(s: &GameState, canon: &Canon, h: &mut H, hashed: bo
         i.tapped_since = 0;
         let key = i.instance;
         (key.acquired.by, if key.acquired.by == AcquiredBy::Own { 0 } else { canon.rank(key.acquired.stamp) },
-            key.acquired.part, canon.id(key.origin), key.ordinal, key.static_grant).hash(h);
+            key.acquired.part, canon.id(key.origin), canon.id(key.granter), key.ordinal, key.static_grant).hash(h);
         i.instance = AbilityAcquisition::OWN;
         i.hash(h);
     }

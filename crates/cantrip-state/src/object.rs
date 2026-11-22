@@ -556,13 +556,18 @@ pub struct AbilityAcquisition {
     pub acquired: Acquired,
     /// The particular card whose abilities were granted, not merely its card definition.
     pub origin: ObjectId,
+    /// The other object whose effect gave the object the ability (CR 113.10, 613.1f): the Equipment whose "Equipped creature has
+    /// '...'" it is, which an instruction of that ability that names it ("Return Trusty Boomerang to its owner's hand") means
+    /// (CR 113.7a: the ability exists on the stack independently of both). `ObjectId::NONE` for the object's own text. It is the
+    /// object then - a stale id, one that has since changed zones (`Obj::became`), is a new object (CR 400.7) that effect finds nothing of.
+    pub granter: ObjectId,
     /// Equal occurrences within one acquisition/origin, counted before slots can be packed or costs paid.
     pub ordinal: u8,
     /// Granted by a static ability, rather than a resolving instruction; needed by grants with activation limits.
     pub static_grant: bool,
 }
 impl AbilityAcquisition {
-    pub const OWN: Self = Self { acquired: Acquired::OWN, origin: ObjectId::NONE, ordinal: 0, static_grant: false };
+    pub const OWN: Self = Self { acquired: Acquired::OWN, origin: ObjectId::NONE, granter: ObjectId::NONE, ordinal: 0, static_grant: false };
 }
 impl Default for AbilityAcquisition { fn default() -> Self { Self::OWN } }
 
