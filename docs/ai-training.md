@@ -240,20 +240,43 @@ own, started and stopped by the driver; the ones marked optional run only when a
 
 | Stage | What it does |
 |---|---|
-| build | `cantrip-ai-host` and `cantrip-selfplay` (release, `--features ort`), the native host, and BotLab (and `cantrip-infer` with the native server or `--workers`); on every run, so a resumed run never uses a stale binary |
+| build | `cantrip-ai-host` and `cantrip-selfplay` (release, `--features ort`), the native host, and BotLab (and `cantrip-infer` with the native server or `--workers`); on every run while the working tree is the generation's engine, and what it builds is kept as the generation's own ("The engine a generation runs") |
+| preflight (not a stage: after the build, every run) | room on the disk and in memory, the workers reached, the champion's parity with the serving options ("Preflight") |
 | selfplay | the champion plays itself with search (`--games`, `--simulations`, `--lanes`), shards to `genN/selfplay`; with `--workers`, on other machines too ("Distributed self-play") |
 | heldout (optional, once) | `--heldout-games N` chooses the permanent held-out set: whole shards of this generation's self-play, before any network trains on them, moved to `ROOT/heldout` (`--heldout-dir`) with `HELDOUT.json` |
 | train | fine-tunes the champion on the window of recent generations (`--window`, `--older-weight`, `--imitation-weight`); the window never holds the held-out set |
 | export | ONNX models and the manifest, to `models/genN` |
-| parity | the Rust evaluators against PyTorch on held-out positions, and with the GPU server, the server too (it checks the references itself as it starts) |
+| parity | the Rust evaluators against PyTorch on held-out positions, and with the GPU server, the server too (it checks the references itself as it starts); the first serving option that passes for every model the later servers hold is the generation's ("Parity, and what a generation serves with") |
 | gate | the candidate against the champion in BotLab on self-play's metagame pairings, scored by pair, by `--accept` (below) over at most `--gate-games` (6,000); with `--workers`, on other machines too ("Distributed duels"), as are the ladder and the miner's replays; recorded by matchup too ("Reading a generation") |
 | promote | an accepted candidate goes to `champions/genN` and becomes `champions/current` |
+| mine, mined (unless `--no-mine`) | the pair miner (`mining.py`): the gate's decisive pairs replayed, judged by deep searches and written as policy targets, `genN/mine/targets`, which the next generations train on. **Data-producing**: a failure stops the generation ("When a stage fails") |
 | evaluate (when a held-out set exists) | `value_eval` on the held-out set, candidate and champion: value MSE and ECE, policy CE and top-1 against its full searches' targets; the two paired by game, and each network's mean value by the seat's deck ("Reading a generation") |
 | ladder (optional, after a promotion) | `--ladder-every N`: after every N-th promotion, the new champion against fixed anchors, recorded in `ROOT/ladder.json` and `ladder.md` (a generation run again replaces its rows) and by matchup in the generation's record; a generation that promoted nothing plays none |
 | retire | deletes the shards and models of all but the last `--keep` generations (gen0 and pinned ones are kept) |
 
-The measurements (evaluate, ladder) run after the promotion and decide nothing: one that fails is recorded as
-failed (`"failed"` in `generation.json`, a row of the README) and the generation goes on to the next stage. The driver
+#### When a stage fails
+
+- A stage that decides or makes something (build to promote, retire) ends the driver with the error, the tail of its
+  log, a `failed` status ("Watching a run") and a notification. Running the driver again resumes at that stage.
+- The **measurements** (evaluate, ladder) run after the promotion and decide nothing: one that fails is recorded as
+  failed (`"failed"` in `generation.json`, a row of the README), listed in the README's WARNING block, told, and the
+  generation goes on to the next stage.
+- The **data-producing** stages (mine, mined) make the next generations' mined targets. One that fails **stops the
+  generation**, saying that the generations after it would train without them: fix the cause and run the driver
+  again. `--allow-data-failure` records the failure as a measurement's is and goes on; the README's WARNING block
+  then says the targets are missing, and so does the README of each generation that trains without them. A
+  generation whose mining window holds an earlier generation with a failed mine or mined stage refuses to run
+  without `--allow-data-failure` - at its preflight, before a game is played, and again at training. A failure
+  recorded by a driver from before this one (a record with no `engine`) is past mending and refuses nothing: it is
+  flagged in the README and told once ("gen13's mined targets were lost before the hardened driver; training without
+  them"). (gen13 of the templates line failed `mine verify`, was "recorded and passed over", and gen14 trained
+  without its targets with nothing said: that is what this is for.)
+- Training's data loader out of memory (its workers each attach the window; the trainer can hang on workers that are
+  gone) is the one failure the driver gets past by itself: training is run again from its last checkpoint with half
+  the loader's workers, down to none, `--train-oom-retries` times (2), each told as `recovered`. A trainer whose log
+  says it and that has not exited a minute later is killed first.
+
+The driver
 runs no network-only duel (it did, as a `netduel` stage, until 2026-11-21: it decided nothing and no reading of a
 generation came to rest on it); an older generation's record that holds one still prints it, and "A network-only
 duel" below plays one by hand.
@@ -264,11 +287,8 @@ steps), with the optimizer, step and epoch. A gate that finished but wasn't reco
 the log is this run's gate: the same champion and seat, the same acceptance rule (its stop line, with the early stop's
 z and minimums) and the same pairing mode.
 
-To run generation after generation:
-
-```bash
-while python -m cantrip_ai.generation --root ../../ai-data --device auto; do :; done
-```
+To run generation after generation, use the supervisor ("The loop", below): it watches each one, tells you what
+happens, and changes the code only between two.
 
 What a generation leaves in `ai-data/`:
 
@@ -283,6 +303,231 @@ What a generation leaves in `ai-data/`:
 - `champions/current`, a symlink to the champion in force, and `champions/history.json`, every gate (paired fields
   included);
 - `heldout/` (once chosen) and `ladder.json` / `ladder.md` (when the ladder runs).
+
+### Watching a run
+
+While it works, the driver keeps `ROOT/genN/status.json` (`status.py`): the stage and when it began, the driver's pid,
+when that process started (a pid is reused; the two together are one process) and host, how long the stage took in
+the generations before (whole runs only: a resumed stage's time is its last part's), a progress counter and when it
+last moved. The counter is read from what the stages write - the games in the distributed ledgers, self-play's
+closed shards, the bytes of the stage logs, training's files - never from the words of a log. A status that cannot
+be written never fails a run.
+
+```bash
+python -m cantrip_ai.status --root ../../ai-data          # exit 0 running/finished, 1 failed, 2 stalled, 3 dead, 4 stopped
+```
+
+says **running**; **stalled** (the process lives and nothing has moved for a quarter of the stage's usual time, at
+least 15 minutes - `--stall-factor`, `--stall-floor` - or for an hour with no earlier generation to go by; or the
+driver has stopped writing the file); **dead** (the file says running and that process is gone - a process that
+exists and may not be asked about counts as alive); **failed**, with
+the error; **stopped** (asked to: Ctrl-C, `--stop`); or **finished**; then the supervisor's own state and the tail of
+the stage's log. `--json` for code.
+
+**Notifications** (`notify.py`). The driver tells a stage that failed (`stage-failed`), a measurement or an allowed
+data stage that failed and was passed over (`measurement-failed`, `data-failed`), anything the README's WARNING block
+flags (`warning`: a matchup far below a half, a seat misvalued, missing mined targets, a serving fallback, a worker
+not reached), a failure it got past (`recovered`), the gate's `verdict`, and a `finished` generation. The supervisor
+tells what the driver cannot: `stalled`, `resumed`, `dead`, `retry`, `held`, `stopped`. Each is one short message and a
+JSON payload:
+
+```json
+{"event": "stage-failed", "message": "gen14 FAILED at parity: parity (candidate): no serving option passes for gen14, gen13; tried ...",
+ "root": "../ai-data", "generation": 14, "stage": "parity", "host": "trainer", "at": "2026-11-21 14:15:02",
+ "details": {"error": "... the last 1,500 characters of the error ...", "transient": null}}
+```
+
+Where they go is this machine's business and never the repository's:
+
+- `CANTRIP_AI_NOTIFY_HOOK`: a command line, run through the shell (`cmd.exe` on Windows) for each one with the message in
+  `CANTRIP_AI_MESSAGE`, the event in `CANTRIP_AI_EVENT` and the payload on its standard input;
+- `CANTRIP_AI_NOTIFY_WEBHOOK`: a URL the payload is POSTed to as JSON with a `content` field holding the message - a
+  Discord webhook URL works as it is;
+- or both in a file, `{"hook": "...", "webhook": "...", "events": ["stage-failed", "dead", ...]}`: `notify.json` in
+  `%LOCALAPPDATA%\cantrip-ai` (Windows) or `~/.config/cantrip-ai`, or wherever `CANTRIP_AI_NOTIFY` says. `events`
+  limits what is sent.
+
+Every notification is also a line of `ROOT/notifications.jsonl`, sent or not, with what each channel answered.
+`python -m cantrip_ai.notify --root ROOT --test "hello"` sends one and says where it went. A notification never
+fails or delays a run.
+
+### The loop
+
+```bash
+python -m cantrip_ai.loop --root ../../ai-data --update origin/main
+```
+
+runs generations one after another with the driver's arguments in `ROOT/generation.args` (`--args-file` names
+another; shell words on any number of lines, `#` comments, Windows paths with forward slashes; arguments after `--`
+are added; a line with a backslash outside quotes is told, since the shell's rules drop it), each generation's
+output in `ROOT/genN-driver.log`. Start it detached (`nohup ... &`, a service, a terminal that stays open); one
+supervisor a root (`ROOT/loop.lock`: a second one refuses to start). At each turn it
+
+1. ends if `ROOT/LOOP.stop` exists, and waits while `ROOT/LOOP.pause` exists;
+2. attaches to a driver that is already running the generation, and does nothing else beside it: no update, no
+   preflight. A driver of this root that runs and writes no status file (one from before the status file; found in
+   the process table) is not attached to and not run beside either: the loop is held until it has ended. The driver
+   itself refuses to start beside a live driver of the same generation;
+3. with `--update REMOTE/BRANCH`, and only between generations - never while the next one is begun and not
+   finished - fetches and fast-forwards the working tree to it: never a merge, never over local changes; without
+   `--update` the code is never touched;
+4. runs the driver's `--preflight` ("Preflight"), which builds and checks everything the generation needs;
+5. runs the generation and watches it.
+
+Nothing the supervisor runs can hang it unnoticed: a git command is given up after two minutes (a fetch after ten;
+the code then stays as it is) and a preflight after `--preflight-timeout` (two hours; the loop is then held), each
+killed with what it started and told; the generation itself is watched for stalls.
+
+A failure the driver names as transient (self-play stopped by its memory governor, an inference server that did not
+start - but never one that refused a model for parity: `status.TRANSIENT`) is run again, `--retries` (2) times a
+generation, after `--retry-wait` (300 s); so is a preflight that failed that way. Anything
+else - a failed stage, a failed preflight, an update that is no fast-forward, a driver that died or was stopped -
+**holds** the loop: the reason is written into `ROOT/LOOP.pause` and told, and the loop waits there. Remove the file
+and it goes on, resuming the generation where it stopped; `LOOP.stop` ends it instead. `python -m cantrip_ai.status`
+shows the loop's state (`ROOT/loop.json`) beside the generation's; `ROOT/loop.log` is its log.
+
+**A generation held at its first preflight counts as begun** (its record exists), so `--update` no longer reaches
+it: the code is updated only between generations. A fix for what held it is merged into the training tree by hand
+(`git merge --ff-only`), then `LOOP.pause` removed. If the fix changes the engine's sources and nothing but the build
+has run, remove the `genN` directory as well (the generation then starts afresh and pins the new engine), or pass
+`--repin-engine` once.
+
+To land code under a running loop: `touch ROOT/LOOP.pause`, wait for the generation to finish (`status` says
+`loop: paused`), change the working tree, remove the file - or let `--update` do it. Never change the tree while a
+generation runs; if it happens anyway the generation keeps the engine it pinned ("The engine a generation runs"), but
+its Python is the tree's.
+
+A supervisor started while a driver is already running the generation attaches to it rather than starting a second.
+The process that loops is small and loads nothing that changes; each step is a fresh process, so updated code is in
+force from the step after the update.
+
+### Preflight
+
+After the build, before anything is played, the driver checks (`--no-preflight` skips it):
+
+- **the disk**: `--min-free-disk` GB (5) free under the root, and at least 1.2 times the last generation's size;
+- **memory**, before training: `--min-free-memory` GB (4) available, and at least the training window's size on disk;
+- **the workers** `--workers` names: each leased and reached through `cantrip-workers`. One that is not is a
+  warning (the stages are played without it) unless `--require-workers`;
+- **the champion's parity**, with the GPU server: the champion served with the serving options, falling back as the
+  parity stage does ("Parity, and what a generation serves with"); self-play serves with what passed.
+
+- **the mined targets** the mining window should hold ("When a stage fails"): an earlier generation whose mine or
+  mined stage failed under this driver refuses here, unless `--allow-data-failure`.
+
+A problem ends the driver before any stage runs. `generation.py ... --preflight` does only this: it builds, makes
+every check for real, prints the plan as `--dry-run` does and runs nothing else (its logs under `ROOT/preflight/`).
+An argument the driver does not know fails it at once, which is how the supervisor finds a stale argument file
+before a generation and not during one. `--dry-run` makes the checks that start nothing (disk, memory, the pool).
+
+### The engine a generation runs
+
+A recording replays only with the engine that made it: the pair miner stands the gate's games in again position by
+position, and one card's change makes a replay another game (`MismatchedPositions`). So each generation names its
+engine once, when it starts - `engine` in `generation.json`: the commit and a hash of what the binaries are built
+from, the Cargo workspace and what its build scripts read, and `dotnet/` - and keeps it (`engine.py`):
+
+- after the build, what that build made is copied to `ROOT/builds/<id>/` (the Rust binaries, BotLab, BotLab
+  published for the workers it published for, and the source tar a Linux worker builds the same engine from), as a
+  Linux worker keeps its builds under `builds/<sha>`; every stage runs those files, and every stage's record carries
+  the id. Only what this run's build stage built is taken - a binary the tree holds from some earlier build is no
+  part of the engine. A kept file is replaced when the same source, built again, gives another, until a stage
+  of the generation has begun; from then on what is pinned stays (the generation's ledgers name the binaries its
+  games began with) and the difference is logged. `--no-build` builds nothing and so pins nothing: the stages then
+  run the tree's files for as long as the tree is that source, their records name no engine, and the mine stage says
+  that it cannot hold the gate's games to one (its verify step still leaves out every pair whose replay differs);
+- a generation resumed after the working tree moved to another source says so, builds nothing, and goes on with its
+  pinned build; if that build lacks something it needs, the driver stops and names the commit to check out;
+- `--repin-engine` adopts the tree as it is now instead. The mine stage then refuses a gate another engine played
+  (and its own recordings of another engine are made again): play the gate again, or `--no-mine`;
+- retention deletes the builds no kept generation names; a pinned generation's and a champion's are kept.
+
+Known limits of the pin, none of them reached while the loop alone moves the tree:
+
+- **The Python that drives the stages** is the working tree's (`ai/`), not pinned.
+- **The decklists and `content/`** a stage reads at run time (`--decks-dir`, BotLab's and the hosts' card data) are
+  read from where they live; the id covers them as sources, the pinned build does not hold a copy.
+- **The toolchains** (rustc, the .NET SDK, onnxruntime, CUDA) are not in the id: the same source built by another
+  compiler has the same id.
+- **The parity stage's Rust test** is built by `cargo test` from the working tree, not from the pinned build (it
+  checks a model against its references; it replays nothing).
+
+### Parity, and what a generation serves with
+
+Below fp32 a GPU's rounding moves a network's outputs, by an amount that differs from network to network. The
+server checks every model it holds against the model's references as it starts and refuses to start on one outside
+the tolerance; the parity stage then runs the Rust test through it. The tolerance is never loosened. Instead the
+check tries serving options in order - `--server-args` as configured, then each `--parity-fallback` in place of its
+precision flags, by default
+
+| option | measured (RTX 4080, T64, rows/s) |
+|---|---|
+| the configured flags (the templates line: `--precision fp16`) | 32.3k |
+| `--precision fp16 --fp16-graph residual --inputs-tf32` | 34.7k |
+| `--precision fp16 --fp16-graph attention --inputs-tf32` | 26.2k |
+| `--precision fp16 --fp16-graph products` | 21.3k |
+| `--precision fp32` | 15.1k |
+
+- and the first that passes **for every model the generation's later servers hold together** (the candidate and the
+champion, which the gate's and the miner's servers serve side by side, and the ladder's anchors), **in every server
+that will hold them** (the generation's own, `--server-args`, and the one each host of a distributed duel runs,
+`--duel-server-args`: the gate never serves flags that were not checked) is the generation's: `serving` in
+`generation.json`, with what failed before it. The gate, the ladder, the miner's replays and judgements and the
+workers' servers all serve with it; a fallback is flagged in the README and told. Models pass different options
+(under the earlier bar, the maximum over the references, gen14 passed `residual` with TF32 inputs on one GPU and
+gen13 failed it), which is why the check holds them together. With `--no-parity-fallback`, or when no option passes,
+the stage fails as before. A worker whose own `server_args` name a precision keeps the rest of its arguments and
+takes the fallback's precision.
+
+Only a parity failure moves on to the next option: the server saying a model is not its references, or the test's
+assertion on the served evaluator. A server that does not start for any other reason - the GPU out of memory, a
+library missing, a timeout - fails the stage as that failure (the supervisor retries it), and is never answered
+with a slower option for a whole generation.
+
+### Running your own line
+
+Everything above comes with the repository; a line of your own needs three things outside it.
+
+1. **The arguments**, in `ROOT/generation.args` - the driver's options for every generation of the line, e.g.
+
+   ```
+   # my line: decklist mode, 3,000 games a generation
+   --mode decklist --decks-dir ../ai-data/decks --games 3000 --simulations 64
+   --device auto --window 4 --ladder-every 1
+   --train-args "--batch 128"
+   ```
+
+   The supervisor's preflight checks them before every generation; an argument the driver does not know holds the
+   loop at once.
+2. **Where to be told** ("Watching a run"): a Discord webhook URL in `CANTRIP_AI_NOTIFY_WEBHOOK`, or a script in
+   `CANTRIP_AI_NOTIFY_HOOK`, or both in the per-user `notify.json`; then
+   `python -m cantrip_ai.notify --root ROOT --test "hello"`. With neither, everything is still in
+   `ROOT/notifications.jsonl` and `python -m cantrip_ai.status`.
+3. **The loop**, from `ai/`, detached: `python -m cantrip_ai.loop --root ROOT --update origin/main` (leave
+   `--update` out to keep the code where it is; point it at your own branch to train on your own changes). Train from
+   a working tree nobody edits - a second clone or `git worktree` - so that `--update` is the only thing that moves it.
+
+Then: `python -m cantrip_ai.status --root ROOT` to look; `touch ROOT/LOOP.pause` to hold it at the next boundary;
+`touch ROOT/LOOP.stop` to end it there; `python -m cantrip_ai.generation --root ROOT --stop` to stop a running
+self-play or duel gracefully now (the loop is then held, and resumes the generation when `LOOP.pause` is removed).
+
+### Testing the driver
+
+`python -m unittest discover -s tests` (from `ai/`) runs the driver's unit tests: no game is played, nothing is
+served, nothing waits on time. Before landing any change to the driver, the miner, the distributed code or the
+supervisor, also run the end-to-end test:
+
+```bash
+CANTRIP_AI_E2E=1 python -m unittest tests.test_e2e_generation     # minutes, CPU only; CARGO_BUILD_JOBS bounds the build
+```
+
+It records a few games, trains a toy generation 0, and runs two real `--tiny` generations with the real binaries:
+every stage, mining included, the distributed path through the worker manager's `local` machine (`--workers local`:
+real ledgers, grants and hosts' results files), the first under the supervisor, on a root seeded with a scrubbed
+copy of a real line's shape (`ai/tests/fixtures/line`: a champions history with labelled generations, a distributed
+gate's results with their `#` header lines). It is skipped without `CANTRIP_AI_E2E` because it builds the engine;
+`CANTRIP_AI_E2E_KEEP=DIR` leaves its root there to look at. Unit tests run the driver with its processes replaced;
+this is the test that runs what they replace.
 
 ### Reading a generation
 
@@ -882,6 +1127,18 @@ CPU.
 
 ## Troubleshooting
 
+- **A run went quiet.** `python -m cantrip_ai.status --root ROOT` says whether it is running, stalled, dead or
+  failed, with the error and the stage's log ("Watching a run"). Under the supervisor, `ROOT/LOOP.pause` holds the
+  reason the loop was held; remove it to go on.
+- **`... was made with other settings`.** A distributed stage's ledger was started with other settings than this
+  run's (another `--server-args`, say). A ledger that holds no games yet is replaced by itself, with a log line; one
+  that holds games is kept and refused: run with the settings it began with, or remove that stage's `genN/dist/NAME`
+  to play it again.
+- **`this generation's engine is ...`.** The working tree changed under a generation and its pinned build lacks a
+  binary: check out the commit the message names and run again, or `--repin-engine` ("The engine a generation runs").
+- **`parity (...): no serving option passes`.** Every option was tried against every model the server holds; the
+  attempts' logs are `genN/logs/parity-tryK.log` and `server-candidate-tryK.log`. Add an option with
+  `--parity-fallback`, never a looser tolerance.
 - **`torch.cuda.is_available()` is False.** NVIDIA: `nvidia-smi` should list the card, and the PyTorch build's CUDA
   version must be one the driver supports. AMD: `rocminfo | grep gfx` should list it. A consumer card ROCm doesn't
   list may need `HSA_OVERRIDE_GFX_VERSION` (`11.0.0` for RDNA3, `10.3.0` for RDNA2). Check that the CPU build of torch

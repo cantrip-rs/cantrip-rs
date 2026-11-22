@@ -182,6 +182,7 @@ class Setup:
     chunk: int = 20
     log: object = print
     cache: dict = field(default_factory=dict)
+    source: object = None         # the engine's source tar for a Linux worker, when the generation pins one (a callable)
 
 
 def substitute(args: list, paths: dict[str, str]) -> list[str]:
@@ -220,7 +221,8 @@ def run(setup: Setup, name: str, args: list, models: list[Path], games: int, see
                               setup.record_native if record else None, serve)
         bundles["windows"] = (files, *reversed(distributed.bundle_manifest(files, setup.cache)))
     if "linux" in by_os:
-        files = linux_files(distributed.source_tar(setup.repo, setup.root / "dist" / "src"), setup.botlab["linux"],
+        source = setup.source() if setup.source is not None else distributed.source_tar(setup.repo, setup.root / "dist" / "src")
+        files = linux_files(source, setup.botlab["linux"],
                             models, decks, pairings)
         bundles["linux"] = (files, *reversed(distributed.bundle_manifest(files, setup.cache)))
     identity = dict(header=header, server_args=" ".join(setup.server_args) if serve else None, games=games, seed=seed,
@@ -269,7 +271,8 @@ def run(setup: Setup, name: str, args: list, models: list[Path], games: int, see
         shutil.rmtree(dist_dir)
         out.mkdir(parents=True)
     with distributed.LedgerLock(dist_dir / "ledger.lock"):
-        ledger = distributed.Ledger.load(dist_dir / "ledger.json", games, seed, header=header, only=only, identity=whole)
+        ledger = distributed.Ledger.load(dist_dir / "ledger.json", games, seed, header=header, only=only, identity=whole,
+                                         log=log)
         ledger.save()
         if not ledger.complete():
             # A stop asked of an earlier run of this duel is not this one's: its local run's, and the whole run's.

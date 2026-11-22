@@ -17,7 +17,9 @@ project's rule, "anything over 50% is a win"), reads the paired share (exactly, 
 with no gate (`--gate-measure` plays it anyway, as a measurement).
 
 Measurements beside the gate, each optional and each after the promotion, so none can hold up or stop a generation (a
-measurement that fails is recorded as failed, in `generation.json` and the README, and the generation goes on):
+measurement that fails is recorded as failed, in `generation.json` and the README's WARNING block, told, and the
+generation goes on; the pair miner's stages are not measurements - they make training data, and one that fails stops
+the generation unless `--allow-data-failure`: `DATA_STAGES`):
 the permanent held-out set
 (`--heldout-games N` chooses it once, from a generation's self-play before its training, moved to `ROOT/heldout`, which
 no window holds; stage `evaluate` then scores the candidate and the champion on it every generation: value MSE and
@@ -96,6 +98,15 @@ generation's self-play directory and `genN/dist/stop`: self-play stops gracefull
 distributed driver (self-play's, a duel's, the judgements') stops its hosts the same way. The driver removes the files
 when it runs the stage again.
 
+While it runs, the driver keeps `genN/status.json` (`status.py`: the stage, its pid, a progress counter read from the
+ledgers, the shards and the logs), tells what happens (`notify.py`: a failure, a flagged warning, the verdict, the
+end), runs every stage with the engine the generation pinned when it began (`engine.py`, `ROOT/builds/<id>`), checks
+before it plays anything that it can (`preflight`: disk, memory, the workers, the champion's parity; `--preflight`
+does only that and plans), and serves with the first serving option that passes parity for every model a server
+holds (`serving_check`, `--parity-fallback`). `loop.py` runs generations one after another over all of this.
+docs/ai-training.md: "Watching a run", "The loop", "Preflight", "The engine a generation runs", "Parity, and what a
+generation serves with".
+
 `--dry-run` prints the stages' commands and the window and runs nothing. `--tiny` sets a toy scale (a handful of
 games at 8 simulations, a few training steps, a gate of 4 games, no SPRT stop) for testing the driver end to end.
 """
@@ -112,15 +123,16 @@ import shlex
 import shutil
 import subprocess
 import sys
+import threading
 import time
 from pathlib import Path
 
-from . import distributed, duels, mining, reports, retention
+from . import distributed, duels, engine, mining, notify, reports, retention, status
 
 REPO = Path(__file__).resolve().parents[2]
 # heldout, evaluate and ladder run only when asked for (or, evaluate, when a held-out set exists; the ladder, when the
 # generation promoted). The measurements come after the promotion, and a failure of one is recorded and passed over
-# (`MEASUREMENTS`).
+# (`MEASUREMENTS`); the pair miner's two stop the generation when they fail (`DATA_STAGES`).
 STAGES = ("build", "selfplay", "heldout", "train", "export", "parity", "gate", "promote", "mine", "evaluate", "ladder",
           "mined", "retire")
 # The stages a retrain runs again (all but the build, the self-play and the held-out set's choice).
@@ -129,9 +141,45 @@ LATER = ("train", "export", "parity", "gate", "promote", "mine", "evaluate", "la
 # (until 2026-11-21; by hand now, docs/ai-training.md "A network-only duel"). The README still shows one recorded, and
 # a retrain sets it aside with the rest.
 RETIRED = ("netduel",)
-# The stages that decide nothing about this generation: a failure is recorded and the generation goes on. The pair
-# miner's two (`mining.py`) make the next generation's targets; without them it trains without this one's.
-MEASUREMENTS = ("mine", "evaluate", "ladder", "mined")
+# The stages that decide nothing and make nothing a later stage reads: a failure is recorded, flagged at the top of
+# the README, told (`notify`), and the generation goes on.
+MEASUREMENTS = ("evaluate", "ladder")
+# The stages whose output is training data: the pair miner's two (`mining.py`) make the next generations' targets. A
+# failure stops the generation, loudly, so that no generation trains without them unnoticed; `--allow-data-failure`
+# records it as a measurement's is and goes on (the README, and the next generation's, then say what is missing).
+DATA_STAGES = ("mine", "mined")
+# The serving options the parity check falls back through, in order, after the configured ones (docs/ai-training.md,
+# "Parity, and what a generation serves with"): each replaces the configured precision flags. Measured on gen14 (an
+# RTX 4080, T64): the default fp16 graph 32.3k rows/s, residual with TF32 inputs 34.7k, attention with TF32 inputs
+# 26.2k, products 21.3k, fp32 15.1k. serve.py has only its precisions.
+NATIVE_FALLBACKS = ("--precision fp16 --fp16-graph residual --inputs-tf32", "--precision fp16 --fp16-graph attention --inputs-tf32",
+                    "--precision fp16 --fp16-graph products", "--precision fp32")
+PYTHON_FALLBACKS = ("--precision fp32",)
+# The flags of a server's arguments that a serving option replaces (each with the values it takes).
+PRECISION_FLAGS = {"--precision": 1, "--fp16-graph": 1, "--inputs-tf32": 0, "--unfused-attention": 0}
+# What training's data loader says when its workers do not fit in memory (each attaches the window): the one failure
+# of training's that is tried again, with fewer workers (`--train-oom-retries`). A GPU out of memory is not this.
+LOADER_OOM = re.compile(r"\bMemoryError|DataLoader worker \(pid|WinError 1455|WinError 1450|paging file is too small|"
+                        r"Cannot allocate memory|not enough memory|Unable to allocate|Couldn't open shared file mapping")
+# train.py's own `--workers` default, when `--train-args` does not name one.
+TRAIN_WORKERS = 2
+# What a server or the parity test says when a model served is outside the tolerance (`status.PARITY_FAILED`, which
+# the supervisor's reading of a failure shares): only this makes the parity check fall back to the next serving
+# option; a server that did not start for any other reason (the GPU out of memory, a library missing, a timeout) is
+# that failure, and no slower option's.
+PARITY_FAILED = status.PARITY_FAILED
+
+
+def loader_workers(words: list[str]) -> int:
+    """train.py's `--workers` as `--train-args` names it (`--workers N` or `--workers=N`, the last one), else its
+    default."""
+    found = TRAIN_WORKERS
+    for k, word in enumerate(words):
+        if word == "--workers" and k + 1 < len(words) and words[k + 1].isdigit():
+            found = int(words[k + 1])
+        elif word.startswith("--workers=") and word.split("=", 1)[1].isdigit():
+            found = int(word.split("=", 1)[1])
+    return found
 # BotLab's `Decks`: a file of a decks folder with fewer cards than this is no decklist (a pool's run.txt and the like).
 MIN_DECK = 30
 EXE = ".exe" if os.name == "nt" else ""
@@ -618,18 +666,29 @@ def gate_reusable(text: str, champion: str, seat: str, lines: dict, dealt: str) 
 class Record:
     def __init__(self, gen_dir: Path, gen: int, dry_run: bool):
         self.dir, self.gen, self.dry_run = gen_dir, gen, dry_run
+        self.engine: str | None = None  # the pinned engine's id, written into every stage's record
         self.path = gen_dir / "generation.json"
         self.data = json.loads(self.path.read_text(encoding="utf-8")) if self.path.exists() else dict(generation=gen, started=now(), stages={})
 
     def done(self, stage: str) -> bool:
         return self.data["stages"].get(stage, {}).get("done", False)
 
+    def begin(self, stage: str):
+        """A stage is begun (again, when an earlier run of the driver did not finish it): counted, so its record can
+        say whether its seconds are a whole run's (`runs`; `status.expected` goes by whole runs only)."""
+        begun = self.data.setdefault("begun", {})
+        begun[stage] = begun.get(stage, 0) + 1
+        self.save()
+
     def put(self, stage: str, seconds: float, **numbers):
-        self.data["stages"][stage] = dict(done=True, seconds=round(seconds, 1), finished=now(), **numbers)
+        self.data["stages"][stage] = dict(done=True, seconds=round(seconds, 1), finished=now(),
+                                          runs=self.data.get("begun", {}).get(stage, 1),
+                                          **({"engine": self.engine} if self.engine else {}), **numbers)
         self.save()
 
     def fail(self, stage: str, seconds: float, why: str):
-        """A measurement that failed: recorded, not done (a resumed generation tries it again)."""
+        """A stage that failed and was passed over (a measurement, or a data stage allowed to): recorded, not done (a
+        resumed generation tries it again)."""
         self.data["stages"][stage] = dict(done=False, failed=why, seconds=round(seconds, 1), finished=now())
         self.save()
 
@@ -666,23 +725,54 @@ def fixed_eval_text(fx: dict) -> str:
             f"value MSE {_f(fx.get('value_mse'))}")
 
 
+def duels_by_matchup(d: dict) -> list[tuple[str, dict]]:
+    """The duels of a generation's record that were read by matchup (`reports.matchups`), each with its name."""
+    s = d["stages"]
+    found = [(name, s[name].get("matchups")) for name in ("gate", *RETIRED) if name in s]
+    found += [(f"ladder against {x['anchor']} at {x['budget']}", x.get("matchups"))
+              for x in s.get("ladder", {}).get("rows", [])]
+    return [(name, m) for name, m in found if m]
+
+
+def warnings(d: dict) -> list[str]:
+    """Everything a generation's record flags, a line each: the README's WARNING block, and what is told (`notify`) as
+    it appears. The reports' flags (a matchup far below a half, a seat misvalued: `reports.py`); a stage that failed
+    and was passed over; mined targets an earlier generation should have made and training went without; a serving
+    option the parity check fell back to; what the preflight doubted."""
+    s = d["stages"]
+    flags = [f"{name}, {f}" for name, m in duels_by_matchup(d) for f in reports.matchup_flags(m)]
+    flags += reports.seat_flags(s.get("evaluate", {}).get("seats") or [])
+    for name in DATA_STAGES + MEASUREMENTS:
+        if s.get(name, {}).get("failed"):
+            why = " ".join(str(s[name]["failed"]).split())
+            flags.append(f"stage {name} failed and was passed over"
+                         + (", so the next generations train WITHOUT this generation's mined targets" if name in DATA_STAGES else "")
+                         + f": {why[:200]}")
+    flags += list(d.get("missing_mined") or [])
+    for when, pick in sorted((d.get("serving") or {}).items()):
+        if pick.get("index"):
+            failed = "; ".join(f"`{t['args'] or '(the default)'}`: {t['failed']}" for t in pick.get("tried", []))
+            flags.append(f"parity ({when}): serving {', '.join(pick.get('models', []))} with `{pick['args']}` instead of the "
+                         f"configured flags ({failed[:300]})")
+    flags += [f"preflight: {w}" for w in (d.get("preflight") or {}).get("warnings", []) if w not in flags]
+    return flags
+
+
 def readme(d: dict) -> str:
     s = d["stages"]
     gen = d["generation"]
     lines = [f"# Generation {gen}", "", f"Expert iteration (docs/ai-player-plan.md, \"Phase 4\"), {d.get('mode', 'full')} mode throughout. "
              f"Started {d['started']}; champion at the start: {d.get('champion', '?')}. Written by `ai/cantrip_ai/generation.py` "
              "from `generation.json`.", ""]
-    # What a total hides, first: a matchup of a duel far below a half, a seat a network misvalues (`reports.py`).
-    duels_read = [(name, s[name].get("matchups")) for name in ("gate", *RETIRED) if name in s]
-    duels_read += [(f"ladder against {x['anchor']} at {x['budget']}", x.get("matchups"))
-                   for x in s.get("ladder", {}).get("rows", [])]
-    duels_read = [(name, m) for name, m in duels_read if m]
+    # What a total hides, first: a matchup of a duel far below a half, a seat a network misvalues (`reports.py`), a
+    # stage that failed and was passed over, training data that is missing, a serving option fallen back to.
+    duels_read = duels_by_matchup(d)
     seats = s.get("evaluate", {}).get("seats") or []
-    flags = [f"{name}, {f}" for name, m in duels_read for f in reports.matchup_flags(m)] + reports.seat_flags(seats)
+    flags = warnings(d)
     if flags:
         lines += [f"> **WARNING: {len(flags)} flagged** (a matchup more than {reports.MATCHUP_Z:g} standard errors below "
-                  f"a half; a seat whose mean value is more than {reports.SEAT_GAP:g} from its mean outcome). The tables "
-                  "are below.", *[f"> - **{f}**" for f in flags], ""]
+                  f"a half; a seat whose mean value is more than {reports.SEAT_GAP:g} from its mean outcome; a stage "
+                  "that failed; training data missing). The tables are below.", *[f"> - **{f}**" for f in flags], ""]
     lines += ["| stage | time | numbers |", "|---|---|---|"]
 
     def row(stage, text):
@@ -736,10 +826,22 @@ def readme(d: dict) -> str:
         r = s["promote"]
         row("promote", ("accepted: gen{0} is the champion".format(gen) if r["accepted"] else f"rejected: {r['champion']} stays the champion")
             + f" ({r['rule']})")
-    for name in MEASUREMENTS + RETIRED:
+    for name in DATA_STAGES + MEASUREMENTS + RETIRED:
         if s.get(name, {}).get("failed"):
             why = " ".join(str(s[name]["failed"]).split())
-            row(name, f"failed, and passed over (a measurement): {why[:300]}")
+            kind = "its output is training data: the next generations train without it" if name in DATA_STAGES else "a measurement"
+            row(name, f"failed, and passed over ({kind}): {why[:300]}")
+    if s.get("mine", {}).get("done"):
+        r = s["mine"]
+        row("mine", f"the gate's pairs mined: {r.get('decisive')} decisive and {r.get('control')} control pairs, "
+                    f"{r.get('replayed')} games replayed ({r.get('same')} the gate's"
+                    + (f", {r['dropped_pairs']} pair(s) left out" if r.get("dropped_pairs") else "") + "), "
+                    f"{(r.get('planned') or {}).get('forks')} forks and {(r.get('planned') or {}).get('losers')} losers' "
+                    f"decisions judged by {r.get('judge')} on {r.get('judged_on')}")
+    if s.get("mined", {}).get("done"):
+        r = s["mined"]
+        row("mined", f"mined targets kept: {json.dumps(r.get('kept'))} (`mine/targets`, the next generations' training; "
+                     "`mine/REPORT.md`)")
     if "netduel" in s and not s["netduel"].get("failed"):
         r = s["netduel"]
         row("netduel", f"the networks alone (no search), candidate gen{gen} against {r['champion']}, {r['decks']}: "
@@ -824,11 +926,36 @@ def selfplay_stopped(out: Path, log_path: Path) -> str:
             f"run the driver again with the same arguments to resume it (log: {log_path})")
 
 
+def fatal_watch(p, log_path: Path, pattern, grace: float, log=print, every: float = 5.0):
+    """Watches a running process's log for a failure it may not die of (`pattern`: training's data loader out of
+    memory leaves the trainer waiting on workers that are gone - gen12 of the templates line waited 1.7 hours): once
+    the log says it and the process is still there `grace` seconds later, the process and everything it started is
+    killed, and the stage fails with what the log holds. Returns the event that ends the watch."""
+    done = threading.Event()
+
+    def look():
+        seen = None
+        while not done.wait(every):
+            if p.poll() is not None:
+                return
+            if seen is None:
+                if pattern.search("\n".join(status.tail(log_path, 200))):
+                    seen = time.time()
+            elif time.time() - seen >= grace:
+                log(f"  {log_path.name} says a failure the process did not exit on; it has hung for {grace:.0f} s: killing it")
+                distributed.kill_tree(p)
+                return
+
+    threading.Thread(target=look, name="fatal-watch", daemon=True).start()
+    return done
+
+
 def run(cmd: list[str], log_path: Path, dry_run: bool, env: dict | None = None, log=print, stream=False,
-        stopped_code: int | None = None) -> str:
+        stopped_code: int | None = None, fatal=None, fatal_grace: float = 60.0) -> str:
     """Runs `cmd` with its output in `log_path` (and here, with `stream`); a failure ends the driver. With
     `stopped_code`, the process stops gracefully on Ctrl-C (it hears it too, from the console): the driver keeps waiting
-    for it, and that exit code raises `Stopped` instead of a failure."""
+    for it, and that exit code raises `Stopped` instead of a failure. With `fatal` (a pattern), a process whose log
+    says it and that has not exited `fatal_grace` seconds later is killed (`fatal_watch`)."""
     shown = " ".join(str(c) for c in cmd)
     if len(shown) > 2000:
         shown = f"{shown[:2000]} ... ({len(cmd)} arguments)"
@@ -838,6 +965,7 @@ def run(cmd: list[str], log_path: Path, dry_run: bool, env: dict | None = None, 
     log_path.parent.mkdir(parents=True, exist_ok=True)
     environment = {**os.environ, **(env or {})}
     interrupts = 0
+    watch = (lambda p: fatal_watch(p, log_path, fatal, fatal_grace, log)) if fatal is not None else (lambda p: threading.Event())
 
     def waiting(p, step):
         """`step()` until it returns. A Ctrl-C meanwhile reaches the process too (it shares the console), and it stops:
@@ -865,6 +993,7 @@ def run(cmd: list[str], log_path: Path, dry_run: bool, env: dict | None = None, 
             p = subprocess.Popen([str(c) for c in cmd], cwd=REPO, env=environment, stdout=subprocess.PIPE,
                                  stderr=subprocess.STDOUT, bufsize=0)
             assert p.stdout is not None
+            watching = watch(p)
             while chunk := waiting(p, lambda: p.stdout.read(4096)):
                 f.write(chunk)
                 f.flush()
@@ -875,11 +1004,14 @@ def run(cmd: list[str], log_path: Path, dry_run: bool, env: dict | None = None, 
                     sys.stderr.write(chunk.decode(errors="replace"))
                     sys.stderr.flush()
             code = waiting(p, p.wait)
+            watching.set()
             p.stdout.close()
-    elif stopped_code is not None:
+    elif stopped_code is not None or fatal is not None:
         with log_path.open("w") as f:
             p = subprocess.Popen([str(c) for c in cmd], cwd=REPO, env=environment, stdout=f, stderr=subprocess.STDOUT)
+            watching = watch(p)
             code = waiting(p, p.wait)
+            watching.set()
     else:
         with log_path.open("w") as f:
             p = subprocess.run([str(c) for c in cmd], cwd=REPO, env=environment, stdout=f, stderr=subprocess.STDOUT)
@@ -898,9 +1030,10 @@ class InferenceServer:
     stage's `server-<stage>.log`."""
 
     def __init__(self, models: list[Path], log_path: Path, device: str, extra: list[str], dry_run: bool, log=print,
-                 native: bool = False, ort_dylib: str | None = None):
+                 native: bool = False, ort_dylib: str | None = None, infer: Path | None = None):
         self.models, self.log_path, self.device, self.extra, self.dry_run, self.log = models, log_path, device, extra, dry_run, log
         self.native, self.ort_dylib = native, ort_dylib
+        self.infer = infer or INFER  # cantrip-infer: the generation's pinned build's (`engine.Engine`)
         self.process = None
         self.address = "127.0.0.1:PORT"
 
@@ -920,7 +1053,7 @@ class InferenceServer:
                 import torch  # noqa: PLC0415
 
                 env["CANTRIP_CUDA_LIBS"] = str(Path(torch.__file__).parent / "lib")
-        return [INFER, "serve", *models, "--port", 0, "--ready-file", ready, "--device", device, *self.extra], env
+        return [self.infer, "serve", *models, "--port", 0, "--ready-file", ready, "--device", device, *self.extra], env
 
     def __enter__(self):
         ready = self.log_path.with_suffix(".ready")
@@ -979,6 +1112,66 @@ def request_stop(root: Path, gen: int | None, now: bool, log=print) -> Path:
     (root / f"gen{gen}" / "dist" / "stop").write_text("now\n" if now else "", encoding="utf-8")
     log(f"asked gen{gen}'s self-play, duels and judgements to stop{' now (their games in flight too)' if now else ''}: {path}")
     return path
+
+
+def with_precision(configured: str, option: str) -> str:
+    """A server's arguments with their precision flags (`PRECISION_FLAGS`) replaced by a serving option's: its batch
+    sizes, pipelines and the rest stay."""
+    words, kept, k = configured.split(), [], 0
+    while k < len(words):
+        if words[k] in PRECISION_FLAGS:
+            k += 1 + PRECISION_FLAGS[words[k]]
+        else:
+            kept.append(words[k])
+            k += 1
+    return " ".join(kept + option.split())
+
+
+def serving_options(configured: str, fallbacks) -> list[str]:
+    """The serving options a parity check tries, in order: the configured arguments, then each fallback in their
+    place (`with_precision`), none twice."""
+    out = [" ".join(configured.split())]
+    for option in fallbacks:
+        made = with_precision(configured, option)
+        if made not in out:
+            out.append(made)
+    return out
+
+
+def available_memory() -> int | None:
+    """Physical memory available now, in bytes; None where this cannot be asked."""
+    if os.name == "nt":
+        import ctypes  # noqa: PLC0415
+
+        class Memory(ctypes.Structure):
+            _fields_ = [("length", ctypes.c_ulong), ("load", ctypes.c_ulong), *[(n, ctypes.c_ulonglong) for n in (
+                "total", "available", "total_page", "available_page", "total_virtual", "available_virtual", "extended")]]
+
+        m = Memory()
+        m.length = ctypes.sizeof(Memory)
+        return int(m.available) if ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(m)) else None
+    try:
+        for line in Path("/proc/meminfo").read_text().splitlines():
+            if line.startswith("MemAvailable:"):
+                return int(line.split()[1]) * 1024
+    except (OSError, ValueError):
+        pass
+    return None
+
+
+def disk_free(path: Path) -> int:
+    return shutil.disk_usage(path).free
+
+
+def tree_bytes(path: Path) -> int:
+    total = 0
+    for base, _, files in os.walk(path):
+        for name in files:
+            try:
+                total += os.path.getsize(os.path.join(base, name))
+            except OSError:
+                pass
+    return total
 
 
 def wants_server(choice: str, device: str) -> bool:
@@ -1211,7 +1404,38 @@ def main(argv=None):
     a.add_argument("--stop-now", action="store_true", help="as --stop, and stop the games in flight too")
     a.add_argument("--dry-run", action="store_true", help="print the plan and run nothing")
     a.add_argument("--tiny", action="store_true", help="a toy scale, for testing the driver")
+    a.add_argument("--allow-data-failure", action="store_true",
+                   help="a data-producing stage that fails (mine, mined: the next generations' mined targets) is recorded "
+                        "and passed over as a measurement is, and a generation trains although an earlier one's mined "
+                        "targets are missing; without it either stops the generation")
+    a.add_argument("--repin-engine", action="store_true",
+                   help="a generation resumed on another engine source than it began with goes on with the working "
+                        "tree's (docs/ai-training.md, 'The engine a generation runs'); its gate must then be played "
+                        "again before its pairs are mined")
+    a.add_argument("--preflight", action="store_true",
+                   help="build, make every preflight check for real (disk and memory, the workers reached, the "
+                        "champion's parity with the serving options), print the plan as --dry-run does, and run "
+                        "nothing else: what the loop's supervisor runs before each generation")
+    a.add_argument("--no-preflight", action="store_true", help="skip the checks at the generation's start")
+    a.add_argument("--require-workers", action="store_true",
+                   help="preflight: a worker --workers names that cannot be leased or reached fails it (default: a "
+                        "warning - the stages are played without it)")
+    a.add_argument("--min-free-disk", type=float, default=5.0, metavar="GB",
+                   help="preflight: the least free space under --root (and at least 1.2 times the last generation's size)")
+    a.add_argument("--min-free-memory", type=float, default=4.0, metavar="GB",
+                   help="preflight, before training: the least available memory (and at least the window's size on disk)")
+    a.add_argument("--parity-fallback", action="append", metavar="ARGS",
+                   help="a serving option the parity check falls back to when the one before it fails for a model the "
+                        "server holds (repeatable, in order; each replaces --server-args' precision flags). Default: "
+                        + "; ".join(f"'{o}'" for o in NATIVE_FALLBACKS) + f" (serve.py: '{PYTHON_FALLBACKS[0]}')")
+    a.add_argument("--no-parity-fallback", action="store_true", help="only the configured serving flags: parity fails with them or passes")
+    a.add_argument("--train-oom-retries", type=int, default=2,
+                   help="times training is run again with half its data-loader workers after they ran out of memory")
     args = a.parse_args(argv)
+    # `--preflight` plans as a dry run does - nothing of the generation is run, recorded or bootstrapped - from here
+    # on; only its build and its checks are real (`build_dry`, `preflight(real=True)`).
+    if args.preflight:
+        args.dry_run = True
     if args.stop or args.stop_now:
         return request_stop(Path(args.root).resolve(), args.generation, args.stop_now)
     show_progress = args.progress == "on" or (args.progress == "auto" and sys.stderr.isatty())
@@ -1222,7 +1446,11 @@ def main(argv=None):
     if args.gate_parallel is None:
         args.gate_parallel = max(1, round(cpus * (SERVER_GATE if server else 1)))
     if args.tiny:
-        args.games, args.simulations, args.train_steps, args.gate_games, args.warmup = 4, 8, 4, 4, 1
+        # A toy scale; the games and the gate's games are the command line's when it names them (a test that mines
+        # needs a few decisive pairs).
+        args.games = 4 if args.games == a.get_default("games") else args.games
+        args.gate_games = 4 if args.gate_games == a.get_default("gate_games") else args.gate_games
+        args.simulations, args.train_steps, args.warmup = 8, 4, 1
         args.accept = "ahead" if args.accept in ("sprt", "sprt-paired") else args.accept
         args.ladder_games = min(args.ladder_games, 4)
         args.heldout_eval_games = min(args.heldout_eval_games, 4)
@@ -1236,6 +1464,15 @@ def main(argv=None):
         pool = deck_pool(decks_dir)
     gen = args.generation or next_generation(root)
     gen_dir = root / f"gen{gen}"
+    if not args.dry_run:
+        # One driver a generation: beside a live one this one would write over its status and its record, and start
+        # its stages a second time. Refused before anything is touched.
+        running = status.read(root, gen)
+        if (running and running.get("state") == "running" and running.get("pid") != os.getpid()
+                and running.get("host") == status.socket.gethostname() and status.alive(running)):
+            raise SystemExit(f"gen{gen} is being run by a driver already (pid {running.get('pid')}, in stage "
+                             f"{running.get('stage')}: {gen_dir / status.STATUS}); this one does not start beside it. "
+                             "`python -m cantrip_ai.status` shows it; `--stop` asks it to stop")
     rec = Record(gen_dir, gen, args.dry_run)
     log = print
     champ = champion(root) if args.dry_run else bootstrap(root)
@@ -1250,28 +1487,216 @@ def main(argv=None):
     held = heldout_dir(root, args.heldout_dir)
     if args.retrain:
         retrain(rec, gen_dir, model_dir, args, log)
+    if args.tiny:
+        args.min_free_disk, args.min_free_memory = min(args.min_free_disk, 1.0), min(args.min_free_memory, 1.0)
+    # `--preflight`'s build and checks are real, with their logs under ROOT/preflight.
+    pre_dir = root / "preflight" if args.preflight else gen_dir
+    build_dry = args.dry_run and not args.preflight
+
+    # The engine this generation runs (`engine.py`): named once, in its record, and kept whatever the tree does after.
+    current = engine.identify(REPO)
+    pinned = rec.data.get("engine")
+    if pinned and pinned.get("id") and pinned.get("id") != current.get("id") and args.repin_engine:
+        log(f"engine: --repin-engine: this generation began on {engine.describe(pinned)} and goes on with the working "
+            f"tree's {engine.describe(current)}; what it recorded before replays no longer")
+        pinned = None
+    if not pinned or not pinned.get("id"):
+        pinned = current
+        rec.data["engine"] = current
+    eng = engine.Engine(root, REPO, pinned, current, log)
+    # Written into a stage's record only while a build of the engine is pinned (`Engine.kept`): with nothing pinned
+    # (`--no-build` on an engine never built here) the stages run whatever the tree holds, and the id would vouch for
+    # binaries nobody kept.
+    rec.engine = eng.id if eng.kept() else None
+    log(f"engine: {engine.describe(pinned)}"
+        + ("" if eng.same() else f"; the working tree is now {engine.describe(current)}: this generation keeps its own "
+                                 f"build ({eng.dir}) and nothing is built from the tree"))
+    built_now: set[str] = set()  # what this run's build stage built (`build`): the only files `eng.adopt` keeps
+    heart: list = []  # the status file's keeper, once the generation runs (`status.Heartbeat`)
+
+    def tell(event: str, message: str, stage_name: str | None = None, **details):
+        """A notification (`notify.py`); a dry run tells nobody."""
+        if not args.dry_run:
+            notify.send(event, message, root=root, generation=gen, stage=stage_name, log=log, **details)
+
+    def tell_warnings():
+        """Whatever the record flags now that was not told before (`warnings`): told once, and kept in the status."""
+        if args.dry_run:
+            return
+        told = rec.data.setdefault("told", [])
+        new = [f for f in warnings(rec.data) if f not in told]
+        for f in new:
+            told.append(f)
+            for h in heart:
+                h.warn(f)
+            tell("warning", f)
+        if new:
+            rec.save()
 
     def stage(name, fn):
         if rec.done(name) and name != "build":
             log(f"[{name}] done already ({rec.data['stages'][name]['seconds']:.0f} s)")
             return
         log(f"[{name}]")
+        for h in heart:
+            h.begin(name)
+        if not args.dry_run:
+            rec.begin(name)
         t = time.time()
         try:
             numbers = fn()
         except (Exception, SystemExit) as e:
-            # A measurement decides nothing: its failure is recorded and the generation goes on.
-            if name not in MEASUREMENTS or args.dry_run:
+            # A measurement decides nothing: its failure is recorded, flagged and told, and the generation goes on. A
+            # data-producing stage's is passed over only when that was asked for: the next generations would train
+            # without what it makes.
+            passed_over = name in MEASUREMENTS or (name in DATA_STAGES and args.allow_data_failure)
+            if args.dry_run or not passed_over:
+                if name in DATA_STAGES and not args.dry_run:
+                    raise SystemExit(
+                        f"stage {name} failed, and its output is training data: the generations after this one would "
+                        f"train WITHOUT gen{gen}'s mined targets. The generation stops here; fix the cause and run the "
+                        "driver again (the stage is tried again), or pass --allow-data-failure to record the failure "
+                        f"and go on without them.\n{e}") from e
                 raise
             why = str(e) or type(e).__name__
             log(f"[{name}] failed, recorded and passed over: {why.splitlines()[0] if why else ''}")
             rec.fail(name, time.time() - t, why[-2000:])
+            tell("data-failed" if name in DATA_STAGES else "measurement-failed",
+                 f"gen{gen}'s {name} failed and was passed over: {why.splitlines()[0][:300] if why else ''}", name,
+                 error=why[-1500:])
+            tell_warnings()
             return
         if not args.dry_run:
             rec.put(name, time.time() - t, **(numbers or {}))
+            tell_warnings()
+            if name == "promote":
+                tell("verdict", f"gen{gen} " + ("accepted: it is the champion" if (numbers or {}).get("accepted") else
+                                                 f"rejected: {(numbers or {}).get('champion')} stays") + f" ({gate_line()})", name,
+                     accepted=(numbers or {}).get("accepted"), gate={k: rec.data["stages"].get("gate", {}).get(k) for k in
+                                                             ("wins", "losses", "draws", "games", "paired_share", "paired_margin", "pentanomial")})
 
-    def server_for(models: list[Path], stage_name: str):
-        """The inference server for a stage, or nothing (a stand-in whose address is unused) when it is off."""
+    def gate_line() -> str:
+        g = rec.data["stages"].get("gate") or {}
+        if g.get("skipped") or g.get("wins") is None:
+            return f"the gate was not played: {g.get('skipped') or 'no gate recorded'}"
+        return duel_text(g)
+
+    def check_mined() -> list[str]:
+        """The mined targets this generation's training should have and has not: an earlier generation of the mining
+        window whose mine or mined stage failed. Under this driver (its record names an engine) that failure was
+        allowed to pass, and training without the targets has to be allowed too (`--allow-data-failure`), else this
+        raises - at the preflight, before a game is played, and again at training. A failure recorded by a driver
+        from before (no engine in the record) is past mending: flagged in the README and told once, never refused.
+        Returns what is flagged, kept in the record (`missing_mined`)."""
+        refusing, flagged = [], []
+        if not args.no_mine:
+            for g in range(gen - 1, max(gen - 1 - args.mine_window, 0), -1):
+                earlier = status.read_json(root / f"gen{g}" / "generation.json") or {}
+                failed = [n for n in DATA_STAGES if (earlier.get("stages") or {}).get(n, {}).get("failed")]
+                if not failed:
+                    continue
+                if "engine" in earlier:
+                    refusing.append(f"gen{g}'s mined targets (its {' and '.join(failed)} failed)")
+                else:
+                    flagged.append(f"gen{g}'s mined targets were lost before the hardened driver; training without them")
+        if refusing and not args.allow_data_failure:
+            raise SystemExit(f"training would go without {'; '.join(refusing)}. Run that generation's failed stage again "
+                             "(the driver with --generation N: it tries it again), or pass --allow-data-failure to "
+                             "train without them")
+        flagged += [f"training without {r} (--allow-data-failure)" for r in refusing]
+        if flagged or rec.data.get("missing_mined"):
+            rec.data["missing_mined"] = flagged
+        return flagged
+
+    # --- What a generation serves with (docs/ai-training.md, "Parity, and what a generation serves with") ---------
+
+    def serving_option() -> str | None:
+        """The serving option the parity checks fell back to, if they did: the candidate's check's once it is made
+        (it holds every model the later stages serve), before it the check of the champion at the start."""
+        made = rec.data.get("serving") or {}
+        pick = made.get("candidate") or made.get("start")
+        return pick.get("option") if pick and pick.get("index") else None
+
+    def served(configured: str) -> str:
+        """A server's arguments as this generation serves: the configured ones, their precision flags the fallback's
+        when the parity check fell back."""
+        option = serving_option()
+        return with_precision(configured, option) if option else configured
+
+    def serving_check(models: list[Path], when: str, test=None, duels_too: bool = False) -> tuple[dict, str]:
+        """The first serving option (the configured flags, then the fallbacks in order: `with_precision`) that passes
+        parity for every one of `models` together, in every server that will hold them: the generation's own
+        (`--server-args`) and, `duels_too`, the one every host of a distributed duel runs (`--duel-server-args`,
+        cantrip-infer) - the gate never serves flags that were not checked. A server checks each model it holds
+        against its references as it starts and refuses to start on one that fails, and `test` (the parity stage's
+        Rust test) is then run through the generation's own. The tolerance is the server's and the test's, never
+        loosened here.
+
+        Only a parity failure (`PARITY_FAILED`) moves on to the next option. A server that does not start for any
+        other reason is raised as itself: falling back on it would serve a whole generation with a slower option
+        for a GPU that was busy for a minute.
+
+        Returns what was chosen (and what failed before it) and the test's output."""
+        native = args.server_impl == "native"
+        fallbacks = list([] if args.no_parity_fallback else (args.parity_fallback if args.parity_fallback is not None
+                                                             else NATIVE_FALLBACKS if native else PYTHON_FALLBACKS))
+        # Each server the models will be held by: its configured arguments, and whether it is cantrip-infer.
+        bases = [(" ".join(args.server_args.split()), native)]
+        if duels_too and duels_distributed() and decks_dir is not None:
+            duel = args.duel_server_args if args.duel_server_args is not None else (args.server_args if native else "")
+            if (" ".join(duel.split()), True) not in bases:
+                bases.append((" ".join(duel.split()), True))
+
+        def under(fallback: str | None) -> list[tuple[str, bool]]:
+            made = []
+            for base, is_native in bases:
+                one = (with_precision(base, fallback) if fallback else base, is_native)
+                if one not in made:
+                    made.append(one)
+            return made
+
+        options: list[tuple[str | None, list]] = [(None, under(None))]
+        for f in fallbacks:
+            if under(f) not in [servers for _, servers in options]:
+                options.append((f, under(f)))
+        names = ", ".join(m.name for m in models)
+        tried: list[dict] = []
+        logs = pre_dir / "logs"
+        for k, (fallback, servers) in enumerate(options):
+            text, failed = "", None
+            for n, (words, is_native) in enumerate(servers):
+                try:
+                    with server_for(models, when, words.split(), logs, native=is_native) as gpu:
+                        if n == 0 and test is not None:
+                            text = test(gpu, words)
+                except SystemExit as e:
+                    if not PARITY_FAILED.search(str(e)):
+                        raise  # not a parity failure: no other option would mend it
+                    lines = [line.strip() for line in str(e).splitlines() if line.strip()]
+                    why = next((line for line in reversed(lines) if PARITY_FAILED.search(line)), "parity failed")[:300]
+                    failed = dict(args=words, failed=why)
+                    for kept in (logs / f"server-{when}.log", logs / "parity.log"):
+                        if kept.exists():
+                            shutil.copy2(kept, kept.with_name(f"{kept.stem}-try{k}{kept.suffix}"))
+                    break
+            if failed is not None:
+                tried.append(failed)
+                log(f"  parity ({when}): `{failed['args'] or '(the default)'}` does not pass for {names}: {failed['failed']}")
+                continue
+            if k:
+                log(f"  parity ({when}): {names} served with `{servers[0][0]}` for this generation, the "
+                    f"{k} option(s) before it failing")
+            # `option`: the fallback's own flags, which every other server's arguments take in place of theirs (`served`).
+            return dict(args=servers[0][0], option=fallback, index=k, tried=tried, models=[m.name for m in models],
+                        checked=[words for words, _ in servers]), text
+        raise SystemExit(f"parity ({when}): no serving option passes for {names}; tried "
+                         + "; ".join(f"`{t['args'] or '(the default)'}` ({t['failed']})" for t in tried)
+                         + ". The tolerance is not loosened: see the logs' -try files in " + str(logs))
+
+    def server_for(models: list[Path], stage_name: str, words: list[str] | None = None, logs: Path | None = None,
+                   native: bool | None = None):
+        """The inference server for a stage, or nothing (a stand-in whose address is unused) when it is off; serving
+        with the generation's serving option (`served`) unless `words` says with what."""
         if not server:
             return contextlib.nullcontext(None)
         for m in models:
@@ -1280,35 +1705,129 @@ def main(argv=None):
                 run([sys.executable, "-m", "cantrip_ai.export", "--checkpoint", m / "train" / "checkpoint.pt", "--out", m,
                      "--weights-only"], gen_dir / "logs" / f"weights-{m.name}.log", args.dry_run,
                     env=dict(PYTHONPATH=str(REPO / "ai")))
-        return InferenceServer(models, gen_dir / "logs" / f"server-{stage_name}.log", args.server_device or args.device,
-                               args.server_args.split(), args.dry_run, log, native=args.server_impl == "native",
-                               ort_dylib=args.ort_dylib)
+        return InferenceServer(models, (logs or gen_dir / "logs") / f"server-{stage_name}.log", args.server_device or args.device,
+                               served(args.server_args).split() if words is None else words,
+                               args.dry_run and logs is None, log,
+                               native=args.server_impl == "native" if native is None else native,
+                               ort_dylib=args.ort_dylib,
+                               infer=eng.path("infer") if (args.server_impl == "native" if native is None else native) else None)
+
+    def preflight(real: bool) -> dict:
+        """The checks before a generation runs (docs/ai-training.md, "Preflight"): room on the disk and, before
+        training, in memory; the workers the request names there (`real`: leased and reached through the worker
+        manager, else only what it could be served by); and, `real` and with the GPU server, the champion's parity
+        with the serving options, falling back as the parity stage does. A problem stops the generation before it
+        runs anything; a doubt is flagged and told."""
+        problems, doubts = [], []
+        base = root if root.exists() else root.parent
+        free = disk_free(base)
+        earlier = [g for n, g in retention.generations(root) if n < gen and (g / "selfplay").is_dir()]
+        need = max(args.min_free_disk * 2**30, 1.2 * tree_bytes(earlier[-1]) if earlier else 0)
+        if free < need:
+            problems.append(f"disk: {free / 2**30:.1f} GB free under {base}, {need / 2**30:.1f} GB wanted (--min-free-disk, "
+                            "and 1.2 times the last generation's size)")
+        memory = available_memory()
+        if memory is not None and not rec.done("train"):
+            win = [d for d, _ in window(root, gen, args.window, args.older_weight, args.imitation_weight, exclude=[held])]
+            on_disk = sum(f.stat().st_size for d in win if d.is_dir() for f in d.glob("*.shard.zst"))
+            need = max(args.min_free_memory * 2**30, on_disk)
+            if memory < need:
+                problems.append(f"memory: {memory / 2**30:.1f} GB available, {need / 2**30:.1f} GB wanted before training "
+                                f"(--min-free-memory, and the window's {on_disk / 2**30:.1f} GB on disk)")
+        if leases is not None:
+            there: set[str] = set()
+            if real:
+                with leases.held() as held_now:
+                    for w in held_now:
+                        try:
+                            p = subprocess.run([*distributed.workers_cli(), "exec", w["lease"], "--timeout", "60", "--",
+                                                "echo", "ok"], capture_output=True, text=True, timeout=120,
+                                               stdin=subprocess.DEVNULL)
+                            if p.returncode == 0:
+                                there.add(w["name"])
+                            else:
+                                log(f"  preflight: worker {w['name']} did not answer (exit {p.returncode}): "
+                                    f"{(p.stderr or p.stdout).strip()[-200:]}")
+                        except (OSError, subprocess.SubprocessError) as e:
+                            log(f"  preflight: worker {w['name']} did not answer ({e})")
+                    asked = {w["name"] for w in held_now} | set(leases.named)
+            else:
+                there = {w["name"] for w in candidate_workers()}
+                asked = there | set(leases.named)
+            missing = sorted(asked - there)
+            if missing:
+                (problems if args.require_workers else doubts).append(
+                    f"workers: {', '.join(missing)} of --workers {args.workers!r} "
+                    + ("could not be leased or reached" if real else "are not in the pool or are disabled")
+                    + ("" if args.require_workers else ": the distributed stages are played without them"))
+        if not rec.done("train"):
+            try:
+                doubts += check_mined()
+            except SystemExit as e:
+                problems.append(str(e))
+        made = rec.data.setdefault("serving", {})
+        if real and server and "start" not in made and not rec.done("selfplay"):
+            if not (champ / "manifest.json").exists():
+                problems.append(f"the champion {champ} has no model")
+            else:
+                try:
+                    made["start"], _ = serving_check([champ], "start")
+                except SystemExit as e:
+                    if not PARITY_FAILED.search(str(e)) and "no serving option passes" not in str(e):
+                        raise  # a server that did not start for another reason: that failure, as itself
+                    problems.append(str(e))
+        out = dict(at=now(), disk_free_gb=round(free / 2**30, 1),
+                   memory_available_gb=round(memory / 2**30, 1) if memory is not None else None, warnings=doubts)
+        for d in doubts:
+            log(f"  preflight WARNING: {d}")
+        if problems:
+            raise SystemExit("preflight failed; nothing was run:\n" + "\n".join(f"  - {x}" for x in problems))
+        log(f"  preflight passed: {out['disk_free_gb']} GB of disk free"
+            + (f", {out['memory_available_gb']} GB of memory available" if memory is not None else "")
+            + (f"; serving the champion with `{made['start']['args']}`" if made.get("start") else ""))
+        return out
 
     def build():
-        run(["cargo", "build", "--release", "-p", "cantrip-ai-host", "--features", "ort"], gen_dir / "logs/build-release.log",
-            args.dry_run, stream=show_progress)
+        if not eng.same():
+            # The tree is another engine now: this generation's is built already, and is the one it runs.
+            log(f"  not built: the working tree is not this generation's engine; it runs {eng.dir}")
+            return
+
+        def made(*names):
+            # What this run's build vouches for: only these are kept as the generation's engine (`Engine.adopt`).
+            if not build_dry:
+                built_now.update(names)
+
+        run(["cargo", "build", "--release", "-p", "cantrip-ai-host", "--features", "ort"], pre_dir / "logs/build-release.log",
+            build_dry, stream=show_progress)
+        made("selfplay", "explore", "ai-host")
         if (server and args.server_impl == "native") or args.workers:
             # On its own: the gpu feature loads onnxruntime at run time, which the other binaries are not built to.
             run(["cargo", "build", "--release", "-p", "cantrip-ai-host", "--features", "gpu", "--bin", "cantrip-infer"],
-                gen_dir / "logs/build-infer.log", args.dry_run, stream=show_progress)
+                pre_dir / "logs/build-infer.log", build_dry, stream=show_progress)
+            made("infer")
         run(["cargo", "build", "--profile", "cards", "-p", "cantrip-host", "--bin", "cantrip-native-host"],
-            gen_dir / "logs/build-native.log", args.dry_run, stream=show_progress)
+            pre_dir / "logs/build-native.log", build_dry, stream=show_progress)
+        made("native-host")
         if not args.no_mine:
             # The recording native host for the pair miner's replays, in a target directory of its own (the same binary
             # with a feature on would otherwise take the place of the table's).
             run(["cargo", "build", "--profile", "cards", "-p", "cantrip-host", "--bin", "cantrip-native-host",
-                 "--features", "ai-record"], gen_dir / "logs/build-native-record.log", args.dry_run,
+                 "--features", "ai-record"], pre_dir / "logs/build-native-record.log", build_dry,
                 env=dict(CARGO_TARGET_DIR=str(REPO / "target" / "record")), stream=show_progress)
+            made("native-host-record")
         run([*dotnet(), "build", "dotnet/tools/Cantrip.BotLab/Cantrip.BotLab.csproj", "-c", "Release", "-v", "q", "--nologo"],
-            gen_dir / "logs/build-botlab.log", args.dry_run, env=dict(DOTNET_ROLL_FORWARD="Major"), stream=show_progress)
+            pre_dir / "logs/build-botlab.log", build_dry, env=dict(DOTNET_ROLL_FORWARD="Major"), stream=show_progress)
+        made("botlab")
         if duels_distributed():
             # BotLab for the workers: self-contained, one file, for each kind of worker there is.
             for kind in sorted({w["os"] for w in candidate_workers()}):
                 rid, _ = BOTLAB_RIDS[kind]
                 run([*dotnet(), "publish", "dotnet/tools/Cantrip.BotLab/Cantrip.BotLab.csproj", "-c", "Release", "-r", rid,
                      "--self-contained", "-p:PublishSingleFile=true", "-p:IncludeNativeLibrariesForSelfExtract=true",
-                     "-o", BOTLAB_PUBLISH / rid, "-v", "q", "--nologo"], gen_dir / f"logs/build-botlab-{rid}.log",
-                    args.dry_run, env=dict(DOTNET_ROLL_FORWARD="Major"), stream=show_progress)
+                     "-o", BOTLAB_PUBLISH / rid, "-v", "q", "--nologo"], pre_dir / f"logs/build-botlab-{rid}.log",
+                    build_dry, env=dict(DOTNET_ROLL_FORWARD="Major"), stream=show_progress)
+                made(f"botlab-{kind}")
 
     def selfplay_command(exe, model, out, lanes) -> list:
         """cantrip-selfplay's command line but for its decks, its resume and its backend: the same on every host."""
@@ -1347,7 +1866,7 @@ def main(argv=None):
             # A stop asked of an earlier run (`--stop`) is not this one's: its local run's, and the whole run's.
             (out / distributed.STOP_FILE).unlink(missing_ok=True)
             (gen_dir / "dist" / "stop").unlink(missing_ok=True)
-        cmd = selfplay_command(SELFPLAY, champ, out, args.lanes)
+        cmd = selfplay_command(eng.path("selfplay"), champ, out, args.lanes)
         if resume or args.workers:
             # Distributed, the directory is resumed whatever it holds: the workers' shards come into it.
             cmd.append("--resume")
@@ -1404,7 +1923,11 @@ def main(argv=None):
         if default_server is None:
             # The native server's settings, not serve.py's (whose arguments `--server-args` holds with the python one).
             default_server = args.server_args if args.server_impl == "native" and args.server_args.strip() else distributed.WORKER_SERVER_ARGS
-        server_words = {w["name"]: distributed.worker_server_args(w, default_server) for w in workers}
+        # With the precision the generation's parity check settled on, where it fell back (`served`).
+        default_server = served(default_server)
+        # A worker's own arguments keep everything but their precision, which is the generation's where the parity
+        # check fell back (`served`).
+        server_words = {w["name"]: served(" ".join(distributed.worker_server_args(w, default_server))).split() for w in workers}
         if args.dry_run:
             for w in workers:
                 log(f"  would push the bundle to {w['name']}:{w['root']}/bundle/<hash> and play in "
@@ -1425,12 +1948,12 @@ def main(argv=None):
                 cuda = str(Path(torch.__file__).parent / "lib")
             if not args.ort_dylib:
                 raise SystemExit("--workers needs onnxruntime-gpu for the workers' cantrip-infer: --ort-dylib or ORT_DYLIB_PATH")
-            files = distributed.bundle_files(SELFPLAY, INFER, Path(args.ort_dylib).parent, Path(cuda), champ, decks_dir,
+            files = distributed.bundle_files(eng.path("selfplay"), eng.path("infer"), Path(args.ort_dylib).parent, Path(cuda), champ, decks_dir,
                                              decks_dir, listed, [n.strip() for n in args.worker_cuda_dlls.split(",") if n.strip()])
             bundle_hash, manifest = distributed.bundle_manifest(files, cache)
             bundles["windows"] = (files, manifest, bundle_hash)
         if any(w.get("os") == "linux" for w in workers):
-            files = distributed.linux_bundle_files(distributed.source_tar(REPO, root / "dist" / "src"), champ, decks_dir,
+            files = distributed.linux_bundle_files(eng.source(), champ, decks_dir,
                                                    decks_dir, listed)
             bundle_hash, manifest = distributed.bundle_manifest(files, cache)
             bundles["linux"] = (files, manifest, bundle_hash)
@@ -1455,10 +1978,10 @@ def main(argv=None):
                                           server_args=" ".join(server_words[w["name"]]),
                                           precision=distributed.precision_of(server_words[w["name"]]))
                           for w in workers}
-        local_identity = dict(binary=distributed.sha256(SELFPLAY, cache)[:16],
+        local_identity = dict(binary=distributed.sha256(eng.path("selfplay"), cache)[:16],
                               backend="server" if server else "cpu",
-                              server_args=args.server_args if server else None,
-                              precision=distributed.precision_of(args.server_args.split()) if server else None)
+                              server_args=served(args.server_args) if server else None,
+                              precision=distributed.precision_of(served(args.server_args).split()) if server else None)
         if args.selfplay_local:
             hosts_identity[local_name] = local_identity
         cache_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1503,7 +2026,7 @@ def main(argv=None):
         with distributed.LedgerLock(dist_dir / "ledger.lock"):
             ledger = distributed.Ledger.load(dist_dir / "ledger.json", args.games, seed,
                                              identity=dict({"global": global_identity, "hosts": hosts_identity}),
-                                             header=header)
+                                             header=header, log=log)
             ledger.save()
             with server_for([champ], "selfplay") as gpu:
                 local = list(cmd)
@@ -1574,6 +2097,11 @@ def main(argv=None):
                                           args.mine_floor, targets, log)
         for e in extra:
             log(f"  extra: {e}")
+        # The mined targets an earlier generation of the mining window should have made (`check_mined`: refused here
+        # as at the preflight, unless allowed).
+        if not args.dry_run:
+            for text in check_mined():
+                log(f"  WARNING: {text}")
         cmd = [sys.executable, "-m", "cantrip_ai.train", "--data", *[f"{d}:{weight:g}" for d, weight in w], *extra, "--out", out,
                *length, "--lr", args.lr, "--warmup", args.warmup, "--value-mix", args.value_mix, "--seed", gen,
                "--device", args.device, "--progress", "on" if show_progress else "off"]
@@ -1586,15 +2114,40 @@ def main(argv=None):
                 cmd += [flag, value]
         if args.schedule != "cosine":
             cmd += ["--schedule", args.schedule]
-        if resuming:
-            cmd.append("--resume")
-        elif init.exists() or args.dry_run:
-            cmd += ["--init", init]
-            if args.carry_optimizer:
-                cmd.append("--init-optimizer")
         champion_checkpoint = str(champ / "train" / "checkpoint.pt")
-        cmd += [word.replace("{champion}", champion_checkpoint) for word in args.train_args.split()]
-        run(cmd, gen_dir / "logs/train.log", args.dry_run, env=dict(PYTHONPATH=str(REPO / "ai")), stream=show_progress)
+        given = [word.replace("{champion}", champion_checkpoint) for word in args.train_args.split()]
+
+        def start(resume: bool) -> list:
+            if resume:
+                return ["--resume"]
+            if init.exists() or args.dry_run:
+                return ["--init", init, *(["--init-optimizer"] if args.carry_optimizer else [])]
+            return []
+
+        # The data loader's workers each attach the window; when they do not fit in memory the trainer fails, or
+        # hangs waiting on workers that are gone (`LOADER_OOM`, `fatal_watch`). That one failure is tried again with
+        # half the workers, down to none (the loader then runs in the trainer itself), from the last checkpoint.
+        workers_now = loader_workers(given)
+        fewer: list = []
+        recovered = []
+        for attempt in range(args.train_oom_retries + 1):
+            try:
+                run([*cmd, *start(resuming or (attempt > 0 and (out / "checkpoint.pt").exists())), *given, *fewer],
+                    gen_dir / "logs/train.log", args.dry_run, env=dict(PYTHONPATH=str(REPO / "ai")), stream=show_progress,
+                    fatal=LOADER_OOM)
+                break
+            except SystemExit as e:
+                if not LOADER_OOM.search(str(e)) or attempt == args.train_oom_retries or workers_now == 0:
+                    raise
+                kept = gen_dir / "logs" / f"train-oom{attempt + 1}.log"
+                if (gen_dir / "logs/train.log").exists():
+                    shutil.copy2(gen_dir / "logs/train.log", kept)
+                was, workers_now = workers_now, workers_now // 2
+                fewer = ["--workers", workers_now]
+                recovered.append(dict(workers_before=was, workers_now=workers_now, log=str(kept)))
+                log(f"  training's data loader ran out of memory with {was} workers: run again with {workers_now} (its log: {kept})")
+                tell("recovered", f"gen{gen}'s training ran out of memory in its data loader with {was} workers; running "
+                                  f"it again with {workers_now}", "train", log_file=str(kept))
         if args.dry_run:
             return
         m = json.loads((out / "metrics.json").read_text(encoding="utf-8"))["history"][-1]
@@ -1610,6 +2163,7 @@ def main(argv=None):
                     precision=ck["args"].get("precision", "fp32"),
                     init="resumed" if resuming else (str(init) if args.train_init else (init.parent.parent.name if init.exists() else "fresh")),
                     lr=args.lr, value_mix=args.value_mix, window=ck["data"]["directories"], samples=ck["data"]["samples"],
+                    **({"loader_recovered": recovered} if recovered else {}),
                     **{k: v for k, v in dict(target_uses=args.target_uses, search_target_repeat=args.search_target_repeat,
                                              imitation_policy_weight=args.imitation_policy_weight,
                                              value_mix_full=args.value_mix_full, value_mix_fast=args.value_mix_fast,
@@ -1625,19 +2179,38 @@ def main(argv=None):
     def parity():
         # With the GPU server, the server checks the references itself as it starts, and the Rust side runs them
         # through it too (`RemoteEvaluator`), beside tract and ort.
-        with server_for([model_dir], "parity") as gpu:
+        def test(gpu, option: str) -> str:
             env = dict(CANTRIP_MODEL=str(model_dir))
             if gpu is not None:
                 env["CANTRIP_AI_SERVER"] = gpu.address
                 # A server below fp32 is held to the reduced bar, the one it checks itself against as it starts.
-                said = args.server_args.split()
-                if "--precision" in said and said[said.index("--precision") + 1:][:1] != ["fp32"]:
+                if distributed.precision_of(option.split()) != "fp32":
                     env["CANTRIP_AI_SERVER_REDUCED"] = "1"
-            text = run(["cargo", "test", "--profile", "cards", "-p", "cantrip-ai", "--features", "ort", "--test", "eval",
+            return run(["cargo", "test", "--profile", "cards", "-p", "cantrip-ai", "--features", "ort", "--test", "eval",
                         "model_parity", "--", "--ignored", "--nocapture"], gen_dir / "logs/parity.log", args.dry_run,
                        env=env, stream=show_progress)
+
+        pick = None
+        if server and not args.dry_run:
+            # Every model a server of this generation holds from here on, together: the candidate and the champion
+            # (the gate's and the miner's servers), and the ladder's anchors. The first serving option that passes
+            # all of them is the generation's (`serving_check`), and every later stage serves with it.
+            models = [model_dir, champ]
+            if args.ladder_every > 0:
+                models += [m for m in (anchor_model(x.strip()) for x in args.ladder_anchors.split(",") if x.strip())
+                           if m is not None]
+            unique = list({m.resolve(): m for m in models}.values())
+            pick, text = serving_check(unique, "candidate", test, duels_too=True)
+            rec.data.setdefault("serving", {})["candidate"] = pick
+        else:
+            with server_for([model_dir], "parity") as gpu:
+                text = test(gpu, args.server_args)
         said = [l for l in text.splitlines() if "parity" in l.lower() or "max" in l.lower()]
-        return dict(summary=(said[-1].strip() if said else "passed").replace("|", "/"))
+        summary = (said[-1].strip() if said else "passed").replace("|", "/")
+        if pick is not None:
+            summary += (f"; served with `{pick['args']}`" + (f" (fallback {pick['index']}: the options before it fail for "
+                        f"{', '.join(pick['models'])})" if pick["index"] else ""))
+        return dict(summary=summary, **({"serving": pick["args"], "served": pick["models"]} if pick else {}))
 
     def dealt_marker() -> str:
         """What BotLab's first line of a duel of this generation says of its decks (`Program.Duel`'s `dealt`)."""
@@ -1717,24 +2290,24 @@ def main(argv=None):
         server_args = args.duel_server_args
         if server_args is None:
             server_args = args.server_args if args.server_impl == "native" else ""
-        words = distributed.worker_server_args({"name": "every host of a duel", "server_args": server_args}, "")
+        words = distributed.worker_server_args({"name": "every host of a duel", "server_args": served(server_args)}, "")
         ort_dir, cuda_dir = worker_libraries()
         cache = distributed.read_json(root / "dist" / "hashes.json") or {}
 
         def local_server(models: list[Path]):
             # Every host's server of a duel is cantrip-infer with the same arguments, this machine's too.
             return InferenceServer(models, gen_dir / "logs" / "server-duel.log", args.server_device or args.device, words,
-                                   args.dry_run, log, native=True, ort_dylib=args.ort_dylib)
+                                   args.dry_run, log, native=True, ort_dylib=args.ort_dylib, infer=eng.path("infer"))
 
         setup = duels.Setup(
             root=root, gen=gen, gen_dir=gen_dir, repo=REPO, workers=workers, local=args.duel_local,
-            local_name=distributed.local_name(), botlab_local=[*dotnet(), BOTLAB],
-            botlab={kind: BOTLAB_PUBLISH / rid / exe for kind, (rid, exe) in BOTLAB_RIDS.items()},
-            native=NATIVE, record_native=RECORD_NATIVE, ai_host=AI_HOST, infer=INFER, ort_dir=ort_dir, cuda_dir=cuda_dir,
+            local_name=distributed.local_name(), botlab_local=[*dotnet(), eng.path("botlab")],
+            botlab={kind: eng.find(f"botlab-{kind}") for kind in BOTLAB_RIDS},
+            native=eng.find("native-host"), record_native=eng.find("native-host-record"), ai_host=eng.find("ai-host"), infer=eng.find("infer"), ort_dir=ort_dir, cuda_dir=cuda_dir,
             cuda_dlls=tuple(n.strip() for n in args.worker_cuda_dlls.split(",") if n.strip()), server_args=words,
             local_parallel=args.gate_parallel, worker_parallel=args.worker_duel_parallel,
             server=local_server if server else None, lease=args.dist_lease, poll=args.dist_poll,
-            timeout=args.worker_timeout, log=log, cache=cache)
+            timeout=args.worker_timeout, log=log, cache=cache, source=eng.source)
         if args.dist_duels and not args.dry_run:
             duels.check_published(setup.botlab, workers)
         duel_setup_made.append(setup)
@@ -1791,11 +2364,11 @@ def main(argv=None):
                 return None
             text, ledger, _ = distributed_duel(name, duel_args, stops, models, games, at)
             return dict(parse_gate(text), hosts=duels.host_rows(ledger))
-        cmd = [*dotnet(), BOTLAB, *seats, *decks, "--games", games, "--parallel", args.gate_parallel, "--seed", at, *extra]
+        cmd = [*dotnet(), eng.path("botlab"), *seats, *decks, "--games", games, "--parallel", args.gate_parallel, "--seed", at, *extra]
         # Every game's result beside the log (BotLab's --results): at a fixed budget a game is played again exactly from
         # its number and the duel's seed, seats and decks (--only-games), so any pair's positions can be mined later.
         cmd += ["--results", gen_dir / "logs" / f"{name}-results.tsv"]
-        env = {"DOTNET_ROLL_FORWARD": "Major", "CANTRIP_NATIVE_HOST": str(NATIVE), "CANTRIP_AI_HOST": str(AI_HOST)}
+        env = {"DOTNET_ROLL_FORWARD": "Major", "CANTRIP_NATIVE_HOST": str(eng.path("native-host")), "CANTRIP_AI_HOST": str(eng.path("ai-host"))}
         with server_for(models, name) as gpu:
             if gpu is not None:
                 cmd += ["--ai-server", gpu.address]
@@ -1803,8 +2376,11 @@ def main(argv=None):
         return None if args.dry_run else parse_gate(text)
 
     def mine_settings() -> mining.Settings:
+        # --tiny: the judgements at a toy scale too (a few simulations in two worlds), so the whole stage runs in a test.
+        tiny = dict(fork_simulations=16, fork_worlds=2, deep_simulations=32, deep_worlds=2, loser_simulations=16,
+                    loser_worlds=2, batch=4) if args.tiny else {}
         return mining.Settings(lanes=args.mine_lanes, control=args.mine_control, heldout=args.mine_heldout,
-                               seed=seed % 1_000_000 + 7)
+                               seed=seed % 1_000_000 + 7, **tiny)
 
     def mine():
         """The pair miner's first half (`mining.py`): the gate's decisive pairs (and a control) replayed and recorded on
@@ -1824,11 +2400,27 @@ def main(argv=None):
             return
         if not results.exists():
             raise SystemExit(f"no gate results to mine ({results})")
+        # A recording replays only with the engine that made it: the gate's games are stood in again by this
+        # generation's pinned engine, which must be the one that played them.
+        played = rec.data["stages"].get("gate", {}).get("engine")
+        if not played or not eng.kept():
+            # Nothing to hold the replays to: said plainly, and left to the verify step, which keeps only the pairs
+            # whose replayed games are the gate's.
+            log("  the gate's record names no pinned engine" if not played else "  no build of this engine is pinned now")
+            log("  (a gate played with --no-build, or by a driver from before): that its games replay on the binaries "
+                "run now cannot be checked beforehand; a pair whose replay differs is left out by the verify step")
+        if played and eng.id and played != eng.id:
+            raise SystemExit(f"the gate was played by engine {played} and this generation's engine is now {eng.id} "
+                             f"({engine.describe(eng.pinned)}): its games do not replay on another engine (the miner "
+                             "would report MismatchedPositions). Play the gate again on this engine (remove the gate "
+                             "and promote stages from generation.json), or pass --no-mine")
         # A stage run again keeps its replays when they were made and verified against these gate results: the replay is
         # this stage's longest step, and the same games again would be the same recordings.
         verified_file = p.replay / "verify.json"
+        engine_file = p.replay / "engine.txt"
         resumed = (verified_file.exists() and (p.selected / "selection.json").exists()
-                   and verified_file.stat().st_mtime > results.stat().st_mtime)
+                   and verified_file.stat().st_mtime > results.stat().st_mtime
+                   and (not eng.id or not engine_file.exists() or engine_file.read_text(encoding="utf-8").strip() == eng.id))
         for d in ((p.judge, p.keep, p.targets, p.heldout) if resumed
                   else (p.selected, p.replay, p.recorded, p.judge, p.keep, p.targets, p.heldout)):
             mining.clear(d)
@@ -1844,9 +2436,11 @@ def main(argv=None):
             decks = ["--decks", decks_dir, "--ai-prior", decks_dir, "--pairings", gen_dir / "gate-pairings.txt"]
         else:
             decks = dealt("gate", args.gate_games, seed + 5_000_000)
-        env = {"DOTNET_ROLL_FORWARD": "Major", "CANTRIP_NATIVE_HOST": str(RECORD_NATIVE), "CANTRIP_AI_HOST": str(AI_HOST),
+        env = {"DOTNET_ROLL_FORWARD": "Major", "CANTRIP_NATIVE_HOST": str(eng.path("native-host-record")), "CANTRIP_AI_HOST": str(eng.path("ai-host")),
                "CANTRIP_AI_TRACES": "1"}
         p.replay.mkdir(parents=True, exist_ok=True)
+        if eng.id and not resumed:
+            engine_file.write_text(eng.id, encoding="utf-8")
         replayed = []
         # A distributed gate's games are replayed each on the host that played it (`duels.REPLAY`): a game replays
         # exactly only on that hardware.
@@ -1879,7 +2473,7 @@ def main(argv=None):
                     log(f"  replayed {len(ledger.done)} of {len(wanted)} {half} games across the hosts ({shards} recorded shards)"
                         + (f"; {moved} on another host than the gate's (their pairs are checked as every replay is)" if moved else ""))
                     continue
-                cmd = [*dotnet(), BOTLAB, "duel", "--a", name, "--b", name, "--model", model_dir, "--model-b", champ, *decks,
+                cmd = [*dotnet(), eng.path("botlab"), "duel", "--a", name, "--b", name, "--model", model_dir, "--model-b", champ, *decks,
                        "--games", args.gate_games, "--parallel", args.gate_parallel, "--seed", seed + 5_000_000,
                        "--only-games", games, "--results", out, "--ai-record", p.recorded / half,
                        "--ai-record-mode", "decklist", "--ai-record-pairs"]
@@ -1893,7 +2487,7 @@ def main(argv=None):
         dropped = mining.prune_selection(p, verified)
         log(f"  replayed {verified['games']} games, {verified['same']} the gate's"
             + (f"; {dropped} pair(s) whose games differ left out" if dropped else ""))
-        run([EXPLORE, "mine-forks", "--first", p.recorded / "first", "--second", p.recorded / "second", "--out", p.forks,
+        run([eng.path("explore"), "mine-forks", "--first", p.recorded / "first", "--second", p.recorded / "second", "--out", p.forks,
              "--lanes", 32], logs / "mine-forks.log", False)
         # The models as directories: mine-values loads each loser's network from its decision's `model`.
         run([*py, "losers", "--selected", p.selected, "--a-model", model_dir, "--b-model", champ],
@@ -1902,7 +2496,7 @@ def main(argv=None):
         with server_for([model_dir, champ], "mine-values") as gpu:
             for half in ("first", "second"):
                 out = p.values(half)
-                run([EXPLORE, "mine-values", "--dir", p.recorded / half, "--games", p.selected / f"losers-{half}.jsonl",
+                run([eng.path("explore"), "mine-values", "--dir", p.recorded / half, "--games", p.selected / f"losers-{half}.jsonl",
                      "--out", out, "--lanes", 16, *(["--server", gpu.address] if gpu is not None else [])],
                     logs / f"mine-values-{half}.log", False)
                 values.append(out)
@@ -1917,7 +2511,7 @@ def main(argv=None):
                 setup = duel_setup()
                 setup = duels.Setup(**{**setup.__dict__, "local": args.judge_local})
                 try:
-                    parts = mining.judge_distributed(setup, p, s, judge_model, decks_dir, EXPLORE, args.mine_local_lanes,
+                    parts = mining.judge_distributed(setup, p, s, judge_model, decks_dir, eng.path("explore"), args.mine_local_lanes,
                                                      args.worker_judge_lanes or 4 * args.mine_lanes)
                 finally:
                     save_hashes()
@@ -1935,7 +2529,7 @@ def main(argv=None):
         local = mining.Settings(**{**s.__dict__, "lanes": args.mine_local_lanes})
         with server_for([judge_model], "mine-judge") as gpu:
             for r in mining.judge_runs(p, local, str(judge_model), str(decks_dir), p.root, str(p.judge)):
-                run([EXPLORE, *r["args"], *(["--server", gpu.address] if gpu is not None else [])],
+                run([eng.path("explore"), *r["args"], *(["--server", gpu.address] if gpu is not None else [])],
                     gen_dir / "logs" / f"mine-judge-{r['name']}.log", False, stream=show_progress)
 
     def mined():
@@ -1967,7 +2561,7 @@ def main(argv=None):
             # The forks' targets from the deeper run, of the forks the verdict runs decided (the keep lists).
             for run_dir in (p.judge / mining.DEEP_RUN, p.judge / mining.LOSERS_RUN):
                 if (run_dir / split).is_dir():
-                    run([EXPLORE, "mine-filter", "--from", run_dir / split, "--keep", p.keep / f"keep-{split}.jsonl",
+                    run([eng.path("explore"), "mine-filter", "--from", run_dir / split, "--keep", p.keep / f"keep-{split}.jsonl",
                          "--out", dest / run_dir.name, "--producer", producer],
                         logs / f"mine-filter-{split}-{run_dir.name}.log", False)
                     st = mine_settings()
@@ -2141,6 +2735,8 @@ def main(argv=None):
 
     def retire():
         doomed = retention.retire(root, args.keep, dry_run=args.dry_run, log=log)
+        if not args.dry_run:
+            doomed += engine.prune(root, engine.named(root, args.keep) | ({eng.id} if eng.id else set()), log)
         return dict(deleted=len(doomed), keep=args.keep)
 
     # The optional stages: the held-out set is chosen once and scored whenever there is one, and the ladder runs when
@@ -2158,17 +2754,76 @@ def main(argv=None):
         mined=(not args.no_mine and args.accept != "always") or rec.done("mined"),
     )
     fns = (build, selfplay, heldout, train, export, parity, gate, promote, mine, evaluate, ladder, mined, retire)
-    for name, fn in zip(STAGES, fns):
-        on = enabled.get(name, True)
-        if on() if callable(on) else on:
-            stage(name, fn)
-        if name == args.stop_after:
-            log(f"stopped after {name}, as asked")
-            return
-    if not args.dry_run:
+
+    def stages() -> str:
+        for name, fn in zip(STAGES, fns):
+            on = enabled.get(name, True)
+            if on() if callable(on) else on:
+                stage(name, fn)
+            if name == "build":
+                # Built (or not asked to): what the tree built is this generation's from here on, and the checks that
+                # need a binary can be made.
+                if not args.dry_run or args.preflight:
+                    taken = eng.adopt(built_now, frozen=any(name_ != "build" for name_ in
+                                                            (*rec.data.get("begun", {}), *rec.data["stages"])))
+                    if taken:
+                        log(f"  engine {eng.id}: {len(taken)} file(s) kept in {eng.dir}")
+                    rec.engine = eng.id if eng.kept() else None
+                    if eng.id and not eng.kept() and not args.dry_run:
+                        log(f"  engine {eng.id}: nothing is pinned (no build this run): the stages run the working "
+                            "tree's files, and their records name no engine")
+                if not args.no_preflight:
+                    log("[preflight]")
+                    for h in heart:
+                        h.begin("preflight")
+                    checked = preflight(real=not args.dry_run or args.preflight)
+                    if not args.dry_run:
+                        rec.data["preflight"] = checked
+                        rec.save()
+                        tell_warnings()
+            if name == args.stop_after:
+                log(f"stopped after {name}, as asked")
+                return "idle"
+        return "finished"
+
+    if args.dry_run:
+        stages()
+        return
+    heart.append(status.Heartbeat(root, gen, model_dir, argv=sys.argv[1:] if argv is None else list(argv)).start())
+    try:
+        outcome = stages()
+    except KeyboardInterrupt:
+        heart[0].close("stopped", "interrupted")
+        raise
+    except (Exception, SystemExit) as e:
+        if isinstance(e, SystemExit):
+            why = e.code if isinstance(e.code, str) else f"exit {e.code}"
+        else:
+            import traceback  # noqa: PLC0415
+
+            why = f"{type(e).__name__}: {e}\n{traceback.format_exc()[-3000:]}"
+        at = heart[0].data.get("stage")
+        first = (why.strip().splitlines() or ["failed"])[0][:400]
+        if status.asked_to_stop(why):
+            heart[0].close("stopped", why)
+            tell("stopped", f"gen{gen} stopped at {at}, as asked: {first}", at)
+        else:
+            heart[0].close("failed", why)
+            kind = status.transient(why)
+            tell("stage-failed", f"gen{gen} FAILED at {at}: {first}" + (f" (transient: {kind})" if kind else ""), at,
+                 error=why[-1500:], transient=kind)
+        raise
+    if outcome == "finished":
         rec.data["finished"] = now()
         rec.save()
         log(readme(rec.data))
+        flagged = warnings(rec.data)
+        took = sum(v.get("seconds", 0) for v in rec.data["stages"].values()) / 3600
+        promoted_now = rec.data["stages"].get("promote", {})
+        tell("finished", f"gen{gen} finished in {took:.2f} h: " + ("accepted" if promoted_now.get("accepted") else "rejected")
+             + f" ({gate_line()})" + (f"; {len(flagged)} WARNING(s): " + " | ".join(f[:160] for f in flagged) if flagged else ""),
+             warnings=flagged, hours=round(took, 2), accepted=promoted_now.get("accepted"))
+    heart[0].close(outcome)
 
 
 if __name__ == "__main__":

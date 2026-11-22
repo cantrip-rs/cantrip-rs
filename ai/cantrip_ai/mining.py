@@ -247,7 +247,8 @@ def judge_distributed(setup, p: Paths, s: Settings, judge_model: Path, decks: Pa
         files = {**bundle(explore, setup.infer, setup.ort_dir, setup.cuda_dir, judge_model, decks, setup.cuda_dlls), **data}
         bundles["windows"] = (files, *reversed(distributed.bundle_manifest(files, setup.cache)))
     if "linux" in by_os:
-        files = {**distributed.linux_bundle_files(distributed.source_tar(setup.repo, setup.root / "dist" / "src"),
+        files = {**distributed.linux_bundle_files(setup.source() if setup.source is not None
+                                                        else distributed.source_tar(setup.repo, setup.root / "dist" / "src"),
                                                   judge_model, decks, None, None), **data}
         bundles["linux"] = (files, *reversed(distributed.bundle_manifest(files, setup.cache)))
     local_runs = {r["name"]: r["args"] for r in judge_runs(p, s, str(judge_model), str(decks), p.root, str(p.judge))}

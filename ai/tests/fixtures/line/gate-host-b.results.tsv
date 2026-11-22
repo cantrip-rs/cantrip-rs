@@ -1,0 +1,10 @@
+# {"format": "duel-results/1", "seeds": "20000000..20000016", "a": "neural:decklist@8+Worlds=1", "b": "neural:decklist@8+Worlds=1", "decks": "2:0123456789abcdef", "pairings": "fedcba9876543210", "each_shuffle": false, "mirrors": false, "models": ["gen7:1111111111111111", "gen6:2222222222222222"]}
+game	pair	shuffle	a_seat	deck1	deck2	winner	a_points	starter	turns
+8	4	20000004	1	ub-reanimator	rw-aggro	1	1	1	12
+9	4	20000004	2	ub-reanimator	rw-aggro	1	0	1	16
+14	7	20000007	1	ub-reanimator	ub-reanimator	1	1	1	15
+11	5	20000005	2	rw-aggro	rw-aggro	2	1	2	12
+12	6	20000006	1	ub-reanimator	rw-aggro	1	1	1	8
+10	5	20000005	1	rw-aggro	rw-aggro	2	0	2	12
+15	7	20000007	2	ub-reanimator	ub-reanimator	2	1	1	12
+13	6	20000006	2	ub-reanimator	rw-aggro	2	1	2	12

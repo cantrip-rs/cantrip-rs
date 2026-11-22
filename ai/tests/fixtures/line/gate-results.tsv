@@ -1,0 +1,17 @@
+game	pair	shuffle	a_seat	deck1	deck2	winner	a_points	starter	turns
+5	2	20000002	2	rw-aggro	ub-reanimator	1	0	2	7
+1	0	20000000	2	ub-reanimator	rw-aggro	1	0	2	16
+7	3	20000003	2	rw-aggro	rw-aggro	1	0	1	16
+4	2	20000002	1	rw-aggro	ub-reanimator	1	1	1	10
+0	0	20000000	1	ub-reanimator	rw-aggro	2	0	1	8
+6	3	20000003	1	rw-aggro	rw-aggro	1	1	2	13
+3	1	20000001	2	rw-aggro	rw-aggro	2	1	1	10
+2	1	20000001	1	rw-aggro	rw-aggro	1	1	1	13
+8	4	20000004	1	ub-reanimator	rw-aggro	1	1	1	12
+9	4	20000004	2	ub-reanimator	rw-aggro	1	0	1	16
+14	7	20000007	1	ub-reanimator	ub-reanimator	1	1	1	15
+11	5	20000005	2	rw-aggro	rw-aggro	2	1	2	12
+12	6	20000006	1	ub-reanimator	rw-aggro	1	1	1	8
+10	5	20000005	1	rw-aggro	rw-aggro	2	0	2	12
+15	7	20000007	2	ub-reanimator	ub-reanimator	2	1	1	12
+13	6	20000006	2	ub-reanimator	rw-aggro	2	1	2	12

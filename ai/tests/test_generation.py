@@ -15,6 +15,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from cantrip_ai import generation  # noqa: E402
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import quiet  # noqa: E402,F401 (no notification leaves a test, no test reads this repository's engine)
+
 
 @contextlib.contextmanager
 def pool_of(tmp: Path, *machines: dict):
@@ -333,7 +336,8 @@ class GenerationTest(unittest.TestCase):
                 "\nneural@64/gen0: the network's 1 answers\nneural@64/gen2: the network's 1 answers\n")
             out = io.StringIO()
             with contextlib.redirect_stdout(out):
-                generation.main(["--root", str(root), "--generation", "2", "--no-build", "--decks-dir", "", "--accept", "sprt"])
+                generation.main(["--root", str(root), "--generation", "2", "--no-build", "--decks-dir", "", "--accept", "sprt",
+                                 "--no-mine"])
             record = json.loads((root / "gen2" / "generation.json").read_text())
             self.assertTrue(record["stages"]["gate"]["done"])
             self.assertEqual((record["stages"]["gate"]["wins"], record["stages"]["gate"]["losses"]), (240, 188))
@@ -670,7 +674,7 @@ class GenerationTest(unittest.TestCase):
 
             out = io.StringIO()
             with unittest.mock.patch.object(generation, "run", failing), contextlib.redirect_stdout(out):
-                generation.main(["--root", str(root), "--generation", "2", "--no-build", "--decks-dir", "",
+                generation.main(["--root", str(root), "--generation", "2", "--no-build", "--decks-dir", "", "--no-mine",
                                  "--ladder-every", "1", "--ladder-anchors", "tactical",
                                  "--gpu-server", "off", "--device", "cpu"])
             self.assertEqual(len(ran), 1, "the ladder was tried")

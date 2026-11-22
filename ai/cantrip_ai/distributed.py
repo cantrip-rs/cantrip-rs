@@ -196,9 +196,11 @@ class Ledger:
 
     @classmethod
     def load(cls, path: Path, games: int, seed: int, identity: dict | None = None, header: dict | None = None,
-             only=None) -> "Ledger":
+             only=None, log=print) -> "Ledger":
         """The ledger at `path` (a new one if there is none), held to `identity` and `header`: a ledger made with other
-        settings is refused, a new host's identity joins."""
+        settings is refused, a new host's identity joins. One that holds nothing yet - no output accepted and no
+        attempt started, so no game of it was ever played - binds nobody to the settings it was made with: it is
+        replaced by a new one, and that is said."""
         led = cls(path, games, seed, only)
         if path.exists():
             d = json.loads(path.read_text(encoding="utf-8"))
@@ -222,14 +224,23 @@ class Ledger:
                     led.done[i] = name
             led.derive_owners()
         if identity is not None:
-            if led.identity and (conflicts := identity_conflicts(led.identity, identity)):
+            conflicts = identity_conflicts(led.identity, identity) if led.identity else []
+            if conflicts and not led.shards and not led.attempts:
+                log(f"  {path} was made with other settings (" + "; ".join(conflicts) + ") and holds no games yet: "
+                    "replaced by a new ledger with this run's settings")
+                led = cls(path, games, seed, only)
+            elif conflicts:
                 raise SystemExit(f"{path} was made with other settings; this self-play cannot go on with these ("
                                  + "; ".join(conflicts) + "). Run it with the settings it began with, or remove its "
                                  "self-play directory and dist/ to start it again")
             merged = {"global": identity.get("global", {}), "hosts": {**led.identity.get("hosts", {}), **identity.get("hosts", {})}}
             led.identity = merged
         if header is not None:
-            if led.header and led.header != header:
+            if led.header and led.header != header and not led.shards and not led.attempts:
+                log(f"  {path} was made for another header and holds no games yet: replaced by a new ledger")
+                led = cls(path, games, seed, only)
+                led.identity = {"global": identity.get("global", {}), "hosts": dict(identity.get("hosts", {}))} if identity else {}
+            elif led.header and led.header != header:
                 raise SystemExit(f"{path}: this binary and model write another header ({header}) than the shards "
                                  f"accepted so far ({led.header}): rebuild as before, or start the self-play again")
             led.header = header
@@ -411,8 +422,8 @@ class LedgerLock:
     """`genN/dist/ledger.lock`: one driver at a time on a generation's ledger (its pid and the process's start time; a
     lock whose process is gone is taken over)."""
 
-    def __init__(self, path: Path):
-        self.path = path
+    def __init__(self, path: Path, what: str = "another driver (pid {pid}) is running this generation's self-play"):
+        self.path, self.what = path, what
 
     def __enter__(self):
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -424,9 +435,13 @@ class LedgerLock:
                 return self
             except FileExistsError:
                 held = read_json(self.path)
-                if held and process_matches(held.get("pid"), held.get("start")):
-                    raise SystemExit(f"{self.path}: another driver (pid {held.get('pid')}) is running this generation's "
-                                     "self-play; wait for it, or remove the lock if it is gone")
+                # What its holder keeps up to date, where there is such a file: the ledger beside a ledger's lock,
+                # which its coordinator saves at every poll (another lock has no such file, and no silence to go by).
+                beside = self.path.with_name("ledger.json") if self.path.name == "ledger.lock" else None
+                heard = beside.stat().st_mtime if beside is not None and beside.exists() else None
+                if held and process_alive(held.get("pid"), held.get("start"), heard):
+                    raise SystemExit(f"{self.path}: {self.what.format(pid=held.get('pid'))}; wait for it, or remove "
+                                     "the lock if it is gone")
                 self.path.unlink(missing_ok=True)
         raise SystemExit(f"{self.path}: the lock could not be taken")
 
@@ -1128,6 +1143,47 @@ def process_matches(pid: int | None, start: int | None) -> bool:
     """Whether process `pid` is alive and the one that started at `start` (a reused id is another process)."""
     now = process_start(pid)
     return now is not None and (start is None or now == start)
+
+
+def process_unreadable(pid: int | None) -> bool:
+    """Whether process `pid` exists and may not be asked about (another user's, a protected one): `process_start` then
+    says None, which is not the same as no such process."""
+    if not pid:
+        return False
+    if os.name == "nt":
+        import ctypes  # noqa: PLC0415
+
+        k = ctypes.WinDLL("kernel32", use_last_error=True)
+        h = k.OpenProcess(0x1000, False, int(pid))
+        if h:
+            k.CloseHandle(h)
+            return False
+        return ctypes.get_last_error() == 5  # ERROR_ACCESS_DENIED
+    try:
+        os.kill(int(pid), 0)
+    except PermissionError:
+        return True
+    except (OSError, ValueError):
+        return False
+    # It exists and can be signalled: unreadable only where there is no /proc to read its start from.
+    return not Path("/proc").is_dir()
+
+
+# How long a process that keeps a file up to date may leave it untouched before it is taken for gone (a driver
+# writes its status every 15 s, a coordinator saves its ledger every poll).
+SILENT = 300.0
+
+
+def process_alive(pid: int | None, start: int | None, heard: float | None = None, now: float | None = None) -> bool:
+    """Whether process `pid` is alive and, where that can be told, the one that started at `start`: `process_matches`,
+    and a process that exists but may not be asked about counts as alive (calling it dead would start a second
+    driver beside it) - unless what it keeps up to date was last written (`heard`, a time) more than `SILENT` ago:
+    a pid nobody can ask about, whose owner has long gone quiet, is some other process that took the number."""
+    if process_matches(pid, start):
+        return True
+    if process_start(pid) is not None or not process_unreadable(pid):
+        return False
+    return heard is None or (time.time() if now is None else now) - heard <= SILENT
 
 
 def write_atomic(path: Path, text: str):

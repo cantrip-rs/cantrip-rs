@@ -76,9 +76,11 @@ KINDS = {
 
 
 def read_results(path: Path) -> list[dict]:
-    """BotLab's `--results`: a dict a game, in the file's order (the order the games finished)."""
+    """BotLab's `--results`: a dict a game, in the file's order (the order the games finished). A distributed duel's
+    host writes its own file with a `# {header}` line first (`duels.read_rows`): left out, so a host's file reads as
+    the merged one does."""
     with open(path, newline="", encoding="utf-8") as f:
-        return list(csv.DictReader(f, delimiter="\t"))
+        return list(csv.DictReader((line for line in f if not line.startswith("#")), delimiter="\t"))
 
 
 def pairs_of(rows: list[dict]) -> dict[int, dict]:

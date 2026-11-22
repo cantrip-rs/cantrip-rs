@@ -966,7 +966,10 @@ class DistributedTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             d = Path(tmp)
             ident = {"global": dict(model="m1", simulations=64), "hosts": {"w": dict(bundle="b1", precision="fp16")}}
-            ledger(d, 10, identity=ident).save()
+            made = ledger(d, 10, identity=ident)
+            # It has played: an attempt was started (a ledger that holds nothing binds nobody, and is replaced).
+            made.attempts["w-a1"] = dict(id="w-a1", host="w", state="running", granted=[[0, 2]], grant_ended=False)
+            made.save()
             with self.assertRaises(SystemExit) as e:
                 ledger(d, 10, identity={"global": dict(model="m1", simulations=128), "hosts": {}})
             self.assertIn("simulations", str(e.exception))
