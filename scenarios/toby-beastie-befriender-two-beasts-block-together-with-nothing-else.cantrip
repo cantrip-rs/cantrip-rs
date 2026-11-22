@@ -1,0 +1,53 @@
+# Two creatures that can't block alone may block together (CR 509.1b, Toby's ruling): each is the other's company, with no
+# third creature blocking. Two Tobys enter, so Bot1 has two Beast tokens (the legend rule puts one Toby into the graveyard,
+# its trigger still creating its Beast). Either Beast alone is refused, and the two of them blocking one Memnite each, with
+# Toby staying out of combat, is legal.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Jet
+Toby, Beastie Befriender
+Toby, Beastie Befriender
+Plains x14
+
+[Bot2 Deck]
+Memnite x2
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Toby, Beastie Befriender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Toby, Beastie Befriender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast Token#2.Power = 4
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite#1 > Bot1; Memnite#2 > Bot1)
+! Bot1.Block(Beast Token#1 > Bot2.Battlefield.Memnite#1)
+! Bot1.Block(Beast Token#2 > Bot2.Battlefield.Memnite#2)
+Bot1.Block(Beast Token#1 > Bot2.Battlefield.Memnite#1; Beast Token#2 > Bot2.Battlefield.Memnite#2)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Memnite; Memnite
+Bot1.Battlefield.Toby, Beastie Befriender.Tapped = false

@@ -1,0 +1,62 @@
+# Toby's "as long as you control four or more creature tokens, creature tokens you control have flying" (CR 604.1, 613.1f): the Beast alone
+# is one token and does not fly; with Dragon Fodder's two goblins there are three, still no flying; a second Dragon Fodder makes five, and every
+# token flies, Toby (not a token) does not; two Lightning Bolts on goblins leave four (still flying) and then three, and the flying is gone again.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Toby, Beastie Befriender
+Dragon Fodder
+Black Lotus
+Lightning Bolt
+Dragon Fodder
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Toby, Beastie Befriender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast Token.Keywords = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast Token.Keywords = (absent)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast Token.Keywords = Flying
+? Bot1.Battlefield.Goblin Token#1.Keywords = Flying
+? Bot1.Battlefield.Toby, Beastie Befriender.Keywords = (absent)
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Goblin Token#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast Token.Keywords = Flying
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Goblin Token#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast Token.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.Beast Token.Power = 4
+Bot1.Battlefield.Beast Token.Toughness = 4

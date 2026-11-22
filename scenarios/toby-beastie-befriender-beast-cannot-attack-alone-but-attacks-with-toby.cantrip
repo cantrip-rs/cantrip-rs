@@ -1,0 +1,33 @@
+# Toby's Beast token has "This token can't attack or block alone" (CR 508.1c): the token alone is not a legal declaration of
+# attackers, and with Toby attacking too it is. Toby is the 1/1 and the Beast the 4/4, so the declaration deals five damage.
+
+[Bot1 Deck]
+Black Lotus
+Toby, Beastie Befriender
+Plains x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Toby, Beastie Befriender.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast Token.Tapped = false
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+! Bot1.Attack(Beast Token > Bot2; Alone: yes)
+Bot1.Attack(Beast Token > Bot2; Toby, Beastie Befriender > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Beast Token.Tapped = true
+Bot2.Life = 15

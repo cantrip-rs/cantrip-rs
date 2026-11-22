@@ -1,0 +1,49 @@
+# The Beast token's "can't attack alone" (CR 508.1c) is about the declaration, not about Toby: Toby, struck by Lightning Bolt, dies, and the Beast
+# (the restriction is on the token itself, so it stays) is still refused alone (Alone: yes), yet is allowed in a declaration with Memnite,
+# another creature, attacking beside it: four and one damage.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Memnite
+Toby, Beastie Befriender
+Black Lotus
+Lightning Bolt
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Toby, Beastie Befriender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Toby, Beastie Befriender)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Toby, Beastie Befriender; Lightning Bolt; Black Lotus
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+! Bot1.Attack(Beast Token > Bot2; Alone: yes)
+Bot1.Attack(Beast Token > Bot2; Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 15

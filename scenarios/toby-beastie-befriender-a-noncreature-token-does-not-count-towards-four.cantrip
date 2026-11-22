@@ -1,0 +1,47 @@
+# Toby's "as long as you control four or more creature tokens, creature tokens you control have flying" (CR 604.1, 111.1) counts
+# creature tokens, not tokens: the Beast and Dragon Fodder's two goblins are three creature tokens, and Thraben Inspector's Clue makes
+# four tokens but not a fourth creature token, so nothing flies.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Toby, Beastie Befriender
+Dragon Fodder
+Thraben Inspector
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Toby, Beastie Befriender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Thraben Inspector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clue Token.Types = Artifact
+? Bot1.Battlefield.Beast Token.Keywords = (absent)
+? Bot1.Battlefield.Goblin Token#1.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.Beast Token.Keywords = (absent)
+Bot1.Battlefield.Goblin Token#2.Keywords = (absent)

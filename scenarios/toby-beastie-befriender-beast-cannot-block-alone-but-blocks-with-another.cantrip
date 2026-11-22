@@ -1,0 +1,33 @@
+# The Beast token can't block alone (CR 509.1b): blocking one of two attackers with it and nothing else is not a legal
+# declaration of blockers, and with another creature of its controller blocking too it is. Bot2's two Memnites attack; the
+# Beast alone is refused, and the Beast and Bot1's Memnite blocking one each is legal.
+
+[Bot1 Deck]
+Black Lotus
+Toby, Beastie Befriender
+Memnite
+Plains x17
+
+[Bot2 Deck]
+Memnite x2
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Toby, Beastie Befriender.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite#1 > Bot1; Memnite#2 > Bot1)
+! Bot1.Block(Beast Token > Bot2.Battlefield.Memnite#1)
+Bot1.Block(Beast Token > Bot2.Battlefield.Memnite#1; Bot1.Battlefield.Memnite > Bot2.Battlefield.Memnite#2)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Memnite; Memnite
+Bot1.Graveyard = Memnite; Black Lotus
