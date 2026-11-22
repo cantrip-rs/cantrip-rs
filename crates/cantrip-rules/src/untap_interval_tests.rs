@@ -939,6 +939,7 @@ fn mana_position(
         resolution: 0,
         cost_objects: vec![(4, CostPart::Permanents, outer)],
         nested: Vec::new(),
+        found: Vec::new(),
     };
     g.mana_activation_x = Some(37);
     g.mana_interval = Some(interval.clone());

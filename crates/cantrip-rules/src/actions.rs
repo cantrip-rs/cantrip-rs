@@ -6515,13 +6515,13 @@ fn combinations(types: &[usize], k: u32, made: [u32; 6], a: &Alternative, out: &
         [] => {}
         [last] => {
             let mut made = made;
-            made[*last] = made[*last].saturating_add(k);
+            made[*last] += k;
             out.push(Some((Alternative { fixed: made, k: 0, types: 0, combination: false, ..*a }, None)));
         }
         [first, rest @ ..] => {
             for n in 0..=k {
                 let mut made = made;
-                made[*first] = made[*first].saturating_add(n);
+                made[*first] += n;
                 combinations(rest, k - n, made, a, out);
             }
         }
@@ -14126,6 +14126,8 @@ fn activate_mana_as(
     if index >= PLAYER_MANA_ABILITY {
         return activate_player_mana(cx, player, source, index - PLAYER_MANA_ABILITY, held);
     }
+    // Where the history of this activation begins (`activation_triggers`): its interval's (`activate_mana`), which begins here.
+    let since = cx.g.mana_interval.as_ref().map_or(cx.g.log.len() as u32, |i| i.since);
     let ability = cx.chars(source).abilities().nth(index as usize).expect("ability");
     // Under way from now until it is activated (`Frame::mana_abilities`), as it is begun (CR 602.2a).
     if cx.s().agenda.get(cx.frame).is_some() {
@@ -14364,7 +14366,6 @@ fn activate_mana_as(
         };
         tapped_for_mana(cx, player, source, produced)?;
     }
-    let since = cx.g.mana_interval.as_ref().expect("a mana ability is activated within its own interval (`activate_mana`)").since;
     activation_triggers(cx, since)
 }
 
@@ -15113,21 +15114,42 @@ fn tapped_for_mana(cx: &mut Cx, player: PlayerId, source: ObjectId, produced: Ma
 /// The triggered mana abilities (CR 605.1b) that what a mana ability did, from the history since it began (`since`), triggers:
 /// its being tapped for mana, and anything else its activation or its resolution did that they wait for - a sacrifice that
 /// paid its cost ("whenever you sacrifice an artifact", Crime Novelist). They resolve at once, as part of the mana ability that
-/// triggered them (CR 605.4a): "whenever you tap a Forest for mana, add an additional {G}". They are looked for among the
-/// permanents that could have one (`mana_trigger_holders`), in the order the events happened. One that asks (a type of the mana
-/// that land produced) suspends the activation, to be run again with the answer. What a mana ability activated within this
-/// one triggered was looked at when it ended, and what a triggered one's own resolution does is passed over here as well
-/// (each is a `ManaInterval::nested` span): no triggered mana ability triggers another's.
+/// triggered them (CR 605.4a): "whenever you tap a Forest for mana, add an additional {G}", in the order the events happened.
+/// One that may look back on its event (CR 603.10a) was found as the event happened, as any triggered ability is, among the
+/// permanents as they were just before it (`settle::collect_batch`, `Cx::mana_trigger_found`) - Crime Novelist sees its own
+/// sacrifice - and is resolved here; the others are looked for here among the permanents that could have one now
+/// (`mana_trigger_holders`). One that asks (a type of the mana that land produced) suspends the activation, to be run again
+/// with the answer. What a mana ability activated within this one triggered was looked at when it ended, and what a triggered
+/// one's own resolution does is passed over here as well (each is a `ManaInterval::nested` span): no triggered mana ability
+/// triggers another's.
 fn activation_triggers(cx: &mut Cx, since: u32) -> R<()> {
     let holders = mana_trigger_holders(cx);
     // Only the delayed ones that are mana abilities, as `delayed_mana_abilities` asks: any other waits on the stack.
     let delayed = cx.s().delayed.iter().any(|d| delayed_mana_ability(cx, d));
-    if holders.is_empty() && !delayed {
+    let found = cx.g.mana_interval.as_ref().is_some_and(|i| !i.found.is_empty());
+    if holders.is_empty() && !delayed && !found {
         return Ok(());
     }
     let mut statics = crate::settle::TriggerStatics::new(None);
     let mut at = since as usize;
-    while at < cx.g.log.len() {
+    loop {
+        // Those found by the events before this one.
+        while let Some(trigger) = cx.take_mana_trigger_found(at as u32) {
+            let AbilityDef::Triggered(t) = cx.cards().ability(trigger.ability) else { continue };
+            let mut item = stack_item(StackKind::Triggered, trigger.source, trigger.ability, trigger.controller, &[]);
+            item.subject = trigger.subject;
+            item.data = trigger.data;
+            item.members = trigger.members;
+            item.event_amount = trigger.event_amount;
+            item.acquired = trigger.acquired;
+            if let Some(words) = trigger.words {
+                item.words = words;
+            }
+            resolve_mana_trigger(cx, &item, t, 0)?;
+        }
+        if at >= cx.g.log.len() {
+            break;
+        }
         let index = at as u32;
         at += 1;
         if cx.g.mana_interval.as_ref().is_some_and(|i| i.nested.iter().any(|&(from, to)| from <= index && index < to)) {
@@ -15146,7 +15168,8 @@ fn activation_triggers(cx: &mut Cx, since: u32) -> R<()> {
             let chars = cx.chars(id);
             for (nth, ability) in chars.abilities().collect::<Vec<_>>().into_iter().enumerate() {
                 let AbilityDef::Triggered(t) = cx.cards().ability(ability) else { continue };
-                if !t.mana_ability {
+                // One that may look back on the event was asked as it happened (`settle::consider`).
+                if !t.mana_ability || cx.cards().looks_back(ability, &event, true) {
                     continue;
                 }
                 // How it acquired the ability (CR 607.5): what the ability is linked by, and asked as.
@@ -15155,7 +15178,7 @@ fn activation_triggers(cx: &mut Cx, since: u32) -> R<()> {
                 if let Some(fired) = t.fires(&*cx, &Asker { instance: Some(AbilityInstance::triggered(ability)), source: id, controller, by, spell: false }, &event) {
                     // Static abilities that stop it triggering or make it trigger again apply to it as to any triggered ability
                     // (CR 603.2, 603.2d): each triggering resolves at once.
-                    let triggering = Triggering { source: id, controller, def: t, permanent: true, looks_back: cx.cards().looks_back(ability, &event, false) };
+                    let triggering = Triggering { source: id, controller, def: t, permanent: true, looks_back: false };
                     if statics.stop(cx, &event, &triggering) {
                         continue;
                     }
@@ -15165,18 +15188,7 @@ fn activation_triggers(cx: &mut Cx, since: u32) -> R<()> {
                     item.subject = fired.subject;
                     item.data = fired.data;
                     item.acquired = acquired;
-                    // A triggered mana ability's mana is produced by its own source (CR 106.3): Mana Flare's additional mana
-                    // is Mana Flare's, not the land's.
-                    let outer = cx.mana_source.replace(id);
-                    let mut added = Ok(());
-                    for _ in 0..=again.len() {
-                        added = cx.with_mana_interval(id, |cx| cx.acting_as(controller, |cx| crate::resolve::triggered_effect(cx, &item, t, false)));
-                        if added.is_err() {
-                            break;
-                        }
-                    }
-                    cx.mana_source = outer;
-                    added?;
+                    resolve_mana_trigger(cx, &item, t, again.len())?;
                 }
             }
         }
@@ -15187,6 +15199,21 @@ fn activation_triggers(cx: &mut Cx, since: u32) -> R<()> {
     Ok(())
 }
 
+/// A triggered mana ability resolves at once (CR 605.4a), and once more for each static ability that made it trigger again
+/// (`again`, CR 603.2d), as a mana ability of its own source, which produces its mana (CR 106.3): Mana Flare's additional
+/// mana is Mana Flare's, not the land's.
+fn resolve_mana_trigger(cx: &mut Cx, item: &StackItem, t: &'static TriggeredDef, again: usize) -> R<()> {
+    let outer = cx.mana_source.replace(item.object);
+    let mut added = Ok(());
+    for _ in 0..=again {
+        added = cx.with_mana_interval(item.object, |cx| cx.acting_as(item.controller, |cx| crate::resolve::triggered_effect(cx, item, t, false)));
+        if added.is_err() {
+            break;
+        }
+    }
+    cx.mana_source = outer;
+    Ok(added?)
+}
 /// Whether a delayed triggered ability is a triggered mana ability that an event resolves at once (CR 605.1b, 605.4a).
 fn delayed_mana_ability(cx: &Cx, d: &cantrip_state::Delayed) -> bool {
     d.when.is_event() && d.when != DelayedWhen::AnyOfObjectsLeaves && matches!(cx.cards().ability(d.ability), AbilityDef::Triggered(t) if t.mana_ability)

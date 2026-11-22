@@ -949,8 +949,11 @@ fn consider(
         let AbilityDef::Triggered(t) = cx.cards().ability(ability) else { continue };
         // A triggered mana ability whose event arises from a mana ability resolves as that ends (CR 605.1b, 605.4a,
         // `actions::activation_triggers`), regardless of which event mask its matcher uses; its event arising elsewhere (a
-        // Treasure's sacrifice is a mana ability's cost, a Clue's is not) it is no mana ability and waits on the stack.
-        if t.mana_ability && cx.within_mana_ability() { continue; }
+        // Treasure's sacrifice is a mana ability's cost, a Clue's is not) it is no mana ability and waits on the stack. One
+        // that may look back on the event (CR 603.10a: "whenever you sacrifice an artifact", Crime Novelist sacrificed itself)
+        // is found here, among the permanents as they were just before it, and kept for the mana ability's end
+        // (`Cx::mana_trigger_found`); `activation_triggers` asks the others of the board as the mana ability ends.
+        if t.mana_ability && cx.within_mana_ability() && !cx.cards().looks_back(ability, event, true) { continue; }
         let by = || {
             let given = *given.get_or_init(|| taken.is_some() || possible);
             if given { layers::given_link(cx.cards(), cx.s(), source, ability, acquired_at(nth)) } else { None }
@@ -2138,6 +2141,10 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                     members_of(&*cx, trigger.subject)
                 };
                 trigger.members = cx.st().members_push(&objects);
+            }
+            // A triggered mana ability an event of a mana ability triggered resolves as that ends (CR 605.4a): kept for it.
+            if def.mana_ability && cx.mana_trigger_found(trigger) {
+                continue;
             }
             cx.st().trigger_push(trigger);
         }

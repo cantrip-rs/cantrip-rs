@@ -1,0 +1,51 @@
+# Crime Novelist: "Whenever you sacrifice an artifact, put a +1/+1 counter on this creature and add {R}." Under Mycosynth
+# Lattice the Novelist is an artifact, and Ashnod's Altar sacrifices it for its own mana. "Whenever you sacrifice" looks back
+# in time (CR 603.10a), so the Novelist sees its own sacrifice; the sacrifice pays a mana ability's cost, so the trigger is a
+# triggered mana ability that resolves at once (CR 605.1b, 605.4a): {C}{C} from the Altar and {R} from the Novelist, with
+# nothing on the stack. The counter goes nowhere: the Novelist is gone (CR 400.7), so the {R} it produced is what shows it.
+# Turn 1: Mountain and Sol Ring pay for the Novelist. Turn 3: two Mountains, two Mox Rubies and Sol Ring pay for the Lattice.
+# Turn 5: Sol Ring and a Mox pay for the Altar, which then sacrifices the Novelist.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Ruby
+Sol Ring
+Crime Novelist
+Mycosynth Lattice
+Ashnod's Altar
+Mountain x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Crime Novelist.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Mycosynth Lattice.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ashnod's Altar.Cast
+[T5 Bot1.Main2]
+Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Crime Novelist)
+? Stack.Count = 0
+? Bot1.Mana = {R}{C}{C}
+? Bot1.ManaFrom = {C}{C} Ashnod's Altar; {R} Crime Novelist
+
+[Expect]
+Bot1.Graveyard = Crime Novelist
+Bot1.Mana = {R}{C}{C}

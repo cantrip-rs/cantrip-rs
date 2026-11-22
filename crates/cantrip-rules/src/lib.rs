@@ -436,6 +436,11 @@ struct ManaInterval {
     /// The spans of the history the mana abilities done within this one took up (CR 605.3b), whose events their own ends
     /// looked at for triggered mana abilities (`actions::activation_triggers`): not looked at again as this one ends.
     nested: Vec<(u32, u32)>,
+    /// The triggered mana abilities that events of this one which look back in time triggered (CR 603.10a: a sacrifice that
+    /// paid its cost), found as any triggered ability is (`settle::collect_batch`, the permanents as they were just before
+    /// each event), each with the history's head as it was found: they resolve as it ends (CR 605.4a,
+    /// `actions::activation_triggers`), never on the stack.
+    found: Vec<(u32, cantrip_state::PendingTrigger)>,
 }
 
 /// When the state triggers judge a change that records no event (CR 603.8: a state trigger "triggers as soon as the game
@@ -2002,7 +2007,7 @@ impl<'a> Cx<'a> {
     /// activation even if this one suspends or cannot pay its costs (CR 605.3, 107.3k, 611.2b).
     pub(crate) fn with_mana_interval<T>(&mut self, source: ObjectId, f: impl FnOnce(&mut Self) -> T) -> T {
         let head = self.g.log.len() as u32;
-        let outer_interval = self.g.mana_interval.replace(ManaInterval { source, since: head, tapped_since: head, resolution: head, cost_objects: Vec::new(), nested: Vec::new() });
+        let outer_interval = self.g.mana_interval.replace(ManaInterval { source, since: head, tapped_since: head, resolution: head, cost_objects: Vec::new(), nested: Vec::new(), found: Vec::new() });
         let outer_x = self.g.mana_activation_x.take();
         let outer_rider = std::mem::take(&mut self.g.mana_rider);
         let done = f(self);
@@ -2022,6 +2027,22 @@ impl<'a> Cx<'a> {
     /// triggered mana abilities it triggers (CR 605.1b) resolve as it ends rather than wait on the stack.
     pub(crate) fn within_mana_ability(&self) -> bool {
         self.g.mana_interval.is_some()
+    }
+
+    /// A triggered mana ability that an event of the mana ability under way triggered (CR 605.1b), kept to resolve as that
+    /// ends (CR 605.4a, `ManaInterval::found`). False, and kept nowhere, when no mana ability is under way.
+    pub(crate) fn mana_trigger_found(&mut self, trigger: cantrip_state::PendingTrigger) -> bool {
+        let head = self.g.log.len() as u32;
+        let Some(interval) = &mut self.g.mana_interval else { return false };
+        interval.found.push((head, trigger));
+        true
+    }
+
+    /// The first of the triggered mana abilities kept for the mana ability under way (`mana_trigger_found`) that was found by
+    /// the history's position `at`, taken out to resolve.
+    pub(crate) fn take_mana_trigger_found(&mut self, at: u32) -> Option<cantrip_state::PendingTrigger> {
+        let interval = self.g.mana_interval.as_mut()?;
+        if interval.found.first().is_some_and(|&(head, _)| head <= at) { Some(interval.found.remove(0).1) } else { None }
     }
 
     /// CR 107.4h: current characteristics at production, including LKI if the source has left (CR 608.2h).

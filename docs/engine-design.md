@@ -1066,7 +1066,11 @@ intervening "if" again as it resolves (CR 603.4), and counts against "triggers o
 once-each-turn ability under a doubler still triggers once. `Triggering::permanent` says the ability is a permanent's: a
 delayed triggered ability is no ability of the object (CR 603.2d, 603.7) and is never asked about, and an ability of a
 card in another zone or of an emblem (CR 114.4) is not "of a permanent". Triggered mana abilities (CR 605.1b) are asked too, each
-triggering resolving at once.
+triggering resolving at once. One that an event of a mana ability under way triggers resolves as that mana ability ends
+(CR 605.4a, `actions::activation_triggers`): where it may look back on the event (CR 603.10a), `collect_batch` finds it
+among the permanents as they were just before the event, as it finds any look-back ability, and keeps it for that end
+(`ManaInterval::found`) instead of the stack - Crime Novelist, an artifact under Mycosynth Lattice, sees its own
+sacrifice to Ashnod's Altar; the others are asked of the board as the mana ability ends.
 
 A resolved effect that makes a chosen permanent's abilities trigger again (Lwaxana Troi, Charming Guest) is read from
 the active continuous effects, independently of its source's abilities (CR 611.2a). Each effect adds one triggering;
