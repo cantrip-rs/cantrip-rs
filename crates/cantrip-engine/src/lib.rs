@@ -34,35 +34,10 @@ pub fn greedy_distribution(cards: &[ObjectId], destinations: &[Destination]) -> 
 }
 pub use cantrip_state::{Frame, FrameKind, Mark, Rng};
 
-static TABLE: OnceLock<CardTable> = OnceLock::new();
-static EXTRA: OnceLock<&'static [&'static CardDef]> = OnceLock::new();
-
-/// Every card, sorted by name: the engine's own, and the definitions a fork added before the table was first asked for
-/// (`add_cards`).
+/// Every card, sorted by name.
 pub fn cards() -> &'static CardTable {
-    TABLE.get_or_init(|| CardTable::new(cantrip_cards::all().into_iter().chain(EXTRA.get().copied().unwrap_or(&[]).iter().copied())))
-}
-
-/// Adds definitions of a fork's own to the engine's - a game variant's emblems, which a seat begins the game with
-/// (`SeatVariant::emblems`) - once, before anything asks for the card table: what is dealt, served or replayed afterwards
-/// knows them as it knows any card. Each is named apart from every definition the engine has, and from each other. Refused
-/// once the table is built, or a second time.
-pub fn add_cards(extra: &'static [&'static CardDef]) -> Result<(), String> {
-    if TABLE.get().is_some() {
-        return Err("the card table is already built: definitions are added before anything asks for it".into());
-    }
-    let mut names: std::collections::HashSet<&str> = cantrip_cards::all().iter().map(|card| card.name).collect();
-    if let Some(taken) = extra.iter().find(|card| !names.insert(card.name)) {
-        return Err(format!("\"{}\" names another definition already", taken.name));
-    }
-    EXTRA.set(extra).map_err(|_| String::from("definitions were added already"))?;
-    // Built by another thread in between, the table would be without them: say so rather than leave them out unnoticed.
-    if let (Some(table), Some(first)) = (TABLE.get(), extra.first())
-        && table.find(first.name).is_none()
-    {
-        return Err("the card table was built while the definitions were being added".into());
-    }
-    Ok(())
+    static TABLE: OnceLock<CardTable> = OnceLock::new();
+    TABLE.get_or_init(|| CardTable::new(cantrip_cards::all()))
 }
 
 /// The card a name names, ignoring case.
