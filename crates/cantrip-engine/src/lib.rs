@@ -9,7 +9,7 @@ pub mod visibility;
 pub mod text;
 
 pub use cantrip_api::*;
-pub use cantrip_rules::{own_special_actions, own_special_action_cost, OwnSpecialAction, Game, Rejected, Setup, activation_alternative, activation_costs, counted_mulligans, eligible_companions, revealed_companion, ApplyContract, apply_contract_check, alternative_cast_total, cast_costs, cast_face_of, cast_total, exile_cast_texts, granted_cast_cost, life_for_cast, chars, check_answer, attack_targets, describe, distribution_problem, first_choices, selection_verdict, live, name_problem, nameable, default_name, summoning_sick, granted_cast_total, special_action_costs, sacrifices_for_reduction, most_affordable_x, replaced_mana_yields, options_with_mana_to_spare, payment_mana_options_with_mana_to_spare};
+pub use cantrip_rules::{own_special_actions, own_special_action_cost, OwnSpecialAction, Game, Rejected, Setup, SeatVariant, activation_alternative, activation_costs, counted_mulligans, eligible_companions, revealed_companion, ApplyContract, apply_contract_check, alternative_cast_total, cast_costs, cast_face_of, cast_total, exile_cast_texts, granted_cast_cost, life_for_cast, chars, check_answer, attack_targets, describe, distribution_problem, first_choices, selection_verdict, live, name_problem, nameable, default_name, summoning_sick, granted_cast_total, special_action_costs, sacrifices_for_reduction, most_affordable_x, replaced_mana_yields, options_with_mana_to_spare, payment_mana_options_with_mana_to_spare};
 pub use cantrip_rules::tree;
 
 /// The simplest legal distribution of looked-at cards (the C# `CardDistribution.Greedy`): each destination's
@@ -61,13 +61,34 @@ pub struct Outside<'a> {
     pub minimum_deck_size: u32,
     pub commander: bool,
     pub commanders: &'a [Vec<String>],
+    /// What a variant sets of each seat's start (`Setup::variant`), by seat.
+    pub variant: &'a [SeatVariantNames],
 }
 
 /// Nothing outside the game, in a Freeform game: no minimum deck size, as no format names one.
 impl Default for Outside<'_> {
     fn default() -> Self {
-        Outside { sideboards: &[], companions: &[], basic_lands_outside: &[], minimum_deck_size: 0, commander: false, commanders: &[] }
+        Outside { sideboards: &[], companions: &[], basic_lands_outside: &[], minimum_deck_size: 0, commander: false, commanders: &[], variant: &[] }
     }
+}
+
+/// What a variant sets of one seat's start, its emblems by name (`SeatVariant`).
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct SeatVariantNames {
+    pub starting_life: Option<i32>,
+    pub starting_hand_size: Option<u8>,
+    pub maximum_hand_size: Option<u32>,
+    pub emblems: Vec<String>,
+}
+
+/// The emblem a name names in `table`, for a seat to begin the game with (`SeatVariant::emblems`): a definition with no card
+/// type, as an emblem's is (CR 114.5).
+pub fn emblem_named(table: &CardTable, name: &str) -> Result<CardId, String> {
+    let id = table.find(name).ok_or_else(|| format!("no emblem is named \"{name}\""))?;
+    if table.get(id).types != TypeSet::NONE {
+        return Err(format!("\"{name}\" is a card, not an emblem"));
+    }
+    Ok(id)
 }
 
 /// A game from decklists of names, top of the library first, and what each seat has outside the game (`Outside`).
@@ -106,6 +127,21 @@ pub fn deal_on(
         seed,
         shuffle,
         opening_chooser,
+        variant: outside
+            .variant
+            .iter()
+            .map(|v| -> Result<SeatVariant, String> {
+                if v.starting_hand_size.is_some_and(|n| n > SeatVariant::MOST_STARTING_HAND_SIZE) {
+                    return Err(format!("a starting hand size above {} is not one a game can start with", SeatVariant::MOST_STARTING_HAND_SIZE));
+                }
+                Ok(SeatVariant {
+                    starting_life: v.starting_life,
+                    starting_hand_size: v.starting_hand_size,
+                    maximum_hand_size: v.maximum_hand_size,
+                    emblems: v.emblems.iter().map(|name| emblem_named(table, name)).collect::<Result<_, _>>()?,
+                })
+            })
+            .collect::<Result<_, _>>()?,
     };
     let mut game = Game::new(table, &setup);
     game.run();

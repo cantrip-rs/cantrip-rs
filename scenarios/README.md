@@ -194,6 +194,21 @@ A scenario that needs a player near death says so instead of playing the life aw
 total (not the starting life of the format, so "half your starting life total" is unchanged), one player per line, `Bot1: 1`.
 A player it does not name starts at 20.
 
+## A variant's start: `[Variant]`
+
+```
+[Variant]
+Bot1: life 30; hand 5; maximum 9; emblem Chandra, Awakened Inferno emblem
+Bot2: hand 9
+```
+
+What a variant sets of a seat's start, the way Vanguard does (CR 902.3-902.5), one player per line, each part optional and
+separated by `;`: `life` is its starting life total, which "half your starting life total" reads (CR 103.4); `hand` its
+starting hand size, the cards it draws for its opening hand and for each mulligan (CR 103.5a); `maximum` its maximum hand
+size before any effect sets one (CR 402.2, 902.5b; Reliquary Tower's "no maximum" still replaces it); and each `emblem`
+an emblem it begins the game with in its command zone, by name (CR 114.4). A player it does not name starts as the format
+says. Unlike `[Life]`, which sets a life total after the deal, this is the start itself.
+
 ## The event limit: `[Event Limit]`
 
 A game that reaches the most events the engine records (`MAX_GAME_EVENTS`) is a draw (`docs/rules-exceptions.md`, RX-1),
@@ -202,7 +217,7 @@ which only a loop played for a very long time reaches. A scenario of such a loop
 
 ## Starting conditions and the board
 
-A scenario may set its starting conditions - life totals (`[Life]`) and dice (`[Dice]`) - but every counter and every
+A scenario may set its starting conditions - life totals (`[Life]`), a variant's start (`[Variant]`) and dice (`[Dice]`) - but every counter and every
 piece of board state comes from game actions: a player near ten poison counters gets them from infect or toxic damage or
 a card that gives them, played in the script, never from a section that writes them.
 

@@ -574,6 +574,30 @@ pub struct Setup {
     pub commander: bool,
     /// Each seat's designated commander cards, separate from its library deck.
     pub commanders: Vec<Vec<CardId>>,
+    /// What a variant sets of each seat's start (CR 103.4, 103.5, 402.2, 902.3): its starting life, its hand sizes and
+    /// the emblems it begins the game with. A seat with no entry starts as the format says.
+    pub variant: Vec<SeatVariant>,
+}
+
+/// What a variant sets of one seat's start, each where it differs from the format's (CR 103.4, 103.5a, 902.3-902.5).
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct SeatVariant {
+    /// The seat's starting life total (CR 103.4): otherwise 20, or 40 in Commander (CR 103.4c).
+    pub starting_life: Option<i32>,
+    /// The seat's starting hand size, the cards it draws for its opening hand and each mulligan (CR 103.5, 103.5a):
+    /// otherwise seven. At most `Player::MOST_STARTING_HAND_SIZE`.
+    pub starting_hand_size: Option<u8>,
+    /// The seat's maximum hand size before any effect sets it (CR 402.2, 902.5b): otherwise seven.
+    pub maximum_hand_size: Option<u32>,
+    /// The emblems the seat begins the game with in the command zone, as a Vanguard player begins with their vanguard
+    /// card there (CR 902.3): each a definition with no card type, whose abilities function from the command zone
+    /// (CR 114.4), owned and controlled by the seat (CR 902.6). They are there before the starting player is chosen.
+    pub emblems: Vec<CardId>,
+}
+
+impl SeatVariant {
+    /// The largest starting hand size a variant may set (`Player::MOST_STARTING_HAND_SIZE`).
+    pub const MOST_STARTING_HAND_SIZE: u8 = cantrip_state::Player::MOST_STARTING_HAND_SIZE;
 }
 
 /// A deal with nothing in it, for building on: a Freeform game, with no minimum deck size, every other field empty.
@@ -590,6 +614,7 @@ impl Default for Setup {
             opening_chooser: None,
             commander: false,
             commanders: Vec::new(),
+            variant: Vec::new(),
         }
     }
 }
@@ -634,6 +659,22 @@ impl Game {
                     player.starting_life = 40;
                 });
             }
+        }
+        // What a variant sets of a seat's start replaces what the format says (CR 103.4, 103.5a, 902.4, 902.5).
+        for (seat, variant) in setup.variant.iter().enumerate().take(players) {
+            state.update_player(PlayerId(seat as u8), |player| {
+                if let Some(life) = variant.starting_life {
+                    player.life = life;
+                    player.starting_life = life;
+                }
+                if let Some(size) = variant.starting_hand_size {
+                    debug_assert!(size <= cantrip_state::Player::MOST_STARTING_HAND_SIZE, "a starting hand size of {size}: the deal should have refused it");
+                    player.starting_hand_size = size;
+                }
+                if let Some(size) = variant.maximum_hand_size {
+                    player.maximum_hand_size = size;
+                }
+            });
         }
         state.outside_supply = setup.basic_lands_outside.clone();
         state.minimum_deck_size = setup.minimum_deck_size;
@@ -686,13 +727,25 @@ impl Game {
                 game.state.update_player(p, |pl| pl.companion_to_reveal = Some(id));
             }
         }
+        // CR 902.3: a variant's emblems are in the command zone before the game begins, each seat's in turn, in the order
+        // given; their abilities function from there (CR 114.4).
+        for (seat, variant) in setup.variant.iter().enumerate().take(players) {
+            if variant.emblems.is_empty() {
+                continue;
+            }
+            let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
+            for &emblem in &variant.emblems {
+                ops::begin_with_emblem(&mut cx, emblem, PlayerId(seat as u8));
+            }
+        }
         if real {
             game.state.frame_push(Frame::new(FrameKind::Opening));
         } else {
-            // A scenario's deal: seven each, in turn order, kept.
+            // A scenario's deal: each seat's starting hand size, seven unless a variant says otherwise, in turn order, kept.
             for p in game.state.apnap().collect::<Vec<_>>() {
+                let size = game.state.player(p).starting_hand_size;
                 let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
-                for _ in 0..7 {
+                for _ in 0..size {
                     ops::draw(&mut cx, p);
                 }
                 game.state.update_player(p, |pl| pl.kept = true);

@@ -24,7 +24,23 @@ public sealed record RulesSeat(string Name, IReadOnlyList<string> Deck, IReadOnl
     /// recording host (<c>--ai-record</c>) can label the seat's archetype. Null sends nothing.
     /// </summary>
     public string? DeckName { get; init; }
+
+    /// <summary>
+    /// What a variant sets of this seat's start, where it differs from the format's: its starting life, its hand sizes and
+    /// the emblems it begins the game with (CR 103.4, 103.5a, 402.2, 902.3). Null starts the seat as the format says.
+    /// </summary>
+    public SeatVariant? Variant { get; init; }
 }
+
+/// <summary>
+/// What a variant sets of one seat's start (the host's <c>StartingLife</c>, <c>StartingHandSize</c>, <c>MaximumHandSize</c>
+/// and <c>Emblems</c>; <c>docs/host-protocol.md</c>): each null or empty where the format's stands.
+/// </summary>
+/// <param name="StartingLife">The seat's starting life total (CR 103.4).</param>
+/// <param name="StartingHandSize">The cards it draws for its opening hand and each mulligan (CR 103.5a).</param>
+/// <param name="MaximumHandSize">Its maximum hand size before any effect sets one (CR 402.2, 902.5b).</param>
+/// <param name="Emblems">The emblems it begins the game with in the command zone, by name (CR 902.3, 114.4).</param>
+public sealed record SeatVariant(int? StartingLife = null, int? StartingHandSize = null, int? MaximumHandSize = null, IReadOnlyList<string>? Emblems = null);
 
 /// <summary>Starting conditions beyond the seed (CR 103).</summary>
 public sealed class RulesGameOptions

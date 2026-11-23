@@ -220,6 +220,7 @@ fn a_mirror_is_the_tables_game_answer_for_answer() {
         shuffle: true,
         first_player: Some(1),
         chooser: None,
+        variant: Vec::new(),
     })
     .map_err(|r| r.detail)
     .unwrap();
@@ -329,6 +330,7 @@ fn a_searched_answer_carries_its_search_and_the_table_takes_it() {
         shuffle: true,
         first_player: Some(1),
         chooser: None,
+        variant: Vec::new(),
     })
     .map_err(|r| r.detail)
     .unwrap();

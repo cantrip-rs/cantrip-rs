@@ -67,6 +67,23 @@ public sealed class NativeRulesHostTests
     }
 
     [Fact]
+    public void A_seats_variant_is_told_to_the_host_and_a_seat_without_one_says_nothing_of_it()
+    {
+        var host = new ScriptedHost();
+        RulesSeat[] seats =
+        [
+            new("Alice", ["Island"]) { Variant = new SeatVariant(StartingLife: 30, StartingHandSize: 5, Emblems: ["Chandra, Awakened Inferno emblem"]) },
+            new("Bob", ["Swamp"]) { Variant = new SeatVariant(MaximumHandSize: 9) },
+            new("Carol", ["Forest"]),
+        ];
+        NativeRulesHost.NewGame(host, seats, 5, new RulesGameOptions { MinimumDeckSize = 60 });
+
+        Assert.Equal(
+            """{"Cmd":"NewGame","Seats":[{"Name":"Alice","Deck":["Island"],"Sideboard":[],"Companion":null,"Commanders":[],"StartingLife":30,"StartingHandSize":5,"MaximumHandSize":null,"Emblems":["Chandra, Awakened Inferno emblem"]},{"Name":"Bob","Deck":["Swamp"],"Sideboard":[],"Companion":null,"Commanders":[],"StartingLife":null,"StartingHandSize":null,"MaximumHandSize":9,"Emblems":[]},{"Name":"Carol","Deck":["Forest"],"Sideboard":[],"Companion":null,"Commanders":[]}],"Seed":5,"Shuffle":true,"FirstPlayer":null,"Chooser":null,"BasicLandsOutside":[],"MinimumDeckSize":60,"Commander":false}""",
+            Assert.Single(host.Requests));
+    }
+
+    [Fact]
     public void A_commander_deal_sends_the_explicit_format_flag_and_keeps_commanders_out_of_the_deck()
     {
         var host = new ScriptedHost();

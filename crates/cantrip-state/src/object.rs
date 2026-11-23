@@ -2833,6 +2833,12 @@ pub struct Player {
     pub life: i32,
     /// The life total the player began the game with (CR 103.4): "half your starting life total".
     pub starting_life: i32,
+    /// How many cards the player draws for their opening hand and for each mulligan (CR 103.5): normally seven; a variant
+    /// may set it otherwise (CR 103.5a, 902.5), up to `Player::MOST_STARTING_HAND_SIZE`.
+    pub starting_hand_size: u8,
+    /// The player's maximum hand size before any effect sets it (CR 402.2): normally seven; a variant may set it otherwise
+    /// (CR 902.5b). What an effect says replaces it (`actions::maximum_hand_size`).
+    pub maximum_hand_size: u32,
     pub pool: ManaPool,
     /// How much of each kind in the pool lasts past the end of the step (`ManaLasts`; CR 106.4, 500.5a): firebending's mana
     /// until end of combat, Raphael, Ninja Destroyer's until end of turn. Spent last, since the ordinary mana of a kind is
@@ -3646,9 +3652,26 @@ impl ManaRestriction {
 }
 
 impl Player {
-    /// A player as the game begins (CR 103.4): `life` life, and nothing else.
+    /// The starting hand size a game has unless a variant says otherwise (CR 103.5).
+    pub const STARTING_HAND_SIZE: u8 = 7;
+
+    /// The maximum hand size a game has unless a variant or an effect says otherwise (CR 402.2).
+    pub const MAXIMUM_HAND_SIZE: u32 = 7;
+
+    /// The largest starting hand size a variant may set: a player may mulligan until their opening hand would be zero
+    /// cards (CR 103.5), and in a multiplayer game one more besides (CR 103.5c), which `mulligans` must still count. Vanguard's
+    /// hand modifiers are a few cards either way (CR 902.5); a deal asking for more is refused (`cantrip_host::session`).
+    pub const MOST_STARTING_HAND_SIZE: u8 = u8::MAX - 1;
+
+    /// A player as the game begins (CR 103.4, 103.5, 402.2): `life` life, seven-card hands, and nothing else.
     pub fn starting(life: i32) -> Player {
-        Player { life, starting_life: life, ..Player::default() }
+        Player {
+            life,
+            starting_life: life,
+            starting_hand_size: Player::STARTING_HAND_SIZE,
+            maximum_hand_size: Player::MAXIMUM_HAND_SIZE,
+            ..Player::default()
+        }
     }
 
     /// Poison counters (CR 122.1f).

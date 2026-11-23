@@ -1,0 +1,29 @@
+# A player draws their starting hand size for an opening hand and for each mulligan, and may mulligan until their opening
+# hand would be zero cards (CR 103.5, 103.5a). Bot1's variant starting hand is two: it mulligans twice and keeps, putting
+# both cards on the bottom of its library. Bot2's starting hand of nine is drawn in full and kept. That Bot1 is not asked
+# a third time is counted in crates/cantrip-engine/tests/variant_start.rs: a question not asked is not a line here.
+
+[Bot1 Deck]
+Forest x40
+
+[Bot2 Deck]
+Island x40
+
+[Variant]
+Bot1: hand 2
+Bot2: hand 9
+
+[Opening]
+
+[Actions]
+Bot1.PlayFirst
+Bot1.Mulligan
+Bot2.Keep
+Bot1.Mulligan
+[T1 Bot1.Main1]
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot1.Library.Count = 40
+Bot2.Hand.Count = 9
+Bot2.Library.Count = 31

@@ -2713,6 +2713,12 @@ pub fn create_emblem(cx: &mut Cx, def: CardId, player: PlayerId, subtype: Option
     emblem_with_words(cx, def, player, words, subtype, maker)
 }
 
+/// Puts an emblem a variant gives a player into the command zone before the game begins, as a Vanguard player's vanguard
+/// card begins there (CR 902.3): no effect makes it, so its text is its own, as printed (`Setup::variant`).
+pub(crate) fn begin_with_emblem(cx: &mut Cx, def: CardId, player: PlayerId) -> ObjectId {
+    emblem_with_words(cx, def, player, Words::NONE, None, None)
+}
+
 /// The emblem `entering` gets its controller as it arrives as `permanent` (`Entering::emblem`, CR 614.12, 114.2): the creating
 /// text is the permanent's own - the text it entered with, acquired as its own (CR 607.5, 707.9a), and its words - and
 /// `permanent`, the new object it is by now, is the object it names (CR 400.7).

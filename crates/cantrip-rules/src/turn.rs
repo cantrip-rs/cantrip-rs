@@ -486,8 +486,9 @@ pub fn opening(cx: &mut Cx) -> R<Flow> {
     let order: Vec<PlayerId> = cx.s().apnap().collect();
     reveal_companions(cx, &order);
     if !dealt {
+        // CR 103.5: each player draws their starting hand size, seven unless a variant says otherwise.
         for &p in &order {
-            for _ in 0..7 {
+            for _ in 0..cx.s().player(p).starting_hand_size {
                 ops::draw(cx, p);
             }
         }
@@ -504,9 +505,10 @@ pub fn opening(cx: &mut Cx) -> R<Flow> {
         let mut redraw = Vec::new();
         for p in undecided {
             let mulligans = cx.s().player(p).mulligans;
-            // Seven counted mulligans and the player keeps (`docs/rules-exceptions.md` RX-6), putting all seven on the
-            // bottom as any keep does.
-            let answer = if counted_mulligans(cx.s(), mulligans) >= 7 {
+            // As many counted mulligans as the starting hand size and the player keeps: another would leave an opening
+            // hand of zero cards (CR 103.5; `docs/rules-exceptions.md` RX-6), and they put the whole hand on the bottom as
+            // any keep does.
+            let answer = if counted_mulligans(cx.s(), mulligans) >= cx.s().player(p).starting_hand_size {
                 Some(Answer::No)
             } else {
                 cx.ask_rule(p, RequestKind::Mulligan { mulligans })?
@@ -541,7 +543,7 @@ pub fn opening(cx: &mut Cx) -> R<Flow> {
                 ops::move_to(cx, id, Zone::library(p));
             }
             shuffle_library(cx, p);
-            for _ in 0..7 {
+            for _ in 0..cx.s().player(p).starting_hand_size {
                 ops::draw(cx, p);
             }
             cx.st().update_player(p, |pl| pl.mulligans += 1);

@@ -8808,7 +8808,8 @@ pub fn maximum_hand_size(cx: &Cx, player: PlayerId) -> Option<u32> {
             says(play_rule_timestamp(cx, source, ability), maximum);
         });
     }
-    newest.map_or(Some(7), |(_, maximum)| maximum)
+    // With nothing saying otherwise, the player's own: seven, or what a variant set (CR 402.2, 902.5b).
+    newest.map_or(Some(cx.s().player(player).maximum_hand_size), |(_, maximum)| maximum)
 }
 
 /// Whether `player` may look at the top card of their library any time (CR 401.2): a permanent they control says so (Bolas's

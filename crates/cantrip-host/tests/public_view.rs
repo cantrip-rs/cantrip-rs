@@ -385,6 +385,7 @@ fn a_whole_game_projects_soundly_for_the_public() {
         shuffle: true,
         first_player: Some(1),
         chooser: None,
+        variant: Vec::new(),
     };
     let mut session = Session::new(deal).map_err(|r| r.detail).unwrap();
     session.show_public();

@@ -150,6 +150,43 @@ pub struct Deal {
     pub shuffle: bool,
     pub first_player: Option<i32>,
     pub chooser: Option<i32>,
+    /// What a variant sets of each seat's start (`Setup::variant`), by seat; a seat past the end starts as the format says.
+    pub variant: Vec<SeatVariantSpec>,
+}
+
+/// What a variant sets of one seat's start, as the server names it (`SeatVariant`): checked as the game is dealt.
+#[derive(Clone, Debug, Default)]
+pub struct SeatVariantSpec {
+    pub starting_life: Option<i32>,
+    pub starting_hand_size: Option<i32>,
+    pub maximum_hand_size: Option<i32>,
+    /// The emblems the seat begins the game with in the command zone, by name: each a definition the engine has with no
+    /// card type (CR 902.3, 114.4).
+    pub emblems: Vec<String>,
+}
+
+/// A seat's variant as the rules take it, or why the deal is refused.
+fn seat_variant(owner: &str, spec: &SeatVariantSpec) -> Result<SeatVariant, Rejection> {
+    let cards = cards();
+    let size = |what: &str, n: Option<i32>, most: u32| -> Result<Option<u32>, Rejection> {
+        match n {
+            None => Ok(None),
+            Some(n) => u32::try_from(n)
+                .ok()
+                .filter(|&n| n <= most)
+                .map(Some)
+                .ok_or_else(|| Rejection::new("InvalidSetup", format!("{owner}'s {what} of {n} is not one a game can start with (0 to {most})"))),
+        }
+    };
+    let starting_hand_size = size("starting hand size", spec.starting_hand_size, u32::from(SeatVariant::MOST_STARTING_HAND_SIZE))?
+        .map(|n| u8::try_from(n).expect("checked against the most a starting hand may be"));
+    let maximum_hand_size = size("maximum hand size", spec.maximum_hand_size, u32::MAX)?;
+    let emblems = spec
+        .emblems
+        .iter()
+        .map(|name| emblem_named(cards, name).map_err(|why| Rejection::new("InvalidSetup", format!("{owner}'s emblem: {why}"))))
+        .collect::<Result<_, _>>()?;
+    Ok(SeatVariant { starting_life: spec.starting_life, starting_hand_size, maximum_hand_size, emblems })
 }
 
 impl Session {
@@ -219,6 +256,11 @@ impl Session {
                     Rejection::new("InvalidSetup", format!("{owner}'s commander {name} is not a card the engine has")))
             }).collect::<Result<Vec<_>, _>>()?);
         }
+        let mut variant = Vec::new();
+        for (at, spec) in deal.variant.iter().enumerate() {
+            let owner = deal.seats.get(at).map_or("seat", |s| s.0.as_str());
+            variant.push(seat_variant(owner, spec)?);
+        }
         let setup = Setup {
             decks,
             sideboards,
@@ -230,6 +272,7 @@ impl Session {
             seed: deal.seed,
             shuffle: deal.shuffle,
             opening_chooser,
+            variant,
         };
         let mut game = Game::new(cards, &setup);
         prepare(&mut game);
@@ -721,7 +764,8 @@ impl Session {
                 self.told.push(Proto::Mulligan { player: request.player, count: i32::from(*mulligans) + 1 });
             }
             (RequestKind::Mulligan { mulligans }, _) => {
-                self.told.push(Proto::Kept { player: request.player, cards: 7 - i32::from(counted_mulligans(&self.game.state, *mulligans)) });
+                let size = i32::from(self.game.state.player(request.player).starting_hand_size);
+                self.told.push(Proto::Kept { player: request.player, cards: size - i32::from(counted_mulligans(&self.game.state, *mulligans)) });
             }
             _ => {}
         }
@@ -1004,7 +1048,7 @@ mod tests {
 
     fn deal(first: &[&str], filler: &str, count: usize) -> Deal {
         let deck = |top: &[&str]| top.iter().map(|c| c.to_string()).chain(std::iter::repeat_n(filler.to_string(), count)).collect::<Vec<_>>();
-        Deal { seats: vec![("North".into(), deck(first), Vec::new()), ("South".into(), deck(&[]), Vec::new())], basic_lands_outside: Vec::new(), companions: Vec::new(), commanders: Vec::new(), commander: false, minimum_deck_size: 60, seed: 1, shuffle: false, first_player: Some(1), chooser: None }
+        Deal { seats: vec![("North".into(), deck(first), Vec::new()), ("South".into(), deck(&[]), Vec::new())], basic_lands_outside: Vec::new(), companions: Vec::new(), commanders: Vec::new(), commander: false, minimum_deck_size: 60, seed: 1, shuffle: false, first_player: Some(1), chooser: None, variant: Vec::new() }
     }
 
     /// A game whose South is controlled by North during South's next turn (CR 723.1): the effect put in place before the

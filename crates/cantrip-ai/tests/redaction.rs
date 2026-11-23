@@ -137,6 +137,7 @@ fn deal(case: &Case, variant: Option<(PlayerId, InfoMode, u64)>) -> Game {
         seed: if variant.is_some() { 2 } else { 1 },
         shuffle: false,
         opening_chooser: case.chooser,
+        variant: Vec::new(),
     };
     let mut game = Game::new(cards(), &setup);
     if variant.is_some() {

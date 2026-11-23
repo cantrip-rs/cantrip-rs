@@ -83,9 +83,7 @@ public sealed class NativeRulesHost : IRulesHost
         }
 
         var host = new NativeRulesHost(transport, seats, history ?? []);
-        List<object> named = [.. seats.Select(seat => seat.DeckName is { } deckName
-            ? (object)new { seat.Name, seat.Deck, seat.Sideboard, seat.Companion, seat.Commanders, DeckName = deckName }
-            : new { seat.Name, seat.Deck, seat.Sideboard, seat.Companion, seat.Commanders })];
+        List<object> named = [.. seats.Select(SeatRequest)];
         object deal = options.Scenario is { } scenario
             ? new
             {
@@ -115,6 +113,35 @@ public sealed class NativeRulesHost : IRulesHost
         }
 
         return host;
+    }
+
+    /// <summary>
+    /// A seat as <c>NewGame</c> names it: what it always says, and its deck's name and its variant only where it has them.
+    /// </summary>
+    private static Dictionary<string, object?> SeatRequest(RulesSeat seat)
+    {
+        Dictionary<string, object?> request = new(StringComparer.Ordinal)
+        {
+            ["Name"] = seat.Name,
+            ["Deck"] = seat.Deck,
+            ["Sideboard"] = seat.Sideboard,
+            ["Companion"] = seat.Companion,
+            ["Commanders"] = seat.Commanders,
+        };
+        if (seat.DeckName is { } deckName)
+        {
+            request["DeckName"] = deckName;
+        }
+
+        if (seat.Variant is { } variant)
+        {
+            request["StartingLife"] = variant.StartingLife;
+            request["StartingHandSize"] = variant.StartingHandSize;
+            request["MaximumHandSize"] = variant.MaximumHandSize;
+            request["Emblems"] = variant.Emblems ?? [];
+        }
+
+        return request;
     }
 
     /// <summary>The request <paramref name="deal"/> with <c>"Public": true</c> beside what it says.</summary>

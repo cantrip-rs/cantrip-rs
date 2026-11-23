@@ -261,6 +261,7 @@ impl<'s> Run<'s> {
             minimum_deck_size: script.minimum_deck_size.unwrap_or(Outside::default().minimum_deck_size),
             commander: script.commander,
             commanders: &commanders,
+            variant: &script.variant,
         };
         let mut game = deal_on(table, &decks, &outside, 1, false, chooser).map_err(|m| ScriptFailure { message: m.clone(), report: m })?;
         // CANTRIP_VERIFY=1: every rollback is checked to restore the state exactly.

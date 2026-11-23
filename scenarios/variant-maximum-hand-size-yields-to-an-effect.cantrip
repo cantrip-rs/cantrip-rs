@@ -1,0 +1,26 @@
+# A variant's maximum hand size is the player's before any effect sets one (CR 402.2, 902.5b); an effect that says
+# otherwise replaces it, as it replaces the normal seven. Bot1's variant maximum is three, but Reliquary Tower, played on
+# turn one, says Bot1 has no maximum hand size: Bot1 keeps all six cards at its cleanup step. Bot2's variant maximum of
+# four stands with no effect to change it, and Bot2 discards down to four on turn two.
+
+[Bot1 Deck]
+Reliquary Tower
+Forest x39
+
+[Bot2 Deck]
+Island x40
+
+[Variant]
+Bot1: maximum 3
+Bot2: maximum 4
+
+[Actions]
+Bot1.Hand.Reliquary Tower.Play
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Reliquary Tower
+Bot1.Hand.Count = 7
+Bot1.Graveyard.Count = 0
+Bot2.Hand.Count = 4
+Bot2.Graveyard.Count = 4

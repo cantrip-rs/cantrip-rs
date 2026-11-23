@@ -45,6 +45,10 @@ pub struct GameScript {
     pub dice: Vec<u8>,
     /// Life totals the players begin with when not 20 (a `[Life]` section: `Bot1: 3`), as (seat index, life).
     pub life: Vec<(usize, i32)>,
+    /// What a variant sets of each seat's start (a `[Variant]` section: `Bot1: life 30; hand 5; maximum 9; emblem <name>`),
+    /// by seat index: its starting life, its starting and maximum hand sizes and the emblems it begins the game with
+    /// (CR 103.4, 103.5a, 402.2, 902.3).
+    pub variant: Vec<cantrip_engine::SeatVariantNames>,
     /// The most events the game records before it is a draw, when not the engine's (an `[Event Limit]` section: `5000`;
     /// `cantrip_rules::MAX_GAME_EVENTS`).
     pub event_limit: Option<usize>,
@@ -639,6 +643,7 @@ enum Section {
     Opening,
     Dice,
     Life,
+    Variant,
     EventLimit,
 }
 
@@ -721,6 +726,27 @@ impl GameScript {
                             _ => return Err(ParseError("a [Life] section gives a starting life total per player, as Bot1: 3".into())),
                         }
                     }
+                    Section::Variant => {
+                        let (key, value) = line.split_once(':').unwrap_or(("", ""));
+                        let Some(seat) = key.trim().to_ascii_uppercase().strip_prefix("BOT").and_then(|n| n.parse::<usize>().ok()).filter(|n| (1..=4).contains(n)) else {
+                            return Err(ParseError("a [Variant] line names a player, as Bot1: life 30; hand 5; maximum 9; emblem <name>".into()));
+                        };
+                        if script.variant.len() < seat {
+                            script.variant.resize(seat, cantrip_engine::SeatVariantNames::default());
+                        }
+                        let variant = &mut script.variant[seat - 1];
+                        for part in value.split(';').map(str::trim).filter(|p| !p.is_empty()) {
+                            let (word, rest) = part.split_once(' ').map_or((part, ""), |(w, r)| (w, r.trim()));
+                            let bad = || ParseError(format!("a [Variant] part is life N, hand N, maximum N or emblem <name>, not \"{part}\""));
+                            match word.to_ascii_lowercase().as_str() {
+                                "life" => variant.starting_life = Some(rest.parse().map_err(|_| bad())?),
+                                "hand" => variant.starting_hand_size = Some(rest.parse().map_err(|_| bad())?),
+                                "maximum" => variant.maximum_hand_size = Some(rest.parse().map_err(|_| bad())?),
+                                "emblem" if !rest.is_empty() => variant.emblems.push(rest.to_string()),
+                                _ => return Err(bad()),
+                            }
+                        }
+                    }
                     Section::EventLimit => match line.parse::<usize>() {
                         Ok(limit) if script.event_limit.is_none() => script.event_limit = Some(limit),
                         _ => return Err(ParseError("an [Event Limit] section gives one number of events, as 5000".into())),
@@ -778,6 +804,7 @@ fn section_header(line: &str) -> Option<Section> {
         "[OPENING]" => Some(Section::Opening),
         "[DICE]" => Some(Section::Dice),
         "[LIFE]" => Some(Section::Life),
+        "[VARIANT]" => Some(Section::Variant),
         "[EVENT LIMIT]" => Some(Section::EventLimit),
         "[BASIC LANDS OUTSIDE]" => Some(Section::BasicLandsOutside),
         "[MINIMUM DECK SIZE]" => Some(Section::MinimumDeckSize),

@@ -1,0 +1,25 @@
+# A variant's emblem is in its player's command zone before the game begins, as a vanguard card is (CR 902.3), and its
+# abilities function from there (CR 114.4, 902.7). Bot1 begins with Chandra, Awakened Inferno's emblem: at the beginning
+# of each of its upkeeps it deals 1 damage to Bot1, turn one's included. Bot2 begins with none.
+
+[Bot1 Deck]
+Forest x40
+
+[Bot2 Deck]
+Island x40
+
+[Variant]
+Bot1: emblem Chandra, Awakened Inferno emblem
+
+[Actions]
+? Bot1.Emblems.Count = 1
+? Stack = Chandra, Awakened Inferno emblem
+[T1 Bot1.Main1]
+? Bot1.Life = 19
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Emblems.Count = 1
+Bot2.Emblems.Count = 0
+Bot1.Life = 18
+Bot2.Life = 20

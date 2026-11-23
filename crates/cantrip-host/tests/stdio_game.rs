@@ -137,6 +137,46 @@ fn commander_setup_crosses_stdio_as_public_cards_with_forty_life() {
     assert_eq!(refused["Rejected"]["Code"], "InvalidSetup");
 }
 
+/// A seat's variant crosses the JSON-lines setup (CR 103.4, 103.5a, 902.3): its starting life and hand are dealt, its emblem
+/// is in its command zone for both seats to see, and what no game can start with is refused.
+#[test]
+fn a_seats_variant_crosses_stdio_with_its_life_hand_and_emblem() {
+    let mut host = Host::start();
+    let dealt = host.call(json!({
+        "Cmd": "NewGame",
+        "Seats": [
+            { "Name": "North", "Deck": vec!["Plains"; 30], "StartingLife": 30, "StartingHandSize": 5, "MaximumHandSize": 9,
+              "Emblems": ["Chandra, Awakened Inferno emblem"] },
+            { "Name": "South", "Deck": vec!["Island"; 30] },
+        ],
+        "Seed": 1, "Shuffle": false, "FirstPlayer": 1, "MinimumDeckSize": 30,
+    }));
+    let game = expect_ok(&dealt)["GameId"].as_u64().unwrap();
+    let started = host.call(json!({ "Cmd": "Start", "GameId": game }));
+    for seat in ["1", "2"] {
+        let view: PlayerView = serde_json::from_value(expect_ok(&started)["Views"][seat].clone()).unwrap();
+        let emblem = view.objects.iter().find(|o| o.name == "Chandra, Awakened Inferno emblem").expect("the emblem is public");
+        assert_eq!(emblem.zone, Some(ZoneKindView::Command));
+        assert!(view.players.iter().any(|p| p.life == 20), "South starts as the format says");
+    }
+    let north: PlayerView = serde_json::from_value(expect_ok(&started)["Views"]["1"].clone()).unwrap();
+    assert_eq!(north.objects.iter().filter(|o| o.zone == Some(ZoneKindView::Hand)).count(), 5);
+
+    for bad in [
+        json!({ "Name": "North", "Deck": vec!["Plains"; 30], "Emblems": ["Plains"] }),
+        json!({ "Name": "North", "Deck": vec!["Plains"; 30], "StartingHandSize": -1 }),
+        json!({ "Name": "North", "Deck": vec!["Plains"; 30], "StartingHandSize": 255 }),
+        json!({ "Name": "North", "Deck": vec!["Plains"; 30], "MaximumHandSize": -3 }),
+    ] {
+        let refused = host.call(json!({
+            "Cmd": "NewGame",
+            "Seats": [bad, { "Name": "South", "Deck": vec!["Island"; 30] }],
+            "Seed": 1, "MinimumDeckSize": 30,
+        }));
+        assert_eq!(refused["Rejected"]["Code"], "InvalidSetup", "{refused}");
+    }
+}
+
 #[test]
 fn a_whole_game_over_stdio() {
     let mut host = Host::start();

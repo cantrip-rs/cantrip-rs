@@ -1,0 +1,28 @@
+# A variant sets each seat's start (CR 103.4, 103.5a, 402.2, 902.4, 902.5): Bot1 begins at 30 life with a starting hand of
+# five, Bot2 with a starting hand of nine and a maximum hand size of eight. Bot1 takes the first turn and skips its draw
+# (CR 103.8a); Bot2 draws a tenth card on turn two, plays nothing, and at its cleanup step discards down to its maximum of
+# eight (CR 514.1), the newest cards by default. Bot1 keeps all six of its cards on turn three: its maximum is seven.
+
+[Bot1 Deck]
+Forest x40
+
+[Bot2 Deck]
+Island x40
+
+[Variant]
+Bot1: life 30; hand 5
+Bot2: hand 9; maximum 8
+
+[Actions]
+? Bot1.Life = 30
+? Bot1.Hand.Count = 5
+? Bot2.Hand.Count = 9
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 30
+Bot1.Hand.Count = 6
+Bot1.Graveyard.Count = 0
+Bot2.Life = 20
+Bot2.Hand.Count = 8
+Bot2.Graveyard.Count = 2

@@ -219,6 +219,7 @@ impl Trace {
                     minimum_deck_size: d.minimum_deck_size,
                     commander: d.commander,
                     commanders: &d.commanders,
+                    variant: &[],
                 };
                 deal_with(&self.lists, &outside, self.seed, d.shuffle, d.opening_chooser.map(PlayerId))
             }

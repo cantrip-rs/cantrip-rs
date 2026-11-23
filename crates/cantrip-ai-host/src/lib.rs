@@ -490,6 +490,7 @@ impl AiHost {
                         shuffle,
                         first_player,
                         chooser,
+                        variant: Vec::new(),
                     }),
                 };
                 let mut session = match made {

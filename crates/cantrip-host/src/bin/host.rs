@@ -30,7 +30,7 @@ use cantrip_engine::Game;
 use cantrip_obs::InfoMode;
 
 use cantrip_host::protocol::{AnswerPayload, AttackMessage, BlockMessage, ViewHandle};
-use cantrip_host::session::{Deal, Rejection, Session};
+use cantrip_host::session::{Deal, Rejection, SeatVariantSpec, Session};
 use cantrip_host::view::printed;
 use serde::Deserialize;
 use serde_json::{Value, json};
@@ -198,6 +198,16 @@ struct SeatSpec {
     /// Commanders are outside the library.
     #[serde(rename = "Commanders", default)]
     commanders: Vec<String>,
+    /// What a variant sets of the seat's start (`SeatVariantSpec`): its starting life, its hand sizes and the emblems it
+    /// begins the game with (CR 103.4, 103.5a, 902.3). Absent, the format's.
+    #[serde(rename = "StartingLife", default)]
+    starting_life: Option<i32>,
+    #[serde(rename = "StartingHandSize", default)]
+    starting_hand_size: Option<i32>,
+    #[serde(rename = "MaximumHandSize", default)]
+    maximum_hand_size: Option<i32>,
+    #[serde(rename = "Emblems", default)]
+    emblems: Vec<String>,
     /// The deck's name, where the table has one: the recorder's archetype label.
     #[serde(rename = "DeckName", default)]
     #[cfg_attr(not(feature = "ai-record"), allow(dead_code))]
@@ -235,7 +245,10 @@ impl Host {
                 // The game as what deals it again (`--ai-record-traces`): a dealt game's lists and setup, as the session
                 // deals it; a scenario's game is not traced.
                 #[cfg(feature = "ai-record")]
-                let traced = self.recorder.as_ref().filter(|r| r.config.traces && scenario.is_none()).map(|_| {
+                // Nor is a variant's: a trace deals the format's start.
+                let varied = seats.iter().any(|s| s.starting_life.is_some() || s.starting_hand_size.is_some() || s.maximum_hand_size.is_some() || !s.emblems.is_empty());
+                #[cfg(feature = "ai-record")]
+                let traced = self.recorder.as_ref().filter(|r| r.config.traces && scenario.is_none() && !varied).map(|_| {
                     let first = first_player.and_then(cantrip_host::view::player_at);
                     let opening = chooser.and_then(cantrip_host::view::player_at).or(first.filter(|_| !shuffle));
                     let mut t = Trace::new(
@@ -263,6 +276,15 @@ impl Host {
                     None => {
                         let companions = seats.iter().map(|s| s.companion.clone()).collect();
                         let commanders = seats.iter().map(|s| s.commanders.clone()).collect();
+                        let variant = seats
+                            .iter()
+                            .map(|s| SeatVariantSpec {
+                                starting_life: s.starting_life,
+                                starting_hand_size: s.starting_hand_size,
+                                maximum_hand_size: s.maximum_hand_size,
+                                emblems: s.emblems.clone(),
+                            })
+                            .collect();
                         let deal = Deal {
                             seats: seats.into_iter().map(|s| (s.name, s.deck, s.sideboard)).collect(),
                             basic_lands_outside,
@@ -274,6 +296,7 @@ impl Host {
                             shuffle,
                             first_player,
                             chooser,
+                            variant,
                         };
                         Session::new(deal)
                     }
