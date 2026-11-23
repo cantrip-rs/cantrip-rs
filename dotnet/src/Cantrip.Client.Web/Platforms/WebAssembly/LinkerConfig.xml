@@ -1,6 +1,14 @@
 <linker>
   <assembly fullname="Cantrip.Client.Web" />
 
+  <!-- A local game (?local; docs/engine-in-the-browser.md) speaks to the rules engine in the page as a server speaks to its
+       sidecar: NativeRulesHost writes and reads the host's JSON with System.Text.Json by reflection, over the server's
+       own request and reply types (anonymous types among them, whose constructors' parameter names it reads). Kept
+       whole, so the trimmer removes none of what that reflection finds. -->
+  <assembly fullname="Cantrip.Server" preserve="all" />
+  <assembly fullname="Cantrip.Protocol" preserve="all" />
+  <assembly fullname="Cantrip.Core" preserve="all" />
+
   <!--
   Uncomment this section when using JSON.NET
   <assembly fullname="System.Core">

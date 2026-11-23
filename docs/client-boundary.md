@@ -13,13 +13,17 @@ division into partial classes.
   actions a card offers (`CardActions`), when a seat passes by itself (`AutoPass`), how the server's log is set out
   under turn and step headings (`GameJournal`), and the canned prompt positions and their `FixtureTransport`
   (`PromptFixtures`). It references only `Cantrip.Client`.
-- `Cantrip.Client.Web` is the UI: Uno Platform on WebAssembly, drawing with Skia. It references only the two above.
-  It builds its `GameClient` over a `WebSocketTransport`, or over a `FixtureTransport` for `?prompt=NAME`. The
+- `Cantrip.Client.Web` is the UI: Uno Platform on WebAssembly, drawing with Skia. Its table code draws from the two above.
+  It builds its `GameClient` over a `WebSocketTransport`, or over a `FixtureTransport` for `?prompt=NAME`, or, for a game
+  with no server (`?local`), over a `LoopbackTransport` to a table in the page. The
   seat's membership proof stays in the tab's `sessionStorage` and goes back only in `Resume`, never into public
   lobby metadata; a seat ticket in the address is taken out of the address bar as the page loads.
 - `Cantrip.Client.Embedded` owns `HostAndPlay` and `HostedGame`, including dataset/deck loading and the
-  authoritative `GameSession`. Callers receive seat transports rather than the server session. No client references
-  it; the playtest and language-model game tools under `dotnet\tools\` do.
+  authoritative `GameSession`. Callers receive seat transports rather than the server session. The playtest and
+  language-model game tools under `dotnet\tools\` reference it. So does the web client, for `?local` alone
+  ([engine-in-the-browser.md](engine-in-the-browser.md)): a game with no server is the page's own table, dealt on the
+  rules engine in the page, and the page plays it through seat transports like any other. A game on a server stays the
+  server's; nothing in the page reaches into it.
 
 The presentation assembly's Cantrip dependency closure is **Presentation, Client, Core and Protocol**.
 `PresentationBoundaryTests` traverses compiled assembly references, and `DependencyClosureTests` holds

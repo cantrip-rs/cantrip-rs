@@ -1,0 +1,13 @@
+[package]
+name = "cantrip-wasm"
+description = "The engine in a browser: cantrip-native-host's JSON requests (docs/host-protocol.md) served by a WebAssembly module with no imports, for a game played entirely in the page (docs/engine-in-the-browser.md)."
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+cantrip-host.workspace = true

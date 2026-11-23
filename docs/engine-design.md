@@ -3758,7 +3758,9 @@ creatures does not lift it for that destruction event.
 [host-protocol.md](host-protocol.md)), so `GameSession`, events, the Discord bot and the web client do not depend on
 the engine's language. The server finds the binary under `target/` when it runs from the repository, or by
 `CANTRIP_NATIVE_HOST`. Calling the engine in-process through FFI is possible later if the sidecar shows up in
-profiles; for human play it will not.
+profiles; for human play it will not. The same requests are served in a web page by `cantrip-wasm`, the engine built for
+WebAssembly, which answers them byte for byte as the sidecar does ([engine-in-the-browser.md](engine-in-the-browser.md));
+both serve `cantrip_host::serve`.
 
 **Python (step 6).** `cantrip-py` exposes batches of games to a training loop: create N games, step them with a batch
 of answers, branch, and encode each game's state for a seat into tensors. It encodes a redacted view, with hidden

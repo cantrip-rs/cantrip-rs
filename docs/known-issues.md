@@ -56,6 +56,7 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-148](#ki-148-a-waiting-when-event-delayed-trigger-is-shown-beside-its-controllers-life-not-on-the-object-it-watches) | A waiting "when [event]" delayed trigger is shown beside its controller's life, not on the object it watches | Pri-2 | Open |
 | [KI-149](#ki-149-no-test-reads-a-noncreature-permanents-printed-power-and-toughness-off-the-wire) | No test reads a noncreature permanent's printed power and toughness off the wire | Pri-2 | Open |
 | [KI-158](#ki-158-the-client-shows-no-melded-faces-text-for-a-meld-card-outside-the-battlefield) | The client shows no melded face's text for a meld card outside the battlefield | Pri-2 | Open |
+| [KI-177](#ki-177-the-simple-auto-player-stops-mid-payment-with-gaeas-cradle-and-mox-emerald) | The simple auto player stops mid-payment with Gaea's Cradle and Mox Emerald | Pri-3 | Open |
 | [KI-3](#ki-3-engine-paths-no-scenario-runs) | Engine paths no scenario runs | Pri-3 | Fix queued |
 | [KI-35](#ki-35-the-tactical-bot-counts-no-summoning-sick-creature-as-a-mana-source-under-shang-chi) | The tactical bot counts no summoning-sick creature as a mana source under Shang-Chi | Pri-3 | Open |
 | [KI-49](#ki-49-the-tactical-bot-does-not-know-infect-or-poison) | The tactical bot does not know infect or poison | Pri-3 | Open |
@@ -105,6 +106,21 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-175](#ki-175-the-x-announcement-never-says-when-x-is-paid-in-life) | The X announcement never says when X is paid in life | Pri-2 | Open |
 
 ## Issues
+
+### KI-177: The simple auto player stops mid-payment with Gaea's Cradle and Mox Emerald
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-3 | Open | harness | 2026-11-23, the browser's local game (`?local`) |
+
+**Notes.** `?local&deck=3-green-red&opponent=1-black-red&seed=5&auto` (the page playing its own seat with the simple
+`AutoPlayer`, not `bot=tactical`): on turn one the seat plays Gaea's Cradle, casts Mox Emerald and taps it while paying for
+a spell, and then answers nothing more. The page shows no question, and the game waits on the seat for good. With
+`&bot=tactical` the same deal plays to its end, as do other deals with the simple player, so the engine and the table
+are not what stops. Not yet tried on a server's table, which would say whether the loopback transport has any part in it.
+The local game's browser test plays a deal the simple player finishes.
+
+**Scenarios.** None: this is a test player's gap, not a position of the rules.
 
 ### KI-176: A creature that can convoke or pay a waterbend shows two identical "tap to pay {1}" rows
 

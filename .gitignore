@@ -79,3 +79,6 @@ ai/spike/web/node_modules/
 
 # llvm-cov raw profiles
 *.profraw
+
+# The rules engine built for the browser (tools\build-engine-wasm.cmd), served beside the web client.
+dotnet/src/Cantrip.Client.Web/Platforms/WebAssembly/wwwroot/engine/

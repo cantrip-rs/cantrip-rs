@@ -37,6 +37,11 @@ public static class ClientConfig
         Test = query.ContainsKey("test");
         CardSheet = query.ContainsKey("cardsheet");
         Decks = query.ContainsKey("decks");
+        Local = query.ContainsKey("local");
+        Engine = query.GetValueOrDefault("engine") is { Length: > 0 } engine ? engine : BrowserEngine.DefaultUrl;
+        LocalDeck = query.GetValueOrDefault("deck") is { Length: > 0 } localDeck ? localDeck : null;
+        LocalOpponent = query.GetValueOrDefault("opponent") is { Length: > 0 } opponent ? opponent : null;
+        LocalSeed = ulong.TryParse(query.GetValueOrDefault("seed"), NumberStyles.None, CultureInfo.InvariantCulture, out ulong localSeed) ? localSeed : null;
         // The advisor's table (MainPage.Advisor.cs): its API, beside a table of its own; never a real table's page.
         Advisor = query.GetValueOrDefault("advisor") is { Length: > 0 } advisor && Uri.TryCreate(advisor, UriKind.Absolute, out Uri? api) ? api : null;
         DeckId = query.GetValueOrDefault("deck") is { Length: > 0 } deck ? deck : null;
@@ -54,10 +59,11 @@ public static class ClientConfig
             .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Distinct()];
 
-        // The deck editor has no table to say where art is: it is beside the page, on the site that served it.
+        // The deck editor and a local game have no server to say where art is: it is beside the page, on the site that
+        // served it.
         ArtTemplate = query.GetValueOrDefault("art") is { Length: > 0 } art
             ? Template(art)
-            : Decks
+            : Decks || Local
                 ? Page.GetLeftPart(UriPartial.Authority) + ArtPath
                 : $"{(Server.Scheme == "wss" ? "https" : "http")}://{Server.Host}:{Server.Port + 1}{ArtPath}";
     }
@@ -112,6 +118,25 @@ public static class ClientConfig
     /// deck editor).
     /// </summary>
     public static bool Decks { get; }
+
+    /// <summary>
+    /// Whether to play the tactical bot with no server (<c>?local</c>), the rules engine in the page
+    /// (<see cref="BrowserEngine"/>; docs/engine-in-the-browser.md). <c>&amp;deck=</c> and <c>&amp;opponent=</c> name the
+    /// decks (<see cref="MainPage.LocalDeckNames"/>), <c>&amp;seed=</c> the shuffle.
+    /// </summary>
+    public static bool Local { get; }
+
+    /// <summary>Where the page's rules engine is (<c>?engine=</c>): beside the page unless given.</summary>
+    public static string Engine { get; }
+
+    /// <summary>A local game's deck for this page's seat, or null for the first.</summary>
+    public static string? LocalDeck { get; }
+
+    /// <summary>A local game's deck for the bot, or null for the second.</summary>
+    public static string? LocalOpponent { get; }
+
+    /// <summary>A local game's shuffle, or null for a random one.</summary>
+    public static ulong? LocalSeed { get; }
 
     /// <summary>
     /// The advisor's API (<c>?advisor=http://localhost:5390/advisor</c>), for a page at the advisor's own table

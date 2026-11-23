@@ -55,6 +55,34 @@ public sealed class WholeGameTests(WebClient web)
     }
 
     /// <summary>
+    /// A whole game with no server at all (<c>?local</c>; docs/engine-in-the-browser.md): the rules engine runs in the page,
+    /// the tactical bot plays the other seat, and the page plays its own (<c>?auto</c>), start to finish. What only a
+    /// browser can say: that the engine built for it loads, answers the table reply for reply, and holds up for a game.
+    /// </summary>
+    [Fact]
+    public async Task A_whole_game_is_played_with_the_rules_engine_in_the_page()
+    {
+        string engine = Path.Combine(WebClient.Root, "dotnet", "src", "Cantrip.Client.Web", "Platforms", "WebAssembly", "wwwroot", "engine", "cantrip_wasm.wasm");
+        Assert.True(File.Exists(engine), $"No engine for the page at {engine}: tools\\build-engine-wasm.cmd builds it (test.cmd does, for a run with the browser's tests).");
+
+        await using Microsoft.AspNetCore.Builder.WebApplication art = await ArtServer.StartAsync(
+            new ArtStore(new ArtStoreOptions { ContentRoot = WebClient.Content, CacheDirectory = WebClient.ArtCache }), "127.0.0.1", 0);
+
+        await using TablePage table = await TablePage.OpenAsync(
+            web,
+            $"local&deck=1-black-red&opponent=2-white-blue&seed=1&art={Uri.EscapeDataString(art.Urls.First())}&name=You&auto",
+            WebClient.Pictures(nameof(WholeGameTests)));
+
+        // Both seats answer in the page with no socket between them, so the table never pauses long enough to settle
+        // before the end: it is watched until the game is over.
+        TableState over = await table.OverAsync(TimeSpan.FromMinutes(4));
+        await table.PictureAsync("local-over");
+
+        Assert.NotEmpty(over.Outcome);
+        Assert.Empty(table.Errors);
+    }
+
+    /// <summary>
     /// The opponent is played by the page too (<c>?bots=2</c>): the tactical bot, over a second socket the page opens for
     /// it, with nothing else at the table. That it runs where a player's browser runs is the whole reason it is written
     /// the way it is, and only a browser can say that it does. Asked to (<c>?narrate</c>), it tells its decisions in the

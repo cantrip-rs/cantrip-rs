@@ -120,6 +120,20 @@ if defined BUILD if not defined BUILDFAILED (
   popd
 )
 
+rem A browser test plays a game on the rules engine in the page (?local), which tools\build-engine-wasm.cmd builds and puts
+rem beside the web client: built for a run that may play the browser's tests, /all or a filtered one.
+set "WASM="
+if defined WEB if defined SLOW set "WASM=1"
+if defined WEB if defined FILTERED set "WASM=1"
+if defined BUILD if not defined BUILDFAILED if defined WASM (
+  if defined DETAILED (
+    call "%ROOT%\tools\build-engine-wasm.cmd"
+  ) else (
+    call "%ROOT%\tools\build-engine-wasm.cmd" >> "%LOG%-build.txt" 2>&1
+  )
+  if errorlevel 1 set "BUILDFAILED=1"
+)
+
 if defined BUILDFAILED (
   set "RESULT=1"
   goto report

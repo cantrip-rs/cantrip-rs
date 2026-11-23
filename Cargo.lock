@@ -231,6 +231,13 @@ name = "cantrip-state"
 version = "0.1.0"
 
 [[package]]
+name = "cantrip-wasm"
+version = "0.1.0"
+dependencies = [
+ "cantrip-host",
+]
+
+[[package]]
 name = "cc"
 version = "1.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

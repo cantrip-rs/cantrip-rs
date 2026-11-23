@@ -13,6 +13,7 @@ members = [
     "crates/cantrip-script",
     "crates/cantrip-bench",
     "crates/cantrip-host",
+    "crates/cantrip-wasm",
     "crates/cantrip-obs",
     "crates/cantrip-ai",
     "crates/cantrip-ai-host",
@@ -34,6 +35,7 @@ cantrip-cards = { path = "crates/cantrip-cards" }
 cantrip-engine = { path = "crates/cantrip-engine" }
 cantrip-script = { path = "crates/cantrip-script" }
 cantrip-host = { path = "crates/cantrip-host" }
+cantrip-wasm = { path = "crates/cantrip-wasm" }
 cantrip-obs = { path = "crates/cantrip-obs" }
 cantrip-ai = { path = "crates/cantrip-ai" }
 cantrip-ai-host = { path = "crates/cantrip-ai-host" }
@@ -46,6 +48,17 @@ codegen-units = 16
 
 [profile.bench]
 inherits = "release"
+
+# The engine for the browser (crates/cantrip-wasm, docs/engine-in-the-browser.md): what a page downloads, so as small as
+# it is fast - no debug information, the whole program optimised together, for size.
+[profile.wasm]
+inherits = "release"
+debug = false
+strip = true
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
 
 # The card loop: release speed, with incremental compilation, so an edit to one card recompiles little more than it.
 [profile.cards]

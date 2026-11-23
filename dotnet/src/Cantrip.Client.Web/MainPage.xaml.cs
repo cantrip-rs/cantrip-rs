@@ -132,7 +132,7 @@ public sealed partial class MainPage : Page
         // Not a reimplementation of the wire protocol - this is Cantrip.Client/Cantrip.Protocol
         // themselves, compiled into this browser-wasm build and talking to a real Cantrip.Server.Host
         // over a real WebSocket.
-        _ = ClientConfig.Decks ? OpenDeckEditorAsync() : ConnectToServerAsync();
+        _ = ClientConfig.Local ? StartLocalAsync() : ClientConfig.Decks ? OpenDeckEditorAsync() : ConnectToServerAsync();
         StartTestState();
     }
 

@@ -204,6 +204,13 @@ your page**, `TableMessage.Return`, the Discord bot's player page). Every move b
 page. The test state has `pairings` (round, final, starts-in, each match in words). `BoosterDraftTests` drafts seat 1
 against seven bots - pick, deck building, pairings - and pictures a pod played out by bots at its final standings.
 
+## A game with no server: `?local`
+
+`?local` plays the tactical bot with the rules engine in the page (`MainPage.Local.cs`;
+[engine-in-the-browser.md](engine-in-the-browser.md)): no game server, only the page and its `engine/cantrip_wasm.wasm`,
+which `tools\build-engine-wasm.cmd` builds. `&deck=` and `&opponent=` pick from `decks/demo`'s two-color decks (built
+into the page), `&seed=` fixes the shuffle, and `?auto` lets the page play its own seat as well.
+
 ## The constructed deck editor
 
 `?decks` (what the bot's site's deck library opens at `/decks/edit`) shows the deck editor instead of a table

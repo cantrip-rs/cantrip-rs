@@ -61,6 +61,18 @@
     <EmbeddedResource Include="Platforms\WebAssembly\WasmScripts\Links.js" />
     <EmbeddedResource Include="Platforms\WebAssembly\WasmScripts\Phone.js" />
     <EmbeddedResource Include="Platforms\WebAssembly\WasmScripts\FullScreen.js" />
+    <EmbeddedResource Include="Platforms\WebAssembly\WasmScripts\Engine.js" />
+  </ItemGroup>
+
+  <!-- A game with no server (?local; docs/engine-in-the-browser.md): the table a tool plays on (Cantrip.Client.Embedded),
+       dealt on the rules engine in the page, the demo decks to deal. The engine itself, crates/cantrip-wasm, is put in
+       Platforms/WebAssembly/wwwroot/engine by tools\build-engine-wasm.cmd. -->
+  <ItemGroup>
+    <ProjectReference Include="..\Cantrip.Client.Embedded\Cantrip.Client.Embedded.csproj" />
+    <EmbeddedResource Include="..\..\..\decks\demo\1-black-red.txt" LogicalName="deck_1-black-red" />
+    <EmbeddedResource Include="..\..\..\decks\demo\2-white-blue.txt" LogicalName="deck_2-white-blue" />
+    <EmbeddedResource Include="..\..\..\decks\demo\3-green-red.txt" LogicalName="deck_3-green-red" />
+    <EmbeddedResource Include="..\..\..\decks\demo\4-red-black.txt" LogicalName="deck_4-red-black" />
   </ItemGroup>
 
   <!-- Card frames, icons, fonts and the frame template, from the tracked content files. -->

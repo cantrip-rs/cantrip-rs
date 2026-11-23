@@ -144,7 +144,8 @@ is pushed from there. Card art never goes in: `content/*/images/` is gitignored 
 - `crates/` — the rules engine (the Rust workspace, `Cargo.toml` at the root): `cantrip-state`, `cantrip-api`,
   `cantrip-rules`, `cantrip-mechanics`, `cantrip-oracle` (generated), `cantrip-cards` (the cards), `cantrip-engine`,
   `cantrip-script` (scenarios), `cantrip-bench`, `cantrip-host` (the `cantrip-native-host` sidecar the server drives
-  over JSON lines; protocol in `docs/host-protocol.md`). Build output is `target/`.
+  over JSON lines; protocol in `docs/host-protocol.md`), `cantrip-wasm` (the same requests served in a web page,
+  `docs/engine-in-the-browser.md`). Build output is `target/`.
 - `.claude/worktrees/pool-<n>` — the agents' worktree pool, reached only through `tools\worktree.cmd`: a lease for
   new work, a single-use token for each agent let into it, one member at a time (`coordinator.md` step 0). Opt-in per
   machine: the `worktree-pool-setup` skill installs its hooks in the gitignored `.claude/settings.local.json`.
