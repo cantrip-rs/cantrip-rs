@@ -90,7 +90,7 @@ fn entry_associations_keep_the_actual_last_known_rows_and_distinguish_incarnatio
     assert_eq!(rows[0].id, island);
     assert!(rows[0].subtypes.has(Subtype::Island));
     assert_eq!(g.history().sacrificed_as_entered(&g.state, Linked { text: t.id_of(&OTHER), ..link }).count(), 0);
-    let acquisition = Acquired { by: AcquiredBy::Copy, stamp: 1, part: 0 };
+    let acquisition = Acquired { by: AcquiredBy::Copy, stamp: 1, part: 0, ..Acquired::OWN };
     assert_eq!(g.history().sacrificed_as_entered(&g.state, Linked { acquired: acquisition, ..link }).count(), 0);
     let card = g.state.obj(forest).became.unwrap();
     cantrip_api::Game::exile_all(&mut cx(&mut g), &[card]);
@@ -112,7 +112,7 @@ fn a_token_copy_enters_with_its_own_linked_sacrifice() {
 
 #[test]
 fn entry_sacrifice_does_not_widen_each_history_record() {
-    assert_eq!(std::mem::size_of::<cantrip_api::history::Record>(), 52);
+    assert_eq!(std::mem::size_of::<cantrip_api::history::Record>(), 60);
 }
 
 #[test]

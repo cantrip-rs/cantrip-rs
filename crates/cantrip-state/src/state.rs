@@ -1240,6 +1240,12 @@ impl GameState {
         self.obj(by.object).marks.choices.object(by)
     }
 
+    /// `chosen_object`, with since when it has been the one chosen (`Chosen::since`): the start of a lending of that object's
+    /// abilities that lasts while it stays chosen (`Lent::since`, Koh, the Face Stealer's "the last chosen card").
+    pub fn chosen_object_since(&self, by: Linked) -> Option<(ObjectId, u32)> {
+        self.obj(by.object).marks.choices.object_since(by)
+    }
+
     /// The ability that made the emblem `id` (`Choices::maker`), for one whose text names that object (`Query::made_by`).
     pub fn made_by(&self, id: ObjectId) -> Option<Linked> {
         self.obj(id).marks.choices.maker()
@@ -1254,7 +1260,7 @@ impl GameState {
             .filter(|e| e.affected == id && matches!(e.kind, EffectKind::RestoreCopy(_)))
             .map(|e| e.timestamp)
             .max()
-            .map_or(Acquired::OWN, |stamp| Acquired { by: AcquiredBy::Copy, stamp, part: 0 })
+            .map_or(Acquired::OWN, |stamp| Acquired { by: AcquiredBy::Copy, stamp, part: 0, lent: Lent::NONE })
     }
 
     pub fn permission_push(&mut self, permission: PlayPermission) {

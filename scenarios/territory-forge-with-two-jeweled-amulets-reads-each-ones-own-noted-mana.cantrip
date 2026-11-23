@@ -1,0 +1,69 @@
+# Territory Forge (CR 607.2e, 607.5, 613.1f): with Panharmonicon out, Bot1's Forge enters on turn 3 and its "if you cast it"
+# trigger triggers twice, exiling both of Bot2's Jeweled Amulets, so the Forge has the activated abilities of each. Bot1 pays
+# {G} for the first Amulet's "{1}, {T}: Put a charge counter ... Note the type of mana spent" (the Forge's second ability, after
+# its own trigger). On turn 5 Bot1 taps the Forge for the second Amulet's "{T}, Remove a charge counter: Add one mana of this
+# artifact's last noted type" (its fifth). The two Amulets' abilities are two lendings, each linked only to its own (CR 607.5): the
+# second Amulet's noting ability noted nothing, so the counter is removed and no mana is added.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Panharmonicon
+Territory Forge
+Island x12
+
+[Bot2 Deck]
+Jeweled Amulet x2
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Panharmonicon.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Jeweled Amulet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Jeweled Amulet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Territory Forge.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Jeweled Amulet#1)
+Bot1.Target(Jeweled Amulet#2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Jeweled Amulet; Jeweled Amulet
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Territory Forge.Activate(Ability: #2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Territory Forge.Counters.Charge = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Territory Forge.Activate(Ability: #5)
+? Bot1.Mana =
+? Bot1.Battlefield.Territory Forge.Counters.Charge = (absent)
+
+[Expect]
+Exile.Count = 2

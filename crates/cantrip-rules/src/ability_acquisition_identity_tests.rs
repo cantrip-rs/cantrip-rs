@@ -268,7 +268,7 @@ fn acquisition_stack_copy_retains_key_without_another_activation() {
 fn acquisition_loop_position_canonicalizes_donor_ids_and_grant_timestamps() {
     let mut g=game();let id=put(&mut g,&OOZE,Zone::BATTLEFIELD);let donor=put(&mut g,&BATS,Zone::graveyard(YOU));let other=put(&mut g,&BATS,Zone::graveyard(YOU));
     let mut item=crate::actions::stack_item(StackKind::Activated,id,AbilityRef {card:g.cards.id_of(&BATS),index:0},YOU,&[]);
-    item.instance=AbilityAcquisition {acquired:Acquired {by:AcquiredBy::Grant,stamp:100,part:0},origin:donor,granter:ObjectId::NONE,ordinal:0,static_grant:true};g.state.stack_push(item);
+    item.instance=AbilityAcquisition {acquired:Acquired {by:AcquiredBy::Grant,stamp:100,part:0, ..Acquired::OWN },origin:donor,granter:ObjectId::NONE,ordinal:0,static_grant:true};g.state.stack_push(item);
     let before=crate::loops::position(&g.state);
     let mut same=g.state.clone();
     for object in [id,donor,other] {same.update_obj(object,|o|o.timestamp+=1000);}

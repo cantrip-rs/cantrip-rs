@@ -1696,7 +1696,12 @@ the text the object has now; either face of a transforming card and either door 
 `CardTable::linked_card`), and how the object acquired the ability (`Acquired`: by its own text, by a copy effect applied
 to it later - the timestamp of its `EffectKind::RestoreCopy`, `GameState::copy_acquired` - or by the effect that granted it,
 which `layers::ability_givers` names), and `Query::exiled_with` answers only an ability of that same text acquired the same
-way. A resolving ability's `Cause::Ability` also retains that captured `Acquired`, so a history lookup for tokens it
+way. An ability an effect lends from another object (`Chars::grant_ability_lent`: Agatha's Soul Cauldron's and Territory
+Forge's exiled cards, Koh, the Face Stealer's last chosen card) is acquired by that lending, `Acquired::lent`: the donor
+object, and since when the effect has lent it without a break (`Lent::since`; 0 for one lent as long as that object exists,
+Koh's the timestamp its choice was made, `GameState::chosen_object_since`). So two cards of one name lent by one effect, or
+one card lent again after another was, are separate linked groups (CR 607.5); the layers note the lending per slot as they
+work out the givers (`cantrip_api::noting_lent`), so it stays the same while the lending goes on. A resolving ability's `Cause::Ability` also retains that captured `Acquired`, so a history lookup for tokens it
 created can distinguish a later copy effect's linked abilities (Dance of Many). A stack item, a pending trigger and a delayed trigger carry how their ability was acquired (worked out as it is
 activated or triggers, `layers::acquired`, with nothing to work out unless an effect could have given it; a look-back
 trigger as it was then, `Then`). So a creature that copies another (Mirrorweave) does not see, through the copied text's

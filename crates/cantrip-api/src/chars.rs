@@ -139,30 +139,39 @@ pub fn token_values(def: &CardDef, card: CardId, words: Words) -> Option<Copiabl
 
 thread_local! {
     /// While the layers work out which object put each ability of one object's there (`noting_lent`): the abilities a
-    /// physical donor lent it (`Chars::grant_ability_from`), by the characteristics they went into, their slot and the donor.
-    static LENT: std::cell::RefCell<Option<Vec<(usize, usize, ObjectId)>>> = const { std::cell::RefCell::new(None) };
+    /// physical donor lent it (`Chars::grant_ability_lent`), by the characteristics they went into, their slot and the
+    /// lending.
+    static LENT: std::cell::RefCell<Option<Vec<(usize, usize, Lent)>>> = const { std::cell::RefCell::new(None) };
 }
 
 /// Runs `f`, noting which slots of the characteristics at `chars` (an address) an ability lent by a physical donor filled
-/// (`Chars::grant_ability_from`), with the donor: what the layers keep in the acquisition key of an ability another object
-/// lent (CR 607.5, Agatha's Soul Cauldron), read only while they work it out, so no characteristics carry it.
-pub fn noting_lent(chars: usize, f: impl FnOnce()) -> Vec<(usize, ObjectId)> {
+/// (`Chars::grant_ability_lent`), with the lending: what the layers keep in the acquisition of an ability another object
+/// lent (`Acquired::lent`, CR 607.5: Agatha's Soul Cauldron, Koh, the Face Stealer), read only while they work it out, so
+/// no characteristics carry it.
+pub fn noting_lent(chars: usize, f: impl FnOnce()) -> Vec<(usize, Lent)> {
     let outer = LENT.with(|l| l.replace(Some(Vec::new())));
     f();
     let lent = LENT.with(|l| l.replace(outer)).unwrap_or_default();
-    lent.into_iter().filter(|&(at, _, _)| at == chars).map(|(_, slot, origin)| (slot, origin)).collect()
+    lent.into_iter().filter(|&(at, _, _)| at == chars).map(|(_, slot, lent)| (slot, lent)).collect()
 }
 
 impl Chars {
-    /// Gives one ability with its physical donor, preserving equal definitions as independent instances.
+    /// Gives one ability with its physical donor, lent for as long as that object exists (`Lent::of`), preserving equal
+    /// definitions as independent instances.
     pub fn grant_ability_from(&mut self, ability: AbilityRef, origin: ObjectId) {
+        self.grant_ability_lent(ability, Lent::of(origin));
+    }
+
+    /// Gives one ability another object lends (`Lent`): an instance of its own (CR 113.2c), and with the other abilities of
+    /// the same lending, a linked group of its own (CR 607.5). With every slot taken it is given no more.
+    pub fn grant_ability_lent(&mut self, ability: AbilityRef, lent: Lent) {
         if let Some(slot) = self.abilities.iter().position(Option::is_none) {
             self.abilities[slot] = Some(ability);
-            if origin != ObjectId::NONE {
+            if lent.is_some() {
                 let at = self as *const Chars as usize;
                 LENT.with(|l| {
-                    if let Some(lent) = l.borrow_mut().as_mut() {
-                        lent.push((at, slot, origin));
+                    if let Some(noted) = l.borrow_mut().as_mut() {
+                        noted.push((at, slot, lent));
                     }
                 });
             }

@@ -51,22 +51,24 @@ pub struct Giver {
     pub by: Acquired,
     /// Exact generating ability's acquisition, separate from CR607 linked grouping and layer ordering.
     pub activation: Acquired,
-    pub origin: ObjectId,
+    /// The lending of another object's ability it is (`Chars::grant_ability_lent`), which `acquired` and `activation` name
+    /// too: `Lent::NONE` for one no donor lent.
+    pub lent: Lent,
     pub static_grant: bool,
 }
 
 impl Giver {
-    pub const NONE: Giver = Giver { object: ObjectId::NONE, acquired: Acquired::OWN, from: ObjectId::NONE, by: Acquired::OWN, activation: Acquired::OWN, origin: ObjectId::NONE, static_grant: false };
+    pub const NONE: Giver = Giver { object: ObjectId::NONE, acquired: Acquired::OWN, from: ObjectId::NONE, by: Acquired::OWN, activation: Acquired::OWN, lent: Lent::NONE, static_grant: false };
 
     /// The giver `object`'s effect `acquired` is, which put the ability there.
     const fn entry(object: ObjectId, acquired: Acquired) -> Giver {
-        Giver { object, acquired, from: object, by: acquired, activation: acquired, origin: ObjectId::NONE, static_grant: false }
+        Giver { object, acquired, from: object, by: acquired, activation: acquired, lent: Lent::NONE, static_grant: false }
     }
 
     /// The giver of a resolved effect that gave an object an ability (`EffectKind::AddAbility`): its source, as the effect's
     /// entry gives it (`GEntry::giver`).
     fn of_effect(e: &ContinuousEffect) -> Giver {
-        Giver::entry(e.source, Acquired { by: AcquiredBy::Grant, stamp: e.timestamp, part: 0 })
+        Giver::entry(e.source, Acquired { by: AcquiredBy::Grant, stamp: e.timestamp, part: 0, lent: Lent::NONE })
     }
 }
 
@@ -81,7 +83,8 @@ fn own_text(cards: &CardTable, chars: &Chars, ability: AbilityRef) -> bool {
 /// text `holder` has, as `ability_givers` counts it (`acquired`).
 fn given_ability(cards: &CardTable, state: &GameState, holder: ObjectId, ability: AbilityRef, giver: Giver) -> Linked {
     let text = cards.linked_card(ability.card);
-    let own = giver.object == ObjectId::NONE || (giver.object == holder && text == cards.linked_to(state, holder).text);
+    // One another object lent is that lending's, even of a card of the same name as `holder`'s (CR 607.5).
+    let own = giver.object == ObjectId::NONE || (giver.object == holder && !giver.lent.is_some() && text == cards.linked_to(state, holder).text);
     let acquired = if own { state.copy_acquired(holder) } else { giver.acquired };
     Linked { object: holder, text, acquired }
 }
@@ -179,7 +182,7 @@ pub fn instance(cards: &CardTable, state: &GameState, log: &[Record], id: Object
         let giver = givers.as_ref().map_or(Giver::NONE, |g| g[at]);
         AbilityAcquisition {
             acquired: if giver.from == ObjectId::NONE { text } else { giver.activation },
-            origin: giver.origin,
+            origin: giver.lent.donor,
             granter: giver.object,
             ordinal: 0,
             static_grant: giver.static_grant,
@@ -267,16 +270,16 @@ fn watched_givers(id: ObjectId) -> Option<[Giver; cantrip_state::MAX_ABILITIES]>
 fn watching_givers(cards: &CardTable, id: ObjectId, giver: Giver, chars: &mut Chars, f: impl FnOnce(&mut Chars)) {
     let Some(givers) = watched_givers(id) else { return f(chars) };
     let before = chars.abilities;
-    // The donor of each ability there so far, as the earlier entries noted it; then what this entry lent.
-    let origins: [ObjectId; cantrip_state::MAX_ABILITIES] = std::array::from_fn(|slot| if before[slot].is_some() { givers[slot].origin } else { ObjectId::NONE });
+    // The lending of each ability there so far, as the earlier entries noted it; then what this entry lent.
+    let origins: [Lent; cantrip_state::MAX_ABILITIES] = std::array::from_fn(|slot| if before[slot].is_some() { givers[slot].lent } else { Lent::NONE });
     let at = &*chars as *const Chars as usize;
     let lent = cantrip_api::noting_lent(at, || f(chars));
     let mut now = origins;
     for (slot, ability) in chars.abilities.iter().enumerate() {
-        if ability.is_none() || *ability != before[slot] { now[slot] = ObjectId::NONE; }
+        if ability.is_none() || *ability != before[slot] { now[slot] = Lent::NONE; }
     }
-    for (slot, origin) in lent {
-        now[slot] = origin;
+    for (slot, lending) in lent {
+        now[slot] = lending;
     }
     let mut after = givers;
     // An ability that left a slot and is now in another was moved (the abilities kept by "loses all abilities except mana
@@ -293,10 +296,12 @@ fn watching_givers(cards: &CardTable, id: ObjectId, giver: Giver, chars: &mut Ch
                 now[slot] = origins[from];
                 givers[from]
             }
-            None if giver.object == id && ability.is_some_and(|a| own_text(cards, chars, a)) => Giver { from: giver.from, by: giver.by, activation: giver.activation, static_grant: giver.static_grant, ..Giver::NONE },
-            None => giver,
+            None if giver.object == id && !now[slot].is_some() && ability.is_some_and(|a| own_text(cards, chars, a)) => Giver { from: giver.from, by: giver.by, activation: giver.activation, static_grant: giver.static_grant, ..Giver::NONE },
+            // One another object lent is that lending's acquisition (CR 607.5): linked only to the abilities the same
+            // lending gave, not to another donor's of the same name, nor to the same donor's lent before and lent again.
+            None => Giver { acquired: Acquired { lent: now[slot], ..giver.acquired }, activation: Acquired { lent: now[slot], ..giver.activation }, ..giver },
         };
-        after[slot].origin = now[slot];
+        after[slot].lent = now[slot];
     }
     GIVERS.with(|g| g.set(after));
 }
@@ -1744,7 +1749,7 @@ impl GEntry {
     /// The object whose effect it is, and the effect, for the abilities' givers (`ability_givers`): its timestamp (CR 613.7),
     /// and for a static ability, which of its source's static abilities it is, so two are two effects (CR 607.5).
     fn giver(&self, cards: &CardTable, state: &GameState) -> Giver {
-        let grant = |part: usize| Acquired { by: AcquiredBy::Grant, stamp: self.timestamp, part: u8::try_from(part).unwrap_or(u8::MAX) };
+        let grant = |part: usize| Acquired { by: AcquiredBy::Grant, stamp: self.timestamp, part: u8::try_from(part).unwrap_or(u8::MAX), lent: Lent::NONE };
         let part_of = |source: ObjectId, st: &'static StaticDef| {
             statics_of(cards, state, source).position(|s| std::ptr::eq(s, st)).unwrap_or(0)
         };

@@ -1093,7 +1093,7 @@ pub fn chosen_name_activations_barred(q: &dyn Query, asker: &Asker, _: PlayerId,
 /// abilities (CR 602.5c). Agatha's Soul Cauldron (the creature cards exiled with it) and Locus of Enlightenment (the exiled
 /// cards used to craft it) grant them.
 pub fn grant_activated_abilities_of(view: &dyn LayerQuery, cards: &[CardId], chars: &mut Chars) {
-    grant_activated_from(view, cards.iter().map(|&card| (ObjectId::NONE, card)), chars);
+    grant_activated_from(view, cards.iter().map(|&card| (Lent::NONE, card)), chars);
 }
 
 /// Activated abilities of particular cards. Unlike a list of definitions, physical donors retain their identity
@@ -1101,24 +1101,31 @@ pub fn grant_activated_abilities_of(view: &dyn LayerQuery, cards: &[CardId], cha
 /// type has that type's mana ability (CR 305.6) as an object, though its card prints none, so it gives that too, after the
 /// printed ones, in WUBRG order. Agatha's Soul Cauldron, Necrotic Ooze, Territory Forge and Thranduil grant them this way.
 pub fn grant_activated_abilities_from(view: &dyn LayerQuery, cards: &[(ObjectId, CardId)], chars: &mut Chars) {
+    grant_activated_from(view, cards.iter().map(|&(origin, card)| (Lent::of(origin), card)), chars);
+}
+
+/// `grant_activated_abilities_from`, each card's lent by a lending that began when it says (`Lent::since`): one the effect
+/// lends only while something about it holds, which may stop and start again (Koh, the Face Stealer's "the last chosen
+/// card"), so each time it starts is another acquisition (CR 607.5).
+pub fn grant_activated_abilities_lent(view: &dyn LayerQuery, cards: &[(Lent, CardId)], chars: &mut Chars) {
     grant_activated_from(view, cards.iter().copied(), chars);
 }
 
-fn grant_activated_from(view: &dyn LayerQuery, cards: impl Iterator<Item = (ObjectId, CardId)>, chars: &mut Chars) {
-    for (origin, card) in cards {
+fn grant_activated_from(view: &dyn LayerQuery, cards: impl Iterator<Item = (Lent, CardId)>, chars: &mut Chars) {
+    for (lent, card) in cards {
         for (index, ability) in view.cards().get(card).abilities.iter().enumerate() {
             if !matches!(ability, AbilityDef::Activated(a) if !a.special_action) {
                 continue;
             }
-            chars.grant_ability_from(AbilityRef { card, index: index as u8 }, origin);
+            chars.grant_ability_lent(AbilityRef { card, index: index as u8 }, lent);
         }
-        if origin == ObjectId::NONE {
+        if !lent.is_some() {
             continue;
         }
-        let donor = view.chars(origin);
+        let donor = view.chars(lent.donor);
         for (mana, land_type) in [(Mana::W, Subtype::Plains), (Mana::U, Subtype::Island), (Mana::B, Subtype::Swamp), (Mana::R, Subtype::Mountain), (Mana::G, Subtype::Forest)] {
             if donor.has_subtype(land_type) {
-                chars.grant_ability_from(AbilityRef { card: view.cards().intrinsic, index: mana as u8 }, origin);
+                chars.grant_ability_lent(AbilityRef { card: view.cards().intrinsic, index: mana as u8 }, lent);
             }
         }
     }

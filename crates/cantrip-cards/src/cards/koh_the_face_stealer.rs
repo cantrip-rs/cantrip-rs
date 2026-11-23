@@ -31,17 +31,21 @@ fn choose_a_creature_card(g: &mut dyn Game, item: &StackItem) -> Result<(), Susp
 /// "Koh has all activated and triggered abilities of the last chosen card." (CR 613.1f, layer 6): each one the card prints, as
 /// written, so Koh is its source and "this creature" in it means Koh. Only while that card is still the one exiled with Koh and
 /// chosen: a card that left exile is a new object (CR 400.7), no longer chosen, and Koh has nothing of it. Each is lent with the
-/// card as its donor (an instance of its own, CR 113.2c); as abilities this one effect gave Koh, a linked pair of the card is
-/// linked on Koh to each other and not to Koh's own (CR 607.5), an activated and a triggered one alike (Boiling Rock Rioter).
+/// card as its donor (an instance of its own, CR 113.2c), lent since it became the last chosen card; as abilities this one
+/// lending gave Koh, a linked pair of the card is linked on Koh to each other and not to Koh's own, nor to those of another
+/// card chosen before, or of this one when it was chosen before another (CR 607.5), an activated and a triggered one alike
+/// (Boiling Rock Rioter).
 /// A special action is no ability (CR 116.2).
 fn abilities_of_the_last_chosen_card(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
     let by = view.linked_to(source);
-    let Some(chosen) = view.state().chosen_object(by).filter(|id| view.exiled_with(by).contains(id)) else { return };
+    let Some((chosen, since)) = view.state().chosen_object_since(by).filter(|(id, _)| view.exiled_with(by).contains(id)) else { return };
     let card = view.state().obj(chosen).card;
-    statics::grant_activated_abilities_from(view, &[(chosen, card)], chars);
+    // Lent since it became the last chosen card: chosen again after another, it is lent anew (CR 607.5).
+    let lent = Lent { donor: chosen, since };
+    statics::grant_activated_abilities_lent(view, &[(lent, card)], chars);
     for (index, ability) in view.cards().get(card).abilities.iter().enumerate() {
         if matches!(ability, AbilityDef::Triggered(_)) {
-            chars.grant_ability_from(AbilityRef { card, index: index as u8 }, chosen);
+            chars.grant_ability_lent(AbilityRef { card, index: index as u8 }, lent);
         }
     }
 }

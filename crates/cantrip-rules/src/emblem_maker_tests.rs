@@ -555,7 +555,7 @@ fn an_emblem_made_as_an_ability_resolves_names_that_ability() {
     assert_eq!(played_by(&mut g, spell), vec![emblem]);
 
     // An ability its object acquired otherwise is linked otherwise (CR 607.5), and the emblem says so.
-    let acquired = Linked { acquired: Acquired { by: AcquiredBy::Copy, stamp: 7, part: 0 }, ..own(&g, maker, &RESOLVER) };
+    let acquired = Linked { acquired: Acquired { by: AcquiredBy::Copy, stamp: 7, part: 0, ..Acquired::OWN }, ..own(&g, maker, &RESOLVER) };
     let def = g.cards.id_of(&EMBLEM);
     let other = cantrip_api::Game::create_emblem_made_by(&mut cx(&mut g), def, YOU, acquired);
     assert_eq!(Query::made_by(&g, other), Some(acquired));

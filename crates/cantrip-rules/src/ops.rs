@@ -1380,7 +1380,11 @@ pub fn remember_chosen(cx: &mut Cx, by: Linked, value: Kept) {
     }
     // Kept with the ability that chose it (CR 607.2d): only abilities linked to that one refer to it.
     let mut choices = cx.s().obj(id).marks.choices;
-    if choices.keep(by, value) {
+    // An object chosen anew is chosen from now (`Chosen::since`, read by `GameState::chosen_object_since`); one that still
+    // stands keeps its own.
+    let fresh = matches!(value, Kept::Object(_)) && !choices.holds(by, value);
+    let stamp = if fresh { cx.st().timestamp() } else { 0 };
+    if choices.keep_at(by, value, stamp) {
         cx.st().update_obj(id, |o| o.marks.choices = choices);
     }
 }

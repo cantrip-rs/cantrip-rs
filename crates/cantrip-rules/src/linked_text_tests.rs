@@ -135,7 +135,7 @@ fn a_front_face_ability_given_to_the_back_face_is_acquired_by_the_effect() {
     let chars = crate::layers::chars(t, &game.state, &game.log, source);
     let slot = |card: &'static CardDef| chars.abilities.iter().position(|a| a.is_some_and(|a| a.card == t.id_of(card))).expect("the ability");
     let given = crate::layers::acquired(t, &game.state, &game.log, source, &chars, slot(&TRANSFORMING));
-    assert_eq!(given, Acquired { by: AcquiredBy::Grant, stamp: timestamp, part: 0 }, "the given front-face ability is the effect's");
+    assert_eq!(given, Acquired { by: AcquiredBy::Grant, stamp: timestamp, part: 0, ..Acquired::OWN }, "the given front-face ability is the effect's");
     let printed = crate::layers::acquired(t, &game.state, &game.log, source, &chars, slot(&TRANSFORMED));
     assert_eq!(printed, Acquired::OWN, "the back face's printed ability is its own");
 }
@@ -288,7 +288,7 @@ fn an_ability_a_permanents_own_effect_gives_it_is_its_own_only_if_printed_within
     let own = crate::layers::acquired(t, &game.state, &game.log, source, &chars, slot(AbilityRef::delayed(t.id_of(&TRIGGERED_CHOOSER), 1)));
     assert_eq!(own, Acquired::OWN, "printed within its own text: its own");
     let acquired = crate::layers::acquired(t, &game.state, &game.log, source, &chars, slot(AbilityRef { card: t.id_of(&TRANSFORMING), index: 0 }));
-    assert_eq!(acquired, Acquired { by: AcquiredBy::Grant, stamp: other, part: 0 }, "another card's, given by its own effect: the effect's");
+    assert_eq!(acquired, Acquired { by: AcquiredBy::Grant, stamp: other, part: 0, ..Acquired::OWN }, "another card's, given by its own effect: the effect's");
 }
 
 /// A mana ability whose own effect reads the choice (`ManaEffect`): asked as the ability it is (CR 607.5).
@@ -437,7 +437,7 @@ fn a_replacement_of_the_permanents_own_text_links_its_exile_to_that_text_while_a
     let stamp = lend(&mut game, &MILL_LENDER, source, given);
     let own = game.text_linked(source);
     let mut item = crate::actions::stack_item(StackKind::Activated, source, given, PlayerId(0), &[]);
-    item.acquired = Acquired { by: AcquiredBy::Grant, stamp, part: 0 };
+    item.acquired = Acquired { by: AcquiredBy::Grant, stamp, part: 0, ..Acquired::OWN };
     let _ = opponent_mills(&mut cx(&mut game), &item);
     let exiled: Vec<ObjectId> = game.state.zone(Zone::exile(PlayerId(1))).to_vec();
     assert_eq!(exiled.len(), 1, "the milled card is exiled instead");

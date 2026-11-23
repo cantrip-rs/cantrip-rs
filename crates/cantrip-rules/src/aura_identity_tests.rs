@@ -229,8 +229,8 @@ fn metadata_survives_copy_undo_redo_and_goto() {
 fn aura_metadata_fits_the_combined_event_budget() {
     // An Aura's host as it left and who put a card onto the battlefield fit in main's budget; which instance an ability
     // activated was is a record of its own (`Event::ActivatedAs`), and payments are numbered in 32 bits.
-    assert_eq!(std::mem::size_of::<Event>(), 28);
-    assert_eq!(std::mem::size_of::<Record>(), 52);
+    assert_eq!(std::mem::size_of::<Event>(), 36);
+    assert_eq!(std::mem::size_of::<Record>(), 60);
     println!(
         "Aura metadata layout: Event={} Record={} StackItem={} PendingTrigger={}",
         std::mem::size_of::<Event>(),

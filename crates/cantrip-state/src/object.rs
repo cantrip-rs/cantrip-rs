@@ -314,7 +314,13 @@ pub trait ChoiceRecord {
     /// `value` chosen by `by`, an ability of the permanent, as it resolved or as the permanent transformed: replacing that
     /// ability's earlier choice of the same kind. Every place taken (`CHOSEN_KEPT`), it is kept no more (beyond practical
     /// scale, docs/known-issues.md KI-135). Whether it was kept.
-    fn keep(&mut self, by: Linked, value: Kept) -> bool;
+    fn keep(&mut self, by: Linked, value: Kept) -> bool {
+        self.keep_at(by, value, 0)
+    }
+    /// `keep`, at the timestamp `stamp` (`Chosen::since`): a value the ability chose before and still has keeps its own.
+    fn keep_at(&mut self, by: Linked, value: Kept, stamp: u32) -> bool;
+    /// Whether `by` has chosen `value` and it still stands, so choosing it again changes nothing (`Chosen::since`).
+    fn holds(&self, by: Linked, value: Kept) -> bool;
     /// What was chosen, with no ability asking: the scenario dump's and the loop watch's.
     fn entered_raw(&self) -> (Option<CardId>, Entered);
     /// Every object it names: chosen as it entered, then chosen as its abilities resolved or (an emblem) what made it (the
@@ -326,7 +332,7 @@ pub trait ChoiceRecord {
 
 impl ChoiceRecord for Choices {
     fn entered(text: CardId, made: Entered) -> Choices {
-        let own = |value| Chosen { value, text, acquired: Acquired::OWN };
+        let own = |value| Chosen { value, text, acquired: Acquired::OWN, since: 0 };
         Choices {
             by: made.any().then_some(text),
             color: made.color,
@@ -339,7 +345,11 @@ impl ChoiceRecord for Choices {
         }
     }
 
-    fn keep(&mut self, by: Linked, value: Kept) -> bool {
+    fn holds(&self, by: Linked, value: Kept) -> bool {
+        self.kept.iter().flatten().any(|c| c.text == by.text && c.acquired == by.acquired && c.value == value)
+    }
+
+    fn keep_at(&mut self, by: Linked, value: Kept, stamp: u32) -> bool {
         // A reselected entry choice uses its existing carrier, without taking another kept slot.
         if by.acquired == Acquired::OWN && self.by == Some(by.text) {
             match value {
@@ -348,14 +358,14 @@ impl ChoiceRecord for Choices {
                 _ => {}
             }
         }
-        let chosen = Chosen { value, text: by.text, acquired: by.acquired };
         let mine = |c: &Option<Chosen<Kept>>| {
             c.is_some_and(|c| c.text == by.text && c.acquired == by.acquired && c.value.same_kind(value))
         };
         let slot = self.kept.iter().position(mine).or_else(|| self.kept.iter().position(Option::is_none));
         match slot {
             Some(at) => {
-                self.kept[at] = Some(chosen);
+                let since = self.kept[at].filter(|c| c.value == value).map_or(stamp, |c| c.since);
+                self.kept[at] = Some(Chosen { value, text: by.text, acquired: by.acquired, since });
                 true
             }
             None => false,
@@ -450,6 +460,17 @@ impl Choices {
         })
     }
 
+    /// The object `by` chose as an ability of it resolved, and since when it has been the one chosen (`Chosen::since`); one
+    /// chosen as the permanent entered, since then (0).
+    pub fn object_since(&self, by: Linked) -> Option<(ObjectId, u32)> {
+        self.entered_to(by).and_then(|c| c.object).map(|id| (id, 0)).or_else(|| {
+            self.kept.iter().flatten().find_map(|c| match c.value {
+                Kept::Object(id) if c.to(by).is_some() => Some((id, c.since)),
+                _ => None,
+            })
+        })
+    }
+
     /// The card name `by` chose (`Chosen::to`): as the permanent entered, or as `by` resolved.
     pub fn card(&self, by: Linked) -> Option<CardId> {
         self.kept_to(by, |k| match k {
@@ -493,6 +514,9 @@ pub struct Chosen<T> {
     pub text: CardId,
     /// How the permanent had the ability that made it (`Linked::acquired`).
     pub acquired: Acquired,
+    /// The timestamp at which that ability made this choice, kept while it chooses the same again (0 for one made as the
+    /// permanent entered): since when "the last chosen card" has been that card (Koh, the Face Stealer, `Lent::since`).
+    pub since: u32,
 }
 
 impl<T: Copy> Chosen<T> {
@@ -524,13 +548,42 @@ pub struct Phased {
 /// How an object came to have an ability, as linked abilities know it (CR 607.1, 607.5): by its own text - what is printed
 /// on it, or the copiable values it entered the battlefield with - or by an effect that gave it the ability later: a copy
 /// effect (CR 707.2), named by the timestamp of the `EffectKind::RestoreCopy` it left, or an effect that granted the ability
-/// (CR 613.1f), named by its timestamp and, for a static ability, which of its source's static abilities it is. Abilities
-/// an object acquired by one effect are linked only to one another (CR 607.5).
+/// (CR 613.1f), named by its timestamp and, for a static ability, which of its source's static abilities it is - and, for
+/// an ability that effect lends from another object (Koh, the Face Stealer's "the last chosen card", Agatha's Soul
+/// Cauldron's exiled cards), the lending (`Lent`). Abilities an object acquired by one effect are linked only to one
+/// another (CR 607.5).
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Default)]
 pub struct Acquired {
     pub by: AcquiredBy,
     pub stamp: u32,
     pub part: u8,
+    pub lent: Lent,
+}
+
+/// One lending of another object's abilities by an effect (CR 607.5): the donor, the particular object whose abilities
+/// are lent (`Chars::grant_ability_lent`), and since when that effect has lent them to it without a break (`since`, a
+/// timestamp; 0 for an effect that lends a donor's abilities for as long as that object exists). The abilities of one
+/// lending are a linked pair of their own: two cards of one name lent by one effect, or one card lent again after the
+/// effect lent another, are each another acquisition, linked to nothing the other's abilities did ("regardless of what
+/// other abilities the object may currently have or may have had in the past"). `Lent::NONE` for an ability no donor lent.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Default)]
+pub struct Lent {
+    pub donor: ObjectId,
+    pub since: u32,
+}
+
+impl Lent {
+    pub const NONE: Lent = Lent { donor: ObjectId::NONE, since: 0 };
+
+    /// `donor`, lent for as long as it is that object.
+    pub const fn of(donor: ObjectId) -> Lent {
+        Lent { donor, since: 0 }
+    }
+
+    /// Whether a donor lent it.
+    pub fn is_some(self) -> bool {
+        self.donor != ObjectId::NONE
+    }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Default)]
@@ -545,7 +598,7 @@ pub enum AcquiredBy {
 }
 
 impl Acquired {
-    pub const OWN: Acquired = Acquired { by: AcquiredBy::Own, stamp: 0, part: 0 };
+    pub const OWN: Acquired = Acquired { by: AcquiredBy::Own, stamp: 0, part: 0, lent: Lent::NONE };
 }
 
 /// An individual ability's acquisition (CR 113.2c, 602.5c), independent of its current offered slot.
@@ -3835,15 +3888,15 @@ mod tests {
     /// acquired by a copy effect or a grant since, even of the same card, refers to nothing.
     #[test]
     fn a_choice_is_read_only_by_an_ability_linked_to_the_one_that_made_it() {
-        let chosen = Chosen { value: ObjectId(9), text: CardId(4), acquired: Acquired::OWN };
+        let chosen = Chosen { value: ObjectId(9), text: CardId(4), acquired: Acquired::OWN, since: 0 };
         let by = |text, acquired| Linked { object: ObjectId(2), text, acquired };
-        let copy = Acquired { by: AcquiredBy::Copy, stamp: 7, part: 0 };
+        let copy = Acquired { by: AcquiredBy::Copy, stamp: 7, part: 0, ..Acquired::OWN };
         assert_eq!(chosen.to(by(CardId(4), Acquired::OWN)), Some(ObjectId(9)));
         assert_eq!(chosen.to(by(CardId(5), Acquired::OWN)), None);
         assert_eq!(chosen.to(by(CardId(4), copy)), None);
-        assert_eq!(chosen.to(by(CardId(4), Acquired { by: AcquiredBy::Grant, stamp: 7, part: 1 })), None);
+        assert_eq!(chosen.to(by(CardId(4), Acquired { by: AcquiredBy::Grant, stamp: 7, part: 1, ..Acquired::OWN })), None);
         // A choice an ability a copy effect gave it made is read by that copy effect's abilities alone (CR 607.5).
-        let by_copy = Chosen { value: CardId(6), text: CardId(4), acquired: copy };
+        let by_copy = Chosen { value: CardId(6), text: CardId(4), acquired: copy, since: 0 };
         assert_eq!(by_copy.to(by(CardId(4), copy)), Some(CardId(6)));
         assert_eq!(by_copy.to(by(CardId(4), Acquired::OWN)), None);
     }
@@ -3851,8 +3904,8 @@ mod tests {
     #[test]
     fn ordered_subtypes_are_typed_linked_and_do_not_enlarge_choices() {
         assert_eq!(std::mem::size_of::<Kept>(), 8);
-        assert_eq!(std::mem::size_of::<Choices>(), 72);
-        assert_eq!(std::mem::size_of::<Obj>(), 976);
+        assert_eq!(std::mem::size_of::<Choices>(), 96);
+        assert_eq!(std::mem::size_of::<Obj>(), 1008);
         let text = CardId(4);
         let own = Linked { object: ObjectId(2), text, acquired: Acquired::OWN };
         let pair = [Subtype::Forest, Subtype::Island];
@@ -3863,7 +3916,7 @@ mod tests {
         assert_eq!(choices.card(own), Some(CardId(9)));
         assert_eq!(choices.entered_raw().1.subtype_pair, Some(pair));
         assert_eq!(choices.subtype_pair(Linked { text: CardId(5), ..own }), None);
-        let copy = Acquired { by: AcquiredBy::Copy, stamp: 7, part: 0 };
+        let copy = Acquired { by: AcquiredBy::Copy, stamp: 7, part: 0, ..Acquired::OWN };
         assert_eq!(choices.subtype_pair(Linked { acquired: copy, ..own }), None);
     }
 
@@ -3880,7 +3933,7 @@ mod tests {
     #[test]
     fn reselected_values_stay_linked_to_the_ability_that_chose_them() {
         let own=Linked {object:ObjectId(2),text:CardId(4),acquired:Acquired::OWN};
-        let grant=Linked {acquired:Acquired {by:AcquiredBy::Grant,stamp:7,part:0},..own};
+        let grant=Linked {acquired:Acquired {by:AcquiredBy::Grant,stamp:7,part:0, ..Acquired::OWN },..own};
         let mut choices=Choices::entered(own.text,Entered {color:Some(Color::Blue),number:Some(2),..Default::default()});
         assert!(choices.keep(grant,Kept::Color(Color::Red)));assert!(choices.keep(grant,Kept::Number(5)));
         assert_eq!((choices.color(own),choices.number(own)),(Some(Color::Blue),Some(2)));
@@ -3895,7 +3948,7 @@ mod tests {
     fn each_ability_keeps_the_name_it_chose() {
         let entered = <Choices as ChoiceRecord>::entered(CardId(4), Entered { card: Some(CardId(10)), ..Default::default() });
         let own = Linked { object: ObjectId(2), text: CardId(4), acquired: Acquired::OWN };
-        let given = Linked { object: ObjectId(2), text: CardId(5), acquired: Acquired { by: AcquiredBy::Grant, stamp: 3, part: 0 } };
+        let given = Linked { object: ObjectId(2), text: CardId(5), acquired: Acquired { by: AcquiredBy::Grant, stamp: 3, part: 0, ..Acquired::OWN } };
         let other = Linked { object: ObjectId(2), text: CardId(6), acquired: Acquired::OWN };
         let mut choices = entered;
         assert_eq!(choices.card(own), Some(CardId(10)), "the name chosen as it entered");
@@ -3928,6 +3981,26 @@ mod tests {
         let mut both = entered;
         assert!(both.keep(own, Kept::Object(ObjectId(9))));
         assert_eq!((both.object(own), both.player(own)), (Some(ObjectId(7)), Some(PlayerId(0))));
+    }
+
+    /// An object chosen anew is chosen from its timestamp; choosing the one that still stands keeps when it was first chosen,
+    /// and choosing another, then the first again, starts again (Koh, the Face Stealer's "the last chosen card", `Lent::since`).
+    #[test]
+    fn a_kept_object_remembers_since_when_it_has_been_chosen() {
+        let own = Linked { object: ObjectId(2), text: CardId(4), acquired: Acquired::OWN };
+        let (a, c) = (Kept::Object(ObjectId(9)), Kept::Object(ObjectId(10)));
+        let mut choices = Choices::default();
+        assert!(!choices.holds(own, a));
+        assert!(choices.keep_at(own, a, 5));
+        assert!(choices.holds(own, a));
+        assert!(choices.keep_at(own, a, 6));
+        assert_eq!(choices.object_since(own), Some((ObjectId(9), 5)), "still the one chosen at 5");
+        assert!(choices.keep_at(own, c, 7));
+        assert!(choices.keep_at(own, a, 8));
+        assert_eq!(choices.object_since(own), Some((ObjectId(9), 8)), "chosen again after another");
+        assert_eq!(choices.object_since(Linked { text: CardId(5), ..own }), None);
+        let entered = <Choices as ChoiceRecord>::entered(CardId(4), Entered { object: Some(ObjectId(7)), ..Default::default() });
+        assert_eq!(entered.object_since(own), Some((ObjectId(7), 0)), "chosen as it entered");
     }
 
     #[test]

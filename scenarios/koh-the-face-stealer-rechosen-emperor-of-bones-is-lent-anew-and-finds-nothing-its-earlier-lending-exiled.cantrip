@@ -1,0 +1,115 @@
+# Koh, the Face Stealer (CR 607.2a, 607.5): Koh's enters trigger exiles one of Bot2's Emperors of Bones on turn 3, and its dies
+# trigger exiles the other, which Bot1's Lightning Bolt kills on turn 5. Bot1 pays 1 life to choose the first Emperor, and at the
+# beginning of combat that card's lent trigger exiles the Llanowar Elves Bot2's Shock killed. In the second main phase Bot1 pays
+# to choose the other Emperor, then pays again to choose the first one once more, and adapts with its lent "{1}{B}: Adapt 2".
+# The first Emperor's abilities are lent to Koh anew: a fresh acquisition, linked only to one another and not to the ones Koh
+# had of that same card before it chose the other (CR 607.5, "regardless of what other abilities the object ... may have had in
+# the past"). So its lent "put a creature card exiled with this creature onto the battlefield" finds nothing, and the Elves the
+# earlier lending exiled stays in exile.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Koh, the Face Stealer
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Emperor of Bones x2
+Llanowar Elves
+Shock
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Llanowar Elves; Shock
+[T2 Bot2.Main2]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Emperor of Bones.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Koh, the Face Stealer.Cast
+Bot1.Pass
+Bot1.Target(Emperor of Bones)
+Bot1.Pass
+Bot2.Pass
+? Exile = Emperor of Bones
+[T4 Bot2.Main2]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Emperor of Bones.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Emperor of Bones)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Exile = Emperor of Bones; Emperor of Bones
+Bot1.Battlefield.Koh, the Face Stealer.Activate
+Bot1.Pass
+Bot1.Choose(Emperor of Bones#1)
+Bot2.Pass
+? Bot1.Life = 19
+[T5 Bot1.BeginCombat]
+Bot1.Target(Bot2.Graveyard.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 3
+[T5 Bot1.Main2]
+Bot1.Battlefield.Koh, the Face Stealer.Activate(Ability: Choose)
+Bot1.Pass
+Bot1.Choose(Emperor of Bones#2)
+Bot2.Pass
+? Bot1.Life = 18
+Bot1.Battlefield.Koh, the Face Stealer.Activate(Ability: Choose)
+Bot1.Pass
+Bot1.Choose(Emperor of Bones#1)
+Bot2.Pass
+? Bot1.Life = 17
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Koh, the Face Stealer.Activate(Ability: Adapt)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Koh, the Face Stealer.Counters.PlusOnePlusOne = 2
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 3
+Bot1.Battlefield = Koh, the Face Stealer; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Life = 17

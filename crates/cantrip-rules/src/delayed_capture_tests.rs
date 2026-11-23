@@ -266,7 +266,7 @@ fn delayed_capture_keeps_the_creating_abilitys_acquired_text_and_words() {
     assert!(cx(&mut g).attach(source, host));
     let ability = AbilityRef::delayed(g.state.obj(source).card, 0);
     let mut item = crate::actions::stack_item(StackKind::Triggered, source, ability, YOU, &[]);
-    item.acquired = Acquired { by: AcquiredBy::Grant, stamp: g.state.timestamp(), part: 0 };
+    item.acquired = Acquired { by: AcquiredBy::Grant, stamp: g.state.timestamp(), part: 0, ..Acquired::OWN };
     item.words = Words::NONE.changed(Word::Subtype(Subtype::Goblin), Word::Subtype(Subtype::Elf));
     g.state.stack_push(item); let serial = g.state.stack.last().unwrap().serial;
     let frame = g.state.agenda.len(); g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
@@ -451,7 +451,7 @@ fn group_departure_keeps_creating_words_and_acquisition() {
     let watched = put(&mut g, &BODY, Zone::BATTLEFIELD);
     let ability = AbilityRef::delayed(g.state.obj(source).card, 0);
     let mut item = crate::actions::stack_item(StackKind::Triggered, source, ability, YOU, &[]);
-    item.acquired = Acquired { by: AcquiredBy::Grant, stamp: g.state.timestamp(), part: 0 };
+    item.acquired = Acquired { by: AcquiredBy::Grant, stamp: g.state.timestamp(), part: 0, ..Acquired::OWN };
     item.words = Words::NONE.changed(Word::Subtype(Subtype::Goblin), Word::Subtype(Subtype::Elf));
     g.state.stack_push(item); let serial = g.state.stack.last().unwrap().serial;
     let frame = g.state.agenda.len(); g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));

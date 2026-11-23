@@ -23,7 +23,7 @@ fn created_tokens_capture_exact_link_and_specific_creating_ability() {
     g.state.zone_push(Zone::BATTLEFIELD, source);
     let ability = AbilityRef { card: cards.id_of(&SOURCE), index: 0 };
     let mut item = crate::actions::stack_item(StackKind::Triggered, source, ability, P, &[]);
-    item.acquired = Acquired { by: AcquiredBy::Grant, stamp: 7, part: 1 };
+    item.acquired = Acquired { by: AcquiredBy::Grant, stamp: 7, part: 1, ..Acquired::OWN };
     g.state.stack_push(item);
     let serial = g.state.stack.last().unwrap().serial;
     g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
@@ -62,6 +62,6 @@ fn created_tokens_capture_exact_link_and_specific_creating_ability() {
     assert_eq!(History::new(&g.log, 1).tokens_created_by(other, ability).count(), 0);
     assert_eq!(History::new(&g.log, 1).tokens_created_by(by, AbilityRef { index: 1, ..ability }).count(), 0);
     assert_eq!(std::mem::size_of::<crate::StateCheck>(), 16);
-    assert_eq!(std::mem::size_of::<Event>(), 28);
-    assert_eq!(std::mem::size_of::<cantrip_api::history::Record>(), 52);
+    assert_eq!(std::mem::size_of::<Event>(), 36);
+    assert_eq!(std::mem::size_of::<cantrip_api::history::Record>(), 60);
 }

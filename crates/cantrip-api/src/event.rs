@@ -1048,11 +1048,11 @@ mod tests {
     }
 
     /// History retains every event; independently acquired activations retain their grant and donor.
-    /// Damage and snow spending use the published u32 domain.
-    /// The composed 64-bit Record includes the acquisition-aware Cause and measures 72 bytes.
+    /// Damage and snow spending use the published u32 domain. The largest is a token's creator (`TokenCreatedByAbility`),
+    /// whose `Linked` names the lending of an ability another object lent (`Acquired::lent`, CR 607.5).
     #[test]
     fn an_event_stays_small() {
-        assert!(std::mem::size_of::<Event>() <= 28, "Event is {} bytes", std::mem::size_of::<Event>());
+        assert!(std::mem::size_of::<Event>() <= 36, "Event is {} bytes", std::mem::size_of::<Event>());
     }
 
     /// Every event kind has its own bit: two kinds sharing one would make a history query for one count the other's
