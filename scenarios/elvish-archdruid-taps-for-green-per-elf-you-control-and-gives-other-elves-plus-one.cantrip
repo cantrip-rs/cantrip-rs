@@ -1,4 +1,4 @@
-# Elvish Archdruid: "{T}: Add {G} for each Elf you control" (CR 106.5): Bot1's Archdruid and Elvish Mystic are two Elves; Memnite is not an Elf and
+# Elvish Archdruid: "{T}: Add {G} for each Elf you control" (CR 605.1a, 106.4): Bot1's Archdruid and Elvish Mystic are two Elves; Memnite is not an Elf and
 # Bot2's Elvish Mystic is not Bot1's, so the Archdruid adds exactly {G}{G}. "Other Elf creatures you control get +1/+1" (CR 613.4c): Bot1's Mystic is
 # 2/2, the Archdruid itself still 2/2, Memnite 1/1 and Bot2's Mystic 1/1.
 

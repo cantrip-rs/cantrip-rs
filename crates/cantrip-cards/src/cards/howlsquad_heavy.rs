@@ -2,7 +2,7 @@ use cantrip_api::*;
 use cantrip_mechanics::max_speed::max_speed;
 use cantrip_mechanics::statics::{have_haste, other_of_subtype_you_control};
 use cantrip_mechanics::triggers::BEGINNING_OF_YOUR_COMBAT;
-use cantrip_mechanics::{lands, lasting_rules, permanents_with_subtype_you_control, tokens};
+use cantrip_mechanics::{lands, lasting_rules, mana, tokens};
 use cantrip_oracle as oracle;
 
 /// "Create a 1/1 red Goblin creature token. That token attacks this combat if able." (CR 111.1, 508.1d): the requirement is an
@@ -16,17 +16,6 @@ fn goblin_that_attacks(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
     Ok(())
 }
 
-/// "{T}: Add {R} for each Goblin you control" (CR 106.1, 608.2h): counted as the ability resolves, this creature among them while it
-/// is one. "Goblin" is read through this creature's words, so a text change makes it count the new creature type (CR 612.2).
-fn add_red_for_each_goblin(g: &mut dyn Game, asker: &Asker, _: Option<Color>) -> Result<(), Suspend> {
-    let goblin = g.words(asker.source).subtype(Subtype::Goblin);
-    let goblins = permanents_with_subtype_you_control(g, asker.controller, goblin);
-    if goblins > 0 {
-        g.add_mana(asker.controller, Mana::R, goblins as u32);
-    }
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     start_your_engines: true,
     abilities: &[triggered(
@@ -34,7 +23,7 @@ pub static CARD: CardDef = CardDef {
         goblin_that_attacks,
         "At the beginning of combat on your turn, create a 1/1 red Goblin creature token. That token attacks this combat if able.",
     )],
-    delayed: &[mana_ability(TAP, add_by(add_red_for_each_goblin), "{T}: Add {R} for each Goblin you control.")],
+    delayed: &[mana_ability(TAP, add_by(mana::add_for_each_subtype_you_control::<{ Mana::R as u8 }, { lands::sub(Subtype::Goblin) }>), "{T}: Add {R} for each Goblin you control.")],
     // "That token attacks this combat if able" (CR 508.1d, 611.2c): the token this ability made, named as the lasting rule starts.
     lasting_rules: &[LastingRule {
         text: "That token attacks this combat if able.",

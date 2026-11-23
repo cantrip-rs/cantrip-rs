@@ -45,7 +45,7 @@ pub fn add_green_equal_to_its_power(g: &mut dyn Game, asker: &Asker, _: Option<C
     Ok(())
 }
 
-/// "Add {U} for each artifact you control" (CR 106.5): counted as the ability resolves, possibly none. A mana ability's
+/// "Add {U} for each artifact you control" (CR 106.4): counted as the ability resolves, possibly none. A mana ability's
 /// `add_by`: Tolarian Academy, and Uthros, Titanic Godcore's 12+ ability.
 pub fn add_blue_for_each_artifact(g: &mut dyn Game, asker: &Asker, _: Option<Color>) -> Result<(), Suspend> {
     let artifacts = crate::artifacts_you_control(g, asker.controller);
@@ -55,7 +55,22 @@ pub fn add_blue_for_each_artifact(g: &mut dyn Game, asker: &Asker, _: Option<Col
     Ok(())
 }
 
-/// "Add {G} for each creature you control" (CR 106.5): counted as the ability resolves, possibly none. A mana ability's
+/// "{T}: Add [mana] for each [subtype] you control" (CR 605.1a, 106.4, 205.3): one mana of the kind `M` (`Mana::G as u8`) for each
+/// permanent of the subtype `SUBTYPE` (`lands::sub(..)`) its controller controls, counted through the layers as the ability
+/// resolves (the source among them if it has the subtype, a changeling for any creature type), possibly none; an opponent's do
+/// not count. The subtype is read through the source's words (CR 612.2), so a text change that rewrites it changes what is
+/// counted; a mana symbol is no word, so the mana stays the same. A mana ability's `add_by`: Elvish Archdruid ({G}, Elves),
+/// Rofellos, Llanowar Emissary ({G}, Forests), Howlsquad Heavy ({R}, Goblins) and The Notary Hobbits ({C}, Halflings).
+pub fn add_for_each_subtype_you_control<const M: u8, const SUBTYPE: u16>(g: &mut dyn Game, asker: &Asker, _: Option<Color>) -> Result<(), Suspend> {
+    let subtype = crate::lands::word(g, asker.source, SUBTYPE);
+    let count = crate::permanents_with_subtype_you_control(g, asker.controller, subtype);
+    if count > 0 {
+        g.add_mana(asker.controller, Mana::ALL[M as usize], count as u32);
+    }
+    Ok(())
+}
+
+/// "Add {G} for each creature you control" (CR 106.4): counted as the ability resolves, possibly none. A mana ability's
 /// `add_by`: Gaea's Cradle, and Evendo, Waking Haven's 12+ ability.
 pub fn add_green_for_each_creature(g: &mut dyn Game, asker: &Asker, _: Option<Color>) -> Result<(), Suspend> {
     let creatures = g.permanents_of(asker.controller).into_iter().filter(|&id| g.chars(id).is(CardType::Creature)).count();
@@ -65,7 +80,7 @@ pub fn add_green_for_each_creature(g: &mut dyn Game, asker: &Asker, _: Option<Co
     Ok(())
 }
 
-/// "For each color among permanents you control, add one mana of that color" (CR 106.5, 105.2): the colors counted as the ability
+/// "For each color among permanents you control, add one mana of that color" (CR 106.4, 105.2): the colors counted as the ability
 /// resolves, possibly none. A mana ability's `add_by`: Bloom Tender (Vivid) and Faeburrow Elder.
 pub fn add_one_of_each_color_among_your_permanents(g: &mut dyn Game, asker: &Asker, _: Option<Color>) -> Result<(), Suspend> {
     for color in crate::vivid::colors(g, asker.controller).iter() {
@@ -428,7 +443,7 @@ fn add_current_power_of_one_color(g: &mut dyn Game, asker: &Asker, color: Option
     Ok(())
 }
 
-/// "Add X mana of any one color, where X is this creature's power." (CR 106.5, 605.3b, 107.1b): the power as the ability
+/// "Add X mana of any one color, where X is this creature's power." (CR 106.4, 605.3b, 107.1b): the power as the ability
 /// resolves, through layers (CR 208.2); none for a power of 0 or less. The activation names the color, any of the five. An
 /// `only_for` restriction on it holds its mana as the ability's own (CR 106.6), and what the player has to pay with counts
 /// it (`ManaCapability::CurrentPowerOneColor`). Redshift, Rocketeer Chief, Woodland Weavemaster and Helga, Skittish Seer
