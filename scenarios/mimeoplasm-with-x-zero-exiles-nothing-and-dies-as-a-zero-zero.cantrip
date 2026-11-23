@@ -1,0 +1,32 @@
+# X=0: nothing is exiled, so it enters with no counters as a 0/0 and is put into its owner's graveyard as a
+# state-based action (CR 704.5f); the creature card in the graveyard is untouched.
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Entomb
+Mimeoplasm, Revered One
+Swamp x2
+Grizzly Bears
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mimeoplasm, Revered One.Cast(X: 0)
+Bot1.Choose(Confirm X)
+
+[Expect]
+Exile = 
+Bot1.Graveyard = Mimeoplasm, Revered One; Entomb; Grizzly Bears

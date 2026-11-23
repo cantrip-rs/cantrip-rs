@@ -1,0 +1,60 @@
+# X=2 exiles two creature cards and gives six counters. Becoming a copy of Grizzly Bears "except it's 0/0 and has this
+# ability" keeps the counters (a 6/6 Bears) and the {2} ability - but that ability is linked only to the "As Mimeoplasm
+# enters" exile printed on Mimeoplasm, which the copy no longer has (CR 607.1, 607.5): it refers to no exiled card, so
+# Llanowar Elves, still in exile, is not a legal target of a second activation. Both cards stay in exile.
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Entomb
+Entomb
+Mimeoplasm, Revered One
+Swamp
+Swamp
+Grizzly Bears
+Llanowar Elves
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Llanowar Elves)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mimeoplasm, Revered One.Cast(X: 2)
+Bot1.Choose(Confirm X)
+Bot1.Choose(Grizzly Bears; Llanowar Elves)
+? Bot1.Battlefield.Mimeoplasm, Revered One.Power = 6
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mimeoplasm, Revered One.Activate(Exile.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 6
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Grizzly Bears.Activate(Exile.Llanowar Elves)
+
+[Expect]
+Exile = Grizzly Bears; Llanowar Elves
+Bot1.Battlefield.Grizzly Bears.Power = 6
+Bot1.Battlefield.Grizzly Bears.Toughness = 6
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 6

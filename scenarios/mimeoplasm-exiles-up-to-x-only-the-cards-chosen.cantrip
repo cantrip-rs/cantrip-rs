@@ -1,0 +1,42 @@
+# "Up to X": with X=2 and two creature cards in Bot1's graveyard, choosing only Grizzly Bears exiles just it and gives three
+# counters (one card exiled this way, CR 614.12); Llanowar Elves stays in the graveyard and Mimeoplasm is a 3/3.
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Entomb
+Entomb
+Mimeoplasm, Revered One
+Swamp
+Grizzly Bears
+Llanowar Elves
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Llanowar Elves)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mimeoplasm, Revered One.Cast(X: 2)
+Bot1.Choose(Confirm X)
+Bot1.Choose(Grizzly Bears)
+
+[Expect]
+Exile = Grizzly Bears
+Bot1.Graveyard = Black Lotus; Entomb; Llanowar Elves; Entomb
+Bot1.Battlefield.Mimeoplasm, Revered One.Power = 3
+Bot1.Battlefield.Mimeoplasm, Revered One.Toughness = 3

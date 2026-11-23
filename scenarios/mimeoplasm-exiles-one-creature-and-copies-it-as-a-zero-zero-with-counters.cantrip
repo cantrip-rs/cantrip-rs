@@ -1,0 +1,56 @@
+# X=1: Mimeoplasm exiles Bot1's one chosen creature card from its own graveyard as it enters (never Bot2's creature card,
+# CR 614.12), enters with three +1/+1 counters, and the {2} ability makes it a copy of that exiled card except it is 0/0
+# (CR 707.9b): Grizzly Bears 2/2 as a 0/0 with three counters is a 3/3, still named for the card it copied.
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Entomb
+Mimeoplasm, Revered One
+Swamp
+Grizzly Bears
+Swamp x12
+
+[Bot2 Deck]
+Swamp
+Entomb
+Island x6
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Llanowar Elves)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mimeoplasm, Revered One.Cast(X: 1)
+Bot1.Choose(Confirm X)
+! Bot1.Choose(Llanowar Elves)
+Bot1.Choose(Grizzly Bears)
+? Bot1.Battlefield.Mimeoplasm, Revered One.Power = 3
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mimeoplasm, Revered One.Activate(Exile.Grizzly Bears)
+Bot1.Pass
+
+[Expect]
+Bot2.Graveyard = Entomb; Llanowar Elves
+Exile = Grizzly Bears
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Grizzly Bears.Toughness = 3
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Grizzly Bears.Types = Creature
+Bot1.Battlefield.Grizzly Bears.Subtypes = Bear
