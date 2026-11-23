@@ -22,6 +22,10 @@ module imports nothing. It exports its memory and four functions:
 Any page can instantiate it with `WebAssembly.instantiate(bytes, {})`. The web client's `Engine.js` does this, and
 `crates/cantrip-wasm/check/determinism.mjs` shows the same few lines.
 
+A fork's own definitions (a variant's emblems, say) join the engine's card table through
+`cantrip_engine::add_cards`, called once before anything asks for the table. A fork's build of the module, and of the
+native host it replays games on, registers them first, so both know them alike.
+
 There is no unwinding on this target (the `wasm` profile aborts on a panic). Where the native host refuses a request the
 engine failed on (`IllegalAnswer`), the module traps. The page then reports the failure, and the module is not used
 again.
