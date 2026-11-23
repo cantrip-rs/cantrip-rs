@@ -1,0 +1,8 @@
+{
+  "name": "Rofellos, Llanowar Emissary",
+  "manaCost": "{G}{G}",
+  "type": "Legendary Creature — Elf Druid",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "{T}: Add {G} for each Forest you control."
+}

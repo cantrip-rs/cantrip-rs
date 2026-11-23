@@ -1,0 +1,49 @@
+# "Forest" is a land type word of Rofellos, Llanowar Emissary's own text (CR 612.2): after Magical Hack changes it to
+# Island, Rofellos counts Bot1's Islands, not its Forests. On turn 3 Bot1 controls two Islands and no Forest (its Forest is
+# still in hand), so Rofellos adds {G}{G} - still green mana, since a mana symbol is no word (CR 612.2) - where unchanged it
+# would add nothing.
+
+[Bot1 Deck]
+Island
+Mox Emerald
+Mox Emerald
+Mox Sapphire
+Rofellos, Llanowar Emissary
+Magical Hack
+Island
+Forest
+Island x12
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Rofellos, Llanowar Emissary.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Magical Hack.Cast(Bot1.Battlefield.Rofellos, Llanowar Emissary)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Forest)
+Bot1.Modes(Island)
+? Bot1.Mana =
+Bot1.Battlefield.Rofellos, Llanowar Emissary.Activate
+? Bot1.Mana = {G}{G}
+
+[Expect]
+Bot1.Battlefield.Rofellos, Llanowar Emissary.Tapped = true

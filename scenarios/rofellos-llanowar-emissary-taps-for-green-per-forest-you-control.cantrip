@@ -1,0 +1,46 @@
+# Rofellos, Llanowar Emissary: "{T}: Add {G} for each Forest you control" (CR 605.1a, 106.4, 205.3). On turn 5 Bot1 controls
+# Forest, Tropical Island (a Forest by its type line, not its name) and Island: two Forests, so Rofellos adds exactly
+# {G}{G}. Island is a land but no Forest, the Mox Emeralds are no lands at all, and Bot2's two Forests are not Bot1's
+# (one more for every land, or every player's Forest, would show). Rofellos is tapped to pay its cost.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Rofellos, Llanowar Emissary
+Island
+Tropical Island
+Plains
+Forest x13
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Rofellos, Llanowar Emissary.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Tropical Island.Play
+? Bot1.Mana =
+Bot1.Battlefield.Rofellos, Llanowar Emissary.Activate
+? Bot1.Mana = {G}{G}
+
+[Expect]
+Bot1.Battlefield.Rofellos, Llanowar Emissary.Tapped = true
+Bot2.Battlefield = Forest; Forest

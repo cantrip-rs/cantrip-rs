@@ -1,0 +1,32 @@
+# Rofellos, Llanowar Emissary counts the Forests its controller controls as the ability resolves (CR 605.1a, 106.4), possibly none:
+# Bot1's only land is an Island, so tapping Rofellos adds no mana at all, while Bot2's Forest is not Bot1's to count.
+# Black Lotus pays for Rofellos on turn 1; its third green mana empties from the pool long before turn 3.
+
+[Bot1 Deck]
+Island
+Black Lotus
+Rofellos, Llanowar Emissary
+Island x17
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Rofellos, Llanowar Emissary.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+? Bot1.Mana =
+Bot1.Battlefield.Rofellos, Llanowar Emissary.Activate
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Rofellos, Llanowar Emissary.Tapped = true
+Bot1.Mana =
