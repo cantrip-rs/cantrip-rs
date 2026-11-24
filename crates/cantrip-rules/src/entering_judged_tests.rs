@@ -242,6 +242,7 @@ fn it_is_judged_again_after_a_replacement_changes_how_it_enters() {
         madness: false,
         pays_characteristic: false,
         exiled_with: None,
+        sent_by: ObjectId::NONE,
         flashback: false,
         exile_instead: ExileInsteads::NONE,
         bottom: false,

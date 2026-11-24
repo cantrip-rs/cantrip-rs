@@ -135,7 +135,7 @@ struct Plan {
     seen_by_all: bool,
     /// A merged permanent leaving the battlefield (CR 730.3): each of its components, and where its card components go if it
     /// is a token a replacement effect for cards alone would have moved elsewhere (CR 730.3e).
-    components: Option<(Vec<crate::merge::Component>, Option<(Zone, Option<Linked>)>)>,
+    components: Option<(Vec<crate::merge::Component>, Option<(Zone, Option<Linked>, ObjectId)>)>,
 }
 
 /// Whether every player can see `id` as it moves now (CR 603.10a: "an object that all players can see"), the instruction
@@ -340,6 +340,7 @@ fn moving_proposal(cx: &Cx, mut m: Moving, reason: ZoneReason) -> (Moving, ZoneC
         madness: false,
         pays_characteristic: m.pays_characteristic,
         exiled_with: None,
+        sent_by: ObjectId::NONE,
         flashback: m.flashback,
         exile_instead: m.exile_instead,
         bottom: false,
@@ -573,9 +574,9 @@ fn move_together_entering_moves(
                 } else {
                     replace::zone_change(cx, ZoneChange { is_card: true, ..proposed })
                 };
-                if as_card.regenerated || as_card.shielded || as_card.replaced { (to, change.exiled_with) } else { (as_card.to, as_card.exiled_with) }
+                if as_card.regenerated || as_card.shielded || as_card.replaced { (to, change.exiled_with, change.sent_by) } else { (as_card.to, as_card.exiled_with, as_card.sent_by) }
             });
-            (all, card_to.filter(|&(z, _)| z != to))
+            (all, card_to.filter(|&(z, _, _)| z != to))
         });
         // Whatever it leaves, it is as it last existed there (CR 400.7, 608.2h, 113.7a): what an ability of it, or one it
         // created, reads once it is gone.
@@ -799,10 +800,10 @@ fn move_together_entering_moves(
         if let Some((all, card_to)) = &components {
             let mut group = vec![new_id];
             for c in all.iter().filter(|c| !c.top) {
-                let (mut to_c, exiled_with) = match card_to {
-                    Some((z, by)) if !c.token => (*z, *by),
-                    _ if to.is(ZoneKind::Command) && (requested_to.is(ZoneKind::Hand) || requested_to.is(ZoneKind::Library)) => (requested_to, change.exiled_with),
-                    _ => (to, change.exiled_with),
+                let (mut to_c, exiled_with, sent_by) = match card_to {
+                    Some((z, by, sent_by)) if !c.token => (*z, *by, *sent_by),
+                    _ if to.is(ZoneKind::Command) && (requested_to.is(ZoneKind::Hand) || requested_to.is(ZoneKind::Library)) => (requested_to, change.exiled_with, ObjectId::NONE),
+                    _ => (to, change.exiled_with, change.sent_by),
                 };
                 if c.commander_id.is_some_and(|identity| change.commander_components.contains(&identity)) {
                     to_c = Zone::COMMAND;
@@ -830,7 +831,7 @@ fn move_together_entering_moves(
                 if to_c.is(ZoneKind::Graveyard) && !c.token {
                     binned.push((to_c.player, part_id));
                 }
-                part_events.push(Event::ZoneChange { old: m.id, new: part_id, from: Zone::GONE, to: to_c, reason, part: true, put_by: None, enchanted_left: None, from_revealed_hand: false, to_revealed_hand: false });
+                part_events.push(Event::ZoneChange { old: m.id, new: part_id, from: Zone::GONE, to: to_c, reason, part: true, put_by: None, enchanted_left: None, from_revealed_hand: false, to_revealed_hand: false, sent_by });
                 if c.face_down {
                     part_events.push(Event::Revealed { player: old.owner, card: part_id });
                 }
@@ -892,7 +893,7 @@ fn move_together_entering_moves(
         if from.is(ZoneKind::Battlefield) {
             remove_from_combat(cx, &[m.id]);
         }
-        events.push(Event::ZoneChange { old: m.id, new: new_id, from, to, reason, part: false, put_by: change.put_by.filter(|_| to.is(ZoneKind::Battlefield)), enchanted_left: aura_hosts.iter().find_map(|&(a, h)| (a == m.id).then_some(h)), from_revealed_hand: from.is(ZoneKind::Hand) && (hands_before & (1 << from.player.0) != 0 || cards_before.contains(&m.id)), to_revealed_hand: false });
+        events.push(Event::ZoneChange { old: m.id, new: new_id, from, to, reason, part: false, put_by: change.put_by.filter(|_| to.is(ZoneKind::Battlefield)), enchanted_left: aura_hosts.iter().find_map(|&(a, h)| (a == m.id).then_some(h)), from_revealed_hand: from.is(ZoneKind::Hand) && (hands_before & (1 << from.player.0) != 0 || cards_before.contains(&m.id)), to_revealed_hand: false, sent_by: change.sent_by });
         events.extend(melded);
         events.append(&mut part_events);
         // CR 708.9: a face-down permanent or spell that moves to any other zone is revealed to all players by its owner as
@@ -3243,6 +3244,7 @@ fn create_tokens_entering(
             madness: false,
             pays_characteristic: false,
             exiled_with: None,
+            sent_by: ObjectId::NONE,
             flashback: false,
             exile_instead: ExileInsteads::NONE,
             bottom: false,
@@ -3311,8 +3313,8 @@ fn create_tokens_entering(
         cx.st().zone_push(Zone::BATTLEFIELD, id);
         emblem_as_it_arrives(cx, &entering, id);
         events.push(match spell {
-            Some(spell) => Event::ZoneChange { old: spell.object, new: id, from: Zone::STACK, to: Zone::BATTLEFIELD, part: false, reason: ZoneReason::Resolve, put_by, enchanted_left: None, from_revealed_hand: false, to_revealed_hand: false },
-            None => Event::ZoneChange { old: id, new: id, from: Zone::GONE, to: Zone::BATTLEFIELD, part: false, reason: ZoneReason::Created, put_by, enchanted_left: None, from_revealed_hand: false, to_revealed_hand: false },
+            Some(spell) => Event::ZoneChange { old: spell.object, new: id, from: Zone::STACK, to: Zone::BATTLEFIELD, part: false, reason: ZoneReason::Resolve, put_by, enchanted_left: None, from_revealed_hand: false, to_revealed_hand: false, sent_by: ObjectId::NONE },
+            None => Event::ZoneChange { old: id, new: id, from: Zone::GONE, to: Zone::BATTLEFIELD, part: false, reason: ZoneReason::Created, put_by, enchanted_left: None, from_revealed_hand: false, to_revealed_hand: false , sent_by: ObjectId::NONE },
         });
         // CR 303.4f, 301.5e: created attached to something, it became attached to it.
         events.extend(entered_attached(cx, id));

@@ -1,0 +1,91 @@
+# Mimeoplasm exiles Phelia, Exuberant Shepherd as it enters and becomes a copy of her. Attacking as Phelia, it exiles
+# Bot2's Grizzly Bears with the attack trigger it has from the copy, then becomes a copy of that Bears: the owner's ruling
+# (jschibel, 2026-11-24) - "exiled with it" reads every creature card this object exiled, however it exiled it, the
+# copied Phelia's trigger included. Llanowar Elves, which Bot2 exiled with its own Swords to Plowshares, was not exiled by
+# Mimeoplasm and is no legal target. The 0/0 Bears with three +1/+1 counters deals 3 combat damage.
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Entomb
+Mimeoplasm, Revered One
+Swamp
+Swamp
+Swamp
+Swamp x10
+Phelia, Exuberant Shepherd
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest
+Plains
+Grizzly Bears
+Swords to Plowshares
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Phelia, Exuberant Shepherd)
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mimeoplasm, Revered One.Cast(X: 1)
+Bot1.Choose(Confirm X)
+Bot1.Choose(Phelia, Exuberant Shepherd)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mimeoplasm, Revered One.Activate(Exile.Phelia, Exuberant Shepherd)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Llanowar Elves.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Phelia, Exuberant Shepherd > Bot2)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 3
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Phelia, Exuberant Shepherd.Activate(Exile.Llanowar Elves)
+Bot1.Battlefield.Phelia, Exuberant Shepherd.Activate(Exile.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Exile = Grizzly Bears; Llanowar Elves; Phelia, Exuberant Shepherd
+Bot1.Battlefield.Phelia, Exuberant Shepherd = (absent)
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Grizzly Bears.Toughness = 3
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 3
+Bot2.Life = 18

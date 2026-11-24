@@ -1,0 +1,76 @@
+# Mimeoplasm exiles Kalitas, Traitor of Ghet as it enters and becomes a copy of it. When Bot2's Grizzly Bears would die
+# to Lightning Bolt, the copied Kalitas's replacement effect exiles it instead (and makes a Zombie): Mimeoplasm exiled it,
+# though the Bolt's resolution moved it. The owner's ruling (jschibel, 2026-11-24) - "exiled with it" reads every creature
+# card this object exiled, however it exiled it - lets Mimeoplasm become a copy of that Bears, a 0/0 with three +1/+1
+# counters.
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Entomb
+Mimeoplasm, Revered One
+Lightning Bolt
+Swamp x10
+Kalitas, Traitor of Ghet
+
+[Bot2 Deck]
+Forest
+Forest
+Grizzly Bears
+Island x4
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Kalitas, Traitor of Ghet)
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Mimeoplasm, Revered One.Cast(X: 1)
+Bot1.Choose(Confirm X)
+Bot1.Choose(Kalitas, Traitor of Ghet)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Battlefield.Forest#2.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mimeoplasm, Revered One.Activate(Exile.Kalitas, Traitor of Ghet)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Kalitas, Traitor of Ghet.Activate(Exile.Grizzly Bears; Ability: Mimeoplasm becomes)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Grizzly Bears; Kalitas, Traitor of Ghet
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield.Kalitas, Traitor of Ghet = (absent)
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Zombie Token.Power = 2

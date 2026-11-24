@@ -191,7 +191,11 @@ pub enum Event {
         /// Continuous hand visibility on each side of this move. These are actual-time observations, not a later
         /// query of a revealing source that may have left. The old and new sides can differ in a simultaneous batch.
         from_revealed_hand: bool,
-        to_revealed_hand: bool },
+        to_revealed_hand: bool,
+        /// The object whose replacement effect last changed where it went (CR 614.1a; `ZoneChange::sent_by`), or
+        /// `ObjectId::NONE`: a card Kalitas, Traitor of Ghet exiles in place of a death was exiled by Kalitas, not by
+        /// whatever destroyed the creature (the record's `cause`).
+        sent_by: ObjectId },
     /// Damage was dealt. `controller` and `kind.colors()` are the source's as it dealt it (CR 120.3, 609.7): "damage red sources
     /// you controlled dealt this turn" counts a source that has since changed controller or color, or left (Temple of
     /// Power's ruling), and a spell's or an ability's source by what it was on the stack or the battlefield then.

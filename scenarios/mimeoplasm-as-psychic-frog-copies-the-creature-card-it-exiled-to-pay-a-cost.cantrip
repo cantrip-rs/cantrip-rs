@@ -1,0 +1,64 @@
+# Mimeoplasm exiles Psychic Frog as it enters and becomes a copy of it, then pays the copied Frog's "Exile three cards from
+# your graveyard" with Grizzly Bears and both Entombs. A card exiled to pay a cost of its ability is one it exiled, so the
+# owner's ruling (jschibel, 2026-11-24) - "exiled with it" reads every creature card this object exiled, however it
+# exiled it - lets it become a copy of that Bears: a 0/0 with three +1/+1 counters.
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Entomb
+Entomb
+Mimeoplasm, Revered One
+Swamp x10
+Psychic Frog
+Grizzly Bears
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Psychic Frog)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Mimeoplasm, Revered One.Cast(X: 1)
+Bot1.Choose(Confirm X)
+Bot1.Choose(Psychic Frog)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mimeoplasm, Revered One.Activate(Exile.Psychic Frog)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Psychic Frog.Activate(Ability: Exile three)
+Bot1.Choose(Grizzly Bears; Entomb#1; Entomb#2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Psychic Frog.Activate(Exile.Grizzly Bears; Ability: Mimeoplasm becomes)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 4
+Bot1.Graveyard = Black Lotus
+Bot1.Battlefield.Psychic Frog = (absent)
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 3

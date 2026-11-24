@@ -60,6 +60,11 @@ pub struct ZoneChange {
     /// and the card in exile is linked to that object's text as it arrives (`Query::exiled_with`). Only the direct result of
     /// that replacement is linked: a later effect that sends the card elsewhere leaves it unlinked, which the core sees to.
     pub exiled_with: Option<Linked>,
+    /// The object whose replacement effect last changed where it goes (CR 614.1a): the source of one printed on a permanent or
+    /// made by a spell or ability, or the moving object itself for its own (flashback, madness, a commander's move);
+    /// `ObjectId::NONE` where none has. Set by the core as the effect applies, never by a replacement, and recorded with the
+    /// move (`Event::ZoneChange::sent_by`): the card Kalitas, Traitor of Ghet exiles in place of a death is one it exiled.
+    pub sent_by: ObjectId,
     /// A spell leaving the stack that was cast with flashback, harmonize or aftermath (CR 702.34a, 702.180a, 702.127a): its
     /// own "exile this card instead of putting it anywhere else any time it would leave the stack", which the core orders
     /// with the other replacement effects that would change the move (CR 616.1). Set by the move, never by a replacement.

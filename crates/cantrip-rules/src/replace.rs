@@ -1433,6 +1433,7 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
             if spent > 0 && let Some(context) = cx.damage.as_mut() { context.applied((source, index, origin), DamageScope::of(&before), spent); }
         }
         unlink_if_sent_elsewhere(&start, proposal);
+        note_sent_by(&start, proposal, source);
         if let Proposal::ZoneChange(z) = &mut *proposal {
             for declined in commander_declined_to.iter_mut() {
                 if *declined != Some(z.to) {
@@ -1864,6 +1865,17 @@ fn apply_to_each_part(cx: &mut Cx, parts: &mut Vec<Proposal>) {
             // Only a printed or a lasting effect replaces anything but a zone change or damage.
             _ => {}
         }
+    }
+}
+
+/// Where a replacement effect changed where an object goes (CR 614.1a), the object whose effect it is
+/// (`ZoneChange::sent_by`): the source of one printed on a permanent or made by a spell or ability, or the moving object
+/// itself for its own (flashback, madness, a commander's move, an entry's own "instead").
+fn note_sent_by(before: &Proposal, after: &mut Proposal, source: ObjectId) {
+    if let (Proposal::ZoneChange(b), Proposal::ZoneChange(a)) = (before, after)
+        && a.to != b.to
+    {
+        a.sent_by = source;
     }
 }
 
@@ -3955,6 +3967,7 @@ mod tests {
             madness: false,
             pays_characteristic: false,
             exiled_with: Some(linked),
+            sent_by: ObjectId::NONE,
             flashback: false,
             exile_instead: ExileInsteads::NONE,
             bottom: false,

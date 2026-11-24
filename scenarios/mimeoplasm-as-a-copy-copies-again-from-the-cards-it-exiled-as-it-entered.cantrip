@@ -1,7 +1,8 @@
 # X=2 exiles two creature cards and gives six counters. Becoming a copy of Grizzly Bears "except it's 0/0 and has this
-# ability" keeps the counters (a 6/6 Bears) and the {2} ability - but that ability is linked only to the "As Mimeoplasm
-# enters" exile printed on Mimeoplasm, which the copy no longer has (CR 607.1, 607.5): it refers to no exiled card, so
-# Llanowar Elves, still in exile, is not a legal target of a second activation. Both cards stay in exile.
+# ability" keeps the counters (a 6/6 Bears) and the {2} ability, and that ability still reads every card this object
+# exiled, however it exiled it - the owner's ruling (jschibel, 2026-11-24): the "as it enters" exile is gone from the copy,
+# but "cards exiled with it" puts no requirement on how they were exiled. So Llanowar Elves, still in exile, is a legal
+# target of a second activation, and the 6/6 Bears becomes a 6/6 Llanowar Elves. Both cards stay in exile.
 [Bot1 Deck]
 Mox Jet
 Mox Emerald
@@ -51,10 +52,14 @@ Bot2.Pass
 ? Bot1.Battlefield.Grizzly Bears.Power = 6
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Emerald.Activate
-! Bot1.Battlefield.Grizzly Bears.Activate(Exile.Llanowar Elves)
+Bot1.Battlefield.Grizzly Bears.Activate(Exile.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
 
 [Expect]
 Exile = Grizzly Bears; Llanowar Elves
-Bot1.Battlefield.Grizzly Bears.Power = 6
-Bot1.Battlefield.Grizzly Bears.Toughness = 6
-Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 6
+Bot1.Battlefield.Grizzly Bears = (absent)
+Bot1.Battlefield.Llanowar Elves.Power = 6
+Bot1.Battlefield.Llanowar Elves.Toughness = 6
+Bot1.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = 6
+Bot1.Battlefield.Llanowar Elves.Subtypes = Druid; Elf

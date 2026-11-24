@@ -1399,8 +1399,7 @@ fn creature_card_exiled_with_this_filter(q: &dyn Query, asker: &Asker, t: Target
 }
 
 /// "Target creature card exiled with [this]" (CR 115.1, 607.2a, 607.2b): a creature card in exile that the ability linked
-/// to this one exiled, from this object as it is now (CR 400.7). The Darkness Crystal, Dino DNA and Mimeoplasm, Revered One
-/// print it.
+/// to this one exiled, from this object as it is now (CR 400.7). The Darkness Crystal and Dino DNA print it.
 pub const CREATURE_CARD_EXILED_WITH_THIS: TargetSpec = target(creature_card_exiled_with_this_filter);
 
 fn creature_put_onto_the_battlefield_with_this(q: &dyn Query, asker: &Asker, t: Target) -> bool {

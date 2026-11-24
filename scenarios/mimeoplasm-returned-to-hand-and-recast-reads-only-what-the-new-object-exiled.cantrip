@@ -1,0 +1,75 @@
+# Mimeoplasm exiles Grizzly Bears as it enters, then Bot2's Unsummon returns it to Bot1's hand. Recast, it is a new
+# object (CR 400.7) that exiles Llanowar Elves as it enters: its copy ability reads every card this object exiled, however
+# it exiled it (the owner's ruling, jschibel, 2026-11-24), but the Bears was exiled by the Mimeoplasm that left, so it is
+# no legal target - only the Elves is.
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Entomb
+Entomb
+Mimeoplasm, Revered One
+Swamp x10
+Grizzly Bears
+Llanowar Elves
+
+[Bot2 Deck]
+Island
+Island
+Unsummon
+Island x4
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Llanowar Elves)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Mimeoplasm, Revered One.Cast(X: 1)
+Bot1.Choose(Confirm X)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island#1.Activate
+Bot2.Hand.Unsummon.Cast(Bot1.Battlefield.Mimeoplasm, Revered One)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Hand.Mimeoplasm, Revered One.Cast(X: 1)
+Bot1.Choose(Confirm X)
+Bot1.Choose(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+! Bot1.Battlefield.Mimeoplasm, Revered One.Activate(Exile.Grizzly Bears)
+Bot1.Battlefield.Mimeoplasm, Revered One.Activate(Exile.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Grizzly Bears; Llanowar Elves
+Bot1.Battlefield.Llanowar Elves.Power = 3
+Bot1.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = 3
