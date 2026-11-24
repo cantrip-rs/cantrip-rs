@@ -152,9 +152,11 @@ difference.
 **What the rules say.** Activating an ability from a hidden zone reveals the card that has it (CR 602.2a), and "the card
 remains revealed from the time the spell or ability is announced until the time it leaves the stack" (CR 701.20a).
 
-**What the engine does instead, and why.** The reveal is one atomic event, made once by the activation, as the ability is
-announced and put on the stack and before its costs are paid (`Event::Revealed`, by the activator; `reveal_if_hidden` in
-`cantrip-rules/src/actions.rs`). The card is not treated as seen by every player afterwards while the ability waits on the
+**What the engine does instead, and why.** The reveal is one atomic event, made once by the activation (`Event::Revealed`,
+by the activator; `reveal_if_hidden` in `cantrip-rules/src/actions.rs`): a mana ability's card as the ability is announced,
+before its costs are paid; any other ability's card as the activation is committed - once its costs are chosen and it can
+no longer be cancelled, first of what its payment makes known, before a cost that discards or exiles the card (cycling,
+channel, a Spirit Guide's) is carried out (`actions::Later::Reveal`; RX-9). The card is not treated as seen by every player afterwards while the ability waits on the
 stack: not by the look-back rule (CR 603.10a, `ops::seen_by_all`) and not by what a seat is shown
 (`cantrip-engine/src/visibility.rs`). Keeping the card revealed is a logistical aid for paper games, so players can track
 what is on the stack: nothing triggers on it, and everything that must be public is made public by the event, which every
@@ -189,3 +191,38 @@ several gain or loss doublers (Boon Reflection, Bloodletter of Aclazotz) applied
 
 **Cards and cases it covers.** Game of Chaos only. A later card whose own doubling stakes can push life past 32 bits
 within a game may cite this decision.
+
+### RX-9: What a cost would reveal is chosen as it is paid and carried out only as the action is committed
+
+| Rule | Category | Decided by | Date |
+| --- | --- | --- | --- |
+| CR 601.2h, 602.2b, 733.1 | paper-only | jschibel | 2026-11-21 |
+
+**What the rules say.** A spell's or ability's costs are paid in any order the player chooses, each carried out as it is
+paid (CR 601.2h, by way of 602.2b for an ability), and the spell or ability becomes cast or activated once they are all
+paid (CR 601.2i). A player who started an action they cannot or will not complete may have it reversed (CR 733.1), but not
+a move from a library to another zone, and in paper a card discarded or exiled from a hand has been seen by everyone.
+
+**What the engine does instead, and why.** As Magic Online does, no part of a payment that would make hidden information
+known is carried out until the payment is complete and the action can no longer be cancelled. Such a part - a card
+discarded, exiled or beheld from a hand, a card put into a library, a face-down permanent moved, the card an ability is
+activated from in a hand or a library (CR 602.2a), a creature type chosen in secret and revealed as a cost, life paid that a
+replacement effect makes another event (Ashiok, Wicked Manipulator's exile of the top of the library) - is chosen as the
+player pays it, with the choice fixed then, and carried out at the commit, after the last question of the payment, all of
+them in the order they were paid (`actions::Later`, `actions::commit`). Until then the player may cancel, and nothing hidden
+has moved or been shown to anyone; once the commit begins, no question it raises offers a cancel
+(`takeback::committing`). The deferral uses CR 601.2h's own freedom of order, and only where no step paid after the part
+could tell the difference (`actions::blocks`); where one could (a later cost that exiles from the graveyard the discarded
+card would reach, Cosmogoyf counted by Fling, a cost that reads the library Ashiok's exile changes), the part is carried
+out at once and the action is past cancelling from then on (`takeback::paid`): the player completes it. A special action
+chooses every part of its cost before paying any and pays them with no question offering a cancel. A mana ability's own
+cost is not deferred: it has no commit, and one that revealed stays through a take-back (Lion's Eye Diamond). The cancel
+is a digital player's undo, not a paper rule: the ruling makes sure it never reveals information and then hides it again.
+Where the engine chose the order because it could not matter, a deferred part's cards arrive after those paid with it
+(Masked Meower's sacrifice lands under the card discarded with it).
+
+**Cards and cases it covers.** Every cast's, activation's, resolution's ("unless pays", "you may pay") and declaration's
+payment: Force of Will and the other pitch spells, discard and hand-exile costs (Bitter Triumph), cycling, channel,
+ninjutsu and every ability activated from a hand or a library (with RX-7), behold, a card put into a library as a cost, A
+Killer Among Us's revealed creature type, Ashiok, Wicked Manipulator's replaced life, and special actions' costs (a morph
+cost that discards, Putrid Raptor).
