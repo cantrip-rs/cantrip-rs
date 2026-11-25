@@ -1,0 +1,82 @@
+# Mimeoplasm exiles Grizzly Bears as it enters and gets three +1/+1 counters. Agatha's Soul Cauldron exiles Eater of the
+# Dead and puts a fourth counter on it, so the Cauldron lends it the Eater's "{0}: If this creature is tapped, exile target
+# creature card from a graveyard and untap this creature" (CR 613.1f). Tapped attacking, Mimeoplasm exiles the Llanowar
+# Elves Bot2 discarded with that lent ability. The owner's ruling (jschibel, 2026-11-24): a card is "exiled with it" only
+# when an ability printed on this Mimeoplasm, or copied onto it, exiled it - never one another effect granted or lent it.
+# So its copy ability refuses the Elves, and still becomes a copy of the Bears its own "as it enters" ability exiled: a
+# 4/4 Bears.
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+Entomb
+Entomb
+Mimeoplasm, Revered One
+Agatha's Soul Cauldron
+Grizzly Bears
+Eater of the Dead
+Forest x15
+
+[Bot2 Deck]
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Eater of the Dead)
+Bot2.Discard(Llanowar Elves)
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Mimeoplasm, Revered One.Cast(X: 1)
+Bot1.Choose(Confirm X)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mimeoplasm, Revered One.Counters.PlusOnePlusOne = 3
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Agatha's Soul Cauldron.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Agatha's Soul Cauldron.Activate(Bot1.Graveyard.Eater of the Dead)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mimeoplasm, Revered One.Counters.PlusOnePlusOne = 4
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Mimeoplasm, Revered One > Bot2)
+Bot1.Battlefield.Mimeoplasm, Revered One.Activate(Bot2.Graveyard.Llanowar Elves; Ability: If this creature is tapped)
+Bot1.Pass
+Bot2.Pass
+? Exile = Eater of the Dead; Grizzly Bears; Llanowar Elves
+? Bot1.Battlefield.Mimeoplasm, Revered One.Tapped = false
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+! Bot1.Battlefield.Mimeoplasm, Revered One.Activate(Exile.Llanowar Elves; Ability: becomes a copy)
+Bot1.Battlefield.Mimeoplasm, Revered One.Activate(Exile.Grizzly Bears; Ability: becomes a copy)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Exile = Eater of the Dead; Grizzly Bears; Llanowar Elves
+Bot1.Battlefield.Mimeoplasm, Revered One = (absent)
+Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot1.Battlefield.Grizzly Bears.Toughness = 4
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 4
+Bot2.Life = 16
