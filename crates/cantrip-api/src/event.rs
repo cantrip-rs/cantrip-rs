@@ -475,13 +475,6 @@ pub enum Event {
     /// 607.2e: Ice Cauldron's "note the type and amount of mana spent to pay this activation cost"), is the activation of
     /// this serial (`History::ability_cost_objects`).
     Resolved { source: ObjectId, ability: AbilityRef, serial: u32 },
-    /// How the source of the activated or triggered ability that resolved just before (`Resolved`) had that ability (CR 607.1,
-    /// 607.5: `StackItem::acquired`), recorded right after it where it is not `Acquired::OWN`: from a copy effect, or granted or
-    /// lent by another effect (CR 613.1f). What the ability did is the records with its `Cause::Ability` up to its `Resolved`,
-    /// so this says by which of its source's abilities a card was exiled: Mimeoplasm, Revered One's "exiled with it" counts
-    /// only the cards an ability of its own text or copiable values exiled, never one an ability another effect gave it
-    /// (the owner's ruling). No event of its own, as `ActivatedAs` is not: nothing triggers on it and no kind files it.
-    ResolvedAs { acquired: Acquired },
     /// A triggered ability of this object triggered and was put on the stack: what "triggers only N times each turn" counts.
     Triggered { source: ObjectId, ability: AbilityRef },
     /// A triggered ability of this object that triggered was put on the stack (CR 603.3b): the stack object it is (`serial`,
@@ -720,7 +713,7 @@ impl Event {
             Event::ResolutionPaymentBegan { source, .. } => source == object,
             Event::ResolutionCostObjectPaid { source, object: paid, .. } => source == object || paid == object,
             Event::CombatFirstStrike { creature } => creature == object,
-            Event::EffectRevealScope { .. } | Event::TokenCreatedByAbility { .. } | Event::AbilityCopied { .. } | Event::ActivatedAs { .. } | Event::ResolvedAs { .. } => false,
+            Event::EffectRevealScope { .. } | Event::TokenCreatedByAbility { .. } | Event::AbilityCopied { .. } | Event::ActivatedAs { .. } => false,
             Event::CombatPaymentBegan { .. } => false,
             Event::CombatCostObjectPaid { source, attacker, object: paid, .. } => source == object || attacker == object || paid == object,
             Event::PaidAlternative { spell, .. } | Event::PaidRepeatedly { spell, .. } => spell == object,
@@ -915,7 +908,7 @@ impl EventMask {
             Event::Looked { .. } => EventMask::LOOKED,
             Event::Countered { .. } => EventMask::COUNTERED,
             Event::AbilityActivated { .. } => EventMask::ABILITY_ACTIVATED,
-            Event::EffectRevealScope { .. } | Event::TokenCreatedByAbility { .. } | Event::ActivatedAs { .. } | Event::ResolvedAs { .. } => EventMask(0),
+            Event::EffectRevealScope { .. } | Event::TokenCreatedByAbility { .. } | Event::ActivatedAs { .. } => EventMask(0),
             // The alternative cost a cast was paid with is part of the cast's record.
             Event::Cast(_) | Event::PaidAlternative { .. } | Event::PaidRepeatedly { .. } => EventMask::CAST,
             Event::LandPlayed { .. } => EventMask::LAND_PLAYED,

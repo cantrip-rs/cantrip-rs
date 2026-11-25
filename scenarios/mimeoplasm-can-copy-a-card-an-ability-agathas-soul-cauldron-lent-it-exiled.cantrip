@@ -1,10 +1,9 @@
 # Mimeoplasm exiles Grizzly Bears as it enters and gets three +1/+1 counters. Agatha's Soul Cauldron exiles Eater of the
 # Dead and puts a fourth counter on it, so the Cauldron lends it the Eater's "{0}: If this creature is tapped, exile target
 # creature card from a graveyard and untap this creature" (CR 613.1f). Tapped attacking, Mimeoplasm exiles the Llanowar
-# Elves Bot2 discarded with that lent ability. The owner's ruling (jschibel, 2026-11-24): a card is "exiled with it" only
-# when an ability printed on this Mimeoplasm, or copied onto it, exiled it - never one another effect granted or lent it.
-# So its copy ability refuses the Elves, and still becomes a copy of the Bears its own "as it enters" ability exiled: a
-# 4/4 Bears.
+# Elves Bot2 discarded with that lent ability. The owner's ruling (jschibel, 2026-11-24): any ability on the card, printed,
+# copied or granted, counts as "exiled with it", because Mimeoplasm did the exiling. So its copy ability may target the
+# Elves, and it becomes a 4/4 Llanowar Elves.
 [Bot1 Deck]
 Swamp
 Mox Jet
@@ -67,8 +66,7 @@ Bot2.Pass
 Bot1.Hand.Forest.Play
 Bot1.Battlefield.Forest#1.Activate
 Bot1.Battlefield.Forest#2.Activate
-! Bot1.Battlefield.Mimeoplasm, Revered One.Activate(Exile.Llanowar Elves; Ability: becomes a copy)
-Bot1.Battlefield.Mimeoplasm, Revered One.Activate(Exile.Grizzly Bears; Ability: becomes a copy)
+Bot1.Battlefield.Mimeoplasm, Revered One.Activate(Exile.Llanowar Elves; Ability: becomes a copy)
 Bot1.Pass
 Bot2.Pass
 [T7 Bot1.Main2]
@@ -76,7 +74,7 @@ Bot2.Pass
 [Expect]
 Exile = Eater of the Dead; Grizzly Bears; Llanowar Elves
 Bot1.Battlefield.Mimeoplasm, Revered One = (absent)
-Bot1.Battlefield.Grizzly Bears.Power = 4
-Bot1.Battlefield.Grizzly Bears.Toughness = 4
-Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Llanowar Elves.Power = 4
+Bot1.Battlefield.Llanowar Elves.Toughness = 4
+Bot1.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = 4
 Bot2.Life = 16

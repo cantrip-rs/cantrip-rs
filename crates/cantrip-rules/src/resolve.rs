@@ -808,9 +808,6 @@ fn resolve_inner(cx: &mut Cx, summarize_terminal_mana: bool) -> R<Flow> {
                 })?;
                 // It has resolved (CR 608.2m: "the first time this ability has resolved this turn").
                 cx.record(Event::Resolved { source: item.object, ability: item.ability, serial: item.serial });
-                if item.acquired != Acquired::OWN {
-                    cx.record(Event::ResolvedAs { acquired: item.acquired });
-                }
             }
             // It leaves the stack as it finishes resolving (CR 608.2n), found by its serial: what it did may have taken an
             // item below it off the stack (Ertai Resurrected countering an ability), moving it down. An ability that ended

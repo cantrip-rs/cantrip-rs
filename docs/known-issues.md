@@ -107,13 +107,6 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 
 ## Issues
 
-### KI-178: Mimeoplasm counts a card a lent ability's "exile it instead" replacement exiled
-
-- **Severity:** pri-1 if a card reaches it. Reachability is unproven: no implemented or legal card is known to reach it.
-- **What happens:** suppose a resolved ability makes a replacement effect (`Origin::Granted`), and that ability was lent or granted to Mimeoplasm, Revered One (by Agatha's Soul Cauldron, say). The effect records `sent_by` as Mimeoplasm. Mimeoplasm's copy ability then accepts the card it exiled. The owner's ruling (2026-11-24) counts only cards exiled by an ability printed on Mimeoplasm or copied onto it.
-- **Fix:** carry the creating ability's acquisition through to the replacement effect, and from there to `sent_by`.
-- **Scenarios:** none yet. The first card that reaches it adds one.
-
 ### KI-177: The simple auto player stops mid-payment with Gaea's Cradle and Mox Emerald
 
 | Priority | Status | Area | Found |

@@ -1,0 +1,76 @@
+# Mimeoplasm exiles Grizzly Bears as it enters. Bot1's own Eater of the Dead, a different permanent, then exiles Llanowar
+# Elves from Bot1's graveyard with its own ability: the exile is Eater of the Dead's, not an ability of Mimeoplasm. The
+# owner's ruling (jschibel, 2026-11-24): only an ability of the Mimeoplasm object itself - printed, copied or granted -
+# counts as "exiled with it", so its copy ability refuses the Elves, and still becomes a copy of the Bears its own "as it
+# enters" ability exiled: a 3/3 Bears.
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+Entomb
+Entomb
+Mimeoplasm, Revered One
+Eater of the Dead
+Forest
+Grizzly Bears
+Llanowar Elves
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Llanowar Elves)
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Mimeoplasm, Revered One.Cast(X: 1)
+Bot1.Choose(Confirm X)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mimeoplasm, Revered One.Counters.PlusOnePlusOne = 3
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Forest#3.Activate
+Bot1.Hand.Eater of the Dead.Cast
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T9 Bot1.DeclareAttackers]
+Bot1.Attack(Eater of the Dead > Bot2)
+Bot1.Battlefield.Eater of the Dead.Activate(Bot1.Graveyard.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Exile = Grizzly Bears; Llanowar Elves
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+! Bot1.Battlefield.Mimeoplasm, Revered One.Activate(Exile.Llanowar Elves; Ability: becomes a copy)
+Bot1.Battlefield.Mimeoplasm, Revered One.Activate(Exile.Grizzly Bears; Ability: becomes a copy)
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main2]
+
+[Expect]
+Exile = Grizzly Bears; Llanowar Elves
+Bot1.Battlefield.Mimeoplasm, Revered One = (absent)
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Grizzly Bears.Toughness = 3
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 3
