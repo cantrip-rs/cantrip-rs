@@ -1,0 +1,64 @@
+# A card Library of Leng puts into the library is not revealed unless the discarding effect revealed it (the rulings), and
+# one put there unrevealed has all its characteristics undefined (CR 701.9c), its abilities among them. Turn 1: Bot1's
+# Faithless Looting discards a Titanbones, Towering Heart, which Bot1 puts on top of the library unseen - Bot2 does not see
+# it, and its "when you discard this card, you gain 3 life" does not trigger. Turn 2: Bot2's Thoughtseize reveals Bot1's
+# hand and takes the other Titanbones; revealed by the effect discarding it, it goes on top of the library known to all,
+# and its trigger functions there (CR 113.6k): Bot1 gains 3 life.
+[Bot1 Deck]
+Library of Leng
+Mox Jet
+Mountain
+Faithless Looting
+Titanbones, Towering Heart
+Island
+Plains
+Titanbones, Towering Heart
+Forest
+Plains x10
+
+[Bot2 Deck]
+Mox Jet
+Thoughtseize
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Library of Leng.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Titanbones, Towering Heart; Island)
+Bot1.Accept
+Bot1.Decline
+? Bot1.Library.Top = Titanbones, Towering Heart
+? Bot2.Sees.Bot1.LibraryTop = (hidden)
+? Stack.Count = 0
+? Bot1.Life = 20
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Thoughtseize.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Titanbones, Towering Heart)
+Bot1.Accept
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 18
+Bot1.Library.Count = 12
+Bot1.Library.Top = Titanbones, Towering Heart
+Bot1.Graveyard = Faithless Looting; Island
+Bot1.Hand = Forest; Plains

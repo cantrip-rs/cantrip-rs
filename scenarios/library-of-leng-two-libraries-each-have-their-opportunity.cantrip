@@ -1,0 +1,47 @@
+# Two Libraries of Leng are two replacement effects, each with its own opportunity at a discarded card's move (CR 614.5,
+# 616.1). Faithless Looting discards two Islands. For the first, Bot1 declines the first Library it applies and is then
+# offered the second, which it takes: the Island goes on top of the library. For the second, Bot1 declines both, and it goes
+# to the graveyard - asked once by each Library, and no more.
+[Bot1 Deck]
+Library of Leng
+Library of Leng
+Mox Jet
+Mox Pearl
+Mountain
+Faithless Looting
+Island
+Island
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Library of Leng.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Library of Leng.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Island; Island)
+Bot1.Decline
+Bot1.Accept
+Bot1.Decline
+Bot1.Decline
+! Bot1.Decline
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Library.Top = Island
+Bot1.Library.Count = 11
+Bot1.Graveyard = Faithless Looting; Island
+Bot1.Hand = Plains

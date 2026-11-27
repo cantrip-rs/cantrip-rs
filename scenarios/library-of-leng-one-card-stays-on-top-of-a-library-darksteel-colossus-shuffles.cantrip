@@ -1,0 +1,46 @@
+# Faithless Looting discards a Lightning Bolt and a Darksteel Colossus together. Bot1 puts the Bolt on top of the library
+# with Library of Leng and lets the Colossus be shuffled in (CR 616.1). The library is randomized except the Bolt, put in a
+# certain position at the same time (CR 701.24g): it stays on top, alone, so nobody is asked to order anything. The shuffle
+# is fixed to reverse what it shuffles ([Shuffles]): the Colossus, five Swamps and five Plains come out Plains first and the
+# Colossus last, under the Bolt.
+[Shuffles]
+Reverse
+
+[Bot1 Deck]
+Library of Leng
+Mox Jet
+Mountain
+Faithless Looting
+Lightning Bolt
+Darksteel Colossus
+Plains
+Forest
+Forest
+Swamp x5
+Plains x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Library of Leng.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Lightning Bolt; Darksteel Colossus)
+Bot1.Accept
+Bot1.Replace(Darksteel Colossus)
+! Bot1.Arrange
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Shuffles = 1
+Bot1.Library = Lightning Bolt; Plains; Plains; Plains; Plains; Plains; Swamp; Swamp; Swamp; Swamp; Swamp; Darksteel Colossus
+Bot1.Graveyard = Faithless Looting

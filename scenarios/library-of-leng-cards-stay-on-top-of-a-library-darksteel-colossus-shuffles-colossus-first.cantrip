@@ -1,0 +1,49 @@
+# Library of Leng and Darksteel Colossus under Wheel of Fortune, the Colossus first in Bot1's hand. Wheel's "each player
+# discards their hand" is one simultaneous move: Bot1 puts the Lightning Bolt and the Island on top of the library with
+# the Library, and lets the Colossus be revealed and shuffled into the library instead (CR 616.1). A library shuffled at
+# the same time that cards are put in a certain position in it is randomized except those cards (CR 701.24g, whose
+# example is Darksteel Colossus beside Gravebane Zombie): the Bolt and the Island stay on top, in the order Bot1 chooses
+# for them (CR 401.4), whatever order the hand held them in, and the Colossus is shuffled into the rest. The shuffle is
+# fixed to reverse what it shuffles ([Shuffles]): the rest - the Colossus, ten Forests, ten Swamps - comes out Swamps
+# first and the Colossus last, so Wheel's seven draws are the Bolt, the Island and five Swamps.
+[Shuffles]
+Reverse
+
+[Bot1 Deck]
+Library of Leng
+Mox Jet
+Black Lotus
+Wheel of Fortune
+Darksteel Colossus
+Lightning Bolt
+Island
+Forest x10
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Library of Leng.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Replace(Darksteel Colossus)
+Bot1.Accept
+Bot1.Accept
+Bot1.Arrange(Island; Lightning Bolt)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Shuffles = 1
+Bot1.Hand = Island; Lightning Bolt; Swamp; Swamp; Swamp; Swamp; Swamp
+Bot1.Library = Swamp; Swamp; Swamp; Swamp; Swamp; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Darksteel Colossus
+Bot1.Graveyard = Wheel of Fortune; Black Lotus

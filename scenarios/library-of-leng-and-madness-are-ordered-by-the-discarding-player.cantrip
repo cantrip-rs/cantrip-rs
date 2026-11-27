@@ -1,0 +1,48 @@
+# Library of Leng and madness (CR 702.35a) both replace a discarded Basking Rootwalla's move to the graveyard, and Bot1,
+# whose card it is, chooses which applies first (CR 616.1). Faithless Looting discards two Rootwallas. For the first,
+# Bot1 takes madness: it is exiled, the Library no longer applies (it is not going to the graveyard, CR 616.1f), and
+# madness's trigger offers the cast, which Bot1 declines, so it goes to the graveyard. For the second, Bot1 takes the
+# Library and puts it on top of the library: madness no longer applies, so no madness trigger, and nothing is cast.
+[Bot1 Deck]
+Library of Leng
+Mox Jet
+Mountain
+Faithless Looting
+Basking Rootwalla
+Basking Rootwalla
+Plains
+Forest
+Forest
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Library of Leng.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Basking Rootwalla; Basking Rootwalla)
+Bot1.Replace(madness)
+Bot1.Replace(Library of Leng)
+Bot1.Accept
+? Stack.Count = 1
+? Bot1.Library.Top = Basking Rootwalla
+Bot1.Decline
+[T1 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Battlefield = Library of Leng; Mountain; Mox Jet
+Bot1.Graveyard = Basking Rootwalla; Faithless Looting
+Bot1.Library.Top = Basking Rootwalla
+Bot1.Library.Count = 11

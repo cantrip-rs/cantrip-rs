@@ -1,0 +1,57 @@
+# Library of Leng offers nothing for a card discarded to pay a cost. Psychic Frog's "Discard a card:" is a cost Bot1 pays
+# activating it, not an effect (the rulings: "costs aren't effects"), so the Island goes to the graveyard and no question is
+# asked. Steamcore Scholar's "discard two cards unless you discard an instant or sorcery card" is paid with the Lightning
+# Bolt, a discard that must be a card with a named characteristic: put into the library unrevealed it could not pay that
+# (CR 701.9c), so the Library is not offered for it (the owner's ruling) and it goes to the graveyard.
+[Bot1 Deck]
+Library of Leng
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Psychic Frog
+Black Lotus
+Steamcore Scholar
+Island
+Lightning Bolt
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Library of Leng.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Psychic Frog.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Steamcore Scholar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Modes(Discard an instant)
+Bot1.Choose(Lightning Bolt)
+! Bot1.Accept
+? Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Battlefield.Psychic Frog.Activate(Ability: Discard)
+Bot1.Choose(Island)
+! Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Island; Lightning Bolt; Black Lotus
+Bot1.Library.Count = 10
+Bot1.Hand.Count = 0
+Bot1.Battlefield.Psychic Frog.Counters.PlusOnePlusOne = 1

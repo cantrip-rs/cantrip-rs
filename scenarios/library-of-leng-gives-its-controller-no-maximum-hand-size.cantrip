@@ -1,0 +1,36 @@
+# Library of Leng: "You have no maximum hand size" (CR 402.2, 514.1). Bot1 ends turn 5 with eight cards in hand and
+# discards nothing in the cleanup step. It is Bot1's alone: Bot2, drawing a card each turn and playing nothing, discards
+# down to seven in each of its cleanup steps.
+[Bot1 Deck]
+Library of Leng
+Mox Jet
+Mox Sapphire
+Ancestral Recall
+Island
+Island
+Island
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Library of Leng.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+? Bot1.Hand.Count = 8
+
+[Expect]
+Bot1.Hand.Count = 8
+Bot1.Graveyard = Ancestral Recall
+Bot2.Graveyard.Count = 2

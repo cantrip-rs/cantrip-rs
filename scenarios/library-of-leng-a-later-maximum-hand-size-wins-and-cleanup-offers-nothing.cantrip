@@ -1,0 +1,49 @@
+# Effects that change a player's maximum hand size apply in timestamp order (the rulings: Null Profusion after Library of
+# Leng leaves a maximum of two): Bot2's Cursed Rack, entering after Bot1's Library, makes Bot1's maximum four. Bot1
+# discards down to four in its turn-3 cleanup step - a rule's discard (CR 514.1), not an effect's - so the Library offers
+# nothing and both cards go to the graveyard.
+[Bot1 Deck]
+Library of Leng
+Mox Jet
+Island
+Island
+Plains
+Plains
+Plains
+Plains x15
+
+[Bot2 Deck]
+Mox Jet
+Black Lotus
+Cursed Rack
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Library of Leng.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Cursed Rack.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.ChoosePlayer(Bot1)
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 6
+Bot1.Discard(Island; Island)
+! Bot1.Accept
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Graveyard = Island; Island
+Bot1.Library.Count = 14

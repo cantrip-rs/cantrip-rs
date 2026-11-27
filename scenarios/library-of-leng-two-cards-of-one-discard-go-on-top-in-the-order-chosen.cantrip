@@ -1,0 +1,54 @@
+# Library of Leng: Faithless Looting discards the Lightning Bolt and the Island together, and Bot1 puts both on top of the
+# library. Two cards put on top of a library at once are in the order their owner chooses (CR 401.4; the rulings: "you get
+# to decide the order"): the Island, discarded last, would lie on top, and Bot1 puts the Bolt above it. The order is
+# Bot1's alone and the cards were not revealed (the rulings), so Bot2 sees no top card. The discard is still a discard
+# (CR 701.9a; the rulings: "the discard triggers anything else that triggers on discards"): Hobgoblin's "whenever you
+# discard a card" triggers for each card, 1 + 2 + 2 power.
+[Bot1 Deck]
+Library of Leng
+Mox Jet
+Black Lotus
+Hobgoblin, Mantled Marauder
+Faithless Looting
+Lightning Bolt
+Island
+Forest
+Forest
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Library of Leng.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Hobgoblin, Mantled Marauder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Lightning Bolt; Island)
+Bot1.Accept
+Bot1.Accept
+Bot1.Arrange(Lightning Bolt; Island)
+? Bot1.Library.Top = Lightning Bolt
+? Bot2.Sees.Bot1.LibraryTop = (hidden)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Library = Lightning Bolt; Island; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp
+Bot1.Graveyard = Faithless Looting; Black Lotus
+Bot1.Battlefield.Hobgoblin, Mantled Marauder.Power = 5

@@ -1,0 +1,48 @@
+# Bot2's Leyline of the Void ("if a card would be put into an opponent's graveyard from anywhere, exile it instead") and
+# Bot1's Library of Leng both replace the move of a card Bot1 discards, and Bot1, the affected player, chooses which applies
+# first (CR 616.1). Faithless Looting discards a Lightning Bolt and an Island. For the Bolt Bot1 takes the Library and puts
+# it on top of the library: it never goes toward the graveyard, so the Leyline does not apply. For the Island Bot1 takes
+# the Leyline: exiled, it is no longer going to the graveyard, so the Library is not offered (CR 616.1f).
+[Bot1 Deck]
+Library of Leng
+Mox Jet
+Mountain
+Faithless Looting
+Lightning Bolt
+Island
+Plains
+Forest
+Forest
+Plains x10
+
+[Bot2 Deck]
+Leyline of the Void
+Island x19
+
+[Actions]
+Bot2.Accept
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Library of Leng.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Lightning Bolt; Island)
+Bot1.Replace(Library of Leng)
+Bot1.Accept
+Bot1.Replace(Leyline of the Void)
+! Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Library.Top = Lightning Bolt
+Bot1.Library.Count = 11
+Exile = Faithless Looting; Island
+Bot1.Graveyard.Count = 0

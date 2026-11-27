@@ -1,0 +1,50 @@
+# Wheel of Fortune makes both players discard their hands in one move. Bot2's Darksteel Colossus is revealed and shuffled
+# into Bot2's library (CR 701.24a); Bot1 puts its Lightning Bolt and Island on top of its own library with Library of Leng.
+# Only Bot2's library was shuffled, so Bot1 still arranges the two cards on top of Bot1's (CR 401.4) - the shuffle of
+# another library takes no position from them. The shuffles are fixed to reverse ([Shuffles]): Bot2's seven draws are the
+# Plains that were at the bottom of its library, and Bot1's are the Bolt and the Island and five Forests from the top.
+[Shuffles]
+Reverse
+
+[Bot1 Deck]
+Library of Leng
+Mox Jet
+Black Lotus
+Wheel of Fortune
+Lightning Bolt
+Island
+Plains
+Forest x10
+Swamp x10
+
+[Bot2 Deck]
+Darksteel Colossus
+Island x6
+Island x10
+Plains x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Library of Leng.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Accept
+Bot1.Arrange(Lightning Bolt; Island)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Shuffles = 0
+Bot2.Shuffles = 1
+Bot1.Hand = Forest; Forest; Forest; Forest; Forest; Island; Lightning Bolt
+Bot1.Graveyard = Wheel of Fortune; Plains; Black Lotus
+Bot2.Hand = Plains; Plains; Plains; Plains; Plains; Plains; Plains
+Bot2.Library.Count = 14

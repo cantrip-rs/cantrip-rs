@@ -1,0 +1,65 @@
+# Library of Leng applies to any spell or ability that has its controller discard, whoever controls it (the rulings), a
+# random discard included ("you can look at a randomly discarded card before deciding where it goes"): Bot2's Hymn to
+# Tourach takes both of Bot1's Islands, and Bot1 puts one on top of the library and lets the other go to the graveyard.
+# The Library is Bot1's alone ("you discard", "your library"): Bot2's own Faithless Looting discards Bot2's cards into
+# Bot2's graveyard, and neither player is asked anything.
+[Bot1 Deck]
+Library of Leng
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Mox Emerald
+Island
+Island
+Plains x10
+
+[Bot2 Deck]
+Black Lotus
+Mountain
+Hymn to Tourach
+Faithless Looting
+Plains
+Plains
+Plains
+Forest
+Forest
+Plains x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Library of Leng.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Plains; Plains)
+! Bot2.Accept
+! Bot1.Accept
+? Bot2.Graveyard = Faithless Looting; Plains; Plains
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Hymn to Tourach.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+Bot1.Decline
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot1.Graveyard = Island
+Bot1.Library.Top = Island
+Bot1.Library.Count = 11
+Bot2.Library.Count = 9
