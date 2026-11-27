@@ -22,7 +22,11 @@ const BEGIN_ON_BATTLEFIELD: Question = Question::new(
 /// Shuffles a zone with the state's own generator (Fisher-Yates).
 pub fn shuffle(state: &mut GameState, zone: Zone) {
     let mut cards: Vec<ObjectId> = state.zone(zone).to_vec();
-    permute(state, &mut cards);
+    if state.take_forced_reversal() {
+        cards.reverse();
+    } else {
+        permute(state, &mut cards);
+    }
     for &id in &cards {
         state.zone_remove(zone, id);
     }

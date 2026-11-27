@@ -1,0 +1,38 @@
+# Faithless Looting discards Darksteel Colossus and Blightsteel Colossus together, and each is revealed and shuffled into
+# Bot1's library instead of going to the graveyard. Two effects shuffle the library at once: what triggers on a shuffle
+# triggers twice (CR 701.24f), so the history holds two shuffles of it. The library itself is randomized once, the result
+# of both: the first two shuffles are fixed to reverse what they shuffle ([Shuffles]), and the library comes out reversed
+# once - shuffled twice, the two reversals would undo each other and leave the Blightsteel on top.
+[Shuffles]
+Reverse
+Reverse
+
+[Bot1 Deck]
+Mountain
+Faithless Looting
+Darksteel Colossus
+Blightsteel Colossus
+Plains
+Plains
+Plains
+Forest
+Forest
+Swamp x3
+Plains x3
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Darksteel Colossus; Blightsteel Colossus)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Shuffles = 2
+Bot1.Library = Plains; Plains; Plains; Swamp; Swamp; Swamp; Darksteel Colossus; Blightsteel Colossus
+Bot1.Graveyard = Faithless Looting
+Bot1.Hand = Forest; Forest; Plains; Plains; Plains

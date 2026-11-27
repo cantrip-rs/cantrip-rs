@@ -962,10 +962,12 @@ fn choose(cx: &mut Cx, proposal: &Proposal, found: &[Candidate]) -> Option<usize
 /// effect's controller's choice. When the question has no answer yet the run goes on as if they did and is replayed with the
 /// answer (see `Cx::ask_core`).
 /// A replacement of damage says which damage it is about (`Purpose::AskDamage`): a player asked once for each of several
-/// creatures is told which one each question is for.
+/// creatures is told which one each question is for; a replacement of a move says which object it would move
+/// (`Purpose::AskMove`), as each card of one discard is asked about on its own.
 fn takes(cx: &mut Cx, you: PlayerId, source: ObjectId, question: &'static Question, about: Option<&Proposal>) -> bool {
     let purpose = match about {
         Some(Proposal::Damage(d)) => Purpose::AskDamage(question, DamageAbout { source: d.source, to: d.target, amount: d.amount }),
+        Some(Proposal::ZoneChange(z)) => Purpose::AskMove(question, z.object),
         _ => Purpose::Ask(question),
     };
     !matches!(cx.ask_core(you, RequestKind::May { source, purpose }, false), Ok(Answer::No))

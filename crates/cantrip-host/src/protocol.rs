@@ -1521,10 +1521,11 @@ pub struct MayPrompt {
     pub no_default: bool,
     /// What an optional replacement of damage would replace (`Purpose::AskDamage`, CR 614.1a), in words as
     /// `ChooseReplacementPrompt::event` has them ("3 damage from Pyroclasm to your opponent's Ornithopter"); empty for any
-    /// other "you may".
+    /// other "you may". For an optional replacement of a move (`Purpose::AskMove`), the name of the card it would move, where
+    /// the seat may look at it ("Lightning Bolt", as Library of Leng asks about each card discarded).
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub event: String,
-    /// The object that damage would be dealt to, or no handle (a player, or no damage).
+    /// The object that damage would be dealt to, or the object a move would move, or no handle (a player, or neither).
     #[serde(default, skip_serializing_if = "no_handle")]
     pub subject: ViewHandle,
 }

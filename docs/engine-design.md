@@ -3624,6 +3624,21 @@ could choose, as several effects that each prevent all of some damage are not or
 The question is the rules' own (`Cx::ask_rule`): a run that reaches it unanswered goes on with the order they arrived in and
 is replayed with the answer. The bots answer it as they answer any placement, in one pass over the cards.
 
+A library's order always matters, so the same rule for a library (CR 401.4) is asked without such a guard where the move
+itself puts the cards there: two or more cards a replacement effect puts on the same end of a library in place of another
+zone in one move (Library of Leng's discards, `ops::arrange_redirected_into_libraries`) are ordered by their owner, in
+APNAP order, with a `DistributeCards` of one `LibraryTop` or `LibraryBottom` destination, top first; they take the places
+they arrived at. A move asked for into a library is ordered by the instruction that makes it (`put_into_library`, the
+mechanics' `library::ask_library_order`), a merged permanent's cards by CR 730.3a. A replacement that shuffles a card into
+its library (Darksteel Colossus, an Omen) shuffles once every card of the move has arrived, and the library is randomized
+except the cards the same move put in a certain position in it - on its top or bottom, by a replacement or by the move's
+own instruction - which keep their end (CR 701.24g: Darksteel Colossus shuffled in while Gravebane Zombie goes on top;
+`ops::shuffle_except_placed`), whatever order the move listed its cards in. Those cards are then ordered by their owner as
+above, the question naming only them. The library is randomized once, in seat order among libraries, however many effects
+shuffle it, but each effect's shuffle is its own event: two Colossi shuffled in together are two `Shuffled` records, and
+what triggers on a shuffle triggers twice (CR 701.24f). A scenario shows what a shuffle did with `[Shuffles] Reverse`
+(`Rng::forced_reversals`), never by where a random shuffle happened to put a card.
+
 ### Cards outside the game
 
 Outside the game is not a zone (CR 400.11), but the cards a player owns outside it - in a match, their sideboard (CR 100.4,

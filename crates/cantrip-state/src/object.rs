@@ -3882,11 +3882,15 @@ pub struct Rng {
     /// has to be able to say what a die shows. Used up before the generator is.
     pub forced: u64,
     pub forced_len: u8,
+    /// Shuffles a script has fixed in advance, each of which reverses the order of the zone it shuffles instead of drawing a
+    /// random one: a scenario that must say a shuffle came after a move does so by where the reversal puts the cards, never
+    /// by where a random shuffle happens to (`[Shuffles]`). Used up before the generator is.
+    pub forced_reversals: u8,
 }
 
 impl Rng {
     pub fn new(seed: u64) -> Rng {
-        let mut rng = Rng { state: 0, inc: (seed << 1) | 1, forced: 0, forced_len: 0 };
+        let mut rng = Rng { state: 0, inc: (seed << 1) | 1, forced: 0, forced_len: 0, forced_reversals: 0 };
         rng.next_u32();
         rng.state = rng.state.wrapping_add(seed ^ 0x853c_49e6_748f_ea9b);
         rng.next_u32();

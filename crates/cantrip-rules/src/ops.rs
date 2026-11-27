@@ -731,6 +731,10 @@ fn move_together_entering_moves(
     let mut separated: Vec<ObjectId> = Vec::new();
     // The components put into one library together, the owner's to order (CR 730.3a).
     let mut into_library: Vec<(PlayerId, Vec<ObjectId>)> = Vec::new();
+    // The cards replacement effects put into a library in place of another zone: (library, bottom, card, effect's source).
+    let mut redirected: Vec<(PlayerId, bool, ObjectId, ObjectId)> = Vec::new();
+    // Every card this move puts on an end of a library rather than shuffling it in, with whether it is the bottom.
+    let mut placed: Vec<(ObjectId, bool)> = Vec::new();
     // CR 400.7f follows only Auras that actually reach their owner's graveyard, and only a host that actually leaves
     // in this simultaneous batch (not one whose destruction was regenerated/replaced). Preserve that relation in the
     // history: adjacent same-cause records alone cannot distinguish separate instructions from simultaneous moves.
@@ -788,6 +792,16 @@ fn move_together_entering_moves(
         } else {
             cx.st().zone_push(to, new_id);
         }
+        // Put into a library by a replacement effect in place of another zone (Library of Leng's discard): with the others
+        // put on the same end of it in this move, in the order its owner arranges (CR 401.4). A move asked for into a library
+        // is arranged by the instruction making it (`put_into_library`), a merged permanent's cards by CR 730.3a below.
+        if to.is(ZoneKind::Library) && !change.shuffle && !requested_to.is(ZoneKind::Library) && components.is_none() {
+            redirected.push((to.player, change.bottom, new_id, change.sent_by));
+        }
+        // Put on an end of a library, not shuffled in: a library this move shuffles keeps it there (CR 701.24g).
+        if to.is(ZoneKind::Library) && !change.shuffle {
+            placed.push((new_id, change.bottom));
+        }
         if to.is(ZoneKind::Graveyard) && !new_token && !old.card_copy {
             binned.push((to.player, new_id));
         }
@@ -827,6 +841,10 @@ fn move_together_entering_moves(
                 let part_id = cx.st().push_obj(part);
                 if to_c.is(ZoneKind::Library) {
                     cx.st().zone_insert(to_c, 0, part_id);
+                    // On top with the permanent's own card, unless the move shuffles them in (CR 730.3a, 701.24g).
+                    if !change.shuffle {
+                        placed.push((part_id, false));
+                    }
                 } else {
                     cx.st().zone_push(to_c, part_id);
                 }
@@ -861,9 +879,9 @@ fn move_together_entering_moves(
         if change.reveal {
             cx.emit(Event::Revealed { player: old.owner, card: new_id });
         }
-        // Shuffled now, announced after the move that put it there is: the history says it arrived, then was shuffled.
+        // Shuffled once every card of the move has arrived (below), announced after the move that put it there is: one
+        // shuffle of that library for each effect that shuffles it (CR 701.24f).
         if change.shuffle && to.is(ZoneKind::Library) {
-            crate::turn::shuffle_in(cx, to);
             shuffled.push(to.player);
         }
         // Rebound exiled it as it resolved (CR 702.88a), if no later effect sent it elsewhere: its delayed triggered ability is
@@ -943,8 +961,24 @@ fn move_together_entering_moves(
     if binned.len() > 1 {
         arrange_graveyards(cx, &binned);
     }
+    // The moves are one simultaneous event: every card of it is in place first, and then each library a replacement of it
+    // shuffles is randomized except the cards the same move put in a specific position in it, which keep their end (CR
+    // 701.24g: Darksteel Colossus shuffled in while Gravebane Zombie goes on top) - whatever order the move listed its
+    // cards in. Shuffled physically once however many effects shuffle it (each is still its own shuffle, CR 701.24f, as
+    // recorded below), in seat order, so the game's generator is drawn in an order the move's own order does not change.
+    // The cards on an end are ordered by their owner afterwards as in any library (CR 401.4, 730.3a), the question naming
+    // only them.
+    shuffled.sort_by_key(|p| p.0);
+    let mut libraries = shuffled.clone();
+    libraries.dedup();
+    for player in libraries {
+        shuffle_except_placed(cx, player, &placed);
+    }
     for (owner, group) in into_library {
         crate::merge::arrange_in_library(cx, owner, &group);
+    }
+    if redirected.len() > 1 {
+        arrange_redirected_into_libraries(cx, &redirected);
     }
     created.extend(separated);
     for effect in retained_statics {
@@ -1001,6 +1035,88 @@ fn move_together_entering_moves(
         return_until_left(cx);
     }
     (created, seen, lost)
+}
+
+/// CR 701.24g: "If an effect would cause a player to shuffle a library at the same time that an object would be put into a
+/// certain position in that library, the result is a shuffled library that's randomized except that the object is in the
+/// specified position." `player`'s library is shuffled with the cards `placed` there by the same move taken out of it - those
+/// on top and those on the bottom each keep their order and their end - and put back on their ends after.
+fn shuffle_except_placed(cx: &mut Cx, player: PlayerId, placed: &[(ObjectId, bool)]) {
+    let library = Zone::library(player);
+    let end = |bottom: bool| -> Vec<ObjectId> {
+        cx.s().zone(library).iter().copied().filter(|id| placed.iter().any(|&(p, b)| p == *id && b == bottom)).collect()
+    };
+    let (top, bottom) = (end(false), end(true));
+    for &card in top.iter().chain(&bottom) {
+        cx.st().zone_remove(library, card);
+    }
+    crate::turn::shuffle_in(cx, library);
+    for (at, &card) in top.iter().enumerate() {
+        cx.st().zone_insert(library, at, card);
+    }
+    for &card in &bottom {
+        cx.st().zone_push(library, card);
+    }
+}
+
+/// CR 401.4: "If an effect puts two or more cards in a specific position in a library at the same time, the owner of those
+/// cards may arrange them in any order", and doesn't reveal it - the cards replacement effects put on one end of a library
+/// together in place of another zone (Library of Leng's "you get to decide the order the cards are placed on the library",
+/// the rulings; Pulmonic Sliver's slivers dying together; Wheel of Sun and Moon's bottom). Each owner, in APNAP order (CR
+/// 101.4), is asked for the order of those on each end, top first, the question theirs alone; the cards take the places
+/// they arrived at in that order.
+fn arrange_redirected_into_libraries(cx: &mut Cx, redirected: &[(PlayerId, bool, ObjectId, ObjectId)]) {
+    let players: Vec<PlayerId> = cx.s().apnap().collect();
+    for owner in players {
+        for bottom in [false, true] {
+            let mine: Vec<(ObjectId, ObjectId)> =
+                redirected.iter().filter(|&&(p, b, _, _)| p == owner && b == bottom).map(|&(_, _, card, by)| (card, by)).collect();
+            if mine.len() < 2 {
+                continue;
+            }
+            let library = Zone::library(owner);
+            // Top first, as they lie, and the places they hold.
+            let (places, listed): (Vec<usize>, Vec<ObjectId>) = cx
+                .s()
+                .zone(library)
+                .iter()
+                .enumerate()
+                .filter(|(_, id)| mine.iter().any(|&(card, _)| card == **id))
+                .map(|(at, &id)| (at, id))
+                .unzip();
+            if listed.len() < 2 {
+                continue;
+            }
+            let source = match mine[0].1 {
+                by if by != ObjectId::NONE => by,
+                _ => listed[0],
+            };
+            let kind = if bottom { DestinationKind::LibraryBottom } else { DestinationKind::LibraryTop };
+            let ask = RequestKind::DistributeCards {
+                source,
+                cards: listed.clone(),
+                destinations: vec![Destination { kind, min: listed.len() as u32, max: listed.len() as u32, eligible: listed.clone() }],
+                may_shuffle: false,
+            };
+            // Unanswered yet, the run goes on with the order they arrived in and is replayed with the answer (`Cx::ask_core`).
+            let order = match cx.ask_rule(owner, ask) {
+                Ok(Some(Answer::Placements { placements, .. })) => placements.into_iter().next().unwrap_or_default(),
+                _ => continue,
+            };
+            if order == listed || order.len() != listed.len() || !listed.iter().all(|id| order.contains(id)) {
+                continue;
+            }
+            for &card in &listed {
+                cx.st().zone_remove(library, card);
+            }
+            // The places ascending, each filled in turn: every card goes back to a place one of them held.
+            for (&at, &card) in places.iter().zip(&order) {
+                cx.st().zone_insert(library, at, card);
+            }
+            // A library whose top is revealed shows the card now on top (CR 401.5).
+            crate::library_visibility::sync(cx);
+        }
+    }
 }
 
 /// "If an effect or rule puts two or more cards into the same graveyard at the same time, the owner of those cards may

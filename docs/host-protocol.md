@@ -181,7 +181,10 @@ Martyr, CR 614.1a) is asked once for each part of the damage it could replace - 
 worded `MayPromptMessage` (`Purpose::AskDamage` in the engine) whose `Event` is that damage in words, as the effects so far
 have left it ("2 damage from Pyroclasm to your opponent's Ornithopter"), and whose `Subject` is the object it would be dealt
 to (no handle for a player). Both are empty for any other "you may". The web client shows `Event` as the prompt's detail.
-Version 234.
+Version 234. An optional replacement of a move is asked the same way, once for each object it could move (Library of
+Leng's "you may put it on top of your library", asked for each card one discard discards; `Purpose::AskMove`): `Event` is
+the card's name and `Subject` its handle, both only where the seat may look at the card, and empty otherwise. No fields
+changed, so no new version.
 
 **A resolving payment of counters says what X removes.** An `UnlessPaysPromptMessage` whose X is "remove any number of
 [kind] counters from" the source (Tetravus, CR 118.3) rather than mana has `XCounter`, the counters' kind as the table names

@@ -1842,6 +1842,23 @@ impl GameState {
         self.rng.forced_len = faces.len().min(10) as u8;
     }
 
+    /// Fixes the next `count` shuffles to reverse the order of what they shuffle (`Rng::forced_reversals`), for a scenario
+    /// that must say a shuffle came after a move.
+    pub fn force_shuffle_reversals(&mut self, count: u8) {
+        self.rng.forced_reversals = count;
+    }
+
+    /// Whether the shuffle about to be made is one a script fixed as a reversal, using it up.
+    pub fn take_forced_reversal(&mut self) -> bool {
+        if self.rng.forced_reversals == 0 {
+            return false;
+        }
+        let old = self.rng;
+        self.rng.forced_reversals -= 1;
+        self.log(Undo::Rng(Box::new(old)));
+        true
+    }
+
     pub fn timestamp(&mut self) -> u32 {
         self.log(Undo::Timestamp(self.next_timestamp));
         self.next_timestamp += 1;
@@ -1904,7 +1921,7 @@ impl GameState {
     /// draw what the game it was copied from will (a search's fork). The journal's generator entries are rewritten too,
     /// so that rolling back past a draw does not bring back the old generator.
     pub fn reseed(&mut self, seed: u64) {
-        let rng = Rng { forced: self.rng.forced, forced_len: self.rng.forced_len, ..Rng::new(seed) };
+        let rng = Rng { forced: self.rng.forced, forced_len: self.rng.forced_len, forced_reversals: self.rng.forced_reversals, ..Rng::new(seed) };
         self.rng = rng;
         for entry in &mut self.journal.entries {
             if let Undo::Rng(old) = entry {

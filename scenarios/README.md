@@ -188,6 +188,14 @@ a graveyard, the first opponent in turn order). Every roll, flip and random choi
 `choose_at_random`) and is recorded as `DieRolled`, `CoinFlipped` or `ChosenAtRandom` in the event history, where triggers
 ("whenever you flip a coin", "win a flip", "roll a die") see it.
 
+## Shuffles: `[Shuffles]`
+
+A shuffle's result is random, so a scenario never asserts where one put a card. Where it must show that a shuffle came after
+a move or left a card where the move put it (CR 701.24g: Darksteel Colossus shuffled in under the cards Library of Leng put on top in the same discard), a
+`[Shuffles]` section of `Reverse` lines fixes that many of the game's first shuffles, in order, to reverse the order of
+what they shuffle instead: the cards on top before it end at the bottom, which the draws or the library then show. Once
+they are used up shuffles are random again.
+
 ## Starting life: `[Life]`
 
 A scenario that needs a player near death says so instead of playing the life away: a `[Life]` section gives a starting life

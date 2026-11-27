@@ -43,6 +43,10 @@ pub struct GameScript {
     pub chooser: i32,
     /// The faces the dice show, in the order they are rolled (a `[Dice]` section: `6; 1; 4`).
     pub dice: Vec<u8>,
+    /// How many of the game's first shuffles reverse the order of what they shuffle instead of drawing a random one (a
+    /// `[Shuffles]` section, one `Reverse` line each): where a scenario must say a shuffle came after a move, by where the
+    /// reversal puts the cards.
+    pub shuffle_reversals: u8,
     /// Life totals the players begin with when not 20 (a `[Life]` section: `Bot1: 3`), as (seat index, life).
     pub life: Vec<(usize, i32)>,
     /// What a variant sets of each seat's start (a `[Variant]` section: `Bot1: life 30; hand 5; maximum 9; emblem <name>`),
@@ -642,6 +646,7 @@ enum Section {
     Expect,
     Opening,
     Dice,
+    Shuffles,
     Life,
     Variant,
     EventLimit,
@@ -759,6 +764,10 @@ impl GameScript {
                             }
                         }
                     }
+                    Section::Shuffles => match line.trim() {
+                        l if l.eq_ignore_ascii_case("reverse") && script.shuffle_reversals < u8::MAX => script.shuffle_reversals += 1,
+                        _ => return Err(ParseError("a [Shuffles] section lists one Reverse line for each shuffle that reverses what it shuffles".into())),
+                    },
                     Section::None => return Err(ParseError("expected a section header such as [Bot1 Deck] first".into())),
                 }
                 Ok(())
@@ -803,6 +812,7 @@ fn section_header(line: &str) -> Option<Section> {
         "[EXPECT]" => Some(Section::Expect),
         "[OPENING]" => Some(Section::Opening),
         "[DICE]" => Some(Section::Dice),
+        "[SHUFFLES]" => Some(Section::Shuffles),
         "[LIFE]" => Some(Section::Life),
         "[VARIANT]" => Some(Section::Variant),
         "[EVENT LIMIT]" => Some(Section::EventLimit),
@@ -883,6 +893,13 @@ mod tests {
         assert_eq!(script.commander_list(1), vec!["Partner A".to_string(), "Partner B".to_string()]);
         assert_eq!(script.decklist(0), vec!["Island".to_string(); 7]);
         assert!(GameScript::parse("[Format]\nPioneer\n[Bot1 Deck]\nIsland\n", "x").is_err());
+    }
+
+    #[test]
+    fn a_shuffles_section_counts_the_reversed_shuffles() {
+        let script = GameScript::parse("[Shuffles]\nReverse\nreverse\n[Bot1 Deck]\nIsland x7\n[Bot2 Deck]\nIsland x7\n", "x").unwrap();
+        assert_eq!(script.shuffle_reversals, 2);
+        assert!(GameScript::parse("[Shuffles]\nRandom\n[Bot1 Deck]\nIsland\n", "x").is_err());
     }
 
     #[test]

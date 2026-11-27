@@ -646,6 +646,7 @@ fn purpose_view(purpose: Purpose, opening: bool) -> CardChoicePurposeView {
         | Purpose::Optional
         | Purpose::Ask(_)
         | Purpose::AskDamage(..)
+        | Purpose::AskMove(..)
         | Purpose::EndTurn
         | Purpose::RevealForMiracle(_)
         | Purpose::CastForMiracleCost(_)
@@ -1450,13 +1451,20 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 kind: kind.words(),
             })
         }
-        RequestKind::May { source, purpose: purpose @ (Purpose::Ask(question) | Purpose::AskDamage(question, _)) } => {
-            // An optional replacement of damage, asked once for each creature a spell would damage, says which one this is.
+        RequestKind::May { source, purpose: purpose @ (Purpose::Ask(question) | Purpose::AskDamage(question, _) | Purpose::AskMove(question, _)) } => {
+            // An optional replacement of damage, asked once for each creature a spell would damage, says which one this is;
+            // one of a move, asked once for each card one discard discards, which card - by name only where the seat may
+            // look at it (a card in its own hand, a permanent).
             let (event, subject) = match purpose {
                 Purpose::AskDamage(_, d) => (
                     damage_words_owned(game, request.player, *d),
                     match d.to { Target::Object(id) => source_handle(game, handles, id), _ => ViewHandle::NONE },
                 ),
+                Purpose::AskMove(_, id) => {
+                    let name = source_name(game, request.player, *id);
+                    let subject = if name.is_empty() { ViewHandle::NONE } else { source_handle(game, handles, *id) };
+                    (name, subject)
+                }
                 _ => (String::new(), ViewHandle::NONE),
             };
             PromptPayload::MayPromptMessage(MayPrompt {
@@ -2687,6 +2695,30 @@ mod tests {
         assert_eq!((to_player.event.as_str(), to_player.subject), ("3 damage from Lightning Bolt to your opponent", ViewHandle::NONE));
         let plain = ask(&game, me, Purpose::Ask(&REDIRECT)).0;
         assert_eq!((plain.event.as_str(), plain.subject), ("", ViewHandle::NONE));
+    }
+
+    /// An optional replacement of a move, asked once for each card one discard discards (Library of Leng), names the card
+    /// and hands its handle to a seat that may look at it - its owner, the card in their hand - and names nothing to a seat
+    /// that may not (CR 614.1a).
+    #[test]
+    fn an_optional_move_replacement_names_the_card_it_would_move_to_who_may_see_it() {
+        static ON_TOP: Question = Question::new("PutOnTopOfLibrary", "put the discarded card on top of your library?", "", "Top of library", "Graveyard");
+        let (game, hand) = game_with(&["Llanowar Elves", "Lightning Bolt"]);
+        let mut seats = game.state.seats();
+        let (me, them) = (seats.next().expect("a seat"), seats.next().expect("a seat"));
+        let (elves, bolt) = (hand[0], hand[1]);
+        let ask = |player: PlayerId| {
+            let request = Request { id: 1, player, kind: RequestKind::May { source: elves, purpose: Purpose::AskMove(&ON_TOP, bolt) }, may_cancel: false };
+            let mut handles = HandleSpace::new();
+            match prompt(&game, &request, &mut handles).expect("a prompt").0 {
+                PromptPayload::MayPromptMessage(p) => (p, handles.handle(bolt)),
+                other => panic!("{other:?}"),
+            }
+        };
+        let (mine, handle) = ask(me);
+        assert_eq!((mine.event.as_str(), mine.subject, mine.question.as_str()), ("Lightning Bolt", handle, "put the discarded card on top of your library?"));
+        let (theirs, _) = ask(them);
+        assert_eq!((theirs.event.as_str(), theirs.subject), ("", ViewHandle::NONE), "a card in another's hand is not named");
     }
 }
 

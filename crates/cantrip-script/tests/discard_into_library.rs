@@ -56,6 +56,7 @@ Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Faithless Looting.Cast
 Bot1.Pass
 Bot1.Choose(Probe Bones; Island)
+Bot1.Arrange(Island; Probe Bones)
 {stack}
 ? Bot1.Library.Count = 15
 Bot1.Pass

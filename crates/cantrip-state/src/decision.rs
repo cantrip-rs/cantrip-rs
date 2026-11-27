@@ -1732,6 +1732,10 @@ pub enum Purpose {
     /// applied so far have left it: Blood of the Martyr asked once for each creature Pyroclasm would deal damage to says
     /// which creature, how much and from what.
     AskDamage(&'static Question, DamageAbout),
+    /// An optional replacement of an object's move to another zone (CR 614.1a), worded as `Ask` is, with the object it
+    /// would move: Library of Leng asked once for each card one effect discards (the rulings: "decide whether or not to use
+    /// it on each of the cards"), Pulmonic Sliver's slivers once for each one a wrath destroys, say which card this is.
+    AskMove(&'static Question, ObjectId),
     /// "The player whose turn it is may end the turn" (CR 724.1): Obeka, Brute Chronologist.
     EndTurn,
     /// The rest of the C# engine's purposes (CardChoicePurpose), one for one.
