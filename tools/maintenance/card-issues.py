@@ -1,6 +1,7 @@
 """GitHub issues for the cards a format plays, and who is working on which.
 
     python tools/maintenance/card-issues.py sync <format> [--dry-run] [--limit N]
+    python tools/maintenance/card-issues.py chunks <format> [--size 100] [--dry-run] [--limit N]
     python tools/maintenance/card-issues.py next <format> [-n 5] [--json]
     python tools/maintenance/card-issues.py claim "Card Name" ["Other Card" ...]
     python tools/maintenance/card-issues.py claim --format <format> [-n 1]
@@ -13,6 +14,13 @@ The cards a format plays are docs/formats/<format>.json, best-played first (form
 Commander, edhrec-scrape.py). Each card that has no card file yet is one issue, "Card: <Name>", labelled `card`,
 `format:<format>` (`Commander` for Commander; a card several formats play has several) and a `priority:` label for how much of the format plays it. `sync` makes the issues that are
 missing, labels the ones that exist, and closes those whose card now has a file. Run it again after a new scrape.
+
+A format with thousands of missing cards (Commander) is worked in chunks instead: `chunks` opens one issue per
+--size missing cards, most-played first, "<Format> chunk N", labelled `chunk` and the format's label, with a
+checklist of its cards. A card gets its own issue only when it is claimed (`claim "Name"` opens it). Run `chunks`
+again to tick the cards that have landed, link the card issues opened since, and close a chunk whose cards are all
+done; a card stays in the chunk it was first put in, and a new scrape's new cards go into new chunks after the last.
+`sync` refuses a chunked format, so its thousands of card issues are never opened at once.
 
 A claim is a comment on the issue ("Claimed by @you"), because the people who work on cards cannot all be assigned
 to or label an issue. A claim holds for 24 hours from the last sign of work, and then the card is free for anyone:
@@ -81,10 +89,18 @@ LABELS = {
     "priority:high": ("d73a4a", "Played in a tenth or more of the format's decks"),
     "priority:medium": ("fbca04", "Played in a few of the format's decks"),
     "priority:low": ("c5def5", "Played in some of the format's decks"),
+    "chunk": ("5319e7", "A chunk of a format's missing cards, most-played first"),
 }
 FORMAT_COLOR = "1d76db"
 # A format's label is format:<format> unless it is named here.
 FORMAT_LABELS = {"commander": "Commander"}
+
+
+# Formats worked in chunk issues (`chunks`) rather than an issue per card (`sync`).
+CHUNKED = {"commander"}
+CHUNK = "<!-- cantrip-chunk: {} {} -->"
+CHUNK_RE = re.compile(r"<!-- cantrip-chunk: (\S+) (\d+) -->")
+CHUNK_ITEM_RE = re.compile(r"^- \[[ x]\] \*\*(.+?)\*\*", re.M)
 
 
 def format_label(format_):
@@ -346,6 +362,8 @@ def sync(args, repo):
     formats = formats_of()
     if args.format not in formats:
         sys.exit(f"no docs/formats/{args.format}.json; run format-scrape.py {args.format}")
+    if args.format in CHUNKED:
+        sys.exit(f"{args.format} is worked in chunks, not an issue per card: card-issues.py chunks {args.format}")
     done = missing.implemented()
     issues = read_state(repo)
     by_name = {i["title"][len("Card: "):]: i for i in issues.values() if i["title"].startswith("Card: ")}
@@ -391,6 +409,75 @@ def sync(args, repo):
         gh("api", "-X", "PATCH", f"repos/{repo}/issues/{issue['number']}", "--input", "-",
            body={"state": "closed", "state_reason": "completed"})
         print(f"closed #{issue['number']}")
+
+
+def chunk_title(format_, number, names, cards):
+    scores = [cards[n]["score"] for n in names if n in cards]
+    spread = f", in {max(scores):g}-{min(scores):g}% of decks" if scores else ""
+    return f"{format_.title()} chunk {number}: {len(names)} cards{spread}"
+
+
+def chunk_body(format_, number, names, cards, done, issue_of):
+    """A chunk's checklist: its cards most-played first, ticked when implemented, each linked to its own issue."""
+    lines = [f"Chunk {number} of the {format_.title()} cards the engine lacks, most-played first "
+             f"(`docs/formats/{format_}.json`; each card's share of the decks that play it).", "",
+             "To take one: `python tools/maintenance/card-issues.py claim \"Name\"` opens the card's own issue and "
+             "claims it (the add-cards skill does this itself); its commit says `Closes #<that issue>`. "
+             f"`card-issues.py chunks {format_}` ticks the cards that have landed and closes the chunk when every "
+             "card is done.", ""]
+    for name in names:
+        share = f" - {cards[name]['score']:g}%" if name in cards else ""
+        link = f" (#{issue_of[name]})" if name in issue_of else ""
+        lines.append(f"- [{'x' if slug(name) in done else ' '}] **{name}**{share}{link}")
+    lines += ["", CHUNK.format(format_, number)]
+    return "\n".join(lines)
+
+
+def chunks(args, repo):
+    """Opens the chunk issues a format's missing cards need, and brings the open ones up to date."""
+    formats = formats_of()
+    if args.format not in formats:
+        sys.exit(f"no docs/formats/{args.format}.json")
+    cards = formats[args.format]
+    done = missing.implemented()
+    issue_of = {i["title"][len("Card: "):]: i["number"] for i in read_state(repo).values()
+                if i["title"].startswith("Card: ")}
+    ours = {}
+    for issue in gh("issue", "list", "-R", repo, "--label", "chunk", "--state", "all", "--limit", "2000",
+                    "--json", "number,title,body,state") or []:
+        match = CHUNK_RE.search(issue["body"])
+        if match and match.group(1) == args.format:
+            ours[int(match.group(2))] = dict(issue, names=CHUNK_ITEM_RE.findall(issue["body"]))
+    chunked = {name for issue in ours.values() for name in issue["names"]}
+    fresh = [name for name in cards if slug(name) not in done and name not in chunked]
+    new = [fresh[i:i + args.size] for i in range(0, len(fresh), args.size)]
+    new = new[:args.limit] if args.limit else new
+    first = max(ours, default=0) + 1
+    print(f"{args.format}: {len(ours)} chunks ({len(chunked)} cards); {len(fresh)} missing cards in none; "
+          f"{len(new)} chunks to open")
+    if args.dry_run:
+        for number, names in enumerate(new, first):
+            print(f"  would open {chunk_title(args.format, number, names, cards)!r}: {', '.join(names[:5])}, ...")
+        return
+    ensure_labels(repo, {"chunk", format_label(args.format)})
+    for number, issue in sorted(ours.items()):
+        if issue["state"] != "OPEN":
+            continue
+        body = chunk_body(args.format, number, issue["names"], cards, done, issue_of)
+        if body != issue["body"]:
+            gh("api", "-X", "PATCH", f"repos/{repo}/issues/{issue['number']}", "--input", "-", body={"body": body})
+            print(f"updated #{issue['number']} (chunk {number})")
+        if all(slug(name) in done for name in issue["names"]):
+            gh("api", "-X", "PATCH", f"repos/{repo}/issues/{issue['number']}", "--input", "-",
+               body={"state": "closed", "state_reason": "completed"})
+            print(f"closed #{issue['number']} (chunk {number}): every card is done")
+    for number, names in enumerate(new, first):
+        made = gh("api", "-X", "POST", f"repos/{repo}/issues", "--input", "-",
+                  body={"title": chunk_title(args.format, number, names, cards),
+                        "body": chunk_body(args.format, number, names, cards, done, issue_of),
+                        "labels": sorted({"chunk", format_label(args.format)})})
+        print(f"#{made['number']} chunk {number}: {len(names)} cards")
+        time.sleep(1.2)  # GitHub limits how fast content may be created
 
 
 def available(args, repo):
@@ -623,6 +710,11 @@ def main():
                      help="the named cards are a pull request's under review: claim them though a local branch has them")
     one = commands.add_parser("release")
     one.add_argument("names", nargs="+")
+    one = commands.add_parser("chunks", help="open and update a chunked format's chunk issues")
+    one.add_argument("format")
+    one.add_argument("--size", type=int, default=100, help="cards in each new chunk")
+    one.add_argument("--dry-run", action="store_true")
+    one.add_argument("--limit", type=int, default=0, help="open at most this many new chunks in this run")
     commands.add_parser("status")
     one = commands.add_parser("log", help="post a progress event on a card's issue (fixed text)")
     one.add_argument("issue", help="the issue number (#N from the claim), or the card's name (slower)")
@@ -634,7 +726,7 @@ def main():
     one.add_argument("--days", type=int, default=30)
     args = parser.parse_args()
     repo = repository(args.repo)
-    {"sync": sync, "next": next_cards, "claim": claim, "release": release, "status": status, "log": log, "times": times}[args.command](args, repo)
+    {"sync": sync, "chunks": chunks, "next": next_cards, "claim": claim, "release": release, "status": status, "log": log, "times": times}[args.command](args, repo)
 
 
 if __name__ == "__main__":
