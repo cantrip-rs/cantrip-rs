@@ -9,9 +9,9 @@
     python tools/maintenance/card-issues.py log <N> <event> [--commit SHA | --findings N | --rule CR]
     python tools/maintenance/card-issues.py times [--days 30]
 
-The cards a format plays are docs/formats/<format>.json, best-played first (format-scrape.py makes it). Each card
-that has no card file yet is one issue, "Card: <Name>", labelled `card`, `format:<format>` (a card several formats
-play has several) and a `priority:` label for how much of the format plays it. `sync` makes the issues that are
+The cards a format plays are docs/formats/<format>.json, best-played first (format-scrape.py makes it; for
+Commander, edhrec-scrape.py). Each card that has no card file yet is one issue, "Card: <Name>", labelled `card`,
+`format:<format>` (`Commander` for Commander; a card several formats play has several) and a `priority:` label for how much of the format plays it. `sync` makes the issues that are
 missing, labels the ones that exist, and closes those whose card now has a file. Run it again after a new scrape.
 
 A claim is a comment on the issue ("Claimed by @you"), because the people who work on cards cannot all be assigned
@@ -83,6 +83,12 @@ LABELS = {
     "priority:low": ("c5def5", "Played in some of the format's decks"),
 }
 FORMAT_COLOR = "1d76db"
+# A format's label is format:<format> unless it is named here.
+FORMAT_LABELS = {"commander": "Commander"}
+
+
+def format_label(format_):
+    return FORMAT_LABELS.get(format_, f"format:{format_}")
 
 
 def load(name):
@@ -282,8 +288,13 @@ def card_issue_body(name, card, entries):
             lines += [f"**{face['name']}** {face.get('mana_cost', '')}", f"*{face['type_line']}{stats}*"]
             lines += ["> " + line for line in face.get("oracle_text", "").splitlines()] + [""]
     for format_, entry in entries:
-        lines.append(f"- **{format_.title()}**: in {entry['score']:g}% of the decks read "
-                     f"(MTGGoldfish {entry['goldfish']:g}%, MTGTop8 {entry['top8']:g}%)")
+        if "goldfish" in entry:
+            lines.append(f"- **{format_.title()}**: in {entry['score']:g}% of the decks read "
+                         f"(MTGGoldfish {entry['goldfish']:g}%, MTGTop8 {entry['top8']:g}%)")
+        else:  # edhrec-scrape.py
+            top = f"in {entry['top']:g}% of the decks that can play it (edhrec.com/top); " if entry["top"] else ""
+            lines.append(f"- **{format_.title()}**: {top}in {entry['commanders']:g}% of the decks of EDHREC's top "
+                         f"commanders, on {entry['among']} of their pages")
     lines += ["", "To take it: `python tools/maintenance/card-issues.py claim \"" + name + "\"` (the add-cards skill "
               "does this itself). The claim lasts 24 hours from your last push; open a pull request with "
               "`Closes #<this issue>` and it stays yours while the pull request is worked on.", "",
@@ -325,7 +336,7 @@ def scryfall_cards(names):
 def labels_for(name, formats):
     """The labels a card's issue should carry, from every format that plays it."""
     entries = [(f, cards[name]) for f, cards in formats.items() if name in cards]
-    labels = {"card"} | {f"format:{f}" for f, _ in entries}
+    labels = {"card"} | {format_label(f) for f, _ in entries}
     if entries:
         labels.add(tier(max(e["score"] for _, e in entries)))
     return labels, entries
@@ -363,12 +374,15 @@ def sync(args, repo):
     ensure_labels(repo, set().union(*(labels for _, labels, _ in create), *(l for _, l in relabel)))
     create = create[:args.limit] if args.limit else create
     cards = scryfall_cards([name for name, _, _ in create])
+    # GitHub allows about 80 content-creating requests a minute and 500 an hour: a run of more than an hour's worth
+    # keeps under the hourly limit instead of running into it.
+    pace = 1.2 if len(create) <= 400 else 7.5
     for index, (name, labels, entries) in enumerate(create, 1):
         made = gh("api", "-X", "POST", f"repos/{repo}/issues", "--input", "-",
                   body={"title": title(name), "body": card_issue_body(name, cards.get(name), entries),
                         "labels": sorted(labels)})
         print(f"[{index}/{len(create)}] #{made['number']} {name}")
-        time.sleep(1.2)  # GitHub limits how fast content may be created
+        time.sleep(pace)
     for number, labels in relabel:
         gh("api", "-X", "POST", f"repos/{repo}/issues/{number}/labels", "--input", "-", body={"labels": sorted(labels)})
     for issue in stale:
