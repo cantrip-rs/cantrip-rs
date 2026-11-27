@@ -531,9 +531,25 @@ impl<'s> Run<'s> {
         let noted = Undo::<()>::before(&self.game, request.player, &answer);
         self.before = self.window();
         match self.game.answer(request.id, request.player, answer.clone()) {
+            // `~`: the engine had to refuse it.
+            Ok(()) if step.is_some_and(|s| s.refused) => {
+                let s = step.expect("a refused line");
+                fail(format!("line {}: {} must be refused, and the engine took it", s.line, s.text))
+            }
             Ok(()) => {
                 let kept = noted.is_mana().then_some(());
                 self.undo.track(&self.game, noted, kept);
+                Ok(())
+            }
+            // Refused, and for the reason a `~` line is about - a required cast's search refusing an answer an attempt has
+            // already failed by (`Game::answer`) - not for being no answer to the question at all (a malformed or illegal
+            // one, which `validate` refuses), which would let a wrong line look right.
+            Err(Rejected(why)) if step.is_some_and(|s| s.refused) => {
+                let s = step.expect("a refused line");
+                if !why.contains("can't complete the cast") {
+                    return fail(format!("line {}: {} was refused, but not as an answer a failed attempt has used: {why}", s.line, s.text));
+                }
+                self.trace.push(format!("T{} {}: line {} refused: {why}", self.turn(), who, s.line));
                 Ok(())
             }
             Err(Rejected(why)) => match step {
@@ -1248,7 +1264,13 @@ impl<'s> Run<'s> {
             return Ok(Decision { intent: Intent::Undo, line: Some(step) });
         }
 
-        let paying = self.casting.as_ref().is_some_and(|c| c.player == request.player)
+        // The X of a required cast made again (Word of Command's, `required`) is the script's to announce, though the attempt
+        // before it was being paid for.
+        let explicit_x = matches!(request.kind, RequestKind::PayCosts { announcing: true, .. })
+            && matches!(self.current(), Some(ScriptStep::Action(step)) if step.verb == ScriptVerb::PayCost
+                && request.player == player_of(step.bot) && x_of(step).ok().flatten().is_some());
+        let paying = !explicit_x
+            && self.casting.as_ref().is_some_and(|c| c.player == request.player)
             && matches!(request.kind, RequestKind::PayCosts { .. });
         if !paying {
             if matches!(request.kind, RequestKind::Priority { .. }) {
@@ -1331,6 +1353,10 @@ impl<'s> Run<'s> {
         }
         self.next();
         self.deliver(request, answer.clone(), Some(step))?;
+        // Refused as it had to be: the question waits for the next line.
+        if step.refused {
+            return Ok(());
+        }
         let act = match &answer {
             Answer::Act(a) => Some(a.kind),
             _ => None,
@@ -1586,6 +1612,15 @@ impl<'s> Run<'s> {
                 let n = u32::from(x_of(step)?.unwrap_or(0));
                 if n > *most {
                     return fail(format!("line {}: {} may pay at most {most} of the generic mana", step.line, bot(request.player)));
+                }
+                Some(Answer::Announce(n))
+            }
+            // The X of a cast an effect makes as it resolves with no "you may" to accept it with (Word of Command's "the player
+            // plays that card if able"): `PayCost(X: 2)` announces it.
+            (V::PayCost, RequestKind::PayCosts { announcing: true, assist: AssistStep::None, most, least, .. }) if x_of(step)?.is_some() => {
+                let n = u32::from(x_of(step)?.unwrap_or(0));
+                if n > *most || n < *least {
+                    return fail(format!("line {}: X may be announced only from {least} to {most}", step.line));
                 }
                 Some(Answer::Announce(n))
             }

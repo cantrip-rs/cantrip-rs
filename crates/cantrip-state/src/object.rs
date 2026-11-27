@@ -2051,15 +2051,28 @@ pub enum EffectKind {
     /// leaves it waiting (723.1b, Secret of Bloodbending's ruling). As it begins every such effect on the player for it is
     /// used up, each becoming the control of them for the window (`ControlsPlayer`), the last created whose controller is in
     /// the game the one that works (723.1a). About the player, so it outlives its `affected` object, which is only the
-    /// source. Mindslaver, Sorin Markov, Worst Fears; Secret of Bloodbending.
+    /// source. Mindslaver, Sorin Markov, Worst Fears; Secret of Bloodbending. "You control the player while that spell is
+    /// resolving" (Word of Command, CR 723.2) is `ControlWindow::Resolution`: it waits on its `affected` object, a spell on the
+    /// stack, and so ends with it if that spell leaves the stack without resolving (CR 400.7).
     ControlNext { player: PlayerId, window: ControlWindow },
+    /// "While doing so, the player can activate mana abilities only if they're from lands that player controls and only if
+    /// mana they produce is spent to activate other mana abilities of lands the player controls and/or to play that card"
+    /// (Word of Command, CR 723.2, 723.7): while `player` plays `card` as the effect has them, the only mana abilities they
+    /// may activate are those of lands they control (CR 602.5), and only one some of whose mana can go to the cost still owed
+    /// (owner ruling 2026-11-27: some spent and the rest left over is legal, and what is left over is ordinary mana; mana
+    /// floating before is theirs to spend on the card). It lasts only while the play is being made: the core makes it as the cast begins
+    /// and ends it as the cast is made or given up (`CastTerms::land_mana_only`). About the player, so it outlives its
+    /// `affected` object, which is only the source.
+    LandManaOnly { player: PlayerId, card: ObjectId },
     /// The effect's controller controls `player` (CR 723): they make every choice and decision `player` is allowed or told
     /// to make (723.5), with `player`'s resources (723.5a), and see what `player` sees of the game (723.4); `player` is still
     /// the active player and controls their objects (723.3). Who is asked is unchanged - the request is `player`'s - and
     /// the host routes it (`GameState::player_controller`). Made by `ControlNext` as its window begins. For a turn it lasts
     /// until the next turn begins (723.1) - through any turn skipped meanwhile, which never begins - and for a combat phase
-    /// it has `Duration::EndOfCombat` and ends as the phase does; either ends at once if its
-    /// controller leaves the game (CR 800.4a). Of several, the newest works (723.1a), and the older resume when it ends.
+    /// it has `Duration::EndOfCombat` and ends as the phase does; for the resolution of a spell or ability (CR 723.2: Word of
+    /// Command's "until Word of Command finishes resolving", "while that spell is resolving") it has `Duration::UntilResolved`
+    /// and ends as that spell or ability finishes resolving (CR 608.2n, 608.3); any of them ends at once if its controller
+    /// leaves the game (CR 800.4a). Of several, the newest works (723.1a), and the older resume when it ends.
     ControlsPlayer(PlayerId),
     /// "The 'legend rule' doesn't apply to permanents [this player] controls" (CR 704.5j, 611.2c) for as long as it lasts:
     /// Hall of Echoes's "this turn". About the player, so it reaches legends that arrive later and outlives its `affected`
@@ -2129,8 +2142,9 @@ impl EffectKind {
                 | EffectKind::NextSpellCantBeCountered
                 | EffectKind::ManaCostRuleForOneSpell { .. }
                 | EffectKind::SkipNextTurn(_)
-                | EffectKind::ControlNext { .. }
+                | EffectKind::ControlNext { window: ControlWindow::Turn { .. } | ControlWindow::CombatPhase, .. }
                 | EffectKind::ControlsPlayer(_)
+                | EffectKind::LandManaOnly { .. }
                 | EffectKind::NoLegendRule(_)
                 | EffectKind::SpellCostChange { .. }
                 | EffectKind::SpellAlternative { .. }
@@ -2179,6 +2193,12 @@ pub enum ControlWindow {
     /// "During their next combat phase": from the beginning of combat step to the end of combat step, an additional combat
     /// phase included only if it is the next one taken (Secret of Bloodbending).
     CombatPhase,
+    /// "While that spell is resolving" (CR 723.2, 608.2): from the moment the effect's `affected` object, a spell on the stack,
+    /// begins to resolve - not if it doesn't resolve because its every target is illegal (CR 608.2b) - until it finishes
+    /// resolving (CR 608.2n, 608.3). The effect waits on that spell and ends with it if the spell leaves the stack any other
+    /// way (CR 400.7). Word of Command's "if the chosen card is cast as a spell, you control the player while that spell is
+    /// resolving".
+    Resolution,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -2284,6 +2304,11 @@ pub enum Duration {
     /// continuously from the ability's creation on the stack. A lapse before resolution prevents the duration from
     /// starting, unless control returns during resolution itself. Aladdin, Merieke Ri Berit and Orcish Squatters print it.
     WhileSourceControlled,
+    /// "Until [this spell or ability] finishes resolving" (CR 608.2n, 608.3): until the resolution of the stack item with this
+    /// serial (`StackItem::serial`) is over - after its last instruction and its leaving the stack, whatever its instructions
+    /// did with it on the way (CR 608.2m). Only player control lasts so (`EffectKind::ControlsPlayer`, CR 723.2): Word of
+    /// Command's "you control that player until Word of Command finishes resolving", and "while that spell is resolving".
+    UntilResolved(u32),
 }
 
 impl Duration {

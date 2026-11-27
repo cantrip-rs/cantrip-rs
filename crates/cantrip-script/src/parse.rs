@@ -407,6 +407,9 @@ pub struct ActionStep {
     pub verb: ScriptVerb,
     pub raw_arguments: String,
     pub arguments: Vec<ScriptArgument>,
+    /// Written `~ Bot1.Target(...)`: the answer is given, and the engine must refuse it (a required cast's known-dead answer,
+    /// `cantrip_rules::required`); the question is then asked again, for the next line to answer.
+    pub refused: bool,
 }
 
 impl ActionStep {
@@ -470,6 +473,7 @@ impl ActionStep {
             verb,
             raw_arguments: raw.to_string(),
             arguments: ScriptArgument::split(raw),
+            refused: false,
         })
     }
 }
@@ -544,6 +548,11 @@ impl ScriptStep {
         if let Some(rest) = line.strip_prefix('?') {
             let expectation = parse_expectation(rest.trim(), number)?;
             return Ok(ScriptStep::Check { line: number, text: line.to_string(), expectation });
+        }
+        // An answer given that the engine must refuse: the question stays, asked again.
+        if let Some(rest) = line.strip_prefix('~') {
+            let action = ActionStep { refused: true, text: line.to_string(), ..ActionStep::parse(rest.trim(), number)? };
+            return Ok(ScriptStep::Action(action));
         }
         if let Some(rest) = line.strip_prefix('!') {
             let action = ActionStep::parse(rest.trim(), number)?;
@@ -929,6 +938,13 @@ mod tests {
     fn a_concession_is_a_line_of_its_player() {
         let step = ActionStep::parse("Bot3.Concede", 1).unwrap();
         assert_eq!((step.verb, step.bot), (ScriptVerb::Concede, 3));
+    }
+
+    #[test]
+    fn parses_an_answer_the_engine_must_refuse() {
+        let script = GameScript::parse("[Bot1 Deck]\nIsland\n[Bot2 Deck]\nIsland\n[Actions]\n~ Bot2.PayCost(X: 3)\nBot2.PayCost(X: 1)\n", "x").unwrap();
+        assert!(matches!(&script.steps[0], ScriptStep::Action(a) if a.refused && a.verb == ScriptVerb::PayCost && a.text.starts_with('~')));
+        assert!(matches!(&script.steps[1], ScriptStep::Action(a) if !a.refused));
     }
 
     #[test]

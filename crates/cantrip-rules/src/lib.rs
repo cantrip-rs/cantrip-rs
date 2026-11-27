@@ -21,6 +21,7 @@ mod delayed_capture_tests;
 #[cfg(test)]
 mod rebound_hand_tests;
 mod takeback;
+mod required;
 #[cfg(test)]
 mod base_power_tests;
 #[cfg(test)]
@@ -967,6 +968,10 @@ impl Game {
             return Ok(());
         }
         validate::check(self, &pending, &answer)?;
+        // A required cast's choice that has already led to an attempt that could not be completed (`required`).
+        if required::refuses(self, at, &pending.kind, &answer) {
+            return Err(Rejected("that choice can't complete the cast, which has to be made: choose another".into()));
+        }
         let here = self.marks();
         self.tree.close(self.at, here);
         // A run answered without stages is redone from its start, so the events it had recorded are thrown away and
@@ -1602,6 +1607,27 @@ impl<'a> Cx<'a> {
     }
 
     pub fn ask_core(&mut self, player: PlayerId, kind: RequestKind, may_cancel: bool) -> R<Answer> {
+        // A question of a required cast's (`required`): asked without its dead answers, and a dead end where every answer is.
+        if required::searching(self.g, self.frame) {
+            return self.ask_core_required(player, kind, may_cancel);
+        }
+        self.ask_core_free(player, kind, may_cancel)
+    }
+
+    /// `ask_core` for a question of a required cast's (`required`), off the ordinary path.
+    #[cold]
+    #[inline(never)]
+    fn ask_core_required(&mut self, player: PlayerId, kind: RequestKind, may_cancel: bool) -> R<Answer> {
+        let Ok(kind) = required::narrow(self.g, self.frame, player, kind) else { return Err(Stop::Cancel) };
+        let shape = kind.clone();
+        let answer = self.ask_core_free(player, kind, may_cancel)?;
+        required::walked(self.g, self.frame, &shape, &answer);
+        Ok(answer)
+    }
+
+    /// `ask_core` without a required cast's narrowing: its body, in `ask_core` itself on the ordinary path.
+    #[inline(always)]
+    fn ask_core_free(&mut self, player: PlayerId, kind: RequestKind, may_cancel: bool) -> R<Answer> {
         // A mana ability activated again as a take-back keeps it (`takeback`, CR 733.1): the answer it was given then.
         if let Ok(scripted) = takeback::scripted_answer(self.g) {
             loops::asked(&mut self.g.state, &kind);
@@ -3579,6 +3605,27 @@ impl cantrip_api::Game for Cx<'_> {
         self.state_changed();
     }
 
+    fn control_until_resolved(&mut self, item: &StackItem, player: PlayerId) {
+        let controllers = resolve::player_controllers(self.s());
+        let timestamp = self.g.state.timestamp();
+        let kind = EffectKind::ControlsPlayer(player);
+        let duration = Duration::UntilResolved(item.serial);
+        self.g.state.effect_push(ContinuousEffect { source: item.object, controller: item.controller, timestamp, affected: item.object, kind, duration, words: Words::NONE });
+        self.g.takeback.controls_until_resolved = true;
+        self.state_changed();
+        ops::record_player_control(self, &controllers);
+    }
+
+    fn control_while_spell_resolves(&mut self, item: &StackItem, player: PlayerId, spell: ObjectId) {
+        if !self.g.state.stack.iter().any(|i| i.kind == StackKind::Spell && i.object == spell) {
+            return;
+        }
+        let timestamp = self.g.state.timestamp();
+        let kind = EffectKind::ControlNext { player, window: ControlWindow::Resolution };
+        self.g.state.effect_push(ContinuousEffect { source: item.object, controller: item.controller, timestamp, affected: spell, kind, duration: Duration::Indefinite, words: Words::NONE });
+        self.state_changed();
+    }
+
     fn settle_once(&mut self, instruction: &mut dyn FnMut(&mut dyn cantrip_api::Game)) {
         ops::as_one_instruction(self, |cx| instruction(cx));
     }
@@ -3691,6 +3738,14 @@ impl cantrip_api::Game for Cx<'_> {
         actions::play_land_during_resolution(self, card).map_err(|_| Suspend)
     }
 
+    fn land_ways_during_resolution_by(&self, card: ObjectId, player: PlayerId) -> Vec<u8> {
+        actions::land_ways_during_resolution(self, card, player)
+    }
+
+    fn play_land_during_resolution_by(&mut self, card: ObjectId, player: PlayerId, way: u8) -> Result<Option<ObjectId>, Suspend> {
+        actions::play_land_during_resolution_by(self, card, player, way).map_err(|_| Suspend)
+    }
+
     fn cast_during_resolution(&mut self, card: ObjectId, instead: Option<ManaCost>) -> Result<bool, Suspend> {
         actions::cast_during_resolution(self, card, CastTerms { instead, ..Default::default() }).map_err(|_| Suspend)
     }
@@ -3702,6 +3757,10 @@ impl cantrip_api::Game for Cx<'_> {
 
     fn cast_ways_during_resolution_by(&mut self, card: ObjectId, player: PlayerId) -> Vec<CastWay> {
         actions::cast_ways_during_resolution(self, card, player)
+    }
+
+    fn cast_ways_during_resolution_as(&mut self, card: ObjectId, terms: CastTerms) -> Vec<CastWay> {
+        actions::cast_ways_as(self, card, terms)
     }
 
     fn chars_as_cast(&mut self, card: ObjectId, way: u8, player: PlayerId) -> Chars {

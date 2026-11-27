@@ -1641,9 +1641,53 @@ to that seat with `ForSeat`, in that seat's handles, docs/host-protocol.md) and 
 lines still answer as the player asked). What a seat sees follows `GameState::sees_as` (723.4): the controller looks into
 the controlled player's hand, knows the faces they know, sees the top of their library when they may, and is shown what
 their questions name - never the cards they own outside the game, which they therefore can't be made to choose from while
-controlled (`Query::outside_the_game` is empty then). Conceding stays the seat's own (723.6). Word of Command and
-Opposition Agent (723.2) control a player for other durations and are not built; they would be a `ControlsPlayer` of their
-own duration.
+controlled (`Query::outside_the_game` is empty then). Conceding stays the seat's own (723.6).
+
+Word of Command (723.2) controls a player for the length of a resolution. "You control that player until Word of Command
+finishes resolving" is `Game::control_until_resolved`: a `ControlsPlayer` with `Duration::UntilResolved(serial)`, the
+resolving item's stack serial, ended by `resolve::resolve` once that item's resolution is over - after its last
+instruction and its leaving the stack, whatever its instructions did with it on the way (CR 608.2m-n). "You control the
+player while that spell is resolving" is `Game::control_while_spell_resolves`: a `ControlNext` with
+`ControlWindow::Resolution` whose `affected` object is that spell, so it ends with the spell if it leaves the stack any
+other way (CR 400.7; it is not among `EffectKind::outlives_affected`'s), and as the spell begins to resolve - not if it
+fizzles (CR 608.2b) - becomes a `ControlsPlayer` until it finishes (`resolve::begin_resolution_control`), with the timestamp
+it was made with. `Event::PlayerControlled` is recorded at each end. Opposition Agent's "while they're searching their
+libraries" is not built.
+
+What the controlled player is made to play: "the player plays that card if able" is a land played by another player as
+the effect resolves (`Game::land_ways_during_resolution_by` and `play_land_during_resolution_by`: only in that player's
+own turn, with a land play left, CR 305.2-3; the land back face of a modal double-faced card too, CR 712.12) or a cast
+that is required, `CastTerms::if_able` (Omen Machine and Wild Evocation print "casts it ... if able" as well). The player
+must cast it if some sequence of choices completes the cast, and casts nothing if none does. A required cast is offered only
+the ways and costs the advice the priority offers are judged by calls payable (`cost_choices`, `could_pay_cast` over
+`offer_costed`: the mana with the cost changes, the targets and what they make the cost - Terror of the Peaks' 3 life - the
+card's own additional costs, `extra_payable`, and, for its mana cost alone, the share a rule of the caster's for paying one
+spell's mana cost reaches, `mana_cost_share_judged`: North Star's) - an alternative cost where only that one could be paid, as Word of
+Command's pitch-spell ruling has it - and its caster may not give it up (`takeback::require`, read by `may_take_back`).
+That advice only keeps it short; what makes it exact and finite is its search (`required`): each attempt is a path through
+the tree of its answers, an attempt that can't be completed is reversed (CR 733.1) and marks its path dead, the remake
+(CR 733.2) is offered no dead answer (`required::narrow`; `Game::answer` refuses one the question could not leave out), and a
+question with no answer left that the game accepts and that is not dead is never asked: it is a dead end that marks the path
+to it (`required::alive`, which tries the answers lazily, for every kind of question a cast asks, and stops at the first
+live one), so no seat is ever left with only answers that will be refused. A land whose own restriction keeps its mana
+from paying for the card (Mishra's Workshop for a spell that is no artifact) is not offered either. The tree is finite - an X has as many answers
+as the rules let it be announced: paid in life up to the life there is, paid in mana up to all that could pay for it
+(`x_bound`) - so the search ends: with the cast, or with every first choice dead, when the card can't be
+cast. A failure that asked nothing ends it at once. `Game::cast_ways_during_resolution_as` gives the ways such a cast may be
+made by.
+
+"While doing so, the player can activate mana abilities only if they're from lands that player controls and only if mana
+they produce is spent to activate other mana abilities of lands the player controls and/or to play that card" (CR 723.7)
+is `CastTerms::land_mana_only`, as the owner ruled it on 2026-11-27. While the cast is made the core holds an
+`EffectKind::LandManaOnly { player, card }` (made and ended by `cast_during_resolution`): `static_rules::activation_barred`
+refuses every mana ability of the player's that is not a land's they control, their own mana abilities (CR 605.1a) are not
+offered, and so whether they are able is judged from their pool - mana floating before, which they may spend - and their
+lands alone; a land's ability whose yield is not stated is run for its yield then (`effect_productions`, in `available_as`:
+Tolarian Academy's {U} for each artifact). A land's mana ability may be activated only if some of what it makes is spent
+on what is being paid for - the card, or another land's mana ability's own cost: `spent_on_what_is_owed` offers only those
+one of whose yields covers some of what the pool does not, and of a choice of colors only the colors that do, and one whose
+yield shows only once it is activated and covers nothing reverses the action (CR 733.1). Over-producing is legal, and what
+is left over is ordinary mana (keeping only its land's own restriction, Mishra's Workshop's).
 
 "...during their next combat phase" (Secret of Bloodbending) is the same effect with `ControlWindow::CombatPhase`: it waits
 on the player for the next combat phase they actually take, a skipped turn or combat phase leaving it waiting, and one

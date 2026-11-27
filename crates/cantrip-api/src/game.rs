@@ -121,6 +121,19 @@ pub struct CastTerms {
     /// effect's controller casts it. Whether they may is judged by `could_cast_during_resolution_by` and
     /// `cast_ways_during_resolution_by` with the same player.
     pub caster: Option<PlayerId>,
+    /// "[The player] casts it if able" (CR 608.2g): the cast is required, not offered. Its caster can't give it up; one that
+    /// can't be completed for a choice they made is reversed (CR 733.1) and made again, as the effect still says (CR 733.2);
+    /// and it is cast for a cost they could pay - an alternative cost where only that one could be (Word of Command's
+    /// ruling: "if there is a non-mana way to cast a spell, ... you may require that way to be used"). Only a card that can't
+    /// be cast at all is not. Omen Machine's and Wild Evocation's "the player casts it without paying its mana cost if able",
+    /// Word of Command's "the player plays that card if able".
+    pub if_able: bool,
+    /// "While doing so, the player can activate mana abilities only if they're from lands that player controls and only if
+    /// mana they produce is spent to activate other mana abilities of lands the player controls and/or to play that card"
+    /// (Word of Command, CR 723.7; owner ruling 2026-11-27): while the cast is being made its caster may activate the mana
+    /// abilities of lands they control and no others (`EffectKind::LandManaOnly`), each only if some of its mana is spent on
+    /// what is paid for; what is left over is ordinary mana. Whether they are able is judged by their pool and those lands.
+    pub land_mana_only: bool,
 }
 
 /// One way a card could be cast as an effect resolves (CR 608.2g): the card as itself, one half of a split card (CR 709.3),
@@ -1545,6 +1558,17 @@ pub trait Game: Query {
         let kind = EffectKind::ControlNext { player, window };
         self.add_player_effect(item.controller, item.object, kind, Duration::Indefinite);
     }
+    /// "You control that player until [this spell] finishes resolving" (CR 723.2, 723.5), made by the resolving spell or
+    /// ability `item`: from now until its resolution is over (CR 608.2n, 608.3; `Duration::UntilResolved`), its controller
+    /// makes every choice and decision `player` makes - those the rest of its instructions call for, a spell `player` casts
+    /// as it resolves included - with `player`'s resources (723.5a), and sees what `player` sees (723.4). The last such
+    /// effect created on a player is the one that works (723.1a). Word of Command.
+    fn control_until_resolved(&mut self, item: &StackItem, player: PlayerId);
+    /// "You control [player] while that spell is resolving" (CR 723.2, 723.5), made by the resolving spell or ability `item`
+    /// about `spell`, a spell on the stack: its controller controls `player` from the moment `spell` begins to resolve until it
+    /// finishes (`ControlWindow::Resolution`). Nothing if `spell` never resolves - it leaves the stack another way, or is
+    /// removed for its every target being illegal (CR 608.2b). Word of Command's "if the chosen card is cast as a spell".
+    fn control_while_spell_resolves(&mut self, item: &StackItem, player: PlayerId, spell: ObjectId);
     /// "[Kind of] spells [player] casts this turn cost ... less / more to cast" (CR 611.2a/c, 601.2f), made by the resolving
     /// spell or ability `item`: the `index`th of the `lasting_cost_changes` of its card (the face that is up, for a permanent's
     /// ability) changes the total cost of every spell `player` casts until the turn ends (CR 514.2), whether or not the source
@@ -2109,6 +2133,15 @@ pub trait Game: Query {
     /// turn's land plays (CR 305.2a). The effect has already asked whether to ("you may play"). The new object, or none if
     /// it could not be played.
     fn play_land_during_resolution(&mut self, card: ObjectId) -> Result<Option<ObjectId>, Suspend>;
+    /// The ways `player` could play `card` as a land now as an effect resolves (CR 305.1, 608.2g): 0 for the card as itself, a
+    /// land card, and `WAY_BACK_FACE` for the land back face of a modal double-faced card (CR 712.12). None unless it is
+    /// `player`'s own turn (CR 305.3) and they have a land play left (CR 305.2); the phase and the stack do not matter.
+    fn land_ways_during_resolution_by(&self, card: ObjectId, player: PlayerId) -> Vec<u8>;
+    /// `player` plays `card` as a land from where it is as an effect resolves (CR 305.1, 608.2g), the way `way` names
+    /// (`land_ways_during_resolution_by`), counted as one of the turn's land plays (CR 305.2a): "the player plays that card"
+    /// (Word of Command), where the effect has a player other than its controller play it. The new object, or none if it
+    /// could not be played.
+    fn play_land_during_resolution_by(&mut self, card: ObjectId, player: PlayerId, way: u8) -> Result<Option<ObjectId>, Suspend>;
     /// The resolving effect's controller casts `card` from where it is (CR 608.2g, 601.2): its targets are chosen and
     /// its costs paid as for any cast, for `instead` rather than its mana cost if given (CR 118.9: madness). Whether
     /// it was cast; a cast the player gives up (CR 733.1) leaves the card where it was.
@@ -2129,6 +2162,11 @@ pub trait Game: Query {
     fn cast_ways_during_resolution(&mut self, card: ObjectId) -> Vec<CastWay>;
     /// `cast_ways_during_resolution` for `player`, who the effect has cast it (`CastTerms::caster`; CR 608.2g).
     fn cast_ways_during_resolution_by(&mut self, card: ObjectId, player: PlayerId) -> Vec<CastWay>;
+    /// The ways `card` could be cast by `terms` now (CR 608.2g): `cast_ways_during_resolution_by` for the caster they name, and for
+    /// a cast the effect requires (`CastTerms::if_able`) only the ways some cost of which the caster could pay (CR 601.2f-h),
+    /// with the mana of their lands alone where the terms say so (`CastTerms::land_mana_only`). Each is one the cast may be
+    /// made by (`CastTerms::way`).
+    fn cast_ways_during_resolution_as(&mut self, card: ObjectId, terms: CastTerms) -> Vec<CastWay>;
     /// The characteristics `card` cast by `player` its way `way` (`CastWay::way`) would have as the spell on the stack (CR
     /// 601.3e): the face it would be cast as - face-down values for a way that casts it face down (CR 708.4) - with the
     /// continuous effects that would apply to it there, its own characteristic-defining abilities included (changeling, CR

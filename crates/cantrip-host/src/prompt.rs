@@ -771,6 +771,10 @@ fn modes_detail(game: &Game, modes: &[Label], faces: bool) -> (String, bool) {
     if faces && modes.iter().any(|l| matches!(l, Label::Fused(_))) {
         return ("Only the face you choose is cast, with its own cost and mana value; fused, both halves are, for both costs".into(), false);
     }
+    // A face that is a land is played (Word of Command's "the player plays that card", CR 305.1, 712.12).
+    if faces && modes.iter().any(|l| matches!(l, Label::Face(face) if game.cards.get(*face).is(CardType::Land))) {
+        return ("Only the face you choose is played: a land face as the land play, a spell face cast with its own cost".into(), false);
+    }
     if faces {
         return ("Only the face you choose is cast, with its own cost and mana value".into(), false);
     }

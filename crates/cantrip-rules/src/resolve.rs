@@ -564,13 +564,83 @@ pub(crate) fn its_own_exile(cx: &Cx, item: &StackItem, moving: ops::Moving, reas
 }
 
 pub fn resolve(cx: &mut Cx) -> R<Flow> {
-    resolve_inner(cx, false)
+    let flow = resolve_inner(cx, false);
+    // Only a run that made such a control has one to end (`Takeback::controls_until_resolved`).
+    if cx.g.takeback.controls_until_resolved && matches!(flow, Ok(Flow::Done)) {
+        end_resolving_control(cx);
+    }
+    flow
+}
+
+/// The resolving item has finished resolving in a run that made a control of a player until then: it ends
+/// (`end_resolution_control`), off the ordinary path.
+#[cold]
+#[inline(never)]
+fn end_resolving_control(cx: &mut Cx) {
+    if let Some(serial) = cx.resolving().map(|i| i.serial) {
+        end_resolution_control(cx, serial);
+    }
 }
 
 /// The normal resolver, allowed to summarize only a declared terminal mana instruction for
 /// CR 106.7. Opaque effects and all preparation instructions still execute normally.
 pub(crate) fn resolve_for_mana_capability(cx: &mut Cx) -> R<Flow> {
     resolve_inner(cx, true)
+}
+
+/// Who controls each seat now (CR 723), in seat order: what `ops::record_player_control` compares with afterwards.
+pub(crate) fn player_controllers(s: &GameState) -> Vec<PlayerId> {
+    s.seats().map(|p| s.player_controller(p)).collect()
+}
+
+/// The spell `item` begins to resolve (CR 608.2): every effect waiting to control a player while it resolves
+/// (`ControlWindow::Resolution`, CR 723.2) becomes the control of that player until it finishes (`Duration::UntilResolved`),
+/// with the timestamp it was created with (CR 723.1a). One whose controller has left the game gives none (CR 800.4a).
+#[inline]
+fn begin_resolution_control(cx: &mut Cx, item: &StackItem) {
+    if cx.s().effects.iter().any(|e| waits_on_resolution(e, item)) {
+        begin_resolution_control_now(cx, item);
+    }
+}
+
+/// Whether `e` waits to control a player while `item` resolves (`ControlWindow::Resolution`).
+#[inline]
+fn waits_on_resolution(e: &ContinuousEffect, item: &StackItem) -> bool {
+    matches!(e.kind, EffectKind::ControlNext { window: ControlWindow::Resolution, .. }) && e.affected == item.object
+}
+
+/// `begin_resolution_control` where some effect waits on `item`, off the ordinary path.
+#[cold]
+#[inline(never)]
+fn begin_resolution_control_now(cx: &mut Cx, item: &StackItem) {
+    let waiting = |e: &ContinuousEffect| waits_on_resolution(e, item);
+    let controllers = player_controllers(cx.s());
+    let pending: Vec<ContinuousEffect> = cx.s().effects.iter().copied().filter(waiting).collect();
+    cx.st().effects_retain(|e| !waiting(e));
+    for e in pending {
+        if let EffectKind::ControlNext { player, .. } = e.kind
+            && cx.s().in_game(e.controller)
+        {
+            cx.st().effect_push(ContinuousEffect { kind: EffectKind::ControlsPlayer(player), duration: Duration::UntilResolved(item.serial), ..e });
+            cx.g.takeback.controls_until_resolved = true;
+        }
+    }
+    // An effect that begins changes the game with no event (CR 603.8).
+    cx.state_changed();
+    ops::record_player_control(cx, &controllers);
+}
+
+/// The stack item with `serial` has finished resolving (CR 608.2n, 608.3): the control of a player that lasted until then
+/// ends (`Duration::UntilResolved`, CR 723.2).
+fn end_resolution_control(cx: &mut Cx, serial: u32) {
+    let ends = |e: &ContinuousEffect| e.duration == Duration::UntilResolved(serial);
+    if !cx.s().effects.iter().any(ends) {
+        return;
+    }
+    let controllers = player_controllers(cx.s());
+    cx.st().effects_retain(|e| !ends(e));
+    cx.state_changed();
+    ops::record_player_control(cx, &controllers);
 }
 
 /// Executes the generated effect itself, in play and in hypothetical resolution. Summarization
@@ -624,6 +694,8 @@ fn resolve_inner(cx: &mut Cx, summarize_terminal_mana: bool) -> R<Flow> {
                 leave_stack(cx, std::slice::from_ref(&item), ZoneReason::Counter);
                 return Ok(Flow::Done);
             }
+            // It resolves (CR 608.2): who controls a player while it does (CR 723.2) is settled first.
+            begin_resolution_control(cx, &item);
             // Gift (CR 702.174b, 702.174j): the chosen opponent gets it before any of the spell's other effects, and
             // only as the spell resolves. A spell that was countered or fizzled gave nothing. Whoever left the game
             // gets nothing (CR 800.4a). A permanent spell gives it when it enters (`cantrip_mechanics::gift`).

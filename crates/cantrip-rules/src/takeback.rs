@@ -104,6 +104,9 @@ pub(crate) struct Trail {
     /// The parts of an action's payment chosen to be carried out as it is committed are being carried out
     /// (`actions::commit`): nothing asked meanwhile may give the action up (`may_take_back`).
     committing: bool,
+    /// How many casts an effect requires are being made (`CastTerms::if_able`): nothing asked meanwhile may give them up
+    /// (`may_take_back`).
+    required: u32,
 }
 
 /// Where the trail stood: what an action begun then has added since.
@@ -142,6 +145,11 @@ pub(crate) struct Script {
 pub(crate) struct Takeback {
     trail: Trail,
     script: Option<Script>,
+    /// The searches of the required casts under way (`required`), innermost last.
+    pub(crate) search: Vec<crate::required::Search>,
+    /// Whether the run has made a control of a player that lasts until a resolution is over (`Duration::UntilResolved`):
+    /// only then is one looked for to end as the resolution finishes (`resolve::resolve`).
+    pub(crate) controls_until_resolved: bool,
 }
 
 /// Bookkeeping of a run: a copy of a game begins with none.
@@ -163,6 +171,18 @@ impl Takeback {
         t.paying.clear();
         t.fixed.clear();
         t.committing = false;
+        t.required = 0;
+        if !self.search.is_empty() {
+            self.end_searches();
+        }
+        self.controls_until_resolved = false;
+    }
+
+    /// The searches of required casts a run had under way are over with it: off the ordinary path, where there are none.
+    #[cold]
+    #[inline(never)]
+    fn end_searches(&mut self) {
+        self.search.clear();
     }
 }
 
@@ -190,7 +210,14 @@ pub(crate) fn paid(g: &mut Game, from: usize) {
 /// did and was activated stays through a take-back (`kept`), so what it did leaves the action free to be given up.
 pub(crate) fn may_take_back(g: &Game) -> bool {
     let t = &g.takeback.trail;
-    !t.committing && t.fixed.iter().all(|&i| t.runs.iter().any(|r| r.done && r.log.0 <= i && i < r.log.1))
+    !t.committing && t.required == 0 && t.fixed.iter().all(|&i| t.runs.iter().any(|r| r.done && r.log.0 <= i && i < r.log.1))
+}
+
+/// A cast an effect requires begins, or ends, being made (`CastTerms::if_able`, CR 608.2g): while it is, its caster may not
+/// give it up (`may_take_back`), but where it can't go on (CR 733.1).
+pub(crate) fn require(g: &mut Game, on: bool) {
+    let t = &mut g.takeback.trail;
+    t.required = if on { t.required + 1 } else { t.required.saturating_sub(1) };
 }
 
 /// The parts of an action's payment chosen to be carried out as it is committed begin, or end, being carried out

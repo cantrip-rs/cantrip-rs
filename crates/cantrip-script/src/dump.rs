@@ -487,7 +487,7 @@ impl StateDump {
             }
             // The control of a player (CR 723): who controls them now, and the effects waiting for their next turn, each
             // its controller, oldest first ("Bot1+extra" for one that gives an extra turn after it, "Bot1+combat" for one that
-            // controls only the next combat phase).
+            // controls only the next combat phase, "Bot1+resolving" for one that waits for a spell on the stack to resolve).
             let controller = s.player_controller(p);
             if controller != p {
                 d.set(format!("{b}.ControlledBy"), bot(controller));
@@ -501,6 +501,7 @@ impl StateDump {
                     .map(|e| match e.kind {
                         EffectKind::ControlNext { window: ControlWindow::Turn { then_extra_turn: true }, .. } => format!("{}+extra", bot(e.controller)),
                         EffectKind::ControlNext { window: ControlWindow::CombatPhase, .. } => format!("{}+combat", bot(e.controller)),
+                        EffectKind::ControlNext { window: ControlWindow::Resolution, .. } => format!("{}+resolving", bot(e.controller)),
                         _ => bot(e.controller),
                     })
                     .collect();

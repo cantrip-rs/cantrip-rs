@@ -4213,8 +4213,10 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, window: ManaWindow, option
         .map(|(_, source, _)| source)
         .collect();
     let given = layers::acquisition_possible(cx.cards(), cx.s());
+    // While a card is played with the mana of lands alone (Word of Command, CR 723.7), only the player's lands' mana abilities.
+    let lands_only = static_rules::land_mana_only(cx, player);
     for &id in cx.s().battlefield() {
-        if !activation_source(cx, id, player, given) {
+        if !activation_source(cx, id, player, given) || lands_only && !static_rules::land_of(cx, id, player) {
             continue;
         }
         let chars = cx.chars(id);
@@ -4337,8 +4339,13 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, window: ManaWindow, option
     // Mana abilities the player has of their own, from a resolved spell or ability (CR 605.1a, 611.2a): offered whenever they
     // could activate a mana ability. Numbered in the order of the effects that gave them, as many as the options can number
     // (`PLAYER_MANA_ABILITY` to 255); a later one past them is not offered, never offered as another.
+    // None while the player plays a card with the mana of their lands alone (Word of Command, CR 723.7).
+    let own_barred = lands_only;
     for (n, effect) in cx.s().effects.iter().filter(|e| matches!(e.kind, EffectKind::PlayerManaAbility(_)) && e.controller == player).enumerate() {
         let Some(index) = u8::try_from(n).ok().and_then(|n| PLAYER_MANA_ABILITY.checked_add(n)) else { break };
+        if own_barred {
+            break;
+        }
         let EffectKind::PlayerManaAbility(ability) = effect.kind else { continue };
         if let Some(def) = activated(cx, ability)
             && window.allows(def)
@@ -4347,8 +4354,8 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, window: ManaWindow, option
             options.push(ActionOption::on(ActionKind::ActivateAbility, effect.source, index));
         }
     }
-    // Mana abilities that function from the hand (CR 113.6, 605): Elvish Spirit Guide's exile-this-card.
-    for &id in cx.s().zone(Zone::hand(player)) {
+    // Mana abilities that function from the hand (CR 113.6, 605): Elvish Spirit Guide's exile-this-card - no land's.
+    for &id in cx.s().zone(Zone::hand(player)).iter().filter(|_| !lands_only) {
         let def = cx.card(cx.s().obj(id).card);
         for (index, ability) in def.abilities.iter().enumerate() {
             let AbilityDef::Activated(a) = ability else { continue };
@@ -6863,6 +6870,32 @@ pub struct Available {
     tap_cap: u32,
 }
 
+impl Available {
+    /// The most mana all of it could make together, or None where some yield can't be told (`unknown`): every unit of the
+    /// pool and of each source's largest alternative, with what its tap triggers add. An upper bound, never less.
+    fn most(&self) -> Option<u32> {
+        if self.unknown {
+            return None;
+        }
+        let sum = |p: &[u32; 6]| p.iter().sum::<u32>();
+        let mut most = sum(&self.fixed) + self.flex.iter().sum::<u32>();
+        for s in &self.snow {
+            most += s.n;
+        }
+        for (_, pool, flex) in &self.restricted {
+            most += sum(pool) + *flex;
+        }
+        for &(_, n) in &self.linked {
+            most += n;
+        }
+        for (alternatives, n) in &self.complex {
+            let one = alternatives.iter().map(|a| sum(&a.fixed) + a.k + sum(&a.extra) + a.produced).max().unwrap_or(0);
+            most += one * *n;
+        }
+        Some(most)
+    }
+}
+
 /// What may be tapped to pay for part of the cost being judged rather than make mana for it (CR 601.2h): untapped artifacts
 /// for improvise (CR 702.126a), untapped creatures for convoke (CR 702.51a), each paying {1} of any of the generic mana or a
 /// convoke creature one mana of one of its colors; and untapped artifacts and creatures for a waterbend cost (CR 701.67a-b),
@@ -7016,6 +7049,35 @@ fn add_available(list: &mut Vec<(ManaRestriction, [u32; 6], u32)>, restriction: 
     list[at].2 = list[at].2.saturating_add(flex);
 }
 
+/// What a mana ability whose yield is not stated makes, worked out by running it for each answer it asks (`effect_productions`),
+/// where every answer was judged: only while a card is played with the mana of lands alone (`available_as`), off the ordinary
+/// path.
+#[cold]
+#[inline(never)]
+fn worked_out_yields(cx: &Cx, id: ObjectId, player: PlayerId, ability: AbilityRef, index: usize, by: Option<Linked>, into: &mut Vec<[u32; 6]>) -> bool {
+    into.clear();
+    match effect_productions(cx, id, player, cx.cards().ability(ability), ability, index, by).filter(|p| !p.unjudged && p.terminal_types == 0) {
+        Some(made) => {
+            *into = made.pools;
+            true
+        }
+        None => false,
+    }
+}
+
+/// The alternatives of a mana ability whose yields were worked out (`worked_out_yields`): one for each pool it could make,
+/// as `alternative` otherwise is, each once.
+#[cold]
+#[inline(never)]
+fn worked_out_alternatives(alternatives: &mut Vec<Alternative>, alternative: Alternative, pools: &[[u32; 6]], tapped: bool) {
+    for &pool in pools {
+        let each = Alternative { fixed: pool, k: 0, types: 0, combination: false, tapped, ..alternative };
+        if !alternatives.contains(&each) {
+            alternatives.push(each);
+        }
+    }
+}
+
 /// Mana that can pay a cost after its announcement (CR 601.2g, 605.3a): priority-only sources must be floated first.
 pub fn available(cx: &Cx, player: PlayerId) -> Available {
     available_without(cx, player, None, ManaWindow::Payment)
@@ -7063,7 +7125,10 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
     let mut flex = [0u32; 64];
     // Mana abilities of the player's own (CR 605.1a): paid with life, as often as the life total allows (CR 119.4), and never
     // while the player can't lose life (CR 119.8) or can't pay life to activate mana abilities (`payable_life_for`).
-    for effect in cx.s().effects.iter().filter(|e| matches!(e.kind, EffectKind::PlayerManaAbility(_)) && e.controller == player) {
+    // While a card is played with the mana of lands alone (Word of Command, CR 723.7), none of these, and only the player's lands
+    // make mana for it.
+    let own_barred = static_rules::land_mana_only(cx, player);
+    for effect in cx.s().effects.iter().filter(|e| matches!(e.kind, EffectKind::PlayerManaAbility(_)) && e.controller == player && !own_barred) {
         let EffectKind::PlayerManaAbility(ability) = effect.kind else { continue };
         if let Some(def) = activated(cx, ability)
             && window.allows(def)
@@ -7098,8 +7163,12 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
     let mut payers: Vec<(ObjectId, Tap)> = Vec::new();
     let mut placed: Vec<ObjectId> = Vec::new();
     let given = layers::acquisition_possible(cx.cards(), cx.s());
+    // While a card is played with the mana of lands alone (Word of Command, CR 723.7), only the player's lands make mana for it.
+    let lands_only = own_barred;
+    // The yields of a land's mana ability worked out while a card is played with the mana of lands alone (`worked_out_yields`).
+    let mut worked: Vec<[u32; 6]> = Vec::new();
     for &id in cx.s().battlefield() {
-        if skip == Some(id) || !activation_source(cx, id, player, given) {
+        if skip == Some(id) || !activation_source(cx, id, player, given) || lands_only && !static_rules::land_of(cx, id, player) {
             continue;
         }
         let chars = cx.chars(id);
@@ -7142,8 +7211,13 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
                 Some(ManaCapability::CurrentPowerOneColor) => chars.power.unwrap_or(0).max(0) as u32,
                 _ => u32::from(def.adds_any),
             };
-            if def.adds.0.iter().all(|&n| n == 0) && one_color == 0
-                && !matches!(def.mana_capability, Some(ManaCapability::FiniteBundles(..) | ManaCapability::CurrentPowerOneColor))
+            let unstated = def.adds.0.iter().all(|&n| n == 0) && one_color == 0
+                && !matches!(def.mana_capability, Some(ManaCapability::FiniteBundles(..) | ManaCapability::CurrentPowerOneColor));
+            // While a card is played with the mana of lands alone (Word of Command, `EffectKind::LandManaOnly`), what such an
+            // ability makes is worked out by running it for every answer it asks (`effect_productions`): the few lands there
+            // are, judged exactly, as whether the card can be played at all asks (owner ruling 2026-11-27).
+            let worked_out = unstated && lands_only && worked_out_yields(cx, id, player, ability, index, by, &mut worked);
+            if unstated && !worked_out
                 || cost.mana.phyrexian != [0; 5]
                 || cost.mana.twobrid != [0; 5]
                 || def.cost.permanents.is_some_and(|p| p.tapped)
@@ -7188,6 +7262,11 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
                 tapped: false,
                 taps: None,
             };
+            if worked_out {
+                worked_out_alternatives(&mut alternatives, alternative, &worked, def.cost.tap);
+                keeps |= !def.cost.tap && !def.cost.sacrifice_self;
+                continue;
+            }
             if let Some(ManaCapability::FiniteBundles(bundles, _)) = def.mana_capability {
                 for bundle in bundles {
                     let outcomes = if replaceable && def.cost.tap {
@@ -11704,7 +11783,7 @@ fn cast(
     by: CastBy,
     resolving: bool,
 ) -> R<()> {
-    let CastTerms { instead, any_type, any_color, exile_instead, flashback, harmonize, life, discard: _, waterbend: bent, more, less, copy: _, way: _, caster: _ } = terms;
+    let CastTerms { instead, any_type, any_color, exile_instead, flashback, harmonize, life, discard: _, waterbend: bent, more, less, copy: _, way: _, caster: _, if_able: _, land_mana_only: _ } = terms;
     let any = AnyMana::of(any_type, any_color);
     // CR 406.3a: a card exiled face down is turned face up just before it is announced.
     ops::turn_up_to_play(cx, card);
@@ -12058,7 +12137,14 @@ fn cast(
                 None if less_each > 0 => u32::from(less_each),
                 None => u32::from(x_symbols),
             };
-            most_x(def.kicker.map_or(base, |k| add_cost(base, ManaCost { x: 0, ..k.cost })), per)
+            let most = most_x(def.kicker.map_or(base, |k| add_cost(base, ManaCost { x: 0, ..k.cost })), per);
+            // A required cast's X paid in mana is no more than all that could pay it (`x_bound`), which no completed payment
+            // passes: its search (`required`) has as many X to try as could be paid. One sacrificing permanents for {1} less
+            // each is bounded by the permanents (`x_bound` counts them).
+            match (crate::required::searching(cx.g, cx.frame) && per > 0).then(|| x_bound(cx, player, spell, base, per, targets, hand_reduction + less)).flatten() {
+                Some(bound) => most.min(bound),
+                None => most,
+            }
         };
         // A multikicker's count is the spell's `kicked`, which holds 255 (RX-5): it is announced no more times than that. A
         // cost paid any number of times otherwise keeps its own count (`announce_repeated`).
@@ -12792,40 +12878,71 @@ fn cast_ways_where_it_is(cx: &Cx, card: ObjectId, player: PlayerId) -> Vec<CastW
 /// the stack and priority are not asked: the effect itself is the permission to play it now.
 pub fn could_play_land_during_resolution(cx: &Cx, card: ObjectId) -> bool {
     let Some(player) = cx.resolving().map(|i| i.controller) else { return false };
+    land_ways_during_resolution(cx, card, player).contains(&0)
+}
+
+/// The ways `player` could play `card` as a land now as an effect resolves (CR 305.1, 608.2g), as `ActionKind::PlayLand`'s
+/// index names them: 0 for the card as itself, a land card, and `WAY_BACK_FACE` for the back face of a modal double-faced
+/// card that is a land (CR 712.12). It is not on the battlefield or the stack, it is `player`'s own turn (CR 305.3) and they
+/// have a land play left (CR 305.2); the phase, the stack and priority are not asked, the effect itself being the
+/// permission. A face a static ability keeps from entering or forbids to be played is none (CR 305.1, 101.2).
+pub fn land_ways_during_resolution(cx: &Cx, card: ObjectId, player: PlayerId) -> Vec<u8> {
     let obj = cx.s().obj(card);
-    if !live(cx.s(), card) || matches!(obj.zone.kind(), ZoneKind::Battlefield | ZoneKind::Stack) || cx.s().turn.active != player {
-        return false;
+    if !live(cx.s(), card) || matches!(obj.zone.kind(), ZoneKind::Battlefield | ZoneKind::Stack) || cx.s().turn.active != player || cx.s().player(player).lost {
+        return Vec::new();
+    }
+    let LandRules { extra, unlimited, .. } = land_rules(cx, player);
+    if !unlimited && cx.s().player(player).lands_played >= 1 + extra {
+        return Vec::new();
     }
     // One a static ability keeps from entering can't be played (CR 305.1, 101.2), nor one a static ability forbids to be
     // played (`LandPlayRule`), nor one a resolved rule says can't be played (Firestorm Phoenix's): the effect is a permission
     // to play it, and a restriction takes precedence (CR 101.2).
-    if !cx.card(obj.card).is(CardType::Land) || cx.s().player(player).lost || crate::static_rules::play_forbidden(cx, cx.cards(), card, player) {
-        return false;
+    if crate::static_rules::play_forbidden(cx, cx.cards(), card, player) {
+        return Vec::new();
     }
     let bans = crate::static_rules::land_play_bans(cx);
-    if !bans.is_empty() && (crate::static_rules::enter_banned(cx, &bans, card) || crate::static_rules::land_play_forbidden(cx, &bans, player, card, obj.card)) {
-        return false;
+    if !bans.is_empty() && crate::static_rules::enter_banned(cx, &bans, card) {
+        return Vec::new();
     }
-    let LandRules { extra, unlimited, .. } = land_rules(cx, player);
-    unlimited || cx.s().player(player).lands_played < 1 + extra
+    let forbidden = |face: CardId| !bans.is_empty() && crate::static_rules::land_play_forbidden(cx, &bans, player, card, face);
+    let def = cx.card(obj.card);
+    let mut ways = Vec::new();
+    if def.is(CardType::Land) && !forbidden(obj.card) {
+        ways.push(0);
+    }
+    if let Some(back) = def.back
+        && def.back_land
+        && !forbidden(cx.card_id(back))
+    {
+        ways.push(WAY_BACK_FACE);
+    }
+    ways
 }
 
-/// Plays `card` as a land as an effect resolves (CR 305.1, 608.2g): put onto the battlefield as a land play, counted
-/// against the turn's land plays as the special action is (CR 305.2a). The new object, or nothing if it could not be.
+/// Plays `card` as a land as an effect resolves (CR 305.1, 608.2g), the resolving effect's controller playing it as itself:
+/// `play_land_during_resolution_by`.
 pub fn play_land_during_resolution(cx: &mut Cx, card: ObjectId) -> R<Option<ObjectId>> {
+    let Some(player) = cx.resolving().map(|i| i.controller) else { return Ok(None) };
+    play_land_during_resolution_by(cx, card, player, 0)
+}
+
+/// `player` plays `card` as a land as an effect resolves (CR 305.1, 608.2g), the way `way` names (`land_ways_during_resolution`):
+/// put onto the battlefield as a land play under their control - a modal double-faced card's back face up (CR 712.14a) - and
+/// counted against the turn's land plays as the special action is (CR 305.2a). The new object, or nothing if it could not be.
+pub fn play_land_during_resolution_by(cx: &mut Cx, card: ObjectId, player: PlayerId, way: u8) -> R<Option<ObjectId>> {
     let held = crate::library_visibility::hold(cx);
-    let result = play_land_during_resolution_inner(cx, card);
+    let result = play_land_during_resolution_inner(cx, card, player, way);
     if result.is_ok() && held {
         crate::library_visibility::release(cx);
     }
     result
 }
 
-fn play_land_during_resolution_inner(cx: &mut Cx, card: ObjectId) -> R<Option<ObjectId>> {
-    if !could_play_land_during_resolution(cx, card) {
+fn play_land_during_resolution_inner(cx: &mut Cx, card: ObjectId, player: PlayerId, way: u8) -> R<Option<ObjectId>> {
+    if !land_ways_during_resolution(cx, card, player).contains(&way) {
         return Ok(None);
     }
-    let Some(player) = cx.resolving().map(|i| i.controller) else { return Ok(None) };
     cx.st().update_player(player, |p| p.lands_played = p.lands_played.saturating_add(1));
     ops::turn_up_to_play(cx, card);
     // Played by the effect, not by any permission on the card (CR 305.1, 608.2g): "each land played this way enters
@@ -12833,10 +12950,15 @@ fn play_land_during_resolution_inner(cx: &mut Cx, card: ObjectId) -> R<Option<Ob
     if !cx.s().permissions.is_empty() {
         cx.st().permissions_retain(|p| p.what != Playable::Card(card));
     }
-    let moved = ops::put_onto_battlefield(cx, &[(card, player, false)], ZoneReason::PlayLand)?;
-    let land = moved.first().copied().filter(|&land| land != card);
+    let land = if way == WAY_BACK_FACE {
+        // A modal double-faced card played as its back face enters as that face (CR 712.14a).
+        Some(ops::put_onto_battlefield_as(cx, card, player, false, true, ZoneReason::PlayLand, &[])?)
+    } else {
+        ops::put_onto_battlefield(cx, &[(card, player, false)], ZoneReason::PlayLand)?.first().copied()
+    };
+    let land = land.filter(|&land| land != card);
     if let Some(land) = land {
-        cx.record(Event::LandPlayed { land, player, way: 0, granted_by: Grant::NONE });
+        cx.record(Event::LandPlayed { land, player, way, granted_by: Grant::NONE });
     }
     Ok(land)
 }
@@ -12846,16 +12968,214 @@ fn play_land_during_resolution_inner(cx: &mut Cx, card: ObjectId) -> R<Option<Ob
 /// (CR 733.1) is undone, and nothing happens.
 pub fn cast_during_resolution(cx: &mut Cx, card: ObjectId, terms: CastTerms) -> R<bool> {
     let held = crate::library_visibility::hold(cx);
-    let result = cast_during_resolution_inner(cx, card, terms);
+    // "While doing so, the player can activate mana abilities only if they're from lands that player controls and only if mana
+    // they produce is spent to activate other mana abilities of lands the player controls and/or to play that card" (CR 723.7):
+    // a rule of the cast for as long as it is being made, which ends as it is made or given up.
+    let limited = match (terms.land_mana_only, cx.resolving().copied()) {
+        (true, Some(item)) => Some(land_mana_begins(cx, &item, terms.caster.unwrap_or(item.controller), card)),
+        _ => None,
+    };
+    let result = cast_during_resolution_required(cx, card, terms);
+    if let (Some(kind), Ok(_)) = (limited, &result) {
+        cx.st().effects_retain(|e| e.kind != kind);
+    }
     if result.is_ok() && held {
         crate::library_visibility::release(cx);
     }
     result
 }
 
+/// `cast_during_resolution_inner`, made again for a cast the effect requires (`CastTerms::if_able`): "the player casts it if
+/// able" leaves its caster no choice to give it up (CR 608.2g), so one that can't be completed for a choice they made - a
+/// target, an X, a land tapped for the wrong mana - is reversed (CR 733.1) and made again, as the effect still says (CR
+/// 733.2), until it is made. Only a cast whose failure no choice of theirs caused, one that asked them nothing, is not:
+/// the card can't be cast, and nothing happens. While the cast is being made, nothing asked may give it up
+/// (`takeback::require`).
+fn cast_during_resolution_required(cx: &mut Cx, card: ObjectId, terms: CastTerms) -> R<bool> {
+    if !terms.if_able {
+        return cast_during_resolution_inner(cx, card, terms);
+    }
+    crate::required::begin(cx.g, cx.frame);
+    loop {
+        crate::required::attempt(cx.g);
+        crate::takeback::require(cx.g, true);
+        let made = cast_during_resolution_inner(cx, card, terms);
+        crate::takeback::require(cx.g, false);
+        match made {
+            // Reversed (CR 733.1): made again, but by no path an attempt has failed by (`required`).
+            Ok(false) if crate::required::failed(cx.g) => continue,
+            // A question waits: the search stays, for the answer to be judged against (`Game::answer`).
+            Err(Stop::Suspend) => return Err(Stop::Suspend),
+            other => {
+                crate::required::end(cx.g);
+                return other;
+            }
+        }
+    }
+}
+
+/// The costs `card` may be cast for as `player` casts it as an effect resolves its way `way` paying its costs (CR 601.2b,
+/// 118.9): its mana cost, where the face has one and it may be cast as itself; a way of the card's own that is open from
+/// where it is (evoke, Force of Will's); an alternative cost another object gives (Jodah's). Each with its label, the way it
+/// casts the card by and the alternative cost given, if any. Where the effect requires the cast (`CastTerms::if_able`), only
+/// those `player` could pay for (advice, as a cast is offered, CR 601.2f-h): the caster must pick one the cast can be made for.
+fn cost_choices(cx: &mut Cx, card: ObjectId, player: PlayerId, way: u8, terms: CastTerms) -> Vec<(Label, u8, Option<Given<SpellAlternative>>)> {
+    let whole = cx.card(cx.s().obj(card).card);
+    let face = cast_face(whole, way);
+    // The card itself and the face-down spell its morph or disguise would cast are judged apart (CR 601.3, 708.4): a ban
+    // on the one need not be on the other.
+    let (whole_forbidden, face_down_allowed) = if way == 0 && whole.ways.iter().any(|w| w.kind.face_down()) {
+        let forbidders = static_rules::spell_bans(cx, player);
+        let whole_forbidden = (!forbidders.is_empty() && forbidden_as_cast(cx, &forbidders, card, None, None, player)) || !targets_as_cast(cx, card, 0, player);
+        (whole_forbidden, face_down_ways_allowed(cx, card, player, &forbidders))
+    } else {
+        (false, Vec::new())
+    };
+    // What the alternative costs read of the spell is the spell it would be on the stack (`SpellsAsCast`).
+    let all = if whole_forbidden { Vec::new() } else { spell_alternatives_of(cx.cards(), cx.s(), &cx.g.log) };
+    let spell = if all.is_empty() { None } else { chars_as_cast_now(cx, card, cast_face_id(cx, card, way), player) };
+    // A card exiled face down is judged as the spell it would be (CR 406.3a-b); the question below is asked of the
+    // card, and `cast` turns it face up.
+    let (ways, alternatives) = {
+        let _face_up = layers::judged_face_up(cx.s(), card);
+        let obj = cx.s().obj(card);
+        let asker = Asker { instance: None, source: card, controller: player, by: None, spell: true };
+        let ways: Vec<u8> = if way == 0 {
+            whole
+                .ways
+                .iter()
+                .enumerate()
+                .filter(|&(n, w)| {
+                    let open = (w.from == ZoneKind::Hand && (!w.only_from || obj.zone == Zone::hand(player)))
+                        || (w.from == obj.zone.kind() && obj.zone.player == player);
+                    let allowed = if w.kind.face_down() { face_down_allowed.contains(&((n + 1) as u8)) } else { !whole_forbidden };
+                    open && allowed
+                        && w.condition.is_none_or(|c| c(&*cx, &asker))
+                        && can_pay_other(cx, card, player, &w.cost)
+                        && !x_only_zero(face.x_cant_be_zero, face.cost.x, w.cost.mana.x)
+                })
+                .map(|(n, _)| (n + 1) as u8)
+                .collect()
+        } else {
+            Vec::new()
+        };
+        let alternatives: Vec<Given<SpellAlternative>> = alternatives_for(&*cx, cx.cards(), &all, player, card, face, way == 0, spell)
+            .into_iter()
+            .filter(|a| can_pay_other(cx, card, player, &a.what.cost.cost()))
+            // An X that can't be 0 has nothing to be for a cost with no {X} (CR 107.3a-b): not a choice.
+            .filter(|a| !x_only_zero(face.x_cant_be_zero, face.cost.x, a.what.cost.cost().mana.x))
+            .collect();
+        (ways, alternatives)
+    };
+    // The choices: the mana cost's own, where the face has one, then the card's ways, then each alternative cost.
+    let mut choices: Vec<(Label, u8, Option<Given<SpellAlternative>>)> = Vec::new();
+    if face.has_cost && !whole_forbidden {
+        choices.push((Label::ManaCost, way, None));
+    }
+    let printed = cx.cards().current(cx.s().obj(card));
+    for &n in &ways {
+        choices.push((Label::Way(printed, n - 1), n, None));
+    }
+    for &a in &alternatives {
+        // A permanent's alternative cost and one a resolved spell or ability gave (CR 611.2c) are in two lists of the card.
+        let label = match a.grant.ability.as_lasting_spell_alternative() {
+            Some(k) => Label::LastingAlternativeCost(a.grant.ability.card, k as u8),
+            None => Label::AlternativeCost(a.grant.ability.card, a.grant.ability.as_spell_alternative().unwrap_or(0) as u8),
+        };
+        choices.push((label, way, Some(a)));
+    }
+    if terms.if_able {
+        choices.retain(|(label, _, given)| {
+            // Only the face's mana cost is a mana cost a rule for paying one spell's mana cost reaches (CR 601.2f, 609.4b,
+            // 118.9): an alternative cost, of the card's own or another object's, is none.
+            let (mana, mana_cost) = match (given, label) {
+                (Some(a), _) => (a.what.cost.cost().mana, false),
+                (None, &Label::Way(_, n)) => (whole.ways.get(n as usize).map_or(face.cost, |w| w.cost.mana), false),
+                _ => (face.cost, true),
+            };
+            could_pay_cast(cx, card, player, face, mana, mana_cost, terms)
+        });
+    }
+    choices
+}
+
+/// Whether `player` could pay `mana`, what casting `face` of `card` as an effect resolves pays as its mana cost, with what the
+/// terms add (advice, CR 601.2f-h, as a cast is offered): the least it could come to, with the cost changes, paid from the
+/// pool and what the mana abilities `player` may activate add.
+///
+/// It is the advice the priority offers are judged by (`offer_costed`): the card's own additional costs that are not mana
+/// (`extra_payable`: Bone Splinters' creature to sacrifice), the targets it could be announced with and what they make the
+/// cost (a cost change that reads them: Terror of the Peaks' 3 life, `added_life_payable`), and the least total the choices
+/// before the targets could make it. Where it can't tell, it says the cast could be paid; the search a required cast is made
+/// by (`required`) ends whatever it says. `mana_cost`: whether `mana` is the face's mana cost, whose share a rule of the
+/// caster's for paying one spell's mana cost reaches as the cast keeps it apart (`mana_cost_share_judged`, CR 601.2f, 609.4b):
+/// the same share the priority offers judge (`Offer::offer`).
+#[allow(clippy::too_many_arguments)]
+fn could_pay_cast(cx: &Cx, card: ObjectId, player: PlayerId, face: &'static CardDef, mana: ManaCost, mana_cost: bool, terms: CastTerms) -> bool {
+    if !extra_payable(cx, card, player, face) {
+        return false;
+    }
+    let mut base = mana;
+    base.generic += terms.more;
+    let a = available(cx, player);
+    let any = AnyMana::of(terms.any_type, terms.any_color);
+    let share = if mana_cost { mana_cost_share_judged(cx, player, card, face, &face.cost) } else { NO_SHARE };
+    let asker = Asker { instance: None, source: card, controller: player, by: None, spell: true };
+    let mut option = ActionOption::on(ActionKind::CastSpell, card, 0);
+    let covered = |targets: &[Target], earlier: &Earlier| {
+        least_cost(cx, &a, player, card, face, base, share, targets, earlier, &mut |least| covers_total(cx, &a, player, card, face, least, 0, any, share))
+            && added_life_payable(cx, &a, player, card, face, targets, earlier)
+    };
+    offer_costed(cx, &a, &asker, face, base.x, false, &mut option, covered)
+}
+
+/// The ways `player` could cast `card` by `terms` as an effect resolves (`cast_ways_during_resolution`); where the effect
+/// requires the cast (`CastTerms::if_able`), only those some cost could be paid for (CR 608.2g, 601.2f-h).
+fn payable_ways(cx: &mut Cx, card: ObjectId, player: PlayerId, terms: CastTerms) -> Vec<CastWay> {
+    let mut ways = cast_ways_during_resolution(cx, card, player);
+    if terms.if_able {
+        let pays_mana_cost = terms.instead.is_none() && terms.life == 0 && terms.discard == 0;
+        let whole = cx.card(cx.s().obj(card).card);
+        ways.retain(|w| {
+            if pays_mana_cost && !terms.flashback {
+                !cost_choices(cx, card, player, w.way, terms).is_empty()
+            } else {
+                let face = cast_face(whole, w.way);
+                // A cost paid instead of the mana cost is no mana cost (CR 118.9); with none instead, it is the face's own.
+                could_pay_cast(cx, card, player, face, terms.instead.unwrap_or(face.cost), terms.instead.is_none(), terms)
+            }
+        });
+    }
+    ways
+}
+
+/// The ways `card` could be cast by `terms` as an effect resolves (CR 608.2g), by the player they name (`CastTerms::caster`) or
+/// the effect's controller: `cast_ways_during_resolution`, and for a cast the effect requires (`CastTerms::if_able`) only those
+/// some cost could be paid for - with the mana of the caster's lands alone, where the terms say so (`land_mana_only`).
+pub fn cast_ways_as(cx: &mut Cx, card: ObjectId, terms: CastTerms) -> Vec<CastWay> {
+    let Some(item) = cx.resolving().copied() else { return Vec::new() };
+    let player = terms.caster.unwrap_or(item.controller);
+    let limited = terms.land_mana_only.then(|| land_mana_begins(cx, &item, player, card));
+    let ways = payable_ways(cx, card, player, terms);
+    if let Some(kind) = limited {
+        cx.st().effects_retain(|e| e.kind != kind);
+    }
+    ways
+}
+
+/// `player` begins to play `card` with the mana of their lands alone (`EffectKind::LandManaOnly`, CR 723.7), as the effect
+/// `item` has them: the effect it makes, to end as the play is made or given up.
+fn land_mana_begins(cx: &mut Cx, item: &StackItem, player: PlayerId, card: ObjectId) -> EffectKind {
+    let timestamp = cx.st().timestamp();
+    let kind = EffectKind::LandManaOnly { player, card };
+    cx.st().effect_push(ContinuousEffect { source: item.object, controller: item.controller, timestamp, affected: item.object, kind, duration: Duration::Indefinite, words: Words::NONE });
+    kind
+}
+
 fn cast_during_resolution_inner(cx: &mut Cx, card: ObjectId, terms: CastTerms) -> R<bool> {
     let Some(player) = terms.caster.or_else(|| cx.resolving().map(|i| i.controller)) else { return Ok(false) };
-    let ways = cast_ways_during_resolution(cx, card, player);
+    let pays_mana_cost = terms.instead.is_none() && terms.life == 0 && terms.discard == 0;
+    let ways = payable_ways(cx, card, player, terms);
     // CR 709.3, 715.3, 712.8a: which face is cast is chosen as it is cast, before it goes on the stack.
     let mut way = match (terms.way, ways.len()) {
         (_, 0) => return Ok(false),
@@ -12887,74 +13207,12 @@ fn cast_during_resolution_inner(cx: &mut Cx, card: ObjectId, terms: CastTerms) -
     // owner's graveyard, CR 702.34a), or an alternative cost another object gives (Jodah's, Primal Prayers'). A face with no
     // mana cost is cast only for an alternative cost (CR 118.6a), so its mana cost is no choice then, and without one it is
     // not cast at all.
-    let pays_mana_cost = terms.instead.is_none() && terms.life == 0 && terms.discard == 0;
     let whole = cx.card(cx.s().obj(card).card);
     let face = cast_face(whole, way);
     let mut alternative: Option<Cost> = None;
     let mut paid_by: Option<Grant> = None;
     if pays_mana_cost && !terms.flashback {
-        // The card itself and the face-down spell its morph or disguise would cast are judged apart (CR 601.3, 708.4): a ban
-        // on the one need not be on the other.
-        let (whole_forbidden, face_down_allowed) = if way == 0 && whole.ways.iter().any(|w| w.kind.face_down()) {
-            let forbidders = static_rules::spell_bans(cx, player);
-            let whole_forbidden = (!forbidders.is_empty() && forbidden_as_cast(cx, &forbidders, card, None, None, player)) || !targets_as_cast(cx, card, 0, player);
-            (whole_forbidden, face_down_ways_allowed(cx, card, player, &forbidders))
-        } else {
-            (false, Vec::new())
-        };
-        // What the alternative costs read of the spell is the spell it would be on the stack (`SpellsAsCast`).
-        let all = if whole_forbidden { Vec::new() } else { spell_alternatives_of(cx.cards(), cx.s(), &cx.g.log) };
-        let spell = if all.is_empty() { None } else { chars_as_cast_now(cx, card, cast_face_id(cx, card, way), player) };
-        // A card exiled face down is judged as the spell it would be (CR 406.3a-b); the question below is asked of the
-        // card, and `cast` turns it face up.
-        let (ways, alternatives) = {
-            let _face_up = layers::judged_face_up(cx.s(), card);
-            let obj = cx.s().obj(card);
-            let asker = Asker { instance: None, source: card, controller: player, by: None, spell: true };
-            let ways: Vec<u8> = if way == 0 {
-                whole
-                    .ways
-                    .iter()
-                    .enumerate()
-                    .filter(|&(n, w)| {
-                        let open = (w.from == ZoneKind::Hand && (!w.only_from || obj.zone == Zone::hand(player)))
-                            || (w.from == obj.zone.kind() && obj.zone.player == player);
-                        let allowed = if w.kind.face_down() { face_down_allowed.contains(&((n + 1) as u8)) } else { !whole_forbidden };
-                        open && allowed
-                            && w.condition.is_none_or(|c| c(&*cx, &asker))
-                            && can_pay_other(cx, card, player, &w.cost)
-                            && !x_only_zero(face.x_cant_be_zero, face.cost.x, w.cost.mana.x)
-                    })
-                    .map(|(n, _)| (n + 1) as u8)
-                    .collect()
-            } else {
-                Vec::new()
-            };
-            let alternatives: Vec<Given<SpellAlternative>> = alternatives_for(&*cx, cx.cards(), &all, player, card, face, way == 0, spell)
-                .into_iter()
-                .filter(|a| can_pay_other(cx, card, player, &a.what.cost.cost()))
-                // An X that can't be 0 has nothing to be for a cost with no {X} (CR 107.3a-b): not a choice.
-                .filter(|a| !x_only_zero(face.x_cant_be_zero, face.cost.x, a.what.cost.cost().mana.x))
-                .collect();
-            (ways, alternatives)
-        };
-        // The choices: the mana cost's own, where the face has one, then the card's ways, then each alternative cost.
-        let mut choices: Vec<(Label, u8, Option<Given<SpellAlternative>>)> = Vec::new();
-        if face.has_cost && !whole_forbidden {
-            choices.push((Label::ManaCost, way, None));
-        }
-        let printed = cx.cards().current(cx.s().obj(card));
-        for &n in &ways {
-            choices.push((Label::Way(printed, n - 1), n, None));
-        }
-        for &a in &alternatives {
-            // A permanent's alternative cost and one a resolved spell or ability gave (CR 611.2c) are in two lists of the card.
-            let label = match a.grant.ability.as_lasting_spell_alternative() {
-                Some(k) => Label::LastingAlternativeCost(a.grant.ability.card, k as u8),
-                None => Label::AlternativeCost(a.grant.ability.card, a.grant.ability.as_spell_alternative().unwrap_or(0) as u8),
-            };
-            choices.push((label, way, Some(a)));
-        }
+        let choices = cost_choices(cx, card, player, way, terms);
         // Its mana cost alone is no choice to ask about; an alternative cost is announced, even the only one (CR 601.2b).
         let chosen = match choices.len() {
             0 => return Ok(false),
@@ -14164,6 +14422,28 @@ fn announce_x(cx: &mut Cx, player: PlayerId, spell: ObjectId, base: ManaCost, ki
     }
 }
 
+/// More than any X paid in mana (`{X}`, a kicker's {X}, a kicker paid any number of times) of casting `spell` for `base` could
+/// be announced as and paid (CR 107.3a, 601.2b, 601.2f-h), `per` the generic mana each X adds: everything that could pay its
+/// generic mana together - the mana every player could make (`Available::most`: assist lets another pay some, CR 702.132a),
+/// a {1} for each permanent that could be tapped and each graveyard card that could be exiled in its place (convoke,
+/// improvise, waterbend, delve), the power of every creature (harmonize), and what the cost changes could take off it - so no
+/// X a payment could complete is above it. None where some mana ability's yield can't be told: then X is not bounded.
+#[cold]
+#[inline(never)]
+fn x_bound(cx: &Cx, player: PlayerId, spell: ObjectId, base: ManaCost, per: u32, targets: &[Target], reduced: u32) -> Option<u32> {
+    let mut mana = 0u32;
+    for p in cx.s().apnap() {
+        mana += available(cx, p).most()?;
+    }
+    let tapped = count_u32(cx.s().battlefield().len()) + count_u32(cx.s().zone(Zone::graveyard(player)).len());
+    let power: u32 = cx.permanents_of(player).into_iter().filter_map(|id| cx.chars(id).power).map(|p| p.max(0) as u32).sum();
+    // What the cost changes could take off a cost as large as all of that (CR 601.2f, 118.7).
+    let probe = ManaCost { generic: base.generic + mana + tapped + power, ..base };
+    let (changed, _) = apply_cost_changes_total(cx, player, Costed::Spell(spell), probe, targets);
+    let off = probe.mana_value().saturating_sub(changed.mana_value());
+    Some((mana + tapped + power + off + reduced) / per.max(1))
+}
+
 /// The most an activation's X may be announced as where it counts targets ("untap X target lands"): no more than the legal
 /// targets there are (CR 601.2c, 602.2b).
 fn x_target_cap(cx: &Cx, asker: &Asker, def: &ActivatedDef) -> u32 {
@@ -15218,6 +15498,10 @@ fn activate_player_mana(cx: &mut Cx, player: PlayerId, source: ObjectId, n: u8, 
 
 fn activate_player_mana_effect(cx: &mut Cx, player: PlayerId, source: ObjectId, effect: ContinuousEffect, held: bool) -> R<()> {
     let EffectKind::PlayerManaAbility(ability) = effect.kind else { return Err(Stop::Cancel) };
+    // No land's: not while the player plays a card with the mana of their lands alone (Word of Command, CR 723.7).
+    if static_rules::land_mana_only(cx, player) {
+        return Err(Stop::Cancel);
+    }
     let def = activated(cx, ability).expect("activated");
     let mut mana = def.cost.mana;
     let variable_x = matches!(def.cost.variable, Some(VariableCost::SacrificeX(_) | VariableCost::SacrificeWithPowerX(_) | VariableCost::BlightX));
@@ -17115,6 +17399,77 @@ fn checkpoint_mana(cx: &mut Cx, player: PlayerId, source: ObjectId, purpose: Pay
     Ok(())
 }
 
+/// Word of Command's "the player can activate mana abilities only if they're from lands that player controls and only if mana
+/// they produce is spent to activate other mana abilities of lands the player controls and/or to play that card" (CR 723.7),
+/// as the owner ruled it on 2026-11-27: a land's mana ability may be activated only if some of the mana it makes is spent on
+/// what is being paid for - some spent and the rest left over is legal, the rest being ordinary mana. So of `options`, the mana
+/// abilities offered while `due` is paid with `pool` there already, only those are kept one of whose yields covers some of
+/// what the pool does not (`uncovered`), and of a choice of colors only the colors that do. What is paid for is the card, or
+/// the mana cost of another land's mana ability being activated to pay for it: its own payment asks this again of that cost.
+/// One whose yield can't be told (`effect_productions` finds no answer) is kept: its activation is then judged as it is
+/// paid for, the cast being reversed if it pays nothing (CR 733.1).
+#[cold]
+#[inline(never)]
+fn spent_on_what_is_owed(cx: &Cx, player: PlayerId, pool: &ManaPool, due: &ManaCost, options: &mut Vec<ActionOption>) {
+    let owed = uncovered(pool, due);
+    let helps = |made: &[u32; 6]| {
+        let mut more = *pool;
+        for m in 0..6 {
+            more.0[m] += made[m];
+        }
+        uncovered(&more, due) != owed
+    };
+    options.retain_mut(|o| {
+        if o.kind != ActionKind::ActivateAbility {
+            return true;
+        }
+        // Mana its own restriction keeps from paying for this at all (Mishra's Workshop's for a spell that is no artifact)
+        // could never be spent on it (`mana_options_while_paying`, CR 106.6).
+        if o.pays_nothing {
+            return false;
+        }
+        let Some(id) = o.source else { return true };
+        if !o.color_choices.is_empty() {
+            let mut kept = ColorSet::NONE;
+            for c in Color::ALL {
+                let mut one = [0u32; 6];
+                one[c.mana() as usize] = 1;
+                if o.color_choices.has(c) && helps(&one) {
+                    kept = kept.with(c);
+                }
+            }
+            o.color_choices = kept;
+            return !kept.is_empty();
+        }
+        let chars = cx.chars(id);
+        let Some(ability) = chars.abilities().nth(o.index as usize) else { return true };
+        let Some(def) = activated(cx, ability) else { return true };
+        let by = cx.link_nth(id, &chars, o.index as usize);
+        let yields: Vec<[u32; 6]> = match def.mana_capability {
+            Some(ManaCapability::FiniteBundles(bundles, _)) => bundles.iter().map(|b| b.0).collect(),
+            _ if def.adds.0.iter().any(|&n| n > 0) || def.adds_any > 0 => {
+                let mut made = def.adds.0;
+                if def.adds_any > 0 {
+                    // Of one color it is chosen: any of them.
+                    let types = any_types(cx, id, player, def, by);
+                    return (0..6).any(|m| {
+                        let mut each = made;
+                        each[m] += u32::from(def.adds_any);
+                        types & (1 << m) != 0 && helps(&each)
+                    }) || (types == 0 && helps(&made));
+                }
+                made = def.adds.0;
+                vec![made]
+            }
+            _ => match effect_productions(cx, id, player, cx.cards().ability(ability), ability, o.index as usize, by) {
+                Some(made) if !made.unjudged && made.terminal_types == 0 => made.pools,
+                _ => return true,
+            },
+        };
+        yields.iter().any(|y| helps(y))
+    });
+}
+
 /// The chance to activate mana abilities before any payment (CR 601.2g).
 fn mana_activation_window(cx: &mut Cx, player: PlayerId, source: ObjectId, total: ManaCost, helpers: &Helpers, life: u32, record: bool) -> R<()> {
     loop {
@@ -17128,6 +17483,11 @@ fn mana_activation_window(cx: &mut Cx, player: PlayerId, source: ObjectId, total
         // choice (CR 601.2g), and mana made then would only be left in the pool, so it is not asked.
         if !helpers.no_mana && remaining.is_zero() { return Ok(()); }
         let mut options = mana_options_while_paying(cx, player, source, helpers.purpose);
+        // Playing a card with the mana of lands alone (Word of Command), only a land's mana ability some of whose mana can go to
+        // what is still owed may be activated (owner ruling 2026-11-27).
+        if static_rules::land_mana_only(cx, player) {
+            land_mana_options(cx, player, source, helpers, &due, &mut options);
+        }
         if options.is_empty() { return Ok(()); }
         // Closing the window with mana still owed is for paying the rest some other way (convoke, delve, improvise,
         // waterbend: CR 601.2h); with none, there is nothing to close it for.
@@ -17151,10 +17511,33 @@ fn mana_activation_window(cx: &mut Cx, player: PlayerId, source: ObjectId, total
                     crate::takeback::step(cx.g, crate::takeback::Step::Activate(act));
                 }
                 activate_mana(cx, player, from, index, color, colorless, &action.targets)?;
+                // A land's mana ability none of whose mana can go to what is owed may not have been activated while a card is
+                // played with the mana of lands alone (owner ruling 2026-11-27): one whose yield showed only now is an illegal
+                // activation, and the action is reversed (CR 733.1).
+                if static_rules::land_mana_only(cx, player) && land_mana_paid_nothing(cx, player, source, helpers, &due, &remaining) {
+                    return Err(Stop::Cancel);
+                }
             }
             _ => return Err(Stop::Cancel),
         }
     }
+}
+
+/// Of `options`, the mana abilities offered while `due` is paid as a card is played with the mana of lands alone, those some of
+/// whose mana can go to what is owed (`spent_on_what_is_owed`): off the ordinary path.
+#[cold]
+#[inline(never)]
+fn land_mana_options(cx: &Cx, player: PlayerId, source: ObjectId, helpers: &Helpers, due: &ManaCost, options: &mut Vec<ActionOption>) {
+    let pool = if helpers.no_mana { ManaPool::default() } else { spendable(cx, player, source, helpers.purpose) };
+    spent_on_what_is_owed(cx, player, &pool, due, options);
+}
+
+/// Whether the land's mana ability just activated as a card is played with the mana of lands alone paid none of what was owed,
+/// `remaining` of `due` being uncovered before it (`mana_activation_window`): off the ordinary path.
+#[cold]
+#[inline(never)]
+fn land_mana_paid_nothing(cx: &Cx, player: PlayerId, source: ObjectId, helpers: &Helpers, due: &ManaCost, remaining: &ManaCost) -> bool {
+    !helpers.no_mana && due.snow == 0 && uncovered(&spendable(cx, player, source, helpers.purpose), due) == *remaining
 }
 
 fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: ManaCost, helpers: &Helpers, scope: Option<PaymentScope>, mut checkpoint: Option<&mut dyn FnMut(&mut Cx, &mut Vec<Event>, &mut Vec<(ObjectId, CostPart)>, &mut Vec<ObjectId>) -> R<bool>>, script_override: Option<Option<Vec<crate::takeback::Step>>>) -> R<(ManaPool, u8)> {

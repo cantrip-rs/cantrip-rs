@@ -901,6 +901,7 @@ pub fn activation_barred(cx: &Cx, forbidders: &[ObjectId], activator: PlayerId, 
     if cx.s().effects.iter().any(barred) {
         return true;
     }
+
     forbidders.iter().any(|&id| {
         let obj = cx.s().obj(id);
         cx.cards().texts_linked(cx.s(), id).any(|(c, by)| {
@@ -908,6 +909,33 @@ pub fn activation_barred(cx: &Cx, forbidders: &[ObjectId], activator: PlayerId, 
             cx.card(c).activation_rules.iter().any(|rule| !rule(cx, &asker, activator, source, def))
         })
     })
+}
+
+/// Whether `source` is a land `player` controls on the battlefield (CR 205.2a, 108.4): what a mana ability must be of while
+/// `player` plays a card with the mana of their lands alone (`EffectKind::LandManaOnly`).
+#[cold]
+#[inline(never)]
+pub(crate) fn land_of(cx: &Cx, source: ObjectId, player: PlayerId) -> bool {
+    let obj = cx.s().obj(source);
+    obj.zone.is(ZoneKind::Battlefield) && obj.controller == player && cx.chars(source).is(CardType::Land)
+}
+
+/// Whether `player` is playing a card with the mana of their lands alone (`EffectKind::LandManaOnly`, Word of Command): the
+/// mana abilities they have of their own (CR 605.1a, 611.2a) are no land's, and may not be activated meanwhile.
+#[inline]
+pub fn land_mana_only(cx: &Cx, player: PlayerId) -> bool {
+    // Only a resolution makes such a play: `actions::cast_during_resolution` makes the effect and ends it within its frame, so
+    // while any other frame runs there is none to look for - the priority offers' advice among it. Asked outside a run (a
+    // question waiting: the resolution's own), it is looked for.
+    let in_frame = cx.s().agenda.get(cx.frame).map(|f| f.kind);
+    !matches!(in_frame, Some(k) if !matches!(k, cantrip_state::FrameKind::Resolve { .. })) && land_mana_only_effect(cx, player)
+}
+
+/// Whether an effect has `player` play a card with the mana of their lands alone (`land_mana_only`), looked for only where one
+/// could be: out of line, as nearly every frame never looks.
+#[inline(never)]
+fn land_mana_only_effect(cx: &Cx, player: PlayerId) -> bool {
+    cx.s().effects.iter().any(|e| matches!(e.kind, EffectKind::LandManaOnly { player: p, .. } if p == player))
 }
 
 /// The permanents on the battlefield with a static ability that restricts attacking and their abilities (CR 508.1c, 613.1f;

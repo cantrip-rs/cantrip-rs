@@ -245,9 +245,16 @@ prompt first, where the spell is still in hand and the stack empty, so check it 
 A cast an effect makes as it resolves — cascade's, Etali's — has no `Cast` line to say an X or a kicker on, so it is
 announced with X of 0 and unkicked, and paid out of the pool; its other questions (a target, teamwork's creatures)
 are answered by lines as usual. Where a "you may" makes the cast, `Bot1.Accept(X: 5)` announces that X (a miracle cost
-that includes {X}, CR 107.3a).
+that includes {X}, CR 107.3a), and where an effect requires it with no "you may" (Word of Command's "the player plays that
+card if able"), `Bot2.PayCost(X: 1)` does.
 
 A **refusal**, `! Bot1.Graveyard.Embereth Shieldbreaker.Cast`, says what must *not* be offered; see [Refusals](#refusals).
+
+An **answer the engine must refuse**, `~ Bot2.PayCost(X: 3)` or `~ Bot2.Target(Bot1.Battlefield.Ornithopter)`, is given as the line
+says, and the script fails unless the engine refuses it; the question is then asked again, for the next line to answer. A
+required cast's search refuses an answer an attempt has already failed by that its question could not leave out (Word of
+Command: a set of targets, an X between live ones; `cantrip_rules::required`). Only that refusal passes: an answer the engine
+refuses for anything else - one that is no legal answer to the question at all - fails the line, with the engine's reason.
 
 `Bot1.Undo` takes back the latest mana ability Bot1 activated, as the table offers it (`cantrip_engine::undo`): the
 game goes back to before it and Bot1 is asked again. It is offered while that activation and everything since only
@@ -636,7 +643,7 @@ kind, place it where the action could otherwise be taken, with a wait or `BotN.P
   absent until then
 - `BotN.TurnsToSkip` (`3`), the turns an effect still makes the player skip (CR 500.11, 614.10), absent when none
 - `BotN.ControlledBy` (`Bot1`), the player controlling them now (CR 723), through a whole turn or only through one combat phase (it is absent again once that combat phase ends), absent while they make their own decisions; and
-  `BotN.NextTurnControlledBy` (`Bot1, Bot3+extra, Bot1+combat`), the effects waiting to control them during their next turn or combat phase, oldest
+  `BotN.NextTurnControlledBy` (`Bot1, Bot3+extra, Bot1+combat, Bot1+resolving`), the effects waiting to control them during their next turn or combat phase, or while a spell on the stack resolves (Word of Command), oldest
   first, the last made the one that works wherever their windows overlap (CR 723.1a), `+extra` on one that gives an extra turn after it, `+combat` on one for only their next combat phase; absent when none
 - `BotN.Speed` (`1` to `4`), once the player has a speed (CR 702.179) and absent while they have none (CR 702.179b)
 - `BotN.Dungeon` (`Undercity: Forge`) while in a dungeon, and `BotN.DungeonsCompleted` once one is completed (CR 309.7)

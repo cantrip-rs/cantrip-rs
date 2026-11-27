@@ -795,13 +795,19 @@ impl<'a> Projector<'a> {
             summary.controlled_by = seat(controller);
             let (who, whose) = if p == self.viewer { ("you", "your") } else { ("them", "their") };
             let verb = if controller == self.viewer { "control" } else { "controls" };
-            // The control that works is the newest (723.1a): of a combat phase, or of the turn.
-            let in_combat = s.effects.iter()
+            // The control that works is the newest (723.1a): of a combat phase, of the turn, or of a resolution (CR 723.2).
+            let working = s.effects.iter()
                 .filter(|e| e.kind == EffectKind::ControlsPlayer(p) && s.in_game(e.controller))
-                .max_by_key(|e| e.timestamp)
-                .is_some_and(|e| e.duration == Duration::EndOfCombat);
-            let window = if in_combat { "combat phase" } else { "turn" };
-            summary.pending_effects.push(format!("{} {verb} {who} during {whose} {window}.", self.player_name(controller)));
+                .max_by_key(|e| e.timestamp);
+            let text = match working.map(|e| e.duration) {
+                Some(Duration::EndOfCombat) => format!("{} {verb} {who} during {whose} combat phase.", self.player_name(controller)),
+                Some(Duration::UntilResolved(serial)) => {
+                    let what = s.stack.iter().find(|i| i.serial == serial).map_or("it", |i| self.game.name(i.object));
+                    format!("{} {verb} {who} until {what} finishes resolving.", self.player_name(controller))
+                }
+                _ => format!("{} {verb} {who} during {whose} turn.", self.player_name(controller)),
+            };
+            summary.pending_effects.push(text);
         }
         for e in s.effects.iter() {
             if let EffectKind::ControlNext { player, window } = e.kind
@@ -815,6 +821,11 @@ impl<'a> Projector<'a> {
                         if then_extra_turn { format!(" After that turn, {they} an extra turn.") } else { String::new() },
                     ),
                     ControlWindow::CombatPhase => ("combat phase", String::new()),
+                    // "While that spell is resolving" (CR 723.2): about the spell it waits on.
+                    ControlWindow::Resolution => {
+                        summary.pending_effects.push(format!("{} {verb} {who} while {} is resolving.", self.player_name(e.controller), self.game.name(e.affected)));
+                        continue;
+                    }
                 };
                 summary.pending_effects.push(format!("{} {verb} {who} during {whose} next {next}.{extra}", self.player_name(e.controller)));
             }
