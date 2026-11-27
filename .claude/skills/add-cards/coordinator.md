@@ -65,7 +65,10 @@ core-feature agents and review agents run on Opus. Agents read only what their w
    round of fixes; a report without it is not sent to review), coverage, each test point with the line that catches it and what it
    broke, client needs, anything odd in the core, and what in `new-card.py`'s
    output it used, what was noise, what it searched for by hand and what cost it failed runs (the coordinator's
-   material for step 7). A card blocked by the core is never faked and never released: the agent keeps the claim,
+   material for step 7). **A bug that does not block its card is out of the agent's scope** - a card, core, review or
+   fix agent alike: it files the bug on GitHub (`gh issue create --label bug`, the rule, the game that shows it, the
+   file and line), names the issue in its report and moves on; it fixes only what its own card cannot be exact
+   without. The coordinator dispatches the fix (a pri-0/1 at once, in its own lease). A card blocked by the core is never faked and never released: the agent keeps the claim,
    commits nothing the gap would change, sends a gap report - the card, its issue, the exact rule (CR), what
    `cantrip-api` lacks and what it learned - and ends; its lease is released (nothing landed is lost: the gap's
    commits, if any, are pushed to a branch first) and the next card takes a new one meanwhile. The agent logs its
