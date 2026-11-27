@@ -842,6 +842,22 @@ impl<'a> Projector<'a> {
                 });
             }
         }
+        // "For one spell this turn, you may spend mana as though it were mana of any type to pay that spell's mana cost" (CR
+        // 609.4b, 611.2a): a rule a resolved ability gave the player for paying their spells' mana costs, on no object, said as
+        // the cost changes are, in the card's own words and named for it, until it ends or a spell uses it up.
+        for e in s.effects.iter() {
+            if let EffectKind::ManaCostRuleForOneSpell { card, index } = e.kind
+                && e.controller == p
+                && let Some(rule) = game.cards.get(card).mana_cost_spend_rules.get(index as usize)
+            {
+                let name = game.cards.get(card).name;
+                summary.pending_effects.push(if p == self.viewer {
+                    format!("{name}: {}", rule.text)
+                } else {
+                    format!("{name}'s effect on their spells: {}", rule.text)
+                });
+            }
+        }
         // "The next red or green creature spell you cast this turn can be cast without paying its mana cost" (CR 611.2c, 118.9): an
         // alternative cost a resolved spell or ability gave the player's next spell, said as the cost changes are.
         for e in s.effects.iter() {

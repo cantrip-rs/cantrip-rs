@@ -2855,6 +2855,25 @@ A cast carries which of them it was made by as `AnyMana`, into `Helpers::any` an
 pays instead of mana still pays only its own share: delve and improvise the generic mana, convoke a symbol of its
 creature's color.
 
+A rule may reach only a spell's mana cost, its additional costs and cost increases still paid normally (CR 601.2f keeps
+them apart in the total): "for one spell this turn, you may spend mana as though it were mana of any type to pay that
+spell's mana cost" (North Star). A resolved ability gives one, for one spell, as `EffectKind::ManaCostRuleForOneSpell`
+(`Game::mana_cost_rule_for_one_spell_this_turn`), naming one of its card's `mana_cost_spend_rules` (`ManaCostSpendRule`: a
+`SpendAnyManaRule` asked of the payment for the spell, and its text, which the page shows while it lasts). No printed card
+gives the standing form, a rule on mana costs alone for every spell. Only while its caster has one
+does a cast keep the mana cost's share of the total apart (`Helpers::mana_cost`): the face's mana cost where it is cast for
+it - never for an alternative cost, a granted way, flashback or harmonize a permission gives, bestow or overload (CR
+118.9) - following its symbols as they are announced (`on_announced`: a Phyrexian symbol paid with mana, a {2/W} paid with
+its color, a hybrid one announced as a half). What reduces the total takes the other symbols first: a reduction may reduce
+an additional cost (Morophon's and Edgewalker's rulings) and the player determines the total and applies its reductions in
+any order (CR 601.2f), so the share is the mana cost's symbols the total still has (`ManaCost::paid_with_any_on`). The
+payment's view pays them as the rule says (`as_paid_on`), and a unit of mana pays a symbol outside the share before one in
+it (`spend_on`), never worse for the payer. Which symbol a unit paid is no part of the payment (CR 609.4b), so a rule for
+one spell is used up only by a spell whose mana spent could not have paid without it (`use_up_mana_cost_spend_rule`:
+`paid_with`, a flow from the mana, by type and snow, and the creatures that convoked it to the symbols). The advice judges
+a cast for its mana cost with the share (`Share`, `mana_cost_share_judged`: `Offer::offer`, `covers_total`, `spell_covers`,
+and an announced X's `XCost::mana_cost`); the other ways of casting with none.
+
 ### Monocolored hybrid
 
 `ManaCost::twobrid` counts {2/W}-style symbols by color (mana value 2 each, CR 202.3f; the card is that color); {C/W} is

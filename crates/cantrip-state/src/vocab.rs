@@ -614,6 +614,46 @@ impl ManaCost {
         paid
     }
 
+    /// The cost as it is paid when mana as though it were of any color (`any_type` false) or of any type may pay the symbols of
+    /// `part` that it has, and only those (CR 609.4b: "to pay that spell's mana cost", `part` the mana cost's share of a total
+    /// that has additional costs and cost increases beside it, which are still paid normally, CR 601.2f). Each of `part`'s
+    /// symbols the cost still has that such mana pays - colored and hybrid ones, and {C} ones of any type - is paid as generic,
+    /// a {2/W} as one mana, as `paid_with_any_color` and `paid_with_any_type` pay them all; the rest keeps its symbols. An X
+    /// `part` has (its {X}) is its own, so what restricts X's mana is lifted as those lift it. The cost itself is not changed:
+    /// this is the payment's view of it.
+    pub fn paid_with_any_on(&self, part: &ManaCost, any_type: bool) -> ManaCost {
+        let mut paid = *self;
+        let mut moved = 0;
+        for m in (0..6).filter(|&m| any_type || m != Mana::C as usize) {
+            let n = part.symbols[m].min(self.symbols[m]);
+            paid.symbols[m] -= n;
+            moved += n;
+        }
+        for pair in part.hybrid.iter().flatten() {
+            if let Some(slot) = paid.hybrid.iter().position(|h| *h == Some(*pair)) {
+                paid.hybrid[slot] = None;
+                moved += 1;
+            }
+        }
+        if moved > 0 {
+            let kept: Vec<Option<(Mana, Mana)>> = paid.hybrid.iter().copied().filter(Option::is_some).collect();
+            paid.hybrid = [None; 6];
+            paid.hybrid[..kept.len()].copy_from_slice(&kept);
+        }
+        for c in 0..5 {
+            let n = part.twobrid[c].min(self.twobrid[c]);
+            paid.twobrid[c] -= n;
+            moved += n;
+        }
+        paid.generic = self.generic + moved;
+        if part.x > 0 && (any_type || self.x_mana.types & 0b1_1111 != 0) {
+            paid.lift_x(self);
+        } else if !self.x_mana.is_any() {
+            paid.not_x = self.not_x + moved;
+        }
+        paid
+    }
+
     /// The two costs added symbol by symbol (CR 709.4b: a split card's mana cost is its halves' combined; a Room's
     /// is that of its unlocked doors, CR 709.5).
     pub fn plus(&self, other: &ManaCost) -> ManaCost {

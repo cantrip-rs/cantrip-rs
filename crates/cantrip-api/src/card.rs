@@ -3834,6 +3834,20 @@ impl AnyMana {
 /// (`AnyMana::view`).
 pub type SpendAnyManaRule = fn(&dyn Query, &Asker, &Spending) -> AnyMana;
 
+/// A rule a resolved spell or ability gives a player for paying one spell's mana cost this turn (CR 609.4b, 611.2a,
+/// `Game::mana_cost_rule_for_one_spell_this_turn`): "for one spell this turn, you may spend mana as though it were mana of
+/// any type to pay that spell's mana cost" (North Star). `lets` is asked as a `SpendAnyManaRule` is, of the payment for a
+/// spell of that player's
+/// (`SpendingFor::Casting`: the spell on the stack, or the card as the spell it would be where its castability is judged),
+/// with the effect's source and controller as its asker; what it lets reaches only the share of the spell's total cost
+/// that is its mana cost (CR 601.2f) - not an alternative cost paid instead (CR 118.9), nor additional costs or cost
+/// increases, which are still paid normally. `text` is what the page says while it lasts.
+#[derive(Clone, Copy)]
+pub struct ManaCostSpendRule {
+    pub text: &'static str,
+    pub lets: SpendAnyManaRule,
+}
+
 /// Whether a static ability lets its controller activate the abilities of this creature as though it had haste (CR 302.6):
 /// given the rule's own asker and the creature whose ability is activated.
 pub type ActivateAsThoughHasteRule = fn(&dyn Query, &Asker, ObjectId) -> bool;
@@ -4199,6 +4213,10 @@ pub struct CardDef {
     /// The cost changes its resolving spells and abilities make for a duration (CR 611.2c, 601.2f): `EffectKind::SpellCostChange`
     /// names the nth. Not standing abilities: they function only while such an effect lasts.
     pub lasting_cost_changes: &'static [LastingCostChange],
+    /// The rules for paying spells' mana costs its resolving spells and abilities give a player for a duration (CR 609.4b,
+    /// 611.2a): `EffectKind::ManaCostRuleForOneSpell` names the nth. Not standing abilities: they function only while such an
+    /// effect lasts.
+    pub mana_cost_spend_rules: &'static [ManaCostSpendRule],
     /// The restrictions on blocking its resolving spells and abilities make for a duration (CR 509.1b, 611.2a):
     /// `EffectKind::BlockRestriction` names the nth. Not standing abilities: they function only while such an effect lasts.
     pub lasting_block_rules: &'static [LastingBlockRule],
@@ -4622,6 +4640,7 @@ impl CardDef {
         cost_additions: &[],
         own_cost_changes: &[],
         lasting_cost_changes: &[],
+        mana_cost_spend_rules: &[],
         lasting_block_rules: &[],
         lasting_rules: &[],
         blockers_instead: &[],

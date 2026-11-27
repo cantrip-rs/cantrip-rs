@@ -1570,6 +1570,15 @@ pub trait Game: Query {
         let kind = EffectKind::SpellAlternative { card: item.ability.card, index, player, words: self.words(item.object) };
         self.add_player_effect(item.controller, item.object, kind, Duration::EndOfTurn);
     }
+    /// "For one spell this turn, you may spend mana as though it were mana of any [type or color] to pay that spell's mana cost"
+    /// (CR 609.4b, 611.2a), made by the resolving spell or ability `item`: the `index`th of the `mana_cost_spend_rules` of its
+    /// card (the face that is up, for a permanent's ability) lets `item`'s controller, "you" (CR 109.5), pay the mana cost's
+    /// share of one spell's total cost so until the turn ends (CR 514.2), whether or not the source stays on the battlefield;
+    /// additional costs and cost increases are still paid normally. The first spell whose payment needed it uses it up.
+    fn mana_cost_rule_for_one_spell_this_turn(&mut self, item: &StackItem, index: u8) {
+        let kind = EffectKind::ManaCostRuleForOneSpell { card: item.ability.card, index };
+        self.add_player_effect(item.controller, item.object, kind, Duration::EndOfTurn);
+    }
     /// "Until end of turn, you may cast [cards] from your graveyard ..." (CR 611.2a, 601.3), made by the resolving spell or
     /// ability `item`: the `index`th of the `lasting_ways` of its card (the face that is up, for a permanent's ability) is a way
     /// `player` may cast cards by until the turn ends (CR 514.2), whether or not the source stays on the battlefield. The effect

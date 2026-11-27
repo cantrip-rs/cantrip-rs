@@ -2032,6 +2032,15 @@ pub enum EffectKind {
     /// card file can't mark a spell during casting, and a delayed trigger would go on the stack above the spell and could
     /// be answered. A kind of spell ("the next creature spell") is a filter to add when a printed card needs one.
     NextSpellCantBeCountered,
+    /// "For one spell this turn, you may spend mana as though it were mana of any [type or color] to pay that spell's mana
+    /// cost" (CR 609.4b, 611.2a, 601.2f-h): a rule a resolved spell or ability gave the effect's controller for as long as it
+    /// lasts, whether or not its source is still on the battlefield. It is the `index`th of the `mana_cost_spend_rules` of
+    /// `card`, the card whose spell or ability made it, which says what mana may be spent (`SpendAnyManaRule`). It reaches only
+    /// the share of a spell's total cost that is its mana cost - not an alternative cost paid instead (CR 118.9), nor an
+    /// additional cost or a cost increase (CR 118.8, 601.2f), which are still paid normally - and the payment keeps that share
+    /// apart as it is paid. It is for one spell: the first spell whose payment could not have been made without it uses it up.
+    /// About the player, so it reaches spells cast later and outlives its `affected` object, which is only the source.
+    ManaCostRuleForOneSpell { card: CardId, index: u8 },
     /// "[This player] skips their next turn" (CR 500.11, 614.10): a replacement effect of the beginning of that player's
     /// next turn, used up by the turn it skips. "Skips their next N turns" is N of them, each waiting for the first turn
     /// the ones before it have not skipped (CR 614.10a). About the player, so it outlives its `affected` object, which is
@@ -2118,6 +2127,7 @@ impl EffectKind {
                 | EffectKind::PlayerPlayRule(_)
                 | EffectKind::PlayerSpecialAction { .. }
                 | EffectKind::NextSpellCantBeCountered
+                | EffectKind::ManaCostRuleForOneSpell { .. }
                 | EffectKind::SkipNextTurn(_)
                 | EffectKind::ControlNext { .. }
                 | EffectKind::ControlsPlayer(_)

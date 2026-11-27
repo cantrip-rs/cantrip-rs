@@ -6019,7 +6019,7 @@ fn x_payable(cx: &Cx, a: &Available, player: PlayerId, source: ObjectId, paid: &
             // A reduction announced before X comes off once the total is determined (CR 601.2f, 118.7a), as the cast takes it:
             // the cards exiled for it, and the power of the creature harmonize taps (CR 702.180a).
             total.generic = total.generic.saturating_sub(paid.reduced).saturating_sub(paid.reducer.map_or(0, |c| reduction_of(cx, c)));
-            affordable_with(cx, a, player, source, &ManaCost { x: 0, ..at_least(total, least) })
+            affordable_with(cx, a, player, source, &ManaCost { x: 0, ..at_least(total, least) }, &paid.mana_cost)
         })
     };
     let pre = x_total(paid, n);
@@ -6638,12 +6638,19 @@ fn least_cost(
     card: ObjectId,
     def: &CardDef,
     base: ManaCost,
+    share: Share,
     targets: &[Target],
     earlier: &Earlier,
     covered: &mut dyn FnMut(ManaCost) -> bool,
 ) -> bool {
-    least_cost_parts(cx, available, player, card, def, base, targets, earlier, &mut |cost, least| covered(at_least(cost, least)))
+    least_cost_parts(cx, available, player, card, def, base, share, targets, earlier, &mut |cost, least| covered(at_least(cost, least)))
 }
+
+/// The share of a total that is the spell's mana cost (CR 601.2f) as the advice judges it, with what a rule its caster has
+/// that reaches only it lets be spent on it (`mana_cost_share_judged`, CR 609.4b); `NO_SHARE` where the spell is not cast
+/// for its mana cost or no such rule applies.
+type Share = (AnyMana, ManaCost);
+const NO_SHARE: Share = (AnyMana::No, ManaCost::ZERO);
 
 /// `least_cost` with the least the total may come to (`CostDelta::at_least`, Trinisphere) not yet applied but returned, for a
 /// cast whose own reductions (emerge, harmonize) are still to come: the least is applied after every reduction, as the cast
@@ -6656,6 +6663,7 @@ fn least_cost_parts(
     card: ObjectId,
     def: &CardDef,
     base: ManaCost,
+    share: Share,
     targets: &[Target],
     earlier: &Earlier,
     covered: &mut dyn FnMut(ManaCost, u8) -> bool,
@@ -6705,7 +6713,7 @@ fn least_cost_parts(
         // a second blue.
         if modal.min <= 1
             && let Some(i) = costs.iter().position(|&c| {
-                finish(cx, available, player, card, def, add_cost(cost, c), targets, earlier.spell.as_ref(), &mut |total, least| spell_covers(cx, available, player, card, def, &at_least(total, least)))
+                finish(cx, available, player, card, def, add_cost(cost, c), targets, earlier.spell.as_ref(), &mut |total, least| spell_covers(cx, available, player, card, def, &at_least(total, least), share))
             })
         {
             costs.swap(0, i);
@@ -6781,11 +6789,12 @@ fn phyrexian_with_life(cx: &Cx, player: PlayerId, mut cost: ManaCost, other_life
 /// else with the restricted mana an ability may spend (CR 106.6); and the spell with mana spent as though it were mana of
 /// any color where a static ability lets `player` do so to cast it (CR 609.4b).
 pub fn can_afford(cx: &Cx, player: PlayerId, source: ObjectId, cost: &ManaCost) -> bool {
-    cost.mana_value() == 0 || affordable_with(cx, &available(cx, player), player, source, cost)
+    cost.mana_value() == 0 || affordable_with(cx, &available(cx, player), player, source, cost, &ManaCost::ZERO)
 }
 
-/// `can_afford`, with `a` what `player` has to pay with.
-fn affordable_with(cx: &Cx, a: &Available, player: PlayerId, source: ObjectId, cost: &ManaCost) -> bool {
+/// `can_afford`, with `a` what `player` has to pay with; `mana_cost` the share of `cost` that is the spell's mana cost, kept
+/// apart for a rule that reaches only it (`XCost::mana_cost`).
+fn affordable_with(cx: &Cx, a: &Available, player: PlayerId, source: ObjectId, cost: &ManaCost, mana_cost: &ManaCost) -> bool {
     if cost.mana_value() == 0 {
         return true;
     }
@@ -6796,7 +6805,8 @@ fn affordable_with(cx: &Cx, a: &Available, player: PlayerId, source: ObjectId, c
         } else {
             static_rules::lets_spend_any_mana(cx, &a.spenders, &Spending { player, source: Some(source), purpose: SpendingFor::Casting })
         };
-        a.covers_for(&any.view(cost), &spell_payment(cx, player, source, a.names_subtypes()))
+        let (on_any, on) = if any_type_part(mana_cost) { mana_cost_share_judged(cx, player, source, cx.card(cx.s().obj(source).card), mana_cost) } else { (AnyMana::No, ManaCost::ZERO) };
+        a.covers_for(&as_paid_on(any, on_any, &on, cost), &spell_payment(cx, player, source, a.names_subtypes()))
     } else {
         a.covers_for(cost, &ability_payment(cx, source, chars.types, chars.subtypes, false))
     }
@@ -7696,7 +7706,7 @@ fn casts_with_any_mana(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId,
 /// Whether `cost` could be paid to cast `card` as `def` (advice, CR 601.2g-h): by the mana at hand that may pay for that
 /// spell (`spell_kind`), spent as though it were mana of any color or type where a static ability lets `player` do so for it
 /// (`casts_with_any_mana`, CR 609.4b).
-fn spell_covers(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &CardDef, cost: &ManaCost) -> bool {
+fn spell_covers(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &CardDef, cost: &ManaCost, share: Share) -> bool {
     let bending;
     let a = match waterbend_tap(def, a.tap_cap) {
         Some(tap) => {
@@ -7706,7 +7716,7 @@ fn spell_covers(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &
         None => a,
     };
     let payment = spell_kind(cx, a, player, card, def);
-    a.covers_for(&casts_with_any_mana(cx, a, player, card, def).view(cost), &payment)
+    a.covers_for(&as_paid_on(casts_with_any_mana(cx, a, player, card, def), share.0, &share.1, cost), &payment)
 }
 
 impl Available {
@@ -10198,6 +10208,8 @@ struct Offer<'a> {
     alternatives: std::cell::OnceCell<Vec<Given<SpellAlternative>>>,
     /// What applies additional costs to spells (CR 118.8, `cost_addition_sources`), found when a spell is first judged.
     imposing: std::cell::OnceCell<Vec<ObjectId>>,
+    /// Whether the player has a rule for paying spells' mana costs (`has_mana_cost_spend_rules`): false in nearly every game.
+    mana_cost_rules: bool,
 }
 
 impl<'a> Offer<'a> {
@@ -10281,6 +10293,10 @@ impl<'a> Offer<'a> {
             a
         };
         // What the permission adds is part of the total before the cost changes apply, as the cast adds it (CR 118.8, 601.2f).
+        // The share of the total that is the face's mana cost, where it is cast for it - no alternative cost another object
+        // gives, none the permission names, no bestow (CR 118.9) - for a rule of the caster's that reaches only it (CR 609.4b).
+        let pays_mana_cost = paid_by.is_none() && !route.imposes() && !route.terms.waterbend && way != WAY_BESTOW;
+        let share = if pays_mana_cost && self.mana_cost_rules { mana_cost_share_judged(cx, player, card, face, &face.cost) } else { NO_SHARE };
         let mut base = base;
         base.generic += u32::from(route.terms.more);
         let base = add_cost(base, route.additional.mana);
@@ -10292,8 +10308,8 @@ impl<'a> Offer<'a> {
                 let harmonize = Cost { tap_to_reduce: true, ..Cost::NONE };
                 way_covered(cx, a, player, card, face, &Cost { mana: base, exile_from_graveyard: route.additional.exile_from_graveyard, ..harmonize }, &harmonize, route.any_mana())
             } else {
-                least_cost(cx, a, player, card, face, base, targets, earlier, &mut |least| {
-                    covers_total(cx, a, player, card, face, least, route.additional.exile_from_graveyard, route.any_mana())
+                least_cost(cx, a, player, card, face, base, share, targets, earlier, &mut |least| {
+                    covers_total(cx, a, player, card, face, least, route.additional.exile_from_graveyard, route.any_mana(), share)
                 })
             }) && added_life_payable(cx, a, player, card, face, targets, earlier)
         };
@@ -10585,7 +10601,8 @@ impl<'a> Offer<'a> {
             return;
         }
         let (cx, player, a) = (self.cx, self.player, self.available());
-        if least_cost(cx, a, player, card, def, overload, &[], &Earlier::NONE, &mut |cost| covers_total(cx, a, player, card, def, cost, 0, AnyMana::No)) {
+        // Overload is an alternative cost (CR 702.96a, 118.9): no mana cost is paid.
+        if least_cost(cx, a, player, card, def, overload, NO_SHARE, &[], &Earlier::NONE, &mut |cost| covers_total(cx, a, player, card, def, cost, 0, AnyMana::No, NO_SHARE)) {
             options.push(ActionOption::on(ActionKind::CastSpell, card, WAY_OVERLOAD));
         }
     }
@@ -10682,7 +10699,7 @@ impl<'a> Offer<'a> {
                     }
                     let a = self.available();
                     let covered = |targets: &[Target], earlier: &Earlier| {
-                        least_cost(cx, a, player, card, face, cost.mana, targets, earlier, &mut |least| covers_total(cx, a, player, card, face, least, cost.exile_from_graveyard, AnyMana::No))
+                        least_cost(cx, a, player, card, face, cost.mana, NO_SHARE, targets, earlier, &mut |least| covers_total(cx, a, player, card, face, least, cost.exile_from_graveyard, AnyMana::No, NO_SHARE))
                             && added_life_payable(cx, a, player, card, face, targets, earlier)
                     };
                     let mut option = ActionOption { granted_by: Some(way.grant), ..ActionOption::on(ActionKind::CastSpell, card, way_number) };
@@ -10718,6 +10735,7 @@ fn castable_ways(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<Avai
         exile_casts: std::cell::OnceCell::new(),
         alternatives: std::cell::OnceCell::new(),
         imposing: std::cell::OnceCell::new(),
+        mana_cost_rules: has_mana_cost_spend_rules(cx.s(), player),
     };
     for zone in cast_zones(cx, player, barred) {
         for &card in cx.s().zone(zone) {
@@ -10892,10 +10910,11 @@ fn way_covered(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &C
     // applies them (CR 601.2f).
     // The totals retain mana but deliberately omit independent permanent costs. Emerge's reduction still reads the
     // original way's sacrifice, not those totals or an unrelated permanent cost added by the casting permission.
-    least_cost_parts(cx, a, player, card, def, total.mana, &[], &Earlier::NONE, &mut |mut cost, least| {
+    // A way of its own is an alternative cost (CR 118.9): no mana cost is paid, so no share of it is kept apart.
+    least_cost_parts(cx, a, player, card, def, total.mana, NO_SHARE, &[], &Earlier::NONE, &mut |mut cost, least| {
         cost.generic = cost.generic.saturating_sub(emerge_reduction(cx, player, card, way));
         // The mana the permission lets pay it pays it (CR 609.4b), as `cast` pays it.
-        if covers_total(cx, a, player, card, def, at_least(cost, least), total.exile_from_graveyard, any) {
+        if covers_total(cx, a, player, card, def, at_least(cost, least), total.exile_from_graveyard, any, NO_SHARE) {
             return true;
         }
         way.tap_to_reduce
@@ -10903,7 +10922,7 @@ fn way_covered(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &C
                 let without = available_without(cx, player, Some(creature), ManaWindow::Payment);
                 let mut reduced = cost;
                 reduced.generic = reduced.generic.saturating_sub(reduction_of(cx, creature));
-                covers_total(cx, &without, player, card, def, at_least(reduced, least), total.exile_from_graveyard, any)
+                covers_total(cx, &without, player, card, def, at_least(reduced, least), total.exile_from_graveyard, any, NO_SHARE)
             })
     })
 }
@@ -11048,7 +11067,7 @@ fn waterbend_tap(def: &CardDef, routed: u32) -> Option<TapFor> {
 /// cards another part of the cost exiles from the graveyard, which delve cannot also use. `any`: what mana the permission
 /// it is cast by lets pay it (CR 609.4b), out of what is left once the others have paid their share.
 #[allow(clippy::too_many_arguments)]
-fn covers_total(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &CardDef, cost: ManaCost, exiled: u8, any: AnyMana) -> bool {
+fn covers_total(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &CardDef, cost: ManaCost, exiled: u8, any: AnyMana, share: Share) -> bool {
     let no_mana = def.keywords.has(Keyword::CantSpendManaToCast);
     let with = pay_with(cx, &a.grantors, player, card, def, face_of(cx, card, def));
     // How much of the generic mana waterbend's taps may pay (CR 701.67a-b): the card's own waterbend cost's and the one the
@@ -11064,7 +11083,8 @@ fn covers_total(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &
         None => a,
     };
     let any = any.max(casts_with_any_mana(cx, a, player, card, def));
-    let as_paid = |cost: ManaCost| any.view(&cost);
+    // The mana cost's share as a rule that reaches only it lets it be paid (CR 609.4b, 601.2f).
+    let as_paid = |cost: ManaCost| as_paid_on(any, share.0, &share.1, &cost);
     // Assist (CR 702.132a): another player may pay generic mana of it - as much as the one who could pay the most.
     let cost = if with.assist && !no_mana && cost.generic > 0 { ManaCost { generic: cost.generic - assist_could_pay(cx, player, card, def, cost.generic), ..cost } } else { cost };
     if !with.any() && !no_mana {
@@ -11716,6 +11736,9 @@ fn cast(
     // Flashback (CR 702.34a) a permission or a permanent gave, or aftermath (CR 702.127a): exiled instead of put anywhere
     // else as it leaves the stack. The way a permanent gave is read now: the spell keeps it if the permanent leaves.
     // Harmonize (CR 702.180a) exiles it as flashback does, and its cost taps a creature to reduce its mana (CR 702.180b).
+    // Flashback a permission gives is an alternative cost though it is the mana cost (CR 702.34a), and so is harmonize (CR
+    // 702.180a): a spell cast by either pays no mana cost.
+    let alternative_by_permission = flashback || harmonize || bent;
     let flashback = flashback || harmonize || def.aftermath || granted.is_some_and(|w| w.what.flashback);
     let mut cost = match (way, instead) {
         (_, Some(instead)) => Cost { mana: instead, ..by.alternative.unwrap_or(Cost::NONE) },
@@ -11738,6 +11761,19 @@ fn cast(
         (WAY_OVERLOAD, _) => Cost::mana(whole.overload.unwrap_or(def.cost)),
         _ => whole.ways[way as usize - 1].cost,
     };
+    // The share of the total that is the face's mana cost (CR 601.2f), for a rule that reaches only it ("you may spend mana
+    // as though it were mana of any type to pay that spell's mana cost", `EffectKind::ManaCostRuleForOneSpell`, CR 609.4b): paid
+    // where the spell is cast for its mana cost - not for an alternative cost (CR 118.9), whatever that cost is - and not its
+    // additional costs or what increases it (CR 118.8, 601.2f), which are still paid normally. It follows the mana cost's
+    // symbols as they are announced (`on_announced`); what reduces the total takes the other symbols first
+    // (`ManaCost::paid_with_any_on` reads it so), as a reduction may reduce an additional cost (Morophon's and Edgewalker's
+    // rulings: "can reduce additional costs or alternative costs") and the player determines the total (CR 601.2f). Kept only
+    // while its caster has such a rule.
+    let pays_mana_cost = instead.is_none()
+        && granted.is_none()
+        && !alternative_by_permission
+        && matches!(way, 0 | WAY_ADVENTURE | WAY_OMEN | WAY_BACK_FACE | WAY_SPLIT_LEFT | WAY_SPLIT_RIGHT | WAY_PROTOTYPE | WAY_FUSED);
+    let mut mana_cost_share = if pays_mana_cost && has_mana_cost_spend_rules(cx.s(), player) { cost.mana } else { ManaCost::ZERO };
     cost.tap_to_reduce |= harmonize;
     // A waterbend cost an alternative cost is (CR 701.67a-b, 118.9: "by waterbending {X} rather than paying its mana cost") is
     // paid as one is: its generic mana is the waterbend cost's, which an artifact or creature may be tapped for, set apart
@@ -12052,6 +12088,7 @@ fn cast(
             modes: (!modes_after_costs).then_some(mask),
             targets: targets.to_vec(),
             targets_later: def.modal.is_some() || (!specs.is_empty() && (def.divide.is_some() || resolving || !targets_with_cast(cx.cards(), def))),
+            mana_cost: mana_cost_share,
         });
         let announced = match crate::x_rules::choose(cx, &x_asker, def.x_rule, least, cap, paid.as_ref())? {
             Some(n) => n,
@@ -12138,8 +12175,12 @@ fn cast(
     let x_life = if extra.pay_x_life { item.x } else { 0 };
 
     // CR 601.2b, 107.4f: which Phyrexian symbols are paid with life is announced before any target.
+    let before = cost.mana;
     announce_twobrids(cx, player, spell, &mut cost.mana, any)?;
     let life = announce_life(cx, player, spell, &mut cost.mana, any, Some(CostFor::Spell))?;
+    if any_type_part(&mana_cost_share) {
+        on_announced(&mut mana_cost_share, &before, &cost.mana, &[]);
+    }
     // CR 601.2b, 702.174a: gift is an optional additional cost, announced, with the opponent it is promised to, before
     // the targets (CR 702.174m): what may be targeted can depend on it. The opponent is the only one without asking.
     if let Some(gift) = def.gift
@@ -12242,7 +12283,11 @@ fn cast(
     // Swamp' to cast", Drought) joins the total as one of its own parts, its permanents chosen as it is paid (CR 601.2h); a
     // cast that cannot pay it is taken back.
     extra_parts.extend(cost_additions(cx, &cost_change_sources(cx), player, Costed::Spell(spell)));
-    announce_hybrids(cx, player, spell, Costed::Spell(spell), &mut cost.mana, &targets, any)?;
+    let before = cost.mana;
+    let halves = announce_hybrids_as(cx, player, spell, Costed::Spell(spell), &mut cost.mana, &targets, any)?;
+    if any_type_part(&mana_cost_share) {
+        on_announced(&mut mana_cost_share, &before, &cost.mana, &halves);
+    }
     let split = announce_reduction(cx, player, spell, Costed::Spell(spell), &cost.mana, &targets, any)?;
     let (added_life, least);
     (cost.mana, added_life, least) = apply_cost_changes_before_least(cx, player, Costed::Spell(spell), cost.mana, &targets, &split);
@@ -12295,6 +12340,14 @@ fn cast(
     // Each waterbend cost paid is one waterbend (CR 701.67c): the additional costs', a waterbend kicker's each time, and the alternative
     // cost a permission names as a waterbend (Hama, the Bloodbender's) apart from them, its {0} included (CR 118.5).
     let waterbends = u32::from(extra.waterbend.generic > bent_generic || extra.waterbend.x > 0) + u32::from(bent) + if def.kicker.is_some_and(|k| k.waterbend) { u32::from(item.kicked) } else { 0 };
+    // What the caster's rules for paying mana costs let be spent on the mana cost's share, asked of the spell as it is paid
+    // for (CR 609.4b, 601.2h).
+    let mana_cost_any = if any_type_part(&mana_cost_share) {
+        let judged: &Cx = cx;
+        mana_cost_spending(judged, judged, player, spell)
+    } else {
+        AnyMana::No
+    };
     let mut helpers = Helpers {
         with,
         waterbend,
@@ -12306,6 +12359,8 @@ fn cast(
         blockers: &[],
         life: life_owed,
         any,
+        mana_cost: if mana_cost_any == AnyMana::No { ManaCost::ZERO } else { mana_cost_share },
+        mana_cost_any,
         abilities_closed: assisted.is_some(),
         assist: if assisted.is_some() { AssistStep::CasterPays } else { AssistStep::None },
         mana_ability: false,
@@ -13543,8 +13598,13 @@ fn announce_reduction(cx: &mut Cx, player: PlayerId, source: ObjectId, costed: C
 /// them (CR 601.2f): an announcement nothing reads before the total cost is determined is the same then as before them.
 /// `any`: what mana may pay the cost (CR 609.4b), which the advice reads.
 fn announce_hybrids(cx: &mut Cx, player: PlayerId, source: ObjectId, costed: Costed, cost: &mut ManaCost, targets: &[Target], any: AnyMana) -> R<()> {
+    announce_hybrids_as(cx, player, source, costed, cost, targets, any).map(|_| ())
+}
+
+/// `announce_hybrids`, saying which symbols were announced as which half: each symbol, and the half it is paid with.
+fn announce_hybrids_as(cx: &mut Cx, player: PlayerId, source: ObjectId, costed: Costed, cost: &mut ManaCost, targets: &[Target], any: AnyMana) -> R<Vec<((Mana, Mana), Mana)>> {
     if cost.hybrid.iter().all(Option::is_none) {
-        return Ok(());
+        return Ok(Vec::new());
     }
     let (more, whole, ..) = deltas(cx, &cost_change_sources(cx), player, costed, None, targets);
     // A reduction by hybrid mana is split after this (CR 118.7e): a cost symbol either half could meet is asked about.
@@ -13554,7 +13614,7 @@ fn announce_hybrids(cx: &mut Cx, player: PlayerId, source: ObjectId, costed: Cos
     let mut met = met_hybrids(&cost.plus(&more), &less);
     met.retain(|(slot, _)| cost.hybrid[*slot].is_some());
     if met.is_empty() {
-        return Ok(());
+        return Ok(Vec::new());
     }
     // Each met symbol: its slot, the half it is announced as unless chosen otherwise, and its other half.
     let symbols: Vec<(usize, Mana, Mana)> = met
@@ -13611,8 +13671,38 @@ fn announce_hybrids(cx: &mut Cx, player: PlayerId, source: ObjectId, costed: Cos
         _ => return Err(Stop::Cancel),
     };
     let chosen: Vec<bool> = (0..n as u8).map(|i| chosen.contains(&i)).collect();
+    let halves = symbols
+        .iter()
+        .zip(&chosen)
+        .map(|(&(slot, taken, other), &chose)| (cost.hybrid[slot].expect("a hybrid symbol"), if chose { other } else { taken }))
+        .collect();
     *cost = announced(&chosen);
-    Ok(())
+    Ok(halves)
+}
+
+/// `on`, the mana cost's share of a total that a rule reaching only it may let other mana pay (`Helpers::mana_cost`), once the
+/// total's monocolored hybrid and Phyrexian symbols are announced (CR 601.2b, 118.13a, 107.4f) - `before` the total as it
+/// was, `after` as announced - and its hybrid symbols announced as one half (`halves`, `announce_hybrids_as`): each of its
+/// symbols announced as its color's is that symbol of `on`'s, and one announced as {2} or as 2 life is none. Where the total
+/// had such a symbol beside the mana cost's (an additional cost's, which no printed card has), the mana cost's is taken to
+/// be the one announced as its color, which the payer, who chose, could have meant as well: identical symbols are not told
+/// apart (CR 107.4).
+fn on_announced(on: &mut ManaCost, before: &ManaCost, after: &ManaCost, halves: &[((Mana, Mana), Mana)]) {
+    for c in 0..5 {
+        let m = Color::ALL[c].mana() as usize;
+        let twobrid = on.twobrid[c].min(before.twobrid[c] - after.twobrid[c]);
+        let phyrexian = on.phyrexian[c].min(before.phyrexian[c] - after.phyrexian[c]);
+        let gained = after.symbols[m] - before.symbols[m];
+        on.symbols[m] += gained.min(twobrid + phyrexian);
+        on.twobrid[c] -= twobrid;
+        on.phyrexian[c] -= phyrexian;
+    }
+    for &(pair, half) in halves {
+        if let Some(slot) = on.hybrid.iter().position(|h| *h == Some(pair)) {
+            on.hybrid[slot] = None;
+            on.symbols[half as usize] += 1;
+        }
+    }
 }
 
 /// Announces which Phyrexian symbols are paid with 2 life (CR 107.4f, 601.2b), as the C# engine's prompt: a choice of
@@ -13967,7 +14057,7 @@ fn announce(cx: &mut Cx, player: PlayerId, spell: ObjectId, paid: &XCost, least:
 /// What an X paid in mana of an ability or a special action with no targets announced costs at each X (`XCost`): `base`
 /// and `base.x` generic mana for each X.
 fn untargeted_x(base: ManaCost, costed: XCosted) -> XCost {
-    XCost { base, per: u32::from(base.x), kicker: None, less: 0, reduced: 0, reducer: None, costed, modes: Some(0), targets: Vec::new(), targets_later: false }
+    XCost { base, per: u32::from(base.x), kicker: None, less: 0, reduced: 0, reducer: None, costed, modes: Some(0), targets: Vec::new(), targets_later: false, mana_cost: ManaCost::ZERO }
 }
 
 /// The most an X paid in mana may be announced as where nothing else bounds it (CR 107.3, 601.2b): no bound play can reach,
@@ -15943,9 +16033,9 @@ fn spend(owed: &mut ManaCost, mana: Mana) {
 /// of a cost whose X only some mana may pay (CR 107.3, 601.2h) - by its own type, whatever it was spent as though it were
 /// (CR 609.4b). X's part is what is left of it once what has paid generic mana instead of mana (`generic_paid`: delve,
 /// improvise, waterbend) and the creatures tapped for convoke have paid theirs (`convoked`), which take X's part first.
-fn spend_noting_x(any: AnyMana, owed: &mut ManaCost, mana: Mana, generic_paid: u32, convoking: &[ColorSet], on_x: &mut [u32; 6]) {
+fn spend_noting_x(any: AnyMana, on_any: AnyMana, on: &mut ManaCost, owed: &mut ManaCost, mana: Mana, generic_paid: u32, convoking: &[ColorSet], on_x: &mut [u32; 6]) {
     if owed.x_mana.is_any() {
-        return spend_as(any, owed, mana);
+        return spend_on(any, on_any, on, owed, mana);
     }
     let x_left = |owed: &ManaCost| {
         let mut cost = *owed;
@@ -15953,7 +16043,7 @@ fn spend_noting_x(any: AnyMana, owed: &mut ManaCost, mana: Mana, generic_paid: u
         convoked(&cost, convoking).x_part()
     };
     let before = x_left(owed);
-    spend_as(any, owed, mana);
+    spend_on(any, on_any, on, owed, mana);
     if x_left(owed) < before {
         on_x[mana as usize] += 1;
     }
@@ -15996,6 +16086,227 @@ fn spend_as(any: AnyMana, owed: &mut ManaCost, mana: Mana) {
         // X's part as though it were mana that may pay it (CR 609.4b), else the rest.
         owed.spend_generic(mana);
     }
+}
+
+/// Whether `player` has an effect giving them a rule for paying one spell's mana cost
+/// (`EffectKind::ManaCostRuleForOneSpell`, CR 609.4b, 611.2a): only then does a cast keep the mana cost's share of its total
+/// apart as it is paid. Looked for only where a spell is cast or its castability judged.
+pub(crate) fn has_mana_cost_spend_rules(s: &cantrip_state::GameState, player: PlayerId) -> bool {
+    !s.effects.is_empty() && s.effects.iter().any(|e| matches!(e.kind, EffectKind::ManaCostRuleForOneSpell { .. }) && e.controller == player)
+}
+
+/// What each of `player`'s rules for paying one spell's mana cost lets be spent on the mana cost of `spell` (CR 609.4b): the
+/// position of its effect, and what it lets (`AnyMana`). The rule is asked as the effect's source and controller (`Asker`),
+/// of the spell `q` reads - on the stack as it is cast, or the card as the spell it would be as its castability is judged
+/// (`AsFace`).
+fn mana_cost_spend_answers(q: &dyn Query, cx: &Cx, player: PlayerId, spell: ObjectId) -> Vec<(usize, AnyMana)> {
+    let spending = Spending { player, source: Some(spell), purpose: SpendingFor::Casting };
+    cx.s()
+        .effects
+        .iter()
+        .enumerate()
+        .filter_map(|(at, e)| match e.kind {
+            EffectKind::ManaCostRuleForOneSpell { card, index } if e.controller == player => {
+                let asker = Asker { instance: None, source: e.source, controller: e.controller, by: None, spell: false };
+                let lets = cx.card(card).mana_cost_spend_rules.get(usize::from(index)).map_or(AnyMana::No, |rule| (rule.lets)(q, &asker, &spending));
+                (lets != AnyMana::No).then_some((at, lets))
+            }
+            _ => None,
+        })
+        .collect()
+}
+
+/// The widest of `mana_cost_spend_answers`.
+fn mana_cost_spending(q: &dyn Query, cx: &Cx, player: PlayerId, spell: ObjectId) -> AnyMana {
+    if !has_mana_cost_spend_rules(cx.s(), player) {
+        return AnyMana::No;
+    }
+    mana_cost_spend_answers(q, cx, player, spell).into_iter().map(|(_, lets)| lets).max().unwrap_or(AnyMana::No)
+}
+
+/// Whether `on`, the mana cost's share of a total that such a rule lets other mana pay, has anything it may change: a symbol
+/// a type of mana is asked for by - a Phyrexian one too, which is one mana of its color once it is announced as paid with
+/// mana rather than 2 life (CR 107.4f, 601.2b; `on_announced` follows it) - or an {X} whose mana may be restricted.
+fn any_type_part(on: &ManaCost) -> bool {
+    on.symbols != [0; 6] || on.hybrid.iter().any(Option::is_some) || on.twobrid != [0; 5] || on.phyrexian != [0; 5] || on.x > 0
+}
+
+/// A face's mana cost `cost` as the share of a total such a rule reaches is judged by the advice (CR 609.4b): a Phyrexian
+/// symbol is its color's once it is announced as mana (CR 107.4f, 601.2b), as the advice reads it (`phyrexian_with_life`);
+/// every other symbol as it is. With what `player`'s rules let be spent on it, cast as `face` of `card`; none where no rule
+/// does.
+fn mana_cost_share_judged(cx: &Cx, player: PlayerId, card: ObjectId, face: &CardDef, cost: &ManaCost) -> (AnyMana, ManaCost) {
+    if !has_mana_cost_spend_rules(cx.s(), player) {
+        return (AnyMana::No, ManaCost::ZERO);
+    }
+    let lets = match face_of(cx, card, face) {
+        Some(f) => mana_cost_spending(&AsFace { cx, spell: card, face: f }, cx, player, card),
+        None => mana_cost_spending(cx, cx, player, card),
+    };
+    if lets == AnyMana::No {
+        return (AnyMana::No, ManaCost::ZERO);
+    }
+    let mut on = *cost;
+    for (i, n) in std::mem::take(&mut on.phyrexian).into_iter().enumerate() {
+        on.symbols[Color::ALL[i].mana() as usize] += n;
+    }
+    (lets, on)
+}
+
+/// The mana a payer is asked for: `owed` with every symbol `any` lets any mana pay, and every symbol of `on` (the spell's
+/// mana cost's share) it still has that `on_any` lets other mana pay, paid as generic (CR 609.4b). The cost is not changed:
+/// this is the payment's view of it.
+fn as_paid_on(any: AnyMana, on_any: AnyMana, on: &ManaCost, owed: &ManaCost) -> ManaCost {
+    if on_any != AnyMana::No && any_type_part(on) { any.view(&owed.paid_with_any_on(on, on_any == AnyMana::Type)) } else { any.view(owed) }
+}
+
+/// `spend_as`, where mana `on_any` says of may also pay the symbols of `on` that `owed` still has (the spell's mana cost's
+/// share of the total, CR 609.4b), which `on` loses as they are paid. A unit pays a symbol `on` does not cover - one of its
+/// own type, then one `any` lets it pay - before one `on` does, since other mana could pay those later; then `on`'s own of its
+/// type, another of `on`'s, X's part, and the generic mana last, as `spend_as` does. Never worse for the payer: which symbol a
+/// unit paid is no part of the payment (CR 609.4b), only what can still pay the rest.
+fn spend_on(any: AnyMana, on_any: AnyMana, on: &mut ManaCost, owed: &mut ManaCost, mana: Mana) {
+    if on_any == AnyMana::No || !any_type_part(on) {
+        return spend_as(any, owed, mana);
+    }
+    let m = mana as usize;
+    let count = |cost: &ManaCost, pair: (Mana, Mana)| cost.hybrid.iter().filter(|h| **h == Some(pair)).count();
+    // How many of `owed`'s symbols of each kind are `on`'s that such mana pays: no more than it has of them, and no {C}
+    // where mana as though it were of any color pays it (no color stands for colorless).
+    let flex = |on: &ManaCost, owed: &ManaCost, i: usize| if i == Mana::C as usize && on_any != AnyMana::Type { 0 } else { on.symbols[i].min(owed.symbols[i]) };
+    let rigid_pair = |on: &ManaCost, owed: &ManaCost, pair: (Mana, Mana)| count(owed, pair) > count(on, pair).min(count(owed, pair));
+    let flex_pair = |on: &ManaCost, owed: &ManaCost, pair: (Mana, Mana)| count(on, pair).min(count(owed, pair)) > 0;
+    let pairs: Vec<(Mana, Mana)> = owed.hybrid.iter().flatten().copied().collect();
+    let take_pair = |owed: &mut ManaCost, pair: (Mana, Mana)| {
+        if let Some(slot) = owed.hybrid.iter().position(|h| *h == Some(pair)) {
+            owed.hybrid[slot] = None;
+        }
+    };
+    let take_on_pair = |on: &mut ManaCost, pair: (Mana, Mana)| {
+        if let Some(slot) = on.hybrid.iter().position(|h| *h == Some(pair)) {
+            on.hybrid[slot] = None;
+        }
+    };
+    let has = |(a, b): (Mana, Mana)| a == mana || b == mana;
+    // A symbol `on` does not cover: of its own type, a hybrid one with a half of it, then one `any` lets it pay.
+    if owed.symbols[m] > flex(on, owed, m) {
+        owed.symbols[m] -= 1;
+        return;
+    }
+    if let Some(&pair) = pairs.iter().find(|&&p| has(p) && rigid_pair(on, owed, p)) {
+        return take_pair(owed, pair);
+    }
+    if any != AnyMana::No {
+        // Mana as though of any color pays no {C}, which no color stands for.
+        let types = if any == AnyMana::Type { 6 } else { 5 };
+        if let Some(i) = (0..types).find(|&i| owed.symbols[i] > flex(on, owed, i)) {
+            owed.symbols[i] -= 1;
+            return;
+        }
+        if let Some(&pair) = pairs.iter().find(|&&p| rigid_pair(on, owed, p)) {
+            return take_pair(owed, pair);
+        }
+    }
+    // One of `on`'s: of its own type, a hybrid one with a half of it, then any other.
+    if flex(on, owed, m) > 0 {
+        owed.symbols[m] -= 1;
+        on.symbols[m] -= 1;
+        return;
+    }
+    if let Some(&pair) = pairs.iter().find(|&&p| has(p) && flex_pair(on, owed, p)) {
+        take_pair(owed, pair);
+        return take_on_pair(on, pair);
+    }
+    if let Some(i) = (0..6).find(|&i| flex(on, owed, i) > 0) {
+        owed.symbols[i] -= 1;
+        on.symbols[i] -= 1;
+        return;
+    }
+    if let Some(&pair) = pairs.iter().find(|&&p| flex_pair(on, owed, p)) {
+        take_pair(owed, pair);
+        return take_on_pair(on, pair);
+    }
+    // X's part as though it were mana that may pay it (CR 609.4b) where it is the mana cost's or `any` lets it be, else the
+    // rest.
+    if (on.x > 0 || any != AnyMana::No) && owed.spend_x_as_any(mana) {
+        return;
+    }
+    owed.spend_generic(mana);
+}
+
+/// Whether the mana a spell's payment spent (`paid`, of which `snow` came from snow sources), with the creatures that
+/// convoked it (`convoking`, by their colors, CR 702.51a) and the generic mana paid other than with mana (`generic_paid`:
+/// delve, improvise, waterbend), could have paid `total` with mana spent as though it were of another kind only as `any`
+/// lets it on the whole total and `on_any` on the mana cost's share `on` (CR 609.4b). Which symbol each unit paid is no part
+/// of the payment - "it doesn't change what mana was actually spent" - so a rule for one spell is used only by a spell that
+/// needed it (`use_up_mana_cost_spend_rule`). A flow from the mana and the creatures to the symbols (`transports`): a creature
+/// pays a symbol of one of its colors or generic mana (X's part too: what restricts X restricts mana, CR 107.3), mana a
+/// symbol of its type, X's part where it may, or generic.
+#[allow(clippy::too_many_arguments)]
+fn paid_with(any: AnyMana, on_any: AnyMana, on: &ManaCost, total: &ManaCost, paid: &ManaPool, snow: &[u32; 6], convoking: &[ColorSet], generic_paid: u32) -> bool {
+    /// The mark on a creature's supply: it pays generic mana and X's part whatever restricts X's mana.
+    const CREATURE: u8 = 1 << 6;
+    let mut cost = as_paid_on(any, on_any, on, total);
+    // What paid generic mana other than with mana takes X's part first, as the payment takes it (`ManaCost::x_part`).
+    cost.generic -= generic_paid.min(cost.generic);
+    let mut supply: Vec<Supply> = Vec::new();
+    for m in 0..6 {
+        let plain = paid.0[m] - snow[m].min(paid.0[m]);
+        supply.push(Supply { snow: false, stage: 0, types: 1 << m, restriction: None, n: plain });
+        supply.push(Supply { snow: true, stage: 0, types: 1 << m, restriction: None, n: snow[m].min(paid.0[m]) });
+    }
+    for &colors in convoking {
+        let types = Color::ALL.iter().filter(|&&c| colors.has(c)).fold(CREATURE, |t, &c| t | 1 << c.mana() as u8);
+        supply.push(Supply { snow: false, stage: 0, types, restriction: None, n: 1 });
+    }
+    supply.retain(|s| s.n > 0);
+    let demand = |n: u32, types: u8, snow: bool| Demand { snow, stage: 1, types, payment: None, n };
+    let mut base: Vec<Demand> = (0..6).map(|m| demand(cost.symbols[m], 1 << m, false)).collect();
+    base.extend(cost.hybrid.iter().flatten().map(|&(a, b)| demand(1, (1 << a as usize) | (1 << b as usize), false)));
+    base.push(demand(cost.plain_generic(), 0b0011_1111 | CREATURE, false));
+    base.push(demand(cost.snow, 0b0011_1111, true));
+    let part = cost.x_part();
+    if part == 0 {
+        base.retain(|d| d.n > 0);
+        return transports(&supply, &base);
+    }
+    if !cost.x_mana.one_each {
+        base.push(demand(part, cost.x_mana.types | CREATURE, false));
+        base.retain(|d| d.n > 0);
+        return transports(&supply, &base);
+    }
+    // One of each type at most (Emblazoned Golem): creatures pay some of it, and mana each set of as many types as is left.
+    let types: Vec<u8> = (0..6u8).filter(|&m| cost.x_mana.types & (1 << m) != 0).collect();
+    let creatures = count_u32(convoking.len());
+    (0..=part.min(creatures)).any(|by_creatures| {
+        let by_mana = part - by_creatures;
+        (0u32..1 << types.len()).filter(|set| set.count_ones() == by_mana).any(|set| {
+            let mut demands = base.clone();
+            demands.push(demand(by_creatures, CREATURE, false));
+            demands.extend(types.iter().enumerate().filter(|(i, _)| set & (1 << i) != 0).map(|(_, &m)| demand(1, 1 << m, false)));
+            demands.retain(|d| d.n > 0);
+            transports(&supply, &demands)
+        })
+    })
+}
+
+/// Uses up the rule for paying one spell's mana cost (`EffectKind::ManaCostRuleForOneSpell`, CR 611.2a: "for one spell this
+/// turn") that the payment of `spell` just made needed: none where the mana it spent could have paid `total` without one
+/// (`paid_with`); otherwise the one letting the least that could have. One spell uses one: two such effects are two spells.
+#[allow(clippy::too_many_arguments)]
+fn use_up_mana_cost_spend_rule(cx: &mut Cx, player: PlayerId, spell: ObjectId, any: AnyMana, on: &ManaCost, total: &ManaCost, paid: &ManaPool, snow: &[u32; 6], convoking: &[ColorSet], generic_paid: u32) {
+    let judged: &Cx = cx;
+    let mut answers = mana_cost_spend_answers(judged, judged, player, spell);
+    let pays = |lets: AnyMana| paid_with(any, lets, on, total, paid, snow, convoking, generic_paid);
+    if pays(AnyMana::No) {
+        return;
+    }
+    answers.sort_by_key(|a| a.1);
+    let Some(&(at, _)) = answers.iter().find(|a| pays(a.1)) else { return };
+    let keep: Vec<bool> = (0..cx.s().effects.len()).map(|i| i != at).collect();
+    cx.st().effects_keep(&keep);
+    // An effect that ends changes the game with no event (CR 603.8).
+    cx.state_changed();
 }
 
 /// Whether a unit of `mana` pays anything still owed.
@@ -16529,6 +16840,13 @@ pub(crate) struct Helpers<'a> {
     /// What a permission to cast the spell lets pay for it (CR 609.4b): mana of any type pays any of its symbols, mana as
     /// though of any color all but {C}.
     pub any: AnyMana,
+    /// The symbols of the total that are the spell's mana cost's (CR 601.2f), kept apart from its additional costs and cost
+    /// increases for a rule that reaches only them (`EffectKind::ManaCostRuleForOneSpell`, CR 609.4b: "to pay that spell's mana
+    /// cost"), and what that rule lets be spent on them (`mana_cost_any`). `ManaCost::ZERO` and `AnyMana::No` for every other
+    /// payment. A rule for one spell is used up by a payment that could not have been made without it
+    /// (`use_up_mana_cost_spend_rule`).
+    pub mana_cost: ManaCost,
+    pub mana_cost_any: AnyMana,
     /// The time for activating mana abilities is over (CR 601.2g): the payment of a spell with assist, whose players each had
     /// a window of their own before anything was paid (CR 702.132a).
     pub abilities_closed: bool,
@@ -16552,7 +16870,7 @@ impl Helpers<'_> {
 
 impl Helpers<'static> {
     pub const NONE: Helpers<'static> =
-        Helpers { with: PayWith::NONE, waterbend: 0, waterbends: 0, creatures: false, no_mana: false, purpose: Paying::Other, attackers: &[], blockers: &[], life: 0, any: AnyMana::No, abilities_closed: false, assist: AssistStep::None, mana_ability: false, exiled_with_source: &[] };
+        Helpers { with: PayWith::NONE, waterbend: 0, waterbends: 0, creatures: false, no_mana: false, purpose: Paying::Other, attackers: &[], blockers: &[], life: 0, any: AnyMana::No, mana_cost: ManaCost::ZERO, mana_cost_any: AnyMana::No, abilities_closed: false, assist: AssistStep::None, mana_ability: false, exiled_with_source: &[] };
 }
 
 /// What a mana payment is for, as far as restricted mana is concerned (CR 106.6): see `payment_for`.
@@ -16802,7 +17120,7 @@ fn mana_activation_window(cx: &mut Cx, player: PlayerId, source: ObjectId, total
     loop {
         // Advice for what more mana could help. This does not spend the pool or close the window.
         let any = helpers.any.max(static_rules::spend_any_mana_for(cx, player, source, spending_for(cx, source, helpers.purpose)));
-        let due = any.view(&total);
+        let due = as_paid_on(any, helpers.mana_cost_any, &helpers.mana_cost, &total);
         let remaining = if helpers.no_mana { due } else if due.snow > 0 {
             quality_uncovered(&quality_groups(cx, player, source, helpers.purpose, &[]), &due)
         } else { uncovered(&spendable(cx, player, source, helpers.purpose), &due) };
@@ -16858,6 +17176,13 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
     // generic mana, convoke a symbol of its creature's color, CR 702.66a, 702.126a, 702.51a); the mana is asked for as the
     // payment's view of what is left.
     let any = helpers.any.max(static_rules::spend_any_mana_for(cx, player, source, spending_for(cx, source, helpers.purpose)));
+    // The symbols of the spell's mana cost that a rule reaching only them lets other mana pay (CR 609.4b, 601.2f), losing
+    // those it pays.
+    let on_any = helpers.mana_cost_any;
+    let mut on = helpers.mana_cost;
+    // The mana from snow sources spent, by type: what a {S} symbol was paid with (CR 107.4h), for whether the payment needed
+    // a rule for one spell (`use_up_mana_cost_spend_rule`).
+    let mut snow_spent = [0u32; 6];
     let mut owed = total;
     let mut paid = ManaPool::default();
     let mut used = 0u8;
@@ -16921,7 +17246,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
         if left.is_zero() {
             break;
         }
-        let due = any.view(&left);
+        let due = as_paid_on(any, on_any, &on, &left);
         let pool = if helpers.no_mana { ManaPool::default() } else { spendable(cx, player, source, helpers.purpose) };
         let candidates =
             if helpers.any() { pay_candidates(cx, player, source, helpers, &cost, &left, &convoking, &delved, bent) } else { Vec::new() };
@@ -16936,7 +17261,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
         // type pays X as its own type still (CR 609.4b), so a payment that may spend it so has no one way of paying X's part.
         let x_restricted = left.x_part() > 0 && !left.x_mana.is_any();
         let x_one_way = |pays: &dyn Fn(&ManaCost) -> bool| {
-            if !x_restricted { Some([0; 6]) } else if any == AnyMana::No { x_paid_one_way(&due, pays) } else { None }
+            if !x_restricted { Some([0; 6]) } else if any == AnyMana::No && (on_any == AnyMana::No || on.x == 0) { x_paid_one_way(&due, pays) } else { None }
         };
         if let Some(groups) = &groups {
             decided = Ways::Many;
@@ -16947,6 +17272,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                     if n == 0 { continue; }
                     if take_group(cx, player, group, n, &told, &mut taken, record) != n { return Err(Stop::Cancel); }
                     paid.0[group.mana as usize] += n;
+                    if group.snow { snow_spent[group.mana as usize] += n; }
                     if let Some(r) = group.restriction { used |= spent_effects(cx, player, source, helpers.purpose, r); }
                 }
                 add_on_x(&mut on_x, Some(x));
@@ -17005,7 +17331,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
             let mut one = [0; 6];
             one[mana as usize] = 1;
             spend_pool(cx, &mut paid, &mut used, &mut taken, one);
-            spend_noting_x(any, &mut owed, mana, generic_paid, &convoking, &mut on_x);
+            spend_noting_x(any, on_any, &mut on, &mut owed, mana, generic_paid, &convoking, &mut on_x);
             let mut left = owed;
             left.generic -= generic_paid.min(left.generic);
             if !convoked(&left, &convoking).is_zero() {
@@ -17053,7 +17379,8 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                         if take_group(cx, player, group, 1, &told, &mut taken, record) != 1 { return Err(Stop::Cancel); }
                         if let Some(r) = action.restriction { used |= spent_effects(cx, player, source, helpers.purpose, r); }
                         paid.0[mana as usize] += 1;
-                        if action.pay_snow { owed.snow -= 1; } else { spend_noting_x(any, &mut owed, mana, generic_paid, &convoking, &mut on_x); }
+                        if action.snow { snow_spent[mana as usize] += 1; }
+                        if action.pay_snow { owed.snow -= 1; } else { spend_noting_x(any, on_any, &mut on, &mut owed, mana, generic_paid, &convoking, &mut on_x); }
                         let mut left = owed;
                         left.generic -= generic_paid.min(left.generic);
                         if !convoked(&left, &convoking).is_zero() {
@@ -17078,7 +17405,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                         }
                     }
                     paid.0[mana as usize] += 1;
-                    spend_noting_x(any, &mut owed, mana, generic_paid, &convoking, &mut on_x);
+                    spend_noting_x(any, on_any, &mut on, &mut owed, mana, generic_paid, &convoking, &mut on_x);
                     let mut left = owed;
                     left.generic -= generic_paid.min(left.generic);
                     if !convoked(&left, &convoking).is_zero() {
@@ -17146,6 +17473,10 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
     if !taken.is_empty() {
         let cast = helpers.purpose == Paying::Casting && cx.s().obj(source).zone.is(ZoneKind::Stack);
         record_spent(cx, player, source, cast, &taken);
+    }
+    // A rule for paying a mana cost that is for one spell (CR 611.2a) is used up by the spell whose payment needed it.
+    if on_any != AnyMana::No && any_type_part(&helpers.mana_cost) {
+        use_up_mana_cost_spend_rule(cx, player, source, any, &helpers.mana_cost, &total, &paid, &snow_spent, &convoking, generic_paid);
     }
     if on_x != [0; 6] {
         let cast = helpers.purpose == Paying::Casting && cx.s().obj(source).zone.is(ZoneKind::Stack);
@@ -18268,6 +18599,98 @@ mod tests {
         spend_as(AnyMana::Color, &mut owed, Mana::R);
         spend_as(AnyMana::Color, &mut owed, Mana::R);
         assert_eq!(owed, mana("{C}"));
+    }
+
+    #[test]
+    fn a_rule_on_the_mana_cost_reaches_its_share_of_the_total_alone() {
+        // CR 609.4b, 601.2f: Muck Rats' {B} under Derelor's {B} more is {B}{B}, of which one {B} is the mana cost's; mana of
+        // any type pays that one, and the increase is still paid with black.
+        let (share, total) = (mana("{B}"), mana("{B}{B}"));
+        assert_eq!(as_paid_on(AnyMana::No, AnyMana::Type, &share, &total), mana("{1}{B}"));
+        // {C} is a type and no color (CR 106.1b): any type pays it, as though of any color it does not.
+        assert_eq!(as_paid_on(AnyMana::No, AnyMana::Type, &mana("{C}"), &mana("{1}{C}")), mana("{2}"));
+        assert_eq!(as_paid_on(AnyMana::No, AnyMana::Color, &mana("{C}"), &mana("{1}{C}")), mana("{1}{C}"));
+        // A share the total no longer has (a reduction took it, Morophon's ruling) is no part of it.
+        assert_eq!(as_paid_on(AnyMana::No, AnyMana::Type, &mana("{G}{G}"), &mana("{G}")), mana("{1}"));
+        // No rule: the total as it is.
+        assert_eq!(as_paid_on(AnyMana::No, AnyMana::No, &share, &total), total);
+        // A hybrid symbol of the share is paid as generic; one of an additional cost is not.
+        assert_eq!(as_paid_on(AnyMana::No, AnyMana::Type, &mana("{G/W}"), &mana("{G/W}{U/R}")), mana("{1}{U/R}"));
+    }
+
+    #[test]
+    fn mana_spent_on_the_mana_cost_pays_what_only_its_own_type_may_first() {
+        // CR 609.4b: owed {B}{B}, one the mana cost's. Black pays the increase's {B}, whatever mana could pay the other.
+        let (mut share, mut owed) = (mana("{B}"), mana("{B}{B}"));
+        spend_on(AnyMana::No, AnyMana::Type, &mut share, &mut owed, Mana::B);
+        assert_eq!((owed, share), (mana("{B}"), mana("{B}")));
+        // Red pays the mana cost's {B}, which the share loses.
+        spend_on(AnyMana::No, AnyMana::Type, &mut share, &mut owed, Mana::R);
+        assert_eq!((owed, share), (ManaCost::ZERO, ManaCost::ZERO));
+        // With the increase's {B} left, red can only pay the share's: then nothing pays the increase but black.
+        let (mut share, mut owed) = (mana("{B}"), mana("{1}{B}{B}"));
+        spend_on(AnyMana::No, AnyMana::Type, &mut share, &mut owed, Mana::R);
+        assert_eq!((owed, share), (mana("{1}{B}"), ManaCost::ZERO));
+        // A hybrid symbol of the increase is paid before the share's of the same pair.
+        let (mut share, mut owed) = (mana("{G/W}"), mana("{G/W}{G/W}"));
+        spend_on(AnyMana::No, AnyMana::Type, &mut share, &mut owed, Mana::G);
+        let pairs = |c: &ManaCost| c.hybrid.iter().flatten().count();
+        assert_eq!((pairs(&owed), pairs(&share)), (1, 1));
+        spend_on(AnyMana::No, AnyMana::Type, &mut share, &mut owed, Mana::U);
+        assert_eq!((owed, share), (ManaCost::ZERO, ManaCost::ZERO));
+        // Mana as though of any color for the whole total (Mycosynth Lattice) pays a symbol it covers before the share's,
+        // which colorless mana could then still pay.
+        let (mut share, mut owed) = (mana("{G}"), mana("{G}{U}"));
+        spend_on(AnyMana::Color, AnyMana::Type, &mut share, &mut owed, Mana::G);
+        assert_eq!((owed, share), (mana("{G}"), mana("{G}")));
+        spend_on(AnyMana::Color, AnyMana::Type, &mut share, &mut owed, Mana::C);
+        assert_eq!(owed, ManaCost::ZERO);
+    }
+
+    #[test]
+    fn a_rule_for_one_spell_is_needed_only_where_the_mana_spent_could_not_pay_without_it() {
+        // CR 609.4b: which symbol each unit paid is no part of the payment. {1}{G} paid with blue and green needed nothing;
+        // paid with two blue it needed the rule.
+        let (share, total) = (mana("{1}{G}"), mana("{1}{G}"));
+        let pool = |w: u32, u: u32, g: u32| ManaPool([w, u, 0, 0, g, 0]);
+        assert!(paid_with(AnyMana::No, AnyMana::No, &share, &total, &pool(0, 1, 1), &[0; 6], &[], 0));
+        assert!(!paid_with(AnyMana::No, AnyMana::No, &share, &total, &pool(0, 2, 0), &[0; 6], &[], 0));
+        assert!(paid_with(AnyMana::No, AnyMana::Type, &share, &total, &pool(0, 2, 0), &[0; 6], &[], 0));
+        // A green-and-white creature that convoked (CR 702.51a) pays the {G}, so blue paid only the generic mana.
+        let gw = ColorSet::NONE.with(Color::Green).with(Color::White);
+        assert!(paid_with(AnyMana::No, AnyMana::No, &share, &total, &pool(0, 1, 0), &[0; 6], &[gw], 0));
+        // {G}{W} with that creature and green mana: the creature pays the {W}, the green the {G}.
+        assert!(paid_with(AnyMana::No, AnyMana::No, &mana("{G}{W}"), &mana("{G}{W}"), &pool(0, 0, 1), &[0; 6], &[gw], 0));
+        // A {S} symbol takes mana from a snow source (CR 107.4h): the green spent on {S}{G} was from snow, the blue not.
+        let snowy = ManaCost { snow: 1, ..mana("{G}") };
+        let snow_g = [0, 0, 0, 0, 1, 0];
+        assert!(!paid_with(AnyMana::No, AnyMana::No, &mana("{G}"), &snowy, &pool(0, 1, 1), &snow_g, &[], 0));
+        assert!(paid_with(AnyMana::No, AnyMana::No, &mana("{G}"), &snowy, &pool(0, 1, 1), &[0, 1, 0, 0, 0, 0], &[], 0));
+        // What delve or improvise paid is generic mana's (CR 702.66a, 702.126a).
+        assert!(paid_with(AnyMana::No, AnyMana::No, &share, &total, &pool(0, 0, 1), &[0; 6], &[], 1));
+    }
+
+    #[test]
+    fn the_share_follows_the_mana_cost_s_symbols_as_they_are_announced() {
+        // CR 107.4f, 601.2b: {1}{G/P} beside a kicker's {G}: the Phyrexian symbol announced as mana is the share's {G}...
+        let mut share = mana("{1}{G/P}");
+        on_announced(&mut share, &mana("{1}{G}{G/P}"), &mana("{1}{G}{G}"), &[]);
+        assert_eq!(share, mana("{1}{G}"));
+        // ...and announced as 2 life, none of it.
+        let mut share = mana("{1}{G/P}");
+        on_announced(&mut share, &mana("{1}{G}{G/P}"), &mana("{1}{G}"), &[]);
+        assert_eq!(share, mana("{1}"));
+        // CR 118.13a: {2/W} announced as {2} is none of the share's symbols; as {W}, its {W}.
+        let mut share = mana("{2/W}");
+        on_announced(&mut share, &mana("{2/W}"), &mana("{2}"), &[]);
+        assert_eq!(share, ManaCost::ZERO);
+        let mut share = mana("{2/W}");
+        on_announced(&mut share, &mana("{2/W}"), &mana("{W}"), &[]);
+        assert_eq!(share, mana("{W}"));
+        // A hybrid symbol announced as one half (CR 601.2b, a reduction meeting it) is that half's.
+        let mut share = mana("{G/W}");
+        on_announced(&mut share, &mana("{G/W}"), &mana("{W}"), &[((Mana::G, Mana::W), Mana::W)]);
+        assert_eq!(share, mana("{W}"));
     }
 
     /// CR 118.7e: a reduction by hybrid mana is split by the payer, one half of each symbol: {2}{G/W} off {3}{G}{W} is

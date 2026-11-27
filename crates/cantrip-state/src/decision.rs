@@ -430,6 +430,10 @@ pub struct XCost {
     pub targets: Vec<Target>,
     /// Whether targets are chosen once X is announced (CR 601.2c): the ones the action did not announce.
     pub targets_later: bool,
+    /// The share of `base` that is the spell's mana cost (CR 601.2f), kept apart for a rule its caster has that reaches only
+    /// it (`EffectKind::ManaCostRuleForOneSpell`, CR 609.4b); `ManaCost::ZERO` where there is none, or the spell is cast for an
+    /// alternative cost (CR 118.9), and for an ability.
+    pub mana_cost: ManaCost,
 }
 
 /// What an X paid in mana is announced for (`XCost`), the request's source being the spell or the source of the ability.
