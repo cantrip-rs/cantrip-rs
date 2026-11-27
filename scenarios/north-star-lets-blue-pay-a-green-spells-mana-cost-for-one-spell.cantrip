@@ -1,0 +1,55 @@
+# North Star's "{4}, {T}: For one spell this turn, you may spend mana as though it were mana of any type to pay that
+# spell's mana cost" (CR 609.4b, 611.2a): activated off exactly four Moxen (the pool is empty after it, and it is tapped),
+# it lets one blue mana pay Norwood Ranger's {G}, which leaves two of Black Lotus's three blue in the pool. That spell
+# needed it, so it is used up: Trained Jackal's {G} can't then be paid with the blue left (a cost it could pay with mana to
+# spare, so the refusal is for want of green).
+
+[Bot1 Deck]
+North Star
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Norwood Ranger
+Trained Jackal
+Black Lotus
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.North Star.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.North Star.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Norwood Ranger.Cast
+? Bot1.Mana = {U}{U}
+Bot1.Pass
+! Bot1.Hand.Trained Jackal.Cast(Mana: short)
+
+[Expect]
+Bot1.Battlefield.North Star.Tapped = true
+Bot1.Battlefield.Norwood Ranger.Tapped = false
+Bot1.Battlefield.Trained Jackal = (absent)

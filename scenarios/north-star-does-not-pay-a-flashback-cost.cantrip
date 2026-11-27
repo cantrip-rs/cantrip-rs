@@ -1,0 +1,60 @@
+# North Star's effect reaches a spell's mana cost, and a spell cast for an alternative cost is cast "rather than pay[ing]
+# its mana cost" (CR 118.9, 702.34a: flashback): Think Twice's flashback {2}{U} can't be paid with three Mountains' red,
+# while the effect - activated after Think Twice was cast from the hand, and unused by the refused flashback - still lets
+# a Mountain's red pay Norwood Ranger's {G}, cast from the hand for its mana cost.
+
+[Bot1 Deck]
+Mountain
+North Star
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Think Twice
+Mountain
+Norwood Ranger
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.North Star.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Think Twice.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.North Star.Activate
+Bot1.Pass
+! Bot1.Graveyard.Think Twice.Cast(Mana: short)
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Norwood Ranger.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Norwood Ranger.Tapped = false
+Bot1.Graveyard = Think Twice

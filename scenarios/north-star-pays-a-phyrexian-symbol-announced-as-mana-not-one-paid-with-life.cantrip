@@ -1,0 +1,56 @@
+# A Phyrexian symbol of a mana cost "can be paid either with one mana of its color or by paying 2 life" (CR 107.4f),
+# announced before the mana is paid (CR 601.2b). Paid with 2 life, Gitaxian Probe's {U/P} needs no mana at all, so
+# North Star's effect is not used up by it; the second Probe's {U/P}, announced as mana, is then one blue mana of its
+# mana cost, which a Mountain's red pays as though it were mana of any type (CR 609.4b). Bot1 ends at 18 life, both
+# Probes resolved and the pool empty.
+
+[Bot1 Deck]
+North Star
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Gitaxian Probe
+Gitaxian Probe
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.North Star.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.North Star.Activate
+Bot1.Pass
+Bot1.Hand.Gitaxian Probe.Cast(Bot2)
+Bot1.Modes(1)
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Gitaxian Probe.Cast(Bot2)
+Bot1.Modes()
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot1.Graveyard.Count = 2
+Bot1.Battlefield.Mountain.Tapped = true

@@ -1,0 +1,68 @@
+# North Star's effect reaches "that spell's mana cost" alone: "Additional costs are still paid normally", and so is a cost
+# increase (CR 601.2f, 118.8: the total is the mana cost plus additional costs and increases). Under Bot1's own Derelor
+# ("Black spells you cast cost {B} more to cast") Muck Rats costs {B}{B}: two Mountains can't pay it, since red may pay
+# the mana cost's {B} but not Derelor's (the refusal is for want of mana: with mana to spare it is offered). Once a Mox
+# Jet is there, the two Mountains' red, made first, still leave the increase owed, so the payment asks for the Jet's
+# black (CR 601.2g); a Mountain's red pays the mana cost and the black the increase, and one red is left over.
+
+[Bot1 Deck]
+North Star
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Muck Rats
+Mox Jet
+Derelor
+Mountain
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.North Star.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Derelor.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.North Star.Activate
+Bot1.Pass
+! Bot1.Hand.Muck Rats.Cast(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Muck Rats.Cast
+Bot1.Battlefield.Mox Jet#2.Activate
+? Bot1.Mana = {R}
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Muck Rats.Tapped = false
+Bot1.Battlefield.Mox Jet#2.Tapped = true

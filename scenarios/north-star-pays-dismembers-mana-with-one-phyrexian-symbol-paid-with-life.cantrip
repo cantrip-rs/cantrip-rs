@@ -1,0 +1,60 @@
+# Dismember's {1}{B/P}{B/P} with one Phyrexian symbol announced as 2 life and the other as mana (CR 107.4f, 601.2b) is a
+# mana cost of {1}{B} and 2 life: North Star's effect lets two Mountains' red pay it (CR 609.4b), and the life is paid
+# beside the mana. Bot1 ends at 18 life, the pool empty, and Bot2's Norwood Ranger dies to the -5/-5.
+
+[Bot1 Deck]
+North Star
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Dismember
+Mountain
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Forest
+Norwood Ranger
+Forest x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.North Star.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Norwood Ranger.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.North Star.Activate
+Bot1.Pass
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Dismember.Cast(Norwood Ranger)
+Bot1.Modes(1)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot2.Battlefield.Norwood Ranger = (absent)
+Bot2.Graveyard = Norwood Ranger

@@ -16,6 +16,7 @@ mod land_cant_be_sacrificed;
 mod lost_abilities;
 mod mana_ability_guards;
 mod merged_components;
+mod north_star_colorless;
 mod repeatable_mana;
 mod righteous_valkyrie_noncreature;
 mod search_any_number;

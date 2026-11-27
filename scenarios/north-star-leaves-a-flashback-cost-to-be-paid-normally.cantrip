@@ -1,0 +1,64 @@
+# North Star's effect reaches a spell's mana cost, and flashback is an alternative cost, paid "rather than paying its mana
+# cost" (CR 118.9, 702.34a): with North Star's effect in place, Think Twice cast by flashback for {2}{U} with three
+# Mountains' red floating still owes its {U} once the red has paid the {2}, so the payment asks for the second Mox
+# Sapphire's blue (CR 601.2g), and one red is left over.
+
+[Bot1 Deck]
+Mountain
+North Star
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Think Twice
+Mountain
+Mox Sapphire
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.North Star.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Think Twice.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.North Star.Activate
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mountain#3.Activate
+Bot1.Graveyard.Think Twice.Cast(Ability: Flashback)
+Bot1.Battlefield.Mox Sapphire#2.Activate
+? Bot1.Mana = {R}
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Mox Sapphire#2.Tapped = true
+Exile = Think Twice

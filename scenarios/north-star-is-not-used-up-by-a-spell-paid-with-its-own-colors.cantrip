@@ -1,0 +1,55 @@
+# North Star's effect is for one spell (CR 611.2a), and it is the payer's choice which (CR 609.4b: "you may spend mana as
+# though it were mana of any type"): Norwood Ranger paid with a Forest's green needed none of it, so it is still there
+# for Trained Jackal, whose {G} an Island's blue then pays. Both are cast in the turn North Star was activated.
+
+[Bot1 Deck]
+North Star
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Norwood Ranger
+Trained Jackal
+Forest
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.North Star.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.North Star.Activate
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Norwood Ranger.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Trained Jackal.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Norwood Ranger.Tapped = false
+Bot1.Battlefield.Trained Jackal.Tapped = false
