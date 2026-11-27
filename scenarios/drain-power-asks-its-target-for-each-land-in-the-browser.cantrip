@@ -1,0 +1,50 @@
+# Browser
+# Drain Power cast by Bot2 on Bot1, the page: the page asks Bot1 to activate a mana ability, with nothing to decline it
+# (CR 117.2e), first of either land it controls, then of the one still owed. Bot1 clicks Shivan Reef and takes its {U} or {R}
+# ability for red (1 damage to Bot1), then its Island. Bot2 adds the {U}{R} Bot1 lost.
+
+[Bot1 Deck]
+Island
+Shivan Reef
+Island
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island
+Island
+Drain Power
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Shivan Reef.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island#1.Activate
+Bot2.Battlefield.Island#2.Activate
+Bot2.Hand.Drain Power.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Client.Bot1.Prompt.Title = Drain Power: activate a mana ability
+? Client.Bot1.Prompt.Detail = Click one of Island, Shivan Reef  ·  Drain Power says to, so it can't be declined
+Bot1.Battlefield.Shivan Reef.Activate(Ability: {U} or {R}; Color: Red)
+? Client.Bot1.Prompt.Detail = Click Island  ·  Drain Power says to, so it can't be declined
+Bot1.Battlefield.Island.Activate
+? Bot2.Mana = {U}{R}
+? Bot1.Mana =
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Island.Tapped = true
+Bot1.Battlefield.Shivan Reef.Tapped = true

@@ -1,0 +1,65 @@
+# Drain Power has Bot2 activate a mana ability of each land it controls (CR 117.2e). Bot2 starts Baxter Building's "{4}, {T}:
+# Add four mana in any combination of colors", taps its Island while paying, and gives it up: the activation is reversed
+# whole, the Island's included (CR 733.1), so the Island is untapped and still owed. Asked again, Bot2 may take the same
+# ability (nothing it gave up is refused it) and pays the {4} with the Island and three Moxen this time: a mana ability of the
+# Island was activated (CR 605.3a), so it is asked for nothing more. Bot1 adds the four mana Bot2 lost; the Moxen's paid the
+# {4}, and Mox Pearl, no land, stays untapped.
+
+[Bot1 Deck]
+Island
+Island
+Drain Power
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Baxter Building
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island
+Mox Pearl
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Baxter Building.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Drain Power.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Baxter Building.Activate(Ability: Add four mana)
+Bot2.Battlefield.Island.Activate
+Bot2.Cancel
+? Bot2.Battlefield.Island.Tapped = false
+? Bot2.Mana =
+Bot2.Battlefield.Baxter Building.Activate(Ability: Add four mana)
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Colors(Green; Green; Green; White)
+? Bot1.Mana = {W}{G}{G}{G}
+? Bot2.Mana =
+
+[Expect]
+Bot2.Battlefield.Baxter Building.Tapped = true
+Bot2.Battlefield.Island.Tapped = true
+Bot2.Battlefield.Mox Ruby.Tapped = true
+Bot2.Battlefield.Mox Pearl.Tapped = false
+Bot1.Graveyard = Drain Power

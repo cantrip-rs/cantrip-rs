@@ -1,0 +1,72 @@
+# Drain Power: "Target player activates a mana ability of each land they control. Then that player loses all unspent mana
+# and you add the mana lost this way." (CR 117.2e, 605.3a, 106.4). Bot2 controls an Island, a Shivan Reef (two mana
+# abilities: Bot2 chooses the {U} or {R} one, red, and takes its 1 damage - the 2004-10-04 ruling that the target player
+# chooses) and a Forest tapped on its own turn, which has no mana ability it can activate and is skipped (CR 609.3). The
+# Island was tapped for mana on an earlier turn and has untapped since: only an activation during Drain Power's own
+# instruction counts toward it, so it is still owed. In
+# response Bot2 taps Mox Ruby, which is no land: its {R} is not asked for, but it is unspent mana, lost with the rest; Mox
+# Jet, no land either, is never asked for and stays untapped. Bot1
+# ends with {U}{R}{R}, its own two untapped Islands untouched; Bot2's pool is empty. Losing the mana before the activations
+# would leave Bot2 holding the lands' {U}{R}, so the order is shown too.
+
+[Bot1 Deck]
+Island
+Island
+Island
+Island
+Drain Power
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island
+Mox Ruby
+Shivan Reef
+Forest
+Mox Jet
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Shivan Reef.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Drain Power.Cast(Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+! Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Shivan Reef.Activate(Ability: {U} or {R}; Color: Red)
+Bot2.Battlefield.Island.Activate
+? Bot1.Mana = {U}{R}{R}
+? Bot2.Mana =
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield.Forest.Tapped = true
+Bot2.Battlefield.Mox Jet.Tapped = false
+Bot2.Battlefield.Island.Tapped = true
+Bot2.Battlefield.Shivan Reef.Tapped = true
+Bot1.Battlefield.Island#3.Tapped = false
+Bot1.Battlefield.Island#4.Tapped = false
+Bot1.Graveyard = Drain Power

@@ -1,0 +1,53 @@
+# Drain Power's activations are mana abilities activated as any are (CR 605.3a, 602.2b): Bot2 activates Darkwater
+# Catacombs ("{1}, {T}: Add {U}{B}") first and pays its {1} by tapping its Island while paying it - a mana ability of the
+# Island activated, so the Island is owed nothing more - then Mishra's Workshop, whose {C}{C}{C} may be spent only to cast
+# artifact spells. Bot2 loses it all, and Bot1 adds the mana lost: {U}{B} and {C}{C}{C} produced by Drain Power, so with no
+# restriction (CR 106.6) - the pool reads plain {C}, not "C ArtifactSpells". The Island's {U} paid for the Catacombs, so it is
+# not lost and not added.
+
+[Bot1 Deck]
+Island
+Island
+Island
+Island
+Drain Power
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island
+Darkwater Catacombs
+Mishra's Workshop
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Darkwater Catacombs.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Mishra's Workshop.Play
+[T7 Bot1.Main1]
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Drain Power.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Darkwater Catacombs.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mishra's Workshop.Activate
+? Bot1.Mana = {U}{B}{C}{C}{C}
+? Bot2.Mana =
+
+[Expect]
+Bot2.Battlefield.Island.Tapped = true
+Bot2.Battlefield.Darkwater Catacombs.Tapped = true
+Bot2.Battlefield.Mishra's Workshop.Tapped = true

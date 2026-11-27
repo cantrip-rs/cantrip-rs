@@ -1,0 +1,6 @@
+{
+  "name": "Drain Power",
+  "manaCost": "{U}{U}",
+  "type": "Sorcery",
+  "oracleText": "Target player activates a mana ability of each land they control. Then that player loses all unspent mana and you add the mana lost this way."
+}
