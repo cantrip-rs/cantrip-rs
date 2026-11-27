@@ -388,8 +388,9 @@ public sealed partial class MainPage
                     _ => $"Being cast. {pay.Remaining} still to pay.",
                 }),
 
-            // A land offered while paying is clicked exactly as it is from a priority prompt.
-            PriorityPromptMessage or PayCostsPromptMessage or UnlessPaysPromptMessage
+            // A land offered while paying, or whose mana ability an effect has the player activate, is clicked exactly as it
+            // is from a priority prompt.
+            PriorityPromptMessage or PayCostsPromptMessage or UnlessPaysPromptMessage or ActivateManaAbilityPromptMessage
                 when _actions.For(card.Handle) is { Count: > 0 } offered =>
                 new CardLook(Actionable: true, Clicked: () => Choose(client, offered)),
 

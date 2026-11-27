@@ -185,6 +185,10 @@ public sealed partial class MainPage
                 FillUnlessPays(client, unless);
                 break;
 
+            case ActivateManaAbilityPromptMessage activate:
+                FillActivateManaAbility(client, activate);
+                break;
+
             case MayPromptMessage may:
                 FillMay(client, may);
                 break;
@@ -1889,6 +1893,18 @@ public sealed partial class MainPage
     }
 
     // --- Paying mid-resolution, searching, choosing cards ---
+
+    /// <summary>
+    /// A mana ability a resolving spell or ability has this player activate (CR 117.2e): Drain Power's "activates a mana ability
+    /// of each land they control", one at a time. The permanents offered are clicked as at priority; nothing declines it.
+    /// </summary>
+    private void FillActivateManaAbility(GameClient client, ActivateManaAbilityPromptMessage prompt)
+    {
+        string source = client.Object(prompt.Source)?.Name ?? "This effect";
+        List<string> names = [.. prompt.Options.Select(o => client.Object(o.Source)?.Name).OfType<string>().Distinct()];
+        string which = names.Count == 1 ? names[0] : $"one of {string.Join(", ", names)}";
+        Prompt($"{source}: activate a mana ability", $"Click {which}  ·  {source} says to, so it can't be declined");
+    }
 
     private void FillUnlessPays(GameClient client, UnlessPaysPromptMessage prompt)
     {

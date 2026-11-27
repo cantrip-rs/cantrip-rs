@@ -135,6 +135,7 @@ public sealed class Decisions
             PriorityPromptMessage priority => Priority(client, priority),
             PayCostsPromptMessage pay => Pay(client, pay),
             UnlessPaysPromptMessage unless => Unless(client, unless),
+            ActivateManaAbilityPromptMessage activate => ActivateMana(activate),
             DeclareAttackersPromptMessage attackers => Attack(client, attackers),
             DeclareBlockersPromptMessage blockers => Block(client, blockers),
             AssignCombatDamagePromptMessage damage => Damage(client, damage),
@@ -593,6 +594,22 @@ public sealed class Decisions
                 : $"How many times do you want to kick {spell}? Each kick costs another {prompt.Kicker}.",
             Choices = [.. Enumerable.Range(0, 4).Select(times => $"{times} time(s)")],
         });
+    }
+
+    /// <summary>
+    /// A mana ability a resolving effect has this seat activate (CR 117.2e): it must be activated, and the mana goes where
+    /// the effect sends it (Drain Power's, to its caster), so not worth a model's question. The one that costs this seat
+    /// least - no life, no damage - and makes the least mana.
+    /// </summary>
+    private static AnswerPayload ActivateMana(ActivateManaAbilityPromptMessage prompt)
+    {
+        ActionOptionMessage? cheapest = prompt.Options
+            .OrderBy(option => option.LifeCost + option.DamageToController)
+            .ThenBy(option => option.Produces.Count + option.ProducesOfAnyOneColor)
+            .FirstOrDefault();
+        return cheapest is null
+            ? prompt.Default()
+            : new ActivateManaAbilityPromptMessage { Player = prompt.Player, Source = prompt.Source, Options = [cheapest] }.Default();
     }
 
     /// <summary>

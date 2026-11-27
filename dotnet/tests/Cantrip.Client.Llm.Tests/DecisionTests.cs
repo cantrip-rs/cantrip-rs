@@ -811,9 +811,38 @@ public sealed class DecisionTests
         }
     }
 
+    [Fact]
+    public void A_mana_ability_an_effect_has_it_activate_is_the_one_that_costs_it_least()
+    {
+        // Drain Power's "target player activates a mana ability of each land they control" (CR 117.2e): it must be activated,
+        // and its mana goes to Drain Power's caster, so the seat takes Shivan Reef's {C} rather than its damaging {U} or {R}.
+        var decisions = new Decisions(new SilentChooser());
+        GameClient client = Seated(Creature(5, "Grizzly Bears", 2, 2));
+        var prompt = new ActivateManaAbilityPromptMessage
+        {
+            Player = Me,
+            Source = Handle(9),
+            Options =
+            [
+                new() { Kind = ActionKindView.ActivateAbility, Source = Handle(7), AbilityIndex = 1, DamageToController = 1, ColorChoices = [ColorView.Blue, ColorView.Red], ProducesOfAnyOneColor = 1 },
+                new() { Kind = ActionKindView.ActivateAbility, Source = Handle(7), AbilityIndex = 0, Produces = [ManaTypeView.Colorless] },
+            ],
+        };
+
+        TakeActionAnswer answer = Assert.IsType<TakeActionAnswer>(decisions.Answer(client, prompt));
+        Assert.Equal(0, answer.AbilityIndex);
+        Assert.Equal(Handle(7), answer.Source);
+    }
+
     public static TheoryData<PromptPayload> EveryPrompt() =>
     [
         new ChooseNumberPromptMessage { Player = Me, Least = 300, Most = uint.MaxValue },
+        new ActivateManaAbilityPromptMessage
+        {
+            Player = Me,
+            Source = Handle(9),
+            Options = [new() { Kind = ActionKindView.ActivateAbility, Source = Handle(5), ColorChoices = [ColorView.Green] }],
+        },
         new PriorityPromptMessage
         {
             Player = Me,

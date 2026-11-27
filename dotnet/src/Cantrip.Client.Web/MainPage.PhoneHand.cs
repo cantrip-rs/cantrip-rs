@@ -269,7 +269,7 @@ public sealed partial class MainPage
     private List<SheetItem>? SheetItems(GameClient client, ViewHandle handle)
     {
         bool plays = AimCandidates(client) is null && _selection.CostChoice is null
-            && client.Prompt?.Prompt is PriorityPromptMessage or PayCostsPromptMessage or UnlessPaysPromptMessage;
+            && client.Prompt?.Prompt is PriorityPromptMessage or PayCostsPromptMessage or UnlessPaysPromptMessage or ActivateManaAbilityPromptMessage;
         if (plays && _actions.For(handle) is { Count: > 0 } offered)
         {
             List<List<ManaRow>> entries = CardActions.MenuEntries(CardActions.ManaRows(offered));

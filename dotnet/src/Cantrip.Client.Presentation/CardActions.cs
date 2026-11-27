@@ -27,6 +27,7 @@ public sealed class CardActions
             PriorityPromptMessage priority => priority.Options,
             PayCostsPromptMessage pay => pay.Options,
             UnlessPaysPromptMessage unless => unless.Options,
+            ActivateManaAbilityPromptMessage activate => activate.Options,
             _ => null,
         };
 
