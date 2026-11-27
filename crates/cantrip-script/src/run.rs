@@ -374,7 +374,9 @@ fn player_of(bot: i32) -> PlayerId {
 fn answers(verb: ScriptVerb, kind: &RequestKind) -> bool {
     use ScriptVerb as V;
     match verb {
-        V::Play | V::Cast | V::Activate | V::Foretell | V::Suspend | V::TakeCompanion | V::Pass => matches!(kind, RequestKind::Priority { .. }),
+        // A mana ability a resolving effect has the player activate (Drain Power) is activated with `Activate` too.
+        V::Activate => matches!(kind, RequestKind::Priority { .. } | RequestKind::ActivateManaAbility { .. }),
+        V::Play | V::Cast | V::Foretell | V::Suspend | V::TakeCompanion | V::Pass => matches!(kind, RequestKind::Priority { .. }),
         V::PayCost => matches!(kind, RequestKind::PayCosts { .. }),
         V::Undo => matches!(kind, RequestKind::Priority { .. } | RequestKind::PayCosts { .. }),
         V::Accept | V::Decline => matches!(kind, RequestKind::May { .. } | RequestKind::UnlessPays { .. }),
@@ -407,6 +409,7 @@ fn kind_name(kind: &RequestKind) -> &'static str {
         RequestKind::Priority { .. } => "Priority",
         RequestKind::PayCosts { .. } => "PayCosts",
         RequestKind::UnlessPays { .. } => "UnlessPays",
+        RequestKind::ActivateManaAbility { .. } => "ActivateManaAbility",
         RequestKind::ChooseCards { .. } => "ChooseCards",
         RequestKind::ChooseTarget { .. } => "ChooseTarget",
         RequestKind::ChooseModes { .. } => "ChooseModes",
@@ -469,7 +472,8 @@ impl<'s> Run<'s> {
         let g = &self.game;
         let name = |id: ObjectId| g.known_name(id).to_string();
         match &r.kind {
-            RequestKind::Priority { options } | RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } => {
+            RequestKind::Priority { options } | RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. }
+            | RequestKind::ActivateManaAbility { options, .. } => {
                 let list: Vec<String> = options
                     .iter()
                     .map(|o| {
@@ -889,7 +893,8 @@ impl<'s> Run<'s> {
                     && action.positional().next().is_none() && !action.text.contains('(')
                     && matches!(request.kind, RequestKind::ChooseCostPayment { .. }))
             {
-                if let RequestKind::Priority { options } | RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } = &request.kind {
+                if let RequestKind::Priority { options } | RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. }
+                    | RequestKind::ActivateManaAbility { options, .. } = &request.kind {
                     if !self.refused_offered(action, *line, text, options)?.is_empty() {
                         return fail(format!("line {line} says {text} must not be offered, but it is"));
                     }
@@ -1435,6 +1440,18 @@ impl<'s> Run<'s> {
                 let decline = options.iter().find(|o| o.kind == ActionKind::DeclineCost).expect("decline offered");
                 Answer::Act(Action::of(decline))
             }
+            // A mana ability the effect has the player activate (CR 117.2e), where no line says which: the first offered, of
+            // the first color it may add, with the first permanents its cost may take.
+            RequestKind::ActivateManaAbility { options, .. } => {
+                let option = &options[0];
+                let mut action = Action::of(option);
+                action.mana = None;
+                action.color = option.color_choices.iter().next();
+                if !option.targets_optional {
+                    action.targets = option.target_candidates.iter().take(option.targets_required as usize).copied().collect();
+                }
+                Answer::Act(action)
+            }
             RequestKind::May { .. } => Answer::No,
             RequestKind::ChoosePlayer { candidates, .. } => Answer::Player(candidates[0]),
             // The first creatures offered with positive power, until their power is enough.
@@ -1546,9 +1563,8 @@ impl<'s> Run<'s> {
     fn matches(&self, step: &ActionStep, request: &Request) -> R<Option<Answer>> {
         use ScriptVerb as V;
         let options = match &request.kind {
-            RequestKind::Priority { options } | RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } => {
-                Some(options)
-            }
+            RequestKind::Priority { options } | RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. }
+            | RequestKind::ActivateManaAbility { options, .. } => Some(options),
             _ => None,
         };
         Ok(match (step.verb, &request.kind) {

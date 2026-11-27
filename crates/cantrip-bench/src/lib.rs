@@ -181,6 +181,11 @@ pub fn decide(game: &Game, random: &mut Random, request: &Request) -> Answer {
             }
         }
         RequestKind::PayCosts { remaining, options, .. } => pay(game, random, remaining, options),
+        // A mana ability the effect has the seat activate (CR 117.2e): any of them, as it must take one.
+        RequestKind::ActivateManaAbility { options, .. } => {
+            let at = random.below(options.len());
+            Answer::Act(fill(random, &options[at]))
+        }
         RequestKind::UnlessPays { options, .. } => {
             if let Some(o) = options.iter().find(|o| o.kind == ActionKind::PayCost)
                 && random.coin()

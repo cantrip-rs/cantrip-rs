@@ -442,6 +442,11 @@ pub(crate) fn ask_of(
         RequestKind::Priority { options: os } => AskKind::Priority {
             options: options(os, refs, &mut perms),
         },
+        // A mana ability a resolving effect has the player activate (CR 117.2e, Drain Power) is a choice among activations,
+        // as a priority's is: observed as one, so that what every trained model reads is unchanged.
+        RequestKind::ActivateManaAbility { options: os, .. } => AskKind::Priority {
+            options: options(os, refs, &mut perms),
+        },
         RequestKind::PayCosts {
             source: s,
             total,

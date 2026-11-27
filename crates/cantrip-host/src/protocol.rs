@@ -1082,12 +1082,25 @@ pub enum PromptPayload {
     ChooseStartingPlayerPromptMessage(ChooseStartingPlayerPrompt),
     MulliganPromptMessage(MulliganPrompt),
     ChooseNumberPromptMessage(ChooseNumberPrompt),
+    ActivateManaAbilityPromptMessage(ActivateManaAbilityPrompt),
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct PriorityPrompt {
     pub player: i32,
+    pub options: Vec<ActionOptionMessage>,
+}
+
+/// A mana ability a resolving spell or ability has the player activate (CR 117.2e, 605.3a): "target player activates a mana
+/// ability of each land they control" (Drain Power). `Source` is what instructs it and `Options` the mana abilities it
+/// allows that can be activated now, each taken with a `TakeActionAnswer` as a priority's mana ability is. There is no
+/// declining it.
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct ActivateManaAbilityPrompt {
+    pub player: i32,
+    pub source: ViewHandle,
     pub options: Vec<ActionOptionMessage>,
 }
 
@@ -1965,6 +1978,7 @@ impl PromptPayload {
             PromptPayload::RemoveCountersPromptMessage(p) => p.player,
             PromptPayload::ChooseStartingPlayerPromptMessage(p) => p.player,
             PromptPayload::MulliganPromptMessage(p) => p.player,
+            PromptPayload::ActivateManaAbilityPromptMessage(p) => p.player,
         }
     }
 
@@ -1995,6 +2009,7 @@ impl PromptPayload {
             PromptPayload::RemoveCountersPromptMessage(_) => "RemoveCountersPromptMessage",
             PromptPayload::ChooseStartingPlayerPromptMessage(_) => "ChooseStartingPlayerPromptMessage",
             PromptPayload::MulliganPromptMessage(_) => "MulliganPromptMessage",
+            PromptPayload::ActivateManaAbilityPromptMessage(_) => "ActivateManaAbilityPromptMessage",
         }
     }
 
@@ -2073,6 +2088,20 @@ impl PromptPayload {
             PromptPayload::UnlessPaysPromptMessage(_) => {
                 AnswerPayload::TakeActionAnswer(TakeActionAnswer::new(ActionKindView::DeclineCost, ViewHandle::NONE))
             }
+            // The mana ability must be activated (CR 117.2e): the first offered, of the first color it may add, with the
+            // first permanents its cost may take.
+            PromptPayload::ActivateManaAbilityPromptMessage(p) => match p.options.first() {
+                Some(o) => {
+                    let mut answer = TakeActionAnswer::take(o);
+                    answer.color = o.color_choices.first().copied();
+                    if !o.targets_optional {
+                        answer.targets = o.target_candidates.iter().take(o.targets_required.max(0) as usize).cloned().collect();
+                    }
+                    answer.sacrifice = o.sacrifice_candidates.first().copied();
+                    AnswerPayload::TakeActionAnswer(answer)
+                }
+                None => AnswerPayload::PassAnswer(PassAnswer {}),
+            },
             PromptPayload::DistributeCardsPromptMessage(p) => AnswerPayload::CardsDistributedAnswer(CardsDistributedAnswer {
                 placements: greedy_distribution(p),
                 shuffle: false,

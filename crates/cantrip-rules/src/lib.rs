@@ -3469,6 +3469,10 @@ impl cantrip_api::Game for Cx<'_> {
         lost
     }
 
+    fn activate_a_mana_ability_of(&mut self, player: PlayerId, source: ObjectId, of: &[ObjectId]) -> Result<Option<ObjectId>, Suspend> {
+        actions::activate_mana_ability_of(self, player, source, of).map_err(|_| Suspend)
+    }
+
     fn become_day(&mut self) -> Result<(), Suspend> {
         day_night::become_designation(self, DayNight::Day).map_err(|_| Suspend)
     }

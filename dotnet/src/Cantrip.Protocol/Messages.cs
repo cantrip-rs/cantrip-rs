@@ -926,6 +926,7 @@ public sealed class AnswerMessage : ClientMessage
 [Union(21, typeof(RemoveCountersPromptMessage))]
 [Union(22, typeof(ChooseNumberPromptMessage))]
 [Union(23, typeof(ChooseCostPaymentPromptMessage))]
+[Union(24, typeof(ActivateManaAbilityPromptMessage))]
 public abstract class PromptPayload
 {
     /// <summary>
@@ -1108,6 +1109,42 @@ public sealed class ChooseCostPaymentPromptMessage : PromptPayload
     [Key(1)] public ViewHandle Source { get; set; }
     [Key(2)] public List<CostPaymentChoiceView> Choices { get; set; } = [];
     public override AnswerPayload Default() => new CostPaymentChosenAnswer { Key = Choices.FirstOrDefault()?.Key ?? string.Empty };
+}
+
+/// <summary>
+/// A mana ability a resolving spell or ability has this player activate (CR 117.2e, 605.3a): Drain Power's "target player
+/// activates a mana ability of each land they control", asked once for each activation. <see cref="Options"/> are the mana
+/// abilities it allows that can be activated now, each taken with a <see cref="TakeActionAnswer"/> as a priority's mana
+/// ability is - its color, and the permanent its cost sacrifices. Nothing declines it: the effect says to activate one.
+/// </summary>
+[MessagePackObject]
+public sealed class ActivateManaAbilityPromptMessage : PromptPayload
+{
+    [Key(0)] public int Player { get; set; }
+
+    /// <summary>The spell or ability that instructs it.</summary>
+    [Key(1)] public ViewHandle Source { get; set; }
+
+    [Key(2)] public List<ActionOptionMessage> Options { get; set; } = [];
+
+    /// <summary>The first mana ability offered, of the first color it may add, with the first permanents its cost may take.</summary>
+    public override AnswerPayload Default()
+    {
+        if (Options.FirstOrDefault() is not { } option)
+        {
+            return new PassAnswer();
+        }
+
+        TakeActionAnswer answer = TakeActionAnswer.Take(option);
+        answer.Color = option.ColorChoices.Count > 0 ? option.ColorChoices[0] : null;
+        if (!option.TargetsOptional)
+        {
+            answer.Targets = [.. option.TargetCandidates.Take(Math.Max(0, option.TargetsRequired))];
+        }
+
+        answer.Sacrifice = option.SacrificeCandidates.Count > 0 ? option.SacrificeCandidates[0] : null;
+        return answer;
+    }
 }
 
 /// <summary>A whole number in an inclusive range. Small ranges retain the existing modes presentation.</summary>

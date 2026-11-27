@@ -17525,6 +17525,45 @@ fn pay_during_resolution_inner(
     }
 }
 
+/// A resolving spell or ability has `player` activate a mana ability of one of `of`, permanents on the battlefield (CR
+/// 117.2e, 605.3a): the player chooses which of them, which of its mana abilities and any color, mode or amount it asks,
+/// and activates it by the activation every mana ability goes through (`activate_mana`: its whole cost, CR 602.2b, and the
+/// triggers and replacement effects of tapping it for mana, CR 106.12), paying a mana cost with other mana abilities as
+/// any payment may (CR 605.3a). Nobody has priority (CR 117.2e), so an ability that may be activated only as an instant
+/// can't be (CR 602.5e); nor can one whose cost can't be paid (CR 118.3, 602.5). Activating it is what the effect says, so
+/// nothing declines it. An activation given up, or whose payment fails, is taken back (CR 733.1) and the player asked again;
+/// one refused without anything asked is not offered again, since the position would refuse it again. The permanent whose
+/// ability was activated, or none where no mana ability of any of them can be activated (CR 609.3).
+pub fn activate_mana_ability_of(cx: &mut Cx, player: PlayerId, source: ObjectId, of: &[ObjectId]) -> R<Option<ObjectId>> {
+    let mut refused: Vec<ActionOption> = Vec::new();
+    loop {
+        let mut options = Vec::new();
+        mana_ability_options(cx, player, ManaWindow::Payment, &mut options);
+        options.retain(|o| o.index < PLAYER_MANA_ABILITY && o.source.is_some_and(|s| of.contains(&s)) && !refused.contains(o));
+        if options.is_empty() {
+            return Ok(None);
+        }
+        let answer = cx.ask_core(player, RequestKind::ActivateManaAbility { source, options: options.clone() }, false)?;
+        let Answer::Act(action) = answer else { return Ok(None) };
+        let from = action.source.expect("source");
+        let (mark, log_mark, since, asked) = (cx.s().mark(), cx.g.log.len(), crate::takeback::since(cx.g), cx.cursor);
+        match activate_mana(cx, player, from, action.index, action.color, action.color.is_none() && action.mana == Some(Mana::C), &action.targets) {
+            Ok(()) => {
+                cx.judge_if_due();
+                return Ok(Some(from));
+            }
+            Err(Stop::Cancel) => {
+                if cx.cursor == asked {
+                    refused.extend(options.into_iter().filter(|o| crate::validate::fits(o, &action)));
+                }
+                crate::takeback::take_back(cx, mark, log_mark, since);
+                cx.judge_if_due();
+            }
+            Err(stop) => return Err(stop),
+        }
+    }
+}
+
 /// Whether `pool` pays `owed` now, however its symbols that can be paid in more than one way are paid (CR 118.13): each
 /// Phyrexian symbol with its color or 2 life, at most `life_room` life between them (CR 107.4f), and each monocolored hybrid
 /// symbol with its color or {2} (CR 107.4e). Symbols of one kind and color are alike, so each choice is how many of them

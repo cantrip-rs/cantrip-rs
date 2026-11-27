@@ -546,6 +546,11 @@ pub enum RequestKind {
         removes: Option<CounterKind>,
         evidence: bool,
     },
+    /// A mana ability to activate because the resolving `source` says to (CR 117.2e, 605.3a): "target player activates a mana
+    /// ability of each land they control" (Drain Power). `options` are the mana abilities of the permanents it names that the
+    /// player can activate now (CR 602.2, 118.3, 602.5e), each answered as a priority's or a payment's mana ability is
+    /// (`Answer::Act`), with its color and the permanents its cost takes. There is no declining: the effect is not optional.
+    ActivateManaAbility { source: ObjectId, options: Vec<ActionOption> },
     /// Choose cards from among `cards`, every one of which the player sees: which sets of them are an answer is `rule`'s to
     /// say (`Selection`; the core checks every answer with it), and what may be chosen next as the player picks is asked of
     /// it too. `rule.kind` is what the asking card calls what may be chosen when it says more than "card" ("artifact or
@@ -715,6 +720,7 @@ impl RequestKind {
             K::ChooseCostPayment { source, .. }
             | K::PayCosts { source, .. }
             | K::UnlessPays { source, .. }
+            | K::ActivateManaAbility { source, .. }
             | K::ChooseCards { source, .. }
             | K::ChooseTarget { source, .. }
             | K::ChooseModes { source, .. }
@@ -780,6 +786,10 @@ impl RequestKind {
             RequestKind::UnlessPays { options: o, source, subject, .. } => {
                 options(&mut add, o);
                 add(&[*source, *subject]);
+            }
+            RequestKind::ActivateManaAbility { source, options: o } => {
+                add(&[*source]);
+                options(&mut add, o);
             }
             RequestKind::PayCosts { source, options: o, attackers, blockers, .. } => {
                 add(&[*source]);
@@ -952,6 +962,13 @@ pub fn without_departed(state: &crate::GameState, mut kind: RequestKind, may_can
         // A payment for an object that has left (Tidal Flats' "for each attacking creature") is for nothing: not made.
         RequestKind::UnlessPays { source, subject, .. } if subject != source && gone(*subject) => return Err(Answer::Pass),
         RequestKind::Priority { options: o } | RequestKind::PayCosts { options: o, .. } | RequestKind::UnlessPays { options: o, .. } => options(o),
+        // A permanent that left with a player who has left the game has nothing left to activate.
+        RequestKind::ActivateManaAbility { options: o, .. } => {
+            options(o);
+            if o.is_empty() {
+                return Err(Answer::Pass);
+            }
+        }
         RequestKind::ChooseCards { cards, rule, .. } | RequestKind::SearchLibrary { library: cards, rule, .. } => {
             cards.retain(|&c| !gone(c));
             if let Some(among) = &mut rule.among {

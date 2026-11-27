@@ -84,6 +84,7 @@ public sealed class ProtocolJsonTests
         """{"$type":"MulliganPromptMessage","Player":1,"Mulligans":1,"Keeps":6}""",
         """{"$type":"ChooseNumberPromptMessage","Player":2,"Source":4,"Least":0,"Most":4294967295,"Heading":"Put counters"}""",
         """{"$type":"ChooseCostPaymentPromptMessage","Player":1,"Source":4,"Choices":[{"Key":"0","Label":"Sacrifice Grizzly Bears as the additional cost","Objects":[8]},{"Key":"1","Label":"Pay 2 life","Objects":[]}]}""",
+        """{"$type":"ActivateManaAbilityPromptMessage","Player":2,"Source":4,"Options":[]}""",
         """{"$type":"RemoveCountersPromptMessage","Player":1,"Source":4,"Total":3,"Pools":[{"Object":5,"Counter":"-1/-1","Count":2},{"Object":6,"Counter":"+1/+1","Count":1}],"UpTo":true}""",
     ];
 

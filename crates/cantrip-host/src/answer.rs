@@ -57,7 +57,7 @@ fn target(handles: &HandleSpace, game: &Game, t: &TargetMessage) -> Result<Targe
 /// the spell a card became as it is cast (CR 400.7, 601.2a: an exiled card cast to the stack), so the card is the one the
 /// question offered, never the object the handle names now; `ObjectId::NONE` for none offered.
 fn restriction_card_of(handles: &HandleSpace, game: &Game, request: &Request, card: ViewHandle) -> ObjectId {
-    let (RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } | RequestKind::Priority { options }) = &request.kind else {
+    let (RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } | RequestKind::Priority { options } | RequestKind::ActivateManaAbility { options, .. }) = &request.kind else {
         return ObjectId::NONE;
     };
     options
@@ -148,7 +148,7 @@ pub fn translate(
             // A handle names an object and every earlier one it was (`HandleSpace::rebind`): the source is the one the
             // offered option names - Channel's mana ability, offered from the card that granted it, which has moved since.
             if let Some(source) = action.source
-                && let RequestKind::PayCosts { options, .. } | RequestKind::Priority { options } = &request.kind
+                && let RequestKind::PayCosts { options, .. } | RequestKind::Priority { options } | RequestKind::ActivateManaAbility { options, .. } = &request.kind
                 && !options.iter().any(|o| o.kind == kind && o.index == action.index && o.source == Some(source))
                 && let Some(o) = options
                     .iter()
@@ -161,14 +161,14 @@ pub fn translate(
             if action.source.is_none()
                 && kind == ActionKind::ActivateAbility
                 && action.index >= PLAYER_SPECIAL_ACTION
-                && let RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } | RequestKind::Priority { options } = &request.kind
+                && let RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } | RequestKind::Priority { options } | RequestKind::ActivateManaAbility { options, .. } = &request.kind
                 && let Some(o) = options.iter().find(|o| o.kind == kind && o.index == action.index)
             {
                 action.source = o.source;
             }
             // A cancel or a decline names no source, whatever the option it matches carries.
             if matches!(kind, ActionKind::CancelCasting | ActionKind::DeclineCost | ActionKind::PayCost | ActionKind::ConfirmCasting)
-                && let RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } | RequestKind::Priority { options } = &request.kind
+                && let RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } | RequestKind::Priority { options } | RequestKind::ActivateManaAbility { options, .. } = &request.kind
                 && let Some(o) = options.iter().find(|o| o.kind == kind)
             {
                 action.source = o.source;
@@ -177,7 +177,7 @@ pub fn translate(
             // What the option is made by (`granted_by`, `paid_by`) stays the engine's: the answer names the option it takes
             // by its place in the question (`option_id`), or, without one, by kind, source and index where only one option
             // has them.
-            if let RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } | RequestKind::Priority { options } =
+            if let RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } | RequestKind::Priority { options } | RequestKind::ActivateManaAbility { options, .. } =
                 &request.kind
             {
                 let alike = |o: &&ActionOption| o.kind == action.kind && o.source == action.source && o.index == action.index
@@ -340,7 +340,7 @@ pub fn payload_of(answer: &Answer, request: &Request, handles: &mut HandleSpace,
             let mut a = TakeActionAnswer::new(crate::prompt::action_kind_view(action.kind), source);
             a.ability_index = i32::from(action.index);
             // The option it takes, by its place in the question (`ActionOptionMessage::option_id`).
-            if let RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } | RequestKind::Priority { options } =
+            if let RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } | RequestKind::Priority { options } | RequestKind::ActivateManaAbility { options, .. } =
                 &request.kind
                 && let Some(i) = options.iter().position(|o| {
                     o.kind == action.kind

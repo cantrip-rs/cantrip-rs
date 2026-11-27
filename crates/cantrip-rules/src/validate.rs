@@ -14,7 +14,8 @@ fn distinct<T: PartialEq>(items: &[T]) -> bool {
     items.iter().enumerate().all(|(i, a)| items[..i].iter().all(|b| b != a))
 }
 
-fn fits(option: &ActionOption, action: &Action) -> bool {
+/// Whether `action` is `option` taken: the same action of the same source, with only what the option offers.
+pub(crate) fn fits(option: &ActionOption, action: &Action) -> bool {
     if option.kind != action.kind || option.source != action.source || option.index != action.index {
         return false;
     }
@@ -198,7 +199,8 @@ pub fn check(game: &Game, request: &Request, answer: &Answer) -> Result<(), Reje
         (RequestKind::Priority { .. }, Answer::Pass) => Ok(()),
         (RequestKind::Priority { options }, Answer::Act(action))
         | (RequestKind::PayCosts { options, .. }, Answer::Act(action))
-        | (RequestKind::UnlessPays { options, .. }, Answer::Act(action)) => {
+        | (RequestKind::UnlessPays { options, .. }, Answer::Act(action))
+        | (RequestKind::ActivateManaAbility { options, .. }, Answer::Act(action)) => {
             if options.iter().any(|o| fits(o, action)) { Ok(()) } else { no("that action is not one of the options") }
         }
         (RequestKind::PayCosts { announcing: true, most, least, .. }, Answer::Announce(value)) => {

@@ -165,7 +165,8 @@ impl Answering {
         let options: &[ActionOption] = match &request.kind {
             RequestKind::Priority { options }
             | RequestKind::PayCosts { options, .. }
-            | RequestKind::UnlessPays { options, .. } => options,
+            | RequestKind::UnlessPays { options, .. }
+            | RequestKind::ActivateManaAbility { options, .. } => options,
             _ => &[],
         };
         let offered = |kind: ActionKind| {
@@ -185,16 +186,29 @@ impl Answering {
             (RequestKind::ChooseCostPayment { choices, .. }, F::CostPayment(index)) if *index < choices.len() => Answer::CostPayment(*index),
             (RequestKind::OrderReplacementOccurrences { occurrences }, F::CostPayment(index)) if *index < occurrences.len() => Answer::CostPayment(*index),
             (RequestKind::Priority { .. }, F::Pass) => Answer::Pass,
+            // A mana ability a resolving effect has the player activate (CR 117.2e) is observed as a priority offering only
+            // those abilities; it can't be passed, so passing it is the first offered, as the rules' default answers it.
+            (RequestKind::ActivateManaAbility { options, .. }, F::Pass) => {
+                let o = options.first().ok_or("no mana ability to activate")?;
+                let mut a = Action::of(o);
+                a.mana = None;
+                a.color = o.color_choices.iter().next();
+                if !o.targets_optional {
+                    a.targets = o.target_candidates.iter().take(o.targets_required as usize).copied().collect();
+                }
+                Answer::Act(a)
+            }
             (
                 RequestKind::Priority { options }
                 | RequestKind::PayCosts { options, .. }
-                | RequestKind::UnlessPays { options, .. },
+                | RequestKind::UnlessPays { options, .. }
+                | RequestKind::ActivateManaAbility { options, .. },
                 F::Act {
                     option,
                     targets,
                     color,
                 },
-            ) if matches!(&request.kind, RequestKind::Priority { .. })
+            ) if matches!(&request.kind, RequestKind::Priority { .. } | RequestKind::ActivateManaAbility { .. })
                 || cantrip_obs::factor::snow_payment(&self.ask.kind) => {
                 let o = &options[*self
                     .perms
@@ -394,12 +408,13 @@ impl Answering {
             (
                 RequestKind::Priority { options }
                 | RequestKind::PayCosts { options, .. }
-                | RequestKind::UnlessPays { options, .. },
+                | RequestKind::UnlessPays { options, .. }
+                | RequestKind::ActivateManaAbility { options, .. },
                 Answer::Act(a),
                 AskKind::Priority { options: canonical }
                 | AskKind::PayCosts { options: canonical, .. }
                 | AskKind::UnlessPays { options: canonical, .. },
-            ) if matches!(&request.kind, RequestKind::Priority { .. })
+            ) if matches!(&request.kind, RequestKind::Priority { .. } | RequestKind::ActivateManaAbility { .. })
                 || cantrip_obs::factor::snow_payment(&self.ask.kind) => {
                 let engine = options.iter().position(|o| {
                     o.kind == a.kind

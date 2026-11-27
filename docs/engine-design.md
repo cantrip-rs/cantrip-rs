@@ -4122,6 +4122,24 @@ snow provenance together, and returns the lost types within native per-type
 bounds. It is separate from producing/doubling mana and from asking a player
 to activate a land's mana abilities. All state changes are journalled.
 
+### A mana ability an effect has a player activate
+
+"[Player] activates a mana ability of [a permanent]" during a resolution (CR 117.2e, 605.3a) is
+`Game::activate_a_mana_ability_of(player, source, of)`: one activation, of one of the permanents `of`
+names, asked as `RequestKind::ActivateManaAbility` - the mana abilities of those permanents that can be
+activated now (`mana_ability_options` in the payment window: no priority, so no activate-only-as-an-instant
+ability, CR 602.5e), with no declining - and made by `actions::activate_mana`, so its whole cost is paid
+(a mana cost with the usual payment, mana abilities allowed, CR 605.3a) and its tapping for mana triggers
+and is replaced (CR 106.12). A given-up or failed activation is taken back (`takeback::take_back`, CR 733.1)
+and asked again; one refused with nothing asked is not offered again. It returns the permanent activated,
+or none when nothing can be. Which permanents, how many times and what follows are the card's: Drain
+Power's file loops over the lands its target controlled as it began (CR 608.2h), asking the history which
+have had a mana ability activated since, until none still owed can be. The client takes the question as a
+priority's mana abilities (`ActivateManaAbilityPromptMessage`, protocol 247); the AI player observes it as
+a priority offering only those options, so no trained model's input changes. Benchmark (`cantrip-bench
+--games 128`, "engine answering", 2026-11-27, main 07f0e179 against the change, alternating on a loaded shared
+machine): 21.50/21.89, 22.04/21.28 us - within the noise.
+
 ### Static characteristic effects with an extended lifetime
 
 `StaticDef::lingers_until_end_of_turn` marks the first printed part, a layer-4 one (the builder refuses any other), of a static characteristic effect whose text expressly continues after its source leaves (Titania’s Song; CR 611.3a). Later parts use the existing `continues()` relationship (CR 613.6). These are distinct lifetimes: `continues()` alone does not extend an effect beyond its source.

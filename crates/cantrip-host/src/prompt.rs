@@ -8,6 +8,7 @@
 //! | `Priority`             | `PriorityPromptMessage`                                                            |
 //! | `PayCosts`             | `PayCostsPromptMessage` (announcing X/kicks sets `AnnouncesXOrKicks`)              |
 //! | `UnlessPays`           | `UnlessPaysPromptMessage`                                                          |
+//! | `ActivateManaAbility`  | `ActivateManaAbilityPromptMessage`                                                 |
 //! | `ChooseCards`          | `ChooseCardsPromptMessage`                                                         |
 //! | `ChooseCards`          | `ChooseTargetPromptMessage` for an unrestricted `SeparatePiles` or `SeparateFaceDown` choice (`pile_selection`): untargeted, any number |
 //! | `TapForPower`          | `ChooseCardsPromptMessage` (purpose `TapToPay`, `Powers`, `MinimumPower`; harmonize's: `TapToReduce`, up to one, `PowersUpTo`) |
@@ -1003,6 +1004,11 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
         RequestKind::Priority { options } => {
             PromptPayload::PriorityPromptMessage(PriorityPrompt { player, options: options_messages(game, handles, options) })
         }
+        RequestKind::ActivateManaAbility { source, options } => PromptPayload::ActivateManaAbilityPromptMessage(ActivateManaAbilityPrompt {
+            player,
+            source: source_handle(game, handles, *source),
+            options: options_messages(game, handles, options),
+        }),
         RequestKind::PayCosts { source, total, remaining, options, mana_abilities, announcing, x, most, least, loyalty, attackers, blockers, life, governs, assist, x_cost } => {
             let def = game.cards.get(game.state.obj(*source).card);
             let kicker = def.kicker;

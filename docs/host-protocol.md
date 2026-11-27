@@ -409,6 +409,15 @@ zone; a life event's source is `ViewHandle.None`, named for whose life total it 
 `CostPaymentChosenAnswer` whose `Key` is the event's zero-based index in decimal (not a `ReplacementChosenAnswer`,
 whose index is a byte); the first event is the default. The replacement for that event is then asked as usual.
 
+**A mana ability an effect has a player activate.** A resolving spell or ability that instructs a player to activate a mana
+ability (CR 117.2e, 605.3a: Drain Power's "target player activates a mana ability of each land they control", asked once for
+each activation) asks an `ActivateManaAbilityPromptMessage`: `Source` the spell or ability, `Options` the mana abilities it
+allows that can be activated now (`ActivateAbility` options, as a priority's mana abilities are: `ColorChoices`,
+`SacrificeCandidates`, `Description`). It is answered with a `TakeActionAnswer` naming one, its color and its sacrifice; there
+is no declining it, and its default answer is the first option. A mana cost of the ability is paid in the usual
+`PayCostsPromptMessage`. The web client captions it "Drain Power: activate a mana ability" and offers the permanents as
+priority does. Version 247.
+
 Protocol 241 adds the cumulative-upkeep-only mana spend filter (CR 106.6, 702.24a); prior filter values are unchanged.
 
 Protocol 242 adds `producesAlternatives` to action options: complete, mutually exclusive mana bundles for one activation. The player chooses the bundle as the ability resolves; existing `produces` contains only mana common to all bundles.
