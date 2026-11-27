@@ -1,0 +1,46 @@
+# Word of Command (CR 723.2, 400.7): "you control the player while that spell is resolving" waits on the spell Bot2 was
+# made to cast. Bot1 counters that Faithless Looting while it waits (NextTurnControlledBy "Bot1+resolving"): it never
+# resolves, so the control never begins and is gone with the spell. Nothing is drawn or discarded.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Word of Command
+Counterspell
+Island x16
+
+[Bot2 Deck]
+Mountain
+Faithless Looting
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Faithless Looting)
+Bot2.Battlefield.Mountain.Activate
+? Bot2.NextTurnControlledBy = Bot1+resolving
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Counterspell.Cast(Stack.Faithless Looting)
+? Bot2.NextTurnControlledBy = Bot1+resolving
+Bot1.Pass
+Bot2.Pass
+? Bot2.NextTurnControlledBy = (absent)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Faithless Looting
+Bot2.Hand.Count = 6
+Bot2.ControlledBy = (absent)
+Bot2.NextTurnControlledBy = (absent)

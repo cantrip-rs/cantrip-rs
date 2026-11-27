@@ -1,0 +1,38 @@
+# Word of Command (CR 723.2, 723.7; owner ruling 2026-11-27): "if able" is judged with the mana in Bot2's pool and its lands'
+# mana abilities alone. Bot2's only land is Tolarian Academy, whose blue mana can't pay Lightning Bolt's {R}, and its Mox Ruby
+# is no land: Bot2 is not able to cast the Bolt, which stays in hand, and the Academy and the Mox stay untapped.
+
+[Bot1 Deck]
+Black Lotus
+Word of Command
+Swamp x18
+
+[Bot2 Deck]
+Tolarian Academy
+Memnite
+Mox Ruby
+Lightning Bolt
+Island x16
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Tolarian Academy.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+? Bot2.Hand.Lightning Bolt.Colors = Red
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Battlefield.Tolarian Academy.Tapped = false
+Bot2.Battlefield.Mox Ruby.Tapped = false

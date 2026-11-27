@@ -1,0 +1,65 @@
+# Word of Command (CR 723.2, 723.7, 609.4b, 601.2f): North Star's rule, "for one spell this turn, you may spend mana as though it
+# were mana of any type to pay that spell's mana cost", is Bot2's, and reaches the spell Bot2 is made to cast. In response to
+# Word of Command Bot2 activates North Star with its four Moxen (none of them red). Lightning Bolt is then chosen: Bot2's only
+# mana is its Islands' {U}, which pays the Bolt's {R} under the rule - so Bot2 is able to cast it, and must. Whether it is
+# able is judged with the rule's share of the cost, as the priority offers judge it.
+
+[Bot1 Deck]
+Black Lotus
+Word of Command
+Swamp x18
+
+[Bot2 Deck]
+Island
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+North Star
+Lightning Bolt
+Island x13
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.North Star.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.North Star.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+Bot2.Target(Bot1)
+Bot2.Battlefield.Island#1.Activate
+? Stack = Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot2.Graveyard = Lightning Bolt

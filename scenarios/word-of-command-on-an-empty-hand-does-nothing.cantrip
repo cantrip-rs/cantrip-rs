@@ -1,0 +1,43 @@
+# Word of Command (CR 723.2): with Bot2's hand empty there is no card to choose and nothing for Bot2 to play; Word of
+# Command resolves, and Bot2 is controlled by no one afterwards. Bot2 empties its hand on turn 2 with seven Memnites and a land.
+
+[Bot1 Deck]
+Black Lotus
+Word of Command
+Swamp x18
+
+[Bot2 Deck]
+Memnite x7
+Island x13
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+? Bot2.Hand.Count = 0
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Word of Command; Black Lotus
+Bot2.Battlefield.Count = 8
+Bot2.ControlledBy = (absent)

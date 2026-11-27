@@ -1,0 +1,42 @@
+# Word of Command (CR 723.2, 107.3a, 119.4): Toxic Deluge's X is paid in life ("as an additional cost, pay X life"), so
+# the mana Bot2's lands could make is no bound on it: Bot1 announces X as 15 at 20 life with three Swamps, Bot2 pays 15 life
+# and the Deluge resolves.
+[Bot1 Deck]
+Black Lotus
+Word of Command
+Swamp x18
+
+[Bot2 Deck]
+Swamp
+Swamp
+Swamp
+Toxic Deluge
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T7 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Toxic Deluge)
+Bot2.PayCost(X: 15)
+Bot2.Battlefield.Swamp#1.Activate
+Bot2.Battlefield.Swamp#2.Activate
+Bot2.Battlefield.Swamp#3.Activate
+? Stack = Toxic Deluge
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 5
+Bot2.Graveyard = Toxic Deluge

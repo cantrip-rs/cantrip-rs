@@ -1,0 +1,54 @@
+# Word of Command (CR 723.2, 601.2f, 118.8, 119.4): as at 2 life, but at 3 Bot2 can pay Go for the Throat's additional 3 life
+# for targeting Terror of the Peaks, so Bot2 is able to cast it and must: Bot2 pays all 3 of its life, and loses the game
+# to it (CR 704.5a) before the spell resolves.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Black Lotus
+Terror of the Peaks
+Word of Command
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Swamp
+Swamp
+Go for the Throat
+Plains x17
+
+[Life]
+Bot2: 3
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Terror of the Peaks.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Go for the Throat)
+Bot2.Target(Terror of the Peaks)
+Bot2.Battlefield.Swamp#1.Activate
+Bot2.Battlefield.Swamp#2.Activate
+
+[Expect]
+Bot2.Life = 0
+Bot2.Status = Lost

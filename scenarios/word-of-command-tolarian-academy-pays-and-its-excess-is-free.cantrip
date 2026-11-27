@@ -1,0 +1,48 @@
+# Word of Command (CR 723.2, 723.7; owner ruling 2026-11-27): Bot2 is made to cast Brainstorm. Its Tolarian Academy, with
+# three artifacts beside it, makes {U}{U}{U}: one pays for Brainstorm, and over-producing is fine - the {U}{U} left over is
+# ordinary mana. Once Word of Command has resolved, Bot2 spends it on Counterspell, countering the Brainstorm itself.
+
+[Bot1 Deck]
+Black Lotus
+Word of Command
+Swamp x18
+
+[Bot2 Deck]
+Tolarian Academy
+Memnite
+Memnite
+Memnite
+Brainstorm
+Counterspell
+Island x14
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Tolarian Academy.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Brainstorm)
+Bot2.Battlefield.Tolarian Academy.Activate
+? Bot2.Mana = {U}{U}
+? Stack = Brainstorm
+Bot1.Pass
+Bot2.Hand.Counterspell.Cast(Stack.Brainstorm)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard.Brainstorm.Colors = Blue
+Bot2.Graveyard.Counterspell.Colors = Blue
+Bot2.Mana = 

@@ -1,0 +1,46 @@
+# Word of Command (CR 723.2): "if the chosen card is cast as a spell, you control the player while that spell is
+# resolving". On Bot1's turn Bot2 is made to cast Faithless Looting, a sorcery, as Word of Command resolves - at a time a
+# sorcery couldn't be cast (CR 608.2g). Word of Command's own control ends as it finishes resolving: while the Looting waits
+# on the stack Bot2 is its own (ControlledBy absent, the control waiting as "Bot1+resolving"), and as the Looting resolves
+# Bot1 controls Bot2 again and makes its discard choice: Bot2's Lightning Bolt goes, which Bot2 would keep. Once it has
+# resolved, no control is left.
+
+[Bot1 Deck]
+Black Lotus
+Word of Command
+Swamp x18
+
+[Bot2 Deck]
+Mountain
+Faithless Looting
+Lightning Bolt
+Mountain x17
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Faithless Looting)
+Bot2.Battlefield.Mountain.Activate
+? Stack = Faithless Looting
+? Bot2.ControlledBy = (absent)
+? Bot2.NextTurnControlledBy = Bot1+resolving
+Bot1.Pass
+Bot2.Pass
+? Bot2.ControlledBy = Bot1
+Bot2.Choose(Lightning Bolt; Mountain)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard.Count = 3
+Bot2.Graveyard.Lightning Bolt.Colors = Red
+Bot2.Graveyard.Faithless Looting.Colors = Red
+Bot2.Hand.Count = 6
+Bot2.ControlledBy = (absent)
+Bot2.NextTurnControlledBy = (absent)

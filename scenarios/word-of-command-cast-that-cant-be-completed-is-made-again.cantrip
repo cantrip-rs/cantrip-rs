@@ -1,0 +1,47 @@
+# Word of Command (CR 723.2, 608.2g, 733.1-2): "the player plays that card if able" is a requirement, not an offer. Bot1,
+# controlling Bot2, is not offered to give the forced Fireball up (`! Bot2.Cancel` at its X). Bot1 announces X as 3, which
+# Bot2's two Mountains can't pay: the cast can't be completed, is reversed whole (CR 733.1), and is made again, as the effect
+# still says (CR 733.2) - the X of 3 that failed is no longer one it may be made with. With X 1 it is cast, and Bot2 takes 1.
+
+[Bot1 Deck]
+Black Lotus
+Word of Command
+Swamp x18
+
+[Bot2 Deck]
+Mountain
+Mountain
+Fireball
+Island x17
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fireball)
+! Bot2.Cancel
+Bot2.PayCost(X: 3)
+Bot2.Target(Bot2)
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Battlefield.Mountain#2.Activate
+Bot2.Cancel
+Bot2.PayCost(X: 1)
+Bot2.Target(Bot2)
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Battlefield.Mountain#2.Activate
+? Stack = Fireball
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Graveyard = Fireball

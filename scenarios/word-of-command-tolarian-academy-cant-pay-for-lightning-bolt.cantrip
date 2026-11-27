@@ -1,0 +1,41 @@
+# Word of Command (CR 723.2, 723.7; owner ruling 2026-11-27): a land's mana ability may be activated only if some of its mana
+# can be spent on the card. With Lightning Bolt chosen, Bot2's Tolarian Academy makes only blue mana, which can't pay {R}:
+# it can't be tapped at all (`! ...Activate` at the payment), and Bot2's Mountain pays. The Academy stays untapped.
+
+[Bot1 Deck]
+Black Lotus
+Word of Command
+Swamp x18
+
+[Bot2 Deck]
+Tolarian Academy
+Memnite
+Mountain
+Lightning Bolt
+Island x16
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Tolarian Academy.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+Bot2.Target(Bot1)
+! Bot2.Battlefield.Tolarian Academy.Activate(Mana: short)
+Bot2.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot2.Battlefield.Tolarian Academy.Tapped = false

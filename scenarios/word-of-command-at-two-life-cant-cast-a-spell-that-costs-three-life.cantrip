@@ -1,0 +1,53 @@
+# Word of Command (CR 723.2, 601.2f, 118.8, 119.4): Go for the Throat's only legal target is Bot1's Terror of the Peaks, and
+# spells Bot1's opponents cast that target it cost an additional 3 life. At 2 life Bot2 can't pay that, so no choice
+# completes the cast: Bot2 is not able to cast it and it stays in Bot2's hand, the Terror unharmed.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Black Lotus
+Terror of the Peaks
+Word of Command
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Swamp
+Swamp
+Go for the Throat
+Plains x17
+
+[Life]
+Bot2: 2
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Terror of the Peaks.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Go for the Throat)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Hand.Go for the Throat.Colors = Black
+Bot1.Battlefield.Terror of the Peaks.Tapped = false
+Bot2.Life = 2

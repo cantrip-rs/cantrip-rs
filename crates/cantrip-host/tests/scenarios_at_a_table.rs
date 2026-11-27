@@ -127,6 +127,23 @@ fn ice_cauldrons_mana_for_one_card_is_spent_at_a_table() {
     }
 }
 
+/// Word of Command's scenarios play at a table (CR 723.2): the controlled player's questions go to the seat controlling them,
+/// and a required cast made again after a reversed attempt is answered there as in the script.
+#[test]
+fn word_of_command_plays_at_a_table() {
+    for name in [
+        "word-of-command-makes-the-opponent-bolt-themselves",
+        "word-of-command-land-mana-left-over-is-ordinary-mana",
+        "word-of-command-tolarian-academy-pays-and-its-excess-is-free",
+        "word-of-command-controller-chooses-x-and-cant-tap-the-mox",
+        "word-of-command-cast-that-cant-be-completed-is-made-again",
+        "word-of-command-plays-the-chosen-land-on-its-owners-turn",
+    ] {
+        let text = std::fs::read_to_string(scripts().join(format!("{name}.cantrip"))).unwrap();
+        at_a_table(name, &text).unwrap_or_else(|report| panic!("{name}: {report}"));
+    }
+}
+
 /// Ice Cauldron's mana in the pool (CR 106.6) is shown to each seat as mana for one card, the exiled Lightning Bolt, named by
 /// that seat's own handle for it - and as the Bolt is cast from exile with it, by the handle of the spell it became.
 #[test]

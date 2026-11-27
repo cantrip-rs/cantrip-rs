@@ -1,0 +1,34 @@
+# Word of Command (CR 723.2, 601.2f-h, 733.1): "the player plays that card if able". Bone Splinters' additional cost, sacrificing a
+# creature, can't be paid by Bot2, who has none: no choice could complete the cast, so Bot2 is not able to cast it and it
+# stays in Bot2's hand - nothing is asked of it, and the game goes on (Bot1's Memnite untouched).
+
+[Bot1 Deck]
+Black Lotus
+Memnite
+Word of Command
+Swamp x17
+
+[Bot2 Deck]
+Swamp
+Bone Splinters
+Plains x18
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Bone Splinters)
+? Bot2.Hand.Bone Splinters.Colors = Black
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Hand.Bone Splinters.Colors = Black
+Bot1.Battlefield.Memnite.Tapped = false

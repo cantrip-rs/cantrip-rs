@@ -1,0 +1,55 @@
+# Word of Command (CR 608.2g, 733.1-2): the forced cast is made again after a choice that can't complete it, and a remake
+# that comes back to a question every answer of which has already failed is reversed there at once, not asked. Bot1, controlling
+# Bot2, has the forced Fireball announced with X 1 and two targets, Bot1 and Bot2 ({1} more for the second target: {2}{R}),
+# which Bot2's Mountain and Wastes can't pay: the payment is stuck and Bot1 gives that attempt up. Made again the same way,
+# the stuck payment is the same question that failed, with nothing left to answer, so the attempt is reversed as it reaches
+# it and the cast is made once more: X 1 at Bot2 alone, {1}{R}, which the two lands pay. Bot2 takes 1.
+
+[Bot1 Deck]
+Black Lotus
+Word of Command
+Swamp x18
+
+[Bot2 Deck]
+Mountain
+Wastes
+Fireball
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Wastes.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fireball)
+Bot2.PayCost(X: 1)
+Bot2.Target(Bot1; Bot2)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Wastes.Activate
+Bot2.Cancel
+Bot2.PayCost(X: 1)
+Bot2.Target(Bot1; Bot2)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Wastes.Activate
+Bot2.PayCost(X: 1)
+Bot2.Target(Bot2)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Wastes.Activate
+? Stack = Fireball
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
+Bot2.Graveyard = Fireball
+Bot2.Battlefield.Mountain.Tapped = true
+Bot2.Battlefield.Wastes.Tapped = true

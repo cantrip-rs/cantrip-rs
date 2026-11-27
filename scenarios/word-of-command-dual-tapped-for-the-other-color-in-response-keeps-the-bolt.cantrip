@@ -1,0 +1,34 @@
+# Word of Command (CR 723.2, 723.7; owner ruling 2026-11-27): the known defence. Bot2's only red source is Steam Vents, and in
+# response to Word of Command it taps it for {U}. Lightning Bolt then can't be cast with the pool's {U} and Bot2's lands, so
+# Bot2 is not able to cast it, and it stays in Bot2's hand.
+
+[Bot1 Deck]
+Black Lotus
+Word of Command
+Swamp x18
+
+[Bot2 Deck]
+Steam Vents
+Lightning Bolt
+Island x18
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Steam Vents.Play
+Bot2.Accept
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Battlefield.Steam Vents.Activate(Ability: {U})
+? Bot2.Mana = {U}
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+? Bot2.Hand.Lightning Bolt.Colors = Red
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Hand.Lightning Bolt.Colors = Red

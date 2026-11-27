@@ -1,0 +1,47 @@
+# Word of Command (CR 723.2, 107.3a, 733.1-2): Bot2 is made to cast Earthquake with one Mountain. Bot1 announces X 1, which the
+# Mountain can't pay: reversed (`Bot2.Cancel` at the dead end). Each remake with X 1 then ends one question earlier by itself,
+# the engine seeing that question's every answer dead - the red mana's assignment, then the Mountain's tap, then X 1's own
+# question. Now X 1 is dead, but the X question can't leave out one number between live ones: announced, it is
+# refused (`~`), and the question is asked again. X 0 is cast with the Mountain.
+
+[Bot1 Deck]
+Black Lotus
+Word of Command
+Swamp x18
+
+[Bot2 Deck]
+Mountain
+Earthquake
+Island x18
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Earthquake)
+Bot2.PayCost(X: 1)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Cancel
+Bot2.PayCost(X: 1)
+Bot2.Battlefield.Mountain.Activate
+Bot2.PayCost(X: 1)
+Bot2.Battlefield.Mountain.Activate
+Bot2.PayCost(X: 1)
+~ Bot2.PayCost(X: 1)
+Bot2.PayCost(X: 0)
+Bot2.Battlefield.Mountain.Activate
+? Stack = Earthquake
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Earthquake
+Bot1.Life = 20
+Bot2.Life = 20

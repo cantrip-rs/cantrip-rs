@@ -1,0 +1,45 @@
+# Word of Command (CR 723.5, 723.7, 107.3a): Bot1 decides everything about the Fireball it makes Bot2 cast - its X (1,
+# all that Bot2's two Mountains can pay with the red) and its target, Bot2 itself - and pays with Bot2's lands alone:
+# Bot2's Mox Ruby is not offered at the payment.
+
+[Bot1 Deck]
+Black Lotus
+Word of Command
+Swamp x18
+
+[Bot2 Deck]
+Mountain
+Mountain
+Mountain
+Mox Ruby
+Fireball
+Island x15
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fireball)
+Bot2.PayCost(X: 1)
+Bot2.Target(Bot2)
+! Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Battlefield.Mountain#2.Activate
+? Stack = Fireball
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield.Mox Ruby.Tapped = false

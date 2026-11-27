@@ -1,0 +1,39 @@
+# Word of Command (CR 723.2, 305.1-3): "to play a card" is to cast it or to play it as a land, and Bot2 may be made to
+# play a land "if they have not already done so this turn" - in their own turn (CR 305.3), in any step (the effect is the
+# permission, CR 608.2g). Bot1 casts Word of Command in Bot2's upkeep, looks at Bot2's hand (723.4: Looked) and chooses
+# Brightclimb Pathway, both of whose faces are lands: which face is played is the controlled player's choice, so Bot1's,
+# and it is Grimclimb Pathway. It is Bot2's land play for the turn (CR 305.2a): Bot2 can play no other in its main phase,
+# and can again next turn.
+
+[Bot1 Deck]
+Black Lotus
+Word of Command
+Swamp x18
+
+[Bot2 Deck]
+Brightclimb Pathway
+Mountain
+Mountain x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Brightclimb Pathway)
+? Bot2.ControlledBy = Bot1
+Bot2.Modes(Grimclimb Pathway)
+? Bot2.ControlledBy = (absent)
+[T2 Bot2.Main1]
+! Bot2.Hand.Mountain.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+
+[Expect]
+Bot2.Battlefield.Grimclimb Pathway.Tapped = false
+Bot2.Battlefield.Count = 2
+Bot1.Looked = Brightclimb Pathway; Mountain; Mountain; Mountain; Mountain; Mountain; Mountain
+Bot2.ControlledBy = (absent)

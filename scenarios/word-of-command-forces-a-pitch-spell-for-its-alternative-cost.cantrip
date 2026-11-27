@@ -1,0 +1,41 @@
+# Word of Command (CR 723.2, 118.9; the ruling "if there is a non-mana way to cast a spell, as with Pitch Spells, you may
+# require that way to be used if it is possible to do so"): Bot2's two Islands can't pay Gush's {4}{U}, but Gush may be
+# cast by returning two Islands instead, so Bot2 is able to cast it and must: the mana cost is no choice, the return is.
+# Both Islands go back to Bot2's hand and Bot2 draws two. The way is left to the default answer, the first offered: offered
+# the mana cost too, the default would take it, and the cast could not be paid.
+
+[Bot1 Deck]
+Black Lotus
+Word of Command
+Swamp x18
+
+[Bot2 Deck]
+Island
+Island
+Gush
+Mountain
+Mountain
+Mountain
+Mountain
+Plains x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Gush)
+Bot2.Choose(Island; Island)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Gush
+Bot2.Hand.Count = 10

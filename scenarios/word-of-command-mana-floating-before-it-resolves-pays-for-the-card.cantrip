@@ -1,0 +1,36 @@
+# Word of Command (CR 723.2, 723.5a; owner ruling 2026-11-27): mana already in Bot2's pool as Word of Command resolves may be
+# spent on the card. Bot2 taps its only Mountain in response, for {R}; Word of Command then chooses Lightning Bolt, which that
+# floating {R} pays for - there is no land left to tap.
+
+[Bot1 Deck]
+Black Lotus
+Word of Command
+Swamp x18
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+? Bot2.Mana = {R}
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+Bot2.Target(Bot1)
+? Stack = Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot2.Graveyard = Lightning Bolt

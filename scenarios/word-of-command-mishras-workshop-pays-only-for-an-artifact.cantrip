@@ -1,0 +1,58 @@
+# Word of Command (CR 723.2, 723.7, 106.6; owner ruling 2026-11-27): a land may be tapped only if its mana can be spent on the
+# card, and Mishra's Workshop's {C}{C}{C} may be spent only to cast artifact spells. Made to cast Fireball for X 1, whose {1} the
+# Workshop's mana could pay but for that limit, Bot2 is not offered the Workshop (`! ...Activate` at the payment) and pays
+# with its Mountains; made to cast Steel Wall, it taps the
+# Workshop, and the {C}{C} left over keeps the Workshop's own limit.
+
+[Bot1 Deck]
+Black Lotus
+Word of Command
+Word of Command
+Swamp x17
+
+[Bot2 Deck]
+Mishra's Workshop
+Mountain
+Mountain
+Fireball
+Steel Wall
+Island x15
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mishra's Workshop.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fireball)
+Bot2.PayCost(X: 1)
+Bot2.Target(Bot1)
+! Bot2.Battlefield.Mishra's Workshop.Activate(Mana: short)
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Battlefield.Mountain#2.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Mishra's Workshop.Tapped = false
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Steel Wall)
+Bot2.Battlefield.Mishra's Workshop.Activate
+? Bot2.Mana = {C}{C} (ArtifactSpells)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Battlefield.Steel Wall.Tapped = false

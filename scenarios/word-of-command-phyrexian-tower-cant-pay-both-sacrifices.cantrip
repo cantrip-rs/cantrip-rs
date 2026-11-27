@@ -1,0 +1,46 @@
+# Word of Command (CR 723.2, 608.2g, 733.1): Bone Splinters forced on Bot2, whose only {B} is Phyrexian Tower's "{T},
+# Sacrifice a creature: Add {B}{B}" and whose only creature, Memnite, is also what Bone Splinters must sacrifice. The
+# cast can never be completed. Bot1 tries the Tower, sacrificing Memnite to it; the attempt is reversed, Memnite back. Made
+# again, the Tower is tried again, and its sacrifice has only the dead Memnite to offer: the engine ends the attempt there itself,
+# and then every answer above it is dead - the Tower, then the target -
+# so nothing is cast, nothing is asked that will be refused, and the game goes on - both cards where
+# they were, Memnite alive, the Ornithopter unharmed.
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Word of Command
+Swamp x17
+
+[Bot2 Deck]
+Phyrexian Tower
+Memnite
+Bone Splinters
+Island x17
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Tower.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Command.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Bone Splinters)
+Bot2.Target(Ornithopter)
+Bot2.Battlefield.Phyrexian Tower.Activate(Ability: Sacrifice)
+Bot2.Target(Ornithopter)
+Bot2.Battlefield.Phyrexian Tower.Activate(Ability: Sacrifice)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Hand.Bone Splinters.Colors = Black
+Bot2.Battlefield = Memnite; Phyrexian Tower
+Bot2.Battlefield.Phyrexian Tower.Tapped = false
+Bot1.Battlefield.Ornithopter.Tapped = false
