@@ -1,0 +1,39 @@
+# Bring to Light's "you may cast that card" is a cast, not a play (CR 608.2g, 601.2): the Valakut Awakening it finds with
+# three colors spent is offered only as its front face, with no choice of the land back face Valakut Stoneforge (CR 712.11b,
+# 712.12), although Bot1's land play is unused. Cast for free, it puts nothing on the bottom and draws one.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Bring to Light
+Island x3
+Valakut Awakening
+Island x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Bring to Light.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Search(Valakut Awakening)
+Bot1.Accept
+? Stack = Valakut Awakening
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Graveyard = Valakut Awakening; Bring to Light; Black Lotus
+Bot1.LandsPlayed = 0
+Bot1.Hand.Count = 4

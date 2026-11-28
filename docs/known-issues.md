@@ -104,8 +104,28 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-173](#ki-173-a-scenarios-casttap--key-is-ignored-for-an-additional-tap-cost) | A scenario's `Cast(Tap: ...)` key is ignored for an additional tap cost | Pri-2 | Open |
 | [KI-174](#ki-174-vizier-of-the-menageries-any-type-rule-has-no-scenario-that-tells-it-from-any-color) | Vizier of the Menagerie's any-type rule has no scenario that tells it from any-color | Pri-2 | Open |
 | [KI-175](#ki-175-the-x-announcement-never-says-when-x-is-paid-in-life) | The X announcement never says when X is paid in life | Pri-2 | Open |
+| [KI-178](#ki-178-a-hideaway-cards-play-question-says-it-uses-a-land-play-when-the-card-may-instead-be-cast) | A hideaway card's "Play?" question says it uses a land play when the card may instead be cast | Pri-2 | Open |
 
 ## Issues
+
+### KI-178: A hideaway card's "Play?" question says it uses a land play when the card may instead be cast
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-2 | Open | client | 2026-11-27, review of the hideaway modal double-faced card fix (#3316) |
+
+**Notes.** When the card a hideaway permanent exiled has a land face it may be played as and a face it may be cast as (a
+modal double-faced card such as Valakut Awakening // Valakut Stoneforge, with a land play left), "you may play the exiled
+card" asks one question, verb `PlayLandDuringResolution` (`cantrip_mechanics::hideaway_play::PLAY_EXILED_LAND`), and then
+which way. The web client captions that verb with its own words (`MainPage.Prompts.cs`, `case "PlayLandDuringResolution"`):
+"It uses one of your land plays this turn", which is untrue of casting the front face (CR 305.2a counts only a land
+played). The engine's own caption, "As a land, it uses your land play this turn", is right. The rules are right: the
+choice that follows offers both ways. A fix captions the verb conditionally (or by the engine's hint) when the card may
+also be cast.
+
+**Scenarios.**
+- [`scenarios/windbrisk-heights-casts-a-hidden-modal-double-faced-cards-front-face.cantrip`](../scenarios/windbrisk-heights-casts-a-hidden-modal-double-faced-cards-front-face.cantrip) -
+  the question that shows it; no `Client.` key checks the caption.
 
 ### KI-177: The simple auto player stops mid-payment with Gaea's Cradle and Mox Emerald
 

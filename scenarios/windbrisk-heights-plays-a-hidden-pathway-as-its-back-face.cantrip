@@ -1,0 +1,33 @@
+# Both faces of a Pathway are lands (CR 712.12): Hengegate Pathway hidden under Windbrisk Heights may be played as either,
+# and Bot1 chooses its back face, Mistgate Pathway, as the turn's land play (CR 305.1, 712.12).
+[Bot1 Deck]
+Windbrisk Heights
+Mox Pearl
+Ornithopter
+Ornithopter
+Ornithopter
+Island
+Island
+Hengegate Pathway
+Island x3
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Windbrisk Heights.Play
+Bot1.Arrange(Hengegate Pathway | Island; Island; Island)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter#1 > Bot2; Ornithopter#2 > Bot2; Ornithopter#3 > Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Windbrisk Heights.Activate(Ability: You may play)
+Bot1.Accept
+Bot1.Modes(Mistgate Pathway)
+[Bot1.Main2]
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield = Windbrisk Heights; Mox Pearl; Ornithopter; Ornithopter; Ornithopter; Mistgate Pathway
+Bot1.LandsPlayed = 1

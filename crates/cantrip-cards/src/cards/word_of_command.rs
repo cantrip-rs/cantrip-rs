@@ -1,14 +1,7 @@
 use cantrip_api::*;
+use cantrip_mechanics::play_during_resolution::{self, Play};
 use cantrip_mechanics::{choose, select, targets};
 use cantrip_oracle as oracle;
-
-/// How the chosen card is played (CR 305.1, 601.2): as a land, by the face its way names (`Game::land_ways_during_resolution_by`),
-/// or cast, by the way its `CastWay` names.
-#[derive(Clone, Copy)]
-enum Play {
-    Land(u8),
-    Cast(u8),
-}
 
 /// "Look at target opponent's hand and choose a card from it. You control that player until Word of Command finishes
 /// resolving. The player plays that card if able. While doing so, the player can activate mana abilities only if they're
@@ -28,24 +21,9 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     // "While doing so ...": only lands' mana abilities, each only if some of its mana is spent on the card; the rest is left
     // as ordinary mana, and mana already floating may pay (owner ruling 2026-11-27, `CastTerms::land_mana_only`).
     let terms = CastTerms { caster: Some(player), if_able: true, land_mana_only: true, ..CastTerms::default() };
-    let face = |g: &dyn Game, way: u8| {
-        let printed = g.state().obj(card).card;
-        match (way, g.card(printed).back) {
-            (WAY_BACK_FACE, Some(back)) => g.card_id(back),
-            _ => printed,
-        }
-    };
-    let mut plays: Vec<(Label, Play)> = g.land_ways_during_resolution_by(card, player).into_iter().map(|way| (Label::Face(face(g, way)), Play::Land(way))).collect();
-    for way in g.cast_ways_during_resolution_as(card, terms) {
-        let label = if way.way == WAY_FUSED { Label::Fused(way.face) } else { Label::Face(way.face) };
-        plays.push((label, Play::Cast(way.way)));
-    }
+    let plays = play_during_resolution::ways(g, card, player, terms);
     // The player's choice, and so the controller's (CR 723.5): which face, where the card can be played more than one way.
-    let play = match plays.len() {
-        0 => return Ok(()),
-        1 => plays[0].1,
-        _ => plays[choose::one_of(g, player, card, plays.iter().map(|p| p.0.clone()).collect())? as usize].1,
-    };
+    let Some(play) = play_during_resolution::choose(g, player, card, &plays)? else { return Ok(()) };
     match play {
         Play::Land(way) => {
             g.play_land_during_resolution_by(card, player, way)?;

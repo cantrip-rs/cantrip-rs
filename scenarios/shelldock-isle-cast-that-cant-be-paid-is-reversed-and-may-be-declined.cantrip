@@ -1,0 +1,32 @@
+# Kazuul's Fury hidden under Shelldock Isle and no creature to sacrifice: the cast Bot1 chooses can't be paid and is
+# reversed (CR 733.1), Bot1 is asked again whether to play the card, and declines: it stays in exile, face down as the reversal left it, and the land play is
+# not spent.
+[Bot1 Deck]
+Shelldock Isle
+Mox Sapphire
+Island x5
+Kazuul's Fury
+Island x3
+Island x30
+
+[Bot2 Deck]
+Island x28
+
+[Actions]
+Bot1.Hand.Shelldock Isle.Play
+Bot1.Arrange(Kazuul's Fury | Island; Island; Island)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Shelldock Isle.Activate(Ability: {U}, {T}: You may play)
+Bot1.Accept
+Bot1.Modes(Kazuul's Fury)
+Bot1.Decline
+[Bot1.Main2]
+
+[Expect]
+Exile = (face down)
+Exile.Count = 1
+Bot1.LandsPlayed = 0
+Bot1.Battlefield = Shelldock Isle; Mox Sapphire

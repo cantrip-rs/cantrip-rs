@@ -1,0 +1,35 @@
+# Bonecrusher Giant hidden under Shelldock Isle may be cast as itself or as its Adventure, Stomp (CR 715.3). Bot1 chooses
+# Stomp and gives the cast up at its target: it is reversed (CR 733.1), and asked again Bot1 is offered only the way not yet
+# tried, so the Giant is cast without a choice of face and resolves.
+[Bot1 Deck]
+Shelldock Isle
+Mox Sapphire
+Island x5
+Bonecrusher Giant
+Island x3
+Island x30
+
+[Bot2 Deck]
+Island x28
+
+[Actions]
+Bot1.Hand.Shelldock Isle.Play
+Bot1.Arrange(Bonecrusher Giant | Island; Island; Island)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Shelldock Isle.Activate(Ability: {U}, {T}: You may play)
+Bot1.Accept
+Bot1.Modes(Stomp)
+Bot1.Cancel
+Bot1.Accept
+? Stack = Bonecrusher Giant
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield = Shelldock Isle; Mox Sapphire; Bonecrusher Giant
+Bot2.Life = 20

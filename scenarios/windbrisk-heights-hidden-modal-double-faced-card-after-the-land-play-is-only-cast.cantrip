@@ -1,0 +1,39 @@
+# With the turn's land play spent on an Island, the hidden Valakut Awakening can't be played as its land back face (CR
+# 305.2, 712.12): it is offered only as a cast of its front, without paying its mana cost (CR 118.9), so there is no face to
+# choose and the cast follows the yes.
+[Bot1 Deck]
+Windbrisk Heights
+Mox Pearl
+Ornithopter
+Ornithopter
+Ornithopter
+Island
+Island
+Valakut Awakening
+Island x3
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Windbrisk Heights.Play
+Bot1.Arrange(Valakut Awakening | Island; Island; Island)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Attack(Ornithopter#1 > Bot2; Ornithopter#2 > Bot2; Ornithopter#3 > Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Windbrisk Heights.Activate(Ability: You may play)
+Bot1.Accept
+? Stack = Valakut Awakening
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[Bot1.Main2]
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard = Valakut Awakening
+Bot1.LandsPlayed = 1
+Bot1.Battlefield = Windbrisk Heights; Mox Pearl; Ornithopter; Ornithopter; Ornithopter; Island

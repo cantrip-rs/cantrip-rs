@@ -2673,15 +2673,18 @@ pub fn may_pay_to_return_this_to_hand(g: &mut dyn Game, item: &StackItem, cost: 
 
 /// "[Player] may cast [card] without paying its mana cost" as the effect resolves (CR 608.2g, 118.9): `player` casts it then
 /// or not at all, its timing waived, X 0 (CR 107.3b), its additional costs paid. Nothing is asked when they could not cast
-/// it at all (a land, no legal target for them, split second on the stack); asked, they may decline, and a cast they give
-/// up (CR 733.1) leaves it where it was. `player` is the effect's controller or the player it names (`CastTerms::caster`:
+/// it at all (a land, no legal target for them, split second on the stack); asked, they may decline, then choose the face
+/// where there is more than one. A cast that can't be made or that they give up is reversed to the moment before it was
+/// begun (CR 733.1), so they are asked again among the ways not yet tried, and a no leaves it where it was
+/// (`play_during_resolution::may_play`). `player` is the effect's controller or the player it names (`CastTerms::caster`:
 /// the card's owner, "that player"). Whether it was cast. Spell Queller (its owner), Ore-Rich Stalactite and the hideaway
 /// lands' "play the exiled card" print it.
 pub fn may_cast_without_paying(g: &mut dyn Game, player: PlayerId, card: ObjectId) -> Result<bool, Suspend> {
-    if !g.could_cast_during_resolution_by(card, player) || !ask_may(g, player, card, Purpose::CastFree)? {
+    if !g.could_cast_during_resolution_by(card, player) {
         return Ok(false);
     }
-    g.cast_during_resolution_as(card, CastTerms { instead: Some(ManaCost::ZERO), caster: Some(player), ..CastTerms::default() })
+    let terms = CastTerms { instead: Some(ManaCost::ZERO), caster: Some(player), ..CastTerms::default() };
+    crate::play_during_resolution::may_play(g, player, card, terms, false, Purpose::CastFree)
 }
 
 /// "You may draw `n` cards" (CR 121.3, 121.2b): not offered when `player` can't draw that many ("can't draw more than one

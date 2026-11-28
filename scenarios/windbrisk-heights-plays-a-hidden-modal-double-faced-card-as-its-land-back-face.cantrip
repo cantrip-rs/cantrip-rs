@@ -1,0 +1,36 @@
+# The hidden card is a modal double-faced card whose back face is a land (CR 712.12): to "play the exiled card" is to cast
+# its front or play its back (CR 712.11b, 712.12, 305.1). With the turn's land play unused, Bot1 plays Valakut Awakening as Valakut
+# Stoneforge, which enters tapped as it declines the 3 life, and the land play is spent (CR 305.2a).
+[Bot1 Deck]
+Windbrisk Heights
+Mox Pearl
+Ornithopter
+Ornithopter
+Ornithopter
+Island
+Island
+Valakut Awakening
+Island x3
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Windbrisk Heights.Play
+Bot1.Arrange(Valakut Awakening | Island; Island; Island)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter#1 > Bot2; Ornithopter#2 > Bot2; Ornithopter#3 > Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Windbrisk Heights.Activate(Ability: You may play)
+Bot1.Accept
+Bot1.Modes(Valakut Stoneforge)
+[Bot1.Main2]
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield = Windbrisk Heights; Mox Pearl; Ornithopter; Ornithopter; Ornithopter; Valakut Stoneforge
+Bot1.Battlefield.Valakut Stoneforge.Tapped = true
+Bot1.LandsPlayed = 1
+Bot1.Life = 20

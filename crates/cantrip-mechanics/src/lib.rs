@@ -55,6 +55,7 @@ pub mod harness;
 pub mod hexproof_from;
 pub mod job_select;
 pub mod hideaway_play;
+pub mod play_during_resolution;
 pub mod cleave;
 pub mod clockwork;
 pub mod craft;

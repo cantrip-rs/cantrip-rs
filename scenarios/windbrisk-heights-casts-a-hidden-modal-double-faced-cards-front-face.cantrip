@@ -1,0 +1,39 @@
+# A hidden modal double-faced card with a land back face may still be cast as its front (CR 712.11b, 118.9): offered both,
+# Bot1 casts Valakut Awakening without paying its mana cost, puts nothing on the bottom and draws one, leaving four Islands in hand. The land play is
+# not spent (CR 305.2a).
+[Bot1 Deck]
+Windbrisk Heights
+Mox Pearl
+Ornithopter
+Ornithopter
+Ornithopter
+Island
+Island
+Valakut Awakening
+Island x3
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Windbrisk Heights.Play
+Bot1.Arrange(Valakut Awakening | Island; Island; Island)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter#1 > Bot2; Ornithopter#2 > Bot2; Ornithopter#3 > Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Windbrisk Heights.Activate(Ability: You may play)
+Bot1.Accept
+Bot1.Modes(Valakut Awakening)
+? Stack = Valakut Awakening
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[Bot1.Main2]
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard = Valakut Awakening
+Bot1.LandsPlayed = 0
+Bot1.Hand.Count = 4

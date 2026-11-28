@@ -1,0 +1,33 @@
+# Kazuul's Fury hidden under Shelldock Isle, Bot2's library at twenty cards, Bot1's land play unused and no creature to
+# sacrifice: Bot1 chooses to cast the Fury, whose cost can't be paid, so the cast is reversed to the moment before it was
+# begun (CR 733.1). Bot1 is still playing the exiled card and is asked again, offered only the way it has not tried: the
+# Fury is not offered a second time, so there is no face to choose and its land back face, Kazuul's Cliffs, is played as the
+# turn's land play (CR 712.12, 305.1).
+[Bot1 Deck]
+Shelldock Isle
+Mox Sapphire
+Island x5
+Kazuul's Fury
+Island x3
+Island x30
+
+[Bot2 Deck]
+Island x28
+
+[Actions]
+Bot1.Hand.Shelldock Isle.Play
+Bot1.Arrange(Kazuul's Fury | Island; Island; Island)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Shelldock Isle.Activate(Ability: {U}, {T}: You may play)
+Bot1.Accept
+Bot1.Modes(Kazuul's Fury)
+Bot1.Accept
+[Bot1.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot1.LandsPlayed = 1
+Bot1.Battlefield = Shelldock Isle; Mox Sapphire; Kazuul's Cliffs
