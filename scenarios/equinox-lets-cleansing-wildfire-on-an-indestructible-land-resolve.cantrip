@@ -1,0 +1,34 @@
+# Equinox counters a spell only if it would destroy a land you control (CR 608.2, 702.12b): Bot2's Cleansing Wildfire
+# aimed at Bot1's Darksteel Citadel, which Equinox enchants, would not destroy it - it is indestructible - so it is not
+# countered: it resolves, the Citadel stays, Bot1 declines the search and Bot2 draws its card.
+
+[Bot1 Deck]
+Darksteel Citadel
+Mox Pearl
+Equinox
+Plains x12
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Cleansing Wildfire
+Mountain x12
+
+[Actions]
+Bot1.Hand.Darksteel Citadel.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Darksteel Citadel)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Cleansing Wildfire.Cast(Bot1.Battlefield.Darksteel Citadel)
+Bot1.Battlefield.Darksteel Citadel.Activate(Stack.Cleansing Wildfire; Ability: Counter)
+Bot1.Decline
+
+[Expect]
+Bot1.Battlefield = Darksteel Citadel; Equinox; Mox Pearl
+Bot1.Battlefield.Darksteel Citadel.Tapped = true
+Bot2.Graveyard = Cleansing Wildfire; Black Lotus
+Bot2.Hand.Count = 6

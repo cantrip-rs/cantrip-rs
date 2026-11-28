@@ -1,0 +1,39 @@
+# Destruction that can't be regenerated is still destruction (CR 701.8a, 701.19c): Jokulhaups would destroy Bot1's
+# enchanted Plains, so Equinox counters it (CR 608.2), and nothing of either player's is destroyed.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Equinox
+Plains x12
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Mox Jet
+Jokulhaups
+Mountain x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Jokulhaups.Cast
+Bot1.Battlefield.Plains.Activate(Stack.Jokulhaups; Ability: Counter)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Equinox; Mox Pearl; Plains
+Bot2.Battlefield = Mountain; Mox Jet; Mox Ruby
+Bot2.Graveyard = Jokulhaups; Black Lotus

@@ -1,0 +1,43 @@
+# Equinox counters Cleansing when no payments could spare every land you control (CR 608.2, 118.12a, 119.4; the owner's
+# rule for Cleansing): Bot1 controls three lands and the players could pay 2 life between them (1 each), so however they
+# chose, at least one of Bot1's lands would be destroyed - three lands is more than two life. It is countered before anyone
+# is asked to pay, and no one pays anything.
+
+[Life]
+Bot1: 1
+Bot2: 1
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Equinox
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Black Lotus
+Cleansing
+Island x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Plains)
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Cleansing.Cast
+Bot1.Battlefield.Plains.Activate(Stack.Cleansing; Ability: Counter)
+[T6 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Equinox; Mox Pearl; Plains; Plains; Plains
+Bot1.Life = 1
+Bot2.Life = 1
+Bot2.Graveyard = Cleansing; Black Lotus; Island; Island

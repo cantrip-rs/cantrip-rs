@@ -1,0 +1,34 @@
+# Equinox counters only a spell that would destroy a land its ability's controller controls (CR 608.2): Bot1 aims its
+# own Stone Rain at Bot2's Mountain and taps the enchanted Plains targeting it - its own spell may be the target - and
+# Stone Rain, destroying only Bot2's land, is not countered.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Equinox
+Black Lotus
+Stone Rain
+Plains x10
+
+[Bot2 Deck]
+Mountain x15
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Stone Rain.Cast(Bot2.Battlefield.Mountain)
+Bot1.Battlefield.Plains.Activate(Stack.Stone Rain; Ability: Counter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Mountain
+Bot1.Graveyard = Stone Rain; Black Lotus
+Bot1.Battlefield = Equinox; Mox Pearl; Plains

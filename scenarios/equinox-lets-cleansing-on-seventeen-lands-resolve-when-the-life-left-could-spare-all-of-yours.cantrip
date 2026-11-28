@@ -1,0 +1,77 @@
+# Equinox lets Cleansing resolve when the players could pay for every land of Bot1's (the owner's rule for Cleansing,
+# 2026-11-27): Bot1 controls nine lands and Bot2 eight, Bot1 has 4 life and Bot2 5. The 9 life they could pay between
+# them is exactly enough to spare all nine of Bot1's lands - no more lands than life - so the destruction depends on what
+# they choose, and Cleansing is not countered (rulings: not if it destroys a land only if a choice is made). Bot2's eight
+# lands are not Bot1's and count for nothing. Then no one pays, and all seventeen are destroyed.
+
+[Life]
+Bot1: 4
+Bot2: 5
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Equinox
+Plains x30
+
+[Bot2 Deck]
+Island
+Black Lotus
+Cleansing
+Island x30
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T8 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T10 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T11 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T12 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T13 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T14 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T15 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T16 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T17 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T18 Bot2.Main1]
+? Bot1.Battlefield.Count = 11
+? Bot2.Battlefield.Count = 8
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Cleansing.Cast
+Bot1.Battlefield.Plains#1.Activate(Stack.Cleansing; Ability: Counter)
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose()
+Bot1.Choose()
+
+[Expect]
+Bot1.Battlefield = Mox Pearl
+Bot1.Life = 4
+Bot2.Life = 5
+Bot2.Battlefield.Count = 0
+Bot1.Graveyard.Count = 10

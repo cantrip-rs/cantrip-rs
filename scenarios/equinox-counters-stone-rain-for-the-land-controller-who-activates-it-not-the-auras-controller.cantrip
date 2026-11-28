@@ -1,0 +1,34 @@
+# "A land you control" is the ability's controller's (CR 113.8, 602.2a): the enchanted land has the ability, so its
+# controller activates it, whoever controls Equinox. Bot2 casts Equinox on Bot1's Plains, then aims Stone Rain at that
+# Plains; Bot1 taps it, and Stone Rain would destroy a land Bot1 controls, so it is countered - though it would destroy no
+# land of Bot2's, Equinox's controller.
+
+[Bot1 Deck]
+Plains x15
+
+[Bot2 Deck]
+Mox Pearl
+Black Lotus
+Equinox
+Stone Rain
+Mountain x11
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Equinox.Cast(Bot1.Battlefield.Plains)
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Stone Rain.Cast(Bot1.Battlefield.Plains)
+Bot1.Battlefield.Plains.Activate(Stack.Stone Rain; Ability: Counter)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Plains
+Bot1.Battlefield.Plains.Tapped = true
+Bot2.Battlefield = Equinox; Mox Pearl
+Bot2.Graveyard = Stone Rain; Black Lotus

@@ -1,0 +1,42 @@
+# Equinox judges the targeted spell where it is (CR 608.2): Bot2 casts Armageddon and, holding priority, Secure the Wastes
+# above it; Bot1 taps the enchanted Plains targeting Armageddon, two objects down by the time the ability resolves.
+# "Destroy all lands" would destroy Bot1's Plains, so Armageddon is countered; Secure the Wastes still resolves after.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Equinox
+Plains x12
+
+[Bot2 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Jet
+Armageddon
+Secure the Wastes
+Plains x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Armageddon.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Secure the Wastes.Cast(X: 1)
+Bot1.Battlefield.Plains.Activate(Stack.Armageddon; Ability: Counter)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Equinox; Mox Pearl; Plains
+Bot2.Battlefield = Mox Jet; Mox Pearl; Plains; Warrior Token
+Bot2.Graveyard = Secure the Wastes; Armageddon; Black Lotus

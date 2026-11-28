@@ -1,0 +1,55 @@
+# Equinox counts only the lands Cleansing's destruction could destroy (CR 702.12b; the owner's rule for Cleansing): Bot1
+# controls two Plains and Darksteel Citadel, indestructible, and each player has 1 life. Two destructible lands are no
+# more than the 2 life the players could pay, so sparing both is a choice they may make, and Cleansing is not countered
+# (rulings: not if it destroys a land only if a choice is made). Bot2's own Islands are not Bot1's and count for nothing.
+# Then no one pays: the Plains and Islands are destroyed, the Citadel stays.
+
+[Life]
+Bot1: 1
+Bot2: 1
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Equinox
+Darksteel Citadel
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island
+Black Lotus
+Cleansing
+Island
+Island x11
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Darksteel Citadel.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Cleansing.Cast
+Bot1.Battlefield.Plains#1.Activate(Stack.Cleansing; Ability: Counter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Darksteel Citadel; Equinox; Mox Pearl; Plains; Plains
+Bot2.Choose()
+Bot1.Choose()
+
+[Expect]
+Bot1.Battlefield = Darksteel Citadel; Mox Pearl
+Bot1.Life = 1
+Bot2.Life = 1
+Bot2.Battlefield.Count = 0

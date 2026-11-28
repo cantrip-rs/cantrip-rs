@@ -1,0 +1,79 @@
+# Cleansing's count is the fewest of Bot1's lands it would destroy with no life paid, whatever choices are made as they
+# are destroyed (CR 616.1; the owner's decision of 2026-11-28): Pyramids has shielded Bot1's Island, and Bot2's Rest in
+# Peace offers another replacement for its destruction. Applied first, Rest in Peace leaves Pyramids nothing to replace
+# and the Island goes; Pyramids applied first saves it. So with no life paid Bot1 could lose as few as its two Plains,
+# no more than the 2 life the players have, and Cleansing is not countered (rulings). Then no one pays, Bot1 applies
+# Pyramids first, and the Island stays.
+
+[Life]
+Bot1: 1
+Bot2: 1
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Pyramids
+Equinox
+Island
+Plains
+Plains x10
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Rest in Peace
+Black Lotus
+Cleansing
+Island x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pyramids.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate(Ability: Add)
+Bot1.Hand.Equinox.Cast(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Rest in Peace.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Cleansing.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Pyramids.Activate
+Bot1.Modes(The next time target land)
+Bot1.Target(Bot1.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Plains#1.Activate(Stack.Cleansing; Ability: Counter)
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose()
+Bot1.Choose()
+Bot1.Replace(Pyramids)
+
+[Expect]
+Bot1.Battlefield.Island.Tapped = false
+Bot1.Battlefield.Plains = (absent)
+Bot1.Life = 1
+Bot2.Life = 1

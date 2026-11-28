@@ -1,0 +1,32 @@
+# Equinox counters a spell that would destroy a land you control, not any permanent of yours (CR 608.2): Shatter aimed at
+# Bot1's Mox Pearl destroys no land, so it is not countered, and the Mox is destroyed.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Equinox
+Plains x12
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Shatter
+Mountain x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Battlefield.Plains.Activate(Stack.Shatter; Ability: Counter)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Equinox; Plains
+Bot1.Graveyard = Mox Pearl

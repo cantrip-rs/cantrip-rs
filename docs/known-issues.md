@@ -48,7 +48,7 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 
 | ID | Issue | Priority | Status |
 | --- | --- | --- | --- |
-| [KI-179](#ki-179-a-speculative-resolution-follows-at-most-262144-runs-and-answers-and-burning-of-xinye-can-pass-it) | A speculative resolution follows at most 262,144 runs and answers, and Burning of Xinye can pass it | Pri-1 | Open: the owner's decision |
+| [KI-179](#ki-179-a-speculative-resolution-follows-at-most-262144-runs-and-answers-and-burning-of-xinye-can-pass-it) | A speculative resolution follows at most 262,144 runs and answers, and Burning of Xinye can pass it | Pri-1 | Open: owed by Burning of Xinye's implementation |
 | [KI-98](#ki-98-a-station-permanent-lists-its-reached-striations-keyword-again-as-granted) | A station permanent lists its reached striation's keyword again, as granted | Pri-2 | Open |
 | [KI-101](#ki-101-a-player-out-of-a-game-that-goes-on-sees-it-a-step-late) | A player out of a game that goes on sees it a step late | Pri-2 | Open |
 | [KI-108](#ki-108-what-can-be-cast-is-over-offered-where-a-mana-abilitys-yield-is-unknown-or-its-cost-is-shared) | What can be cast is over-offered where a mana ability's yield is unknown or its cost is shared | Pri-2 | Open |
@@ -131,7 +131,7 @@ also be cast.
 
 | Priority | Status | Area | Found |
 | --- | --- | --- | --- |
-| Pri-1 | Open: the owner's decision | engine (`crates/cantrip-rules/src/speculate.rs`) | 2026-11-15, building Equinox's speculative resolution; reach measured 2026-11-28 |
+| Pri-1 | Open: owed by Burning of Xinye's implementation | engine (`crates/cantrip-rules/src/speculate.rs`) | 2026-11-15, building Equinox's speculative resolution; reach measured 2026-11-28 |
 
 **Notes.** What a stack object would do if it resolved now (`Query::speculate_resolution`, CR 608.2) is found by playing
 its resolution on a hidden copy once for each legal answer and each chance outcome. Each run of the resolution, and each
@@ -145,7 +145,10 @@ destroys your land and every answer of which destroys it. Two printed spells do,
 
 - **Cleansing** ("For each land, destroy that land unless any player pays 1 life"): each player chooses the lands they pay
   for, and nothing is destroyed until the end, so every combination of choices is an outcome (both players at 3 life with
-  13 lands is some 110,000; at 4 life with 17 lands some six million).
+  13 lands is some 110,000; at 4 life with 17 lands some six million). Equinox's own file answers Cleansing by a rule
+  instead, reading off a single outcome with no life paid how many of your lands it would really destroy (the owner's
+  decisions of 2026-11-27 and 2026-11-28, `crates/cantrip-cards/src/cards/equinox.rs`; scenarios
+  `equinox-counters-cleansing-on-seventeen-lands-*` and `equinox-lets-cleansing-on-seventeen-lands-*`).
 - **Burning of Xinye** ("You destroy four lands you control, then target opponent destroys four lands they control"), not
   implemented: for Equinox's controller as the target opponent, the caster's choice of four lands (each order of each set,
   since the probe cannot know the order is unread) comes before their own, so the work is about three times the product of
@@ -154,9 +157,11 @@ destroys your land and every answer of which destroys it. Two printed spells do,
   (it destroys four of that player's lands whatever is chosen, so the rulings have it countered). Six lands each is an
   ordinary game.
 
-A rules deviation reachable in play, so not beyond practical scale: the fix is the owner's to choose (cutting the orders of
-a choice no later step reads, merging answers that leave the same position, or a decision for Burning of Xinye as for
-Cleansing).
+A rules deviation reachable in play, so not beyond practical scale. The owner decided (jschibel, 2026-11-28) that Burning of
+Xinye is answered as Cleansing is: a by-name special case in Equinox's file that skips the speculation, its rule worked
+out and proven against the probe at small sizes. It can't be written or tested before the card exists, so it is owed by
+Burning of Xinye's implementation: `docs/card-notes/burning_of_xinye.md`, which `new-card.py` prints for that card, says
+so and sketches the rule. The bound itself stays as it is.
 
 **Scenarios.** None yet: Burning of Xinye is not implemented.
 

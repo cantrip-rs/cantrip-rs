@@ -1,0 +1,41 @@
+# A spell other than Cleansing is judged by resolving it on a hidden copy, every way it could go (CR 608.2): Bot2's
+# Essence Vortex aimed at Bot1's Dryad Arbor, a land creature Equinox enchants, destroys it only unless Bot1 pays 1 life
+# (CR 118.12a), so it would destroy a land Bot1 controls only if a choice is made, and it is not countered (rulings).
+# For real, Bot1 then pays the life, and the Arbor stays. (Bot2 waits for its second turn: the Arbor, a creature, is
+# summoning sick until it has been under Bot1's control since Bot1's turn began, CR 302.6.)
+
+[Bot1 Deck]
+Dryad Arbor
+Mox Pearl
+Equinox
+Plains x12
+
+[Bot2 Deck]
+Island
+Black Lotus
+Mox Sapphire
+Essence Vortex
+Island x11
+
+[Actions]
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Dryad Arbor)
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Essence Vortex.Cast(Bot1.Battlefield.Dryad Arbor)
+Bot1.Battlefield.Dryad Arbor.Activate(Stack.Essence Vortex; Ability: Counter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+Bot1.PayCost
+
+[Expect]
+Bot1.Battlefield = Dryad Arbor; Equinox; Mox Pearl
+Bot1.Battlefield.Dryad Arbor.Tapped = true
+Bot1.Life = 19
+Bot2.Graveyard = Essence Vortex; Black Lotus; Island

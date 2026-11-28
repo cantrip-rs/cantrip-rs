@@ -1,0 +1,52 @@
+# The life Equinox counts for Cleansing is the life each player could pay (CR 119.4, 119.8; the owner's rule for Cleansing),
+# not their life totals: Bot1 controls Platinum Emperion, so its 20 life can't change and it can pay none, and Bot2 has 2.
+# Bot1's three lands (Mishra's Workshop and two Plains) are more than the 2 life that could be paid for them, so every way
+# Cleansing could go destroys one of them, and it is countered. Its 20 life counted, Cleansing would not be.
+
+[Life]
+Bot2: 2
+
+[Bot1 Deck]
+Mishra's Workshop
+Black Lotus
+Black Lotus
+Mox Pearl
+Platinum Emperion
+Equinox
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Black Lotus
+Cleansing
+Island x13
+
+[Actions]
+Bot1.Hand.Mishra's Workshop.Play
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mishra's Workshop.Activate
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Platinum Emperion.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Plains)
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Cleansing.Cast
+Bot1.Battlefield.Plains#1.Activate(Stack.Cleansing; Ability: Counter)
+[T6 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Equinox; Mishra's Workshop; Mox Pearl; Plains; Plains; Platinum Emperion
+Bot1.Life = 20
+Bot2.Life = 2
+Bot2.Graveyard = Cleansing; Black Lotus; Island; Island

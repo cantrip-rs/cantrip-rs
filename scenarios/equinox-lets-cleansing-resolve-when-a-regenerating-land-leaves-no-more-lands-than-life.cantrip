@@ -1,0 +1,54 @@
+# Equinox counts only the lands Cleansing would really destroy (CR 701.19a; the owner's decision of 2026-11-28): Bot1
+# controls two Plains and Dryad Arbor, which Death Ward has given a regeneration shield, and each player has 1 life. With
+# no life paid, Cleansing would destroy the two Plains and the Arbor would regenerate, and two is no more than the 2 life
+# the players could pay for them, so sparing every land it would destroy is a choice they may make: it is not countered
+# (rulings). Then no one pays: the Plains are destroyed, and the Arbor regenerates, tapped.
+
+[Life]
+Bot1: 1
+Bot2: 1
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Equinox
+Dryad Arbor
+Death Ward
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Black Lotus
+Cleansing
+Island x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Plains)
+[T3 Bot1.Main1]
+Bot1.Hand.Dryad Arbor.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Cleansing.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Death Ward.Cast(Dryad Arbor)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Plains#1.Activate(Stack.Cleansing; Ability: Counter)
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose()
+Bot1.Choose()
+
+[Expect]
+Bot1.Battlefield = Dryad Arbor; Mox Pearl
+Bot1.Battlefield.Dryad Arbor.Tapped = true
+Bot1.Life = 1
+Bot2.Life = 1

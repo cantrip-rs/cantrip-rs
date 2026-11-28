@@ -1,0 +1,53 @@
+# Beside the regenerating land, lands that would be destroyed still count (CR 701.19a; the owner's decision of
+# 2026-11-28): Bot1 controls three Plains and Dryad Arbor, which Death Ward has given a regeneration shield, and each
+# player has 1 life. With no life paid Cleansing would destroy the three Plains, more than the 2 life that could spare
+# them, so every way it could go destroys one, and it is countered. No one pays, and every land stays, the Arbor untapped.
+
+[Life]
+Bot1: 1
+Bot2: 1
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Equinox
+Dryad Arbor
+Death Ward
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Black Lotus
+Cleansing
+Island x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Plains)
+[T3 Bot1.Main1]
+Bot1.Hand.Dryad Arbor.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T8 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Cleansing.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Death Ward.Cast(Dryad Arbor)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Plains#1.Activate(Stack.Cleansing; Ability: Counter)
+[T8 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Dryad Arbor; Equinox; Mox Pearl; Plains; Plains; Plains
+Bot1.Battlefield.Dryad Arbor.Tapped = false
+Bot1.Life = 1
+Bot2.Life = 1
+Bot2.Graveyard = Cleansing; Black Lotus; Island; Island; Island
