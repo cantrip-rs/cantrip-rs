@@ -18082,10 +18082,6 @@ pub fn may_pay_counted(cx: &mut Cx, payer: PlayerId, source: ObjectId, subject: 
     pay_during_resolution(cx, payer, source, subject, cost, question, None, None, Paying::Other)
 }
 
-/// The most X a payer may raise "you may pay {X}" to while choosing it: past what any game could produce, a bound for a
-/// player who raises without paying.
-const MOST_X_PAID: u32 = 1000;
-
 /// "You may pay {X}" as a spell or ability resolves (CR 118.12, 608.2d), X chosen by the payer as they pay it, since the
 /// text does not define it (CR 107.3f): one question (`RequestKind::UnlessPays` with its `x`) raises and lowers X, makes mana
 /// (CR 605.3a), and pays {X} once the pool covers it, or declines. Any X may be chosen, 0 included (paying {0} is still
@@ -18269,7 +18265,10 @@ fn pay_during_resolution_inner(
                 Some(None) => false,
                 // Collect evidence X no further than the graveyard could pay (CR 701.59b), counted as collect evidence is.
                 None if cost.collect_evidence_x => resolution_rest_payable(cx, payer, source, with, &Cost { collect_evidence: n + 1, ..*cost }, n + 1, false),
-                None => n < MOST_X_PAID,
+                // X paid in life no further than the life there is to pay it with (CR 119.4), and X paid in mana as far as
+                // an X announced for a cast goes (`most_x`): no bound play can reach, the mana abilities activated while
+                // paying making what the pool lacks (CR 605.3a).
+                None => (!cost.pay_x_life || can_pay_life(cx, payer, life_of(Some(n + 1)))) && n < most_x(cost.mana, u32::from(cost.mana.x)),
             };
             if more {
                 options.push(ActionOption::simple(ActionKind::IncreaseX));
@@ -19549,3 +19548,7 @@ mod random_discard_cost_tests;
 #[cfg(test)]
 #[path = "collect_evidence_x_tests.rs"]
 mod collect_evidence_x_tests;
+
+#[cfg(test)]
+#[path = "resolution_x_tests.rs"]
+mod resolution_x_tests;

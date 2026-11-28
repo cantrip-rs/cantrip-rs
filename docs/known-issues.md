@@ -299,8 +299,8 @@ by hand on a clock, is out of reach.
 | --- | --- | --- | --- |
 | Pri-3 | Won't fix: beyond practical scale | engine (`crates/cantrip-rules/src/actions.rs`, `most_x`) | 2026-11-14, review of PR #3021 (Balduvian Hydra) |
 
-**Notes.** Where nothing else bounds it, an X paid in mana (a spell's, an activation's, a morph or disguise cost's), a
-multikicker's count and a "{1} less for each" sacrifice count are announced up to `i32::MAX` less the rest of the cost's
+**Notes.** Where nothing else bounds it, an X paid in mana (a spell's, an activation's, a morph or disguise cost's, or
+one chosen as it is paid while a spell or ability resolves, "you may pay {X}"), a multikicker's count and a "{1} less for each" sacrifice count are announced up to `i32::MAX` less the rest of the cost's
 mana value, divided by the mana each X adds: 2,147,483,646 for Fireball, half that for an {X}{X}. A larger X is not
 offered. The bound keeps the total within the announcement's signed controls on the wire and leaves a `ManaCost`'s 32 bits
 as much room again for whatever raises the cost later, so the arithmetic on it stays plain. Play cannot reach it: an X
