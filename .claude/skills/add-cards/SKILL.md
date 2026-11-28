@@ -40,7 +40,7 @@ Three layers, kept apart by the compiler (`cantrip-api` is all a card can see):
 | Layer | Crate | What goes there |
 | --- | --- | --- |
 | Core | `cantrip-state`, `cantrip-rules`, exposed by `cantrip-api` (`Game`, `Query`) | Every procedure the Comprehensive Rules define: destroy, sacrifice, exile, return to hand, put into a library, mill, discard, damage and its prevention, counters, control, targeting legality, protection/hexproof/ward, the stack, priority, layers, replacement and prevention ordering, triggers, state-based actions, combat, mana, costs, zones and new-object identity (CR 400.7), last-known information, simultaneity (CR 101.4, 603.10). Keywords that change a core procedure (trample, first strike, split second). |
-| Shared mechanics | `cantrip-mechanics` | **Every keyword action (CR 701) and keyword ability (CR 702), from the first card that has it**: one module named for the keyword, parameterised (`earthbend`, `evoke`, `storm`, `amass`, `flashback`, ...). Any other recipe two or more printed cards use exactly as written: target filters, trigger matchers, tutors, land templates, tokens, one-line effects, delayed end-step effects. |
+| Shared mechanics | `cantrip-mechanics` | **Every keyword action (CR 701) and keyword ability (CR 702), from the first card that has it**: one module named for the keyword, parameterised (`earthbend`, `evoke`, `storm`, `amass`, `flashback`, ...). Any other recipe two or more printed cards use exactly as written **and that has a reason to be decided in one place** (below, "Share what is the same"): target filters, trigger matchers, tutors, land templates, tokens, delayed end-step effects. Not a couple of lines combining pieces already shared. |
 | Card | `crates/cantrip-cards/src/cards/<card>.rs` | Only this card's own conditions, values, branching and sequencing, over `Game`, `Query` and the shared mechanics. |
 
 **A card file must never:**
@@ -90,13 +90,18 @@ every card the rule describes, and is guarded on the game state - never on "does
 because the table holds every card. A core change is benchmarked (`cargo run --release -p cantrip-bench -- --games
 128`, the "engine answering" line before and after, reported with it); a mechanics change is not. A non-keyword
 mechanic names in its doc comment at least two printed cards that use it exactly as written; with only one it stays in
-that card. A keyword module cites its CR rule and names its cards. Never widen a central switch to encode a card.
+that card, and with two it still needs the engineering reason below. A keyword module cites its CR rule and names its cards. Never widen a central switch to encode a card.
 
 **Share what is the same, and only that.** If an existing function does what the card needs, use it. If another card
 already does the same thing in its own code - the prior art shows it, you come across it, or `python
 tools/maintenance/card-dupes.py "Card Name"` lists it (every function of the card's file whose body another card file
-repeats, kinds and numbers masked; run it once the card is written) - move it into one shared function and change every
-card that has a copy to call it, in this change: it is part of the card, never a note left for later. Never stretch a shared function over something that only looks alike: a flag or parameter only one
+repeats, kinds and numbers masked; run it once the card is written) - ask whether it has an engineering reason to be
+shared (CLAUDE.md, "A second card is necessary, never sufficient"): a rules subtlety a card would get wrong alone, how
+a fact is represented, a procedure with real logic - something a fix or a rule change must reach once. If it has, move
+it into one shared function and change every card that has a copy to call it, in this change: it is part of the card,
+never a note left for later. If it is a couple of lines that only combine pieces already shared (a shared filter and
+"you control", a shared helper after the card's own step), write them in the card and leave the other card alone: that
+repetition is not a finding, and no issue is opened for it. Never stretch a shared function over something that only looks alike: a flag or parameter only one
 caller uses, or a branch on which card is calling, means it was not the same thing.
 
 **A card never tells the engine what the rules already decide.** Where the rules fix a property of an ability or an

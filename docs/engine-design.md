@@ -73,7 +73,9 @@ The `cards` profile (release code, incremental) is the card loop's: an edit to o
 2. **Shared mechanics (`cantrip-mechanics`): parameterised recipes.** Code that is the same across cards and differs
    only in their data: keyword actions (scry, surveil, mill, investigate, explore), keyword abilities that are
    ordinary abilities with parameters (cycling N, ward N), common effect shapes, and history questions more than one
-   card asks. Admission: name a second printed card that would use it exactly as written.
+   card asks. Admission: name a second printed card that would use it exactly as written, and the
+   reason it must be decided in one place (a rules subtlety, how a fact is represented, real logic); a couple of lines
+   combining pieces already shared stay in the cards.
 3. **Cards (`cantrip-cards`): everything one card does alone.** Grist's repeating +1, Gollum's parity choice. Built
    from the public API and the shared mechanics, nothing else.
 

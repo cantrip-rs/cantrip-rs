@@ -270,7 +270,8 @@ stops there (`?` carries the `Suspend` out). Once the question is answered, the 
 
   A quality only this card asks is a `SelectFn` in its file - `fn noncreature_nonland(q: &dyn Query, choice: &Choice, _: u32)
   -> Verdict { Verdict::each(choice, |card| ..) }` - made a part with `select::part(&(noncreature_nonland as SelectFn), 0,
-  "")` (Duress); one a second printed card asks moves into `select`. Never a closure, never a list worked out before asking:
+  "")` (Duress); one a second printed card asks moves into `select` when it is more than
+  existing parts put together (two parts combined with `.with(..)` stay in the card). Never a closure, never a list worked out before asking:
   the core judges the answer, and the client each pick, by the rule. The older `choose::{card, cards, card_from, cards_from,
   cards_from_kind, any_number_of, cards_within_total}`, `search_library` and `library::Find` / `search_to_*` are kept for
   existing cards.
@@ -365,7 +366,9 @@ The layering of [engine-design.md](engine-design.md) holds, and CLAUDE.md's rule
 
 1. **The card's file** for everything one card does. That is the default.
 2. **`cantrip-mechanics`** for a recipe a second already-printed card would use exactly as written (connive, cycling,
-   search, a target slot). Name the second card in the doc comment.
+   search, a target slot). Name the second card in the doc comment. A second card is necessary, not sufficient: the
+   recipe also needs a reason to be decided in one place (a rules subtlety, how a fact is represented, real logic). A
+   couple of lines that only combine pieces already shared stay in each card that writes them.
 3. **`cantrip-rules`** (the core) only for rules authority: a procedure of the Comprehensive Rules, a kind of
    question, a cost type, a zone-change rule. Never a card's behavior. A core change is reviewed on its own.
 

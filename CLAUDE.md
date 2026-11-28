@@ -77,6 +77,15 @@ first card that has it** - one function or module in `cantrip-mechanics` named f
 printed again. It goes in the core instead only when it changes a core procedure (trample, first strike, split
 second).
 
+**A second card is necessary, never sufficient: shared code needs an engineering reason.** A non-keyword function
+goes into `cantrip-mechanics` when it holds something that has to be decided in one place, so that a fix or a rule
+change lands once: a rules subtlety a card would get wrong on its own, how a fact is represented (`teamwork::used`,
+never `paid > 0` in a card), a procedure with real logic. A couple of lines that only combine pieces already shared -
+an existing filter and "you control", an existing helper called after the card's own step - stay in every card that
+writes them, however many do. Two cards with the same three lines are not a finding and not a cleanup to file: a
+shared name for them saves nothing and grows the surface every card has to search. Using what is already shared
+is still required: a hand-written copy of an existing shared function is replaced by a call to it.
+
 **The past is asked of the event history, never of a counter.** Every event since the game began is in
 `q.history()` (`cantrip_api::history`). A one-off question is written in the card's file (`EventQuery`, or an iterator
 over the records); a question a second printed card asks moves to `cantrip_mechanics::history`; the core only records
