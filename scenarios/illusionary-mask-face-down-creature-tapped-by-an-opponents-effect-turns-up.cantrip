@@ -1,0 +1,72 @@
+# Becoming tapped by an effect is the event too (CR 701.26a, 614.1), whoever taps it: on turn 2 Bot2's Icy Manipulator taps
+# Bot1's face-down creature, cast with Illusionary Mask - instead it is turned face up and becomes tapped, the 0/8 Caelorna,
+# Coral Tyrant, tapped once. Bot2's own Mox it taps for mana meanwhile is no creature of the Mask's and is simply tapped.
+
+[Bot1 Deck]
+Illusionary Mask
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Sapphire
+Caelorna, Coral Tyrant
+Island x20
+
+[Bot2 Deck]
+Icy Manipulator
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Illusionary Mask.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Illusionary Mask.Activate(X: 2)
+Bot1.Pass
+Bot1.Choose(Caelorna, Coral Tyrant)
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Battlefield.Mox Ruby#4.Activate
+Bot2.Hand.Icy Manipulator.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#5.Activate
+Bot2.Battlefield.Icy Manipulator.Activate(Bot1.Battlefield.#1)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Caelorna, Coral Tyrant.Tapped = true
+Bot1.Battlefield.Caelorna, Coral Tyrant.FaceDown = (absent)
+Bot2.Battlefield.Icy Manipulator.Tapped = true

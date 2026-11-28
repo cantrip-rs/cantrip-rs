@@ -1,0 +1,43 @@
+# Illusionary Mask activated for X = 0 spends no mana on X (CR 107.3a), so only a creature card with mana cost {0} could be
+# paid by it: Ornithopter may be chosen, Fugitive Wizard's {U} may not. Both "may"s are declinable: Ornithopter chosen but not
+# cast stays in hand, and the second activation chooses nothing at all, so nothing is cast and no question follows.
+
+[Bot1 Deck]
+Illusionary Mask
+Mox Pearl
+Mox Jet
+Ornithopter
+Fugitive Wizard
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Illusionary Mask.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Illusionary Mask.Activate(X: 0)
+Bot1.Pass
+! Bot1.Choose(Fugitive Wizard)
+Bot1.Choose(Ornithopter)
+Bot1.Decline
+Bot1.Pass
+? Stack.Count = 0
+Bot1.Battlefield.Illusionary Mask.Activate(X: 0)
+Bot1.Pass
+Bot1.Choose()
+! Bot1.Accept
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Fugitive Wizard; Island; Island; Ornithopter
+Bot1.Battlefield.Count = 3
+Stack.Count = 0

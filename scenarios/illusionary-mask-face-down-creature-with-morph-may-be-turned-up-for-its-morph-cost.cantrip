@@ -1,0 +1,53 @@
+# A creature cast face down by Illusionary Mask has the face-down values of CR 708.2a, and like any face-down permanent that
+# would have morph face up it may be turned face up for its morph cost (CR 702.37e; the ruling): Spined Basher ({2}{B}, morph
+# {2}{B}) is cast face down with {B}{B}{B} spent on X, and on turn 3 turned up for exactly {2}{B} - the pool empty after - into
+# the 3/1 it is. Turned up so, it is no longer one the Mask's effect applies to.
+
+[Bot1 Deck]
+Illusionary Mask
+Mox Pearl
+Mox Jet
+Black Lotus
+Spined Basher
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Illusionary Mask.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Illusionary Mask.Activate(X: 3)
+Bot1.Pass
+Bot1.Choose(Spined Basher)
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDownName = Spined Basher
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Spined Basher.Power = 3
+Bot1.Battlefield.Spined Basher.Toughness = 1
+Bot1.Battlefield.Spined Basher.FaceDown = (absent)

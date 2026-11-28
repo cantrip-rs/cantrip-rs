@@ -786,18 +786,34 @@ fn activation_of(records: &[Record], before: usize, mut serial: u32) -> Option<(
 /// ruling on Ice Cauldron: {C}{C}{R}{R} for an X of 6 reduced to 4).
 fn mana_spent_on(records: &[Record], end: usize, source: ObjectId) -> ManaPool {
     let mut spent = ManaPool::default();
+    for (m, n, _) in mana_units_spent_on(records, end, source) {
+        spent.0[m as usize] += n;
+    }
+    spent
+}
+
+/// `mana_spent_on`, each part by type and by whether it came from a snow source (CR 107.4h; each `Event::ManaSpent` is all
+/// snow mana or none): how much of each, a type that none was spent of included at 0.
+fn mana_units_spent_on(records: &[Record], end: usize, source: ObjectId) -> Vec<(Mana, u32, bool)> {
+    let mut spent = Vec::new();
     for r in records[..end].iter().rev() {
         match r.event {
-            Event::ManaSpent { on, cast: false, mana, .. } if on == source => {
-                for m in Mana::ALL {
-                    spent.0[m as usize] += u32::from(mana.get(m));
-                }
+            Event::ManaSpent { on, cast: false, mana, snow, .. } if on == source => {
+                spent.extend(Mana::ALL.map(|m| (m, u32::from(mana.get(m)), snow > 0)));
             }
             Event::AbilityActivated { .. } | Event::Resolved { .. } => break,
             _ => {}
         }
     }
     spent
+}
+
+/// "The mana you spent on {X}" of an activated ability of `source` whose activation is the `AbilityActivated` record at `end`
+/// of `q.history().all()` (CR 601.2h by way of 602.2b): the mana spent to pay that activation, as `mana_spent_on` finds it
+/// (Ice Cauldron's note), each part by type and from a snow source or not, for `Query::mana_could_pay`. Which activation it
+/// is, and how much of it was X's, the asking card says. Illusionary Mask asks it; Ice Cauldron reads the same walk.
+pub fn mana_spent_activating(q: &dyn Query, end: usize, source: ObjectId) -> Vec<(Mana, u32, bool)> {
+    mana_units_spent_on(q.history().all(), end, source)
 }
 
 /// "This artifact's last noted type [and amount] of mana" (CR 607.2e), asked by the ability linked to `by`: the mana spent

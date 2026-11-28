@@ -1,0 +1,60 @@
+# Illusionary Mask's {X} paid with {U}{U}{U} from Black Lotus (the pool empty right after the activation, CR 601.2h): the mana
+# spent on X decides what may be chosen, by amount and by type (the ruling) - Waterwind Scout's {2}{U} (3, exactly X), never
+# Giant Octopus's {3}{U} (one more) nor Balduvian Bears' {1}{G} (no green spent), nor a matching card in the opponent's hand
+# ("in your hand"). The Scout is cast face down as a 2/2 creature spell (CR 708.4), resolves face down (its "enters" ability
+# never applies, CR 708.3), and on turn 3 its attack would tap it: instead it is turned face up and becomes tapped (CR 614.1,
+# 701.26a), attacking as the flying 2/2 Scout, and turning up makes no Map token (CR 708.8).
+
+[Bot1 Deck]
+Illusionary Mask
+Mox Pearl
+Mox Jet
+Black Lotus
+Waterwind Scout
+Giant Octopus
+Balduvian Bears
+Island x20
+
+[Bot2 Deck]
+Aegis Turtle
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Illusionary Mask.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Illusionary Mask.Activate(X: 3)
+Bot1.Pass
+? Bot1.Mana =
+! Bot1.Choose(Giant Octopus)
+! Bot1.Choose(Balduvian Bears)
+! Bot1.Choose(Aegis Turtle)
+Bot1.Choose(Waterwind Scout)
+Bot1.Accept
+? Stack..FaceDown = true
+? Stack..FaceDownName = Waterwind Scout
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Keywords = (absent)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(#1 > Bot2)
+? Bot1.Battlefield.Waterwind Scout.Tapped = true
+? Bot1.Battlefield.Waterwind Scout.FaceDown = (absent)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Waterwind Scout.Keywords = Flying
+Bot1.Battlefield.Map Token = (absent)

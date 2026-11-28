@@ -1,0 +1,62 @@
+# An attacker assigns its combat damage too (CR 510.1): Bot1's face-down creature, cast with Illusionary Mask, is Caelorna, Coral
+# Tyrant (0/8). Might of the Ancestors makes the face-down 2/2 a 4/2 with vigilance, so it attacks without becoming tapped and
+# stays face down (CR 702.20b). Unblocked, it would assign its 4 to Bot2: instead it is turned face up and assigns as Caelorna
+# with the +2/+0 still on it (CR 614.1, 708.8) - 2, not the 4 the face-down creature had.
+
+[Bot1 Deck]
+Illusionary Mask
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Sapphire
+Caelorna, Coral Tyrant
+Might of the Ancestors
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Illusionary Mask.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Illusionary Mask.Activate(X: 2)
+Bot1.Pass
+Bot1.Choose(Caelorna, Coral Tyrant)
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Might of the Ancestors.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..Power = 4
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(#1 > Bot2)
+? Bot1.Battlefield..Tapped = false
+? Bot1.Battlefield..FaceDown = true
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Caelorna, Coral Tyrant.FaceDown = (absent)
+Bot1.Battlefield.Caelorna, Coral Tyrant.Power = 2
+Bot1.Battlefield.Caelorna, Coral Tyrant.Tapped = false

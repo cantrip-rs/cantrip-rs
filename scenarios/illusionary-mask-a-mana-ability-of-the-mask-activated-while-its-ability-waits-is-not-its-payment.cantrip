@@ -1,0 +1,58 @@
+# A Realm Reborn gives Illusionary Mask "{T}: Add one mana of any color." Bot1 activates the Mask's {X} for X = 2 with
+# {U}{G}, then, the ability waiting on the stack, taps the Mask for mana: that is another of its abilities activated
+# (CR 605.3), not the one resolving, and the mana spent on {X} is still the {U}{G} of its own activation - Coral Eel's {1}{U}
+# could be paid by it and may be chosen.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+A Realm Reborn
+Illusionary Mask
+Mox Sapphire
+Coral Eel
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.A Realm Reborn.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate(Ability: {T}: Add {W})
+Bot1.Battlefield.Mox Jet.Activate(Ability: {T}: Add {B})
+Bot1.Hand.Illusionary Mask.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate(Ability: {T}: Add {U})
+Bot1.Battlefield.Mox Emerald.Activate(Ability: {T}: Add {G})
+Bot1.Battlefield.Illusionary Mask.Activate(Ability: {X}; X: 2)
+Bot1.Battlefield.Illusionary Mask.Activate(Ability: Add one mana; Color: Red)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Coral Eel)
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield..FaceDownName = Coral Eel

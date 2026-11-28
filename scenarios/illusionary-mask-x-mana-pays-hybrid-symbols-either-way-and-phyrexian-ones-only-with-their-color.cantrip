@@ -1,0 +1,62 @@
+# Illusionary Mask's "could be paid by some amount of, or all of, the mana you spent on {X}" pays each symbol of the card's mana
+# cost as a payment would, with mana only (the ruling: {U}{U} pays {W/U}{W/U}). With {U}{U}{U}{U} spent on X, Wildgrowth Archaic's
+# {2/G}{2/G} could be paid, each monocolored hybrid symbol with {2} (CR 107.4e), and is cast face down. On turn 3, with {U}{U}
+# spent, Fatehold Chronologist's {1}{W/U} could be paid, its hybrid symbol with its blue half (CR 107.4e); never Vault Skirge's
+# {1}{B/P}, whose Phyrexian symbol mana pays only with black - mana is spent, no life (CR 107.4f).
+
+[Bot1 Deck]
+Illusionary Mask
+Mox Jet
+Mox Sapphire
+Black Lotus
+Island
+Vault Skirge
+Wildgrowth Archaic
+Fatehold Chronologist
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Illusionary Mask.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Illusionary Mask.Activate(X: 4)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Vault Skirge)
+Bot1.Choose(Wildgrowth Archaic)
+Bot1.Accept
+? Stack..FaceDownName = Wildgrowth Archaic
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Illusionary Mask.Activate(X: 2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Vault Skirge)
+Bot1.Choose(Fatehold Chronologist)
+Bot1.Accept
+? Stack..FaceDownName = Fatehold Chronologist
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.#1.FaceDownName = Wildgrowth Archaic
+Bot1.Battlefield.#2.FaceDownName = Fatehold Chronologist
+Bot1.Hand = Vault Skirge

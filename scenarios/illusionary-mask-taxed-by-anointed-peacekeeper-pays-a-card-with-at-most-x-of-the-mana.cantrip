@@ -1,0 +1,69 @@
+# Bot2's Anointed Peacekeeper names Illusionary Mask, so its ability costs {2} more (CR 601.2f): on turn 3 Bot1 activates it
+# for X = 2 and pays {W}{B}{U}{G}, all four (the pool empty after). No part of that mana is told apart as X's: a creature card
+# qualifies if at most X of the mana spent could pay its mana cost, in any combination (owner ruling 2026-11-27). Balduvian
+# Bears' {1}{G} is paid by two of it - the {G} and any other - and may be chosen; Wildwood Patrol's {2}{G} would take three,
+# more than X, though four were spent, and may not.
+
+[Bot1 Deck]
+Illusionary Mask
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Balduvian Bears
+Wildwood Patrol
+Island x20
+
+[Bot2 Deck]
+Anointed Peacekeeper
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Illusionary Mask.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.Hand.Anointed Peacekeeper.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Name(Illusionary Mask)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Illusionary Mask.Activate(X: 2)
+Bot1.Pass
+? Bot1.Mana =
+! Bot1.Choose(Wildwood Patrol)
+Bot1.Choose(Balduvian Bears)
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield..FaceDownName = Balduvian Bears
+Bot1.Hand = Island; Wildwood Patrol

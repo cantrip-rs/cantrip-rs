@@ -1,0 +1,68 @@
+# Bite Down has Bot1's face-down creature, cast with Illusionary Mask, deal damage equal to its power - the face-down 2/2's 2,
+# determined as the instruction is carried out (CR 608.2h) - to Bot2's Grizzly Bears. That damage would be dealt by it: instead
+# it is turned face up and deals that damage (CR 614.1, 614.6). It is Caelorna, Coral Tyrant, a 0/8, and the Bears still die:
+# the event is the 2 damage, not a new one of its power now.
+
+[Bot1 Deck]
+Illusionary Mask
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Sapphire
+Caelorna, Coral Tyrant
+Mox Emerald
+Bite Down
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Grizzly Bears
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Illusionary Mask.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Illusionary Mask.Activate(X: 2)
+Bot1.Pass
+Bot1.Choose(Caelorna, Coral Tyrant)
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bite Down.Cast
+Bot1.Target(Bot1.Battlefield.#1)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Caelorna, Coral Tyrant.Power = 0
+Bot1.Battlefield.Caelorna, Coral Tyrant.Damage = 0

@@ -1,0 +1,67 @@
+# The active player announces attackers' combat damage first, then the defending player blockers' (CR 510.1): Bot1's face-down
+# blocker, cast with Illusionary Mask, is Caelorna, Coral Tyrant (0/8). Bot2's Wildwood Patrol (4/2, trample) divides its 4
+# against the face-down 2/2 - lethal is 2, so 2 tramples over to Bot1 (CR 702.19b). Only then would the blocker assign its 2:
+# instead it is turned face up and assigns as Caelorna, whose 0 power assigns nothing (CR 510.1a, 614.1). The Patrol is dealt
+# nothing; Caelorna, face up already, is dealt the 2.
+
+[Bot1 Deck]
+Illusionary Mask
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Sapphire
+Caelorna, Coral Tyrant
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Wildwood Patrol
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Illusionary Mask.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Illusionary Mask.Activate(X: 2)
+Bot1.Pass
+Bot1.Choose(Caelorna, Coral Tyrant)
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Battlefield.Mox Emerald#3.Activate
+Bot2.Hand.Wildwood Patrol.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Wildwood Patrol > Bot1)
+Bot1.Block(#1 > Wildwood Patrol)
+Bot2.AssignDamage(Wildwood Patrol > #1: 2; Wildwood Patrol > Bot1: 2)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot1.Battlefield.Caelorna, Coral Tyrant.Damage = 2
+Bot2.Battlefield.Wildwood Patrol.Damage = 0

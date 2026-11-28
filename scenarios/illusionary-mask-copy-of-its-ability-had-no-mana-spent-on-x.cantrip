@@ -1,0 +1,70 @@
+# A copy of Illusionary Mask's ability (Peter Parker's Camera, CR 707.10) has the X of the ability it copies but no cost paid:
+# no mana was spent on its X, so as the copy resolves only a creature card with mana cost {0} may be chosen - Ornithopter, not
+# Plated Seastrider's {U}{U}, which the {U}{U} spent on the original's X pays as the original resolves after it. Both are cast
+# face down, the copy's first. On turn 5 both attack, tapped together: each is turned face up as it would become tapped, the
+# second still one the effect applies to though the first was turned up a moment before (CR 708.8).
+
+[Bot1 Deck]
+Illusionary Mask
+Mox Pearl
+Mox Jet
+Island
+Peter Parker's Camera
+Ornithopter
+Plated Seastrider
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Illusionary Mask.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Peter Parker's Camera.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Illusionary Mask.Activate(X: 2)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Peter Parker's Camera.Activate(Stack.Illusionary Mask)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Plated Seastrider)
+Bot1.Choose(Ornithopter)
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDownName = Ornithopter
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plated Seastrider)
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.#1.FaceDown = true
+? Bot1.Battlefield.#2.FaceDown = true
+? Bot1.Hand.Count = 0
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(#1 > Bot2; #2 > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Plated Seastrider.Tapped = true
+Bot2.Life = 19
