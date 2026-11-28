@@ -681,6 +681,66 @@ pub fn with_classic<T>(classic: bool, run: impl FnOnce() -> T) -> T {
     out
 }
 
+/// A single step towards a payment the seat must make and `pay` finds no way to: the first offered mana ability, made
+/// whole (its targets - a choice in its cost, as Phyrexian Tower's creature to sacrifice - and a color owed, or any it
+/// may choose), that the engine accepts. `pay` takes only abilities whose yield it can see paying the cost; this is for a
+/// payment that cannot be given up (a required cast, CR 608.2g, 733.1), where an ability `pay` cannot judge (Tolarian
+/// Academy's "for each", a sacrifice to choose) is still an answer, and may be the only one. `None` if no step is accepted.
+pub fn step(game: &Game, request: &Request) -> Option<Answer> {
+    let (RequestKind::PayCosts { remaining: owed, options, .. } | RequestKind::UnlessPays { remaining: owed, options, .. }) =
+        &request.kind
+    else {
+        return None;
+    };
+    const COLORS: [Color; 5] = [Color::White, Color::Blue, Color::Black, Color::Red, Color::Green];
+    options.iter().filter(|o| crate::atomic::is_mana_ability(game, o)).find_map(|o| {
+        let mut colors: Vec<Option<Color>> = COLORS.iter().filter(|&&c| o.color_choices.has(c)).map(|&c| Some(c)).collect();
+        colors.sort_by_key(|c| c.is_none_or(|c| !pays(owed, Mana::ALL[c as usize])));
+        if colors.is_empty() {
+            colors.push(None);
+        }
+        let n = if o.targets_optional { 0 } else { o.targets_required as usize };
+        let picks = combinations(o.target_candidates.len(), n);
+        colors.iter().find_map(|&color| {
+            picks.iter().find_map(|pick| {
+                let mut action = Action::of(o);
+                if color.is_some() {
+                    action.color = color;
+                    if o.mana == Some(Mana::C) {
+                        action.mana = None;
+                    }
+                }
+                action.targets = pick.iter().map(|&i| o.target_candidates[i]).collect();
+                let answer = Answer::Act(action);
+                check_answer(game, request, &answer).is_ok().then_some(answer)
+            })
+        })
+    })
+}
+
+/// The first `CAP` ways to choose `k` of `n` (indices, in order).
+fn combinations(n: usize, k: usize) -> Vec<Vec<usize>> {
+    const CAP: usize = 64;
+    let mut out = Vec::new();
+    if k > n {
+        return out;
+    }
+    let mut at: Vec<usize> = (0..k).collect();
+    loop {
+        out.push(at.clone());
+        if out.len() >= CAP {
+            return out;
+        }
+        let Some(i) = (0..k).rev().find(|&i| at[i] < n - k + i) else {
+            return out;
+        };
+        at[i] += 1;
+        for j in i + 1..k {
+            at[j] = at[j - 1] + 1;
+        }
+    }
+}
+
 /// What the AI player pays a payment with: for `PayCosts` (announcing `x` where it is being announced), `auto_pay`,
 /// then a mana ability that adds mana still owed; for `UnlessPays`, X raised or lowered to `x`, then paying once the
 /// pool covers it, a mana ability while it does not. `None` where it cannot pay: the caller cancels or declines.

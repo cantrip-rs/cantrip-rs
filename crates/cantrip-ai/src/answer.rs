@@ -258,7 +258,7 @@ impl Answering {
                 None if self.ask.may_cancel || offered(ActionKind::CancelCasting).is_some() => {
                     cancel()
                 }
-                None => return Err("nothing pays the cost".into()),
+                None => pay::step(game, request).ok_or("nothing pays the cost")?,
             },
             (RequestKind::UnlessPays { .. }, F::Unless { pay: false, .. }) => {
                 offered(ActionKind::DeclineCost).ok_or("the cost cannot be declined")?
@@ -267,6 +267,7 @@ impl Answering {
                 match pay::pay(game, request, *x) {
                     Some(a) => a,
                     None => offered(ActionKind::DeclineCost)
+                        .or_else(|| pay::step(game, request))
                         .ok_or("nothing pays the cost, and it cannot be declined")?,
                 }
             }

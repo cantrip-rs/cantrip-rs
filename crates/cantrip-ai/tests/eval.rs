@@ -326,8 +326,11 @@ fn scenarios(every: usize) -> Vec<PathBuf> {
 }
 
 fn corpus(every: usize) -> Tally {
+    played(scenarios(every))
+}
+
+fn played(sample: Vec<PathBuf>) -> Tally {
     let evaluator = TractEvaluator::load(&tiny(), table()).unwrap();
-    let sample = scenarios(every);
     let tally = Mutex::new(Tally::default());
     let next = std::sync::atomic::AtomicUsize::new(0);
     let threads = std::thread::available_parallelism().map_or(4, |n| n.get());
@@ -366,6 +369,20 @@ fn corpus(every: usize) -> Tally {
 fn network_answers_are_accepted() {
     let t = corpus(60);
     assert!(t.requests > 500, "{t:?}");
+    assert!(t.refused.is_empty(), "{:#?}", t.refused);
+}
+
+/// The scenarios of a required cast (`CastTerms::if_able`, Word of Command's), every one of them, whatever the sample
+/// above takes: there the caster may not give the cast up, so a payment the seat can only make step by step (a mana
+/// ability with a choice in its cost, as Phyrexian Tower's sacrifice) is the one answer it has.
+#[test]
+fn network_answers_to_a_required_cast_are_accepted() {
+    let all: Vec<PathBuf> = scenarios(1)
+        .into_iter()
+        .filter(|p| p.file_stem().is_some_and(|s| s.to_string_lossy().starts_with("word-of-command")))
+        .collect();
+    assert!(all.len() >= 20, "{} Word of Command scenarios", all.len());
+    let t = played(all);
     assert!(t.refused.is_empty(), "{:#?}", t.refused);
 }
 
