@@ -651,6 +651,17 @@ impl<'a> History<'a> {
         })
     }
 
+    /// How many untapped lands `player` controlled at the beginning of this turn (Power Surge), as its `Event::TurnBegan`
+    /// keeps it: the board at the turn's first moment, before the untap step's phasing and untapping (CR 502.1, 502.3),
+    /// whatever has become of those lands since. Only the player whose turn it is was counted; None for another player, and
+    /// for a turn with no beginning recorded.
+    pub fn untapped_lands_as_turn_began(&self, player: PlayerId) -> Option<u32> {
+        self.this_turn().iter().find_map(|r| match r.event {
+            Event::TurnBegan { player: p, untapped_lands, .. } if p == player => Some(untapped_lands),
+            _ => None,
+        })
+    }
+
     /// Cards `player` has drawn this turn (CR 121).
     pub fn drawn(&self, player: PlayerId) -> usize {
         self.count(EventQuery::kind(EventMask::DREW).player(player).this_turn())

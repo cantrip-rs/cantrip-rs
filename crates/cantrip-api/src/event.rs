@@ -495,7 +495,15 @@ pub enum Event {
     /// `player`'s turn began (CR 500.1, 502): recorded only, as its untap step starts. A turn skipped (CR 614.10) never
     /// begins and has none. `extra` is whether it is an extra turn (CR 500.7), as "haven't begun an extra turn this game"
     /// asks.
-    TurnBegan { player: PlayerId, extra: bool },
+    ///
+    /// It is taken at the turn's first moment: once what ends as the turn begins has ended (the control of a player for the
+    /// turn before, CR 723.1; "until your next turn"), and before the untap step's first action, its phasing (CR 502.1) and
+    /// then its untapping (CR 502.3), even when the untap step is skipped (CR 500.11). `untapped_lands` is how many untapped
+    /// lands `player` controlled then, judged by their characteristics then (CR 613; a phased-out permanent is treated as
+    /// though it does not exist, CR 702.26b): "the number of untapped lands they controlled at the beginning of this turn"
+    /// (Power Surge; `History::untapped_lands_as_turn_began`). A count, and the active player's alone: every printed
+    /// card that asks about the beginning of the turn asks about the player whose turn it is, and this one only how many.
+    TurnBegan { player: PlayerId, extra: bool, untapped_lands: u32 },
     /// `player` completed a dungeon (CR 309.7): their venture marker left its bottommost room, by the state-based action
     /// (CR 704.5t) or by venturing on from it (CR 701.49c). Recorded only.
     DungeonCompleted { player: PlayerId },

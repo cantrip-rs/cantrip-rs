@@ -39,7 +39,7 @@ fn game_with(seats: usize) -> (Game, ObjectId) {
 }
 fn turn(g: &mut Game, player: PlayerId, number: u32, extra: bool) {
     g.state.update_turn(|t| { t.active = player; t.number = number; t.set_step(Step::Untap); });
-    cx(g).record(Event::TurnBegan { player, extra });
+    cx(g).record(Event::TurnBegan { player, extra, untapped_lands: 0 });
 }
 fn schedule(g: &mut Game, source: ObjectId, of: Option<PlayerId>) {
     let ability = AbilityRef::delayed(g.state.obj(source).card, 0);

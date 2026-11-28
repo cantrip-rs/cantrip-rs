@@ -679,10 +679,7 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
                 p.turn_began = number;
                 p.lands_played = 0;
             });
-            // How many turns a player has taken is asked of the history (`cantrip_mechanics::history::in_your_first_turns`).
-            // Whether it is an extra turn is part of its beginning (CR 500.7: "haven't begun an extra turn this game").
-            cx.record(Event::TurnBegan { player: active, extra: turn.extra != 0 });
-            // "Until your next turn" ends as that turn begins (CR 611.2b).
+            // "Until your next turn" ends as that turn begins (CR 611.2a: it lasts as long as it says).
             if cx.s().effects.iter().any(|e| e.duration == Duration::UntilNextTurnOf(active)) {
                 cx.st().effects_retain(|e| e.duration != Duration::UntilNextTurnOf(active));
                 ops::settle_lasting_and_control(cx);
@@ -704,6 +701,12 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
                     cx.st().effect_set(at, effect);
                 }
             }
+            // The turn has begun, what ends as it begins ended: its record, with the board as it is at that moment, before the
+            // untap step's phasing and untapping (CR 502.1, 502.3; `Event::TurnBegan`). How many turns a player has taken is
+            // asked of the history (`cantrip_mechanics::history::in_your_first_turns`). Whether it is an extra turn is part
+            // of its beginning (CR 500.7: "haven't begun an extra turn this game").
+            let untapped_lands = untapped_lands_of(cx, active);
+            cx.record(Event::TurnBegan { player: active, extra: turn.extra != 0, untapped_lands });
             // The turn begins even when its first step is skipped (CR 500.11, 614.10a).
             // Turn-bound durations ended above; skipped untap-step deadlines, phasing, day/night, exert and untaps wait.
             if crate::static_rules::skips_step(cx, active, Step::Untap) {
@@ -737,6 +740,19 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
     }
     push_priority(cx);
     Ok(Flow::Done)
+}
+
+/// How many untapped lands `player` controls now, by their characteristics now (CR 613): the count `Event::TurnBegan` keeps
+/// of the turn's first moment. Phased-out permanents are off the battlefield's list (CR 702.26b). Once a turn, so kept out of
+/// the turn's hot path.
+#[cold]
+#[inline(never)]
+fn untapped_lands_of(cx: &Cx, player: PlayerId) -> u32 {
+    let s = cx.s();
+    s.battlefield().iter().filter(|&&id| {
+        let obj = s.obj(id);
+        obj.controller == player && !obj.tapped && cx.chars(id).is(CardType::Land)
+    }).count() as u32
 }
 
 /// The turn `player` takes now is their "next turn" for every effect waiting to control them during it (CR 723.1, 723.1b: a
