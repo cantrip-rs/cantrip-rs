@@ -605,12 +605,13 @@ pub fn factored_name(game: &Game, answer: &Answer) -> Option<FactoredAnswer> {
 }
 
 /// The X an announcement (or an "unless pays" cost's X) comes to: `now`, moved a step by each of the leading `answers`
-/// that raises or lowers it.
+/// that raises or lowers it, or the X the first announcement among them names: an announcement ends it, and one after
+/// it is the casting remade (`record::ends_run`).
 pub fn final_x(now: u32, answers: &[Answer]) -> u32 {
     let mut x = now;
     for a in answers {
         match a {
-            Answer::Announce(n) => x = *n,
+            Answer::Announce(n) => return *n,
             Answer::Act(a) if a.kind == ActionKind::IncreaseX => x += 1,
             Answer::Act(a) if a.kind == ActionKind::DecreaseX => x = x.saturating_sub(1),
             _ => break,

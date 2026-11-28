@@ -88,16 +88,26 @@ pub(crate) fn run_key(request: &Request) -> Option<(PlayerId, u8, ObjectId, Obje
 
 /// Whether `answer` ends the payment it answers - the cost paid, declined or the casting cancelled - so that a request
 /// of the same `run_key` after it is a new ask, not the same payment going on: Thrull Wizard's "unless pays {3}" after
-/// its {B} is declined is asked by the same source about the same spell with no answer between them.
+/// its {B} is declined is asked by the same source about the same spell with no answer between them. An X announced
+/// (or confirmed) ends its announcement the same way: the announcement asked again after it is the casting remade, the
+/// engine having reversed a payment no answer could finish (CR 733) - Word of Command's X 1 announced again, a new ask.
 pub(crate) fn ends_run(answer: &Answer) -> bool {
     match answer {
-        Answer::Cancel => true,
+        Answer::Cancel | Answer::Announce(_) => true,
         Answer::Act(a) => matches!(
             a.kind,
-            ActionKind::PayCost | ActionKind::DeclineCost | ActionKind::CancelCasting
+            ActionKind::PayCost | ActionKind::DeclineCost | ActionKind::CancelCasting | ActionKind::ConfirmCasting
         ),
         _ => false,
     }
+}
+
+/// Whether `request` lets its payment be given up: it may be cancelled, or offers to cancel casting. One that does not
+/// (a spell cast by another's command, CR 723.2) offers its cancel only at a dead end, where it is the only answer left.
+fn may_give_up(request: &Request) -> bool {
+    request.may_cancel
+        || matches!(&request.kind, RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. }
+            if options.iter().any(|o| o.kind == ActionKind::CancelCasting))
 }
 
 fn lives(game: &Game) -> Vec<i64> {
@@ -337,13 +347,16 @@ pub fn record_distilled(
             k += 1;
             continue;
         };
-        // The run of answers this one starts, and its last answer: what the seat finally did.
+        // The run of answers this one starts, and its last answer: what the seat finally did. A payment that could not
+        // be given up where it began is paid there; the cancel at its dead end is that request's own answer, not one its
+        // start offers.
         let key = run_key(&request);
         let mut last = k;
         while key.is_some()
             && !ends_run(&answers[last].2)
             && last + 1 < answers.len()
             && asked[last + 1].as_ref().and_then(run_key) == key
+            && (may_give_up(&request) || !crate::atomic::cancels(&answers[last + 1].2))
         {
             last += 1;
         }

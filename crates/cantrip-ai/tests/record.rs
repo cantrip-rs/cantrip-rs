@@ -172,6 +172,11 @@ fn scenarios_that_once_failed_record() {
             // Thrull Wizard asks for {B}, then, declined, for {3}: two asks from the same source about the same spell
             // with no answer between them, the second a new decision, not the first one's payment going on.
             "thrull-wizard-three-mana-saves-spell",
+            // Word of Command's forced cast can't be given up where its payment begins, only at a dead end, where the
+            // cancel is the only answer (CR 723.2, 733): the payment is paid at its start and given up there, two answers.
+            // A remake that announces X again is a new announcement, the engine having reversed the last.
+            "word-of-command-a-dead-x-is-refused-and-a-live-one-taken",
+            "word-of-command-remade-cast-reversed-at-the-question-it-failed-at-before",
         ]
         .iter()
         .map(|n| {
