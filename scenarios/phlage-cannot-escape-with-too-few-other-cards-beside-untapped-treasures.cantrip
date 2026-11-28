@@ -1,0 +1,56 @@
+# Escape exiles five *other* cards from the graveyard (CR 702.138a). On turn 5 the graveyard holds Phlage (cast from hand on
+# turn 1 and sacrificed) and only two others, the Arid Mesas cracked on turns 1 and 3, while two Gold Pans' Treasures stand
+# untapped beside lands and Moxen that cover {R}{R}{W}{W}. A Treasure is a token: sacrificed for mana it puts no card into the
+# graveyard (CR 111.1, 108.2b), so its mana ability cannot feed the exile cost, and the escape is not offered. This is the position
+# a booster pod's bot seat stalled in (issue #2209): offered the escape, it announced it, the cast was taken back, and it announced
+# it again, thousands of times a turn, until the event ran out of time.
+
+[Bot1 Deck]
+Arid Mesa
+Mox Ruby
+Mox Pearl
+Phlage, Titan of Fire's Fury
+Gold Pan
+Gold Pan
+Arid Mesa
+Plateau x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Arid Mesa.Play
+Bot1.Battlefield.Arid Mesa.Activate
+Bot1.Search(Plateau)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plateau.Activate(Ability: {R})
+Bot1.Hand.Phlage, Titan of Fire's Fury.Cast
+Bot1.Target(Bot2)
+[T3 Bot1.Main1]
+Bot1.Hand.Arid Mesa.Play
+Bot1.Battlefield.Arid Mesa.Activate
+Bot1.Search(Plateau)
+Bot1.Battlefield.Plateau.Activate(Ability: {R})
+Bot1.Battlefield.Plateau.Activate(Ability: {R})
+Bot1.Hand.Gold Pan.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gold Pan.Cast
+[T5 Bot1.Main1]
+? Bot1.Graveyard = Arid Mesa; Phlage, Titan of Fire's Fury; Arid Mesa
+? Bot1.Battlefield.Treasure Token#1.Tapped = false
+? Bot1.Battlefield.Treasure Token#2.Tapped = false
+! Bot1.Graveyard.Phlage, Titan of Fire's Fury.Cast(Ability: Escape)
+
+[Expect]
+Bot1.Graveyard = Arid Mesa; Phlage, Titan of Fire's Fury; Arid Mesa
+Exile.Count = 0
+Bot1.Battlefield.Count = 8
+Bot2.Life = 17
+Bot1.Life = 21
