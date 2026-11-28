@@ -5,13 +5,8 @@ use cantrip_oracle as oracle;
 /// "Target Lizard, Mouse, Otter, or Raccoon you control": a permanent you control with one of those creature types, the
 /// words read through the land's own (CR 612).
 fn critter_you_control(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    let Target::Object(id) = t else { return false };
-    if !targets::permanent(q, id) || q.controller(id) != asker.controller {
-        return false;
-    }
-    let words = q.words(asker.source);
-    let chars = q.chars(id);
-    [Subtype::Lizard, Subtype::Mouse, Subtype::Otter, Subtype::Raccoon].into_iter().any(|s| chars.has_subtype(words.subtype(s)))
+    targets::permanent_of_any_subtype(q, asker, t, &[Subtype::Lizard, Subtype::Mouse, Subtype::Otter, Subtype::Raccoon])
+        && matches!(t, Target::Object(id) if q.controller(id) == asker.controller)
 }
 
 /// "... gets +1/+0 and gains haste until end of turn": nothing if the target is no longer legal (CR 608.2b).

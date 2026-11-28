@@ -6,7 +6,7 @@ use cantrip_oracle as oracle;
 /// creature card in your graveyard" instead. The teamwork cost is announced before the target is chosen (CR 601.2b-c,
 /// 702.194b), so the target is judged by it, as the spell is cast and again as it resolves (CR 608.2b).
 fn creature_card_in_your_graveyard_with_mana_value_4_or_less_or_any_with_teamwork(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    if q.obj(asker.source).paid > 0 {
+    if teamwork::used_by(q, asker.source) {
         (targets::CREATURE_CARD_IN_YOUR_GRAVEYARD.filter)(q, asker, t)
     } else {
         targets::card_in_your_graveyard_with_mana_value_at_most(q, asker, t, &[CardType::Creature], 4)

@@ -2,16 +2,11 @@ use cantrip_api::*;
 use cantrip_mechanics::{lands, library, select, statics};
 use cantrip_oracle as oracle;
 
-/// "A Plan card": a card with the Plan subtype, read through the words of the text asking (CR 205.3, 612).
-fn plan(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
-    let plan = q.words(choice.source).subtype(Subtype::Plan);
-    Verdict::each(choice, |card| q.chars(card).has_subtype(plan))
-}
-
 /// "Search your library for a Plan card, reveal it, put it into your hand, then shuffle." (CR 701.23): the whole library is
-/// shown; the player may find nothing, and the library is shuffled either way.
+/// shown; the player may find nothing, and the library is shuffled either way. "A Plan card" is a card with the Plan subtype,
+/// read through the words of the text asking (CR 205.3, 612).
 fn search_for_a_plan(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let rule = Selection::new(select::up_to(1)).with(select::part(&(plan as SelectFn), 0, "")).called("Plan");
+    let rule = Selection::new(select::up_to(1)).with(select::subtype_card(Subtype::Plan)).called("Plan");
     library::find_to_hand(g, item.controller, item.object, rule, true)?;
     Ok(())
 }

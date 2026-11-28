@@ -5,12 +5,7 @@ use cantrip_mechanics::{lands, triggers, typecycling};
 use cantrip_oracle as oracle;
 
 /// "A Dragon card": a card with the creature type Dragon, read through the words of the text that asks for it (CR 612).
-fn dragon(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
-    let dragon = q.words(choice.source).subtype(Subtype::Dragon);
-    Verdict::each(choice, |card| q.chars(card).has_subtype(dragon))
-}
-
-const DRAGON: Part = select::part(&(dragon as SelectFn), 0, "");
+const DRAGON: Part = select::subtype_card(Subtype::Dragon);
 
 /// A search for "a Dragon card", which may be left unfound (CR 701.23b).
 const DRAGON_CARD: Selection = Selection::of(select::up_to(1), &[DRAGON]).called("Dragon");

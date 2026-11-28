@@ -6,7 +6,7 @@ use cantrip_oracle as oracle;
 /// teamwork cost is announced before the target is chosen (CR 601.2b-c, 702.194b), so the target is judged by it, as the spell
 /// is cast and again as it resolves (CR 608.2b).
 fn creature_with_mana_value_3_or_less_or_any_with_teamwork(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    if q.obj(asker.source).paid > 0 {
+    if teamwork::used_by(q, asker.source) {
         (targets::CREATURE.filter)(q, asker, t)
     } else {
         targets::creature_with_mana_value_at_most::<3>(q, asker, t)

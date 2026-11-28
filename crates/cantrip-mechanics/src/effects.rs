@@ -802,7 +802,7 @@ pub fn plus_one_counter_on_each_other_of_subtype_you_control<const SUBTYPE: u16>
 }
 
 /// "Put a +1/+1 counter on each other creature you control" as an ability's whole effect (CR 122.1, 101.4): the creatures its controller controls
-/// as it resolves but its source, together. Monica Rambeau and Web-Warriors print it.
+/// as it resolves but its source, together. Monica Rambeau and Web-Warriors print it; Guiding Hydra after removing its counter.
 pub fn plus_one_counter_on_each_other_creature_you_control(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let others: Vec<ObjectId> =
         g.permanents_of(item.controller).into_iter().filter(|&id| id != item.object && g.chars(id).is(CardType::Creature)).collect();

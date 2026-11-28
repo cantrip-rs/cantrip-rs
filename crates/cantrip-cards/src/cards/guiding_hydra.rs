@@ -16,11 +16,7 @@ fn share(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if g.remove_counters(this, CounterKind::PlusOne, 1) == 0 {
         return Ok(());
     }
-    let others: Vec<ObjectId> =
-        g.permanents_of(item.controller).into_iter().filter(|&id| id != this && g.chars(id).is(CardType::Creature)).collect();
-    let puts: Vec<(ObjectId, CounterKind, i32)> = others.into_iter().map(|id| (id, CounterKind::PlusOne, 1)).collect();
-    g.add_counters_together(&puts);
-    Ok(())
+    effects::plus_one_counter_on_each_other_creature_you_control(g, item)
 }
 
 pub static CARD: CardDef = CardDef {

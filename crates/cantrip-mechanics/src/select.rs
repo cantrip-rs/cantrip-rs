@@ -177,7 +177,8 @@ pub const LAND: Part = part(&(land as SelectFn), 0, "");
 pub const FOREST: Part = subtype_card(Subtype::Forest);
 
 /// "A [subtype] card" (CR 205.3, 612.2): a card with `subtype`, the type read through the words of the text of the card that asks
-/// and a card as it is where it is. `FOREST` is the Forest card; From Father to Son searches for a Vehicle card.
+/// and a card as it is where it is. `FOREST` is the Forest card; From Father to Son searches for a Vehicle card, Last Light of
+/// Durin's Day for a Dragon card and The Masters of Evil for a Plan card.
 pub const fn subtype_card(subtype: Subtype) -> Part {
     part(&(self::subtype as SelectFn), crate::lands::sub(subtype) as u32, "")
 }

@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{discard_chosen, effects};
+use cantrip_mechanics::{discard_chosen, effects, triggers};
 use cantrip_oracle as oracle;
 
 const ASK: Question = Question::new(
@@ -9,17 +9,6 @@ const ASK: Question = Question::new(
     "Draw cards",
     "Don't draw",
 );
-
-/// "Whenever you cast a noncreature spell" (CR 603.2, 601.2i): a spell its controller cast, read as it stands on the stack, the
-/// ability about that spell (`StackItem::subject`).
-fn you_cast_a_noncreature_spell(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
-    match event {
-        Event::SpellCast { spell, player, .. } if *player == me.controller && !q.chars(*spell).is(CardType::Creature) => {
-            Fired::about(Target::Object(*spell))
-        }
-        _ => None,
-    }
-}
 
 /// "You may draw X cards, where X is the amount of mana spent to cast that spell. If you do, discard two cards." (CR 601.2h,
 /// 121.1, 701.9, 608.2c): all the mana spent counts, of any type and on any part of the cost, read from the spell's own object
@@ -39,7 +28,7 @@ fn draw_then_discard(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
 
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
-        when_asked(EventMask::SPELL_CAST, you_cast_a_noncreature_spell),
+        triggers::NONCREATURE_SPELL_YOU_CAST_ABOUT_IT,
         draw_then_discard,
         "Whenever you cast a noncreature spell, you may draw X cards, where X is the amount of mana spent to cast that spell. If you do, discard two cards.",
     )],

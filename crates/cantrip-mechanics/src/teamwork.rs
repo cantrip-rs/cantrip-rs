@@ -20,3 +20,10 @@ pub const fn optional(power: u8) -> OptionalCost {
 pub fn used(item: &StackItem) -> bool {
     item.paid > 0
 }
+
+/// "If this spell was cast using teamwork" (CR 702.194b), asked of the spell object rather than its stack item: what a target
+/// filter reads, judging the spell's targets as it is cast and again as it resolves (Cruel Alliance, Too Evil to Stay Dead).
+/// A copy of the spell was cast the same way when the original was (CR 707.10).
+pub fn used_by(q: &dyn Query, spell: ObjectId) -> bool {
+    q.obj(spell).paid > 0
+}

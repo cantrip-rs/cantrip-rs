@@ -1629,7 +1629,7 @@ pub fn noncreature_spell_you_cast_with_at_least_mana_spent<const N: u32>(q: &dyn
 
 /// "Whenever you cast a noncreature spell, ... that spell's ..." (CR 603.2, 601.2i): the same trigger as
 /// `noncreature_spell_you_cast`, with the spell as the ability's subject so the effect can read it ("that spell's mana
-/// value"). Chrome Host Seedshark, Shark Typhoon and Thor, God of Thunder print it.
+/// value"). Chrome Host Seedshark, Shark Typhoon, Thor, God of Thunder and Uncover the Moon-Letters print it.
 pub fn noncreature_spell_you_cast_about_it(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
         Event::SpellCast { spell, player, .. } if *player == me.controller && !q.chars(*spell).is(CardType::Creature) => {
