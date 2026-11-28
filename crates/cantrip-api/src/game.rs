@@ -1983,7 +1983,7 @@ pub trait Game: Query {
     /// `maximum` in all, asked as `RequestKind::RemoveCounters` with `up_to`, and they come off. `source` is the spell or
     /// ability. Nothing is asked of an object with no counters, or one that has changed zones (CR 400.7). Says how many
     /// came off, for "for each counter removed this way" (Hex Parasite). Heartless Act, Hex Parasite, Price of Betrayal.
-    fn remove_counters_up_to(&mut self, player: PlayerId, source: ObjectId, object: ObjectId, maximum: u8) -> Result<u16, Suspend>;
+    fn remove_counters_up_to(&mut self, player: PlayerId, source: ObjectId, object: ObjectId, maximum: u32) -> Result<u32, Suspend>;
     /// "Remove a counter from a [permanent] you control" as the effect resolves (CR 608.2d, 122.1): `player` chooses one counter
     /// of any kind on any of `permanents` (the ones the effect may take it from), asked as `RequestKind::RemoveCounters`, and it
     /// comes off. Whether one did, for "if you do": none when none of them has a counter or has changed zones (CR 400.7).

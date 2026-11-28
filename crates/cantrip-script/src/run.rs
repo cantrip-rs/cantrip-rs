@@ -1553,7 +1553,7 @@ impl<'s> Run<'s> {
             }
             // Counters from among permanents (CR 118.3): as many as there are from each pool in turn, the first offered first.
             RequestKind::RemoveCounters { pools, total, .. } => {
-                let mut left = u32::from(*total);
+                let mut left = *total;
                 let mut taken = Vec::new();
                 for p in pools {
                     let n = p.count.min(left);
@@ -2655,7 +2655,7 @@ impl<'s> Run<'s> {
     /// `RemoveCounters(Grizzly Bears: 2; Hill Giant: PlusOnePlusOne 1)`: each permanent named, with how many counters come off
     /// it, and the kind (as the dump spells it) where it has more than one. For "up to" (`up_to`), `RemoveCounters()` removes
     /// none, and a number of them past the most is left for the rules to refuse (`! Bot1.RemoveCounters(..)`).
-    fn remove_counters(&self, step: &ActionStep, pools: &[CounterPool], total: u8, up_to: bool) -> R<Answer> {
+    fn remove_counters(&self, step: &ActionStep, pools: &[CounterPool], total: u32, up_to: bool) -> R<Answer> {
         let mut objects: Vec<Target> = Vec::new();
         for p in pools {
             if !objects.contains(&Target::Object(p.object)) {

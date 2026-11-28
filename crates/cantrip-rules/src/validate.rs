@@ -322,8 +322,8 @@ pub fn check(game: &Game, request: &Request, answer: &Answer) -> Result<(), Reje
             }
             if *up_to {
                 // "Up to" (CR 608.2d): none at all is a choice, more than the number is not.
-                if sum > *total as u32 { no(format!("{sum} counters removed, up to {total} allowed")) } else { Ok(()) }
-            } else if sum != *total as u32 {
+                if sum > *total { no(format!("{sum} counters removed, up to {total} allowed")) } else { Ok(()) }
+            } else if sum != *total {
                 no(format!("{sum} counters removed, {total} wanted (CR 118.3)"))
             } else {
                 Ok(())

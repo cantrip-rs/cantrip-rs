@@ -310,7 +310,7 @@ pub fn decide(game: &Game, random: &mut Random, request: &Request) -> Answer {
         RequestKind::Craft { cards, minimum, .. } => Answer::Cards(cards[..*minimum as usize].to_vec()),
         // As many as there are from each pool in turn.
         RequestKind::RemoveCounters { pools, total, .. } => {
-            let mut left = u32::from(*total);
+            let mut left = *total;
             let mut taken = Vec::new();
             for p in pools {
                 let n = p.count.min(left);

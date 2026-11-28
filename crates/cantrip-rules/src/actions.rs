@@ -1474,9 +1474,9 @@ fn choose_counters_among(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: 
 
 fn choose_counters_among_by(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost, by: Option<Linked>) -> R<Vec<(ObjectId, CounterKind, u32)>> {
     let Some(among) = cost.remove_counters_among else { return Ok(Vec::new()) };
-    let total = among.count;
+    let total = u32::from(among.count);
     let pools = counter_pools(cx, source, player, among, by);
-    if pools.iter().map(|p| p.count as u32).sum::<u32>() < total as u32 {
+    if pools.iter().map(|p| p.count as u32).sum::<u32>() < total {
         return Err(Stop::Cancel);
     }
     match cx.ask_core(player, RequestKind::RemoveCounters { source, pools, total, up_to: false }, true)? {

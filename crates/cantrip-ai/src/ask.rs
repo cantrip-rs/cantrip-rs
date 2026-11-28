@@ -727,7 +727,7 @@ pub(crate) fn ask_of(
             pools.sort_by_key(|p| (p.object, p.kind, p.count));
             AskKind::RemoveCounters {
                 pools,
-                total: *total,
+                total: u8::try_from(*total).unwrap_or(u8::MAX),
                 up_to: *up_to,
             }
         }

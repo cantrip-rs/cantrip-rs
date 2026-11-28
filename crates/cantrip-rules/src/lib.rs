@@ -3584,7 +3584,7 @@ impl cantrip_api::Game for Cx<'_> {
         before - self.g.state.obj(object).counters(kind)
     }
 
-    fn remove_counters_up_to(&mut self, player: PlayerId, source: ObjectId, object: ObjectId, maximum: u8) -> Result<u16, Suspend> {
+    fn remove_counters_up_to(&mut self, player: PlayerId, source: ObjectId, object: ObjectId, maximum: u32) -> Result<u32, Suspend> {
         counters::remove_up_to(self, player, source, object, maximum).map_err(|_| Suspend)
     }
 

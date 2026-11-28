@@ -305,7 +305,7 @@ pub fn mv(cx: &mut Cx, from: ObjectId, to: ObjectId, kind: CounterKind, n: i32) 
 /// which of the counters on `id`, of any kinds and how many of each, from none to `maximum` in all, and they come off
 /// together. Nothing is asked of an object that has changed zones (CR 400.7) or that has no counters. How many came off:
 /// "for each counter removed this way". Heartless Act, Hex Parasite, Price of Betrayal (its permanents).
-pub fn remove_up_to(cx: &mut Cx, player: PlayerId, source: ObjectId, id: ObjectId, maximum: u8) -> crate::R<u16> {
+pub fn remove_up_to(cx: &mut Cx, player: PlayerId, source: ObjectId, id: ObjectId, maximum: u32) -> crate::R<u32> {
     if maximum == 0 || !live(cx.s(), id) || cx.s().obj(id).zone.is(ZoneKind::PhasedOut) {
         return Ok(0);
     }
@@ -323,11 +323,11 @@ pub fn remove_up_to(cx: &mut Cx, player: PlayerId, source: ObjectId, id: ObjectI
     let Answer::Counters(taken) = cx.ask_core(player, RequestKind::RemoveCounters { source, pools, total: maximum, up_to: true }, false)? else {
         return Ok(0);
     };
-    let mut removed = 0u16;
+    let mut removed = 0u32;
     for (object, kind, n) in taken {
         let before = cx.s().obj(object).counters(kind);
         remove(cx, object, kind, n as i32);
-        removed += (before - cx.s().obj(object).counters(kind)) as u16;
+        removed += (before - cx.s().obj(object).counters(kind)) as u32;
     }
     Ok(removed)
 }

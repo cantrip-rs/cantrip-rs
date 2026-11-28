@@ -1,12 +1,13 @@
 use cantrip_api::*;
-use cantrip_mechanics::{delayed, persist, targets, triggers::THIS_ENTERS};
+use cantrip_mechanics::{delayed, effects, persist, targets, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
 
 /// "Remove any number of counters from target creature you control" (CR 122.1, 608.2d): the controller chooses which, of any
-/// kinds, from none up to all of them. The most the request can name is 255 counters at once, far beyond a creature in a timed game.
+/// kinds, from none up to all of them (`effects::counters_on`).
 fn remove_any_number_of_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
-    g.remove_counters_up_to(item.controller, item.object, creature, u8::MAX)?;
+    let all = effects::counters_on(g, creature);
+    g.remove_counters_up_to(item.controller, item.object, creature, all)?;
     Ok(())
 }
 

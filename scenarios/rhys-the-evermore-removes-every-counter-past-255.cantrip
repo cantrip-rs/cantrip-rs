@@ -1,0 +1,94 @@
+# Rhys, the Evermore's "{W}, {T}: Remove any number of counters from target creature you control" takes as many as the
+# creature has, however many (CR 122.1, 608.2d): no fewer counters are offered than are there. Turn 1: Black Lotuses
+# pay for Doubling Season. Turn 3: Ulamog, the Defiler's cast trigger exiles the top half of Bot2's library with Emrakul,
+# the Aeons Torn among it (mana value 15), so Ulamog enters with 15 +1/+1 counters, doubled to 30. Bristly Bill doubles
+# them on turns 13 and 15, each doubling doubled again: 90, then 270. Turn 19: Rhys removes all 270, and Ulamog is a 7/7.
+
+[Bot1 Deck]
+Island
+Ulamog, the Defiler
+Doubling Season
+Black Lotus x4
+Black Lotus
+Forest
+Bristly Bill, Spine Sower
+Forest
+Forest
+Forest
+Plains
+Rhys, the Evermore
+Forest x5
+
+[Bot2 Deck]
+Plains x8
+Emrakul, the Aeons Torn
+Plains x28
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Doubling Season.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ulamog, the Defiler.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ulamog, the Defiler.Counters.PlusOnePlusOne = 30
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T7 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Bristly Bill, Spine Sower.Cast
+[T9 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Target(Bristly Bill, Spine Sower)
+[T11 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Target(Bristly Bill, Spine Sower)
+[T13 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Target(Bristly Bill, Spine Sower)
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Forest#3.Activate
+Bot1.Battlefield.Forest#4.Activate
+Bot1.Battlefield.Bristly Bill, Spine Sower.Activate
+[T13 Bot1.Main2]
+? Bot1.Battlefield.Ulamog, the Defiler.Counters.PlusOnePlusOne = 90
+[T15 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Target(Bristly Bill, Spine Sower)
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Forest#3.Activate
+Bot1.Battlefield.Forest#4.Activate
+Bot1.Battlefield.Bristly Bill, Spine Sower.Activate
+[T15 Bot1.Main2]
+? Bot1.Battlefield.Ulamog, the Defiler.Counters.PlusOnePlusOne = 270
+[T17 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Rhys, the Evermore.Cast
+[T19 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Rhys, the Evermore.Activate(Bot1.Battlefield.Ulamog, the Defiler)
+Bot1.RemoveCounters(Ulamog, the Defiler: 270)
+[T19 Bot1.Main2]
+
+[Expect]
+Turn = 19
+Bot1.Battlefield.Ulamog, the Defiler.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Ulamog, the Defiler.Power = 7

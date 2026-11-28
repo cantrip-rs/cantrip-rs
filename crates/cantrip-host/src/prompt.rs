@@ -1506,7 +1506,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
         RequestKind::RemoveCounters { source, pools, total, up_to } => PromptPayload::RemoveCountersPromptMessage(RemoveCountersPrompt {
             player,
             source: source_handle(game, handles, *source),
-            total: i32::from(*total),
+            total: wire(*total),
             up_to: *up_to,
             pools: pools
                 .iter()
