@@ -77,6 +77,10 @@ pub const WAY_TRANSFORMED: u8 = 252;
 /// cost or an alternative cost (the ruling: casting it prototyped is no alternative cost).
 pub const WAY_PROTOTYPE: u8 = 248;
 
+/// How a card is cast face down as a 2/2 creature spell by an effect, with no way of its own to be (CR 708.4, 708.2a):
+/// Illusionary Mask's "cast that card face down as a 2/2 creature spell", as a way number.
+pub const WAY_FACE_DOWN: u8 = 247;
+
 /// What made an action possible beyond the rules every player has (CR 601.3, 305.1, 118.9, 113.6): the object, and
 /// which of its abilities. A permanent's static ability (Lurrus of the Dream-Den's way from the graveyard, Bolas's Citadel's
 /// and Mystic Forge's rules for the top of the library, Primal Prayers' alternative cost), the spell or ability whose effect

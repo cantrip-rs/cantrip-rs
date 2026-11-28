@@ -347,6 +347,29 @@ pub struct Untap {
     pub remove: [i32; CounterKind::COUNT],
 }
 
+/// An untapped permanent about to become tapped (CR 701.26a, 614.1): by a cost, an attack declaration, an effect. Illusionary
+/// Mask's "if the creature ... would become tapped, instead it's turned face up and becomes tapped" is the one effect printed
+/// for it, which leaves the tap as it is and turns the permanent up as it applies (`GrantedReplacementDef::then`). Only lasting
+/// effects a spell or ability made are asked about it (`ops::tap_quietly`): no static ability replaces a tap.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Tap {
+    pub permanent: ObjectId,
+    /// Its controller, whose choice CR 616.1 is.
+    pub controller: PlayerId,
+}
+
+/// An attacking or blocking creature about to assign its combat damage (CR 510.1, 614.1): one that would assign some, to
+/// something there to be dealt it (CR 510.1a-d). Illusionary Mask's "if the creature ... would assign ... damage, instead it's
+/// turned face up and assigns ... damage" is the one effect printed for it: the creature then assigns as it is face up, its
+/// power and its trample read after the effect (`turn::combat_damage`). Only lasting effects a spell or ability made are asked
+/// about it.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct CombatDamageAssignment {
+    pub creature: ObjectId,
+    /// Its controller, whose choice CR 616.1 is.
+    pub controller: PlayerId,
+}
+
 /// A proposed event a replacement effect may reshape.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Proposal {
@@ -363,6 +386,8 @@ pub enum Proposal {
     LifeChange(LifeChange),
     ManaProduction(ManaProduction),
     Untap(Untap),
+    Tap(Tap),
+    CombatDamageAssignment(CombatDamageAssignment),
 }
 
 /// The kinds of event a replacement effect watches for, so an effect is asked only about events it could replace.
@@ -385,6 +410,10 @@ pub enum ReplacementKind {
     ManaProduction,
     /// A permanent untapping (CR 701.26b): `Proposal::Untap`.
     Untap,
+    /// A permanent becoming tapped (CR 701.26a): `Proposal::Tap`.
+    Tap,
+    /// A creature assigning combat damage (CR 510.1): `Proposal::CombatDamageAssignment`.
+    CombatDamageAssignment,
 }
 
 impl Proposal {
@@ -402,6 +431,8 @@ impl Proposal {
             Proposal::LifeChange(_) => ReplacementKind::LifeChange,
             Proposal::ManaProduction(_) => ReplacementKind::ManaProduction,
             Proposal::Untap(_) => ReplacementKind::Untap,
+            Proposal::Tap(_) => ReplacementKind::Tap,
+            Proposal::CombatDamageAssignment(_) => ReplacementKind::CombatDamageAssignment,
         }
     }
 }
@@ -531,6 +562,11 @@ pub struct GrantedReplacementDef {
     /// "The next time [an event] would happen this turn, ... instead" (CR 614.1a): the effect is used up by the one event it
     /// replaces, and ends as it applies; a second such effect waits for the next event.
     pub once: bool,
+    /// Made about a permanent spell, it applies to the permanent the spell becomes as it resolves (CR 608.3): Illusionary
+    /// Mask's "if the creature that spell becomes as it resolves ... would ...". The core carries it from the spell onto that
+    /// permanent as it enters (`ops::carry_effects`); an effect about a spell otherwise ends as the spell leaves the stack
+    /// (CR 400.7).
+    pub becomes: bool,
     /// The effect's words, as its card's Oracle text prints them (the sentence that makes it, and what it does besides): what
     /// tells whether it refers to its own source while it waits to apply (CR 609.7a, `CardTable::names_its_source`), as Torch
     /// the Tower's "If a permanent dealt damage by Torch the Tower would die this turn, exile it instead" does. A shared

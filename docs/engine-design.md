@@ -4154,6 +4154,38 @@ The shared recipes for Combat Celebrant and Ahn-Crop Champion, Own the Day and W
 untapping legal targets, and untapping all controlled lands call that authority. The recipes still
 select their own printed sets; simultaneous legality and replacement timing belong to the core.
 
+### Becoming tapped and assigning combat damage as replaceable events; a face-down cast by an effect
+
+Illusionary Mask's "if the creature that spell becomes as it resolves has not been turned face up and would assign or deal
+damage, be dealt damage, or become tapped, instead it's turned face up and ..." (CR 614.1) is three lasting replacement effects
+(`EffectKind::Replacement`) of three kinds, each leaving its event as it is and turning the creature up as it applies
+(`GrantedReplacementDef::then`, CR 614.6), so whatever else would modify the same event is ordered with it (CR 616.1):
+
+- **Damage** is `Proposal::Damage`, as it was.
+- **Becoming tapped** (CR 701.26a) is `Proposal::Tap` (`ReplacementKind::Tap`), met in `ops::tap_quietly`, which every tap
+  goes through - a cost's {T}, convoke, crew, an attack declaration (CR 508.1f), an effect - before the permanent is tapped and
+  before anything is announced. No static ability replaces a tap, so only lasting effects are looked for, and none in a game
+  with no lasting effect: the tap's one guard is `GameState::effects` being empty, the rest `#[cold]` (`replace::tap`).
+- **Assigning combat damage** (CR 510.1) is `Proposal::CombatDamageAssignment`. With such an effect in the game
+  (`replace::lasting_replaces`, a scan of the lasting effects once a damage step) the step is taken announcement by
+  announcement (`turn::combat_damage_announced_in_turn`, `#[cold]`): each attacker that would assign damage (CR 510.1a-c) meets
+  the effects, the attackers' divisions are asked and fixed, then each blocker that would assign meets them, and the blockers'
+  are asked - so an attacker divides its damage among the blockers as they were before any of them turned up (a trampler's
+  lethal damage for a face-down 2/2 is 2), and each creature assigns as it is once turned up. Without one, the step is as it
+  always was.
+
+The cast is `Game::cast_face_down_during_resolution` (CR 708.4, 608.2g): the card cast face down by `WAY_FACE_DOWN` with no way
+of its own, as the 2/2 of CR 708.2a with no text, name, subtypes or mana cost (`intrinsic::MORPHED`, whose morph action a
+face-down permanent that would have morph face up has, CR 702.37e), judged as that face-down spell (`could_cast_face_down_
+during_resolution`). The effects are made about the spell and carried onto the permanent it becomes as it resolves
+(`GrantedReplacementDef::becomes`, `ops::carry_effects`, CR 608.3); "has not been turned face up" is asked of the history
+(`Event::TurnedFaceUp`). "Mana spent on {X}" that "could pay" a mana cost is `Query::mana_could_pay`, the payment's own flow
+(`Demand::of`), with Phyrexian symbols paid by their color and monocolored hybrid either way, and a bound on how many of the mana
+it may use: where an increase made the Mask's ability cost more, no part of the mana spent is told apart as X's, and a card
+qualifies if at most X of it, in any combination, could pay its mana cost (owner ruling 2026-11-27) - a payment spends one unit
+for each symbol and generic mana, so the bound is on what the cost asks. Each `Event::ManaSpent` is all snow mana or none
+(`record_spent`), so {S} reads back by type.
+
 ### Blocking exceptions for landwalk (CR 609.4)
 
 `CardDef::landwalk_exceptions` names the landwalk abilities ignored for a particular

@@ -82,6 +82,7 @@ static ONCE_REDIRECT: CardDef = CardDef {
         damage: None,
         optional: None,
         once: true,
+        becomes: false,
         text: "",
     }],
     ..CardDef::BLANK

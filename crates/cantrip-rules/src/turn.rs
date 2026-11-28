@@ -2095,14 +2095,47 @@ fn combat_damage(cx: &mut Cx) -> R<()> {
         cx.st().set_blocks(blocks);
     }
 
+    // A creature's assigning combat damage is an event a replacement effect may watch for (CR 510.1, 614.1): only a lasting
+    // one a spell or ability made does (Illusionary Mask's), and the step is then taken announcement by announcement.
+    if crate::replace::lasting_replaces(cx, ReplacementKind::CombatDamageAssignment) {
+        return combat_damage_announced_in_turn(cx, first_strike_step);
+    }
+
     // The creatures dealing combat damage now: the attackers, and each blocker once however many creatures it blocks.
-    let attackers: Vec<Attacker> = cx
-        .s()
+    let attackers = attackers_dealing_now(cx, first_strike_step);
+    let blockers = blockers_dealing_now(cx, first_strike_step);
+
+    // The divisions, each with the player who makes it.
+    let mut divisions = attacker_divisions(cx, &attackers);
+    divisions.extend(blocker_divisions(cx, &blockers));
+    let chosen = divide(cx, &divisions)?;
+
+    let assignments = combat_assignments(cx, &attackers, &blockers, &chosen);
+    deal_combat_damage(cx, &assignments);
+    Ok(())
+}
+
+/// CR 510.2: all of it is dealt at once, and announced at once (CR 603.2c). A prevention shield two or more sources would
+/// deal damage to prevents whose damage its player or controller chooses (CR 615.7).
+fn deal_combat_damage(cx: &mut Cx, assignments: &[(ObjectId, Target, u32)]) {
+    cx.instruction(|cx| {
+        let (_, _, mut batch) = ops::damage_batch(cx, assignments, true);
+        batch.rest_of_preventions(cx);
+    }, |_| true);
+}
+
+/// The attackers dealing combat damage in this combat damage step (CR 510.1, 510.4).
+fn attackers_dealing_now(cx: &Cx, first_strike_step: bool) -> Vec<Attacker> {
+    cx.s()
         .attackers
         .iter()
         .copied()
         .filter(|a| live(cx.s(), a.id) && deals_now(cx, a.id, a.first_strike, first_strike_step) && assigns_combat_damage(cx, a.id))
-        .collect();
+        .collect()
+}
+
+/// The blockers dealing combat damage in this combat damage step (CR 510.1, 510.4), each once however many creatures it blocks.
+fn blockers_dealing_now(cx: &Cx, first_strike_step: bool) -> Vec<ObjectId> {
     let mut blockers: Vec<ObjectId> = Vec::new();
     for b in &cx.s().blocks {
         if !blockers.contains(&b.blocker) && live(cx.s(), b.blocker) && deals_now(cx, b.blocker, b.first_strike, first_strike_step)
@@ -2110,22 +2143,39 @@ fn combat_damage(cx: &mut Cx) -> R<()> {
             blockers.push(b.blocker);
         }
     }
+    blockers
+}
 
-    // The divisions, each with the player who makes it.
-    let mut divisions: Vec<(PlayerId, DamageDivision)> = Vec::new();
+/// The attackers' divisions of their combat damage, each with the player who makes it (CR 510.1c, 702.22j).
+fn attacker_divisions(cx: &Cx, attackers: &[Attacker]) -> Vec<(PlayerId, DamageDivision)> {
+    let mut divisions = Vec::new();
     for attacker in attackers.iter().filter(|a| a.blocked) {
         if let Some(d) = attacker_division(cx, attacker) {
             let by = if d.banding { cx.s().obj(d.creatures[0]).controller } else { cx.s().obj(attacker.id).controller };
             divisions.push((by, d));
         }
     }
-    for &blocker in &blockers {
+    divisions
+}
+
+/// The blockers' divisions of their combat damage, each with the player who makes it (CR 510.1d, 702.22k).
+fn blocker_divisions(cx: &Cx, blockers: &[ObjectId]) -> Vec<(PlayerId, DamageDivision)> {
+    let mut divisions = Vec::new();
+    for &blocker in blockers {
         if let Some(d) = blocker_division(cx, blocker) {
             let by = if d.banding { cx.s().obj(d.creatures[0]).controller } else { cx.s().obj(blocker).controller };
             divisions.push((by, d));
         }
     }
+    divisions
+}
+
+/// Each player's divisions asked of them, in APNAP order (CR 510.1): the shares they chose.
+fn divide(cx: &mut Cx, divisions: &[(PlayerId, DamageDivision)]) -> R<Vec<(ObjectId, Option<ObjectId>, u32)>> {
     let mut chosen: Vec<(ObjectId, Option<ObjectId>, u32)> = Vec::new();
+    if divisions.is_empty() {
+        return Ok(chosen);
+    }
     let players: Vec<PlayerId> = cx.s().apnap().collect();
     for player in players {
         let mine: Vec<DamageDivision> = divisions.iter().filter(|(by, _)| *by == player).map(|(_, d)| d.clone()).collect();
@@ -2135,14 +2185,55 @@ fn combat_damage(cx: &mut Cx) -> R<()> {
             chosen.extend(shares);
         }
     }
+    Ok(chosen)
+}
 
-    let assignments = combat_assignments(cx, &attackers, &blockers, &chosen);
-    // CR 510.2: all of it is dealt at once, and announced at once (CR 603.2c). A prevention shield two or more sources would
-    // deal damage to prevents whose damage its player or controller chooses (CR 615.7).
-    cx.instruction(|cx| {
-        let (_, _, mut batch) = ops::damage_batch(cx, &assignments, true);
-        batch.rest_of_preventions(cx);
-    }, |_| true);
+/// Whether `attacker` would assign combat damage now (CR 510.1a-c): more than 0, to what it attacks if it is unblocked, to
+/// its blockers if it is blocked - or, with trample and none left, to what it attacks (CR 702.19d).
+fn attacker_would_assign(cx: &Cx, attacker: &Attacker) -> bool {
+    if crate::static_rules::combat_damage_of(cx, attacker.id) == 0 {
+        return false;
+    }
+    if !attacker.blocked {
+        return combat_defender_present(cx, attacker.target);
+    }
+    !blockers_of(cx, attacker.id).is_empty() || (cx.chars(attacker.id).has(Keyword::Trample) && combat_defender_present(cx, attacker.target))
+}
+
+/// Whether `blocker` would assign combat damage now (CR 510.1a, 510.1d): more than 0, to a creature it still blocks.
+fn blocker_would_assign(cx: &Cx, blocker: ObjectId) -> bool {
+    crate::static_rules::combat_damage_of(cx, blocker) > 0 && !blocked_by(cx, blocker).is_empty()
+}
+
+/// The combat damage step where a replacement effect watches for creatures assigning combat damage (CR 510.1, 614.1): the
+/// active player announces how each attacking creature assigns its combat damage, then the defending players how each blocking
+/// creature does. Each creature that would assign some as its announcement comes meets the effects first, all of that
+/// announcement's at once - Illusionary Mask's turns it face up - and is then assigned as it is: its power, its trample, what
+/// it is to the others (CR 614.6). So an attacker's damage is divided among blockers as they are before any of them is turned
+/// up. All of it is then dealt at once (CR 510.2).
+#[cold]
+#[inline(never)]
+fn combat_damage_announced_in_turn(cx: &mut Cx, first_strike_step: bool) -> R<()> {
+    let would: Vec<ObjectId> =
+        attackers_dealing_now(cx, first_strike_step).iter().filter(|a| attacker_would_assign(cx, a)).map(|a| a.id).collect();
+    for creature in would {
+        crate::replace::combat_damage_assignment(cx, creature);
+    }
+    let attackers = attackers_dealing_now(cx, first_strike_step);
+    let divisions = attacker_divisions(cx, &attackers);
+    let chosen = divide(cx, &divisions)?;
+    let mut assignments = combat_assignments(cx, &attackers, &[], &chosen);
+
+    let would: Vec<ObjectId> =
+        blockers_dealing_now(cx, first_strike_step).into_iter().filter(|&b| blocker_would_assign(cx, b)).collect();
+    for creature in would {
+        crate::replace::combat_damage_assignment(cx, creature);
+    }
+    let blockers = blockers_dealing_now(cx, first_strike_step);
+    let divisions = blocker_divisions(cx, &blockers);
+    let chosen = divide(cx, &divisions)?;
+    assignments.extend(combat_assignments(cx, &[], &blockers, &chosen));
+    deal_combat_damage(cx, &assignments);
     Ok(())
 }
 

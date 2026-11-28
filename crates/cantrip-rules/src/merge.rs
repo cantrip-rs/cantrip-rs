@@ -326,6 +326,10 @@ impl Query for AsText<'_> {
         self.q.has_granted_way(card)
     }
 
+    fn mana_could_pay(&self, mana: &[(Mana, u32, bool)], at_most: u32, cost: &ManaCost) -> bool {
+        crate::actions::mana_could_pay(mana, at_most, cost)
+    }
+
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         self.q.producible_types(permanent)
     }

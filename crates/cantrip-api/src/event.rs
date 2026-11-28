@@ -290,7 +290,7 @@ pub enum Event {
     /// payment is made, so a spell's come before its `Cast`: "using mana produced by [this]", "mana from a Treasure was spent
     /// to cast it" (`History::mana_spent_to_cast`). Only recorded.
     /// `rider` is the "when that mana is spent" delayed ability the mana carried (`ManaFrom::rider`), 0 for none: one event
-    /// for each source and rider.
+    /// for each source and rider, and its snow mana (`snow`, CR 107.4h) apart from its other mana, so `snow` is 0 or all of it.
     ManaSpent { player: PlayerId, source: ObjectId, on: ObjectId, cast: bool, mana: ManaTally, snow: u32, rider: u32 },
     /// Of the mana `player` spent to pay a cost of `on` (as `ManaSpent` says), `n` of the type `mana` paid its X, where only
     /// some mana may be spent on X ("Spend only black and/or red mana on X", CR 107.3, 601.2h): which mana pays which part

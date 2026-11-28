@@ -250,6 +250,17 @@ pub trait Query {
         panic!("mana production requires a rules-host query")
     }
 
+    /// Whether some or all of `mana`, `at_most` of it in all, could pay `cost` (CR 601.2h, 107.4): `mana` as units of a type,
+    /// `n` of each, from a snow source or not (CR 107.4h). Each colored symbol is paid with its color, a hybrid one with either half, a Phyrexian one
+    /// with its color only (this is mana, not life), a monocolored hybrid one with its color or two of any, {C} with
+    /// colorless mana, {S} with mana from a snow source, an {X} as 0 (CR 107.3g), and the generic mana with any. Illusionary
+    /// Mask's "a creature card in your hand whose mana cost could be paid by some amount of, or all of, the mana you spent on
+    /// {X}" (its ruling: {U}{U} pays {U}{U}, {1}{U}, {2} or {W/U}{W/U}, not {2}{U} or {G}), at most X of the mana spent where
+    /// an increase made it more (owner ruling 2026-11-27). Implemented by the rules host, which pays costs.
+    fn mana_could_pay(&self, _mana: &[(Mana, u32, bool)], _at_most: u32, _cost: &ManaCost) -> bool {
+        panic!("judging a payment requires a rules-host query")
+    }
+
     /// The "defending player" of `attacker`, an attacking creature or one that attacked (CR 508.5, 310.9d): the player it
     /// attacks, or the controller of the planeswalker or the protector of the battle it attacks, as it began attacking
     /// (`Attacker::defending`) - so still once that planeswalker or battle has changed controller or protector, or been
@@ -2206,6 +2217,13 @@ pub trait Game: Query {
     /// The resolving effect's controller casts `card` transformed, for nothing (CR 712.11a, 118.9): put on the stack
     /// with its back face up, it resolves into a permanent back face up (CR 712.13). Whether it was cast.
     fn cast_transformed_during_resolution(&mut self, card: ObjectId) -> Result<bool, Suspend>;
+    /// Whether the resolving effect's controller could cast `card` face down as a 2/2 creature spell now, from where it is
+    /// (CR 608.2g, 708.4): judged as that face-down spell, a 2/2 with no text, name, subtypes or mana cost (CR 708.2a).
+    fn could_cast_face_down_during_resolution(&mut self, card: ObjectId) -> bool;
+    /// The resolving effect's controller casts `card` face down as a 2/2 creature spell without paying its mana cost (CR
+    /// 708.4, 118.9; Illusionary Mask): turned face down before it is put on the stack, it resolves into a face-down permanent.
+    /// The spell, or none where it was not cast.
+    fn cast_face_down_during_resolution(&mut self, card: ObjectId) -> Result<Option<ObjectId>, Suspend>;
     /// "Damage can't be prevented this turn" (CR 615.12): a rule of the game until the turn ends.
     fn damage_cant_be_prevented(&mut self);
     /// Makes the object about to enter a copy (CR 707.2).

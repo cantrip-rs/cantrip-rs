@@ -273,6 +273,10 @@ impl Query for AsSpell<'_> {
         self.q.has_granted_way(card)
     }
 
+    fn mana_could_pay(&self, mana: &[(Mana, u32, bool)], at_most: u32, cost: &ManaCost) -> bool {
+        crate::actions::mana_could_pay(mana, at_most, cost)
+    }
+
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         self.q.producible_types(permanent)
     }
@@ -411,6 +415,10 @@ impl Query for WithWords<'_> {
 
     fn has_granted_way(&self, card: ObjectId) -> bool {
         self.q.has_granted_way(card)
+    }
+
+    fn mana_could_pay(&self, mana: &[(Mana, u32, bool)], at_most: u32, cost: &ManaCost) -> bool {
+        crate::actions::mana_could_pay(mana, at_most, cost)
     }
 
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
@@ -4692,6 +4700,10 @@ impl Query for Announcing<'_> {
         self.q.has_granted_way(card)
     }
 
+    fn mana_could_pay(&self, mana: &[(Mana, u32, bool)], at_most: u32, cost: &ManaCost) -> bool {
+        crate::actions::mana_could_pay(mana, at_most, cost)
+    }
+
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         self.q.producible_types(permanent)
     }
@@ -4826,6 +4838,10 @@ impl Query for Watch<'_> {
     fn has_granted_way(&self, card: ObjectId) -> bool {
         self.w.told.set(true);
         self.q.has_granted_way(card)
+    }
+
+    fn mana_could_pay(&self, mana: &[(Mana, u32, bool)], at_most: u32, cost: &ManaCost) -> bool {
+        crate::actions::mana_could_pay(mana, at_most, cost)
     }
 
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
@@ -5628,6 +5644,10 @@ impl Query for AsFace<'_> {
 
     fn has_granted_way(&self, card: ObjectId) -> bool {
         self.cx.has_granted_way(card)
+    }
+
+    fn mana_could_pay(&self, mana: &[(Mana, u32, bool)], at_most: u32, cost: &ManaCost) -> bool {
+        crate::actions::mana_could_pay(mana, at_most, cost)
     }
 
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
@@ -8524,6 +8544,22 @@ fn transports(supply: &[Supply], demand: &[Demand]) -> bool {
     transport_flow(supply, demand).is_some()
 }
 
+/// `Query::mana_could_pay`: whether some or all of `mana` (units of a type, how many, from a snow source or not), `at_most`
+/// units of it in all, could pay `cost` (CR 601.2h): its Phyrexian symbols with their colors, no life (CR 107.4f), each
+/// monocolored hybrid symbol either way (CR 107.4e), an {X} as 0 (CR 107.3g), and the rest by the flow every payment is
+/// judged by (`Demand::of`). A payment spends one unit for each symbol and each generic mana it pays, so the bound is on what
+/// the cost asks, as each way of paying its monocolored hybrid symbols has it ask.
+pub(crate) fn mana_could_pay(mana: &[(Mana, u32, bool)], at_most: u32, cost: &ManaCost) -> bool {
+    let supply: Vec<Supply> =
+        mana.iter().filter(|m| m.1 > 0).map(|&(m, n, snow)| Supply { snow, stage: 0, types: 1 << m as u8, restriction: None, n }).collect();
+    pool_announcements_pay(cost, 0, AnyMana::No, &|cost| {
+        let mut demand = Vec::new();
+        Demand::of(cost, 1, None, &mut demand);
+        demand.retain(|d| d.n > 0);
+        demand.iter().map(|d| u64::from(d.n)).sum::<u64>() <= u64::from(at_most) && transports(&supply, &demand)
+    })
+}
+
 fn transport_flow(supply: &[Supply], demand: &[Demand]) -> Option<Vec<Vec<u64>>> {
     transport_flow_as(supply, demand, false)
 }
@@ -9855,6 +9891,11 @@ fn mutating_face_of(whole: &'static CardDef, way: u8) -> Option<&'static CardDef
 /// 702.168b, 708.4): a 2/2 creature with no text, no name, no subtypes and no mana cost for morph and megamorph
 /// (`intrinsic::MORPHED`), with ward {2} for disguise (`intrinsic::DISGUISED`).
 fn face_down_values_of(whole: &'static CardDef, way: u8) -> Option<&'static CardDef> {
+    // Cast face down by an effect with no way of its own (CR 708.4): the 2/2 with no text, no name, no subtypes and no mana
+    // cost of CR 708.2a, which may be turned up by morph where it would have it face up as any face-down permanent may.
+    if way == WAY_FACE_DOWN {
+        return Some(&cantrip_api::intrinsic::MORPHED);
+    }
     let w = whole.ways.get((way as usize).checked_sub(1)?)?;
     match w.kind {
         WayKind::Morph | WayKind::Megamorph => Some(&cantrip_api::intrinsic::MORPHED),
@@ -9894,6 +9935,10 @@ impl Query for QueryAsFace<'_> {
 
     fn has_granted_way(&self, card: ObjectId) -> bool {
         self.q.has_granted_way(card)
+    }
+
+    fn mana_could_pay(&self, mana: &[(Mana, u32, bool)], at_most: u32, cost: &ManaCost) -> bool {
+        crate::actions::mana_could_pay(mana, at_most, cost)
     }
 
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
@@ -10101,6 +10146,10 @@ impl Query for WithX<'_> {
 
     fn has_granted_way(&self, card: ObjectId) -> bool {
         self.q.has_granted_way(card)
+    }
+
+    fn mana_could_pay(&self, mana: &[(Mana, u32, bool)], at_most: u32, cost: &ManaCost) -> bool {
+        crate::actions::mana_could_pay(mana, at_most, cost)
     }
 
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
@@ -13328,6 +13377,54 @@ pub fn cast_transformed_during_resolution(cx: &mut Cx, card: ObjectId) -> R<bool
         Err(Stop::Cancel) => {
             crate::takeback::take_back(cx, mark, log_mark, since);
             Ok(false)
+        }
+        Err(stop) => Err(stop),
+    }
+}
+
+/// Whether the resolving effect's controller could cast `card` face down as a 2/2 creature spell now, from where it is
+/// (CR 608.2g, 708.4): a card not on the battlefield or the stack, cast with no way of its own to be face down (Illusionary
+/// Mask's "you may cast that card face down as a 2/2 creature spell"), judged as the face-down spell it would be - a 2/2 with
+/// no text, no name, no subtypes and no mana cost (CR 708.2a, `intrinsic::MORPHED`) - and not as the card (CR 708.4): a
+/// ban on spells like the card need not be one on it. Split second on the stack forbids it (CR 702.61a).
+pub fn could_cast_face_down_during_resolution(cx: &mut Cx, card: ObjectId) -> bool {
+    let Some(item) = cx.resolving().copied() else { return false };
+    let player = item.controller;
+    let obj = cx.s().obj(card);
+    if !live(cx.s(), card) || matches!(obj.zone.kind(), ZoneKind::Battlefield | ZoneKind::Stack) {
+        return false;
+    }
+    if cx.s().stack.iter().any(|i| i.serial != item.serial && i.kind == StackKind::Spell && has_split_second(cx, i.object)) {
+        return false;
+    }
+    if cast_barred(cx, player).contains(obj.zone.kind()) {
+        return false;
+    }
+    let forbidders = static_rules::spell_bans(cx, player);
+    forbidders.is_empty() || !forbidden_as_cast(cx, &forbidders, card, cast_face_id(cx, card, WAY_FACE_DOWN), None, player)
+}
+
+/// Casts `card` face down as a 2/2 creature spell without paying its mana cost as an effect resolves (CR 608.2g, 708.4,
+/// 118.9): it is turned face down before it is put on the stack, the face-down values its copiable values (CR 708.2a), and
+/// resolves into a face-down permanent (CR 708.4). Turned up only as a face-down permanent may be (CR 708.7): by morph or
+/// disguise where it would have it face up (`Query::turn_up_way`), or by an effect. A cast given up (CR 733.1) is undone,
+/// and nothing happens. The spell, or none where it was not cast.
+pub fn cast_face_down_during_resolution(cx: &mut Cx, card: ObjectId) -> R<Option<ObjectId>> {
+    if !could_cast_face_down_during_resolution(cx, card) {
+        return Ok(None);
+    }
+    let Some(player) = cx.resolving().map(|i| i.controller) else { return Ok(None) };
+    let mark = cx.s().mark();
+    let log_mark = cx.g.log.len();
+    let since = crate::takeback::since(cx.g);
+    match cast(cx, player, card, WAY_FACE_DOWN, &[], CastTerms { instead: Some(ManaCost::ZERO), ..CastTerms::default() }, CastBy::default(), true) {
+        Ok(()) => {
+            crate::takeback::finished(cx.g, since);
+            Ok(cx.s().obj(card).became)
+        }
+        Err(Stop::Cancel) => {
+            crate::takeback::take_back(cx, mark, log_mark, since);
+            Ok(None)
         }
         Err(stop) => Err(stop),
     }
@@ -16919,18 +17016,22 @@ fn told_pools(cx: &Cx, player: PlayerId, told: &[ManaPart]) -> Vec<(ManaPart, Ma
 /// Records what a payment for `on` spent, one `Event::ManaSpent` for each source it took mana from, in the order it first
 /// took from each (CR 106.3, 601.2h).
 fn record_spent(cx: &mut Cx, player: PlayerId, on: ObjectId, cast: bool, taken: &[(ObjectId, Mana, u32, bool, u32)]) {
-    let mut by: Vec<(ObjectId, u32, ManaTally, u64)> = Vec::new();
+    // A source's snow mana and its other mana are two records (CR 107.4h: a source's snow-ness is captured as it produces
+    // the mana, and may differ from one time to the next), so each record is all snow or none: what "mana from a snow source
+    // spent on" a cost is, by type, can be read back (Illusionary Mask's {S}).
+    let mut by: Vec<(ObjectId, u32, bool, ManaTally, u64)> = Vec::new();
     for &(source, mana, n, snow, rider) in taken {
-        let at = match by.iter().position(|(s, r, ..)| *s == source && *r == rider) {
+        let at = match by.iter().position(|(s, r, w, ..)| *s == source && *r == rider && *w == snow) {
             Some(at) => at,
             None => {
-                by.push((source, rider, ManaTally::default(), 0));
+                by.push((source, rider, snow, ManaTally::default(), 0));
                 by.len() - 1
             }
         };
-        by[at].2.add(mana, n);
-        if snow { by[at].3 += u64::from(n); }
+        by[at].3.add(mana, n);
+        if snow { by[at].4 += u64::from(n); }
     }
+    let by = by.into_iter().map(|(source, rider, _, mana, snow)| (source, rider, mana, snow));
     for (source, rider, mana, snow) in by {
         cx.record(Event::ManaSpent { player, source, on, cast, mana, snow: snow.min(u64::from(u32::MAX)) as u32, rider });
     }

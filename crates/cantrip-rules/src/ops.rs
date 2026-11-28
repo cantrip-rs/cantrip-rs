@@ -3079,10 +3079,15 @@ pub fn last_known_from(cx: &mut Cx, id: ObjectId, c: &Chars) -> LastKnown {
 /// The effects of spells and abilities that change a permanent spell's characteristics or controller go on applying to the
 /// permanent it becomes (CR 400.7a): a spell whose text was changed is a permanent with that text, and a creature spell cast
 /// with suspend that gained haste is a creature with haste (CR 702.62a). Each is an effect of a layer (`layers::effect_layer`)
-/// or a change of control; it keeps its timestamp and duration.
+/// or a change of control; it keeps its timestamp and duration. So does a replacement effect made about the spell for the
+/// permanent it becomes (`GrantedReplacementDef::becomes`, CR 608.3: Illusionary Mask's).
 pub fn carry_effects(cx: &mut Cx, spell: ObjectId, permanent: ObjectId) {
+    let cards = cx.cards();
     let carries = |e: &cantrip_state::ContinuousEffect| {
-        e.affected == spell && (layers::effect_layer(e.kind).is_some() || matches!(e.kind, EffectKind::Control(_)))
+        e.affected == spell
+            && (layers::effect_layer(e.kind).is_some()
+                || matches!(e.kind, EffectKind::Control(_))
+                || matches!(e.kind, EffectKind::Replacement { card, index, .. } if cards.get(card).granted_replacements[index as usize].becomes))
     };
     let carried: Vec<cantrip_state::ContinuousEffect> = cx.s().effects.iter().filter(|e| carries(e)).copied().collect();
     if carried.is_empty() {
@@ -5621,6 +5626,11 @@ pub fn tap(cx: &mut Cx, id: ObjectId, by: PlayerId) {
 /// `Event::Tapped`s are announced together (`tap_together`, CR 603.2c).
 pub fn tap_quietly(cx: &mut Cx, id: ObjectId) -> bool {
     if !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield) || cx.s().obj(id).tapped {
+        return false;
+    }
+    // Becoming tapped is an event a replacement effect may watch for (CR 614.1): only a lasting one a spell or ability made
+    // does (Illusionary Mask's), so none is looked for in a game with no lasting effect.
+    if !cx.s().effects.is_empty() && !crate::replace::tap(cx, id) {
         return false;
     }
     cx.st().update_obj(id, |o| o.tapped = true);

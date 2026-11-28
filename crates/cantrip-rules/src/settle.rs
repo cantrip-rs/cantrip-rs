@@ -1502,6 +1502,10 @@ struct BoardThen<'a> {
 }
 
 impl Query for BoardThen<'_> {
+    fn mana_could_pay(&self, mana: &[(Mana, u32, bool)], at_most: u32, cost: &ManaCost) -> bool {
+        crate::actions::mana_could_pay(mana, at_most, cost)
+    }
+
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         self.q.producible_types(permanent)
     }

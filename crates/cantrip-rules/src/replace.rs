@@ -476,6 +476,8 @@ fn subject_of(proposal: &Proposal) -> Option<ObjectId> {
         Proposal::Connive(c) => Some(c.creature),
         Proposal::Explore(e) => Some(e.creature),
         Proposal::Untap(u) => Some(u.permanent),
+        Proposal::Tap(t) => Some(t.permanent),
+        Proposal::CombatDamageAssignment(a) => Some(a.creature),
         Proposal::DrawInstruction(_)
         | Proposal::Draw(_)
         | Proposal::Mill(_)
@@ -523,6 +525,8 @@ fn affected(cx: &Cx, proposal: &Proposal) -> PlayerId {
         // (Damping Sphere's ruling): the player who tapped the permanent for it.
         Proposal::ManaProduction(m) => m.player,
         Proposal::Untap(u) => u.controller,
+        Proposal::Tap(t) => t.controller,
+        Proposal::CombatDamageAssignment(a) => a.controller,
     }
 }
 
@@ -2283,6 +2287,41 @@ pub fn would_explore(cx: &mut Cx, creature: ObjectId) {
     if possible(cx, None) {
         apply(cx, &mut Proposal::Explore(Explore { creature }));
     }
+}
+
+/// Whether a lasting replacement effect a spell or ability made watches for events of `kind` (CR 611.2, 614.1): the guard of
+/// the events only such an effect replaces - a permanent becoming tapped, a creature assigning combat damage - which no
+/// static ability does.
+pub(crate) fn lasting_replaces(cx: &Cx, kind: ReplacementKind) -> bool {
+    let cards = cx.cards();
+    cx.s().effects.iter().any(|e| match e.kind {
+        EffectKind::Replacement { card, index, .. } | EffectKind::ReplacementRule { card, index, .. } => {
+            cards.get(card).granted_replacements[index as usize].kind == kind
+        }
+        _ => false,
+    })
+}
+
+/// An untapped permanent about to become tapped meets the effects that would replace it (CR 701.26a, 614.1, 616.1), each
+/// doing what it does as it applies: Illusionary Mask's turns it face up. Whether it is still an untapped permanent to tap
+/// (`ops::tap_quietly`, which then taps it). Out of line, reached only where some lasting effect is in the game.
+#[cold]
+#[inline(never)]
+pub(crate) fn tap(cx: &mut Cx, permanent: ObjectId) -> bool {
+    if !lasting_replaces(cx, ReplacementKind::Tap) {
+        return true;
+    }
+    let mut proposal = Proposal::Tap(Tap { permanent, controller: cx.s().obj(permanent).controller });
+    apply(cx, &mut proposal);
+    live(cx.s(), permanent) && cx.s().obj(permanent).zone.is(ZoneKind::Battlefield) && !cx.s().obj(permanent).tapped
+}
+
+/// An attacking or blocking creature about to assign combat damage meets the effects that would replace it (CR 510.1, 614.1,
+/// 616.1), each doing what it does as it applies: Illusionary Mask's turns it face up, and it then assigns as it is
+/// (`turn::combat_damage`).
+pub(crate) fn combat_damage_assignment(cx: &mut Cx, creature: ObjectId) {
+    let mut proposal = Proposal::CombatDamageAssignment(CombatDamageAssignment { creature, controller: cx.s().obj(creature).controller });
+    apply(cx, &mut proposal);
 }
 
 /// A permanent about to untap (CR 701.26b): the event once every effect that replaces it has applied, each once (CR 614.5),

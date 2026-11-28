@@ -1351,7 +1351,7 @@ impl ReplacementDef {
 
 /// A replacement effect a resolving spell or ability makes for a while (CR 611.2), about the object it was made for.
 pub const fn granted_replacement(kind: ReplacementKind, applies: GrantedApplies, apply: GrantedApply, hint: &'static str) -> GrantedReplacementDef {
-    GrantedReplacementDef { hint, show_captured_value: false, kind, applies, apply, then: None, damage: None, optional: None, once: false, text: "" }
+    GrantedReplacementDef { hint, show_captured_value: false, kind, applies, apply, then: None, damage: None, optional: None, once: false, becomes: false, text: "" }
 }
 
 impl GrantedReplacementDef {
@@ -1380,6 +1380,12 @@ impl GrantedReplacementDef {
     /// "The next time ... would ...": the effect ends as it applies, used up (CR 614.1a).
     pub const fn once(self) -> GrantedReplacementDef {
         GrantedReplacementDef { once: true, ..self }
+    }
+
+    /// "The creature that spell becomes as it resolves" (CR 608.3, 400.7): an effect made about a permanent spell goes on
+    /// applying to the permanent it becomes (`GrantedReplacementDef::becomes`).
+    pub const fn of_the_permanent_it_becomes(self) -> GrantedReplacementDef {
+        GrantedReplacementDef { becomes: true, ..self }
     }
 
     /// The effect's words as its card's Oracle text prints them (`GrantedReplacementDef::text`): "If a creature dealt damage

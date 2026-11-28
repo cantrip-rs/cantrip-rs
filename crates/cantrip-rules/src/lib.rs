@@ -2256,6 +2256,10 @@ impl Query for Game {
         actions::has_granted_way(self, self.cards, card)
     }
 
+    fn mana_could_pay(&self, mana: &[(Mana, u32, bool)], at_most: u32, cost: &ManaCost) -> bool {
+        crate::actions::mana_could_pay(mana, at_most, cost)
+    }
+
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         actions::producible_types_in(self, permanent)
     }
@@ -2358,6 +2362,10 @@ impl Query for Cx<'_> {
 
     fn effect_controller(&self) -> Option<PlayerId> {
         Cx::effect_controller(self)
+    }
+
+    fn mana_could_pay(&self, mana: &[(Mana, u32, bool)], at_most: u32, cost: &ManaCost) -> bool {
+        crate::actions::mana_could_pay(mana, at_most, cost)
     }
 
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
@@ -3798,6 +3806,14 @@ impl cantrip_api::Game for Cx<'_> {
 
     fn cast_transformed_during_resolution(&mut self, card: ObjectId) -> Result<bool, Suspend> {
         actions::cast_transformed_during_resolution(self, card).map_err(|_| Suspend)
+    }
+
+    fn could_cast_face_down_during_resolution(&mut self, card: ObjectId) -> bool {
+        actions::could_cast_face_down_during_resolution(self, card)
+    }
+
+    fn cast_face_down_during_resolution(&mut self, card: ObjectId) -> Result<Option<ObjectId>, Suspend> {
+        actions::cast_face_down_during_resolution(self, card).map_err(|_| Suspend)
     }
 
     fn become_monarch(&mut self, player: PlayerId) {
