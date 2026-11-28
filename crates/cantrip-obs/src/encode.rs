@@ -844,7 +844,8 @@ pub fn encode(
     let options = step.tokens.len().min(room - places.len().min(room));
     cap_hit |= options < step.tokens.len();
     let all_chosen = chosen;
-    let chosen_from = chosen.len().saturating_sub(MAX_CHOSEN.min(room - options));
+    // The choices so far get what the options leave after a token for each place: past that, pooling could not fit.
+    let chosen_from = chosen.len().saturating_sub(MAX_CHOSEN.min(room - options - places.len().min(room - options)));
     cap_hit |= chosen.len() - chosen_from < chosen.len().min(MAX_CHOSEN);
     let chosen = &chosen[chosen_from..];
     let mut room = room - options - chosen.len();

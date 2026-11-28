@@ -307,9 +307,8 @@ pub fn bound(ask: &Ask) -> usize {
         AskKind::ChooseNumber { .. } => 8,
         AskKind::ChooseCostPayment { .. } => usize::BITS as usize / 4,
         AskKind::UnlessPays { .. } => 2,
-        AskKind::ChooseCards { count, .. }
-        | AskKind::ChooseTarget { count, .. }
-        | AskKind::SearchLibrary { count, .. } => *count as usize + 1,
+        AskKind::ChooseCards { count, .. } | AskKind::SearchLibrary { count, .. } => *count as usize + 1,
+        AskKind::ChooseTarget { count, .. } => *count as usize + 1,
         AskKind::ChooseModes { count, at_most, .. } => (*at_most).max(*count) as usize + 1,
         AskKind::ChooseColors { count, .. } => *count as usize,
         AskKind::DiscardToHandSize { count, .. } => *count as usize,

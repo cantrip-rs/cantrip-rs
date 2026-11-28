@@ -320,7 +320,7 @@ fn tallied(part: &select::Part) -> Option<u32> {
 /// that fails to find, CR 701.19b), and the most of a running total of mana value where a part keeps one. The rest of the
 /// rule - what a card already chosen rules out, "as many as can" - is the validator's: an answer it refuses is one the
 /// caller backtracks from (`Rejection::global`).
-fn selection(game: &Game, request: &Request, rule: &Selection) -> (Vec<Target>, u8, bool, Option<u32>) {
+fn selection(game: &Game, request: &Request, rule: &Selection) -> (Vec<Target>, u32, bool, Option<u32>) {
     let eligible: Vec<Target> = first_choices(game, request).into_iter().map(Target::Object).collect();
     let none_complete = selection_verdict(game, request, &[]).is_some_and(|(_, v)| v.complete);
     let (count, up_to) = match rule.count {
@@ -329,7 +329,7 @@ fn selection(game: &Game, request: &Request, rule: &Selection) -> (Vec<Target>, 
         cantrip_engine::Count::AnyNumber => (count_u32(eligible.len()), true),
     };
     let most = rule.parts().find_map(tallied);
-    (eligible, u8::try_from(count).unwrap_or(u8::MAX), up_to, most)
+    (eligible, count, up_to, most)
 }
 
 /// What a name must be (`NameKind`) as the ask's number: 0 any, 1 nonland, 2 land, 3 any other kind.
@@ -727,7 +727,7 @@ pub(crate) fn ask_of(
             pools.sort_by_key(|p| (p.object, p.kind, p.count));
             AskKind::RemoveCounters {
                 pools,
-                total: u8::try_from(*total).unwrap_or(u8::MAX),
+                total: *total,
                 up_to: *up_to,
             }
         }

@@ -17,11 +17,16 @@ use cantrip_script::GameScript;
 
 const MODES: [InfoMode; 3] = [InfoMode::Full, InfoMode::Decklist, InfoMode::Hidden];
 
-/// Answers the recorder skips, by "kind/why". A creature type chosen from all of them (some 300) has more options than
-/// a position's 128 tokens hold, and the encoder cuts options past the cap (`cantrip_obs::encode`); when the type
-/// chosen is one cut, the answer makes no sample. 58 answers of the whole corpus's 7404 scenarios, at present
-/// (`docs/known-issues.md`, KI-78).
-const EXPECTED: [&str; 1] = ["ChooseSubtype/chosen option cut by the cap"];
+/// Answers the recorder skips, by "kind/why": a step with more options than a position's 128 tokens hold, where the
+/// encoder cuts the options past the cap (`cantrip_obs::encode`) and the one chosen is among those cut, makes no sample
+/// (`docs/known-issues.md`, KI-141). A creature type chosen from all of them (some 300): 166 answers of the whole
+/// corpus's 28,887 scenarios, at present. Cards chosen from hundreds: the permanents Ulamog, the Defiler's annihilator
+/// sacrifices past 255 (`ulamog-the-defiler-annihilates-past-255-counters-and-permanents`), every pick of the answer
+/// that falls past the first options of its step.
+const EXPECTED: [&str; 2] = [
+    "ChooseSubtype/chosen option cut by the cap",
+    "ChooseCards/chosen option cut by the cap",
+];
 
 fn root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
@@ -177,6 +182,11 @@ fn scenarios_that_once_failed_record() {
             // A remake that announces X again is a new announcement, the engine having reversed the last.
             "word-of-command-a-dead-x-is-refused-and-a-live-one-taken",
             "word-of-command-remade-cast-reversed-at-the-question-it-failed-at-before",
+            // More than 255 permanents sacrificed and counters removed in one answer: the ask carries the engine's 32-bit
+            // count, not one cut to 255, so the answer's tokens are all walked; a step of hundreds of cards with choices
+            // already made keeps room for a token per place (`cantrip_obs::encode`).
+            "ulamog-the-defiler-annihilates-past-255-counters-and-permanents",
+            "rhys-the-evermore-removes-every-counter-past-255",
         ]
         .iter()
         .map(|n| {

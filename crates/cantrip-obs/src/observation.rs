@@ -376,7 +376,7 @@ pub enum AskKind {
     UnlessPays { subject: Ref, total: CostObs, remaining: CostObs, life: u8, life_payable: bool, verb: String, options: Vec<OptionObs>, x: Option<u32>, x_most: u32 },
     /// `count` (or up to) of `eligible` among `cards`. `purpose` the engine's name for why; `total` index for index with
     /// `eligible`.
-    ChooseCards { purpose: String, cards: Vec<Ref>, eligible: Vec<Ref>, count: u8, up_to: bool, total: Option<TotalObs> },
+    ChooseCards { purpose: String, cards: Vec<Ref>, eligible: Vec<Ref>, count: u32, up_to: bool, total: Option<TotalObs> },
     /// `least` to `count` of `candidates` (sorted), `total` index for index with them.
     ChooseTarget { purpose: String, candidates: Vec<Ref>, optional: bool, least: u8, count: u8, any_number: bool, slot_player: Option<u8>, total: Option<TotalObs> },
     /// Modes by index: `labels` says what each is. `pawprints`, when not empty, is each mode's pawprint symbols (CR 700.2i),
@@ -405,7 +405,7 @@ pub enum AskKind {
     CollectEvidence { cards: Vec<Ref>, values: Vec<u8>, minimum: u8 },
     Craft { cards: Vec<Ref>, minimum: u8, maximum: u8 },
     /// `total` counters from among the pools (sorted); with `up_to`, any number of them up to `total`, none included.
-    RemoveCounters { pools: Vec<CounterPoolObs>, total: u8, up_to: bool },
+    RemoveCounters { pools: Vec<CounterPoolObs>, total: u32, up_to: bool },
     /// A total divided among up to `max_targets` (0: any number) of `candidates`, each at least 1.
     ChooseDividedTargets { candidates: Vec<Ref>, total: u32, max_targets: u8, optional: bool },
     /// Each of `eligible` attacks one of `defenders` or stays home. `requirements` how many of the requirements (CR 508.1d)
@@ -460,7 +460,7 @@ pub enum AskKind {
     /// The cards looked at, top first, each to one destination; or a shuffle where allowed.
     DistributeCards { cards: Vec<Ref>, destinations: Vec<DestinationObs>, may_shuffle: bool },
     /// `library` (sorted), `eligible` (sorted); `destination` the engine's `SearchDestination` number.
-    SearchLibrary { library: Vec<Ref>, eligible: Vec<Ref>, count: u8, optional: bool, destination: u8 },
+    SearchLibrary { library: Vec<Ref>, eligible: Vec<Ref>, count: u32, optional: bool, destination: u8 },
     /// Which replacement effect applies first: `sources` sorted (with their hints), the event's facts.
     ChooseReplacement { subject: Ref, life: Option<i32>, sources: Vec<Ref>, hints: Vec<String>, damage: Option<(Ref, Ref, u32)>, turn: bool, counters: Vec<(u16, i32)>, draw: bool },
     /// An inclusive numeric range, represented without enumerating its values.
