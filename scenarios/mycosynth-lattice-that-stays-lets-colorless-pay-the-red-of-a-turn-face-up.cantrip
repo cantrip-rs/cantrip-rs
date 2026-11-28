@@ -1,0 +1,60 @@
+# The control for Mycosynth Lattice sacrificed in a special action's mana window: with the Lattice still on the battlefield
+# when the cost is paid, "players may spend mana as though it were mana of any color" lets colorless mana pay the {R} of a
+# turn face up (CR 609.4b, 116.2b, 702.37e). Krark-Clan Ironworks sacrifices two Islands (artifacts under the Lattice) and
+# itself for six {C} in the payment's mana window, and Ainok Tracker turns face up for {4}{R} with {C} left over.
+# Turn 1: a Black Lotus for the morph, two for the Lattice. Turn 3: an Island and a Lotus for the Ironworks. Turn 5: a
+# second Island, then the turn face up.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Black Lotus
+Ainok Tracker
+Mycosynth Lattice
+Krark-Clan Ironworks
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Ainok Tracker.Cast(Ability: Morph)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mycosynth Lattice.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Krark-Clan Ironworks.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+Bot1.Battlefield.Krark-Clan Ironworks.Activate(Sacrifice: Island)
+Bot1.Battlefield.Krark-Clan Ironworks.Activate(Sacrifice: Island)
+Bot1.Battlefield.Krark-Clan Ironworks.Activate(Sacrifice: Krark-Clan Ironworks)
+? Bot1.Mana = {C}
+Bot1.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ainok Tracker.Power = 3
+Bot1.Battlefield.Mycosynth Lattice.Types = Artifact

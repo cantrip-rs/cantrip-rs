@@ -1,0 +1,53 @@
+# Mycosynth Lattice's "players may spend mana as though it were mana of any color" is read as the mana is spent (CR 609.4b,
+# 611.3a), after the cast's chance to activate mana abilities (CR 601.2g-h). Bot1 casts Lightning Bolt with the Lattice out
+# and, in the cast's mana window, has Krark-Clan Ironworks sacrifice the Lattice for {C}{C}: the Lattice is gone when the cost
+# is paid, so the {C}{C} can't pay the {R} and the window stays open - with the Lattice still applying it would have closed by
+# itself, the pool covering the cost. Mox Ruby's {R} pays it, and the {C}{C} is left in the pool.
+# Turn 1: Island, Mox Ruby, and two Black Lotuses for the Lattice. Turn 3: a Lotus and the Island for the Ironworks.
+
+[Bot1 Deck]
+Island
+Mox Ruby
+Black Lotus
+Black Lotus
+Black Lotus
+Mycosynth Lattice
+Krark-Clan Ironworks
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mycosynth Lattice.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Krark-Clan Ironworks.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Krark-Clan Ironworks.Activate(Sacrifice: Mycosynth Lattice)
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {C}{C}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Mycosynth Lattice = (absent)
+Bot1.Battlefield.Mox Ruby.Tapped = true

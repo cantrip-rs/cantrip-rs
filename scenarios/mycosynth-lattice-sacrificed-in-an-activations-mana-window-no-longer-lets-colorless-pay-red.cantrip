@@ -1,0 +1,56 @@
+# Mycosynth Lattice's "players may spend mana as though it were mana of any color" is read as the mana is spent (CR 609.4b,
+# 611.3a), after the activation's chance to activate mana abilities (CR 602.2b, 601.2g-h). Bot1 activates Goblin Balloon
+# Brigade's "{R}: This creature gains flying until end of turn" with the Lattice out and, in the activation's mana window, has
+# Krark-Clan Ironworks sacrifice the Lattice for {C}{C}: the Lattice is gone when the cost is paid, so the {C}{C} can't pay
+# the {R} and the window stays open - with the Lattice still applying it would have closed by itself, the pool covering the
+# cost. The Mountain's {R} pays it, and the {C}{C} is left in the pool.
+# Turn 1: the Mountain for the Brigade, two Black Lotuses for the Lattice. Turn 3: a Lotus and an Island for the Ironworks.
+
+[Bot1 Deck]
+Mountain
+Goblin Balloon Brigade
+Black Lotus
+Black Lotus
+Black Lotus
+Mycosynth Lattice
+Krark-Clan Ironworks
+Island
+Island x15
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goblin Balloon Brigade.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mycosynth Lattice.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Krark-Clan Ironworks.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Goblin Balloon Brigade.Activate
+Bot1.Battlefield.Krark-Clan Ironworks.Activate(Sacrifice: Mycosynth Lattice)
+Bot1.Battlefield.Mountain.Activate
+? Bot1.Mana = {C}{C}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Goblin Balloon Brigade.Keywords = Flying
+Bot1.Battlefield.Mountain.Tapped = true

@@ -1,0 +1,69 @@
+# Tinybones, Bauble Burglar's "During your turn, you may play cards you don't own with stash counters on them from exile, and
+# mana of any type can be spent to cast those spells" is a static ability: it applies only while Tinybones is on the
+# battlefield (CR 604.1, 611.3a), and the mana is spent after the cast's chance to activate mana abilities (CR 601.2g-h,
+# 609.4b). Bot1 casts the stashed Lightning Bolt and, in the cast's mana window, has Ashnod's Altar sacrifice Tinybones for
+# {C}{C}: Tinybones is gone when the cost is paid, so the {C}{C} can't pay the {R} and the window stays open - with the
+# permission still applying it would have closed by itself, the pool covering the cost. Mox Ruby's {R} pays it, and the
+# {C}{C} is left in the pool. (With Tinybones still there, other mana pays: the Mox Pearl scenario beside this one.)
+# Turn 1: Swamp and Mox Ruby for Tinybones. Turn 3: Tinybones's ability makes Bot2 discard the Bolt, exiled with a stash
+# counter. Turn 5: three Swamps for the Altar, then the Bolt.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Mox Pearl
+Tinybones, Bauble Burglar
+Swamp
+Swamp
+Ashnod's Altar
+Swamp x14
+
+[Bot2 Deck]
+Lightning Bolt
+Mountain x6
+Mountain x13
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tinybones, Bauble Burglar.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tinybones, Bauble Burglar.Activate
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Exile.Lightning Bolt.Counters.Stash = 1
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Ashnod's Altar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Tinybones, Bauble Burglar)
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {C}{C}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Mox Ruby.Tapped = true
+Bot1.Battlefield.Mox Pearl.Tapped = false
+Bot2.Graveyard = Lightning Bolt

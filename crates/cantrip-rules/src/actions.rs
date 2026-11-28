@@ -12523,6 +12523,9 @@ fn cast(
         blockers: &[],
         life: life_owed,
         any,
+        // A permanent's (or an emblem's) permission to cast cards in exile is a static ability (CR 604.1): what it lets be spent
+        // is asked again as the mana is (`spend_any_now`). The card's own (CR 113.6e) is the spell's, and an effect's lasts.
+        any_by: by.by.filter(|g| any != AnyMana::No && g.object != card && g.ability.as_exile_cast().is_some()),
         mana_cost: if mana_cost_any == AnyMana::No { ManaCost::ZERO } else { mana_cost_share },
         mana_cost_any,
         abilities_closed: assisted.is_some(),
@@ -16895,19 +16898,23 @@ fn spend_on(any: AnyMana, on_any: AnyMana, on: &mut ManaCost, owed: &mut ManaCos
 /// of the payment - "it doesn't change what mana was actually spent" - so a rule for one spell is used only by a spell that
 /// needed it (`use_up_mana_cost_spend_rule`). A flow from the mana and the creatures to the symbols (`transports`): a creature
 /// pays a symbol of one of its colors or generic mana (X's part too: what restricts X restricts mana, CR 107.3), mana a
-/// symbol of its type, X's part where it may, or generic.
+/// symbol of its type, X's part where it may, or generic. `wider`: mana spent while a wider reading than `any` held (a
+/// permission that left between units, CR 611.3a), each unit of which stands for any type that reading let it (any color,
+/// or any type) as well as its own - as it could when it was spent.
 #[allow(clippy::too_many_arguments)]
-fn paid_with(any: AnyMana, on_any: AnyMana, on: &ManaCost, total: &ManaCost, paid: &ManaPool, snow: &[u32; 6], convoking: &[ColorSet], generic_paid: u32) -> bool {
+fn paid_with(any: AnyMana, on_any: AnyMana, on: &ManaCost, total: &ManaCost, paid: &ManaPool, snow: &[u32; 6], wider: &[(AnyMana, ManaPool, [u32; 6])], convoking: &[ColorSet], generic_paid: u32) -> bool {
     /// The mark on a creature's supply: it pays generic mana and X's part whatever restricts X's mana.
     const CREATURE: u8 = 1 << 6;
     let mut cost = as_paid_on(any, on_any, on, total);
     // What paid generic mana other than with mana takes X's part first, as the payment takes it (`ManaCost::x_part`).
     cost.generic -= generic_paid.min(cost.generic);
     let mut supply: Vec<Supply> = Vec::new();
-    for m in 0..6 {
-        let plain = paid.0[m] - snow[m].min(paid.0[m]);
-        supply.push(Supply { snow: false, stage: 0, types: 1 << m, restriction: None, n: plain });
-        supply.push(Supply { snow: true, stage: 0, types: 1 << m, restriction: None, n: snow[m].min(paid.0[m]) });
+    for (stands_for, paid, snow) in std::iter::once((0u8, paid, snow)).chain(wider.iter().map(|(a, p, s)| (if *a == AnyMana::Type { 0b0011_1111 } else { 0b0001_1111 }, p, s))) {
+        for m in 0..6 {
+            let plain = paid.0[m] - snow[m].min(paid.0[m]);
+            supply.push(Supply { snow: false, stage: 0, types: 1 << m | stands_for, restriction: None, n: plain });
+            supply.push(Supply { snow: true, stage: 0, types: 1 << m | stands_for, restriction: None, n: snow[m].min(paid.0[m]) });
+        }
     }
     for &colors in convoking {
         let types = Color::ALL.iter().filter(|&&c| colors.has(c)).fold(CREATURE, |t, &c| t | 1 << c.mana() as u8);
@@ -16947,11 +16954,19 @@ fn paid_with(any: AnyMana, on_any: AnyMana, on: &ManaCost, total: &ManaCost, pai
 /// Uses up the rule for paying one spell's mana cost (`EffectKind::ManaCostRuleForOneSpell`, CR 611.2a: "for one spell this
 /// turn") that the payment of `spell` just made needed: none where the mana it spent could have paid `total` without one
 /// (`paid_with`); otherwise the one letting the least that could have. One spell uses one: two such effects are two spells.
+/// `spent_under`: the mana spent while each reading of what other rules let be spent held (by `AnyMana`, with its snow);
+/// `any`, the last, for a payment that spent none. Each unit could pay what it could as it was spent.
 #[allow(clippy::too_many_arguments)]
-fn use_up_mana_cost_spend_rule(cx: &mut Cx, player: PlayerId, spell: ObjectId, any: AnyMana, on: &ManaCost, total: &ManaCost, paid: &ManaPool, snow: &[u32; 6], convoking: &[ColorSet], generic_paid: u32) {
+fn use_up_mana_cost_spend_rule(cx: &mut Cx, player: PlayerId, spell: ObjectId, any: AnyMana, spent_under: &[(ManaPool, [u32; 6]); 3], on: &ManaCost, total: &ManaCost, convoking: &[ColorSet], generic_paid: u32) {
     let judged: &Cx = cx;
     let mut answers = mana_cost_spend_answers(judged, judged, player, spell);
-    let pays = |lets: AnyMana| paid_with(any, lets, on, total, paid, snow, convoking, generic_paid);
+    // The narrowest reading any mana was spent under is the cost's view; what was spent under a wider one stands for more.
+    let readings = [AnyMana::No, AnyMana::Color, AnyMana::Type];
+    let base = readings.into_iter().find(|&a| spent_under[a as usize].0 != ManaPool::default()).unwrap_or(any);
+    let wider: Vec<(AnyMana, ManaPool, [u32; 6])> =
+        readings.into_iter().filter(|&a| a > base && spent_under[a as usize].0 != ManaPool::default()).map(|a| (a, spent_under[a as usize].0, spent_under[a as usize].1)).collect();
+    let (paid, snow) = &spent_under[base as usize];
+    let pays = |lets: AnyMana| paid_with(base, lets, on, total, paid, snow, &wider, convoking, generic_paid);
     if pays(AnyMana::No) {
         return;
     }
@@ -17498,6 +17513,10 @@ pub(crate) struct Helpers<'a> {
     /// What a permission to cast the spell lets pay for it (CR 609.4b): mana of any type pays any of its symbols, mana as
     /// though of any color all but {C}.
     pub any: AnyMana,
+    /// The static ability of a permanent or an emblem `any` is given by, "you may cast ... and mana of any type can be spent
+    /// to cast those spells" (Tinybones, Bauble Burglar's, CR 604.1): it applies only while it is there (CR 611.3a), so it
+    /// is asked again as each unit is spent (`spend_any_now`). `None` where `any` is an effect's, which lasts (Gonti's).
+    pub any_by: Option<Grant>,
     /// The symbols of the total that are the spell's mana cost's (CR 601.2f), kept apart from its additional costs and cost
     /// increases for a rule that reaches only them (`EffectKind::ManaCostRuleForOneSpell`, CR 609.4b: "to pay that spell's mana
     /// cost"), and what that rule lets be spent on them (`mana_cost_any`). `ManaCost::ZERO` and `AnyMana::No` for every other
@@ -17528,7 +17547,7 @@ impl Helpers<'_> {
 
 impl Helpers<'static> {
     pub const NONE: Helpers<'static> =
-        Helpers { with: PayWith::NONE, waterbend: 0, waterbends: 0, creatures: false, no_mana: false, purpose: Paying::Other, attackers: &[], blockers: &[], life: 0, any: AnyMana::No, mana_cost: ManaCost::ZERO, mana_cost_any: AnyMana::No, abilities_closed: false, assist: AssistStep::None, mana_ability: false, exiled_with_source: &[] };
+        Helpers { with: PayWith::NONE, waterbend: 0, waterbends: 0, creatures: false, no_mana: false, purpose: Paying::Other, attackers: &[], blockers: &[], life: 0, any: AnyMana::No, any_by: None, mana_cost: ManaCost::ZERO, mana_cost_any: AnyMana::No, abilities_closed: false, assist: AssistStep::None, mana_ability: false, exiled_with_source: &[] };
 }
 
 /// What a mana payment is for, as far as restricted mana is concerned (CR 106.6): see `payment_for`.
@@ -17763,14 +17782,17 @@ fn commit_mana_helpers(cx: &mut Cx, source: ObjectId, scope: Option<PaymentScope
     }
 }
 
-/// Commit the units spent so far before another cost may inspect the game, then resume that cost's scheduler.
-fn checkpoint_mana(cx: &mut Cx, player: PlayerId, source: ObjectId, purpose: Paying, taken: &mut Vec<(ObjectId, Mana, u32, bool, u32)>, tapped: &mut Vec<Event>, helper_receipts: &mut Vec<(ObjectId, CostPart)>, delved: &mut Vec<ObjectId>, checkpoint: &mut Option<&mut dyn FnMut(&mut Cx, &mut Vec<Event>, &mut Vec<(ObjectId, CostPart)>, &mut Vec<ObjectId>) -> R<bool>>) -> R<()> {
-    let Some(hook) = checkpoint.as_deref_mut() else { return Ok(()) };
+/// Commit the units spent so far before another cost may inspect the game, then resume that cost's scheduler. Whether the
+/// position changed meanwhile (`GameState::epoch`): another part of the cost paid can change what the mana may be spent as
+/// (`spend_any_now`); going straight back to the mana does not.
+fn checkpoint_mana(cx: &mut Cx, player: PlayerId, source: ObjectId, purpose: Paying, taken: &mut Vec<(ObjectId, Mana, u32, bool, u32)>, tapped: &mut Vec<Event>, helper_receipts: &mut Vec<(ObjectId, CostPart)>, delved: &mut Vec<ObjectId>, checkpoint: &mut Option<&mut dyn FnMut(&mut Cx, &mut Vec<Event>, &mut Vec<(ObjectId, CostPart)>, &mut Vec<ObjectId>) -> R<bool>>) -> R<bool> {
+    let Some(hook) = checkpoint.as_deref_mut() else { return Ok(false) };
     let cast = purpose == Paying::Casting && cx.s().obj(source).zone.is(ZoneKind::Stack);
     record_spent(cx, player, source, cast, taken);
     taken.clear();
+    let epoch = cx.s().epoch;
     if !hook(cx, tapped, helper_receipts, delved)? { *checkpoint = None; }
-    Ok(())
+    Ok(cx.s().epoch != epoch)
 }
 
 /// Word of Command's "the player can activate mana abilities only if they're from lands that player controls and only if mana
@@ -17844,11 +17866,27 @@ fn spent_on_what_is_owed(cx: &Cx, player: PlayerId, pool: &ManaPool, due: &ManaC
     });
 }
 
+/// What `player` may spend as though it were mana of another kind on the payment for `source` at this moment (CR 609.4b): the
+/// cast's own permission's (`Helpers::any`) and the static abilities' of the battlefield. It is how the mana may be spent,
+/// so it is read as each unit is spent (CR 118.3a), never once for the whole payment: a static ability's effect applies only
+/// while the ability is there (CR 611.3a), and a permanent that gave it sacrificed for mana in the payment's window (CR
+/// 601.2g), or as another part of the cost paid between units (CR 601.2h: in any order), lets no unit after be spent so,
+/// while one spent before was paid as it was (CR 609.4b: it doesn't change what was spent).
+fn spend_any_now(cx: &Cx, player: PlayerId, source: ObjectId, helpers: &Helpers) -> AnyMana {
+    let given = match helpers.any_by {
+        // A permanent's permission gone, or no longer its controller's (CR 109.5, 611.3a), lets nothing.
+        Some(g) if helpers.any != AnyMana::No && !exile_casts_of(cx.cards(), cx.s(), &cx.g.log).iter().any(|c| c.grant == g && c.controller == player) => AnyMana::No,
+        _ => helpers.any,
+    };
+    given.max(static_rules::spend_any_mana_for(cx, player, source, spending_for(cx, source, helpers.purpose)))
+}
+
 /// The chance to activate mana abilities before any payment (CR 601.2g).
 fn mana_activation_window(cx: &mut Cx, player: PlayerId, source: ObjectId, total: ManaCost, helpers: &Helpers, life: u32, record: bool) -> R<()> {
     loop {
-        // Advice for what more mana could help. This does not spend the pool or close the window.
-        let any = helpers.any.max(static_rules::spend_any_mana_for(cx, player, source, spending_for(cx, source, helpers.purpose)));
+        // Advice for what more mana could help, as the mana would be spent now (`spend_any_now`). This does not spend the pool
+        // or close the window.
+        let any = spend_any_now(cx, player, source, helpers);
         let due = as_paid_on(any, helpers.mana_cost_any, &helpers.mana_cost, &total);
         let remaining = if helpers.no_mana { due } else if due.snow > 0 {
             quality_uncovered(&quality_groups(cx, player, source, helpers.purpose, &[]), &due)
@@ -17931,8 +17969,16 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
     // any mana, and one who may spend mana of any type on it every symbol; the cost is not changed, nor is what was spent.
     // What is owed keeps the cost's symbols, since what pays instead of mana pays only some of them (delve and improvise
     // generic mana, convoke a symbol of its creature's color, CR 702.66a, 702.126a, 702.51a); the mana is asked for as the
-    // payment's view of what is left.
-    let any = helpers.any.max(static_rules::spend_any_mana_for(cx, player, source, spending_for(cx, source, helpers.purpose)));
+    // payment's view of what is left. It is read as each unit is spent (`spend_any_now`): after the mana abilities' window,
+    // and again after anything else is done between units - another part of the cost paid (`checkpoint_mana`), a permanent
+    // tapped to pay - which alone could change it (`read_any`); spending the pool's mana does not.
+    let mut any = AnyMana::No;
+    let mut read_any = true;
+    // The mana spent while each reading of it held (by `AnyMana`), with how much of each type came from snow sources: what
+    // a unit could pay is what it could as it was spent, for whether the payment needed a rule for one spell
+    // (`use_up_mana_cost_spend_rule`). `credited`, how much of `paid` and `snow_spent` is already counted there.
+    let mut spent_under = [(ManaPool::default(), [0u32; 6]); 3];
+    let mut credited = (ManaPool::default(), [0u32; 6]);
     // The symbols of the spell's mana cost that a rule reaching only them lets other mana pay (CR 609.4b, 601.2f), losing
     // those it pays.
     let on_any = helpers.mana_cost_any;
@@ -17985,7 +18031,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                     }
                     paid.0[mana as usize] += got;
                     if index + 1 < count {
-                        checkpoint_mana(cx, player, source, helpers.purpose, &mut taken, &mut tapped_to_pay, &mut helper_receipts, &mut delved, &mut checkpoint)?;
+                        read_any |= checkpoint_mana(cx, player, source, helpers.purpose, &mut taken, &mut tapped_to_pay, &mut helper_receipts, &mut delved, &mut checkpoint)?;
                     }
                 }
             }
@@ -18002,6 +18048,11 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
         let left = convoked(&cost, &convoking);
         if left.is_zero() {
             break;
+        }
+        if read_any {
+            credit_spent(&mut spent_under[any as usize], &mut credited, &paid, &snow_spent);
+            any = spend_any_now(cx, player, source, helpers);
+            read_any = false;
         }
         let due = as_paid_on(any, on_any, &on, &left);
         let pool = if helpers.no_mana { ManaPool::default() } else { spendable(cx, player, source, helpers.purpose) };
@@ -18092,7 +18143,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
             let mut left = owed;
             left.generic -= generic_paid.min(left.generic);
             if !convoked(&left, &convoking).is_zero() {
-                checkpoint_mana(cx, player, source, helpers.purpose, &mut taken, &mut tapped_to_pay, &mut helper_receipts, &mut delved, &mut checkpoint)?;
+                read_any |= checkpoint_mana(cx, player, source, helpers.purpose, &mut taken, &mut tapped_to_pay, &mut helper_receipts, &mut delved, &mut checkpoint)?;
             }
             continue;
         }
@@ -18141,7 +18192,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                         let mut left = owed;
                         left.generic -= generic_paid.min(left.generic);
                         if !convoked(&left, &convoking).is_zero() {
-                            checkpoint_mana(cx, player, source, helpers.purpose, &mut taken, &mut tapped_to_pay, &mut helper_receipts, &mut delved, &mut checkpoint)?;
+                            read_any |= checkpoint_mana(cx, player, source, helpers.purpose, &mut taken, &mut tapped_to_pay, &mut helper_receipts, &mut delved, &mut checkpoint)?;
                         }
                         continue;
                     }
@@ -18166,7 +18217,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                     let mut left = owed;
                     left.generic -= generic_paid.min(left.generic);
                     if !convoked(&left, &convoking).is_zero() {
-                        checkpoint_mana(cx, player, source, helpers.purpose, &mut taken, &mut tapped_to_pay, &mut helper_receipts, &mut delved, &mut checkpoint)?;
+                        read_any |= checkpoint_mana(cx, player, source, helpers.purpose, &mut taken, &mut tapped_to_pay, &mut helper_receipts, &mut delved, &mut checkpoint)?;
                     }
                 }
                 ActionKind::ConfirmCasting => {
@@ -18181,6 +18232,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                     // The creatures and artifacts tapped to pay are tapped as the cost is paid, all at once (CR 601.2h): their
                     // events are announced together when it is (CR 603.2c).
                     if ops::tap_quietly(cx, id) {
+                        read_any = true;
                         tapped_to_pay.push(Event::Tapped { permanent: id, player });
                         let part = if action.index == PAY_CONVOKE { CostPart::Convoke }
                             else if action.index == PAY_IMPROVISE { CostPart::Improvise }
@@ -18201,7 +18253,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                     let mut left = owed;
                     left.generic -= generic_paid.min(left.generic);
                     if !convoked(&left, &convoking).is_zero() {
-                        checkpoint_mana(cx, player, source, helpers.purpose, &mut taken, &mut tapped_to_pay, &mut helper_receipts, &mut delved, &mut checkpoint)?;
+                        read_any |= checkpoint_mana(cx, player, source, helpers.purpose, &mut taken, &mut tapped_to_pay, &mut helper_receipts, &mut delved, &mut checkpoint)?;
                     }
                 }
                 ActionKind::ExileToPay => {
@@ -18211,7 +18263,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                     let mut left = owed;
                     left.generic -= generic_paid.min(left.generic);
                     if !convoked(&left, &convoking).is_zero() {
-                        checkpoint_mana(cx, player, source, helpers.purpose, &mut taken, &mut tapped_to_pay, &mut helper_receipts, &mut delved, &mut checkpoint)?;
+                        read_any |= checkpoint_mana(cx, player, source, helpers.purpose, &mut taken, &mut tapped_to_pay, &mut helper_receipts, &mut delved, &mut checkpoint)?;
                     }
                 }
                 _ => return Err(Stop::Cancel),
@@ -18233,7 +18285,8 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
     }
     // A rule for paying a mana cost that is for one spell (CR 611.2a) is used up by the spell whose payment needed it.
     if on_any != AnyMana::No && any_type_part(&helpers.mana_cost) {
-        use_up_mana_cost_spend_rule(cx, player, source, any, &helpers.mana_cost, &total, &paid, &snow_spent, &convoking, generic_paid);
+        credit_spent(&mut spent_under[any as usize], &mut credited, &paid, &snow_spent);
+        use_up_mana_cost_spend_rule(cx, player, source, any, &spent_under, &helpers.mana_cost, &total, &convoking, generic_paid);
     }
     if on_x != [0; 6] {
         let cast = helpers.purpose == Paying::Casting && cx.s().obj(source).zone.is(ZoneKind::Stack);
@@ -18243,6 +18296,16 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
     }
     commit_mana_helpers(cx, source, scope, &mut tapped_to_pay, &mut helper_receipts, &mut delved);
     Ok((paid, used))
+}
+
+/// Counts the mana `paid` (and `snow` of it) that `credited` does not yet count as spent under the reading `under` holds
+/// (`pay_mana_inner`'s `spent_under`).
+fn credit_spent(under: &mut (ManaPool, [u32; 6]), credited: &mut (ManaPool, [u32; 6]), paid: &ManaPool, snow: &[u32; 6]) {
+    for m in 0..6 {
+        under.0.0[m] += paid.0[m] - credited.0.0[m];
+        under.1[m] += snow[m] - credited.1[m];
+    }
+    *credited = (*paid, *snow);
 }
 
 /// `x`, the mana of each type a payment made one way spent on X's part (`x_paid_one_way`), added to what it has spent on it.
@@ -19409,21 +19472,36 @@ mod tests {
         // paid with two blue it needed the rule.
         let (share, total) = (mana("{1}{G}"), mana("{1}{G}"));
         let pool = |w: u32, u: u32, g: u32| ManaPool([w, u, 0, 0, g, 0]);
-        assert!(paid_with(AnyMana::No, AnyMana::No, &share, &total, &pool(0, 1, 1), &[0; 6], &[], 0));
-        assert!(!paid_with(AnyMana::No, AnyMana::No, &share, &total, &pool(0, 2, 0), &[0; 6], &[], 0));
-        assert!(paid_with(AnyMana::No, AnyMana::Type, &share, &total, &pool(0, 2, 0), &[0; 6], &[], 0));
+        assert!(paid_with(AnyMana::No, AnyMana::No, &share, &total, &pool(0, 1, 1), &[0; 6], &[], &[], 0));
+        assert!(!paid_with(AnyMana::No, AnyMana::No, &share, &total, &pool(0, 2, 0), &[0; 6], &[], &[], 0));
+        assert!(paid_with(AnyMana::No, AnyMana::Type, &share, &total, &pool(0, 2, 0), &[0; 6], &[], &[], 0));
         // A green-and-white creature that convoked (CR 702.51a) pays the {G}, so blue paid only the generic mana.
         let gw = ColorSet::NONE.with(Color::Green).with(Color::White);
-        assert!(paid_with(AnyMana::No, AnyMana::No, &share, &total, &pool(0, 1, 0), &[0; 6], &[gw], 0));
+        assert!(paid_with(AnyMana::No, AnyMana::No, &share, &total, &pool(0, 1, 0), &[0; 6], &[], &[gw], 0));
         // {G}{W} with that creature and green mana: the creature pays the {W}, the green the {G}.
-        assert!(paid_with(AnyMana::No, AnyMana::No, &mana("{G}{W}"), &mana("{G}{W}"), &pool(0, 0, 1), &[0; 6], &[gw], 0));
+        assert!(paid_with(AnyMana::No, AnyMana::No, &mana("{G}{W}"), &mana("{G}{W}"), &pool(0, 0, 1), &[0; 6], &[], &[gw], 0));
         // A {S} symbol takes mana from a snow source (CR 107.4h): the green spent on {S}{G} was from snow, the blue not.
         let snowy = ManaCost { snow: 1, ..mana("{G}") };
         let snow_g = [0, 0, 0, 0, 1, 0];
-        assert!(!paid_with(AnyMana::No, AnyMana::No, &mana("{G}"), &snowy, &pool(0, 1, 1), &snow_g, &[], 0));
-        assert!(paid_with(AnyMana::No, AnyMana::No, &mana("{G}"), &snowy, &pool(0, 1, 1), &[0, 1, 0, 0, 0, 0], &[], 0));
+        assert!(!paid_with(AnyMana::No, AnyMana::No, &mana("{G}"), &snowy, &pool(0, 1, 1), &snow_g, &[], &[], 0));
+        assert!(paid_with(AnyMana::No, AnyMana::No, &mana("{G}"), &snowy, &pool(0, 1, 1), &[0, 1, 0, 0, 0, 0], &[], &[], 0));
         // What delve or improvise paid is generic mana's (CR 702.66a, 702.126a).
-        assert!(paid_with(AnyMana::No, AnyMana::No, &share, &total, &pool(0, 0, 1), &[0; 6], &[], 1));
+        assert!(paid_with(AnyMana::No, AnyMana::No, &share, &total, &pool(0, 0, 1), &[0; 6], &[], &[], 1));
+    }
+
+    #[test]
+    fn mana_spent_while_a_wider_rule_held_pays_what_it_could_as_it_was_spent() {
+        // CR 609.4b, 611.3a: {1}{G} paid with two blue, one spent while mana could be spent as though it were any color (a
+        // Mycosynth Lattice since sacrificed) - that unit could pay the {G}, so the payment needed no rule for one spell. Both
+        // spent after the Lattice left, it did.
+        let (share, total) = (mana("{1}{G}"), mana("{1}{G}"));
+        let blue = |n: u32| ManaPool([0, n, 0, 0, 0, 0]);
+        assert!(paid_with(AnyMana::No, AnyMana::No, &share, &total, &blue(1), &[0; 6], &[(AnyMana::Color, blue(1), [0; 6])], &[], 0));
+        assert!(!paid_with(AnyMana::No, AnyMana::No, &share, &total, &blue(2), &[0; 6], &[], &[], 0));
+        // Mana as though it were of any color pays no {C} (CR 105.1); mana of any type does (CR 106.1b).
+        let (share, total) = (mana("{1}{C}"), mana("{1}{C}"));
+        assert!(!paid_with(AnyMana::No, AnyMana::No, &share, &total, &blue(1), &[0; 6], &[(AnyMana::Color, blue(1), [0; 6])], &[], 0));
+        assert!(paid_with(AnyMana::No, AnyMana::No, &share, &total, &blue(1), &[0; 6], &[(AnyMana::Type, blue(1), [0; 6])], &[], 0));
     }
 
     #[test]

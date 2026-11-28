@@ -1,0 +1,56 @@
+# Mycosynth Lattice sacrificed to Krark-Clan Ironworks in the mana window of a special action (turning Ainok Tracker
+# face up for {4}{R}) is gone when the cost is paid (CR 601.2g-h, 116.2b), so colorless mana can't pay the {R} (CR 609.4b
+# no longer applies, CR 611.3a) and the action is taken back (CR 733.1): Ainok stays face down. The permission is read as
+# the mana is spent, after the window (`actions::spend_any_now`), not before it.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Black Lotus
+Ainok Tracker
+Mycosynth Lattice
+Krark-Clan Ironworks
+Island
+Island x15
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Ainok Tracker.Cast(Ability: Morph)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mycosynth Lattice.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Krark-Clan Ironworks.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Island.Types = Land; Artifact
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+Bot1.Battlefield.Krark-Clan Ironworks.Activate(Sacrifice: Island)
+Bot1.Battlefield.Krark-Clan Ironworks.Activate(Sacrifice: Mycosynth Lattice)
+Bot1.Battlefield.Krark-Clan Ironworks.Activate(Sacrifice: Krark-Clan Ironworks)
+# The {C} pays the {4}, and the {R} is still owed with nothing that may pay it: the action can't be completed (CR 733.1).
+Bot1.Cancel
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield..Power = 2
+Bot1.Battlefield..FaceDownName = Ainok Tracker

@@ -97,6 +97,8 @@ mod any_color_spell_tests;
 #[cfg(test)]
 mod mana_cost_spend_rule_tests;
 #[cfg(test)]
+mod spend_any_mana_timing_tests;
+#[cfg(test)]
 mod back_face_targets_tests;
 #[cfg(test)]
 mod cast_as_spell_tests;
