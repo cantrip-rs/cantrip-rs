@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::each_player_sacrifices_x;
+use cantrip_mechanics::each_player_sacrifices;
 use cantrip_mechanics::triggers::{self, THIS_ENTERS};
 use cantrip_oracle as oracle;
 
@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 /// creature is sacrificed together; a player with fewer than X creatures sacrifices them all.
 fn each_player_sacrifices_x_creatures(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let x = g.obj(item.object).x;
-    each_player_sacrifices_x(g, item.object, x, |q, id| q.chars(id).is(CardType::Creature))?;
+    each_player_sacrifices(g, item.object, x, |q, id| q.chars(id).is(CardType::Creature))?;
     Ok(())
 }
 

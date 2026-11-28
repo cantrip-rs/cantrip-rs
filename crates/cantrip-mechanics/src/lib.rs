@@ -400,7 +400,7 @@ pub fn sacrifice_chosen(
     g: &mut dyn Game,
     player: PlayerId,
     source: ObjectId,
-    count: u8,
+    count: u32,
     kind: fn(&Chars) -> bool,
 ) -> Result<LeftBattlefield, Suspend> {
     let eligible: Vec<ObjectId> = g.permanents_of(player).into_iter().filter(|&id| kind(&g.chars(id))).collect();
@@ -417,7 +417,7 @@ pub fn each_opponent_sacrifices(
     g: &mut dyn Game,
     controller: PlayerId,
     source: ObjectId,
-    count: u8,
+    count: u32,
     kind: fn(&dyn Query, ObjectId) -> bool,
 ) -> Result<(), Suspend> {
     each_opponent_sacrifices_choices(g, controller, source, count, kind).map(|_| ())
@@ -431,35 +431,25 @@ pub fn each_opponent_sacrifices_choices(
     g: &mut dyn Game,
     controller: PlayerId,
     source: ObjectId,
-    count: u8,
+    count: u32,
     kind: fn(&dyn Query, ObjectId) -> bool,
 ) -> Result<Vec<(PlayerId, ObjectId)>, Suspend> {
     let players: Vec<PlayerId> = g.state().apnap().filter(|&p| p != controller).collect();
-    sacrifice_together(g, &players, source, u32::from(count), kind)
+    sacrifice_together(g, &players, source, count, kind)
 }
 
 /// "Each player sacrifices `count` [kind] of their choice" (CR 701.21a, 101.4): as `each_opponent_sacrifices` but for every
 /// player, the controller included, in turn order from the active player. Returns who chose what (the old objects), so that
-/// "if you sacrificed a creature this way" can look at it. Garruk, Veiled Butcher's -2 and Innocent Blood print it.
+/// "if you sacrificed a creature this way" can look at it. Garruk, Veiled Butcher's -2 and Innocent Blood print it, and
+/// Meathook Massacre II's "each player sacrifices X creatures of their choice" (CR 107.3), X what it was cast with.
 pub fn each_player_sacrifices(
     g: &mut dyn Game,
     source: ObjectId,
-    count: u8,
-    kind: fn(&dyn Query, ObjectId) -> bool,
-) -> Result<Vec<(PlayerId, ObjectId)>, Suspend> {
-    each_player_sacrifices_x(g, source, u32::from(count), kind)
-}
-
-/// `each_player_sacrifices` for a count worked out as the effect resolves, as wide as X (CR 107.3): Meathook Massacre II's
-/// "each player sacrifices X creatures of their choice", X what it was cast with.
-pub fn each_player_sacrifices_x(
-    g: &mut dyn Game,
-    source: ObjectId,
-    x: u32,
+    count: u32,
     kind: fn(&dyn Query, ObjectId) -> bool,
 ) -> Result<Vec<(PlayerId, ObjectId)>, Suspend> {
     let players: Vec<PlayerId> = g.state().apnap().collect();
-    sacrifice_together(g, &players, source, x, kind)
+    sacrifice_together(g, &players, source, count, kind)
 }
 
 /// "Each opponent chooses [one permanent of each of `kinds`] from among the [`among`] permanents they control, then
@@ -532,8 +522,8 @@ fn sacrifice_together(
 /// quality of the group, such as the greatest mana value among them), chosen by that player when there is a choice and all
 /// of them taken when there are no more than `count`. `sacrifice_chosen` filters by kind; Break Under Pressure's "with the
 /// greatest mana value among creatures and planeswalkers they control" cannot be a kind.
-pub fn sacrifice_one_of(g: &mut dyn Game, player: PlayerId, source: ObjectId, count: u8, eligible: Vec<ObjectId>) -> Result<LeftBattlefield, Suspend> {
-    let chosen = chosen_to_sacrifice(g, player, source, u32::from(count), eligible)?;
+pub fn sacrifice_one_of(g: &mut dyn Game, player: PlayerId, source: ObjectId, count: u32, eligible: Vec<ObjectId>) -> Result<LeftBattlefield, Suspend> {
+    let chosen = chosen_to_sacrifice(g, player, source, count, eligible)?;
     Ok(g.sacrifice(player, &chosen))
 }
 

@@ -978,13 +978,13 @@ pub fn creature_attacks_with_another(q: &dyn Query, creature: ObjectId, event: &
 }
 
 fn annihilate<const N: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    annihilate_n(g, item, N)
+    annihilate_n(g, item, u32::from(N))
 }
 
 /// Annihilator's resolution (CR 702.86a) for an N worked out as it resolves: the defending player sacrifices `n`
 /// permanents. Ulamog, the Defiler's "annihilator X, where X is the number of +1/+1 counters on it" calls it, with its
 /// own `triggered(ANNIHILATOR, ..)`.
-pub fn annihilate_n(g: &mut dyn Game, item: &StackItem, n: u8) -> Result<(), Suspend> {
+pub fn annihilate_n(g: &mut dyn Game, item: &StackItem, n: u32) -> Result<(), Suspend> {
     // The defending player of the creature with annihilator (CR 508.5), whatever has become of what it attacked.
     let Some(defending) = g.defending_player(item.object) else { return Ok(()) };
     crate::sacrifice_chosen(g, defending, item.object, n, |_| true).map(drop)
@@ -1450,7 +1450,7 @@ fn ward_sacrifice_among(
     if eligible.len() >= n as usize
         && g.ask(payer, RequestKind::May { source: by, purpose: Purpose::Ask(question) })? == Answer::Yes
     {
-        return crate::sacrifice_one_of(g, payer, item.object, n, eligible).map(drop);
+        return crate::sacrifice_one_of(g, payer, item.object, u32::from(n), eligible).map(drop);
     }
     g.counter_item(by, item.data[1] as usize);
     Ok(())

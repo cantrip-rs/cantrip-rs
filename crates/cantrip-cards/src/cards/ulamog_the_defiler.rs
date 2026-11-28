@@ -24,7 +24,7 @@ fn enters(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
 /// "Ulamog has annihilator X, where X is the number of +1/+1 counters on it" (CR 702.86a): X is counted as the ability
 /// resolves (the ruling), on Ulamog as it is then or as it last was on the battlefield.
 fn annihilate_x(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let x = g.obj(item.object).counters(CounterKind::PlusOne).clamp(0, u8::MAX as i32) as u8;
+    let x = g.obj(item.object).counters(CounterKind::PlusOne).max(0) as u32;
     annihilate_n(g, item, x)
 }
 

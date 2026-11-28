@@ -2642,7 +2642,7 @@ pub fn choose_to_discard_a_card_or_lose_life(
 /// with fewer than `N` creatures sacrifices them all. Innocent Blood, Dghor, Bloodletter, Liliana, Dreadhorde General (two) and
 /// Blasphemous Edict (thirteen) print it.
 pub fn each_player_sacrifices_creatures<const N: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    crate::each_player_sacrifices(g, item.object, N, |q, id| q.chars(id).is(CardType::Creature))?;
+    crate::each_player_sacrifices(g, item.object, u32::from(N), |q, id| q.chars(id).is(CardType::Creature))?;
     Ok(())
 }
 
