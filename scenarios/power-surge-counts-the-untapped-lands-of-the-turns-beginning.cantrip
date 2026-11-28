@@ -1,0 +1,51 @@
+# Power Surge deals each player, in their upkeep, damage equal to the untapped lands they controlled at the beginning of
+# this turn: before the untap step untaps anything (CR 502.3), and however those lands are tapped since. Bot1 casts it on
+# turn 1 off Black Lotus and taps its Mountain for nothing, so that Mountain is tapped as turn 3 begins: it untaps in the
+# untap step but was not untapped at the beginning, so turn 3 deals 0 (a count of the untapped lands now would be 1).
+# Bot2 had no land as turn 2 began (0), then plays a Forest it keeps untapped: in turn 4's upkeep it taps the Forest in
+# response, which still counts (1, where a count now would be 0). Turn 5: Bot1's two untapped Mountains, one tapped in
+# response, deal 2. Each player is counted alone: Bot2's Forest never counts on Bot1's turn.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Power Surge
+Mountain
+Mountain
+Mountain
+Mountain
+Mountain x20
+
+[Bot2 Deck]
+Forest x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Power Surge.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+[T2 Bot2.Main1]
+? Bot2.Life = 20
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+? Bot1.Life = 20
+Bot1.Hand.Mountain.Play
+[T4 Bot2.Upkeep]
+Bot2.Battlefield.Forest.Activate
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+? Bot2.Life = 19
+Bot2.Hand.Forest.Play
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 19

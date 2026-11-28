@@ -1,0 +1,45 @@
+# Power Surge counts what was an untapped land as the turn began, whatever it is when the ability resolves. Bot1's
+# Mutavault is its one land, untapped as turn 3 begins. In the upkeep, with Power Surge's ability on the stack, Bot1 taps
+# Mutavault for {C} to animate it, and Bot2 flashes Swift Reconfiguration onto it: a Vehicle artifact that has lost the
+# land type (CR 205.1a, 613.1d). It was an untapped land at the beginning of the turn, so Power Surge deals 1; counting the
+# lands as they are now (or the untapped permanents of the beginning by what they are now) would deal 0.
+
+[Bot1 Deck]
+Mutavault
+Black Lotus
+Power Surge
+Mountain x27
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Swift Reconfiguration
+Plains x27
+
+[Actions]
+Bot1.Hand.Mutavault.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Power Surge.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Battlefield.Mutavault.Activate(Ability: {T})
+Bot1.Battlefield.Mutavault.Activate(Ability: {1})
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swift Reconfiguration.Cast(Bot1.Battlefield.Mutavault)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Mutavault.Types = Artifact
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Mutavault.Tapped = true

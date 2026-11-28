@@ -1,0 +1,52 @@
+# Power Surge knows how many lands were untapped at the beginning of the turn even if it was not on the battlefield then
+# (its ruling), and a land phased out then is treated as though it did not exist (CR 702.26b). Bot1's Power Surge deals 1
+# on turn 3 for its Mountain. Then Bot1 casts Teferi's Protection: Power Surge, the Mountain and the Moxen phase out, and
+# Bot1 plays a Plains afterwards, which stays. On turn 4 Power Surge is phased out and does nothing to Bot2. As turn 5
+# begins the Plains is Bot1's one untapped land; Power Surge and the Mountain phase in during the untap step (CR 502.1),
+# and Power Surge deals 1 - not 0 for having been away, and not 2 for the Mountain that phased in.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Power Surge
+Mox Pearl
+Mox Ruby
+Mox Jet
+Teferi's Protection
+Plains
+Mountain x22
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Power Surge.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+? Bot1.Life = 19
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Teferi's Protection.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Power Surge = (absent)
+Bot1.Hand.Plains.Play
+[T4 Bot2.Main1]
+? Bot2.Life = 20
+[T5 Bot1.Upkeep]
+? Bot1.Battlefield.Mountain.Tapped = false
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20

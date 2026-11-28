@@ -1,0 +1,43 @@
+# Power Surge counts the lands of the turn's beginning by their characteristics then (CR 613): a land an effect has made
+# something else is not one. In turn 2 Bot1 animates its Mutavault off Mox Ruby and Bot2 casts Swift Reconfiguration on
+# it: a Vehicle artifact that has lost the land type (CR 205.1a, 613.1d), long after the animation ends. Mutavault is
+# untapped as turn 3 begins but no land, so Power Surge deals Bot1 0 (judged by its printed types, 1). Bot2's one Plains
+# paid for Swift Reconfiguration and is still tapped as turn 4 begins, so Bot2 takes 0 too.
+
+[Bot1 Deck]
+Mutavault
+Mox Ruby
+Black Lotus
+Power Surge
+Mountain x26
+
+[Bot2 Deck]
+Plains
+Swift Reconfiguration
+Plains x28
+
+[Actions]
+Bot1.Hand.Mutavault.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Power Surge.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mutavault.Activate(Ability: {1})
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swift Reconfiguration.Cast(Bot1.Battlefield.Mutavault)
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Mutavault.Types = Artifact
+? Bot1.Battlefield.Mutavault.Tapped = false
+[T3 Bot1.Main1]
+? Bot1.Life = 20
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20

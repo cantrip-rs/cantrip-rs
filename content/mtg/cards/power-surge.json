@@ -1,0 +1,6 @@
+{
+  "name": "Power Surge",
+  "manaCost": "{R}{R}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of each player's upkeep, this enchantment deals X damage to that player, where X is the number of untapped lands they controlled at the beginning of this turn."
+}

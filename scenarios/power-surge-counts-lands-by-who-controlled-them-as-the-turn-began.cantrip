@@ -1,0 +1,62 @@
+# Power Surge counts the untapped lands "they controlled at the beginning of this turn": a land taken away afterward
+# still counts for the player who had it then, and one that comes back during the untap step still counts for the player
+# who had it as the turn began. Bot1's Mutavault deals 1 to Bot1 on turn 3, and Bot2's Island 1 to Bot2 on turn 4. In
+# turn 5's upkeep, with Power Surge's ability on the stack, Bot1 animates Mutavault off Mox Ruby and Bot2's Old Man of the
+# Sea takes it: it was Bot1's as the turn began, so Bot1 takes 1 (counting by who controls it now, 0). As turn 6 begins Bot2
+# controls the Island and Mutavault, both untapped; Bot2 untaps Old Man in the untap step, which gives Mutavault back to
+# Bot1, yet Power Surge deals Bot2 2 (by who controls them now, 1).
+
+[Bot1 Deck]
+Mutavault
+Mox Ruby
+Black Lotus
+Power Surge
+Mountain x26
+
+[Bot2 Deck]
+Island
+Black Lotus
+Old Man of the Sea
+Island x27
+
+[Actions]
+Bot1.Hand.Mutavault.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Power Surge.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+[T3 Bot1.Main1]
+? Bot1.Life = 19
+[T4 Bot2.Main1]
+? Bot2.Life = 19
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mutavault.Activate(Ability: {1})
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Mutavault)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Mutavault.Tapped = false
+? Bot1.Life = 19
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+? Bot1.Life = 18
+Bot2.Accept
+[T6 Bot2.Upkeep]
+? Bot1.Battlefield.Mutavault.Tapped = false
+Bot2.Pass
+Bot1.Pass
+[T6 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 17
+Bot2.Battlefield.Old Man of the Sea.Tapped = false

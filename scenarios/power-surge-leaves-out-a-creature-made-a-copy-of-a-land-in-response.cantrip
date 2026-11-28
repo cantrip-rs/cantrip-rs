@@ -1,0 +1,50 @@
+# Power Surge counts only what was an untapped land as the turn began: a permanent that becomes one later in the turn is
+# not counted. As turn 3 begins Bot1 controls an untapped Mutavault and an untapped Ornithopter. In the upkeep, with Power
+# Surge's ability on the stack, Bot1 animates Mutavault with Mox Ruby's mana (so it stays untapped), and Bot2 casts
+# Mirrorweave on it: the Ornithopter becomes a copy of Mutavault, an untapped land (an animation is no copiable value, CR
+# 707.2). Power Surge deals 1, for Mutavault alone; counting the untapped lands as they are now would deal 2.
+
+[Bot1 Deck]
+Mutavault
+Ornithopter
+Mox Ruby
+Black Lotus
+Power Surge
+Mountain x25
+
+[Bot2 Deck]
+Island
+Black Lotus
+Mirrorweave
+Island x27
+
+[Actions]
+Bot1.Hand.Mutavault.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Power Surge.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mutavault.Activate(Ability: {1})
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Mirrorweave.Cast(Bot1.Battlefield.Mutavault)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Mutavault#2.Types = Land
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield = Mox Ruby; Mutavault; Mutavault; Power Surge
